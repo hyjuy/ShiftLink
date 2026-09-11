@@ -1,0 +1,16 @@
+.env
+*.gguf
+.venv/
+__pycache__/
+*.pyc
+
+# 합성 데이터 산출물 (4.11 저장 원칙: 원본은 로컬/외부 관리, 코드만 git)
+ledger/
+artifacts/
+splits/
+raw/
+qc/report.json
+data/*
+!data/.gitkeep
+seeds/*
+!seeds/.gitkeep

@@ -1,0 +1,1617 @@
+{
+  "_meta": {
+    "purpose": "B1 스키마에 맞춘 공통 기준정보(라인·구간·설비군·유형·장비·부품·관계·매뉴얼). 3개 대표 사건 파일이 이 파일의 ID를 참조한다.",
+    "all_numbers_are": "[가상 값] — 실제 설비 수치가 아니다",
+    "dataset_version": "DS-v1.0",
+    "split_note": "기준정보와 관계·매뉴얼은 kb 공용이며 분할되지 않는다(B9-2). 그 근거도 B9-2에 있다.",
+    "is_synthetic": true
+  },
+  "seeds": [
+    {
+      "seed_id": "SD-001",
+      "label": "Bosch Rexroth, Knowledge in Detail: Hydraulics – Basic Principles",
+      "use": "HPU 원리·구성",
+      "license_note": "© Bosch Rexroth AG — 원문 복제 금지, 개념·용어만"
+    },
+    {
+      "seed_id": "SD-002",
+      "label": "Parker HY29-0035/UK Denison 베인펌프 Overall Instructions",
+      "use": "펌프 고장 증상 구조",
+      "license_note": "© Parker Hannifin — 표 복제 금지"
+    },
+    {
+      "seed_id": "SD-003",
+      "label": "SKF, Bearing Damage and Failure Analysis (ISO 15243)",
+      "use": "베어링 손상 분류 용어",
+      "license_note": "SKF 저작물 — 분류 체계 용어만"
+    },
+    {
+      "seed_id": "SD-004",
+      "label": "SKF, Bearing damage classification transcript",
+      "use": "손상 분류 보조",
+      "license_note": "SKF 저작물"
+    },
+    {
+      "seed_id": "SD-005",
+      "label": "KOSHA GUIDE M-101-2012 컨베이어의 안전에 관한 기술지침",
+      "use": "CV·RT 안전",
+      "license_note": "공단 기술지침(공공) — 지침 번호 명기"
+    },
+    {
+      "seed_id": "SD-006",
+      "label": "산업안전보건기준에 관한 규칙 제92조(정비 등의 작업 시의 운전정지)",
+      "use": "T5 안전 근거",
+      "license_note": "법령(자유 이용). [기존] 미결 #18 본문·적용 범위 확인 필요"
+    },
+    {
+      "seed_id": "SD-007",
+      "label": "OSHA 29 CFR 1910.147 Lockout/Tagout",
+      "use": "T5 안전 근거(해외)",
+      "license_note": "미 연방 자료(public domain). [기존] 미결 #18"
+    },
+    {
+      "seed_id": "SD-008",
+      "label": "IspatGuru, Historical Development of Rolling Mills",
+      "use": "압연 공정 배경",
+      "license_note": "개인 블로그 — 수치 인용 금지"
+    }
+  ],
+  "production_lines": [
+    {
+      "line_id": "LN-0001",
+      "code": "L1",
+      "name": "가상 냉연 코일 처리 라인 1",
+      "plant_code": "PL-A",
+      "scope_note": "보조설비 구간(이송·구동·유압·유틸리티)만 대상. 압연 공정 본체는 범위 밖. 전문가1 D-32는 승인 대기이며 이 주석은 제안 표기다.",
+      "nominal_speed_range": {
+        "min": 20.0,
+        "max": 120.0,
+        "unit": "m_min",
+        "_note": "[가상 값]"
+      },
+      "product_codes": [
+        "CR-A08",
+        "CR-B12"
+      ],
+      "is_synthetic": true
+    }
+  ],
+  "process_segments": [
+    {
+      "segment_id": "SG-0001",
+      "line_id": "LN-0001",
+      "code": "ENTRY",
+      "name": "입측 이송 구간",
+      "sequence_no": 1,
+      "segment_kind": "material",
+      "is_synthetic": true
+    },
+    {
+      "segment_id": "SG-0002",
+      "line_id": "LN-0001",
+      "code": "CENTER",
+      "name": "중앙 이송 구간",
+      "sequence_no": 2,
+      "segment_kind": "material",
+      "is_synthetic": true
+    },
+    {
+      "segment_id": "SG-0003",
+      "line_id": "LN-0001",
+      "code": "EXIT",
+      "name": "출측 이송·적재 구간",
+      "sequence_no": 3,
+      "segment_kind": "material",
+      "is_synthetic": true
+    },
+    {
+      "segment_id": "SG-0004",
+      "line_id": "LN-0001",
+      "code": "UTIL",
+      "name": "유틸리티 구간",
+      "sequence_no": 99,
+      "segment_kind": "utility",
+      "is_synthetic": true
+    }
+  ],
+  "equipment_groups": [
+    {
+      "equipment_group_id": "EG-0001",
+      "segment_id": "SG-0004",
+      "code": "EG-HYD",
+      "name": "유압 설비군",
+      "group_kind": "hydraulic"
+    },
+    {
+      "equipment_group_id": "EG-0002",
+      "segment_id": "SG-0004",
+      "code": "EG-ELEC",
+      "name": "전력 설비군",
+      "group_kind": "electric"
+    },
+    {
+      "equipment_group_id": "EG-0003",
+      "segment_id": "SG-0004",
+      "code": "EG-PNEU",
+      "name": "공압 설비군",
+      "group_kind": "pneumatic"
+    },
+    {
+      "equipment_group_id": "EG-0004",
+      "segment_id": "SG-0001",
+      "code": "EG-DRV-E",
+      "name": "입측 구동 설비군",
+      "group_kind": "drive"
+    },
+    {
+      "equipment_group_id": "EG-0005",
+      "segment_id": "SG-0003",
+      "code": "EG-DRV-X",
+      "name": "출측 구동 설비군",
+      "group_kind": "drive"
+    },
+    {
+      "equipment_group_id": "EG-0006",
+      "segment_id": "SG-0001",
+      "code": "EG-TRN-E",
+      "name": "입측 이송 설비군",
+      "group_kind": "transport"
+    },
+    {
+      "equipment_group_id": "EG-0007",
+      "segment_id": "SG-0002",
+      "code": "EG-TRN-C",
+      "name": "중앙 이송 설비군",
+      "group_kind": "transport"
+    },
+    {
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "code": "EG-TRN-X",
+      "name": "출측 이송 설비군",
+      "group_kind": "transport"
+    }
+  ],
+  "equipment_types": [
+    {
+      "equipment_type_id": "ET-0001",
+      "type_code": "HPU",
+      "model_name": "가상-HPU-45L",
+      "manufacturer_label": "가상-A",
+      "spec_ref_seed_ids": [
+        "SD-001",
+        "SD-002"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0002",
+      "type_code": "GR",
+      "model_name": "가상-GR-315",
+      "manufacturer_label": "가상-B",
+      "spec_ref_seed_ids": [
+        "SD-003",
+        "SD-004"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0003",
+      "type_code": "RT",
+      "model_name": "가상-RT-1200",
+      "manufacturer_label": "가상-B",
+      "spec_ref_seed_ids": [],
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    },
+    {
+      "equipment_type_id": "ET-0004",
+      "type_code": "CV",
+      "model_name": "가상-CV-800",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [
+        "SD-005"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0005",
+      "type_code": "PDP",
+      "model_name": "가상-PDP-400",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [],
+      "_note": "[신규 제안] 기존 enum(HPU/GR/RT/CV/COMMON) 밖의 유형. K-01의 equipment 값은 COMMON으로 매핑한다",
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    },
+    {
+      "equipment_type_id": "ET-0006",
+      "type_code": "CAU",
+      "model_name": "가상-CAU-75",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [],
+      "_note": "[신규 제안] 위와 동일",
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    }
+  ],
+  "equipment": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "equipment_type_id": "ET-0001",
+      "equipment_group_id": "EG-0001",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 1층",
+      "location_marker": "MK-UTIL-A1",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "hpu_pressure",
+          "unit": "bar",
+          "normal_min": 145.0,
+          "normal_max": 165.0,
+          "alarm_low": 130.0,
+          "alarm_high": 175.0,
+          "max_rate_of_change": 8.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_oil_temp",
+          "unit": "degC",
+          "normal_min": 35.0,
+          "normal_max": 58.0,
+          "alarm_low": null,
+          "alarm_high": 65.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_filter_dp",
+          "unit": "bar",
+          "normal_min": 0.0,
+          "normal_max": 1.2,
+          "alarm_low": null,
+          "alarm_high": 2.0,
+          "max_rate_of_change": 0.3,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_flow",
+          "unit": "L_min",
+          "normal_min": 38.0,
+          "normal_max": 46.0,
+          "alarm_low": 30.0,
+          "alarm_high": null,
+          "max_rate_of_change": 4.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "equipment_type_id": "ET-0005",
+      "equipment_group_id": "EG-0002",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 배전반",
+      "location_marker": "MK-UTIL-A2",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "bus_voltage",
+          "unit": "pct",
+          "normal_min": 97.0,
+          "normal_max": 103.0,
+          "alarm_low": 94.0,
+          "alarm_high": 106.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "equipment_type_id": "ET-0006",
+      "equipment_group_id": "EG-0003",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 2층",
+      "location_marker": "MK-UTIL-A3",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "air_pressure",
+          "unit": "kPa",
+          "normal_min": 550.0,
+          "normal_max": 700.0,
+          "alarm_low": 480.0,
+          "alarm_high": null,
+          "max_rate_of_change": 40.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "equipment_type_id": "ET-0002",
+      "equipment_group_id": "EG-0004",
+      "segment_id": "SG-0001",
+      "location_text": "입측 조작반 좌측 5 m",
+      "location_marker": "MK-E-01",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "alarm_low": null,
+          "alarm_high": 4.5,
+          "max_rate_of_change": 0.6,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "alarm_low": null,
+          "alarm_high": 72.0,
+          "max_rate_of_change": 1.5,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "alarm_low": null,
+          "alarm_high": 36.0,
+          "max_rate_of_change": 3.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "equipment_type_id": "ET-0002",
+      "equipment_group_id": "EG-0005",
+      "segment_id": "SG-0003",
+      "location_text": "출측 조작반 우측 4 m",
+      "location_marker": "MK-X-01",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "alarm_low": null,
+          "alarm_high": 4.5,
+          "max_rate_of_change": 0.6,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "alarm_low": null,
+          "alarm_high": 72.0,
+          "max_rate_of_change": 1.5,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "alarm_low": null,
+          "alarm_high": 36.0,
+          "max_rate_of_change": 3.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0006",
+      "segment_id": "SG-0001",
+      "location_text": "입측 1~12번 롤러",
+      "location_marker": "MK-E-02",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0007",
+      "segment_id": "SG-0002",
+      "location_text": "중앙 13~28번 롤러",
+      "location_marker": "MK-C-01",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_lift_delay",
+          "unit": "min",
+          "normal_min": 0.0,
+          "normal_max": 0.05,
+          "alarm_low": null,
+          "alarm_high": 0.12,
+          "max_rate_of_change": 0.03,
+          "_note": "[가상 값] 승강 응답 지연(분)"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "출측 29~40번 롤러",
+      "location_marker": "MK-X-02",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8.0,
+          "normal_max": 16.0,
+          "alarm_low": null,
+          "alarm_high": 20.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "equipment_type_id": "ET-0004",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "출측 적재 컨베이어",
+      "location_marker": "MK-X-03",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_min": 10.0,
+          "normal_max": 60.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 10.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "cv_belt_tension",
+          "unit": "kPa",
+          "normal_min": 380.0,
+          "normal_max": 460.0,
+          "alarm_low": 330.0,
+          "alarm_high": 510.0,
+          "max_rate_of_change": 30.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "alarm_low": null,
+          "alarm_high": 90.0,
+          "max_rate_of_change": 12.0,
+          "_note": "[가상 값] 적재 대기율"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "equipment_type_id": "ET-0004",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "스크랩 컨베이어",
+      "location_marker": "MK-X-04",
+      "status": "in_service",
+      "criticality": "C",
+      "measurement_points": [
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "alarm_low": null,
+          "alarm_high": 90.0,
+          "max_rate_of_change": 12.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    }
+  ],
+  "components": [
+    {
+      "component_id": "CP-0001",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-PMP",
+      "name": "주 베인펌프",
+      "component_kind": "pump",
+      "failure_modes": [
+        "토출 저하",
+        "이상 소음",
+        "내부 누유"
+      ]
+    },
+    {
+      "component_id": "CP-0002",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-FLT",
+      "name": "리턴 필터",
+      "component_kind": "filter",
+      "failure_modes": [
+        "막힘",
+        "차압 상승",
+        "바이패스 개방"
+      ]
+    },
+    {
+      "component_id": "CP-0003",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-ACC",
+      "name": "축압기",
+      "component_kind": "accumulator",
+      "failure_modes": [
+        "질소압 저하",
+        "블래더 파손"
+      ]
+    },
+    {
+      "component_id": "CP-0004",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-RLV",
+      "name": "릴리프 밸브",
+      "component_kind": "valve",
+      "failure_modes": [
+        "설정압 이탈",
+        "고착"
+      ]
+    },
+    {
+      "component_id": "CP-0005",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-CLR",
+      "name": "오일 쿨러",
+      "component_kind": "valve",
+      "failure_modes": [
+        "냉각 성능 저하",
+        "스케일"
+      ]
+    },
+    {
+      "component_id": "CP-0006",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01-HOS",
+      "name": "주 공급 호스",
+      "component_kind": "hose",
+      "failure_modes": [
+        "크랙",
+        "외피 손상"
+      ]
+    },
+    {
+      "component_id": "CP-0007",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-BRG",
+      "name": "입력측 베어링",
+      "component_kind": "bearing",
+      "failure_modes": [
+        "표면 피로",
+        "압흔",
+        "부착 마모",
+        "전식"
+      ],
+      "_note": "손상 분류 용어는 SD-003·SD-004(ISO 15243) 체계만 참고, 원문 표 미복제"
+    },
+    {
+      "component_id": "CP-0008",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-GBX",
+      "name": "감속 기어박스",
+      "component_kind": "gearbox",
+      "failure_modes": [
+        "치면 마모",
+        "윤활 부족",
+        "이상 진동"
+      ]
+    },
+    {
+      "component_id": "CP-0009",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-CPL",
+      "name": "커플링",
+      "component_kind": "coupling",
+      "failure_modes": [
+        "편심",
+        "탄성체 열화"
+      ]
+    },
+    {
+      "component_id": "CP-0010",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-MTR",
+      "name": "구동 모터",
+      "component_kind": "motor",
+      "failure_modes": [
+        "과부하",
+        "절연 저하"
+      ]
+    },
+    {
+      "component_id": "CP-0011",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-VIB",
+      "name": "진동 센서",
+      "component_kind": "sensor",
+      "failure_modes": [
+        "오프셋 드리프트",
+        "배선 단선"
+      ]
+    },
+    {
+      "component_id": "CP-0012",
+      "equipment_id": "EQ-0004",
+      "code": "GR-01-TMP",
+      "name": "베어링 온도 센서",
+      "component_kind": "sensor",
+      "failure_modes": [
+        "오프셋 드리프트"
+      ]
+    },
+    {
+      "component_id": "CP-0013",
+      "equipment_id": "EQ-0008",
+      "code": "RT-03-ROL",
+      "name": "롤러 세트",
+      "component_kind": "roller",
+      "failure_modes": [
+        "편마모",
+        "고착",
+        "표면 손상"
+      ]
+    },
+    {
+      "component_id": "CP-0014",
+      "equipment_id": "EQ-0008",
+      "code": "RT-03-CLP",
+      "name": "유압 클램프",
+      "component_kind": "valve",
+      "failure_modes": [
+        "응답 지연",
+        "내부 누유"
+      ]
+    },
+    {
+      "component_id": "CP-0015",
+      "equipment_id": "EQ-0009",
+      "code": "CV-01-BLT",
+      "name": "벨트",
+      "component_kind": "belt",
+      "failure_modes": [
+        "사행",
+        "장력 저하",
+        "손상"
+      ]
+    },
+    {
+      "component_id": "CP-0016",
+      "equipment_id": "EQ-0009",
+      "code": "CV-01-TNS",
+      "name": "텐셔너",
+      "component_kind": "valve",
+      "failure_modes": [
+        "유압 저하",
+        "고착"
+      ]
+    },
+    {
+      "component_id": "CP-0017",
+      "equipment_id": "EQ-0007",
+      "code": "RT-02-LFT",
+      "name": "승강 실린더",
+      "component_kind": "valve",
+      "failure_modes": [
+        "응답 지연",
+        "내부 누유"
+      ]
+    },
+    {
+      "component_id": "CP-0018",
+      "equipment_id": "EQ-0006",
+      "code": "RT-01-CLP",
+      "name": "유압 클램프",
+      "component_kind": "valve",
+      "failure_modes": [
+        "응답 지연"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "REL-0001",
+      "from_kind": "equipment",
+      "from_id": "EQ-0006",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 12,
+      "capacity": {
+        "value": 120.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "입측 RT-01에서 중앙 RT-02로 소재 전달",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0002",
+      "from_kind": "equipment",
+      "from_id": "EQ-0007",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 15,
+      "capacity": {
+        "value": 120.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "중앙 RT-02에서 출측 RT-03으로 소재 전달",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0003",
+      "from_kind": "equipment",
+      "from_id": "EQ-0008",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 10,
+      "capacity": {
+        "value": 60.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "출측 RT-03에서 적재 컨베이어 CV-01로 배출",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0004",
+      "from_kind": "equipment",
+      "from_id": "EQ-0008",
+      "to_kind": "equipment",
+      "to_id": "EQ-0010",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "material",
+      "lag_seconds": 10,
+      "capacity": {
+        "value": 20.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "불량 절단재의 스크랩 분기",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0005",
+      "from_kind": "equipment",
+      "from_id": "EQ-0004",
+      "to_kind": "equipment",
+      "to_id": "EQ-0006",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-01이 입측 롤러 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0006",
+      "from_kind": "equipment",
+      "from_id": "EQ-0004",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-01이 중앙 롤러도 함께 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0007",
+      "from_kind": "equipment",
+      "from_id": "EQ-0005",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-02가 출측 롤러 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0008",
+      "from_kind": "equipment",
+      "from_id": "EQ-0005",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "torque",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-02가 적재 컨베이어도 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0009",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0006",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 4,
+      "capacity": {
+        "value": 12.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-01 클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0010",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 5,
+      "capacity": {
+        "value": 14.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-02 승강·클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0011",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 6,
+      "capacity": {
+        "value": 12.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-03 클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0012",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "oil",
+      "lag_seconds": 8,
+      "capacity": {
+        "value": 6.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 CV-01 텐셔너에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0013",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0004",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 GR-01에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0014",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0005",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 GR-02에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0015",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0001",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 HPU-01 펌프 모터에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0016",
+      "from_kind": "equipment",
+      "from_id": "EQ-0003",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "pneumatic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "air",
+      "lag_seconds": 3,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "CAU-01이 CV-01 디버터에 공압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0017",
+      "from_kind": "equipment",
+      "from_id": "EQ-0009",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "interlock",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "signal",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "CV-01 적재 대기율 90 % 초과 시 RT-03 감속·정지 인터록",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0018",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "line",
+      "to_id": "LN-0001",
+      "relation_type": "common_mode",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "signal",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01 압력 130 bar 미달 시 라인 저속 모드로 전환",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0019",
+      "from_kind": "equipment",
+      "from_id": "EQ-0007",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "co_occurrence",
+      "direction": "bidirectional",
+      "causality": "co_occurrence",
+      "evidence_strength": "low",
+      "transfer_medium": "none",
+      "lag_seconds": null,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "동일 유압 분기를 공유해 함께 증상이 나타나는 경향만 있음. 원인 확정 근거로 사용 금지(QC-CAUSE-02)",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0020",
+      "from_kind": "equipment",
+      "from_id": "EQ-0010",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "interlock",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "signal",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "선택 관계. 스크랩 컨베이어 만적 시 RT-03 배출 정지",
+      "is_synthetic": true
+    }
+  ],
+  "manual_documents": [
+    {
+      "document_id": "MD-0001",
+      "doc_kind": "manufacturer_original",
+      "is_editable": false,
+      "title": "가상-HPU-45L 취급 설명서(가상 대체본)",
+      "version": "v1.0",
+      "line_id": null,
+      "equipment_type_ids": [
+        "ET-0001"
+      ],
+      "seed_ids": [
+        "SD-001",
+        "SD-002"
+      ],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+      "status": "active",
+      "is_synthetic": true,
+      "_note": "제조사 원문은 복제하지 않는다. 구조만 참고한 가상 대체본이며 개정 불가(QC-REV-01)"
+    },
+    {
+      "document_id": "MD-0002",
+      "doc_kind": "manufacturer_original",
+      "is_editable": false,
+      "title": "가상-GR-315 감속기 정비 지침(가상 대체본)",
+      "version": "v1.0",
+      "line_id": null,
+      "equipment_type_ids": [
+        "ET-0002"
+      ],
+      "seed_ids": [
+        "SD-003",
+        "SD-004"
+      ],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+      "status": "active",
+      "is_synthetic": true
+    },
+    {
+      "document_id": "MD-0003",
+      "doc_kind": "line_procedure",
+      "is_editable": true,
+      "title": "L1 라인 운전·정지·재가동 절차",
+      "version": "v1.2",
+      "line_id": "LN-0001",
+      "segment_ids": [
+        "SG-0001",
+        "SG-0002",
+        "SG-0003",
+        "SG-0004"
+      ],
+      "seed_ids": [],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000003",
+      "status": "active",
+      "is_synthetic": true
+    },
+    {
+      "document_id": "MD-0004",
+      "doc_kind": "segment_procedure",
+      "is_editable": true,
+      "title": "출측 이송·적재 구간 이상 대응 절차",
+      "version": "v1.1",
+      "line_id": "LN-0001",
+      "segment_ids": [
+        "SG-0003"
+      ],
+      "seed_ids": [
+        "SD-005"
+      ],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000004",
+      "status": "active",
+      "is_synthetic": true
+    },
+    {
+      "document_id": "MD-0005",
+      "doc_kind": "equipment_procedure",
+      "is_editable": true,
+      "title": "HPU-01 일상 점검·이상 대응 보조 매뉴얼",
+      "version": "v1.0",
+      "line_id": "LN-0001",
+      "equipment_type_ids": [
+        "ET-0001"
+      ],
+      "seed_ids": [
+        "SD-001"
+      ],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000005",
+      "status": "active",
+      "is_synthetic": true
+    },
+    {
+      "document_id": "MD-0006",
+      "doc_kind": "org_supplement",
+      "is_editable": true,
+      "title": "L1 안전 금기·정지 작업 보조 지침",
+      "version": "v1.3",
+      "line_id": "LN-0001",
+      "segment_ids": [
+        "SG-0001",
+        "SG-0002",
+        "SG-0003",
+        "SG-0004"
+      ],
+      "seed_ids": [
+        "SD-005",
+        "SD-006",
+        "SD-007"
+      ],
+      "content_sha256": "0000000000000000000000000000000000000000000000000000000000000006",
+      "status": "active",
+      "is_synthetic": true
+    }
+  ],
+  "manual_sections": [
+    {
+      "section_id": "MS-0001",
+      "document_id": "MD-0003",
+      "section_no": "3.1",
+      "heading": "정상 운전 중 이송 불균일 확인 순서",
+      "body": "라인 속도와 운전 모드를 먼저 확인한 뒤 입측·중앙·출측 롤러의 속도 차를 비교한다. 속도 차가 5 m/min 이상이면 구동 계통을 확인한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "op_mode",
+          "op": "in",
+          "value": [
+            "running_normal",
+            "running_reduced"
+          ]
+        }
+      ],
+      "excludes_conditions": [
+        {
+          "field": "stop_restart_state",
+          "op": "in",
+          "value": [
+            "restarting",
+            "restart_prep"
+          ]
+        }
+      ],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a001"
+    },
+    {
+      "section_id": "MS-0002",
+      "document_id": "MD-0003",
+      "section_no": "3.2",
+      "heading": "상류·하류 구분 확인",
+      "body": "증상이 관측된 구간만 보지 않고 상류 구간의 속도·구동 상태와 하류 구간의 적재 대기율을 함께 확인한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a002"
+    },
+    {
+      "section_id": "MS-0003",
+      "document_id": "MD-0004",
+      "section_no": "2.1",
+      "heading": "출측 롤러 구동 이상 의심 시 점검 순서",
+      "body": "RT-03 모터 전류와 롤러 회전 상태를 확인한다. 전류가 정상 범위이면 구동 계통 이상으로 단정하지 않는다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "op_mode",
+          "op": "eq",
+          "value": "running_normal"
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.1",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a003"
+    },
+    {
+      "section_id": "MS-0004",
+      "document_id": "MD-0004",
+      "section_no": "2.2",
+      "heading": "적재 정체 시 조치",
+      "body": "CV-01 적재 대기율이 90 %를 넘으면 인터록으로 RT-03이 감속한다. 이때 RT-03을 설비 이상으로 판단하지 않고 적재부를 먼저 확인한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "cv_queue_len",
+          "op": "gte",
+          "value": 90.0
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "segment",
+      "safety_flag": false,
+      "version": "v1.1",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a004"
+    },
+    {
+      "section_id": "MS-0005",
+      "document_id": "MD-0005",
+      "section_no": "4.2",
+      "heading": "필터 차압 상승 시 대응",
+      "body": "리턴 필터 차압이 1.2 bar를 넘으면 토출 압력과 유량을 함께 확인하고, 2.0 bar 이상이면 정지 계획을 수립한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "hpu_filter_dp",
+          "op": "gte",
+          "value": 1.2
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a005"
+    },
+    {
+      "section_id": "MS-0006",
+      "document_id": "MD-0005",
+      "section_no": "4.3",
+      "heading": "압력 저하가 다수 장비에 동시 영향을 줄 때",
+      "body": "HPU-01 압력이 145 bar 미달이면 RT-01·RT-02·RT-03 클램프와 CV-01 텐셔너를 함께 확인한다. 개별 장비 이상으로 판단하기 전에 공급원을 먼저 확인한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "hpu_pressure",
+          "op": "lt",
+          "value": 145.0
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a006"
+    },
+    {
+      "section_id": "MS-0007",
+      "document_id": "MD-0006",
+      "section_no": "1.1",
+      "heading": "정비 작업 시 운전 정지·잠금",
+      "body": "설비 내부 점검·부품 교체는 운전을 정지하고 전원·유압을 차단·잠금한 뒤 수행한다. 운전 중 롤러·벨트 접근을 금지한다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조; KOSHA GUIDE M-101-2012; OSHA 29 CFR 1910.147",
+      "version": "v1.3",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a007"
+    },
+    {
+      "section_id": "MS-0008",
+      "document_id": "MD-0006",
+      "section_no": "1.2",
+      "heading": "가압 상태 배관·호스 취급 금지",
+      "body": "유압 계통이 가압된 상태에서 배관·호스·커플링을 분리하지 않는다. 압력 해제와 축압기 방압을 확인한 뒤 작업한다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment_group",
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조",
+      "version": "v1.3",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a008"
+    }
+  ],
+  "personas": [
+    {
+      "persona_id": "V-01",
+      "alias": "박 반장",
+      "years": 28,
+      "equipment_focus": [
+        "HPU",
+        "GR"
+      ],
+      "judgment_style": "감각 우선",
+      "risk_posture": "실용",
+      "speech": "짧고 단정적",
+      "known_biases": [
+        "감각 판단 과신",
+        "하류 정체를 상류 문제로 단정"
+      ],
+      "segment_focus": [
+        "SG-0004",
+        "SG-0001"
+      ],
+      "relation_bias": "utility_first",
+      "hop_habit": 2,
+      "stop_restart_experience": "high",
+      "handover_style": "terse_risky",
+      "co_occurrence_confusion": "high",
+      "is_synthetic": true
+    },
+    {
+      "persona_id": "V-02",
+      "alias": "김 기장",
+      "years": 19,
+      "equipment_focus": [
+        "RT",
+        "CV"
+      ],
+      "judgment_style": "계측 우선",
+      "risk_posture": "실용",
+      "speech": "조건문 많음",
+      "known_biases": [
+        "계측값 정상이면 이상 없다고 단정"
+      ],
+      "segment_focus": [
+        "SG-0001",
+        "SG-0002",
+        "SG-0003"
+      ],
+      "relation_bias": "local_first",
+      "hop_habit": 1,
+      "stop_restart_experience": "medium",
+      "handover_style": "checklist",
+      "co_occurrence_confusion": "low",
+      "is_synthetic": true
+    },
+    {
+      "persona_id": "V-03",
+      "alias": "이 주임",
+      "years": 12,
+      "equipment_focus": [
+        "COMMON",
+        "HPU",
+        "PDP",
+        "CAU"
+      ],
+      "judgment_style": "절차 우선",
+      "risk_posture": "보수",
+      "speech": "인계 문서체",
+      "known_biases": [
+        "안전 보류 과다"
+      ],
+      "segment_focus": [
+        "SG-0001",
+        "SG-0002",
+        "SG-0003",
+        "SG-0004"
+      ],
+      "relation_bias": "downstream_first",
+      "hop_habit": 2,
+      "stop_restart_experience": "high",
+      "handover_style": "narrative_complete",
+      "co_occurrence_confusion": "medium",
+      "is_synthetic": true,
+      "_note": "[신규 제안] equipment_focus를 공용(PDP·CAU 포함)으로 확장. V-04 신설 대신 이 방식을 추천(B6-2)"
+    }
+  ],
+  "event_prototypes": [
+    {
+      "prototype_id": "PT-0003",
+      "pattern_name": "상류 구동 이상의 하류 증상화",
+      "case_type": "upstream_cause",
+      "root_equipment_type": "GR",
+      "relation_path_types": [
+        "drive",
+        "material_flow"
+      ],
+      "primary_symptom_class": "이송 불균일",
+      "derived_event_count": 4,
+      "assigned_split": "kb"
+    },
+    {
+      "prototype_id": "PT-0007",
+      "pattern_name": "하류 적재 정체의 전단 설비 오인",
+      "case_type": "downstream_block",
+      "root_equipment_type": "CV",
+      "relation_path_types": [
+        "interlock"
+      ],
+      "primary_symptom_class": "롤러 구동 이상 의심",
+      "derived_event_count": 3,
+      "assigned_split": "dev"
+    },
+    {
+      "prototype_id": "PT-0011",
+      "pattern_name": "공통 유압 저하의 다수 장비 동시 영향",
+      "case_type": "common_utility",
+      "root_equipment_type": "HPU",
+      "relation_path_types": [
+        "hydraulic_supply",
+        "common_mode"
+      ],
+      "primary_symptom_class": "클램프·승강 응답 지연",
+      "derived_event_count": 3,
+      "assigned_split": "sealed"
+    },
+    {
+      "prototype_id": "PT-0015",
+      "pattern_name": "컨베이어 적재부 정체 중 수동 개입 위험",
+      "case_type": "safety_withhold",
+      "root_equipment_type": "CV",
+      "relation_path_types": [
+        "material_flow"
+      ],
+      "primary_symptom_class": "적재 정체",
+      "derived_event_count": 2,
+      "assigned_split": "kb"
+    },
+    {
+      "prototype_id": "PT-0016",
+      "pattern_name": "가압 상태 유압 배관 취급 위험",
+      "case_type": "safety_withhold",
+      "root_equipment_type": "HPU",
+      "relation_path_types": [
+        "hydraulic_supply"
+      ],
+      "primary_symptom_class": "누유·압력 이상",
+      "derived_event_count": 2,
+      "assigned_split": "kb"
+    }
+  ]
+}

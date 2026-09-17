@@ -1,0 +1,868 @@
+{
+  "_meta": {
+    "scenario_no": 2,
+    "title": "하류 정체가 전단 설비 이상처럼 관측되는 사건",
+    "prototype_id": "PT-0007",
+    "split": "dev",
+    "all_numbers_are": "[가상 값]",
+    "references": "00_plant_and_relations.json, 01_kb_cards_shared.json",
+    "split_note": "dev 사건이므로 이 사건에서 파생된 카드는 kb 인덱스에 들어가지 않는다. 행동 후보의 근거와 cards_expected는 kb 카드를 가리킨다."
+  },
+  "operating_context_snapshot": {
+    "context_id": "CTX-0032",
+    "line_id": "LN-0001",
+    "captured_at": "2026-06-03T10:03:00+09:00",
+    "op_mode": "running_normal",
+    "line_speed": 88.0,
+    "product_code": "CR-B12",
+    "segment_states": [
+      {
+        "segment_id": "SG-0001",
+        "state": "running"
+      },
+      {
+        "segment_id": "SG-0002",
+        "state": "running"
+      },
+      {
+        "segment_id": "SG-0003",
+        "state": "blocked"
+      },
+      {
+        "segment_id": "SG-0004",
+        "state": "running"
+      }
+    ],
+    "shift_code": "A",
+    "shift_date": "2026-06-03",
+    "shift_boundary_flag": false,
+    "stop_restart_state": "none",
+    "active_alarms": [
+      {
+        "code": "CV01-QUEUE-HI",
+        "equipment_id": "EQ-0009",
+        "raised_at": "2026-06-03T10:04:00+09:00",
+        "severity": "warn"
+      },
+      {
+        "code": "RT03-ILK-ACT",
+        "equipment_id": "EQ-0008",
+        "raised_at": "2026-06-03T10:06:00+09:00",
+        "severity": "info"
+      }
+    ],
+    "measurements": [
+      {
+        "equipment_id": "EQ-0008",
+        "component_id": null,
+        "signal": "rt_motor_current",
+        "value": 6.2,
+        "unit": "A",
+        "taken_at": "2026-06-03T10:03:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0009",
+        "component_id": null,
+        "signal": "cv_queue_len",
+        "value": 94.0,
+        "unit": "pct",
+        "taken_at": "2026-06-03T10:03:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0009",
+        "component_id": null,
+        "signal": "cv_speed",
+        "value": 0.0,
+        "unit": "m_min",
+        "taken_at": "2026-06-03T10:03:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "component_id": null,
+        "signal": "hpu_pressure",
+        "value": 158.0,
+        "unit": "bar",
+        "taken_at": "2026-06-03T10:03:00+09:00"
+      }
+    ],
+    "utility_states": [
+      {
+        "equipment_id": "EQ-0001",
+        "state": "normal",
+        "value": 158.0,
+        "unit": "bar"
+      },
+      {
+        "equipment_id": "EQ-0002",
+        "state": "normal",
+        "value": 101.0,
+        "unit": "pct"
+      },
+      {
+        "equipment_id": "EQ-0003",
+        "state": "normal",
+        "value": 655.0,
+        "unit": "kPa"
+      }
+    ],
+    "is_synthetic": true,
+    "_note": "SG-0003이 blocked, 상류는 running — QC-CTX-03(구간 상태 정합성) 통과 조합"
+  },
+  "event": {
+    "event_id": "EV-0032",
+    "prototype_id": "PT-0007",
+    "line_id": "LN-0001",
+    "context_id": "CTX-0032",
+    "scenario": "S1",
+    "case_type": "downstream_block",
+    "case_tags": [
+      "condition_mismatch"
+    ],
+    "equipment": "RT",
+    "primary_equipment_id": "EQ-0008",
+    "segment_ids": [
+      "SG-0003"
+    ],
+    "occurred_at": "2026-06-03T10:05:00+09:00",
+    "reported_at": "2026-06-03T10:08:00+09:00",
+    "symptom_text": "출측 RT-03 롤러가 10~20초 간격으로 멈췄다가 다시 돌아간다. 신입 작업자가 롤러 구동 이상으로 보고했다.",
+    "severity": "low",
+    "production_impact": {
+      "kind": "short_stop",
+      "value": 6.0,
+      "unit": "min"
+    },
+    "quality_impact": "none",
+    "safety_impact": "near_miss",
+    "cause_confidence": "determined",
+    "traversed_relation_ids": [
+      "REL-0017",
+      "REL-0007",
+      "REL-0011",
+      "REL-0019",
+      "REL-0020"
+    ],
+    "is_recurrence_of": "EV-0026",
+    "handover_ids": [
+      "HO-0201"
+    ],
+    "revision_candidate_ids": [
+      "RV-0002"
+    ],
+    "timeline": [
+      {
+        "at": "2026-06-03T10:03:00+09:00",
+        "kind": "context",
+        "text": "정상 운전 88 m/min, 품목 CR-B12, A조. 출측 구간 blocked"
+      },
+      {
+        "at": "2026-06-03T10:07:00+09:00",
+        "kind": "observation",
+        "text": "RT-03 롤러 간헐 정지 육안 확인"
+      },
+      {
+        "at": "2026-06-03T10:09:00+09:00",
+        "kind": "observation",
+        "text": "RT-03 모터 전류 6.2 A (정상 8~16 A, 하한 미달)"
+      },
+      {
+        "at": "2026-06-03T10:11:00+09:00",
+        "kind": "observation",
+        "text": "CV-01 적재 대기율 94 % (경보 90 %)"
+      },
+      {
+        "at": "2026-06-03T10:25:00+09:00",
+        "kind": "action",
+        "text": "적재부 걸림 확인. 컨베이어 정지·잠금 후 반장 입회로 제거"
+      },
+      {
+        "at": "2026-06-03T10:52:00+09:00",
+        "kind": "outcome",
+        "text": "적재 대기율 31 %로 하강, RT-03 정상 회전 복귀, 전류 12.1 A"
+      },
+      {
+        "at": "2026-06-03T13:45:00+09:00",
+        "kind": "handover",
+        "text": "B조에 적재 가이드 편심 점검 요청 인계"
+      }
+    ],
+    "measurements": {
+      "rt_motor_current": 6.2,
+      "cv_queue_len": 94.0,
+      "cv_speed": 0.0,
+      "hpu_pressure": 158.0,
+      "gr_vib_rms": 1.8,
+      "_note": "[기존 호환 필드] context_id의 measurements[]에서 코드가 평탄화"
+    },
+    "true_cause": "CV-01 적재부에서 소재가 걸려 적재 대기율이 94 %에 이르렀고, CV-01→RT-03 인터록(REL-0017)이 작동해 RT-03이 감속·정지를 반복했다. RT-03 구동 계통 자체는 정상이며, 관측된 '롤러 구동 이상'은 인터록의 정상 동작이다. [누수 카나리: zzk9-ev0032-9d41]",
+    "true_actions": [
+      "CV-01 적재 대기율 확인",
+      "적재부 걸림 육안 확인",
+      "컨베이어 정지·잠금 후 걸린 소재 제거(수동 개입 금지)",
+      "적재 가이드 편심 점검 요청 등록"
+    ],
+    "true_cause_equipment_ids": [
+      "EQ-0009"
+    ],
+    "cards_expected": [
+      "K-0109",
+      "K-0103",
+      "K-0108"
+    ],
+    "canary_token": "zzk9-ev0032-9d41",
+    "split": "dev",
+    "is_synthetic": true
+  },
+  "observations": [
+    {
+      "observation_id": "OB-0201",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0008",
+      "component_id": "CP-0013",
+      "observed_at": "2026-06-03T10:07:00+09:00",
+      "obs_kind": "visual",
+      "signal": null,
+      "value": null,
+      "unit": null,
+      "qualitative_text": "롤러가 10~20초 간격으로 멈췄다가 다시 돌아간다",
+      "judgment_vs_normal": "unknown",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0202",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0008",
+      "component_id": null,
+      "observed_at": "2026-06-03T10:09:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "rt_motor_current",
+      "value": 6.2,
+      "unit": "A",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true,
+      "_note": "인터록으로 정지한 하류 장비의 전류는 감소해야 한다(PH-05). 증가하면 규칙 위반"
+    },
+    {
+      "observation_id": "OB-0203",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0009",
+      "component_id": null,
+      "observed_at": "2026-06-03T10:11:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "cv_queue_len",
+      "value": 94.0,
+      "unit": "pct",
+      "qualitative_text": null,
+      "judgment_vs_normal": "above",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0204",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0005",
+      "component_id": null,
+      "observed_at": "2026-06-03T10:13:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "gr_vib_rms",
+      "value": 1.8,
+      "unit": "mm_s",
+      "qualitative_text": null,
+      "judgment_vs_normal": "normal",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0205",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0001",
+      "component_id": null,
+      "observed_at": "2026-06-03T10:15:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "hpu_pressure",
+      "value": 158.0,
+      "unit": "bar",
+      "qualitative_text": null,
+      "judgment_vs_normal": "normal",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0206",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0009",
+      "component_id": "CP-0015",
+      "observed_at": "2026-06-03T10:17:00+09:00",
+      "obs_kind": "state",
+      "signal": "cv_speed",
+      "value": 0.0,
+      "unit": "m_min",
+      "qualitative_text": "적재부에서 코일 1매가 가이드에 걸려 정지",
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0207",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0010",
+      "component_id": null,
+      "observed_at": "2026-06-03T10:19:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "cv_queue_len",
+      "value": 22.0,
+      "unit": "pct",
+      "qualitative_text": null,
+      "judgment_vs_normal": "normal",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true,
+      "_note": "스크랩 컨베이어 만적 아님 → REL-0020 경로 제외"
+    }
+  ],
+  "event_equipment_links": [
+    {
+      "link_id": "EL-0201",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0008",
+      "role": "primary_occurrence",
+      "via_relation_id": null,
+      "hop_distance": 0,
+      "reason_text": "증상이 보고된 장비",
+      "evidence_observation_ids": [
+        "OB-0201",
+        "OB-0202"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0202",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0009",
+      "role": "cause_candidate",
+      "via_relation_id": "REL-0017",
+      "hop_distance": 1,
+      "reason_text": "RT-03을 구속하는 인터록의 상류. 적재 대기율 94 %·벨트 정지로 원인 후보를 지지한다",
+      "evidence_observation_ids": [
+        "OB-0203",
+        "OB-0206"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0203",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0005",
+      "role": "checked_no_finding",
+      "via_relation_id": "REL-0007",
+      "hop_distance": 1,
+      "reason_text": "RT-03 구동 감속기. 진동 1.8 mm/s 정상이므로 구동 이상 후보에서 제외",
+      "evidence_observation_ids": [
+        "OB-0204"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0204",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0001",
+      "role": "checked_no_finding",
+      "via_relation_id": "REL-0011",
+      "hop_distance": 1,
+      "reason_text": "유압 공급원. 158 bar 정상",
+      "evidence_observation_ids": [
+        "OB-0205"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0205",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0007",
+      "role": "common_cause_candidate",
+      "via_relation_id": "REL-0019",
+      "hop_distance": 1,
+      "reason_text": "RT-03과 동시 증상 경향이 있는 관계이나 causality=co_occurrence이므로 원인 후보로 올리지 않는다(QC-CAUSE-02). 추가 확인 질문 생성에만 사용",
+      "evidence_observation_ids": [],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0206",
+      "event_id": "EV-0032",
+      "equipment_id": "EQ-0010",
+      "role": "checked_no_finding",
+      "via_relation_id": "REL-0020",
+      "hop_distance": 1,
+      "reason_text": "스크랩 컨베이어 대기율 22 %로 만적 아님",
+      "evidence_observation_ids": [
+        "OB-0207"
+      ],
+      "visibility": "pre_action"
+    }
+  ],
+  "action_candidates": [
+    {
+      "action_candidate_id": "AC-0201",
+      "event_id": "EV-0032",
+      "rank": 1,
+      "action_kind": "check",
+      "title": "CV-01 적재 대기율과 적재부 걸림 확인",
+      "detail": "적재 대기율이 90 % 이상이면 RT-03 감속은 인터록의 정상 동작이다. 적재부 가이드와 걸린 소재를 육안으로 확인한다.",
+      "target_equipment_id": "EQ-0009",
+      "basis_card_ids": [
+        "K-0109",
+        "K-0103"
+      ],
+      "basis_section_ids": [
+        "MS-0004"
+      ],
+      "supporting_observation_ids": [
+        "OB-0203",
+        "OB-0206"
+      ],
+      "applied_conditions": [
+        {
+          "signal": "cv_queue_len",
+          "op": "gte",
+          "value": 90.0,
+          "unit": "pct"
+        }
+      ],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": false,
+      "withhold_reason": null,
+      "visibility": "pre_action"
+    },
+    {
+      "action_candidate_id": "AC-0202",
+      "event_id": "EV-0032",
+      "rank": 2,
+      "action_kind": "check",
+      "title": "인터록 작동 이력 확인",
+      "detail": "RT03-ILK-ACT 알람 이력으로 감속이 인터록 때문인지 확인한다.",
+      "target_equipment_id": "EQ-0008",
+      "basis_card_ids": [
+        "K-0109"
+      ],
+      "basis_section_ids": [
+        "MS-0004"
+      ],
+      "supporting_observation_ids": [
+        "OB-0202"
+      ],
+      "applied_conditions": [],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": false,
+      "withhold_reason": null,
+      "visibility": "pre_action"
+    },
+    {
+      "action_candidate_id": "AC-0203",
+      "event_id": "EV-0032",
+      "rank": 3,
+      "action_kind": "no_action_observe",
+      "title": "RT-03 구동부 점검은 보류",
+      "detail": "RT-03 구동부 점검 지식(하류 모터 전류 상승 조건)은 이번 상황과 조건이 다르다. 전류가 상한 초과가 아니라 하한 미달이므로 적용하지 않는다.",
+      "target_equipment_id": "EQ-0008",
+      "basis_card_ids": [],
+      "basis_section_ids": [
+        "MS-0003"
+      ],
+      "supporting_observation_ids": [
+        "OB-0202"
+      ],
+      "applied_conditions": [
+        {
+          "signal": "rt_motor_current",
+          "op": "lt",
+          "value": 8.0,
+          "unit": "A"
+        }
+      ],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": false,
+      "withhold_reason": "condition_mismatch",
+      "visibility": "pre_action",
+      "_note": "K-0102(하류 전류 상승 시 상류 확인)는 rt_motor_current ≥ 16 조건이므로 제외되어야 한다. 조건 불일치 제외율(M-13)의 채점 지점"
+    },
+    {
+      "action_candidate_id": "AC-0204",
+      "event_id": "EV-0032",
+      "rank": 4,
+      "action_kind": "loto_request",
+      "title": "걸린 소재 제거는 정지·잠금 후 실시",
+      "detail": "운전 중 적재부에 손·도구를 넣지 않는다. 컨베이어를 정지하고 기동 장치를 잠근 뒤 반장 입회로 제거한다.",
+      "target_equipment_id": "EQ-0009",
+      "basis_card_ids": [
+        "K-0108"
+      ],
+      "basis_section_ids": [
+        "MS-0007"
+      ],
+      "supporting_observation_ids": [
+        "OB-0206"
+      ],
+      "applied_conditions": [],
+      "requires_approval": true,
+      "approval_role": "supervisor",
+      "safety_flag": true,
+      "withhold_reason": "safety_requires_approval",
+      "visibility": "pre_action",
+      "_note": "T5 근거이므로 순위 무관 선두 노출. safety_impact=near_miss인 이유(신입이 손으로 밀려 했음)와 연결"
+    }
+  ],
+  "actions_executed": [
+    {
+      "action_executed_id": "AX-0201",
+      "event_id": "EV-0032",
+      "action_candidate_id": "AC-0201",
+      "executed_at": "2026-06-03T10:21:00+09:00",
+      "executor_persona_id": "V-02",
+      "approval_status": "not_required",
+      "approver_role": null,
+      "approved_at": null,
+      "action_kind": "check",
+      "detail": "적재 대기율 94 % 확인, 적재부 가이드에 코일 1매 걸림 확인",
+      "deviation_reason": null,
+      "is_temporary_fix": false,
+      "visibility": "post_action"
+    },
+    {
+      "action_executed_id": "AX-0202",
+      "event_id": "EV-0032",
+      "action_candidate_id": "AC-0204",
+      "executed_at": "2026-06-03T10:25:00+09:00",
+      "executor_persona_id": "V-03",
+      "approval_status": "approved",
+      "approver_role": "supervisor",
+      "approved_at": "2026-06-03T10:23:00+09:00",
+      "action_kind": "clean",
+      "detail": "컨베이어 정지·기동장치 잠금 후 반장 입회로 걸린 코일 제거, 이후 재기동",
+      "deviation_reason": "후보는 loto_request였고 실제로는 정지·잠금 후 제거(clean)까지 수행했다",
+      "is_temporary_fix": false,
+      "visibility": "post_action"
+    }
+  ],
+  "outcomes": [
+    {
+      "outcome_id": "OC-0201",
+      "action_executed_id": "AX-0202",
+      "event_id": "EV-0032",
+      "recorded_at": "2026-06-03T10:52:00+09:00",
+      "immediate_result": "resolved",
+      "observation_window_h": 8,
+      "result_status": "confirmed",
+      "post_measurements": [
+        {
+          "equipment_id": "EQ-0009",
+          "signal": "cv_queue_len",
+          "value": 31.0,
+          "unit": "pct",
+          "taken_at": "2026-06-03T10:52:00+09:00",
+          "judgment_vs_normal": "normal"
+        },
+        {
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "value": 12.1,
+          "unit": "A",
+          "taken_at": "2026-06-03T10:52:00+09:00",
+          "judgment_vs_normal": "normal"
+        }
+      ],
+      "visibility": "post_action",
+      "_note": "resolved이며 조치 후 측정값이 모두 정상이므로 QC-ACT-03 통과"
+    }
+  ],
+  "recurrence_checks": [
+    {
+      "recurrence_check_id": "RC-0201",
+      "outcome_id": "OC-0201",
+      "checked_at": "2026-06-03T19:00:00+09:00",
+      "recurrence_status": "no_recurrence",
+      "recurred_event_id": null,
+      "visibility": "post_action"
+    }
+  ],
+  "prior_event_compact": {
+    "_note": "RV-0002의 근거 사건 2건 요건을 만족시키는 선행 사건. 같은 prototype_id(PT-0007)·같은 split(dev)",
+    "event": {
+      "event_id": "EV-0026",
+      "prototype_id": "PT-0007",
+      "line_id": "LN-0001",
+      "context_id": null,
+      "scenario": "S1",
+      "case_type": "downstream_block",
+      "equipment": "RT",
+      "primary_equipment_id": "EQ-0008",
+      "occurred_at": "2026-05-06T02:30:00+09:00",
+      "symptom_text": "야간에 출측 롤러가 간헐 정지, 구동 이상으로 보고됨",
+      "cause_confidence": "determined",
+      "true_cause": "CV-01 적재 정체로 인터록 작동(EV-0032와 동일 원형)",
+      "true_actions": [
+        "적재 대기율 확인",
+        "정지·잠금 후 제거"
+      ],
+      "cards_expected": [
+        "K-0109"
+      ],
+      "split": "dev",
+      "is_synthetic": true,
+      "_context_note": "이 샘플 묶음에서는 선행 사건의 컨텍스트 스냅샷을 생략했다. 실제 데이터셋에서는 CTX-xxxx가 필수이며 null이면 QC-REF-01 위반이다."
+    },
+    "outcome": {
+      "outcome_id": "OC-0026",
+      "action_executed_id": "AX-0026",
+      "event_id": "EV-0026",
+      "recorded_at": "2026-05-06T03:10:00+09:00",
+      "immediate_result": "resolved",
+      "observation_window_h": 24,
+      "result_status": "confirmed",
+      "visibility": "post_action"
+    },
+    "recurrence_check": {
+      "recurrence_check_id": "RC-0026",
+      "outcome_id": "OC-0026",
+      "checked_at": "2026-06-03T12:00:00+09:00",
+      "recurrence_status": "recurred",
+      "recurred_event_id": "EV-0032",
+      "visibility": "post_action"
+    }
+  },
+  "knowledge_cards": [
+    {
+      "card_id": "K-0201",
+      "version": "v1.0",
+      "grade": "L1",
+      "tacit_type": "T2",
+      "equipment": "RT",
+      "component": "롤러 세트",
+      "scenario": "S1",
+      "title": "하류 인터록 감속과 구동 이상의 구분 기준",
+      "symptom": "출측 롤러가 간헐 정지",
+      "know_how": "모터 전류가 정상 하한 미달이면 인터록 감속을 먼저 의심하고, 상한 초과면 구동 부하 이상을 의심한다.",
+      "rationale": "인터록 감속은 구동 명령 자체가 줄어 전류가 함께 낮아지지만, 구동 부하 이상은 전류가 높아진다.",
+      "conditions": [
+        {
+          "signal": "rt_motor_current",
+          "op": "lt",
+          "value": 8.0
+        }
+      ],
+      "exclusions": [
+        {
+          "signal": "op_mode",
+          "op": "in",
+          "value": [
+            "restarting"
+          ]
+        }
+      ],
+      "safety_flag": false,
+      "safety_basis": null,
+      "conflict_group": null,
+      "confidence": "medium",
+      "provenance": {
+        "seed_ids": [
+          "SD-005"
+        ],
+        "persona_id": "V-02",
+        "event_ids": [
+          "EV-0026",
+          "EV-0032"
+        ],
+        "generator": "gen-model-A",
+        "generated_at": "2026-10-07T10:00:00+09:00"
+      },
+      "scope_level": "equipment",
+      "line_id": "LN-0001",
+      "equipment_ids": [
+        "EQ-0008",
+        "EQ-0009"
+      ],
+      "relation_ids": [
+        "REL-0017"
+      ],
+      "context_conditions": [],
+      "manual_refs": [
+        "MS-0003",
+        "MS-0004"
+      ],
+      "tried_and_failed": [],
+      "stop_conditions": [],
+      "expected_result": null,
+      "valid_until": null,
+      "verifier": null,
+      "split": "dev",
+      "status": "accepted",
+      "is_synthetic": true,
+      "_note": "dev 분할 카드이므로 kb 인덱스에 넣지 않는다(QC-LEAK-03 대상은 sealed이지만 dev도 검색 대상 제외: grade·status 무관하게 split=kb만 검색)"
+    }
+  ],
+  "handover_records": [
+    {
+      "handover_id": "HO-0201",
+      "event_ids": [
+        "EV-0032"
+      ],
+      "shift_from": "A",
+      "shift_to": "B",
+      "shift_date": "2026-06-03",
+      "created_at": "2026-06-03T13:45:00+09:00",
+      "author_persona_id": "V-02",
+      "memo_text": "10시경 출측 롤러 간헐 정지. 원인은 적재부 걸림. 정지·잠금 후 제거 완료. 적재 가이드 편심 의심되니 확인 필요. 신입이 손으로 밀려 한 일 있었음 — 교육 필요.",
+      "open_items": [
+        {
+          "item_id": "HOI-0201-1",
+          "text": "CV-01 적재 가이드 편심 점검 요청 등록",
+          "status": "open",
+          "due_shift": "B",
+          "basis_ids": [
+            "OB-0206",
+            "AX-0202"
+          ]
+        },
+        {
+          "item_id": "HOI-0201-2",
+          "text": "운전 중 적재부 수동 개입 금지 재교육(아차사고)",
+          "status": "open",
+          "due_shift": "B",
+          "basis_ids": [
+            "K-0108"
+          ]
+        },
+        {
+          "item_id": "HOI-0201-3",
+          "text": "동일 증상 재발 시 RT-03 구동부부터 분해하지 않도록 확인 순서 공유",
+          "status": "open",
+          "due_shift": "C",
+          "basis_ids": [
+            "K-0109",
+            "K-0201"
+          ]
+        }
+      ],
+      "linked_action_executed_ids": [
+        "AX-0201",
+        "AX-0202"
+      ],
+      "expected_open_items": [
+        "HOI-0201-1",
+        "HOI-0201-2",
+        "HOI-0201-3"
+      ],
+      "is_synthetic": true,
+      "_note": "V-02의 handover_style=checklist이므로 메모에 3항목이 대체로 드러난다. HOI-0201-3은 메모에 암시만 되어 있어 추출 난도가 높다"
+    }
+  ],
+  "revision_chain": {
+    "revision_proposal": {
+      "revision_id": "RV-0002",
+      "base_document_id": "MD-0004",
+      "base_version": "v1.1",
+      "target_section_id": "MS-0003",
+      "base_section_sha256": "000000000000000000000000000000000000000000000000000000000000a003",
+      "change_kind": "add_exclusion",
+      "before_text": "RT-03 모터 전류와 롤러 회전 상태를 확인한다. 전류가 정상 범위이면 구동 계통 이상으로 단정하지 않는다.",
+      "after_text": "RT-03 모터 전류와 롤러 회전 상태를 확인한다. 전류가 정상 범위이면 구동 계통 이상으로 단정하지 않는다. 전류가 정상 하한(8 A) 미달이면 이 절을 적용하지 않고 2.2 적재 정체 절차를 따른다.",
+      "reason_text": "같은 원형의 사건이 2회(EV-0026, EV-0032) 발생했고 두 번 모두 하류 정체가 원인이었다. 현행 절은 전류 하한 미달 상황의 제외 조건이 없어 신입이 구동부 점검으로 진입한다.",
+      "basis_event_ids": [
+        "EV-0026",
+        "EV-0032"
+      ],
+      "basis_card_ids": [
+        "K-0109",
+        "K-0201"
+      ],
+      "basis_recurrence_ids": [
+        "RC-0026"
+      ],
+      "apply_scope": {
+        "scope_level": "segment",
+        "ids": [
+          "SG-0003"
+        ]
+      },
+      "affected_segment_ids": [
+        "SG-0003"
+      ],
+      "affected_equipment_ids": [
+        "EQ-0008",
+        "EQ-0009",
+        "EQ-0010"
+      ],
+      "verification_needed": [
+        "전류 하한 8 A가 CR-A08 품목에서도 동일한지 확인",
+        "야간 저속 운전 시 하한 기준 재확인"
+      ],
+      "risk_level": "low",
+      "state": "approved",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000b002",
+      "searchable_after_publish": false,
+      "is_synthetic": true,
+      "visibility": "post_action",
+      "_note": "state=approved이지만 아직 발행되지 않았다. searchable_after_publish=false이므로 검색에 반영되지 않아야 한다 — M-19(승인 전 개정 검색 반영 0건)의 양성 시험 케이스"
+    },
+    "approval": {
+      "approval_id": "AP-0002",
+      "revision_id": "RV-0002",
+      "approver_role": "supervisor",
+      "approver_code": "R-02",
+      "decision": "approved",
+      "reason_text": "제외 조건 추가만으로 위험 증가가 없고 근거 사건 2건이 확인된다.",
+      "decided_at": "2026-06-05T09:10:00+09:00",
+      "checked_base_version": "v1.1"
+    },
+    "publish_record": null,
+    "_answer_change_note": "발행 전(현 상태): '출측 롤러 간헐 정지' 질의에 MS-0003 v1.1이 그대로 검색되어 구동부 점검이 먼저 제시될 수 있다. 발행 후(예정): MS-0003 v1.2의 제외 조건이 적용되어 응답이 MS-0004(적재 정체 절차)로 유도된다. **승인만 된 상태에서는 이 변화가 나타나지 않아야 하며, 나타나면 M-19 실패다.**"
+  },
+  "eval_items": [
+    {
+      "eval_item_id": "EVQ-0201",
+      "split": "dev",
+      "mode": "query",
+      "question": "출측 롤러가 10~20초 간격으로 멈춘다. 모터 전류는 6.2 A다. 무엇을 먼저 확인해야 하나?",
+      "expected_card_ids": [
+        "K-0109",
+        "K-0103"
+      ],
+      "expected_section_ids": [
+        "MS-0004"
+      ],
+      "expected_equipment_ids": [
+        "EQ-0008",
+        "EQ-0009",
+        "EQ-0005"
+      ],
+      "expected_relation_ids": [
+        "REL-0017"
+      ],
+      "expected_excluded_card_ids": [
+        "K-0102"
+      ],
+      "expected_withhold": false,
+      "expected_safety_cards": [
+        "K-0108"
+      ],
+      "_note": "expected_excluded_card_ids가 조건 불일치 제외율(M-13) 채점 근거다"
+    },
+    {
+      "eval_item_id": "EVQ-0202",
+      "split": "dev",
+      "mode": "handover",
+      "question": "A조 메모를 다음 교대 인계 항목 후보로 정리하라.",
+      "input_handover_id": "HO-0201",
+      "expected_open_items": [
+        "HOI-0201-1",
+        "HOI-0201-2",
+        "HOI-0201-3"
+      ],
+      "expected_withhold": false
+    }
+  ]
+}

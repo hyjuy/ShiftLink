@@ -9,9 +9,8 @@
 - `fix/*`, `chore/*` : 동일 규칙
 
 ## PR 규칙
-- 리뷰어 1명 이상. 스키마·인터페이스(`src/pipeline/`) 변경은 유현준 필수 리뷰.
+- 리뷰 없이 PR을 바로 merge할 수 있다 (리뷰어 필수 규칙 제거).
 - squash merge로 `main` 히스토리 선형 유지.
-- CODEOWNERS가 영역별 리뷰어 자동 할당.
 
 ## 태그
 - 주차 통합 체크포인트: `v0.1-week1`, `v0.2-week2`(MVP E2E), `v0.3-week3`(평가 완료), `v1.0-week4`(최종 동결)

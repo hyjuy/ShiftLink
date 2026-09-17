@@ -1,1 +1,0 @@
-"""ShiftLink pipeline package."""

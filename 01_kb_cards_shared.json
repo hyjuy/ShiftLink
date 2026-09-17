@@ -1,0 +1,241 @@
+{
+  "_meta": {
+    "purpose": "dev·sealed 사건의 cards_expected와 행동 후보 근거가 참조하는 kb 카드. 기존 규칙 '평가 문항이 참조해야 하는 일반 지식은 kb 카드에서 뽑아 expected_card_ids로 지정한다'(4.7.6)를 따른다.",
+    "split": "kb",
+    "all_numbers_are": "[가상 값]"
+  },
+  "kb_source_events_compact": [
+    {
+      "event_id": "EV-0024",
+      "prototype_id": "PT-0015",
+      "line_id": "LN-0001",
+      "context_id": null,
+      "scenario": "S1",
+      "case_type": "safety_withhold",
+      "equipment": "CV",
+      "primary_equipment_id": "EQ-0009",
+      "occurred_at": "2026-03-11T13:20:00+09:00",
+      "symptom_text": "적재부에 코일이 걸려 컨베이어가 정체되었고 작업자가 손으로 밀려 했다",
+      "cause_confidence": "determined",
+      "true_cause": "적재 가이드 편심으로 소재가 걸림. 수동 개입 시도는 안전상 보류가 정답인 사건. [누수 카나리: zzk9-ev0024-1c8e]",
+      "true_actions": [
+        "컨베이어 정지·잠금 후 제거",
+        "반장 호출"
+      ],
+      "cards_expected": [
+        "K-0108",
+        "K-0109"
+      ],
+      "canary_token": "zzk9-ev0024-1c8e",
+      "split": "kb",
+      "is_synthetic": true,
+      "_context_note": "샘플에서 컨텍스트 스냅샷 생략. 실제 데이터셋에서는 필수."
+    },
+    {
+      "event_id": "EV-0025",
+      "prototype_id": "PT-0016",
+      "line_id": "LN-0001",
+      "context_id": null,
+      "scenario": "S1",
+      "case_type": "safety_withhold",
+      "equipment": "HPU",
+      "primary_equipment_id": "EQ-0001",
+      "occurred_at": "2026-03-24T20:05:00+09:00",
+      "symptom_text": "주 공급 호스 연결부에서 미세 누유가 보였다",
+      "cause_confidence": "determined",
+      "true_cause": "호스 커플링 오링 열화. 가압 상태 분리 시도는 안전상 보류가 정답인 사건. [누수 카나리: zzk9-ev0025-4b2d]",
+      "true_actions": [
+        "압력 해제·축압기 방압 확인 후 작업",
+        "정비 담당 승인"
+      ],
+      "cards_expected": [
+        "K-0110"
+      ],
+      "canary_token": "zzk9-ev0025-4b2d",
+      "split": "kb",
+      "is_synthetic": true,
+      "_context_note": "샘플에서 컨텍스트 스냅샷 생략. 실제 데이터셋에서는 필수."
+    }
+  ],
+  "knowledge_cards": [
+    {
+      "card_id": "K-0108",
+      "version": "v1.0",
+      "grade": "L1",
+      "tacit_type": "T5",
+      "equipment": "CV",
+      "component": "벨트",
+      "scenario": "S1",
+      "title": "운전 중 컨베이어 적재부·리턴 롤러 접근 금지",
+      "symptom": "적재부에 소재가 걸려 정체된 상황",
+      "know_how": "운전 중에는 적재부나 리턴 롤러 쪽에 손·도구를 넣지 않는다. 걸린 소재는 컨베이어를 정지하고 기동 장치를 잠근 뒤 제거하며, 혼자 판단하지 않고 반장에게 알린다.",
+      "rationale": "이송 중 협착·말림 위험이 크고, 정비·청소 작업 시 운전 정지가 요구된다.",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": true,
+      "safety_basis": "KOSHA GUIDE M-101-2012 「컨베이어의 안전에 관한 기술지침」; 산업안전보건기준에 관한 규칙 제92조",
+      "conflict_group": null,
+      "confidence": "high",
+      "provenance": {
+        "seed_ids": [
+          "SD-005",
+          "SD-006"
+        ],
+        "persona_id": "V-03",
+        "event_ids": [
+          "EV-0024"
+        ],
+        "generator": "gen-model-A",
+        "generated_at": "2026-10-07T10:00:00+09:00"
+      },
+      "scope_level": "equipment",
+      "line_id": "LN-0001",
+      "equipment_ids": [
+        "EQ-0009",
+        "EQ-0010"
+      ],
+      "relation_ids": [],
+      "context_conditions": [],
+      "manual_refs": [
+        "MS-0007"
+      ],
+      "tried_and_failed": [],
+      "stop_conditions": [],
+      "expected_result": null,
+      "valid_until": null,
+      "verifier": null,
+      "split": "kb",
+      "status": "accepted",
+      "is_synthetic": true
+    },
+    {
+      "card_id": "K-0109",
+      "version": "v1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "CV",
+      "component": "벨트",
+      "scenario": "S2",
+      "title": "적재 정체 확인 순서",
+      "symptom": "출측 이송이 간헐적으로 멈춘다",
+      "know_how": "① CV-01 적재 대기율 확인 ② 적재 가이드·걸림 육안 확인 ③ 벨트 속도·장력 확인 ④ 인터록 작동 이력 확인. 대기율 90 % 이상이면 전단 롤러 이상으로 판단하지 않는다.",
+      "rationale": "적재 대기율 90 % 이상에서 RT-03 감속 인터록이 작동하므로 전단 장비가 멈추는 것은 정상 동작이다.",
+      "conditions": [
+        {
+          "signal": "cv_queue_len",
+          "op": "gte",
+          "value": 90.0
+        }
+      ],
+      "exclusions": [
+        {
+          "signal": "op_mode",
+          "op": "in",
+          "value": [
+            "maintenance_loto"
+          ]
+        }
+      ],
+      "safety_flag": false,
+      "safety_basis": null,
+      "conflict_group": null,
+      "confidence": "high",
+      "provenance": {
+        "seed_ids": [
+          "SD-005"
+        ],
+        "persona_id": "V-02",
+        "event_ids": [
+          "EV-0024"
+        ],
+        "generator": "gen-model-A",
+        "generated_at": "2026-10-07T10:00:00+09:00"
+      },
+      "scope_level": "segment",
+      "line_id": "LN-0001",
+      "segment_ids": [
+        "SG-0003"
+      ],
+      "equipment_ids": [
+        "EQ-0009",
+        "EQ-0008"
+      ],
+      "relation_ids": [
+        "REL-0017",
+        "REL-0003"
+      ],
+      "context_conditions": [],
+      "manual_refs": [
+        "MS-0004"
+      ],
+      "tried_and_failed": [],
+      "stop_conditions": [],
+      "expected_result": "전단 설비 이상과 하류 정체가 구분된다",
+      "valid_until": null,
+      "verifier": null,
+      "split": "kb",
+      "status": "accepted",
+      "is_synthetic": true
+    },
+    {
+      "card_id": "K-0110",
+      "version": "v1.0",
+      "grade": "L1",
+      "tacit_type": "T5",
+      "equipment": "HPU",
+      "component": "주 공급 호스",
+      "scenario": "S3",
+      "title": "가압 상태에서 유압 배관·호스 분리 금지",
+      "symptom": "연결부 누유, 압력 이상",
+      "know_how": "유압 계통이 가압된 상태에서 호스·배관·커플링을 분리하지 않는다. 압력을 해제하고 축압기 방압을 확인한 뒤, 정비 담당 승인으로 작업한다. 확인 전에는 보류한다.",
+      "rationale": "가압 유체의 분사·기계적 반발로 중대 재해 위험이 있으며, 정비 작업 시 운전 정지와 에너지 차단이 요구된다.",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조; OSHA 29 CFR 1910.147(LOTO)",
+      "conflict_group": null,
+      "confidence": "high",
+      "provenance": {
+        "seed_ids": [
+          "SD-001",
+          "SD-006",
+          "SD-007"
+        ],
+        "persona_id": "V-03",
+        "event_ids": [
+          "EV-0025"
+        ],
+        "generator": "gen-model-A",
+        "generated_at": "2026-10-07T10:00:00+09:00"
+      },
+      "scope_level": "equipment",
+      "line_id": "LN-0001",
+      "equipment_ids": [
+        "EQ-0001"
+      ],
+      "component_ids": [
+        "CP-0002",
+        "CP-0003",
+        "CP-0006"
+      ],
+      "relation_ids": [
+        "REL-0009",
+        "REL-0010",
+        "REL-0011",
+        "REL-0012"
+      ],
+      "context_conditions": [],
+      "manual_refs": [
+        "MS-0008"
+      ],
+      "tried_and_failed": [],
+      "stop_conditions": [],
+      "expected_result": null,
+      "valid_until": null,
+      "verifier": null,
+      "split": "kb",
+      "status": "accepted",
+      "is_synthetic": true
+    }
+  ]
+}

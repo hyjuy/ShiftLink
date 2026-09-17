@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import pytest
 from pydantic import ValidationError
 
-from src.pipeline.schemas import Artifact, Condition, Event, KnowledgeCard, Provenance
+from shiftlink.agent.schemas import Artifact, Condition, Event, KnowledgeCard, Provenance
 
 
 def test_schema_v09_and_k01_validation_rules() -> None:

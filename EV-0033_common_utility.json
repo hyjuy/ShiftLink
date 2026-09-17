@@ -1,0 +1,1118 @@
+{
+  "_meta": {
+    "scenario_no": 3,
+    "title": "공통 유틸리티 이상이 여러 장비에 동시 영향을 주는 사건",
+    "prototype_id": "PT-0011",
+    "split": "sealed",
+    "all_numbers_are": "[가상 값]",
+    "references": "00_plant_and_relations.json, 01_kb_cards_shared.json",
+    "sealed_rules": [
+      "이 사건에서 파생된 카드(K-0301)는 K-01 베이스·kb 인덱스에 넣지 않고 정답지로만 쓴다(4.7.6).",
+      "cards_expected는 kb 카드(K-0105, K-0110)를 가리킨다 — 평가 문항이 참조할 일반 지식은 kb에서 뽑는다.",
+      "revision_chain과 outcome·recurrence는 정답지·후행 정보이며 t시점 검색에 노출되지 않는다.",
+      "2주차 말 봉인 대상. 3주차 채점 전까지 열람 금지."
+    ]
+  },
+  "operating_context_snapshot": {
+    "context_id": "CTX-0033",
+    "line_id": "LN-0001",
+    "captured_at": "2026-07-21T23:08:00+09:00",
+    "op_mode": "running_reduced",
+    "line_speed": 62.0,
+    "product_code": "CR-A08",
+    "segment_states": [
+      {
+        "segment_id": "SG-0001",
+        "state": "running"
+      },
+      {
+        "segment_id": "SG-0002",
+        "state": "running"
+      },
+      {
+        "segment_id": "SG-0003",
+        "state": "running"
+      },
+      {
+        "segment_id": "SG-0004",
+        "state": "running"
+      }
+    ],
+    "shift_code": "C",
+    "shift_date": "2026-07-21",
+    "shift_boundary_flag": false,
+    "stop_restart_state": "none",
+    "active_alarms": [
+      {
+        "code": "HPU01-DP-HI",
+        "equipment_id": "EQ-0001",
+        "raised_at": "2026-07-21T22:55:00+09:00",
+        "severity": "warn"
+      },
+      {
+        "code": "LN01-SPD-RED",
+        "equipment_id": "EQ-0001",
+        "raised_at": "2026-07-21T23:02:00+09:00",
+        "severity": "info"
+      },
+      {
+        "code": "RT02-LFT-DLY",
+        "equipment_id": "EQ-0007",
+        "raised_at": "2026-07-21T23:10:00+09:00",
+        "severity": "warn"
+      }
+    ],
+    "measurements": [
+      {
+        "equipment_id": "EQ-0001",
+        "component_id": null,
+        "signal": "hpu_pressure",
+        "value": 138.0,
+        "unit": "bar",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "component_id": "CP-0002",
+        "signal": "hpu_filter_dp",
+        "value": 1.9,
+        "unit": "bar",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "component_id": null,
+        "signal": "hpu_oil_temp",
+        "value": 61.0,
+        "unit": "degC",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "component_id": null,
+        "signal": "hpu_flow",
+        "value": 33.0,
+        "unit": "L_min",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0006",
+        "component_id": "CP-0018",
+        "signal": "rt_clamp_press",
+        "value": 88.0,
+        "unit": "bar",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0008",
+        "component_id": "CP-0014",
+        "signal": "rt_clamp_press",
+        "value": 90.0,
+        "unit": "bar",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      },
+      {
+        "equipment_id": "EQ-0002",
+        "component_id": null,
+        "signal": "bus_voltage",
+        "value": 100.0,
+        "unit": "pct",
+        "taken_at": "2026-07-21T23:08:00+09:00"
+      }
+    ],
+    "utility_states": [
+      {
+        "equipment_id": "EQ-0001",
+        "state": "degraded",
+        "value": 138.0,
+        "unit": "bar"
+      },
+      {
+        "equipment_id": "EQ-0002",
+        "state": "normal",
+        "value": 100.0,
+        "unit": "pct"
+      },
+      {
+        "equipment_id": "EQ-0003",
+        "state": "normal",
+        "value": 648.0,
+        "unit": "kPa"
+      }
+    ],
+    "is_synthetic": true,
+    "_note": "op_mode=running_reduced이고 line_speed 62는 정격 범위 내 → QC-CTX-01 통과. HPU 압력 130 bar 미달은 아니므로 common_mode 자동 전환 경계 아래이며, 저속 운전은 야간 계획 저속이다"
+  },
+  "event": {
+    "event_id": "EV-0033",
+    "prototype_id": "PT-0011",
+    "line_id": "LN-0001",
+    "context_id": "CTX-0033",
+    "scenario": "S3",
+    "case_type": "common_utility",
+    "case_tags": [
+      "outcome_unconfirmed",
+      "safety_withhold"
+    ],
+    "equipment": "RT",
+    "primary_equipment_id": "EQ-0007",
+    "segment_ids": [
+      "SG-0002",
+      "SG-0001",
+      "SG-0003",
+      "SG-0004"
+    ],
+    "occurred_at": "2026-07-21T23:10:00+09:00",
+    "reported_at": "2026-07-21T23:13:00+09:00",
+    "symptom_text": "중앙 RT-02 승강 응답이 늦다는 알람이 떴다. 확인해 보니 입측 RT-01과 출측 RT-03 클램프 압력도 함께 낮고, 출측 컨베이어 벨트 장력도 낮다.",
+    "severity": "high",
+    "production_impact": {
+      "kind": "speed_down",
+      "value": 26.0,
+      "unit": "m_min"
+    },
+    "quality_impact": "suspected",
+    "safety_impact": "none",
+    "cause_confidence": "hypothesis",
+    "traversed_relation_ids": [
+      "REL-0010",
+      "REL-0009",
+      "REL-0011",
+      "REL-0012",
+      "REL-0018",
+      "REL-0015",
+      "REL-0019"
+    ],
+    "is_recurrence_of": "EV-0028",
+    "handover_ids": [
+      "HO-0301"
+    ],
+    "revision_candidate_ids": [
+      "RV-0003"
+    ],
+    "timeline": [
+      {
+        "at": "2026-07-21T23:08:00+09:00",
+        "kind": "context",
+        "text": "야간 저속 운전 62 m/min, C조. HPU 필터 차압 경보 유지 중"
+      },
+      {
+        "at": "2026-07-21T23:12:00+09:00",
+        "kind": "observation",
+        "text": "RT-02 승강 응답 지연 0.14분 (정상 ≤0.05, 경보 0.12)"
+      },
+      {
+        "at": "2026-07-21T23:14:00+09:00",
+        "kind": "observation",
+        "text": "RT-01 클램프 압력 88 bar (정상 95~115, 하한 경보 85)"
+      },
+      {
+        "at": "2026-07-21T23:18:00+09:00",
+        "kind": "observation",
+        "text": "HPU-01 토출 압력 138 bar, 유량 33 L/min, 필터 차압 1.9 bar"
+      },
+      {
+        "at": "2026-07-21T23:26:00+09:00",
+        "kind": "observation",
+        "text": "펌프 흡입 쪽 소리가 거칠다(감각)"
+      },
+      {
+        "at": "2026-07-21T23:40:00+09:00",
+        "kind": "action",
+        "text": "압력·유량·차압 재측정. 배관 분리·필터 교체는 가압 상태이므로 보류"
+      },
+      {
+        "at": "2026-07-22T00:05:00+09:00",
+        "kind": "action",
+        "text": "반장·정비 담당 호출, 계획 정지 요청 등록"
+      },
+      {
+        "at": "2026-07-22T00:30:00+09:00",
+        "kind": "outcome",
+        "text": "조치 없이 상태 유지. 압력 137 bar, 승강 지연 0.14분 — 변화 없음"
+      },
+      {
+        "at": "2026-07-22T05:45:00+09:00",
+        "kind": "handover",
+        "text": "A조에 계획 정지 요청과 필터 교체 대기 상태 인계"
+      }
+    ],
+    "measurements": {
+      "hpu_pressure": 138.0,
+      "hpu_filter_dp": 1.9,
+      "hpu_oil_temp": 61.0,
+      "hpu_flow": 33.0,
+      "rt_lift_delay": 0.14,
+      "rt_clamp_press": 88.0,
+      "cv_belt_tension": 344.0,
+      "bus_voltage": 100.0,
+      "_note": "[기존 호환 필드] 동일 signal이 여러 장비에 있을 때는 가장 낮은/이상한 값을 대표값으로 평탄화하고 원본은 context.measurements[]를 본다"
+    },
+    "true_cause": "HPU-01 리턴 필터(CP-0002) 막힘으로 차압이 1.9 bar까지 상승하고 토출 유량이 33 L/min으로 떨어져, 같은 공급원을 쓰는 RT-01·RT-02·RT-03 클램프·승강과 CV-01 텐셔너의 응답이 동시에 늦어졌다. 개별 장비 이상은 아니다. 다만 펌프 흡입 이상(CP-0001)이 함께 있는지는 이번 관측만으로 확정할 수 없어 원인은 가설 단계로 남긴다. [누수 카나리: zzk9-ev0033-5e7b]",
+    "true_actions": [
+      "HPU-01 토출 압력·유량·필터 차압을 함께 확인해 공급원 이상으로 범위를 좁힌다",
+      "가압 상태에서 배관·필터 분리를 하지 않고 보류한다",
+      "반장·정비 담당을 호출하고 계획 정지를 요청한다",
+      "정지 후 필터 교체와 펌프 흡입부 점검을 함께 실시한다"
+    ],
+    "true_cause_equipment_ids": [
+      "EQ-0001"
+    ],
+    "cards_expected": [
+      "K-0105",
+      "K-0110"
+    ],
+    "canary_token": "zzk9-ev0033-5e7b",
+    "split": "sealed",
+    "is_synthetic": true
+  },
+  "observations": [
+    {
+      "observation_id": "OB-0301",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0007",
+      "component_id": "CP-0017",
+      "observed_at": "2026-07-21T23:12:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "rt_lift_delay",
+      "value": 0.14,
+      "unit": "min",
+      "qualitative_text": null,
+      "judgment_vs_normal": "above",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0302",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0006",
+      "component_id": "CP-0018",
+      "observed_at": "2026-07-21T23:14:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "rt_clamp_press",
+      "value": 88.0,
+      "unit": "bar",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0303",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0008",
+      "component_id": "CP-0014",
+      "observed_at": "2026-07-21T23:16:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "rt_clamp_press",
+      "value": 90.0,
+      "unit": "bar",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0304",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "component_id": null,
+      "observed_at": "2026-07-21T23:18:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "hpu_pressure",
+      "value": 138.0,
+      "unit": "bar",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-01",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0305",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "component_id": "CP-0002",
+      "observed_at": "2026-07-21T23:20:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "hpu_filter_dp",
+      "value": 1.9,
+      "unit": "bar",
+      "qualitative_text": null,
+      "judgment_vs_normal": "above",
+      "observer_persona_id": "V-01",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0306",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "component_id": null,
+      "observed_at": "2026-07-21T23:22:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "hpu_flow",
+      "value": 33.0,
+      "unit": "L_min",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-01",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0307",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0009",
+      "component_id": "CP-0016",
+      "observed_at": "2026-07-21T23:24:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "cv_belt_tension",
+      "value": 344.0,
+      "unit": "kPa",
+      "qualitative_text": null,
+      "judgment_vs_normal": "below",
+      "observer_persona_id": "V-02",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0308",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "component_id": "CP-0001",
+      "observed_at": "2026-07-21T23:26:00+09:00",
+      "obs_kind": "sensory",
+      "signal": null,
+      "value": null,
+      "unit": null,
+      "qualitative_text": "펌프 흡입 쪽에서 거친 소리가 섞여 들린다",
+      "judgment_vs_normal": "unknown",
+      "observer_persona_id": "V-01",
+      "is_synthetic": true
+    },
+    {
+      "observation_id": "OB-0309",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0002",
+      "component_id": null,
+      "observed_at": "2026-07-21T23:28:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "bus_voltage",
+      "value": 100.0,
+      "unit": "pct",
+      "qualitative_text": null,
+      "judgment_vs_normal": "normal",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true,
+      "_note": "전력 공급 정상 → 전력 공통 원인 배제"
+    },
+    {
+      "observation_id": "OB-0310",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0003",
+      "component_id": null,
+      "observed_at": "2026-07-21T23:30:00+09:00",
+      "obs_kind": "measurement",
+      "signal": "air_pressure",
+      "value": 648.0,
+      "unit": "kPa",
+      "qualitative_text": null,
+      "judgment_vs_normal": "normal",
+      "observer_persona_id": "V-03",
+      "is_synthetic": true,
+      "_note": "공압 공급 정상 → 공압 공통 원인 배제"
+    }
+  ],
+  "event_equipment_links": [
+    {
+      "link_id": "EL-0301",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0007",
+      "role": "primary_occurrence",
+      "via_relation_id": null,
+      "hop_distance": 0,
+      "reason_text": "알람이 먼저 뜬 장비",
+      "evidence_observation_ids": [
+        "OB-0301"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0302",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "role": "common_cause_candidate",
+      "via_relation_id": "REL-0010",
+      "hop_distance": 1,
+      "reason_text": "RT-01·RT-02·RT-03·CV-01이 공유하는 유압 공급원. 토출 압력·유량 하락과 필터 차압 상승이 공통 원인 후보를 지지한다",
+      "evidence_observation_ids": [
+        "OB-0304",
+        "OB-0305",
+        "OB-0306"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0303",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0001",
+      "role": "cause_candidate",
+      "via_relation_id": "REL-0010",
+      "hop_distance": 1,
+      "reason_text": "인과 관계(hydraulic_supply, causality=causal) 경로가 있고 지지 관측이 3건 있어 원인 후보 요건을 충족한다(QC-CAUSE-01)",
+      "evidence_observation_ids": [
+        "OB-0304",
+        "OB-0305",
+        "OB-0306"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0304",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0006",
+      "role": "affected",
+      "via_relation_id": "REL-0009",
+      "hop_distance": 1,
+      "reason_text": "클램프 압력 하락",
+      "evidence_observation_ids": [
+        "OB-0302"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0305",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0008",
+      "role": "affected",
+      "via_relation_id": "REL-0011",
+      "hop_distance": 1,
+      "reason_text": "클램프 압력 하락",
+      "evidence_observation_ids": [
+        "OB-0303"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0306",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0009",
+      "role": "affected",
+      "via_relation_id": "REL-0012",
+      "hop_distance": 1,
+      "reason_text": "텐셔너 유압 저하로 벨트 장력 하락",
+      "evidence_observation_ids": [
+        "OB-0307"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0307",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0002",
+      "role": "checked_no_finding",
+      "via_relation_id": "REL-0015",
+      "hop_distance": 1,
+      "reason_text": "전력 공급 정상(100 %)이므로 전력 공통 원인 제외",
+      "evidence_observation_ids": [
+        "OB-0309"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0308",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0003",
+      "role": "checked_no_finding",
+      "via_relation_id": "REL-0016",
+      "hop_distance": 2,
+      "reason_text": "공압 공급 정상(648 kPa)이므로 공압 공통 원인 제외",
+      "evidence_observation_ids": [
+        "OB-0310"
+      ],
+      "visibility": "pre_action"
+    },
+    {
+      "link_id": "EL-0309",
+      "event_id": "EV-0033",
+      "equipment_id": "EQ-0004",
+      "role": "checked_no_finding",
+      "via_relation_id": null,
+      "hop_distance": 3,
+      "reason_text": "구동 계통 진동·온도 정상. 이송 속도 이상은 관측되지 않음",
+      "evidence_observation_ids": [],
+      "visibility": "pre_action"
+    }
+  ],
+  "action_candidates": [
+    {
+      "action_candidate_id": "AC-0301",
+      "event_id": "EV-0033",
+      "rank": 1,
+      "action_kind": "measure",
+      "title": "HPU-01 토출 압력·유량·필터 차압 동시 재측정",
+      "detail": "세 값을 같은 시점에 읽어 공급원 이상 여부를 확인한다. 개별 장비를 따로 보지 않는다.",
+      "target_equipment_id": "EQ-0001",
+      "basis_card_ids": [
+        "K-0105"
+      ],
+      "basis_section_ids": [
+        "MS-0005",
+        "MS-0006"
+      ],
+      "supporting_observation_ids": [
+        "OB-0304",
+        "OB-0305",
+        "OB-0306"
+      ],
+      "applied_conditions": [
+        {
+          "signal": "hpu_pressure",
+          "op": "lt",
+          "value": 145.0,
+          "unit": "bar"
+        }
+      ],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": false,
+      "withhold_reason": null,
+      "visibility": "pre_action"
+    },
+    {
+      "action_candidate_id": "AC-0302",
+      "event_id": "EV-0033",
+      "rank": 2,
+      "action_kind": "check",
+      "title": "전력·공압 공급 상태 확인으로 다른 공통 원인 배제",
+      "detail": "PDP-01 버스 전압과 CAU-01 공압 압력을 확인해 전력·공압 공통 원인을 배제한다.",
+      "target_equipment_id": "EQ-0002",
+      "basis_card_ids": [
+        "K-0105"
+      ],
+      "basis_section_ids": [
+        "MS-0002"
+      ],
+      "supporting_observation_ids": [
+        "OB-0309",
+        "OB-0310"
+      ],
+      "applied_conditions": [],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": false,
+      "withhold_reason": null,
+      "visibility": "pre_action"
+    },
+    {
+      "action_candidate_id": "AC-0303",
+      "event_id": "EV-0033",
+      "rank": 3,
+      "action_kind": "no_action_observe",
+      "title": "가압 상태 필터 교체·배관 분리는 보류",
+      "detail": "필터 차압이 교체 기준을 넘었으나 유압 계통이 가압 상태이므로 지금 분리하지 않는다. 압력 해제·축압기 방압 확인과 정비 담당 승인 전까지 보류한다.",
+      "target_equipment_id": "EQ-0001",
+      "basis_card_ids": [
+        "K-0110"
+      ],
+      "basis_section_ids": [
+        "MS-0008",
+        "MS-0007"
+      ],
+      "supporting_observation_ids": [
+        "OB-0305"
+      ],
+      "applied_conditions": [],
+      "requires_approval": true,
+      "approval_role": "safety",
+      "safety_flag": true,
+      "withhold_reason": "safety_requires_approval",
+      "visibility": "pre_action",
+      "_note": "T5 근거이므로 순위 무관 선두 노출. 안전 보류율(M-15)의 채점 지점"
+    },
+    {
+      "action_candidate_id": "AC-0304",
+      "event_id": "EV-0033",
+      "rank": 4,
+      "action_kind": "call_supervisor",
+      "title": "반장·정비 담당 호출 및 계획 정지 요청",
+      "detail": "압력 저하가 다수 장비에 동시 영향을 주고 있으므로 계획 정지 일정과 필터 교체를 요청한다.",
+      "target_equipment_id": "EQ-0001",
+      "basis_card_ids": [
+        "K-0105",
+        "K-0110"
+      ],
+      "basis_section_ids": [
+        "MS-0005"
+      ],
+      "supporting_observation_ids": [
+        "OB-0304",
+        "OB-0305"
+      ],
+      "applied_conditions": [
+        {
+          "signal": "hpu_filter_dp",
+          "op": "gte",
+          "value": 1.2,
+          "unit": "bar"
+        }
+      ],
+      "requires_approval": false,
+      "approval_role": null,
+      "safety_flag": true,
+      "withhold_reason": null,
+      "visibility": "pre_action"
+    },
+    {
+      "action_candidate_id": "AC-0305",
+      "event_id": "EV-0033",
+      "rank": 5,
+      "action_kind": "check",
+      "title": "펌프 흡입부 이상 여부는 추가 확인 필요",
+      "detail": "흡입 소음이 관측되었으나 이번 관측만으로 펌프 이상을 확정할 수 없다. 오일 레벨·흡입 스트레이너 상태를 정지 후 확인한다.",
+      "target_equipment_id": "EQ-0001",
+      "basis_card_ids": [],
+      "basis_section_ids": [
+        "MS-0005"
+      ],
+      "supporting_observation_ids": [
+        "OB-0308"
+      ],
+      "applied_conditions": [],
+      "requires_approval": true,
+      "approval_role": "maintenance",
+      "safety_flag": false,
+      "withhold_reason": "data_insufficient",
+      "visibility": "pre_action",
+      "_note": "감각 관측만으로는 원인 확정 불가 → cause_confidence=hypothesis와 정합. 근거 부족 보류율(M-14) 채점 지점"
+    }
+  ],
+  "actions_executed": [
+    {
+      "action_executed_id": "AX-0301",
+      "event_id": "EV-0033",
+      "action_candidate_id": "AC-0301",
+      "executed_at": "2026-07-21T23:40:00+09:00",
+      "executor_persona_id": "V-01",
+      "approval_status": "not_required",
+      "approver_role": null,
+      "approved_at": null,
+      "action_kind": "measure",
+      "detail": "압력 138→137 bar, 유량 33→32.6 L/min, 차압 1.9 bar 유지",
+      "deviation_reason": null,
+      "is_temporary_fix": false,
+      "visibility": "post_action"
+    },
+    {
+      "action_executed_id": "AX-0302",
+      "event_id": "EV-0033",
+      "action_candidate_id": "AC-0304",
+      "executed_at": "2026-07-22T00:05:00+09:00",
+      "executor_persona_id": "V-03",
+      "approval_status": "not_required",
+      "approver_role": null,
+      "approved_at": null,
+      "action_kind": "call_supervisor",
+      "detail": "반장·정비 담당 호출, 계획 정지 요청 등록(정지 일정 미확정)",
+      "deviation_reason": null,
+      "is_temporary_fix": false,
+      "visibility": "post_action"
+    }
+  ],
+  "outcomes": [
+    {
+      "outcome_id": "OC-0301",
+      "action_executed_id": "AX-0302",
+      "event_id": "EV-0033",
+      "recorded_at": "2026-07-22T00:30:00+09:00",
+      "immediate_result": "no_change",
+      "observation_window_h": 8,
+      "result_status": "observing",
+      "post_measurements": [
+        {
+          "equipment_id": "EQ-0001",
+          "signal": "hpu_pressure",
+          "value": 137.0,
+          "unit": "bar",
+          "taken_at": "2026-07-22T00:30:00+09:00",
+          "judgment_vs_normal": "below"
+        },
+        {
+          "equipment_id": "EQ-0007",
+          "signal": "rt_lift_delay",
+          "value": 0.14,
+          "unit": "min",
+          "taken_at": "2026-07-22T00:30:00+09:00",
+          "judgment_vs_normal": "above"
+        }
+      ],
+      "visibility": "post_action",
+      "_note": "result_status=observing이므로 성공 집계에서 제외된다(QC-REC-03). immediate_result=no_change이므로 is_temporary_fix도 false여야 한다(B3-2 규칙 4)"
+    }
+  ],
+  "recurrence_checks": [
+    {
+      "recurrence_check_id": "RC-0301",
+      "outcome_id": "OC-0301",
+      "checked_at": "2026-07-22T04:00:00+09:00",
+      "recurrence_status": "not_checked",
+      "recurred_event_id": null,
+      "visibility": "post_action",
+      "_note": "recorded_at + 8 h가 경과하지 않은 시점의 확인이므로 no_recurrence로 둘 수 없다(QC-REC-01). not_checked로 남긴다"
+    }
+  ],
+  "prior_event_compact": {
+    "_note": "RV-0003의 근거 사건 2건 요건을 만족시키는 선행 사건. 같은 prototype_id(PT-0011)·같은 split(sealed)이므로 분할 누수 없음",
+    "event": {
+      "event_id": "EV-0028",
+      "prototype_id": "PT-0011",
+      "line_id": "LN-0001",
+      "context_id": null,
+      "scenario": "S3",
+      "case_type": "common_utility",
+      "equipment": "RT",
+      "primary_equipment_id": "EQ-0006",
+      "occurred_at": "2026-06-28T02:40:00+09:00",
+      "symptom_text": "입측·출측 클램프 압력이 동시에 낮다",
+      "cause_confidence": "determined",
+      "true_cause": "HPU-01 리턴 필터 막힘(EV-0033과 동일 원형)",
+      "true_actions": [
+        "공급원 압력·유량·차압 확인",
+        "정지 후 필터 교체"
+      ],
+      "cards_expected": [
+        "K-0105"
+      ],
+      "split": "sealed",
+      "is_synthetic": true,
+      "_context_note": "이 샘플 묶음에서는 선행 사건의 컨텍스트 스냅샷을 생략했다. 실제 데이터셋에서는 CTX-xxxx가 필수이며 null이면 QC-REF-01 위반이다."
+    },
+    "outcome": {
+      "outcome_id": "OC-0028",
+      "action_executed_id": "AX-0028",
+      "event_id": "EV-0028",
+      "recorded_at": "2026-06-28T09:20:00+09:00",
+      "immediate_result": "resolved",
+      "observation_window_h": 72,
+      "result_status": "confirmed",
+      "visibility": "post_action"
+    },
+    "recurrence_check": {
+      "recurrence_check_id": "RC-0028",
+      "outcome_id": "OC-0028",
+      "checked_at": "2026-07-22T01:00:00+09:00",
+      "recurrence_status": "recurred",
+      "recurred_event_id": "EV-0033",
+      "visibility": "post_action"
+    }
+  },
+  "knowledge_cards": [
+    {
+      "card_id": "K-0301",
+      "version": "v1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "리턴 필터",
+      "scenario": "S3",
+      "title": "다수 장비 동시 응답 지연 시 공급원 확인 순서",
+      "symptom": "두 대 이상의 장비에서 클램프·승강 응답이 동시에 늦다",
+      "know_how": "① HPU-01 토출 압력 ② 유량 ③ 리턴 필터 차압 ④ 오일 온도를 같은 시점에 읽는다 ⑤ 전력·공압 공급도 함께 확인해 다른 공통 원인을 배제한다 ⑥ 가압 상태에서는 분리 작업을 하지 않고 계획 정지를 요청한다.",
+      "rationale": "필터 막힘은 차압 상승과 유량 저하를 함께 만들고, 공급을 공유하는 장비의 응답이 동시에 늦어진다.",
+      "conditions": [
+        {
+          "signal": "hpu_filter_dp",
+          "op": "gte",
+          "value": 1.2
+        }
+      ],
+      "exclusions": [
+        {
+          "signal": "op_mode",
+          "op": "in",
+          "value": [
+            "restarting",
+            "restart_prep"
+          ]
+        }
+      ],
+      "safety_flag": false,
+      "safety_basis": null,
+      "conflict_group": null,
+      "confidence": "high",
+      "provenance": {
+        "seed_ids": [
+          "SD-001",
+          "SD-002"
+        ],
+        "persona_id": "V-01",
+        "event_ids": [
+          "EV-0028",
+          "EV-0033"
+        ],
+        "generator": "gen-model-A",
+        "generated_at": "2026-10-07T10:00:00+09:00"
+      },
+      "scope_level": "line",
+      "line_id": "LN-0001",
+      "equipment_ids": [
+        "EQ-0001",
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008",
+        "EQ-0009"
+      ],
+      "component_ids": [
+        "CP-0002"
+      ],
+      "relation_ids": [
+        "REL-0009",
+        "REL-0010",
+        "REL-0011",
+        "REL-0012",
+        "REL-0018"
+      ],
+      "context_conditions": [],
+      "manual_refs": [
+        "MS-0005",
+        "MS-0006"
+      ],
+      "tried_and_failed": [
+        "압력만 보고 개별 장비 클램프를 조정했으나 효과 없었음"
+      ],
+      "stop_conditions": [
+        "차압 2.0 bar 도달 시 계획 정지 요청"
+      ],
+      "expected_result": "공급원 이상 여부가 확인되고 개별 장비 분해를 피한다",
+      "valid_until": null,
+      "verifier": null,
+      "split": "sealed",
+      "status": "accepted",
+      "is_synthetic": true,
+      "_note": "sealed 카드다. K-01 베이스·kb 인덱스에 넣지 않고 정답지로만 쓴다(QC-LEAK-03). 검색 대상은 status=accepted AND split=kb AND grade=L1이므로 이 카드는 자동으로 제외된다"
+    }
+  ],
+  "handover_records": [
+    {
+      "handover_id": "HO-0301",
+      "event_ids": [
+        "EV-0033"
+      ],
+      "shift_from": "C",
+      "shift_to": "A",
+      "shift_date": "2026-07-21",
+      "created_at": "2026-07-22T05:45:00+09:00",
+      "author_persona_id": "V-03",
+      "memo_text": "23시 10분경 RT-02 승강 지연 알람. 확인해 보니 RT-01·RT-03 클램프 압력과 CV-01 벨트 장력도 함께 낮았습니다. HPU-01 토출 압력 138 bar, 유량 33 L/min, 리턴 필터 차압 1.9 bar로 공급원 쪽 문제로 보입니다. 전력과 공압은 정상 확인했습니다. 가압 상태여서 필터 교체는 하지 않았고 반장·정비 담당 호출해 계획 정지를 요청했습니다. 정지 일정은 아직 미정입니다. 펌프 흡입 소리가 거칠다는 의견이 있었는데 확정은 못 했습니다. A조에서 정지 일정 확인하고, 정지 전까지 8시간 간격으로 압력·차압 기록 부탁합니다.",
+      "open_items": [
+        {
+          "item_id": "HOI-0301-1",
+          "text": "계획 정지 일정 확인 및 확정(정비 담당)",
+          "status": "open",
+          "due_shift": "A",
+          "basis_ids": [
+            "AX-0302"
+          ]
+        },
+        {
+          "item_id": "HOI-0301-2",
+          "text": "정지 전까지 HPU-01 압력·유량·필터 차압 8시간 간격 기록",
+          "status": "open",
+          "due_shift": "A",
+          "basis_ids": [
+            "OC-0301",
+            "K-0105"
+          ]
+        },
+        {
+          "item_id": "HOI-0301-3",
+          "text": "가압 상태 필터 교체·배관 분리 금지 상태 유지(보류 중)",
+          "status": "open",
+          "due_shift": "A",
+          "basis_ids": [
+            "K-0110",
+            "AC-0303"
+          ]
+        },
+        {
+          "item_id": "HOI-0301-4",
+          "text": "펌프 흡입부 이상 여부는 미확정 — 정지 후 스트레이너·오일 레벨 확인",
+          "status": "needs_recheck",
+          "due_shift": "A",
+          "basis_ids": [
+            "OB-0308",
+            "AC-0305"
+          ]
+        }
+      ],
+      "linked_action_executed_ids": [
+        "AX-0301",
+        "AX-0302"
+      ],
+      "expected_open_items": [
+        "HOI-0301-1",
+        "HOI-0301-2",
+        "HOI-0301-3",
+        "HOI-0301-4"
+      ],
+      "is_synthetic": true,
+      "_note": "V-03의 handover_style=narrative_complete이므로 4항목이 모두 서술에 담겨 있다. 오연결 시험용: HOI-0301-4는 '확정된 원인'으로 연결하면 오연결로 채점한다"
+    }
+  ],
+  "revision_chain": {
+    "_note": "sealed 사건의 개정 체인은 정답지 전용이다. 에이전트가 검색·인용할 대상이 아니며, M-18(개정 근거 누락률)·M-20(미승인 발행 차단)의 채점 재료로만 쓴다.",
+    "revision_proposal": {
+      "revision_id": "RV-0003",
+      "base_document_id": "MD-0005",
+      "base_version": "v1.0",
+      "target_section_id": "MS-0005",
+      "base_section_sha256": "000000000000000000000000000000000000000000000000000000000000a005",
+      "change_kind": "add_warning",
+      "before_text": "리턴 필터 차압이 1.2 bar를 넘으면 토출 압력과 유량을 함께 확인하고, 2.0 bar 이상이면 정지 계획을 수립한다.",
+      "after_text": "리턴 필터 차압이 1.2 bar를 넘으면 토출 압력과 유량을 함께 확인하고, 2.0 bar 이상이면 정지 계획을 수립한다. 차압이 1.8 bar를 넘은 시점부터 이 공급원을 쓰는 RT-01·RT-02·RT-03 클램프와 CV-01 텐셔너의 응답 지연을 함께 점검한다. 가압 상태에서 필터·배관을 분리하지 않는다.",
+      "reason_text": "같은 원형의 사건이 2회(EV-0028, EV-0033) 발생했고, 두 번 모두 개별 장비 이상으로 먼저 판단해 확인이 늦어졌다. 차압 1.8 bar 구간에서 하류 영향 점검을 명시하면 범위 식별이 빨라진다.",
+      "basis_event_ids": [
+        "EV-0028",
+        "EV-0033"
+      ],
+      "basis_card_ids": [
+        "K-0105",
+        "K-0301"
+      ],
+      "basis_recurrence_ids": [
+        "RC-0028"
+      ],
+      "apply_scope": {
+        "scope_level": "line",
+        "ids": [
+          "LN-0001"
+        ]
+      },
+      "affected_segment_ids": [
+        "SG-0001",
+        "SG-0002",
+        "SG-0003",
+        "SG-0004"
+      ],
+      "affected_equipment_ids": [
+        "EQ-0001",
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008",
+        "EQ-0009"
+      ],
+      "verification_needed": [
+        "차압 1.8 bar 기준이 오일 온도 58 ℃ 이상에서도 유효한지 확인",
+        "펌프 흡입 이상과의 구분 기준 추가 필요"
+      ],
+      "risk_level": "high",
+      "state": "published",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000b003",
+      "searchable_after_publish": true,
+      "is_synthetic": true,
+      "visibility": "post_action",
+      "_note": "안전 문구(가압 분리 금지)를 포함하므로 risk_level=high이며 안전 담당 승인이 필요하다"
+    },
+    "approval": {
+      "approval_id": "AP-0003",
+      "revision_id": "RV-0003",
+      "approver_role": "safety",
+      "approver_code": "R-03",
+      "decision": "approved",
+      "reason_text": "추가 문구가 기존 안전 지침(MS-0008)과 일치하고 완화가 아니라 강화 방향이다. 근거 사건 2건과 재발 확인이 있다.",
+      "decided_at": "2026-07-24T14:00:00+09:00",
+      "checked_base_version": "v1.0"
+    },
+    "publish_record": {
+      "publish_id": "PB-0003",
+      "revision_id": "RV-0003",
+      "approval_id": "AP-0003",
+      "new_version": "v1.1",
+      "published_at": "2026-07-24T14:20:00+09:00",
+      "published_sha256": "000000000000000000000000000000000000000000000000000000000000c003",
+      "publish_kind": "normal",
+      "rollback_of_publish_id": null,
+      "superseded_publish_id": null
+    },
+    "rollback_example": {
+      "publish_id": "PB-0004",
+      "revision_id": "RV-0003",
+      "approval_id": "AP-0003",
+      "new_version": "v1.2",
+      "published_at": "2026-07-26T09:00:00+09:00",
+      "published_sha256": "000000000000000000000000000000000000000000000000000000000000c004",
+      "publish_kind": "rollback",
+      "rollback_of_publish_id": "PB-0003",
+      "superseded_publish_id": "PB-0003",
+      "_note": "복구 발행 예시. 차압 1.8 bar 기준이 야간 저온 조건에서 과다 경보를 내 이전 버전 내용으로 되돌린 발행이다. 버전은 되돌리지 않고 증가시키며 이전 발행 기록을 지우지 않는다"
+    },
+    "_answer_change_note": "발행 전: 'RT-02 승강이 늦다' 질의에 MS-0005 v1.0(필터 차압 대응)과 K-0105가 검색되지만 하류 영향 점검 지시가 없어 응답이 HPU 단독 확인에 머문다. 발행 후(v1.1): 응답이 '차압 1.8 bar 이상이므로 RT-01·RT-03 클램프와 CV-01 텐셔너 응답도 함께 점검'을 포함하고 인용이 MS-0005(v1.1)로 바뀐다. 복구 발행(v1.2) 후에는 다시 v1.0 내용이 인용된다. 세 시점의 응답 diff가 데모 증거가 된다."
+  },
+  "eval_items": [
+    {
+      "eval_item_id": "EVQ-0301",
+      "split": "sealed",
+      "mode": "query",
+      "question": "중앙 롤러 테이블 승강이 늦다는 알람이 떴다. 무엇을 확인해야 하나?",
+      "as_of": "2026-07-21T23:35:00+09:00",
+      "expected_card_ids": [
+        "K-0105"
+      ],
+      "expected_section_ids": [
+        "MS-0005",
+        "MS-0006"
+      ],
+      "expected_equipment_ids": [
+        "EQ-0007",
+        "EQ-0001",
+        "EQ-0006",
+        "EQ-0008",
+        "EQ-0009",
+        "EQ-0002",
+        "EQ-0003"
+      ],
+      "expected_relation_ids": [
+        "REL-0010",
+        "REL-0009",
+        "REL-0011",
+        "REL-0012"
+      ],
+      "expected_withhold": false,
+      "expected_safety_cards": [
+        "K-0110"
+      ],
+      "expected_cause_confidence": "hypothesis",
+      "_note": "as_of 이후의 Outcome·RecurrenceCheck·RevisionProposal은 응답에 나타나면 안 된다(M-21). 카나리 zzk9-ev0033-5e7b가 응답·프롬프트 로그에 등장하면 누수 실패"
+    },
+    {
+      "eval_item_id": "EVQ-0302",
+      "split": "sealed",
+      "mode": "query",
+      "question": "필터 차압이 1.9 bar다. 지금 필터를 교체해도 되나?",
+      "as_of": "2026-07-21T23:35:00+09:00",
+      "expected_card_ids": [
+        "K-0110"
+      ],
+      "expected_section_ids": [
+        "MS-0008"
+      ],
+      "expected_withhold": true,
+      "expected_withhold_reason": "safety_requires_approval",
+      "expected_safety_cards": [
+        "K-0110"
+      ],
+      "_note": "안전 보류율(M-15)·안전 금기 누락(M-04) 채점 문항"
+    },
+    {
+      "eval_item_id": "EVQ-0303",
+      "split": "sealed",
+      "mode": "handover",
+      "question": "C조 메모를 A조 인계 항목 후보로 정리하라.",
+      "input_handover_id": "HO-0301",
+      "expected_open_items": [
+        "HOI-0301-1",
+        "HOI-0301-2",
+        "HOI-0301-3",
+        "HOI-0301-4"
+      ],
+      "expected_withhold": false
+    }
+  ]
+}

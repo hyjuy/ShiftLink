@@ -1,6 +1,6 @@
 # 담당 영역별 자동 리뷰어 지정 (프로젝트 계획서 담당표 기준)
 # TODO: 각자 GitHub 아이디로 @자리 채우기
 /src/pipeline/  @hyjuy
-/src/rag/       # 최재영
+/src/rag/       @nalziori
 /src/edge/      # 허재원
 /eval/          # 전혜민

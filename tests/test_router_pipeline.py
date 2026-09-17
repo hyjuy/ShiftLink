@@ -3,6 +3,7 @@ from pydantic import ValidationError
 
 from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.router import HandoverRequest, QueryRequest, route_request
+from shiftlink.agent import tools as tool_stubs
 
 
 def test_router_uses_input_shape_instead_of_text_keywords() -> None:
@@ -106,3 +107,25 @@ def test_handover_pipeline_adds_proposal_before_one_model_call() -> None:
         "model",
     ]
     assert model.calls == 1
+
+
+def test_five_read_only_tool_stubs_are_explicitly_unimplemented() -> None:
+    calls = {
+        "lookup_equipment": lambda: tool_stubs.lookup_equipment(equipment_ids=["RT-01"]),
+        "search_cards": lambda: tool_stubs.search_cards(
+            query="진동", equipment_ids=["RT-01"]
+        ),
+        "list_handover": lambda: tool_stubs.list_handover(equipment_ids=["RT-01"]),
+        "propose_handover": lambda: tool_stubs.propose_handover(
+            memo_text="진동 재확인",
+            equipment_ids=["RT-01"],
+            shift="A",
+            existing_items=[],
+        ),
+        "get_checklist": lambda: tool_stubs.get_checklist(equipment_ids=["RT-01"]),
+    }
+
+    assert tuple(calls) == tool_stubs.READ_ONLY_TOOLS
+    for call in calls.values():
+        with pytest.raises(NotImplementedError):
+            call()

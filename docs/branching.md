@@ -17,5 +17,5 @@
 - 데이터 봉인은 별도 네임스페이스: `data-v1.0-sealed` (코드 태그와 분리, 4.7.6 원칙)
 
 ## 충돌 예방
-- K-01/Event 스키마, 도구 인터페이스는 `src/pipeline/`에서 작게 자주 머지 → 나머지가 그 위에서 작업.
+- K-01/Event 스키마, 도구 인터페이스는 `shiftlink/agent/`에서 작게 자주 머지 → 나머지가 그 위에서 작업.
 - 대용량 합성데이터(`ledger/`, `artifacts/`, `splits/`, `raw/`)는 git에 올리지 않음 (`.gitignore`). 코드와 `manifest.json`(해시)만 커밋.

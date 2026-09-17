@@ -1,6 +1,1 @@
-# 담당 영역별 자동 리뷰어 지정 (프로젝트 계획서 담당표 기준)
-# TODO: 각자 GitHub 아이디로 @자리 채우기
-/src/pipeline/  @hyjuy
-/src/rag/       @nalziori
-/src/edge/      # 허재원
-/eval/          # 전혜민
+# 담당 영역별 자동 리뷰어 지정을 사용하지 않기로 함 (리뷰 규칙 제거)

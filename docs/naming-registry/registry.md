@@ -34,6 +34,7 @@
 | `list_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 목록 | 유현준 |
 | `propose_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 제안 | 유현준 |
 | `get_checklist()` | `shiftlink/agent/tools.py` | 도구: 체크리스트 조회 | 유현준 |
+| `main()` | `shiftlink/data/__init__.py` | 데이터 파이프라인 실행 계획 CLI 진입점 | 유현준 |
 
 > `search_cards()`에 `scope_id`·`source_kind` 필드 추가가 고도화 초안 §4.5(Q4)에서 제안됐지만 **미결**이므로 현재 공개 시그니처에는 포함하지 않는다. 결정되면 여기 시그니처 변경 이력을 한 줄 추가할 것.
 

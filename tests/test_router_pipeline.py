@@ -1,7 +1,9 @@
+import inspect
+
 import pytest
 from pydantic import ValidationError
 
-from shiftlink.agent.pipeline import FixedPipeline
+from shiftlink.agent.pipeline import FixedPipeline, ToolProvider
 from shiftlink.agent.router import HandoverRequest, QueryRequest, route_request
 from shiftlink.agent import tools as tool_stubs
 
@@ -26,6 +28,12 @@ def test_router_uses_input_shape_instead_of_text_keywords() -> None:
         {},
         {"question": "상태?", "memo_text": "인계", "line_id": "L1", "eq_id": "RT-01"},
         {"question": "   ", "line_id": "L1", "eq_id": "RT-01"},
+        {
+            "question": "상태?",
+            "line_id": "L1",
+            "eq_id": "RT-01",
+            "scope_id": "S1",
+        },
         {"memo_text": "인계", "shift": "D", "eq_ids": []},
     ],
 )
@@ -70,7 +78,7 @@ class RecordingModel:
         return {"status": "draft"}
 
 
-def test_query_pipeline_has_fixed_tool_order_and_one_model_call() -> None:
+def test_query_pipeline_excludes_handover_tools_and_calls_model_once() -> None:
     tools = RecordingTools()
     model = RecordingModel(tools.calls)
 
@@ -82,14 +90,13 @@ def test_query_pipeline_has_fixed_tool_order_and_one_model_call() -> None:
     assert tools.calls == [
         "lookup_equipment",
         "search_cards",
-        "list_handover",
         "get_checklist",
         "model",
     ]
     assert model.calls == 1
 
 
-def test_handover_pipeline_adds_proposal_before_one_model_call() -> None:
+def test_handover_pipeline_lists_existing_items_before_one_model_call() -> None:
     tools = RecordingTools()
     model = RecordingModel(tools.calls)
 
@@ -103,29 +110,32 @@ def test_handover_pipeline_adds_proposal_before_one_model_call() -> None:
         "search_cards",
         "list_handover",
         "get_checklist",
-        "propose_handover",
         "model",
     ]
     assert model.calls == 1
 
 
-def test_five_read_only_tool_stubs_are_explicitly_unimplemented() -> None:
+def test_five_tool_stubs_are_explicitly_unimplemented() -> None:
     calls = {
         "lookup_equipment": lambda: tool_stubs.lookup_equipment(equipment_ids=["RT-01"]),
         "search_cards": lambda: tool_stubs.search_cards(
             query="진동", equipment_ids=["RT-01"]
         ),
         "list_handover": lambda: tool_stubs.list_handover(equipment_ids=["RT-01"]),
-        "propose_handover": lambda: tool_stubs.propose_handover(
-            memo_text="진동 재확인",
-            equipment_ids=["RT-01"],
-            shift="A",
-            existing_items=[],
-        ),
+        "propose_handover": lambda: tool_stubs.propose_handover(extraction_result={}),
         "get_checklist": lambda: tool_stubs.get_checklist(equipment_ids=["RT-01"]),
     }
 
-    assert tuple(calls) == tool_stubs.READ_ONLY_TOOLS
+    assert tuple(calls) == tool_stubs.TOOL_STUBS
     for call in calls.values():
         with pytest.raises(NotImplementedError):
             call()
+
+
+def test_registered_tool_provider_and_search_signature_match_registry() -> None:
+    assert "propose_handover" in ToolProvider.__dict__
+    assert tuple(inspect.signature(tool_stubs.search_cards).parameters) == (
+        "query",
+        "equipment_ids",
+        "k",
+    )

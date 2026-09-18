@@ -5,9 +5,12 @@
 - A payload containing `question` is query mode.
 - A payload containing `memo_text` is handover mode.
 - Both keys or neither key is rejected; natural-language keywords never select a mode.
-- The pipeline order is route → fixed read-only tools → one model call → output validation.
+- Unapproved `scope_id` and `source_kind` fields are rejected per the naming registry.
+- The pipeline order is route → fixed retrieval tools → one model call → output validation.
 - The five tool contracts are `lookup_equipment`, `search_cards`, `list_handover`,
   `propose_handover`, and `get_checklist`. Their current implementations are explicit stubs.
+- `list_handover` runs only in handover mode; `propose_handover` accepts a validated model
+  extraction and is intentionally outside the pre-model retrieval stage.
 
 ## Evidence
 
@@ -17,15 +20,32 @@
 | GREEN | Same focused command | `7 passed in 0.28s` |
 | Regression and coverage | `uv run --python 3.10 --with-requirements requirements.txt --with pytest-cov python -m pytest -q --cov=shiftlink.agent.router --cov=shiftlink.agent.pipeline --cov=shiftlink.agent.tools --cov-report=term-missing` | `11 passed in 0.66s`; all three new modules 100%, 100% total |
 
+## Contract correction evidence
+
+| Stage | Command | Result |
+| --- | --- | --- |
+| RED | `uv run --python 3.10 --with-requirements requirements.txt python -m pytest tests/test_router_pipeline.py -q` | `2 failed, 6 passed`: query invoked `list_handover`; handover invoked `propose_handover` before the model. |
+| GREEN | Same focused command | `8 passed in 0.22s` |
+| Coverage | `uv run --python 3.10 --with-requirements requirements.txt --with pytest-cov python -m pytest tests/test_router_pipeline.py -q --cov=shiftlink.agent.router --cov=shiftlink.agent.pipeline --cov=shiftlink.agent.tools --cov-report=term-missing` | `8 passed in 0.53s`; all three modules 100%, 100% total. |
+
+## Naming registry alignment
+
+| Stage | Command | Result |
+| --- | --- | --- |
+| RED | `uv run --python 3.10 --with-requirements requirements.txt python -m pytest tests/test_router_pipeline.py -q` | `2 failed, 8 passed`: unapproved query fields were accepted and `ToolProvider` omitted `propose_handover`. |
+| GREEN | Same focused command | `10 passed in 0.27s`. |
+| Coverage | Focused command with `pytest-cov` for router, pipeline, and tools | `10 passed in 0.61s`; all three modules 100%, 100% total. |
+
 ## Guarantees
 
 | What is guaranteed | Test type | Test target |
 | --- | --- | --- |
 | Input shape, not Korean wording, determines query or handover mode | Unit | `test_router_uses_input_shape_instead_of_text_keywords` |
 | Missing, ambiguous, blank, and invalid-shift input is rejected | Unit | `test_router_rejects_missing_ambiguous_or_invalid_formats` |
-| Query tools run in fixed order before exactly one model call | Integration | `test_query_pipeline_has_fixed_tool_order_and_one_model_call` |
-| Handover adds an unsaved proposal before exactly one model call | Integration | `test_handover_pipeline_adds_proposal_before_one_model_call` |
-| All five declared tools are non-persisting stubs | Unit | `test_five_read_only_tool_stubs_are_explicitly_unimplemented` |
+| Public tool protocol and search signature match the naming registry | Contract | `test_registered_tool_provider_and_search_signature_match_registry` |
+| Query excludes handover lookup and runs in fixed order before one model call | Integration | `test_query_pipeline_excludes_handover_tools_and_calls_model_once` |
+| Handover lists existing items before one model call | Integration | `test_handover_pipeline_lists_existing_items_before_one_model_call` |
+| All five declared tools are explicit stubs | Unit | `test_five_tool_stubs_are_explicitly_unimplemented` |
 
 ## Known gap
 

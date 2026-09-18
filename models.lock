@@ -1,0 +1,39 @@
+# 팀 공용 모델 태그·digest 고정 (개발계획 v2 Day1 표준)
+# Ollama 버전과 모델 digest가 PC/Jetson 간 일치하는지 확인하는 용도.
+
+[ollama]
+version = "0.34.1"
+
+[[model]]
+role = "plan-B"
+tag = "qwen2.5:3b-instruct-q4_K_M"
+digest = "357c53fb659c"
+pulled_by = "최재영 (nalziori)"
+pulled_at = "2026-09-17"
+host = "PC (Windows)"
+
+[[model]]
+role = "sft-korean (선택 형식 SFT, #7)"
+tag = "qwen2.5-3b-ko:latest"
+digest = "e38fa3b88631"
+base_model = "qwen2.5:3b-instruct-q4_K_M"
+gguf_sha256 = "3a37a010030935ab945fec52633fc40acd8e91c0c8a2126e84f8ff2c2d81ea24"
+gguf_source = "클라우드 렌탈 GPU 학습 결과. 원본 GGUF는 git에 커밋하지 않음(N-1) — 로컬(C:\\Users\\abab9\\models-ko\\)에만 있음, 공유 드라이브 업로드 필요"
+pulled_by = "최재영 (nalziori)"
+pulled_at = "2026-09-17"
+host = "PC (Windows)"
+
+# TODO: 아래는 아직 미확인. 각 담당자가 pull 후 채운다.
+# [[model]]
+# role = "plan-A"
+# tag = "qwen2.5:7b-instruct-q4_K_M"
+#
+# [[model]]
+# role = "plan-C"
+# tag = "exaone3.5:2.4b-instruct-q4_K_M"
+#
+# [[model]]
+# role = "plan-B (Jetson)"
+# tag = "qwen2.5:3b-instruct-q4_K_M"
+# digest = ""  # 허재원이 Jetson에서 pull 후 기록, PC와 일치해야 함
+# host = "Jetson"

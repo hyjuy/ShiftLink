@@ -1,0 +1,2 @@
+date	experimenter	variable	setting	time_budget_min	n_runs	primary_metric	primary_value	secondary_p95_s	secondary_temp_c	verdict	notes
+2026-09-18	example	model	qwen2.5:3b-instruct-q4_K_M	10	1	structured_output_success_rate	1.0			keep	예시 행 — 실제 실험 기록 시 이 줄은 지우지 말고 아래에 추가만 할 것

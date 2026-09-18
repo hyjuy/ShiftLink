@@ -1,7 +1,9 @@
+import inspect
+
 import pytest
 from pydantic import ValidationError
 
-from shiftlink.agent.pipeline import FixedPipeline
+from shiftlink.agent.pipeline import FixedPipeline, ToolProvider
 from shiftlink.agent.router import HandoverRequest, QueryRequest, route_request
 from shiftlink.agent import tools as tool_stubs
 
@@ -26,6 +28,12 @@ def test_router_uses_input_shape_instead_of_text_keywords() -> None:
         {},
         {"question": "상태?", "memo_text": "인계", "line_id": "L1", "eq_id": "RT-01"},
         {"question": "   ", "line_id": "L1", "eq_id": "RT-01"},
+        {
+            "question": "상태?",
+            "line_id": "L1",
+            "eq_id": "RT-01",
+            "scope_id": "S1",
+        },
         {"memo_text": "인계", "shift": "D", "eq_ids": []},
     ],
 )
@@ -122,3 +130,12 @@ def test_five_tool_stubs_are_explicitly_unimplemented() -> None:
     for call in calls.values():
         with pytest.raises(NotImplementedError):
             call()
+
+
+def test_registered_tool_provider_and_search_signature_match_registry() -> None:
+    assert "propose_handover" in ToolProvider.__dict__
+    assert tuple(inspect.signature(tool_stubs.search_cards).parameters) == (
+        "query",
+        "equipment_ids",
+        "k",
+    )

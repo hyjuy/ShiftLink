@@ -28,7 +28,7 @@ role = "plan-B (Jetson)"
 tag = "qwen2.5:3b-instruct-q4_K_M"
 digest = "357c53fb659c"
 host = "Jetson (jetson-06, 100.115.59.4)"
-note = "PC 기록과 digest 일치 확인(2026-09-18). 단, 2026-09-18 13:37 KST 실측 시 CUDA OOM으로 로드 실패 — Jetson_실측_PRE01-04.md 참고"
+note = "PC 기록과 digest 일치 확인(2026-09-18). 구조화 출력 성공 확인(재시도, 원격세션 정리 후) — load 30.7s(최초 1회)/eval 1.26s(25tok). 상세: Jetson_실측_PRE01-04.md"
 
 # TODO: 아래는 아직 미확인. 각 담당자가 pull 후 채운다.
 # [[model]]

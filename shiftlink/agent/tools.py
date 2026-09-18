@@ -10,6 +10,7 @@ TOOL_STUBS = (
     "propose_handover",
     "get_checklist",
 )
+# This declares the integration surface only; each stub deliberately fails until wired.
 
 
 def lookup_equipment(*, equipment_ids: list[str]) -> list[dict[str, Any]]:
@@ -41,6 +42,7 @@ def propose_handover(
     extraction_result: dict[str, Any],
 ) -> list[dict[str, Any]]:
     """Queue unsaved handover candidates from validated model extraction."""
+    # Candidate generation is post-validation, so it is not a pre-model retrieval tool.
     raise NotImplementedError("propose_handover adapter is not implemented")
 
 

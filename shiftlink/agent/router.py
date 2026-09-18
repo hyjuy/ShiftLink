@@ -36,11 +36,14 @@ class RoutedRequest(BaseModel):
 
 def route_request(payload: Mapping[str, object]) -> RoutedRequest:
     """Route by mutually exclusive format keys, never by natural-language intent."""
+    # The wire format is the discriminant: identical Korean wording must not alter routing.
     has_question = "question" in payload
     has_memo = "memo_text" in payload
+    # Reject omitted and ambiguous formats before Pydantic validates mode-specific fields.
     if has_question == has_memo:
         raise ValueError("request must contain exactly one of 'question' or 'memo_text'")
 
     if has_question:
+        # `extra=forbid` on QueryRequest prevents handover-only fields from leaking in.
         return RoutedRequest(mode="query", request=QueryRequest.model_validate(payload))
     return RoutedRequest(mode="handover", request=HandoverRequest.model_validate(payload))

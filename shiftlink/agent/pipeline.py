@@ -38,10 +38,12 @@ class FixedPipeline:
     ) -> None:
         self.tools = tools
         self.model = model
+        # Keep the skeleton usable until the production response schema is supplied.
         self.validator = validator or (lambda **values: values["model_output"])
 
     def run(self, payload: Mapping[str, object]) -> PipelineResult:
         routed = route_request(payload)
+        # Tool results are fully collected before the single model call.
         tool_results = self._run_tools(routed.request)
         model_output = self.model(
             mode=routed.mode,
@@ -54,6 +56,7 @@ class FixedPipeline:
             tool_results=tool_results,
             model_output=model_output,
         )
+        # Validation is the last in-process gate; it cannot trigger another model call.
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
 
     def _run_tools(self, request: QueryRequest | HandoverRequest) -> dict[str, Any]:
@@ -72,6 +75,7 @@ class FixedPipeline:
             source_kind = "card"
             k = 5
 
+        # Both modes share equipment and card retrieval, in this fixed order.
         results = {
             "equipment": self.tools.lookup_equipment(equipment_ids=equipment_ids),
             "cards": self.tools.search_cards(
@@ -83,9 +87,11 @@ class FixedPipeline:
             ),
         }
         if isinstance(request, HandoverRequest):
+            # Existing handovers need an explicit shift and are never read for a query.
             results["handover"] = self.tools.list_handover(
                 equipment_ids=equipment_ids,
                 shift=shift,
             )
+        # Checklist retrieval always follows the optional handover lookup.
         results["checklist"] = self.tools.get_checklist(equipment_ids=equipment_ids)
         return results

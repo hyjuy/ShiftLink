@@ -1,4 +1,4 @@
-"""Fixed four-stage pipeline: route, tools, one model call, validation."""
+"""Fixed four-stage pipeline: route, retrieval, one model call, validation."""
 
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Protocol
@@ -13,8 +13,6 @@ class ToolProvider(Protocol):
     def search_cards(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
     def list_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
-
-    def propose_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
     def get_checklist(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
@@ -83,17 +81,11 @@ class FixedPipeline:
                 source_kind=source_kind,
                 k=k,
             ),
-            "handover": self.tools.list_handover(
-                equipment_ids=equipment_ids,
-                shift=shift,
-            ),
-            "checklist": self.tools.get_checklist(equipment_ids=equipment_ids),
         }
         if isinstance(request, HandoverRequest):
-            results["handover_proposal"] = self.tools.propose_handover(
-                memo_text=request.memo_text,
+            results["handover"] = self.tools.list_handover(
                 equipment_ids=equipment_ids,
-                shift=request.shift,
-                existing_items=results["handover"],
+                shift=shift,
             )
+        results["checklist"] = self.tools.get_checklist(equipment_ids=equipment_ids)
         return results

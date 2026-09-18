@@ -1,9 +1,9 @@
-"""Read-only tool contracts. Storage-backed implementations are added later."""
+"""Tool contracts. Storage-backed implementations are added later."""
 
 from typing import Any, Literal
 
 
-READ_ONLY_TOOLS = (
+TOOL_STUBS = (
     "lookup_equipment",
     "search_cards",
     "list_handover",
@@ -38,12 +38,9 @@ def list_handover(
 
 def propose_handover(
     *,
-    memo_text: str,
-    equipment_ids: list[str],
-    shift: str,
-    existing_items: list[dict[str, Any]],
+    extraction_result: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    """Build unsaved handover candidates; user acceptance persists them later."""
+    """Queue unsaved handover candidates from validated model extraction."""
     raise NotImplementedError("propose_handover adapter is not implemented")
 
 

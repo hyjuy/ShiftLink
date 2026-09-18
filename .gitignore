@@ -4,6 +4,10 @@
 __pycache__/
 *.pyc
 
+# 로컬 에이전트 협업 문서 (커밋 안 함)
+AGENTS.md
+CLAUDE.md
+
 # 합성 데이터 산출물 (4.11 저장 원칙: 원본은 로컬/외부 관리, 코드만 git)
 ledger/
 artifacts/

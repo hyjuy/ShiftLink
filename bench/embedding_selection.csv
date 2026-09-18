@@ -1,0 +1,4 @@
+candidate,format,host,size_mb,cosine_vs_original_avg,cosine_vs_original_min,cosine_vs_original_max,latency_cold_ms,latency_warm_ms,coexists_with_planB,license_status,verdict,measured_at
+nlpai-lab/KURE-v1,safetensors (sentence-transformers),PC,~1200,1.0,1.0,1.0,50418,-,n/a (기준점),mit,reference,2026-09-18
+daynice/kure-v1,GGUF (Ollama),Jetson,664,0.99998,0.99996,0.99999,3497,82,yes (qwen2.5:3b 2.2GB + 664MB 동시 로드 확인),mit (Modelfile LICENSE 필드 확인됨),keep,2026-09-18
+bge-m3:567m,GGUF (Ollama),Jetson,664,-,-,-,33086,39,untested,mit,keep (보류 — KURE-v1이 한국어 특화라 우선),2026-09-18

@@ -1,2 +1,4 @@
 date	experimenter	variable	setting	time_budget_min	n_runs	primary_metric	primary_value	secondary_p95_s	secondary_temp_c	verdict	notes
 2026-09-18	example	model	qwen2.5:3b-instruct-q4_K_M	10	1	structured_output_success_rate	1.0			keep	예시 행 — 실제 실험 기록 시 이 줄은 지우지 말고 아래에 추가만 할 것
+2026-09-18	cursor	power_mode	25W	15	20	structured_output_success_rate	1.0	1.2461	45.6	keep	planB qwen2.5:3b-instruct-q4_K_M; raw=/home/jetson/shiftlink-bench/power_25W_20260918_142740.jsonl; preflight check done
+2026-09-18	cursor	power_mode	15W	15	20	structured_output_success_rate	1.0	1.2574	46.6	keep	planB qwen2.5:3b-instruct-q4_K_M; raw=/home/jetson/shiftlink-bench/power_15W_20260918_143837.jsonl; preflight check done; vscode-server pkill 후 측정

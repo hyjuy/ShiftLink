@@ -16,8 +16,6 @@ class QueryRequest(BaseModel):
     line_id: NonBlank
     eq_id: NonBlank
     observations: list[dict[str, object]] = Field(default_factory=list)
-    scope_id: NonBlank | None = None
-    source_kind: Literal["card", "clause"] = "card"
     k: int = Field(default=5, ge=1, le=5)
 
 

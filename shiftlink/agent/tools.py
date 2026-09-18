@@ -1,6 +1,6 @@
 """Tool contracts. Storage-backed implementations are added later."""
 
-from typing import Any, Literal
+from typing import Any
 
 
 TOOL_STUBS = (
@@ -22,8 +22,6 @@ def search_cards(
     *,
     query: str,
     equipment_ids: list[str],
-    scope_id: str | None = None,
-    source_kind: Literal["card", "clause"] = "card",
     k: int = 5,
 ) -> list[dict[str, Any]]:
     """Return visible knowledge cards or published manual clauses."""

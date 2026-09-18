@@ -14,6 +14,8 @@ class ToolProvider(Protocol):
 
     def list_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
+    def propose_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
+
     def get_checklist(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
 
@@ -64,15 +66,11 @@ class FixedPipeline:
             equipment_ids = [request.eq_id]
             shift = None
             query = request.question
-            scope_id = request.scope_id
-            source_kind = request.source_kind
             k = request.k
         else:
             equipment_ids = request.eq_ids
             shift = request.shift
             query = request.memo_text
-            scope_id = None
-            source_kind = "card"
             k = 5
 
         # Both modes share equipment and card retrieval, in this fixed order.
@@ -81,8 +79,6 @@ class FixedPipeline:
             "cards": self.tools.search_cards(
                 query=query,
                 equipment_ids=equipment_ids,
-                scope_id=scope_id,
-                source_kind=source_kind,
                 k=k,
             ),
         }

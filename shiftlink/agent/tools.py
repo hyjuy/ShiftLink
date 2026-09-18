@@ -1,15 +1,16 @@
-"""Read-only tool contracts. Storage-backed implementations are added later."""
+"""Tool contracts. Storage-backed implementations are added later."""
 
-from typing import Any, Literal
+from typing import Any
 
 
-READ_ONLY_TOOLS = (
+TOOL_STUBS = (
     "lookup_equipment",
     "search_cards",
     "list_handover",
     "propose_handover",
     "get_checklist",
 )
+# This declares the integration surface only; each stub deliberately fails until wired.
 
 
 def lookup_equipment(*, equipment_ids: list[str]) -> list[dict[str, Any]]:
@@ -21,8 +22,6 @@ def search_cards(
     *,
     query: str,
     equipment_ids: list[str],
-    scope_id: str | None = None,
-    source_kind: Literal["card", "clause"] = "card",
     k: int = 5,
 ) -> list[dict[str, Any]]:
     """Return visible knowledge cards or published manual clauses."""
@@ -38,12 +37,10 @@ def list_handover(
 
 def propose_handover(
     *,
-    memo_text: str,
-    equipment_ids: list[str],
-    shift: str,
-    existing_items: list[dict[str, Any]],
+    extraction_result: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    """Build unsaved handover candidates; user acceptance persists them later."""
+    """Queue unsaved handover candidates from validated model extraction."""
+    # Candidate generation is post-validation, so it is not a pre-model retrieval tool.
     raise NotImplementedError("propose_handover adapter is not implemented")
 
 

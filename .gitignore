@@ -4,6 +4,9 @@
 __pycache__/
 *.pyc
 
+# macOS Finder 폴더 설정
+.DS_Store
+
 # 로컬 에이전트 협업 문서 (커밋 안 함)
 AGENTS.md
 CLAUDE.md

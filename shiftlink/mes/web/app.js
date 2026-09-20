@@ -33,19 +33,6 @@
     if (waiting.length) return `${names(waiting)}이 기다리고 있습니다. 장비를 선택하면 대기 이유를 확인할 수 있습니다.`;
     return "코일은 아래 번호 순서로 이동합니다. 구동·공급 장비는 이송을 돕고, 코일이 통과하는 경로와는 구분됩니다.";
   }
-  function machineSvg(kind) {
-    const roller = (x) => `<g class="rotor" style="transform-origin:${x}px 66px"><circle cx="${x}" cy="66" r="9"/><path d="M${x - 6} 66h12M${x} 60v12"/></g>`;
-    const drawings = {
-      rt: `<path d="M17 78h146M30 78v18M150 78v18"/>${[32, 61, 90, 119, 148].map(roller).join("")}<path d="M18 51v-8h15M162 51v-8h-15"/>`,
-      cv: `<rect x="17" y="53" width="146" height="27" rx="13"/><path class="belt-motion" d="M30 55h120M30 78h120"/>${[32, 148].map(roller).join("")}<path d="M40 81v15M140 81v15"/>`,
-      gr: `<rect x="15" y="48" width="55" height="36" rx="8"/><path d="M25 54v24M35 54v24M45 54v24M70 66h15M129 66h35"/><g class="rotor" style="transform-origin:106px 66px"><circle cx="106" cy="66" r="23"/><circle cx="106" cy="66" r="8"/><path d="M106 39v17M106 76v17M79 66h17M116 66h17M87 47l12 12M113 73l12 12M87 85l12-12M113 59l12-12"/></g><path d="M20 91h120"/>`,
-      hpu: `<rect x="25" y="48" width="106" height="43" rx="5"/><path class="fluid" d="M29 72h98v15H29z"/><circle cx="60" cy="32" r="14"/><path d="M60 46v13M60 32l8-7M131 68h24V31h16"/><path class="supply-motion" d="M132 68h23V31h16"/>`,
-      pdp: `<rect x="44" y="15" width="92" height="78" rx="6"/><path d="M90 20v68M113 52v12"/><circle cx="59" cy="30" r="3"/><circle cx="73" cy="30" r="3"/><path class="power-symbol" d="M73 43L60 64h13l-7 16 18-24H71z"/>`,
-      cau: `<rect x="25" y="44" width="115" height="40" rx="20"/><path d="M45 84v11M119 84v11M140 64h20V32h13M78 44V31"/><circle cx="78" cy="24" r="10"/><path d="M78 24l5-5"/><path class="supply-motion" d="M35 65h125V32h13"/>`,
-      generic: `<rect x="40" y="28" width="100" height="60" rx="8"/><circle cx="90" cy="58" r="16"/><path d="M90 48v20M80 58h20"/>`
-    };
-    return `<svg viewBox="0 0 180 105" aria-hidden="true" focusable="false">${drawings[kind] || drawings.generic}</svg>`;
-  }
   function createHistory() { return { runId: null, cursor: -1, events: [], snapshots: [], completed: 0 }; }
   function createConfigCache() { return { config: null, configId: null }; }
   function configsCompatible(old, new_) { if (!old || !new_) return false; return old.config_id === new_.config_id; }
@@ -139,6 +126,14 @@
     setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
     const playing=$("#animate-machines").checked && (mode==="live" ? !stale : replay.playing);
     $("#line-map").querySelectorAll(".flow-node").forEach(n=>n.classList.toggle("is-moving",machineMoving(snapshot,model.lookup(n.dataset.equipment),playing)));
+    $("#line-map").querySelectorAll(".flow-coil").forEach(node=>{
+      const coil=(snapshot.coils || []).find(c=>c.coil_id===node.dataset.coil);
+      if (!coil) return;
+      const moving=coil.quality_status!=="hold" && machineMoving(snapshot,model.lookup(coil.equipment_id),playing);
+      node.style.transition=moving?"cx 1s linear":"none";
+      node.style.cx=String(-60+Math.max(0,Math.min(1,Number(coil.position)||0))*120)+"px";
+      node.querySelector("title").textContent=`${coil.coil_id} · 위치 ${Math.round(Number(coil.position)*100)}%${coil.quality_status==="hold"?" · 제품 보류":""}`;
+    });
     setView("#incident-summary",operator.incidentView(model));
     setView("#part-locator",operator.partView(model));
     setView("#selection-evidence",operator.evidenceView(model,selectedRelation));
@@ -239,7 +234,7 @@
     } catch (error) { if (epoch === requestEpoch && mode === "live") { stale=true; setConnection(`연결 실패 · 마지막 관측 표시 · ${error.message}`, "fault"); freezeCoils(); updateControls(); } }
     finally { loading = false; }
   }
-  function freezeCoils() { document.querySelectorAll(".is-moving").forEach(node => node.classList.remove("is-moving")); document.querySelectorAll(".coil").forEach((node) => { node.style.transition = "none"; }); }
+  function freezeCoils() { document.querySelectorAll(".is-moving").forEach(node => node.classList.remove("is-moving")); document.querySelectorAll(".coil,.flow-coil").forEach((node) => { node.style.transition = "none"; }); }
   function updateControls() {
     document.querySelectorAll("#control-panel button, #control-panel select, #recovery-panel [data-action], #recovery-panel [data-command]").forEach((el) => { el.disabled = mode !== "live" || controlPending || stale; });
     const stage = lastSnapshot?.recovery?.stage;

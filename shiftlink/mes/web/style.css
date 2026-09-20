@@ -186,5 +186,15 @@ body[data-experience="expert"] .learn-note { display: none; }
 .flow-edge.selected .edge-line { stroke: #8fddff; stroke-width: 5; }
 .selected-relation { padding: 12px; margin-top: 12px; background: #213b4b; border-left: 3px solid #8fddff; color: #e6f5ff; }
 .detail-jump { margin: 8px 0 14px; font-size: 14px; }
+.machine-illustration { fill: none; stroke: #bbd3df; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.machine-illustration .fluid { fill: #345d70; stroke: none; }
+.machine-illustration .power-symbol { fill: #f4d69a; stroke: none; }
+.machine-illustration .rotor { animation: machine-turn 3s linear infinite paused; }
+.machine-illustration .belt-motion, .machine-illustration .supply-motion { stroke: #80ded0; stroke-dasharray: 8 6; animation: machine-flow 1.2s linear infinite paused; }
+.is-moving .machine-illustration .rotor, .is-moving .machine-illustration .belt-motion, .is-moving .machine-illustration .supply-motion { animation-play-state: running; }
+.flow-node.fault .machine-illustration { stroke: #ffb9bf; }
+.flow-node.waiting .machine-illustration { stroke: #efc78b; }
+.flow-coil { fill: #95bac7; stroke: #e2f4fa; stroke-width: 3; }
+@media (prefers-reduced-motion: reduce) { .machine-illustration *, .is-moving .machine-illustration * { animation: none !important; }.flow-coil { transition: none !important; } }
 @media (max-width: 1450px) { .work-area { grid-template-columns: minmax(0,1fr); }.detail-column { grid-template-columns: minmax(0,1fr) minmax(280px,.7fr); }.diagnostic-panel { grid-row: span 2; } }
 @media (max-width: 720px) { .detail-column { grid-template-columns: minmax(0,1fr); }.diagnostic-panel { grid-row: auto; } }

@@ -9,10 +9,10 @@
 <body>
   <a class="skip-link" href="#main-content">운전 화면으로 바로가기</a>
   <header class="app-header">
-    <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><div><p class="eyebrow">ShiftLink / OPERATIONS</p><h1>가상 냉연 코일 보조설비</h1></div></div>
+    <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><div><p class="eyebrow">ShiftLink / FIELD CONTEXT</p><h1>설비 흐름 · 현장 확인 지원</h1></div></div>
     <p id="connection-status" class="status-label" aria-live="polite">상태를 불러오는 중</p>
   </header>
-  <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 합성 데이터 · 실제 설비 제어·물리 검증·MES 연동이 아닙니다.</p>
+  <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 가상 냉연 코일 이송 보조설비 · 합성 데이터. 원인·안전·정비 최종 판정은 사람이 수행합니다. 실제 MES·PLC 제어가 아닙니다.</p>
   <main id="main-content">
     <section class="view-toolbar" aria-label="조회 모드 및 기록">
       <div class="controls"><label for="view-mode">조회 모드</label><select id="view-mode"><option value="live">실시간 운전</option><option value="replay">기록 재생</option></select><span id="mode-badge" class="mode-badge">실시간</span></div>
@@ -29,17 +29,28 @@
       <article><span>누적 배출</span><strong id="throughput">—</strong><small>현재 실행 기준</small></article>
       <article class="alarm-summary"><span>활성 알람</span><strong id="alarm-count">—</strong><small>아래 알람 목록에서 확인</small></article>
     </section>
+    <section class="incident-band" aria-labelledby="incident-heading"><div class="panel-heading"><h2 id="incident-heading">지금 확인할 위치</h2><span class="hint">항목을 누르면 관련 설비·부품·근거로 이동</span></div><div id="incident-summary"></div><p id="operator-announcement" class="sr-only" role="status" aria-live="polite"></p></section>
     <div class="observation-bar"><span>실행 <b id="run-id">—</b></span><span>관측 순번 <b id="sequence">—</b></span><span>모의 시각 <b id="observed-at">—</b></span></div>
     <section class="work-area">
       <section class="panel map-panel" aria-labelledby="map-heading">
-        <div class="panel-heading"><div><p class="eyebrow">MATERIAL FLOW</p><h2 id="map-heading">2D 라인 맵</h2></div><span class="direction-note">입측 → 출측</span></div>
-        <p class="hint">설비를 선택하면 운전 상태와 센서 추이를 확인할 수 있습니다.</p>
+        <div class="panel-heading"><div><p class="eyebrow">LINE → EQUIPMENT → COMPONENT</p><h2 id="map-heading">코일 이송 · 설비 관계도</h2></div><span class="direction-note">입측 → 출측</span></div>
+        <div class="operator-tools"><label for="experience-mode">화면 설명</label><select id="experience-mode"><option value="learn">흐름 배우기</option><option value="expert">빠른 점검</option></select><label for="relation-filter">표시 관계</label><select id="relation-filter"><option value="related">선택 설비 + 영향 대기</option><option value="affected">영향 대기</option><option value="material">소재 흐름</option><option value="all">모든 관계</option></select></div>
+        <div class="equipment-finder"><label for="equipment-search">설비 찾기</label><input id="equipment-search" type="search" placeholder="예: GR-01, 감속기" aria-controls="equipment-results" autocomplete="off"><div id="equipment-results"></div></div>
+        <details class="learning-guide" open><summary>처음 보는 설비인가요? 흐름 읽는 순서</summary><p class="process-intro"><b>코일은 감긴 철판입니다.</b> 본선 화살표를 따라 롤러 → 컨베이어로 이동합니다. 아래의 감속기·유압장치는 코일이 통과하는 곳이 아니라 구동·공급원입니다. 장비를 누르면 연결 대상, 측정 근거, 부품과 다음 확인을 볼 수 있습니다.</p></details>
+        <p id="process-story" class="process-story">운전 상태를 불러오는 중입니다.</p>
+        <div class="process-options"><p class="hint">Tab으로 설비·연결을 이동하고 Enter로 선택할 수 있습니다. 좁은 화면에서는 지도를 좌우로 이동하거나 설비 찾기를 사용하세요.</p><label><input id="animate-machines" type="checkbox" checked> 운전 표시 움직임</label></div>
         <div class="map-scroll"><div id="line-map" class="line-map"></div></div>
-        <div class="map-legend" aria-label="상태 범례"><span><i class="legend-dot normal"></i>정상</span><span><i class="legend-dot waiting"></i>대기</span><span><i class="legend-dot warning"></i>경고</span><span><i class="legend-dot fault"></i>고장</span><span><i class="legend-coil"></i>코일</span></div>
+        <p class="detail-jump"><a href="#equipment-detail">선택 설비의 부품·근거·다음 확인으로 이동 ↓</a></p>
+        <div class="map-legend" aria-label="상태 범례"><span>—→ 소재 이송</span><span>┄→ 공급·인터록</span><span class="impact-key">━→ 관측된 영향 대기</span><span>! 자체 이상</span><span>Ⅱ 제품 보류</span><span>◎ 코일</span></div>
+        <p class="hint animation-note">배치는 기능·관계 개념도입니다. 실제 크기·거리·부품 조립 위치가 아닙니다. 선은 구성에 등록된 관계만 표시하며 관계 자체가 고장 원인을 확정하지 않습니다.</p>
         <details class="utility-section"><summary>유틸리티 공급 관계 <span>연결 목록 보기</span></summary><div id="utility-links">유틸리티 연결 정보를 불러오는 중</div></details>
       </section>
       <div class="detail-column">
-        <aside id="equipment-detail" class="panel"><h2>설비 상세</h2><p class="hint">맵에서 설비를 선택하세요.</p></aside>
+        <aside class="panel diagnostic-panel" aria-label="선택 설비의 근거와 확인 순서"><div id="equipment-detail" tabindex="-1"><h2>설비 상세</h2><p class="hint">맵에서 설비를 선택하세요.</p></div><div id="part-locator"></div><div id="selection-evidence"></div>
+          <section id="recovery-panel" aria-labelledby="recovery-heading"><div class="panel-heading"><div><p class="eyebrow">NEXT CHECK</p><h2 id="recovery-heading">다음 확인 · 정상 복귀 조건</h2></div></div><div id="recovery-content"></div><p class="hint">조치 완료는 합성 신호를 복원하는 시연 기록입니다. 실제 점검 성공을 판정하지 않습니다. 2 tick 안정화도 모의 규칙입니다.</p></section>
+          <div class="handover-tools"><button type="button" id="download-context">확인 맥락 내려받기</button><span class="hint">관측·가정·미확인·다음 조치를 구분한 인계용 초안</span></div><p id="context-message" role="status"></p>
+        </aside>
+        <section class="panel" id="component-panel" aria-labelledby="component-heading"><p class="eyebrow">SYNTHETIC CONDITION</p><h2 id="component-heading">부품 상태 (모의) <small id="component-equipment"></small></h2><div id="component-content"></div><details><summary>건전도 계산 가정</summary><p class="hint">실제 잔여수명 예측이 아닙니다. 운전 1초당 0.001%p 감소, 이상 부품은 25~35%, 정비 후 해당 부품만 95%로 설정됩니다.</p></details></section>
         <section class="panel trend-panel" aria-labelledby="trend-heading"><div class="panel-heading"><div><p class="eyebrow">SENSOR TREND</p><h2 id="trend-heading">센서 추이</h2></div></div><label for="signal-select">측정 항목</label><select id="signal-select"><option value="">설비를 선택하세요</option></select><div id="sensor-trends"><p class="empty-state">관측 데이터가 쌓이면 추이가 표시됩니다.</p></div><p id="trend-description" class="hint">선택한 설비의 관측값을 표시합니다.</p></section>
       </div>
     </section>
@@ -69,6 +80,7 @@
     </section>
   </main>
   <footer>ShiftLink · 모의 MES <span>합성 레이아웃 · 센서 및 생산 데이터는 시연용입니다.</span></footer>
+  <script src="/static/operator.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>

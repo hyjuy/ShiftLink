@@ -44,7 +44,20 @@ class MesWebTests(unittest.TestCase):
     def test_javascript_history_and_connection_behavior(self) -> None:
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
-const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass} = require('./shiftlink/mes/web/app.js');
+const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage} = require('./shiftlink/mes/web/app.js');
+assert.equal(equipmentKind({profile_id:'hpu', code:'CUSTOM-01'}), 'hpu');
+assert.equal(equipmentKind({profile_id:'custom', code:'HPU-01'}), 'generic', 'unknown profile must not invent equipment internals');
+assert.equal(equipmentKind({code:'RT-01'}), 'rt');
+const running = {operating_state:'running', fault_level:'normal'};
+assert.equal(machineMoving({line_mode:'running'}, running, true), true);
+assert.equal(machineMoving({line_mode:'paused'}, running, true), false);
+assert.equal(machineMoving({line_mode:'running'}, running, false), false, 'paused replay and animation toggle stop motion');
+assert.equal(machineMoving({line_mode:'running'}, {...running, operating_state:'waiting'}, true), false);
+assert.equal(machineMoving({line_mode:'running'}, {...running, fault_level:'critical'}, true), false);
+const message = processMessage({line_mode:'running', equipment:[{equipment_id:'h', operating_state:'stopped', fault_level:'critical'}, {equipment_id:'r', operating_state:'waiting', fault_level:'normal'}]}, {equipment:[{equipment_id:'h',code:'HPU-01'}, {equipment_id:'r',code:'RT-01'}]});
+assert.match(message, /HPU-01에 자체 이상/);
+assert.match(message, /RT-01은 대기/);
+assert.match(processMessage({line_mode:'paused'}, {}), /움직임도 멈춥니다/);
 const h = createHistory();
 acceptSnapshot(h, {run_id:'old', sequence:12});
 const events = ['scenario_selected','alarm_raised'].map(event_type => ({run_id:'old', sequence:12, event_type}));
@@ -80,7 +93,7 @@ const vm = require('node:vm');
 const fs = require('node:fs');
 let calls = 0, interval;
 const elements = new Map();
-const document = { querySelector(selector) { if (!elements.has(selector)) elements.set(selector, {}); return elements.get(selector); }, querySelectorAll() {return [];} };
+const document = { addEventListener() {}, querySelector(selector) { if (!elements.has(selector)) elements.set(selector, {addEventListener() {}}); return elements.get(selector); }, querySelectorAll() {return [];} };
 vm.runInNewContext(fs.readFileSync('./shiftlink/mes/web/app.js', 'utf8'), {
  document, fetch: async () => { calls++; throw new Error('offline'); }, AbortSignal,
  setInterval(callback) { interval = callback; }, Date, console

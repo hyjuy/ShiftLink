@@ -263,7 +263,7 @@ class _Handler(BaseHTTPRequestHandler):
                 content_type = "text/csv; charset=utf-8" if format_name == "csv" else "application/x-ndjson; charset=utf-8"
                 self._send(200, self.service.export(run_id, format_name).encode(), content_type); return
             if parsed.path == "/": self._send(200, (self.web_root / "index.html").read_bytes(), "text/html; charset=utf-8"); return
-            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "style.css"}:
+            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "style.css"}:
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
                 self._send(200, (self.web_root / name).read_bytes(), f"{kind}; charset=utf-8"); return
             self._send(404, {"error": "not found", "is_synthetic": True})

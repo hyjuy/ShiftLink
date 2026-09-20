@@ -12,12 +12,18 @@ class OperatorViewTests(unittest.TestCase):
         service = MesService(Path("docs/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         examples = {}
-        for scenario in ("normal", "drive_fault", "hydraulic_fault", "downstream_block", "gearbox_overheat", "gearbox_leak", "coil_quality_hold"):
+        for scenario in ("normal", "drive_fault", "hydraulic_fault", "downstream_block", "gearbox_overheat", "hydraulic_overheat", "gearbox_leak", "coil_quality_hold"):
             service.control({"command": "reset"}); service.control({"command": "start"})
             if scenario != "normal":
                 service.control({"command": "scenario", "scenario_id": scenario})
             service.tick()
             examples[scenario] = service.state()
+        for action in service.state()["recovery"]["actions"]:
+            service.control({"command": "recovery_action", "action_id": action["action_id"]})
+            service.tick()
+        service.control({"command": "recover"}); service.tick()
+        examples["stabilizing"] = service.state()
+        service.tick(); examples["completed"] = service.state()
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -60,6 +66,24 @@ assert.equal(unknown.links.length,0); assert.match(flowView(unknown,'learn','rel
 const normal = JSON.parse(JSON.stringify(examples.normal));
 normal.measurements.find(x=>x.equipment_id===id('GR-01') && x.signal==='gr_brg_temp').value=100;
 assert.equal(buildOperatorModel(normal,config,id('GR-01')).faults.length,0);
+assert.match(flowView(buildOperatorModel(examples.stabilizing,config,id('RT-01'))),/복구 관찰/);
+assert.doesNotMatch(flowView(buildOperatorModel(examples.stabilizing,config,id('RT-01'))),/>↳ 영향 대기</);
+assert.equal(buildOperatorModel(examples.completed,config,id('RT-01')).faults.length,0);
+assert.equal(buildOperatorModel(examples.hydraulic_overheat,config,id('HPU-01')).problemPart,'cooling');
+const noBand=JSON.parse(JSON.stringify(config));
+noBand.equipment.find(e=>e.code==='GR-01').signals.forEach(s=>{s.normal_min=null;s.normal_max=null;});
+assert.match(evidenceView(buildOperatorModel(normal,noBand,id('GR-01'))),/기준 없음 · 판정 불가/);
+const inactive=JSON.parse(JSON.stringify(config));
+inactive.equipment.find(e=>e.code==='GR-01').active=false;
+assert.equal(buildOperatorModel(normal,inactive,id('GR-02')).cause,undefined);
+const drive=JSON.parse(JSON.stringify(examples.drive_fault));
+assert.equal(buildOperatorModel(drive,inactive,id('GR-02')).cause.equipment_id,id('GR-02'));
+const {relationKey}=require('./shiftlink/mes/web/operator.js');
+const hydraulic=buildOperatorModel(examples.hydraulic_fault,config,id('HPU-01'));
+const key=relationKey(hydraulic.links.find(l=>l.affected && l.to_id===id('RT-02')));
+assert.match(evidenceView(hydraulic,key),/선택 연결: HPU-01 → RT-02/);
+assert.ok(flowView(hydraulic,'learn','related',key).includes(`data-relation="${key}" aria-pressed="true"`));
+assert.equal(new Set(hydraulic.links.map(relationKey)).size,hydraulic.links.length);
 console.log('Topology, isolation, part assumption, evidence, and graph checks passed');
 '''], input=json.dumps({"config": service.config()["config"], "examples": examples}),
             cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True, encoding="utf-8")
@@ -75,6 +99,10 @@ console.log('Topology, isolation, part assumption, evidence, and graph checks pa
         self.assertIn("part-locator", dom.ids)
         self.assertIn("selection-evidence", dom.ids)
         self.assertLess(html.index('id="recovery-panel"'), html.index('id="control-panel"'))
+
+    def test_refresh_preserves_summary_and_exact_relation_focus(self):
+        result = subprocess.run(["node", "tests/mes_operator_dom.cjs"], capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

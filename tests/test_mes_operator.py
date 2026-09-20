@@ -30,6 +30,43 @@ const fs = require('node:fs');
 const {buildOperatorModel, flowView, incidentView, evidenceView, partView} = require('./shiftlink/mes/web/operator.js');
 const {config, examples} = JSON.parse(fs.readFileSync(0, 'utf8'));
 const id = code => config.equipment.find(e=>e.code===code).equipment_id;
+const configured=[...config.relations,...config.branches];
+assert.equal(configured.length,19);
+assert.deepEqual(configured.filter(l=>l.relation_type==='material_flow').map(l=>[l.from_id,l.to_id]),[
+ ['EQ-0006','EQ-0007'],['EQ-0007','EQ-0008'],['EQ-0008','EQ-0009'],['EQ-0008','EQ-0010']]);
+assert.deepEqual(configured.filter(l=>l.relation_type==='interlock').map(l=>[l.from_id,l.to_id]),[
+ ['EQ-0009','EQ-0008'],['EQ-0010','EQ-0008']]);
+const simultaneous=flowView(buildOperatorModel(examples.normal,config,'EQ-0007')).match(/<g class="flow-edge [^>]*data-type="co_occurrence"[\s\S]*?<\/g>/)[0];
+assert.match(simultaneous,/RT-02 ↔ RT-03/);assert.doesNotMatch(simultaneous,/marker-end/);
+// All filters are emphasis controls: visibility is material + direct selection only.
+for (const selected of [null, ...config.equipment.map(e=>e.equipment_id)]) {
+ for (const filter of ['related','affected','material','all','power_supply']) {
+  const model=buildOperatorModel(examples.hydraulic_fault,config,selected);
+  assert.equal(model.selected?.equipment_id ?? null,selected,'no implicit selection');
+  const html=flowView(model,'learn',filter);
+  const actual=[...html.matchAll(/data-relation="([^"]+)"/g)].map(m=>m[1]).sort();
+  const expected=model.links.filter(l=>l.relation_type==='material_flow'||[l.from_id,l.to_id].includes(selected)).map(l=>`${l.from_id}|${l.to_id}|${l.relation_type}`).sort();
+  assert.deepEqual(actual,expected,`${selected}/${filter}: exact configured visibility`);
+  const map=require('./shiftlink/mes/web/operator.js').layout(model);
+  assert.ok(map.height<=750,'baseline overview must fit a compact three-row map');
+  const segments=[];
+  for(const edge of html.matchAll(/<path class="edge-line" d="([^"]+)"/g)) {
+   const points=[...edge[1].matchAll(/[ML]([\d.-]+) ([\d.-]+)/g)].map(p=>[+p[1],+p[2]]);
+   for(let i=1;i<points.length;i++) {
+    const [a,b]=[points[i-1],points[i]];
+    for(const n of map.nodes) {
+     const hit=a[0]===b[0]?a[0]>n.x-101&&a[0]<n.x+101&&Math.max(a[1],b[1])>n.y-46&&Math.min(a[1],b[1])<n.y+106:a[1]>n.y-46&&a[1]<n.y+106&&Math.max(a[0],b[0])>n.x-101&&Math.min(a[0],b[0])<n.x+101;
+     assert.equal(hit,false,`${selected}: rendered edge clears ${n.equipment_id}`);
+    }
+    for(const [c,d] of segments) {
+     const v=a[0]===b[0],w=c[0]===d[0],axis=v?1:0;
+     if(v===w&&a[1-axis]===c[1-axis])assert.ok(Math.min(Math.max(a[axis],b[axis]),Math.max(c[axis],d[axis]))<=Math.max(Math.min(a[axis],b[axis]),Math.min(c[axis],d[axis])),'no shared line segment');
+    }
+    segments.push([a,b]);
+   }
+  }
+ }
+}
 let m = buildOperatorModel(examples.hydraulic_fault, config, id('RT-02'));
 assert.equal(m.links.filter(l=>l.affected).length,4);
 assert.ok(m.links.filter(l=>l.affected).every(l=>l.from_id===id('HPU-01')));
@@ -101,7 +138,7 @@ for (const link of hydraulic.links) {
   const [x1,y1]=points[i-1],[x2,y2]=points[i];
   assert.ok(x1===x2 || y1===y2,'orthogonal path');
   for(const n of placed) {
-   const left=n.x-101,right=n.x+101,top=n.y-56,bottom=n.y+156;
+   const left=n.x-101,right=n.x+101,top=n.y-46,bottom=n.y+106;
    const overlap=x1===x2 ? x1>left&&x1<right&&Math.max(y1,y2)>top&&Math.min(y1,y2)<bottom : y1>top&&y1<bottom&&Math.max(x1,x2)>left&&Math.min(x1,x2)<right;
    assert.equal(overlap,false,`${relationKey(link)} must clear ${n.equipment_id} plus 10px margin`);
   }
@@ -116,7 +153,7 @@ console.log('Topology, isolation, part assumption, evidence, and graph checks pa
         from tests.test_mes_ui_layout import Elements
         html = Path("shiftlink/mes/web/index.html").read_text(encoding="utf-8")
         dom = Elements(html)
-        for identifier in ("experience-mode", "equipment-search", "relation-filter"):
+        for identifier in ("experience-mode", "equipment-search", "relation-filter", "map-scale"):
             self.assertIn(identifier, dom.labels)
         self.assertIn("incident-summary", dom.ids)
         self.assertIn("part-locator", dom.ids)

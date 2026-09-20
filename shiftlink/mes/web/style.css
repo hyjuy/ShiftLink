@@ -184,6 +184,25 @@ body[data-experience="expert"] .learn-note { display: none; }
 @media (prefers-reduced-motion: reduce) { .is-moving .flow-coil { animation: none; } }
 .node-code { font-size: 20px; }.node-status, .node-meta, .edge-label { font-size: 17px; }.node-role { font-size: 18px; }
 .flow-edge.selected .edge-line { stroke: #8fddff; stroke-width: 5; }
+.map-scroll { background: #121e2b; }
+.flow-map { min-width: 0; }
+.edge-halo { fill: none; stroke: #121e2b; stroke-width: 11; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+.flow-edge .edge-line { stroke: #a5b9cd; stroke-width: 2.5; }
+.flow-edge[data-type="material_flow"] .edge-line { stroke: #c4d2df; stroke-width: 3; stroke-dasharray: none; }
+.flow-edge[data-type="drive"] .edge-line { stroke-dasharray: 12 4; }
+.flow-edge[data-type="power_supply"] .edge-line { stroke-dasharray: 16 4 3 4; }
+.flow-edge[data-type="hydraulic_supply"] .edge-line { stroke-dasharray: 7 5; }
+.flow-edge[data-type="pneumatic_supply"] .edge-line { stroke-dasharray: 2 6; }
+.flow-edge[data-type="interlock"] .edge-line { stroke-dasharray: 12 4 2 4 2 4; }
+.flow-edge[data-type="co_occurrence"] .edge-line { stroke-dasharray: 1 8; }
+.flow-edge.emphasized .edge-line { stroke-width: 4; }
+.flow-edge.affected .edge-line { stroke: #ffbd70; stroke-width: 6; }
+.flow-edge.selected .edge-line, .flow-edge:focus-visible .edge-line, .flow-edge:hover .edge-line { stroke: #fff; stroke-width: 5; }
+.flow-edge.affected:is(.selected,:focus-visible,:hover) .edge-line { stroke-width: 7; }
+.arrow-material { fill: #c4d2df; }.arrow-related, .legend-arrow { fill: #a5b9cd; }
+.relation-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; padding: 16px 8px; color: #e6edf5; }
+.relation-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.relation-legend svg { width: 64px; height: 18px; }
 .selected-relation { padding: 12px; margin-top: 12px; background: #213b4b; border-left: 3px solid #8fddff; color: #e6f5ff; }
 .detail-jump { margin: 8px 0 14px; font-size: 14px; }
 .workspace-tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid #566d82; padding-bottom: 8px; }
@@ -196,7 +215,34 @@ body[data-experience="expert"] .learn-note { display: none; }
 #control-message:empty { display: none; }
 .workspace-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .detail-workspace { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(300px,1fr); gap: 16px; align-items: start; }
-#workspace-flow .flow-map { max-width: 1120px; margin-inline: auto; }
+#workspace-flow .flow-map { max-width: 1200px; max-height: max(340px, calc(100dvh - 420px)); margin-inline: auto; }
+#workspace-flow .map-expanded .flow-map { min-width: 1200px; max-height: none; }
+.flow-map .node-status { font-size: 14px; text-anchor: end; }
+.flow-map .node-role { font-size: 16px; }
+.flow-map .node-meta { font-size: 14px; }
+.map-settings { margin: 6px 0; color: #c5d3df; }
+.app-header { padding: 10px 0; }
+.synthetic { padding: 6px 12px; }
+main { gap: 8px; margin-top: 8px; }
+.workspace-panel { gap: 8px; }
+.workspace-tabs { padding-bottom: 4px; }
+.workspace-tabs button { padding-block: 8px; }
+.summary-grid { gap: 8px; }
+.summary-grid article { padding: 8px 12px; display: flex; align-items: center; gap: 12px; }
+.summary-grid strong { font-size: 20px; margin: 0; }
+.summary-grid small { display: none; }
+.map-panel .panel-heading { margin-bottom: 8px; }
+.map-panel .eyebrow { display: none; }
+.map-panel .process-story { margin: 6px 0; padding: 6px 10px; }
+.map-panel .line-map { padding: 0; }
+.relation-legend { gap: 6px 16px; padding: 8px 0; }
+@media (max-width: 640px) {
+  .summary-grid article { gap: 6px; padding: 8px; }.summary-grid strong { font-size: 17px; }
+  .operator-tools { display: grid; grid-template-columns: 80px minmax(0,1fr); }
+  .operator-tools select { width: 100%; }
+  .operator-tools #clear-selection { grid-column: 1 / -1; grid-row: 4; }
+  .operator-tools .hint { grid-column: 1 / -1; }
+}
 #workspace-history .trend-panel { max-width: 960px; width: 100%; }
 @media (max-width: 900px) { .detail-workspace { grid-template-columns: minmax(0,1fr); }.workspace-tabs button { padding: 12px; } }
 .machine-illustration { fill: none; stroke: #bbd3df; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }

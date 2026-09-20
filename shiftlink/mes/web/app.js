@@ -109,7 +109,7 @@
     el.querySelectorAll("details").forEach((d,i)=>{ if (open[i]!==undefined) d.open=open[i]; });
     if (summaryIndex >= 0) el.querySelectorAll("summary")[summaryIndex]?.focus({preventScroll:true});
     if (focused && keys.length) {
-      const target = [...el.querySelectorAll('button,[role="button"]')].find(n=>keys.every(([k,v])=>n.getAttribute(k)===v)) || el.querySelector('[data-action],[data-command="recover"],button');
+      const target = [...el.querySelectorAll('button,[role="button"]')].find(n=>keys.every(([k,v])=>n.getAttribute(k)===v) && n.hasAttribute("data-relation")===active.hasAttribute("data-relation")) || el.querySelector('[data-action],[data-command="recover"],button');
       (target || $("#equipment-detail"))?.focus({preventScroll:true});
     }
   }
@@ -134,16 +134,23 @@
   }
   function selectEquipment(id, relation="", move=false) {
     if (!lastSnapshot?.equipment?.some(e=>e.equipment_id===id)) return;
+    if (id===selectedId && !relation && !move) { clearSelection(); return; }
     selectedId=id; selectedPartId=null; selectedRelation=relation; renderSnapshot(lastSnapshot,currentConfig());
     if (move) { showWorkspace("detail"); $("#equipment-detail").focus(); $("#equipment-detail").scrollIntoView({block:"start"}); }
     setText("#operator-announcement", `${name(id,currentConfig())} 선택. 상세 영역에서 부품과 관측 근거를 확인하세요.`);
   }
+  function clearSelection() {
+    selectedId=null; selectedPartId=null; selectedRelation="";
+    renderSnapshot(lastSnapshot,currentConfig());
+    setText("#operator-announcement","선택 해제. 기본 소재 흐름만 표시합니다.");
+  }
   function renderEquipment(snapshot, config) {
     const model=operator.buildOperatorModel(snapshot,config,selectedId,selectedPartId);
     const relation=model.links.find(l=>operator.relationKey(l)===selectedRelation);
-    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} → ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "관측된 영향 대기" : "구성상 연결 · 원인 확정 아님"}` : "연결선을 선택하면 출발·도착 설비와 관계를 확인할 수 있습니다.");
+    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "관측된 영향 대기" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
     setText("#process-story",processMessage(snapshot,config));
     setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
+    setView("#relation-legend",operator.legendView($("#experience-mode").value));
     const playing=$("#animate-machines").checked && (mode==="live" ? !stale : replay.playing);
     $("#line-map").querySelectorAll(".flow-node").forEach(n=>n.classList.toggle("is-moving",machineMoving(snapshot,model.lookup(n.dataset.equipment),playing)));
     $("#line-map").querySelectorAll(".flow-coil").forEach(node=>{
@@ -157,7 +164,7 @@
     setView("#incident-summary",operator.incidentView(model));
     setView("#part-locator",operator.partView(model));
     setView("#selection-evidence",operator.evidenceView(model,selectedRelation));
-    setView("#utility-links",model.links.filter(l=>l.relation_type!=="material_flow").map(l=>`<p><button type="button" data-equipment="${escape(l.from_id)}">${escape(l.from.code || l.from_id)}</button> → <button type="button" data-equipment="${escape(l.to_id)}">${escape(l.to.code || l.to_id)}</button> · ${escape(l.label)}</p>`).join("") || "연결 정보 없음");
+    setView("#utility-links",model.links.filter(l=>l.relation_type!=="material_flow" && [l.from_id,l.to_id].includes(selectedId)).map(l=>`<p><button type="button" data-equipment="${escape(l.from_id)}">${escape(l.from.code || l.from_id)}</button> ${l.directionSymbol} <button type="button" data-equipment="${escape(l.to_id)}">${escape(l.to.code || l.to_id)}</button> · ${escape(l.label)}</p>`).join("") || "설비를 선택하면 직접 관계를 표시합니다.");
     const signature=JSON.stringify([snapshot.run_id,model.faults.map(n=>n.equipment_id),model.held.map(c=>c.coil_id),snapshot.recovery?.stage]);
     if (signature!==incidentSignature) { incidentSignature=signature; setText("#operator-announcement",`상태 변경. 자체 이상·주의 ${model.faults.length}대, 보류 코일 ${model.held.length}개. 지금 확인할 위치에서 상세를 선택하세요.`); }
   }
@@ -165,7 +172,12 @@
     const equipment = snapshot.equipment?.find((item) => item.equipment_id === selectedId);
     const measurements = (snapshot.measurements || []).filter((item) => item.equipment_id === selectedId);
     const configEq = config?.equipment?.find((e) => e.equipment_id === selectedId);
-    if (!equipment) { $("#equipment-detail").innerHTML = "<h2>설비 상세</h2><p>설비 정보가 없습니다.</p>"; return; }
+    if (!equipment) {
+      setView("#equipment-detail","<h2>설비 상세</h2><p>설비를 선택하세요.</p>");
+      $("#signal-select").innerHTML=""; $("#signal-select").dataset.signals="";
+      $("#sensor-trends").innerHTML=""; setText("#trend-description","설비를 선택하면 추이를 표시합니다.");
+      return;
+    }
     const configInfo = config ? `<p class="config-ref">구성 <small>${config.version_label || config.config_id?.slice(0, 8)}</small></p>` : "";
     const assetInfo = configEq?.asset_id ? `<p>자산 ID: ${escape(configEq.asset_id)}</p>` : "";
     const profileInfo = configEq?.profile_id ? `<p>프로필: ${escape(configEq.profile_id)}</p>` : "";
@@ -200,13 +212,12 @@
   function renderSnapshot(snapshot, config) {
     if (!snapshot) return;
     if (snapshot.run_id !== lastSnapshot?.run_id || snapshot.scenario_id !== lastSnapshot?.scenario_id) {
-      selectedId = snapshot.equipment?.find(e => e.fault_level !== "normal")?.equipment_id || snapshot.recovery?.equipment_id || selectedId;
       selectedPartId = null; selectedRelation="";
     }
     lastSnapshot = snapshot;
-    if (!snapshot.equipment?.some((e) => e.equipment_id === selectedId)) selectedId = snapshot.equipment?.[0]?.equipment_id;
+    if (!snapshot.equipment?.some((e) => e.equipment_id === selectedId)) selectedId = null;
     setText("#line-mode", label(snapshot.line_mode)); setText("#sequence", snapshot.sequence);
-    setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${name(selectedId, config)}`);
+    setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${selectedId?name(selectedId, config):"없음"}`);
     setText("#alarm-count", (snapshot.active_alarms || []).length); setText("#observed-at", clock(snapshot.simulated_at));
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
     setText("#throughput", mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length);
@@ -418,9 +429,12 @@
     const command=event.target.closest("#recovery-content [data-command]"); if (command && !command.disabled) control(command.dataset.command);
   });
   $("#line-map").addEventListener("keydown", event=>{ if (["Enter"," "].includes(event.key) && event.target.matches('[role="button"]')) { event.preventDefault(); selectEquipment(event.target.dataset.equipment,event.target.dataset.relation || ""); } });
+  $("#workspace-flow").addEventListener("keydown",event=>{ if(event.key==="Escape") { event.preventDefault(); clearSelection(); } });
+  $("#clear-selection").onclick=clearSelection;
   $("#workspace-tabs").addEventListener("keydown", workspaceKeydown);
   $("#experience-mode").onchange=()=>{ document.body.dataset.experience=$("#experience-mode").value; $(".learning-guide").open=$("#experience-mode").value==="learn"; renderSnapshot(lastSnapshot,currentConfig()); };
   $("#relation-filter").onchange=()=>renderSnapshot(lastSnapshot,currentConfig());
+  $("#map-scale").onchange=event=>$(".map-scroll").classList.toggle("map-expanded",event.target.value==="detail");
   $("#equipment-search").oninput=event=>{
     const query=event.target.value.trim().toLowerCase();
     const matches=(currentConfig()?.equipment || []).filter(e=>[e.code,e.name,e.equipment_id,roleFor(e)[0]].join(" ").toLowerCase().includes(query));

@@ -21,12 +21,13 @@
     const faults = nodes.filter(n=>n.fault_level && n.fault_level!=="normal");
     const spec = config?.scenarios?.find(s=>s.scenario_id===snapshot.scenario_id);
     const cause = nodes.find(n=>n.active!==false && (n.capabilities || []).includes(spec?.cause_capability));
-    const selected = lookup(selectedId) || faults[0] || nodes[0];
+    const selected = lookup(selectedId);
     const links = relations.filter(r=>lookup(r.from_id) && lookup(r.to_id)).map(r=>{
       const from = lookup(r.from_id), to = lookup(r.to_id);
       const affected = Boolean(spec && from.equipment_id===cause?.equipment_id && faults.includes(from) &&
         r.relation_type===spec.propagation_relation && to.operating_state==="waiting" && to.wait_reason===spec.wait_reason);
-      return {...r, from, to, affected, label:types[r.relation_type] || r.relation_type};
+      return {...r, from, to, affected, label:types[r.relation_type] || r.relation_type,
+        directionSymbol:r.relation_type==="co_occurrence" ? "↔" : "→"};
     });
     const problemPart = selected?.equipment_id===cause?.equipment_id && snapshot.scenario_id!=="normal" ? spec?.component_id || null : null;
     const parts = (snapshot.components || []).filter(c=>c.equipment_id===selected?.equipment_id);
@@ -56,7 +57,7 @@
       cau: `<rect x="25" y="44" width="115" height="40" rx="20"/><path d="M45 84v11M119 84v11M140 64h20V32h13M78 44V31"/><circle cx="78" cy="24" r="10"/><path d="M78 24l5-5"/><path class="supply-motion" d="M35 65h125V32h13"/>`,
       generic: `<rect x="40" y="28" width="100" height="60" rx="8"/><circle cx="90" cy="58" r="16"/><path d="M90 48v20M80 58h20"/>`
     };
-    return `<svg class="machine-illustration" x="-85" y="22" width="170" height="99" viewBox="0 0 180 105" aria-hidden="true" focusable="false">${drawings[kind] || drawings.generic}</svg>`;
+    return `<svg class="machine-illustration" x="-56" y="8" width="112" height="65" viewBox="0 0 180 105" aria-hidden="true" focusable="false">${drawings[kind] || drawings.generic}</svg>`;
   }
   function layout(model) {
     let row=0; const placed=[];
@@ -65,33 +66,45 @@
       model.nodes.filter(n=>n.group==="support" && !(n.capabilities || []).includes("drive"))];
     for (const group of groups) {
       const cols=Math.min(4,group.length);
-      group.forEach((n,i)=>placed.push({...n,x:(i%cols+0.5)*240,y:70+(row+Math.floor(i/cols))*235}));
+      group.forEach((n,i)=>placed.push({...n,x:(i%cols+0.5)*300,y:94+(row+Math.floor(i/cols))*250}));
       row+=Math.ceil(group.length/4);
     }
-    return {nodes:placed,height:Math.max(180,row*235+8)};
+    return {nodes:placed,height:Math.max(250,row*250-16)};
   }
 
   const relationKey = l => `${l.from_id}|${l.to_id}|${l.relation_type}`;
-  function routePoints(a,b,type) {
-    if (a.y===b.y && Math.abs(a.x-b.x)===240 && type!=="interlock") {
+  function routePoints(a,b,type,lane=0,sourcePort=0,targetPort=0) {
+    if (a.y===b.y && Math.abs(a.x-b.x)===300 && !["interlock","co_occurrence"].includes(type)) {
       const direction=Math.sign(b.x-a.x);
-      return [[a.x+direction*104,a.y+65],[b.x-direction*104,b.y+65]];
+      return [[a.x+direction*104,a.y+30],[b.x-direction*104,b.y+30]];
     }
-    if (a.y===b.y) return [[a.x,a.y+158],[a.x,a.y+169],[b.x,a.y+169],[b.x,b.y+158]];
-    const down=b.y>a.y, corridor=a.x===840?720:a.x+120;
-    const sourceLane=a.y+(down?169:-66), targetLane=b.y+(down?-66:169);
-    return [[a.x,a.y+(down?158:-58)],[a.x,sourceLane],[corridor,sourceLane],[corridor,targetLane],[b.x,targetLane],[b.x,b.y+(down?-58:158)]];
+    const ax=a.x+sourcePort, bx=b.x+targetPort, band=y=>y+124+lane*12;
+    if (a.y===b.y && a.group==="route" && b.group==="route") return [[ax,a.y-48],[ax,a.y-82+lane*14],[bx,a.y-82+lane*14],[bx,b.y-48]];
+    if (a.y===b.y) return [[ax,a.y+108],[ax,band(a.y)],[bx,band(a.y)],[bx,b.y+108]];
+    const down=b.y>a.y, corridor=a.x+(a.x===1050?-150:150)+(lane-4)*10;
+    const sourceLane=band(a.y-(down?0:250)), targetLane=band(b.y-(down?250:0));
+    if (sourceLane===targetLane) return [[ax,a.y+(down?108:-48)],[ax,sourceLane],[bx,targetLane],[bx,b.y+(down?-48:108)]];
+    return [[ax,a.y+(down?108:-48)],[ax,sourceLane],[corridor,sourceLane],[corridor,targetLane],[bx,targetLane],[bx,b.y+(down?-48:108)]];
   }
   function flowView(model, experience="learn", filter="related", selectedRelation="") {
     if (!model.nodes.length) return '<p class="empty-state">설비 관측 없음</p>';
     const map=layout(model), activeId=model.selected?.equipment_id;
-    const links=model.links.filter(l=>filter==="all" || l.relation_type==="material_flow" || (filter!=="material" && l.affected) || (filter==="related" && [l.from_id,l.to_id].includes(activeId)));
-    const edges=links.map((l,i)=>{
+    const links=model.links.filter(l=>l.relation_type==="material_flow" || [l.from_id,l.to_id].includes(activeId));
+    const onRoof=l=>l.relation_type!=="material_flow" && [l.from_id,l.to_id].every(id=>map.nodes.find(n=>n.equipment_id===id)?.group==="route") && map.nodes.find(n=>n.equipment_id===l.from_id).y===map.nodes.find(n=>n.equipment_id===l.to_id).y;
+    const port=(node,link)=>{
+      const other=l=>map.nodes.find(n=>n.equipment_id===(l.from_id===node.equipment_id?l.to_id:l.from_id));
+      const incident=links.filter(l=>[l.from_id,l.to_id].includes(node.equipment_id) && onRoof(l)===onRoof(link));
+      if(onRoof(link)) incident.sort((a,b)=>other(a).x-other(b).x);
+      return (incident.indexOf(link)-(incident.length-1)/2)*18;
+    };
+    let lane=0, roofLane=0;
+    const edges=links.map(l=>{
       const a=map.nodes.find(n=>n.equipment_id===l.from_id), b=map.nodes.find(n=>n.equipment_id===l.to_id);
-      const material=l.relation_type==="material_flow", cls=l.affected?"affected":material?"material":"related";
-      const d=routePoints(a,b,l.relation_type).map(([x,y],index)=>`${index?"L":"M"}${x} ${y}`).join(" ");
-      const description=`${title(a)} → ${title(b)} · ${l.label} · ${l.affected?"관측된 영향 대기":"구성상 관계 · 원인 확정 아님"}`;
-      return `<g class="flow-edge ${cls} ${selectedRelation===relationKey(l)?"selected":""}" role="button" tabindex="0" data-equipment="${esc(l.from_id)}" data-relation="${esc(relationKey(l))}" aria-pressed="${selectedRelation===relationKey(l)}" aria-label="${esc(description)}"><title>${esc(description)}</title><path class="edge-hit" d="${d}"/><path class="edge-line" d="${d}" marker-end="url(#arrow-${cls})"/></g>`;
+      const material=l.relation_type==="material_flow", cls=material?"material":"related";
+      const emphasized=filter==="affected"?l.affected:filter==="material"?material:filter==="related"?[l.from_id,l.to_id].includes(activeId):l.relation_type===filter;
+      const d=routePoints(a,b,l.relation_type,onRoof(l)?roofLane++:a.y===b.y && Math.abs(a.x-b.x)===300 && !["interlock","co_occurrence"].includes(l.relation_type)?0:lane++,port(a,l),port(b,l)).map(([x,y],index)=>`${index?"L":"M"}${x} ${y}`).join(" ");
+      const description=`${title(a)} ${l.directionSymbol} ${title(b)} · ${l.label} · ${l.affected?"관측된 영향 대기":"구성상 관계 · 원인 확정 아님"}`;
+      return `<g class="flow-edge ${cls} ${l.affected?"affected":""} ${emphasized?"emphasized":""} ${selectedRelation===relationKey(l)?"selected":""}" data-type="${esc(l.relation_type)}" role="button" tabindex="0" data-equipment="${esc(activeId || l.from_id)}" data-relation="${esc(relationKey(l))}" aria-pressed="${selectedRelation===relationKey(l)}" aria-label="${esc(description)}"><title>${esc(description)}</title><path class="edge-hit" d="${d}"/><path class="edge-halo" d="${d}"/><path class="edge-line" d="${d}" ${l.relation_type==="co_occurrence"?'':`marker-end="url(#arrow-${cls})"`}/></g>`;
     }).join("");
     const nodes=map.nodes.map(n=>{
       const fault=n.fault_level!=="normal", held=n.coils.some(c=>c.quality_status==="hold"), waiting=n.operating_state==="waiting";
@@ -101,10 +114,14 @@
       const group=n.group==="route"?`${model.config.route.indexOf(n.equipment_id)+1} · 소재 본선`:n.group==="branch"?"물류 분기 · 시연 제외":"구동·공급";
       const component=n.equipment_id===model.cause?.equipment_id && model.spec?.component_id ? `${partNames[model.spec.component_id] || model.spec.component_id} · 가정` : "";
       const description=`${title(n)} · ${n.role[0]} · ${state} · ${group}${component?` · ${component}`:""}`;
-      const dots=n.coils.map(c=>`<circle class="flow-coil ${c.quality_status==="hold"?"held":""}" data-coil="${esc(c.coil_id)}" cx="-60" cy="65" r="11"><title>${esc(c.coil_id)}${c.quality_status==="hold"?" · 제품 보류":""}</title></circle>`).join("");
-      return `<g transform="translate(${n.x} ${n.y})" class="flow-node ${cls} ${activeId===n.equipment_id?"selected":""}" role="button" tabindex="0" data-equipment="${esc(n.equipment_id)}" aria-pressed="${activeId===n.equipment_id}" aria-label="${esc(description)}"><title>${esc(description)}</title><rect class="node-body" x="-91" y="-46" width="182" height="192" rx="10"/><text class="node-code" x="-78" y="-23">${esc(title(n))}</text><text class="node-status" x="-78" y="-3">${fault?"! ":held?"Ⅱ ":waiting?"↳ ":""}${esc(state)}</text><text class="node-role" x="-78" y="17">${esc(n.role[0])}</text><text class="node-meta" x="-78" y="135">${esc(component || group)}</text>${machineSvg(n.profile_id)}${dots}</g>`;
+      const dots=n.coils.map(c=>`<circle class="flow-coil ${c.quality_status==="hold"?"held":""}" data-coil="${esc(c.coil_id)}" cx="-60" cy="45" r="9"><title>${esc(c.coil_id)}${c.quality_status==="hold"?" · 제품 보류":""}</title></circle>`).join("");
+      return `<g transform="translate(${n.x} ${n.y})" class="flow-node ${cls} ${activeId===n.equipment_id?"selected":""}" role="button" tabindex="0" data-equipment="${esc(n.equipment_id)}" aria-pressed="${activeId===n.equipment_id}" aria-label="${esc(description)}"><title>${esc(description)}</title><rect class="node-body" x="-91" y="-36" width="182" height="132" rx="10"/><text class="node-code" x="-78" y="-13">${esc(title(n))}</text><text class="node-status" x="78" y="-13">${fault?"! ":held?"Ⅱ ":waiting?"↳ ":""}${esc(state)}</text><text class="node-role" x="-78" y="8">${esc(n.role[0])}</text><text class="node-meta" x="-78" y="87">${esc(component || group)}</text>${machineSvg(n.profile_id)}${dots}</g>`;
     }).join("");
-    return `${!model.config?'<p class="hint">구성 미보존 · 연결·역할을 추정하지 않습니다.</p>':""}<svg class="flow-map" viewBox="0 0 960 ${map.height}" role="group" aria-label="설비 관계도 · Tab으로 설비와 연결을 이동하고 Enter로 선택"><defs>${["material","related","affected"].map(c=>`<marker id="arrow-${c}" class="arrow-${c}" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z"/></marker>`).join("")}</defs>${edges}${nodes}</svg>${experience==="learn"?'<p class="learn-note">① 본선 화살표는 코일 이동 순서입니다. ② 구동·공급 설비를 누르면 연결 대상이 보입니다. ③ 점선은 공급·인터록, 굵은 주황선은 서버가 관측한 영향 대기입니다. 배치는 위치 개념도이며 실제 거리·부품 배치가 아닙니다.</p>':""}`;
+    return `${!model.config?'<p class="hint">구성 미보존 · 연결·역할을 추정하지 않습니다.</p>':""}<svg class="flow-map" viewBox="0 0 1200 ${map.height}" role="group" aria-label="설비 관계도 · Tab으로 이동, Enter 또는 Space로 선택, Escape로 해제"><defs>${["material","related"].map(c=>`<marker id="arrow-${c}" class="arrow-${c}" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z"/></marker>`).join("")}</defs>${edges}${nodes}</svg>`;
+  }
+
+  function legendView(experience="learn") {
+    return `<div class="relation-legend" aria-label="관계선 범례">${["material_flow","drive","power_supply","hydraulic_supply","pneumatic_supply","interlock","co_occurrence"].map(t=>`<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge" data-type="${t}"><path class="edge-line" d="M2 9H50"/>${t==="co_occurrence"?'': '<path class="legend-arrow" d="M49 3L61 9L49 15Z"/>'}</g></svg>${esc(types[t])}</span>`).join("")}<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge affected" data-type="hydraulic_supply"><path class="edge-line" d="M2 9H60"/></g></svg>관측된 영향: 유형 유지 + 굵은 선</span></div>${experience==="learn"?'<p class="learn-note">소재 화살표는 분기를 포함해 항상 표시합니다. 설비를 선택하면 직접 관계만 추가됩니다. 동시 발생은 방향·인과를 뜻하지 않는 무방향 선입니다. 교차점의 틈은 연결 접점이 아닙니다. 같은 설비를 다시 누르거나 Escape로 해제합니다.</p>':""}`;
   }
 
   function incidentView(model) {
@@ -123,13 +140,13 @@
     const incoming=model.links.filter(l=>l.to_id===eq.equipment_id && l.affected);
     const related=model.links.filter(l=>l.from_id===eq.equipment_id || l.to_id===eq.equipment_id);
     const relation=model.links.find(l=>relationKey(l)===selectedRelation);
-    const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} → ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"관측된 영향 대기":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
+    const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"관측된 영향 대기":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
     const measurements=model.measurements.map(s=>{
       const band=s.normal_min==null&&s.normal_max==null?"기준 없음":`${s.normal_min??"하한 없음"} ~ ${s.normal_max??"상한 없음"}`;
       const finding=!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
       return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small></th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
     }).join("");
-    return `${relationNote}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption><thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead><tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div><details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> → <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
+    return `${relationNote}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption><thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead><tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div><details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
   }
 
   function partView(model) {
@@ -139,7 +156,7 @@
     return `<p class="part-caption">${part?`시연에서 가정한 문제 부품: <b>${esc(partNames[part] || part)}</b> · 센서만으로 확정한 진단이 아닙니다.`:"문제 부품 미확정 · 아래는 구성된 모의 부품입니다."}</p><div class="part-locator" role="group" aria-label="부품 위치 개념도 · 실제 조립 위치 아님">${model.parts.map(p=>`<button type="button" data-part="${esc(p.component_id)}" aria-pressed="${chosen?.component_id===p.component_id}" class="part-target ${p.component_id===part?"suspect":""}"><span aria-hidden="true">${p.component_id===part?"!":"◇"}</span><b>${esc(p.name)}</b><small>${p.component_id===part?"시연 가정 부품":"모의 구성 부품"}</small></button>`).join("")}</div>${chosen?`<p class="part-context"><b>${esc(chosen.name)}</b> · 모의 건전도 ${Number(chosen.health_percent).toFixed(1)}% · 운전 ${(chosen.operating_seconds/3600).toFixed(3)} h · 정비 ${Number(chosen.maintenance_count)}회</p>`:""}<p class="hint">위치는 기능별 개념 배치입니다. 실제 잔여수명·고장 확률을 뜻하지 않습니다.</p>`;
   }
 
-  const api={buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
+  const api={legendView,buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
   if (typeof module!=="undefined") module.exports=api;
   if (typeof window!=="undefined") window.MesOperator=api;
 })();

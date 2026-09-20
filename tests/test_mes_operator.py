@@ -92,6 +92,21 @@ const key=relationKey(hydraulic.links.find(l=>l.affected && l.to_id===id('RT-02'
 assert.match(evidenceView(hydraulic,key),/선택 연결: HPU-01 → RT-02/);
 assert.ok(flowView(hydraulic,'learn','related',key).includes(`data-relation="${key}" aria-pressed="true"`));
 assert.equal(new Set(hydraulic.links.map(relationKey)).size,hydraulic.links.length);
+const {layout,routePoints}=require('./shiftlink/mes/web/operator.js');
+const placed=layout(hydraulic).nodes;
+for (const link of hydraulic.links) {
+ const a=placed.find(n=>n.equipment_id===link.from_id),b=placed.find(n=>n.equipment_id===link.to_id);
+ const points=routePoints(a,b,link.relation_type);
+ for(let i=1;i<points.length;i++) {
+  const [x1,y1]=points[i-1],[x2,y2]=points[i];
+  assert.ok(x1===x2 || y1===y2,'orthogonal path');
+  for(const n of placed) {
+   const left=n.x-101,right=n.x+101,top=n.y-56,bottom=n.y+156;
+   const overlap=x1===x2 ? x1>left&&x1<right&&Math.max(y1,y2)>top&&Math.min(y1,y2)<bottom : y1>top&&y1<bottom&&Math.max(x1,x2)>left&&Math.min(x1,x2)<right;
+   assert.equal(overlap,false,`${relationKey(link)} must clear ${n.equipment_id} plus 10px margin`);
+  }
+ }
+}
 console.log('Topology, isolation, part assumption, evidence, and graph checks passed');
 '''], input=json.dumps({"config": service.config()["config"], "examples": examples}),
             cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True, encoding="utf-8")

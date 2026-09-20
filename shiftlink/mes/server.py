@@ -62,7 +62,11 @@ class MesService:
             if run.config_id:
                 stored = self.storage.get_configuration(run.config_id)
                 if stored:
-                    return configuration.from_payload(stored)
+                    config = configuration.from_payload(stored)
+                    if config.source == "catalog" and config.version_label == "baseline":
+                        from .scenarios.priority import expand
+                        return expand(config)
+                    return config
         return configuration.from_catalog(self.catalog.data)
 
     def state(self) -> dict[str, object]:
@@ -207,6 +211,8 @@ class MesService:
                 self.engine.set_scenario(str(payload.get("scenario_id", "")))
             elif command == "recover":
                 self.engine.recover()
+            elif command == "recovery_action":
+                self.engine.perform_action(str(payload.get("action_id", "")))
             elif command == "speed":
                 value = payload.get("speed", 1)
                 if isinstance(value, bool) or not isinstance(value, (float, int)):

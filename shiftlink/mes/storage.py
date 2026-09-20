@@ -39,6 +39,7 @@ def _snapshot(payload: dict[str, Any]) -> Snapshot:
         measurements=tuple(Measurement(**{**item, "observed_at": _time(item["observed_at"])}) for item in payload.get("measurements", [])),
         active_alarms=tuple(Alarm(**{**item, "raised_at": _time(item["raised_at"]), "acknowledged_at": _time(item.get("acknowledged_at")), "cleared_at": _time(item.get("cleared_at"))}) for item in payload.get("active_alarms", [])),
         is_synthetic=payload.get("is_synthetic", True),
+        recovery=payload.get("recovery"), components=tuple(payload.get("components", [])),
     )
 
 

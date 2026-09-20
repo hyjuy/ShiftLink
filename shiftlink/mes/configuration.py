@@ -8,7 +8,7 @@ from typing import Any
 
 from .contracts import (
     Configuration, EquipmentConfig, SignalSpec, RelationConfig, ScenarioSpec,
-    SignalEffect, LayoutGroup
+    SignalEffect, LayoutGroup, RecoveryAction
 )
 
 # Permitted capabilities; derived from equipment code prefixes and actual relations.
@@ -182,7 +182,8 @@ def from_catalog(catalog_data: dict[str, Any]) -> Configuration:
         scenarios=tuple(scenarios),
         layout=tuple(layout)
     )
-    return finalize(config)
+    from .scenarios.priority import expand
+    return expand(config)
 
 
 def _compute_material_route(catalog_data: dict[str, Any], eq_by_id: dict) -> tuple[str, ...]:
@@ -263,7 +264,10 @@ def load_draft(payload: dict[str, Any], *, source: str) -> Configuration:
                 SignalEffect(**eff) if isinstance(eff, dict) else eff
                 for eff in sc.get("signal_effects", [])
             ),
-            recovery_ticks=int(sc.get("recovery_ticks", 2))
+            recovery_ticks=int(sc.get("recovery_ticks", 2)),
+            title=sc.get("title", ""), source_url=sc.get("source_url", ""),
+            recovery_actions=tuple(RecoveryAction(**a) for a in sc.get("recovery_actions", [])),
+            component_id=sc.get("component_id", ""), product_hold=sc.get("product_hold", False)
         )
         for sc in payload.get("scenarios", [])
     )
@@ -353,6 +357,17 @@ def validate(config: Configuration) -> list[str]:
         if (from_id, to_id) not in route_material and (from_id, to_id) not in {(r.from_id, r.to_id) for r in config.branches}:
             errors.append(f"Material flow {from_id}→{to_id}: not in route and not in branches (ambiguous)")
 
+    scenario_ids = [s.scenario_id for s in config.scenarios]
+    if len(scenario_ids) != len(set(scenario_ids)):
+        errors.append("Duplicate scenario_id")
+    for scenario in config.scenarios:
+        actions = scenario.recovery_actions
+        if scenario.recovery_ticks < 1:
+            errors.append(f"{scenario.scenario_id}: recovery_ticks must be positive")
+        if len({a.action_id for a in actions}) != len(actions) or any(not a.action_id or not a.title for a in actions):
+            errors.append(f"{scenario.scenario_id}: recovery actions need unique IDs and titles")
+        if scenario.product_hold and not actions:
+            errors.append(f"{scenario.scenario_id}: product hold requires release actions")
     return errors
 
 
@@ -535,7 +550,11 @@ def to_payload(config: Configuration) -> dict[str, Any]:
                     {"capability": eff.capability, "signal": eff.signal, "value": eff.value}
                     for eff in s.signal_effects
                 ],
-                "recovery_ticks": s.recovery_ticks
+                "recovery_ticks": s.recovery_ticks,
+                **({"title": s.title, "source_url": s.source_url,
+                    "component_id": s.component_id, "product_hold": s.product_hold,
+                    "recovery_actions": [{"action_id": a.action_id, "title": a.title, "detail": a.detail} for a in s.recovery_actions]}
+                   if s.recovery_actions or s.title else {})
             }
             for s in config.scenarios
         ],

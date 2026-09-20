@@ -35,7 +35,7 @@ class RecoveryTests(unittest.TestCase):
     def test_four_scenarios_require_ordered_actions_before_recovery(self):
         for scenario in SCENARIOS:
             with self.subTest(scenario=scenario):
-                self.engine.reset(); self.engine.start()
+                self.service.control({"command": "reset"}); self.engine.start()
                 self.select(scenario)
                 with self.assertRaises(ValueError):
                     self.engine.recover()
@@ -111,8 +111,30 @@ class RecoveryTests(unittest.TestCase):
         self.service.control({"command": "recovery_action", "action_id": action})
         self.service.control({"command": "recovery_action", "action_id": action})
         self.assertEqual(sum(a["completed"] for a in self.actions()), 1)
-        self.engine.reset(); self.engine.start(); self.select("gearbox_leak")
+        self.service.control({"command": "reset"}); self.engine.start(); self.select("gearbox_leak")
         self.assertFalse(any(a["completed"] for a in self.actions()))
+
+    def test_switch_from_legacy_fault_updates_alarm_and_keeps_action_log(self):
+        self.select("drive_fault")
+        self.select("gearbox_overheat")
+        self.assertEqual(self.engine.snapshot.active_alarms[0].code, "AL-GR-HOT")
+        self.finish_actions()
+        events = self.service.replay(self.engine.run.run_id, -1)["events"]
+        self.assertEqual(sum(e["event_type"] == "recovery_action_completed" for e in events), 3)
+
+    def test_baseline_restart_adds_scenarios_without_rewriting_past_config(self):
+        payload = configuration.to_payload(self.engine.config)
+        payload["scenarios"] = [s for s in payload["scenarios"] if s["scenario_id"] not in SCENARIOS]
+        for eq in payload["equipment"]:
+            eq["signals"] = [s for s in eq["signals"] if s["signal"] != "gr_oil_leak"]
+        old = configuration.from_payload(payload)
+        self.service.storage.save_configuration(old.config_id, json.dumps(configuration.to_payload(old)))
+        old_run = Run.create(seed=1, config_id=old.config_id)
+        self.service.storage.create_run(old_run)
+        restored = MesService(Path("docs/00_plant_and_relations.json"), self.service.storage)
+        self.assertTrue(set(SCENARIOS) <= {s.scenario_id for s in restored.active_config.scenarios})
+        preserved = restored.stored_config(old.config_id)["config"]
+        self.assertEqual(len(preserved["scenarios"]), 3)
 
 
 if __name__ == "__main__":

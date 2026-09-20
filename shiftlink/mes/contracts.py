@@ -73,6 +73,13 @@ class SignalEffect:
 
 
 @dataclass(frozen=True)
+class RecoveryAction:
+    action_id: str
+    title: str
+    detail: str
+
+
+@dataclass(frozen=True)
 class ScenarioSpec:
     scenario_id: str
     cause_capability: str
@@ -81,6 +88,11 @@ class ScenarioSpec:
     alarm_code: str
     signal_effects: tuple[SignalEffect, ...] = ()
     recovery_ticks: int = 2
+    title: str = ""
+    source_url: str = ""
+    recovery_actions: tuple[RecoveryAction, ...] = ()
+    component_id: str = ""
+    product_hold: bool = False
 
 
 @dataclass(frozen=True)
@@ -168,6 +180,8 @@ class Snapshot:
     measurements: tuple[Measurement, ...] = ()
     active_alarms: tuple[Alarm, ...] = ()
     is_synthetic: bool = True
+    recovery: dict[str, object] | None = None
+    components: tuple[dict[str, object], ...] = ()
 
     @property
     def key(self) -> tuple[str, int]:

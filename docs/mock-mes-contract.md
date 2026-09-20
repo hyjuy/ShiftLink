@@ -26,9 +26,14 @@
 | GET | `/api/runs/{run_id}/replay?sequence=N` | 저장 snapshot 재생 |
 | POST | `/api/control` | `start`, `pause`, `resume`, `reset`, `speed`, `scenario`, `recover` |
 | GET | `/api/export?format=jsonl|csv` | 관측 기록 내보내기 |
+| GET | `/api/config` | 활성 구성(route·layout·시나리오 포함) |
+| GET | `/api/configs/{config_id}` | 저장된 구성(과거 런 재생용) |
+| POST | `/api/config/validate` | 초안 검증: `{draft}` → `{valid, errors, diff}` |
+| POST | `/api/config/apply` | 구성 적용: `{base_config_id, draft, reason, actor}` — 가동 중/기준 불일치는 409 |
 
 잘못된 명령·시나리오·형식은 400, 없는 런·기록은 404, 서버 오류는 500을 반환한다. 기본 바인딩은 `127.0.0.1`이다.
 
-재생 응답은 `snapshots`, `events` 배열이며 `sequence=N`은 N보다 큰 기록을 뜻한다. 전체 재생은 -1을 사용한다.
+재생 응답은 `snapshots`, `events` 배열과 `config_id`, `config_preserved`를 포함한다. `config_preserved=false`는 업그레이드 이전 런으로 당시 구성이 미보존임을 뜻한다. `sequence=N`은 N보다 큰 기록을 뜻한다. 전체 재생은 -1을 사용한다.
+`/api/state`는 활성 `config_id`를 포함한다. 구성 적용은 안전한 런 경계에서만 수행되며(가동 중 hot swap 없음), 성공 시 이전 런을 보존하고 새 구성의 새 런을 만든다. 되돌리기는 이전 구성을 참조하는 새 런이다. 상세는 `docs/mock-mes-modularization.md` 참고.
 내보내기에 `run_id`를 지정하면 해당 기록을 사용한다. 생략하면 현재 실행을 사용한다.
 기록 재생 중에는 실시간 상태를 화면에 병합하지 않는다. 가상시각은 연결 상태 판단에 사용하지 않는다.

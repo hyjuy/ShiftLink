@@ -69,6 +69,12 @@ class MesStorage:
                 FOREIGN KEY (run_id, sequence) REFERENCES snapshots(run_id, sequence));
             CREATE TABLE IF NOT EXISTS ground_truth (
                 run_id TEXT PRIMARY KEY, payload TEXT NOT NULL, FOREIGN KEY (run_id) REFERENCES runs(run_id));
+            CREATE TABLE IF NOT EXISTS configurations (
+                config_id TEXT PRIMARY KEY, created_at TEXT NOT NULL, payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS config_changes (
+                change_id TEXT PRIMARY KEY, requested_at TEXT NOT NULL, applied_at TEXT,
+                base_config_id TEXT, new_config_id TEXT, reason TEXT, actor TEXT,
+                actor_self_reported INTEGER NOT NULL DEFAULT 1, status TEXT NOT NULL, detail TEXT, run_id TEXT);
         """)
         self.connection.commit()
 
@@ -109,6 +115,34 @@ class MesStorage:
                 self.connection.execute("INSERT INTO ground_truth VALUES (?, ?)", (truth.run_id, _dump(truth)))
         except sqlite3.IntegrityError as error:
             raise ValueError(f"ground truth already exists or run is unknown: {truth.run_id}") from error
+
+    def save_configuration(self, config_id: str, canonical_payload: str, created_at: datetime | None = None) -> None:
+        """Idempotent: the same config_id always carries the same canonical payload (hash-addressed)."""
+        self.connection.execute(
+            "INSERT OR IGNORE INTO configurations VALUES (?, ?, ?)",
+            (config_id, (created_at or datetime.now().astimezone()).isoformat(), canonical_payload),
+        )
+        self.connection.commit()
+
+    def get_configuration(self, config_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute("SELECT payload FROM configurations WHERE config_id = ?", (config_id,)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def record_config_change(self, change: dict[str, Any]) -> None:
+        with self.connection:
+            self.connection.execute(
+                "INSERT INTO config_changes VALUES (:change_id, :requested_at, :applied_at, :base_config_id,"
+                " :new_config_id, :reason, :actor, :actor_self_reported, :status, :detail, :run_id)",
+                {
+                    "applied_at": None, "base_config_id": None, "new_config_id": None, "reason": None,
+                    "actor": None, "actor_self_reported": 1, "detail": None, "run_id": None, **change,
+                },
+            )
+
+    def list_config_changes(self) -> list[dict[str, Any]]:
+        cursor = self.connection.execute("SELECT * FROM config_changes ORDER BY requested_at")
+        columns = [description[0] for description in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor]
 
     def snapshots(self, run_id: str, *, as_of: datetime | None = None) -> list[Snapshot]:
         query = "SELECT payload FROM snapshots WHERE run_id = ?"; args: list[object] = [run_id]

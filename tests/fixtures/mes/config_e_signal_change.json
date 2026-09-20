@@ -1,0 +1,608 @@
+{
+  "config_id": "0cf801cda5bab6645adb1f9c4a4e874b5b73cdbbbb0db5d20781f389ef9e9beb",
+  "version_label": "baseline",
+  "source": "catalog",
+  "line_id": "LN-0001",
+  "equipment": [
+    {
+      "equipment_id": "EQ-0001",
+      "asset_id": "AS-EQ-0001-001",
+      "code": "HPU-01",
+      "name": "HPU-01",
+      "segment_id": "SG-0004",
+      "profile_id": "hpu",
+      "capabilities": [
+        "hydraulic_supply"
+      ],
+      "signals": [
+        {
+          "signal": "hpu_pressure",
+          "name": "hpu_pressure",
+          "unit": "kPa",
+          "normal_min": 1000,
+          "normal_max": 1200,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "hpu_oil_temp",
+          "name": "hpu_oil_temp",
+          "unit": "degC",
+          "normal_min": 35.0,
+          "normal_max": 58.0,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "hpu_filter_dp",
+          "name": "hpu_filter_dp",
+          "unit": "bar",
+          "normal_min": 0.0,
+          "normal_max": 1.2,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "hpu_flow",
+          "name": "hpu_flow",
+          "unit": "L_min",
+          "normal_min": 38.0,
+          "normal_max": 46.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "asset_id": "AS-EQ-0002-001",
+      "code": "PDP-01",
+      "name": "PDP-01",
+      "segment_id": "SG-0004",
+      "profile_id": "pdp",
+      "capabilities": [
+        "power_supply"
+      ],
+      "signals": [
+        {
+          "signal": "bus_voltage",
+          "name": "bus_voltage",
+          "unit": "pct",
+          "normal_min": 97.0,
+          "normal_max": 103.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "asset_id": "AS-EQ-0003-001",
+      "code": "CAU-01",
+      "name": "CAU-01",
+      "segment_id": "SG-0004",
+      "profile_id": "cau",
+      "capabilities": [
+        "pneumatic_supply"
+      ],
+      "signals": [
+        {
+          "signal": "air_pressure",
+          "name": "air_pressure",
+          "unit": "kPa",
+          "normal_min": 550.0,
+          "normal_max": 700.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "asset_id": "AS-EQ-0004-001",
+      "code": "GR-01",
+      "name": "GR-01",
+      "segment_id": "SG-0001",
+      "profile_id": "gr",
+      "capabilities": [
+        "drive"
+      ],
+      "signals": [
+        {
+          "signal": "gr_vib_rms",
+          "name": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "gr_brg_temp",
+          "name": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "gr_current",
+          "name": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "asset_id": "AS-EQ-0005-001",
+      "code": "GR-02",
+      "name": "GR-02",
+      "segment_id": "SG-0003",
+      "profile_id": "gr",
+      "capabilities": [
+        "drive"
+      ],
+      "signals": [
+        {
+          "signal": "gr_vib_rms",
+          "name": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "gr_brg_temp",
+          "name": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "gr_current",
+          "name": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "asset_id": "AS-EQ-0006-001",
+      "code": "RT-01",
+      "name": "RT-01",
+      "segment_id": "SG-0001",
+      "profile_id": "rt",
+      "capabilities": [
+        "transport"
+      ],
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "name": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "required": true,
+          "zero_when_stopped": true
+        },
+        {
+          "signal": "rt_clamp_press",
+          "name": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "asset_id": "AS-EQ-0007-001",
+      "code": "RT-02",
+      "name": "RT-02",
+      "segment_id": "SG-0002",
+      "profile_id": "rt",
+      "capabilities": [
+        "transport"
+      ],
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "name": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "required": true,
+          "zero_when_stopped": true
+        },
+        {
+          "signal": "rt_clamp_press",
+          "name": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "rt_lift_delay",
+          "name": "rt_lift_delay",
+          "unit": "min",
+          "normal_min": 0.0,
+          "normal_max": 0.05,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "asset_id": "AS-EQ-0008-001",
+      "code": "RT-03",
+      "name": "RT-03",
+      "segment_id": "SG-0003",
+      "profile_id": "rt",
+      "capabilities": [
+        "transport"
+      ],
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "name": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "required": true,
+          "zero_when_stopped": true
+        },
+        {
+          "signal": "rt_clamp_press",
+          "name": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "required": true,
+          "zero_when_stopped": false
+        },
+        {
+          "signal": "rt_motor_current",
+          "name": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8.0,
+          "normal_max": 16.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "asset_id": "AS-EQ-0009-001",
+      "code": "CV-01",
+      "name": "CV-01",
+      "segment_id": "SG-0003",
+      "profile_id": "cv",
+      "capabilities": [
+        "transport",
+        "discharge"
+      ],
+      "signals": [
+        {
+          "signal": "cv_speed",
+          "name": "cv_speed",
+          "unit": "m_min",
+          "normal_min": 10.0,
+          "normal_max": 60.0,
+          "required": true,
+          "zero_when_stopped": true
+        },
+        {
+          "signal": "cv_queue_len",
+          "name": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "asset_id": "AS-EQ-0010-001",
+      "code": "CV-02",
+      "name": "CV-02",
+      "segment_id": "SG-0003",
+      "profile_id": "cv",
+      "capabilities": [
+        "transport",
+        "discharge"
+      ],
+      "signals": [
+        {
+          "signal": "cv_queue_len",
+          "name": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "required": true,
+          "zero_when_stopped": false
+        }
+      ],
+      "coil_capacity": 1,
+      "dwell_seconds": 10.0,
+      "active": true
+    }
+  ],
+  "relations": [
+    {
+      "relation_type": "material_flow",
+      "from_id": "EQ-0006",
+      "to_id": "EQ-0007",
+      "lag_seconds": 12,
+      "capacity_value": 120.0,
+      "capacity_unit": "m_min"
+    },
+    {
+      "relation_type": "material_flow",
+      "from_id": "EQ-0007",
+      "to_id": "EQ-0008",
+      "lag_seconds": 15,
+      "capacity_value": 120.0,
+      "capacity_unit": "m_min"
+    },
+    {
+      "relation_type": "material_flow",
+      "from_id": "EQ-0008",
+      "to_id": "EQ-0009",
+      "lag_seconds": 10,
+      "capacity_value": 60.0,
+      "capacity_unit": "m_min"
+    },
+    {
+      "relation_type": "drive",
+      "from_id": "EQ-0004",
+      "to_id": "EQ-0006",
+      "lag_seconds": 1,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "drive",
+      "from_id": "EQ-0004",
+      "to_id": "EQ-0007",
+      "lag_seconds": 1,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "drive",
+      "from_id": "EQ-0005",
+      "to_id": "EQ-0008",
+      "lag_seconds": 1,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "drive",
+      "from_id": "EQ-0005",
+      "to_id": "EQ-0009",
+      "lag_seconds": 2,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "hydraulic_supply",
+      "from_id": "EQ-0001",
+      "to_id": "EQ-0006",
+      "lag_seconds": 4,
+      "capacity_value": 12.0,
+      "capacity_unit": "L_min"
+    },
+    {
+      "relation_type": "hydraulic_supply",
+      "from_id": "EQ-0001",
+      "to_id": "EQ-0007",
+      "lag_seconds": 5,
+      "capacity_value": 14.0,
+      "capacity_unit": "L_min"
+    },
+    {
+      "relation_type": "hydraulic_supply",
+      "from_id": "EQ-0001",
+      "to_id": "EQ-0008",
+      "lag_seconds": 6,
+      "capacity_value": 12.0,
+      "capacity_unit": "L_min"
+    },
+    {
+      "relation_type": "hydraulic_supply",
+      "from_id": "EQ-0001",
+      "to_id": "EQ-0009",
+      "lag_seconds": 8,
+      "capacity_value": 6.0,
+      "capacity_unit": "L_min"
+    },
+    {
+      "relation_type": "power_supply",
+      "from_id": "EQ-0002",
+      "to_id": "EQ-0004",
+      "lag_seconds": 0,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "power_supply",
+      "from_id": "EQ-0002",
+      "to_id": "EQ-0005",
+      "lag_seconds": 0,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "power_supply",
+      "from_id": "EQ-0002",
+      "to_id": "EQ-0001",
+      "lag_seconds": 0,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "pneumatic_supply",
+      "from_id": "EQ-0003",
+      "to_id": "EQ-0009",
+      "lag_seconds": 3,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "interlock",
+      "from_id": "EQ-0009",
+      "to_id": "EQ-0008",
+      "lag_seconds": 2,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "co_occurrence",
+      "from_id": "EQ-0007",
+      "to_id": "EQ-0008",
+      "lag_seconds": null,
+      "capacity_value": null,
+      "capacity_unit": null
+    },
+    {
+      "relation_type": "interlock",
+      "from_id": "EQ-0010",
+      "to_id": "EQ-0008",
+      "lag_seconds": 2,
+      "capacity_value": null,
+      "capacity_unit": null
+    }
+  ],
+  "branches": [
+    {
+      "relation_type": "material_flow",
+      "from_id": "EQ-0008",
+      "to_id": "EQ-0010",
+      "lag_seconds": 10,
+      "capacity_value": 20.0,
+      "capacity_unit": "m_min"
+    }
+  ],
+  "route": [
+    "EQ-0006",
+    "EQ-0007",
+    "EQ-0008",
+    "EQ-0009"
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "drive_fault",
+      "cause_capability": "drive",
+      "propagation_relation": "drive",
+      "wait_reason": "upstream_drive_fault",
+      "alarm_code": "AL-DRV-VIB",
+      "signal_effects": [
+        {
+          "capability": "drive",
+          "signal": "gr_vib_rms",
+          "value": 5.0
+        }
+      ],
+      "recovery_ticks": 2
+    },
+    {
+      "scenario_id": "hydraulic_fault",
+      "cause_capability": "hydraulic_supply",
+      "propagation_relation": "hydraulic_supply",
+      "wait_reason": "hydraulic_supply_low",
+      "alarm_code": "AL-HYD-LOW",
+      "signal_effects": [
+        {
+          "capability": "hydraulic_supply",
+          "signal": "hpu_pressure",
+          "value": 120.0
+        }
+      ],
+      "recovery_ticks": 2
+    },
+    {
+      "scenario_id": "downstream_block",
+      "cause_capability": "discharge",
+      "propagation_relation": "interlock",
+      "wait_reason": "downstream_block",
+      "alarm_code": "AL-DSB-QUE",
+      "signal_effects": [
+        {
+          "capability": "discharge",
+          "signal": "cv_queue_len",
+          "value": 95.0
+        }
+      ],
+      "recovery_ticks": 2
+    }
+  ],
+  "layout": [
+    {
+      "title": "소재 주경로",
+      "equipment_ids": [
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008",
+        "EQ-0009"
+      ]
+    },
+    {
+      "title": "구동·공급·보조 설비",
+      "equipment_ids": [
+        "EQ-0001",
+        "EQ-0002",
+        "EQ-0003",
+        "EQ-0004",
+        "EQ-0005",
+        "EQ-0010"
+      ]
+    }
+  ]
+}

@@ -69,6 +69,55 @@ class HttpTests(unittest.TestCase):
             self.get('/api/runs/missing/replay')
         self.assertEqual(caught.exception.code, 404)
 
+    def post_json(self, path, payload):
+        request = Request(self.base + path, json.dumps(payload).encode(),
+                          {'Content-Type': 'application/json'})
+        with urlopen(request, timeout=5) as response:
+            return json.load(response)
+
+    def test_config_endpoints_validate_apply_and_replay_linkage(self):
+        config = json.loads(self.get('/api/config'))['config']
+        self.assertTrue(config['route'])
+        self.assertTrue(config['layout'])
+        state = json.loads(self.get('/api/state'))
+        self.assertEqual(state['config_id'], config['config_id'])
+
+        # stored config is retrievable for replay rendering
+        stored = json.loads(self.get(f"/api/configs/{config['config_id']}"))['config']
+        self.assertEqual(stored['config_id'], config['config_id'])
+
+        # validate: broken draft reports concrete errors, nothing changes
+        broken = json.loads(json.dumps(config)); broken['route'] = ['EQ-MISSING']
+        verdict = self.post_json('/api/config/validate', {'draft': broken})
+        self.assertFalse(verdict['valid']); self.assertTrue(verdict['errors'])
+
+        # apply while running -> 409, engine keeps its run
+        self.post({'command': 'start'}); self.service.tick()
+        run_before = json.loads(self.get('/api/state'))['run_id']
+        with self.assertRaises(HTTPError) as caught:
+            self.post_json('/api/config/apply', {'base_config_id': config['config_id'], 'draft': config})
+        self.assertEqual(caught.exception.code, 409)
+
+        # paused apply with an HPU asset swap -> new run, old replay intact
+        self.post({'command': 'pause'})
+        swapped = json.loads(json.dumps(config))
+        for item in swapped['equipment']:
+            if item['code'].startswith('HPU'):
+                item['asset_id'] = 'AS-EQ-0001-002'; item['name'] += ' 교체'
+        swapped['version_label'] = 'B-hpu-swap'
+        result = self.post_json('/api/config/apply', {
+            'base_config_id': config['config_id'], 'draft': swapped,
+            'reason': 'HPU 교체', 'actor': '테스트(자기기입)'})
+        self.assertNotEqual(result['run_id'], run_before)
+        replay = json.loads(self.get(f'/api/runs/{run_before}/replay'))
+        self.assertEqual(replay['config_id'], config['config_id'])
+        self.assertTrue(replay['config_preserved'])
+
+        # stale base now conflicts
+        with self.assertRaises(HTTPError) as caught:
+            self.post_json('/api/config/apply', {'base_config_id': config['config_id'], 'draft': config})
+        self.assertEqual(caught.exception.code, 409)
+
     def test_file_database_survives_service_restart(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / 'mes.sqlite3'

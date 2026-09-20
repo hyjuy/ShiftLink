@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShiftLink 모의 MES</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">운전 화면으로 바로가기</a>
+  <header class="app-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><div><p class="eyebrow">ShiftLink / OPERATIONS</p><h1>가상 냉연 코일 보조설비</h1></div></div>
+    <p id="connection-status" class="status-label" aria-live="polite">상태를 불러오는 중</p>
+  </header>
+  <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 합성 데이터 · 실제 설비 제어·물리 검증·MES 연동이 아닙니다.</p>
+  <main id="main-content">
+    <section class="view-toolbar" aria-label="조회 모드 및 기록">
+      <div class="controls"><label for="view-mode">조회 모드</label><select id="view-mode"><option value="live">실시간 운전</option><option value="replay">기록 재생</option></select><span id="mode-badge" class="mode-badge">실시간</span></div>
+      <div class="export-controls"><span>관측 데이터 내보내기</span><a id="export-jsonl" href="/api/export?format=jsonl" download>JSONL ↓</a><a id="export-csv" href="/api/export?format=csv" download>CSV ↓</a></div>
+    </section>
+    <section id="replay-controls" class="panel replay-panel" aria-label="기록 재생" hidden>
+      <div class="controls"><label for="replay-run">저장된 실행</label><select id="replay-run"><option value="">실행 목록을 불러오는 중</option></select><button id="replay-refresh">목록 새로고침</button><button id="replay-play">재생</button></div>
+      <div class="replay-timeline"><label for="replay-sequence">관측 시점</label><input id="replay-sequence" type="range" min="0" max="0" value="0"><output id="replay-position" for="replay-sequence">기록을 선택하세요.</output></div>
+      <p class="hint">실행을 선택하면 기록을 불러옵니다. 재생 중에는 시연 제어를 사용할 수 없습니다.</p>
+    </section>
+    <section aria-label="라인 요약" class="summary-grid">
+      <article><span>운전 상태</span><strong id="line-mode">—</strong><small>모의 라인 모드</small></article>
+      <article><span>라인 내 코일</span><strong id="coil-count">—</strong><small>현재 이송 중인 소재</small></article>
+      <article><span>누적 배출</span><strong id="throughput">—</strong><small>현재 실행 기준</small></article>
+      <article class="alarm-summary"><span>활성 알람</span><strong id="alarm-count">—</strong><small>아래 알람 목록에서 확인</small></article>
+    </section>
+    <div class="observation-bar"><span>실행 <b id="run-id">—</b></span><span>관측 순번 <b id="sequence">—</b></span><span>모의 시각 <b id="observed-at">—</b></span></div>
+    <section class="work-area">
+      <section class="panel map-panel" aria-labelledby="map-heading">
+        <div class="panel-heading"><div><p class="eyebrow">MATERIAL FLOW</p><h2 id="map-heading">2D 라인 맵</h2></div><span class="direction-note">입측 → 출측</span></div>
+        <p class="hint">설비를 선택하면 운전 상태와 센서 추이를 확인할 수 있습니다.</p>
+        <div class="map-scroll"><div id="line-map" class="line-map"></div></div>
+        <div class="map-legend" aria-label="상태 범례"><span><i class="legend-dot normal"></i>정상</span><span><i class="legend-dot waiting"></i>대기</span><span><i class="legend-dot warning"></i>경고</span><span><i class="legend-dot fault"></i>고장</span><span><i class="legend-coil"></i>코일</span></div>
+        <details class="utility-section"><summary>유틸리티 공급 관계 <span>연결 목록 보기</span></summary><div id="utility-links">유틸리티 연결 정보를 불러오는 중</div></details>
+      </section>
+      <div class="detail-column">
+        <aside id="equipment-detail" class="panel"><h2>설비 상세</h2><p class="hint">맵에서 설비를 선택하세요.</p></aside>
+        <section class="panel trend-panel" aria-labelledby="trend-heading"><div class="panel-heading"><div><p class="eyebrow">SENSOR TREND</p><h2 id="trend-heading">센서 추이</h2></div></div><label for="signal-select">측정 항목</label><select id="signal-select"><option value="">설비를 선택하세요</option></select><div id="sensor-trends"><p class="empty-state">관측 데이터가 쌓이면 추이가 표시됩니다.</p></div><p id="trend-description" class="hint">선택한 설비의 관측값을 표시합니다.</p></section>
+      </div>
+    </section>
+    <section class="panel" id="control-panel"><div class="panel-heading"><div><p class="eyebrow">SIMULATION CONTROL</p><h2>시연 제어</h2></div><span class="hint">모의 운전 전용</span></div>
+      <div class="controls">
+        <button data-command="start" class="primary-button">시작</button><button data-command="pause">일시정지</button><button data-command="resume">재개</button><button data-command="recover">복구 진행</button><button data-command="reset" class="quiet-button">새 실행</button>
+        <div class="control-field"><label for="speed">배속</label><select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="5">5×</option></select></div>
+        <div class="control-field scenario-field"><label for="scenario">시나리오</label><select id="scenario"><option value="normal">정상</option><option value="drive_fault">구동부 이상</option><option value="downstream_block">출측 정체</option><option value="hydraulic_fault">유압 공급 이상</option></select></div>
+      </div><p id="control-message" aria-live="polite"></p>
+    </section>
+    <section class="bottom-grid">
+      <section class="panel"><div class="panel-heading"><h2>활성 알람</h2><span class="hint">현재 관측 시점</span></div><ul id="alarm-list" class="feed"></ul></section>
+      <section class="panel"><div class="panel-heading"><h2>최근 이벤트</h2><span class="hint">선택한 실행의 이력</span></div><ul id="event-list" class="feed"></ul></section>
+    </section>
+  </main>
+  <footer>ShiftLink · 모의 MES <span>합성 레이아웃 · 센서 및 생산 데이터는 시연용입니다.</span></footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+// DOM-contract tests, not browser layout or assistive-technology tests.
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const fs = require('node:fs');
+const elements = new Map();
+const document = {activeElement:null, addEventListener(){}, querySelectorAll(){return [];}, querySelector(s){
+  if (!elements.has(s)) elements.set(s,{addEventListener(){}}); return elements.get(s);
+}};
+const scope={document,fetch:async()=>{throw new Error('offline');},AbortSignal,setInterval(){},Date};
+const source=fs.readFileSync('shiftlink/mes/web/app.js','utf8').replace('  refresh();','  globalThis.testView = setView; globalThis.testTabs = {showWorkspace,workspaceKeydown}; globalThis.testDiagramMode = setDiagramMode;\n  refresh();');
+vm.runInNewContext(source,scope);
+function focusable(attrs={}) {return {hasAttribute:k=>k in attrs,getAttribute:k=>attrs[k],focus(){document.activeElement=this;}};}
+const first=focusable({'data-equipment':'HPU','data-relation':'HPU|RT1|hydraulic'});
+const second=focusable({'data-equipment':'HPU','data-relation':'HPU|RT2|hydraulic'});
+const replacement=focusable({'data-equipment':'HPU','data-relation':'HPU|RT2|hydraulic'});
+let after=false;
+const el={dataset:{},contains:n=>[first,second].includes(n),querySelectorAll:s=>s==='button,[role="button"]'?[first,replacement]:[],querySelector:()=>first,set innerHTML(v){after=true;}};
+elements.set('#test',el);document.activeElement=second;
+scope.testView('#test','new data');assert.ok(after);assert.equal(document.activeElement,replacement,'same source/type must retain exact destination');
+const oldSummary=focusable(),newSummary=focusable();after=false;
+const oldDetails={open:true},newDetails={open:false};
+Object.assign(el,{dataset:{},contains:n=>n===oldSummary,querySelectorAll:s=>s==='summary'?[after?newSummary:oldSummary]:s==='details'?[after?newDetails:oldDetails]:[]});
+document.activeElement=oldSummary;scope.testView('#test','updated evidence');
+assert.equal(document.activeElement,newSummary);assert.equal(newDetails.open,true);
+console.log('Refresh focus contract passed: exact relation and open summary');
+const tabs=['flow','detail','history','setup'].map(key=>{
+ const attrs={'aria-controls':`workspace-${key}`};
+ const tab=Object.assign(focusable(attrs),{dataset:{workspace:key},setAttribute(k,v){attrs[k]=v;}});
+ elements.set(`#tab-${key}`,tab);elements.set(`#workspace-${key}`,{hidden:key!=='flow'});return tab;
+});
+document.querySelectorAll=s=>s==='[role="tab"][data-workspace]'?tabs:[];
+scope.testTabs.showWorkspace('detail',true);
+assert.equal(document.activeElement,tabs[1]);
+assert.equal(tabs[1].getAttribute('aria-selected'),'true');
+assert.equal(elements.get('#workspace-flow').hidden,true);
+assert.equal(elements.get('#workspace-detail').hidden,false);
+let prevented=false;
+scope.testTabs.workspaceKeydown({target:tabs[1],key:'End',preventDefault(){prevented=true;}});
+assert.ok(prevented);assert.equal(document.activeElement,tabs[3]);
+scope.testTabs.workspaceKeydown({target:tabs[3],key:'ArrowRight',preventDefault(){}});
+assert.equal(document.activeElement,tabs[0]);
+assert.equal(tabs.filter(t=>t.tabIndex===0).length,1);
+assert.equal(['flow','detail','history','setup'].filter(k=>!elements.get(`#workspace-${k}`).hidden).length,1);
+console.log('Tab visibility, selection and keyboard wrap contracts passed');
+const classes=new Set();
+document.body={classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name);}}};
+elements.set('#diagram-toolbar',{hidden:true});
+elements.set('#diagram-back',focusable());elements.set('#diagram-open',focusable());
+scope.testDiagramMode(true);
+assert.ok(classes.has('diagram-only'));
+assert.equal(elements.get('#diagram-toolbar').hidden,false);
+assert.equal(elements.get('#workspace-flow').hidden,false);
+assert.equal(document.activeElement,elements.get('#diagram-back'));
+scope.testDiagramMode(false);
+assert.ok(!classes.has('diagram-only'));
+assert.equal(elements.get('#diagram-toolbar').hidden,true);
+assert.equal(document.activeElement,elements.get('#diagram-open'));
+console.log('Diagram-only entry/exit and focus restoration passed');

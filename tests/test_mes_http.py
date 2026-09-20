@@ -69,6 +69,25 @@ class HttpTests(unittest.TestCase):
             self.get('/api/runs/missing/replay')
         self.assertEqual(caught.exception.code, 404)
 
+    def test_recovery_actions_through_http_and_saved_replay(self):
+        self.post({'command': 'start'})
+        state = self.post({'command': 'scenario', 'scenario_id': 'gearbox_leak'})
+        self.service.tick()
+        self.assertEqual(state['recovery']['stage'], 'actions')
+        with self.assertRaises(HTTPError) as caught:
+            self.post({'command': 'recover'})
+        self.assertEqual(caught.exception.code, 400)
+        for action in state['recovery']['actions']:
+            state = self.post({'command': 'recovery_action', 'action_id': action['action_id']})
+            self.service.tick()
+        self.assertEqual(state['recovery']['stage'], 'ready')
+        state = self.post({'command': 'recover'})
+        self.assertEqual(state['recovery']['stage'], 'stabilizing')
+        self.service.tick(); self.service.tick()
+        replay = json.loads(self.get(f"/api/runs/{state['run_id']}/replay"))
+        self.assertEqual(replay['snapshots'][-1]['recovery']['stage'], 'completed')
+        self.assertTrue(replay['snapshots'][-1]['components'])
+
     def post_json(self, path, payload):
         request = Request(self.base + path, json.dumps(payload).encode(),
                           {'Content-Type': 'application/json'})

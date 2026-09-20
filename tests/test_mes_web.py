@@ -23,14 +23,14 @@ class MesWebTests(unittest.TestCase):
 
     def test_dashboard_uses_only_documented_observation_and_control_apis(self) -> None:
         script = (WEB / "app.js").read_text(encoding="utf-8")
-        for endpoint in ("/api/state", "/api/events", "/api/catalog", "/api/control"):
+        for endpoint in ("/api/state", "/api/events", "/api/config", "/api/control"):
             self.assertIn(endpoint, script)
         self.assertIn("fetch(", script)
         self.assertIn("is_synthetic", script)
         self.assertIn("connectionState", script)
         self.assertIn("pause", script)
         self.assertIn("snapshot.coils", script)
-        self.assertIn("catalog?.relations", script)
+        self.assertIn("config?.equipment", script)
         self.assertIn('control("scenario"', script)
 
     def test_event_cursor_is_separate_from_the_current_snapshot_sequence(self) -> None:

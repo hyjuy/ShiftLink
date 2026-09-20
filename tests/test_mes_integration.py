@@ -9,6 +9,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
+from shiftlink.mes import configuration
 from shiftlink.mes.adapters import ObserverAdapter
 from shiftlink.mes.contracts import GroundTruth, Run
 from shiftlink.mes.engine import MesEngine
@@ -17,6 +18,13 @@ from shiftlink.mes.storage import MesStorage
 
 UTC = timezone.utc
 STARTED_AT = datetime(2026, 1, 1, tzinfo=UTC)
+
+
+def _relation(rel_type, from_id, to_id, lag=10):
+    return {"relation_type": rel_type, "from_id": from_id, "to_id": to_id,
+            "from_kind": "equipment", "to_kind": "equipment", "lag_seconds": lag}
+
+
 CATALOG = {
     "production_lines": [{"line_id": "LN-0001"}],
     "equipment": [
@@ -27,11 +35,20 @@ CATALOG = {
         {"equipment_id": "EQ-0008", "code": "RT-03", "measurement_points": [{"signal": "rt_speed", "unit": "m_min", "normal_min": 20, "normal_max": 120}]},
         {"equipment_id": "EQ-0009", "code": "CV-01", "measurement_points": [{"signal": "cv_queue_len", "unit": "pct", "normal_min": 0, "normal_max": 70}]},
     ],
+    "relations": [
+        _relation("material_flow", "EQ-0006", "EQ-0007", 12),
+        _relation("material_flow", "EQ-0007", "EQ-0008", 15),
+        _relation("material_flow", "EQ-0008", "EQ-0009", 10),
+        _relation("drive", "EQ-0004", "EQ-0006", 1),
+        _relation("hydraulic_supply", "EQ-0001", "EQ-0007", 5),
+        _relation("interlock", "EQ-0009", "EQ-0008", 2),
+    ],
 }
+CONFIG = configuration.from_catalog(CATALOG)
 
 
 def engine(run_id: str = "integration-run", seed: int = 23) -> MesEngine:
-    return MesEngine(Run(run_id, seed, STARTED_AT), CATALOG)
+    return MesEngine(Run(run_id, seed, STARTED_AT, config_id=CONFIG.config_id), CONFIG)
 
 
 def events_for_tick(subject: MesEngine) -> list[object]:

@@ -21,10 +21,89 @@ class Run:
     scenario_version: str = "v1"
     split: str = "dev"
     is_synthetic: bool = True
+    # None means the applied configuration was not preserved (pre-upgrade runs).
+    config_id: str | None = None
 
     @classmethod
-    def create(cls, seed: int, started_at: datetime | None = None) -> "Run":
-        return cls(uuid4().hex, seed, started_at or utc_now())
+    def create(cls, seed: int, started_at: datetime | None = None, config_id: str | None = None) -> "Run":
+        return cls(uuid4().hex, seed, started_at or utc_now(), config_id=config_id)
+
+
+@dataclass(frozen=True)
+class SignalSpec:
+    signal: str
+    name: str
+    unit: str
+    normal_min: float | None = None
+    normal_max: float | None = None
+    required: bool = True
+    zero_when_stopped: bool = False
+
+
+@dataclass(frozen=True)
+class EquipmentConfig:
+    equipment_id: str  # logical install position; meaning preserved from the legacy catalog
+    asset_id: str  # synthetic asset instance; replacement issues a new id, never reused
+    code: str
+    name: str
+    segment_id: str | None
+    profile_id: str
+    capabilities: tuple[str, ...]
+    signals: tuple[SignalSpec, ...] = ()
+    coil_capacity: int = 1
+    dwell_seconds: float = 10.0
+    active: bool = True
+
+
+@dataclass(frozen=True)
+class RelationConfig:
+    relation_type: str
+    from_id: str
+    to_id: str
+    lag_seconds: float | None = None
+    capacity_value: float | None = None
+    capacity_unit: str | None = None
+
+
+@dataclass(frozen=True)
+class SignalEffect:
+    capability: str
+    signal: str
+    value: float
+
+
+@dataclass(frozen=True)
+class ScenarioSpec:
+    scenario_id: str
+    cause_capability: str
+    propagation_relation: str
+    wait_reason: str
+    alarm_code: str
+    signal_effects: tuple[SignalEffect, ...] = ()
+    recovery_ticks: int = 2
+
+
+@dataclass(frozen=True)
+class LayoutGroup:
+    title: str
+    equipment_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class Configuration:
+    config_id: str  # sha256 of the canonical payload (configuration.config_hash)
+    version_label: str
+    source: str
+    line_id: str
+    equipment: tuple[EquipmentConfig, ...] = ()
+    relations: tuple[RelationConfig, ...] = ()
+    route: tuple[str, ...] = ()  # explicit main material route; never inferred from capacity
+    branches: tuple[RelationConfig, ...] = ()
+    scenarios: tuple[ScenarioSpec, ...] = ()
+    layout: tuple[LayoutGroup, ...] = ()
+
+    def equipment_by_id(self) -> dict[str, "EquipmentConfig"]:
+        return {item.equipment_id: item for item in self.equipment}
 
 
 @dataclass(frozen=True)

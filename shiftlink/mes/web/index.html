@@ -47,8 +47,21 @@
       <div class="controls">
         <button data-command="start" class="primary-button">시작</button><button data-command="pause">일시정지</button><button data-command="resume">재개</button><button data-command="recover">복구 진행</button><button data-command="reset" class="quiet-button">새 실행</button>
         <div class="control-field"><label for="speed">배속</label><select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="5">5×</option></select></div>
-        <div class="control-field scenario-field"><label for="scenario">시나리오</label><select id="scenario"><option value="normal">정상</option><option value="drive_fault">구동부 이상</option><option value="downstream_block">출측 정체</option><option value="hydraulic_fault">유압 공급 이상</option></select></div>
+        <div class="control-field scenario-field"><label for="scenario">시나리오</label><select id="scenario"></select></div>
       </div><p id="control-message" aria-live="polite"></p>
+    </section>
+    <section class="panel" id="config-panel" hidden><div class="panel-heading"><div><p class="eyebrow">CONFIGURATION</p><h2>구성 관리</h2></div><span class="hint">일시정지 상태에서 적용</span></div>
+      <div class="controls">
+        <div class="control-field"><label for="config-file">설정 파일 (JSON)</label><input id="config-file" type="file" accept=".json" aria-describedby="config-file-hint"/><small id="config-file-hint">구성 변경을 담은 JSON 파일 선택</small></div>
+        <button id="config-validate" type="button">검증</button>
+      </div>
+      <div id="config-errors" class="config-errors"></div>
+      <div class="controls">
+        <div class="control-field"><label for="config-reason">변경 이유</label><input id="config-reason" type="text" placeholder="예: HPU 교체"/></div>
+        <div class="control-field"><label for="config-actor">작업자 (자기기입)</label><input id="config-actor" type="text" placeholder="이름 또는 직책"/></div>
+      </div>
+      <button id="config-apply" type="button" class="primary-button">구성 적용</button>
+      <p id="config-message" aria-live="polite"></p>
     </section>
     <section class="bottom-grid">
       <section class="panel"><div class="panel-heading"><h2>활성 알람</h2><span class="hint">현재 관측 시점</span></div><ul id="alarm-list" class="feed"></ul></section>

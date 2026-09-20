@@ -34,6 +34,13 @@ class MesLayoutTests(unittest.TestCase):
         for identifier in ("replay-refresh", "replay-play", "export-jsonl", "export-csv", "sensor-trends"):
             self.assertIn(identifier, self.dom.ids)
 
+    def test_configuration_manager_can_find_configuration_controls(self):
+        for identifier in ("config-file", "config-reason", "config-actor"):
+            with self.subTest(identifier=identifier):
+                self.assertIn(identifier, self.dom.ids)
+        for identifier in ("config-validate", "config-apply", "config-errors", "config-message", "config-panel"):
+            self.assertIn(identifier, self.dom.ids)
+
     def test_frequently_updated_map_is_not_a_live_announcement_region(self):
         self.assertNotEqual(self.dom.ids["line-map"][1].get("aria-live"), "polite")
         self.assertEqual(self.dom.ids["control-message"][1].get("aria-live"), "polite")

@@ -17,6 +17,17 @@
 | `ToolProvider` | `shiftlink/agent/pipeline.py` | 도구 5종 Protocol | 유현준 |
 | `PipelineResult` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 출력 | 유현준 |
 | `FixedPipeline` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 본체 | 유현준 |
+| `Configuration` | `shiftlink/mes/contracts.py` | 모의 MES 구성 버전(설비·관계·경로·시나리오·배치 묶음, config_id=sha256) | 유현준 |
+| `EquipmentConfig` | `shiftlink/mes/contracts.py` | 설비 구성(논리 위치 equipment_id + 합성 자산 asset_id + 프로필) | 유현준 |
+| `SignalSpec` | `shiftlink/mes/contracts.py` | 신호 정의(단위·정상범위·필수 여부) | 유현준 |
+| `RelationConfig` | `shiftlink/mes/contracts.py` | 구성 내 관계(공급·구동·인터록·소재) — 미승인 제안 `Relation`과 별개 | 유현준 |
+| `ScenarioSpec` | `shiftlink/mes/contracts.py` | capability 기반 모의 시나리오 정의 | 유현준 |
+| `SignalEffect` | `shiftlink/mes/contracts.py` | 시나리오의 신호 override(capability+signal) | 유현준 |
+| `LayoutGroup` | `shiftlink/mes/contracts.py` | UI 맵 배치 그룹 | 유현준 |
+| `MesEngine` | `shiftlink/mes/engine.py` | 결정적 모의 MES 엔진(Configuration 소비) | 유현준 |
+| `MesStorage` | `shiftlink/mes/storage.py` | 모의 MES SQLite 저장(구성·변경 이력 포함) | 유현준 |
+| `MesService` | `shiftlink/mes/server.py` | 모의 MES HTTP 서비스(구성 적용 포함) | 유현준 |
+| `ObserverAdapter` | `shiftlink/mes/adapters.py` | 모델 관측 허용 목록 경계(as_of) | 유현준 |
 | `SourceSpan` | `shiftlink/rag/extraction.py` | F-02 추출 원문 위치 | 최재영 |
 | `Negation` | `shiftlink/rag/extraction.py` | F-02 부정 표현 | 최재영 |
 | `Withdrawal` | `shiftlink/rag/extraction.py` | F-02 철회 표현 | 최재영 |
@@ -35,6 +46,12 @@
 | `propose_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 제안 | 유현준 |
 | `get_checklist()` | `shiftlink/agent/tools.py` | 도구: 체크리스트 조회 | 유현준 |
 | `main()` | `shiftlink/data/__init__.py` | 데이터 파이프라인 실행 계획 CLI 진입점 | 유현준 |
+| `from_catalog()` | `shiftlink/mes/configuration.py` | 기준정보 JSON → 기본 Configuration | 유현준 |
+| `load_draft()` | `shiftlink/mes/configuration.py` | 사용자 구성 초안 로딩(스키마 검사, 해시 재계산) | 유현준 |
+| `validate()` | `shiftlink/mes/configuration.py` | 구성 의미 검증(오류 목록 반환) | 유현준 |
+| `diff()` | `shiftlink/mes/configuration.py` | 구성 변경 분류(교체/추가/제거/신호/경로) | 유현준 |
+| `to_payload()` / `from_payload()` | `shiftlink/mes/configuration.py` | Configuration ↔ JSON dict | 유현준 |
+| `finalize()` | `shiftlink/mes/configuration.py` | 내용 기반 config_id(sha256) 채움 | 유현준 |
 
 > `search_cards()`에 `scope_id`·`source_kind` 필드 추가가 고도화 초안 §4.5(Q4)에서 제안됐지만 **미결**이므로 현재 공개 시그니처에는 포함하지 않는다. 결정되면 여기 시그니처 변경 이력을 한 줄 추가할 것.
 

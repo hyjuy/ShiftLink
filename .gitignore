@@ -1,6 +1,8 @@
 .env
 *.gguf
 .venv/
+.test-deps/
+.coverage
 __pycache__/
 *.pyc
 

@@ -89,7 +89,7 @@
   let history = createHistory(), requestEpoch = 0, loading = false, controlPending = false, applyPending = false;
   let liveConfig = createConfigCache(), replayConfig = createConfigCache();
   let replay = { snapshots: [], events: [], index: 0, playing: false, configId: null, configPreserved: true };
-  function setConnection(message, kind = "") { setText("#connection-status", message); $("#connection-status").className = `status-label ${kind}`; }
+  function setConnection(message, kind = "") { setText("#connection-status", message); $("#connection-status").className = `status-label ${kind}`; setText("#diagram-connection",message); $("#diagram-connection").className = kind; }
   async function request(url, options = {}) {
     const response = await fetch(url, { ...options, signal: AbortSignal.timeout(7000) });
     if (!response.ok) { const error = await response.json().catch(() => ({})); throw new Error(error.error || `요청 실패 (${response.status})`); }
@@ -114,6 +114,17 @@
     }
   }
   const currentConfig = () => mode === "live" ? liveConfig.config : replayConfig.config;
+  function setDiagramMode(enabled, focus = true) {
+    document.body.classList.toggle("diagram-only", enabled);
+    $("#diagram-toolbar").hidden = !enabled;
+    showWorkspace("flow");
+    if (globalThis.location) {
+      const url = new URL(globalThis.location.href);
+      if (enabled) url.searchParams.set("view", "diagram"); else url.searchParams.delete("view");
+      globalThis.history.replaceState(null, "", url);
+    }
+    if (focus) $(enabled ? "#diagram-back" : "#diagram-open").focus();
+  }
   function showWorkspace(key, focus = false) {
     const target = document.querySelector(`#tab-${key}`);
     if (!target?.dataset?.workspace) return;
@@ -147,10 +158,12 @@
   function renderEquipment(snapshot, config) {
     const model=operator.buildOperatorModel(snapshot,config,selectedId,selectedPartId);
     const relation=model.links.find(l=>operator.relationKey(l)===selectedRelation);
+    $("#selected-connection").classList.toggle("has-relation", Boolean(relation));
     setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "관측된 영향 대기" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
     setText("#process-story",processMessage(snapshot,config));
     setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
     setView("#relation-legend",operator.legendView($("#experience-mode").value));
+    setView("#diagram-legend-content",operator.legendView("expert"));
     const playing=$("#animate-machines").checked && (mode==="live" ? !stale : replay.playing);
     $("#line-map").querySelectorAll(".flow-node").forEach(n=>n.classList.toggle("is-moving",machineMoving(snapshot,model.lookup(n.dataset.equipment),playing)));
     $("#line-map").querySelectorAll(".flow-coil").forEach(node=>{
@@ -217,6 +230,7 @@
     lastSnapshot = snapshot;
     if (!snapshot.equipment?.some((e) => e.equipment_id === selectedId)) selectedId = null;
     setText("#line-mode", label(snapshot.line_mode)); setText("#sequence", snapshot.sequence);
+    setText("#diagram-state", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)}`);
     setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${selectedId?name(selectedId, config):"없음"}`);
     setText("#alarm-count", (snapshot.active_alarms || []).length); setText("#observed-at", clock(snapshot.simulated_at));
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
@@ -429,12 +443,24 @@
     const command=event.target.closest("#recovery-content [data-command]"); if (command && !command.disabled) control(command.dataset.command);
   });
   $("#line-map").addEventListener("keydown", event=>{ if (["Enter"," "].includes(event.key) && event.target.matches('[role="button"]')) { event.preventDefault(); selectEquipment(event.target.dataset.equipment,event.target.dataset.relation || ""); } });
-  $("#workspace-flow").addEventListener("keydown",event=>{ if(event.key==="Escape") { event.preventDefault(); clearSelection(); } });
+  $("#workspace-flow").addEventListener("keydown",event=>{ if(event.key==="Escape") { event.preventDefault(); if ($("#diagram-legend").open) $("#diagram-legend").open=false; else clearSelection(); } });
   $("#clear-selection").onclick=clearSelection;
   $("#workspace-tabs").addEventListener("keydown", workspaceKeydown);
   $("#experience-mode").onchange=()=>{ document.body.dataset.experience=$("#experience-mode").value; $(".learning-guide").open=$("#experience-mode").value==="learn"; renderSnapshot(lastSnapshot,currentConfig()); };
   $("#relation-filter").onchange=()=>renderSnapshot(lastSnapshot,currentConfig());
-  $("#map-scale").onchange=event=>$(".map-scroll").classList.toggle("map-expanded",event.target.value==="detail");
+  $("#map-scale").onchange=event=>{
+    const expanded=event.target.value==="detail";
+    $(".map-scroll").classList.toggle("map-expanded",expanded);
+    $("#diagram-zoom").textContent=expanded?"전체 맞춤":"확대";
+    $("#diagram-zoom").setAttribute("aria-pressed",String(expanded));
+  };
+  $("#diagram-open").onclick=()=>setDiagramMode(true);
+  $("#diagram-back").onclick=()=>setDiagramMode(false);
+  $("#diagram-clear").onclick=clearSelection;
+  $("#diagram-zoom").onclick=()=>{
+    $("#map-scale").value=$("#map-scale").value==="detail"?"fit":"detail";
+    $("#map-scale").onchange({target:$("#map-scale")});
+  };
   $("#equipment-search").oninput=event=>{
     const query=event.target.value.trim().toLowerCase();
     const matches=(currentConfig()?.equipment || []).filter(e=>[e.code,e.name,e.equipment_id,roleFor(e)[0]].join(" ").toLowerCase().includes(query));
@@ -449,6 +475,7 @@
     setText("#context-message","확인 맥락 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");
   };
   $("#config-panel").hidden=false;
+  if (globalThis.location?.search && new URLSearchParams(globalThis.location.search).get("view")==="diagram") setDiagramMode(true,false);
   refresh();
   setInterval(() => {
     if (mode === "live") { if (lastReceived && Date.now() - lastReceived > 10000) { stale=true; setConnection("데이터 수신 지연 · 마지막 관측 표시 · 시연 조치 잠금", "warning"); freezeCoils(); updateControls(); } refresh(); }

@@ -7,7 +7,7 @@ const document = {activeElement:null, addEventListener(){}, querySelectorAll(){r
   if (!elements.has(s)) elements.set(s,{addEventListener(){}}); return elements.get(s);
 }};
 const scope={document,fetch:async()=>{throw new Error('offline');},AbortSignal,setInterval(){},Date};
-const source=fs.readFileSync('shiftlink/mes/web/app.js','utf8').replace('  refresh();','  globalThis.testView = setView; globalThis.testTabs = {showWorkspace,workspaceKeydown};\n  refresh();');
+const source=fs.readFileSync('shiftlink/mes/web/app.js','utf8').replace('  refresh();','  globalThis.testView = setView; globalThis.testTabs = {showWorkspace,workspaceKeydown}; globalThis.testDiagramMode = setDiagramMode;\n  refresh();');
 vm.runInNewContext(source,scope);
 function focusable(attrs={}) {return {hasAttribute:k=>k in attrs,getAttribute:k=>attrs[k],focus(){document.activeElement=this;}};}
 const first=focusable({'data-equipment':'HPU','data-relation':'HPU|RT1|hydraulic'});
@@ -42,3 +42,17 @@ assert.equal(document.activeElement,tabs[0]);
 assert.equal(tabs.filter(t=>t.tabIndex===0).length,1);
 assert.equal(['flow','detail','history','setup'].filter(k=>!elements.get(`#workspace-${k}`).hidden).length,1);
 console.log('Tab visibility, selection and keyboard wrap contracts passed');
+const classes=new Set();
+document.body={classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name);}}};
+elements.set('#diagram-toolbar',{hidden:true});
+elements.set('#diagram-back',focusable());elements.set('#diagram-open',focusable());
+scope.testDiagramMode(true);
+assert.ok(classes.has('diagram-only'));
+assert.equal(elements.get('#diagram-toolbar').hidden,false);
+assert.equal(elements.get('#workspace-flow').hidden,false);
+assert.equal(document.activeElement,elements.get('#diagram-back'));
+scope.testDiagramMode(false);
+assert.ok(!classes.has('diagram-only'));
+assert.equal(elements.get('#diagram-toolbar').hidden,true);
+assert.equal(document.activeElement,elements.get('#diagram-open'));
+console.log('Diagram-only entry/exit and focus restoration passed');

@@ -40,6 +40,11 @@
     </section>
 
       <section class="panel map-panel" aria-labelledby="map-heading">
+        <button id="diagram-open" type="button">관계도만 크게 보기 ↗</button>
+        <div id="diagram-toolbar" hidden>
+          <strong>모의 MES</strong><span id="diagram-state"></span><span id="diagram-connection" role="status"></span>
+          <div class="diagram-actions"><button id="diagram-zoom" type="button" aria-pressed="false">확대</button><button id="diagram-clear" type="button">선택 해제</button><details id="diagram-legend"><summary>범례</summary><div id="diagram-legend-content"></div><p>소재 흐름은 항상 표시 · 설비를 선택하면 직접 관계 추가<br>구성상 연결은 고장 원인 확정이 아닙니다.</p></details><button id="diagram-back" type="button">기존 화면</button></div>
+        </div>
         <div class="panel-heading"><div><p class="eyebrow">LINE → EQUIPMENT → COMPONENT</p><h2 id="map-heading">코일 이송 · 설비 관계도</h2></div><span class="direction-note">입측 → 출측</span></div>
         <div class="operator-tools"><label for="experience-mode">화면 설명</label><select id="experience-mode"><option value="learn">흐름 배우기</option><option value="expert">빠른 점검</option></select><label for="relation-filter">강조할 관계</label><select id="relation-filter"><option value="related">선택 설비의 직접 관계</option><option value="affected">관측된 영향 대기</option><option value="material">소재 흐름</option><option value="drive">구동</option><option value="power_supply">전력 공급</option><option value="hydraulic_supply">유압 공급</option><option value="pneumatic_supply">공압 공급</option><option value="interlock">인터록</option><option value="co_occurrence">동시 발생</option></select><button id="clear-selection" type="button">선택 해제</button><label for="map-scale">도면 크기</label><select id="map-scale"><option value="fit">전체 한눈에 보기</option><option value="detail">확대 보기 · 가로 스크롤</option></select><span class="hint">소재선은 항상 표시 · 설비 선택 시 직접 관계 추가</span></div>
 

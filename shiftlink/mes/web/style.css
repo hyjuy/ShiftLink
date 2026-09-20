@@ -257,3 +257,22 @@ main { gap: 8px; margin-top: 8px; }
 @media (prefers-reduced-motion: reduce) { .machine-illustration *, .is-moving .machine-illustration * { animation: none !important; }.flow-coil { transition: none !important; } }
 @media (max-width: 1450px) { .work-area { grid-template-columns: minmax(0,1fr); }.detail-column { grid-template-columns: minmax(0,1fr) minmax(280px,.7fr); }.diagnostic-panel { grid-row: span 2; } }
 @media (max-width: 720px) { .detail-column { grid-template-columns: minmax(0,1fr); }.diagnostic-panel { grid-row: auto; } }
+#diagram-open { margin-bottom: 8px; }
+#diagram-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #526779; }
+#diagram-toolbar[hidden] { display: none; }
+#diagram-connection.warning { color: #f2c67b; }
+#diagram-connection.fault { color: #ffa5aa; }
+.diagram-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+#diagram-legend { position: relative; }
+#diagram-legend summary { cursor: pointer; padding: 8px; }
+#diagram-legend[open] { position: absolute; z-index: 5; right: 12px; top: 8px; width: min(440px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 12px; background: #142330; border: 1px solid #8199ac; border-radius: 8px; }
+.diagram-only { max-width: none; margin: 0; padding: 0; }
+.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement), .diagram-only #workspace-flow > :not(.map-panel), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
+.diagram-only main, .diagram-only #workspace-flow { margin: 0; padding: 0; max-width: none; }
+.diagram-only .map-panel { height: 100dvh; display: grid; grid-template-rows: auto minmax(0,1fr) auto; padding: 0; margin: 0; border: 0; border-radius: 0; }
+.diagram-only .map-scroll { min-height: 0; overflow: auto; }
+.diagram-only .line-map { height: 100%; }
+.diagram-only #workspace-flow .flow-map { width: 100%; height: 100%; min-width: 0; max-width: none; max-height: none; }
+.diagram-only #workspace-flow .map-expanded .flow-map { min-width: 1200px; min-height: 734px; }
+.diagram-only #selected-connection { display: none; }
+.diagram-only #selected-connection.has-relation { display: block; margin: 0; padding: 8px 12px; }

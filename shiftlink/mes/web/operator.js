@@ -65,24 +65,33 @@
       model.nodes.filter(n=>n.group==="support" && !(n.capabilities || []).includes("drive"))];
     for (const group of groups) {
       const cols=Math.min(4,group.length);
-      group.forEach((n,i)=>placed.push({...n,x:(i%cols+0.5)*960/cols,y:62+(row+Math.floor(i/cols))*235}));
+      group.forEach((n,i)=>placed.push({...n,x:(i%cols+0.5)*240,y:70+(row+Math.floor(i/cols))*235}));
       row+=Math.ceil(group.length/4);
     }
     return {nodes:placed,height:Math.max(180,row*235+8)};
   }
 
   const relationKey = l => `${l.from_id}|${l.to_id}|${l.relation_type}`;
+  function routePoints(a,b,type) {
+    if (a.y===b.y && Math.abs(a.x-b.x)===240 && type!=="interlock") {
+      const direction=Math.sign(b.x-a.x);
+      return [[a.x+direction*104,a.y+65],[b.x-direction*104,b.y+65]];
+    }
+    if (a.y===b.y) return [[a.x,a.y+158],[a.x,a.y+169],[b.x,a.y+169],[b.x,b.y+158]];
+    const down=b.y>a.y, corridor=a.x===840?720:a.x+120;
+    const sourceLane=a.y+(down?169:-66), targetLane=b.y+(down?-66:169);
+    return [[a.x,a.y+(down?158:-58)],[a.x,sourceLane],[corridor,sourceLane],[corridor,targetLane],[b.x,targetLane],[b.x,b.y+(down?-58:158)]];
+  }
   function flowView(model, experience="learn", filter="related", selectedRelation="") {
     if (!model.nodes.length) return '<p class="empty-state">설비 관측 없음</p>';
     const map=layout(model), activeId=model.selected?.equipment_id;
     const links=model.links.filter(l=>filter==="all" || l.relation_type==="material_flow" || (filter!=="material" && l.affected) || (filter==="related" && [l.from_id,l.to_id].includes(activeId)));
     const edges=links.map((l,i)=>{
       const a=map.nodes.find(n=>n.equipment_id===l.from_id), b=map.nodes.find(n=>n.equipment_id===l.to_id);
-      const lateral=a.y===b.y, sx=a.x+(lateral ? Math.sign(b.x-a.x)*91 : 0), sy=a.y+(lateral ? 65 : b.y>a.y ? 146 : -48), ex=b.x-(lateral ? Math.sign(b.x-a.x)*96 : 0), ey=b.y+(lateral ? 65 : b.y>a.y ? -52 : 150);
       const material=l.relation_type==="material_flow", cls=l.affected?"affected":material?"material":"related";
-      const d=lateral ? (l.relation_type==="interlock" ? `M${sx} ${sy+20} Q${(sx+ex)/2} ${sy+85} ${ex} ${ey+20}` : `M${sx} ${sy} L${ex} ${ey}`) : `M${sx} ${sy} C${sx} ${(sy+ey)/2},${ex} ${(sy+ey)/2},${ex} ${ey}`;
+      const d=routePoints(a,b,l.relation_type).map(([x,y],index)=>`${index?"L":"M"}${x} ${y}`).join(" ");
       const description=`${title(a)} → ${title(b)} · ${l.label} · ${l.affected?"관측된 영향 대기":"구성상 관계 · 원인 확정 아님"}`;
-      return `<g class="flow-edge ${cls} ${selectedRelation===relationKey(l)?"selected":""}" role="button" tabindex="0" data-equipment="${esc(l.from_id)}" data-relation="${esc(relationKey(l))}" aria-pressed="${selectedRelation===relationKey(l)}" aria-label="${esc(description)}"><title>${esc(description)}</title><path class="edge-hit" d="${d}"/><path class="edge-line" d="${d}" marker-end="url(#arrow-${cls})"/>${!material?`<text class="edge-label" x="${(sx+ex)/2+6}" y="${(sy+ey)/2-7}">${esc(l.label)}</text>`:""}</g>`;
+      return `<g class="flow-edge ${cls} ${selectedRelation===relationKey(l)?"selected":""}" role="button" tabindex="0" data-equipment="${esc(l.from_id)}" data-relation="${esc(relationKey(l))}" aria-pressed="${selectedRelation===relationKey(l)}" aria-label="${esc(description)}"><title>${esc(description)}</title><path class="edge-hit" d="${d}"/><path class="edge-line" d="${d}" marker-end="url(#arrow-${cls})"/></g>`;
     }).join("");
     const nodes=map.nodes.map(n=>{
       const fault=n.fault_level!=="normal", held=n.coils.some(c=>c.quality_status==="hold"), waiting=n.operating_state==="waiting";
@@ -95,7 +104,7 @@
       const dots=n.coils.map(c=>`<circle class="flow-coil ${c.quality_status==="hold"?"held":""}" data-coil="${esc(c.coil_id)}" cx="-60" cy="65" r="11"><title>${esc(c.coil_id)}${c.quality_status==="hold"?" · 제품 보류":""}</title></circle>`).join("");
       return `<g transform="translate(${n.x} ${n.y})" class="flow-node ${cls} ${activeId===n.equipment_id?"selected":""}" role="button" tabindex="0" data-equipment="${esc(n.equipment_id)}" aria-pressed="${activeId===n.equipment_id}" aria-label="${esc(description)}"><title>${esc(description)}</title><rect class="node-body" x="-91" y="-46" width="182" height="192" rx="10"/><text class="node-code" x="-78" y="-23">${esc(title(n))}</text><text class="node-status" x="-78" y="-3">${fault?"! ":held?"Ⅱ ":waiting?"↳ ":""}${esc(state)}</text><text class="node-role" x="-78" y="17">${esc(n.role[0])}</text><text class="node-meta" x="-78" y="135">${esc(component || group)}</text>${machineSvg(n.profile_id)}${dots}</g>`;
     }).join("");
-    return `${!model.config?'<p class="hint">구성 미보존 · 연결·역할을 추정하지 않습니다.</p>':""}<svg class="flow-map" viewBox="0 0 960 ${map.height}" role="group" aria-label="설비 관계도 · Tab으로 설비와 연결을 이동하고 Enter로 선택"><defs>${["material","related","affected"].map(c=>`<marker id="arrow-${c}" class="arrow-${c}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z"/></marker>`).join("")}</defs>${edges}${nodes}</svg>${experience==="learn"?'<p class="learn-note">① 본선 화살표는 코일 이동 순서입니다. ② 구동·공급 설비를 누르면 연결 대상이 보입니다. ③ 점선은 공급·인터록, 굵은 주황선은 서버가 관측한 영향 대기입니다. 배치는 위치 개념도이며 실제 거리·부품 배치가 아닙니다.</p>':""}`;
+    return `${!model.config?'<p class="hint">구성 미보존 · 연결·역할을 추정하지 않습니다.</p>':""}<svg class="flow-map" viewBox="0 0 960 ${map.height}" role="group" aria-label="설비 관계도 · Tab으로 설비와 연결을 이동하고 Enter로 선택"><defs>${["material","related","affected"].map(c=>`<marker id="arrow-${c}" class="arrow-${c}" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z"/></marker>`).join("")}</defs>${edges}${nodes}</svg>${experience==="learn"?'<p class="learn-note">① 본선 화살표는 코일 이동 순서입니다. ② 구동·공급 설비를 누르면 연결 대상이 보입니다. ③ 점선은 공급·인터록, 굵은 주황선은 서버가 관측한 영향 대기입니다. 배치는 위치 개념도이며 실제 거리·부품 배치가 아닙니다.</p>':""}`;
   }
 
   function incidentView(model) {
@@ -130,7 +139,7 @@
     return `<p class="part-caption">${part?`시연에서 가정한 문제 부품: <b>${esc(partNames[part] || part)}</b> · 센서만으로 확정한 진단이 아닙니다.`:"문제 부품 미확정 · 아래는 구성된 모의 부품입니다."}</p><div class="part-locator" role="group" aria-label="부품 위치 개념도 · 실제 조립 위치 아님">${model.parts.map(p=>`<button type="button" data-part="${esc(p.component_id)}" aria-pressed="${chosen?.component_id===p.component_id}" class="part-target ${p.component_id===part?"suspect":""}"><span aria-hidden="true">${p.component_id===part?"!":"◇"}</span><b>${esc(p.name)}</b><small>${p.component_id===part?"시연 가정 부품":"모의 구성 부품"}</small></button>`).join("")}</div>${chosen?`<p class="part-context"><b>${esc(chosen.name)}</b> · 모의 건전도 ${Number(chosen.health_percent).toFixed(1)}% · 운전 ${(chosen.operating_seconds/3600).toFixed(3)} h · 정비 ${Number(chosen.maintenance_count)}회</p>`:""}<p class="hint">위치는 기능별 개념 배치입니다. 실제 잔여수명·고장 확률을 뜻하지 않습니다.</p>`;
   }
 
-  const api={buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey};
+  const api={buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
   if (typeof module!=="undefined") module.exports=api;
   if (typeof window!=="undefined") window.MesOperator=api;
 })();

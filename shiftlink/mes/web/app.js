@@ -114,14 +114,34 @@
     }
   }
   const currentConfig = () => mode === "live" ? liveConfig.config : replayConfig.config;
+  function showWorkspace(key, focus = false) {
+    const target = document.querySelector(`#tab-${key}`);
+    if (!target?.dataset?.workspace) return;
+    document.querySelectorAll('[role="tab"][data-workspace]').forEach(tab => {
+      const selected = tab.dataset.workspace === key;
+      tab.setAttribute("aria-selected", String(selected)); tab.tabIndex = selected ? 0 : -1;
+      document.querySelector(`#${tab.getAttribute("aria-controls")}`).hidden = !selected;
+    });
+    if (focus) target.focus();
+  }
+  function workspaceKeydown(event) {
+    const tabs = [...document.querySelectorAll('[role="tab"][data-workspace]')];
+    const index = tabs.indexOf(event.target);
+    if (index < 0 || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    showWorkspace(tabs[next].dataset.workspace, true);
+  }
   function selectEquipment(id, relation="", move=false) {
     if (!lastSnapshot?.equipment?.some(e=>e.equipment_id===id)) return;
     selectedId=id; selectedPartId=null; selectedRelation=relation; renderSnapshot(lastSnapshot,currentConfig());
-    if (move) { $("#equipment-detail").focus(); $("#equipment-detail").scrollIntoView({block:"start"}); }
+    if (move) { showWorkspace("detail"); $("#equipment-detail").focus(); $("#equipment-detail").scrollIntoView({block:"start"}); }
     setText("#operator-announcement", `${name(id,currentConfig())} 선택. 상세 영역에서 부품과 관측 근거를 확인하세요.`);
   }
   function renderEquipment(snapshot, config) {
     const model=operator.buildOperatorModel(snapshot,config,selectedId,selectedPartId);
+    const relation=model.links.find(l=>operator.relationKey(l)===selectedRelation);
+    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} → ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "관측된 영향 대기" : "구성상 연결 · 원인 확정 아님"}` : "연결선을 선택하면 출발·도착 설비와 관계를 확인할 수 있습니다.");
     setText("#process-story",processMessage(snapshot,config));
     setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
     const playing=$("#animate-machines").checked && (mode==="live" ? !stale : replay.playing);
@@ -186,6 +206,7 @@
     lastSnapshot = snapshot;
     if (!snapshot.equipment?.some((e) => e.equipment_id === selectedId)) selectedId = snapshot.equipment?.[0]?.equipment_id;
     setText("#line-mode", label(snapshot.line_mode)); setText("#sequence", snapshot.sequence);
+    setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${name(selectedId, config)}`);
     setText("#alarm-count", (snapshot.active_alarms || []).length); setText("#observed-at", clock(snapshot.simulated_at));
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
     setText("#throughput", mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length);
@@ -281,6 +302,8 @@
     setConnection(replay.playing ? "기록 재생 중 · 실시간 제어 분리" : "기록 재생 일시정지 · 실시간 제어 분리");
   }
   function clearDisplay(message) {
+    setText("#workspace-context", message);
+    setText("#selected-connection", "연결 정보 불러오는 중");
     lastSnapshot = null; $("#line-map").replaceChildren();
     for (const id of ["line-map", "equipment-detail", "incident-summary", "part-locator", "selection-evidence", "recovery-content", "component-content", "alarm-list"]) { delete $(`#${id}`).dataset.html; setText(`#${id}`, message); }
     delete $("#line-map").dataset.layout;
@@ -387,12 +410,15 @@
   $("#speed").onchange = (event) => control("speed", { speed: Number(event.target.value) });
   $("#scenario").onchange = (event) => control("scenario", { scenario_id: event.target.value });
   document.addEventListener("click", event => {
+    const tab=event.target.closest("[data-workspace]"); if (tab) showWorkspace(tab.dataset.workspace);
+    const jump=event.target.closest("[data-open-workspace]"); if (jump) { showWorkspace(jump.dataset.openWorkspace, true); if (jump.dataset.openWorkspace==="detail") $("#equipment-detail").focus(); }
     const eq=event.target.closest("[data-equipment]"); if (eq) selectEquipment(eq.dataset.equipment,eq.dataset.relation || "",Boolean(eq.closest("#incident-summary,#equipment-results,#alarm-list")));
     const part=event.target.closest("[data-part]"); if (part) { selectedPartId=part.dataset.part; renderSnapshot(lastSnapshot,currentConfig()); }
     const action=event.target.closest("#recovery-content [data-action]"); if (action && !action.disabled) control("recovery_action",{action_id:action.dataset.action});
     const command=event.target.closest("#recovery-content [data-command]"); if (command && !command.disabled) control(command.dataset.command);
   });
   $("#line-map").addEventListener("keydown", event=>{ if (["Enter"," "].includes(event.key) && event.target.matches('[role="button"]')) { event.preventDefault(); selectEquipment(event.target.dataset.equipment,event.target.dataset.relation || ""); } });
+  $("#workspace-tabs").addEventListener("keydown", workspaceKeydown);
   $("#experience-mode").onchange=()=>{ document.body.dataset.experience=$("#experience-mode").value; $(".learning-guide").open=$("#experience-mode").value==="learn"; renderSnapshot(lastSnapshot,currentConfig()); };
   $("#relation-filter").onchange=()=>renderSnapshot(lastSnapshot,currentConfig());
   $("#equipment-search").oninput=event=>{

@@ -1,0 +1,66 @@
+# 인계 모드의 결정적 비교 기준. LLM 생성·저장·작업지시를 수행하지 않는다.
+schema_version: v0.1
+name: handover-rules-baseline
+status: draft
+purpose: "인계 모드의 후보 추출·대조 품질을 측정하기 위한 규칙 기반 Baseline"
+input_contract:
+  required_fields: [memo_text, shift, eq_ids]
+  source_schema: shiftlink.agent.router.HandoverRequest
+  read_only_preprocessing:
+    - "list_handover(shift, eq_ids)로 기존 인계 항목을 조회한다"
+  existing_handover_source: "read-only list_handover 결과"
+output_contract:
+  produces: handover_candidate_list
+  persistence: "사용자 수락 전에는 등록 후보만 반환한다"
+  required_candidate_fields: [equipment_id, open_item, evidence_text, status, next_action, confidence, existing_item_id, safety_hold, withhold_reason]
+  existing_item_id: "null 또는 기존 인계 open_item의 불변 ID"
+  safety_hold: "boolean. 위험 행동이 언급되면 true"
+  withhold_reason: "null 또는 safety_requires_approval, data_insufficient, conflicting_basis"
+  forbidden_actions: [MES 상태 변경, 자동 종료, 작업지시 발행]
+
+rules:
+  - rule_id: HR-001
+    priority: 1
+    when: "입력 eq_ids에 등록된 설비 ID가 하나 이상 있다"
+    then: "각 설비 ID를 후보의 equipment_id로 보존한다. 메모 본문에만 나온 미등록 설비명은 새 설비 ID로 추정하지 않는다."
+
+  - rule_id: HR-002
+    priority: 2
+    when: "메모에 관측값, 알람, 상태 변화, 미확인 사항, 조치 또는 다음 교대 요청이 있다"
+    then: "각 의미 단위를 open_item 후보로 추출하고, 원문 구절을 evidence_text에 남긴다."
+
+  - rule_id: HR-003
+    priority: 3
+    when: "메모에 미확인, 재확인, 관찰, 예정, 필요, 시 또는 유사한 불확실성 표현이 있다"
+    then: "status를 open 또는 needs_recheck로 두고, 이를 해결됨으로 바꾸지 않는다. 다음 행동이 있으면 next_action에 원문 의미를 보존한다."
+
+  - rule_id: HR-004
+    priority: 4
+    when: "같은 equipment_id와 정규화한 open_item이 기존 인계 항목과 일치한다"
+    then: "새 항목을 만들지 않고 existing_item_id를 연결한 중복 후보로 표시한다."
+
+  - rule_id: HR-005
+    priority: 5
+    when: "메모가 기존 인계 항목의 정정, 철회 또는 반박을 나타낸다"
+    then: "기존 항목을 자동 종료하지 않는다. status를 needs_recheck로 제안하고 정정 근거를 evidence_text에 남긴다."
+
+  - rule_id: HR-006
+    priority: 6
+    when: "운전 중 접근, 방호물 해체, 잔압 상태 분해, 에너지 격리 전 정비처럼 안전 위험 행동이 언급된다"
+    then: "candidate에 safety_hold=true와 withhold_reason=safety_requires_approval을 붙이고, 작업 실행 대신 안전 절차·반장·정비·안전 담당 확인이 필요하다는 보류 문구를 반환한다."
+
+  - rule_id: HR-007
+    priority: 7
+    when: "명시적인 설비 ID 또는 추출 가능한 인계 항목이 없다"
+    then: "후보를 억지로 만들지 않는다. missing_information으로 필요한 설비·증상·시각 또는 다음 요청을 반환한다."
+
+normalization:
+  whitespace: trim_and_collapse
+  duplicate_key: [equipment_id, normalized_open_item]
+  uncertainty_terms: [미확인, 재확인, 관찰, 예정, 필요, 시]
+  safety_terms: [운전 중, 접근, 방호물, 잔압, 에너지 격리, 정비]
+
+evaluation_notes:
+  primary_metrics: [handover_omission_rate, handover_false_link_rate]
+  compare_against: "동일 메모·기존 인계 목록으로 실행한 인계 모드"
+  limitation: "형태가 다른 동의어, 긴 문맥의 원인 연결, 암묵적 다음 행동은 누락할 수 있다."

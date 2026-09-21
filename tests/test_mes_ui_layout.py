@@ -45,8 +45,11 @@ class MesLayoutTests(unittest.TestCase):
         self.assertNotEqual(self.dom.ids["line-map"][1].get("aria-live"), "polite")
         self.assertEqual(self.dom.ids["control-message"][1].get("aria-live"), "polite")
 
-    def test_workspace_tabs_show_only_flow_initially(self):
-        for key in ("flow", "detail", "history", "setup"):
+    def test_workspace_tabs_keep_controls_inside_the_flow_workspace(self):
+        self.assertNotIn("tab-setup", self.dom.ids)
+        self.assertIn("control-drawer", self.dom.ids)
+        self.assertIn("operations-table", self.dom.ids)
+        for key in ("flow", "detail", "history"):
             tab = self.dom.ids[f"tab-{key}"][1]
             panel = self.dom.ids[f"workspace-{key}"][1]
             self.assertEqual(tab["role"], "tab")

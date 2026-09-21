@@ -13,7 +13,7 @@ python -m shiftlink.data --help
 ```
 
 `--from` is an inclusive starting stage, not a source path. The supported baseline
-is P0 through P6, as described in `docs/B_data.md` B7. Decimal stages are marked
+is P0 through P6, as described in `docs/design/B_data.md` B7. Decimal stages are marked
 as unapproved proposals there and are not enabled. The requested option spelling
 is `all --from P3`; the documentation's shorthand `from P3` is not a subcommand.
 Defaults remain seed `0` and dataset version `0.9`; the starting stage is `P0`.

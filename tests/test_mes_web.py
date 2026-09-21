@@ -21,6 +21,13 @@ class MesWebTests(unittest.TestCase):
         self.assertIn('id="synthetic-notice"', html)
         self.assertIn('aria-live="polite"', html)
 
+    def test_flow_and_demo_controls_share_one_operator_workspace(self) -> None:
+        html = (WEB / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="control-panel-toggle"', html)
+        self.assertIn('id="control-drawer"', html)
+        self.assertIn('id="operations-table"', html)
+        self.assertNotIn('id="tab-setup"', html)
+
     def test_dashboard_uses_only_documented_observation_and_control_apis(self) -> None:
         script = (WEB / "app.js").read_text(encoding="utf-8")
         for endpoint in ("/api/state", "/api/events", "/api/config", "/api/control"):
@@ -44,7 +51,7 @@ class MesWebTests(unittest.TestCase):
     def test_javascript_history_and_connection_behavior(self) -> None:
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
-const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage} = require('./shiftlink/mes/web/app.js');
+const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows} = require('./shiftlink/mes/web/app.js');
 assert.equal(equipmentKind({profile_id:'hpu', code:'CUSTOM-01'}), 'hpu');
 assert.equal(equipmentKind({profile_id:'custom', code:'HPU-01'}), 'generic', 'unknown profile must not invent equipment internals');
 assert.equal(equipmentKind({code:'RT-01'}), 'rt');
@@ -76,6 +83,8 @@ assert.equal(connectionState(1000, 12000, 'running'), '데이터 수신 지연')
 assert.equal(connectionState(1000, 2000, 'paused'), '연결됨 · 일시정지');
 assert.equal(stateClass({fault_level:'warning',operating_state:'running'}), 'warning');
 assert.equal(stateClass({fault_level:'normal',operating_state:'waiting'}), 'waiting');
+const rows = operationRows({equipment:[{equipment_id:'EQ-1', operating_state:'waiting', fault_level:'normal'}], coils:[{equipment_id:'EQ-1'}], active_alarms:[{equipment_id:'EQ-1', severity:'warning'}], measurements:[{equipment_id:'EQ-1', signal:'cycle_time', value:12, unit:'s'}]}, {equipment:[{equipment_id:'EQ-1', code:'RT-01', name:'Roller', dwell_seconds:10}]}, 5);
+assert.deepEqual(rows[0], {equipment_id:'EQ-1', name:'RT-01', status:'waiting', faultLevel:'normal', throughput:0, utilization:0, queue:1, cycleTime:'12 s', alerts:1, changed:true});
 acceptEvents(h, {run_id:'new',events:[{run_id:'new', sequence:2, event_type:'coil_exited'}]});
 acceptEvents(h, {run_id:'new',events:[{run_id:'new', sequence:2, event_type:'coil_exited'}]});
 assert.equal(h.completed, 1, 'boundary replay does not inflate throughput');

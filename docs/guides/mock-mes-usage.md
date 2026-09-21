@@ -47,4 +47,4 @@
 커버리지: `python -m coverage run --source=shiftlink.mes -m pytest -q` 후 `python -m coverage report -m`.
 JavaScript 행동 검증은 `tests/test_mes_web.py`에 기록된 명령을 사용한다.
 
-세부 시연 가정은 `mock-mes-domain.md`, API는 `mock-mes-contract.md`, 실제 검증 결과는 `testing/mock-mes.tdd.md`를 참고한다.
+세부 시연 가정은 [도메인 모델](../design/mock-mes-domain.md), API는 [공통 계약](../design/mock-mes-contract.md), 실제 검증 결과는 [검증 기록](../testing/mock-mes.tdd.md)을 참고한다.

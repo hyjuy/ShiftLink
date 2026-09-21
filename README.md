@@ -11,4 +11,4 @@
 | PM·QA / 검수·평가·시나리오 | 전혜민 | `eval/` |
 
 ## 브랜치 전략
-자세한 내용은 [`docs/branching.md`](docs/branching.md) 참고.
+자세한 내용은 [`docs/guides/branching.md`](docs/guides/branching.md) 참고.

@@ -293,7 +293,7 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     root = Path(__file__).resolve().parents[2]
     database = db_path or root / "data" / "mock-mes.sqlite3"
     database.parent.mkdir(parents=True, exist_ok=True)
-    service = MesService(catalog_path or root / "docs" / "00_plant_and_relations.json", MesStorage(database))
+    service = MesService(catalog_path or root / "docs" / "data" / "00_plant_and_relations.json", MesStorage(database))
     handler = type("MesHandler", (_Handler,), {"service": service, "web_root": Path(__file__).with_name("web")})
     server = ThreadingHTTPServer((host, port), handler)
     stopped = threading.Event()

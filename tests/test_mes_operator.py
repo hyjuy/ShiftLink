@@ -9,7 +9,7 @@ from shiftlink.mes.server import MesService
 
 class OperatorViewTests(unittest.TestCase):
     def test_topology_fault_parts_evidence_and_accessible_graph(self):
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         examples = {}
         for scenario in ("normal", "drive_fault", "hydraulic_fault", "downstream_block", "gearbox_overheat", "hydraulic_overheat", "gearbox_leak", "coil_quality_hold"):
@@ -158,7 +158,7 @@ console.log('Topology, isolation, part assumption, evidence, and graph checks pa
         self.assertIn("incident-summary", dom.ids)
         self.assertIn("part-locator", dom.ids)
         self.assertIn("selection-evidence", dom.ids)
-        self.assertLess(html.index('id="recovery-panel"'), html.index('id="control-panel"'))
+        self.assertLess(html.index('id="control-panel"'), html.index('id="recovery-panel"'))
 
     def test_refresh_preserves_summary_and_exact_relation_focus(self):
         result = subprocess.run(["node", "tests/mes_operator_dom.cjs"], capture_output=True, text=True, encoding="utf-8")

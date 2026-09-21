@@ -7,7 +7,7 @@ import unittest
 class MesServerTests(unittest.TestCase):
     def test_events_identify_run_and_speed_is_reported(self):
         from shiftlink.mes.server import MesService
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         service.control({"command": "speed", "speed": 2})
         self.assertEqual(service.state()["speed"], 2)
@@ -15,7 +15,7 @@ class MesServerTests(unittest.TestCase):
 
     def test_invalid_payloads_are_rejected(self):
         from shiftlink.mes.server import MesService
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         for payload in ([], None, {"command": "speed", "speed": None}, {"command": "speed", "speed": True}):
             with self.assertRaises(ValueError):
@@ -24,7 +24,7 @@ class MesServerTests(unittest.TestCase):
     def test_control_advances_a_single_persisted_engine(self) -> None:
         from shiftlink.mes.server import MesService
 
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         before = service.state()["sequence"]
         service.control({"command": "start"})
         service.engine.tick()
@@ -37,14 +37,14 @@ class MesServerTests(unittest.TestCase):
     def test_control_rejects_unknown_command(self) -> None:
         from shiftlink.mes.server import MesService
 
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         with self.assertRaises(ValueError):
             service.control({"command": "delete"})
 
     def test_replay_and_exports_use_only_public_records(self) -> None:
         from shiftlink.mes.server import MesService
 
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         service.control({"command": "start"})
         service.tick()
         run_id = service.engine.run.run_id
@@ -56,7 +56,7 @@ class MesServerTests(unittest.TestCase):
     def test_background_tick_can_persist_sqlite_state(self) -> None:
         from shiftlink.mes.server import MesService
 
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         service.control({"command": "start"})
         errors: list[Exception] = []
         worker = threading.Thread(target=lambda: self._tick(service, errors))
@@ -76,7 +76,7 @@ class MesServerTests(unittest.TestCase):
 class MesServerConfigTests(unittest.TestCase):
     def _service(self):
         from shiftlink.mes.server import MesService
-        service = MesService(Path("docs/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         return service
 

@@ -6,13 +6,13 @@
 
 ## 1. 기본 구성 A 이해
 
-`configuration.py`의 `from_catalog()`는 `docs/00_plant_and_relations.json`에서 기본 구성을 생성한다.
+`configuration.py`의 `from_catalog()`는 `docs/data/00_plant_and_relations.json`에서 기본 구성을 생성한다.
 
 ```
 from shiftlink.mes.configuration import from_catalog
 import json
 
-with open('docs/00_plant_and_relations.json', encoding='utf-8') as f:
+with open('docs/data/00_plant_and_relations.json', encoding='utf-8') as f:
     catalog = json.load(f)
     
 config = from_catalog(catalog)
@@ -52,7 +52,7 @@ import json
 from shiftlink.mes.configuration import from_catalog, to_payload, from_payload, finalize
 
 # 기본 구성 로드
-with open('docs/00_plant_and_relations.json', encoding='utf-8') as f:
+with open('docs/data/00_plant_and_relations.json', encoding='utf-8') as f:
     catalog = json.load(f)
 config_a = from_catalog(catalog)
 

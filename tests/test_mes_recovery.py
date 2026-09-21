@@ -14,7 +14,7 @@ SCENARIOS = ("gearbox_overheat", "hydraulic_overheat", "gearbox_leak", "coil_qua
 
 class RecoveryTests(unittest.TestCase):
     def setUp(self):
-        self.service = MesService(Path("docs/00_plant_and_relations.json"))
+        self.service = MesService(Path("docs/data/00_plant_and_relations.json"))
         self.addCleanup(self.service.storage.close)
         self.engine = self.service.engine
         self.engine.start()
@@ -131,7 +131,7 @@ class RecoveryTests(unittest.TestCase):
         self.service.storage.save_configuration(old.config_id, json.dumps(configuration.to_payload(old)))
         old_run = Run.create(seed=1, config_id=old.config_id)
         self.service.storage.create_run(old_run)
-        restored = MesService(Path("docs/00_plant_and_relations.json"), self.service.storage)
+        restored = MesService(Path("docs/data/00_plant_and_relations.json"), self.service.storage)
         self.assertTrue(set(SCENARIOS) <= {s.scenario_id for s in restored.active_config.scenarios})
         preserved = restored.stored_config(old.config_id)["config"]
         self.assertEqual(len(preserved["scenarios"]), 3)

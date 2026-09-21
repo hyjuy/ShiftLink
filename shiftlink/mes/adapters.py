@@ -1,6 +1,6 @@
 """Explicit safe views from MES records to ShiftLink-facing observations.
 
-Boundary rules (see docs/mock-mes-modularization.md):
+Boundary rules (see docs/design/mock-mes-modularization.md):
 - Only event types in OBSERVABLE_EVENT_TYPES reach model-facing observations.
   ``scenario_selected`` and ``recovery_started`` carry injected-cause context and are excluded.
 - ``scenario_id`` is stripped from snapshots; it names the injected cause.

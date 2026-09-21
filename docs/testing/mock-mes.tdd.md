@@ -1,6 +1,6 @@
 # Mock MES integration TDD evidence
 
-Source: `docs/mock-mes-development-template.md`. This integration suite was derived from its normal-operation, incident, recovery, replay/export, deterministic restart, and observation-isolation guarantees.
+Source: `docs/templates/mock-mes-development-template.md`. This integration suite was derived from its normal-operation, incident, recovery, replay/export, deterministic restart, and observation-isolation guarantees.
 
 | Guarantee | Test | Type | Result |
 | --- | --- | --- | --- |

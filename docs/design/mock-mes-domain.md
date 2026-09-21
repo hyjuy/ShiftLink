@@ -1,6 +1,6 @@
 # 모의 MES 산업 도메인 모델
 
-이 구현은 `docs/00_plant_and_relations.json`의 가상 냉연 코일 처리 라인 보조설비를 사용한다. 실제 압연 공정, PLC 인터록, 설비 용량을 검증한 모델이 아니다. 기존 기준정보와 Event/KnowledgeCard 계약은 변경하지 않는다.
+이 구현은 `docs/data/00_plant_and_relations.json`의 가상 냉연 코일 처리 라인 보조설비를 사용한다. 실제 압연 공정, PLC 인터록, 설비 용량을 검증한 모델이 아니다. 기존 기준정보와 Event/KnowledgeCard 계약은 변경하지 않는다.
 
 ## 소재 흐름과 UI 계약
 

@@ -71,7 +71,7 @@ UI 평가자 `evaluate_usability`, 설비 평가자 `evaluate_response`가 읽�
 
 브라우저 연결이 없어 화면 스크린샷·실제 키보드/스크린리더·터치·초보자 과업 실험은 수행하지 못했다. 전체 관계 표시의 교차선과 긴 레이블, 좁은 화면 지도 이동은 후속 실사용 검증 대상이다. 실제 물리 위치를 확인하려면 설비 배치도·부품 목록·센서 매핑을 추가해야 한다.
 
-테스트 절차와 RED/GREEN 근거는 [검증 기록](testing/mes-operator.tdd.md)에 정리했다.
+테스트 절차와 RED/GREEN 근거는 [검증 기록](../testing/mes-operator.tdd.md)에 정리했다.
 
 ## 애니메이션 복원 후 재확인
 

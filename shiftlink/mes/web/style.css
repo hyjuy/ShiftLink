@@ -213,6 +213,17 @@ body[data-experience="expert"] .learn-note { display: none; }
 .edge-line { stroke-linejoin: round; stroke-linecap: round; }
 .workspace-panel { display: grid; gap: 16px; min-width: 0; }
 #control-message:empty { display: none; }
+.integrated-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; color: #bbccd9; font-size: 13px; }
+.control-drawer { display: grid; gap: 18px; border-color: #4f7d78; background: #14242d; }
+.control-drawer #config-panel { border-top: 1px solid #3d5968; padding-top: 18px; }
+.operations-panel { padding-bottom: 10px; }
+.operations-scroll { overflow-x: auto; }
+#operations-table { width: 100%; min-width: 820px; border-collapse: collapse; text-align: left; font-size: 13px; }
+#operations-table th, #operations-table td { padding: 11px 10px; border-bottom: 1px solid #34495d; white-space: nowrap; }
+#operations-table thead { color: #bbccd9; background: #1a2c3c; }
+#operations-table tbody tr.warning { background: #302b22; color: #ffe0b1; }
+#operations-table tbody tr.waiting { background: #202d3a; color: #c8e3ff; }
+#operations-table tbody tr.fault { background: #38242b; color: #ffc0c5; }
 .workspace-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .detail-workspace { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(300px,1fr); gap: 16px; align-items: start; }
 #workspace-flow .flow-map { max-width: 1200px; max-height: max(340px, calc(100dvh - 420px)); margin-inline: auto; }
@@ -245,6 +256,7 @@ main { gap: 8px; margin-top: 8px; }
 }
 #workspace-history .trend-panel { max-width: 960px; width: 100%; }
 @media (max-width: 900px) { .detail-workspace { grid-template-columns: minmax(0,1fr); }.workspace-tabs button { padding: 12px; } }
+@media (max-width: 640px) { .integrated-toolbar { align-items: flex-start; flex-direction: column; }.integrated-toolbar button { width: 100%; } }
 .machine-illustration { fill: none; stroke: #bbd3df; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .machine-illustration .fluid { fill: #345d70; stroke: none; }
 .machine-illustration .power-symbol { fill: #f4d69a; stroke: none; }

@@ -33,6 +33,17 @@
     if (waiting.length) return `${names(waiting)}이 기다리고 있습니다. 장비를 선택하면 대기 이유를 확인할 수 있습니다.`;
     return "코일은 아래 번호 순서로 이동합니다. 구동·공급 장비는 이송을 돕고, 코일이 통과하는 경로와는 구분됩니다.";
   }
+  function operationRows(snapshot, config, completed = 0) {
+    const alarms = snapshot.active_alarms || [], coils = snapshot.coils || [], measurements = snapshot.measurements || [];
+    return (snapshot.equipment || []).map((state) => {
+      const equipment = config?.equipment?.find(item => item.equipment_id === state.equipment_id) || {};
+      const cycle = measurements.find(item => item.equipment_id === state.equipment_id && /cycle.*time|cycle_time/i.test(item.signal));
+      const queue = coils.filter(coil => coil.equipment_id === state.equipment_id).length;
+      const alerts = alarms.filter(alarm => alarm.equipment_id === state.equipment_id).length;
+      const active = state.operating_state === "running" && state.fault_level === "normal";
+      return { equipment_id: state.equipment_id, name: equipment.code || equipment.name || state.equipment_id, status: state.operating_state, faultLevel: state.fault_level, throughput: active ? completed : 0, utilization: active ? 100 : 0, queue, cycleTime: cycle ? `${cycle.value} ${cycle.unit}` : `${equipment.dwell_seconds ?? "—"} s`, alerts, changed: !active || alerts > 0 };
+    });
+  }
   function createHistory() { return { runId: null, cursor: -1, events: [], snapshots: [], completed: 0 }; }
   function createConfigCache() { return { config: null, configId: null }; }
   function configsCompatible(old, new_) { if (!old || !new_) return false; return old.config_id === new_.config_id; }
@@ -79,7 +90,7 @@
       return `<article class="component-card ${value < 40 ? "degraded" : ""}"><div><b>${escape(c.name)}</b><strong>${value.toFixed(1)}% · ${state}</strong></div><meter min="0" max="100" low="40" high="70" optimum="100" value="${value}" aria-label="${escape(c.name)} 모의 건전도">${value.toFixed(1)}%</meter><small>누적 운전 ${(c.operating_seconds / 3600).toFixed(3)} h · 정비 ${Number(c.maintenance_count)}회${c.last_maintenance_at ? ` · 최근 ${escape(clock(c.last_maintenance_at))}` : ""}</small></article>`;
     }).join("")}</div>`;
   }
-  if (typeof module !== "undefined") module.exports = { createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, recoveryView, componentView };
+  if (typeof module !== "undefined") module.exports = { createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, recoveryView, componentView };
   if (typeof document === "undefined") return;
   const operator = globalThis.MesOperator;
   const $ = (selector) => document.querySelector(selector);
@@ -222,6 +233,10 @@
     setText("#trend-description", description);
   }
   function renderFeed(selector, items, format) { $(selector).innerHTML = items.length ? items.map((item) => `<li class="${item.severity === "critical" ? "fault" : ""}">${escape(format(item))}</li>`).join("") : "<li>없음</li>"; }
+  function renderOperations(snapshot, config, completed) {
+    const rows = operationRows(snapshot, config, completed);
+    setView("#operations-body", rows.map(row => `<tr class="${row.changed ? stateClass({operating_state:row.status, fault_level:row.faultLevel !== "normal" ? row.faultLevel : row.alerts ? "warning" : "normal"}) : ""}"><th scope="row">${escape(row.name)}</th><td>${escape(label(row.status))}${row.faultLevel !== "normal" ? ` · ${escape(label(row.faultLevel))}` : ""}</td><td>${row.throughput}</td><td>${row.utilization}%</td><td>${row.queue}</td><td>${escape(row.cycleTime)}</td><td>${row.alerts ? `⚠ ${row.alerts}` : "—"}</td></tr>`).join("") || '<tr><td colspan="7">설비 데이터 없음</td></tr>');
+  }
   function renderSnapshot(snapshot, config) {
     if (!snapshot) return;
     if (snapshot.run_id !== lastSnapshot?.run_id || snapshot.scenario_id !== lastSnapshot?.scenario_id) {
@@ -234,7 +249,8 @@
     setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${selectedId?name(selectedId, config):"없음"}`);
     setText("#alarm-count", (snapshot.active_alarms || []).length); setText("#observed-at", clock(snapshot.simulated_at));
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
-    setText("#throughput", mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length);
+    const completed = mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length;
+    setText("#throughput", completed); renderOperations(snapshot, config, completed);
     const configBadge = !config || replay.configPreserved === false ? "기록 재생 · 당시 구성 미보존" : "기록 재생 · 당시 구성";
     setText("#mode-badge", mode === "live" ? "실시간 · 합성 데이터" : configBadge);
     if (mode === "live") setView("#scenario", '<option value="normal" disabled>정상 운전</option>' + (config?.scenarios || []).filter(s => s.scenario_id !== "normal").map((s) => `<option value="${escape(s.scenario_id)}">${escape(s.title || ({drive_fault: "구동부 진동 이상", hydraulic_fault: "유압 공급 저하", downstream_block: "출측 코일 정체"})[s.scenario_id] || s.scenario_id)}</option>`).join(""));
@@ -475,6 +491,7 @@
     setText("#context-message","확인 맥락 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");
   };
   $("#config-panel").hidden=false;
+  $("#control-panel-toggle").onclick=()=>{ const drawer=$("#control-drawer"), open=drawer.hidden; drawer.hidden=!open; $("#control-panel-toggle").setAttribute("aria-expanded",String(open)); $("#control-panel-toggle").textContent=open ? "시연·설정 닫기" : "시연·설정 열기"; };
   if (globalThis.location?.search && new URLSearchParams(globalThis.location.search).get("view")==="diagram") setDiagramMode(true,false);
   refresh();
   setInterval(() => {

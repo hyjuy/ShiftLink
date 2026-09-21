@@ -23,7 +23,7 @@ Object.assign(el,{dataset:{},contains:n=>n===oldSummary,querySelectorAll:s=>s===
 document.activeElement=oldSummary;scope.testView('#test','updated evidence');
 assert.equal(document.activeElement,newSummary);assert.equal(newDetails.open,true);
 console.log('Refresh focus contract passed: exact relation and open summary');
-const tabs=['flow','detail','history','setup'].map(key=>{
+const tabs=['flow','detail','history'].map(key=>{
  const attrs={'aria-controls':`workspace-${key}`};
  const tab=Object.assign(focusable(attrs),{dataset:{workspace:key},setAttribute(k,v){attrs[k]=v;}});
  elements.set(`#tab-${key}`,tab);elements.set(`#workspace-${key}`,{hidden:key!=='flow'});return tab;
@@ -36,11 +36,11 @@ assert.equal(elements.get('#workspace-flow').hidden,true);
 assert.equal(elements.get('#workspace-detail').hidden,false);
 let prevented=false;
 scope.testTabs.workspaceKeydown({target:tabs[1],key:'End',preventDefault(){prevented=true;}});
-assert.ok(prevented);assert.equal(document.activeElement,tabs[3]);
-scope.testTabs.workspaceKeydown({target:tabs[3],key:'ArrowRight',preventDefault(){}});
+assert.ok(prevented);assert.equal(document.activeElement,tabs[2]);
+scope.testTabs.workspaceKeydown({target:tabs[2],key:'ArrowRight',preventDefault(){}});
 assert.equal(document.activeElement,tabs[0]);
 assert.equal(tabs.filter(t=>t.tabIndex===0).length,1);
-assert.equal(['flow','detail','history','setup'].filter(k=>!elements.get(`#workspace-${k}`).hidden).length,1);
+assert.equal(['flow','detail','history'].filter(k=>!elements.get(`#workspace-${k}`).hidden).length,1);
 console.log('Tab visibility, selection and keyboard wrap contracts passed');
 const classes=new Set();
 document.body={classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name);}}};

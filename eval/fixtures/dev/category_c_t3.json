@@ -1,0 +1,400 @@
+[
+  {
+    "case_id": "C-t3-001",
+    "category": "C",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0300",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0300"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "step1",
+            "preconditions": [],
+            "expected_result": "res1",
+            "stop_conditions": []
+          },
+          {
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "step2",
+            "preconditions": [],
+            "expected_result": "res2",
+            "stop_conditions": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "notes": "Correct ascending order"
+    },
+    "description": "T3 with properly ordered steps",
+    "canary_token": "qqz7-dev-c001-order-ok"
+  },
+  {
+    "case_id": "C-t3-002",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-0301",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0301"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "step1",
+            "expected_result": "res1"
+          },
+          {
+            "step_id": "ST-01",
+            "order": 2,
+            "action": "step2",
+            "expected_result": "res2"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Duplicate step_id rejected",
+    "canary_token": "qqz7-dev-c002-dup-id"
+  },
+  {
+    "case_id": "C-t3-003",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-0302",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0302"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "step1",
+            "expected_result": "res1"
+          },
+          {
+            "step_id": "ST-02",
+            "order": 1,
+            "action": "step2",
+            "expected_result": "res2"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Duplicate order rejected",
+    "canary_token": "qqz7-dev-c003-dup-order"
+  },
+  {
+    "case_id": "C-t3-004",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-0303",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0303"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-01",
+            "order": 2,
+            "action": "step1",
+            "expected_result": "res1"
+          },
+          {
+            "step_id": "ST-02",
+            "order": 1,
+            "action": "step2",
+            "expected_result": "res2"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Out of order rejected",
+    "canary_token": "qqz7-dev-c004-ooo"
+  },
+  {
+    "case_id": "C-t3-005",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-0304",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0304"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": []
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Empty steps list rejected",
+    "canary_token": "qqz7-dev-c005-empty"
+  },
+  {
+    "case_id": "C-t3-006",
+    "category": "C",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0305",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0305"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "step1",
+            "expected_result": "res1",
+            "stop_conditions": ["stop1", "stop2"]
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "notes": "Stop conditions preserved"
+    },
+    "description": "Steps with stop_conditions preserved",
+    "canary_token": "qqz7-dev-c006-stops"
+  },
+  {
+    "case_id": "C-t3-007",
+    "category": "C",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0306",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0306"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-99",
+            "order": 1,
+            "action": "step1",
+            "expected_result": "res1"
+          },
+          {
+            "step_id": "ST-999",
+            "order": 2,
+            "action": "step2",
+            "expected_result": "res2"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "Valid step_id patterns",
+    "canary_token": "qqz7-dev-c007-pattern"
+  },
+  {
+    "case_id": "C-t3-008",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-0307",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0307"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-9",
+            "order": 1,
+            "action": "step1",
+            "expected_result": "res1"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Invalid step_id pattern (too short)",
+    "canary_token": "qqz7-dev-c008-bad-pattern"
+  }
+]

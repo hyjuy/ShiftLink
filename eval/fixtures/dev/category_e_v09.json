@@ -1,0 +1,270 @@
+[
+  {
+    "case_id": "E-v09-001",
+    "category": "E",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0500",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T1",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.85,
+      "provenance": {
+        "seed_ids": ["SD-001"],
+        "persona_id": "V-01",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "accepted"
+    },
+    "expected": {
+      "outcome": "converted"
+    },
+    "description": "Valid T1 converts with status forced to draft",
+    "canary_token": "qqz7-dev-e001-t1-ok"
+  },
+  {
+    "case_id": "E-v09-002",
+    "category": "E",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0501",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T5",
+      "equipment": "CV",
+      "component": "belt",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": true,
+      "safety_basis": "KOSHA GUIDE",
+      "confidence": 0.95,
+      "provenance": {
+        "seed_ids": ["SD-002"],
+        "persona_id": "V-02",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "accepted"
+    },
+    "expected": {
+      "outcome": "converted"
+    },
+    "description": "Valid T5 safety card converts",
+    "canary_token": "qqz7-dev-e002-t5-ok"
+  },
+  {
+    "case_id": "E-v09-003",
+    "category": "E",
+    "type": "error",
+    "input": {
+      "card_id": "K-0502",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "hose",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-003"],
+        "persona_id": "V-03",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "accepted"
+    },
+    "expected": {
+      "outcome": "needs_review"
+    },
+    "description": "T4 without handover_method needs_review",
+    "canary_token": "qqz7-dev-e003-t4-nr"
+  },
+  {
+    "case_id": "E-v09-004",
+    "category": "E",
+    "type": "error",
+    "input": {
+      "card_id": "K-0503",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "RT",
+      "component": "motor",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.75,
+      "provenance": {
+        "seed_ids": ["SD-004"],
+        "persona_id": "V-04",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "needs_review"
+    },
+    "description": "T3 without steps needs_review",
+    "canary_token": "qqz7-dev-e004-t3-nr"
+  },
+  {
+    "case_id": "E-v09-005",
+    "category": "E",
+    "type": "error",
+    "input": {
+      "card_id": "K-0504",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T5",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": true,
+      "safety_basis": null,
+      "confidence": 0.9,
+      "provenance": {
+        "seed_ids": ["SD-005"],
+        "persona_id": "V-05",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "needs_review"
+    },
+    "description": "Safety flag without basis needs_review",
+    "canary_token": "qqz7-dev-e005-safety-nr"
+  },
+  {
+    "case_id": "E-v09-006",
+    "category": "E",
+    "type": "error",
+    "input": "not_a_dict",
+    "expected": {
+      "outcome": "rejected"
+    },
+    "description": "Non-dict input rejected",
+    "canary_token": "qqz7-dev-e006-no-dict"
+  },
+  {
+    "case_id": "E-v09-007",
+    "category": "E",
+    "type": "error",
+    "input": {
+      "card_id": "INVALID",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T1",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.5,
+      "provenance": {
+        "seed_ids": ["SD-007"],
+        "persona_id": "V-07",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "rejected"
+    },
+    "description": "Invalid card_id rejected",
+    "canary_token": "qqz7-dev-e007-bad-id"
+  },
+  {
+    "case_id": "E-v09-008",
+    "category": "E",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0505",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T2",
+      "equipment": "GR",
+      "component": "gear",
+      "scenario": "S2",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [
+        {
+          "signal": "temp",
+          "op": ">",
+          "value": 50,
+          "unit": "C"
+        }
+      ],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.7,
+      "provenance": {
+        "seed_ids": ["SD-008"],
+        "persona_id": "V-08",
+        "event_ids": [],
+        "generator": "gen",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "converted"
+    },
+    "description": "T2 with conditions converts",
+    "canary_token": "qqz7-dev-e008-t2-ok"
+  }
+]

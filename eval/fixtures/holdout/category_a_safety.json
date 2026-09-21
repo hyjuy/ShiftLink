@@ -1,0 +1,114 @@
+[
+  {
+    "case_id": "A-holdout-001",
+    "category": "A",
+    "type": "normal",
+    "input": {
+      "equipment_ids": ["RT"],
+      "observations": {}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0109",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "RT",
+        "component": "motor",
+        "scenario": "S1",
+        "title": "safety-motor",
+        "know_how": "Lock before service",
+        "rationale": "Rotation hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "EQUIPMENT SPEC",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0109"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0109"],
+      "expected_count": 1,
+      "notes": "Different equipment from dev, same category"
+    },
+    "description": "Holdout: Safety card for different equipment",
+    "canary_token": "qqz7-holdout-a001-eq10"
+  },
+  {
+    "case_id": "A-holdout-002",
+    "category": "A",
+    "type": "boundary",
+    "input": {
+      "equipment_ids": ["HPU"],
+      "observations": {"pressure": 15, "flow": 100}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0110",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "hose",
+        "scenario": "S1",
+        "title": "safety-hose",
+        "know_how": "Release pressure before disconnect",
+        "rationale": "Leakage hazard",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": ">=",
+            "value": 10,
+            "unit": "bar"
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "KOSHA STANDARD",
+        "confidence": 0.95,
+        "provenance": {
+          "seed_ids": ["SD-0110"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0110"],
+      "condition_status": "verified",
+      "notes": "Multiple observations, card included when condition passes"
+    },
+    "description": "Holdout: Multiple observations with condition verification",
+    "canary_token": "qqz7-holdout-a002-multi-obs"
+  },
+  {
+    "case_id": "A-holdout-003",
+    "category": "A",
+    "type": "error",
+    "input": {
+      "equipment_ids": [],
+      "observations": {}
+    },
+    "fixture_cards": [],
+    "expected": {
+      "expected_safety_card_ids": [],
+      "expected_count": 0,
+      "notes": "Empty equipment list"
+    },
+    "description": "Holdout: Empty equipment list returns no results",
+    "canary_token": "qqz7-holdout-a003-empty-eq"
+  }
+]

@@ -1,0 +1,144 @@
+[
+  {
+    "case_id": "D-holdout-001",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-4000",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-4000"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "abnormal_stop_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-1001",
+            "restart_type": "abnormal_stop_restart",
+            "action": "emergency_restart",
+            "observed_result": "system_recovered",
+            "failure_reason": null,
+            "evidence_ids": ["EV-0010"]
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "restart_type": "abnormal_stop_restart",
+      "notes": "Different restart type from dev"
+    },
+    "description": "Holdout: T6 with abnormal_stop_restart type",
+    "canary_token": "qqz7-holdout-d001-abnormal"
+  },
+  {
+    "case_id": "D-holdout-002",
+    "category": "D",
+    "type": "error",
+    "input": {
+      "card_id": "K-4001",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-4001"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "maintenance_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-1002",
+            "restart_type": "abnormal_stop_restart",
+            "action": "restart",
+            "observed_result": "failure",
+            "failure_reason": "Different type",
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "Type conflict between card and attempt",
+      "notes": "Known types must match"
+    },
+    "description": "Holdout: Type mismatch rejected",
+    "canary_token": "qqz7-holdout-d002-mismatch"
+  },
+  {
+    "case_id": "D-holdout-003",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-4002",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-4002"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "unknown",
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "restart_type": "unknown",
+      "no_attempts": true,
+      "notes": "Unknown type with no attempts"
+    },
+    "description": "Holdout: T6 with unknown restart_type and no attempts",
+    "canary_token": "qqz7-holdout-d003-unk-empty"
+  }
+]

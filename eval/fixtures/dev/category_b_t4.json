@@ -1,0 +1,370 @@
+[
+  {
+    "case_id": "B-t4-001",
+    "category": "B",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0200",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "handover test",
+      "know_how": "transfer info",
+      "rationale": "protocol",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0200"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["equipment_status", "part_serial"],
+          "recipient_role": "shift_lead",
+          "timing": "end_of_shift",
+          "channel": "verbal_handover_log",
+          "acknowledgement": "signed_log_entry"
+        },
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "handover_method_present": true,
+      "required_fields_count": 5,
+      "notes": "All required fields present in HandoverMethod"
+    },
+    "description": "T4 card with complete handover method passes validation",
+    "canary_token": "qqz7-dev-b001-complete"
+  },
+  {
+    "case_id": "B-t4-002",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0201",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0201"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "T4 requires type_payload.handover_method",
+      "notes": "Missing handover_method field should fail validation"
+    },
+    "description": "T4 without handover_method rejected",
+    "canary_token": "qqz7-dev-b002-missing-hm"
+  },
+  {
+    "case_id": "B-t4-003",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0202",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0202"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": [],
+          "recipient_role": "shift_lead",
+          "timing": "end_of_shift",
+          "channel": "verbal",
+          "acknowledgement": "signed"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "required_context must have min_length=1",
+      "notes": "Empty required_context list violates min_length constraint"
+    },
+    "description": "Empty required_context array rejected",
+    "canary_token": "qqz7-dev-b003-empty-context"
+  },
+  {
+    "case_id": "B-t4-004",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0203",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0203"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["  "],
+          "recipient_role": "shift_lead",
+          "timing": "end_of_shift",
+          "channel": "verbal",
+          "acknowledgement": "signed"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "required_context items must be NonBlank (stripped length >= 1)",
+      "notes": "Whitespace-only string fails NonBlank constraint"
+    },
+    "description": "Whitespace-only required_context item rejected",
+    "canary_token": "qqz7-dev-b004-whitespace"
+  },
+  {
+    "case_id": "B-t4-005",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0204",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0204"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["info_a", "info_b"],
+          "recipient_role": "",
+          "timing": "end_of_shift",
+          "channel": "verbal",
+          "acknowledgement": "signed"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "recipient_role must be NonBlank",
+      "notes": "Empty recipient_role fails validation"
+    },
+    "description": "Empty recipient_role rejected",
+    "canary_token": "qqz7-dev-b005-empty-role"
+  },
+  {
+    "case_id": "B-t4-006",
+    "category": "B",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0205",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0205"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["equipment_id", "maintenance_code"],
+          "recipient_role": "maintenance_engineer",
+          "timing": "before_production_restart",
+          "channel": "work_order_system",
+          "acknowledgement": "digital_confirmation"
+        },
+        "restart_type": "maintenance_restart",
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "handover_method_present": true,
+      "restart_type_allowed": true,
+      "notes": "T4 with optional restart_type is valid"
+    },
+    "description": "T4 with restart_type (allowed per D-29) passes",
+    "canary_token": "qqz7-dev-b006-with-restart"
+  },
+  {
+    "case_id": "B-t4-007",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0206",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T1",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "sound",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0206"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["info"],
+          "recipient_role": "lead",
+          "timing": "now",
+          "channel": "verbal",
+          "acknowledgement": "nod"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "handover_method only allowed on T4 cards",
+      "notes": "Scope restriction: handover_method not permitted on T1"
+    },
+    "description": "Non-T4 card with handover_method rejected",
+    "canary_token": "qqz7-dev-b007-wrong-type"
+  },
+  {
+    "case_id": "B-t4-008",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-0207",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0207"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["info"],
+          "recipient_role": "lead",
+          "timing": "now",
+          "channel": "verbal",
+          "acknowledgement": null
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "acknowledgement must be NonBlank (not null)",
+      "notes": "Null value in required field"
+    },
+    "description": "Null value in handover_method field rejected",
+    "canary_token": "qqz7-dev-b008-null-field"
+  }
+]

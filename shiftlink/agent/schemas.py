@@ -54,10 +54,13 @@ class KnowledgeCard(BaseModel):
         "rejected_safety",
     ] = "draft"
 
-    # D-26 승인 대기: safety_flag 기반 노출·채점·전수 검수 확대 규칙 자리.
-    # D-27 승인 대기: T4 전달축 분리(content_type/handover_relevant) 자리.
-    # D-28 승인 대기: type_payload 및 T3 steps 구조화 자리.
-    # D-29 승인 대기: T6_setup_restart 및 tried_and_failed 자리.
+    # 아래 요구사항은 승인됨. v0.9에는 확장 미구현이며, 상세 필드명은
+    # 구현 제안으로서 9/22 계약 검토 후 스키마 v1.0에 고정한다.
+    # D-26 승인: 안전 조건을 safety_flag=True 전체로 확장한다.
+    # T-27 / D-27 승인: T4에 어떻게 인수인계하는지 전달 방법을 담는다.
+    # D-28 승인: 단계별 해결 순서를 보여줄 수 있도록 한다.
+    # D-29 승인: 재가동 유형에 따라 실패를 구분할 수 있도록 한다.
+    # 전달축 분리나 T6_setup_restart 신설까지 승인된 것으로 해석하지 않는다.
 
     @model_validator(mode="after")
     def validate_k01_rules(self) -> "KnowledgeCard":

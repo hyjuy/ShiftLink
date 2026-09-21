@@ -72,6 +72,8 @@
 | `EV-` | Event (사건) |
 | `K-` | KnowledgeCard |
 | `PT-` | EventPrototype (신규 제안, 미승인) |
+| `MD-` | ManualDocument (매뉴얼 문서 — 설계 예제 `docs/data/`에서 사용, 미승인 제안) |
+| `MS-` | ManualSection (매뉴얼 절 — 위와 동일) |
 | `R-<영역 2자>` | 요구사항 ID (예: `R-PL01`, `R-SC01`) — §13.1 |
 
 새 엔티티 종류가 생기면(예: 관계·매뉴얼 등, 전부 미승인) 접두어를 여기 먼저 등록하고 코드에 쓴다.

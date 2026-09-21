@@ -1464,6 +1464,373 @@
       "safety_basis": "산업안전보건기준에 관한 규칙 제92조",
       "version": "v1.3",
       "content_sha256": "000000000000000000000000000000000000000000000000000000000000a008"
+    },
+    {
+      "section_id": "MS-0009",
+      "document_id": "MD-0001",
+      "section_no": "1.1",
+      "heading": "장치 구성 개요",
+      "body": "가상-HPU-45L은 주 베인펌프, 리턴 필터, 축압기, 릴리프 밸브, 오일 쿨러, 주 공급 호스로 구성된다. 각 부품의 코드와 고장 형태는 기준정보의 부품 목록을 따른다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a009"
+    },
+    {
+      "section_id": "MS-0010",
+      "document_id": "MD-0001",
+      "section_no": "2.1",
+      "heading": "정상 운전 범위",
+      "body": "토출 압력 145~165 bar, 작동유 온도 35~58 ℃, 토출 유량 38~46 L/min을 정상 범위로 본다. 범위를 벗어난 상태에서는 원인 확인 전까지 부하를 늘리지 않는다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00a"
+    },
+    {
+      "section_id": "MS-0011",
+      "document_id": "MD-0001",
+      "section_no": "2.2",
+      "heading": "기동 전 확인 사항",
+      "body": "기동 전에 유면, 누유 흔적, 필터 차압 지시, 릴리프 밸브 설정 표시를 확인한다. 필터 차압이 1.2 bar를 넘은 상태로 기동하지 않는다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "stop_restart_state",
+          "op": "in",
+          "value": [
+            "restart_prep",
+            "restarting"
+          ]
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00b"
+    },
+    {
+      "section_id": "MS-0012",
+      "document_id": "MD-0001",
+      "section_no": "3.1",
+      "heading": "펌프 이상 소음 시 확인",
+      "body": "펌프에서 이상 소음이 나면 토출 압력과 유량의 흔들림을 함께 확인한다. 소음과 유량 저하가 함께 나타나면 흡입부와 베인 마모를 점검 대상에 올리되, 소음만으로 원인을 단정하지 않는다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00c"
+    },
+    {
+      "section_id": "MS-0013",
+      "document_id": "MD-0001",
+      "section_no": "5.1",
+      "heading": "축압기 취급 주의",
+      "body": "축압기 점검·분리 전에는 펌프를 정지하고 회로 압력 해제와 축압기 방압을 확인한다. 질소 충전·방출은 지정 절차 외의 방법으로 수행하지 않는다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조",
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00d"
+    },
+    {
+      "section_id": "MS-0014",
+      "document_id": "MD-0002",
+      "section_no": "2.1",
+      "heading": "진동 기준",
+      "body": "케이싱 진동 0.5~2.8 mm/s를 정상으로 보고 4.5 mm/s 이상이면 경보로 처리한다. 상승 추세가 0.6 mm/s를 넘으면 측정 주기를 줄인다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00e"
+    },
+    {
+      "section_id": "MS-0015",
+      "document_id": "MD-0002",
+      "section_no": "2.2",
+      "heading": "베어링 온도 기준",
+      "body": "베어링 온도 30~62 ℃를 정상으로 보고 72 ℃ 이상이면 경보로 처리한다. 온도가 단독으로 상승하면 윤활 상태와 부하 이력을 함께 확인한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a00f"
+    },
+    {
+      "section_id": "MS-0016",
+      "document_id": "MD-0002",
+      "section_no": "3.1",
+      "heading": "베어링 손상 유형 점검",
+      "body": "분해 점검 시 손상은 표면 피로, 압흔, 부착 마모, 전식으로 구분해 기록한다. 손상 분류 용어는 ISO 15243 체계를 따르며 이 문서는 분류 용어만 참고한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a010"
+    },
+    {
+      "section_id": "MS-0017",
+      "document_id": "MD-0002",
+      "section_no": "3.2",
+      "heading": "커플링 정렬 점검",
+      "body": "진동 상승과 함께 커플링 탄성체 열화나 편심이 의심되면 정지 상태에서 정렬을 측정한다. 정렬 측정값과 탄성체 상태를 같은 기록에 남긴다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a011"
+    },
+    {
+      "section_id": "MS-0018",
+      "document_id": "MD-0002",
+      "section_no": "4.1",
+      "heading": "윤활 관리",
+      "body": "윤활유는 지정 등급을 사용하고 교환 주기는 운전 시간 기준으로 관리한다. 윤활 부족이 의심되면 베어링 온도와 진동 추세를 함께 확인한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a012"
+    },
+    {
+      "section_id": "MS-0019",
+      "document_id": "MD-0003",
+      "section_no": "4.1",
+      "heading": "정상 정지 절차",
+      "body": "적재 대기율을 낮춘 뒤 라인 속도를 단계적으로 줄이고, 출측·중앙·입측 순서로 이송을 정지한다. 정지 후 유압·전력 공급 상태를 기록한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "op_mode",
+          "op": "in",
+          "value": [
+            "running_normal",
+            "running_reduced"
+          ]
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a013"
+    },
+    {
+      "section_id": "MS-0020",
+      "document_id": "MD-0003",
+      "section_no": "4.2",
+      "heading": "이상 정지 시 조치",
+      "body": "인터록이나 경보에 의한 정지면 정지 원인 신호와 발생 시각을 먼저 기록한다. 원인이 확인되지 않은 상태로 재가동하지 않는다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a014"
+    },
+    {
+      "section_id": "MS-0021",
+      "document_id": "MD-0003",
+      "section_no": "5.1",
+      "heading": "정상 정지 후 재가동 순서",
+      "body": "정상 정지 후 재가동은 유압 압력이 정상 범위에 도달했는지 확인한 뒤 저속으로 기동하고, 구간별로 속도를 복귀시키는 순서로 진행한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "stop_restart_state",
+          "op": "in",
+          "value": [
+            "restart_prep",
+            "restarting"
+          ]
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a015"
+    },
+    {
+      "section_id": "MS-0022",
+      "document_id": "MD-0003",
+      "section_no": "5.2",
+      "heading": "이상 정지 후 재가동 확인",
+      "body": "이상 정지 후 재가동은 정지 원인에 대한 조치 확인을 먼저 기록한 뒤 정상 정지 후 재가동 순서를 따른다. 재가동 시도와 실패는 재가동 유형별로 구분해 기록하고, 한 유형의 실패를 다른 유형에 일반화하지 않는다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "stop_restart_state",
+          "op": "in",
+          "value": [
+            "restart_prep",
+            "restarting"
+          ]
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": false,
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a016"
+    },
+    {
+      "section_id": "MS-0023",
+      "document_id": "MD-0003",
+      "section_no": "5.3",
+      "heading": "정비 후 재가동 확인",
+      "body": "정비 후 재가동 전에 잠금·표지 해제 상태, 작업자 이탈, 방호 장치 복원을 확인한다. 확인 기록 없이 재가동하지 않는다.",
+      "applies_conditions": [
+        {
+          "field": "stop_restart_state",
+          "op": "in",
+          "value": [
+            "restart_prep",
+            "restarting"
+          ]
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조; OSHA 29 CFR 1910.147",
+      "version": "v1.2",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a017"
+    },
+    {
+      "section_id": "MS-0024",
+      "document_id": "MD-0004",
+      "section_no": "2.3",
+      "heading": "벨트 사행·장력 이상 시 조치",
+      "body": "벨트 장력이 380 kPa 미만이거나 사행이 관측되면 속도를 낮추고 텐셔너 유압을 확인한다. 330 kPa 미만이면 정지를 검토한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "cv_belt_tension",
+          "op": "lt",
+          "value": 380.0
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.1",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a018"
+    },
+    {
+      "section_id": "MS-0025",
+      "document_id": "MD-0004",
+      "section_no": "3.1",
+      "heading": "스크랩 컨베이어 만적 시 조치",
+      "body": "스크랩 컨베이어 만적 시 인터록으로 출측 롤러의 배출이 정지할 수 있다. 배출 정지를 설비 이상으로 판단하기 전에 스크랩 적재 상태를 먼저 확인한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "segment",
+      "safety_flag": false,
+      "version": "v1.1",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a019"
+    },
+    {
+      "section_id": "MS-0026",
+      "document_id": "MD-0005",
+      "section_no": "2.1",
+      "heading": "일상 점검 항목",
+      "body": "근무 시작 시 유면, 누유 흔적, 토출 압력, 필터 차압 지시값을 확인해 기록한다. 전일 기록과 차이가 크면 추세를 비교한다. [가상 값]",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01a"
+    },
+    {
+      "section_id": "MS-0027",
+      "document_id": "MD-0005",
+      "section_no": "4.1",
+      "heading": "압력 저하 시 확인 순서",
+      "body": "토출 압력이 정상 하한 145 bar 아래로 내려가면 유량과 필터 차압을 같은 시점 값으로 함께 기록한다. 단일 지시값만으로 원인을 단정하지 않고, 공급 대상 장비의 증상 유무를 확인한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "hpu_pressure",
+          "op": "lt",
+          "value": 145.0
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01b"
+    },
+    {
+      "section_id": "MS-0028",
+      "document_id": "MD-0005",
+      "section_no": "4.4",
+      "heading": "유온 상승 시 대응",
+      "body": "작동유 온도가 58 ℃를 넘으면 오일 쿨러 상태와 부하를 확인하고, 65 ℃ 이상이면 계획 정지를 검토한다. [가상 값]",
+      "applies_conditions": [
+        {
+          "field": "hpu_oil_temp",
+          "op": "gte",
+          "value": 58.0
+        }
+      ],
+      "excludes_conditions": [],
+      "scope_level": "equipment",
+      "safety_flag": false,
+      "version": "v1.0",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01c"
+    },
+    {
+      "section_id": "MS-0029",
+      "document_id": "MD-0006",
+      "section_no": "1.3",
+      "heading": "운전 중 이물 제거·청소 금지",
+      "body": "운전 중에는 컨베이어·롤러의 이물 제거, 청소, 정렬 조정을 하지 않는다. 해당 작업은 정지·잠금 후 수행한다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "line",
+      "safety_flag": true,
+      "safety_basis": "KOSHA GUIDE M-101-2012; 산업안전보건기준에 관한 규칙 제92조",
+      "version": "v1.3",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01d"
+    },
+    {
+      "section_id": "MS-0030",
+      "document_id": "MD-0006",
+      "section_no": "1.4",
+      "heading": "적재 정체 시 수동 개입 금지",
+      "body": "적재 정체를 해소하기 위해 운전 중 적재부에 들어가거나 소재를 손으로 조정하지 않는다. 정체는 감속·정지 후 조치한다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "segment",
+      "safety_flag": true,
+      "safety_basis": "KOSHA GUIDE M-101-2012",
+      "version": "v1.3",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01e"
+    },
+    {
+      "section_id": "MS-0031",
+      "document_id": "MD-0006",
+      "section_no": "1.5",
+      "heading": "전기 작업 전 차단·확인",
+      "body": "배전반·전동기 단자 작업 전에는 전원 차단·잠금과 검전 확인을 수행한다. 확인 없이 커버를 열지 않는다.",
+      "applies_conditions": [],
+      "excludes_conditions": [],
+      "scope_level": "equipment_group",
+      "safety_flag": true,
+      "safety_basis": "산업안전보건기준에 관한 규칙 제92조; OSHA 29 CFR 1910.147",
+      "version": "v1.3",
+      "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01f"
     }
   ],
   "personas": [

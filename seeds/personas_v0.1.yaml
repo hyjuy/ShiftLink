@@ -1,0 +1,62 @@
+# 가상 페르소나 초안. 실제 숙련자나 실제 발언을 나타내지 않는다.
+schema_version: v0.1
+is_synthetic: true
+source_note: "L1 보조설비 데모용 합성 페르소나. 사실은 Event에만 두고, 페르소나는 해석·서술 경향만 만든다."
+
+personas:
+  - persona_id: V-01
+    display_name: "박 반장"
+    years: 28
+    equipment_focus: [HPU, GR]
+    segment_focus: [SG-0004, SG-0001]
+    tacit_type_focus: [T1]
+    judgment_style: sensory_first
+    relation_bias: utility_first
+    hop_habit: 2
+    stop_restart_experience: high
+    risk_posture: pragmatic
+    speech: terse_assertive
+    handover_style: terse_risky
+    known_biases:
+      - "감각 판단을 계측 확인보다 앞세울 수 있다"
+      - "하류 정체를 상류 공급 문제로 성급히 귀속할 수 있다"
+    co_occurrence_confusion: high
+
+  - persona_id: V-02
+    display_name: "김 기장"
+    years: 19
+    equipment_focus: [RT, CV]
+    segment_focus: [SG-0001, SG-0002, SG-0003]
+    tacit_type_focus: [T2, T3]
+    judgment_style: measurement_first
+    relation_bias: local_first
+    hop_habit: 1
+    stop_restart_experience: medium
+    risk_posture: pragmatic
+    speech: conditional_detailed
+    handover_style: checklist
+    known_biases:
+      - "계측값이 정상 범위이면 이상이 없다고 단정할 수 있다"
+    co_occurrence_confusion: low
+
+  - persona_id: V-03
+    display_name: "이 주임"
+    years: 12
+    equipment_focus: [COMMON, HPU, PDP, CAU]
+    segment_focus: [SG-0001, SG-0002, SG-0003, SG-0004]
+    tacit_type_focus: [T4, T5]
+    judgment_style: procedure_first
+    relation_bias: downstream_first
+    hop_habit: 2
+    stop_restart_experience: high
+    risk_posture: conservative
+    speech: narrative_handover
+    handover_style: narrative_complete
+    known_biases:
+      - "안전 보류를 과도하게 적용할 수 있다"
+    co_occurrence_confusion: medium
+
+conflict_policy:
+  factual_ground_truth: "사건 원장은 하나의 사실만 유지한다."
+  interpretation_policy: "상충하는 해석·요령은 병합하지 않고 별도 카드와 conflict_group으로 관리한다."
+  safety_policy: "안전 관련 상충은 보수적인 쪽만 채택하고 다른 쪽은 rejected_safety로 남긴다."

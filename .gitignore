@@ -25,3 +25,4 @@ data/*
 seeds/*
 !seeds/.gitkeep
 !seeds/카드_작성_가이드_초안.md
+!seeds/personas_v0.1.yaml

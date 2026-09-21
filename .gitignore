@@ -25,3 +25,8 @@ data/*
 seeds/*
 !seeds/.gitkeep
 !seeds/카드_작성_가이드_초안.md
+
+# 제조사·민간 원문 PDF는 재배포 권한 미확인 → 로컬 보관, 공유 드라이브로 전달 (docs/manual/download-status.md)
+docs/manual/bosch-*.pdf
+docs/manual/parker-*.pdf
+docs/manual/BR-*.pdf

@@ -6,6 +6,7 @@ from typing import Any
 TOOL_STUBS = (
     "lookup_equipment",
     "search_cards",
+    "search_safety_cards",
     "list_handover",
     "propose_handover",
     "get_checklist",
@@ -23,6 +24,7 @@ def search_cards(
     query: str,
     equipment_ids: list[str],
     k: int = 5,
+    observations: dict[str, object] | None = None,
 ) -> list[dict[str, Any]]:
     """Return visible knowledge cards or published manual clauses."""
     raise NotImplementedError("search_cards retrieval adapter is not implemented")
@@ -47,3 +49,12 @@ def propose_handover(
 def get_checklist(*, equipment_ids: list[str]) -> list[dict[str, Any]]:
     """Return applicable checklist rows without recording completion."""
     raise NotImplementedError("get_checklist storage adapter is not implemented")
+
+
+def search_safety_cards(
+    *,
+    equipment_ids: list[str],
+    observations: dict[str, object] | None = None,
+) -> list[dict[str, Any]]:
+    """Return all applicable safety cards (safety_flag=True) regardless of k limit."""
+    raise NotImplementedError("search_safety_cards retrieval adapter is not implemented")

@@ -5,12 +5,20 @@ from typing import Any, Callable, Mapping, Protocol
 
 from shiftlink.agent import tools as tool_stubs
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
+from shiftlink.agent.response import build_response, validate_response
 
 
 class ToolProvider(Protocol):
     def lookup_equipment(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]: ...
 
-    def search_cards(self, **kwargs: object) -> list[dict[str, Any]]: ...
+    def search_cards(
+        self, *, query: str, equipment_ids: list[str], k: int = 5,
+        observations: dict[str, object] | None = None,
+    ) -> list[dict[str, Any]]: ...
+
+    def search_safety_cards(
+        self, *, equipment_ids: list[str], observations: dict[str, object] | None = None
+    ) -> list[dict[str, Any]]: ...
 
     def list_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
@@ -40,8 +48,22 @@ class FixedPipeline:
     ) -> None:
         self.tools = tools
         self.model = model
-        # Keep the skeleton usable until the production response schema is supplied.
-        self.validator = validator or (lambda **values: values["model_output"])
+        # Default validator: build response and validate invariants
+        if validator is None:
+            def default_validator(**values: Any) -> Any:
+                resp = build_response(
+                    mode=values["mode"],
+                    request=values["request"],
+                    tool_results=values["tool_results"],
+                    model_output=values.get("model_output"),
+                )
+                errors = validate_response(resp, values["tool_results"])
+                if errors:
+                    resp.review_queue = True
+                return resp
+            self.validator = default_validator
+        else:
+            self.validator = validator
 
     def run(self, payload: Mapping[str, object]) -> PipelineResult:
         routed = route_request(payload)
@@ -58,7 +80,21 @@ class FixedPipeline:
             tool_results=tool_results,
             model_output=model_output,
         )
-        # Validation is the last in-process gate; it cannot trigger another model call.
+        # One retry only when validation flagged the output; a second failure
+        # stays in the review queue instead of triggering more model calls.
+        if getattr(output, "review_queue", False):
+            model_output = self.model(
+                mode=routed.mode,
+                request=routed.request,
+                tool_results=tool_results,
+                retry=True,
+            )
+            output = self.validator(
+                mode=routed.mode,
+                request=routed.request,
+                tool_results=tool_results,
+                model_output=model_output,
+            )
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
 
     def _run_tools(self, request: QueryRequest | HandoverRequest) -> dict[str, Any]:
@@ -67,11 +103,18 @@ class FixedPipeline:
             shift = None
             query = request.question
             k = request.k
+            observations = request.observations
         else:
             equipment_ids = request.eq_ids
             shift = request.shift
             query = request.memo_text
             k = 5
+            observations = None
+
+        # Convert observations list to dict if present (query mode only)
+        observations_dict = None
+        if observations:
+            observations_dict = {obs.get("signal"): obs.get("value") for obs in observations if "signal" in obs}
 
         # Both modes share equipment and card retrieval, in this fixed order.
         results = {
@@ -80,8 +123,36 @@ class FixedPipeline:
                 query=query,
                 equipment_ids=equipment_ids,
                 k=k,
+                observations=observations_dict,
             ),
         }
+
+        # Keep ranked results separate from the uncapped safety merge for evaluation.
+        results["ranked_cards"] = list(results["cards"])
+
+        # Retrieve safety cards independently (all applicable, not subject to k limit).
+        safety_cards = self.tools.search_safety_cards(
+            equipment_ids=equipment_ids,
+            observations=observations_dict,
+        )
+
+        # Merge safety_cards and cards: remove duplicates by card_id, safety cards first.
+        seen_ids = set()
+        merged_cards = []
+        for card in safety_cards:
+            card_id = card.get("card_id")
+            if card_id and card_id not in seen_ids:
+                merged_cards.append(card)
+                seen_ids.add(card_id)
+        for card in results["cards"]:
+            card_id = card.get("card_id")
+            if card_id and card_id not in seen_ids:
+                merged_cards.append(card)
+                seen_ids.add(card_id)
+        results["cards"] = merged_cards
+        # Keep the raw safety retrieval so the merge itself can be audited independently.
+        results["safety_cards"] = safety_cards
+
         if isinstance(request, HandoverRequest):
             # Existing handovers need an explicit shift and are never read for a query.
             results["handover"] = self.tools.list_handover(

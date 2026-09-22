@@ -1,0 +1,318 @@
+[
+  {
+    "case_id": "F-e2e-001",
+    "category": "F",
+    "type": "normal",
+    "input": {
+      "question": "conveyor safety",
+      "line_id": "LN-0001",
+      "eq_id": "CV",
+      "k": 5,
+      "observations": []
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-conveyor",
+        "know_how": "Do not touch moving belt",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "KOSHA GUIDE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_card_ids": ["K-0108"],
+      "expected_safety_card_ids": ["K-0108"],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Query returns applicable safety cards",
+    "canary_token": "qqz7-dev-f001-query"
+  },
+  {
+    "case_id": "F-e2e-002",
+    "category": "F",
+    "type": "normal",
+    "input": {
+      "question": "hose pressure",
+      "line_id": "LN-0001",
+      "eq_id": "HPU",
+      "k": 5,
+      "observations": [
+        {"signal": "pressure", "value": 8}
+      ]
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0110",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "hose",
+        "scenario": "S1",
+        "title": "safety-hose",
+        "know_how": "Release pressure before disconnect",
+        "rationale": "Hazard",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": ">=",
+            "value": 10
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "EQUIPMENT SPEC",
+        "confidence": 0.95,
+        "provenance": {
+          "seed_ids": ["SD-0110"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_card_ids": [],
+      "expected_safety_card_ids": [],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Pressure 8 fails pressure >= 10: exclude from both ranked and safety results",
+    "canary_token": "qqz7-dev-f002-obs"
+  },
+  {
+    "case_id": "F-e2e-003",
+    "category": "F",
+    "type": "boundary",
+    "input": {
+      "question": "high pressure case",
+      "line_id": "LN-0001",
+      "eq_id": "HPU",
+      "k": 5,
+      "observations": [
+        {"signal": "pressure", "value": 20}
+      ]
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0111",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "pump",
+        "scenario": "S1",
+        "title": "safety-pump",
+        "know_how": "Stop if over limit",
+        "rationale": "Hazard",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": "<=",
+            "value": 12
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "SPEC",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0111"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_card_ids": [],
+      "expected_safety_card_ids": [],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Condition fails: safety card excluded",
+    "canary_token": "qqz7-dev-f003-exclude"
+  },
+  {
+    "case_id": "F-e2e-004",
+    "category": "F",
+    "type": "normal",
+    "input": {
+      "memo_text": "completed work",
+      "eq_ids": ["CV"],
+      "shift": "A"
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-conveyor",
+        "know_how": "Stop before service",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_card_ids": ["K-0108"],
+      "expected_safety_card_ids": ["K-0108"],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Handover mode retrieves safety cards",
+    "canary_token": "qqz7-dev-f004-handover"
+  },
+  {
+    "case_id": "F-e2e-005",
+    "category": "F",
+    "type": "normal",
+    "input": {
+      "question": "query with steps",
+      "line_id": "LN-0001",
+      "eq_id": "CV",
+      "k": 5,
+      "observations": []
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0200",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T3",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "procedure-stop",
+        "symptom": "need to stop",
+        "know_how": "Steps to stop safely",
+        "rationale": "Safety procedure",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": false,
+        "confidence": 0.85,
+        "provenance": {
+          "seed_ids": ["SD-0200"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted",
+        "type_payload": {
+          "steps": [
+            {
+              "step_id": "ST-01",
+              "order": 1,
+              "action": "press stop button",
+              "preconditions": [],
+              "expected_result": "belt stopped",
+              "stop_conditions": []
+            },
+            {
+              "step_id": "ST-02",
+              "order": 2,
+              "action": "lock system",
+              "preconditions": ["belt stopped"],
+              "expected_result": "system locked",
+              "stop_conditions": []
+            }
+          ]
+        }
+      }
+    ],
+    "expected": {
+      "expected_card_ids": ["K-0200"],
+      "expected_safety_card_ids": [],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Response includes steps in order",
+    "canary_token": "qqz7-dev-f005-steps"
+  },
+  {
+    "case_id": "F-e2e-006",
+    "category": "F",
+    "type": "normal",
+    "input": {
+      "question": "test canary",
+      "line_id": "LN-0001",
+      "eq_id": "CV",
+      "k": 5,
+      "observations": []
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety",
+        "know_how": "Stop first",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_card_ids": ["K-0108"],
+      "expected_safety_card_ids": ["K-0108"],
+      "recall_at_k_k_value": 5
+    },
+    "description": "Canary token leakage check",
+    "canary_token": "qqz7-dev-f006-canary-detect"
+  }
+]

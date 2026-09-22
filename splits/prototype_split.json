@@ -1,0 +1,83 @@
+{
+  "policy_version": "1",
+  "recorded_at": "2026-09-22",
+  "contract": "docs/data/policies/source-and-split-contract.md",
+  "catalog": "docs/data/reference/00_plant_and_relations.json",
+  "split_weights": {
+    "kb": 7,
+    "dev": 2,
+    "sealed": 3
+  },
+  "unit": "leakage_connected_group",
+  "preserve_existing_assignments": true,
+  "new_group_assignment": {
+    "encoding": "UTF-8",
+    "input": "shiftlink-split-v1:<group_id>",
+    "hash": "SHA-256",
+    "integer_order": "big-endian",
+    "modulus": 12,
+    "buckets": {
+      "kb": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "dev": [
+        7,
+        8
+      ],
+      "sealed": [
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  "assignments": [
+    {
+      "group_id": "PT-0003",
+      "prototype_ids": [
+        "PT-0003"
+      ],
+      "split": "kb",
+      "basis": "existing_catalog_assignment"
+    },
+    {
+      "group_id": "PT-0007",
+      "prototype_ids": [
+        "PT-0007"
+      ],
+      "split": "dev",
+      "basis": "existing_catalog_assignment"
+    },
+    {
+      "group_id": "PT-0011",
+      "prototype_ids": [
+        "PT-0011"
+      ],
+      "split": "sealed",
+      "basis": "existing_catalog_assignment"
+    },
+    {
+      "group_id": "PT-0015",
+      "prototype_ids": [
+        "PT-0015"
+      ],
+      "split": "kb",
+      "basis": "existing_catalog_assignment"
+    },
+    {
+      "group_id": "PT-0016",
+      "prototype_ids": [
+        "PT-0016"
+      ],
+      "split": "kb",
+      "basis": "existing_catalog_assignment"
+    }
+  ],
+  "conflict_action": "quarantine_new_item_and_review_evaluation_contamination"
+}

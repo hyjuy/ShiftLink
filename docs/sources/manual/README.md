@@ -15,13 +15,19 @@ ShiftLink의 가상 냉연 코일 이송 보조설비(유압장치·감속기·�
 | M-05 | [SAP Digital Manufacturing — Nonconformance Disposition Routings](https://help.sap.com/docs/sap-digital-manufacturing/execution/nonconformance-disposition-routings) | 부적합 분석·수리·복귀·폐기 경로 및 허용범위 이탈 처리 | 영향 코일의 검사·재작업·폐기 업무 시나리오 |
 | M-06 | [SAP — Controlling Production (Buyoff, Hold, Release)](https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-) | 제품 보류·해제 및 보류 상태의 작업 제한 | 영향 코일 식별, 보류, 조치 기록, 해제 시나리오 |
 
+| M-07 | Bosch — HPU 수력학 기초 자료 (파일명 기준, 발행 문서 번호·URL 미기재) | 확인 필요 | `HPU-01` 유압 기초 원리 참고 (로컬 보관, git 미포함) |
+| M-08 | BR — 손상 유형 (파일명 기준, 발행 기관·URL 미확인, 미리보기본 가능성) | 확인 필요 | 손상·고장 유형 분류 참고 (로컬 보관, git 미포함) |
+| M-09 | BR — 재제조 가능성 평가 가이드 (발행 기관·URL 미확인) | 확인 필요 | 부품 재사용·교체 판단 참고 (로컬 보관, git 미포함) |
+
+M-07~M-09는 2026-09-21에 팀원이 제공한 PDF이며, 출처와 재배포 권한을 확인하기 전까지 파일은 리포에 넣지 않는다([다운로드 기록](download-status.md)). 활용 내용은 파일명 기준 추정이므로 본문 검토 후 갱신한다.
+
 M-03은 제조사 기술 해설이며 독립된 운전 매뉴얼은 아니다. M-05와 M-06은 MES 제품 도움말·교육 자료이다. 웹 문서는 변경될 수 있고, 검색 시점의 공개 여부가 최신 적용본임을 의미하지 않는다. M-04는 2012년판이므로 실제 적용 모델·펌웨어와 일치하는지 별도 확인해야 한다.
 
 ## 자료별 활용 메모
 
 ### M-01 — 유압 펌프
 
-압력·유량이 발생하지 않거나 유량이 부족한 상황에서 회전, 흡입 조건, 유면, 밸브 계통 등 여러 후보를 구분하는 진단 구조를 참고한다. 저압 신호만으로 펌프 고장을 확정하는 정답을 만들지 않는다. 프로젝트 `../data/00_plant_and_relations.json`의 `SD-002` 참고문헌과 연결된다.
+압력·유량이 발생하지 않거나 유량이 부족한 상황에서 회전, 흡입 조건, 유면, 밸브 계통 등 여러 후보를 구분하는 진단 구조를 참고한다. 저압 신호만으로 펌프 고장을 확정하는 정답을 만들지 않는다. 프로젝트 `../../data/reference/00_plant_and_relations.json`의 `SD-002` 참고문헌과 연결된다.
 
 ### M-02 — 감속기
 

@@ -11,12 +11,23 @@
 | `KnowledgeCard` | `shiftlink/agent/schemas.py` | K-01 지식 카드 스키마 | 유현준 |
 | `Event` | `shiftlink/agent/schemas.py` | 사건 스키마 (기존 9필드) | 유현준 |
 | `Artifact` | `shiftlink/agent/schemas.py` | 산출물 스키마 | 유현준 |
+| `HandoverMethod` | `shiftlink/agent/schemas.py` | D-27 T4 인수인계 방법 (v1.0) | 유현준 |
+| `ResolutionStep` | `shiftlink/agent/schemas.py` | D-28 T3 단계 (v1.0) | 유현준 |
+| `FailedAttempt` | `shiftlink/agent/schemas.py` | D-29 시도·실패 기록 (v1.0) | 유현준 |
+| `TypePayload` | `shiftlink/agent/schemas.py` | 암묵지 유형별 payload (v1.0) | 유현준 |
+| `V09ConversionResult` | `shiftlink/agent/compat.py` | v0.9 → v1.0 변환 결과 | 유현준 |
 | `QueryRequest` | `shiftlink/agent/router.py` | 질의 모드 입력 | 유현준 |
 | `HandoverRequest` | `shiftlink/agent/router.py` | 인계 모드 입력 | 유현준 |
 | `RoutedRequest` | `shiftlink/agent/router.py` | 라우터 판정 결과 | 유현준 |
-| `ToolProvider` | `shiftlink/agent/pipeline.py` | 도구 5종 Protocol | 유현준 |
+| `ToolProvider` | `shiftlink/agent/pipeline.py` | 도구 6종 Protocol (v1.0) | 유현준 |
 | `PipelineResult` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 출력 | 유현준 |
 | `FixedPipeline` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 본체 | 유현준 |
+| `AgentResponse` | `shiftlink/agent/response.py` | D-26~29 응답 구조화 모델 (v1.0) | 유현준 |
+| `SafetyNotice` | `shiftlink/agent/response.py` | 안전 공지 렌더링 (v1.0) | 유현준 |
+| `StepRender` | `shiftlink/agent/response.py` | T3 단계 렌더링 (v1.0) | 유현준 |
+| `HandoverMethodRender` | `shiftlink/agent/response.py` | T4 인계 방법 렌더링 (v1.0) | 유현준 |
+| `RestartFailure` | `shiftlink/agent/response.py` | 재가동 실패 렌더링 (v1.0) | 유현준 |
+| `InMemoryToolProvider` | `shiftlink/rag/retrieval.py` | 인메모리 KB 검색 구현 (v1.0) | 유현준 |
 | `Configuration` | `shiftlink/mes/contracts.py` | 모의 MES 구성 버전(설비·관계·경로·시나리오·배치 묶음, config_id=sha256) | 유현준 |
 | `EquipmentConfig` | `shiftlink/mes/contracts.py` | 설비 구성(논리 위치 equipment_id + 합성 자산 asset_id + 프로필) | 유현준 |
 | `SignalSpec` | `shiftlink/mes/contracts.py` | 신호 정의(단위·정상범위·필수 여부) | 유현준 |
@@ -39,12 +50,18 @@
 
 | 이름 | 위치 | 뜻 | 담당자 |
 | --- | --- | --- | --- |
+| `convert_card_v09()` | `shiftlink/agent/compat.py` | v0.9 카드를 v1.0으로 변환 (needs_review/converted/rejected) | 유현준 |
 | `route_request()` | `shiftlink/agent/router.py` | 입력을 질의/인계 모드로 판정 | 유현준 |
 | `lookup_equipment()` | `shiftlink/agent/tools.py` | 도구: 장비 조회 | 유현준 |
 | `search_cards()` | `shiftlink/agent/tools.py` | 도구: 카드 검색 | 유현준 |
+| `search_safety_cards()` | `shiftlink/agent/tools.py` | 도구: 안전 카드 전수 검색 (v1.0) | 유현준 |
 | `list_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 목록 | 유현준 |
 | `propose_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 제안 | 유현준 |
 | `get_checklist()` | `shiftlink/agent/tools.py` | 도구: 체크리스트 조회 | 유현준 |
+| `build_response()` | `shiftlink/agent/response.py` | 도구 결과 → 응답 구조화 (v1.0) | 유현준 |
+| `render_response()` | `shiftlink/agent/response.py` | 응답 → 결정적 텍스트 렌더 (v1.0) | 유현준 |
+| `validate_response()` | `shiftlink/agent/response.py` | 응답 불변식 검증 (v1.0) | 유현준 |
+| `check_card_rules()` | `shiftlink/rag/retrieval.py` | 카드 P5 규칙 검사 (v1.0) | 유현준 |
 | `main()` | `shiftlink/data/__init__.py` | 데이터 파이프라인 실행 계획 CLI 진입점 | 유현준 |
 | `from_catalog()` | `shiftlink/mes/configuration.py` | 기준정보 JSON → 기본 Configuration | 유현준 |
 | `load_draft()` | `shiftlink/mes/configuration.py` | 사용자 구성 초안 로딩(스키마 검사, 해시 재계산) | 유현준 |
@@ -72,6 +89,8 @@
 | `EV-` | Event (사건) |
 | `K-` | KnowledgeCard |
 | `PT-` | EventPrototype (신규 제안, 미승인) |
+| `MD-` | ManualDocument (매뉴얼 문서 — 설계 예제 `docs/data/`에서 사용, 미승인 제안) |
+| `MS-` | ManualSection (매뉴얼 절 — 위와 동일) |
 | `R-<영역 2자>` | 요구사항 ID (예: `R-PL01`, `R-SC01`) — §13.1 |
 
 새 엔티티 종류가 생기면(예: 관계·매뉴얼 등, 전부 미승인) 접두어를 여기 먼저 등록하고 코드에 쓴다.

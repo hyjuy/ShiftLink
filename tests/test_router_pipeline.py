@@ -54,6 +54,10 @@ class RecordingTools:
         self.calls.append("search_cards")
         return [{"card_id": "K-0001"}]
 
+    def search_safety_cards(self, **_: object) -> list[dict[str, object]]:
+        self.calls.append("search_safety_cards")
+        return [{"card_id": "K-0002", "safety_flag": True}]
+
     def list_handover(self, **_: object) -> list[dict[str, object]]:
         self.calls.append("list_handover")
         return []
@@ -90,6 +94,7 @@ def test_query_pipeline_excludes_handover_tools_and_calls_model_once() -> None:
     assert tools.calls == [
         "lookup_equipment",
         "search_cards",
+        "search_safety_cards",
         "get_checklist",
         "model",
     ]
@@ -108,6 +113,7 @@ def test_handover_pipeline_lists_existing_items_before_one_model_call() -> None:
     assert tools.calls == [
         "lookup_equipment",
         "search_cards",
+        "search_safety_cards",
         "list_handover",
         "get_checklist",
         "model",
@@ -115,11 +121,14 @@ def test_handover_pipeline_lists_existing_items_before_one_model_call() -> None:
     assert model.calls == 1
 
 
-def test_five_tool_stubs_are_explicitly_unimplemented() -> None:
+def test_six_tool_stubs_are_explicitly_unimplemented() -> None:
     calls = {
         "lookup_equipment": lambda: tool_stubs.lookup_equipment(equipment_ids=["RT-01"]),
         "search_cards": lambda: tool_stubs.search_cards(
             query="진동", equipment_ids=["RT-01"]
+        ),
+        "search_safety_cards": lambda: tool_stubs.search_safety_cards(
+            equipment_ids=["RT-01"]
         ),
         "list_handover": lambda: tool_stubs.list_handover(equipment_ids=["RT-01"]),
         "propose_handover": lambda: tool_stubs.propose_handover(extraction_result={}),

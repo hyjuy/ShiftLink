@@ -1,0 +1,393 @@
+[
+  {
+    "case_id": "A-safety-001",
+    "category": "A",
+    "type": "normal",
+    "input": {
+      "equipment_ids": ["CV"],
+      "observations": {}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-conveyor",
+        "know_how": "Do not touch moving belt",
+        "rationale": "Hazard risk",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "KOSHA GUIDE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0108"],
+      "expected_count": 1
+    },
+    "description": "Single safety card for CV equipment",
+    "canary_token": "qqz7-dev-a001-single"
+  },
+  {
+    "case_id": "A-safety-002",
+    "category": "A",
+    "type": "normal",
+    "input": {
+      "equipment_ids": ["HPU"],
+      "observations": {"pressure": 15}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0110",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "hose",
+        "scenario": "S1",
+        "title": "safety-hose",
+        "know_how": "Release pressure before disconnect",
+        "rationale": "Leakage hazard",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": ">=",
+            "value": 10,
+            "unit": "bar"
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "KOSHA STANDARD",
+        "confidence": 0.95,
+        "provenance": {
+          "seed_ids": ["SD-0110"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0110"],
+      "expected_count": 1
+    },
+    "description": "Safety card with verified condition",
+    "canary_token": "qqz7-dev-a002-cond-ok"
+  },
+  {
+    "case_id": "A-safety-003",
+    "category": "A",
+    "type": "boundary",
+    "input": {
+      "equipment_ids": ["HPU"],
+      "observations": {"pressure": 15}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0111",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "pump",
+        "scenario": "S1",
+        "title": "safety-pump",
+        "know_how": "Stop if pressure exceeds 12bar",
+        "rationale": "Overpressure damage",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": "<=",
+            "value": 12,
+            "unit": "bar"
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "EQUIPMENT SPEC",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0111"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": [],
+      "expected_count": 0
+    },
+    "description": "Safety card excluded when condition fails",
+    "canary_token": "qqz7-dev-a003-cond-fail"
+  },
+  {
+    "case_id": "A-safety-004",
+    "category": "A",
+    "type": "normal",
+    "input": {
+      "equipment_ids": ["CV"],
+      "observations": {}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-cv",
+        "know_how": "Stop before maintenance",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      },
+      {
+        "card_id": "K-0109",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "roller",
+        "scenario": "S1",
+        "title": "safety-roller",
+        "know_how": "Lock rollers",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0109"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0108", "K-0109"],
+      "expected_count": 2
+    },
+    "description": "Multiple safety cards for multiple equipment",
+    "canary_token": "qqz7-dev-a004-multi"
+  },
+  {
+    "case_id": "A-safety-005",
+    "category": "A",
+    "type": "boundary",
+    "input": {
+      "equipment_ids": ["CV"],
+      "observations": {}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-cv",
+        "know_how": "Stop first",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0108"],
+      "expected_count": 1
+    },
+    "description": "No duplicates in results",
+    "canary_token": "qqz7-dev-a005-dedup"
+  },
+  {
+    "case_id": "A-safety-006",
+    "category": "A",
+    "type": "boundary",
+    "input": {
+      "equipment_ids": ["CV"],
+      "observations": {"unknown_signal": 100}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-cv",
+        "know_how": "Stop first",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0108"],
+      "expected_count": 1
+    },
+    "description": "Unknown signal: conservative inclusion",
+    "canary_token": "qqz7-dev-a006-unk-sig"
+  },
+  {
+    "case_id": "A-safety-007",
+    "category": "A",
+    "type": "error",
+    "input": {
+      "equipment_ids": ["GR"],
+      "observations": {}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0108",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "CV",
+        "component": "belt",
+        "scenario": "S1",
+        "title": "safety-cv",
+        "know_how": "Stop",
+        "rationale": "Hazard",
+        "conditions": [],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.9,
+        "provenance": {
+          "seed_ids": ["SD-0108"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": [],
+      "expected_count": 0
+    },
+    "description": "No cards for non-matching equipment",
+    "canary_token": "qqz7-dev-a007-no-match"
+  },
+  {
+    "case_id": "A-safety-008",
+    "category": "A",
+    "type": "boundary",
+    "input": {
+      "equipment_ids": ["HPU"],
+      "observations": {"pressure": 12}
+    },
+    "fixture_cards": [
+      {
+        "card_id": "K-0110",
+        "version": "1.0",
+        "grade": "L1",
+        "tacit_type": "T5",
+        "equipment": "HPU",
+        "component": "hose",
+        "scenario": "S1",
+        "title": "safety-hose",
+        "know_how": "Release pressure",
+        "rationale": "Hazard",
+        "conditions": [
+          {
+            "signal": "pressure",
+            "op": ">=",
+            "value": 12,
+            "unit": "bar"
+          }
+        ],
+        "exclusions": [],
+        "safety_flag": true,
+        "safety_basis": "RULE",
+        "confidence": 0.95,
+        "provenance": {
+          "seed_ids": ["SD-0110"],
+          "persona_id": "P-01",
+          "event_ids": [],
+          "generator": "test",
+          "generated_at": "2026-09-21T00:00:00+00:00"
+        },
+        "split": "kb",
+        "status": "accepted"
+      }
+    ],
+    "expected": {
+      "expected_safety_card_ids": ["K-0110"],
+      "expected_count": 1
+    },
+    "description": "Boundary value: >= 12 includes 12",
+    "canary_token": "qqz7-dev-a008-boundary"
+  }
+]

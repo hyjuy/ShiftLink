@@ -1,0 +1,375 @@
+[
+  {
+    "case_id": "D-restart-001",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0400",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0400"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "normal_stop_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-0001",
+            "restart_type": "normal_stop_restart",
+            "action": "restart",
+            "observed_result": "success",
+            "failure_reason": null,
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "T6 with known restart_type and matching attempt",
+    "canary_token": "qqz7-dev-d001-known"
+  },
+  {
+    "case_id": "D-restart-002",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0401",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0401"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "unknown",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-0002",
+            "restart_type": "normal_stop_restart",
+            "action": "restart",
+            "observed_result": "fail",
+            "failure_reason": "Power",
+            "evidence_ids": []
+          },
+          {
+            "attempt_id": "AT-0003",
+            "restart_type": "maintenance_restart",
+            "action": "reset",
+            "observed_result": "fail",
+            "failure_reason": null,
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "T6 with unknown restart_type allows mixed attempts",
+    "canary_token": "qqz7-dev-d002-unknown"
+  },
+  {
+    "case_id": "D-restart-003",
+    "category": "D",
+    "type": "error",
+    "input": {
+      "card_id": "K-0402",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0402"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "abnormal_stop_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-0004",
+            "restart_type": "normal_stop_restart",
+            "action": "restart",
+            "observed_result": "fail",
+            "failure_reason": "Wrong",
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Type conflict rejected",
+    "canary_token": "qqz7-dev-d003-conflict"
+  },
+  {
+    "case_id": "D-restart-004",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0403",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0403"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "maintenance_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-0005",
+            "restart_type": "maintenance_restart",
+            "action": "check",
+            "observed_result": "ok",
+            "failure_reason": null,
+            "evidence_ids": ["K-0403", "EV-0003"]
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "Evidence refs preserved",
+    "canary_token": "qqz7-dev-d004-evidence"
+  },
+  {
+    "case_id": "D-restart-005",
+    "category": "D",
+    "type": "error",
+    "input": {
+      "card_id": "K-0404",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0404"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "T6 without restart_type rejected",
+    "canary_token": "qqz7-dev-d005-no-type"
+  },
+  {
+    "case_id": "D-restart-006",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0405",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T5",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": true,
+      "safety_basis": "rule",
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0405"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "normal_stop_restart"
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "Non-T6 with restart_type allowed",
+    "canary_token": "qqz7-dev-d006-t5-rest"
+  },
+  {
+    "case_id": "D-restart-007",
+    "category": "D",
+    "type": "normal",
+    "input": {
+      "card_id": "K-0406",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0406"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "normal_stop_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-0006",
+            "restart_type": "unknown",
+            "action": "retry",
+            "observed_result": "unk",
+            "failure_reason": null,
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid"
+    },
+    "description": "Known card with unknown attempt allowed",
+    "canary_token": "qqz7-dev-d007-unk-attempt"
+  },
+  {
+    "case_id": "D-restart-008",
+    "category": "D",
+    "type": "error",
+    "input": {
+      "card_id": "K-0407",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T6",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-0407"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "restart_type": "normal_stop_restart",
+        "tried_and_failed": [
+          {
+            "attempt_id": "AT-INVALID",
+            "restart_type": "normal_stop_restart",
+            "action": "restart",
+            "observed_result": "result",
+            "failure_reason": null,
+            "evidence_ids": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid"
+    },
+    "description": "Invalid attempt_id pattern rejected",
+    "canary_token": "qqz7-dev-d008-bad-id"
+  }
+]

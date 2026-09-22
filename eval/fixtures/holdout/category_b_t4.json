@@ -1,0 +1,141 @@
+[
+  {
+    "case_id": "B-holdout-001",
+    "category": "B",
+    "type": "normal",
+    "input": {
+      "card_id": "K-2000",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "handover-eng",
+      "know_how": "transfer info",
+      "rationale": "protocol",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-2000"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["part_number"],
+          "recipient_role": "engineer",
+          "timing": "immediately",
+          "channel": "email_notification",
+          "acknowledgement": "read_receipt"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "handover_method_present": true,
+      "notes": "Different context scenario from dev"
+    },
+    "description": "Holdout: T4 with different context scenario",
+    "canary_token": "qqz7-holdout-b001-eng"
+  },
+  {
+    "case_id": "B-holdout-002",
+    "category": "B",
+    "type": "error",
+    "input": {
+      "card_id": "K-2001",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-2001"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["info"],
+          "recipient_role": "lead",
+          "timing": "now",
+          "channel": "verbal",
+          "acknowledgement": ""
+        }
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "acknowledgement must be NonBlank",
+      "notes": "Empty string validation"
+    },
+    "description": "Holdout: Empty acknowledgement field rejected",
+    "canary_token": "qqz7-holdout-b002-empty-ack"
+  },
+  {
+    "case_id": "B-holdout-003",
+    "category": "B",
+    "type": "normal",
+    "input": {
+      "card_id": "K-2002",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T4",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-2002"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "handover_method": {
+          "required_context": ["status_a", "status_b", "status_c"],
+          "recipient_role": "supervisor",
+          "timing": "end_of_week",
+          "channel": "report_document",
+          "acknowledgement": "manager_signature"
+        },
+        "tried_and_failed": []
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "required_context_count": 3,
+      "notes": "Multiple context items allowed"
+    },
+    "description": "Holdout: Multiple required_context items",
+    "canary_token": "qqz7-holdout-b003-multi-ctx"
+  }
+]

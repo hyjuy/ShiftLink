@@ -1,0 +1,119 @@
+[
+  {
+    "case_id": "E-holdout-001",
+    "category": "E",
+    "type": "normal",
+    "input": {
+      "card_id": "K-5000",
+      "version": "0.9",
+      "grade": "L1",
+      "tacit_type": "T2",
+      "equipment": "RT",
+      "component": "bearing",
+      "scenario": "S3",
+      "title": "베어링 진동",
+      "know_how": "진동 계측 및 정비",
+      "rationale": "기술 기준",
+      "conditions": [{"signal": "vibration", "op": ">", "value": 2.5}],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.82,
+      "provenance": {
+        "seed_ids": ["SD-100"],
+        "persona_id": "V-10",
+        "event_ids": [],
+        "generator": "gen-model",
+        "generated_at": "2026-09-10T10:00:00+09:00"
+      },
+      "split": "kb",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "converted",
+      "converted_status": "draft",
+      "notes": "Different scenario (S3) from dev"
+    },
+    "description": "Holdout: T2 with S3 scenario converts",
+    "canary_token": "qqz7-holdout-e001-s3"
+  },
+  {
+    "case_id": "E-holdout-002",
+    "category": "E",
+    "type": "error",
+    "input": {
+      "card_id": "K-5001",
+      "tacit_type": "T1",
+      "equipment": "COMMON",
+      "component": "system",
+      "scenario": "S1",
+      "title": "일반",
+      "know_how": "방법",
+      "rationale": "근거",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.5,
+      "provenance": null,
+      "split": "kb",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "needs_review",
+      "deficiencies": ["invalid provenance"],
+      "notes": "Null provenance causes needs_review"
+    },
+    "description": "Holdout: Null provenance causes needs_review",
+    "canary_token": "qqz7-holdout-e002-null-prov"
+  },
+  {
+    "case_id": "E-holdout-003",
+    "category": "E",
+    "type": "error",
+    "input": null,
+    "expected": {
+      "outcome": "rejected",
+      "deficiencies": ["Input is not a dict"],
+      "notes": "Null input rejected"
+    },
+    "description": "Holdout: Null input rejected",
+    "canary_token": "qqz7-holdout-e003-null-input"
+  },
+  {
+    "case_id": "E-holdout-004",
+    "category": "E",
+    "type": "normal",
+    "input": {
+      "card_id": "K-5002",
+      "version": "1.0",
+      "grade": "L0",
+      "tacit_type": "T1",
+      "equipment": "GR",
+      "component": "pinion",
+      "scenario": "S2",
+      "title": "기어 이상음",
+      "symptom": "저주파 울음",
+      "know_how": "재정비",
+      "rationale": "마모",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.65,
+      "provenance": {
+        "seed_ids": ["SD-101"],
+        "persona_id": "V-11",
+        "event_ids": ["EV-0050"],
+        "generator": "gen-model",
+        "generated_at": "2026-09-11T10:00:00+09:00"
+      },
+      "split": "kb",
+      "status": "draft"
+    },
+    "expected": {
+      "outcome": "converted",
+      "converted_status": "draft",
+      "notes": "T1 with S2 scenario"
+    },
+    "description": "Holdout: T1 with different scenario",
+    "canary_token": "qqz7-holdout-e004-t1-s2"
+  }
+]

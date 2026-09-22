@@ -1,0 +1,168 @@
+[
+  {
+    "case_id": "C-holdout-001",
+    "category": "C",
+    "type": "normal",
+    "input": {
+      "card_id": "K-3000",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "reservoir",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "low level",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-3000"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-10",
+            "order": 1,
+            "action": "check_level",
+            "preconditions": [],
+            "expected_result": "level_verified",
+            "stop_conditions": []
+          },
+          {
+            "step_id": "ST-20",
+            "order": 2,
+            "action": "refill",
+            "preconditions": [],
+            "expected_result": "tank_full",
+            "stop_conditions": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "order_ascending": true,
+      "notes": "Different step IDs from dev"
+    },
+    "description": "Holdout: T3 with different step sequences",
+    "canary_token": "qqz7-holdout-c001-seq"
+  },
+  {
+    "case_id": "C-holdout-002",
+    "category": "C",
+    "type": "error",
+    "input": {
+      "card_id": "K-3001",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "pump",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "issue",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-3001"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-05",
+            "order": 3,
+            "action": "step1",
+            "preconditions": [],
+            "expected_result": "res1",
+            "stop_conditions": []
+          },
+          {
+            "step_id": "ST-04",
+            "order": 1,
+            "action": "step2",
+            "preconditions": [],
+            "expected_result": "res2",
+            "stop_conditions": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "invalid",
+      "error_reason": "T3 steps must be in ascending order by order field",
+      "notes": "Out of order: [3, 1]"
+    },
+    "description": "Holdout: Steps out of order rejected",
+    "canary_token": "qqz7-holdout-c002-ooo"
+  },
+  {
+    "case_id": "C-holdout-003",
+    "category": "C",
+    "type": "normal",
+    "input": {
+      "card_id": "K-3002",
+      "version": "1.0",
+      "grade": "L1",
+      "tacit_type": "T3",
+      "equipment": "HPU",
+      "component": "system",
+      "scenario": "S1",
+      "title": "test",
+      "symptom": "symptom",
+      "know_how": "test",
+      "rationale": "test",
+      "conditions": [],
+      "exclusions": [],
+      "safety_flag": false,
+      "confidence": 0.8,
+      "provenance": {
+        "seed_ids": ["SD-3002"],
+        "persona_id": "P-01",
+        "event_ids": [],
+        "generator": "test",
+        "generated_at": "2026-09-21T00:00:00+00:00"
+      },
+      "split": "dev",
+      "status": "draft",
+      "type_payload": {
+        "steps": [
+          {
+            "step_id": "ST-100",
+            "order": 1,
+            "action": "prepare_workspace",
+            "preconditions": [],
+            "expected_result": "ready",
+            "stop_conditions": []
+          }
+        ]
+      }
+    },
+    "expected": {
+      "outcome": "valid",
+      "single_step_valid": true,
+      "notes": "Single step T3 card is valid"
+    },
+    "description": "Holdout: Single-step T3 card valid",
+    "canary_token": "qqz7-holdout-c003-single"
+  }
+]

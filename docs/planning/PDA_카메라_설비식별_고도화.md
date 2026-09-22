@@ -729,7 +729,7 @@ GET /api/equipment/scan/recent?limit=5
 
 ## 11. 네이밍 레지스트리 등록 초안
 
-> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/collaboration/naming-registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
+> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/collaboration/naming_registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
 
 **클래스**
 

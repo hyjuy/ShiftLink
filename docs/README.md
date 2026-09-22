@@ -43,7 +43,7 @@
 
 ## 관리 기준과 이동 기록
 
-- `docs/data`는 작성·검토용 자료다. 저장소 루트의 `mes-data/`는 모의 MES 실행 DB이므로 별도로 관리한다.
+- `docs/data`는 작성·검토용 자료다. 저장소 루트의 `mes_data/`는 모의 MES 실행 DB이므로 별도로 관리한다.
 - 현재 카드 작성 기준은 `seeds/카드_작성_가이드_초안.md` 한 곳을 따른다. v0.9 문서는 archive에 보관한다.
 - 과거 보고서의 검증 결과는 당시 기록이며 현재 상태의 재검증을 뜻하지 않는다.
 - 기존 JSON·PDF·bundle 내용은 폴더 정리 과정에서 변경하지 않았다. 이동한 Markdown의 상대 링크와 활성 경로 참조는 갱신했다.
@@ -53,7 +53,7 @@
 |---|---|
 | `docs/manual/` | `docs/sources/manual/` |
 | `docs/safety_sources_18/` | `docs/sources/safety/` |
-| `docs/naming-registry/` | `docs/collaboration/naming-registry/` |
+| `docs/naming-registry/` | `docs/collaboration/naming_registry/` |
 | `docs/guides/branching.md` | `docs/collaboration/branching.md` |
 | `docs/guides/카드_작성_가이드_초안.md` | `docs/archive/카드_작성_가이드_초안.md` |
 

@@ -1,11 +1,22 @@
 """Pipeline data contracts for schema version 1.0."""
 
+import operator
 from datetime import datetime
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Callable, Literal, Mapping
 
 from pydantic import BaseModel, Field, StringConstraints, model_validator
 
 SCHEMA_VERSION = "1.0"
+
+# Allowed Condition operators (계약 §4.2). Anything else evaluates to unknown.
+_COMPARISONS: dict[str, Callable[[Any, Any], bool]] = {
+    "==": operator.eq,
+    "!=": operator.ne,
+    ">": operator.gt,
+    ">=": operator.ge,
+    "<": operator.lt,
+    "<=": operator.le,
+}
 
 
 Split = Literal["kb", "dev", "sealed"]
@@ -20,6 +31,24 @@ class Condition(BaseModel):
     op: str
     value: Any
     unit: str | None = None
+
+    def evaluate(self, observations: Mapping[str, Any] | None) -> bool | None:
+        """
+        Deterministic condition match (계약 §4.2).
+
+        True/False when the signal is observed and comparable, None when the
+        signal is missing or not comparable (unknown — never treated as False).
+        """
+        if not observations or self.signal not in observations:
+            return None
+        observed = observations[self.signal]
+        comparison = _COMPARISONS.get(self.op)
+        if comparison is None:
+            return None
+        try:
+            return comparison(observed, self.value)
+        except TypeError:
+            return None
 
 
 class HandoverMethod(BaseModel):

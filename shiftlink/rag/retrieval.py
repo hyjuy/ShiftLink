@@ -1,9 +1,10 @@
 """In-memory tool provider for knowledge cards retrieval."""
 
-from typing import Any, Annotated
 import re
-from dataclasses import dataclass
-from shiftlink.agent.schemas import KnowledgeCard, Condition
+from copy import deepcopy
+from typing import Any
+
+from shiftlink.agent.schemas import Condition, KnowledgeCard
 
 
 GENERATION_PROMPT_TEMPLATE = """## 카드 생성 규칙 (D-26~29)
@@ -49,31 +50,11 @@ def _evaluate_condition(cond: Condition, observations: dict[str, Any] | None) ->
     """
     Evaluate a condition against observations.
     Returns: True if condition is met, False if not met, None if unverifiable (signal missing).
+
+    Single source of truth is Condition.evaluate (schemas.py) so the pipeline
+    applies the same §4.2 rule to the merged card list.
     """
-    if not observations or cond.signal not in observations:
-        return None  # Signal missing, unknown status
-
-    obs_value = observations[cond.signal]
-    op = cond.op
-    target = cond.value
-
-    try:
-        if op == "==":
-            return obs_value == target
-        elif op == "!=":
-            return obs_value != target
-        elif op == ">":
-            return obs_value > target
-        elif op == ">=":
-            return obs_value >= target
-        elif op == "<":
-            return obs_value < target
-        elif op == "<=":
-            return obs_value <= target
-        else:
-            return None  # Invalid op
-    except (TypeError, ValueError):
-        return None  # Comparison failed
+    return cond.evaluate(observations)
 
 
 def _calculate_token_overlap(query: str, text: str) -> int:
@@ -158,7 +139,7 @@ class InMemoryToolProvider:
         self.checklist_db = checklist_db or []
 
     def lookup_equipment(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]:
-        """Return equipment metadata."""
+        """Return equipment metadata. Rows are copies — tools are read only."""
         results = []
         for eq_id in equipment_ids:
             eq = next(
@@ -166,7 +147,7 @@ class InMemoryToolProvider:
                 None,
             )
             if eq:
-                results.append(eq)
+                results.append(deepcopy(eq))
         return results
 
     def search_cards(
@@ -281,22 +262,20 @@ class InMemoryToolProvider:
     def list_handover(
         self, *, equipment_ids: list[str], shift: str | None = None
     ) -> list[dict[str, Any]]:
-        """Return existing handover items."""
-        results = [
-            h for h in self.handover_db
+        """Return existing handover items as copies; nothing is accepted or closed."""
+        return [
+            deepcopy(h)
+            for h in self.handover_db
             if h.get("equipment_id") in equipment_ids
             and (shift is None or h.get("shift") == shift)
         ]
-        return results
 
     def propose_handover(self, *, extraction_result: dict[str, Any]) -> list[dict[str, Any]]:
         """Queue handover candidates (stub implementation)."""
         return []
 
     def get_checklist(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]:
-        """Return applicable checklists."""
-        results = [
-            c for c in self.checklist_db
-            if c.get("equipment_id") in equipment_ids
+        """Return applicable checklists as copies; completion is never recorded."""
+        return [
+            deepcopy(c) for c in self.checklist_db if c.get("equipment_id") in equipment_ids
         ]
-        return results

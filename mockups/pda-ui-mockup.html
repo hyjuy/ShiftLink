@@ -1,0 +1,1092 @@
+<meta charset="utf-8">
+<title>ShiftLink PDA — UI 구상 (피그마 임포트용)</title>
+<style>
+  /* ────────────────────────────────────────────────────────────────
+     ShiftLink PDA UI 구상 · 피그마 임포트용 목업
+     ────────────────────────────────────────────────────────────────
+     상태   : 구상(검토용) · 커밋 전 · 깃 추적되지 않음
+     출처   : docs/planning/PDA_카메라_설비식별_고도화.md §7
+     데이터 : docs/data/00_plant_and_relations.json (설비 10대)
+              docs/data/01_kb_cards_shared.json + EV-0031/32/33 (카드 12장)
+              EV-0031 handover_records (인계 1건, 미종료 3건)
+     구성   : 분리형 — PDA(카메라+브라우저) ↔ LAN/Wi-Fi ↔ 거치형 Jetson
+
+     피그마 임포트(html.to.design) 대비 규칙
+       · 고정 px만 사용 — vw/vh/aspect-ratio 없음
+       · flex + gap 만 사용 → 오토레이아웃으로 변환되게
+       · ::before/::after 로 보이는 내용 만들지 않음 (임포트 시 유실)
+       · backdrop-filter / conic-gradient / position:sticky 미사용
+       · 다크 단일 테마 — 설계 §7.6이 다크 고정이므로 테마 분기 없음
+       · 모든 글자는 실제 텍스트 노드 (배경 이미지·아이콘 폰트 없음)
+     ──────────────────────────────────────────────────────────────── */
+  :root{
+    --bg:#0A0D11; --surface:#161B22; --surface-2:#1E252E; --edge:#2B333D;
+    --tx:#F3F6F9; --tx-2:#AEB9C4; --tx-3:#7C8792;
+    --safety:#F0453C; --safety-bg:#3A0F0D; --safety-edge:#8E241E;
+    --ok:#31C25E; --warn:#FFB020; --fail:#FF8A3D; --scan:#38C6F2;
+    --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
+    --board:#0E1216; --board-line:#232A32;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--board);color:var(--tx);
+    font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.5;padding:40px;
+  }
+  .mono{font-family:Consolas,"D2Coding",monospace}
+  b{font-weight:700}
+
+  .board-head{display:flex;flex-direction:column;gap:6px;padding-bottom:20px;margin-bottom:28px;
+    border-bottom:1px solid var(--board-line);width:1180px}
+  .board-head .t{font-size:18px;font-weight:700}
+  .board-head .s{font-size:13px;color:var(--tx-2)}
+  .board-head .n{font-size:12px;color:var(--tx-3)}
+
+  .sec{display:flex;flex-direction:column;gap:18px;margin-bottom:52px}
+  .sec-t{display:flex;flex-direction:column;gap:4px}
+  .sec-t .a{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--scan)}
+  .sec-t .b{font-size:16px;font-weight:700}
+  .sec-t .c{font-size:12.5px;color:var(--tx-2);width:920px}
+  .rack{display:flex;flex-wrap:wrap;gap:32px}
+
+  .frame{display:flex;flex-direction:column;gap:8px;width:360px}
+  .frame-lb{display:flex;gap:8px;font-size:12px;font-weight:700;color:var(--scan)}
+  .frame-lb .num{color:var(--tx-2)}
+  .frame-nt{font-size:11.5px;color:var(--tx-3);width:360px}
+
+  .note{width:920px;border:1px solid var(--board-line);border-radius:10px;background:var(--surface);
+    padding:18px;display:flex;flex-direction:column;gap:10px}
+  .note .h{font-size:14px;font-weight:700}
+  .note .p{font-size:12.5px;color:var(--tx-2)}
+  .note .li{display:flex;gap:9px;font-size:12.5px;color:var(--tx-2)}
+  .note .li .n{color:var(--scan);font-weight:700;flex-shrink:0;width:16px}
+
+  /* ── PDA 화면 ─────────────────────────────────────── */
+  /* 프레임 높이 — 760px 는 PDA 첫 화면 크기다. 내용이 그보다 길면 프레임을 늘려
+     전부 보이게 한다. 앱에서는 그 초과분이 스크롤 영역이고, 안전 띠는 sticky 고정된다.
+     목업을 760px 로 잘라 두면 보여주려고 만든 내용이 안 보이고 피그마에도 잘린 채
+     들어간다. 스크롤하는 화면은 긴 프레임으로 그리는 것이 정석이다. */
+  .screen{width:360px;min-height:760px;background:var(--bg);border:1px solid var(--edge);
+    border-radius:16px;display:flex;flex-direction:column;font-size:14px}
+
+  .sysbar{height:26px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;font-size:10.5px;color:var(--tx-3);flex-shrink:0}
+  .appbar{height:50px;display:flex;align-items:center;gap:8px;padding:0 14px;
+    border-bottom:1px solid var(--edge);flex-shrink:0}
+  .appbar .t{font-size:16px;font-weight:700;flex-grow:1}
+  .appbar .t.sub{font-size:14px;font-weight:600;color:var(--tx-2)}
+  .appbar .ic{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+    font-size:17px;color:var(--tx-2);flex-shrink:0}
+
+  .net{height:42px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13px;
+    color:var(--tx-2);background:var(--surface);border-bottom:1px solid var(--edge);flex-shrink:0}
+  .net.warn{background:#2A1E06;border-bottom-color:var(--warn);color:#FFD98A}
+  .dot{width:9px;height:9px;border-radius:5px;background:var(--tx-3);flex-shrink:0}
+  .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)}
+  .dot.fail{background:var(--fail)} .dot.red{background:var(--safety)}
+  .net .q{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px;
+    background:var(--surface-2);border:1px solid var(--edge);color:var(--tx-2)}
+  .net.warn .q{border-color:var(--warn);color:#FFD98A;background:#3A2A0B}
+
+  .ctx{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;
+    background:var(--surface);border-bottom:1px solid var(--edge);flex-shrink:0}
+  .ctx .rail{width:4px;height:40px;border-radius:2px;flex-shrink:0}
+  .ctx .col{display:flex;flex-direction:column;gap:2px;flex-grow:1}
+  .ctx .r1{display:flex;align-items:baseline;gap:6px}
+  .ctx .id{font-size:16px;font-weight:700}
+  .ctx .nm{font-size:12px;color:var(--tx-2)}
+  .ctx .src{font-size:11px;font-weight:700;color:var(--ok)}
+  .ctx .src.man{color:var(--warn)}
+  .ctx .edit{width:56px;height:48px;border-radius:8px;border:1px solid var(--edge);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+    color:var(--tx-2);flex-shrink:0}
+
+  .pane{flex-grow:1;padding:14px;display:flex;flex-direction:column;gap:12px}
+  .pane.tight{padding:0;gap:0}
+  .pane.dense{gap:10px}
+  .fill{flex-grow:1}
+
+  .btn{min-height:56px;padding:10px 14px;border-radius:10px;background:var(--surface-2);
+    border:1px solid var(--edge);display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:16px;font-weight:700;color:var(--tx);flex-shrink:0}
+  .btn.sm{min-height:48px;font-size:14px;font-weight:600}
+  .btn.pri{background:#F3F6F9;border-color:#F3F6F9;color:#0A0D11}
+  .btn.gh{background:transparent}
+  .btn.off{opacity:.4}
+  .btn.scan{height:136px;flex-direction:column;gap:8px;background:var(--scan);
+    border-color:var(--scan);color:#04202B;font-size:21px}
+  .btn.scan .ico{font-size:34px;font-weight:400}
+  .btn .tagv{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;
+    background:#3A2A0B;border:1px solid var(--warn);color:#FFD98A}
+  .row2{display:flex;gap:8px;flex-shrink:0}
+  .row2 > *{flex-grow:1;flex-basis:0}
+
+  .lbl{font-size:11px;font-weight:700;letter-spacing:1.6px;color:var(--tx-3)}
+  .lbl.hot{color:var(--scan)}
+  .hint{font-size:12px;color:var(--tx-3)}
+
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{height:48px;padding:0 14px;border-radius:24px;background:var(--surface);
+    border:1px solid var(--edge);display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
+  .sw{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+  .vf{flex-grow:1;background:#141A21;display:flex;align-items:center;justify-content:center}
+  .ret{width:232px;height:176px;border-radius:8px;border:3px dashed #E8EDF2;
+    display:flex;align-items:center;justify-content:center}
+  .ret.cand{border-style:solid;border-color:var(--warn)}
+  .ret.lock{border-style:solid;border-color:var(--ok)}
+  .ret.fail{border-style:solid;border-color:var(--fail)}
+  .box{width:148px;height:114px;border-radius:5px;background:#D9D4C8;
+    display:flex;flex-direction:column;overflow:hidden}
+  .box .band{height:16px;flex-shrink:0}
+  .box .mid{flex-grow:1;display:flex;align-items:center;justify-content:center;gap:10px}
+  .box .cap{height:18px;font-size:10px;font-weight:700;color:#14181C;
+    display:flex;align-items:center;justify-content:center}
+  .qr{width:40px;height:40px;display:flex;flex-wrap:wrap;background:#D9D4C8;border:3px solid #D9D4C8}
+  .qr i{width:8px;height:8px;display:block}
+  .k{background:#14181C} .w{background:#D9D4C8}
+  .half{width:74px;height:114px;background:#05080B}
+
+  .sstate{height:50px;display:flex;align-items:center;gap:9px;padding:0 14px;font-size:14px;
+    font-weight:600;background:var(--surface);border-top:1px solid var(--edge);flex-shrink:0}
+  .sstate.cand{color:var(--warn)} .sstate.lock{color:var(--ok)} .sstate.fail{color:var(--fail)}
+  .votes{margin-left:auto;display:flex;gap:4px}
+  .vt{width:16px;height:5px;border-radius:2px;background:var(--edge)}
+  .vt.on{background:var(--ok)} .vt.pd{background:var(--warn)}
+  .sfoot{padding:12px 14px;display:flex;flex-direction:column;gap:8px;
+    border-top:1px solid var(--edge);flex-shrink:0}
+
+  .list{display:flex;flex-direction:column;gap:8px}
+  .lrow{min-height:56px;padding:8px 12px;border:1px solid var(--edge);border-radius:10px;
+    background:var(--surface);display:flex;align-items:center;gap:11px}
+  .lrow .rail{width:4px;height:36px;border-radius:2px;flex-shrink:0}
+  .lrow .col{display:flex;flex-direction:column;gap:1px;flex-grow:1}
+  .lrow .id{font-size:15px;font-weight:700}
+  .lrow .nm{font-size:11.5px;color:var(--tx-2)}
+  .lrow .mk{font-size:11px;color:var(--tx-2);flex-shrink:0}
+  /* 증상 선택 — 「기타」도 같은 크기·같은 자리. 목록이 전부가 아님을 구조로 알린다. */
+  .lrow.sym{font-size:14px;line-height:1.4}
+  .lrow.sym .mark{width:20px;flex-shrink:0;color:var(--tx-2);font-weight:700;text-align:center}
+  .lrow.sym.sel{border-color:var(--scan);background:#0F2A33}
+  .lrow.sym.sel .mark{color:var(--scan)}
+  .lrow.sym.other{border-style:dashed}
+  .lrow .symtx{font-size:14px}
+
+  .card{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    display:flex;flex-direction:column;gap:7px}
+  .card.top{border-color:#1C6F88}
+  .card.out{opacity:.62;border-style:dashed}
+  .card .kid{font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--tx-3)}
+  .card .ttl{font-size:15px;font-weight:700}
+  .card .bd{font-size:13px;color:var(--tx-2)}
+  .card .src{font-size:11px;color:var(--tx-3)}
+  .card .exp{font-size:12px;color:var(--ok)}
+
+  /* 조치 순위 */
+  .rk{display:flex;align-items:center;gap:9px}
+  .rkno{width:26px;height:26px;border-radius:13px;background:var(--surface-2);
+    border:1px solid var(--edge);color:var(--tx-2);font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .rkno.one{background:var(--scan);border-color:var(--scan);color:#04202B}
+  .rkno.next{background:#3A2A0B;border-color:var(--warn);color:#FFD98A}
+  .rk .kid{flex-grow:1}
+  .why{font-size:11.5px;color:var(--scan)}
+  .why.dim{color:var(--tx-3)}
+  .why.no{color:var(--fail)}
+
+  .pills{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--surface-2);
+    border:1px solid var(--edge);color:var(--tx-2)}
+  .pill.mt{color:var(--ok);border-color:#1E6B39}
+  .pill.ms{color:var(--fail);border-color:#7A4218}
+  .pill.un{color:var(--tx-3)}
+  .pill.tried{color:var(--warn);border-color:#7A5A18}
+  .steps{display:flex;flex-direction:column;gap:5px}
+  .steps .li{display:flex;gap:7px;font-size:13px;color:var(--tx-2)}
+  .steps .st{color:var(--scan);font-weight:700;flex-shrink:0}
+
+  .safety{border:2px solid var(--safety-edge);background:var(--safety-bg);border-radius:10px;
+    padding:12px;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+  .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#FFD7D4}
+  .safety .kid{font-size:11px;font-weight:700;color:#FFB3AE;letter-spacing:.8px}
+  .safety .ttl{font-size:16px;font-weight:700;color:#FFF0EF}
+  .safety .bd{font-size:13px;color:#FFE2E0}
+  .safety .bs{font-size:11.5px;color:#FFC9C5;border-top:1px solid var(--safety-edge);padding-top:8px}
+  .safety .gate{font-size:11.5px;font-weight:700;color:#FFD7D4}
+
+  .prog{display:flex;flex-direction:column;gap:10px}
+  .pstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx-2)}
+  .pstep .n{width:18px;font-weight:700;color:var(--tx-2);flex-shrink:0}
+  .pstep .t{width:58px;flex-shrink:0}
+  .pstep .bar{flex-grow:1;height:7px;border-radius:4px;background:var(--surface-2);
+    display:flex;overflow:hidden}
+  .pstep .bar .f{height:7px;border-radius:4px;background:var(--scan)}
+  .pstep .mk{width:16px;text-align:center;font-weight:700;flex-shrink:0}
+  .pstep.done{color:var(--tx)} .pstep.done .f{background:var(--ok)} .pstep.done .mk{color:var(--ok)}
+  .pstep.run .mk{color:var(--scan)}
+
+  /* 시도 기록 */
+  .try{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    display:flex;flex-direction:column;gap:6px}
+  .try.noeff{border-color:#7A4218}
+  .try.now{border-color:var(--warn);background:#221A0A}
+  .try .hd{display:flex;align-items:center;gap:8px}
+  .try .aid{font-size:11px;font-weight:700;color:var(--tx-3);letter-spacing:.8px}
+  .try .fld{display:flex;gap:8px;font-size:12.5px}
+  .try .fld .k2{width:64px;color:var(--tx-3);flex-shrink:0;font-size:11px;font-weight:700;
+    letter-spacing:.6px}
+  .try .fld .v2{color:var(--tx-2);flex-grow:1}
+
+  .t4{display:flex;flex-direction:column;gap:9px}
+  .t4 .fld{display:flex;flex-direction:column;gap:4px}
+  .t4 .k2{font-size:10.5px;font-weight:700;letter-spacing:1.2px;color:var(--tx-3)}
+  .t4 .v{font-size:13px;color:var(--tx);border:1px solid var(--edge);border-radius:8px;
+    padding:10px 11px;background:var(--surface);min-height:48px;display:flex;align-items:center}
+  .t4 .v.ph{color:var(--tx-3)}
+  .t4 .v.req{border-color:var(--warn)}
+  .t4 .v.auto{border-color:#1C6F88;color:var(--tx-2)}
+
+  .field{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    min-height:96px;font-size:15px;display:flex;flex-direction:column}
+  .obs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-2);
+    border:1px solid var(--edge);border-radius:8px;padding:9px 11px;background:var(--surface)}
+  .obs .x{margin-left:auto;color:var(--tx-3)}
+
+  .alert{border:1px solid var(--warn);background:#2A1E06;border-radius:10px;padding:12px;
+    display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+  .alert .hd{font-size:15px;font-weight:700;color:#FFD98A}
+  .alert .p{font-size:12.5px;color:#E7CFA0}
+  .alert .cd{font-size:11.5px;color:#FFE9BC;background:#3A2A0B;border-radius:3px;padding:4px 6px;
+    font-family:Consolas,monospace;word-break:break-all}
+  .alert.bad{border-color:var(--safety-edge);background:var(--safety-bg)}
+  .alert.bad .hd{color:#FFD7D4} .alert.bad .p{color:#FFC9C5}
+  .alert.bad .cd{background:#511713;color:#FFE2E0}
+
+  .empty{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;padding:0 24px;text-align:center}
+  .empty .big{font-size:22px;font-weight:700}
+  .empty .p{font-size:13.5px;color:var(--tx-2)}
+  .empty .rule{font-size:13px;font-weight:700;color:var(--scan);border:1px solid #1C6F88;
+    border-radius:8px;padding:9px 14px}
+  .empty .ul{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--tx-2);
+    text-align:left}
+
+  .discl{padding:10px 14px;font-size:11.5px;color:var(--tx-2);background:var(--surface);
+    border-top:1px solid var(--edge);display:flex;gap:7px;flex-shrink:0}
+  .cue{font-size:10.5px;color:var(--tx-3);text-align:center;flex-shrink:0}
+
+  .tok-rack{display:flex;flex-wrap:wrap;gap:12px}
+  .tok{width:168px;border:1px solid var(--board-line);border-radius:9px;overflow:hidden;
+    display:flex;flex-direction:column;background:var(--surface)}
+  .tok .sw2{height:54px}
+  .tok .m{padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+  .tok .n2{font-size:11.5px;font-weight:700}
+  .tok .h{font-size:10.5px;color:var(--tx-2);font-family:Consolas,monospace}
+  .ty-rack{display:flex;flex-direction:column;gap:14px;width:600px}
+  .ty{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--board-line);
+    padding-bottom:12px}
+  .ty .k3{width:110px;font-size:10.5px;font-weight:700;letter-spacing:1.2px;color:var(--tx-3);
+    flex-shrink:0}
+  .tt-rack{display:flex;flex-direction:column;gap:12px}
+  .tt{display:flex;align-items:center;gap:14px}
+  .tt .bx{border:1px dashed var(--scan);background:#0F2A33;border-radius:7px;flex-shrink:0}
+  .tt .d{font-size:12.5px;color:var(--tx-2)}
+
+  /* ── 시연 대본 ────────────────────────────────────── */
+  .sc{width:1180px;border:1px solid var(--board-line);border-radius:10px;background:var(--surface);
+    display:flex;flex-direction:column;overflow:hidden}
+  .sc-h{padding:14px 16px;display:flex;align-items:center;gap:12px;background:var(--surface-2);
+    border-bottom:1px solid var(--board-line)}
+  .sc-h .id{font-size:12px;font-weight:700;letter-spacing:1.4px;color:var(--scan);width:34px;flex-shrink:0}
+  .sc-h .nm{font-size:14px;font-weight:700;flex-grow:1}
+  .sc-h .du{font-size:12px;color:var(--tx-3);flex-shrink:0}
+  .sc-h.star{background:#0F2A33}
+  .sc-h.star .nm{color:#BFEBF7}
+  .sc-r{padding:11px 16px;display:flex;gap:14px;border-bottom:1px solid #1B2128}
+  .sc-r:last-child{border-bottom:0}
+  .sc-r .tm{width:44px;flex-shrink:0;font-size:12px;color:var(--tx-3);font-family:Consolas,monospace}
+  .sc-r .ac{width:210px;flex-shrink:0;font-size:12.5px;color:var(--tx);font-weight:600}
+  .sc-r .fr{width:150px;flex-shrink:0;font-size:11.5px;color:var(--scan);font-weight:700}
+  .sc-r .ln{flex-grow:1;font-size:12.5px;color:var(--tx-2)}
+  .sc-r.key{background:#141A21}
+  .sc-r.key .ln{color:var(--tx)}
+  .sc-f{padding:12px 16px;font-size:12px;color:var(--warn);background:#1A1508;
+    border-top:1px solid #3A2A0B}
+  .sc-lg{width:1180px;display:flex;gap:14px;padding:0 16px;font-size:11px;color:var(--tx-3)}
+  .sc-lg .tm{width:44px;flex-shrink:0} .sc-lg .ac{width:210px;flex-shrink:0}
+  .sc-lg .fr{width:150px;flex-shrink:0}
+</style>
+
+<div class="board-head">
+  <div class="t">ShiftLink PDA — UI 구상</div>
+  <div class="s">화면 16장 + 시연 대본 5편 · 다크 단일 테마 · 폭 360px, 첫 화면 760px(내용이 길면 그만큼 프레임이 길어지고 앱에서는 스크롤 영역) · 분리형 구성(PDA ↔ 거치형 Jetson)</div>
+  <div class="n">설비 10대·카드 12장·인계 1건 모두 docs/data 실제 값. 시도 기록(AT-XXXX)은 원천 데이터가 없어 예시로 표시함. 점검 체크리스트와 재가동 이력 등 기타 항목은 제외했다. 라운드 4: 세로 스크롤 허용에 따라 페이징 화면 4장 제거 및 라운드 3 깎인 내용 복원 완료. 상태: 라운드 4.</div>
+</div>
+
+<!-- ══ 진입과 식별 ═════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">01 – 06</div>
+    <div class="b">진입과 식별</div>
+    <div class="c">장갑 착용·소음 80~90dB·저조도를 전제한다. 음성 안내는 쓰지 않고 시각과 햅틱으로만 알린다. 주 행동 56dp, 보조 48dp, 간격 8dp.</div>
+  </div>
+  <div class="rack">
+
+    <!-- 01 홈 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">01</span><span>홈</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:26</span><span class="mono">Wi-Fi · 68%</span></div>
+        <div class="appbar"><span class="t">ShiftLink</span><span class="ic">⚙</span></div>
+        <div class="net"><span class="dot ok"></span><span>로컬 정상</span><span class="q">대기 3건</span></div>
+        <div class="pane">
+          <div class="fill" style="flex-grow:3"></div>
+          <div class="btn scan"><span class="ico">◎</span><span>설비 스캔</span></div>
+          <div class="hint">상자에 붙은 코드를 비추면 설비가 확정됩니다.</div>
+          <div class="fill"></div>
+          <div class="lbl">최근 설비</div>
+          <div class="chips">
+            <div class="chip"><span class="sw" style="background:#F0453C"></span><span>HPU-01</span></div>
+            <div class="chip"><span class="sw" style="background:#F0C419"></span><span>RT-01</span></div>
+            <div class="chip"><span class="sw" style="background:#2FC26B"></span><span>CV-01</span></div>
+          </div>
+          <div class="row2">
+            <div class="btn sm">설비 목록</div>
+            <div class="btn sm">인계 확인</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">스캔이 화면 최대 요소이자 유일한 주 행동. 최근 설비는 탭 1회 재진입 — 같은 설비를 반복 조회할 때 매번 스캔을 강요하지 않는다.</div>
+    </div>
+
+    <!-- 02 탐색 중 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">02</span><span>스캔 · 탐색 중</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:26</span><span class="mono">Wi-Fi · 68%</span></div>
+        <div class="appbar"><span class="t">스캔</span><span class="ic">✕</span></div>
+        <div class="pane tight">
+          <div class="vf">
+            <div class="ret">
+              <div class="box">
+                <div class="band" style="background:#F0453C"></div>
+                <div class="mid">
+                  <div class="qr"><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i></div>
+                </div>
+                <div class="cap">HPU-01</div>
+              </div>
+            </div>
+          </div>
+          <div class="sstate"><span class="dot" style="background:#E8EDF2"></span><span>상자를 프레임 안에</span></div>
+          <div class="sfoot">
+            <div class="btn sm gh">직접 선택</div>
+            <div class="hint">탭하면 초점을 다시 맞춥니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">조준 프레임은 상자 실크기(200×150mm)에 맞춰 사용자가 거리를 스스로 잡게 한다. 「직접 선택」은 이 화면에서 항상 보인다.</div>
+    </div>
+
+    <!-- 03 후보 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">03</span><span>스캔 · 후보 2/3</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:26</span><span class="mono">Wi-Fi · 68%</span></div>
+        <div class="appbar"><span class="t">스캔</span><span class="ic">✕</span></div>
+        <div class="pane tight">
+          <div class="vf">
+            <div class="ret cand">
+              <div class="box">
+                <div class="band" style="background:#F0453C"></div>
+                <div class="mid">
+                  <div class="qr"><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i></div>
+                </div>
+                <div class="cap">HPU-01</div>
+              </div>
+            </div>
+          </div>
+          <div class="sstate cand"><span class="dot warn"></span><span>HPU-01 확인 중…</span>
+            <span class="votes"><i class="vt on"></i><i class="vt on"></i><i class="vt pd"></i></span></div>
+          <div class="sfoot">
+            <div class="btn pri">확인</div>
+            <div class="hint">햅틱 짧게 1회 · 2/3 일치는 사용자 확인을 받는다</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">신뢰도를 소수점으로 보여주지 않는다. 마커 디코딩은 성공·실패의 이산 사건이라 <b>일치한 프레임 수</b>가 더 정직한 지표다.</div>
+    </div>
+
+    <!-- 04 확정 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">04</span><span>스캔 · 확정 3/3</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:26</span><span class="mono">Wi-Fi · 68%</span></div>
+        <div class="appbar"><span class="t">스캔</span><span class="ic">✕</span></div>
+        <div class="pane tight">
+          <div class="vf">
+            <div class="ret lock">
+              <div class="box">
+                <div class="band" style="background:#F0453C"></div>
+                <div class="mid">
+                  <div class="qr"><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i></div>
+                </div>
+                <div class="cap">HPU-01</div>
+              </div>
+            </div>
+          </div>
+          <div class="sstate lock"><span class="dot ok"></span><span>HPU-01 확정</span>
+            <span class="votes"><i class="vt on"></i><i class="vt on"></i><i class="vt on"></i></span></div>
+          <div class="sfoot">
+            <div class="btn pri">계속</div>
+            <div class="hint mono">qr · SHIFTLINK:EQ:HPU-01 · 0.4s</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">확정 즉시 햅틱 길게 1회 — 산업 소음에서 신뢰할 수 있는 유일한 비시각 채널. 디코딩 원문을 한 줄 노출해 현장 디버깅을 가능하게 한다.</div>
+    </div>
+
+    <!-- 05 실패 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">05</span><span>스캔 · 3회 실패</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:27</span><span class="mono">Wi-Fi · 67%</span></div>
+        <div class="appbar"><span class="t">스캔</span><span class="ic">✕</span></div>
+        <div class="pane tight">
+          <div class="vf">
+            <div class="ret fail">
+              <div class="box">
+                <div class="band" style="background:#4A90F0"></div>
+                <div class="mid">
+                  <div class="qr"><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="k"></i><i class="k"></i><i class="w"></i><i class="k"></i><i class="w"></i><i class="k"></i></div>
+                  <div class="half"></div>
+                </div>
+                <div class="cap">GR-01</div>
+              </div>
+            </div>
+          </div>
+          <div class="sstate fail"><span class="dot fail"></span><span>인식 실패 — 직접 선택</span></div>
+          <div class="alert">
+            <div class="hd">설비 미확정</div>
+            <div class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다.</div>
+          </div>
+          <div class="sfoot">
+            <div class="btn pri">직접 선택</div>
+            <div class="btn sm gh">다시 스캔</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">3회 실패하면 수동 선택으로 자동 전환한다. 실패를 막다른 길로 두지 않되, 확정되지 않은 설비로 검색이 나가는 일도 없다.</div>
+    </div>
+
+    <!-- 06 직접 선택 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">06</span><span>직접 선택</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:27</span><span class="mono">Wi-Fi · 67%</span></div>
+        <div class="appbar"><span class="t">직접 선택</span><span class="ic">✕</span></div>
+        <div class="pane">
+          <div class="hint">상자의 색 띠와 이름표를 보고 고르세요.</div>
+          <div class="alert">
+            <div class="hd">설비 미확정</div>
+            <div class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다. 아래에서 설비를 선택하세요.</div>
+          </div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#38C6F2;padding:6px 0 8px 0;border-bottom:1px dashed #38C6F2;margin-bottom:6px;">↓ 스크롤 영역 (고정: 힌트·버튼)</div>
+          <div class="list">
+            <div class="lrow"><span class="rail" style="background:#F0453C"></span><span class="col"><span class="id">HPU-01</span><span class="nm">유압 설비군 · 유틸리티실 A동 1층</span></span><span class="mk">빨강</span></div>
+            <div class="lrow"><span class="rail" style="background:#A78BFA"></span><span class="col"><span class="id">PDP-01</span><span class="nm">전력 설비군 · A동 배전반</span></span><span class="mk">보라</span></div>
+            <div class="lrow"><span class="rail" style="background:#38C6F2"></span><span class="col"><span class="id">CAU-01</span><span class="nm">공압 설비군 · A동 2층</span></span><span class="mk">하늘</span></div>
+            <div class="lrow"><span class="rail" style="background:#4A90F0"></span><span class="col"><span class="id">GR-01</span><span class="nm">입측 구동 설비군 · 조작반 좌측 5m</span></span><span class="mk">파랑</span></div>
+            <div class="lrow"><span class="rail" style="background:#4A90F0"></span><span class="col"><span class="id">GR-02</span><span class="nm">출측 구동 설비군 · 조작반 우측 4m</span></span><span class="mk">파랑</span></div>
+            <div class="lrow"><span class="rail" style="background:#F0C419"></span><span class="col"><span class="id">RT-01</span><span class="nm">입측 이송 설비군 · 1~12번 롤러</span></span><span class="mk">노랑</span></div>
+            <div class="lrow"><span class="rail" style="background:#F0C419"></span><span class="col"><span class="id">RT-02</span><span class="nm">중앙 이송 설비군 · 13~28번 롤러</span></span><span class="mk">노랑</span></div>
+            <div class="lrow"><span class="rail" style="background:#2FC26B"></span><span class="col"><span class="id">CV-01</span><span class="nm">출측 이송 설비군 · 적재 컨베이어</span></span><span class="mk">초록</span></div>
+            <div class="lrow"><span class="rail" style="background:#2FC26B"></span><span class="col"><span class="id">CV-02</span><span class="nm">출측 이송 설비군 · 스크랩 컨베이어</span></span><span class="mk">초록</span></div>
+            <div class="lrow"><span class="rail" style="background:#F0C419"></span><span class="col"><span class="id">RT-03</span><span class="nm">출측 이송 설비군 · 29~40번 롤러</span></span><span class="mk">노랑</span></div>
+          </div>
+          <div class="fill"></div>
+          <div class="btn sm gh">카메라로 돌아가기</div>
+        </div>
+      </div>
+      <div class="frame-nt">색상은 자동 판정에 쓰지 않는다. 조명에 따라 무너지는 신호를 판정 경로에 넣으면 오인식만 늘기 때문에 육안 대조 용도로만 쓴다. 카탈로그 설비 10대 전체. 스크롤 영역: 설비 목록이 760px를 초과하면 여기서 스크롤된다. 앱에서는 힌트와 버튼이 sticky 고정되고 설비 목록만 흐르는 상태를 표현한다. 목업은 .screen의 min-height:760px과 .pane의 overflow를 제거하여 내용만큼 프레임이 길어지고, 설비 10대 전체가 나열된다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 질의와 대기 ═══════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">07 – 09</div>
+    <div class="b">확정 이후 — 질의와 대기</div>
+    <div class="c">생성 응답은 실측 p95 21~34초다. 이 구간의 답은 "검색 결과를 생성보다 먼저 올린다"다. 안전 카드는 LLM을 기다릴 이유가 없다.</div>
+  </div>
+  <div class="rack">
+
+    <!-- 07 컨텍스트 확정 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">07</span><span>컨텍스트 확정</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:27</span><span class="mono">Wi-Fi · 67%</span></div>
+        <div class="appbar"><span class="ic">←</span><span class="t sub">작업 선택</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001 · 3/3 프레임</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane">
+          <div class="lbl">무엇을 하시겠습니까?</div>
+          <div class="btn">증상 질의</div>
+          <div class="btn">인계 확인 <span class="tagv">3건 미종료</span></div>
+          <div class="btn">인계 작성</div>
+          <div class="fill"></div>
+          <div class="hint mono">EQ-0009 · 출측 적재 컨베이어</div>
+        </div>
+      </div>
+      <div class="frame-nt">배너는 이 화면 이후 전 화면에 고정되고 언제나 [수정]을 동반한다. 잘못된 컨텍스트로 조용히 진행되는 것이 오인식보다 나쁘다.</div>
+    </div>
+
+    <!-- 08 질의 입력 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">08</span><span>증상 질의 입력</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:28</span><span class="mono">Wi-Fi · 67%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane">
+          <div class="lbl">증상 — 이 설비에 등록된 증상</div>
+          <div class="list">
+            <div class="lrow sym"><span class="mark">○</span><span class="col"><span class="symtx">적재부에 소재가 걸려 정체된 상황</span></span></div>
+            <div class="lrow sym sel"><span class="mark">●</span><span class="col"><span class="symtx">출측 이송이 간헐적으로 멈춘다</span></span></div>
+            <div class="lrow sym other"><span class="mark">○</span><span class="col"><span class="symtx">기타 — 직접 입력</span></span></div>
+          </div>
+          <div class="hint">「기타」를 고르면 입력창이 열립니다. 목록에 없는 증상은 카드가 없을 수 있고, 그때는 「해당 지식 없음」이 나옵니다.</div>
+          <div class="lbl">관측값 — 넣을수록 순위가 정확해집니다</div>
+          <div class="row2">
+            <div class="btn sm">대기율</div>
+            <div class="btn sm">속도</div>
+            <div class="btn sm">장력</div>
+          </div>
+          <div class="obs"><span class="mono">cv_queue_len = 94 pct</span><span class="x">✕</span></div>
+          <div class="hint">정상 범위 0~70 % · 경보 90 % 이상</div>
+          <div class="fill"></div>
+          <div class="btn pri">검색</div>
+          <div class="hint">관측값이 많을수록 조치 순위가 정확해집니다.</div>
+        </div>
+      </div>
+      <div class="frame-nt"><b>증상은 목록에서 고른다.</b> 한글 텍스트 입력은 IME 조합이 필요해 장갑 낀 손에 최악이고, 목록 항목은 카드의 <span class="mono">symptom</span> 필드에서 그대로 나오므로 검색 매칭률도 높다. <b>「기타」를 목록과 같은 크기·같은 자리에 두는 이유</b> — 목록에서만 고를 수 있으면 항상 무언가 찾히고 「해당 지식 없음」이 영영 나오지 않는다. 그 화면은 이 시스템에서 실패가 아니라 기능이다. 등록 증상이 0건인 설비(CAU-01·PDP-01)는 「기타」만 나온다. 증상은 검색 범위만 좁히고 <b>순위에는 영향을 주지 않는다</b> — 안 그러면 고른 증상의 카드가 1순위가 되어 순위 산정이 자기실현이 된다. 복합 증상은 관측값으로 표현한다. 정상 범위는 카탈로그 <span class="mono">measurement_points</span> 값.</div>
+    </div>
+
+    <!-- 09 대기 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">09</span><span>대기 · 부분 결과 선노출</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:28</span><span class="mono">Wi-Fi · 67%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane">
+          <div class="prog">
+            <div class="pstep done"><span class="n">①</span><span class="t">카드 검색</span><span class="bar"><span class="f" style="width:100%"></span></span><span class="mk">✓</span></div>
+            <div class="pstep run"><span class="n">②</span><span class="t">순위 산정</span><span class="bar"><span class="f" style="width:52%"></span></span><span class="mk">⟳</span></div>
+            <div class="pstep"><span class="n">③</span><span class="t">답변 생성</span><span class="bar"></span><span class="mk">·</span></div>
+          </div>
+          <div class="safety">
+            <div class="hd"><span class="dot red"></span><span>안전 · 먼저 확인</span></div>
+            <div class="kid">K-0108 · T5 · L1</div>
+            <div class="ttl">운전 중 컨베이어 적재부·리턴 롤러 접근 금지</div>
+            <div class="bs">근거 — KOSHA GUIDE M-101-2012; 산업안전보건기준에 관한 규칙 제92조</div>
+          </div>
+          <div class="lbl">조치 후보 5건 · 순위 산정 중</div>
+          <div class="card"><div class="kid">K-0109 · T3</div><div class="ttl">적재 정체 확인 순서</div></div>
+          <div class="card"><div class="kid">K-0105 · T2</div><div class="ttl">여러 장비가 동시에 느려지면 개별 장비보다 유압 공급원을 먼저 본다</div></div>
+          <div class="fill"></div>
+          <div class="btn sm gh">취소</div>
+        </div>
+      </div>
+      <div class="frame-nt">안전 카드는 검색되는 즉시 올린다 — 작업자는 2초 만에 읽을 것을 손에 쥔다. 조치 후보도 순위가 확정되기 전에 목록으로 먼저 보인다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 조치 순위 ═════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">10 – 11</div>
+    <div class="b">조치 순위와 시도 기록 — 이 설계의 핵심</div>
+    <div class="c">조치를 1개만 제시하지 않는다. 하나를 고쳐서 해결되지 않는 경우가 현장에서 더 흔하기 때문에, 관련도 순으로 나열하고 <b>시도 → 결과 → 다음</b>이 화면 안에서 순환하게 만든다.</div>
+  </div>
+
+  <div class="note">
+    <div class="h">왜 순위 목록인가</div>
+    <div class="p">기존 설계는 카드 목록을 보여주는 것까지만 있었고, "첫 조치가 듣지 않았다"는 상태를 다룰 자리가 없었다. 작업자는 목록 맨 위를 해 보고 안 되면 화면을 떠나 버린다. 시도 기록을 UI로 끌어올리면 두 가지가 동시에 해결된다 — 다음 조치로 내려가는 동선이 생기고, 실패한 시도가 인계에 자동으로 남는다.</div>
+    <div class="p">새 개념이 아니다. 계약 <span class="mono">RestartFailure</span>(attempt_id · restart_type · action · observed_result · failure_reason)와 카드 필드 <span class="mono">tried_and_failed[]</span>가 이미 D-29로 정의되어 있다. 이 화면은 그 계약을 작업자 쪽으로 드러내는 것이다.</div>
+    <div class="h">순위 근거 — 점수만 보여주지 않고 이유를 쓴다</div>
+    <div class="li"><span class="n">1</span><span><b>조건 일치</b> — 입력한 관측값으로 카드의 <span class="mono">conditions</span>가 참으로 확인된 것. 가장 강한 근거다.</span></div>
+    <div class="li"><span class="n">2</span><span><b>설비 직접 지정</b> — <span class="mono">scope_level=equipment</span> 이고 이 설비가 <span class="mono">equipment_ids</span>에 있는 것.</span></div>
+    <div class="li"><span class="n">3</span><span><b>범위 좁음</b> — equipment › segment › line 순. 라인 전체 카드는 넓게 맞지만 구체성이 낮다.</span></div>
+    <div class="li"><span class="n">4</span><span><b>조건 미평가</b> — 관측값이 없어 확인 못 한 것. 내리지도 올리지도 않고 "확인 필요"로 둔다.</span></div>
+    <div class="li"><span class="n">5</span><span><b>조건 불일치</b> — 목록에서 내리고 <b>적용 안 되는 이유와 함께</b> 별도 구획에 남긴다. 지우지 않는 이유는 아래 프레임 10의 K-0103이 보여 준다.</span></div>
+    <div class="h">안전 카드는 순위에 넣지 않는다</div>
+    <div class="p">안전은 선택지가 아니라 전제다. <span class="mono">safety_flag=true</span>인 카드는 순위 목록 위에 고정하고, 조치를 시작하기 전 통과해야 하는 관문으로 표시한다. 조치 1번과 경쟁시키면 "건너뛸 수 있는 항목"으로 읽힌다.</div>
+  </div>
+
+  <div class="rack">
+
+    <!-- 10 결과 · 조치 순위 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">10</span><span>결과 · 조치 순위</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:28</span><span class="mono">Wi-Fi · 66%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane dense">
+          <div class="safety">
+            <div class="hd"><span class="dot red"></span><span>안전 · 조치 전 필수</span><span style="font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;background:#1C6F88;color:#BFEBF7;margin-left:auto;flex-shrink:0;letter-spacing:0.5px;">고정</span></div>
+            <div class="kid">K-0108 · T5 · L1</div>
+            <div class="ttl">운전 중 적재부·리턴 롤러 접근 금지</div>
+            <div class="bd">걸린 소재는 컨베이어를 정지하고 기동 장치를 잠근 뒤 제거한다. 혼자 판단하지 않고 반장에게 알린다.</div>
+            <div class="bs">근거 — KOSHA GUIDE M-101-2012; 산업안전보건기준에 관한 규칙 제92조</div>
+            <div class="gate">아래 조치는 이 조건을 지킨 상태에서만 수행한다</div>
+          </div>
+
+          <div class="lbl hot">조치 — 관련도 순 2건 (검색 대상 카드 기준)</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#38C6F2;padding:6px 0 8px 0;border-bottom:1px dashed #38C6F2;margin-bottom:6px;">↓ 스크롤 영역 (고정: 안전 띠)</div>
+
+          <div class="card top">
+            <div class="rk"><span class="rkno one">1</span><span class="kid">K-0109 · T3 · L1</span></div>
+            <div class="ttl">적재 정체 확인 순서</div>
+            <div class="why">조건 일치 · 설비 직접 지정</div>
+            <div class="pills"><span class="pill mt">cv_queue_len 94 ≥ 90 · 일치</span></div>
+            <div class="steps">
+              <div class="li"><span class="st">①</span><span>CV-01 적재 대기율 확인</span></div>
+              <div class="li"><span class="st">②</span><span>적재 가이드·걸림 육안 확인</span></div>
+              <div class="li"><span class="st">③</span><span>벨트 속도·장력 확인</span></div>
+              <div class="li"><span class="st">④</span><span>인터록 작동 이력 확인</span></div>
+            </div>
+            <div class="exp">기대 — 전단 설비 이상과 하류 정체가 구분된다</div>
+            <div class="btn sm">이 조치 시도</div>
+          </div>
+
+          <div class="card">
+            <div class="rk"><span class="rkno">2</span><span class="kid">K-0105 · T2 · L1</span></div>
+            <div class="ttl">여러 장비가 동시에 느려지면 개별 장비보다 유압 공급원을 먼저 본다</div>
+            <div class="why dim">범위 넓음 (line) · 조건 미평가</div>
+            <div class="pills"><span class="pill un">hpu_pressure — 관측값 없음</span></div>
+            <div class="bd">클램프·승강 응답 지연이 두 대 이상에서 동시에 나타나면 각 장비를 따로 보지 말고 HPU-01 토출 압력·유량·필터 차압을 먼저 읽는다. 압력이 145 bar 미달이면 공급원 이상으로 범위를 좁힌다.</div>
+            <div class="exp">기대 — 공통 유틸리티 원인 여부가 먼저 확인된다</div>
+            <div class="btn sm">이 조치 시도</div>
+          </div>
+
+
+          <div class="lbl">적용 안 됨 1건 — 이유와 함께 남김</div>
+          <div class="card out">
+            <div class="rk"><span class="rkno">—</span><span class="kid">K-0103 · T2 · L1</span></div>
+            <div class="ttl">적재 대기율 70 % 미만이면 하류 정체를 원인 후보에서 제외한다</div>
+            <div class="why no">조건 불일치 — 이 카드는 지금 쓰면 안 된다</div>
+            <div class="pills"><span class="pill ms">cv_queue_len 94 ≥ 70 · 불일치</span></div>
+            <div class="bd">대기율이 94 %이므로 "하류 정체를 원인에서 제외"하는 판단은 성립하지 않는다.</div>
+          </div>
+        </div>
+        <div class="discl"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
+      </div>
+      <div class="frame-nt"><b>K-0103을 지우지 않는 이유</b> — K-0109(대기율 ≥90)와 K-0103(대기율 &lt;70)은 서로 반대 조건이다. 94 %라는 관측값 하나가 어느 쪽을 적용할지 결정한다. 불일치 카드를 숨기면 작업자는 "왜 하류를 제외하지 않는가"를 알 수 없다. <b>이 프레임은 760px보다 길다</b> — 조치 2건과 적용 안 됨 1건이 첫 화면에 다 들어가지 않기 때문이다. 앱에서는 초과분이 스크롤 영역이고 안전 띠는 sticky 고정된다. 페이지 전환 버튼은 없다.</div>
+    </div>
+
+
+    <!-- 11 시도 기록 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">11</span><span>조치 시도 기록</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:52</span><span class="mono">Wi-Fi · 61%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane dense">
+          <div style="padding:8px 12px;background:#3A0F0D;border:2px solid var(--safety-edge);border-radius:8px;font-size:10.5px;color:#FFD7D4;flex-shrink:0;display:flex;align-items:center;gap:6px">
+            <span style="font-weight:700;color:#FFD7D4">⚠</span>
+            <span>안전 · K-0108 필수 (근거 — KOSHA GUIDE M-101-2012; 제92조)</span>
+            <span style="font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;background:#1C6F88;color:#BFEBF7;margin-left:auto;flex-shrink:0;letter-spacing:0.5px;">고정</span>
+          </div>
+
+          <div class="lbl">시도 기록 2건 · 미해결</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:#38C6F2;padding:6px 0 8px 0;border-bottom:1px dashed #38C6F2;margin-bottom:6px;">↓ 스크롤 영역 (고정: 안전 띠)</div>
+
+          <div class="try noeff">
+            <div class="hd"><span class="rkno">1</span><span class="aid">AT-0001 · 예시 · 14:32</span>
+              <span class="pill ms">효과 없음</span></div>
+            <div class="fld"><span class="k2">조치</span><span class="v2">K-0109 적재 정체 확인 순서</span></div>
+            <div class="fld"><span class="k2">관측</span><span class="v2">가이드 걸림 없음. 인터록 작동 이력 없음</span></div>
+            <div class="fld"><span class="k2">사유</span><span class="v2">대기율은 94 %인데 물리적 걸림이 확인되지 않음</span></div>
+          </div>
+
+          <div class="try noeff">
+            <div class="hd"><span class="rkno">2</span><span class="aid">AT-0002 · 예시 · 14:45</span>
+              <span class="pill ms">효과 없음</span></div>
+            <div class="fld"><span class="k2">조치</span><span class="v2">K-0105 공급원 확인 (유압 압력·유량·필터 차압)</span></div>
+            <div class="fld"><span class="k2">관측</span><span class="v2">hpu_pressure 152 bar — 정상 범위 내</span></div>
+            <div class="fld"><span class="k2">사유</span><span class="v2">압력 정상이라 유압 공급원 이상 배제됨</span></div>
+          </div>
+
+          <div class="lbl hot">다음 조치 — 남은 조치가 없습니다</div>
+          <div class="try now">
+            <div class="hd"><span class="rkno next">—</span><span class="aid">조치 후보 소진</span>
+              <span class="pill tried">인계 권장</span></div>
+            <div class="fld"><span class="k2">상태</span><span class="v2">CV-01에 적용 가능한 조치 2건을 모두 시도했고 둘 다 배제되었습니다</span></div>
+            <div class="fld"><span class="k2">근거</span><span class="v2">하류 정체(K-0109)와 유압 공급원(K-0105)이 모두 확인됨. 남은 원인은 등록된 지식 밖입니다</span></div>
+            <div class="fld"><span class="k2">다음</span><span class="v2">시도 기록 2건을 인계로 넘겨 다음 교대가 이어받게 합니다</span></div>
+          </div>
+
+          <div class="fill"></div>
+          <div class="btn pri">인계로 넘기기 (시도 2건 포함)</div>
+          <div class="btn sm gh">관측값 추가하고 재검색</div>
+        </div>
+      </div>
+      <div class="frame-nt">필드 이름은 계약 <span class="mono">RestartFailure</span>를 그대로 따른다. 설비 단위 조치가 배제되면 범위를 라인·공급원으로 넓히는 것이 순위 갱신 규칙이고, 그 이유를 화면에 쓴다. 해결되지 않으면 기록째로 인계로 넘긴다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 지식 없음 · 인계 ══════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">12 – 14</div>
+    <div class="b">답하지 않을 때, 그리고 인계</div>
+    <div class="c">시도 기록이 쌓였는데도 해결되지 않으면 그 기록이 인계의 맥락이 된다. 인계 작성 칸 구조는 계약 <span class="mono">HandoverMethodRender</span>의 5요소를 따른다.</div>
+  </div>
+  <div class="rack">
+
+    <!-- 12 지식 없음 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">12</span><span>해당 지식 없음</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:31</span><span class="mono">Wi-Fi · 66%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#38C6F2"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CAU-01</span><span class="nm">공압 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0004</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="empty">
+          <div class="big">해당 지식 없음</div>
+          <div class="p">입력하신 증상·조건에 맞는<br>근거 있는 카드가 없습니다.</div>
+          <div class="rule">추측으로 답하지 않습니다</div>
+          <div class="ul">
+            <div>· 증상을 더 구체적으로 적어 보세요</div>
+            <div>· 공기압 등 관측값을 추가하세요</div>
+            <div>· 숙련자에게 문의하세요</div>
+          </div>
+        </div>
+        <div class="pane" style="flex-grow:0">
+          <div class="btn pri">다시 질의</div>
+        </div>
+      </div>
+      <div class="frame-nt">억지 설정이 아니다 — CAU-01(EQ-0003)과 PDP-01(EQ-0002)은 카탈로그에 카드가 실제로 0건이다. 빈 상태를 사과하거나 얼버무리지 않는다. 답하지 않았다는 사실 자체가 이 시스템의 기능이다.</div>
+    </div>
+
+    <!-- 13 인계 확인 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">13</span><span>인계 확인</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">21:58</span><span class="mono">Wi-Fi · 44%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#4A90F0"></span>
+          <span class="col">
+            <span class="r1"><span class="id">GR-01</span><span class="nm">입측 구동 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0005</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane dense">
+          <div class="lbl">HO-0101 · B조 → C조 · 05-12</div>
+          <div class="card">
+            <div class="kid">전 교대 메모</div>
+            <div class="bd">출측 처짐 있어서 속도 80으로 내려놨다. 감속기 봤고 윤활 보충했다. 이상 없다.</div>
+          </div>
+          <div class="lbl">미종료 3건</div>
+          <div class="card">
+            <div class="pills"><span class="pill ms">open</span><span class="pill">C조 마감</span></div>
+            <div class="bd">라인 속도 96→80 m/min 임시 하향 상태 유지 중. 원인 미해소</div>
+            <div class="src">근거 AX-0102 · OC-0101</div>
+          </div>
+          <div class="card">
+            <div class="pills"><span class="pill ms">open</span><span class="pill">C조 마감</span></div>
+            <div class="bd">GR-01 진동·베어링 온도 4시간 간격 재측정 (기준 진동 4.5 mm/s, 온도 72 ℃)</div>
+            <div class="src">근거 K-0101 · AC-0101</div>
+          </div>
+          <div class="card">
+            <div class="pills"><span class="pill un">needs_recheck</span><span class="pill">A조 마감</span></div>
+            <div class="bd">차기 계획 정지 시 GR-01 입력측 베어링 점검 요청 등록</div>
+            <div class="src">근거 K-0104</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-nt">상태를 open / needs_recheck로 구분한다. 근거 ID를 항목마다 노출하는 이유는 인계 항목이 어디서 나온 것인지 다음 교대가 되짚을 수 있어야 하기 때문이다.</div>
+    </div>
+
+    <!-- 14 인계 작성 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">14</span><span>인계 작성 · T4 5요소</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">22:04</span><span class="mono">Wi-Fi · 41%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#2FC26B"></span>
+          <span class="col">
+            <span class="r1"><span class="id">CV-01</span><span class="nm">출측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="pane">
+          <div class="lbl">인계 — 5칸 모두 필수</div>
+          <div class="t4">
+            <div class="fld"><div class="k2">REQUIRED_CONTEXT</div>
+              <div class="v auto">시도 2건 실패 (AT-0001 · AT-0002 · 예시) · 대기율 94 %</div></div>
+            <div class="fld"><div class="k2">RECIPIENT_ROLE</div>
+              <div class="v">야간조 정비 담당</div></div>
+            <div class="fld"><div class="k2">TIMING</div>
+              <div class="v">교대 직후 최초 기동 전</div></div>
+            <div class="fld"><div class="k2">CHANNEL</div>
+              <div class="v">구두 인계 + 인계서 기록</div></div>
+            <div class="fld"><div class="k2">ACKNOWLEDGEMENT</div>
+              <div class="v ph req">입력 필요</div></div>
+          </div>
+          <div class="alert"><div class="p">확인 방법이 비어 있으면 저장되지 않습니다.</div></div>
+          <div class="fill"></div>
+          <div class="btn pri off">저장</div>
+        </div>
+      </div>
+      <div class="frame-nt">첫 칸이 <b>시도 기록에서 자동으로 채워진다</b>(파란 테두리). 무엇을 해 봤고 왜 안 됐는지가 인계의 가장 중요한 맥락인데 손으로 적으라고 하면 빠지기 때문이다. 계약이 5요소이므로 5칸이고, 가장 자주 비는 <span class="mono">acknowledgement</span>를 마지막에 두고 비면 저장을 잠근다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 예외 ══════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">15 – 16</div>
+    <div class="b">열리지 않을 때, 끊겼을 때</div>
+    <div class="c">분리형 구성이라 무선 단절은 정상 상태의 일부다. 스캔은 되는데 질의는 안 되는 비대칭을 숨기지 않고 그대로 보여 준다.</div>
+  </div>
+  <div class="rack">
+
+    <!-- 15 연결 끊김 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">15</span><span>Jetson 연결 끊김</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:34</span><span class="mono">Wi-Fi 약함 · 64%</span></div>
+        <div class="ctx">
+          <span class="rail" style="background:#F0C419"></span>
+          <span class="col">
+            <span class="r1"><span class="id">RT-01</span><span class="nm">입측 이송 설비군</span></span>
+            <span class="src">✓ 카메라 확정 · SC-LOCAL-0001</span>
+          </span>
+          <span class="edit">수정</span>
+        </div>
+        <div class="net warn"><span class="dot warn"></span><span>Jetson에 연결할 수 없음</span><span class="q">대기 4건</span></div>
+        <div class="pane">
+          <div class="alert">
+            <div class="hd">서버가 응답하지 않습니다</div>
+            <div class="p">거치된 Jetson과 통신이 끊겼습니다. 무선 신호가 닿는 곳으로 이동한 뒤 다시 시도하세요.</div>
+            <div class="cd">https://192.168.4.1:8443 · 타임아웃 8s</div>
+          </div>
+          <div class="lbl">지금 할 수 있는 것</div>
+          <div class="card">
+            <div class="kid">가능</div>
+            <div class="ttl">스캔과 설비 확정</div>
+          </div>
+          <div class="card">
+            <div class="kid">가능</div>
+            <div class="ttl">캐시된 카드 열람 · 12건</div>
+          </div>
+          <div class="card" style="opacity:.5">
+            <div class="kid">불가</div>
+            <div class="ttl">새 증상 질의 · 조치 순위 산정</div>
+            <div class="src">검색과 생성은 Jetson에서만 수행됩니다.</div>
+          </div>
+          <div class="fill"></div>
+          <div class="btn pri">캐시 카드 열람</div>
+          <div class="btn sm gh">연결 다시 시도</div>
+        </div>
+      </div>
+      <div class="frame-nt">분리형 구성의 직접적 귀결. 가능·불가를 나눠 보여 주고, 스캔 기록과 시도 기록은 outbox에 쌓였다가 재연결 시 전송된다. 로컬 발급 ID는 <span class="mono">SC-LOCAL-</span> 접두어로 서버 발급과 구분한다.</div>
+    </div>
+
+    <!-- 16 카메라 불가 -->
+    <div class="frame">
+      <div class="frame-lb"><span class="num">16</span><span>카메라를 열 수 없음</span></div>
+      <div class="screen">
+        <div class="sysbar"><span class="mono">14:31</span><span class="mono">Wi-Fi · 66%</span></div>
+        <div class="appbar"><span class="t">스캔</span><span class="ic">✕</span></div>
+        <div class="pane">
+          <div class="alert bad">
+            <div class="hd">카메라를 열 수 없습니다</div>
+            <div class="p">보안 컨텍스트가 아닙니다. 카메라는 HTTPS 또는 localhost에서만 열립니다.</div>
+            <div class="cd">http://192.168.4.1:8000/pda.html</div>
+            <div class="p">→ https:// 주소로 접속하세요. 자체 서명 인증서를 이 단말에 먼저 신뢰 등록해야 합니다.</div>
+          </div>
+          <div class="card">
+            <div class="kid">권한</div>
+            <div class="ttl">카메라 권한이 거부되어 있습니다</div>
+            <div class="btn sm">권한 다시 요청</div>
+          </div>
+          <div class="fill"></div>
+          <div class="btn pri">직접 선택으로 계속</div>
+          <div class="hint">인식 없이도 설비를 고르고 캐시 카드를 볼 수 있습니다.</div>
+        </div>
+      </div>
+      <div class="frame-nt">원인과 실제 주소를 그대로 노출해야 현장에서 디버깅된다. "오류가 발생했습니다"는 아무 도움이 안 된다. 이 화면이 R-1 치명 위험에 대한 대비다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 시연 대본 ═════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">DEMO</div>
+    <div class="b">시연 시나리오 — 총 4분 40초</div>
+    <div class="c">기존 설계안 §12의 S1~S3은 조치를 1개만 보여주는 전제로 쓰였다. 조치 순위가 설계의 중심이 되었으므로 <b>D2를 가장 긴 구간으로 두고</b> 나머지를 그 앞뒤에 배치한다. 상자 6개(HPU-01·GR-01·GR-02·RT-01·CV-01·CAU-01)를 준비한다. 페이징 화면(06-b, 10-b)은 데모에서 생략 가능하다 — 주 기능은 이미 프레임 06과 10에서 보인다.</div>
+  </div>
+
+  <div class="note">
+    <div class="h">발표 첫 30초 — 설정 고지</div>
+    <div class="p">"실제 설비를 들고 올 수 없어서, 상자 하나가 설비 한 대를 대신합니다. 상자에 붙은 코드가 설비 ID입니다. 작업자는 PDA로 이 상자를 찍습니다. PDA는 카메라와 화면만 갖고 있고, 검색과 생성은 저기 거치된 Jetson에서 돕니다."</div>
+    <div class="p">이 고지를 먼저 하면 상자가 초라해 보이지 않고 <b>의도된 대체물</b>로 읽힌다. 분리형 구성도 같이 밝혀 두면 뒤의 D5(단절 시연)가 갑작스럽지 않다.</div>
+  </div>
+
+  <div class="sc-lg"><div class="tm">시각</div><div class="ac">행동</div><div class="fr">화면</div><div class="ln">대사</div></div>
+
+  <!-- D1 -->
+  <div class="sc">
+    <div class="sc-h"><span class="id">D1</span><span class="nm">신입 — 찍으면 끝, 안전은 2초</span><span class="du">50초</span></div>
+    <div class="sc-r"><span class="tm">0:00</span><span class="ac">홈에서 스캔 버튼</span><span class="fr">01 → 02</span><span class="ln">"신입은 이 설비가 뭔지도 모릅니다."</span></div>
+    <div class="sc-r"><span class="tm">0:05</span><span class="ac">초록 띠 상자(CV-01) 비춤</span><span class="fr">03 → 04</span><span class="ln">"세 프레임이 같은 답을 내면 확정입니다. 설비를 목록에서 고르는 단계가 없습니다."</span></div>
+    <div class="sc-r"><span class="tm">0:12</span><span class="ac">증상 목록에서 「출측 이송이 간헐적으로 멈춘다」 탭 + 대기율 94 입력</span><span class="fr">07 → 08</span><span class="ln">"증상은 고르면 됩니다 — 장갑 낀 손으로 한글을 칠 수는 없으니까요. 목록에 없으면 「기타」로 적습니다. 그리고 관측값을 하나 넣습니다. 이게 뒤에서 중요해집니다."</span></div>
+    <div class="sc-r key"><span class="tm">0:22</span><span class="ac">—</span><span class="fr">09</span><span class="ln">"생성에는 20초 남짓 걸립니다. 그런데 <b>안전 카드는 2초 만에 이미 떠 있습니다.</b> 안전은 LLM을 기다릴 이유가 없으니까요."</span></div>
+    <div class="sc-r"><span class="tm">0:40</span><span class="ac">결과 도착</span><span class="fr">10</span><span class="ln">"근거 없는 내용은 만들지 않습니다. 카드 ID와 조문이 그대로 붙어 있습니다."</span></div>
+    <div class="sc-f">보여주기 좋은 순간 — 0:22. 진행 막대 ③이 아직 비어 있는데 빨간 안전 블록이 화면에 있는 장면.</div>
+  </div>
+
+  <!-- D2 -->
+  <div class="sc">
+    <div class="sc-h star"><span class="id">D2</span><span class="nm">★ 조치 순위 — 하나로 안 되면 다음으로</span><span class="du">100초</span></div>
+    <div class="sc-r"><span class="tm">0:00</span><span class="ac">결과 화면 스크롤</span><span class="fr">10</span><span class="ln">"조치를 하나만 주지 않습니다. 관련도 순으로 네 개가 나옵니다."</span></div>
+    <div class="sc-r key"><span class="tm">0:10</span><span class="ac">1번 카드의 순위 근거 가리키기</span><span class="fr">10</span><span class="ln">"1번이 위에 있는 이유가 적혀 있습니다 — <b>'조건 일치'</b>. 방금 넣은 대기율 94 %가 이 카드의 조건 90 % 이상을 실제로 만족합니다. 점수만 보여주면 아무도 안 믿습니다."</span></div>
+    <div class="sc-r key"><span class="tm">0:25</span><span class="ac">맨 아래 '적용 안 됨' 구획</span><span class="fr">10</span><span class="ln">"여기 K-0103은 <b>일부러 남겨 둔 겁니다.</b> '대기율 70 % 미만이면 하류 정체를 원인에서 빼라'는 카드인데, 지금 94 %라서 안 맞습니다. 숨기면 작업자는 왜 하류를 안 뺐는지 알 수 없습니다."</span></div>
+    <div class="sc-r"><span class="tm">0:45</span><span class="ac">1번 「이 조치 시도」 → 결과 '효과 없음' 기록</span><span class="fr">10 → 11</span><span class="ln">"걸림을 확인했는데 없습니다. 실패를 그대로 적습니다."</span></div>
+    <div class="sc-r"><span class="tm">1:00</span><span class="ac">2번도 시도 → 압력 정상 → '효과 없음'</span><span class="fr">11</span><span class="ln">"두 번째도 아닙니다. 압력이 정상이라 유압 공급원 이상이 배제됐습니다."</span></div>
+    <div class="sc-r key"><span class="tm">1:20</span><span class="ac">'남은 조치가 없습니다' 구획</span><span class="fr">11</span><span class="ln">"두 건이 전부 배제되자 <b>「남은 조치가 없습니다」라고 말합니다.</b> 지어내지 않습니다. 대신 시도 기록 두 건을 그대로 인계로 넘깁니다 — 첫 조치가 듣지 않은 것이 실패가 아니라 <b>다음 교대로 넘어가는 정보</b>가 됩니다."</span></div>
+    <div class="sc-f">리허설을 여기에 집중한다. 0:25(적용 안 됨)과 1:20(소진 → 인계)이 이 시스템이 단순 검색기와 다르다는 것을 보여주는 두 지점이다. 등록된 지식을 다 쓰고 나면 그 사실을 말한다는 점이 핵심이다.</div>
+  </div>
+
+  <!-- D3 -->
+  <div class="sc">
+    <div class="sc-h"><span class="id">D3</span><span class="nm">상자 3연속 — 맥락이 통째로 갈아탄다</span><span class="du">40초</span></div>
+    <div class="sc-r"><span class="tm">0:00</span><span class="ac">파란 상자(GR-01) 스캔</span><span class="fr">04 → 07</span><span class="ln">"찍는 대상만 바꿉니다."</span></div>
+    <div class="sc-r"><span class="tm">0:12</span><span class="ac">노란 상자(RT-01) 스캔</span><span class="fr">04 → 07</span><span class="ln">"배너, 미종료 건수, 검색 범위가 전부 따라옵니다."</span></div>
+    <div class="sc-r"><span class="tm">0:24</span><span class="ac">하늘 상자(CAU-01) 스캔 → 질의</span><span class="fr">12</span><span class="ln">"공압 설비는 등록된 카드가 없습니다. <b>'해당 지식 없음'</b>이 그대로 나옵니다 — 억지로 만든 화면이 아니고, 데이터에 실제로 없어서 나오는 겁니다."</span></div>
+    <div class="sc-f">보여주기 좋은 순간 — 0:24. 없는 건 없다고 말하는 장면이 있는 걸 잘 찾는 장면보다 신뢰를 준다.</div>
+  </div>
+
+  <!-- D4 -->
+  <div class="sc">
+    <div class="sc-h"><span class="id">D4</span><span class="nm">교대 — 시도 기록이 인계로 넘어간다</span><span class="du">50초</span></div>
+    <div class="sc-r"><span class="tm">0:00</span><span class="ac">GR-01 스캔 → 인계 확인</span><span class="fr">13</span><span class="ln">"전 교대가 세 건을 남겼습니다. 항목마다 근거 ID가 붙어 있어 어디서 나온 얘긴지 되짚을 수 있습니다."</span></div>
+    <div class="sc-r"><span class="tm">0:18</span><span class="ac">CV-01로 돌아가 「인계로 넘기기」</span><span class="fr">11 → 14</span><span class="ln">"아까 해결 못 한 건을 인계로 넘깁니다."</span></div>
+    <div class="sc-r key"><span class="tm">0:28</span><span class="ac">첫 칸(파란 테두리) 가리키기</span><span class="fr">14</span><span class="ln">"<b>첫 칸이 이미 채워져 있습니다.</b> 시도 2건과 그 사유가 자동으로 들어갔습니다. 손으로 적으라고 하면 이게 제일 먼저 빠지는 항목입니다."</span></div>
+    <div class="sc-r"><span class="tm">0:40</span><span class="ac">마지막 칸이 비어 저장 잠김</span><span class="fr">14</span><span class="ln">"다섯 칸이 강제됩니다. 누구에게, 언제, 어떻게, 그리고 <b>무엇으로 확인하는지.</b>"</span></div>
+    <div class="sc-f">D2를 먼저 해야 이 장면이 성립한다. 순서를 바꾸지 않는다.</div>
+  </div>
+
+  <!-- D5 -->
+  <div class="sc">
+    <div class="sc-h"><span class="id">D5</span><span class="nm">실패를 일부러 보여준다</span><span class="du">40초</span></div>
+    <div class="sc-r"><span class="tm">0:00</span><span class="ac">상자를 절반 가리고 스캔</span><span class="fr">05 → 06</span><span class="ln">"3회 실패하면 멈추지 않고 직접 고르게 합니다."</span></div>
+    <div class="sc-r key"><span class="tm">0:12</span><span class="ac">확정 전 상태에서 검색 시도</span><span class="fr">06</span><span class="ln">"중요한 건 <b>확정되지 않은 설비로는 검색 자체를 막는다</b>는 겁니다. 엉뚱한 설비의 안전 지침이 나가면 안 되니까요."</span></div>
+    <div class="sc-r key"><span class="tm">0:24</span><span class="ac">Wi-Fi를 끊고 다시 스캔</span><span class="fr">15</span><span class="ln">"Jetson과 끊어도 <b>스캔과 확정은 됩니다</b> — 인식은 PDA 안에서 끝나니까요. 대신 새 질의는 잠깁니다. 할 수 있는 것과 없는 것을 나눠서 보여줍니다."</span></div>
+    <div class="sc-f">설계 원칙이 "확실하지 않으면 답하지 않는다"이므로, 실패를 숨기면 그 원칙을 보여줄 기회를 잃는다. 단절 시연은 분리형 구성을 눈으로 납득시키는 장면이다.</div>
+  </div>
+
+  <div class="note">
+    <div class="h">시연 전 점검</div>
+    <div class="li"><span class="n">1</span><span>P0-1 통과 여부 — PDA에서 카메라가 실제로 열리는가. 여기서 막히면 D1·D3·D5가 전부 불가하다.</span></div>
+    <div class="li"><span class="n">2</span><span>상자 6개의 QR이 <b>카탈로그에서 생성된</b> 값인가. 수기 작성 금지(R-6).</span></div>
+    <div class="li"><span class="n">3</span><span>발표장 실조명에서 M-2~M-4(거리·각도·조명) 재측정. 리허설 조명과 다르면 D3이 무너진다.</span></div>
+    <div class="li"><span class="n">4</span><span>D5의 Wi-Fi 차단을 무엇으로 할지 — 기내 모드인지 AP 전원인지 미리 정한다. 복구 시간도 재 둔다.</span></div>
+    <div class="li"><span class="n">5</span><span>D2의 관측값 입력(94)을 빠뜨리면 순위 근거가 "조건 미평가"로 나와 대본이 성립하지 않는다. <b>가장 흔한 리허설 실수 지점.</b></span></div>
+  </div>
+</div>
+
+<!-- ══ 토큰 ══════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t">
+    <div class="a">TOKENS</div>
+    <div class="b">디자인 토큰</div>
+    <div class="c">임포트 후 피그마 변수로 승격시킬 값들이다. PDA 화면은 다크 단일 테마로 고정한다 — 옥외·고휘도용 전환은 P1으로 미룬다.</div>
+  </div>
+
+  <div class="tok-rack">
+    <div class="tok"><div class="sw2" style="background:#0A0D11"></div><div class="m"><div class="n2">bg</div><div class="h">#0A0D11</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#161B22"></div><div class="m"><div class="n2">surface</div><div class="h">#161B22</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#1E252E"></div><div class="m"><div class="n2">surface-2</div><div class="h">#1E252E</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#2B333D"></div><div class="m"><div class="n2">edge</div><div class="h">#2B333D</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#F3F6F9"></div><div class="m"><div class="n2">text</div><div class="h">#F3F6F9 · 15.8:1</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#AEB9C4"></div><div class="m"><div class="n2">text-2</div><div class="h">#AEB9C4 · 8.9:1</div></div></div>
+  </div>
+
+  <div class="tok-rack">
+    <div class="tok"><div class="sw2" style="background:#F0453C"></div><div class="m"><div class="n2">safety</div><div class="h">#F0453C</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#31C25E"></div><div class="m"><div class="n2">확정 / 조건 일치</div><div class="h">#31C25E</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#FFB020"></div><div class="m"><div class="n2">후보 / 다음 조치</div><div class="h">#FFB020</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#FF8A3D"></div><div class="m"><div class="n2">실패 / 조건 불일치</div><div class="h">#FF8A3D</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#38C6F2"></div><div class="m"><div class="n2">진행 / 순위 1</div><div class="h">#38C6F2</div></div></div>
+  </div>
+
+  <div class="tok-rack">
+    <div class="tok"><div class="sw2" style="background:#F0453C"></div><div class="m"><div class="n2">HPU 빨강</div><div class="h">#F0453C</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#4A90F0"></div><div class="m"><div class="n2">GR 파랑</div><div class="h">#4A90F0</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#F0C419"></div><div class="m"><div class="n2">RT 노랑</div><div class="h">#F0C419</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#2FC26B"></div><div class="m"><div class="n2">CV 초록</div><div class="h">#2FC26B</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#A78BFA"></div><div class="m"><div class="n2">PDP 보라</div><div class="h">#A78BFA</div></div></div>
+    <div class="tok"><div class="sw2" style="background:#38C6F2"></div><div class="m"><div class="n2">CAU 하늘</div><div class="h">#38C6F2</div></div></div>
+  </div>
+
+  <div class="ty-rack">
+    <div class="ty"><div class="k3">카드 제목 20</div><div style="font-size:20px;font-weight:700">적재 정체 확인 순서</div></div>
+    <div class="ty"><div class="k3">본문 16</div><div style="font-size:16px">출측 이송이 간헐적으로 멈춥니다</div></div>
+    <div class="ty"><div class="k3">보조 13</div><div style="font-size:13px;color:#AEB9C4">기대 — 전단 설비 이상과 하류 정체가 구분된다</div></div>
+    <div class="ty"><div class="k3">순위 근거 11.5</div><div class="why" style="font-size:11.5px">조건 일치 · 설비 직접 지정</div></div>
+    <div class="ty"><div class="k3">데이터 14</div><div class="mono" style="font-size:14px">cv_queue_len = 94 pct</div></div>
+  </div>
+
+  <div class="tt-rack">
+    <div class="tt"><div class="bx" style="width:80px;height:56px"></div><div class="d"><b>56dp</b> — 주 행동 (검색, 계속, 이 조치 시도, 저장)</div></div>
+    <div class="tt"><div class="bx" style="width:68px;height:48px"></div><div class="d"><b>48dp</b> — 보조 행동 (수정, 목록 항목, 칩)</div></div>
+    <div class="tt"><div class="bx" style="width:48px;height:8px"></div><div class="d"><b>8dp</b> — 최소 간격</div></div>
+  </div>
+</div>

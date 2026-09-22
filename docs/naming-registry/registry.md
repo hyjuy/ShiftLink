@@ -16,14 +16,22 @@
 | `FailedAttempt` | `shiftlink/agent/schemas.py` | D-29 시도·실패 기록 (v1.0) | 유현준 |
 | `TypePayload` | `shiftlink/agent/schemas.py` | 암묵지 유형별 payload (v1.0) | 유현준 |
 | `V09ConversionResult` | `shiftlink/agent/compat.py` | v0.9 → v1.0 변환 결과 | 유현준 |
-| `QueryRequest` | `shiftlink/agent/router.py` | 질의 모드 입력 | 유현준 |
-| `HandoverRequest` | `shiftlink/agent/router.py` | 인계 모드 입력 | 유현준 |
-| `RoutedRequest` | `shiftlink/agent/router.py` | 라우터 판정 결과 | 유현준 |
+| `ConversionIssue` | `shiftlink/agent/compat.py` | 변환 findings 1건 (code·severity·field·message) | 유현준 |
+| `V09ConversionBatch` | `shiftlink/agent/compat.py` | v0.9 일괄 변환 집계 (counts·issue_counts·중복 ID·auto_accepted) | 유현준 |
+| `QueryRequest` | `shiftlink/agent/router.py` | 질의 모드 입력 (공용 접근자: `equipment_ids`·`search_text`·`k`·`shift`·`observation_map()`) | 유현준 |
+| `HandoverRequest` | `shiftlink/agent/router.py` | 인계 모드 입력 (공용 접근자 동일) | 유현준 |
+| `Observation` | `shiftlink/agent/router.py` | 관측 신호 1건 (signal·value·unit) — §4.2 조건 판정 입력 | 유현준 |
+| `RoutedRequest` | `shiftlink/agent/router.py` | 라우터 판정 결과 (+ `route_reason`) | 유현준 |
 | `ToolProvider` | `shiftlink/agent/pipeline.py` | 도구 6종 Protocol (v1.0) | 유현준 |
-| `PipelineResult` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 출력 | 유현준 |
+| `ToolSpec` | `shiftlink/agent/tools.py` | 4.8 도구 표 1행(입력·출력·저장소·읽기 전용) | 유현준 |
+| `PipelineResult` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 출력 (mode·tool_results·output·model_calls·no_knowledge·cache_hit·audit) | 유현준 |
+| `AuditRecord` | `shiftlink/agent/pipeline.py` | 실행 1스텝 감사 기록 (4.12) | 유현준 |
+| `ResponseCache` | `shiftlink/agent/pipeline.py` | 질의+검색결과 해시 키 모델 출력 캐시 (4.8) | 유현준 |
 | `FixedPipeline` | `shiftlink/agent/pipeline.py` | 고정 파이프라인 본체 | 유현준 |
-| `AgentResponse` | `shiftlink/agent/response.py` | D-26~29 응답 구조화 모델 (v1.0) | 유현준 |
+| `AgentResponse` | `shiftlink/agent/response.py` | D-26~29 응답 구조화 모델 (v1.0). `handover_method`는 `handover_methods[0]` 파생 | 유현준 |
 | `SafetyNotice` | `shiftlink/agent/response.py` | 안전 공지 렌더링 (v1.0) | 유현준 |
+| `CardCitation` | `shiftlink/agent/response.py` | 인용 카드 + 등급 표기 (4.10) | 유현준 |
+| `HandoverCandidate` | `shiftlink/agent/response.py` | 인계 등록 후보 (수락 전·미저장, F-04) | 유현준 |
 | `StepRender` | `shiftlink/agent/response.py` | T3 단계 렌더링 (v1.0) | 유현준 |
 | `HandoverMethodRender` | `shiftlink/agent/response.py` | T4 인계 방법 렌더링 (v1.0) | 유현준 |
 | `RestartFailure` | `shiftlink/agent/response.py` | 재가동 실패 렌더링 (v1.0) | 유현준 |
@@ -51,6 +59,8 @@
 | 이름 | 위치 | 뜻 | 담당자 |
 | --- | --- | --- | --- |
 | `convert_card_v09()` | `shiftlink/agent/compat.py` | v0.9 카드를 v1.0으로 변환 (needs_review/converted/rejected) | 유현준 |
+| `convert_cards_v09()` | `shiftlink/agent/compat.py` | v0.9 카드 일괄 변환 → `V09ConversionBatch` | 유현준 |
+| `Condition.evaluate()` | `shiftlink/agent/schemas.py` | 조건 1건 결정적 평가 (True/False/None=미관측) — §4.2 단일 출처 | 유현준 |
 | `route_request()` | `shiftlink/agent/router.py` | 입력을 질의/인계 모드로 판정 | 유현준 |
 | `lookup_equipment()` | `shiftlink/agent/tools.py` | 도구: 장비 조회 | 유현준 |
 | `search_cards()` | `shiftlink/agent/tools.py` | 도구: 카드 검색 | 유현준 |
@@ -58,9 +68,12 @@
 | `list_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 목록 | 유현준 |
 | `propose_handover()` | `shiftlink/agent/tools.py` | 도구: 인계 제안 | 유현준 |
 | `get_checklist()` | `shiftlink/agent/tools.py` | 도구: 체크리스트 조회 | 유현준 |
+| `verify_tool_provider()` | `shiftlink/agent/tools.py` | 어댑터의 도구 6종·읽기 전용·범위 밖 도구 계약 검사 | 유현준 |
+| `check_tool_output()` | `shiftlink/agent/tools.py` | 도구 출력의 문서화된 필드 존재 검사 | 유현준 |
 | `build_response()` | `shiftlink/agent/response.py` | 도구 결과 → 응답 구조화 (v1.0) | 유현준 |
 | `render_response()` | `shiftlink/agent/response.py` | 응답 → 결정적 텍스트 렌더 (v1.0) | 유현준 |
-| `validate_response()` | `shiftlink/agent/response.py` | 응답 불변식 검증 (v1.0) | 유현준 |
+| `validate_response()` | `shiftlink/agent/response.py` | 응답 불변식 검증 (v1.0). `[code] message` 형식 반환 | 유현준 |
+| `is_model_retryable()` | `shiftlink/agent/response.py` | 검증 결함이 모델 재시도 대상인지 판정 (§4.3) | 유현준 |
 | `check_card_rules()` | `shiftlink/rag/retrieval.py` | 카드 P5 규칙 검사 (v1.0) | 유현준 |
 | `main()` | `shiftlink/data/__init__.py` | 데이터 파이프라인 실행 계획 CLI 진입점 | 유현준 |
 | `from_catalog()` | `shiftlink/mes/configuration.py` | 기준정보 JSON → 기본 Configuration | 유현준 |

@@ -15,8 +15,11 @@ from shiftlink.agent.schemas import (
 )
 from shiftlink.rag.retrieval import InMemoryToolProvider, check_card_rules
 from shiftlink.agent.response import (
+    DISCLAIMER,
     AgentResponse,
+    HandoverCandidate,
     build_response,
+    is_model_retryable,
     render_response,
     validate_response,
 )
@@ -560,3 +563,162 @@ def test_validate_response_no_lost_stop_conditions() -> None:
     resp = AgentResponse(mode="query")
     errors = validate_response(resp, tool_results)
     assert any("Lost stop_conditions" in e for e in errors)
+
+
+# --- v1.0 고도화: 등급 표기·인용 검증·카드별 단계·인계 후보 ---
+
+
+def _results(*cards: KnowledgeCard) -> dict:
+    return {
+        "cards": [c.model_dump(mode="json") for c in cards],
+        "equipment": [],
+        "checklist": [],
+    }
+
+
+def test_each_cited_card_shows_its_grade_label() -> None:
+    """4.10: 인용 카드마다 'L1 합성·시뮬레이션 검증' 등급을 표시한다."""
+    resp = build_response("query", None, _results(make_card_t1()))
+    text = render_response(resp)
+
+    assert resp.cards[0].grade == "L1"
+    assert resp.cards[0].grade_label == "L1 합성·시뮬레이션 검증"
+    assert "K-0001 [L1 합성·시뮬레이션 검증]" in text
+    assert validate_response(resp, _results(make_card_t1())) == []
+
+
+def test_render_always_carries_the_not_a_work_order_notice() -> None:
+    """4.10: '실제 작업지시 아님' 문구 상시 표시."""
+    text = render_response(build_response("query", None, _results(make_card_t1())))
+    assert DISCLAIMER in text
+
+
+def test_second_t4_card_does_not_overwrite_the_first() -> None:
+    """D-27: T4 인계 방법은 카드별로 보존한다."""
+    first = make_card_t4(card_id="K-0004")
+    second = make_card_t4(card_id="K-0005")
+    tool_results = _results(first, second)
+
+    resp = build_response("query", None, tool_results)
+
+    assert [hm.card_id for hm in resp.handover_methods] == ["K-0004", "K-0005"]
+    assert resp.handover_method.card_id == "K-0004"  # 계약 §4.3 필드명 유지
+    assert not [e for e in validate_response(resp, tool_results) if "handover_method_lost" in e]
+
+
+def test_steps_of_two_cards_are_not_interleaved() -> None:
+    """D-28: 카드별 단계 순서를 보존하고 서로 섞지 않는다."""
+    tool_results = _results(make_card_t3(card_id="K-0003"), make_card_t3(card_id="K-0007"))
+    resp = build_response("query", None, tool_results)
+    text = render_response(resp)
+
+    assert [s.card_id for s in resp.steps] == ["K-0003", "K-0003", "K-0007", "K-0007"]
+    assert text.index("카드 K-0003") < text.index("카드 K-0007")
+    # 두 카드의 order가 1,2,1,2여도 역전으로 보고하지 않는다.
+    assert not [e for e in validate_response(resp, tool_results) if "ascending order" in e]
+
+
+def test_safety_notice_collects_every_stop_condition() -> None:
+    """D-26·§2.2: 첫 단계만이 아니라 카드의 중단 조건 전부를 노출한다."""
+    card = make_card_t3(card_id="K-0008")
+    card.safety_flag = True
+    card.safety_basis = "KOSHA GUIDE M-101-2012"
+    tool_results = _results(card)
+
+    resp = build_response("query", None, tool_results)
+
+    assert resp.safety_notices[0].stop_conditions == ["조건 A", "조건 B"]
+    assert validate_response(resp, tool_results) == []
+
+
+def test_safety_card_without_basis_is_flagged() -> None:
+    """D-26·4.12: safety_flag 카드에 근거가 없으면 검증 오류."""
+    tool_results = {
+        "cards": [{"card_id": "K-0001", "safety_flag": True, "grade": "L1"}],
+        "equipment": [],
+        "checklist": [],
+    }
+    resp = build_response("query", None, tool_results)
+    errors = validate_response(resp, tool_results)
+
+    assert any("safety_basis_missing" in e for e in errors)
+    assert "근거 미기재 — 검토 필요" in render_response(resp)
+
+
+def test_model_citations_are_filtered_against_retrieval() -> None:
+    """4.8 코드 검증: 검색 결과에 없는 인용 ID는 채택하지 않는다."""
+    tool_results = _results(make_card_t1(card_id="K-0001"))
+    resp = build_response(
+        "query", None, tool_results, {"cited_card_ids": ["K-0001", "K-9999"], "answer": "본문"}
+    )
+
+    assert resp.cited_card_ids == ["K-0001"]
+    assert resp.dropped_citations == ["K-9999"]
+    assert resp.answer == "본문"
+    assert validate_response(resp, tool_results) == []
+
+
+def test_only_unknown_citations_fall_back_to_no_knowledge() -> None:
+    """3.3: 인용 ID가 실제 결과에 없으면 '지식 없음'으로 치환한다."""
+    tool_results = _results(make_card_t1(card_id="K-0001"))
+    resp = build_response(
+        "query", None, tool_results, {"cited_card_ids": ["K-9999"], "answer": "근거 없는 본문"}
+    )
+    text = render_response(resp)
+
+    assert resp.no_knowledge is True
+    assert resp.answer is None
+    assert "해당 지식 없음" in text
+    assert "근거 없는 본문" not in text
+    assert "K-9999" in text  # 무엇을 버렸는지는 남긴다
+
+
+def test_handover_candidates_are_proposals_only() -> None:
+    """3.4 F-04: 인계 항목은 등록 후보로만 제시하고 저장하지 않는다."""
+    tool_results = _results(make_card_t4(card_id="K-0004"))
+    resp = build_response(
+        "handover",
+        None,
+        tool_results,
+        {"handover_candidates": [{"text": "RT-01 진동 재확인", "card_ids": ["K-0004"]}]},
+    )
+    text = render_response(resp)
+
+    assert resp.handover_candidates[0].status == "proposed"
+    assert "수락 전, 저장되지 않음" in text
+    assert validate_response(resp, tool_results) == []
+
+
+def test_handover_candidate_citing_unknown_card_is_flagged() -> None:
+    """4.9: 근거 없는 조치 제안은 검증에서 걸러진다."""
+    tool_results = _results(make_card_t1(card_id="K-0001"))
+    resp = AgentResponse(mode="handover")
+    resp.handover_candidates = [HandoverCandidate(text="점검", card_ids=["K-9999"])]
+
+    errors = validate_response(resp, tool_results)
+    assert any("handover_candidate_unknown_card" in e for e in errors)
+
+
+def test_restart_failure_evidence_is_rendered() -> None:
+    """D-29: 시도·실패의 근거 ID를 응답에 남긴다."""
+    attempt = FailedAttempt(
+        attempt_id="AT-0001",
+        restart_type="normal_stop_restart",
+        action="재시작",
+        observed_result="실패",
+        failure_reason=None,
+        evidence_ids=["EV-0001"],
+    )
+    resp = build_response("query", None, _results(make_card_t6(failed_attempts=[attempt])))
+    text = render_response(resp)
+
+    assert resp.restart_failures[0].evidence_ids == ["EV-0001"]
+    assert "근거: EV-0001" in text
+    assert "이유: 미상" in text
+
+
+def test_only_model_attributable_findings_are_retryable() -> None:
+    """§4.3: 재시도는 모델이 고칠 수 있는 결함에만 적용한다."""
+    assert is_model_retryable(["[cited_card_unknown] Cited card K-9999 not found"]) is True
+    assert is_model_retryable(["[safety_basis_missing] Safety card K-0001 has no safety_basis"]) is False
+    assert is_model_retryable([]) is False

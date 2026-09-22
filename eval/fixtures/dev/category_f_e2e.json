@@ -56,7 +56,7 @@
       "eq_id": "HPU",
       "k": 5,
       "observations": [
-        {"signal": "pressure", "value": 8}
+        {"signal": "pressure", "value": 12}
       ]
     },
     "fixture_cards": [

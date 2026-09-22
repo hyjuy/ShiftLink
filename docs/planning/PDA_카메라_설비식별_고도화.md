@@ -25,6 +25,7 @@
 - [15. 작업 분해](#15-작업-분해)
 - [16. 위험](#16-위험)
 - [17. 미검증 항목](#17-미검증-항목)
+- [18. 정정 이력](#18-정정-이력)
 
 ---
 
@@ -226,7 +227,7 @@
 | QR | 한 변 80 mm, 오류정정 레벨 **M**, 여백(quiet zone) 모듈 4개분 이상 |
 | ArUco | `DICT_6X6_250`, 한 변 100 mm, 흰 여백 30 mm 이상 |
 | 인쇄 | 300 DPI 이상, 순수 흑(0,0,0) / 순수 백(255,255,255) |
-| 텍스트 | `equipment_id` + 한글 설비명, 48pt 이상 |
+| 텍스트 | `code` + 한글 설비명, 48pt 이상 |
 | 부착 면 | **최소 2면(정면·상면)** 에 동일 내용. 상자를 돌려놔도 인식되게 |
 
 ### 5.3 QR 인코딩 내용
@@ -237,19 +238,32 @@ SHIFTLINK:EQ:HPU-01
 
 접두어 `SHIFTLINK:EQ:` 를 검사해 **현장의 무관한 QR(택배 송장 등)을 즉시 배제**한다. 이 접두어 검사가 오인식 1차 방어선이다.
 
-### 5.4 설비 ↔ 마커 매핑 (초안)
+**접두어 뒤에 오는 값은 `code`(`HPU-01`)다. `equipment_id`(`EQ-0001`)가 아니다.** [확정 2026-09-22]
 
-| equipment_id | 설비군 | 한글명 | QR 내용 | ArUco ID | 색상 띠 |
-| --- | --- | --- | --- | --- | --- |
-| `HPU-01` | HPU | 유압 유닛 | `SHIFTLINK:EQ:HPU-01` | 30 | 빨강 |
-| `HPU-02` | HPU | 유압 유닛 2 | `SHIFTLINK:EQ:HPU-02` | 31 | 빨강 |
-| `GR-01` | GR | 감속기(RT 구동) | `SHIFTLINK:EQ:GR-01` | 32 | 파랑 |
-| `GR-02` | GR | 감속기(CV 구동) | `SHIFTLINK:EQ:GR-02` | 33 | 파랑 |
-| `RT-01` | RT | 롤러테이블 | `SHIFTLINK:EQ:RT-01` | 34 | 노랑 |
-| `RT-02` | RT | 롤러테이블 2 | `SHIFTLINK:EQ:RT-02` | 35 | 노랑 |
-| `CV-01` | CV | 컨베이어 | `SHIFTLINK:EQ:CV-01` | 36 | 초록 |
+근거 — 상자에는 사람이 읽는 이름표가 같이 인쇄되고, 수동 선택 목록도 같은 값을 보여준다. 세 곳(QR·이름표·목록)이 같은 문자열이어야 작업자가 육안으로 대조할 수 있다. `EQ-0001`은 사람이 설비를 식별하는 데 쓰는 값이 아니다.
 
-> 실제 `equipment_id` 값은 `docs/data/00_plant_and_relations.json`의 등록값과 **반드시 일치**시킨다. 위 표는 형식 예시이며, 구현 시 카탈로그를 정본으로 삼아 생성한다(§13의 T-3 정합 테스트가 이를 강제한다).
+디코딩된 `code`는 PDA가 카탈로그에서 `equipment_id`로 해석한 뒤 서버로 보낸다. **카탈로그에 없는 `code`는 무시한다**(§6.1).
+
+### 5.4 설비 ↔ 마커 매핑
+
+`docs/data/00_plant_and_relations.json`의 `equipment` 배열에서 생성한 값이다. **수기로 작성하지 않는다** — 인쇄 자산은 카탈로그에서 스크립트로 생성하고, §13의 G-4 정합 테스트가 1:1 일치를 강제한다(R-6).
+
+| equipment_id | code | 설비군 | 위치 | QR 내용 | ArUco ID | 색상 띠 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `EQ-0001` | `HPU-01` | 유압 설비군 | 유틸리티실 A동 1층 | `SHIFTLINK:EQ:HPU-01` | 30 | 빨강 |
+| `EQ-0002` | `PDP-01` | 전력 설비군 | 유틸리티실 A동 배전반 | `SHIFTLINK:EQ:PDP-01` | 31 | 보라 |
+| `EQ-0003` | `CAU-01` | 공압 설비군 | 유틸리티실 A동 2층 | `SHIFTLINK:EQ:CAU-01` | 32 | 하늘 |
+| `EQ-0004` | `GR-01` | 입측 구동 설비군 | 입측 조작반 좌측 5 m | `SHIFTLINK:EQ:GR-01` | 33 | 파랑 |
+| `EQ-0005` | `GR-02` | 출측 구동 설비군 | 출측 조작반 우측 4 m | `SHIFTLINK:EQ:GR-02` | 34 | 파랑 |
+| `EQ-0006` | `RT-01` | 입측 이송 설비군 | 입측 1~12번 롤러 | `SHIFTLINK:EQ:RT-01` | 35 | 노랑 |
+| `EQ-0007` | `RT-02` | 중앙 이송 설비군 | 중앙 13~28번 롤러 | `SHIFTLINK:EQ:RT-02` | 36 | 노랑 |
+| `EQ-0008` | `RT-03` | 출측 이송 설비군 | 출측 29~40번 롤러 | `SHIFTLINK:EQ:RT-03` | 37 | 노랑 |
+| `EQ-0009` | `CV-01` | 출측 이송 설비군 | 출측 적재 컨베이어 | `SHIFTLINK:EQ:CV-01` | 38 | 초록 |
+| `EQ-0010` | `CV-02` | 출측 이송 설비군 | 스크랩 컨베이어 | `SHIFTLINK:EQ:CV-02` | 39 | 초록 |
+
+**색상 띠는 `equipment_types.type_code`(HPU·PDP·CAU·GR·RT·CV) 기준**이다. `equipment_groups.name`(입측/출측 이송 설비군 등)과 다르므로 혼동하지 않는다. RT-03과 CV-01·CV-02는 같은 설비군(EG-0008)이지만 색 띠는 유형에 따라 노랑·초록으로 갈린다.
+
+> **상자 6개 권장 구성**: `HPU-01`(빨강) · `GR-01`(파랑) · `GR-02`(파랑) · `RT-01`(노랑) · `CV-01`(초록) · `CAU-01`(하늘). 시연 대본 §12의 동선과 맞춘 것이다. `CAU-01`은 등록된 카드가 0건이라 「해당 지식 없음」 화면을 억지 설정 없이 보여줄 수 있다.
 
 ---
 
@@ -304,8 +318,8 @@ SHIFTLINK:EQ:HPU-01
 | --- | --- | --- | --- |
 | 물리 | 상자에 QR/ArUco 부착 | 설비 명판 옆에 QR/ArUco 부착 | 라벨 재부착 |
 | 인식 | QR 디코딩 | QR 디코딩 | **없음** |
-| 매핑 | `SHIFTLINK:EQ:HPU-01` → `HPU-01` | 동일 | **없음** |
-| 컨텍스트 | `eq_id` 주입 | 동일 | **없음** |
+| 매핑 | `SHIFTLINK:EQ:HPU-01` → `code=HPU-01` → `equipment_id=EQ-0001` | 동일 | **없음** |
+| 컨텍스트 | `eq_id`(= `equipment_id`) 주입 | 동일 | **없음** |
 
 즉 **인식 계층은 "상자"를 전혀 모른다.** 이 추상화 경계를 유지하는 것이 설계 목표 중 하나다. 코드나 스키마 어디에도 `box`라는 단어를 넣지 않는다.
 
@@ -592,11 +606,15 @@ async function scanFrame(video) {
   const codes = await detector.detect(video);
   for (const c of codes) {
     const m = /^SHIFTLINK:EQ:(.+)$/.exec(c.rawValue);   // 접두어 검사 = 1차 방어
-    if (m) return { eqId: m[1], method: 'qr' };
+    if (!m) continue;
+    const eq = CATALOG.find(e => e.code === m[1]);      // code → 카탈로그 조회 = 2차 방어
+    if (eq) return { equipmentId: eq.equipment_id, code: eq.code, method: 'qr' };
   }
   return null;
 }
 ```
+
+QR이 담은 것은 `code`이므로 **카탈로그 조회를 거쳐 `equipment_id`로 바꾼 뒤** 컨텍스트에 넣는다. 조회에 실패한 값은 접두어가 맞아도 버린다.
 
 1순위 경로의 실질 분량은 수십 줄이다. 복잡도는 인식이 아니라 **UI 상태 관리와 폴백 흐름**에 있다.
 
@@ -610,13 +628,16 @@ async function scanFrame(video) {
 @dataclass(frozen=True)
 class EquipmentScan:
     scan_id: str            # "SC-0001" (접두어-4자리 규칙 준수)
-    equipment_id: str       # 카탈로그에 실재해야 함
+    equipment_id: str       # "EQ-0001" — 카탈로그 정본 키. 서버·질의는 이 값을 쓴다
+    code: str               # "HPU-01" — QR·이름표·수동 선택 목록의 표시값
     method: Literal["qr", "aruco", "manual"]
-    marker_value: str | None    # 디코딩된 원문 (감사용)
+    marker_value: str | None    # 디코딩된 원문 "SHIFTLINK:EQ:HPU-01" (감사용)
     frame_votes: int            # 일치한 연속 프레임 수 (1~3)
     scanned_at: datetime
     device_id: str | None       # PDA 식별(해시)
 ```
+
+**`equipment_id`와 `code`를 둘 다 담는다.** QR은 `code`를 싣고(§5.3), 서버 조회·질의 컨텍스트는 `equipment_id`를 쓴다. 둘을 한 레코드에 남겨야 감사 시 "어떤 인쇄물을 찍어서 어떤 설비로 해석됐는가"를 되짚을 수 있다.
 
 **신뢰도를 float로 두지 않는다.** 마커 디코딩은 성공/실패의 이산 사건이므로 `frame_votes`(몇 프레임이 같은 답을 냈는가)가 더 정직하고 검증 가능한 지표다. 분류기를 도입하게 되면 그때 `confidence` 필드를 추가한다.
 
@@ -628,12 +649,14 @@ class EquipmentScan:
 class QueryRequest(BaseModel):
     question: NonBlank
     line_id: str
-    eq_id: str                                   # 기존 그대로
+    eq_id: str                                   # 기존 그대로 — "EQ-0001" (equipment_id)
     eq_id_source: Literal["camera_scan", "manual_selection", "unspecified"] = "unspecified"   # 신규
     scan_id: str | None = None                   # 신규, 감사 추적용
     observations: list[dict] = []
     k: int = 5
 ```
+
+**`eq_id`에는 `equipment_id`(`EQ-0001`)를 넣는다. `code`(`HPU-01`)를 넣지 않는다.** 기존 도구 5종과 카드의 `equipment_ids`가 전부 `EQ-` 형식이므로, 여기에 `code`가 들어가면 검색이 전건 불일치한다. `code`↔`equipment_id` 변환은 PDA가 카탈로그를 보고 확정 시점에 끝낸다.
 
 `HandoverRequest`도 동일하게 `eq_id_source` + `scan_ids: list[str]`만 추가한다.
 
@@ -645,13 +668,17 @@ class QueryRequest(BaseModel):
 
 ```http
 POST /api/equipment/scan
-{ "equipment_id": "HPU-01", "method": "qr",
+{ "equipment_id": "EQ-0001", "code": "HPU-01", "method": "qr",
   "marker_value": "SHIFTLINK:EQ:HPU-01", "frame_votes": 3 }
 
-200 { "scan_id": "SC-0001", "equipment_id": "HPU-01",
-      "name": "유압 유닛", "is_synthetic": true }
-404 { "error": "unknown equipment_id: HPU-09", "is_synthetic": true }
+200 { "scan_id": "SC-0001", "equipment_id": "EQ-0001", "code": "HPU-01",
+      "name": "유압 설비군", "is_synthetic": true }
+404 { "error": "unknown equipment_id: EQ-0099", "is_synthetic": true }
 ```
+
+`code`도 함께 보내지만 **서버 검증의 기준은 `equipment_id`** 다. 둘이 카탈로그에서 짝이 맞지 않으면 400으로 거절한다 — 인쇄물과 카탈로그가 어긋난 상태(R-6)를 서버가 잡아내는 지점이다.
+
+`name`은 `equipment_groups[].name`(「유압 설비군」)이다. `equipment_types[].type_code`(「HPU」)와 혼동하지 않는다.
 
 ```http
 GET /api/equipment/scan/recent?limit=5
@@ -666,11 +693,14 @@ GET /api/equipment/scan/recent?limit=5
 
 ```json
 {
-  "equipment_id": "HPU-01",
+  "equipment_id": "EQ-0001",
+  "code": "HPU-01",
   "…기존 필드…",
   "markers": { "qr": "SHIFTLINK:EQ:HPU-01", "aruco_id": 30 }
 }
 ```
+
+`markers.qr` 값은 `"SHIFTLINK:EQ:" + code` 로 **생성**한다. 손으로 적지 않는다 — 카탈로그 안에서도 `code`와 어긋날 수 있기 때문이며, G-4 테스트가 이 일치를 강제한다.
 
 별도 레지스트리 파일을 만들지 않는 이유: 설비 마스터가 이미 여기에 있고, 두 군데로 나뉘면 반드시 어긋난다. 정합성은 §13 T-3 테스트로 강제한다.
 
@@ -761,6 +791,7 @@ GET /api/equipment/scan/recent?limit=5
 | 대상 | 필드 |
 | --- | --- |
 | `QueryRequest` / `HandoverRequest` | `eq_id_source`, `scan_id`(또는 `scan_ids`) |
+| `EquipmentScan` | `equipment_id`, `code` (둘 다 보유) |
 | `EquipmentConfig` (카탈로그 JSON) | `markers.qr`, `markers.aruco_id` |
 
 ---
@@ -821,10 +852,11 @@ GET /api/equipment/scan/recent?limit=5
 
 | # | 보장 항목 | 판정 |
 | --- | --- | --- |
-| G-1 | 고정 이미지 픽스처에서 QR 디코딩 결과가 기대 `equipment_id`와 일치 | 전건 일치 |
+| G-1 | 고정 이미지 픽스처에서 QR 디코딩 결과가 기대 `code`와 일치하고, 카탈로그 조회로 올바른 `equipment_id`가 나옴 | 전건 일치 |
 | G-2 | `SHIFTLINK:EQ:` 접두어가 없는 QR은 전부 무시 | 오검출 0건 |
-| G-3 | 카탈로그에 없는 `equipment_id`는 서버가 404로 거부 | 통과 |
-| G-4 | 카탈로그의 모든 설비가 마커 매핑을 보유하고, 매핑이 1:1 | 불일치 0건 |
+| G-3 | 카탈로그에 없는 `equipment_id`는 서버가 404로, `equipment_id`↔`code` 짝이 어긋나면 400으로 거부 | 통과 |
+| G-4 | 카탈로그의 모든 설비가 마커 매핑을 보유하고, `markers.qr == "SHIFTLINK:EQ:" + code` 이며 매핑이 1:1 | 불일치 0건 |
+| G-8 | 화면·인쇄물에서 `code`(`HPU-01`)와 `equipment_id`(`EQ-0001`)를 혼용하지 않음 | 혼용 0건 |
 | G-5 | `eq_id_source` 미지정·`unspecified` 질의에서 카드 검색이 수행되지 않음 | 통과 |
 | G-6 | 신규 필드 추가 후에도 **기존 44개 테스트 전건 통과** | 44/44 |
 | G-7 | 카메라 이미지가 MES 상태·제어 경로로 전파되지 않음 | 경로 0건 |
@@ -924,9 +956,37 @@ GET /api/equipment/scan/recent?limit=5
 | 인식 지연 수치(QR 8~20ms, ArUco 2~5ms) | 외부 자료 기반 추정. **실측 미수행** |
 | `BarcodeDetector`의 대상 PDA 단말 지원 여부 | **미확인** — P0-1에서 함께 확인할 것 |
 | 마커 인식 가능 거리(0.5~2.5m) | 마커 크기·카메라 해상도 기반 계산값. **실측 미수행** |
-| `docs/data/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID | §5.4 표는 **형식 예시**. 구현 시 카탈로그를 정본으로 재생성 필요 |
+| ~~`docs/data/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID~~ | **해소 2026-09-22** — 카탈로그 직접 확인. 설비 10대, §5.4 표를 실제 값으로 교체 |
 | 산업용 PDA 하드웨어 스캔 트리거 키 사용 가능 여부 | 단말 미확정(U-11) |
 
 ---
 
-**작성 2026-09-21 · 상태: 제안(검토 대기) · 승인 전 코드 착수 금지**
+## 18. 정정 이력
+
+### 2026-09-22 — QR 인코딩 값 확정 및 ID 체계 정정
+
+카탈로그를 직접 확인한 결과, 이 문서가 `equipment_id`와 `code`를 혼동하고 있었다. 정본은 `equipment_id="EQ-0001"`, `code="HPU-01"` 이다.
+
+**확정**: QR 페이로드는 `"SHIFTLINK:EQ:" + code` 다(§5.3). 상자 이름표·수동 선택 목록과 같은 값이어야 작업자가 육안 대조할 수 있기 때문이다. 서버 조회와 `QueryRequest.eq_id` 에는 `equipment_id` 를 쓴다.
+
+| 절 | 정정 내용 |
+| --- | --- |
+| §5.2 | 인쇄 텍스트를 `equipment_id` → `code` |
+| §5.3 | 접두어 뒤 값이 `code` 임을 명시 |
+| §5.4 | 형식 예시 7행 → **카탈로그 실제 값 10행**(`equipment_id`·`code` 병기, ArUco ID 30~39, 색 띠는 `type_code` 기준). 상자 6개 권장 구성 추가 |
+| §6.4 | 이행 표의 매핑 경로를 `code → equipment_id` 2단계로 |
+| §8.3 | 예제 코드에 카탈로그 조회 단계 추가 |
+| §9.1 | `EquipmentScan` 에 `code` 필드 추가 |
+| §9.2 | `eq_id` 는 `equipment_id` 임을 명시 (카드의 `equipment_ids` 가 `EQ-` 형식이므로) |
+| §9.3 | 요청·응답 예시를 `EQ-0001` + `code` 로. 짝 불일치 시 400 규칙 추가 |
+| §9.4 | 카탈로그 예시를 `EQ-0001` 로. `markers.qr` 생성 규칙 명시 |
+| §11 | 레지스트리 초안에 `EquipmentScan.code` 추가 |
+| §13 | G-1·G-3·G-4 판정 기준 정정, **G-8(ID 혼용 금지) 신설** |
+
+**미반영**: §7 화면 와이어프레임과 §12 시연 대본의 `HPU-01` 표기는 그대로 둔다. 작업자에게 보이는 값이 `code` 이므로 정확하다.
+
+**함께 확인된 것** — 카드는 12장이고 이 중 `split=dev` 1장(K-0201), `split=sealed` 1장(K-0301)은 **에이전트 검색 대상이 아니다**(C-102: `status=accepted AND split=kb AND grade=L1`). 마커·화면 자산을 만들 때 `sealed` 분할 내용이 노출되지 않도록 주의한다(C-099 누수 방지).
+
+---
+
+**작성 2026-09-21 · 정정 2026-09-22 · 상태: 제안(검토 대기) · 승인 전 코드 착수 금지**

@@ -1,7 +1,7 @@
 /* ShiftLink PDA — 동작하는 프로토타입
  * ─────────────────────────────────────────────────────────────────────
  * 설계: docs/planning/PDA_카메라_설비식별_고도화.md
- * 구상: mockups/pda-ui-mockup.html
+ * 구상: docs/design/pda-ui/pda-ui-mockup.html
  *
  * 지키는 규범
  *   C-102  검색 대상 = status=accepted AND split=kb AND grade=L1
@@ -17,7 +17,7 @@
 
 // ── 정본 경로 (저장소 루트 기준) ────────────────────────────────────
 // dev(EV-0032)·sealed(EV-0033)는 읽지 않는다. 파일 단위 격리가 필터보다 확실하다.
-const DATA_ROOT = '../../docs/data/';
+const DATA_ROOT = '../../../data/';
 /* main(#40)이 docs/data/ 를 재편했다. 새 경로를 먼저 시도하고 구 경로로 폴백한다
  * — 머지 전 트리와 머지 후 트리에서 모두 동작해야 하기 때문이다.
  * 머지가 끝나면 폴백(두 번째 항목)을 지운다. */
@@ -108,7 +108,7 @@ async function boot() {
     box.innerHTML = '<p class="hd">데이터 로드 실패</p><p class="p"></p><code></code>'
       + '<p class="p">저장소 <b>루트</b>에서 서버를 띄워야 <code>docs/data/</code> 에 닿습니다.<br>'
       + '<code>python -m http.server 8791</code> → '
-      + '<code>http://localhost:8791/mockups/prototype/pda.html</code></p>';
+      + '<code>http://localhost:8791/docs/design/pda-ui/prototype/pda.html</code></p>';
     box.querySelector('.p').textContent = String(err && err.message || err);
     box.querySelector('code').textContent = new URL(DATA_ROOT, location.href).href;
     $('bootErr').appendChild(box);

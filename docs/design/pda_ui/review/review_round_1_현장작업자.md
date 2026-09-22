@@ -1,6 +1,6 @@
 # 채점 · 현장 작업자 · 라운드 1
 
-대상: `mockups/pda-ui-mockup.html` (1136줄)  
+대상: `docs/design/pda_ui/pda_ui_mockup.html` (1136줄)  
 총점: **81 / 100**
 
 | 대분류 | 취득 | 배점 | 하한 | 충족 |

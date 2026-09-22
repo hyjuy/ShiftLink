@@ -1,6 +1,6 @@
 # 채점 · 안전 담당 · 라운드 5
 
-**대상**: mockups/pda-ui-mockup.html (78,149 bytes)  
+**대상**: docs/design/pda_ui/pda_ui_mockup.html (78,149 bytes)  
 **채점일**: 2026-09-22  
 **총점**: 73 / 100  
 **판정**: 불합격 (B 미달)

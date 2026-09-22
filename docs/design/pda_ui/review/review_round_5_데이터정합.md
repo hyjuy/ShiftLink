@@ -1,6 +1,6 @@
 # 채점 · 데이터 정합 · 라운드 5
 
-**대상**: mockups/pda-ui-mockup.html (78,149 bytes)  
+**대상**: docs/design/pda_ui/pda_ui_mockup.html (78,149 bytes)  
 **채점 렌즈**: D. 데이터 정합 (D1·D2·D3)  
 **총점**: **97 / 100**
 

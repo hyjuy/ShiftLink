@@ -1,6 +1,6 @@
 # 채점 · 현장 작업자 · 라운드 5
 
-대상: mockups/pda-ui-mockup.html (78149 bytes)  
+대상: docs/design/pda_ui/pda_ui_mockup.html (78149 bytes)  
 총점: 97 / 100
 
 **판정**: 미달 (B 항목 미달)

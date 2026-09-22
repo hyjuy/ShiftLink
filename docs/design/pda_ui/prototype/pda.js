@@ -1,7 +1,7 @@
 /* ShiftLink PDA — 동작하는 프로토타입
  * ─────────────────────────────────────────────────────────────────────
  * 설계: docs/planning/PDA_카메라_설비식별_고도화.md
- * 구상: docs/design/pda-ui/pda-ui-mockup.html
+ * 구상: docs/design/pda_ui/pda_ui_mockup.html
  *
  * 지키는 규범
  *   C-102  검색 대상 = status=accepted AND split=kb AND grade=L1
@@ -108,7 +108,7 @@ async function boot() {
     box.innerHTML = '<p class="hd">데이터 로드 실패</p><p class="p"></p><code></code>'
       + '<p class="p">저장소 <b>루트</b>에서 서버를 띄워야 <code>docs/data/</code> 에 닿습니다.<br>'
       + '<code>python -m http.server 8791</code> → '
-      + '<code>http://localhost:8791/docs/design/pda-ui/prototype/pda.html</code></p>';
+      + '<code>http://localhost:8791/docs/design/pda_ui/prototype/pda.html</code></p>';
     box.querySelector('.p').textContent = String(err && err.message || err);
     box.querySelector('code').textContent = new URL(DATA_ROOT, location.href).href;
     $('bootErr').appendChild(box);

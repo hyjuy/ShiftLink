@@ -1,6 +1,6 @@
 # 채점 · 데이터 정합 · 라운드 7
 
-대상: mockups/pda-ui-mockup.html (78,622 바이트)  
+대상: docs/design/pda_ui/pda_ui_mockup.html (78,622 바이트)  
 총점: **9 / 15**
 
 | 대분류 | 취득 | 배점 | 하한 | 충족 |

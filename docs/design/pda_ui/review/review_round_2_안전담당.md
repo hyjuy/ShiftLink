@@ -1,6 +1,6 @@
 # 채점 · 안전 담당 · 라운드 2
 
-**대상**: mockups/pda-ui-mockup.html (79,553 bytes)  
+**대상**: docs/design/pda_ui/pda_ui_mockup.html (79,553 bytes)  
 **총점**: 80 / 100 (게이트 미달: B 필수 만점 불충족)
 
 ---

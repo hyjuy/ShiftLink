@@ -1,6 +1,6 @@
 # 채점 · 현장 작업자 · 라운드 7
 
-**대상**: mockups/pda-ui-mockup.html (78,622 바이트)  
+**대상**: docs/design/pda_ui/pda_ui_mockup.html (78,622 바이트)  
 **채점자 렌즈**: 현장 물리 조건 (장갑·소음·저조도·한 손 엄지)  
 **총점**: 98 / 100
 

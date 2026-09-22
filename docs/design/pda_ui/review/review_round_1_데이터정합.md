@@ -1,6 +1,6 @@
 # 채점 · 데이터 정합 · 라운드 1
 
-**대상:** `mockups/pda-ui-mockup.html` (1136줄)  
+**대상:** `docs/design/pda_ui/pda_ui_mockup.html` (1136줄)  
 **채점일:** 2026-09-22  
 **총점:** 85 / 100
 

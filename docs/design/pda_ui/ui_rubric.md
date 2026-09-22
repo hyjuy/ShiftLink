@@ -1,8 +1,8 @@
 # ShiftLink PDA UI — 채점 루브릭
 
 > 상태: 구상 · 커밋 전 · 100점 만점
-> 사용: `ui-industrial`(설계자)과 `ui-judge`(심사자)가 같은 기준을 읽는다.
-> 대상: `docs/design/pda-ui/pda-ui-mockup.html`
+> 사용: `ui_industrial`(설계자)과 `ui_judge`(심사자)가 같은 기준을 읽는다.
+> 대상: `docs/design/pda_ui/pda_ui_mockup.html`
 
 ---
 
@@ -83,7 +83,7 @@
 - **A1 오버플로우·A4 위치 같은 레이아웃 항목은 CSS를 읽고 손으로 더해 판정하지 않는다.** 브라우저로 실제 렌더 높이를 측정한다
 
 ```bash
-cd docs/design/pda-ui && python -m http.server 8779 --bind 127.0.0.1
+cd docs/design/pda_ui && python -m http.server 8779 --bind 127.0.0.1
 ```
 
 ```js

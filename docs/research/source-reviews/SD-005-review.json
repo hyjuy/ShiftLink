@@ -1,0 +1,170 @@
+{
+  "artifact_type": "source_review_only",
+  "source_id": "SD-005",
+  "mode": "검토 전용",
+  "decision": "B",
+  "decision_label": "보완 대기",
+  "source_reviewer": "/root/sd005_source_review",
+  "summary_and_contract_checker": "/root",
+  "source_reviewed_at": "2026-09-22T15:45:13+09:00",
+  "purpose": "CV·RT 관련 카드의 초안 생성 근거 후보 검토; 작업 승인 아님",
+  "registry_change": null,
+  "observed_registry_state": {
+    "review_status": "pending_review",
+    "approved_scope": []
+  },
+  "scope_candidate_not_approved": {
+    "scope_id": "sd005-m101-2012-cvrt-review-20260922",
+    "locator": "§2; §4.3(1)(7)(9)(10)(11)(13)(14); §5.1(8); §5.9(2)(3). 인쇄 pp.1,5,6,7,13 / PDF pp.3,7,8,9,15.",
+    "document_version": "KOSHA GUIDE M-101-2012; 표지 2012. 6.; 개요 공표일 2012-06-20 (로컬 표기·공식 구목록 식별 대조)",
+    "text_sha256": "da2683d4d6b2b615b963007fccc3c82f8a79cceb2fbf3874bc655cab5d420fcb",
+    "allowed_claims": [
+      "[§2, 인쇄 p.1 / PDF p.3; §4.3(1), 인쇄 p.5 / PDF p.7] 이 지침의 범위는 컨베이어와 부속장치의 설계·제작·설치·사용이다. 용도와 사용 조건은 설계 및 취급설명서가 정한 범위를 벗어나지 않도록 다룬다.",
+      "[§4.3(7), 인쇄 p.5 / PDF p.7] 비상정지나 사고로 멈춘 컨베이어를 다시 기동하기 전에는 정지 원인과 고장 부위의 보수 상태를 확인하도록 제시한다.",
+      "[§4.3(9), 인쇄 p.6 / PDF p.8] 정비·청소·급유·검사·수리가 작업자를 위험하게 할 우려가 있으면, 운전을 멈추고 다시 작동하지 않게 하는 조치가 필요하다고 설명한다.",
+      "[§4.3(10)(11), 인쇄 p.6 / PDF p.8] 운전 중 방호·점검 덮개의 개방은 부득이한 경우를 제외하고 하지 않도록 제시한다. 작업상 불가피하더라도 사업주의 필요한 안전조치가 없는 상태에서 컨베이어에 올라가는 것은 허용 범위로 보지 않는다.",
+      "[§4.3(13)(14), 인쇄 p.6 / PDF p.8] 작업자·정비 담당자·관리감독자에게 작업 전에 작업표준·취급·정비방법 등을 교육하고, 설비 업무일지를 비치하고 작성하도록 제시한다.",
+      "[§5.1(8), 인쇄 p.7 / PDF p.9] 근로자에게 위험을 미칠 우려가 있는 벨트 컨베이어의 테이크업 장치에는 덮개 또는 울을 설치하도록 제시한다. 중력식은 추 아래 출입을 막는 덮개·울 또는 추 낙하 방지장치를 다룬다.",
+      "[§5.9(2), 인쇄 p.13 / PDF p.15] 분기·상승 롤러가 움직이는 동안 화물이 해당 롤러 바로 앞에서 정지하는 구조를 제시한다.",
+      "[§5.9(3), 인쇄 p.13 / PDF p.15] 롤러·휠 컨베이어는 사용 뒤 사용 전 상태로 되돌릴 필요가 있음을 잘 보이는 곳에 표시하고 작업자에게 알리도록 제시한다."
+    ],
+    "exclusions": [
+      "전체 범위: 2012년 기술지침의 설명이다. 최신 법적 의무·현장 작업 허가·최종 안전 승인으로 사용하지 않는다. 2026년 B-M-33-2026과 관련 절 대조 전 현행 기준으로 표현하지 않는다.",
+      "§2 및 §5.1·5.9: CV의 벨트/테이크업 형식과 RT의 롤러·휠 컨베이어 구조는 설치 자료로 확인하지 못했다. 가상 설비 명칭만으로 적용 모델을 확정하지 않는다.",
+      "§4.3(7): 비상정지·사고정지를 정상정지 전체로 확대하지 않는다. 원인·보수상황 확인만으로 재가동 승인이나 성공을 주장하지 않는다.",
+      "§4.3(9): 비상정지와 에너지 격리를 동일시하지 않는다. 차단점·잠금·잔압 해제·검증 순서·수치·승인권자는 이 요약으로 생성하지 않는다.",
+      "§4.3(10)(11): 부득이한 경우를 임의 덮개 개방·승강 허가로 바꾸지 않는다. 필요한 안전조치가 무엇인지는 추정하지 않는다.",
+      "§4.3(13)(14): 교육·업무일지 조항은 T4의 수신 역할·인계 시각·채널·확인 방법 전체를 제공하지 않는다. 기록 항목·보존기간도 창작하지 않는다.",
+      "§5.1(8): 중력식의 추 위험을 유압식 텐셔너에 동일 적용하지 않는다. 장력값·정비 절차·성능 기준을 생성하지 않는다.",
+      "§5.9(2)(3): 구조·표시·주지에 관한 설명이다. 현장 인터록 시험·걸림 제거 순서·정상 복귀 위치/허용치·재가동 유형을 임의 확정하지 않는다.",
+      "전체 범위: 특정 사건·관측·조치 결과·실패 사례를 다루지 않는다. tried_and_failed, EV/AR 참조, supporting_event_ids 등을 창작하지 않는다.",
+      "검토 제외: §4.3(12)의 4.2(11) 참조를 임의 정정하지 않는다. §5.9(1)의 높이 수치·낙하 위험 조건·적재/반출장소 단서도 이 입력에서 제외한다.",
+      "전체 범위: 공식 원본 계보와 이 요약의 저장·생성 입력 전달·재배포 이용조건이 미확정이다. 현재 생성 입력 사용은 보류한다."
+    ],
+    "reviewed_by": "/root/sd005_source_review",
+    "reviewed_at": "2026-09-22T15:45:13+09:00",
+    "use_scope": null,
+    "kind": "background",
+    "group_id": null,
+    "reference_ids": []
+  },
+  "text_kind": "reviewer_summary",
+  "text_origin": "로컬 원문에 대응하는 검토 요약. 카드 또는 모델 답변을 새로운 출처로 등록한 것이 아님.",
+  "text_encoding": "UTF-8; LF between lines; no BOM; no terminal newline in excerpts_candidate[0].text",
+  "excerpts_candidate": [
+    {
+      "evidence_id": "E1",
+      "source_id": "SD-005",
+      "scope_id": "sd005-m101-2012-cvrt-review-20260922",
+      "text": "C01 [§2, 인쇄 p.1 / PDF p.3; §4.3(1), 인쇄 p.5 / PDF p.7] 이 지침의 범위는 컨베이어와 부속장치의 설계·제작·설치·사용이다. 용도와 사용 조건은 설계 및 취급설명서가 정한 범위를 벗어나지 않도록 다룬다.\nC02 [§4.3(7), 인쇄 p.5 / PDF p.7] 비상정지나 사고로 멈춘 컨베이어를 다시 기동하기 전에는 정지 원인과 고장 부위의 보수 상태를 확인하도록 제시한다.\nC03 [§4.3(9), 인쇄 p.6 / PDF p.8] 정비·청소·급유·검사·수리가 작업자를 위험하게 할 우려가 있으면, 운전을 멈추고 다시 작동하지 않게 하는 조치가 필요하다고 설명한다.\nC04 [§4.3(10)(11), 인쇄 p.6 / PDF p.8] 운전 중 방호·점검 덮개의 개방은 부득이한 경우를 제외하고 하지 않도록 제시한다. 작업상 불가피하더라도 사업주의 필요한 안전조치가 없는 상태에서 컨베이어에 올라가는 것은 허용 범위로 보지 않는다.\nC05 [§4.3(13)(14), 인쇄 p.6 / PDF p.8] 작업자·정비 담당자·관리감독자에게 작업 전에 작업표준·취급·정비방법 등을 교육하고, 설비 업무일지를 비치하고 작성하도록 제시한다.\nC06 [§5.1(8), 인쇄 p.7 / PDF p.9] 근로자에게 위험을 미칠 우려가 있는 벨트 컨베이어의 테이크업 장치에는 덮개 또는 울을 설치하도록 제시한다. 중력식은 추 아래 출입을 막는 덮개·울 또는 추 낙하 방지장치를 다룬다.\nC07 [§5.9(2), 인쇄 p.13 / PDF p.15] 분기·상승 롤러가 움직이는 동안 화물이 해당 롤러 바로 앞에서 정지하는 구조를 제시한다.\nC08 [§5.9(3), 인쇄 p.13 / PDF p.15] 롤러·휠 컨베이어는 사용 뒤 사용 전 상태로 되돌릴 필요가 있음을 잘 보이는 곳에 표시하고 작업자에게 알리도록 제시한다."
+    }
+  ],
+  "claim_to_source": [
+    {
+      "claim_id": "C01",
+      "locator": "§2, 인쇄 p.1 / PDF p.3; §4.3(1), 인쇄 p.5 / PDF p.7"
+    },
+    {
+      "claim_id": "C02",
+      "locator": "§4.3(7), 인쇄 p.5 / PDF p.7"
+    },
+    {
+      "claim_id": "C03",
+      "locator": "§4.3(9), 인쇄 p.6 / PDF p.8"
+    },
+    {
+      "claim_id": "C04",
+      "locator": "§4.3(10)(11), 인쇄 p.6 / PDF p.8"
+    },
+    {
+      "claim_id": "C05",
+      "locator": "§4.3(13)(14), 인쇄 p.6 / PDF p.8"
+    },
+    {
+      "claim_id": "C06",
+      "locator": "§5.1(8), 인쇄 p.7 / PDF p.9"
+    },
+    {
+      "claim_id": "C07",
+      "locator": "§5.9(2), 인쇄 p.13 / PDF p.15"
+    },
+    {
+      "claim_id": "C08",
+      "locator": "§5.9(3), 인쇄 p.13 / PDF p.15"
+    }
+  ],
+  "unresolved_scope_fields": [
+    "use_scope"
+  ],
+  "approval_blockers": [
+    "공식 지침 원본과 로컬 파일의 동일성·취득 계보 미확정",
+    "공식 포털의 2026년 개정본 B-M-33-2026과 관련 절 대조 및 2012판 선택 이유 미확정",
+    "정확한 요약/발췌문의 저장·생성 입력 전달·재배포 이용범위 미확정"
+  ],
+  "source_lineage": {
+    "kind": "background",
+    "group_id": null,
+    "split": null,
+    "reference_ids": [],
+    "case_material_opened": false
+  },
+  "generation_request": null,
+  "missing_request_fields": [
+    "card_id",
+    "version",
+    "group_id",
+    "persona_id",
+    "model_version",
+    "confidence",
+    "confidence_basis"
+  ],
+  "input_file_sha256": {
+    "seeds/source_registry.json": "2c753df97b96a07291ec213c3bbe3300d2fcd9565443de601f1e181cf4e39e66",
+    "splits/prototype_split.json": "970c7d994961ca41308c57cf5b7743adbbeb6ae70d94769bd0455c57ed6833e0",
+    "shiftlink/data/generation.py": "9e252672872a6deaded02f6170e93e0f1a7530f406122a8b3e5f1a02bf1536fc",
+    "shiftlink/agent/schemas.py": "7c22ffd3ddda25db05a346b7d8038f8cc458f04a6373954c775701881bcfb12f",
+    "docs/data/policies/source-and-split-contract.md": "a9f993c3b62e33bd2c7b235c67a38e9d6b52f7227c45a6c7797bb65194b5e0f2",
+    "docs/guides/card-generation.md": "75aca6ed94d8bb4db6ac23702e77267dd4002e5bd433ee656cfdc5347ef7a7dd",
+    "seeds/카드_작성_가이드_초안.md": "b5b73900cf9ebbdb7c4c301457e99568a2e186b7f48403ca5fb004aae34e6146",
+    "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27"
+  },
+  "validated_at": "2026-09-22T16:04:56+09:00",
+  "validation": {
+    "json_strict_parse": "pass",
+    "excerpt_model": "pass",
+    "summary_utf8_bytes": 1885,
+    "text_sha256_matches": "pass",
+    "terminal_newline_changes_hash": "pass",
+    "scope_model": "expected_failure",
+    "scope_errors": [
+      {
+        "loc": [
+          "use_scope"
+        ],
+        "type": "string_type",
+        "msg": "Input should be a valid string"
+      }
+    ],
+    "partial_request_model": "expected_failure",
+    "missing_request_fields": [
+      "card_id",
+      "version",
+      "group_id",
+      "persona_id",
+      "model_version",
+      "confidence",
+      "confidence_basis"
+    ],
+    "background_lineage": "pass: no case group or references",
+    "target_generation_group": "not supplied; no assignment made",
+    "registry_and_input_hashes_unchanged": "pass",
+    "actual_source_gate": "pending_review; blocked by _prepare source check (code inspected, _prepare not called)",
+    "python_validation_runtime_pydantic": "2.13.5",
+    "project_pydantic_pin": "2.9.2",
+    "runtime_limitation": "Bundled runtime uses 2.13.5; pinned 2.9.2 runtime not available/tested. System python3 has no pydantic; no project venv found.",
+    "pipeline_or_database_called": false,
+    "card_generated": false,
+    "external_model_called": false
+  },
+  "warning": "보고서용 B 판정이며 등록부 상태가 아니다. scope_candidate_not_approved는 use_scope=null이어서 ApprovedScope로 유효하지 않다. 등록부에 복사하지 말 것. 보완 후 전체 승인 요건을 재검토해야 한다."
+}

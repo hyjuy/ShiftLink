@@ -16,6 +16,40 @@ from shiftlink.agent.schemas import (
 )
 
 
+@pytest.mark.parametrize("op", ["==", "!=", ">", ">=", "<", "<="])
+def test_condition_accepts_supported_operators(op: str) -> None:
+    assert Condition(signal="pressure", op=op, value=10).op == op
+
+
+@pytest.mark.parametrize("op", ["=>", "=", "", "contains"])
+def test_condition_rejects_unsupported_operators(op: str) -> None:
+    with pytest.raises(ValidationError, match="op"):
+        Condition(signal="pressure", op=op, value=10)
+
+
+@pytest.mark.parametrize(
+    "overrides, error",
+    [
+        ({"safety_flag": True, "safety_basis": " \t\n"}, "safety_basis"),
+        ({"symptom": " \t\n"}, "symptom"),
+        ({"type_payload": {"steps": []}}, "steps only allowed on T3"),
+    ],
+)
+def test_card_rejects_validation_loopholes(overrides: dict, error: str) -> None:
+    base = dict(
+        card_id="K-0001", version="1.0", tacit_type="T1", equipment="HPU",
+        component="pump", scenario="S1", title="Pump noise", symptom="Noise",
+        know_how="Inspect pump", rationale="Wear", confidence=0.8, split="kb",
+        provenance=dict(
+            seed_ids=[], persona_id="P-01", event_ids=[], generator="test",
+            generated_at="2026-09-22T00:00:00Z",
+        ),
+    )
+    KnowledgeCard.model_validate(base)
+    with pytest.raises(ValidationError, match=error):
+        KnowledgeCard.model_validate(base | overrides)
+
+
 def test_schema_v09_and_k01_validation_rules() -> None:
     base = {
         "card_id": "K-0001",

@@ -24,6 +24,7 @@ def search_cards(
     query: str,
     equipment_ids: list[str],
     k: int = 5,
+    observations: dict[str, object] | None = None,
 ) -> list[dict[str, Any]]:
     """Return visible knowledge cards or published manual clauses."""
     raise NotImplementedError("search_cards retrieval adapter is not implemented")

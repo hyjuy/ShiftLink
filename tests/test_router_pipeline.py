@@ -147,4 +147,5 @@ def test_registered_tool_provider_and_search_signature_match_registry() -> None:
         "query",
         "equipment_ids",
         "k",
+        "observations",
     )

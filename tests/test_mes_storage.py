@@ -38,7 +38,7 @@ class MesStorageTests(unittest.TestCase):
         self.event = RuntimeEvent("run-1", 1, self.snapshot.simulated_at, "tick", "EQ-0001", "normal")
 
     def test_catalog_preserves_reference_ids_and_signal_units(self) -> None:
-        catalog = Catalog.load(Path("docs/data/00_plant_and_relations.json"))
+        catalog = Catalog.load(Path("docs/data/reference/00_plant_and_relations.json"))
 
         self.assertEqual(catalog.equipment["EQ-0001"]["code"], "HPU-01")
         self.assertEqual(catalog.measurement_point("EQ-0001", "hpu_pressure")["unit"], "bar")

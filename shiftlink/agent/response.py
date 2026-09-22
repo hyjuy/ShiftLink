@@ -3,6 +3,7 @@
 from typing import Any, Annotated
 from pydantic import BaseModel, Field, ConfigDict
 from shiftlink.agent.router import QueryRequest, HandoverRequest
+from shiftlink.agent.schemas import EvidenceGap, GeneralizationEvidence, Provenance, SafetyReview
 
 
 class SafetyNotice(BaseModel):
@@ -19,6 +20,10 @@ class StepRender(BaseModel):
     action: str
     expected_result: str
     stop_conditions: list[str] = Field(default_factory=list)
+    verification_step: str | None = None
+    rollback_action: str | None = None
+    escalation_target: str | None = None
+    escalation_channel: str | None = None
 
 
 class HandoverMethodRender(BaseModel):
@@ -37,6 +42,16 @@ class RestartFailure(BaseModel):
     action: str
     observed_result: str
     failure_reason: str | None = None
+    evidence_gap: EvidenceGap | None = None
+    next_observations: list[str] = Field(default_factory=list)
+    required_data: list[str] = Field(default_factory=list)
+    data_collection_role: str | None = None
+
+
+class CardMetadata(BaseModel):
+    provenance: Provenance
+    generalization_evidence: GeneralizationEvidence | None = None
+    safety_review: SafetyReview | None = None
 
 
 class AgentResponse(BaseModel):
@@ -49,6 +64,8 @@ class AgentResponse(BaseModel):
     handover_method: HandoverMethodRender | None = None
     restart_failures: list[RestartFailure] = Field(default_factory=list)
     cited_card_ids: list[str] = Field(default_factory=list)
+    unverified_card_ids: list[str] = Field(default_factory=list)
+    card_metadata: dict[str, CardMetadata] = Field(default_factory=dict)
     review_queue: bool = False
 
 
@@ -74,20 +91,34 @@ def build_response(
         card_id = card.get("card_id")
         if card_id:
             cited_ids.add(card_id)
+            if card.get("provenance"):
+                resp.card_metadata[card_id] = CardMetadata(
+                    provenance=card["provenance"],
+                    generalization_evidence=card.get("generalization_evidence"),
+                    safety_review=card.get("safety_review"),
+                )
 
         # T5/safety cards with safety_flag=True go to safety_notices
         if card.get("safety_flag"):
             type_payload = card.get("type_payload")
             stop_conditions = []
             if type_payload and type_payload.get("steps"):
-                first_step = type_payload["steps"][0]
-                stop_conditions = first_step.get("stop_conditions", [])
+                stop_conditions = list(dict.fromkeys(
+                    condition for step in type_payload["steps"]
+                    for condition in step.get("stop_conditions", [])
+                ))
             notice = SafetyNotice(
                 card_id=card_id or "",
                 safety_basis=card.get("safety_basis", ""),
                 stop_conditions=stop_conditions,
             )
             resp.safety_notices.append(notice)
+
+        # Preserve warnings without presenting unchecked procedures as applicable.
+        if card.get("condition_status") == "unverified":
+            if card_id:
+                resp.unverified_card_ids.append(card_id)
+            continue
 
         # T3 steps
         type_payload = card.get("type_payload")
@@ -99,6 +130,10 @@ def build_response(
                     action=step_dict.get("action", ""),
                     expected_result=step_dict.get("expected_result", ""),
                     stop_conditions=step_dict.get("stop_conditions", []),
+                    verification_step=step_dict.get("verification_step"),
+                    rollback_action=step_dict.get("rollback_action"),
+                    escalation_target=step_dict.get("escalation_target"),
+                    escalation_channel=step_dict.get("escalation_channel"),
                 )
                 resp.steps.append(step)
 
@@ -122,6 +157,10 @@ def build_response(
                     action=attempt_dict.get("action", ""),
                     observed_result=attempt_dict.get("observed_result", ""),
                     failure_reason=attempt_dict.get("failure_reason"),
+                    evidence_gap=attempt_dict.get("evidence_gap"),
+                    next_observations=attempt_dict.get("next_observations", []),
+                    required_data=attempt_dict.get("required_data", []),
+                    data_collection_role=attempt_dict.get("data_collection_role"),
                 )
                 resp.restart_failures.append(attempt)
 
@@ -147,6 +186,11 @@ def render_response(resp: AgentResponse) -> str:
             if notice.stop_conditions:
                 lines.append(f"  중단 조건: {'; '.join(notice.stop_conditions)}")
 
+    if resp.unverified_card_ids:
+        lines.append("\n## 조건 미확인")
+        lines.append("- 적용·제외 조건을 확인할 수 없어 조치 제안을 보류합니다. 안전 공지는 참고 경고로 유지합니다.")
+        lines.append(f"- 확인 대상 카드: {', '.join(resp.unverified_card_ids)}")
+
     # Steps (in order)
     if resp.steps:
         lines.append("")
@@ -159,6 +203,12 @@ def render_response(resp: AgentResponse) -> str:
             lines.append(f"- 예상 결과: {step.expected_result}")
             if step.stop_conditions:
                 lines.append(f"- 중단 조건: {'; '.join(step.stop_conditions)}")
+            for label, value in (
+                ("결과 확인", step.verification_step), ("복구 조치", step.rollback_action),
+                ("보고 대상", step.escalation_target), ("보고 채널", step.escalation_channel),
+            ):
+                if value:
+                    lines.append(f"- {label}: {value}")
 
     # Handover method (T4)
     if resp.handover_method:
@@ -196,6 +246,7 @@ def render_response(resp: AgentResponse) -> str:
                     lines.append(f"  이유: {attempt.failure_reason}")
                 else:
                     lines.append(f"  이유: 미상")
+                lines.extend(_render_evidence_gap(attempt))
 
         if unknown_attempts:
             lines.append("### unknown")
@@ -206,17 +257,53 @@ def render_response(resp: AgentResponse) -> str:
                     lines.append(f"  이유: {attempt.failure_reason}")
                 else:
                     lines.append(f"  이유: 미상")
+                lines.extend(_render_evidence_gap(attempt))
 
     # Citations
     if resp.cited_card_ids:
         lines.append("")
         lines.append(f"## 참고 카드: {', '.join(resp.cited_card_ids)}")
+        for card_id, metadata in resp.card_metadata.items():
+            for source in metadata.provenance.sources:
+                location = f" ({source.locator})" if source.locator else ""
+                version = f" / 문서 버전 {source.document_version}" if source.document_version else ""
+                lines.append(f"- {card_id} 출처: {source.source_id}{location}{version}")
+            if metadata.generalization_evidence:
+                evidence = metadata.generalization_evidence
+                for label, value in (
+                    ("적용 범위", evidence.generalization_scope),
+                    ("신뢰도 근거", evidence.confidence_basis),
+                    ("지지 사건", ', '.join(evidence.supporting_event_ids)),
+                    ("반대 사건", ', '.join(evidence.contradicting_event_ids)),
+                ):
+                    if value:
+                        lines.append(f"- {card_id} {label}: {value}")
+            if metadata.safety_review:
+                review = metadata.safety_review
+                lines.append(f"- {card_id} 안전 검토 기록: {review.status}")
+                if review.valid_until:
+                    lines.append(f"  기록된 유효기한: {review.valid_until.isoformat()}")
+                if review.review_triggers:
+                    lines.append(f"  재검토 조건: {'; '.join(review.review_triggers)}")
 
     if resp.review_queue:
         lines.append("")
         lines.append("⚠️ 이 응답은 검증 실패로 review_queue에 대기 중입니다.")
 
     return "\n".join(lines)
+
+
+def _render_evidence_gap(attempt: RestartFailure) -> list[str]:
+    lines = []
+    for label, value in (
+        ("근거 부족 유형", attempt.evidence_gap),
+        ("다음 관찰 항목", '; '.join(attempt.next_observations)),
+        ("필요 자료", '; '.join(attempt.required_data)),
+        ("자료 수집 담당", attempt.data_collection_role),
+    ):
+        if value:
+            lines.append(f"  {label}: {value}")
+    return lines
 
 
 def validate_response(
@@ -264,7 +351,9 @@ def validate_response(
     # 4. Check stop_conditions not lost
     expected_stop_conds = set()
     for card in all_cards:
-        if card.get("tacit_type") == "T3" and card.get("type_payload", {}).get("steps"):
+        if (card.get("tacit_type") == "T3"
+                and (card.get("condition_status") != "unverified" or card.get("safety_flag"))
+                and (card.get("type_payload") or {}).get("steps")):
             for step in card["type_payload"]["steps"]:
                 for cond in step.get("stop_conditions", []):
                     expected_stop_conds.add(cond)

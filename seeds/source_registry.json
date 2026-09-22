@@ -1,0 +1,301 @@
+{
+  "registry_version": "1",
+  "recorded_at": "2026-09-22",
+  "contract": "docs/data/policies/source-and-split-contract.md",
+  "notes": [
+    "Registration is not generation approval. Empty approved_scope blocks source-backed drafting under this policy; runtime enforcement is not implemented.",
+    "Existing review notes are historical evidence, not a fulltext recheck on recorded_at.",
+    "License notes are inherited text, not verified rights determinations.",
+    "Only two PDFs exist in the current source directories. Older local download claims remain historical."
+  ],
+  "sources": [
+    {
+      "source_id": "SD-001",
+      "title": "Bosch Rexroth, Knowledge in Detail: Hydraulics – Basic Principles",
+      "aliases": [],
+      "source_family": "SD-001",
+      "url": "https://www.boschrexroth.com/en/us/academy/media/",
+      "url_role": "catalog",
+      "purpose": "HPU 원리·구성",
+      "legacy_license_note_unverified": "© Bosch Rexroth AG — 원문 복제 금지, 개념·용어만",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-002",
+      "title": "Parker HY29-0035/UK Denison 베인펌프 Overall Instructions",
+      "aliases": [
+        "M-01"
+      ],
+      "source_family": "SD-002",
+      "url": "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_Manuals/Vane_Pumps/HY29-0035-UK.pdf",
+      "url_role": "document",
+      "purpose": "펌프 고장 증상 구조",
+      "legacy_license_note_unverified": "© Parker Hannifin — 표 복제 금지",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md"
+      ],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-003",
+      "title": "SKF, Bearing Damage and Failure Analysis (ISO 15243)",
+      "aliases": [],
+      "source_family": "SKF-bearing-damage",
+      "url": null,
+      "url_role": "document",
+      "purpose": "베어링 손상 분류 용어",
+      "legacy_license_note_unverified": "SKF 저작물 — 분류 체계 용어만",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-004",
+      "title": "SKF, Bearing damage classification transcript",
+      "aliases": [],
+      "source_family": "SKF-bearing-damage",
+      "url": null,
+      "url_role": "document",
+      "purpose": "손상 분류 보조",
+      "legacy_license_note_unverified": "SKF 저작물",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-005",
+      "title": "KOSHA GUIDE M-101-2012 컨베이어의 안전에 관한 기술지침",
+      "aliases": [
+        "S-02"
+      ],
+      "source_family": "SD-005",
+      "url": "https://kosha.or.kr/cms/resFileDownload.do?fileName=%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EA%B8%B0%EC%88%A0%EC%A7%80%EC%B9%A8%28KOSHA_Guide%29_%EB%AA%A9%EB%A1%9D_20230824%EA%B8%B0%EC%A4%80.pdf&siteId=kosha&type=etc",
+      "url_role": "catalog",
+      "purpose": "CV·RT 안전",
+      "legacy_license_note_unverified": "공단 기술지침(공공) — 지침 번호 명기",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": {
+        "path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+        "bytes": 131056,
+        "sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27"
+      },
+      "reviewed_notes": [
+        "docs/sources/safety/S-02_KOSHA_GUIDE_M-101-2012.md"
+      ],
+      "document_version": "M-101-2012",
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-006",
+      "title": "산업안전보건기준에 관한 규칙 제92조(정비 등의 작업 시의 운전정지)",
+      "aliases": [
+        "S-01"
+      ],
+      "source_family": "SD-006",
+      "url": "https://www.law.go.kr/LSW/lsSideInfoP.do?docCls=jo&joBrNo=00&joNo=0092&lsiSeq=273603&urlMode=lsScJoRltInfoR",
+      "url_role": "document",
+      "purpose": "T5 안전 근거",
+      "legacy_license_note_unverified": "법령(자유 이용). [기존] 미결 #18 본문·적용 범위 확인 필요",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [
+        "docs/sources/safety/S-01_산업안전보건기준에_관한_규칙_제92조.md"
+      ],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-007",
+      "title": "OSHA 29 CFR 1910.147 Lockout/Tagout",
+      "aliases": [
+        "S-03"
+      ],
+      "source_family": "SD-007",
+      "url": "https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1910/subpart-J/section-1910.147",
+      "url_role": "document",
+      "purpose": "T5 안전 근거(해외)",
+      "legacy_license_note_unverified": "미 연방 자료(public domain). [기존] 미결 #18",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [
+        "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+      ],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "SD-008",
+      "title": "IspatGuru, Historical Development of Rolling Mills",
+      "aliases": [],
+      "source_family": "SD-008",
+      "url": null,
+      "url_role": "document",
+      "purpose": "압연 공정 배경",
+      "legacy_license_note_unverified": "개인 블로그 — 수치 인용 금지",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "reviewed_notes": [],
+      "document_version": null,
+      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+    },
+    {
+      "source_id": "M-02",
+      "title": "SEW-EURODRIVE - Possible malfunctions/remedy",
+      "aliases": [],
+      "source_family": "SEW-gear-unit",
+      "url": "https://download.sew-eurodrive.com/download/html/31981496/en-EN/25440305419.html",
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+    },
+    {
+      "source_id": "M-03",
+      "title": "SKF - Bearing damage analysis: ISO 15243 is here to help you",
+      "aliases": [],
+      "source_family": "SKF-bearing-damage",
+      "url": "https://evolution.skf.com/bearing-damage-analysis-iso-15243-is-here-to-help-you/",
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+    },
+    {
+      "source_id": "M-04",
+      "title": "Siemens - SINAMICS G120 CU240B/E-2 List Manual",
+      "aliases": [],
+      "source_family": "Siemens-G120",
+      "url": "https://cache.industry.siemens.com/dl/files/596/59745596/att_77615/v1/LH11_0112_eng.pdf",
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": {
+        "path": "docs/sources/manual/siemens-G120-CU240BE2-LH11-0112-en.pdf",
+        "bytes": 4031162,
+        "sha256": "e50541ae888a5e660bec7608b227d5b02dd211c29096b3884269e2931c0a5ceb"
+      },
+      "document_version": "01/2012",
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+    },
+    {
+      "source_id": "M-05",
+      "title": "SAP Digital Manufacturing - Nonconformance Disposition Routings",
+      "aliases": [],
+      "source_family": "SAP-DM",
+      "url": "https://help.sap.com/docs/sap-digital-manufacturing/execution/nonconformance-disposition-routings",
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+    },
+    {
+      "source_id": "M-06",
+      "title": "SAP - Controlling Production (Buyoff, Hold, Release)",
+      "aliases": [],
+      "source_family": "SAP-DM",
+      "url": "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-",
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+    },
+    {
+      "source_id": "M-07",
+      "title": "Bosch HPU - identity pending",
+      "aliases": [],
+      "source_family": "SD-001",
+      "url": null,
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+    },
+    {
+      "source_id": "M-08",
+      "title": "BR damage types - publisher pending",
+      "aliases": [],
+      "source_family": "unresolved-M-08",
+      "url": null,
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+    },
+    {
+      "source_id": "M-09",
+      "title": "BR remanufacturing evaluation - publisher pending",
+      "aliases": [],
+      "source_family": "unresolved-M-09",
+      "url": null,
+      "url_role": "document",
+      "review_status": "pending_review",
+      "approved_scope": [],
+      "local_snapshot": null,
+      "document_version": null,
+      "reviewed_notes": [
+        "docs/sources/manual/README.md",
+        "docs/sources/manual/download-status.md"
+      ],
+      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+    }
+  ]
+}

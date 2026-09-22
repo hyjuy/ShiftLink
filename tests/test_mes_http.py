@@ -14,7 +14,7 @@ from shiftlink.mes.storage import MesStorage
 
 class HttpTests(unittest.TestCase):
     def setUp(self):
-        self.service = MesService(Path('docs/data/00_plant_and_relations.json'))
+        self.service = MesService(Path('docs/data/reference/00_plant_and_relations.json'))
         handler = type('TestHandler', (_Handler,), {
             'service': self.service, 'web_root': Path('shiftlink/mes/web')})
         self.server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
@@ -140,13 +140,13 @@ class HttpTests(unittest.TestCase):
     def test_file_database_survives_service_restart(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / 'mes.sqlite3'
-            first = MesService(Path('docs/data/00_plant_and_relations.json'), MesStorage(database))
+            first = MesService(Path('docs/data/reference/00_plant_and_relations.json'), MesStorage(database))
             first.control({'command': 'start'})
             first.tick()
             run_id = first.engine.run.run_id
             expected = first.replay(run_id, -1)
             first.storage.close()
-            second = MesService(Path('docs/data/00_plant_and_relations.json'), MesStorage(database))
+            second = MesService(Path('docs/data/reference/00_plant_and_relations.json'), MesStorage(database))
             try:
                 self.assertEqual(second.replay(run_id, -1), expected)
             finally:

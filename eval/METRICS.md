@@ -2,6 +2,16 @@
 
 ## Overview
 
+### 2026-09-22 evaluation correction
+
+- Category A now checks exact safety ID sets, including an explicitly empty expected set/count.
+- Category F rejects unexpected merged cards and requires the final safety notice set to match the expected safety IDs. Fixture expected IDs must be exhaustive; this is a synthetic contract evaluation, not an open-corpus relevance judgment.
+- Ranked metrics use `ranked_cards` before the uncapped safety merge: Precision@k = relevant ranked hits / k (unfilled slots count as misses); Recall@k = relevant ranked hits / all expected relevant cards. Empty relevance sets produce null recall and are excluded from its mean.
+- `unexpected_card_rate` = unexpected merged IDs / retrieved merged IDs (0 for no retrieval); `safety_missing_rate` = missing expected safety notices / expected safety IDs (null when none are expected). The report includes means and contributing sample counts.
+- `stub_pipeline_latency_ms.p95` is the nearest-rank 95th percentile across F cases on the local PC. It excludes fixture loading and uses a deterministic model stub; it is not real LLM or Jetson latency. Six synthetic cases are not a production latency benchmark.
+- The pass ratio and Wilson interval still describe case-level compliance, not a confidence interval for mean Recall@k. The legacy merged recall gate is separate from ranked Recall@k.
+- Dev fixture F-e2e-002 had pressure 8 against `>= 10` but expected inclusion. Its expected sets were corrected to empty according to the condition contract; holdout fixtures were not edited.
+
 All metrics are **deterministic** (no LLM judge). Each category A-F reports success count, total count, pass ratio, and 95% Wilson CI. Holdout suite uses same metrics as dev for final validation.
 
 ## Metric Definitions by Category

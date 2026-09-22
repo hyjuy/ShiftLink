@@ -9,7 +9,7 @@ from shiftlink.mes.server import MesService
 
 class OperatorViewTests(unittest.TestCase):
     def test_topology_fault_parts_evidence_and_accessible_graph(self):
-        service = MesService(Path("docs/data/00_plant_and_relations.json"))
+        service = MesService(Path("docs/data/reference/00_plant_and_relations.json"))
         self.addCleanup(service.storage.close)
         examples = {}
         for scenario in ("normal", "drive_fault", "hydraulic_fault", "downstream_block", "gearbox_overheat", "hydraulic_overheat", "gearbox_leak", "coil_quality_hold"):

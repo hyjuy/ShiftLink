@@ -13,7 +13,7 @@ from shiftlink.mes.configuration import (
 )
 
 
-CATALOG_PATH = Path(__file__).parents[1] / "docs" / "00_plant_and_relations.json"
+CATALOG_PATH = Path(__file__).parents[1] / "docs" / "data" / "reference" / "00_plant_and_relations.json"
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "mes"
 
 

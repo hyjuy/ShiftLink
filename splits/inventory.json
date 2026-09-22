@@ -1,0 +1,147 @@
+{
+  "inventory_version": "1",
+  "recorded_at": "2026-09-22",
+  "scope": "Current source registry, source notes/PDFs, synthetic datasets and evaluation fixture bytes. Not a formal holdout seal or complete experiment manifest.",
+  "files": [
+    {
+      "path": "docs/data/00_plant_and_relations.json",
+      "bytes": 62415,
+      "sha256": "99aa219b7a920abd07e9c42cea0b0f50dc527572fe1f91892f2fa87af7939c46"
+    },
+    {
+      "path": "docs/data/01_kb_cards_shared.json",
+      "bytes": 8204,
+      "sha256": "bf2525815d86aec38b481c303c646edecf998b393fbe68822ec325a202d03c88"
+    },
+    {
+      "path": "docs/data/EV-0031_upstream_cause.json",
+      "bytes": 43890,
+      "sha256": "3b6d4888f24c7e5a9cd915ffafbb9be3c679987ba7b28dc58bf8394b7d1fb0aa"
+    },
+    {
+      "path": "docs/data/EV-0032_downstream_block.json",
+      "bytes": 28728,
+      "sha256": "9b0c89fa9eefdcbdb12c265e6461b1c6d955eacc887e9b2c6b91c36e71081ffc"
+    },
+    {
+      "path": "docs/data/EV-0033_common_utility.json",
+      "bytes": 38538,
+      "sha256": "c44cf27ef84fa9c538653cfed050842114cc1901d53b3903a5bfdf5f5fe256f2"
+    },
+    {
+      "path": "docs/data/source-and-split-contract.md",
+      "bytes": 11587,
+      "sha256": "377d5bc78ec134fd75eb06e4e30b98d2457c10ac4914b1de3788cce2b52743eb"
+    },
+    {
+      "path": "docs/manual/download-status.md",
+      "bytes": 2528,
+      "sha256": "2837b76e5cf6f0107271153ee096e0e47499b815465f95b0723c13df87faf4ec"
+    },
+    {
+      "path": "docs/manual/README.md",
+      "bytes": 7558,
+      "sha256": "2e07a274a56ee93b4db342465290881921a146b60a7400ad2f070c7c0745e885"
+    },
+    {
+      "path": "docs/manual/siemens-G120-CU240BE2-LH11-0112-en.pdf",
+      "bytes": 4031162,
+      "sha256": "e50541ae888a5e660bec7608b227d5b02dd211c29096b3884269e2931c0a5ceb"
+    },
+    {
+      "path": "docs/safety_sources_18/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "bytes": 131056,
+      "sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27"
+    },
+    {
+      "path": "docs/safety_sources_18/S-01_산업안전보건기준에_관한_규칙_제92조.md",
+      "bytes": 2556,
+      "sha256": "3b160469081163e00b0deddce715a04cb1c048b65f9a74b887669865802753f0"
+    },
+    {
+      "path": "docs/safety_sources_18/S-02_KOSHA_GUIDE_M-101-2012.md",
+      "bytes": 3160,
+      "sha256": "8bb9aa51c7f0941ffed3e541b25dbfff4932c5d1ca69d58a94bb25c5590ef896"
+    },
+    {
+      "path": "docs/safety_sources_18/S-03_OSHA_29_CFR_1910_147.md",
+      "bytes": 2884,
+      "sha256": "79d296bc0ed95e1bcbab29209a333a6d62a93b3ed074ca6778feb6ba12ea21b4"
+    },
+    {
+      "path": "docs/testing/dev_sample_memos.jsonl",
+      "bytes": 2500,
+      "sha256": "fe5e54c04ee3b61740de7f319e99fd4376f774c8e2cf13284f010eb8feb0a7ad"
+    },
+    {
+      "path": "eval/fixtures/dev/category_a_safety.json",
+      "bytes": 10115,
+      "sha256": "3881b86a131fd2d5bedcb859aedadb34b6520b44cb2592df030fad3d22f77ab9"
+    },
+    {
+      "path": "eval/fixtures/dev/category_b_t4.json",
+      "bytes": 10087,
+      "sha256": "079425e67715f8e268eb54a14490edc40815d3fd1b4d59163cf032d3ac650f8f"
+    },
+    {
+      "path": "eval/fixtures/dev/category_c_t3.json",
+      "bytes": 9514,
+      "sha256": "76e2e250d8692c2b57873d3b0df36982201a13fbc5210c8addc0efea9390ce77"
+    },
+    {
+      "path": "eval/fixtures/dev/category_d_restart.json",
+      "bytes": 9509,
+      "sha256": "92669750ad5359201bbad0f51b14040f1a7b6dede1585a425ccf1c6a2d584ef6"
+    },
+    {
+      "path": "eval/fixtures/dev/category_e_v09.json",
+      "bytes": 6484,
+      "sha256": "b8c94ae9637d6f56b67f22dbf78df71289aa0b53a15bcaf6a5c0bd2f82117b27"
+    },
+    {
+      "path": "eval/fixtures/dev/category_f_e2e.json",
+      "bytes": 8218,
+      "sha256": "ca3fe7f15e162fb03924ce09e8cf2670c6861a1a720f3086deb9634151c1a2e3"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_a_safety.json",
+      "bytes": 3064,
+      "sha256": "a70cc0b52c004d3324ac5663f88bf6f6e8fa8a75b97e449ac8fe30c0ad7c0f25"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_b_t4.json",
+      "bytes": 3762,
+      "sha256": "d416c9369bcc19954403f7c5e2c323071b3d370c763081e12eaec51bf22b50f8"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_c_t3.json",
+      "bytes": 4253,
+      "sha256": "743e9456507becb480468380fad3278e85d8669b7c657f07a3477eca1f0eeb46"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_d_restart.json",
+      "bytes": 3813,
+      "sha256": "1acb26a8ae665e1e4e8694b04ad55d565d25de192585f1325456514179962ba1"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_e_v09.json",
+      "bytes": 3160,
+      "sha256": "b7c23cd400e6f8cf4475210883a1f59620d09c59bdb8c478d22e603f2a92ddf9"
+    },
+    {
+      "path": "eval/fixtures/holdout/category_f_e2e.json",
+      "bytes": 3805,
+      "sha256": "a08ee1b827584062c57f6fef87519ea0d8583143cc74ee1cce5e00fa030df46a"
+    },
+    {
+      "path": "seeds/source_registry.json",
+      "bytes": 12578,
+      "sha256": "7d73a4fe067accc7fdafcb74facb9333408150f642e06a118b7747eef01121e5"
+    },
+    {
+      "path": "splits/prototype_split.json",
+      "bytes": 1715,
+      "sha256": "c5760b9e755912ba0646094c0ac9dd1f226cf6610b1f493c5d88b0d899b8ebc3"
+    }
+  ]
+}

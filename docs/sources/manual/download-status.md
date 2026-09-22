@@ -9,7 +9,7 @@
 | M-07 Bosch HPU 수력학 기초 | **로컬 확보(2026-09-21), git 미포함** | 8,585,123 bytes. 파일명 `bosch-HPU-knowledge-in-detail-hydraulics-basic-principles.pdf`. 출처 URL·발행 문서 번호 미기재 — 제공자 확인 필요. `.gitignore`로 제외 |
 | M-08 BR 손상 유형 | **로컬 확보(2026-09-21), git 미포함** | 8,713,793 bytes. 파일명 `BR-손상유형-093168a92d25cc46_pdf_preview_medium.pdf`. 파일명에 `preview`가 있어 미리보기본일 수 있음. 발행 기관·출처 URL 미확인. `.gitignore`로 제외 |
 | M-09 BR 재제조 가능성 평가 가이드 | **로컬 확보(2026-09-21), git 미포함** | 918,305 bytes, 파일 헤더 `%PDF-1.4`. 파일명 `BR-재제조가능성-평가가이드.pdf`. 발행 기관·출처 URL 미확인. `.gitignore`로 제외 |
-| S-02 KOSHA GUIDE M-101-2012 | [로컬 PDF](../safety_sources_18/M-101-2012%20%EC%BB%A8%EB%B2%A0%EC%9D%B4%EC%96%B4%EC%9D%98%20%EC%95%88%EC%A0%84%EC%97%90%20%EA%B4%80%ED%95%9C%20%EA%B8%B0%EC%88%A0%EC%A7%80%EC%B9%A8.pdf) (`safety_sources_18/`) | 131,056 bytes, 파일 헤더 `%PDF-1.4` 확인. 공공기관(KOSHA) 발행 지침이라 git에 포함. 공공누리 등 이용조건 표기는 미확인 |
+| S-02 KOSHA GUIDE M-101-2012 | [로컬 PDF](../safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf) (`safety_sources_18/`) | 131,056 bytes, 파일 헤더 `%PDF-1.4` 확인. 공공기관(KOSHA) 발행 지침이라 git에 포함. 공공누리 등 이용조건 표기는 미확인 |
 
 M-02, M-03, M-05, M-06의 HTML 자료는 [README](README.md)의 공식 원문 링크와 활용 메모로 제공한다. HTML 전문을 로컬 복제하지 않았다.
 

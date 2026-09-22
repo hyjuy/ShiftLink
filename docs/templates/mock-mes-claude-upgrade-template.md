@@ -13,7 +13,7 @@
 1. 적용되는 AGENTS.md, 현재 브랜치, dirty 파일, 원격 추적 상태를 확인한다. 사용자의 미커밋 변경을 보존한다.
 2. `codex/mock-mes`는 이전 구현 브랜치다. 현재 작업 위치를 먼저 확인하고 임의로 main에서 개발하거나 강제로 전환하지 않는다. 별도 작업 브랜치가 필요하면 `codex/mock-mes-modularization`을 사용하되 기존 동명 브랜치도 확인한다.
 3. 관련 범위는 `shiftlink/mes/`, `tests/test_mes*`, `docs/design/mock-mes-*`, `docs/guides/mock-mes-*`, `docs/templates/mock-mes-*`, `docs/testing/mock-mes.tdd.md`다. `shiftlink/agent/schemas.py`와 관측 어댑터 계약도 확인한다. 전체 저장소를 무작정 읽지 않는다.
-4. 기준정보는 `docs/data/00_plant_and_relations.json`이다. 이를 원본 보존하고 별도 설정·fixture로 확장한다. sealed 사건 파일은 읽거나 개발 데이터로 재사용하지 않는다.
+4. 기준정보는 `docs/data/reference/00_plant_and_relations.json`이다. 이를 원본 보존하고 별도 설정·fixture로 확장한다. sealed 사건 파일은 읽거나 개발 데이터로 재사용하지 않는다.
 5. 실제 Python 버전을 확인한다. 이전 검증은 **3.12.10**에서 75개 테스트 통과, Python MES 커버리지 91%였다. 이는 현재 상태의 증거가 아니므로 기준 테스트를 다시 실행한다. **3.10.11 호환성은 검증 전이다.** 설치된 다른 3.10 패치 버전의 통과를 3.10.11 통과로 보고하지 않는다.
 6. 실행 진입점은 `python -m shiftlink.mes`, 기본 DB는 `data/mock-mes.sqlite3`다. 현재 `--port`, `--db` 옵션을 확인해 임시 DB·다른 포트에서 검증하고 사용자 실행 DB를 덮어쓰지 않는다.
 

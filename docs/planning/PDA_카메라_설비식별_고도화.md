@@ -249,7 +249,7 @@ SHIFTLINK:EQ:HPU-01
 | `RT-02` | RT | 롤러테이블 2 | `SHIFTLINK:EQ:RT-02` | 35 | 노랑 |
 | `CV-01` | CV | 컨베이어 | `SHIFTLINK:EQ:CV-01` | 36 | 초록 |
 
-> 실제 `equipment_id` 값은 `docs/data/00_plant_and_relations.json`의 등록값과 **반드시 일치**시킨다. 위 표는 형식 예시이며, 구현 시 카탈로그를 정본으로 삼아 생성한다(§13의 T-3 정합 테스트가 이를 강제한다).
+> 실제 `equipment_id` 값은 `docs/data/reference/00_plant_and_relations.json`의 등록값과 **반드시 일치**시킨다. 위 표는 형식 예시이며, 구현 시 카탈로그를 정본으로 삼아 생성한다(§13의 T-3 정합 테스트가 이를 강제한다).
 
 ---
 
@@ -662,7 +662,7 @@ GET /api/equipment/scan/recent?limit=5
 
 ### 9.4 설비↔마커 매핑 저장 위치
 
-`docs/data/00_plant_and_relations.json`의 설비 항목에 **선택 필드 1개**를 추가한다.
+`docs/data/reference/00_plant_and_relations.json`의 설비 항목에 **선택 필드 1개**를 추가한다.
 
 ```json
 {
@@ -729,7 +729,7 @@ GET /api/equipment/scan/recent?limit=5
 
 ## 11. 네이밍 레지스트리 등록 초안
 
-> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/naming-registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
+> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/collaboration/naming-registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
 
 **클래스**
 
@@ -924,7 +924,7 @@ GET /api/equipment/scan/recent?limit=5
 | 인식 지연 수치(QR 8~20ms, ArUco 2~5ms) | 외부 자료 기반 추정. **실측 미수행** |
 | `BarcodeDetector`의 대상 PDA 단말 지원 여부 | **미확인** — P0-1에서 함께 확인할 것 |
 | 마커 인식 가능 거리(0.5~2.5m) | 마커 크기·카메라 해상도 기반 계산값. **실측 미수행** |
-| `docs/data/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID | §5.4 표는 **형식 예시**. 구현 시 카탈로그를 정본으로 재생성 필요 |
+| `docs/data/reference/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID | §5.4 표는 **형식 예시**. 구현 시 카탈로그를 정본으로 재생성 필요 |
 | 산업용 PDA 하드웨어 스캔 트리거 키 사용 가능 여부 | 단말 미확정(U-11) |
 
 ---

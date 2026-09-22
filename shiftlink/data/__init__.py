@@ -1,4 +1,4 @@
-"""Plan the data pipeline; generation and storage are not implemented yet."""
+"""Legacy stage planner; reviewed draft generation lives in .generation."""
 
 import argparse
 import json

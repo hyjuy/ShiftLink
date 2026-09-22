@@ -7,7 +7,7 @@
 - 브랜치 `docs/day2-work-result`, 미커밋 변경: 이 문서와 템플릿 문서.
 - Python **3.10.11** (winget 설치, venv: `%LOCALAPPDATA%/Temp/claude/mes310venv`).
 - 기준 테스트: `tests/test_mes*.py` → **40 passed, 2 skipped, 10 subtests**, Python MES 커버리지 **91%** (3.10.11). 이전 문서의 "75개 통과(3.12.10)"는 현재 상태와 다르며 개수 자체를 합격 기준으로 삼지 않는다.
-- 기준정보: `docs/data/00_plant_and_relations.json` (설비 10대 EQ-0001~0010, material_flow 4건 — EQ-0006→0007→0008→{0009(60 m_min), 0010(20 m_min)} 분기).
+- 기준정보: `docs/data/reference/00_plant_and_relations.json` (설비 10대 EQ-0001~0010, material_flow 4건 — EQ-0006→0007→0008→{0009(60 m_min), 0010(20 m_min)} 분기).
 
 ## 식별자 의미 (합의, 조용히 바꾸지 않음)
 
@@ -51,7 +51,7 @@
 
 ### `configuration.py` (아키텍처 소유)
 
-- `from_catalog(catalog_data: dict) -> Configuration` — 기존 `docs/data/00_plant_and_relations.json`에서 기본 구성 A 생성. 원본 파일은 불변. 주경로는 material_flow 위상 + **현행 동작 보존을 위해 문서화된 규칙**으로 한 번만 산출하고 Configuration에 명시 고정.
+- `from_catalog(catalog_data: dict) -> Configuration` — 기존 `docs/data/reference/00_plant_and_relations.json`에서 기본 구성 A 생성. 원본 파일은 불변. 주경로는 material_flow 위상 + **현행 동작 보존을 위해 문서화된 규칙**으로 한 번만 산출하고 Configuration에 명시 고정.
 - `load_draft(payload: dict, *, source: str) -> Configuration` — 사용자 JSON 초안 로딩(스키마 검사 포함). eval 불가 순수 데이터만.
 - `validate(config: Configuration) -> list[str]` — 의미 검증: 중복 ID(equipment/asset/signal), 알 수 없는 profile/capability, 끊긴 route(비활성·부재 설비 참조), 누락 공급 관계, 필수 신호 누락, 단위 없는 신호, 모호한 분기(route 밖 material_flow에 분기 규칙 없음), 폐기 asset_id 재사용. 오류는 위치·이유 포함 문자열.
 - `diff(old: Configuration, new: Configuration) -> dict` — 유형별 변경 목록: `renamed / param_changed / asset_replaced / added / removed / signal_changed / route_changed / layout_changed`.

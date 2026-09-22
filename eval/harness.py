@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from eval.evaluators import evaluate_case, EvaluationResult, EVALUATORS
+from shiftlink.agent.schemas import SCHEMA_VERSION
 
 
 def wilson_ci_95(successes: int, total: int) -> tuple[float, float]:
@@ -185,6 +186,22 @@ def run_suite(
             "passed": passed,
             "sample_breakdown": _get_sample_breakdown(results_list)
         }
+        if category == "F":
+            metric_summary = {}
+            for name in ("precision_at_k", "recall_at_k", "unexpected_card_rate", "safety_missing_rate"):
+                values = [r.metrics[name] for r in results_list if r.metrics.get(name) is not None]
+                metric_summary[name] = {
+                    "mean": sum(values) / len(values) if values else None,
+                    "samples": len(values),
+                }
+            latencies = sorted(r.metrics["latency_ms"] for r in results_list
+                               if r.metrics.get("latency_ms") is not None)
+            metric_summary["stub_pipeline_latency_ms"] = {
+                "p95": latencies[math.ceil(0.95 * len(latencies)) - 1] if latencies else None,
+                "samples": len(latencies),
+                "scope": "Local deterministic stub; excludes real LLM/network latency",
+            }
+            category_results[category]["metrics"] = metric_summary
 
         # Print category summary
         status = "PASS" if passed else "FAIL"
@@ -197,7 +214,7 @@ def run_suite(
     report = {
         "run_id": run_id,
         "git_rev": get_git_rev(),
-        "schema_version": "1.0",
+        "schema_version": SCHEMA_VERSION,
         "fixture_sha256": get_fixture_sha256(suite),
         "timestamp": datetime.now().isoformat(),
         "suite": suite,
@@ -232,7 +249,7 @@ def _get_metric_name(category: str) -> str:
         "C": "Resolution Steps Schema Compliance",
         "D": "Restart Type & Attempt Consistency",
         "E": "v0.9 Conversion Success Rate",
-        "F": "E2E Pipeline Integration (Recall@k + Canary)"
+        "F": "E2E Integration (ranked retrieval, unwanted cards, safety, canary)"
     }
     return names.get(category, f"Category {category}")
 

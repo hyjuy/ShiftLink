@@ -27,11 +27,11 @@
 
 참조 자료:
 
-- `docs/data/00_plant_and_relations.json`: 기준정보·설비 ID·연결 관계
+- `docs/data/reference/00_plant_and_relations.json`: 기준정보·설비 ID·연결 관계
 - `docs/design/B_data.md`: 운전 컨텍스트·데이터 생성 규칙 제안
 - `docs/design/A_domain.md`: 도메인 범위와 관계 해석
 - `docs/planning/01_고도화_초안.md`: 사용자 시나리오와 기존 미결 사항
-- `docs/guides/branching.md`: 브랜치·데이터 관리 규칙
+- `docs/collaboration/branching.md`: 브랜치·데이터 관리 규칙
 
 현재 자료에는 6대 구성안과 10대 샘플이 혼재한다. 초기 구현은 기존 JSON의 10대 구성을 **시연용 가정**으로 사용하고 설비 목록을 설정에서 읽는다. 형상·소재 이동 경로가 부족하면 별도 데모 레이아웃에 가정을 기록한다. 유틸리티·구동 연결을 소재 이동 경로로 해석하지 않는다. 기존 기준정보를 임의로 확정하거나 덮어쓰지 않는다.
 

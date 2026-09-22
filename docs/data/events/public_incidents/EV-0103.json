@@ -1,0 +1,19 @@
+{
+  "event_id": "EV-0103",
+  "scenario": "S2",
+  "equipment": "COMMON",
+  "timeline": [
+    "2024년 2월 경기도 포천시 작업장에서 화물자동차에 적재된 코일을 인양했다. 정확한 일자는 원문에 없다.",
+    "천장주행크레인 정격하중은 2.8톤, 취급 코일은 약 3톤으로 기록되어 있다.",
+    "코일이 운반보조용 C형 훅에서 이탈해 작업자를 덮쳤고 작업자가 사망했다."
+  ],
+  "true_cause": "공단 자료는 부적합한 C형 훅, 정격하중 초과 및 무게중심 불일치, 작업계획서 미작성과 작업지휘자 미배치를 원인으로 제시한다.",
+  "true_actions": [],
+  "measurements": {
+    "crane_rated_load_t": 2.8,
+    "coil_mass_approx_t": 3
+  },
+  "cards_expected": [],
+  "restart_attempts": [],
+  "split": "kb"
+}

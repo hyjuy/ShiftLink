@@ -11,7 +11,10 @@ from shiftlink.agent.response import build_response, validate_response
 class ToolProvider(Protocol):
     def lookup_equipment(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]: ...
 
-    def search_cards(self, **kwargs: object) -> list[dict[str, Any]]: ...
+    def search_cards(
+        self, *, query: str, equipment_ids: list[str], k: int = 5,
+        observations: dict[str, object] | None = None,
+    ) -> list[dict[str, Any]]: ...
 
     def search_safety_cards(
         self, *, equipment_ids: list[str], observations: dict[str, object] | None = None
@@ -120,8 +123,12 @@ class FixedPipeline:
                 query=query,
                 equipment_ids=equipment_ids,
                 k=k,
+                observations=observations_dict,
             ),
         }
+
+        # Keep ranked results separate from the uncapped safety merge for evaluation.
+        results["ranked_cards"] = list(results["cards"])
 
         # Retrieve safety cards independently (all applicable, not subject to k limit).
         safety_cards = self.tools.search_safety_cards(

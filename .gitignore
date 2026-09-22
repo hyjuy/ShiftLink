@@ -30,6 +30,7 @@ mes_data/*
 seeds/*
 !seeds/.gitkeep
 !seeds/카드_작성_가이드_초안.md
+!seeds/personas_v0.1.yaml
 !seeds/source_registry.json
 
 # 평가 하니스 실행 결과는 실행마다 생성되는 산출물 → 저장소에 누적하지 않는다.

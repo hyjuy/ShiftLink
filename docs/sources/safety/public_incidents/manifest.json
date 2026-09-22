@@ -1,8 +1,12 @@
 {
   "schema_version": "1.1",
   "recorded_at": "2026-09-22",
-  "status": "draft_requires_domain_review",
-  "use_scope": "공개 사건 요약을 Event로 구조화한 검토용 초안. 운영 KB 적재·안전 절차 승인·정식 평가 봉인 아님.",
+  "status": "reference_only_excluded_from_operational_events",
+  "use_scope": "공개 사고의 안전 참고용 조사 기록. 냉간코일 공장 내 오류·조치 사건 데이터에서 제외. 카드 생성·운영 KB 적재·평가 사용 승인 아님.",
+  "operational_event_eligible": false,
+  "reclassified_at": "2026-09-22",
+  "original_path": "docs/data/events/public_incidents/",
+  "reclassification_reason": "5건 모두 검증된 오류 대응 조치가 없고 일부는 외부 하역·다른 재료와 공정의 사례다. 원문에 없는 복구 조치를 추가하지 않고 참고자료로 보존한다.",
   "common_notes": [
     "각 JSON은 Event 단일 객체이며 출처와 작성 판단은 이 manifest에 분리했다.",
     "scenario=S2는 저년차 교육용으로 작성자가 지정한 사용 장면이다. 실제 사고자의 숙련도에 관한 사실이 아니다.",

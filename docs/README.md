@@ -26,7 +26,8 @@
 | 결정·미결 사항 확인 | [확정·미결 목록](planning/04_확정_미결_목록.md), [결정 질문](planning/03_결정질문.md), [제약 대장](planning/constraint_register.md) |
 | T1~T6 카드 작성 | [현재 작성 가이드 v1.1](../seeds/카드_작성_가이드_초안.md), [구현 계약](design/D26-29_계약_v1.0.md) |
 | 카드 생성 실행 | [생성 가이드](guides/card-generation.md) |
-| 실제 사건 기반 Event 확인 | [공개 사건 목록](data/events/public_incidents/README.md) |
+| 오류·고장 및 조치 사건 작성 | [냉간코일 공장 내 사건 기준](data/events/README.md) |
+| 공개 사고의 안전 참고자료 확인 | [사고 참고자료 목록](sources/safety/public_incidents/README.md) |
 | 데이터 분류·사용 기준 확인 | [데이터 안내](data/README.md), [출처·분할 계약](data/policies/source-and-split-contract.md) |
 | 모의 MES 실행 | [실행 가이드](guides/mock-mes-usage.md) |
 | 장비 구성 변경 | [구성 가이드](guides/mock-mes-configuration-guide.md) |

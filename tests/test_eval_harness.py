@@ -24,6 +24,46 @@ from eval.harness import (
 )
 
 
+def test_safety_evaluator_rejects_unexpected_cards_when_expected_empty():
+    case = load_fixtures("dev")["A"][0]
+    result = evaluate_case(case, {"expected_safety_card_ids": [], "expected_count": 0}, "A")
+    assert not result.passed
+    assert result.failure_type == "retrieval"
+
+
+def test_e2e_evaluator_rejects_extra_cards_and_reports_metrics():
+    case = load_fixtures("dev")["F"][0]
+    result = evaluate_case(case, {"expected_card_ids": [], "expected_safety_card_ids": []}, "F")
+    assert not result.passed
+    assert result.failure_type == "retrieval"
+    assert result.metrics["unexpected_card_rate"] == 1.0
+
+
+def test_e2e_reports_ranked_metrics_separately_from_safety_merge():
+    case = load_fixtures("dev")["F"][0]
+    result = evaluate_case(case, case["expected"], "F")
+    assert result.passed, result.reason
+    assert result.metrics["precision_at_k"] == 0.2
+    assert result.metrics["recall_at_k"] == 1.0
+    assert result.metrics["unexpected_card_rate"] == 0.0
+    assert result.metrics["safety_missing_rate"] == 0.0
+    assert result.metrics["latency_ms"] >= 0.0
+
+
+def test_safety_merge_does_not_inflate_ranked_recall():
+    from copy import deepcopy
+    case = deepcopy(load_fixtures("dev")["F"][0])
+    card = case["fixture_cards"][0]
+    case["fixture_cards"] = [dict(card, card_id=f"K-{i:04d}") for i in range(1, 7)]
+    expected_ids = [c["card_id"] for c in case["fixture_cards"]]
+    result = evaluate_case(case, dict(expected_card_ids=expected_ids,
+                                     expected_safety_card_ids=expected_ids), "F")
+    assert result.passed, result.reason
+    assert result.metrics["precision_at_k"] == 1.0
+    assert result.metrics["recall_at_k"] == 5 / 6
+    assert result.metrics["safety_missing_rate"] == 0.0
+
+
 class TestWilsonCI:
     """Test Wilson score interval calculation."""
 

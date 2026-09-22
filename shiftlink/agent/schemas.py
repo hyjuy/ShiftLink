@@ -1,22 +1,11 @@
-"""Pipeline data contracts for schema version 1.0."""
+"""Pipeline data contracts, including backward-compatible v1.1 metadata."""
 
-import operator
 from datetime import datetime
-from typing import Annotated, Any, Callable, Literal, Mapping
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, Field, StringConstraints, model_validator
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
-SCHEMA_VERSION = "1.0"
-
-# Allowed Condition operators (계약 §4.2). Anything else evaluates to unknown.
-_COMPARISONS: dict[str, Callable[[Any, Any], bool]] = {
-    "==": operator.eq,
-    "!=": operator.ne,
-    ">": operator.gt,
-    ">=": operator.ge,
-    "<": operator.lt,
-    "<=": operator.le,
-}
+SCHEMA_VERSION = "1.1"
 
 
 Split = Literal["kb", "dev", "sealed"]
@@ -24,31 +13,15 @@ Equipment = Literal["HPU", "GR", "RT", "CV", "COMMON"]
 
 NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 RestartType = Literal["normal_stop_restart", "abnormal_stop_restart", "maintenance_restart", "unknown"]
+EventId = Annotated[str, StringConstraints(pattern=r"^EV-\d{4}$")]
+EvidenceGap = Literal["not_observed", "not_recorded", "insufficient_evidence", "conflicting_evidence"]
 
 
 class Condition(BaseModel):
     signal: str
-    op: str
+    op: Literal["==", "!=", ">", ">=", "<", "<="]
     value: Any
     unit: str | None = None
-
-    def evaluate(self, observations: Mapping[str, Any] | None) -> bool | None:
-        """
-        Deterministic condition match (계약 §4.2).
-
-        True/False when the signal is observed and comparable, None when the
-        signal is missing or not comparable (unknown — never treated as False).
-        """
-        if not observations or self.signal not in observations:
-            return None
-        observed = observations[self.signal]
-        comparison = _COMPARISONS.get(self.op)
-        if comparison is None:
-            return None
-        try:
-            return comparison(observed, self.value)
-        except TypeError:
-            return None
 
 
 class HandoverMethod(BaseModel):
@@ -68,6 +41,10 @@ class ResolutionStep(BaseModel):
     preconditions: list[str] = Field(default_factory=list)
     expected_result: NonBlank
     stop_conditions: list[str] = Field(default_factory=list)
+    verification_step: NonBlank | None = None
+    rollback_action: NonBlank | None = None
+    escalation_target: NonBlank | None = None
+    escalation_channel: NonBlank | None = None
 
 
 class FailedAttempt(BaseModel):
@@ -77,7 +54,11 @@ class FailedAttempt(BaseModel):
     action: NonBlank
     observed_result: NonBlank
     failure_reason: str | None = None
-    # Format check only; referential integrity is verified by the eval harness.
+    evidence_gap: EvidenceGap | None = None
+    next_observations: list[NonBlank] = Field(default_factory=list)
+    required_data: list[NonBlank] = Field(default_factory=list)
+    data_collection_role: NonBlank | None = None
+    # Format check only; existence and split integrity need separate batch validation.
     evidence_ids: list[Annotated[str, StringConstraints(pattern=r"^(K|EV|AR)-\d{4}$")]] = Field(
         default_factory=list
     )
@@ -91,12 +72,66 @@ class TypePayload(BaseModel):
     tried_and_failed: list[FailedAttempt] = Field(default_factory=list)
 
 
+class SourceReference(BaseModel):
+    """Reference and location only; no source text or event ground truth."""
+    source_id: NonBlank
+    locator: NonBlank | None = None
+    document_version: NonBlank | None = None
+
+
+class GeneralizationEvidence(BaseModel):
+    supporting_event_ids: list[EventId] = Field(default_factory=list)
+    contradicting_event_ids: list[EventId] = Field(default_factory=list)
+    generalization_scope: NonBlank | None = None
+    confidence_basis: NonBlank | None = None
+
+    @model_validator(mode="after")
+    def validate_event_roles(self) -> "GeneralizationEvidence":
+        for ids in (self.supporting_event_ids, self.contradicting_event_ids):
+            if len(ids) != len(set(ids)):
+                raise ValueError("Generalization event IDs must be unique")
+        if set(self.supporting_event_ids) & set(self.contradicting_event_ids):
+            raise ValueError("An event cannot both support and contradict the same card")
+        return self
+
+
+class SafetyReview(BaseModel):
+    """Review metadata; independent of card adoption and workflow authorization."""
+    status: Literal["draft", "pending_review", "approved", "restricted", "expired", "withdrawn"] = "draft"
+    approved_by: NonBlank | None = None
+    approver_role: NonBlank | None = None
+    reviewed_at: AwareDatetime | None = None
+    valid_until: AwareDatetime | None = None
+    review_triggers: list[NonBlank] = Field(default_factory=list)
+    evidence_grade: NonBlank | None = None
+    safety_level: NonBlank | None = None
+
+    @model_validator(mode="after")
+    def validate_review(self) -> "SafetyReview":
+        if self.status == "approved" and any(value is None for value in (
+            self.approved_by, self.approver_role, self.reviewed_at,
+            self.valid_until, self.evidence_grade,
+        )):
+            raise ValueError("approved safety reviews require approver, role, review/expiry dates and evidence grade")
+        if self.reviewed_at and self.valid_until and self.valid_until <= self.reviewed_at:
+            raise ValueError("valid_until must be after reviewed_at")
+        return self
+
+
 class Provenance(BaseModel):
+    model_config = ConfigDict(protected_namespaces=("model_validate", "model_dump"))
+
     seed_ids: list[str]
     persona_id: str
     event_ids: list[str]
     generator: str
     generated_at: datetime
+    sources: list[SourceReference] = Field(default_factory=list)
+    extraction_method: NonBlank | None = None
+    model_version: NonBlank | None = None
+    prompt_version: NonBlank | None = None
+    index_version: NonBlank | None = None
+    schema_version: NonBlank | None = None
 
 
 class KnowledgeCard(BaseModel):
@@ -108,13 +143,13 @@ class KnowledgeCard(BaseModel):
     component: str
     scenario: Literal["S1", "S2", "S3"]
     title: str
-    symptom: str | None = None
+    symptom: NonBlank | None = None
     know_how: str
     rationale: str
     conditions: list[Condition] = Field(default_factory=list)
     exclusions: list[Condition] = Field(default_factory=list)
     safety_flag: bool = False
-    safety_basis: str | None = None
+    safety_basis: NonBlank | None = None
     conflict_group: str | None = None
     confidence: float = Field(ge=0, le=1)
     provenance: Provenance
@@ -128,6 +163,8 @@ class KnowledgeCard(BaseModel):
         "rejected_safety",
     ] = "draft"
     type_payload: TypePayload | None = None
+    generalization_evidence: GeneralizationEvidence | None = None
+    safety_review: SafetyReview | None = None
 
     # Implementation notes for v1.0 contracts (D-26~29 approved requirements):
     # D-26 approved: safety conditions extended to all safety_flag=True cards.
@@ -162,8 +199,6 @@ class KnowledgeCard(BaseModel):
         if self.tacit_type == "T3":
             if not self.type_payload or not self.type_payload.steps:
                 raise ValueError("T3 cards require type_payload.steps (at least 1)")
-            if len(self.type_payload.steps) < 1:
-                raise ValueError("T3 cards require type_payload.steps (at least 1)")
             step_ids = [step.step_id for step in self.type_payload.steps]
             if len(step_ids) != len(set(step_ids)):
                 raise ValueError("T3 steps must have unique step_ids")
@@ -193,7 +228,7 @@ class KnowledgeCard(BaseModel):
         if self.type_payload:
             if self.type_payload.handover_method and self.tacit_type != "T4":
                 raise ValueError("handover_method only allowed on T4 cards")
-            if self.type_payload.steps and self.tacit_type != "T3":
+            if self.type_payload.steps is not None and self.tacit_type != "T3":
                 raise ValueError("steps only allowed on T3 cards")
 
         return self

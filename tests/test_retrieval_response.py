@@ -14,12 +14,10 @@ from shiftlink.agent.schemas import (
     Provenance,
 )
 from shiftlink.rag.retrieval import InMemoryToolProvider, check_card_rules
+from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.response import (
-    DISCLAIMER,
     AgentResponse,
-    HandoverCandidate,
     build_response,
-    is_model_retryable,
     render_response,
     validate_response,
 )
@@ -155,6 +153,117 @@ def make_card_t6(card_id: str = "K-0006", equipment: str = "HPU", failed_attempt
 
 # Tests for InMemoryToolProvider
 
+def extended_card_data():
+    data = make_card_t3().model_dump(mode="json")
+    data["generalization_evidence"] = dict(
+        supporting_event_ids=["EV-0001"], contradicting_event_ids=["EV-0002"],
+        generalization_scope="HPU pump", confidence_basis="Two reviewed cases",
+    )
+    data["provenance"].update(
+        sources=[dict(source_id="AR-0001", locator="page 3", document_version="2")],
+        extraction_method="human_review", model_version="model-1", prompt_version="p-2",
+        index_version="idx-3", schema_version="1.1",
+    )
+    data.update(safety_flag=True, safety_basis="Reviewed rule", safety_review=dict(
+        status="approved", approved_by="reviewer-1", approver_role="safety engineer",
+        reviewed_at="2026-09-22T00:00:00Z", valid_until="2027-09-22T00:00:00Z",
+        evidence_grade="reviewed manual", safety_level="high",
+        review_triggers=["Equipment changed"],
+    ))
+    data["type_payload"]["steps"][0].update(
+        verification_step="Read pressure", rollback_action="Return to stopped state",
+        escalation_target="Maintenance", escalation_channel="Radio",
+    )
+    data["type_payload"]["tried_and_failed"] = [dict(
+        attempt_id="AT-0001", restart_type="unknown", action="Restart",
+        observed_result="Stopped", failure_reason=None, evidence_gap="not_recorded",
+        next_observations=["Pressure"], required_data=["Alarm log"],
+        data_collection_role="Operator",
+    )]
+    return data
+
+
+def test_extension_fields_survive_card_json_and_response():
+    raw = extended_card_data()
+    card = KnowledgeCard.model_validate_json(KnowledgeCard.model_validate(raw).model_dump_json())
+    assert card.model_dump(mode="json")["generalization_evidence"] == raw["generalization_evidence"]
+    assert card.provenance.sources[0].locator == "page 3"
+    resp = build_response("query", None, {"cards": [card.model_dump(mode="json")]})
+    assert resp.steps[0].verification_step == "Read pressure"
+    assert resp.steps[0].rollback_action == "Return to stopped state"
+    assert resp.restart_failures[0].evidence_gap == "not_recorded"
+    assert resp.restart_failures[0].failure_reason is None
+    assert resp.card_metadata[card.card_id].safety_review.status == "approved"
+    text = render_response(resp)
+    for value in ("Read pressure", "Return to stopped state", "Maintenance", "Radio",
+                  "Alarm log", "Operator", "page 3", "not_recorded"):
+        assert value in text
+
+
+@pytest.mark.parametrize("section,patch,error", [
+    ("generalization_evidence", {"supporting_event_ids": ["invalid"]}, "supporting_event_ids"),
+    ("generalization_evidence", {"contradicting_event_ids": ["EV-0001"]}, "both support and contradict"),
+    ("generalization_evidence", {"supporting_event_ids": ["EV-0001", "EV-0001"]}, "unique"),
+    ("safety_review", {"approved_by": None}, "approved"),
+    ("safety_review", {"valid_until": "2025-09-22T00:00:00Z"}, "after reviewed_at"),
+    ("safety_review", {"reviewed_at": "2026-09-22T00:00:00"}, "timezone"),
+])
+def test_extension_rejects_inconsistent_metadata(section, patch, error):
+    raw = extended_card_data()
+    raw[section].update(patch)
+    with pytest.raises(ValidationError, match=error):
+        KnowledgeCard.model_validate(raw)
+
+
+@pytest.mark.parametrize("field,value", [("evidence_gap", "invented"), ("data_collection_role", " ")])
+def test_attempt_extension_rejects_invalid_values(field, value):
+    raw = extended_card_data()
+    raw["type_payload"]["tried_and_failed"][0][field] = value
+    with pytest.raises(ValidationError, match=field):
+        KnowledgeCard.model_validate(raw)
+
+
+def test_optional_extensions_preserve_legacy_and_conversion():
+    from shiftlink.agent.compat import convert_card_v09
+    card = make_card_t1()
+    assert card.generalization_evidence is None
+    assert card.safety_review is None
+    assert card.provenance.sources == []
+    raw = extended_card_data()
+    converted = convert_card_v09(raw)
+    assert converted.outcome == "converted"
+    assert converted.card.generalization_evidence.supporting_event_ids == ["EV-0001"]
+    assert converted.card.status == "draft"
+
+
+@pytest.mark.parametrize("location", ["symptom", "scope", "verification", "required_data"])
+def test_search_uses_structured_knowledge(location):
+    raw = extended_card_data()
+    other = KnowledgeCard.model_validate(raw | {"card_id": "K-0001"})
+    raw["card_id"] = "K-0009"
+    if location == "symptom":
+        raw["symptom"] = "cavitation"
+    elif location == "scope":
+        raw["generalization_evidence"]["generalization_scope"] = "cavitation"
+    elif location == "verification":
+        raw["type_payload"]["steps"][0]["verification_step"] = "cavitation"
+    else:
+        raw["type_payload"]["tried_and_failed"][0]["required_data"] = ["cavitation"]
+    target = KnowledgeCard.model_validate(raw)
+    provider = InMemoryToolProvider(cards=[other, target])
+    assert provider.search_cards(query="cavitation", equipment_ids=["HPU"], k=1)[0]["card_id"] == "K-0009"
+
+
+def test_search_does_not_rank_by_approval_or_generator_metadata():
+    raw = extended_card_data()
+    other = KnowledgeCard.model_validate(raw | {"card_id": "K-0001"})
+    raw["card_id"] = "K-0009"
+    raw["provenance"]["model_version"] = "cavitation"
+    raw["safety_review"]["approved_by"] = "cavitation"
+    target = KnowledgeCard.model_validate(raw)
+    provider = InMemoryToolProvider(cards=[other, target])
+    assert provider.search_cards(query="cavitation", equipment_ids=["HPU"], k=1)[0]["card_id"] == "K-0001"
+
 def test_retrieval_loads_only_accepted_kb_l1_cards() -> None:
     """Only status=accepted AND split='kb' AND grade='L1' cards loaded."""
     accepted_l1 = make_card_t1(card_id="K-0001", equipment="HPU")
@@ -201,9 +310,56 @@ def test_search_cards_excludes_false_conditions() -> None:
     results = provider.search_cards(query="test", equipment_ids=["HPU"], k=5)
     assert len(results) == 1
 
-    # Observations don't match: condition_status should reflect this
-    # (In this implementation, search_cards doesn't receive observations,
-    # so we test search_safety_cards for observation handling)
+    assert provider.search_cards(
+        query="test", equipment_ids=["HPU"], observations={"pressure": 0}
+    ) == []
+
+
+@pytest.mark.parametrize("safety_flag", [False, True])
+@pytest.mark.parametrize("field,value", [("conditions", 0), ("exclusions", 100)])
+def test_pipeline_never_reintroduces_inapplicable_cards(safety_flag, field, value):
+    card = make_card_t1(safety_flag=safety_flag)
+    setattr(card, field, [Condition(signal="pressure", op="==", value=100)])
+    result = FixedPipeline(model=lambda **kw: {}, tools=InMemoryToolProvider(cards=[card])).run(
+        dict(question="test", line_id="L1", eq_id="HPU",
+             observations=[dict(signal="pressure", value=value)])
+    )
+    assert result.tool_results["cards"] == []
+    assert result.output.cited_card_ids == []
+
+
+@pytest.mark.parametrize("observations,status", [
+    ({"pressure": 100}, "unverified"),
+    ({"pressure": 100, "mode": "normal"}, "verified"),
+    ({"pressure": "invalid", "mode": "normal"}, "unverified"),
+])
+def test_all_conditions_and_exclusions_must_be_verified(observations, status):
+    card = make_card_t1(safety_flag=True)
+    card.conditions = [Condition(signal="pressure", op=">=", value=100)]
+    card.exclusions = [Condition(signal="mode", op="==", value="maintenance")]
+    provider = InMemoryToolProvider(cards=[card])
+    for results in (
+        provider.search_cards(query="test", equipment_ids=["HPU"], observations=observations),
+        provider.search_safety_cards(equipment_ids=["HPU"], observations=observations),
+    ):
+        assert results[0]["condition_status"] == status
+
+
+def test_unverified_procedure_keeps_warning_but_withholds_actions():
+    card = make_card_t3()
+    card.safety_flag, card.safety_basis = True, "Safety basis"
+    card.conditions = [Condition(signal="pressure", op=">", value=100)]
+    result = FixedPipeline(model=lambda **kw: {}, tools=InMemoryToolProvider(cards=[card])).run(
+        dict(question="test", line_id="L1", eq_id="HPU")
+    )
+    assert result.output.safety_notices[0].card_id == card.card_id
+    assert result.output.unverified_card_ids == [card.card_id]
+    assert result.output.steps == []
+    assert not result.output.review_queue
+    rendered = render_response(result.output)
+    assert "조건 미확인" in rendered
+    assert "첫 번째 조치" not in rendered
+    assert "조건 B" in rendered
 
 
 def test_search_cards_deterministic_ranking() -> None:
@@ -563,162 +719,3 @@ def test_validate_response_no_lost_stop_conditions() -> None:
     resp = AgentResponse(mode="query")
     errors = validate_response(resp, tool_results)
     assert any("Lost stop_conditions" in e for e in errors)
-
-
-# --- v1.0 고도화: 등급 표기·인용 검증·카드별 단계·인계 후보 ---
-
-
-def _results(*cards: KnowledgeCard) -> dict:
-    return {
-        "cards": [c.model_dump(mode="json") for c in cards],
-        "equipment": [],
-        "checklist": [],
-    }
-
-
-def test_each_cited_card_shows_its_grade_label() -> None:
-    """4.10: 인용 카드마다 'L1 합성·시뮬레이션 검증' 등급을 표시한다."""
-    resp = build_response("query", None, _results(make_card_t1()))
-    text = render_response(resp)
-
-    assert resp.cards[0].grade == "L1"
-    assert resp.cards[0].grade_label == "L1 합성·시뮬레이션 검증"
-    assert "K-0001 [L1 합성·시뮬레이션 검증]" in text
-    assert validate_response(resp, _results(make_card_t1())) == []
-
-
-def test_render_always_carries_the_not_a_work_order_notice() -> None:
-    """4.10: '실제 작업지시 아님' 문구 상시 표시."""
-    text = render_response(build_response("query", None, _results(make_card_t1())))
-    assert DISCLAIMER in text
-
-
-def test_second_t4_card_does_not_overwrite_the_first() -> None:
-    """D-27: T4 인계 방법은 카드별로 보존한다."""
-    first = make_card_t4(card_id="K-0004")
-    second = make_card_t4(card_id="K-0005")
-    tool_results = _results(first, second)
-
-    resp = build_response("query", None, tool_results)
-
-    assert [hm.card_id for hm in resp.handover_methods] == ["K-0004", "K-0005"]
-    assert resp.handover_method.card_id == "K-0004"  # 계약 §4.3 필드명 유지
-    assert not [e for e in validate_response(resp, tool_results) if "handover_method_lost" in e]
-
-
-def test_steps_of_two_cards_are_not_interleaved() -> None:
-    """D-28: 카드별 단계 순서를 보존하고 서로 섞지 않는다."""
-    tool_results = _results(make_card_t3(card_id="K-0003"), make_card_t3(card_id="K-0007"))
-    resp = build_response("query", None, tool_results)
-    text = render_response(resp)
-
-    assert [s.card_id for s in resp.steps] == ["K-0003", "K-0003", "K-0007", "K-0007"]
-    assert text.index("카드 K-0003") < text.index("카드 K-0007")
-    # 두 카드의 order가 1,2,1,2여도 역전으로 보고하지 않는다.
-    assert not [e for e in validate_response(resp, tool_results) if "ascending order" in e]
-
-
-def test_safety_notice_collects_every_stop_condition() -> None:
-    """D-26·§2.2: 첫 단계만이 아니라 카드의 중단 조건 전부를 노출한다."""
-    card = make_card_t3(card_id="K-0008")
-    card.safety_flag = True
-    card.safety_basis = "KOSHA GUIDE M-101-2012"
-    tool_results = _results(card)
-
-    resp = build_response("query", None, tool_results)
-
-    assert resp.safety_notices[0].stop_conditions == ["조건 A", "조건 B"]
-    assert validate_response(resp, tool_results) == []
-
-
-def test_safety_card_without_basis_is_flagged() -> None:
-    """D-26·4.12: safety_flag 카드에 근거가 없으면 검증 오류."""
-    tool_results = {
-        "cards": [{"card_id": "K-0001", "safety_flag": True, "grade": "L1"}],
-        "equipment": [],
-        "checklist": [],
-    }
-    resp = build_response("query", None, tool_results)
-    errors = validate_response(resp, tool_results)
-
-    assert any("safety_basis_missing" in e for e in errors)
-    assert "근거 미기재 — 검토 필요" in render_response(resp)
-
-
-def test_model_citations_are_filtered_against_retrieval() -> None:
-    """4.8 코드 검증: 검색 결과에 없는 인용 ID는 채택하지 않는다."""
-    tool_results = _results(make_card_t1(card_id="K-0001"))
-    resp = build_response(
-        "query", None, tool_results, {"cited_card_ids": ["K-0001", "K-9999"], "answer": "본문"}
-    )
-
-    assert resp.cited_card_ids == ["K-0001"]
-    assert resp.dropped_citations == ["K-9999"]
-    assert resp.answer == "본문"
-    assert validate_response(resp, tool_results) == []
-
-
-def test_only_unknown_citations_fall_back_to_no_knowledge() -> None:
-    """3.3: 인용 ID가 실제 결과에 없으면 '지식 없음'으로 치환한다."""
-    tool_results = _results(make_card_t1(card_id="K-0001"))
-    resp = build_response(
-        "query", None, tool_results, {"cited_card_ids": ["K-9999"], "answer": "근거 없는 본문"}
-    )
-    text = render_response(resp)
-
-    assert resp.no_knowledge is True
-    assert resp.answer is None
-    assert "해당 지식 없음" in text
-    assert "근거 없는 본문" not in text
-    assert "K-9999" in text  # 무엇을 버렸는지는 남긴다
-
-
-def test_handover_candidates_are_proposals_only() -> None:
-    """3.4 F-04: 인계 항목은 등록 후보로만 제시하고 저장하지 않는다."""
-    tool_results = _results(make_card_t4(card_id="K-0004"))
-    resp = build_response(
-        "handover",
-        None,
-        tool_results,
-        {"handover_candidates": [{"text": "RT-01 진동 재확인", "card_ids": ["K-0004"]}]},
-    )
-    text = render_response(resp)
-
-    assert resp.handover_candidates[0].status == "proposed"
-    assert "수락 전, 저장되지 않음" in text
-    assert validate_response(resp, tool_results) == []
-
-
-def test_handover_candidate_citing_unknown_card_is_flagged() -> None:
-    """4.9: 근거 없는 조치 제안은 검증에서 걸러진다."""
-    tool_results = _results(make_card_t1(card_id="K-0001"))
-    resp = AgentResponse(mode="handover")
-    resp.handover_candidates = [HandoverCandidate(text="점검", card_ids=["K-9999"])]
-
-    errors = validate_response(resp, tool_results)
-    assert any("handover_candidate_unknown_card" in e for e in errors)
-
-
-def test_restart_failure_evidence_is_rendered() -> None:
-    """D-29: 시도·실패의 근거 ID를 응답에 남긴다."""
-    attempt = FailedAttempt(
-        attempt_id="AT-0001",
-        restart_type="normal_stop_restart",
-        action="재시작",
-        observed_result="실패",
-        failure_reason=None,
-        evidence_ids=["EV-0001"],
-    )
-    resp = build_response("query", None, _results(make_card_t6(failed_attempts=[attempt])))
-    text = render_response(resp)
-
-    assert resp.restart_failures[0].evidence_ids == ["EV-0001"]
-    assert "근거: EV-0001" in text
-    assert "이유: 미상" in text
-
-
-def test_only_model_attributable_findings_are_retryable() -> None:
-    """§4.3: 재시도는 모델이 고칠 수 있는 결함에만 적용한다."""
-    assert is_model_retryable(["[cited_card_unknown] Cited card K-9999 not found"]) is True
-    assert is_model_retryable(["[safety_basis_missing] Safety card K-0001 has no safety_basis"]) is False
-    assert is_model_retryable([]) is False

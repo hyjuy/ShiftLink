@@ -5,7 +5,8 @@ Each evaluator takes case input and expected output, returns {pass: bool, reason
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from time import perf_counter
 from typing import Any, Callable
 
 
@@ -17,6 +18,7 @@ class EvaluationResult:
     passed: bool
     reason: str
     failure_type: str | None = None  # "schema", "data", "retrieval", "response", "evaluator", "not_implemented"
+    metrics: dict[str, float | None] = field(default_factory=dict)
 
 
 def evaluate_category_a(case: dict, expected: dict) -> EvaluationResult:
@@ -88,8 +90,13 @@ def evaluate_category_a(case: dict, expected: dict) -> EvaluationResult:
                 failure_type="retrieval"
             )
 
-        # Verify count if specified
-        if expected_count > 0 and len(results) != expected_count:
+        unexpected = retrieved_ids - expected_safety_ids
+        if unexpected:
+            return EvaluationResult(case_id, "A", False,
+                                    f"Unexpected safety cards: {unexpected}", "retrieval")
+
+        # Zero is an explicit expected count too.
+        if "expected_count" in expected and len(results) != expected_count:
             return EvaluationResult(
                 case_id=case_id,
                 category="A",
@@ -353,6 +360,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
     6. Check safety/integrity: no safety cards lost, order preserved, stop_conditions kept
     7. Canary token leakage detection (qqz7-... and zzk9-... should NOT appear in render)
     """
+    metrics: dict[str, float | None] = {}
     case_id = case.get("case_id", "unknown")
 
     try:
@@ -382,7 +390,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                 category="F",
                 passed=False,
                 reason=f"Provider init failed: {str(e)}",
-                failure_type="evaluator"
+                failure_type="evaluator", metrics=metrics
             )
 
         # Deterministic model stub: pass through tool_results as-is
@@ -411,8 +419,10 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                 "shift": case_input.get("shift", "A"),
             }
 
-        # Run pipeline
+        # Stub pipeline timing, not model/network latency.
+        started = perf_counter()
         result = pipeline.run(payload)
+        latency_ms = (perf_counter() - started) * 1000
 
         # Extract response and tool results
         response = result.output
@@ -420,9 +430,27 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
         retrieved_cards = tool_results.get("cards", [])
         safety_cards = tool_results.get("safety_cards", [])
 
-        # Verify Recall@k
+        # Measure ranked retrieval separately from merged safety coverage.
         expected_card_ids = set(expected.get("expected_card_ids", []))
         retrieved_ids = set(card.get("card_id") for card in retrieved_cards if card.get("card_id"))
+
+        k = payload.get("k", 5)
+        ranked_ids = {c["card_id"] for c in tool_results["ranked_cards"][:k]}
+        expected_safety_ids = set(expected.get("expected_safety_card_ids", []))
+        notice_ids = {n.card_id for n in response.safety_notices}
+        unexpected = retrieved_ids - expected_card_ids
+        metrics.update({
+            "precision_at_k": len(ranked_ids & expected_card_ids) / k,
+            "recall_at_k": (len(ranked_ids & expected_card_ids) / len(expected_card_ids)
+                            if expected_card_ids else None),
+            "unexpected_card_rate": len(unexpected) / len(retrieved_ids) if retrieved_ids else 0.0,
+            "safety_missing_rate": (len(expected_safety_ids - notice_ids) / len(expected_safety_ids)
+                                    if expected_safety_ids else None),
+            "latency_ms": latency_ms,
+        })
+        if unexpected:
+            return EvaluationResult(case_id, "F", False,
+                                    f"Unexpected cards: {unexpected}", "retrieval", metrics)
 
         recall = 1.0  # Default: perfect recall if no expected cards
         if expected_card_ids:
@@ -434,8 +462,8 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                     case_id=case_id,
                     category="F",
                     passed=False,
-                    reason=f"Recall@k too low: {recall*100:.1f}% (expected {expected.get('recall_at_k_k_value', 5)}-cutoff). Missing: {expected_card_ids - retrieved_ids}",
-                    failure_type="retrieval"
+                    reason=f"Merged recall too low: {recall*100:.1f}%. Missing: {expected_card_ids - retrieved_ids}",
+                    failure_type="retrieval", metrics=metrics
                 )
 
         # Verify citations
@@ -448,20 +476,20 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                     category="F",
                     passed=False,
                     reason=f"Cited card_ids not in tool_results: {missing_in_results}",
-                    failure_type="response"
+                    failure_type="response", metrics=metrics
                 )
 
         # Verify safety notices preservation
         if hasattr(response, "safety_notices"):
             expected_safety_ids = set(expected.get("expected_safety_card_ids", []))
             cited_safety_ids = set(n.card_id for n in response.safety_notices)
-            if expected_safety_ids and not expected_safety_ids.issubset(cited_safety_ids):
+            if expected_safety_ids != cited_safety_ids:
                 return EvaluationResult(
                     case_id=case_id,
                     category="F",
                     passed=False,
-                    reason=f"Safety notices missing: {expected_safety_ids - cited_safety_ids}",
-                    failure_type="response"
+                    reason=f"Safety notices mismatch: missing={expected_safety_ids - cited_safety_ids}, unexpected={cited_safety_ids - expected_safety_ids}",
+                    failure_type="response", metrics=metrics
                 )
 
         # Verify step order preservation (T3)
@@ -473,7 +501,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                     category="F",
                     passed=False,
                     reason=f"Step order not preserved: {orders}",
-                    failure_type="response"
+                    failure_type="response", metrics=metrics
                 )
 
         # Canary token leakage detection
@@ -495,7 +523,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
                 category="F",
                 passed=False,
                 reason=f"Canary token leakage detected in render",
-                failure_type="response"
+                failure_type="response", metrics=metrics
             )
 
         return EvaluationResult(
@@ -503,7 +531,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
             category="F",
             passed=True,
             reason=f"E2E pipeline passed: Recall {recall*100:.1f}%, {len(response.safety_notices) if hasattr(response, 'safety_notices') else 0} safety notices, {len(response.steps) if hasattr(response, 'steps') else 0} steps",
-            failure_type=None
+            failure_type=None, metrics=metrics
         )
 
     except ImportError as e:
@@ -512,7 +540,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
             category="F",
             passed=False,
             reason=f"Pipeline modules not available: {str(e)}",
-            failure_type="not_implemented"
+            failure_type="not_implemented", metrics=metrics
         )
     except Exception as e:
         return EvaluationResult(
@@ -520,7 +548,7 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
             category="F",
             passed=False,
             reason=f"Evaluator error: {str(e)}",
-            failure_type="evaluator"
+            failure_type="evaluator", metrics=metrics
         )
 
 

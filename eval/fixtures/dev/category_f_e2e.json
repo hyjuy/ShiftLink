@@ -56,7 +56,7 @@
       "eq_id": "HPU",
       "k": 5,
       "observations": [
-        {"signal": "pressure", "value": 12}
+        {"signal": "pressure", "value": 8}
       ]
     },
     "fixture_cards": [
@@ -94,11 +94,11 @@
       }
     ],
     "expected": {
-      "expected_card_ids": ["K-0110"],
-      "expected_safety_card_ids": ["K-0110"],
+      "expected_card_ids": [],
+      "expected_safety_card_ids": [],
       "recall_at_k_k_value": 5
     },
-    "description": "Query with condition-matching observations",
+    "description": "Pressure 8 fails pressure >= 10: exclude from both ranked and safety results",
     "canary_token": "qqz7-dev-f002-obs"
   },
   {

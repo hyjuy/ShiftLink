@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.1",
+  "recorded_at": "2026-09-22",
+  "status": "draft_requires_domain_review",
+  "use_scope": "공개 사건 요약을 Event로 구조화한 검토용 초안. 운영 KB 적재·안전 절차 승인·정식 평가 봉인 아님.",
+  "common_notes": [
+    "각 JSON은 Event 단일 객체이며 출처와 작성 판단은 이 manifest에 분리했다.",
+    "scenario=S2는 저년차 교육용으로 작성자가 지정한 사용 장면이다. 실제 사고자의 숙련도에 관한 사실이 아니다.",
+    "true_actions는 검증된 정답 조치가 확보되지 않아 빈 목록이다. 사고 당시 위험 행동과 구조 행동은 timeline에만 기록했다. 예방 권고를 실제 수행·검증된 복구 조치로 바꾸지 않았다.",
+    "cards_expected와 restart_attempts는 미작성/근거 부족으로 비워 두었다. 사고나 재가동 실패가 없었다는 뜻이 아니다.",
+    "measurements는 원문 수치만 사용한다. 빈 객체는 수치 미확인이며 정상값이나 0을 뜻하지 않는다. coil_mass_approx_t는 근삿값이고 수치는 MES 관측 신호가 아니다.",
+    "각 group_id는 발행기관과 원문 식별자로 먼저 고정했다. split은 기존 계약의 SHA-256 규칙에 따라 계산했다. 전체 계보·유사사건 중복 검토는 미완료다.",
+    "이 사건들은 대화에서 이미 열람되었다. sealed로 배정돼도 미열람 최종 평가셋으로 사용할 수 없다. 모든 항목은 운영/평가 편입 보류 상태다.",
+    "사후 원인과 결과를 포함하므로 Event 전체를 런타임 질의 입력으로 전달하지 않는다.",
+    "출처 등록부의 기존 승인 상태를 변경하지 않았다. 이 목록은 검토한 발췌 범위의 추적 기록이며 카드 생성 승인이나 전문가 검수를 대신하지 않는다."
+  ],
+  "events": [
+    {
+      "event_id": "EV-0101",
+      "file": "EV-0101.json",
+      "title": "냉간압연기 정비 중 유압펌프 가동 사고",
+      "source_id": "OSHA-14232789",
+      "source_url": "https://www.osha.gov/ords/imis/accidentsearch.accident_detail?id=14232789",
+      "locator": "Accident Summary Nr: 14232789; Abstract",
+      "source_checked_at": "2026-09-22",
+      "event_date_as_reported": "1992-09-04",
+      "group_id": "PUBLIC-OSHA-14232789",
+      "split_bucket": 3,
+      "split": "kb",
+      "review_status": "pending_domain_review",
+      "source_scope": "명시된 사건 경위와 보고서상 원인에 한정한 한국어 요약",
+      "notes": "냉간압연 직접 사례. HPU는 유압펌프 가동을 기준으로 한 프로젝트 분류이며 원문의 설비 코드가 아니다.",
+      "unresolved": [
+        "true_actions의 정답 조치 검토",
+        "cards_expected 연결",
+        "프로젝트 설비 분류 적합성",
+        "출처 계보·기존 데이터 중복 점검"
+      ]
+    },
+    {
+      "event_id": "EV-0102",
+      "file": "EV-0102.json",
+      "title": "철강 리코일러 말림 사고",
+      "source_id": "OSHA-145379.015",
+      "source_url": "https://www.osha.gov/ords/imis/accidentsearch.accident_detail?id=145379.015",
+      "locator": "Accident Summary Nr: 145379.015; Abstract",
+      "source_checked_at": "2026-09-22",
+      "event_date_as_reported": "2022-04-13",
+      "group_id": "PUBLIC-OSHA-145379.015",
+      "split_bucket": 6,
+      "split": "kb",
+      "review_status": "pending_domain_review",
+      "source_scope": "명시된 사건 경위와 보고서상 원인에 한정한 한국어 요약",
+      "notes": "철강 슬리팅·권취 사례. 원문은 냉간압연 공정 자체라고 명시하지 않는다. 리코일러 전용 코드가 없어 COMMON으로 임시 분류.",
+      "unresolved": [
+        "true_actions의 정답 조치 검토",
+        "cards_expected 연결",
+        "프로젝트 설비 분류 적합성",
+        "출처 계보·기존 데이터 중복 점검"
+      ]
+    },
+    {
+      "event_id": "EV-0103",
+      "file": "EV-0103.json",
+      "title": "코일 인양 중 C형 훅 이탈 사고",
+      "source_id": "KOSHA-448929-253851",
+      "source_url": "https://oshri.kosha.or.kr/kosha/data/regionalCase.do?articleNo=448929&attachNo=253851&mode=download",
+      "locator": "PDF 1쪽 재해개요·재해원인",
+      "source_checked_at": "2026-09-22",
+      "event_date_as_reported": "2024-02",
+      "group_id": "PUBLIC-KOSHA-448929-253851",
+      "split_bucket": 2,
+      "split": "kb",
+      "review_status": "pending_domain_review",
+      "source_scope": "명시된 사건 경위와 보고서상 원인에 한정한 한국어 요약",
+      "notes": "코일 하역 유사 작업 사례. 냉간코일 제조 사업장인지는 확인되지 않음. 크레인 전용 코드가 없어 COMMON으로 임시 분류. 공단 자료는 일부 내용이 실제 재해 상황과 다를 수 있다고 명시.",
+      "unresolved": [
+        "true_actions의 정답 조치 검토",
+        "cards_expected 연결",
+        "프로젝트 설비 분류 적합성",
+        "출처 계보·기존 데이터 중복 점검"
+      ]
+    },
+    {
+      "event_id": "EV-0104",
+      "file": "EV-0104.json",
+      "title": "고장 난 코일카 수리 중 낙하 사고",
+      "source_id": "NIOSH-FACE-98-14",
+      "source_url": "https://stacks.cdc.gov/view/cdc/167397",
+      "locator": "Description (웹 요약); FACE 98-14",
+      "source_checked_at": "2026-09-22",
+      "event_date_as_reported": null,
+      "group_id": "PUBLIC-NIOSH-FACE-98-14",
+      "split_bucket": 5,
+      "split": "kb",
+      "review_status": "pending_domain_review",
+      "source_scope": "명시된 사건 경위와 보고서상 원인에 한정한 한국어 요약",
+      "notes": "코일 공급설비 정비 사례. 1998-10-29는 보고서 발행일로 사건 발생일에 사용하지 않음. 코일카 전용 코드가 없어 COMMON으로 임시 분류.",
+      "unresolved": [
+        "true_actions의 정답 조치 검토",
+        "cards_expected 연결",
+        "프로젝트 설비 분류 적합성",
+        "출처 계보·기존 데이터 중복 점검"
+      ]
+    },
+    {
+      "event_id": "EV-0105",
+      "file": "EV-0105.json",
+      "title": "리코일러 내 두께 측정 중 코일 미끄러짐 사고",
+      "source_id": "KOSHA-419237-236370",
+      "source_url": "https://oshri.kosha.or.kr/kosha/data/machine.do?articleNo=419237&attachNo=236370&mode=download",
+      "locator": "PDF 1쪽 재해개요·재해발생원인",
+      "source_checked_at": "2026-09-22",
+      "event_date_as_reported": null,
+      "group_id": "PUBLIC-KOSHA-419237-236370",
+      "split_bucket": 5,
+      "split": "kb",
+      "review_status": "pending_domain_review",
+      "source_scope": "명시된 사건 경위와 보고서상 원인에 한정한 한국어 요약",
+      "notes": "구리 코일 열간압연 사례이며 철강 냉간압연 사건이 아니다. 유사 리코일러 위험 비교용. COMMON은 임시 프로젝트 분류.",
+      "unresolved": [
+        "true_actions의 정답 조치 검토",
+        "cards_expected 연결",
+        "프로젝트 설비 분류 적합성",
+        "출처 계보·기존 데이터 중복 점검"
+      ]
+    }
+  ]
+}

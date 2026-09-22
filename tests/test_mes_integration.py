@@ -102,7 +102,7 @@ class MesIntegrationTests(unittest.TestCase):
         """Two dashboard/API clients must observe one engine, not advance two copies."""
         from shiftlink.mes.server import MesService
 
-        service = MesService(Path("docs/data/00_plant_and_relations.json"), seed=23)
+        service = MesService(Path("docs/data/reference/00_plant_and_relations.json"), seed=23)
         self.addCleanup(service.storage.close)
         service.control({"command": "start"})
         first_client = service.state()

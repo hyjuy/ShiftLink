@@ -1,0 +1,16 @@
+{
+  "event_id": "EV-0105",
+  "scenario": "S2",
+  "equipment": "COMMON",
+  "timeline": [
+    "경기 파주시 사업장의 열간압연공정 리코일러에서 구리 코일 두께를 측정했다.",
+    "작업자가 설비 안으로 상체를 넣은 상태에서 코일이 미끄러져 내려왔다.",
+    "코일과 안전가이드 사이에 작업자의 머리가 끼어 사망했다."
+  ],
+  "true_cause": "공단 자료는 코일 낙하방지실린더 미작동과 위험장소 출입금지조치 미실시를 원인으로 제시한다.",
+  "true_actions": [],
+  "measurements": {},
+  "cards_expected": [],
+  "restart_attempts": [],
+  "split": "kb"
+}

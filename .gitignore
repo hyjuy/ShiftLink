@@ -25,7 +25,8 @@ raw/
 qc/report.json
 data/*
 !data/.gitkeep
-mes-data/
+mes-data/*
+!mes-data/.gitkeep
 seeds/*
 !seeds/.gitkeep
 !seeds/카드_작성_가이드_초안.md

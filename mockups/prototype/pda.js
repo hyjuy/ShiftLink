@@ -18,11 +18,17 @@
 // ── 정본 경로 (저장소 루트 기준) ────────────────────────────────────
 // dev(EV-0032)·sealed(EV-0033)는 읽지 않는다. 파일 단위 격리가 필터보다 확실하다.
 const DATA_ROOT = '../../docs/data/';
-const CATALOG_FILE = 'CATALOG';
+/* main(#40)이 docs/data/ 를 재편했다. 새 경로를 먼저 시도하고 구 경로로 폴백한다
+ * — 머지 전 트리와 머지 후 트리에서 모두 동작해야 하기 때문이다.
+ * 머지가 끝나면 폴백(두 번째 항목)을 지운다. */
 const SOURCES = {
-  catalog: '00_plant_and_relations.json',
-  kb: ['01_kb_cards_shared.json', 'EV-0031_upstream_cause.json']
+  catalog: ['reference/00_plant_and_relations.json', '00_plant_and_relations.json'],
+  kb: [
+    ['knowledge_cards/01_kb_cards_shared.json', '01_kb_cards_shared.json'],
+    ['scenarios/EV-0031_upstream_cause.json', 'EV-0031_upstream_cause.json']
+  ]
 };
+const USED_PATHS = [];
 
 const QR_PREFIX = 'SHIFTLINK:EQ:';
 const VOTE_WINDOW = 3;
@@ -56,7 +62,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // ── 부팅: 정본 적재 ────────────────────────────────────────────────
 async function boot() {
   try {
-    const cat = await fetchJson(DATA_ROOT + SOURCES.catalog);
+    const cat = await fetchFirst(SOURCES.catalog);
     S.groups = {};
     (cat.equipment_groups || []).forEach((g) => { S.groups[g.equipment_group_id] = g; });
     S.types = {};
@@ -75,8 +81,8 @@ async function boot() {
     }));
 
     const all = [];
-    for (const f of SOURCES.kb) {
-      const d = await fetchJson(DATA_ROOT + f);
+    for (const candidates of SOURCES.kb) {
+      const d = await fetchFirst(candidates);
       (d.knowledge_cards || []).forEach((c) => all.push(c));
       (d.handover_records || []).forEach((h) => S.handovers.push(h));
     }
@@ -85,8 +91,10 @@ async function boot() {
       c.status === 'accepted' && c.split === 'kb' && c.grade === 'L1');
 
     const dropped = all.length - S.cards.length;
+    const legacy = USED_PATHS.filter((p) => p.indexOf('/') === -1).length;
     $('dData').textContent = '설비 ' + S.equipment.length + '대 · 카드 ' + S.cards.length + '장'
-      + (dropped ? ' (비대상 ' + dropped + '장 제외)' : '') + ' · 인계 ' + S.handovers.length + '건';
+      + (dropped ? ' (비대상 ' + dropped + '장 제외)' : '') + ' · 인계 ' + S.handovers.length + '건'
+      + (legacy ? ' · 구 경로 ' + legacy + '개 (main 머지 전)' : ' · 신 경로');
 
     if (!S.equipment.length || !S.cards.length) throw new Error('정본이 비어 있습니다');
 
@@ -111,6 +119,19 @@ async function fetchJson(url) {
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error(url.split('/').pop() + ' — HTTP ' + res.status);
   return res.json();
+}
+
+/* 후보 경로를 순서대로 시도한다. 전부 실패하면 첫 후보 기준으로 오류를 낸다. */
+async function fetchFirst(candidates) {
+  let firstErr = null;
+  for (const rel of candidates) {
+    try {
+      const data = await fetchJson(DATA_ROOT + rel);
+      USED_PATHS.push(rel);
+      return data;
+    } catch (err) { if (!firstErr) firstErr = err; }
+  }
+  throw firstErr || new Error(candidates[0] + ' — 읽을 수 없음');
 }
 
 // ── 화면 전환 ──────────────────────────────────────────────────────

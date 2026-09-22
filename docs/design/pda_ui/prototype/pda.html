@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>ShiftLink PDA — 프로토타입</title>
+<!--
+  동작하는 프로토타입 · 구상 검증용 · 커밋 전
+  ────────────────────────────────────────────────────────────────
+  설계   docs/planning/PDA_카메라_설비식별_고도화.md §7
+  구상   docs/design/pda_ui/pda_ui_mockup.html (화면 16장)
+  구성   분리형 — PDA(카메라+브라우저) ↔ LAN/Wi-Fi ↔ 거치형 Jetson
+
+  이 파일은 shiftlink/ 밖에 있다. 설계안이 C-056·C-057 개정 승인을 전제하며
+  "승인 전 코드 착수 금지"를 명시하므로, server.py 화이트리스트와 네이밍
+  레지스트리를 건드리지 않는 위치에 둔다.
+
+  데이터는 정본 JSON을 런타임에 읽는다. 값을 복사해 두지 않으므로 어긋날 수 없다.
+  읽는 파일은 kb 분할만 든 둘뿐이고, dev·sealed 파일은 열지 않는다(C-099).
+
+  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 캡처·업로드 경로가 없다.
+
+  실행:  저장소 루트에서  python -m http.server 8791
+         http://localhost:8791/docs/design/pda_ui/prototype/pda.html
+-->
+<style>
+  :root{
+    --bg:#0A0D11; --surface:#161B22; --surface-2:#1E252E; --edge:#2B333D;
+    --tx:#F3F6F9; --tx-2:#AEB9C4; --tx-3:#7C8792;
+    --safety:#F0453C; --safety-bg:#3A0F0D; --safety-edge:#8E241E;
+    --ok:#31C25E; --warn:#FFB020; --fail:#FF8A3D; --scan:#38C6F2;
+    --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--tx);
+    font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:16px;line-height:1.5;overscroll-behavior:none;
+    display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);
+  }
+  .mono{font-family:ui-monospace,"Cascadia Mono",Consolas,"D2Coding",monospace;font-variant-numeric:tabular-nums}
+  button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+  :focus-visible{outline:3px solid var(--scan);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  #app{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+  .screen{flex:1 1 auto;display:none;flex-direction:column;min-height:0}
+  .screen.on{display:flex}
+
+  .appbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-height:50px;
+    padding:0 6px 0 14px;border-bottom:1px solid var(--edge)}
+  .appbar h1{margin:0;font-size:16px;font-weight:700}
+  .appbar .ic{min-width:48px;min-height:48px;display:grid;place-items:center;font-size:18px;color:var(--tx-2)}
+  .appbar .sp{flex:1 1 auto}
+
+  /* 세로 스크롤 허용 — 안전 띠는 sticky 고정 (A3 결정 2026-09-22) */
+  .pane{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:14px;display:flex;flex-direction:column;gap:12px}
+  .pane.flush{padding:0;overflow:hidden}
+  .grow{flex:1 1 auto}
+
+  #net{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;
+    color:var(--tx-2);background:var(--surface);border-bottom:1px solid var(--edge);min-height:44px}
+  #net.warn{background:#2A1E06;border-color:var(--warn);color:#FFD98A}
+  #net .dot{width:9px;height:9px;border-radius:50%;background:var(--tx-3);flex:0 0 auto}
+  #net.ok .dot{background:var(--ok)} #net.warn .dot{background:var(--warn)}
+  #net .q{margin-left:auto;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;
+    background:var(--surface-2);border:1px solid var(--edge)}
+
+  #ctx{flex:0 0 auto;display:none;align-items:center;gap:10px;padding:10px 8px 10px 14px;
+    background:var(--surface);border-bottom:1px solid var(--edge)}
+  #ctx.on{display:flex}
+  #ctx .rail{width:4px;align-self:stretch;min-height:38px;border-radius:2px;background:var(--tx-3)}
+  #ctx .txt{flex:1 1 auto;min-width:0}
+  #ctx .id{font-size:16px;font-weight:800}
+  #ctx .nm{font-size:12px;color:var(--tx-2)}
+  #ctx .src{font-size:11px;font-weight:700;color:var(--ok)}
+  #ctx .src.manual{color:var(--warn)}
+  #ctx .edit{min-width:56px;min-height:48px;border-radius:8px;border:1px solid var(--edge);
+    display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--tx-2);flex:0 0 auto}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:56px;padding:8px 14px;
+    border-radius:10px;font-size:16px;font-weight:700;background:var(--surface-2);color:var(--tx);
+    border:1px solid var(--edge);width:100%;flex:0 0 auto}
+  .btn.sm{min-height:48px;font-size:14px;font-weight:600}
+  .btn.primary{background:#F3F6F9;color:#0A0D11;border-color:#F3F6F9}
+  .btn.ghost{background:transparent}
+  .btn[disabled]{opacity:.4}
+  .btn.big{min-height:136px;flex-direction:column;gap:6px;font-size:21px;background:var(--scan);
+    color:#04202B;border-color:var(--scan)}
+  .btn.big .ico{font-size:36px;line-height:1}
+  .btn-row{display:flex;gap:8px;flex:0 0 auto}
+  .btn-row>*{flex:1 1 0}
+
+  .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--tx-2);text-transform:uppercase;margin:0;flex:0 0 auto}
+  .lbl.hot{color:var(--scan)}
+  .hint{font-size:12px;color:var(--tx-3);line-height:1.45;margin:0}
+
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;min-height:48px;padding:0 14px;border-radius:999px;
+    background:var(--surface);border:1px solid var(--edge);font-size:14px;font-weight:700}
+  .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
+
+  /* 뷰파인더 */
+  .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
+  .vf video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0E1319}
+  .reticle{position:relative;z-index:1;width:min(72vw,240px);height:min(54vw,180px);border-radius:8px;
+    border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
+  .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
+  .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}
+  .reticle.failed{border-style:solid;border-color:var(--fail);box-shadow:0 0 0 6px rgba(255,138,61,.13)}
+  #scanState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
+    font-weight:600;background:var(--surface);border-top:1px solid var(--edge);min-height:50px}
+  #scanState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
+  #scanState.candidate{color:var(--warn)} #scanState.candidate .dot{background:var(--warn)}
+  #scanState.locked{color:var(--ok)} #scanState.locked .dot{background:var(--ok)}
+  #scanState.failed{color:var(--fail)} #scanState.failed .dot{background:var(--fail)}
+  .votes{display:flex;gap:4px;margin-left:auto;flex:0 0 auto}
+  .vote{width:16px;height:5px;border-radius:2px;background:var(--edge)}
+  .vote.on{background:var(--ok)} .vote.pend{background:var(--warn)}
+  .scanfoot{flex:0 0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
+    border-top:1px solid var(--edge)}
+
+  .list{display:flex;flex-direction:column;gap:8px}
+  .row{display:flex;align-items:center;gap:11px;width:100%;min-height:56px;padding:8px 12px;
+    border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
+  .row .rail{width:4px;min-height:34px;align-self:stretch;border-radius:2px;background:var(--tx-3)}
+  .row .txt{flex:1 1 auto;min-width:0}
+  .row .id{font-size:15px;font-weight:700}
+  .row .nm{font-size:11.5px;color:var(--tx-2)}
+  .row .mk{font-size:11px;color:var(--tx-2);flex:0 0 auto;text-align:right}
+  /* 증상 선택 — 「기타」도 같은 크기·같은 자리에 둔다. 목록이 전부가 아님을 구조로 알린다. */
+  .row.sym{font-size:15px;line-height:1.4}
+  .row.sym.sel{border-color:var(--scan);background:#0F2A33}
+  .row.sym .mark{width:22px;flex:0 0 auto;color:var(--tx-3);font-weight:700;text-align:center}
+  .row.sym.sel .mark{color:var(--scan)}
+  .row.sym.other{border-style:dashed}
+
+  /* 안전 관문 — 스크롤해도 상단 고정 */
+  .safety{border:2px solid var(--safety-edge);background:var(--safety-bg);border-radius:10px;padding:12px;
+    display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  .safety.pin{position:sticky;top:0;z-index:5}
+  .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFD7D4}
+  .safety .hd .dot{width:9px;height:9px;border-radius:50%;background:var(--safety);flex:0 0 auto}
+  .safety .pinbadge{margin-left:auto;font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;
+    background:#1C6F88;color:#BFEBF7;letter-spacing:.05em}
+  .safety .kid{font-size:11px;font-weight:700;color:#FFB3AE;letter-spacing:.06em}
+  .safety .ttl{font-size:16px;font-weight:800;line-height:1.35;color:#FFF0EF}
+  .safety .body{font-size:13.5px;color:#FFE2E0;line-height:1.6}
+  .safety .basis{font-size:11.5px;color:#FFC9C5;border-top:1px solid var(--safety-edge);padding-top:7px}
+  .safety .gate{font-size:11.5px;font-weight:700;color:#FFD7D4}
+
+  .card{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
+  .card.top{border-color:#1C6F88}
+  .card.out{opacity:.62;border-style:dashed}
+  .card.done{opacity:.5}
+  .card .kid{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--tx-2)}
+  .card .ttl{font-size:15px;font-weight:700;line-height:1.35}
+  .card .body{font-size:13.5px;color:var(--tx-2);line-height:1.6}
+  .card .src{font-size:11px;color:var(--tx-2)}
+  .card .exp{font-size:12px;color:var(--ok)}
+
+  .rk{display:flex;align-items:center;gap:9px}
+  .rkno{width:26px;height:26px;border-radius:13px;background:var(--surface-2);border:1px solid var(--edge);
+    color:var(--tx-2);font-size:13px;font-weight:700;display:grid;place-items:center;flex:0 0 auto}
+  .rkno.one{background:var(--scan);border-color:var(--scan);color:#04202B}
+  .rkno.next{background:#3A2A0B;border-color:var(--warn);color:#FFD98A}
+  .why{font-size:11.5px;color:var(--scan)}
+  .why.dim{color:var(--tx-2)}
+  .why.no{color:var(--fail)}
+
+  .pills{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--surface-2);
+    border:1px solid var(--edge);color:var(--tx-2)}
+  .pill.match{color:var(--ok);border-color:#1E6B39}
+  .pill.miss{color:var(--fail);border-color:#7A4218}
+  .pill.unknown{color:var(--tx-2)}
+  .steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;
+    font-size:13.5px;color:var(--tx-2)}
+  .steps li{display:flex;gap:7px}
+  .steps .st{color:var(--scan);font-weight:700;flex:0 0 auto}
+
+  .steps-prog{display:flex;flex-direction:column;gap:9px;flex:0 0 auto}
+  .pstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx-2)}
+  .pstep .n{width:19px;flex:0 0 auto;font-weight:700;color:var(--tx-2)}
+  .pstep .t{width:62px;flex:0 0 auto}
+  .pstep .bar{flex:1 1 auto;height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+  .pstep .bar i{display:block;height:100%;width:0;border-radius:4px;background:var(--scan);transition:width .3s linear}
+  .pstep .mk{width:18px;flex:0 0 auto;text-align:center;font-weight:700}
+  .pstep.done{color:var(--tx)} .pstep.done .bar i{background:var(--ok)} .pstep.done .mk{color:var(--ok)}
+  .pstep.run .mk{color:var(--scan)}
+
+  .try{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+  .try.noeff{border-color:#7A4218}
+  .try.solved{border-color:#1E6B39}
+  .try.now{border-color:var(--warn);background:#221A0A}
+  .try .hd{display:flex;align-items:center;gap:8px}
+  .try .aid{font-size:11px;font-weight:700;color:var(--tx-2);letter-spacing:.05em}
+  .try .fld{display:flex;gap:8px;font-size:12.5px}
+  .try .fld .k{width:52px;flex:0 0 auto;color:var(--tx-2);font-size:11px;font-weight:700}
+  .try .fld .v{color:var(--tx-2);flex:1 1 auto}
+
+  .t4{display:flex;flex-direction:column;gap:9px}
+  .t4 .fld{display:flex;flex-direction:column;gap:4px}
+  .t4 .k{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--tx-2)}
+  .t4 .v{font-size:13.5px;color:var(--tx);border:1px solid var(--edge);border-radius:8px;
+    padding:12px;background:var(--surface);min-height:48px;display:flex;align-items:center}
+  .t4 .v.auto{border-color:#1C6F88;color:var(--tx-2)}
+  .t4 input{width:100%;background:var(--surface);color:var(--tx);border:1px solid var(--edge);
+    border-radius:8px;padding:12px;font:inherit;font-size:15px;min-height:48px}
+  .t4 input.req{border-color:var(--warn)}
+
+  textarea,input[type=number],select{width:100%;background:var(--surface);color:var(--tx);
+    border:1px solid var(--edge);border-radius:10px;padding:12px;font:inherit;font-size:16px;min-height:56px}
+  textarea{min-height:104px;resize:vertical;line-height:1.5}
+  .obsrow{display:flex;gap:8px;align-items:stretch;flex:0 0 auto}
+  .obsrow select{flex:1 1 auto;min-width:0}
+  .obsrow input{flex:0 0 96px}
+  .obsrow .btn{width:auto;flex:0 0 auto;min-width:56px}
+  .obs{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tx-2);
+    border:1px solid var(--edge);border-radius:8px;padding:10px;background:var(--surface);flex:0 0 auto}
+  .obs .x{margin-left:auto;min-width:44px;min-height:44px;display:grid;place-items:center;color:var(--tx-2)}
+
+  .alert{border-radius:10px;border:1px solid var(--warn);background:#2A1E06;padding:12px;
+    display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
+  .alert .hd{font-size:15px;font-weight:800;color:#FFD98A;margin:0}
+  .alert .p{font-size:13px;color:#E7CFA0;line-height:1.5;margin:0}
+  .alert code{font-size:12px;color:#FFE9BC;background:#3A2A0B;padding:2px 5px;border-radius:3px;word-break:break-all}
+  .alert.bad{border-color:var(--safety-edge);background:var(--safety-bg)}
+  .alert.bad .hd{color:#FFD7D4} .alert.bad .p{color:#FFC9C5}
+  .alert.bad code{background:#511713;color:#FFE2E0}
+
+  .empty{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;text-align:center;padding:20px 22px}
+  .empty .big{font-size:22px;font-weight:800;margin:0}
+  .empty .p{font-size:14px;color:var(--tx-2);line-height:1.6;margin:0}
+  .empty .rule{font-size:13px;font-weight:700;color:var(--scan);border:1px solid rgba(56,198,242,.45);
+    border-radius:8px;padding:9px 13px}
+  .empty ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;
+    font-size:13.5px;color:var(--tx-2);text-align:left}
+
+  .disclaimer{flex:0 0 auto;padding:10px 14px;font-size:11.5px;line-height:1.45;color:var(--tx-2);
+    background:var(--surface);border-top:1px solid var(--edge);display:flex;gap:7px}
+
+  /* 진단 패널 — 프로토타입 전용 */
+  #diag{flex:0 0 auto;display:none;padding:10px 14px;background:#0E1319;border-top:1px solid var(--edge);
+    font-size:11.5px;color:var(--tx-2);gap:6px;flex-direction:column}
+  #diag.on{display:flex}
+  #diag .t{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--fail);text-transform:uppercase}
+  #diag dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
+  #diag dt{color:var(--tx-2)} #diag dd{margin:0}
+  #diag .sim{display:flex;gap:8px;margin-top:4px}
+  #diag .sim select{min-height:44px;font-size:13px;padding:8px}
+  #diag .sim .btn{width:auto;min-height:44px;font-size:13px;flex:0 0 auto}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
+    <span class="q" id="netQueue" hidden>대기 0건</span></div>
+
+  <div id="ctx">
+    <i class="rail" id="ctxRail"></i>
+    <div class="txt">
+      <div><span class="id" id="ctxId">—</span> <span class="nm" id="ctxName"></span></div>
+      <div class="src" id="ctxSrc"></div>
+    </div>
+    <button class="edit" id="ctxEdit" type="button">수정</button>
+  </div>
+
+  <!-- 부팅 -->
+  <section class="screen on" id="s-boot">
+    <div class="pane"><div class="grow"></div>
+      <p class="lbl">ShiftLink PDA</p>
+      <p class="hint" id="bootMsg">정본 데이터를 읽는 중…</p>
+      <div id="bootErr"></div>
+      <div class="grow"></div></div>
+  </section>
+
+  <!-- 홈 -->
+  <section class="screen" id="s-home">
+    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span>
+      <button class="ic" id="toDiag" type="button" aria-label="진단">⚙</button></div>
+    <div class="pane">
+      <div class="grow"></div>
+      <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
+      <p class="hint">상자에 붙은 코드를 비추면 설비가 확정됩니다.</p>
+      <div class="grow"></div>
+      <p class="lbl">최근 설비</p>
+      <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
+      <div class="btn-row">
+        <button class="btn sm" id="toManual" type="button">설비 목록</button>
+        <button class="btn sm" id="toHandoverHome" type="button">인계 확인</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 스캔 -->
+  <section class="screen" id="s-scan">
+    <div class="appbar"><h1>스캔</h1><span class="sp"></span>
+      <button class="ic" id="scanClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="pane flush" style="display:flex;flex-direction:column">
+      <div class="vf"><video id="video" playsinline muted autoplay></video>
+        <div class="reticle" id="reticle"></div></div>
+      <div id="scanState"><span class="dot"></span><span id="scanText">카메라 준비 중…</span>
+        <span class="votes" id="voteBar" hidden><i class="vote"></i><i class="vote"></i><i class="vote"></i></span></div>
+      <div class="scanfoot">
+        <button class="btn primary" id="scanConfirm" type="button" hidden>확인</button>
+        <button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 카메라 불가 -->
+  <section class="screen" id="s-nocam">
+    <div class="appbar"><h1>스캔</h1><span class="sp"></span>
+      <button class="ic" id="nocamClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="pane">
+      <div class="alert bad" id="nocamBox">
+        <p class="hd">카메라를 열 수 없습니다</p>
+        <p class="p" id="nocamWhy"></p>
+        <code id="nocamAddr"></code>
+        <p class="p" id="nocamFix"></p>
+      </div>
+      <div class="alert">
+        <p class="hd">설비 미확정</p>
+        <p class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다.</p>
+      </div>
+      <div class="grow"></div>
+      <button class="btn primary" id="nocamManual" type="button">직접 선택으로 계속</button>
+      <button class="btn sm ghost" id="nocamRetry" type="button">다시 시도</button>
+    </div>
+  </section>
+
+  <!-- 직접 선택 -->
+  <section class="screen" id="s-manual">
+    <div class="appbar"><h1>직접 선택</h1><span class="sp"></span>
+      <button class="ic" id="manualClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="pane">
+      <div class="alert">
+        <p class="hd">설비 미확정</p>
+        <p class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다. 아래에서 설비를 선택하세요.</p>
+      </div>
+      <p class="hint">상자의 색 띠와 이름표를 보고 고르세요.</p>
+      <div class="list" id="manualList"></div>
+      <button class="btn sm ghost" id="manualToScan" type="button">카메라로 돌아가기</button>
+    </div>
+  </section>
+
+  <!-- 컨텍스트 확정 -->
+  <section class="screen" id="s-ctx">
+    <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1></div>
+    <div class="pane">
+      <p class="lbl">무엇을 하시겠습니까?</p>
+      <button class="btn" id="toAsk" type="button">증상 질의</button>
+      <button class="btn" id="toHandover" type="button">인계 확인</button>
+      <button class="btn" id="toHandoverNew" type="button">인계 작성</button>
+      <div class="grow"></div>
+      <p class="hint" id="ctxFoot"></p>
+    </div>
+  </section>
+
+  <!-- 질의 입력 -->
+  <section class="screen" id="s-ask">
+    <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1></div>
+    <div class="pane">
+      <p class="lbl">증상 — 이 설비에 등록된 증상</p>
+      <div class="list" id="symptomList"></div>
+      <div id="otherWrap" hidden style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto">
+        <textarea id="question" placeholder="증상을 직접 적어 주세요" autocomplete="off"></textarea>
+        <p class="hint">목록에 없는 증상입니다. 등록된 카드가 없으면 「해당 지식 없음」이 나옵니다 — 추측으로 답하지 않습니다.</p>
+      </div>
+      <p class="lbl">관측값 — 넣을수록 순위가 정확해집니다</p>
+      <div class="obsrow">
+        <select id="obsSignal" aria-label="신호"></select>
+        <input type="number" id="obsValue" step="any" inputmode="decimal" placeholder="값" aria-label="값">
+        <button class="btn sm" id="obsAdd" type="button">추가</button>
+      </div>
+      <p class="hint" id="obsRange"></p>
+      <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
+      <div class="grow"></div>
+      <div class="alert" id="askBlock" hidden><p class="p" id="askBlockWhy"></p></div>
+      <button class="btn primary" id="doSearch" type="button">검색</button>
+    </div>
+  </section>
+
+  <!-- 대기 -->
+  <section class="screen" id="s-wait">
+    <div class="appbar"><h1 style="font-size:14px;color:var(--tx-2)">검색 중</h1></div>
+    <div class="pane">
+      <div class="steps-prog">
+        <div class="pstep" id="st1"><span class="n">①</span><span class="t">카드 검색</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+        <div class="pstep" id="st2"><span class="n">②</span><span class="t">순위 산정</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+        <div class="pstep" id="st3"><span class="n">③</span><span class="t">답변 생성</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+      </div>
+      <p class="lbl" id="waitLbl" hidden>먼저 찾은 안전 카드</p>
+      <div id="waitCards" style="display:flex;flex-direction:column;gap:10px"></div>
+      <div class="grow"></div>
+      <button class="btn sm ghost" id="waitCancel" type="button">취소</button>
+    </div>
+  </section>
+
+  <!-- 결과 · 조치 순위 -->
+  <section class="screen" id="s-result">
+    <div class="appbar"><button class="ic" id="resultBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">결과 · 조치 순위</h1></div>
+    <div class="pane" id="resultPane"></div>
+    <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
+  </section>
+
+  <!-- 시도 기록 -->
+  <section class="screen" id="s-tries">
+    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1></div>
+    <div class="pane" id="triesPane"></div>
+  </section>
+
+  <!-- 지식 없음 -->
+  <section class="screen" id="s-empty">
+    <div class="appbar"><button class="ic" id="emptyBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">결과</h1></div>
+    <div class="empty">
+      <p class="big">해당 지식 없음</p>
+      <p class="p">입력하신 증상·조건에 맞는<br>근거 있는 카드가 없습니다.</p>
+      <p class="rule">추측으로 답하지 않습니다</p>
+      <ul>
+        <li>· 증상을 더 구체적으로 적어 보세요</li>
+        <li>· 관측값을 추가하세요</li>
+        <li>· 숙련자에게 문의하세요</li>
+      </ul>
+    </div>
+    <div class="pane" style="flex:0 0 auto;overflow:visible">
+      <button class="btn primary" id="emptyRetry" type="button">다시 질의</button>
+    </div>
+  </section>
+
+  <!-- 인계 확인 -->
+  <section class="screen" id="s-handover">
+    <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1></div>
+    <div class="pane" id="hoPane"></div>
+  </section>
+
+  <!-- 인계 작성 -->
+  <section class="screen" id="s-hoNew">
+    <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="뒤로">←</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1></div>
+    <div class="pane">
+      <p class="lbl">인계 — 5칸 모두 필수</p>
+      <div class="t4">
+        <div class="fld"><div class="k">REQUIRED_CONTEXT</div><div class="v auto" id="hoCtx">—</div></div>
+        <div class="fld"><div class="k">RECIPIENT_ROLE</div><input id="hoRole" value="야간조 정비 담당"></div>
+        <div class="fld"><div class="k">TIMING</div><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
+        <div class="fld"><div class="k">CHANNEL</div><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
+        <div class="fld"><div class="k">ACKNOWLEDGEMENT</div><input id="hoAck" class="req" placeholder="무엇으로 확인하는가"></div>
+      </div>
+      <div class="alert" id="hoWarn"><p class="p">확인 방법이 비어 있으면 저장되지 않습니다.</p></div>
+      <div class="grow"></div>
+      <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
+    </div>
+  </section>
+
+  <!-- 진단 -->
+  <div id="diag">
+    <span class="t">진단 · 프로토타입 전용</span>
+    <dl>
+      <dt>보안 컨텍스트</dt><dd id="dSecure">—</dd>
+      <dt>BarcodeDetector</dt><dd id="dDetector">—</dd>
+      <dt>정본 데이터</dt><dd id="dData">—</dd>
+      <dt>서버</dt><dd id="dServer">—</dd>
+      <dt>최근 스캔</dt><dd id="dScan">—</dd>
+      <dt>eq_id_source</dt><dd id="dSource">—</dd>
+      <dt>outbox</dt><dd id="dOutbox">0건</dd>
+    </dl>
+    <div class="sim">
+      <select id="simValue" aria-label="마커 원문 모의 입력"></select>
+      <button class="btn sm" id="simFeed" type="button">주입</button>
+    </div>
+    <p class="hint">인쇄물 없이 디코딩 파이프라인을 검증합니다. 3회 주입하면 3/3 투표가 됩니다.</p>
+  </div>
+
+</div>
+
+<script src="pda.js"></script>
+</body>
+</html>

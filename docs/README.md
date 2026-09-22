@@ -26,7 +26,8 @@
 | 결정·미결 사항 확인 | [확정·미결 목록](planning/04_확정_미결_목록.md), [결정 질문](planning/03_결정질문.md), [제약 대장](planning/constraint_register.md) |
 | T1~T6 카드 작성 | [현재 작성 가이드 v1.1](../seeds/카드_작성_가이드_초안.md), [구현 계약](design/D26-29_계약_v1.0.md) |
 | 카드 생성 실행 | [생성 가이드](guides/card-generation.md) |
-| 실제 사건 기반 Event 확인 | [공개 사건 목록](data/events/public_incidents/README.md) |
+| 오류·고장 및 조치 사건 작성 | [냉간코일 공장 내 사건 기준](data/events/README.md) |
+| 공개 사고의 안전 참고자료 확인 | [사고 참고자료 목록](sources/safety/public_incidents/README.md) |
 | 데이터 분류·사용 기준 확인 | [데이터 안내](data/README.md), [출처·분할 계약](data/policies/source-and-split-contract.md) |
 | 모의 MES 실행 | [실행 가이드](guides/mock-mes-usage.md) |
 | 장비 구성 변경 | [구성 가이드](guides/mock-mes-configuration-guide.md) |
@@ -43,7 +44,7 @@
 
 ## 관리 기준과 이동 기록
 
-- `docs/data`는 작성·검토용 자료다. 저장소 루트의 `data/`는 모의 MES 실행 DB이므로 별도로 관리한다.
+- `docs/data`는 작성·검토용 자료다. 저장소 루트의 `mes_data/`는 모의 MES 실행 DB이므로 별도로 관리한다.
 - 현재 카드 작성 기준은 `seeds/카드_작성_가이드_초안.md` 한 곳을 따른다. v0.9 문서는 archive에 보관한다.
 - 과거 보고서의 검증 결과는 당시 기록이며 현재 상태의 재검증을 뜻하지 않는다.
 - 기존 JSON·PDF·bundle 내용은 폴더 정리 과정에서 변경하지 않았다. 이동한 Markdown의 상대 링크와 활성 경로 참조는 갱신했다.
@@ -53,7 +54,7 @@
 |---|---|
 | `docs/manual/` | `docs/sources/manual/` |
 | `docs/safety_sources_18/` | `docs/sources/safety/` |
-| `docs/naming-registry/` | `docs/collaboration/naming-registry/` |
+| `docs/naming-registry/` | `docs/collaboration/naming_registry/` |
 | `docs/guides/branching.md` | `docs/collaboration/branching.md` |
 | `docs/guides/카드_작성_가이드_초안.md` | `docs/archive/카드_작성_가이드_초안.md` |
 

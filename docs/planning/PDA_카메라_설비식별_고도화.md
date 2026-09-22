@@ -246,7 +246,7 @@ SHIFTLINK:EQ:HPU-01
 
 ### 5.4 설비 ↔ 마커 매핑
 
-`docs/data/00_plant_and_relations.json`의 `equipment` 배열에서 생성한 값이다. **수기로 작성하지 않는다** — 인쇄 자산은 카탈로그에서 스크립트로 생성하고, §13의 G-4 정합 테스트가 1:1 일치를 강제한다(R-6).
+`docs/data/reference/00_plant_and_relations.json`의 `equipment` 배열에서 생성한 값이다. **수기로 작성하지 않는다** — 인쇄 자산은 카탈로그에서 스크립트로 생성하고, §13의 G-4 정합 테스트가 1:1 일치를 강제한다(R-6).
 
 | equipment_id | code | 설비군 | 위치 | QR 내용 | ArUco ID | 색상 띠 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -689,7 +689,7 @@ GET /api/equipment/scan/recent?limit=5
 
 ### 9.4 설비↔마커 매핑 저장 위치
 
-`docs/data/00_plant_and_relations.json`의 설비 항목에 **선택 필드 1개**를 추가한다.
+`docs/data/reference/00_plant_and_relations.json`의 설비 항목에 **선택 필드 1개**를 추가한다.
 
 ```json
 {
@@ -759,7 +759,7 @@ GET /api/equipment/scan/recent?limit=5
 
 ## 11. 네이밍 레지스트리 등록 초안
 
-> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/naming-registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
+> 레지스트리 관례상 **미승인·미구현 이름은 등록하지 않는다**(registry.md 주석). 아래는 승인·구현 시점에 `docs/collaboration/naming-registry/registry.md`에 **같은 변경 안에서** 등록할 초안이다.
 
 **클래스**
 
@@ -956,7 +956,7 @@ GET /api/equipment/scan/recent?limit=5
 | 인식 지연 수치(QR 8~20ms, ArUco 2~5ms) | 외부 자료 기반 추정. **실측 미수행** |
 | `BarcodeDetector`의 대상 PDA 단말 지원 여부 | **미확인** — P0-1에서 함께 확인할 것 |
 | 마커 인식 가능 거리(0.5~2.5m) | 마커 크기·카메라 해상도 기반 계산값. **실측 미수행** |
-| ~~`docs/data/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID~~ | **해소 2026-09-22** — 카탈로그 직접 확인. 설비 10대, §5.4 표를 실제 값으로 교체 |
+| ~~`docs/data/reference/00_plant_and_relations.json`의 실제 설비 인스턴스 개수·ID~~ | **해소 2026-09-22** — 카탈로그 직접 확인. 설비 10대, §5.4 표를 실제 값으로 교체 |
 | 산업용 PDA 하드웨어 스캔 트리거 키 사용 가능 여부 | 단말 미확정(U-11) |
 
 ---

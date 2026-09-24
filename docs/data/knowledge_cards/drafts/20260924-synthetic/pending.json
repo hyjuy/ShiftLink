@@ -1,0 +1,33 @@
+{
+ "record_type": "card_pending_supplement",
+ "recorded_at": "2026-09-24",
+ "basis": "seeds/카드_작성_가이드_초안.md §2, §3",
+ "note": "가이드 §3: 보완 큐의 자동 생성·저장 기능은 아직 구현되지 않았다. 이 파일은 그 자리를 대신하는 수동 기록이며 승인 기록이 아니다.",
+ "items": [
+  {
+   "card_id": "K-9005",
+   "version": "1.0-draft-002",
+   "missing": "safety_basis",
+   "rule": "가이드 §2·§3 — 안전 내용이 있으나 근거 문헌이 연결되지 않음",
+   "blocked_by": "안전 근거는 법령·지침 원문이 필요하다. 해당 원문 검토는 이 작업 범위 밖이므로 값을 창작하지 않고 보류한다.",
+   "action_when_available": "safety_flag=true로 올리고 safety_basis에 검토된 조항을 인용한 새 버전을 만든다. 금지·중지·격리 자체가 핵심이면 T5로 분리한다.",
+   "detail": "안전 관련 표현이 있으나 safety_flag가 꺼져 있다: ['인터록', '차단', '해제하지']. 금지·중지·격리 자체가 핵심이면 T5로 분리하고, 부수적이면 safety_flag와 safety_basis로 표시한다. 근거가 없으면 값을 만들지 말고 보완 대기로 남긴다."
+  },
+  {
+   "card_id": "K-9002",
+   "version": "1.0-draft-002",
+   "missing": "conditions 기준값 출처",
+   "rule": "가이드 §3 — 값을 창작하지 않는다",
+   "blocked_by": "인터록 작동 기준값이 인용 원문에 없다. 설비 인터록 설정 문서가 필요하다.",
+   "action_when_available": "기준값 출처를 발췌로 등록하고 conditions를 복원한 새 버전을 만든다."
+  },
+  {
+   "card_id": "K-9003",
+   "version": "1.0-draft-002",
+   "missing": "conditions/exclusions 기준값 출처",
+   "rule": "가이드 §3 — 값을 창작하지 않는다",
+   "blocked_by": "베어링 온도 정상 상한과 유압 기준값이 인용 원문에 없다.",
+   "action_when_available": "설비 기준값 문서를 발췌로 등록하고 조건을 복원한다."
+  }
+ ]
+}

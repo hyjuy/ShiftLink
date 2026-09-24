@@ -1,0 +1,239 @@
+{
+ "_meta": {
+  "title": "품목 전환 후 진동 상승 보고 — 정상 범위로 판정",
+  "prototype_id": "PT-0018",
+  "split": "kb",
+  "all_numbers_are": "[가상 값]",
+  "spec_version": "event-spec-v1",
+  "prototype_identity": {
+   "case_type": "no_fault_variation",
+   "root_equipment_type": "GR",
+   "relation_path_types": [
+    "drive"
+   ],
+   "primary_symptom_class": "품목 전환에 따른 정상 범위 변동"
+  },
+  "references": "기준정보·관계·페르소나 ID는 00_plant_and_relations.json 참조",
+  "visibility_rule": "post_action / ground_truth 표시된 블록은 t시점 검색·프롬프트에 노출되지 않는다(B3-4)",
+  "human_review_required": true
+ },
+ "operating_context_snapshot": {
+  "context_id": "CTX-0035",
+  "line_id": "LN-0001",
+  "captured_at": "2026-07-28T09:40:00+09:00",
+  "op_mode": "running_normal",
+  "line_speed": 84.0,
+  "product_code": "CR-B12",
+  "shift_code": "A",
+  "shift_date": "2026-07-28",
+  "shift_boundary_flag": false,
+  "stop_restart_state": "none",
+  "active_alarms": [],
+  "measurements": [
+   {
+    "equipment_id": "EQ-0005",
+    "component_id": null,
+    "signal": "gr_vib_rms",
+    "value": 2.6,
+    "unit": "mm_s",
+    "taken_at": "2026-07-28T09:44:00+09:00"
+   },
+   {
+    "equipment_id": "EQ-0005",
+    "component_id": null,
+    "signal": "gr_brg_temp",
+    "value": 61.0,
+    "unit": "degC",
+    "taken_at": "2026-07-28T09:48:00+09:00"
+   },
+   {
+    "equipment_id": "EQ-0008",
+    "component_id": null,
+    "signal": "rt_motor_current",
+    "value": 15.2,
+    "unit": "A",
+    "taken_at": "2026-07-28T09:50:00+09:00"
+   }
+  ],
+  "segment_states": [
+   {
+    "segment_id": "SG-0001",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0002",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0003",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0004",
+    "state": "running"
+   }
+  ],
+  "utility_states": [
+   {
+    "equipment_id": "EQ-0001",
+    "state": "normal",
+    "value": 154.0,
+    "unit": "bar"
+   },
+   {
+    "equipment_id": "EQ-0002",
+    "state": "normal",
+    "value": 100.0,
+    "unit": "pct"
+   },
+   {
+    "equipment_id": "EQ-0003",
+    "state": "normal",
+    "value": 641.0,
+    "unit": "kPa"
+   }
+  ],
+  "is_synthetic": true
+ },
+ "event": {
+  "event_id": "EV-0035",
+  "prototype_id": "PT-0018",
+  "line_id": "LN-0001",
+  "context_id": "CTX-0035",
+  "scenario": "S2",
+  "case_type": "no_fault_variation",
+  "equipment": "GR",
+  "primary_equipment_id": "EQ-0005",
+  "segment_ids": [
+   "SG-0003"
+  ],
+  "occurred_at": "2026-07-28T09:40:00+09:00",
+  "reported_at": "2026-07-28T09:46:00+09:00",
+  "symptom_text": "품목을 CR-B12로 바꾼 뒤 GR-02 진동 표시가 평소보다 높아 보인다고 보고되었다.",
+  "severity": "low",
+  "timeline": [
+   {
+    "at": "2026-07-28T09:40:00+09:00",
+    "kind": "context",
+    "text": "품목 CR-A08 → CR-B12 전환 후 정상 운전, 라인 속도 84 m/min, A조"
+   },
+   {
+    "at": "2026-07-28T09:44:00+09:00",
+    "kind": "observation",
+    "text": "GR-02 진동 2.6 mm/s (정상 0.5~2.8, 경보 4.5)"
+   },
+   {
+    "at": "2026-07-28T09:48:00+09:00",
+    "kind": "observation",
+    "text": "GR-02 베어링 온도 61.0 degC (정상 상한 72)"
+   }
+  ],
+  "case_tags": [
+   "false_alarm",
+   "product_change"
+  ],
+  "quality_impact": "none",
+  "safety_impact": "none",
+  "cause_confidence": "determined",
+  "production_impact": {
+   "kind": "none",
+   "value": 0.0,
+   "unit": "m_min"
+  },
+  "traversed_relation_ids": [
+   "REL-0007"
+  ],
+  "_true_actions_note": "빈 배열이 아니라 '조치하지 않음'이 정답 조치다. 빈 배열은 events/README 기준에서 '정답 조치를 검증하지 못함'을 뜻하므로 구분한다.",
+  "true_cause": "설비 이상이 아니다. CR-B12는 CR-A08보다 폭이 넓어 구동 하중이 커지므로 진동 실효값이 정상 범위 안에서 올라간다. 2.6 mm/s는 정상 상한 2.8 미만이고 베어링 온도·모터 전류도 정상 범위다. 품목 전환에 따른 정상 변동이다.",
+  "true_actions": [
+   "조치하지 않는다. 품목 전환에 따른 정상 범위 변동으로 기록만 남긴다",
+   "라인 속도 하향이나 윤활 보충 등 생산 조건 변경을 하지 않는다",
+   "다음 정기 점검 주기에 GR-02 진동 추세를 확인 항목으로 유지한다"
+  ],
+  "true_cause_equipment_ids": [],
+  "canary_token": "zzk9-ev0035-73b1",
+  "split": "kb",
+  "is_synthetic": true,
+  "_visibility": {
+   "pre_action": [
+    "symptom_text",
+    "severity",
+    "timeline(관측까지)",
+    "traversed_relation_ids"
+   ],
+   "ground_truth": [
+    "true_cause",
+    "true_actions",
+    "true_cause_equipment_ids",
+    "cards_expected",
+    "canary_token"
+   ],
+   "post_action": [
+    "revision_candidate_ids",
+    "timeline(행동 이후)"
+   ]
+  }
+ },
+ "observations": [
+  {
+   "observation_id": "OB-0317",
+   "event_id": "EV-0035",
+   "equipment_id": "EQ-0005",
+   "observed_at": "2026-07-28T09:44:00+09:00",
+   "observer_persona_id": "V-02",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "gr_vib_rms",
+   "value": 2.6,
+   "unit": "mm_s",
+   "qualitative_text": null,
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0318",
+   "event_id": "EV-0035",
+   "equipment_id": "EQ-0008",
+   "observed_at": "2026-07-28T09:50:00+09:00",
+   "observer_persona_id": "V-02",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "rt_motor_current",
+   "value": 15.2,
+   "unit": "A",
+   "qualitative_text": null,
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0319",
+   "event_id": "EV-0035",
+   "equipment_id": "EQ-0005",
+   "observed_at": "2026-07-28T09:46:00+09:00",
+   "observer_persona_id": "V-01",
+   "obs_kind": "sensory",
+   "component_id": null,
+   "signal": null,
+   "value": null,
+   "unit": null,
+   "qualitative_text": "평소와 다른 소리는 들리지 않고 하우징 온도도 손으로 만질 수 있는 정도다",
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0320",
+   "event_id": "EV-0035",
+   "equipment_id": "EQ-0005",
+   "observed_at": "2026-07-28T09:48:00+09:00",
+   "observer_persona_id": "V-01",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "gr_brg_temp",
+   "value": 61.0,
+   "unit": "degC",
+   "qualitative_text": null,
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  }
+ ]
+}

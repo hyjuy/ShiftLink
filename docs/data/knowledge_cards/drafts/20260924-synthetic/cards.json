@@ -1,0 +1,397 @@
+[
+ {
+  "card_id": "K-9001",
+  "version": "1.0-draft-001",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "RT",
+  "component": "롤러 세트",
+  "scenario": "S2",
+  "title": "하류 롤러 전류가 오르고 상류 감속기에서 저음·진동이 잡히면 상류 구동부터 본다",
+  "symptom": "출측 롤러 구간에서 소재가 처지며 사행하고 모터 전류가 정상 상한을 넘는다",
+  "know_how": "출측 롤러 전류가 정상 상한을 넘으면 하류 적재 대기율을 먼저 읽어 정체 여부를 가르고, 정체가 아니면 상류 구동 감속기의 소리와 진동을 확인한다.",
+  "rationale": "적재 대기율이 낮은데도 출측 전류만 올라가 있고 상류 구동부에서 규칙적인 저음과 진동 상승이 함께 관측되었다.",
+  "conditions": [
+   {
+    "signal": "rt_motor_current",
+    "op": ">=",
+    "value": 17.8,
+    "unit": "A"
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.3,
+  "provenance": {
+   "seed_ids": [
+    "SD-901",
+    "SD-902"
+   ],
+   "persona_id": "V-01",
+   "event_ids": [
+    "EV-0031"
+   ],
+   "generator": "shiftlink.data.generation",
+   "generated_at": "2026-09-24T05:05:18.821900Z",
+   "sources": [
+    {
+     "source_id": "SD-901",
+     "locator": "synthetic shift log, EV-0031, V-01",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-902",
+     "locator": "synthetic shift log, EV-0031, V-02",
+     "document_version": "synthetic-persona-narrative-v1"
+    }
+   ],
+   "extraction_method": "reviewed_excerpt_generation",
+   "model_version": "demo-stage-b",
+   "prompt_version": "evidence-draft-v1",
+   "index_version": null,
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "handover_method": null,
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "출측 롤러 모터 전류를 읽고 정상 상한 초과 여부를 확인한다",
+     "preconditions": [],
+     "expected_result": "전류가 정상 상한을 넘는지 확정된다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "하류 적재 대기율을 읽어 정체 여부를 가른다",
+     "preconditions": [],
+     "expected_result": "대기율이 낮으면 하류 정체를 원인 후보에서 제외한다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "상류 구동 감속기의 소리와 진동을 확인한다",
+     "preconditions": [],
+     "expected_result": "규칙적인 저음과 진동 상승이 있는지 확인된다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    }
+   ],
+   "restart_type": null,
+   "tried_and_failed": []
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0031"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "같은 라인의 출측 롤러 구간",
+   "confidence_basis": null
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-9002",
+  "version": "1.0-draft-002",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "RT",
+  "component": "롤러 세트",
+  "scenario": "S1",
+  "title": "출측 롤러가 간헐 정지하는데 전류가 낮으면 하류 적재부를 먼저 본다",
+  "symptom": "출측 롤러가 10~20초 간격으로 멈췄다 돌아가고 모터 전류는 정상 하한보다 낮다",
+  "know_how": "구동 이상으로 보고되어도 전류가 낮으면 구동부 과부하가 아니다. 하류 적재 대기율을 먼저 읽고, 높으면 적재부 걸림을 확인한다. 판정 기준값은 해당 설비의 인터록 설정 문서에서 확인한다.",
+  "rationale": "구동부에 부하가 걸려 멈추는 경우라면 전류가 올라간다. 전류가 낮으면서 하류 대기율이 높다면 하류에서 막혀 되짚어 온 정체다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.25,
+  "provenance": {
+   "seed_ids": [
+    "SD-904",
+    "SD-905"
+   ],
+   "persona_id": "V-02",
+   "event_ids": [
+    "EV-0032"
+   ],
+   "generator": "shiftlink.data.generation",
+   "generated_at": "2026-09-24T07:33:26.650251Z",
+   "sources": [
+    {
+     "source_id": "SD-904",
+     "locator": "synthetic shift log, EV-0032, V-02",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-905",
+     "locator": "synthetic shift log, EV-0032, V-03",
+     "document_version": "synthetic-persona-narrative-v1"
+    }
+   ],
+   "extraction_method": "reviewed_excerpt_generation",
+   "model_version": "claude-opus-5-session",
+   "prompt_version": "evidence-draft-v1",
+   "index_version": null,
+   "schema_version": "1.1"
+  },
+  "split": "dev",
+  "status": "draft",
+  "type_payload": {
+   "handover_method": null,
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "출측 롤러 모터 전류를 읽어 정상 하한 미만인지 확인한다",
+     "preconditions": [],
+     "expected_result": "구동부 과부하 여부가 갈린다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "하류 적재 대기율을 읽는다",
+     "preconditions": [],
+     "expected_result": "대기율이 높으면 하류 정체를 원인 후보로 올린다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "적재부 잔류물 유무를 육안으로 확인한다",
+     "preconditions": [],
+     "expected_result": "걸림 여부가 확인된다. 운전 중 접근하지 않는다",
+     "stop_conditions": [],
+     "verification_step": null,
+     "rollback_action": null,
+     "escalation_target": null,
+     "escalation_channel": null
+    }
+   ],
+   "restart_type": null,
+   "tried_and_failed": []
+  },
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-9003",
+  "version": "1.0-draft-002",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "GR",
+  "component": "입력측 베어링",
+  "scenario": "S2",
+  "title": "감속기 하우징 발열에 유면 하한이 겹치면 윤활 공급을 의심한다",
+  "symptom": "감속기 하우징이 손대기 어려울 만큼 뜨겁고 유면계가 하한선에 가깝다",
+  "know_how": "발열만 보고 부하를 낮추지 말고 유면을 함께 읽는다. 유면이 하한이면 윤활 보충으로 끝내지 말고 급유 배관 막힘 점검을 요청한다. 정상 범위 판정은 해당 설비의 기준값 문서를 확인한다.",
+  "rationale": "베어링 온도가 평소보다 높은데 진동은 경보값에 못 미치고 유압 공급도 정상 표시라면, 구동 계통 손상보다 급유량 부족을 먼저 본다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.25,
+  "provenance": {
+   "seed_ids": [
+    "SD-906",
+    "SD-907",
+    "SD-908"
+   ],
+   "persona_id": "V-01",
+   "event_ids": [
+    "EV-0034"
+   ],
+   "generator": "shiftlink.data.generation",
+   "generated_at": "2026-09-24T07:33:26.682098Z",
+   "sources": [
+    {
+     "source_id": "SD-906",
+     "locator": "synthetic shift log, EV-0034, V-01",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-907",
+     "locator": "synthetic shift log, EV-0034, V-02",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-908",
+     "locator": "synthetic shift log, EV-0034, V-03",
+     "document_version": "synthetic-persona-narrative-v1"
+    }
+   ],
+   "extraction_method": "reviewed_excerpt_generation",
+   "model_version": "claude-opus-5-session",
+   "prompt_version": "evidence-draft-v1",
+   "index_version": null,
+   "schema_version": "1.1"
+  },
+  "split": "dev",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-9004",
+  "version": "1.0-draft-001",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S2",
+  "title": "품목 전환 후 진동이 올라도 정상 범위면 생산 조건을 바꾸지 않는다",
+  "symptom": "품목을 바꾼 뒤 진동 표시가 평소보다 높아 보인다는 보고가 들어온다",
+  "know_how": "보고만으로 속도를 내리거나 윤활을 보충하지 않는다. 진동·베어링 온도·모터 전류를 읽어 모두 정상 범위 안이면 조치하지 않고 기록만 남긴다.",
+  "rationale": "폭이 넓은 품목은 구동 하중이 커져 진동 실효값이 정상 범위 안에서 올라간다. 범위 안의 변동에 생산 조건을 바꾸면 손실만 생긴다.",
+  "conditions": [
+   {
+    "signal": "gr_vib_rms",
+    "op": "<",
+    "value": 2.8,
+    "unit": "mm_s"
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.35,
+  "provenance": {
+   "seed_ids": [
+    "SD-909",
+    "SD-910"
+   ],
+   "persona_id": "V-02",
+   "event_ids": [
+    "EV-0035"
+   ],
+   "generator": "shiftlink.data.generation",
+   "generated_at": "2026-09-24T06:35:08.560279Z",
+   "sources": [
+    {
+     "source_id": "SD-909",
+     "locator": "synthetic shift log, EV-0035, V-01",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-910",
+     "locator": "synthetic shift log, EV-0035, V-02",
+     "document_version": "synthetic-persona-narrative-v1"
+    }
+   ],
+   "extraction_method": "reviewed_excerpt_generation",
+   "model_version": "claude-opus-5-session",
+   "prompt_version": "evidence-draft-v1",
+   "index_version": null,
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-9005",
+  "version": "1.0-draft-002",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "CV",
+  "component": "벨트",
+  "scenario": "S1",
+  "title": "재가동이 안 되면 고장을 찾기 전에 인터록 조건부터 읽는다",
+  "symptom": "정지 후 재가동 버튼을 눌러도 기동하지 않고 인터록 표시가 남아 있다",
+  "know_how": "① 재가동 버튼 반복 조작을 중단한다. ② 적재 대기율을 읽어 인터록 작동 기준을 넘었는지 확인한다. 넘었으면 설비 고장이 아니라 차단 조건이 살아 있는 것이다. ③ 적재부 잔류물 유무와 정지 원인 기록을 확인한다. ④ 정지 원인 확인과 승인 기록을 갖춘 뒤 재가동한다. 인터록을 임의로 해제하지 않는다.",
+  "rationale": "적재 대기율이 인터록 기준을 넘은 상태에서는 설계대로 기동이 차단된다. 이때 기동하지 않는 것은 고장 증상이 아니라 정상 동작이다.",
+  "conditions": [
+   {
+    "signal": "cv_queue_len",
+    "op": ">=",
+    "value": 90.0,
+    "unit": "pct"
+   }
+  ],
+  "exclusions": [
+   {
+    "signal": "op_mode",
+    "op": "==",
+    "value": "running_normal",
+    "unit": "none"
+   }
+  ],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.3,
+  "provenance": {
+   "seed_ids": [
+    "SD-911",
+    "SD-912"
+   ],
+   "persona_id": "V-03",
+   "event_ids": [
+    "EV-0036"
+   ],
+   "generator": "shiftlink.data.generation",
+   "generated_at": "2026-09-24T06:40:26.914089Z",
+   "sources": [
+    {
+     "source_id": "SD-911",
+     "locator": "synthetic shift log, EV-0036, V-02",
+     "document_version": "synthetic-persona-narrative-v1"
+    },
+    {
+     "source_id": "SD-912",
+     "locator": "synthetic shift log, EV-0036, V-03",
+     "document_version": "synthetic-persona-narrative-v1"
+    }
+   ],
+   "extraction_method": "reviewed_excerpt_generation",
+   "model_version": "claude-opus-5-session",
+   "prompt_version": "evidence-draft-v1",
+   "index_version": null,
+   "schema_version": "1.1"
+  },
+  "split": "dev",
+  "status": "draft",
+  "type_payload": {
+   "handover_method": null,
+   "steps": null,
+   "restart_type": "abnormal_stop_restart",
+   "tried_and_failed": []
+  },
+  "generalization_evidence": null,
+  "safety_review": null
+ }
+]

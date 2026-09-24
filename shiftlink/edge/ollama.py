@@ -18,6 +18,8 @@ import urllib.error
 import urllib.request
 from typing import Any
 
+from shiftlink.agent.canary import CANARY_PREFIXES, has_canary
+
 DEFAULT_MODEL = "qwen2.5:3b-instruct-q4_K_M"  # models.lock plan-B
 DEFAULT_HOST = "http://localhost:11434"
 # Jetson 최초 로드 30.7s 실측(docs/reports/Jetson_실측_PRE01-04.md) 때문에 넉넉히 잡는다.
@@ -40,7 +42,6 @@ MODEL_CARD_FIELDS = (
     "safety_basis",
     "condition_status",
 )
-CANARY_PREFIXES = ("zzk9-", "qqz7-")  # §5 카나리 검출 시 컨텍스트에서 제거
 
 # A의 validate_model_output(response.py)과 같은 제약을 모델 쪽에도 걸어 실패를 줄인다.
 OUTPUT_SCHEMA = {
@@ -90,8 +91,7 @@ def card_context(tool_results: dict[str, Any]) -> tuple[list[dict[str, Any]], li
             for field in MODEL_CARD_FIELDS
             if card.get(field) is not None
         }
-        blob = json.dumps(trimmed, ensure_ascii=False)
-        if any(prefix in blob for prefix in CANARY_PREFIXES):
+        if has_canary(card):
             dropped.append(card.get("card_id", "<no-id>"))
             continue
         context.append(trimmed)
@@ -106,6 +106,7 @@ def build_messages(
 ) -> tuple[list[dict[str, str]], list[str]]:
     """Ollama /api/chat용 messages와, 카나리로 제외된 카드 ID 목록을 만든다."""
     cards, dropped = card_context(tool_results)
+    dropped = sorted(set(dropped + tool_results.get("dropped_canary_card_ids", [])))
     # 질의는 question, 인계는 memo_text — 라우터가 둘 중 하나만 채운다.
     ask = getattr(request, "question", None) or getattr(request, "memo_text", "")
     # observations는 Observation 모델 목록이다(구 호출자는 dict를 넘길 수 있어 둘 다 받는다).

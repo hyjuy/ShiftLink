@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Protocol
 
 from shiftlink.agent import tools as tool_stubs
+from shiftlink.agent.canary import has_canary
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
 from shiftlink.agent.response import AgentResponse, build_response, validate_response
 
@@ -72,6 +73,16 @@ class FixedPipeline:
         routed = route_request(payload)
         # Tool results are fully collected before the single model call.
         tool_results = self._run_tools(routed.request)
+        dropped = {
+            card.get("card_id", "<no-id>")
+            for card in tool_results["cards"] if has_canary(card)
+        }
+        if dropped:
+            for key in ("cards", "ranked_cards", "safety_cards"):
+                tool_results[key] = [
+                    card for card in tool_results[key] if not has_canary(card)
+                ]
+            tool_results["dropped_canary_card_ids"] = sorted(dropped)
         if routed.mode == "query" and not tool_results["cards"]:
             return PipelineResult(
                 mode=routed.mode, tool_results=tool_results,
@@ -102,7 +113,9 @@ class FixedPipeline:
             return None, "모델 출력 형식 오류", True
         except TimeoutError:
             return None, "모델 요청 시간 초과", False
-        except ConnectionError:
+        except ConnectionError as exc:
+            if str(exc).startswith("HTTP 404 ") and "model" in str(exc).lower():
+                return None, "설정한 모델을 찾을 수 없습니다.", False
             return None, "모델 연결 또는 HTTP 요청 실패", False
         except NotImplementedError:
             return None, "요청한 모드는 모델 어댑터에서 지원하지 않습니다", False

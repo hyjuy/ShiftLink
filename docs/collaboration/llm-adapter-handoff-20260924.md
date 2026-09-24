@@ -134,7 +134,7 @@ InMemoryToolProvider의 카드는 `KnowledgeCard.model_dump(mode="json")`의 전
 }
 ```
 
-제안 JSON Schema (기존 구현에 아직 없음):
+모델 출력 JSON Schema (`shiftlink/edge/ollama.py` 구현):
 
 ```json
 {
@@ -144,7 +144,8 @@ InMemoryToolProvider의 카드는 `KnowledgeCard.model_dump(mode="json")`의 전
     "cited_card_ids": {
       "type": "array",
       "items": {"type": "string", "pattern": "^K-\\d{4}$"},
-      "uniqueItems": true
+      "uniqueItems": true,
+      "minItems": 1
     }
   },
   "required": ["answer", "cited_card_ids"],
@@ -154,7 +155,7 @@ InMemoryToolProvider의 카드는 `KnowledgeCard.model_dump(mode="json")`의 전
 
 - B는 모델 응답에서 JSON을 파싱하고 구조·타입·공백뿐인 answer 등을 검사해 반환한다.
 - A는 인용 ID가 이번 호출의 `tool_results["cards"]`에 포함되는지 검사하고 적용 조건·응답 보류를 판단한다. KB에 존재하더라도 이번 검색 결과에 없는 ID는 거부한다. 정규식 일치만으로 이 검사를 대신하지 않는다.
-- 빈 인용 목록은 근거 부족 후보로 허용하되 A가 해당 자유 답변을 그대로 표시하지 않는 정책을 구현한다.
+- 빈 인용 목록은 출력 형식 오류로 거부한다. A는 한 번 재시도하고 다시 실패하면 자유 답변을 표시하지 않고 `review_queue`로 보류한다.
 - 안전 공지·절차 구조는 A가 구성한다. 모델이 AgentResponse 전체를 덮어쓰게 하지 않는다.
 - JSON Schema는 의미 정확성을 보장하지 않는다. 카드와 답변 내용의 일치는 별도로 평가한다.
 

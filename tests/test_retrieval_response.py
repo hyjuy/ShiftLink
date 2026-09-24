@@ -552,10 +552,11 @@ def test_unverified_procedure_keeps_warning_but_withholds_actions():
     assert result.output.safety_notices[0].card_id == card.card_id
     assert result.output.unverified_card_ids == [card.card_id]
     assert result.output.steps == []
-    assert result.output.validation_errors == []
-    assert not result.output.review_queue
+    assert result.output.review_queue
+    assert result.output.answer == ""
     rendered = render_response(result.output)
     assert "조건 미확인" in rendered
+    assert "조건 미확인 카드에 대한 답변입니다." not in rendered
     assert "첫 번째 조치" not in rendered
     assert "조건 B" in rendered
 

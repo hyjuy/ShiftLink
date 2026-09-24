@@ -2,6 +2,8 @@
 # Ollama 버전과 모델 digest가 PC/Jetson 간 일치하는지 확인하는 용도.
 
 [ollama]
+# 재현 기준은 Jetson에서 확인한 버전이다. 2026-09-24 PC의 0.34.3 측정은
+# bench/experiments.tsv에 별도로 기록하며, 동일 환경 재현 결과로 간주하지 않는다.
 version = "0.34.1"
 
 [[model]]

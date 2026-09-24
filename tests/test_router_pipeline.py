@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from shiftlink.agent.pipeline import FixedPipeline, ToolProvider
 from shiftlink.agent.router import HandoverRequest, QueryRequest, route_request
 from shiftlink.agent import tools as tool_stubs
+from shiftlink.agent.response import render_response
 
 
 def test_router_uses_input_shape_instead_of_text_keywords() -> None:
@@ -76,10 +77,10 @@ class RecordingModel:
         self.events = events
         self.calls = 0
 
-    def __call__(self, **_: object) -> dict[str, str]:
+    def __call__(self, **_: object) -> dict[str, object]:
         self.events.append("model")
         self.calls += 1
-        return {"status": "draft"}
+        return {"answer": "확인한 카드에 근거한 답변입니다.", "cited_card_ids": ["K-0002"]}
 
 
 def test_query_pipeline_excludes_handover_tools_and_calls_model_once() -> None:
@@ -216,3 +217,77 @@ def test_observation_value_is_required_but_explicit_null_is_preserved() -> None:
     assert request.model_dump()["observations"] == [
         {"signal": "pressure", "value": None, "unit": None}
     ]
+
+
+def test_pipeline_uses_model_answer_and_only_model_citations() -> None:
+    result = FixedPipeline(tools=RecordingTools(), model=lambda **_: {
+        "answer": "근거 기반 답변", "cited_card_ids": ["K-0001"]
+    }).run({"question": "상태?", "line_id": "L1", "eq_id": "HPU"})
+
+    assert result.output.answer == "근거 기반 답변"
+    assert result.output.cited_card_ids == ["K-0001"]
+    assert "근거 기반 답변" in render_response(result.output)
+
+
+@pytest.mark.parametrize("model_output", [
+    {"cited_card_ids": ["K-0001"]},
+    {"answer": "   ", "cited_card_ids": ["K-0001"]},
+    {"answer": "답변", "cited_card_ids": ["K-0001"], "extra": True},
+    {"answer": 12, "cited_card_ids": ["K-0001"]},
+    {"answer": "답변", "cited_card_ids": "K-0001"},
+    {"answer": "답변", "cited_card_ids": ["K-9999"]},
+    {"answer": "답변", "cited_card_ids": ["BAD-ID"]},
+    {"answer": "답변", "cited_card_ids": []},
+])
+def test_invalid_model_output_is_retried_once_then_held(model_output) -> None:
+    calls = []
+
+    def model(**kwargs):
+        calls.append(kwargs)
+        return model_output
+
+    result = FixedPipeline(tools=RecordingTools(), model=model).run(
+        {"question": "상태?", "line_id": "L1", "eq_id": "HPU"}
+    )
+
+    assert len(calls) == 2
+    assert calls[1]["retry"] is True
+    assert result.output.review_queue is True
+    assert result.output.answer == ""
+    assert result.output.validation_errors
+
+
+def test_adapter_value_error_retries_once_then_holds() -> None:
+    calls = []
+
+    def model(**kwargs):
+        calls.append(kwargs)
+        raise ValueError("adapter output parse failed")
+
+    result = FixedPipeline(tools=RecordingTools(), model=model).run(
+        {"question": "상태?", "line_id": "L1", "eq_id": "HPU"}
+    )
+
+    assert len(calls) == 2
+    assert calls[1]["retry"] is True
+    assert result.output.review_queue is True
+    assert result.output.answer == ""
+    assert result.output.validation_errors == ["모델 출력 형식 오류"]
+
+
+@pytest.mark.parametrize("error", [TimeoutError("timeout"), ConnectionError("HTTP 404")])
+def test_transport_errors_are_held_without_retry(error) -> None:
+    calls = []
+
+    def model(**_):
+        calls.append(1)
+        raise error
+
+    result = FixedPipeline(tools=RecordingTools(), model=model).run(
+        {"question": "상태?", "line_id": "L1", "eq_id": "HPU"}
+    )
+
+    assert calls == [1]
+    assert result.output.review_queue is True
+    assert result.output.answer == ""
+    assert result.output.validation_errors

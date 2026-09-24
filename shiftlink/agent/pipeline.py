@@ -48,6 +48,7 @@ class FixedPipeline:
     ) -> None:
         self.tools = tools
         self.model = model
+        self._default_validator = validator is None
         # Default validator: build response and validate invariants
         if validator is None:
             def default_validator(**values: Any) -> Any:
@@ -56,9 +57,11 @@ class FixedPipeline:
                     request=values["request"],
                     tool_results=values["tool_results"],
                     model_output=values.get("model_output"),
+                    model_error=values.get("model_error"),
                 )
                 errors = validate_response(resp, values["tool_results"])
                 if errors:
+                    resp.validation_errors.extend(errors)
                     resp.review_queue = True
                 return resp
             self.validator = default_validator
@@ -74,33 +77,49 @@ class FixedPipeline:
                 mode=routed.mode, tool_results=tool_results,
                 output=AgentResponse(mode=routed.mode, no_knowledge=True),
             )
-        model_output = self.model(
-            mode=routed.mode,
-            request=routed.request,
-            tool_results=tool_results,
+        model_output, model_error, retryable = self._call_model(
+            mode=routed.mode, request=routed.request, tool_results=tool_results
         )
-        output = self.validator(
-            mode=routed.mode,
-            request=routed.request,
-            tool_results=tool_results,
-            model_output=model_output,
+        output = self._validate_output(
+            routed.mode, routed.request, tool_results, model_output, model_error
         )
-        # One retry only when validation flagged the output; a second failure
-        # stays in the review queue instead of triggering more model calls.
-        if getattr(output, "review_queue", False):
-            model_output = self.model(
-                mode=routed.mode,
-                request=routed.request,
-                tool_results=tool_results,
-                retry=True,
+        # Retry once for output/schema or response validation failures. Transport
+        # failures and unsupported modes are held immediately.
+        if retryable or (model_error is None and getattr(output, "review_queue", False)):
+            model_output, model_error, _ = self._call_model(
+                mode=routed.mode, request=routed.request,
+                tool_results=tool_results, retry=True,
             )
-            output = self.validator(
-                mode=routed.mode,
-                request=routed.request,
-                tool_results=tool_results,
-                model_output=model_output,
+            output = self._validate_output(
+                routed.mode, routed.request, tool_results, model_output, model_error
             )
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
+
+    def _call_model(self, **kwargs: Any) -> tuple[Any, str | None, bool]:
+        try:
+            return self.model(**kwargs), None, False
+        except ValueError:
+            return None, "모델 출력 형식 오류", True
+        except TimeoutError:
+            return None, "모델 요청 시간 초과", False
+        except ConnectionError:
+            return None, "모델 연결 또는 HTTP 요청 실패", False
+        except NotImplementedError:
+            return None, "요청한 모드는 모델 어댑터에서 지원하지 않습니다", False
+
+    def _validate_output(
+        self, mode: Mode, request: QueryRequest | HandoverRequest,
+        tool_results: dict[str, Any], model_output: Any, model_error: str | None,
+    ) -> Any:
+        if model_error and not self._default_validator:
+            return build_response(mode, request, tool_results, model_error=model_error)
+        values = dict(
+            mode=mode, request=request, tool_results=tool_results,
+            model_output=model_output,
+        )
+        if self._default_validator:
+            values["model_error"] = model_error
+        return self.validator(**values)
 
     def _run_tools(self, request: QueryRequest | HandoverRequest) -> dict[str, Any]:
         if isinstance(request, QueryRequest):

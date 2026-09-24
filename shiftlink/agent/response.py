@@ -1,6 +1,7 @@
 """Agent response building and rendering (D-26~29 §4.3)."""
 
-from typing import Any, Annotated
+import re
+from typing import Any
 from pydantic import BaseModel, Field, ConfigDict
 from shiftlink.agent.router import QueryRequest, HandoverRequest
 from shiftlink.agent.schemas import EvidenceGap, GeneralizationEvidence, Provenance, SafetyReview
@@ -64,6 +65,8 @@ class AgentResponse(BaseModel):
     handover_method: HandoverMethodRender | None = None
     restart_failures: list[RestartFailure] = Field(default_factory=list)
     cited_card_ids: list[str] = Field(default_factory=list)
+    answer: str = ""
+    validation_errors: list[str] = Field(default_factory=list)
     unverified_card_ids: list[str] = Field(default_factory=list)
     card_metadata: dict[str, CardMetadata] = Field(default_factory=dict)
     review_queue: bool = False
@@ -74,24 +77,32 @@ def build_response(
     mode: str,
     request: QueryRequest | HandoverRequest,
     tool_results: dict[str, Any],
-    model_output: dict[str, Any] | None = None,
+    model_output: Any = None,
+    model_error: str | None = None,
 ) -> AgentResponse:
     """
-    Build AgentResponse from pipeline components.
-
-    Currently a stub that collects tool results. In production, this would parse
-    model_output (model response) to populate response fields according to D-26~29 rules.
+    Build AgentResponse from retrieved cards and a validated model result.
     """
     resp = AgentResponse(mode=mode)
+    if model_error:
+        resp.validation_errors.append(model_error)
+        resp.review_queue = True
+    elif model_output is not None:
+        errors = validate_model_output(model_output, tool_results)
+        resp.validation_errors.extend(errors)
+        resp.review_queue = bool(errors)
+        if not errors:
+            resp.answer = model_output["answer"]
+            resp.cited_card_ids = list(model_output["cited_card_ids"])
 
     # Stub: Extract safety cards from tool_results
     cards = tool_results.get("cards", [])
-    cited_ids = set()
+    available_ids = set()
 
     for card in cards:
         card_id = card.get("card_id")
         if card_id:
-            cited_ids.add(card_id)
+            available_ids.add(card_id)
             if card.get("provenance"):
                 resp.card_metadata[card_id] = CardMetadata(
                     provenance=card["provenance"],
@@ -165,8 +176,41 @@ def build_response(
                 )
                 resp.restart_failures.append(attempt)
 
-    resp.cited_card_ids = sorted(cited_ids)
+    if model_output is None and model_error is None:
+        # Preserve the helper's legacy behavior for callers that build a
+        # card-only response outside the model pipeline.
+        resp.cited_card_ids = sorted(available_ids)
     return resp
+
+
+def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> list[str]:
+    """Validate the adapter's strict answer and citation contract."""
+    if not isinstance(model_output, dict):
+        return ["모델 출력은 객체여야 합니다."]
+    if set(model_output) != {"answer", "cited_card_ids"}:
+        return ["모델 출력에는 answer와 cited_card_ids만 있어야 합니다."]
+    answer = model_output["answer"]
+    cited_ids = model_output["cited_card_ids"]
+    errors = []
+    if not isinstance(answer, str) or not answer.strip():
+        errors.append("answer는 비어 있지 않은 문자열이어야 합니다.")
+    if not isinstance(cited_ids, list) or any(not isinstance(value, str) for value in cited_ids):
+        errors.append("cited_card_ids는 문자열 목록이어야 합니다.")
+        return errors
+    if len(cited_ids) != len(set(cited_ids)):
+        errors.append("인용 카드 ID가 중복되었습니다.")
+    if not cited_ids:
+        errors.append("답변에 유효한 카드 인용이 없습니다.")
+    available_ids = {
+        card.get("card_id") for card in tool_results.get("cards", [])
+        if isinstance(card, dict) and card.get("card_id")
+    }
+    for card_id in cited_ids:
+        if not re.fullmatch(r"K-\d{4}", card_id):
+            errors.append(f"잘못된 카드 ID 형식: {card_id}")
+        if card_id not in available_ids:
+            errors.append(f"이번 검색 결과에 없는 카드 ID 인용: {card_id}")
+    return errors
 
 
 def render_response(resp: AgentResponse) -> str:
@@ -194,6 +238,10 @@ def render_response(resp: AgentResponse) -> str:
         lines.append("\n## 조건 미확인")
         lines.append("- 적용·제외 조건을 확인할 수 없어 조치 제안을 보류합니다. 안전 공지는 참고 경고로 유지합니다.")
         lines.append(f"- 확인 대상 카드: {', '.join(resp.unverified_card_ids)}")
+
+    if resp.answer and not resp.review_queue and resp.cited_card_ids:
+        lines.append("\n## 답변")
+        lines.append(resp.answer)
 
     # Steps (in order)
     if resp.steps:
@@ -293,6 +341,8 @@ def render_response(resp: AgentResponse) -> str:
     if resp.review_queue:
         lines.append("")
         lines.append("⚠️ 이 응답은 검증 실패로 review_queue에 대기 중입니다.")
+        if resp.validation_errors:
+            lines.extend(f"- {error}" for error in resp.validation_errors)
 
     return "\n".join(lines)
 

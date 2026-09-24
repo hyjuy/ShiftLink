@@ -130,7 +130,11 @@ def test_empty_query_does_not_invoke_custom_output_validator():
 
 def test_empty_handover_still_calls_model():
     calls = []
-    result = FixedPipeline(tools=InMemoryToolProvider(), model=lambda **kw: calls.append(kw) or {}).run(
+    def unsupported_model(**kw):
+        calls.append(kw)
+        raise NotImplementedError
+
+    result = FixedPipeline(tools=InMemoryToolProvider(), model=unsupported_model).run(
         dict(memo_text="점검 미완료", shift="A", eq_ids=["HPU"]))
     assert len(calls) == 1
     assert result.output.no_knowledge is False
@@ -144,7 +148,10 @@ def test_safety_only_search_is_not_treated_as_empty():
     calls = []
     result = FixedPipeline(
         tools=SafetyOnlyProvider(cards=[make_card_t1(safety_flag=True)]),
-        model=lambda **kw: calls.append(kw) or {},
+        model=lambda **kw: calls.append(kw) or {
+            "answer": "안전 카드에 근거한 안내입니다.",
+            "cited_card_ids": [kw["tool_results"]["cards"][0]["card_id"]],
+        },
     ).run(dict(question="test", line_id="L1", eq_id="HPU"))
     assert len(calls) == 1
     assert result.tool_results["ranked_cards"] == []
@@ -536,12 +543,16 @@ def test_unverified_procedure_keeps_warning_but_withholds_actions():
     card = make_card_t3()
     card.safety_flag, card.safety_basis = True, "Safety basis"
     card.conditions = [Condition(signal="pressure", op=">", value=100)]
-    result = FixedPipeline(model=lambda **kw: {}, tools=InMemoryToolProvider(cards=[card])).run(
+    result = FixedPipeline(model=lambda **kw: {
+        "answer": "조건 미확인 카드에 대한 답변입니다.",
+        "cited_card_ids": [kw["tool_results"]["cards"][0]["card_id"]],
+    }, tools=InMemoryToolProvider(cards=[card])).run(
         dict(question="test", line_id="L1", eq_id="HPU")
     )
     assert result.output.safety_notices[0].card_id == card.card_id
     assert result.output.unverified_card_ids == [card.card_id]
     assert result.output.steps == []
+    assert result.output.validation_errors == []
     assert not result.output.review_queue
     rendered = render_response(result.output)
     assert "조건 미확인" in rendered

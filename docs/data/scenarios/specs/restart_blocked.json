@@ -1,0 +1,97 @@
+{
+  "case_type": "restart_blocked",
+  "root_equipment_type": "CV",
+  "relation_path_types": ["material_flow", "interlock"],
+  "primary_symptom_class": "정지 후 재가동 실패",
+  "pattern_name": "잔류물 미제거 상태의 재가동 시도가 인터록으로 차단되는 사건",
+  "title": "컨베이어 정지 후 재가동 시도가 인터록으로 차단됨",
+  "line_id": "LN-0001",
+  "primary_equipment_id": "EQ-0009",
+  "segment_ids": ["SG-0003"],
+  "occurred_at": "2026-08-11T14:22:00+09:00",
+  "reported_at": "2026-08-11T14:31:00+09:00",
+  "symptom_text": "CV-01 정지 후 재가동 버튼을 눌러도 기동하지 않고 인터록 표시가 남아 있다.",
+  "severity": "medium",
+  "scenario": "S1",
+  "operating_context": {
+    "captured_at": "2026-08-11T14:22:00+09:00",
+    "op_mode": "stopped_fault",
+    "line_speed": 0.0,
+    "product_code": "CR-A08",
+    "shift_code": "B",
+    "shift_date": "2026-08-11",
+    "shift_boundary_flag": false,
+    "stop_restart_state": "restart_prep",
+    "active_alarms": [
+      {"code": "CV01-ILK-ON", "equipment_id": "EQ-0009",
+       "raised_at": "2026-08-11T14:22:00+09:00", "severity": "warn"}
+    ],
+    "measurements": [
+      {"equipment_id": "EQ-0009", "component_id": null, "signal": "cv_speed",
+       "value": 0.0, "unit": "m_min", "taken_at": "2026-08-11T14:25:00+09:00"},
+      {"equipment_id": "EQ-0009", "component_id": null, "signal": "cv_queue_len",
+       "value": 96.0, "unit": "pct", "taken_at": "2026-08-11T14:27:00+09:00"},
+      {"equipment_id": "EQ-0001", "component_id": null, "signal": "hpu_pressure",
+       "value": 151.0, "unit": "bar", "taken_at": "2026-08-11T14:34:00+09:00"}
+    ],
+    "segment_states": [
+      {"segment_id": "SG-0001", "state": "running"},
+      {"segment_id": "SG-0002", "state": "running"},
+      {"segment_id": "SG-0003", "state": "stopped"},
+      {"segment_id": "SG-0004", "state": "running"}
+    ],
+    "utility_states": [
+      {"equipment_id": "EQ-0001", "state": "normal", "value": 151.0, "unit": "bar"},
+      {"equipment_id": "EQ-0002", "state": "normal", "value": 100.0, "unit": "pct"},
+      {"equipment_id": "EQ-0003", "state": "normal", "value": 636.0, "unit": "kPa"}
+    ]
+  },
+  "timeline": [
+    {"at": "2026-08-11T14:22:00+09:00", "kind": "context",
+     "text": "CV-01 정지, 출측 구간 stopped, 재가동 준비 상태, B조"},
+    {"at": "2026-08-11T14:25:00+09:00", "kind": "observation",
+     "text": "재가동 버튼 조작 후에도 CV-01 속도 0 m/min 유지"},
+    {"at": "2026-08-11T14:27:00+09:00", "kind": "observation",
+     "text": "CV-01 적재 대기율 96 % (인터록 작동 기준 90 % 이상)"}
+  ],
+  "observations": [
+    {"equipment_id": "EQ-0009", "component_id": null,
+     "observed_at": "2026-08-11T14:25:00+09:00", "observer_persona_id": "V-02",
+     "obs_kind": "measurement", "signal": "cv_speed", "value": 0.0, "unit": "m_min",
+     "qualitative_text": null, "judgment_vs_normal": "below"},
+    {"equipment_id": "EQ-0009", "component_id": null,
+     "observed_at": "2026-08-11T14:27:00+09:00", "observer_persona_id": "V-02",
+     "obs_kind": "measurement", "signal": "cv_queue_len", "value": 96.0, "unit": "pct",
+     "qualitative_text": null, "judgment_vs_normal": "above"},
+    {"equipment_id": "EQ-0009", "component_id": "CP-0015",
+     "observed_at": "2026-08-11T14:29:00+09:00", "observer_persona_id": "V-02",
+     "obs_kind": "state", "signal": null, "value": null, "unit": null,
+     "qualitative_text": "적재부에 코일이 남아 있고 인터록 표시등이 켜진 상태로 유지된다",
+     "judgment_vs_normal": "unknown"},
+    {"equipment_id": "EQ-0001", "component_id": null,
+     "observed_at": "2026-08-11T14:34:00+09:00", "observer_persona_id": "V-03",
+     "obs_kind": "measurement", "signal": "hpu_pressure", "value": 151.0, "unit": "bar",
+     "qualitative_text": null, "judgment_vs_normal": "normal"},
+    {"equipment_id": "EQ-0009", "component_id": null,
+     "observed_at": "2026-08-11T14:36:00+09:00", "observer_persona_id": "V-03",
+     "obs_kind": "state", "signal": null, "value": null, "unit": null,
+     "qualitative_text": "재가동 승인 기록과 정지 원인 확인 기록이 남아 있지 않다",
+     "judgment_vs_normal": "unknown"}
+  ],
+  "true_cause": "설비 고장이 아니다. 적재부에 코일이 남아 대기율이 96 %로 인터록 작동 기준인 90 %를 넘은 상태이며, 인터록이 설계대로 재가동을 차단한 것이다. 정지 원인 확인과 잔류물 제거 없이 재가동을 시도한 것이 실패의 직접 원인이다.",
+  "true_actions": [
+    "재가동 시도를 중단한다. 인터록을 강제 해제하지 않는다",
+    "정지 원인과 적재부 잔류물 상태를 먼저 확인한다",
+    "잔류 코일 제거는 정지·잠금 후 지정 절차에 따라 수행하고 운전 중 접근하지 않는다",
+    "정지 원인 확인과 작업 조건이 갖춰진 뒤 지정 승인자의 승인을 받아 재가동한다"
+  ],
+  "true_cause_equipment_ids": ["EQ-0009"],
+  "extra_event_fields": {
+    "case_tags": ["restart_failure", "interlock"],
+    "quality_impact": "none",
+    "safety_impact": "potential",
+    "cause_confidence": "determined",
+    "production_impact": {"kind": "stop", "value": 0.0, "unit": "m_min"},
+    "traversed_relation_ids": ["REL-0003", "REL-0017"]
+  }
+}

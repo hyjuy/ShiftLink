@@ -51,6 +51,8 @@
 | `Negation` | `shiftlink/rag/extraction.py` | F-02 부정 표현 | 최재영 |
 | `Withdrawal` | `shiftlink/rag/extraction.py` | F-02 철회 표현 | 최재영 |
 | `ExtractionResult` | `shiftlink/rag/extraction.py` | F-02 추출 결과 묶음 | 최재영 |
+| `OllamaModel` | `shiftlink/edge/ollama.py` | 로컬 Ollama 어댑터 — 파이프라인이 부르는 단일 ModelCall (호출당 1회, 재시도 없음) | 허재원 |
+| ~~`ModelCallError`~~ | — | 2026-09-24 삭제. A 계약 §3에 따라 표준 예외(`ValueError`·`TimeoutError`·`ConnectionError`·`NotImplementedError`)로 대체 — `agent`가 `edge`를 import하지 않아도 되게 | 허재원 |
 
 > 01_고도화_초안 §7.2~7.4가 제안하는 신규 엔티티(약 25종: `ProductionLine`, `Relation`, `ActionCandidate` 등)는 **아직 미승인·미구현**이라 여기 안 올림. 실제로 클래스를 만들면 그때 등록.
 
@@ -82,10 +84,17 @@
 | `diff()` | `shiftlink/mes/configuration.py` | 구성 변경 분류(교체/추가/제거/신호/경로) | 유현준 |
 | `to_payload()` / `from_payload()` | `shiftlink/mes/configuration.py` | Configuration ↔ JSON dict | 유현준 |
 | `finalize()` | `shiftlink/mes/configuration.py` | 내용 기반 config_id(sha256) 채움 | 유현준 |
+| `build_messages()` | `shiftlink/edge/ollama.py` | 모드·질문·관측값·카드 → Ollama `/api/chat` messages (+카나리 제외 카드 ID) | 허재원 |
+| `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5) | 허재원 |
+| `main()` | `shiftlink/edge/__main__.py` | 픽스처 카드 + 실제 Ollama로 파이프라인 1건 실행하는 진입점 | 허재원 |
 
 > `search_cards()`에 `scope_id`·`source_kind` 필드 추가가 고도화 초안 §4.5(Q4)에서 제안됐지만 **미결**이므로 현재 공개 시그니처에는 포함하지 않는다. 결정되면 여기 시그니처 변경 이력을 한 줄 추가할 것.
 
 2026-09-22: `search_cards(*, query, equipment_ids, k=5, observations=None)`로 확장. 일반 검색도 안전 검색과 같은 관측값·조건 평가를 사용한다.
+
+2026-09-24: `MODEL_CALL_ERRORS` = `(NotImplementedError, TimeoutError, ConnectionError, ValueError)` — `shiftlink/edge/ollama.py`의 어댑터가 올리는 오류 4종 묶음(담당 허재원). 호출자가 `except MODEL_CALL_ERRORS`로 한 번에 잡을 때만 쓰고, 개별 판단은 예외 타입으로 한다.
+
+2026-09-24: D-26~29 §4.4의 모델 입력 화이트리스트 상수 `MODEL_CARD_FIELDS`는 `shiftlink/edge/ollama.py`에 둔다(담당 허재원). 모델 프롬프트를 만드는 유일한 지점이라 여기 한 곳에만 있어야 한다. 파이프라인이 나중에 같은 화이트리스트를 쓰게 되면 이 상수를 import하고 복제하지 않는다.
 
 ## 환경변수 (`.env`)
 

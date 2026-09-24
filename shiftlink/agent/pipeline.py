@@ -5,7 +5,7 @@ from typing import Any, Callable, Mapping, Protocol
 
 from shiftlink.agent import tools as tool_stubs
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
-from shiftlink.agent.response import build_response, validate_response
+from shiftlink.agent.response import AgentResponse, build_response, validate_response
 
 
 class ToolProvider(Protocol):
@@ -69,6 +69,11 @@ class FixedPipeline:
         routed = route_request(payload)
         # Tool results are fully collected before the single model call.
         tool_results = self._run_tools(routed.request)
+        if routed.mode == "query" and not tool_results["cards"]:
+            return PipelineResult(
+                mode=routed.mode, tool_results=tool_results,
+                output=AgentResponse(mode=routed.mode, no_knowledge=True),
+            )
         model_output = self.model(
             mode=routed.mode,
             request=routed.request,
@@ -114,7 +119,7 @@ class FixedPipeline:
         # Convert observations list to dict if present (query mode only)
         observations_dict = None
         if observations:
-            observations_dict = {obs.get("signal"): obs.get("value") for obs in observations if "signal" in obs}
+            observations_dict = {obs.signal: obs.value for obs in observations}
 
         # Both modes share equipment and card retrieval, in this fixed order.
         results = {

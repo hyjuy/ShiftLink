@@ -1,0 +1,64 @@
+{
+  "persona_id": "V-03",
+  "display_name": "이 주임",
+  "is_synthetic": true,
+  "persona_source": "seeds/personas_v0.1.yaml#/personas/2",
+  "review_scope": "합성 인수인계 조장 관점을 적용한 AI 검토. 실제 숙련자의 발언·경험·승인 아님. 사실은 원문에 한정하고 페르소나는 해석·서술 경향만 제공한다.",
+  "common_basis": [
+    "seeds/personas_v0.1.yaml#/source_note",
+    "seeds/personas_v0.1.yaml#/draft_assumptions/2",
+    "seeds/personas_v0.1.yaml#/draft_assumptions/3",
+    "seeds/personas_v0.1.yaml#/draft_assumptions/4",
+    "seeds/personas_v0.1.yaml#/conflict_policy"
+  ],
+  "reviews": [
+    {
+      "card_id": "K-0301",
+      "reading": "2012년 지침의 요지는 정지스위치 주위에 장애물을 두지 않는다는 것이다. 이 카드만으로 현재 장애물 유무나 제거 완료를 알 수는 없다.",
+      "concern": "인계받았다는 기록을 장애물 제거 완료로 읽거나, 조장 확인을 운전 중 접근·제거 작업 허가로 오해할 수 있다. 이는 현재 카드의 오류가 아니라 인계 활용 시의 해석 위험이다.",
+      "suggested_change": "카드 사실 본문은 유지한다. 별도 역할별 설명에 '금지 규칙의 전달과 현장 상태의 확인은 구별하며, 인계 수락은 미해결 항목 종료가 아니다'를 표시하는 것을 제안한다. 이는 페르소나의 기록 관점이며 원문 조항에 추가 절차가 있다는 뜻은 아니다.",
+      "basis": {
+        "source": ["source-packet.json#/candidates/0/excerpt", "source-packet.json#/candidates/0/excluded_claims"],
+        "card": ["cards.json#/0/know_how", "cards.md#K-0301"],
+        "persona": ["seeds/personas_v0.1.yaml#/personas/2/observable_information/2", "seeds/personas_v0.1.yaml#/personas/2/decision_authority/cannot_do/1", "seeds/personas_v0.1.yaml#/personas/2/recording_method/omission_risk"]
+      },
+      "unverified_questions": [
+        "현재 현장의 장애물 유무에 대해 제공된 관측·보고가 있는가? 있다면 보고자·시각과 이후 상태 변화가 확인되는가?",
+        "미해결 상태라면 후속 확인 대상과 시점은 실제 현장 기록에 지정되어 있는가? 이 카드에는 해당 정보가 없다."
+      ],
+      "decision": "문헌 요약 유지. 역할별 설명 제안은 별도 표시하고 원문 밖 질문은 미확인으로 남긴다. 운영·안전 승인 판단 보류."
+    },
+    {
+      "card_id": "K-0302",
+      "reading": "2012년 지침은 비상·사고 정지 중인 컨베이어의 재기동에 앞서 정지 원인과 고장 장소의 보수상황 등을 확인하도록 한다. 이 문장은 보수가 끝났다는 보고도, 재기동 허가도 아니다.",
+      "concern": "'원인·보수상황 확인 인계 완료'를 실제 정비 완료·안전 확보·재기동 승인으로 합쳐 읽을 위험이 있다. 조장 직책이나 인계 기록 확정은 지정 작업 승인자의 판단을 대신하지 않는다.",
+      "suggested_change": "카드 본문과 기존 적용 한계를 유지한다. 인계 관점 설명에는 '확인된 내용과 미확인 항목을 구분하며, 인계 수락으로 재기동 미해결 항목을 종료하지 않는다'를 별도 제안한다. 원문에 없는 인계 채널·담당자 이름·승인 순서·재가동 경험은 추가하지 않는다.",
+      "basis": {
+        "source": ["source-packet.json#/candidates/1/excerpt", "source-packet.json#/candidates/1/excluded_claims"],
+        "card": ["cards.json#/1/know_how", "cards.json#/1/type_payload/restart_type", "cards.md#K-0302"],
+        "persona": ["seeds/personas_v0.1.yaml#/personas/2/unknown_information/1", "seeds/personas_v0.1.yaml#/personas/2/decision_authority/can_do/1", "seeds/personas_v0.1.yaml#/personas/2/decision_authority/cannot_do/0", "seeds/personas_v0.1.yaml#/personas/2/decision_authority/cannot_do/1"]
+      },
+      "unverified_questions": [
+        "정지 원인과 보수상황 중 실제로 확인된 것은 무엇이며 무엇이 미확인인가? 확인 근거가 제공되어 있는가?",
+        "정비 완료·작업 안전 조건·재가동 허가 여부를 각각 확인할 현장 기록이 있는가? 지정 승인자는 누구인지 실제 작업표준에서 확인되었는가?"
+      ],
+      "decision": "T6 문헌 요약 유지. 인계 방법 T4로 재분류하지 않는다. 사실 확인과 승인 여부는 각각 미확인으로 두며 운영·안전 승인 판단 보류."
+    },
+    {
+      "card_id": "K-0303",
+      "reading": "2012년 지침은 컨베이어에 올라가지 않도록 하며, 작업상 부득이한 경우에 사업주가 안전상 필요한 조치를 강구한 경우의 예외를 함께 둔다. 카드에는 그 조치의 구체 내용이나 충분조건이 없다.",
+      "concern": "조장의 인계 확인을 사업주의 안전조치 완료나 올라가기 허가로 오해할 수 있다. 반대로 보수적인 페르소나 성향만으로 원문의 예외를 삭제해 절대 금지로 바꾸어도 원문에 충실하지 않다.",
+      "suggested_change": "금지와 예외를 함께 둔 본문을 유지한다. 역할별 설명에 '예외 문구를 전달한 것과 실제 예외 조건을 확인한 것은 다르다. 조장 직책·인계 수락은 작업 승인 근거가 아니다'를 별도로 제안한다. 필요한 조치 목록이나 승인자를 임의로 채우지 않는다.",
+      "basis": {
+        "source": ["source-packet.json#/candidates/2/excerpt", "source-packet.json#/candidates/2/allowed_claims/1", "source-packet.json#/candidates/2/excluded_claims"],
+        "card": ["cards.json#/2/know_how", "cards.json#/2/safety_basis", "cards.md#K-0303"],
+        "persona": ["seeds/personas_v0.1.yaml#/personas/2/decision_authority/cannot_do/0", "seeds/personas_v0.1.yaml#/personas/2/decision_authority/cannot_do/1", "seeds/personas_v0.1.yaml#/personas/2/known_biases/0", "seeds/personas_v0.1.yaml#/draft_assumptions/4"]
+      },
+      "unverified_questions": [
+        "현재 사례에서 작업상 부득이함과 필요한 안전조치의 확인 근거가 실제로 제공되어 있는가?",
+        "현장 적용 문서가 정한 작업 제한·확인 역할·승인 절차는 무엇인가? 원문 요약만으로 답할 수 없다."
+      ],
+      "decision": "금지·예외를 보존한 문헌 요약 유지. 실제 예외 충족이나 접근 허가를 판정하지 않으며 운영·안전 승인 판단 보류."
+    }
+  ]
+}

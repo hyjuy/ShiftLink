@@ -5,7 +5,7 @@
 | 폴더 | 내용 | 시작 파일 |
 |---|---|---|
 | `reference/` | 합성 라인·설비·부품·관계·페르소나 등 공통 기준정보 | [00_plant_and_relations.json](reference/00_plant_and_relations.json) |
-| `knowledge_cards/` | 합성 공용 KB 카드와 출처 사건 묶음; 파일 전체가 단일 KnowledgeCard는 아님 | [01_kb_cards_shared.json](knowledge_cards/01_kb_cards_shared.json) |
+| `knowledge_cards/` | 합성 공용 KB 묶음과 검토용 지식카드 초안. 파일별 형식·승인 상태 구분 | [기존 공용 KB](knowledge_cards/01_kb_cards_shared.json), [원문 기반 초안 3건](knowledge_cards/drafts/20260924/README.md) |
 | `scenarios/` | 사건·관측·카드·정답 등 복합 합성 시나리오; 파일 전체가 단일 Event는 아님 | [EV-0031](scenarios/EV-0031_upstream_cause.json) (`kb`), [EV-0032](scenarios/EV-0032_downstream_block.json) (`dev`), [EV-0033](scenarios/EV-0033_common_utility.json) (`sealed`) |
 | `events/` | 냉간코일 공장 내 오류·고장과 조치·결과 사건; 현재 적격 실제 사건 0건 | [범위·작성 기준](events/README.md) |
 | `policies/` | 출처·계보·분할·평가 데이터 관리 규칙 | [원문·출처·평가 분할 계약](policies/source-and-split-contract.md) |

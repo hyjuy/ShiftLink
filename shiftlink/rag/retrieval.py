@@ -1,10 +1,10 @@
 """In-memory tool provider for knowledge cards retrieval."""
 
-from typing import Any, Annotated
+from typing import Any, Annotated, get_args
 import re
 from heapq import nsmallest
 from dataclasses import dataclass
-from shiftlink.agent.schemas import KnowledgeCard, Condition, SCHEMA_VERSION
+from shiftlink.agent.schemas import KnowledgeCard, Condition, Equipment, SCHEMA_VERSION
 
 
 GENERATION_PROMPT_TEMPLATE = f"""## 카드 생성 규칙 (스키마 v{SCHEMA_VERSION})
@@ -193,6 +193,7 @@ class InMemoryToolProvider:
         equipment_db: list[dict[str, Any]] | None = None,
         handover_db: list[dict[str, Any]] | None = None,
         checklist_db: list[dict[str, Any]] | None = None,
+        equipment_types: list[dict[str, Any]] | None = None,
     ) -> None:
         """
         Initialize with KB cards and optional equipment/handover/checklist data.
@@ -202,6 +203,7 @@ class InMemoryToolProvider:
             equipment_db: Optional equipment metadata.
             handover_db: Optional existing handovers.
             checklist_db: Optional checklists.
+            equipment_types: Catalog equipment_type_id/type_code records.
 
         Raises:
             ValueError: If dev or sealed cards are mixed in (gate enforcement).
@@ -218,20 +220,41 @@ class InMemoryToolProvider:
                     self.cards.append(card)
 
         self.equipment_db = equipment_db or []
+        self.equipment_types = equipment_types or []
         self.handover_db = handover_db or []
         self.checklist_db = checklist_db or []
 
+    def _resolve_equipment(self, equipment_ids: list[str]) -> list[tuple[str, str, dict[str, Any] | None]]:
+        """Resolve registered IDs/codes; retain explicit schema types for legacy callers."""
+        resolved = []
+        for identifier in equipment_ids:
+            matches = [row for row in self.equipment_db
+                       if identifier in (row.get("equipment_id"), row.get("code"))]
+            if len(matches) > 1:
+                raise ValueError(f"Ambiguous equipment identifier: {identifier}")
+            row = matches[0] if matches else None
+            if row is None:
+                if identifier not in get_args(Equipment):
+                    raise ValueError(f"Unknown equipment identifier: {identifier}")
+                resolved.append((identifier, identifier, None))
+                continue
+            type_id = row.get("equipment_type_id")
+            if type_id is None and identifier in get_args(Equipment):
+                type_code = identifier
+            else:
+                types = [item for item in self.equipment_types
+                         if type_id is not None and item.get("equipment_type_id") == type_id]
+                if len(types) != 1:
+                    raise ValueError(f"Missing or ambiguous equipment type: {identifier}")
+                type_code = types[0].get("type_code")
+            if type_code not in get_args(Equipment):
+                raise ValueError(f"Unsupported card equipment type: {type_code}")
+            resolved.append((row["equipment_id"], type_code, row))
+        return resolved
+
     def lookup_equipment(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]:
-        """Return equipment metadata."""
-        results = []
-        for eq_id in equipment_ids:
-            eq = next(
-                (e for e in self.equipment_db if e.get("equipment_id") == eq_id),
-                None,
-            )
-            if eq:
-                results.append(eq)
-        return results
+        """Return canonical metadata, rejecting unresolved or unsupported equipment."""
+        return [row for _, _, row in self._resolve_equipment(equipment_ids) if row is not None]
 
     def search_cards(
         self,
@@ -247,10 +270,11 @@ class InMemoryToolProvider:
         Returns top-k results (deterministic ranking by token overlap, then card_id).
         """
         query_tokens = set(re.findall(r'\w+', query.lower()))
+        equipment_codes = {code for _, code, _ in self._resolve_equipment(equipment_ids)}
 
         def candidates():
             for card in self.cards:
-                if card.equipment not in equipment_ids and card.equipment != "COMMON":
+                if card.equipment not in equipment_codes and card.equipment != "COMMON":
                     continue
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
@@ -279,9 +303,10 @@ class InMemoryToolProvider:
         Condition matching follows §4.2 rules.
         """
         # Equipment filter
+        equipment_codes = {code for _, code, _ in self._resolve_equipment(equipment_ids)}
         candidate_cards = [
             c for c in self.cards
-            if c.safety_flag and (c.equipment in equipment_ids or c.equipment == "COMMON")
+            if c.safety_flag and (c.equipment in equipment_codes or c.equipment == "COMMON")
         ]
 
         # Condition matching with observations
@@ -299,9 +324,10 @@ class InMemoryToolProvider:
         self, *, equipment_ids: list[str], shift: str | None = None
     ) -> list[dict[str, Any]]:
         """Return existing handover items."""
+        canonical_ids = {identifier for identifier, _, _ in self._resolve_equipment(equipment_ids)}
         results = [
             h for h in self.handover_db
-            if h.get("equipment_id") in equipment_ids
+            if h.get("equipment_id") in canonical_ids
             and (shift is None or h.get("shift") == shift)
         ]
         return results
@@ -312,8 +338,9 @@ class InMemoryToolProvider:
 
     def get_checklist(self, *, equipment_ids: list[str]) -> list[dict[str, Any]]:
         """Return applicable checklists."""
+        canonical_ids = {identifier for identifier, _, _ in self._resolve_equipment(equipment_ids)}
         results = [
             c for c in self.checklist_db
-            if c.get("equipment_id") in equipment_ids
+            if c.get("equipment_id") in canonical_ids
         ]
         return results

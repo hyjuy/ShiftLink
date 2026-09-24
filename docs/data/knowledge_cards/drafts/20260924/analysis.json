@@ -1,0 +1,89 @@
+{
+  "analyst": "Codex sub-agent card_analyst (AI)",
+  "analysis_date": "2026-09-24",
+  "scope": "Final batch artifacts only; no new source investigation, code change, human approval, or sealed source access",
+  "result": "Historical explicit-knowledge literature summaries; not verified field tacit knowledge or demonstrated RAG improvement",
+  "counts": {
+    "cards": 3,
+    "content_pass": 3,
+    "operational_hold": 3,
+    "types": {"T5": 2, "T6": 1},
+    "equipment": {"CV": 3},
+    "scenarios": {"S1": 2, "S2": 1},
+    "source_documents_used": 1,
+    "source_groups_used": 1,
+    "source_links": 18,
+    "metadata_links": 61,
+    "schema_pass": 3,
+    "leaf_coverage_pass": 3,
+    "draft_L0": 3,
+    "safety_flag_true": 3,
+    "human_safety_reviews": 0
+  },
+  "cards": [
+    {"card_id": "K-0301", "tacit_type": "T5", "content_decision": "pass", "operational_gate": "hold"},
+    {"card_id": "K-0302", "tacit_type": "T6", "content_decision": "pass", "operational_gate": "hold"},
+    {"card_id": "K-0303", "tacit_type": "T5", "content_decision": "pass", "operational_gate": "hold"}
+  ],
+  "source": {
+    "source_id": "SD-005",
+    "document_version": "M-101-2012; 2012.6.20",
+    "group_id": "SRC-KOSHA-M101-2012-CONVEYOR-SAFETY",
+    "bucket": 4,
+    "split": "kb",
+    "assignment_status": "proposal_not_registered",
+    "registry_status": "pending_review",
+    "approved_scope": []
+  },
+  "held_or_excluded": [
+    {"item": "SKF P-04", "split": "dev", "reason": "T2 conditional reusable selection knowledge not established by single design case", "card_created": false},
+    {"item": "NSK", "split": "dev", "reason": "GR/RT equipment mapping unsupported", "card_created": false},
+    {"item": "KOSHA 4.3(9)", "reason": "Substantial overlap with existing maintenance safety card", "card_created": false},
+    {"item": "Hydraulic lineage", "split": "sealed", "reason": "Excluded from source reading and generation; metadata only", "card_created": false}
+  ],
+  "revisions": [
+    "P-02/P-03 excerpts expanded to full clauses after author request, preserving abnormal-stop premise and employer safety-measure exception",
+    "Independent reviewer requested Korean correction of K-0302 generalization_scope; author corrected and reviewer checked final file",
+    "SKF P-04 initial T2 candidate held after type review"
+  ],
+  "requirements_met": [
+    "Source-based draft generation with document and clause traceability",
+    "Independent AI content review separated from operational approval",
+    "Source evidence distinguished from production metadata",
+    "Unsupported procedural details and forced type/equipment mappings avoided"
+  ],
+  "requirements_not_demonstrated": [
+    "Field tacit-knowledge acquisition or cross-event generalization",
+    "Diverse equipment and T1-T4 coverage",
+    "Global semantic lineage and duplicate clearance",
+    "Human source/content/safety approval and current site applicability",
+    "Official pipeline execution, Qwen/Ollama generation quality, or RAG performance improvement"
+  ],
+  "next_source_priorities": [
+    "Confirm source scope, current applicable site documents, restart authority and exception criteria for existing cards",
+    "Collect CV event evidence including observations, decision rationale, failed attempts, handover, outcomes and counterexamples",
+    "Obtain SKF conditional design-selection support and NSK equipment mapping; preserve dev group assignments"
+  ],
+  "operational_conditions_remaining": [
+    "Source approval and use rights",
+    "Group registration and global semantic lineage/duplicate review",
+    "Human content/safety review and site applicability",
+    "Confidence evaluation and sentinel consumption policy",
+    "Official pipeline/runtime checks and lineage-separated retrieval/answer evaluation"
+  ],
+  "verification": {
+    "method": "PowerShell Get-FileHash SHA256 of current files compared to review.json and validation.json",
+    "all_reviewed_hashes_match": true,
+    "all_validation_artifact_hashes_match_for_checked_files": true,
+    "checked_files": {
+      "cards.json": "cb6a8949d9a843d2e0f08a15f34b2572359dcee562441af1e490aca48ee6217d",
+      "source-packet.json": "620ee39990206297b7661a4345895907328a5de6ecfb573dae8fa6cbf7e9bcfe",
+      "evidence-map.json": "ae9930f3af8c9c8e307fc11bd9c68f667d9b30e280fb5a679576f01d747bddd7"
+    },
+    "limitations": [
+      "Structural validation is not semantic entailment or human approval",
+      "Existing ID checks cover shared KB and 20260923 batch only",
+      "Source-file hash validation is inherited from validation.json, not newly rerun by analyst"
+    ]
+  }
+}

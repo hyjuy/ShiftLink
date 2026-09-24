@@ -1,0 +1,52 @@
+{
+  "status": "pass",
+  "checked_at": "2026-09-24T04:57:48.352863+00:00",
+  "pydantic_version": "2.9.2",
+  "card_count": 3,
+  "cards": [
+    {
+      "card_id": "K-0301",
+      "schema": "pass",
+      "unknown_fields": "pass",
+      "source_link_count": 6,
+      "metadata_link_count": 20,
+      "leaf_coverage": "pass",
+      "runtime_exclusion": "pass"
+    },
+    {
+      "card_id": "K-0302",
+      "schema": "pass",
+      "unknown_fields": "pass",
+      "source_link_count": 6,
+      "metadata_link_count": 21,
+      "leaf_coverage": "pass",
+      "runtime_exclusion": "pass"
+    },
+    {
+      "card_id": "K-0303",
+      "schema": "pass",
+      "unknown_fields": "pass",
+      "source_link_count": 6,
+      "metadata_link_count": 20,
+      "leaf_coverage": "pass",
+      "runtime_exclusion": "pass"
+    }
+  ],
+  "source_file_hashes": "pass",
+  "split_hashes": "pass",
+  "id_collisions": "none_in_checked_batches",
+  "protected_files_unchanged": true,
+  "reviewed_artifact_hashes": "pass",
+  "source_approval_granted": false,
+  "production_generation_pipeline_executed": false,
+  "limits": [
+    "Structural checks do not establish semantic entailment or human approval.",
+    "ID comparison covers shared KB and 20260923 batch only; global semantic lineage remains unverified."
+  ],
+  "artifact_sha256": {
+    "cards.json": "cb6a8949d9a843d2e0f08a15f34b2572359dcee562441af1e490aca48ee6217d",
+    "source-packet.json": "620ee39990206297b7661a4345895907328a5de6ecfb573dae8fa6cbf7e9bcfe",
+    "evidence-map.json": "ae9930f3af8c9c8e307fc11bd9c68f667d9b30e280fb5a679576f01d747bddd7",
+    "validate.py": "cff428d7944e28f8b94901668e382d62ea26451a67d3a99a5f1a423fa26f1e1b"
+  }
+}

@@ -1,301 +1,746 @@
 {
-  "registry_version": "1",
-  "recorded_at": "2026-09-22",
-  "contract": "docs/data/policies/source-and-split-contract.md",
-  "notes": [
-    "Registration is not generation approval. Empty approved_scope blocks source-backed drafting under this policy; runtime enforcement is not implemented.",
-    "Existing review notes are historical evidence, not a fulltext recheck on recorded_at.",
-    "License notes are inherited text, not verified rights determinations.",
-    "Only two PDFs exist in the current source directories. Older local download claims remain historical."
-  ],
-  "sources": [
+ "registry_version": "1",
+ "recorded_at": "2026-09-22",
+ "contract": "docs/data/policies/source-and-split-contract.md",
+ "notes": [
+  "Registration is not generation approval. Empty approved_scope blocks source-backed drafting under this policy; runtime enforcement is not implemented.",
+  "Existing review notes are historical evidence, not a fulltext recheck on recorded_at.",
+  "License notes are inherited text, not verified rights determinations.",
+  "Only two PDFs exist in the current source directories. Older local download claims remain historical.",
+  "2026-09-24: SD-901 이후는 shiftlink.data.narrative가 만든 합성 작업일지다. is_synthetic=true이며 reviewed_by가 사람이 아니다. 실제 원문과 같은 근거로 쓰지 않는다."
+ ],
+ "sources": [
+  {
+   "source_id": "SD-001",
+   "title": "Bosch Rexroth, Knowledge in Detail: Hydraulics – Basic Principles",
+   "aliases": [],
+   "source_family": "SD-001",
+   "url": "https://www.boschrexroth.com/en/us/academy/media/",
+   "url_role": "catalog",
+   "purpose": "HPU 원리·구성",
+   "legacy_license_note_unverified": "© Bosch Rexroth AG — 원문 복제 금지, 개념·용어만",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-002",
+   "title": "Parker HY29-0035/UK Denison 베인펌프 Overall Instructions",
+   "aliases": [
+    "M-01"
+   ],
+   "source_family": "SD-002",
+   "url": "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_Manuals/Vane_Pumps/HY29-0035-UK.pdf",
+   "url_role": "document",
+   "purpose": "펌프 고장 증상 구조",
+   "legacy_license_note_unverified": "© Parker Hannifin — 표 복제 금지",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md"
+   ],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-003",
+   "title": "SKF, Bearing Damage and Failure Analysis (ISO 15243)",
+   "aliases": [],
+   "source_family": "SKF-bearing-damage",
+   "url": null,
+   "url_role": "document",
+   "purpose": "베어링 손상 분류 용어",
+   "legacy_license_note_unverified": "SKF 저작물 — 분류 체계 용어만",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-004",
+   "title": "SKF, Bearing damage classification transcript",
+   "aliases": [],
+   "source_family": "SKF-bearing-damage",
+   "url": null,
+   "url_role": "document",
+   "purpose": "손상 분류 보조",
+   "legacy_license_note_unverified": "SKF 저작물",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-005",
+   "title": "KOSHA GUIDE M-101-2012 컨베이어의 안전에 관한 기술지침",
+   "aliases": [
+    "S-02"
+   ],
+   "source_family": "SD-005",
+   "url": "https://kosha.or.kr/cms/resFileDownload.do?fileName=%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EA%B8%B0%EC%88%A0%EC%A7%80%EC%B9%A8%28KOSHA_Guide%29_%EB%AA%A9%EB%A1%9D_20230824%EA%B8%B0%EC%A4%80.pdf&siteId=kosha&type=etc",
+   "url_role": "catalog",
+   "purpose": "CV·RT 안전",
+   "legacy_license_note_unverified": "공단 기술지침(공공) — 지침 번호 명기",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": {
+    "path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+    "bytes": 131056,
+    "sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27"
+   },
+   "reviewed_notes": [
+    "docs/sources/safety/S-02_KOSHA_GUIDE_M-101-2012.md"
+   ],
+   "document_version": "M-101-2012",
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-006",
+   "title": "산업안전보건기준에 관한 규칙 제92조(정비 등의 작업 시의 운전정지)",
+   "aliases": [
+    "S-01"
+   ],
+   "source_family": "SD-006",
+   "url": "https://www.law.go.kr/LSW/lsSideInfoP.do?docCls=jo&joBrNo=00&joNo=0092&lsiSeq=273603&urlMode=lsScJoRltInfoR",
+   "url_role": "document",
+   "purpose": "T5 안전 근거",
+   "legacy_license_note_unverified": "법령(자유 이용). [기존] 미결 #18 본문·적용 범위 확인 필요",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [
+    "docs/sources/safety/S-01_산업안전보건기준에_관한_규칙_제92조.md"
+   ],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-007",
+   "title": "OSHA 29 CFR 1910.147 Lockout/Tagout",
+   "aliases": [
+    "S-03"
+   ],
+   "source_family": "SD-007",
+   "url": "https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1910/subpart-J/section-1910.147",
+   "url_role": "document",
+   "purpose": "T5 안전 근거(해외)",
+   "legacy_license_note_unverified": "미 연방 자료(public domain). [기존] 미결 #18",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [
+    "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+   ],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "SD-008",
+   "title": "IspatGuru, Historical Development of Rolling Mills",
+   "aliases": [],
+   "source_family": "SD-008",
+   "url": null,
+   "url_role": "document",
+   "purpose": "압연 공정 배경",
+   "legacy_license_note_unverified": "개인 블로그 — 수치 인용 금지",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "reviewed_notes": [],
+   "document_version": null,
+   "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
+  },
+  {
+   "source_id": "M-02",
+   "title": "SEW-EURODRIVE - Possible malfunctions/remedy",
+   "aliases": [],
+   "source_family": "SEW-gear-unit",
+   "url": "https://download.sew-eurodrive.com/download/html/31981496/en-EN/25440305419.html",
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+  },
+  {
+   "source_id": "M-03",
+   "title": "SKF - Bearing damage analysis: ISO 15243 is here to help you",
+   "aliases": [],
+   "source_family": "SKF-bearing-damage",
+   "url": "https://evolution.skf.com/bearing-damage-analysis-iso-15243-is-here-to-help-you/",
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+  },
+  {
+   "source_id": "M-04",
+   "title": "Siemens - SINAMICS G120 CU240B/E-2 List Manual",
+   "aliases": [],
+   "source_family": "Siemens-G120",
+   "url": "https://cache.industry.siemens.com/dl/files/596/59745596/att_77615/v1/LH11_0112_eng.pdf",
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": {
+    "path": "docs/sources/manual/siemens-G120-CU240BE2-LH11-0112-en.pdf",
+    "bytes": 4031162,
+    "sha256": "e50541ae888a5e660bec7608b227d5b02dd211c29096b3884269e2931c0a5ceb"
+   },
+   "document_version": "01/2012",
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+  },
+  {
+   "source_id": "M-05",
+   "title": "SAP Digital Manufacturing - Nonconformance Disposition Routings",
+   "aliases": [],
+   "source_family": "SAP-DM",
+   "url": "https://help.sap.com/docs/sap-digital-manufacturing/execution/nonconformance-disposition-routings",
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+  },
+  {
+   "source_id": "M-06",
+   "title": "SAP - Controlling Production (Buyoff, Hold, Release)",
+   "aliases": [],
+   "source_family": "SAP-DM",
+   "url": "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-",
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
+  },
+  {
+   "source_id": "M-07",
+   "title": "Bosch HPU - identity pending",
+   "aliases": [],
+   "source_family": "SD-001",
+   "url": null,
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+  },
+  {
+   "source_id": "M-08",
+   "title": "BR damage types - publisher pending",
+   "aliases": [],
+   "source_family": "unresolved-M-08",
+   "url": null,
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+  },
+  {
+   "source_id": "M-09",
+   "title": "BR remanufacturing evaluation - publisher pending",
+   "aliases": [],
+   "source_family": "unresolved-M-09",
+   "url": null,
+   "url_role": "document",
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "local_snapshot": null,
+   "document_version": null,
+   "reviewed_notes": [
+    "docs/sources/manual/README.md",
+    "docs/sources/manual/download-status.md"
+   ],
+   "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
     {
-      "source_id": "SD-001",
-      "title": "Bosch Rexroth, Knowledge in Detail: Hydraulics – Basic Principles",
-      "aliases": [],
-      "source_family": "SD-001",
-      "url": "https://www.boschrexroth.com/en/us/academy/media/",
-      "url_role": "catalog",
-      "purpose": "HPU 원리·구성",
-      "legacy_license_note_unverified": "© Bosch Rexroth AG — 원문 복제 금지, 개념·용어만",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-002",
-      "title": "Parker HY29-0035/UK Denison 베인펌프 Overall Instructions",
-      "aliases": [
-        "M-01"
-      ],
-      "source_family": "SD-002",
-      "url": "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_Manuals/Vane_Pumps/HY29-0035-UK.pdf",
-      "url_role": "document",
-      "purpose": "펌프 고장 증상 구조",
-      "legacy_license_note_unverified": "© Parker Hannifin — 표 복제 금지",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md"
-      ],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-003",
-      "title": "SKF, Bearing Damage and Failure Analysis (ISO 15243)",
-      "aliases": [],
-      "source_family": "SKF-bearing-damage",
-      "url": null,
-      "url_role": "document",
-      "purpose": "베어링 손상 분류 용어",
-      "legacy_license_note_unverified": "SKF 저작물 — 분류 체계 용어만",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-004",
-      "title": "SKF, Bearing damage classification transcript",
-      "aliases": [],
-      "source_family": "SKF-bearing-damage",
-      "url": null,
-      "url_role": "document",
-      "purpose": "손상 분류 보조",
-      "legacy_license_note_unverified": "SKF 저작물",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-005",
-      "title": "KOSHA GUIDE M-101-2012 컨베이어의 안전에 관한 기술지침",
-      "aliases": [
-        "S-02"
-      ],
-      "source_family": "SD-005",
-      "url": "https://kosha.or.kr/cms/resFileDownload.do?fileName=%EC%95%88%EC%A0%84%EB%B3%B4%EA%B1%B4%EA%B8%B0%EC%88%A0%EC%A7%80%EC%B9%A8%28KOSHA_Guide%29_%EB%AA%A9%EB%A1%9D_20230824%EA%B8%B0%EC%A4%80.pdf&siteId=kosha&type=etc",
-      "url_role": "catalog",
-      "purpose": "CV·RT 안전",
-      "legacy_license_note_unverified": "공단 기술지침(공공) — 지침 번호 명기",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": {
-        "path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
-        "bytes": 131056,
-        "sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27"
-      },
-      "reviewed_notes": [
-        "docs/sources/safety/S-02_KOSHA_GUIDE_M-101-2012.md"
-      ],
-      "document_version": "M-101-2012",
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-006",
-      "title": "산업안전보건기준에 관한 규칙 제92조(정비 등의 작업 시의 운전정지)",
-      "aliases": [
-        "S-01"
-      ],
-      "source_family": "SD-006",
-      "url": "https://www.law.go.kr/LSW/lsSideInfoP.do?docCls=jo&joBrNo=00&joNo=0092&lsiSeq=273603&urlMode=lsScJoRltInfoR",
-      "url_role": "document",
-      "purpose": "T5 안전 근거",
-      "legacy_license_note_unverified": "법령(자유 이용). [기존] 미결 #18 본문·적용 범위 확인 필요",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [
-        "docs/sources/safety/S-01_산업안전보건기준에_관한_규칙_제92조.md"
-      ],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-007",
-      "title": "OSHA 29 CFR 1910.147 Lockout/Tagout",
-      "aliases": [
-        "S-03"
-      ],
-      "source_family": "SD-007",
-      "url": "https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1910/subpart-J/section-1910.147",
-      "url_role": "document",
-      "purpose": "T5 안전 근거(해외)",
-      "legacy_license_note_unverified": "미 연방 자료(public domain). [기존] 미결 #18",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [
-        "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
-      ],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "SD-008",
-      "title": "IspatGuru, Historical Development of Rolling Mills",
-      "aliases": [],
-      "source_family": "SD-008",
-      "url": null,
-      "url_role": "document",
-      "purpose": "압연 공정 배경",
-      "legacy_license_note_unverified": "개인 블로그 — 수치 인용 금지",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "reviewed_notes": [],
-      "document_version": null,
-      "generation_gate": "Confirm edition, locator, permitted claims, exclusions, reviewer and use scope before approving any draft scope."
-    },
-    {
-      "source_id": "M-02",
-      "title": "SEW-EURODRIVE - Possible malfunctions/remedy",
-      "aliases": [],
-      "source_family": "SEW-gear-unit",
-      "url": "https://download.sew-eurodrive.com/download/html/31981496/en-EN/25440305419.html",
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
-    },
-    {
-      "source_id": "M-03",
-      "title": "SKF - Bearing damage analysis: ISO 15243 is here to help you",
-      "aliases": [],
-      "source_family": "SKF-bearing-damage",
-      "url": "https://evolution.skf.com/bearing-damage-analysis-iso-15243-is-here-to-help-you/",
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
-    },
-    {
-      "source_id": "M-04",
-      "title": "Siemens - SINAMICS G120 CU240B/E-2 List Manual",
-      "aliases": [],
-      "source_family": "Siemens-G120",
-      "url": "https://cache.industry.siemens.com/dl/files/596/59745596/att_77615/v1/LH11_0112_eng.pdf",
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": {
-        "path": "docs/sources/manual/siemens-G120-CU240BE2-LH11-0112-en.pdf",
-        "bytes": 4031162,
-        "sha256": "e50541ae888a5e660bec7608b227d5b02dd211c29096b3884269e2931c0a5ceb"
-      },
-      "document_version": "01/2012",
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
-    },
-    {
-      "source_id": "M-05",
-      "title": "SAP Digital Manufacturing - Nonconformance Disposition Routings",
-      "aliases": [],
-      "source_family": "SAP-DM",
-      "url": "https://help.sap.com/docs/sap-digital-manufacturing/execution/nonconformance-disposition-routings",
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
-    },
-    {
-      "source_id": "M-06",
-      "title": "SAP - Controlling Production (Buyoff, Hold, Release)",
-      "aliases": [],
-      "source_family": "SAP-DM",
-      "url": "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-",
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Confirm applicable product/version and reviewed locators before approving any draft scope."
-    },
-    {
-      "source_id": "M-07",
-      "title": "Bosch HPU - identity pending",
-      "aliases": [],
-      "source_family": "SD-001",
-      "url": null,
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
-    },
-    {
-      "source_id": "M-08",
-      "title": "BR damage types - publisher pending",
-      "aliases": [],
-      "source_family": "unresolved-M-08",
-      "url": null,
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
-    },
-    {
-      "source_id": "M-09",
-      "title": "BR remanufacturing evaluation - publisher pending",
-      "aliases": [],
-      "source_family": "unresolved-M-09",
-      "url": null,
-      "url_role": "document",
-      "review_status": "pending_review",
-      "approved_scope": [],
-      "local_snapshot": null,
-      "document_version": null,
-      "reviewed_notes": [
-        "docs/sources/manual/README.md",
-        "docs/sources/manual/download-status.md"
-      ],
-      "generation_gate": "Verify identity and relevant scope; M-07 is not yet confirmed as the same edition as SD-001."
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0003",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0031, V-01",
+     "reference_ids": [
+      "EV-0031"
+     ],
+     "scope_id": "EV-0031-V-01-log",
+     "text_sha256": "d2a08943658c0a3a40b30cffa4de1d3074d024293adbe0cabd56abdd577ab2cf",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
     }
-  ]
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-901",
+   "source_id": "SD-901",
+   "title": "합성 작업일지 EV-0031 / V-01",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0003",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0031, V-02",
+     "reference_ids": [
+      "EV-0031"
+     ],
+     "scope_id": "EV-0031-V-02-log",
+     "text_sha256": "91769a85c311d1e5b5db0e9ab64b60cff8bdcc7ea1ea8e1ec12cd026bedb73c9",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-902",
+   "source_id": "SD-902",
+   "title": "합성 작업일지 EV-0031 / V-02",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0003",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0031, V-03",
+     "reference_ids": [
+      "EV-0031"
+     ],
+     "scope_id": "EV-0031-V-03-log",
+     "text_sha256": "6cd63b70e3bd767ee0af064cb27871a2e257cf26e5adadfcdff961af599b15a5",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-903",
+   "source_id": "SD-903",
+   "title": "합성 작업일지 EV-0031 / V-03",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0007",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0032, V-02",
+     "reference_ids": [
+      "EV-0032"
+     ],
+     "scope_id": "EV-0032-V-02-log",
+     "text_sha256": "e31263cebad50dee4975e21cce658b8ff8a894700f921154b527a7101043d38c",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-904",
+   "source_id": "SD-904",
+   "title": "합성 작업일지 EV-0032 / V-02",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0007",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0032, V-03",
+     "reference_ids": [
+      "EV-0032"
+     ],
+     "scope_id": "EV-0032-V-03-log",
+     "text_sha256": "9da1cd25344a3e38561793b67fbc7649f9cfc91f4b4143e3f72f325cc3ab56d3",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-905",
+   "source_id": "SD-905",
+   "title": "합성 작업일지 EV-0032 / V-03",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0017",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0034, V-01",
+     "reference_ids": [
+      "EV-0034"
+     ],
+     "scope_id": "EV-0034-V-01-log",
+     "text_sha256": "f51483b10f62520566146d709f3581ba605b78879719c57bc34d2b75fd7e9ba8",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-906",
+   "source_id": "SD-906",
+   "title": "합성 작업일지 EV-0034 / V-01",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0017",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0034, V-02",
+     "reference_ids": [
+      "EV-0034"
+     ],
+     "scope_id": "EV-0034-V-02-log",
+     "text_sha256": "5a6f3fb419b747ab990533e29be94c5a98936e48a8f9eecc7cadf45f4201065a",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-907",
+   "source_id": "SD-907",
+   "title": "합성 작업일지 EV-0034 / V-02",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0017",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0034, V-03",
+     "reference_ids": [
+      "EV-0034"
+     ],
+     "scope_id": "EV-0034-V-03-log",
+     "text_sha256": "49696905226174cbb67026e25cfe5b820ba34848e0258c4af0f6bb9cc6f2e2be",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-908",
+   "source_id": "SD-908",
+   "title": "합성 작업일지 EV-0034 / V-03",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0018",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0035, V-01",
+     "reference_ids": [
+      "EV-0035"
+     ],
+     "scope_id": "EV-0035-V-01-log",
+     "text_sha256": "bd07b293e342a5a9bf2993efe2cc2549a5c57cc02882bcd2c0963a8e03168609",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-909",
+   "source_id": "SD-909",
+   "title": "합성 작업일지 EV-0035 / V-01",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0018",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0035, V-02",
+     "reference_ids": [
+      "EV-0035"
+     ],
+     "scope_id": "EV-0035-V-02-log",
+     "text_sha256": "b26718dd6a7f7b40f7dec06a3f8c906eb81e09e3eec3e0cc5c4e1698adf42cb7",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-910",
+   "source_id": "SD-910",
+   "title": "합성 작업일지 EV-0035 / V-02",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0019",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0036, V-02",
+     "reference_ids": [
+      "EV-0036"
+     ],
+     "scope_id": "EV-0036-V-02-log",
+     "text_sha256": "c1ff55ad814f7c42021bf32d8f9b2cea029619f71ec2c1a9948d62f6072482c0",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-911",
+   "source_id": "SD-911",
+   "title": "합성 작업일지 EV-0036 / V-02",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  },
+  {
+   "aliases": [],
+   "approved_scope": [
+    {
+     "allowed_claims": [
+      "작성자가 관측·기록한 증상과 계측값"
+     ],
+     "document_version": "synthetic-persona-narrative-v1",
+     "exclusions": [
+      "고장 원인 확정",
+      "조치의 적절성",
+      "작성자가 관측하지 않은 설비의 상태"
+     ],
+     "group_id": "PT-0019",
+     "kind": "case",
+     "locator": "synthetic shift log, EV-0036, V-03",
+     "reference_ids": [
+      "EV-0036"
+     ],
+     "scope_id": "EV-0036-V-03-log",
+     "text_sha256": "04491ef6377c367fe0b3c322e5c1034f2a4b903f7daf26cd904d50a1e141ea9b",
+     "use_scope": "카드 초안 생성 근거",
+     "reviewed_by": "ai-assisted-synthetic-narrative; 사람 승인 아님",
+     "reviewed_at": "2026-09-24T00:00:00+09:00"
+    }
+   ],
+   "is_synthetic": true,
+   "purpose": "페르소나 기반 합성 사건 원문",
+   "review_status": "approved_for_draft",
+   "source_family": "SD-912",
+   "source_id": "SD-912",
+   "title": "합성 작업일지 EV-0036 / V-03",
+   "url": null,
+   "url_role": null,
+   "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
+   "human_review_required": true
+  }
+ ]
 }

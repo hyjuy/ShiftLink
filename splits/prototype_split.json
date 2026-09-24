@@ -77,6 +77,42 @@
       ],
       "split": "kb",
       "basis": "existing_catalog_assignment"
+    },
+    {
+      "group_id": "PT-0017",
+      "prototype_ids": [
+        "PT-0017"
+      ],
+      "split": "dev",
+      "basis": "new_group_assignment_hash",
+      "bucket": 8,
+      "pattern_name": "윤활 공급 저하가 구동부 발열로 나타나는 사건",
+      "is_synthetic": true,
+      "registered_at": "2026-09-24"
+    },
+    {
+      "group_id": "PT-0018",
+      "prototype_ids": [
+        "PT-0018"
+      ],
+      "split": "kb",
+      "basis": "new_group_assignment_hash",
+      "bucket": 1,
+      "pattern_name": "이상으로 보고되었으나 정상 범위인 변동",
+      "is_synthetic": true,
+      "registered_at": "2026-09-24"
+    },
+    {
+      "group_id": "PT-0019",
+      "prototype_ids": [
+        "PT-0019"
+      ],
+      "split": "dev",
+      "basis": "new_group_assignment_hash",
+      "bucket": 8,
+      "pattern_name": "잔류물 미제거 상태의 재가동 시도가 인터록으로 차단되는 사건",
+      "is_synthetic": true,
+      "registered_at": "2026-09-24"
     }
   ],
   "conflict_action": "quarantine_new_item_and_review_evaluation_contamination"

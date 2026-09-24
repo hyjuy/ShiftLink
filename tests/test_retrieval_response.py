@@ -1,6 +1,8 @@
 """Tests for retrieval and response modules (D-26~29 §4)."""
 
 import pytest
+import json
+from pathlib import Path
 from datetime import datetime
 from pydantic import ValidationError
 
@@ -21,6 +23,191 @@ from shiftlink.agent.response import (
     render_response,
     validate_response,
 )
+
+
+@pytest.fixture
+def equipment_provider():
+    catalog = json.loads((Path(__file__).resolve().parents[1] /
+        "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
+    provider = InMemoryToolProvider(
+        cards=[make_card_t1(), make_card_t1("K-0002", safety_flag=True),
+               make_card_t1("K-0003", equipment="GR"),
+               make_card_t1("K-0004", equipment="COMMON", safety_flag=True)],
+        equipment_db=catalog["equipment"], equipment_types=catalog["equipment_types"],
+        handover_db=[{"equipment_id": "EQ-0001", "shift": "A"}],
+        checklist_db=[{"equipment_id": "EQ-0001", "text": "fixture"}],
+    )
+    return provider
+
+
+@pytest.mark.parametrize("identifier", ["EQ-0001", "HPU-01"])
+def test_catalog_equipment_ids_and_codes_share_card_search(equipment_provider, identifier):
+    provider = equipment_provider
+    assert provider.lookup_equipment(equipment_ids=[identifier])[0]["equipment_id"] == "EQ-0001"
+    assert {c["card_id"] for c in provider.search_cards(query="test", equipment_ids=[identifier])} == {
+        "K-0001", "K-0002", "K-0004"}
+    assert {c["card_id"] for c in provider.search_safety_cards(equipment_ids=[identifier])} == {
+        "K-0002", "K-0004"}
+    assert provider.list_handover(equipment_ids=[identifier], shift="A") == [
+        {"equipment_id": "EQ-0001", "shift": "A"}]
+    assert provider.get_checklist(equipment_ids=[identifier]) == [
+        {"equipment_id": "EQ-0001", "text": "fixture"}]
+
+
+@pytest.mark.parametrize("identifier", ["HPU-99", "EQ-9999", "PDP-01"])
+def test_unresolved_equipment_stops_before_model(equipment_provider, identifier):
+    calls = []
+    with pytest.raises(ValueError, match="equipment"):
+        FixedPipeline(tools=equipment_provider, model=lambda **kw: calls.append(kw)).run(
+            dict(question="test", line_id="L1", eq_id=identifier))
+    assert calls == []
+    for search in (
+        lambda: equipment_provider.search_cards(query="test", equipment_ids=["HPU", identifier]),
+        lambda: equipment_provider.search_safety_cards(equipment_ids=[identifier]),
+    ):
+        with pytest.raises(ValueError, match="equipment"):
+            search()
+
+
+def test_equipment_mapping_keeps_original_request(equipment_provider):
+    calls = []
+    result = FixedPipeline(tools=equipment_provider, model=lambda **kw: calls.append(kw) or {}).run(
+        dict(question="test", line_id="L1", eq_id="HPU-01"))
+    assert calls[0]["request"].eq_id == "HPU-01"
+    assert result.tool_results["equipment"][0]["equipment_id"] == "EQ-0001"
+    assert {c["card_id"] for c in result.tool_results["safety_cards"]} == {"K-0002", "K-0004"}
+
+
+@pytest.mark.parametrize("break_catalog", ["duplicate_code", "missing_type", "duplicate_type"])
+def test_ambiguous_or_missing_equipment_mapping_is_rejected(equipment_provider, break_catalog):
+    provider = equipment_provider
+    if break_catalog == "duplicate_code":
+        provider.equipment_db.append(dict(provider.equipment_db[0], equipment_id="EQ-9999"))
+    elif break_catalog == "missing_type":
+        provider.equipment_types = []
+    else:
+        provider.equipment_types.append(dict(provider.equipment_types[0]))
+    with pytest.raises(ValueError, match="equipment"):
+        provider.search_safety_cards(equipment_ids=["HPU-01"])
+
+
+def test_direct_equipment_types_remain_supported(equipment_provider):
+    assert {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=["HPU"])} == {
+        "K-0001", "K-0002", "K-0004"}
+
+
+@pytest.mark.parametrize("reason", ["empty_kb", "condition_false", "excluded"])
+def test_query_without_cards_skips_model_and_renders_no_knowledge(reason):
+    card = make_card_t1(safety_flag=True)
+    if reason == "condition_false":
+        card.conditions = [Condition(signal="pressure", op=">", value=10)]
+    elif reason == "excluded":
+        card.exclusions = [Condition(signal="pressure", op="==", value=0)]
+    provider = InMemoryToolProvider(cards=[] if reason == "empty_kb" else [card])
+    calls = []
+    result = FixedPipeline(tools=provider, model=lambda **kw: calls.append(kw) or {}).run(
+        dict(question="test", line_id="L1", eq_id="HPU",
+             observations=[dict(signal="pressure", value=0)]))
+    assert calls == []
+    assert result.tool_results["cards"] == []
+    assert result.output.no_knowledge is True
+    assert result.output.cited_card_ids == []
+    assert result.output.review_queue is False
+    assert "해당 지식 없음" in render_response(result.output)
+    assert AgentResponse.model_validate_json(result.output.model_dump_json()).no_knowledge is True
+
+
+def test_empty_query_does_not_invoke_custom_output_validator():
+    calls = []
+    result = FixedPipeline(
+        tools=InMemoryToolProvider(),
+        model=lambda **kw: calls.append("model"),
+        validator=lambda **kw: calls.append("validator"),
+    ).run(dict(question="test", line_id="L1", eq_id="HPU"))
+    assert calls == []
+    assert result.output.no_knowledge is True
+
+
+def test_empty_handover_still_calls_model():
+    calls = []
+    result = FixedPipeline(tools=InMemoryToolProvider(), model=lambda **kw: calls.append(kw) or {}).run(
+        dict(memo_text="점검 미완료", shift="A", eq_ids=["HPU"]))
+    assert len(calls) == 1
+    assert result.output.no_knowledge is False
+
+
+def test_safety_only_search_is_not_treated_as_empty():
+    class SafetyOnlyProvider(InMemoryToolProvider):
+        def search_cards(self, **kwargs):
+            return []
+
+    calls = []
+    result = FixedPipeline(
+        tools=SafetyOnlyProvider(cards=[make_card_t1(safety_flag=True)]),
+        model=lambda **kw: calls.append(kw) or {},
+    ).run(dict(question="test", line_id="L1", eq_id="HPU"))
+    assert len(calls) == 1
+    assert result.tool_results["ranked_cards"] == []
+    assert result.output.no_knowledge is False
+    assert result.output.safety_notices[0].card_id == "K-0001"
+
+
+@pytest.mark.parametrize("collision", ["duplicate_id", "id_matches_other_code"])
+def test_equipment_identity_collision_blocks_model(equipment_provider, collision):
+    provider = equipment_provider
+    if collision == "duplicate_id":
+        provider.equipment_db.append(dict(provider.equipment_db[0], code="HPU-OTHER"))
+    else:
+        provider.equipment_db[1]["code"] = "EQ-0001"
+    calls = []
+    with pytest.raises(ValueError, match="Ambiguous equipment identifier"):
+        FixedPipeline(tools=provider, model=lambda **kw: calls.append(kw)).run(
+            dict(question="test", line_id="L1", eq_id="EQ-0001"))
+    assert calls == []
+
+
+@pytest.mark.parametrize("missing_field", ["equipment_type_id", "type_code"])
+def test_incomplete_equipment_type_never_falls_back_to_code_prefix(equipment_provider, missing_field):
+    provider = equipment_provider
+    if missing_field == "equipment_type_id":
+        del provider.equipment_db[0][missing_field]
+    else:
+        del provider.equipment_types[0][missing_field]
+    for search in (
+        lambda: provider.search_cards(query="test", equipment_ids=["HPU-01"]),
+        lambda: provider.search_safety_cards(equipment_ids=["HPU-01"]),
+    ):
+        with pytest.raises(ValueError, match="equipment type"):
+            search()
+
+
+@pytest.mark.parametrize("operation", ["list_handover", "get_checklist"])
+def test_unknown_equipment_cannot_read_records(equipment_provider, operation):
+    # A valid ID alongside an invalid ID must not produce a partial result.
+    with pytest.raises(ValueError, match="Unknown equipment identifier"):
+        getattr(equipment_provider, operation)(equipment_ids=["EQ-0001", "HPU-99"])
+
+
+def test_mixed_handover_equipment_rejects_unknown_before_model(equipment_provider):
+    calls = []
+    with pytest.raises(ValueError, match="Unknown equipment identifier"):
+        FixedPipeline(tools=equipment_provider, model=lambda **kw: calls.append(kw)).run(
+            dict(memo_text="test", shift="A", eq_ids=["HPU-01", "HPU-99"]))
+    assert calls == []
+
+
+def test_same_type_equipment_does_not_share_handover_or_checklist(equipment_provider):
+    provider = equipment_provider
+    provider.equipment_db.append(dict(provider.equipment_db[0], equipment_id="EQ-9001", code="HPU-02"))
+    provider.handover_db.extend([
+        {"equipment_id": "EQ-9001", "shift": "A"},
+        {"equipment_id": "EQ-0001", "shift": "B"},
+    ])
+    provider.checklist_db.append({"equipment_id": "EQ-9001", "text": "other pump"})
+    assert provider.list_handover(equipment_ids=["HPU-01"], shift="A") == [
+        {"equipment_id": "EQ-0001", "shift": "A"}]
+    assert provider.get_checklist(equipment_ids=["HPU-01"]) == [
+        {"equipment_id": "EQ-0001", "text": "fixture"}]
 
 
 def make_provenance() -> Provenance:

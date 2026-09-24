@@ -149,3 +149,70 @@ def test_registered_tool_provider_and_search_signature_match_registry() -> None:
         "k",
         "observations",
     )
+
+
+@pytest.mark.parametrize("observations", [
+    [{"value": 10}],
+    [{"signal": "pressure"}],
+    [{"signal": "", "value": 10}],
+    [{"signal": " \t", "value": 10}],
+    [{"signal": "pressure", "value": 10, "unt": "bar"}],
+    [{"signal": "pressure", "value": 10, "unit": " "}],
+    [{"signal": "pressure", "value": 10}, {"signal": "pressure", "value": 20}],
+    [{"signal": "pressure", "value": 10}, {"signal": " pressure ", "value": 20}],
+])
+def test_invalid_observations_stop_before_tools_and_model(observations) -> None:
+    tools = RecordingTools()
+    model = RecordingModel(tools.calls)
+    with pytest.raises(ValidationError):
+        FixedPipeline(tools=tools, model=model).run({
+            "question": "상태?", "line_id": "L1", "eq_id": "HPU",
+            "observations": observations,
+        })
+    assert tools.calls == []
+    assert model.calls == 0
+
+
+def test_observations_reach_search_and_model_without_value_loss() -> None:
+    observed = []
+
+    class ObservationTools(RecordingTools):
+        def search_cards(self, **kwargs):
+            observed.append(kwargs["observations"])
+            return [{"card_id": "K-0001"}]
+
+        def search_safety_cards(self, **kwargs):
+            observed.append(kwargs["observations"])
+            return []
+
+    observations = [
+        {"signal": " pressure ", "value": 0, "unit": " bar "},
+        {"signal": "running", "value": False},
+        {"signal": "mode", "value": "stopped"},
+        {"signal": "temperature", "value": 21.5},
+    ]
+    expected = [dict(observations[0], signal="pressure", unit="bar")] + [
+        dict(item, unit=None) for item in observations[1:]
+    ]
+    model_requests = []
+
+    def model(**kwargs):
+        model_requests.append(kwargs["request"].model_dump(mode="json"))
+        return {}
+
+    FixedPipeline(tools=ObservationTools(), model=model).run({
+        "question": "상태?", "line_id": "L1", "eq_id": "HPU",
+        "observations": observations,
+    })
+    assert observed == [{"pressure": 0, "running": False, "mode": "stopped", "temperature": 21.5}] * 2
+    assert model_requests[0]["observations"] == expected
+
+
+def test_observation_value_is_required_but_explicit_null_is_preserved() -> None:
+    request = QueryRequest.model_validate({
+        "question": "상태?", "line_id": "L1", "eq_id": "HPU",
+        "observations": [{"signal": "pressure", "value": None}],
+    })
+    assert request.model_dump()["observations"] == [
+        {"signal": "pressure", "value": None, "unit": None}
+    ]

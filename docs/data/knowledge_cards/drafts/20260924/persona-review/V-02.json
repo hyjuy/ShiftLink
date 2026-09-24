@@ -1,0 +1,47 @@
+{
+  "persona_id": "V-02",
+  "display_name": "김 기장",
+  "is_synthetic": true,
+  "persona_source": "seeds/personas_v0.1.yaml#personas[persona_id=V-02]",
+  "reviews": [
+    {
+      "card_id": "K-0301",
+      "reading": "RT·CV 운전·이송 점검 담당 관점에서 CV에 해당하는 문헌 요약으로 읽는다. 2012년 지침의 요지는 정지스위치 주위에 장애물을 두지 말라는 것이다. RT까지 적용 범위를 넓히지 않는다.",
+      "concern": "계측 표시가 정상이어도 정지스위치 주변 장애물 유무가 확인된 것은 아니다. 빈 체크를 장애물 없음으로 읽거나, 이 카드가 운전 중 장애물 제거 접근을 허가한다고 오해할 수 있다. 실제 주변 상태는 제공되지 않았다.",
+      "suggested_change": "카드의 금기와 적용 한계를 유지한다. 역할별 보조 설명에는 '주변 장애물 유무를 확인한 기록이 없으면 미확인으로 남긴다'를 합성 페르소나의 기록 방식 제안으로 구분해 표시한다. 이 문장을 원문에 있는 점검 절차나 주기로 표시하지 않는다.",
+      "basis": {
+        "original": ["source-packet.json#/candidates/0/excerpt", "source-packet.json#/candidates/0/excluded_claims"],
+        "card": ["cards.json#/0/know_how", "cards.md#K-0301 · 정지스위치 주변 장애물 금지"],
+        "persona": ["seeds/personas_v0.1.yaml#draft_assumptions", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].equipment_focus", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].decision_authority.cannot_do", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].recording_method.omission_risk"]
+      },
+      "unverified_questions": ["원문 밖 현장 확인 질문: 해당 CV 정지스위치 주변 상태를 확인한 기록이 제공되는가?", "원문 밖 현장 확인 질문: 장애물이 있다면 적용할 작업 조건과 지정 절차는 무엇인가?"],
+      "decision": "문헌 요약 유지; 역할별 기록 오해 방지 설명 추가 제안. AI 합성 관점 검토이며 현장 안전·출처·사람 승인이 아니다."
+    },
+    {
+      "card_id": "K-0302",
+      "reading": "RT·CV 담당이 읽더라도 이 원문의 대상은 컨베이어다. 2012년 지침은 비상·사고 정지 후 재기동 전에 정지 원인과 고장 장소 보수상황 등을 먼저 확인하도록 한다. 확인 대상이 제시된 것이며 실제 확인 완료나 재기동 허가가 제시된 것은 아니다.",
+      "concern": "정상 계측값이나 알람 해제를 보수 완료·재기동 승인과 같게 읽을 위험이 있다. 원인과 보수상황 칸이 비어 있는 것을 정상으로 취급할 수도 있다. 제공된 값·기록이 없으므로 어떤 항목도 확인 완료라고 쓸 수 없다. 정지 시각 일치만으로 원인을 확정하지 않는 역할 경계도 유지해야 한다.",
+      "suggested_change": "보조 설명에서 정지 원인과 보수상황을 별도의 미확인 항목으로 읽도록 제안한다. 확인 결과·시각·담당자·승인 상태는 실제 기록을 받을 때만 채우고, 현재는 입력하지 않는다. 이는 V-02의 기록 방식 적용 제안이며 원문에 없는 재기동 절차나 승인자를 추가하는 것이 아니다.",
+      "basis": {
+        "original": ["source-packet.json#/candidates/1/excerpt", "source-packet.json#/candidates/1/excluded_claims"],
+        "card": ["cards.json#/1/know_how", "cards.md#K-0302 · 비상·사고 정지 후 재기동 전 원인·보수상황 확인"],
+        "persona": ["seeds/personas_v0.1.yaml#draft_assumptions", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].responsibility_scope", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].decision_authority.must_report_or_request_approval", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].decision_authority.cannot_do", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].recording_method.handover", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].recording_method.omission_risk"]
+      },
+      "unverified_questions": ["원문 밖 현장 확인 질문: 정지 원인과 고장 장소 보수상황을 뒷받침하는 기록이 각각 있는가?", "원문 밖 현장 확인 질문: 현장 작업표준에서 재기동 승인과 작업 조건 확인은 어떻게 정하는가?"],
+      "decision": "문헌 요약과 T6 유지; 확인 항목과 확인 완료·승인을 구분하는 역할별 보조 설명 제안. 실제 재기동 가능 여부는 미평가."
+    },
+    {
+      "card_id": "K-0303",
+      "reading": "CV 담당 관점에서 올라가기 금지와 원문의 예외를 함께 읽는다. 2012년 지침의 예외는 작업상 부득이한 경우로서 사업주가 안전상 필요한 조치를 강구한 경우다. RT에 대한 별도 작업 허가로 확장하지 않는다.",
+      "concern": "정지 표시·정상 수치·빈 체크만으로 예외가 충족됐다고 판단할 수 없다. '작업이 필요하다'는 작업자 판단만으로 올라가도 된다고 읽어서도 안 된다. 필요한 조치의 구체 종류와 충족 여부는 이 원문 발췌 및 카드에 없다.",
+      "suggested_change": "기존 금지와 예외를 같은 화면에서 유지하고, 예외 충족 여부는 이 카드로 자동 판단하지 않는다는 한계를 계속 표시한다. 역할별 체크리스트 표현을 쓰더라도 실제 확인 내용이 없는 칸은 미확인으로 남기며, 예외를 단순한 완료 체크 하나로 축약하지 않도록 제안한다.",
+      "basis": {
+        "original": ["source-packet.json#/candidates/2/excerpt", "source-packet.json#/candidates/2/excluded_claims"],
+        "card": ["cards.json#/2/know_how", "cards.md#K-0303 · 컨베이어 올라가기 금지와 원문 예외"],
+        "persona": ["seeds/personas_v0.1.yaml#draft_assumptions", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].equipment_focus", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].decision_authority.cannot_do", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].recording_method.omission_risk", "seeds/personas_v0.1.yaml#personas[persona_id=V-02].known_biases"]
+      },
+      "unverified_questions": ["원문 밖 현장 확인 질문: 해당 작업에 필요한 안전조치와 그 충족 여부를 판단할 현장 기준이 무엇인가?", "원문 밖 현장 확인 질문: 사업주가 필요한 조치를 강구했음을 확인할 실제 기록이 있는가?"],
+      "decision": "금지·예외를 함께 보존한 문헌 요약 유지; 예외 충족 자동 판정 금지 설명 유지 제안. 현장 작업 허가나 현행 법적 적합성 판정은 하지 않음."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "created_at": "2026-09-24T04:57:47.747577+00:00",
+  "persona_source": "seeds/personas_v0.1.yaml",
+  "persona_source_sha256": "3a100eada3b75bd59bd367a3d85705499fd3358b88e9856584cfcc449bec5141",
+  "card_source": "docs/data/knowledge_cards/drafts/20260924/cards.json",
+  "card_source_sha256": "cb6a8949d9a843d2e0f08a15f34b2572359dcee562441af1e490aca48ee6217d",
+  "review_kind": "synthetic_persona_ai_review",
+  "persona_count": 3,
+  "card_count": 3,
+  "review_count": 9,
+  "new_knowledge_cards": 0,
+  "canonical_cards_unchanged": true,
+  "canonical_fact_change_reason": "All three role reviews proposed retaining the source-grounded facts; explanations and unresolved questions are applied in the companion document.",
+  "applications": [
+    {
+      "persona_id": "V-01",
+      "card_id": "K-0301",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-01",
+      "card_id": "K-0302",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-01",
+      "card_id": "K-0303",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-02",
+      "card_id": "K-0301",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-02",
+      "card_id": "K-0302",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-02",
+      "card_id": "K-0303",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-03",
+      "card_id": "K-0301",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-03",
+      "card_id": "K-0302",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    },
+    {
+      "persona_id": "V-03",
+      "card_id": "K-0303",
+      "applied_to": "cards-by-persona.md",
+      "application": "role_specific_explanation_and_review_note",
+      "canonical_fact_change": false
+    }
+  ],
+  "verification": {
+    "json_and_required_fields": "pass",
+    "persona_card_matrix": "3x3 pass",
+    "card_and_persona_source_unchanged": "pass",
+    "human_approval_granted": false
+  },
+  "files_sha256": {
+    "V-01.json": "2f749671d5e5c1a6f803abc161f29f876b76f2a3e2728d866600073e197b0811",
+    "V-02.json": "099257c630bc9fafe2a7ea16e84800f044ccd5cfbf111f4f16f93cfc314a50b4",
+    "V-03.json": "a430403de2be4c6b9ba6d9259ace4e7a56952f2c7c71d007e94ce08a0d098f57",
+    "cards-by-persona.md": "e06c7c24fd83c6921763d69c62de9a097d605933a7dc479d4955e4c8c1ea31a2"
+  },
+  "original_card_source": "artifacts/knowledge-card-team-20260924/cards.json",
+  "storage_note": "Relocated companion documentation link and card source path; review statements and canonical card content unchanged."
+}

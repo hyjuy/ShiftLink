@@ -2,11 +2,19 @@
 
 from typing import Annotated, Literal, Mapping
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 
 Mode = Literal["query", "handover"]
 NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+
+
+class Observation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    signal: NonBlank
+    value: object = Field(...)
+    unit: NonBlank | None = None
 
 
 class QueryRequest(BaseModel):
@@ -15,8 +23,15 @@ class QueryRequest(BaseModel):
     question: NonBlank
     line_id: NonBlank
     eq_id: NonBlank
-    observations: list[dict[str, object]] = Field(default_factory=list)
+    observations: list[Observation] = Field(default_factory=list)
     k: int = Field(default=5, ge=1, le=5)
+
+    @model_validator(mode="after")
+    def validate_observation_signals(self) -> "QueryRequest":
+        signals = [observation.signal for observation in self.observations]
+        if len(signals) != len(set(signals)):
+            raise ValueError("Observation signals must be unique")
+        return self
 
 
 class HandoverRequest(BaseModel):

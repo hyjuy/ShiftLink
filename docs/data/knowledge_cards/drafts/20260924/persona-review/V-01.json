@@ -1,0 +1,56 @@
+{
+  "persona_id": "V-01",
+  "display_name": "박 반장",
+  "is_synthetic": true,
+  "persona_source": "seeds/personas_v0.1.yaml#personas[persona_id=V-01]",
+  "review_kind": "기존 합성 페르소나 관점의 AI 문헌 검토. 실제 박 반장의 발언·경험·검수나 승인이 아님",
+  "role_boundary": "V-01의 주 담당은 HPU·GR이다. CV 전문 담당이나 안전 승인자로 간주하지 않는다. YAML의 역할·경력·권한도 합성 가정이며 현재 현장 배치의 증거가 아니다.",
+  "common_policy": "사실을 페르소나로 보충하지 않는다. 관찰값·현장 상태·권한은 주어지지 않았고 미확인으로 남긴다. 2012년 문헌 요약을 현행 작업 허가로 바꾸지 않는다. 제안은 카드 본문과 별도이며 실제 변경하지 않았다.",
+  "reviews": [
+    {
+      "card_id": "K-0301",
+      "reading": "2012년 지침의 뜻은 간단하다. 컨베이어 정지스위치 주위에 장애물을 두지 말라는 내용이다. 이 조항에는 장애물을 치우러 접근하는 방법까지 적혀 있지 않다.",
+      "concern": "짧게 설명하려다 '주변만 비우면 괜찮다'로 줄이면 CV 전체 안전을 확인한 것처럼 들릴 수 있다. HPU·GR 담당 설정만으로 CV 현장 장애물 유무나 안전을 판단할 수 없다.",
+      "suggested_change": "AI 편집 제안: 별도 표시되는 카드에도 cards.md의 적용 한계인 '운전 중 접근 허가나 에너지 격리 절차를 뜻하지 않음'을 함께 보여 주는 방안을 검토한다. 문헌 주장 추가나 현장 조치 지시는 아니다.",
+      "basis": {
+        "source": "source-packet.json P-01; SD-005 M-101-2012 PDF p.7 / 인쇄 p.5 / §4.3(3)",
+        "card": "cards.json K-0301 know_how; cards.md K-0301 적용 한계",
+        "persona_fields": ["V-01.equipment_focus", "V-01.responsibility_scope", "V-01.recording_method.omission_risk", "V-01.decision_authority.cannot_do"],
+        "policy": "draft_assumptions: 관찰 가능한 정보 제한, 직급·경력과 권한 구분"
+      },
+      "unverified_questions": ["별도 카드 화면에도 적용 한계가 함께 표시되는가?", "실제 CV 현장 상태와 관련 작업표준은 누가 어떤 기록으로 확인하는가? 실제 담당자는 미확인이다."],
+      "bias_control": "terse_assertive/terse_risky 성향은 표현만 짧게 하는 데 한정했다. '괜찮다'라는 안전 판정이나 관측 사실을 만들지 않았다.",
+      "decision": "문헌 요약은 유지 가능. 표시 개선 제안만 남김. 현장 적용·안전 승인은 판단하지 않음."
+    },
+    {
+      "card_id": "K-0302",
+      "reading": "2012년 지침은 비상정지나 사고로 멈춘 컨베이어를 다시 돌리기 전에 왜 멈췄는지, 고장 난 곳의 보수상황은 어떤지 등을 먼저 확인하라고 한다. 확인할 항목을 적은 것이며, 이 문장만으로 재기동 허가를 받는 것은 아니다.",
+      "concern": "V-01의 재가동 경험이 많다는 합성 설정 때문에 '원인 확인했다, 돌려라'로 축약할 위험이 있다. 또 CV 정지를 HPU·GR 공급 문제로 성급히 돌리면 원문에 없는 원인 판단이 들어간다.",
+      "suggested_change": "AI 편집 제안: cards.md의 '이 확인만으로 재기동이 승인되거나 안전이 보장되지 않음'을 단독 카드 표시에도 유지하는 방안을 검토한다. 원인·보수상황 확인과 재가동 승인을 구별하고 실제 확인 결과를 만들어 넣지 않는다.",
+      "basis": {
+        "source": "source-packet.json P-02 전체 조항; SD-005 M-101-2012 PDF p.7 / 인쇄 p.5 / §4.3(7)",
+        "card": "cards.json K-0302 know_how/type_payload.restart_type; cards.md K-0302 적용 한계",
+        "persona_fields": ["V-01.unknown_information", "V-01.decision_authority.must_report_or_request_approval", "V-01.known_biases", "V-01.stop_restart_experience", "V-01.recording_method.omission_risk"],
+        "policy": "draft_assumptions: 경력은 승인 권한 근거가 아니며 누락값을 보충하지 않음"
+      },
+      "unverified_questions": ["현장 작업표준에서 정한 재가동 승인자와 승인 기록은 무엇인가? 현재 제공되지 않았다.", "CV 정지 원인과 보수상황을 확인한 기록이 있는가? 이 카드에는 실제 사건 관측값이 없다."],
+      "bias_control": "sensory_first/utility_first 편향과 동시발생 혼동을 억제했다. 감각이나 상류 공급 문제로 원인을 확정하지 않았고, YAML 속 반장 직함을 승인 권한으로 사용하지 않았다.",
+      "decision": "비상·사고 정지라는 전제를 보존해 문헌 요약 유지 가능. 재가동 허가 또는 복구 완료 판단은 하지 않음."
+    },
+    {
+      "card_id": "K-0303",
+      "reading": "2012년 지침은 컨베이어에 올라가지 말라고 한다. 작업 때문에 부득이한 경우에도 사업주가 안전상 필요한 조치를 한 경우를 제외하고는 올라가지 말라는 문장이다. 어떤 조치면 충분한지는 이 조항에 나와 있지 않다.",
+      "concern": "실용적인 판단 성향 때문에 '잠깐이면 된다'거나 '멈췄으니 된다'로 예외를 넓힐 수 있다. 반장이 필요하다고 말한 것을 사업주의 안전조치로 바꾸어 읽어서는 안 된다. CV 직접 전문성이 없는 역할이 예외 충족을 판단할 근거도 없다.",
+      "suggested_change": "AI 편집 제안: 원문 어순을 살린 '작업상 부득이한 경우에도 사업주가 안전상 필요한 조치를 한 경우를 제외하고는 올라가지 않는다'는 설명을 검토용 표현 대안으로 남긴다. 구체 안전조치·승인 경로는 원문에 없으므로 추가하지 않는다.",
+      "basis": {
+        "source": "source-packet.json P-03 전체 조항; SD-005 M-101-2012 PDF p.8 / 인쇄 p.6 / §4.3(11)",
+        "card": "cards.json K-0303 know_how/rationale; cards.md K-0303 적용 한계",
+        "persona_fields": ["V-01.risk_posture", "V-01.responsibility_scope", "V-01.decision_authority.cannot_do", "V-01.decision_authority.must_report_or_request_approval"],
+        "policy": "draft_assumptions: 과신 성향을 권장 절차나 사실 근거로 쓰지 않음; conflict_policy.safety_policy"
+      },
+      "unverified_questions": ["해당 현장 문서에서 '안전상 필요한 조치'를 어떻게 구체화하고 확인하는가?", "단독 카드 화면에서 예외 설명과 '정지만으로 허가가 아님'이라는 한계가 함께 보이는가?"],
+      "bias_control": "pragmatic 성향을 예외 확대 근거로 쓰지 않았다. 원문의 예외를 없애는 새 절대금지도 만들지 않았다. 사업주 안전조치를 반장의 지시나 경험으로 대체하지 않았다.",
+      "decision": "금지와 원문 예외를 함께 보존하는 문헌 요약으로 유지 가능. 표현 대안은 별도 제안이며 예외 충족이나 현장 안전은 승인하지 않음."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "format_version": "1.0",
+  "evidence_source": "source-packet.json#/candidates; evidence ID는 각 packet_id이며 excerpt가 원문 발췌다.",
+  "empty_values_policy": "null 및 빈 배열은 연결 대상에서 제외한다. metadata_links는 원문 주장을 지지하는 근거가 아니다.",
+  "metadata_basis": {
+    "M-RUN": "메인 에이전트의 작업 배정: K-0301부터, version=1.1-draft-20260924-001, draft/L0, persona_id=codex-card-author, generator=Codex sub-agent card_author. GPT-6 계열 사용, Qwen 호출 없음. generated_at은 실제 Get-Date -Format o 출력. schema_version은 shiftlink/agent/schemas.py SCHEMA_VERSION.",
+    "M-CLASS": "seeds/카드_작성_가이드_초안.md 유형 판정: 독립 금기 T5, 정지 후 재기동 전 확인 T6. CV는 source-review.md의 conveyor 의미 대응. 원문이 프로젝트 분류 코드를 제공한 것은 아니다.",
+    "M-SCENARIO": "docs/design/A_domain.md A4.2: S1 신입, S2 저년차. source-packet.json의 독자별 데모 분류를 사용한 제작 메타데이터다.",
+    "M-SPLIT": "source-packet.json SD-005 group_id=SRC-KOSHA-M101-2012-CONVEYOR-SAFETY, bucket=4, split=kb. docs/data/policies/source-and-split-contract.md의 해시 규칙을 적용한 미등록 제안이며 운영 배정표를 수정하지 않았다.",
+    "M-SOURCE": "source-packet.json과 source-review.md의 SD-005 PDF 경로·판본·조항·AI 발췌/시각 대조 기록. source registry pending_review, approved_scope 비어 있음.",
+    "M-CONFIDENCE": "메인이 지정한 0.0 미평가 sentinel. 확률/정확도 점수 아님. 사람 승인 및 현장 적용성 평가 미완료.",
+    "M-SAFETY": "안전 금기 또는 재기동 전 안전 확인이므로 safety_flag=true. 원문 의미에 대한 AI 분류이며 사람 안전 승인 아님.",
+    "M-RESTART": "source-packet.json P-02의 비상정지 또는 사고 정지 맥락을 abnormal_stop_restart enum에 대응한 분류 메타데이터다."
+  },
+  "cards": [
+    {
+      "card_id": "K-0301",
+      "source_links": {
+        "/component": ["P-01"],
+        "/title": ["P-01"],
+        "/know_how": ["P-01"],
+        "/rationale": ["P-01"],
+        "/safety_basis": ["P-01"],
+        "/generalization_evidence/generalization_scope": ["P-01"]
+      },
+      "metadata_links": {
+        "/card_id": "M-RUN", "/version": "M-RUN", "/grade": "M-RUN", "/status": "M-RUN",
+        "/tacit_type": "M-CLASS", "/equipment": "M-CLASS", "/scenario": "M-SCENARIO", "/split": "M-SPLIT",
+        "/safety_flag": "M-SAFETY", "/confidence": "M-CONFIDENCE",
+        "/generalization_evidence/confidence_basis": "M-CONFIDENCE",
+        "/provenance/persona_id": "M-RUN", "/provenance/generator": "M-RUN", "/provenance/generated_at": "M-RUN",
+        "/provenance/sources/0/source_id": "M-SOURCE", "/provenance/sources/0/locator": "M-SOURCE", "/provenance/sources/0/document_version": "M-SOURCE",
+        "/provenance/extraction_method": "M-SOURCE", "/provenance/model_version": "M-RUN", "/provenance/schema_version": "M-RUN"
+      }
+    },
+    {
+      "card_id": "K-0302",
+      "source_links": {
+        "/component": ["P-02"],
+        "/title": ["P-02"],
+        "/know_how": ["P-02"],
+        "/rationale": ["P-02"],
+        "/safety_basis": ["P-02"],
+        "/generalization_evidence/generalization_scope": ["P-02"]
+      },
+      "metadata_links": {
+        "/card_id": "M-RUN", "/version": "M-RUN", "/grade": "M-RUN", "/status": "M-RUN",
+        "/tacit_type": "M-CLASS", "/equipment": "M-CLASS", "/scenario": "M-SCENARIO", "/split": "M-SPLIT",
+        "/safety_flag": "M-SAFETY", "/confidence": "M-CONFIDENCE", "/type_payload/restart_type": "M-RESTART",
+        "/generalization_evidence/confidence_basis": "M-CONFIDENCE",
+        "/provenance/persona_id": "M-RUN", "/provenance/generator": "M-RUN", "/provenance/generated_at": "M-RUN",
+        "/provenance/sources/0/source_id": "M-SOURCE", "/provenance/sources/0/locator": "M-SOURCE", "/provenance/sources/0/document_version": "M-SOURCE",
+        "/provenance/extraction_method": "M-SOURCE", "/provenance/model_version": "M-RUN", "/provenance/schema_version": "M-RUN"
+      }
+    },
+    {
+      "card_id": "K-0303",
+      "source_links": {
+        "/component": ["P-03"],
+        "/title": ["P-03"],
+        "/know_how": ["P-03"],
+        "/rationale": ["P-03"],
+        "/safety_basis": ["P-03"],
+        "/generalization_evidence/generalization_scope": ["P-03"]
+      },
+      "metadata_links": {
+        "/card_id": "M-RUN", "/version": "M-RUN", "/grade": "M-RUN", "/status": "M-RUN",
+        "/tacit_type": "M-CLASS", "/equipment": "M-CLASS", "/scenario": "M-SCENARIO", "/split": "M-SPLIT",
+        "/safety_flag": "M-SAFETY", "/confidence": "M-CONFIDENCE",
+        "/generalization_evidence/confidence_basis": "M-CONFIDENCE",
+        "/provenance/persona_id": "M-RUN", "/provenance/generator": "M-RUN", "/provenance/generated_at": "M-RUN",
+        "/provenance/sources/0/source_id": "M-SOURCE", "/provenance/sources/0/locator": "M-SOURCE", "/provenance/sources/0/document_version": "M-SOURCE",
+        "/provenance/extraction_method": "M-SOURCE", "/provenance/model_version": "M-RUN", "/provenance/schema_version": "M-RUN"
+      }
+    }
+  ]
+}

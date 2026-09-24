@@ -67,6 +67,7 @@ class AgentResponse(BaseModel):
     unverified_card_ids: list[str] = Field(default_factory=list)
     card_metadata: dict[str, CardMetadata] = Field(default_factory=dict)
     review_queue: bool = False
+    no_knowledge: bool = False
 
 
 def build_response(
@@ -176,6 +177,9 @@ def render_response(resp: AgentResponse) -> str:
     Restart failures (by restart_type, unknown preserved) → Citations.
     """
     lines = []
+
+    if resp.no_knowledge:
+        lines.append("해당 지식 없음: 현재 검색 결과에 적용 가능한 지식카드가 없어 답변을 보류합니다.")
 
     # Safety notices (always first)
     if resp.safety_notices:

@@ -1,0 +1,210 @@
+{
+  "recorded_at": "2026-09-24",
+  "purpose": "원문 기반 검토용 draft/L0 후보. 운영 KB/출처 승인 상태 변경 없음",
+  "model_version": null,
+  "sources": [
+    {
+      "source_id": "SD-005",
+      "path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "document_version": "M-101-2012; 2012.6.20",
+      "group_id": "SRC-KOSHA-M101-2012-CONVEYOR-SAFETY",
+      "reviewed_pages": [
+        7,
+        8
+      ],
+      "registry_status": "pending_review",
+      "approved_scope": [],
+      "absolute_path": "D:\\obsd\\Projects\\ShiftLink\\docs\\sources\\safety\\M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27",
+      "split_hash": "df57346eca1e0d777f297911c1c414656100de338a223f92628c8b736b143024",
+      "bucket": 4,
+      "split": "kb",
+      "assignment_status": "proposal_not_registered"
+    },
+    {
+      "source_id": "LOCAL-SKF-10404-EN",
+      "path": "docs/data/events/SKF-10404_EN_Driveline_for_Metals.pdf",
+      "document_version": "PUB 71/S7 10404 EN; May 2010",
+      "group_id": "SRC-SKF-10404-EN-DRIVELINE-FOR-METALS",
+      "reviewed_pages": [
+        1,
+        2
+      ],
+      "registry_status": "not_registered_local_identifier_only",
+      "approved_scope": [],
+      "absolute_path": "D:\\obsd\\Projects\\ShiftLink\\docs\\data\\events\\SKF-10404_EN_Driveline_for_Metals.pdf",
+      "sha256": "615b313d31f12c7bb3d1539fad51323f8a108a25acd84289cb6919cc6f133e04",
+      "split_hash": "20442120e0959bc6ef6734c7aa462a1dcb74e76ab9fc7608b34fbe5d77dba22f",
+      "bucket": 7,
+      "split": "dev",
+      "assignment_status": "proposal_not_registered"
+    },
+    {
+      "source_id": "LOCAL-NSK-COLD-ROLLING",
+      "path": "docs/data/events/NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf",
+      "document_version": "Cold Rolling Mill Application CS 1 / ATI / 21",
+      "group_id": "SRC-NSK-COLD-ROLLING-MILL-STEELSTRIP",
+      "reviewed_pages": [
+        1,
+        2
+      ],
+      "registry_status": "not_registered_local_identifier_only",
+      "approved_scope": [],
+      "absolute_path": "D:\\obsd\\Projects\\ShiftLink\\docs\\data\\events\\NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf",
+      "sha256": "ff5b1099cefc93494fe6c7f81a491653ec882af60497cbacdf72b312b7029e8e",
+      "split_hash": "512e9419b918ffde22eef8e64605924d4321475abcd39d1e49341a73c60df15f",
+      "bucket": 7,
+      "split": "dev",
+      "assignment_status": "proposal_not_registered"
+    }
+  ],
+  "candidates": [
+    {
+      "packet_id": "P-01",
+      "source_id": "SD-005",
+      "title": "컨베이어 정지스위치 주위 장애물 금지",
+      "locator": "PDF p.7 / 인쇄 p.5 / 4.3 사용 (3)",
+      "excerpt": "정지스위치 주위에는 장애물을 놓아두지 않아야 한다.",
+      "allowed_claims": [
+        "2012년 지침은 컨베이어 정지스위치 주변에 장애물을 두지 않도록 정한다."
+      ],
+      "excluded_claims": [
+        "장애물 제거를 위한 운전 중 접근 허가",
+        "정지스위치와 에너지 격리의 동일시",
+        "점검 주기와 거리 기준",
+        "현행 법적 적합성"
+      ],
+      "tacit_type_candidate": "T5",
+      "equipment": "CV",
+      "component": "정지스위치",
+      "scenario": "S1",
+      "duplicate_review": "K-0108은 적재부/리턴롤러 접근금지, K-0109는 정체 확인으로 목적이 다름.",
+      "source_path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "source_sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27",
+      "group_id": "SRC-KOSHA-M101-2012-CONVEYOR-SAFETY",
+      "split": "kb",
+      "status": "draft",
+      "grade": "L0"
+    },
+    {
+      "packet_id": "P-02",
+      "source_id": "SD-005",
+      "title": "비상·사고 정지 후 재기동 전 원인과 보수상황 확인",
+      "locator": "PDF p.7 / 인쇄 p.5 / 4.3 사용 (7)",
+      "excerpt": "(7) 비상정지 중 또는 사고로 정지중인 컨베이어를 재기동할 경우에는 먼저 정지의 원인 및 고장 장소의 보수상황 등을 확인하여야 한다.",
+      "allowed_claims": [
+        "2012년 지침은 비상정지 중 또는 사고로 정지 중인 컨베이어를 재기동하기 전에 정지 원인과 고장 장소 보수상황 등을 먼저 확인하도록 정한다."
+      ],
+      "excluded_claims": [
+        "이 확인만으로 재기동 승인",
+        "스위치 조작 순서",
+        "안전 인터록 해제",
+        "재가동 성공 여부",
+        "수리 방법",
+        "인계 채널"
+      ],
+      "tacit_type_candidate": "T6",
+      "restart_type": "abnormal_stop_restart",
+      "equipment": "CV",
+      "component": "컨베이어",
+      "scenario": "S2",
+      "duplicate_review": "K-0108의 접근금지 및 K-0109의 정체 확인과 달리 비상/사고 정지 후 재기동 전 확인 목적.",
+      "source_path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "source_sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27",
+      "group_id": "SRC-KOSHA-M101-2012-CONVEYOR-SAFETY",
+      "split": "kb",
+      "status": "draft",
+      "grade": "L0"
+    },
+    {
+      "packet_id": "P-03",
+      "source_id": "SD-005",
+      "title": "컨베이어 올라가기 금지와 원문 예외 범위",
+      "locator": "PDF p.8 / 인쇄 p.6 / 4.3 사용 (11)",
+      "excerpt": "(11) 근로자는 작업의 필요상 부득이한 경우에도 사업주가 안전상의 필요한 조치를 강구한 경우를 제외하고는 컨베이어에 올라가지 않아야 한다.",
+      "allowed_claims": [
+        "2012년 지침은 작업상 부득이한 경우에도 사업주가 안전상 필요한 조치를 강구한 경우를 제외하고 근로자가 컨베이어에 올라가지 않도록 정한다.",
+        "이 원문은 필요한 안전조치의 구체적인 종류나 충분조건을 정하지 않는다."
+      ],
+      "excluded_claims": [
+        "정지만 하면 올라가도 된다는 허가",
+        "작업자가 필요성을 판단하면 예외 인정",
+        "구체적인 승인자나 연락 채널 창작",
+        "예외에 필요한 안전조치 임의 정의"
+      ],
+      "tacit_type_candidate": "T5",
+      "equipment": "CV",
+      "component": "컨베이어",
+      "scenario": "S1",
+      "duplicate_review": "K-0108과 안전 주제는 가깝지만 올라탐이라는 독립 행위와 사업주 안전조치 예외를 다룸. 추후 전역 의미 중복 검토 필요.",
+      "source_path": "docs/sources/safety/M-101-2012 컨베이어의 안전에 관한 기술지침.pdf",
+      "source_sha256": "4df08fe99c8986086809d8cad27dc46a9c4194d9dde527c8de095e19a4d14a27",
+      "group_id": "SRC-KOSHA-M101-2012-CONVEYOR-SAFETY",
+      "split": "kb",
+      "status": "draft",
+      "grade": "L0"
+    },
+    {
+      "packet_id": "P-04",
+      "source_id": "LOCAL-SKF-10404-EN",
+      "title": "특정 축 베어링 배치 부적합이 확인된 감속기 설계대안 사례",
+      "locator": "PDF p.2 / Rolling mill doubles MTBF with SKF engineered solutions for gearboxes",
+      "excerpt": "an unsuitable bearing arrangement on one specific shaft of the gearbox",
+      "allowed_claims": [
+        "SKF 2010년 사례는 강대 산세라인 feeding stand 감속기와 커플링의 반복고장 및 충격부하 맥락을 보고한다.",
+        "SKF는 분석 후 특정 축의 인치계 테이퍼롤러베어링 한 쌍의 배치를 부적합하다고 판단했다고 보고한다.",
+        "그 사례에서 SKF Explorer 구면롤러 스러스트베어링을 중심으로 구성한 자체 완결 유닛과 플랜지 슬리브를 제안했다.",
+        "이는 해당 사례 조건에 한정된 설계대안 검토 자료이다."
+      ],
+      "excluded_claims": [
+        "ShiftLink GR에 직접 교체 적용",
+        "같은 증상의 모든 감속기 원인 확정",
+        "진단 단계 또는 측정 기준 창작",
+        "설계 치수나 토크값 창작",
+        "재가동 절차",
+        "MTBF/ROI 효과 보장",
+        "현재 냉간압연 라인과 동일 공정이라고 확정"
+      ],
+      "tacit_type_candidate": "T2",
+      "type_review_required": true,
+      "condition_basis": "특정 축 베어링 배치의 부적합이 분석으로 확인된 해당 사례 조건. 일반 고장만으로 충족으로 보지 않음.",
+      "equipment": "GR",
+      "component": "감속 기어박스",
+      "scenario": "S2",
+      "duplicate_review": "K-0201은 Xu-Zhang의 운전조건/진동 보고 기록 대조라는 별도 문헌 계보. K-0108~0110에도 이 설계대안 없음. 전역 의미 누출 없음 보장은 안 함.",
+      "source_path": "docs/data/events/SKF-10404_EN_Driveline_for_Metals.pdf",
+      "source_sha256": "615b313d31f12c7bb3d1539fad51323f8a108a25acd84289cb6919cc6f133e04",
+      "group_id": "SRC-SKF-10404-EN-DRIVELINE-FOR-METALS",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0"
+    }
+  ],
+  "held": [
+    {
+      "source_id": "SD-005",
+      "locator": "PDF p.8 / 인쇄 p.6 / 4.3 (9)",
+      "reason": "위험 정비 시 운전정지/작동방지는 K-0108과 상당 중복하여 신규 카드 보류"
+    },
+    {
+      "source_id": "LOCAL-NSK-COLD-ROLLING",
+      "locator": "PDF pp.1-2",
+      "excerpt": "Four-Row Tapered Roller Bearings",
+      "reason": "냉간압연 베어링 철편 유입 사례 확인. GR/RT의 어느 구체 설비인지 확인되지 않아 억지 매핑하지 않음. 진단순서/재가동절차도 없음. dev 유지."
+    },
+    {
+      "group_id": "SRC-VICKERS-LOGICAL-TROUBLESHOOTING-OBSERVATION-GAP",
+      "bucket": 10,
+      "split": "sealed",
+      "reason": "기존 보고서의 sealed 계보 메타데이터만 확인. 이번 원문 열람/생성 안 함."
+    }
+  ],
+  "limits": [
+    "AI 원문 검토이며 사람 승인 아님",
+    "그룹 ID는 원문 제목/문서번호로 해시 계산 전에 정함; 재추첨/변경 없음",
+    "배정표 등록 안 함",
+    "원문 계보의 전역 의미 중복과 전문 이용권한은 미확정",
+    "역사적 문헌 요약이며 현행 안전/법령 준수 판정이나 현장 작업 지시가 아님",
+    "기존 카드/초안은 중복 대조만 수행, 생성 원문으로 사용하지 않음"
+  ]
+}

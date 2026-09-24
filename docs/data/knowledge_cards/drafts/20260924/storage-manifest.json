@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-09-24T05:17:30.904500+00:00",
+  "canonical_directory": "docs/data/knowledge_cards/drafts/20260924",
+  "original_working_directory": "artifacts/knowledge-card-team-20260924",
+  "authorization": "user_approved_storage_location_only",
+  "card_count": 3,
+  "status": "draft",
+  "grade": "L0",
+  "original_files_preserved": true,
+  "copied_files_initial_hash_match": 17,
+  "relocation_adjustments": [
+    "persona-review/cards-by-persona.md: relative persona link",
+    "persona-review/application.json: canonical card path and relocated document hash"
+  ],
+  "verification": "pass: JSON, schema, unknown fields, review hashes, user confirmation hash, persona hashes",
+  "files_sha256": {
+    "cards.json": "cb6a8949d9a843d2e0f08a15f34b2572359dcee562441af1e490aca48ee6217d",
+    "cards.md": "9c1132053bceb1799d307c7f1ee57182b45fd5720b2d42fdde883e99ea3b122e",
+    "source-packet.json": "620ee39990206297b7661a4345895907328a5de6ecfb573dae8fa6cbf7e9bcfe",
+    "source-review.md": "46c71cb810b075bc5f554d56de9b34e1fb3cc8be3ca052516bc316f80ea6740d",
+    "evidence-map.json": "ae9930f3af8c9c8e307fc11bd9c68f667d9b30e280fb5a679576f01d747bddd7",
+    "review.json": "17340ff24d437196e80bfc23c9afe9803c2416d0ee2e423b565a113334719080",
+    "review.md": "a39ab4d265e11b0f78c88e2047287f4edb8183205697b9d7ba3546fee9dce39c",
+    "analysis.json": "f5de5cdc6f1ee02624d7bce12775a9772d70065fac5debc462b246d12015319c",
+    "analysis.md": "743bd9aed459a52a30f024da4700c29ea3931aa6bd16de7fdbb3a1785954b04c",
+    "human-review.json": "3f943e3ee1c2439e5df3544cb034156874cfd3b50af2ab9546b843d10c909d82",
+    "author-notes.md": "be8cf34a1326d96cd7f197eea3d7c19b743559aad2fea7e978340206c2b89c7f",
+    "validation.json": "2c143eb3cd58836e6d80446e94d810b8a3137c5c741e9fafff7bb2c0fbb8e470",
+    "README.md": "007f02b75797fdae2e27361529da01ec1ebd656c4299d8b90d1b0ad6a413941e",
+    "persona-review/V-01.json": "2f749671d5e5c1a6f803abc161f29f876b76f2a3e2728d866600073e197b0811",
+    "persona-review/V-02.json": "099257c630bc9fafe2a7ea16e84800f044ccd5cfbf111f4f16f93cfc314a50b4",
+    "persona-review/V-03.json": "a430403de2be4c6b9ba6d9259ace4e7a56952f2c7c71d007e94ce08a0d098f57",
+    "persona-review/cards-by-persona.md": "e06c7c24fd83c6921763d69c62de9a097d605933a7dc479d4955e4c8c1ea31a2",
+    "persona-review/application.json": "26ac8f9c7fe10428caab1d01cddddc5d59ff836932e30746e1c4090365651108"
+  }
+}

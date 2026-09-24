@@ -1,0 +1,80 @@
+{
+  "reviewer": "Codex sub-agent card_reviewer (AI)",
+  "review_date": "2026-09-24",
+  "scope": "독립 원문 대조 및 검토용 초안 검수; 사람 승인 아님",
+  "verdict_meaning": "pass는 문헌 요약 초안으로서 통과만 뜻한다. 운영 KB 채택·현장 적용·안전 승인은 별도 hold다.",
+  "reviewed_hashes": {
+    "cards.json": "cb6a8949d9a843d2e0f08a15f34b2572359dcee562441af1e490aca48ee6217d",
+    "source-packet.json": "620ee39990206297b7661a4345895907328a5de6ecfb573dae8fa6cbf7e9bcfe",
+    "evidence-map.json": "ae9930f3af8c9c8e307fc11bd9c68f667d9b30e280fb5a679576f01d747bddd7"
+  },
+  "checks": {
+    "knowledge_card_schema": "3/3 pass, 실제 KnowledgeCard.model_validate",
+    "leaf_evidence_coverage": "3/3 pass, 모든 non-null 말단이 source_links 또는 metadata_links에 연결; 초과 경로 없음",
+    "source_visual_comparison": "KOSHA PDF p.7/p.8 및 SKF PDF p.2 렌더 전체 관련 문단 육안 대조",
+    "draft_and_safety_metadata": "3/3 draft/L0, safety_flag=true, safety_basis 존재, safety_review=null",
+    "duplicate_review": "공유 knowledge_cards의 K-0108~0110 제목·know_how와 의미 비교; 정답/봉인 사례 미열람",
+    "pipeline_import": "미실행. 출처 미승인 및 그룹 미등록 상태이므로 공식 파이프라인 통과를 주장하지 않음"
+  },
+  "cards": [
+    {
+      "card_id": "K-0301",
+      "verdict": "pass",
+      "format": "pass",
+      "semantic_support": "pass",
+      "field_use": "hold",
+      "evidence": "SD-005 PDF p.7 / 인쇄 p.5 / §4.3(3); P-01",
+      "reason": "정지스위치 주변 장애물 금지는 원문에 직접 존재하며 독립 금기 T5가 타당하다. 제거 작업 허가·격리 동일시·수치·주기를 추가하지 않았다.",
+      "competing_type": "T2 아님: 조건별 요령이 핵심이 아님",
+      "duplicate": "K-0108의 적재부/리턴 롤러 접근 금지와 대상 행위가 다름",
+      "expert_question": "현장 정지스위치 접근성 관리 절차와 현재 적용 문서에 부합하는가?",
+      "content_decision": "pass",
+      "operational_gate": "hold"
+    },
+    {
+      "card_id": "K-0302",
+      "verdict": "pass",
+      "format": "pass",
+      "semantic_support": "pass",
+      "field_use": "hold",
+      "evidence": "SD-005 PDF p.7 / 인쇄 p.5 / §4.3(7); P-02 전체 조항",
+      "reason": "비상·사고 정지 후 재기동 전 확인이라는 주된 목적에 따라 T6 및 abnormal_stop_restart가 타당하다. 원인 규명 절차를 창작하지 않고 원문 확인 대상을 요약했으며 복구 성공·재기동 승인을 보장하지 않는다.",
+      "competing_type": "T3와 구별: 원인을 좁히는 진단 순서가 아닌 재기동 전 확인 요구; 부수 안전은 safety_flag로 보존",
+      "duplicate": "K-0109의 적재 정체 진단 순서와 목적이 다름",
+      "expert_question": "이 조항 외에 현장 재기동에 필요한 확인·권한·격리 해제 조건은 무엇인가?",
+      "resolved_revision": "generalization_scope의 일본어 문장을 한국어로 정정한 최종 파일 확인",
+      "content_decision": "pass",
+      "operational_gate": "hold"
+    },
+    {
+      "card_id": "K-0303",
+      "verdict": "pass",
+      "format": "pass",
+      "semantic_support": "pass",
+      "field_use": "hold",
+      "evidence": "SD-005 PDF p.8 / 인쇄 p.6 / §4.3(11); P-03 전체 조항",
+      "reason": "올라가기 금지와 작업상 부득이함·사업주 안전조치의 예외를 함께 보존한다. 정지 여부만으로 허용하거나 작업자 판단으로 예외를 확정하지 않았다. 독립 금기 T5가 타당하다.",
+      "competing_type": "T2 아님: 예외 존재보다 독립 금기가 주된 목적",
+      "duplicate": "K-0108과 안전 주제는 유사하지만 올라탐 및 원문 예외라는 별도 검색 목적이 있음; 전역 중복 확정은 아님",
+      "expert_question": "원문 예외를 현장에 적용할 때 필요한 조치와 검토 절차가 명시된 최신 문서가 있는가?",
+      "content_decision": "pass",
+      "operational_gate": "hold"
+    }
+  ],
+  "held_candidate": {
+    "packet_id": "P-04",
+    "verdict": "hold",
+    "source": "SKF 10404 EN PDF p.2",
+    "reason": "특정 감속기 고장의 원인 분석 및 주문 설계 제안 사례다. 조건은 사건 적용 범위이며 조건별 재사용 요령을 지지하지 않아 T2로 강제 분류하지 않는다. 진단 단계·감각 해석·재가동 절차도 부족하다.",
+    "required_information": "조건별 대안 선택 기준 또는 재사용 가능한 절차의 원문 근거; 실제 설비 적합성",
+    "split": "dev",
+    "card_created": false
+  },
+  "global_holds": [
+    "SD-005 pending_review 및 approved_scope=[]; AI 대조는 출처 승인 기록이 아님",
+    "split=kb는 해시 규칙의 미등록 제안이며 운영 KB 적재 승인 아님",
+    "역사적 2012년 지침 요약; 현행 법령·현장 안전 적합성 판단 미실시",
+    "confidence=0.0은 요청자가 지정한 미평가 sentinel; 점수로 런타임 활용하기 전에 실제 평가 및 필드 정책 필요",
+    "전문 이용권한·사람 안전 검수·전체 계보 중복 확인 미완료"
+  ]
+}

@@ -1,0 +1,204 @@
+{
+ "note": "페르소나 기반 합성 작업일지. 실제 현장 기록이 아니다. seeds/source_registry.json의 SD-901~912가 이 파일들을 가리킨다.",
+ "generator": "shiftlink.data.narrative",
+ "narratives": [
+  {
+   "source_id": "SD-901",
+   "file": "narratives/EV-0031_V-01.txt",
+   "scope_id": "EV-0031-V-01-log",
+   "text_sha256": "d2a08943658c0a3a40b30cffa4de1d3074d024293adbe0cabd56abdd577ab2cf",
+   "group_id": "PT-0003",
+   "reference_ids": [
+    "EV-0031"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0103",
+    "OB-0104",
+    "OB-0105"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "7b02baa6a2efcdac05cd591f19bc072e7aa6ff4e95352dcaebcd51aa5c6c1427"
+  },
+  {
+   "source_id": "SD-902",
+   "file": "narratives/EV-0031_V-02.txt",
+   "scope_id": "EV-0031-V-02-log",
+   "text_sha256": "91769a85c311d1e5b5db0e9ab64b60cff8bdcc7ea1ea8e1ec12cd026bedb73c9",
+   "group_id": "PT-0003",
+   "reference_ids": [
+    "EV-0031"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0101",
+    "OB-0102",
+    "OB-0107"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "0aa029720e79bd7baab663b7c4ab094a5db7cc4c827b2855254da9250d28c0bd"
+  },
+  {
+   "source_id": "SD-903",
+   "file": "narratives/EV-0031_V-03.txt",
+   "scope_id": "EV-0031-V-03-log",
+   "text_sha256": "6cd63b70e3bd767ee0af064cb27871a2e257cf26e5adadfcdff961af599b15a5",
+   "group_id": "PT-0003",
+   "reference_ids": [
+    "EV-0031"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0106"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "1d2e386d0bbc644139ffc2cc923c0c73acb3b6cfd76e05b00bdb4bef90a20dc6"
+  },
+  {
+   "source_id": "SD-904",
+   "file": "narratives/EV-0032_V-02.txt",
+   "scope_id": "EV-0032-V-02-log",
+   "text_sha256": "e31263cebad50dee4975e21cce658b8ff8a894700f921154b527a7101043d38c",
+   "group_id": "PT-0007",
+   "reference_ids": [
+    "EV-0032"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0201",
+    "OB-0202",
+    "OB-0203",
+    "OB-0204",
+    "OB-0206",
+    "OB-0207"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "21138a47e0e975cb5dcbd6d15ea49f371afcbaf5d50761055a5e94d8e7f9926b"
+  },
+  {
+   "source_id": "SD-905",
+   "file": "narratives/EV-0032_V-03.txt",
+   "scope_id": "EV-0032-V-03-log",
+   "text_sha256": "9da1cd25344a3e38561793b67fbc7649f9cfc91f4b4143e3f72f325cc3ab56d3",
+   "group_id": "PT-0007",
+   "reference_ids": [
+    "EV-0032"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0205"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "671259033dad80c47fc3a3139a8769b64b4a090cdb151b91cefc53b4cda96cf4"
+  },
+  {
+   "source_id": "SD-906",
+   "file": "narratives/EV-0034_V-01.txt",
+   "scope_id": "EV-0034-V-01-log",
+   "text_sha256": "f51483b10f62520566146d709f3581ba605b78879719c57bc34d2b75fd7e9ba8",
+   "group_id": "PT-0017",
+   "reference_ids": [
+    "EV-0034"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0311",
+    "OB-0312",
+    "OB-0313"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "1917bc8d2da744205ea9b71b3c7eff2dc6711f7287962ddb8fa3a76e76bdb2ee"
+  },
+  {
+   "source_id": "SD-907",
+   "file": "narratives/EV-0034_V-02.txt",
+   "scope_id": "EV-0034-V-02-log",
+   "text_sha256": "5a6f3fb419b747ab990533e29be94c5a98936e48a8f9eecc7cadf45f4201065a",
+   "group_id": "PT-0017",
+   "reference_ids": [
+    "EV-0034"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0314",
+    "OB-0315"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "6f05d7e2434d5ec6859dd4c50b1099e1b9f3e836d4cfae4f7cb5b0675be79dbd"
+  },
+  {
+   "source_id": "SD-908",
+   "file": "narratives/EV-0034_V-03.txt",
+   "scope_id": "EV-0034-V-03-log",
+   "text_sha256": "49696905226174cbb67026e25cfe5b820ba34848e0258c4af0f6bb9cc6f2e2be",
+   "group_id": "PT-0017",
+   "reference_ids": [
+    "EV-0034"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0316"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "69c80e9f44344d39b59985dc5530f5a3c9083ff365ba8047f0a68acd1f6025f1"
+  },
+  {
+   "source_id": "SD-909",
+   "file": "narratives/EV-0035_V-01.txt",
+   "scope_id": "EV-0035-V-01-log",
+   "text_sha256": "bd07b293e342a5a9bf2993efe2cc2549a5c57cc02882bcd2c0963a8e03168609",
+   "group_id": "PT-0018",
+   "reference_ids": [
+    "EV-0035"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0319",
+    "OB-0320"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "3425b83f7513e844fda5cdfe97ee1ab7871dcb08a39b54ff5588c3609e058a8f"
+  },
+  {
+   "source_id": "SD-910",
+   "file": "narratives/EV-0035_V-02.txt",
+   "scope_id": "EV-0035-V-02-log",
+   "text_sha256": "b26718dd6a7f7b40f7dec06a3f8c906eb81e09e3eec3e0cc5c4e1698adf42cb7",
+   "group_id": "PT-0018",
+   "reference_ids": [
+    "EV-0035"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0317",
+    "OB-0318"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "40eb099197ca6fbbfd1d62460921d5f8e22ea4644a1619b78382fb202a20d709"
+  },
+  {
+   "source_id": "SD-911",
+   "file": "narratives/EV-0036_V-02.txt",
+   "scope_id": "EV-0036-V-02-log",
+   "text_sha256": "c1ff55ad814f7c42021bf32d8f9b2cea029619f71ec2c1a9948d62f6072482c0",
+   "group_id": "PT-0019",
+   "reference_ids": [
+    "EV-0036"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0321",
+    "OB-0322",
+    "OB-0323"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "7366ac9803161d1c544c88b9039198f50c06d460880c01c624ca209ef158f469"
+  },
+  {
+   "source_id": "SD-912",
+   "file": "narratives/EV-0036_V-03.txt",
+   "scope_id": "EV-0036-V-03-log",
+   "text_sha256": "04491ef6377c367fe0b3c322e5c1034f2a4b903f7daf26cd904d50a1e141ea9b",
+   "group_id": "PT-0019",
+   "reference_ids": [
+    "EV-0036"
+   ],
+   "derived_from_observation_ids": [
+    "OB-0324",
+    "OB-0325"
+   ],
+   "prompt_version": "persona-narrative-v1",
+   "prompt_sha256": "fbc6432efdd506fc8849175aefc9cd6fb044c63931d99e671d96b126b4236210"
+  }
+ ],
+ "hash_basis": "text_sha256은 LF 줄바꿈 UTF-8 바이트 기준이다. .gitattributes의 eol=lf가 적용된 상태와 일치한다. 이 경로에 -text를 걸면 CRLF가 보존되어 바이트 해시가 어긋난다."
+}

@@ -1,0 +1,284 @@
+{
+ "_meta": {
+  "title": "구동 감속기 윤활 부족으로 인한 베어링 발열",
+  "prototype_id": "PT-0017",
+  "split": "dev",
+  "all_numbers_are": "[가상 값]",
+  "spec_version": "event-spec-v1",
+  "prototype_identity": {
+   "case_type": "lubrication_starvation",
+   "root_equipment_type": "GR",
+   "relation_path_types": [
+    "drive"
+   ],
+   "primary_symptom_class": "윤활 부족에 따른 구동부 발열"
+  },
+  "references": "기준정보·관계·페르소나 ID는 00_plant_and_relations.json 참조",
+  "visibility_rule": "post_action / ground_truth 표시된 블록은 t시점 검색·프롬프트에 노출되지 않는다(B3-4)",
+  "human_review_required": true
+ },
+ "operating_context_snapshot": {
+  "context_id": "CTX-0034",
+  "line_id": "LN-0001",
+  "captured_at": "2026-07-14T02:10:00+09:00",
+  "op_mode": "running_normal",
+  "line_speed": 92.0,
+  "product_code": "CR-A08",
+  "shift_code": "C",
+  "shift_date": "2026-07-14",
+  "shift_boundary_flag": false,
+  "stop_restart_state": "none",
+  "active_alarms": [],
+  "measurements": [
+   {
+    "equipment_id": "EQ-0004",
+    "component_id": "CP-0007",
+    "signal": "gr_brg_temp",
+    "value": 78.0,
+    "unit": "degC",
+    "taken_at": "2026-07-14T02:14:00+09:00"
+   },
+   {
+    "equipment_id": "EQ-0004",
+    "component_id": "CP-0007",
+    "signal": "gr_vib_rms",
+    "value": 2.9,
+    "unit": "mm_s",
+    "taken_at": "2026-07-14T02:15:00+09:00"
+   },
+   {
+    "equipment_id": "EQ-0008",
+    "component_id": null,
+    "signal": "rt_motor_current",
+    "value": 16.8,
+    "unit": "A",
+    "taken_at": "2026-07-14T02:18:00+09:00"
+   },
+   {
+    "equipment_id": "EQ-0001",
+    "component_id": null,
+    "signal": "hpu_pressure",
+    "value": 158.0,
+    "unit": "bar",
+    "taken_at": "2026-07-14T02:21:00+09:00"
+   }
+  ],
+  "segment_states": [
+   {
+    "segment_id": "SG-0001",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0002",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0003",
+    "state": "running"
+   },
+   {
+    "segment_id": "SG-0004",
+    "state": "running"
+   }
+  ],
+  "utility_states": [
+   {
+    "equipment_id": "EQ-0001",
+    "state": "normal",
+    "value": 158.0,
+    "unit": "bar"
+   },
+   {
+    "equipment_id": "EQ-0002",
+    "state": "normal",
+    "value": 100.0,
+    "unit": "pct"
+   },
+   {
+    "equipment_id": "EQ-0003",
+    "state": "normal",
+    "value": 648.0,
+    "unit": "kPa"
+   }
+  ],
+  "is_synthetic": true
+ },
+ "event": {
+  "event_id": "EV-0034",
+  "prototype_id": "PT-0017",
+  "line_id": "LN-0001",
+  "context_id": "CTX-0034",
+  "scenario": "S2",
+  "case_type": "lubrication_starvation",
+  "equipment": "GR",
+  "primary_equipment_id": "EQ-0004",
+  "segment_ids": [
+   "SG-0002",
+   "SG-0003"
+  ],
+  "occurred_at": "2026-07-14T02:10:00+09:00",
+  "reported_at": "2026-07-14T02:16:00+09:00",
+  "symptom_text": "GR-01 하우징 표면이 평소보다 뜨겁고 유면계가 하한선에 가깝다. 출측 롤러 전류도 조금 올라가 있다.",
+  "severity": "medium",
+  "timeline": [
+   {
+    "at": "2026-07-14T02:10:00+09:00",
+    "kind": "context",
+    "text": "정상 운전, 라인 속도 92 m/min, 품목 CR-A08, C조 야간"
+   },
+   {
+    "at": "2026-07-14T02:12:00+09:00",
+    "kind": "observation",
+    "text": "GR-01 하우징 발열 감각 확인, 유면계 하한 근접"
+   },
+   {
+    "at": "2026-07-14T02:14:00+09:00",
+    "kind": "observation",
+    "text": "GR-01 베어링 온도 78.0 degC (정상 상한 72)"
+   },
+   {
+    "at": "2026-07-14T02:18:00+09:00",
+    "kind": "observation",
+    "text": "RT-03 모터 전류 16.8 A (정상 8~16 A)"
+   }
+  ],
+  "case_tags": [
+   "night_shift"
+  ],
+  "quality_impact": "none",
+  "safety_impact": "none",
+  "cause_confidence": "hypothesis",
+  "production_impact": {
+   "kind": "none",
+   "value": 0.0,
+   "unit": "m_min"
+  },
+  "traversed_relation_ids": [
+   "REL-0006",
+   "REL-0011"
+  ],
+  "true_cause": "GR-01 윤활유 공급 배관의 부분 막힘으로 베어링부 급유량이 줄어 마찰열이 축적되었다. 진동은 아직 경보값에 못 미치고 출측 롤러 전류 상승은 구동 저항 증가의 2차 결과다. 유압 공급 이상은 아니다.",
+  "true_actions": [
+   "GR-01 유면·베어링 온도 30분 간격 재측정으로 상승 추세 확인",
+   "윤활 보충은 임시 조치임을 명시하고 배관 막힘 점검 요청 등록",
+   "차기 계획 정지 시 급유 배관과 필터 상태 점검"
+  ],
+  "true_cause_equipment_ids": [
+   "EQ-0004"
+  ],
+  "canary_token": "zzk9-ev0034-b413",
+  "split": "dev",
+  "is_synthetic": true,
+  "_visibility": {
+   "pre_action": [
+    "symptom_text",
+    "severity",
+    "timeline(관측까지)",
+    "traversed_relation_ids"
+   ],
+   "ground_truth": [
+    "true_cause",
+    "true_actions",
+    "true_cause_equipment_ids",
+    "cards_expected",
+    "canary_token"
+   ],
+   "post_action": [
+    "revision_candidate_ids",
+    "timeline(행동 이후)"
+   ]
+  }
+ },
+ "observations": [
+  {
+   "observation_id": "OB-0311",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0004",
+   "observed_at": "2026-07-14T02:12:00+09:00",
+   "observer_persona_id": "V-01",
+   "obs_kind": "sensory",
+   "component_id": "CP-0007",
+   "signal": null,
+   "value": null,
+   "unit": null,
+   "qualitative_text": "하우징이 손을 대기 어려울 만큼 뜨겁고 유면계 눈금이 하한선에 붙어 있다",
+   "judgment_vs_normal": "unknown",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0312",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0004",
+   "observed_at": "2026-07-14T02:14:00+09:00",
+   "observer_persona_id": "V-01",
+   "obs_kind": "measurement",
+   "component_id": "CP-0007",
+   "signal": "gr_brg_temp",
+   "value": 78.0,
+   "unit": "degC",
+   "qualitative_text": null,
+   "judgment_vs_normal": "above",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0313",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0004",
+   "observed_at": "2026-07-14T02:15:00+09:00",
+   "observer_persona_id": "V-01",
+   "obs_kind": "measurement",
+   "component_id": "CP-0007",
+   "signal": "gr_vib_rms",
+   "value": 2.9,
+   "unit": "mm_s",
+   "qualitative_text": null,
+   "judgment_vs_normal": "above",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0314",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0008",
+   "observed_at": "2026-07-14T02:18:00+09:00",
+   "observer_persona_id": "V-02",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "rt_motor_current",
+   "value": 16.8,
+   "unit": "A",
+   "qualitative_text": null,
+   "judgment_vs_normal": "above",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0315",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0009",
+   "observed_at": "2026-07-14T02:19:00+09:00",
+   "observer_persona_id": "V-02",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "cv_queue_len",
+   "value": 41.0,
+   "unit": "pct",
+   "qualitative_text": null,
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  },
+  {
+   "observation_id": "OB-0316",
+   "event_id": "EV-0034",
+   "equipment_id": "EQ-0001",
+   "observed_at": "2026-07-14T02:21:00+09:00",
+   "observer_persona_id": "V-03",
+   "obs_kind": "measurement",
+   "component_id": null,
+   "signal": "hpu_pressure",
+   "value": 158.0,
+   "unit": "bar",
+   "qualitative_text": null,
+   "judgment_vs_normal": "normal",
+   "is_synthetic": true
+  }
+ ]
+}

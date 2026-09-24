@@ -1,0 +1,260 @@
+{
+ "format_version": "1.0",
+ "note": "값이 있는 모든 말단 필드를 JSON Pointer로 원문에 연결한다. 참조의 존재·범위·완전성을 확인한 것이며 의미적 수반성 검증이 아니다.",
+ "cards": {
+  "K-9001@1.0-draft-001": {
+   "excerpt_sources": [
+    "SD-901",
+    "SD-902"
+   ],
+   "links": {
+    "/component": [
+     "SD-902"
+    ],
+    "/conditions/0/op": [
+     "SD-902"
+    ],
+    "/conditions/0/signal": [
+     "SD-902"
+    ],
+    "/conditions/0/unit": [
+     "SD-902"
+    ],
+    "/conditions/0/value": [
+     "SD-902"
+    ],
+    "/generalization_evidence/generalization_scope": [
+     "SD-902"
+    ],
+    "/generalization_evidence/supporting_event_ids/0": [
+     "SD-901"
+    ],
+    "/know_how": [
+     "SD-901",
+     "SD-902"
+    ],
+    "/rationale": [
+     "SD-901",
+     "SD-902"
+    ],
+    "/symptom": [
+     "SD-902"
+    ],
+    "/title": [
+     "SD-901",
+     "SD-902"
+    ],
+    "/type_payload/steps/0/action": [
+     "SD-902"
+    ],
+    "/type_payload/steps/0/expected_result": [
+     "SD-902"
+    ],
+    "/type_payload/steps/0/order": [
+     "SD-902"
+    ],
+    "/type_payload/steps/0/step_id": [
+     "SD-902"
+    ],
+    "/type_payload/steps/1/action": [
+     "SD-902"
+    ],
+    "/type_payload/steps/1/expected_result": [
+     "SD-902"
+    ],
+    "/type_payload/steps/1/order": [
+     "SD-902"
+    ],
+    "/type_payload/steps/1/step_id": [
+     "SD-902"
+    ],
+    "/type_payload/steps/2/action": [
+     "SD-901"
+    ],
+    "/type_payload/steps/2/expected_result": [
+     "SD-901"
+    ],
+    "/type_payload/steps/2/order": [
+     "SD-901"
+    ],
+    "/type_payload/steps/2/step_id": [
+     "SD-901"
+    ]
+   }
+  },
+  "K-9002@1.0-draft-002": {
+   "excerpt_sources": [
+    "SD-904",
+    "SD-905"
+   ],
+   "links": {
+    "/component": [
+     "SD-904"
+    ],
+    "/know_how": [
+     "SD-904"
+    ],
+    "/rationale": [
+     "SD-904",
+     "SD-905"
+    ],
+    "/symptom": [
+     "SD-904"
+    ],
+    "/title": [
+     "SD-904"
+    ],
+    "/type_payload/steps/0/action": [
+     "SD-904"
+    ],
+    "/type_payload/steps/0/expected_result": [
+     "SD-904"
+    ],
+    "/type_payload/steps/0/order": [
+     "SD-904"
+    ],
+    "/type_payload/steps/0/step_id": [
+     "SD-904"
+    ],
+    "/type_payload/steps/1/action": [
+     "SD-904"
+    ],
+    "/type_payload/steps/1/expected_result": [
+     "SD-904"
+    ],
+    "/type_payload/steps/1/order": [
+     "SD-904"
+    ],
+    "/type_payload/steps/1/step_id": [
+     "SD-904"
+    ],
+    "/type_payload/steps/2/action": [
+     "SD-904"
+    ],
+    "/type_payload/steps/2/expected_result": [
+     "SD-904"
+    ],
+    "/type_payload/steps/2/order": [
+     "SD-904"
+    ],
+    "/type_payload/steps/2/step_id": [
+     "SD-904"
+    ]
+   }
+  },
+  "K-9003@1.0-draft-002": {
+   "excerpt_sources": [
+    "SD-906",
+    "SD-907",
+    "SD-908"
+   ],
+   "links": {
+    "/component": [
+     "SD-906"
+    ],
+    "/know_how": [
+     "SD-906"
+    ],
+    "/rationale": [
+     "SD-906",
+     "SD-907",
+     "SD-908"
+    ],
+    "/symptom": [
+     "SD-906"
+    ],
+    "/title": [
+     "SD-906"
+    ]
+   }
+  },
+  "K-9004@1.0-draft-001": {
+   "excerpt_sources": [
+    "SD-909",
+    "SD-910"
+   ],
+   "links": {
+    "/component": [
+     "SD-910"
+    ],
+    "/conditions/0/op": [
+     "SD-910"
+    ],
+    "/conditions/0/signal": [
+     "SD-910"
+    ],
+    "/conditions/0/unit": [
+     "SD-910"
+    ],
+    "/conditions/0/value": [
+     "SD-910"
+    ],
+    "/know_how": [
+     "SD-910"
+    ],
+    "/rationale": [
+     "SD-909",
+     "SD-910"
+    ],
+    "/symptom": [
+     "SD-910"
+    ],
+    "/title": [
+     "SD-909",
+     "SD-910"
+    ]
+   }
+  },
+  "K-9005@1.0-draft-002": {
+   "excerpt_sources": [
+    "SD-911",
+    "SD-912"
+   ],
+   "links": {
+    "/component": [
+     "SD-911"
+    ],
+    "/conditions/0/op": [
+     "SD-911"
+    ],
+    "/conditions/0/signal": [
+     "SD-911"
+    ],
+    "/conditions/0/unit": [
+     "SD-911"
+    ],
+    "/conditions/0/value": [
+     "SD-911"
+    ],
+    "/exclusions/0/op": [
+     "SD-911"
+    ],
+    "/exclusions/0/signal": [
+     "SD-911"
+    ],
+    "/exclusions/0/unit": [
+     "SD-911"
+    ],
+    "/exclusions/0/value": [
+     "SD-911"
+    ],
+    "/know_how": [
+     "SD-911",
+     "SD-912"
+    ],
+    "/rationale": [
+     "SD-911"
+    ],
+    "/symptom": [
+     "SD-911"
+    ],
+    "/title": [
+     "SD-911"
+    ],
+    "/type_payload/restart_type": [
+     "SD-911"
+    ]
+   }
+  }
+ }
+}

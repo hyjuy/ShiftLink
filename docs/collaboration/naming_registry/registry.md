@@ -53,6 +53,7 @@
 | `ExtractionResult` | `shiftlink/rag/extraction.py` | F-02 추출 결과 묶음 | 최재영 |
 | `OllamaModel` | `shiftlink/edge/ollama.py` | 로컬 Ollama 어댑터 — 파이프라인이 부르는 단일 ModelCall (호출당 1회, 재시도 없음) | 허재원 |
 | ~~`ModelCallError`~~ | — | 2026-09-24 삭제. A 계약 §3에 따라 표준 예외(`ValueError`·`TimeoutError`·`ConnectionError`·`NotImplementedError`)로 대체 — `agent`가 `edge`를 import하지 않아도 되게 | 허재원 |
+| `EventSpec` | `shiftlink/data/scenario.py` | 합성 사건 명세. 작성자가 정하는 것만 담고 ID·split·카나리는 제외 | 허재원 |
 
 > 01_고도화_초안 §7.2~7.4가 제안하는 신규 엔티티(약 25종: `ProductionLine`, `Relation`, `ActionCandidate` 등)는 **아직 미승인·미구현**이라 여기 안 올림. 실제로 클래스를 만들면 그때 등록.
 
@@ -87,6 +88,13 @@
 | `build_messages()` | `shiftlink/edge/ollama.py` | 모드·질문·관측값·카드 → Ollama `/api/chat` messages (+카나리 제외 카드 ID) | 허재원 |
 | `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5) | 허재원 |
 | `main()` | `shiftlink/edge/__main__.py` | 픽스처 카드 + 실제 Ollama로 파이프라인 1건 실행하는 진입점 | 허재원 |
+| `build_scenario()` | `shiftlink/data/scenario.py` | 사건 명세 → 검증된 합성 시나리오 + split 배정 제안 (배정표는 고치지 않음) | 허재원 |
+| `resolve_prototype()` | `shiftlink/data/scenario.py` | 원형 식별 4키로 계보 판정. 기존·미등록 배정이 해시보다 우선 | 허재원 |
+| `assign_split()` | `shiftlink/data/scenario.py` | 분할 계약 §63 해시 배정 (`shiftlink-split-v1:<group_id>` SHA-256 mod 12) | 허재원 |
+| `generate_narrative()` | `shiftlink/data/narrative.py` | 사건 원장 + 페르소나 → 합성 작업일지 원문. 등록부는 갱신하지 않음 | 허재원 |
+| `build_prompt()` | `shiftlink/data/narrative.py` | 정답지·타 페르소나 관측·sealed를 제외한 Stage A 프롬프트 조립 | 허재원 |
+| `shop_floor_names()` | `shiftlink/data/narrative.py` | 내부 ID → 현장 호칭(`EQ-0008` → `RT-03`) 매핑 | 허재원 |
+| `lint_card()` / `lint_cards()` | `shiftlink/data/card_lint.py` | 카드 작성 가이드 §2·§3·§5·§7 중 **스키마가 못 잡는** 유형 경계·안전 표시를 자문 수준으로 지적 | 허재원 |
 
 > `search_cards()`에 `scope_id`·`source_kind` 필드 추가가 고도화 초안 §4.5(Q4)에서 제안됐지만 **미결**이므로 현재 공개 시그니처에는 포함하지 않는다. 결정되면 여기 시그니처 변경 이력을 한 줄 추가할 것.
 

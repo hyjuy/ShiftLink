@@ -213,6 +213,13 @@ def test_canary_card_is_dropped_from_context():
     assert context == []
 
 
+def test_canary_in_non_prompt_field_is_also_dropped():
+    tainted = make_tool_results(type_payload={"steps": [{"action": "qqz7-secret"}]})
+    context, dropped = card_context(tainted)
+    assert context == []
+    assert dropped == ["K-0108"]
+
+
 def test_prompt_carries_question_observations_and_cards():
     messages, _ = build_messages("query", make_request(), make_tool_results())
     user = messages[1]["content"]

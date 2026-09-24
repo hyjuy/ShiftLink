@@ -201,15 +201,17 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
         errors.append("인용 카드 ID가 중복되었습니다.")
     if not cited_ids:
         errors.append("답변에 유효한 카드 인용이 없습니다.")
-    available_ids = {
-        card.get("card_id") for card in tool_results.get("cards", [])
+    available_cards = {
+        card["card_id"]: card for card in tool_results.get("cards", [])
         if isinstance(card, dict) and card.get("card_id")
     }
     for card_id in cited_ids:
         if not re.fullmatch(r"K-\d{4}", card_id):
             errors.append(f"잘못된 카드 ID 형식: {card_id}")
-        if card_id not in available_ids:
+        if card_id not in available_cards:
             errors.append(f"이번 검색 결과에 없는 카드 ID 인용: {card_id}")
+        elif available_cards[card_id].get("condition_status") == "unverified":
+            errors.append(f"조건이 확인되지 않은 카드 ID 인용: {card_id}")
     return errors
 
 

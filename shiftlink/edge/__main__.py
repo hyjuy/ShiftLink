@@ -50,6 +50,9 @@ def build_provider(case: dict) -> InMemoryToolProvider:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="backslashreplace")
     parser = argparse.ArgumentParser(prog="python -m shiftlink.edge")
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
     parser.add_argument("--case", default=None, help="case_id (기본: 파일의 첫 케이스)")
@@ -93,7 +96,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"\n# 모델 출력: {json.dumps(output, ensure_ascii=False)}")
     print(f"# 측정: {json.dumps(measured, ensure_ascii=False)} wall_s={wall_s:.3f}")
     print(f"\n{render_response(result.output)}")
-    return 0
+    return 1 if result.output.review_queue else 0
 
 
 if __name__ == "__main__":

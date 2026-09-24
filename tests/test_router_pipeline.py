@@ -291,3 +291,30 @@ def test_transport_errors_are_held_without_retry(error) -> None:
     assert result.output.review_queue is True
     assert result.output.answer == ""
     assert result.output.validation_errors
+
+
+def test_missing_model_error_is_distinct_from_connection_failure() -> None:
+    def model(**_: object) -> None:
+        raise ConnectionError('HTTP 404 Not Found {"error":"model qwen not found"}')
+
+    result = FixedPipeline(tools=RecordingTools(), model=model).run(
+        {"question": "상태?", "line_id": "L1", "eq_id": "HPU"}
+    )
+    assert result.output.validation_errors == ["설정한 모델을 찾을 수 없습니다."]
+
+
+def test_canary_card_is_removed_before_model_and_response() -> None:
+    class CanaryTools(RecordingTools):
+        def search_cards(self, **_: object) -> list[dict[str, object]]:
+            return [{"card_id": "K-0001", "know_how": "zzk9-secret"}]
+
+        def search_safety_cards(self, **_: object) -> list[dict[str, object]]:
+            return []
+
+    calls = []
+    result = FixedPipeline(tools=CanaryTools(), model=lambda **kw: calls.append(kw)).run(
+        {"question": "상태?", "line_id": "L1", "eq_id": "HPU"}
+    )
+    assert calls == []
+    assert result.output.no_knowledge
+    assert result.tool_results["cards"] == []

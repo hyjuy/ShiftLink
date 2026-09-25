@@ -2,6 +2,49 @@
 
 이 폴더는 **냉간 철강 코일 공정과 해당 공장 내부 설비에서 발생한 오류·고장에 대해 관측, 조치, 결과를 연결한 Event**를 보관한다. 현재 이 기준으로 확인된 실제 사건은 0건이다. 자료를 확보하지 않은 상태에서 실제 사건이나 복구 조치를 생성하지 않는다.
 
+## 폴더 구조 (2026-09-25)
+
+| 폴더 | 자료 |
+|---|---|
+| `HPU/` | 유압 펌프·유압계통 진단 및 안전 참고자료 |
+| `GR/` | 감속기 매뉴얼과 냉간압연 감속기 사례·연구 후보 |
+| `RT/` | 코일카 매뉴얼의 범용 승강 안전 참고자료. 현재 RT 적용 모델은 아님 |
+| `CV/` | 컨베이어·아이들러 매뉴얼과 범용 안전 참고자료 |
+| `shared/` | 단일 설비군에 대응시키기 어려운 제철·냉간압연 사례와 제품 배경자료 |
+
+원문 파일은 각 폴더에 두고, 이 README만 루트에 둔다. 사건 후보와 일반 매뉴얼은 아래의 **분류와 사용 범위**로 구분한다.
+
+## 보관 자료 분류
+
+아래 PDF·HTML은 **Event JSON이 아닌 원문 후보 또는 참고자료**다. 파일이 이 폴더에 있다는 사실만으로 실제 설치 설비와의 일치, 출처 이용 승인, 작업 안전성, 카드 생성 가능성을 뜻하지 않는다. 특정 모델의 수치·정비 순서를 가상 설비에 적용하지 않는다. 공통 안전 주의사항은 설비와 무관하게 검토할 가치가 있어 보관하되, 국내 현장 절차를 대신하지 않는다.
+
+| 자료 | 분류와 사용 범위 |
+|---|---|
+| `GR/xu-zhang-2024-research-on-the-service-life-of-bearings-in-the-gearbox-of-rolling-mill-transmission-system-under-non.pdf` | 냉간압연 감속기 베어링 연구·사건 후보. 실제 정비·복구 결과는 부족 |
+| `shared/NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf` | 냉간압연 베어링 사례. 현재 GR/RT와 부품 대응 미확인 |
+| `shared/Rolling mill bearing reliability_ three case studies, one conclusion - Euro Bearing.pdf` | 냉간압연 백업롤 사례 포함. 현재 설비 분류와 직접 대응 미확인 |
+| `GR/Failure analysis and countermeasures of gearbox in cold rolling mill.pdf` | 제목은 적합하지만 사례의 상세 원인·조치 본문 부족 |
+| `shared/FUCHS-RENOLIT-CXS-AM-1.html` | 제철소 윤활제 사례·제품 정보. 냉간코일 설비 고장 Event 근거는 아님 |
+| `shared/SKF-10404_EN_Driveline_for_Metals.pdf` | 금속 산업 구동계 제품 자료. 사건 기록 아님; 기존 카드 초안의 원문 경로로 참조됨 |
+| `HPU/100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf` | 범용 유압 진단·정지 관련 참고자료. 특정 현장 사건이나 승인 절차 아님 |
+| `HPU/`의 PDF 5개 | Danfoss·Parker의 특정 펌프 정비/고장 매뉴얼. 공통 안전 주의사항과 진단 후보는 보관; 적용 펌프 모델 미확인 |
+| `GR/26867443.pdf` | SEW ML..2/ML..V2 설치·운전 지침. 일반 안전 절과 제품별 정비 내용 구분 필요 |
+| `GR/26873427.pdf` | 같은 제품군의 카탈로그. 사고·수행 조치 기록 아님 |
+| `RT/830CC-V1.pdf`, `RT/Coil-Cars.pdf` | 코일카 매뉴얼. 일반적인 승강·정비 안전 주의사항 때문에 보관; 프로젝트 RT 롤러·클램프·승강부의 적용 모델로 간주하지 않음 |
+| `CV/brochure-conveyor-solutions-handbook-4230-en.pdf` | Metso 컨베이어 제품 핸드북. 일반 안전 내용과 벨트·부품 설명 참고용 |
+| `CV/Martin_C4_CR_18_09_4_Manual.pdf` | Martin 아이들러 설치·유지보수·고장 매뉴얼. 회전체 방호 등 일반 안전 내용 보관; 모델별 절차 전용 금지 |
+
+판재 굽힘기, 열간압연 중심 자료, 제품 사양만 있는 코일카 브로슈어는 [범위 밖 후보](../../archive/event-source-out-of-scope/README.md)로 옮겼다. 기존 검토 기록은 [원문 검토 보고서](../../reports/event-source-card-review-20260923.md)에 남아 있다.
+
+### 기존 카드 검토 기록의 경로
+
+2026-09-24 [카드 원문 패킷](../knowledge_cards/drafts/20260924/source-packet.json)과 그 검증 파일은 당시 파일 경로와 패킷 해시를 기록한 이력이라 수정하지 않았다. 해당 패킷의 두 로컬 원문은 **내용 변경 없이** 다음 위치로 옮겼다.
+
+| 기록된 경로 | 현재 경로 |
+|---|---|
+| `docs/data/events/SKF-10404_EN_Driveline_for_Metals.pdf` | `docs/data/events/shared/SKF-10404_EN_Driveline_for_Metals.pdf` |
+| `docs/data/events/NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf` | `docs/data/events/shared/NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf` |
+
 ## 포함·제외 기준
 
 - 포함: 냉간코일 공장 내 생산·가공·권취 및 관련 설비의 오류, 품질 이상, 정지, 고장 진단·정비·복구 사례. 공장·공정과 대상 설비의 관계를 원문에서 확인해야 한다.

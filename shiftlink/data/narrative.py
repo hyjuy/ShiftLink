@@ -192,7 +192,7 @@ def _load_persona(path: Path, persona_id: str) -> dict:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     parser.add_argument('--scenario', type=Path, required=True)
-    parser.add_argument('--persona', required=True, help='persona_id, e.g. V-01')
+    parser.add_argument('--persona', required=True, help='persona_id, e.g. V-11')
     parser.add_argument('--personas', type=Path, default=Path('seeds/personas_v0.1.yaml'))
     parser.add_argument('--catalog', type=Path, default=CATALOG)
     parser.add_argument('--source-id', help='New registry source_id, e.g. SD-901')

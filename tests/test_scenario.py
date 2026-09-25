@@ -57,10 +57,10 @@ def spec() -> dict:
         'scenario': 'S2',
         'observations': [
             {'equipment_id': 'EQ-0004', 'component_id': 'CP-0007',
-             'observed_at': '2026-07-14T02:12:00+09:00', 'observer_persona_id': 'V-01',
+             'observed_at': '2026-07-14T02:12:00+09:00', 'observer_persona_id': 'V-11',
              'obs_kind': 'sensory', 'qualitative_text': '하우징이 손대기 어려울 만큼 뜨겁다'},
             {'equipment_id': 'EQ-0004', 'observed_at': '2026-07-14T02:14:00+09:00',
-             'observer_persona_id': 'V-01', 'obs_kind': 'measurement',
+             'observer_persona_id': 'V-13', 'obs_kind': 'measurement',
              'signal': 'gr_brg_temp', 'value': 78.0, 'unit': 'degC',
              'judgment_vs_normal': 'above'},
         ],

@@ -279,7 +279,7 @@
       "unit": "min",
       "qualitative_text": null,
       "judgment_vs_normal": "above",
-      "observer_persona_id": "V-03",
+      "observer_persona_id": "V-12",
       "is_synthetic": true
     },
     {
@@ -294,7 +294,7 @@
       "unit": "bar",
       "qualitative_text": null,
       "judgment_vs_normal": "below",
-      "observer_persona_id": "V-03",
+      "observer_persona_id": "V-12",
       "is_synthetic": true
     },
     {
@@ -309,7 +309,7 @@
       "unit": "bar",
       "qualitative_text": null,
       "judgment_vs_normal": "below",
-      "observer_persona_id": "V-03",
+      "observer_persona_id": "V-12",
       "is_synthetic": true
     },
     {
@@ -324,7 +324,7 @@
       "unit": "bar",
       "qualitative_text": null,
       "judgment_vs_normal": "below",
-      "observer_persona_id": "V-01",
+      "observer_persona_id": "V-11",
       "is_synthetic": true
     },
     {
@@ -339,7 +339,7 @@
       "unit": "bar",
       "qualitative_text": null,
       "judgment_vs_normal": "above",
-      "observer_persona_id": "V-01",
+      "observer_persona_id": "V-11",
       "is_synthetic": true
     },
     {
@@ -354,7 +354,7 @@
       "unit": "L_min",
       "qualitative_text": null,
       "judgment_vs_normal": "below",
-      "observer_persona_id": "V-01",
+      "observer_persona_id": "V-11",
       "is_synthetic": true
     },
     {
@@ -369,7 +369,7 @@
       "unit": "kPa",
       "qualitative_text": null,
       "judgment_vs_normal": "below",
-      "observer_persona_id": "V-02",
+      "observer_persona_id": "V-12",
       "is_synthetic": true
     },
     {
@@ -384,7 +384,7 @@
       "unit": null,
       "qualitative_text": "펌프 흡입 쪽에서 거친 소리가 섞여 들린다",
       "judgment_vs_normal": "unknown",
-      "observer_persona_id": "V-01",
+      "observer_persona_id": "V-11",
       "is_synthetic": true
     },
     {
@@ -399,7 +399,7 @@
       "unit": "pct",
       "qualitative_text": null,
       "judgment_vs_normal": "normal",
-      "observer_persona_id": "V-03",
+      "observer_persona_id": "V-13",
       "is_synthetic": true,
       "_note": "전력 공급 정상 → 전력 공통 원인 배제"
     },
@@ -415,7 +415,7 @@
       "unit": "kPa",
       "qualitative_text": null,
       "judgment_vs_normal": "normal",
-      "observer_persona_id": "V-03",
+      "observer_persona_id": "V-13",
       "is_synthetic": true,
       "_note": "공압 공급 정상 → 공압 공통 원인 배제"
     }
@@ -690,7 +690,7 @@
       "event_id": "EV-0033",
       "action_candidate_id": "AC-0301",
       "executed_at": "2026-07-21T23:40:00+09:00",
-      "executor_persona_id": "V-01",
+      "executor_persona_id": "V-11",
       "approval_status": "not_required",
       "approver_role": null,
       "approved_at": null,
@@ -705,7 +705,7 @@
       "event_id": "EV-0033",
       "action_candidate_id": "AC-0304",
       "executed_at": "2026-07-22T00:05:00+09:00",
-      "executor_persona_id": "V-03",
+      "executor_persona_id": "V-11",
       "approval_status": "not_required",
       "approver_role": null,
       "approved_at": null,
@@ -842,7 +842,7 @@
           "SD-001",
           "SD-002"
         ],
-        "persona_id": "V-01",
+        "persona_id": "V-11",
         "event_ids": [
           "EV-0028",
           "EV-0033"
@@ -899,7 +899,7 @@
       "shift_to": "A",
       "shift_date": "2026-07-21",
       "created_at": "2026-07-22T05:45:00+09:00",
-      "author_persona_id": "V-03",
+      "author_persona_id": "V-13",
       "memo_text": "23시 10분경 RT-02 승강 지연 알람. 확인해 보니 RT-01·RT-03 클램프 압력과 CV-01 벨트 장력도 함께 낮았습니다. HPU-01 토출 압력 138 bar, 유량 33 L/min, 리턴 필터 차압 1.9 bar로 공급원 쪽 문제로 보입니다. 전력과 공압은 정상 확인했습니다. 가압 상태여서 필터 교체는 하지 않았고 반장·정비 담당 호출해 계획 정지를 요청했습니다. 정지 일정은 아직 미정입니다. 펌프 흡입 소리가 거칠다는 의견이 있었는데 확정은 못 했습니다. A조에서 정지 일정 확인하고, 정지 전까지 8시간 간격으로 압력·차압 기록 부탁합니다.",
       "open_items": [
         {
@@ -953,7 +953,7 @@
         "HOI-0301-4"
       ],
       "is_synthetic": true,
-      "_note": "V-03의 handover_style=narrative_complete이므로 4항목이 모두 서술에 담겨 있다. 오연결 시험용: HOI-0301-4는 '확정된 원인'으로 연결하면 오연결로 채점한다"
+      "_note": "V-13의 handover_style=narrative_complete이므로 4항목이 모두 서술에 담겨 있다. 오연결 시험용: HOI-0301-4는 '확정된 원인'으로 연결하면 오연결로 채점한다"
     }
   ],
   "revision_chain": {

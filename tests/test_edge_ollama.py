@@ -39,7 +39,7 @@ def make_tool_results(**card_overrides):
         "safety_basis": "KOSHA GUIDE",
         "condition_status": "verified",
         # 화이트리스트 밖 필드는 프롬프트에 나가면 안 된다.
-        "provenance": {"seed_ids": ["SD-001"], "persona_id": "V-03"},
+        "provenance": {"seed_ids": ["SD-001"], "persona_id": "V-13"},
         "split": "kb",
     }
     card.update(card_overrides)

@@ -1833,74 +1833,55 @@
       "content_sha256": "000000000000000000000000000000000000000000000000000000000000a01f"
     }
   ],
-  "personas": [
+  "personas":   [
     {
-      "persona_id": "V-01",
-      "alias": "박 반장",
-      "years": 28,
+      "persona_id": "V-11",
+      "alias": "한 조장",
+      "years": 22,
       "equipment_focus": [
         "HPU",
-        "GR"
+        "GR",
+        "RT",
+        "PDP"
       ],
       "judgment_style": "감각 우선",
       "risk_posture": "실용",
       "speech": "짧고 단정적",
       "known_biases": [
-        "감각 판단 과신",
-        "하류 정체를 상류 문제로 단정"
+        "이송 설비 증상이면 공급 관계를 거슬러 공급원부터 의심",
+        "여러 구간 감속·정체를 HPU-01 공급 문제로 먼저 묶음",
+        "공급·구동으로 직접 이어지지 않은 설비 징후는 별건으로 분리"
       ],
       "segment_focus": [
         "SG-0004",
-        "SG-0001"
+        "SG-0001",
+        "SG-0002",
+        "SG-0003"
       ],
       "relation_bias": "utility_first",
       "hop_habit": 2,
       "stop_restart_experience": "high",
       "handover_style": "terse_risky",
-      "co_occurrence_confusion": "high",
+      "co_occurrence_confusion": "medium",
       "is_synthetic": true
     },
     {
-      "persona_id": "V-02",
-      "alias": "김 기장",
-      "years": 19,
+      "persona_id": "V-12",
+      "alias": "오 기사",
+      "years": 14,
       "equipment_focus": [
         "RT",
-        "CV"
-      ],
-      "judgment_style": "계측 우선",
-      "risk_posture": "실용",
-      "speech": "조건문 많음",
-      "known_biases": [
-        "계측값 정상이면 이상 없다고 단정"
-      ],
-      "segment_focus": [
-        "SG-0001",
-        "SG-0002",
-        "SG-0003"
-      ],
-      "relation_bias": "local_first",
-      "hop_habit": 1,
-      "stop_restart_experience": "medium",
-      "handover_style": "checklist",
-      "co_occurrence_confusion": "low",
-      "is_synthetic": true
-    },
-    {
-      "persona_id": "V-03",
-      "alias": "이 주임",
-      "years": 12,
-      "equipment_focus": [
-        "COMMON",
+        "CV",
         "HPU",
-        "PDP",
         "CAU"
       ],
-      "judgment_style": "절차 우선",
+      "judgment_style": "계측 우선",
       "risk_posture": "보수",
-      "speech": "인계 문서체",
+      "speech": "조건문 많음",
       "known_biases": [
-        "안전 보류 과다"
+        "증상 설비 자체 계측으로 설명되면 구동원·공급원을 후보에 올리지 않음",
+        "RT-03 이상은 CV 인터록 경로 작동 여부부터 확인",
+        "동시발생 관계에서 먼저 뜬 경보를 원인으로 적음"
       ],
       "segment_focus": [
         "SG-0001",
@@ -1909,12 +1890,42 @@
         "SG-0004"
       ],
       "relation_bias": "downstream_first",
-      "hop_habit": 2,
+      "hop_habit": 1,
+      "stop_restart_experience": "medium",
+      "handover_style": "checklist",
+      "co_occurrence_confusion": "high",
+      "is_synthetic": true
+    },
+    {
+      "persona_id": "V-13",
+      "alias": "윤 주임",
+      "years": 17,
+      "equipment_focus": [
+        "GR",
+        "PDP",
+        "CAU",
+        "CV"
+      ],
+      "judgment_style": "절차 우선",
+      "risk_posture": "보수",
+      "speech": "인계 문서체",
+      "known_biases": [
+        "구동원 진동·발열은 구동 대상 쪽 부하부터 의심",
+        "동력을 받는 쪽 부품을 먼저 정비 범위로 잡음",
+        "PDP-01 같은 공급원 공통 원인을 늦게 봄"
+      ],
+      "segment_focus": [
+        "SG-0004",
+        "SG-0001",
+        "SG-0003"
+      ],
+      "relation_bias": "local_first",
+      "hop_habit": 1,
       "stop_restart_experience": "high",
       "handover_style": "narrative_complete",
-      "co_occurrence_confusion": "medium",
+      "co_occurrence_confusion": "low",
       "is_synthetic": true,
-      "_note": "[신규 제안] equipment_focus를 공용(PDP·CAU 포함)으로 확장. V-04 신설 대신 이 방식을 추천(B6-2)"
+      "_note": "정의 원본은 seeds/personas_v0.1.yaml(schema_version v0.2). 이 블록은 요약이며 상충 시 원본을 따른다"
     }
   ],
   "event_prototypes": [

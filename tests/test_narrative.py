@@ -27,7 +27,7 @@ def catalog() -> dict:
 @pytest.fixture
 def persona() -> dict:
     personas = yaml.safe_load(PERSONAS.read_text(encoding='utf-8'))['personas']
-    return next(p for p in personas if p['persona_id'] == 'V-01')
+    return next(p for p in personas if p['persona_id'] == 'V-11')
 
 
 def test_prompt_excludes_ground_truth(scenario, persona, catalog) -> None:
@@ -52,7 +52,7 @@ def test_prompt_excludes_post_action_timeline(scenario, persona, catalog) -> Non
 
 def test_prompt_only_exposes_the_personas_own_observations(scenario, persona, catalog) -> None:
     prompt, observation_ids = build_prompt(scenario, persona, catalog)
-    assert observation_ids == ['OB-0103', 'OB-0104', 'OB-0105']
+    assert observation_ids == ['OB-0103', 'OB-0106']
     others = [o for o in scenario['observations']
               if o['observer_persona_id'] != persona['persona_id'] and o['qualitative_text']]
     assert others, 'fixture must contain other personas observations'
@@ -61,7 +61,7 @@ def test_prompt_only_exposes_the_personas_own_observations(scenario, persona, ca
 
 
 def test_timeline_does_not_leak_other_personas_readings(scenario, persona, catalog) -> None:
-    """The ledger timeline merges every persona's sightings; V-01 must not see V-02's."""
+    """The ledger timeline merges every persona's sightings; V-11 must not see V-12's."""
     prompt, _ = build_prompt(scenario, persona, catalog)
     theirs = [t['text'] for t in scenario['event']['timeline']
               if t['kind'] == 'observation' and 'RT-03' in t['text']]
@@ -112,7 +112,7 @@ def test_proposed_scope_is_copyable_into_the_registry(scenario, persona, catalog
     approved = ApprovedScope.model_validate(scope)
     assert approved.kind == 'case'
     assert result['registry_proposal']['derived_from_observation_ids'] == [
-        'OB-0103', 'OB-0104', 'OB-0105']
+        'OB-0103', 'OB-0106']
 
 
 def test_sealed_scenario_is_refused(scenario, persona, catalog) -> None:

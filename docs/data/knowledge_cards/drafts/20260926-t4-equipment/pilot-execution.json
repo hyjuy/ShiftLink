@@ -1,0 +1,14 @@
+{
+  "orchestrator": "/root",
+  "role_context": "Every role spawned with fork_turns=none; one bootstrap read of its own role packet permitted, no further tools allowed.",
+  "model": "Inherited parent configuration, no override; server snapshot and sampling settings unavailable.",
+  "output_capture": "Role final JSON responses transcribed into pilot-senders.json and pilot-receivers.json; actual sender message strings forwarded by pilot.py receivers.",
+  "role_agents": [
+    {"agent":"/root/pilot_sender_none","role":"sender","condition":"none","packet":"pilot-sender-none.txt"},
+    {"agent":"/root/pilot_sender_checklist","role":"sender","condition":"checklist","packet":"pilot-sender-checklist.txt"},
+    {"agent":"/root/pilot_sender_card","role":"sender","condition":"equipment_card","packet":"pilot-sender-equipment_card.txt"},
+    {"agent":"/root/pilot_receiver_none","role":"receiver","condition":"none","packet":"pilot-receiver-none.txt"},
+    {"agent":"/root/pilot_receiver_checklist","role":"receiver","condition":"checklist","packet":"pilot-receiver-checklist.txt"},
+    {"agent":"/root/pilot_receiver_card","role":"receiver","condition":"equipment_card","packet":"pilot-receiver-equipment_card.txt"}
+  ]
+}

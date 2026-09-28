@@ -1,0 +1,331 @@
+{
+  "review_id": "cross-review-hpu-gr-pdp-20260926",
+  "reviewer": "RT/CV/CAU 저자 에이전트가 다른 저자의 HPU/GR/PDP를 교차 검토",
+  "review_scope": "specs-hpu-gr.json 12개와 기존 COMMON cards.json 25개, 신규 RT/CV/CAU specs 14개의 의미 비교. 원본 specs 수정 없음.",
+  "review_limit": "문서·구조 교차 검토이며 장비 실험·현장 검증·블라인드 독립 인적 평가가 아니다. 검토자는 비교 대상 RT/CV/CAU 후보의 저자이다. 평점·현장 신뢰도를 산출하지 않음.",
+  "reviewed_inputs": [
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260926-t4-equipment/specs-hpu-gr.json",
+      "sha256": "348c96e12c1820fa1c473be5e4111c1d25d76201019a39a00fcb8320efb38bed"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260926-t4-equipment/specs-rt-cv.json",
+      "sha256": "6ba16436c535c2b6da44fa79593f52f5eee0be6bd6ae259bc21b368753b6f941"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260925-t4-synthetic/cards.json",
+      "sha256": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260925-t4-synthetic/specs-01-13.json",
+      "sha256": "29687a1aa54a92a2c0347d139f2ce0ad1cf8f2c752553a246a3b2abfb5fe153a"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260925-t4-synthetic/specs-14-25.json",
+      "sha256": "fcd1211d43fd8c723d5ae3dd47af85d8b935ef4bc0befe8df58fd46161e7cc11"
+    },
+    {
+      "path": "docs/data/reference/00_plant_and_relations.json",
+      "sha256": "3e54feb521cfef8808f2793ffee847d063e247c8d3b64372ed8b585c0226d366"
+    }
+  ],
+  "rubric": {
+    "t4_five_fields": "비어 있지 않은 required_context와 4개 문자열이 존재하며 합성 가정임을 밝힐 것",
+    "equipment_necessity": "장비명·부품명만 바꾼 COMMON 복제는 reject. 실제 태그 의미·부품 확인 객체·관계·인스턴스 조합이 수신 대조를 바꿀 때 유지.",
+    "catalog": "적용 EQ와 참조 위치가 존재하고 태그/단위/관계 방향·범위가 일치할 것. 카탈로그는 방법 효능의 근거가 아님.",
+    "boundaries": "관측/추정/승인을 구분하고 원인 판정·조작 지시를 새로 만들지 않을 것",
+    "receipt_state": "미확인 내용을 정확히 되짚으면 수신확인은 가능하되 정보 미해결 유지. 누락·미회신은 별도 수신 미완료."
+  },
+  "mechanical_validation": {
+    "result": "pass",
+    "spec_count": 12,
+    "five_fields": "12개 전부 정확히 5필드이며 비어 있지 않음",
+    "applicable_equipment_ids": "모든 EQ가 카탈로그에 존재",
+    "catalog_refs": "모든 작성 참조가 해당 배열의 ID 및 요청한 property/signal에 해소됨. 범위 충분성은 항목별 별도 검토.",
+    "validator_note": "첫 검사는 PowerShell PSObject.Properties 컬렉션 Count 처리 오류로 중단됐다. @(...Properties)로 컬렉션을 명시해 재실행했고 12개 모두 통과했다. 문서 결함은 아니었다."
+  },
+  "shared_findings": {
+    "synthetic_provenance": "모든 카드가 5필드를 합성이라고 표시하고 카탈로그를 방법 근거와 구분함.",
+    "causality_and_authority": "현재 문안에서 새 원인 확정·운전 조건·승인권·작업 절차를 발견하지 못함.",
+    "receipt_vs_resolution": "모든 unresolved_handling은 미확인 되짚기의 수신완료 가능, 문제 미해결, 미회신 별도 추적을 명시함. 개별 acknowledgement의 입력 상태 고정 문제는 아래에 기록.",
+    "count_policy": "개수 목표를 맞추기 위해 통과시키지 않았음. pass 7, revise 3, reject 2는 판정 개수이며 품질점수가 아님."
+  },
+  "reviews": [
+    {
+      "method_key": "HPU-01",
+      "verdict": "pass",
+      "basis": "공급원 hpu_pressure와 네 수요처의 측정 위치·물리량을 분기 단위로 대조한다. HPU 전체 보고의 대상별 범위가 전달 객체이므로 COMMON M08/M23의 장비명 치환을 넘어선다.",
+      "nearest_methods": [
+        "M08",
+        "M23",
+        "RT-06",
+        "CV-02"
+      ],
+      "semantic_overlap": "RT-06은 RT 클램프 측에서 공급원 자료를 연결하고 CV-02는 장력 표시의 물리량을 보존한다. HPU-01은 HPU에서 나가는 전체 분기 누락을 확인하므로 서로 범위를 분리해 유지 가능.",
+      "issues": [],
+      "recommendations": [
+        "통합 안내에 RT-06·CV-02와의 적용 경계를 적어 같은 인계에 세 카드를 중복 적용하지 않도록 연결한다."
+      ],
+      "catalog_result": "EQ-0001, REL-0009~0012가 존재하며 대상 및 유압 관계 일치.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "HPU-02",
+      "verdict": "pass",
+      "basis": "hpu_pressure와 hpu_filter_dp는 같은 bar이지만 절대 압력 관측과 필터 차압의 의미가 다르고 hpu_flow(L_min)는 별도 관측이다. 세 항목의 태그·단위·시각 짝을 확인하는 장비별 오류 조건이 명시돼 있다.",
+      "nearest_methods": [
+        "M08",
+        "M10"
+      ],
+      "semantic_overlap": "일반 결측·시각 보존 방법을 쓰지만 압력/차압/유량 오전사 조합을 구체적으로 다뤄 독립 적용 범위가 있다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "EQ-0001에 세 태그·단위가 등록되고 CP-0001 주 베인펌프, CP-0002 리턴 필터 존재.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "HPU-03",
+      "verdict": "revise",
+      "basis": "hpu_oil_temp와 쿨러 직접 관측의 근거 경계를 구별하는 방법 자체는 장비별로 유효하다. 그러나 미확인 입력을 수신확인 문장에서 확보 사실로 바꾸는 모순이 있다.",
+      "nearest_methods": [
+        "M11",
+        "M14"
+      ],
+      "semantic_overlap": "등록 유온 태그와 미등록 쿨러 입출구/성능 계측의 경계를 수신자가 확인하므로 단순 부품명 치환은 아니다.",
+      "issues": [
+        {
+          "severity": "required",
+          "field": "handover_method.acknowledgement",
+          "evidence": "수신자가 유온 계측이 있다는 사실과 쿨러 성능은 별도 기록 없이는 미확인이라는 범위를 구분해 회신한다.",
+          "problem": "required_context와 synthetic_narrative는 유온 값·기록이 없을 수 있도록 허용하지만 acknowledgement는 유온 계측이 확보됐음을 고정한다.",
+          "change": "'수신자가 유온 계측 기록의 확보 여부 또는 미확인 상태와 쿨러 성능 확인 기록의 별도 확보 상태를 각각 회신한다'로 조건화한다."
+        }
+      ],
+      "recommendations": [],
+      "catalog_result": "hpu_oil_temp(degC) 및 CP-0005 오일 쿨러 일치. 쿨러 전용 성능/입출구 태그를 생성하지 않은 점 적합.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "공통 상태 분리는 적합하나 acknowledgement 입력 조건 수정 필요"
+    },
+    {
+      "method_key": "HPU-04",
+      "verdict": "reject",
+      "basis": "현재 문안은 '관찰 위치·방향·시각을 보존하고 발생 부품 추정을 관측 사실과 구분'하는 M09+M11의 결합이다. 호스·펌프명과 위치표지를 빼도 전달 순서·수신 대조·실패 조건이 그대로 남는다.",
+      "nearest_methods": [
+        "M09",
+        "M11"
+      ],
+      "semantic_overlap": "HPU 전용 태그·부품 간 구조·관계·측정 의미가 수신 검증을 바꾸지 않는다. 외관 흔적과 내부 원인의 구분은 기존 COMMON 관측/가설 분리로 충족된다.",
+      "issues": [
+        {
+          "severity": "required",
+          "field": "distinguishing_feature/procedure",
+          "evidence": "바닥 등 관찰 위치, 호스 외관 관찰, 펌프 내부 누유라는 원인 후보는 서로 다른 범위다.",
+          "problem": "장비명·부품명을 치환한 일반 위치/추정 인계이고 독립 방법으로 추가할 필수성이 부족하다.",
+          "change": "독립 카드에서 제외하고 M09·M11의 HPU 적용 예시로 보존한다. 재채택은 새로운 근거에서 HPU 부품 간 식별·관측 대조 규칙이 확보될 때 검토한다."
+        }
+      ],
+      "recommendations": [
+        "카탈로그 정확성이나 안전성 때문에 reject하는 것이 아니라 의미 중복 필터에 따른 제외 제안이다."
+      ],
+      "catalog_result": "CP-0001·CP-0006·EQ-0001 위치 표지는 정확하나 방법 독립성 근거가 되지는 않음.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "HPU-05",
+      "verdict": "pass",
+      "basis": "oil 매체의 hydraulic_supply와 signal 매체의 라인 common_mode를 서로 다른 전달 경로로 구별한다. 카탈로그 관계 존재와 실제 모드 기록을 분리해 회신하는 구체적인 이종 관계 확인이다.",
+      "nearest_methods": [
+        "M11",
+        "M12",
+        "M23",
+        "RT-05"
+      ],
+      "semantic_overlap": "RT-05는 소재/역방향 인터록이고 HPU-05는 HPU 유압 수요처/라인 전체 모드라는 서로 다른 관측 대상·관계 조합이다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "REL-0018은 EQ-0001→LN-0001 common_mode(signal), REL-0009·0012는 oil 매체 장비 관계. 임계값을 조작 기준으로 사용하지 않음.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "GR-01",
+      "verdict": "pass",
+      "basis": "같은 gr_vib_rms·gr_brg_temp·gr_current를 쓰는 두 GR의 위치 표지·장비 ID·태그 복합 식별을 요구하고 GR-02에 GR-01 부품 코드를 복사하는 오류를 방지한다.",
+      "nearest_methods": [
+        "M01",
+        "M08",
+        "M13",
+        "RT-01"
+      ],
+      "semantic_overlap": "M01 외부 문의의 식별정보 묶음과 달리 동일 태그를 가진 실제 두 인스턴스 간 전사 오류 및 부품 등록 범위를 검증한다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "EQ-0004/MK-E-01과 EQ-0005/MK-X-01, 세 태그·단위가 모두 일치. GR-02 부품 미등록 사실 확인.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "GR-02",
+      "verdict": "pass",
+      "basis": "센서 부품의 이력·계측값·측정 대상인 베어링 소견을 세 갈래로 대조한다. 계측 생성 부품과 측정 대상 부품의 확인 범위를 구분하는 장비 구조가 방법을 결정한다.",
+      "nearest_methods": [
+        "M05",
+        "M07",
+        "M11"
+      ],
+      "semantic_overlap": "COMMON 결과/근거 분리를 사용하는 구체화이지만 GR-01-BRG/VIB/TMP의 서로 다른 세 확인 객체가 독립 판단 기준을 제공한다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "CP-0007·0011·0012가 EQ-0004에 소속되고 EQ-0004에 진동·온도 태그 존재. 상세 부품 없는 GR-02를 적용 대상에서 제외한 점 적합.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "GR-03",
+      "verdict": "pass",
+      "basis": "GR-01은 RT-01·02, GR-02는 RT-03·CV-01로 서로 다른 fan-out을 갖는다. 동일 역할이 여러 장비를 맡아도 연결 대상별 회신을 따로 확인해 역할별 분리만 하는 M23보다 구체적인 검증을 제공한다.",
+      "nearest_methods": [
+        "M23",
+        "HPU-01",
+        "CV-04"
+      ],
+      "semantic_overlap": "HPU-01은 분기별 측정 물리량, CV-04는 한 CV로 들어오는 세 종류 공급 관계, GR-03은 선택 구동원의 실제 수요 장비 집합과 회신 범위가 핵심이다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "REL-0005~0008의 GR별 실제 drive 대상과 applicability EQ-0004/0005 일치.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "GR-04",
+      "verdict": "reject",
+      "basis": "새 RT-03과 같은 GR-02↔RT-03 장비쌍의 전류/관측을 별개 태그·측정 위치·시각으로 전달하고 하나를 다른 쪽으로 복사하지 않는 동일 방법이다.",
+      "nearest_methods": [
+        "RT-03",
+        "M08",
+        "M13"
+      ],
+      "semantic_overlap": "GR-04의 A 단위·계측점 대응 문서 미확인 추가는 RT-03을 강화할 세부 항목이며 별도 독립 카드를 유지할 이유가 부족하다.",
+      "issues": [
+        {
+          "severity": "required",
+          "field": "entire_method",
+          "evidence": "GR-04: GR-02 gr_current / RT-03 rt_motor_current를 따로 회신. RT-03: RT-03 전류와 연결 GR-02 관측의 설비·태그·측정 위치를 따로 회신.",
+          "problem": "분류 장비를 GR 또는 RT로 바꾼 동일 장비 경계 인계가 중복 생성된다.",
+          "change": "한 canonical 방법으로 통합하고 장비별 적용 sidecar에서 GR-02와 RT-03 양쪽을 연결한다. GR-04의 전류 합산·대체 금지와 계측점 대응 문서 확보 상태는 통합본에 보존한다."
+        },
+        {
+          "severity": "required",
+          "field": "handover_method.acknowledgement",
+          "evidence": "계측점 대응은 미확인이라고 되짚는다.",
+          "problem": "required_context는 대응 문서 보유 여부를 받는데 acknowledgement는 문서가 있어도 미확인을 고정한다.",
+          "change": "통합 시 '계측점 대응 문서의 확보·확인 상태 또는 미확인'을 되짚도록 조건화한다."
+        }
+      ],
+      "recommendations": [
+        "원본 내용은 제외 기록 또는 통합 근거로 남기고 삭제하지 않는다."
+      ],
+      "catalog_result": "EQ-0005 gr_current(A), EQ-0008 rt_motor_current(A), REL-0007 정확. 문제는 정확성보다 중복과 상태 조건.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "공통 상태 분리는 적합하나 acknowledgement 입력 조건 수정 필요"
+    },
+    {
+      "method_key": "PDP-01",
+      "verdict": "pass",
+      "basis": "bus_voltage가 전압 이름을 갖지만 단위는 pct라는 카탈로그 의미를 보존한다. 기준 전압이 없는 상태에서 V로 바꾸지 못한다는 구체적 해석 경계가 수신확인에 포함된다.",
+      "nearest_methods": [
+        "M08",
+        "M11",
+        "CV-01"
+      ],
+      "semantic_overlap": "CV-01의 pct는 적재 대기율이고 PDP는 기준 전압에 대한 비율이다. 서로 다른 의미·확인 대상 때문에 독립 적용 범위가 있다.",
+      "issues": [],
+      "recommendations": [],
+      "catalog_result": "EQ-0002 bus_voltage(pct)·ET-0005 일치. equipment=COMMON/equipment_family=PDP는 현 enum 한계를 드러냄.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "PDP-02",
+      "verdict": "revise",
+      "basis": "외부 순회 관찰과 내부 전기 확인 기록의 경계를 명시하는 내용은 페르소나의 접근·관측 범위와 부합한다. 다만 송신자와 수신자를 같은 recipient_role 목록으로 적어 각 역할의 수신 범위를 확인할 수 없다.",
+      "nearest_methods": [
+        "M02",
+        "M09",
+        "M11",
+        "CAU-02"
+      ],
+      "semantic_overlap": "CAU-02는 관측 종류 3개, PDP-02는 외부 관찰/내부 기록의 접근 범위라는 다른 조합이다. 단순 COMMON 복제라는 판정까지는 하지 않으나 전기 표시의 해석 미확인 범위를 유지해야 한다.",
+      "issues": [
+        {
+          "severity": "required",
+          "field": "handover_method.recipient_role",
+          "evidence": "외부 관찰을 제공하는 V-11과 전기 정비 이상 접수 담당 V-13",
+          "problem": "timing은 V-11의 외부 순회 메모를 정비 접수 담당에게 넘기는 시점인데 수신 목록에는 '제공하는' V-11까지 포함된다. 양방향 인계인지, 교대 취합도 받는지 불분명하다.",
+          "change": "주수신자를 전기 정비 기록 접수 V-13으로 명시한다. V-11이 교대 취합용 사본도 받는 설계라면 송신/사본 인수 범위를 분리해 적고 acknowledgement에서 각 범위를 확인한다."
+        }
+      ],
+      "recommendations": [],
+      "catalog_result": "EQ-0002/MK-UTIL-A2와 ET-0005 정확. 외부 관찰 종류는 personas_v0.1.yaml의 V-11 범위에 있고 카탈로그 내부 부품 ID는 생성하지 않음.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    },
+    {
+      "method_key": "PDP-03",
+      "verdict": "revise",
+      "basis": "직접 power_supply 대상과 하류 drive/hydraulic_supply의 매체·대상 구분은 장비별 필수성이 있다. 다만 CV까지 포함한다는 방법 범위에 비해 catalog_refs는 하류 RT-03 연결만 제시한다.",
+      "nearest_methods": [
+        "M12",
+        "M23",
+        "HPU-05",
+        "CV-04"
+      ],
+      "semantic_overlap": "PDP-03은 직접 전력 대상과 2단계 하류를 나누고 CV-04는 한 수요 장비로 들어오는 매체를 나누므로 구별 가능.",
+      "issues": [
+        {
+          "severity": "required",
+          "field": "catalog_refs",
+          "evidence": "REL-0013/0014/0015와 REL-0007/0011만 참조하면서 required_context는 '하류 RT·CV'를 다룸",
+          "problem": "현재 하류 참조 REL-0007(GR-02→RT-03)·REL-0011(HPU-01→RT-03)에는 CV가 없다. 방법의 CV 경로를 추적할 수 있게 참조를 보완해야 한다.",
+          "change": "CV-01 drive REL-0008 및 hydraulic_supply REL-0012를 추가한다. RT-01/02를 포함한 모든 하류를 포괄하려면 REL-0005/0006/0009/0010도 추가하거나 범위를 RT-03·CV-01 예시로 명시한다."
+        }
+      ],
+      "recommendations": [],
+      "catalog_result": "적힌 5개 참조 자체는 모두 유효. PDP 직접 대상 GR-01·GR-02·HPU-01과 applicability EQ-0002도 정확. 참조 범위의 불완전성이 문제.",
+      "t4_fields": "present_and_nonempty",
+      "synthetic_status": "five_fields_explicitly_synthetic",
+      "boundary_check": "진단·작업 절차·승인권 생성 없음",
+      "receipt_resolution_check": "미확인 되짚기의 수신확인 가능, 정보 미해결과 미회신 별도 추적"
+    }
+  ],
+  "recommended_next_actions": [
+    "HPU-04는 COMMON 적용 예시로 이동하고 독립 카드 생성에서 제외한다.",
+    "GR-04와 RT-03은 하나의 방법으로 통합하되 장비별 적용 메타데이터를 양쪽에 연결한다.",
+    "HPU-03·PDP-02·PDP-03의 구체 수정과 GR/RT 통합 후 변경본을 검증하고 변경 전 리뷰 해시를 최신 승인 해시처럼 재사용하지 않는다."
+  ]
+}

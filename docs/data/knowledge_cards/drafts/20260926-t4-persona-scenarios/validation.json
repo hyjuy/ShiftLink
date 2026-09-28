@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-09-25T15:32:06.575971+00:00",
+  "scenario_count": 25,
+  "linked_card_schema_passed": 25,
+  "fictional_fact_count": 200,
+  "method_field_links_checked": 125,
+  "persona_counts": {
+    "V-11": 9,
+    "V-12": 8,
+    "V-13": 8
+  },
+  "independent_review_passed": 25,
+  "integrity_negative_probes_rejected": [
+    "unknown_reference",
+    "sender_private_access",
+    "missing_synthetic_label",
+    "invented_authority",
+    "circular_response_support"
+  ],
+  "simulation_mode": "authored_script",
+  "isolated_agent_execution_performed": false,
+  "card_effectiveness_experiment_performed": false,
+  "real_site_validation_performed": false,
+  "previous_card_scores_reused": false,
+  "input_hashes": {
+    "scenarios-01-13.json": "e1744e7c27acc1b94f1ff0976036f0fee12cdf042807550287c4947aa9af757c",
+    "scenarios-14-25.json": "8a45cf244416b984a8a2fd4be4161b4f468bb31b3fbd01bd9140adb1f9eccc13",
+    "review.json": "10075f21e1a8e51278b0a5a73e59f5be9b4c20cd7c43e50bb9c24ab14982dec7"
+  },
+  "linked_cards_sha256": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172",
+  "persona_file_sha256": "072290bb4fa8dfb1448d1746a9f256efa37c83e9653ab41a0172d0d10185622d",
+  "verifier_sha256": "0752e5a05b6472b64cf21dfc15a0ae086937771cf17add6307f465f334ea0ecd"
+}

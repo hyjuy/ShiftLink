@@ -1,0 +1,39 @@
+{
+  "policy_version": "synthetic-t4-development-v1",
+  "authorization": "사용자 후속 요청: 하니스 검증·서브에이전트 검토를 수행하고 누락된 내용을 합성 데이터로 생성해 25건을 채우기",
+  "is_synthetic": true,
+  "scope": "합성 인계 방법의 개발용 KnowledgeCard 초안. 원문으로 검증된 현장 지식·작업표준·독립 사건이 아님.",
+  "split": "dev",
+  "split_basis": "이 파일에서 명시적으로 정한 로컬 sandbox 개발 전용 배정. 운영 원문 그룹 배정이 아니며 prototype_split.json을 변경하거나 기존 sealed 그룹을 재배정하지 않는다.",
+  "id_allocation": "seeds, docs/data/knowledge_cards, eval/fixtures/dev의 기존 JSON에서 K 식별자만 조사한 뒤 미사용 최소 양의 번호 25개를 실행기가 할당한다. 이 배치 폴더는 조사에서 제외한다. 범위 내 충돌 검사이며 전역 ID 발급 승인이 아니다.",
+  "version_allocation": "정렬·정규화한 설계 명세와 배치 정책을 함께 SHA-256으로 계산한 앞 12자리를 synthetic- 접두어와 결합한다.",
+  "confidence_definition": "5개 인계 필드 중 이전 원문 검토의 supported 필드와 값·근거가 일치하는 필드 수 / 5. 실제 실행 측정값. 사실 정확도 확률·AI 품질점수·현장 적용 신뢰도가 아니다.",
+  "scenario": "S1",
+  "scenario_basis": "이 배치의 공통 합성 인계 연습용 스키마 슬롯. 실제 사건이나 기존 S1 사건 원장에 대응한다는 주장이 아니다.",
+  "equipment": "COMMON",
+  "equipment_basis": "정보 전달 방법을 설계하므로 특정 설치 모델을 지정하지 않는다.",
+  "component": "인계 정보 및 수신 확인 기록",
+  "safety_boundary": "합성 인계 설계이며 현장 표준이 아니다. 수신 확인은 정보의 수신·이해 확인만 뜻한다. 운전 조건 변경·정비 착수·재가동·제한 해제를 승인하지 않는다. 실제 승인·작업·결과 기록이 입력되지 않았으면 확인된 사실로 쓰지 않는다.",
+  "provenance_policy": "실제 명세 파일과 로컬 합성 source_ref, 명세 작성 persona_id, 실행 UTC 시각, 실행 스크립트와 스키마 버전을 기록한다. event_ids는 비워 둔다. 확인하지 않은 model_version은 생략한다.",
+  "approval_policy": "사람 출처 승인·안전 검토·카드 채택은 미완료. source_registry와 운영 DB를 변경하지 않는다. production generation pipeline 통과로 보고하지 않는다.",
+  "rubric": {
+    "name": "합성 T4 설계 품질: AI 독립 검토",
+    "dimensions": {
+      "reusability": "사건 한 건의 현황이 아닌 반복 적용할 정보 전달 방법인가",
+      "specificity": "다섯 필드와 미확인·미응답 처리까지 실행 가능한 전달 방식인가",
+      "consistency": "전달 내용·대상·시점·채널·확인 응답이 서로 일치하는가",
+      "boundary": "합성·미확인을 투명하게 표시하고 인계와 물리 조치·승인을 구분하는가",
+      "distinctness": "설비명·제목·문체를 제외해도 다른 카드와 목적·정보·확인 방식이 다른가"
+    },
+    "anchors": {
+      "0": "누락 또는 목적과 반대",
+      "1": "중대한 누락·충돌로 재작성 필요",
+      "2": "부분 충족, 사용 전 구체적 보완 필요",
+      "3": "개발용 초안으로 충족, 작은 개선 여지",
+      "4": "명확하고 구체적으로 충족"
+    },
+    "score_formula": "sum(five_dimension_scores) * 5; 0–100. 독립 검토자별 점수와 이유를 보존하고 산술평균을 집계한다.",
+    "development_acceptance": "스키마·추적·격리 검사 통과, 각 검토자 80점 이상, 모든 차원 3점 이상, 해결되지 않은 major finding 없음. 현장 채택 기준이 아니다.",
+    "factual_validation": "별도 원문 필드 충족률과 현장 검증 카드 수를 보고한다. 합성 source는 독립 사실 증거로 세지 않는다."
+  }
+}

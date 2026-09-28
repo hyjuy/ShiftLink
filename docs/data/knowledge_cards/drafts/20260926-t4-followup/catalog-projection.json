@@ -1,0 +1,827 @@
+{
+  "equipment_types": [
+    {
+      "equipment_type_id": "ET-0001",
+      "type_code": "HPU",
+      "model_name": "가상-HPU-45L",
+      "manufacturer_label": "가상-A",
+      "spec_ref_seed_ids": [
+        "SD-001",
+        "SD-002"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0002",
+      "type_code": "GR",
+      "model_name": "가상-GR-315",
+      "manufacturer_label": "가상-B",
+      "spec_ref_seed_ids": [
+        "SD-003",
+        "SD-004"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0003",
+      "type_code": "RT",
+      "model_name": "가상-RT-1200",
+      "manufacturer_label": "가상-B",
+      "spec_ref_seed_ids": [],
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    },
+    {
+      "equipment_type_id": "ET-0004",
+      "type_code": "CV",
+      "model_name": "가상-CV-800",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [
+        "SD-005"
+      ]
+    },
+    {
+      "equipment_type_id": "ET-0005",
+      "type_code": "PDP",
+      "model_name": "가상-PDP-400",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [],
+      "_note": "[신규 제안] 기존 enum(HPU/GR/RT/CV/COMMON) 밖의 유형. K-01의 equipment 값은 COMMON으로 매핑한다",
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    },
+    {
+      "equipment_type_id": "ET-0006",
+      "type_code": "CAU",
+      "model_name": "가상-CAU-75",
+      "manufacturer_label": "가상-C",
+      "spec_ref_seed_ids": [],
+      "_note": "[신규 제안] 위와 동일",
+      "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
+    }
+  ],
+  "equipment": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "equipment_type_id": "ET-0001",
+      "equipment_group_id": "EG-0001",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 1층",
+      "location_marker": "MK-UTIL-A1",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "hpu_pressure",
+          "unit": "bar",
+          "normal_min": 145.0,
+          "normal_max": 165.0,
+          "alarm_low": 130.0,
+          "alarm_high": 175.0,
+          "max_rate_of_change": 8.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_oil_temp",
+          "unit": "degC",
+          "normal_min": 35.0,
+          "normal_max": 58.0,
+          "alarm_low": null,
+          "alarm_high": 65.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_filter_dp",
+          "unit": "bar",
+          "normal_min": 0.0,
+          "normal_max": 1.2,
+          "alarm_low": null,
+          "alarm_high": 2.0,
+          "max_rate_of_change": 0.3,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "hpu_flow",
+          "unit": "L_min",
+          "normal_min": 38.0,
+          "normal_max": 46.0,
+          "alarm_low": 30.0,
+          "alarm_high": null,
+          "max_rate_of_change": 4.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "equipment_type_id": "ET-0005",
+      "equipment_group_id": "EG-0002",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 배전반",
+      "location_marker": "MK-UTIL-A2",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "bus_voltage",
+          "unit": "pct",
+          "normal_min": 97.0,
+          "normal_max": 103.0,
+          "alarm_low": 94.0,
+          "alarm_high": 106.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "equipment_type_id": "ET-0006",
+      "equipment_group_id": "EG-0003",
+      "segment_id": "SG-0004",
+      "location_text": "유틸리티실 A동 2층",
+      "location_marker": "MK-UTIL-A3",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "air_pressure",
+          "unit": "kPa",
+          "normal_min": 550.0,
+          "normal_max": 700.0,
+          "alarm_low": 480.0,
+          "alarm_high": null,
+          "max_rate_of_change": 40.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "equipment_type_id": "ET-0002",
+      "equipment_group_id": "EG-0004",
+      "segment_id": "SG-0001",
+      "location_text": "입측 조작반 좌측 5 m",
+      "location_marker": "MK-E-01",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "alarm_low": null,
+          "alarm_high": 4.5,
+          "max_rate_of_change": 0.6,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "alarm_low": null,
+          "alarm_high": 72.0,
+          "max_rate_of_change": 1.5,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "alarm_low": null,
+          "alarm_high": 36.0,
+          "max_rate_of_change": 3.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "equipment_type_id": "ET-0002",
+      "equipment_group_id": "EG-0005",
+      "segment_id": "SG-0003",
+      "location_text": "출측 조작반 우측 4 m",
+      "location_marker": "MK-X-01",
+      "status": "in_service",
+      "criticality": "A",
+      "measurement_points": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8,
+          "alarm_low": null,
+          "alarm_high": 4.5,
+          "max_rate_of_change": 0.6,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0,
+          "alarm_low": null,
+          "alarm_high": 72.0,
+          "max_rate_of_change": 1.5,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0,
+          "alarm_low": null,
+          "alarm_high": 36.0,
+          "max_rate_of_change": 3.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0006",
+      "segment_id": "SG-0001",
+      "location_text": "입측 1~12번 롤러",
+      "location_marker": "MK-E-02",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0007",
+      "segment_id": "SG-0002",
+      "location_text": "중앙 13~28번 롤러",
+      "location_marker": "MK-C-01",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_lift_delay",
+          "unit": "min",
+          "normal_min": 0.0,
+          "normal_max": 0.05,
+          "alarm_low": null,
+          "alarm_high": 0.12,
+          "max_rate_of_change": 0.03,
+          "_note": "[가상 값] 승강 응답 지연(분)"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "equipment_type_id": "ET-0003",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "출측 29~40번 롤러",
+      "location_marker": "MK-X-02",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 15.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0,
+          "alarm_low": 85.0,
+          "alarm_high": null,
+          "max_rate_of_change": 6.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8.0,
+          "normal_max": 16.0,
+          "alarm_low": null,
+          "alarm_high": 20.0,
+          "max_rate_of_change": 2.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "equipment_type_id": "ET-0004",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "출측 적재 컨베이어",
+      "location_marker": "MK-X-03",
+      "status": "in_service",
+      "criticality": "B",
+      "measurement_points": [
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_min": 10.0,
+          "normal_max": 60.0,
+          "alarm_low": null,
+          "alarm_high": null,
+          "max_rate_of_change": 10.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "cv_belt_tension",
+          "unit": "kPa",
+          "normal_min": 380.0,
+          "normal_max": 460.0,
+          "alarm_low": 330.0,
+          "alarm_high": 510.0,
+          "max_rate_of_change": 30.0,
+          "_note": "[가상 값]"
+        },
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "alarm_low": null,
+          "alarm_high": 90.0,
+          "max_rate_of_change": 12.0,
+          "_note": "[가상 값] 적재 대기율"
+        }
+      ],
+      "is_synthetic": true
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "equipment_type_id": "ET-0004",
+      "equipment_group_id": "EG-0008",
+      "segment_id": "SG-0003",
+      "location_text": "스크랩 컨베이어",
+      "location_marker": "MK-X-04",
+      "status": "in_service",
+      "criticality": "C",
+      "measurement_points": [
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0,
+          "alarm_low": null,
+          "alarm_high": 90.0,
+          "max_rate_of_change": 12.0,
+          "_note": "[가상 값]"
+        }
+      ],
+      "is_synthetic": true
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "REL-0001",
+      "from_kind": "equipment",
+      "from_id": "EQ-0006",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 12,
+      "capacity": {
+        "value": 120.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "입측 RT-01에서 중앙 RT-02로 소재 전달",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0002",
+      "from_kind": "equipment",
+      "from_id": "EQ-0007",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 15,
+      "capacity": {
+        "value": 120.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "중앙 RT-02에서 출측 RT-03으로 소재 전달",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0003",
+      "from_kind": "equipment",
+      "from_id": "EQ-0008",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "material",
+      "lag_seconds": 10,
+      "capacity": {
+        "value": 60.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "출측 RT-03에서 적재 컨베이어 CV-01로 배출",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0004",
+      "from_kind": "equipment",
+      "from_id": "EQ-0008",
+      "to_kind": "equipment",
+      "to_id": "EQ-0010",
+      "relation_type": "material_flow",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "material",
+      "lag_seconds": 10,
+      "capacity": {
+        "value": 20.0,
+        "unit": "m_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "불량 절단재의 스크랩 분기",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0005",
+      "from_kind": "equipment",
+      "from_id": "EQ-0004",
+      "to_kind": "equipment",
+      "to_id": "EQ-0006",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-01이 입측 롤러 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0006",
+      "from_kind": "equipment",
+      "from_id": "EQ-0004",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-01이 중앙 롤러도 함께 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0007",
+      "from_kind": "equipment",
+      "from_id": "EQ-0005",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "torque",
+      "lag_seconds": 1,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-02가 출측 롤러 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0008",
+      "from_kind": "equipment",
+      "from_id": "EQ-0005",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "drive",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "torque",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "GR-02가 적재 컨베이어도 구동",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0009",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0006",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 4,
+      "capacity": {
+        "value": 12.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-01 클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0010",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0007",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 5,
+      "capacity": {
+        "value": 14.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-02 승강·클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0011",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "oil",
+      "lag_seconds": 6,
+      "capacity": {
+        "value": 12.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 RT-03 클램프에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0012",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "hydraulic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "oil",
+      "lag_seconds": 8,
+      "capacity": {
+        "value": 6.0,
+        "unit": "L_min"
+      },
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01이 CV-01 텐셔너에 유압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0013",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0004",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 GR-01에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0014",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0005",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 GR-02에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0015",
+      "from_kind": "equipment",
+      "from_id": "EQ-0002",
+      "to_kind": "equipment",
+      "to_id": "EQ-0001",
+      "relation_type": "power_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "electric",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "PDP-01이 HPU-01 펌프 모터에 전력 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0016",
+      "from_kind": "equipment",
+      "from_id": "EQ-0003",
+      "to_kind": "equipment",
+      "to_id": "EQ-0009",
+      "relation_type": "pneumatic_supply",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "air",
+      "lag_seconds": 3,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "CAU-01이 CV-01 디버터에 공압 공급",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0017",
+      "from_kind": "equipment",
+      "from_id": "EQ-0009",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "interlock",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "signal",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "CV-01 적재 대기율 90 % 초과 시 RT-03 감속·정지 인터록",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0018",
+      "from_kind": "equipment",
+      "from_id": "EQ-0001",
+      "to_kind": "line",
+      "to_id": "LN-0001",
+      "relation_type": "common_mode",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "high",
+      "transfer_medium": "signal",
+      "lag_seconds": 0,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "HPU-01 압력 130 bar 미달 시 라인 저속 모드로 전환",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0019",
+      "from_kind": "equipment",
+      "from_id": "EQ-0007",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "co_occurrence",
+      "direction": "bidirectional",
+      "causality": "co_occurrence",
+      "evidence_strength": "low",
+      "transfer_medium": "none",
+      "lag_seconds": null,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "동일 유압 분기를 공유해 함께 증상이 나타나는 경향만 있음. 원인 확정 근거로 사용 금지(QC-CAUSE-02)",
+      "is_synthetic": true
+    },
+    {
+      "relation_id": "REL-0020",
+      "from_kind": "equipment",
+      "from_id": "EQ-0010",
+      "to_kind": "equipment",
+      "to_id": "EQ-0008",
+      "relation_type": "interlock",
+      "direction": "directed",
+      "causality": "causal",
+      "evidence_strength": "medium",
+      "transfer_medium": "signal",
+      "lag_seconds": 2,
+      "capacity": null,
+      "valid_from": "2026-01-01T00:00:00+09:00",
+      "valid_to": null,
+      "note": "선택 관계. 스크랩 컨베이어 만적 시 RT-03 배출 정지",
+      "is_synthetic": true
+    }
+  ]
+}

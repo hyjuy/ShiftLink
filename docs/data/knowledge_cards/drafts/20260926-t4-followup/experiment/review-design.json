@@ -1,0 +1,151 @@
+{
+  "reviewer": "/root/design_review",
+  "author_independent": true,
+  "review_date": "2026-09-26",
+  "review_stage": "final_independent_pre_freeze_recheck",
+  "verdict": "pass",
+  "meaning_of_pass": "The reviewed design is suitable for a separate freeze step. This is not a freeze, execution authorization beyond the parent task, a role result, or evidence of T4 effectiveness.",
+  "initial_review": "review-design-initial.json",
+  "initial_review_sha256": "6e2422f86ceae353dd13202e91e8a5683bca5eb47c874c7425c2abdabbae2c65",
+  "role_execution_performed": false,
+  "scope": "Experiment files; allowed catalog-projection.json; selected cards and equipment-map entries only. No original catalog, sealed/holdout, prior role scripts, or broad repository search.",
+  "findings": [],
+  "resolution_history": [
+    {
+      "id": "R1",
+      "status": "resolved",
+      "paths": [
+        "evaluation-only/rubric.md",
+        "evaluation-only/judgment-template.json"
+      ],
+      "verified": "Actual receiver input atoms are enumerated, deduplicated and hash-locked before viewing receiver output; quoted inclusion/exclusion evidence and denominator are retained. Fixed-ledger judgments, actual-input fidelity, claims, requests and per-response summaries are distinct. Faithful reproduction of sender misinformation can count as input fidelity but remains wrong end-to-end, inherited misinformation, and not a newly unsupported receiver claim."
+    },
+    {
+      "id": "R2",
+      "status": "resolved",
+      "paths": [
+        "evaluation-only/fact-ledger.json",
+        "assemble-design.py",
+        "evaluation-only/rubric.md"
+      ],
+      "verified": "GR/CV/CAU state and time/cutoff facts were separated. CAU actual receipt and content confirmation are separate unknown atoms. Rubric fixes contextual identity and partial-preservation rules without hidden partial credit. Final denominator is69 fact and27 unknown atoms."
+    },
+    {
+      "id": "R3",
+      "status": "resolved",
+      "paths": [
+        "protocol.md",
+        "evaluation-only/rubric.md"
+      ],
+      "verified": "Unchanged HPU know_how's unavailable catalog dependency is acknowledged; a reference is not permission to fetch and remembered specific relations are not input evidence. Normal/error examples distinguish unsupported concrete supply assignments, verification requests, general unit explanation and assigning the unobserved memo unit."
+    },
+    {
+      "id": "R4",
+      "status": "resolved",
+      "origin": "Follow-up independent cross-check after initial-review preservation; tracked by author as R2_additional",
+      "paths": [
+        "evaluation-only/fact-ledger.json",
+        "evaluation-only/rubric.md",
+        "review-revisions.json"
+      ],
+      "initial_issue": "PDP mandatory phase-voltage unknown and CV full/interlock names were available only in t4 support and could conflict with the strict unsupported-target rule in baseline conditions.",
+      "verified": "Removed mandatory PDP phase-voltage atom; narrowed CV to generic signal state available in raw notes. Support-only details do not create mandatory fixed-ledger points or omissions. No raw memo or role packet was expanded."
+    },
+    {
+      "id": "traceability",
+      "status": "resolved",
+      "paths": [
+        "execution-log-template.json"
+      ],
+      "verified": "Actual outer-prompt file path and actual packet UTF-8 bytes fields now support the protocol's logging requirements."
+    }
+  ],
+  "checks": {
+    "sender_packets": 18,
+    "receiver_templates": 6,
+    "source_memos": 6,
+    "unchanged_role_templates_and_memos_vs_initial": 30,
+    "planned_pairs": 54,
+    "planned_roles": 108,
+    "max_attempts_with_infrastructure_retry": 216,
+    "fixed_fact_atoms": 69,
+    "fixed_unknown_atoms": 27,
+    "selected_catalog_references_resolved_in_allowed_projection": 21,
+    "source_cards_sha256": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+    "source_version": "synthetic-f7c3411308f7",
+    "initial_snapshot_hash_matches": 7,
+    "revision_manifest_current_hash_matches": 7,
+    "static_verification_command": "python docs/data/knowledge_cards/drafts/20260926-t4-followup/experiment/verify-design.py",
+    "static_verification_exit_code": 0,
+    "static_verification_result": "pass; run by independent reviewer after reading the script and confirming its read-only scope",
+    "manual_semantic_review": "All six memo sets and all fixed atom expected values inspected; no answer-like raw instruction or evaluation leakage identified. Support is the intended intervention, not incident evidence. Three-condition common values, selected know_how exact copies, actual template shape, fixed order and repeated cardinalities independently compared.",
+    "other_design_requirements": "Strict/sensitivity target-presupposition examples; general-unit boundary; new-information/receipt/reask/echo units; two-turn limit; length package-effect limitation; fresh fork_turns=none and one-read rules; observation-unavailable eligibility; stop/retry/missing rules; nonblinding limitations; and post-revision new-situation evaluation requirements remain explicit."
+  },
+  "remaining_limitations": [
+    "Synthetic development cases are authored with card knowledge and prior pilot limitations in mind, so six event groups are not an independent generalization set.",
+    "T4 support is400-463 Unicode characters versus91 for checklist and0 for none. The comparison estimates a content-plus-length package effect.",
+    "The HPU card's catalog reference remains an unavailable dependency in the role packet by design. This is a disclosed test limitation, not permission for external lookup or catalog-based incident claims.",
+    "Fresh contexts and tool rules are instruction controls, not OS isolation. Actual tool observability and eligibility must be recorded in execution.",
+    "Condition can be inferred from path/support phrasing and content. Full participant or evaluator blinding is not established.",
+    "Model snapshot, token cap, sampling configuration, actual usage and costs may be unavailable; reproducibility is limited to exposed settings and retained inputs/outputs.",
+    "A separate freezer must compute and verify the final manifest; future actual receiver packets depend on real sender output and cannot be pre-frozen as existing files.",
+    "This pass does not establish comparative effectiveness, validate all cards, or authorize claims about field operation, task resolution or independent generalization."
+  ],
+  "input_hashes": {
+    "assemble-design.py": "83d8ee4991a93da874811ac8567625cfb603e9b51e68f67012cacd01d2fa2b98",
+    "card-selection.json": "b6f311d8d788a6803b26ff207c7f2c5d859022d57822414b41ddb54f85d73026",
+    "coverage-and-lineage.json": "350b60ff76eae6796ba595b002a66f0b477414bc42cecf386efb95b3b76cb9d7",
+    "evaluation-only/fact-ledger.json": "17ac7ce682fefe7f71b9e8380e0d8b4e28ac80e8ceebe884fbc2e954414213dc",
+    "evaluation-only/judgment-template.json": "38727fa3c4fbbdf3d92cedf5c8cedaf27991d2e539f75ac71eb555339b2bd97c",
+    "evaluation-only/rubric.md": "c1d0ff63609f6728dcbd6fc6d834dc3aa2bf89a2a12427cee9351e11a829bb4f",
+    "execution-log-template.json": "434f6f5dc418978417c759d188e5f3f7eb668e1d5e305883a465e112e73b2b6f",
+    "input-lengths.json": "644196ede78ae13cfed1d657b9e47a51ac34c1868aeb38ced9e61a7a58c3b6ae",
+    "protocol.md": "0b0c937ee6d1d61c595e0b65ff2b925426c66b5fbe5baac41f207022e5325c76",
+    "README.md": "4ed0709ff962f64b581438c780580f0d4c69a87391a4f535bb36d66a915e2e14",
+    "receiver-templates/F-CAU.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-CV.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-GR.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-HPU.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-PDP.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-RT.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "review-design-initial.json": "6e2422f86ceae353dd13202e91e8a5683bca5eb47c874c7425c2abdabbae2c65",
+    "review-revisions.json": "f71b42545fc3f2f0fb817d6af2faaea062f92e581e3e02eac7736d0bc4607bba",
+    "review-snapshots/initial/assemble-design.py": "cd4f8b12df62589d567075198207db424dab5ed172d37af41f0f7ef1e4acf264",
+    "review-snapshots/initial/evaluation-only/fact-ledger.json": "e62eaee857220b32692a5bb0a415ad7a5facde877f4b269e95f4ccc697b97428",
+    "review-snapshots/initial/evaluation-only/judgment-template.json": "78a4bc6bf723694798407b208b6e50b5dbd8db5e9fdac84cff9822cd32dcd5bb",
+    "review-snapshots/initial/evaluation-only/rubric.md": "e17b204ea9bd47e60a65e2af58230a86e4b8449c694733ade2ee7fd3be6fd627",
+    "review-snapshots/initial/execution-log-template.json": "697d58b230b60fc3c7ea4eb899dc52896dfe325240630d638ac21295aa06a755",
+    "review-snapshots/initial/protocol.md": "a3f3707aa53031ec142367a29e17702a3ec53e53e8e9125a3daaf59c84af2730",
+    "review-snapshots/initial/verify-design.py": "0f3e3a9f468540d3a456fcb588b10ffe065340447b24c7bc3c29df3751fa039c",
+    "run-plan.json": "e8453b756a52e6baac31880de2cba094b5656c6a1af3790322339ea3193b474c",
+    "sender-packets/F-CAU-checklist.json": "7010a8b23b54686404541f93903448d76cdb12a21e07b25ea0a1c79bae0b07cc",
+    "sender-packets/F-CAU-none.json": "dba349b6865a176bd1c6c27fff869addbe902d87e38754275777fa438df8d8aa",
+    "sender-packets/F-CAU-t4.json": "7a999175cce20a775751dedd92a3135ad2d79b160bc9229e9469b236f7d81f7d",
+    "sender-packets/F-CV-checklist.json": "fea857937e902c56cf819cffab9bcc1549aec32471c3a21100eee4569c108e31",
+    "sender-packets/F-CV-none.json": "d2f7db22abdf02df05ab614e10826ce071b90a540dedec4f86be7667a1ef61da",
+    "sender-packets/F-CV-t4.json": "fede96353aa73c40d4326a51b358c5de30bf31c0af091246530cc59c9b0f73f2",
+    "sender-packets/F-GR-checklist.json": "590a741334e8a8021346232aee8c755999d60b5af3f48515ea0c90e5edb44d10",
+    "sender-packets/F-GR-none.json": "97dc4b754d2a609ac6f19d89bd54f0320d2f0104fd9b313b988f419197023c06",
+    "sender-packets/F-GR-t4.json": "45a44fcedcb268f43cc90fd31cd94abb7579b2f04cf6c20f853a8a9c64c4a550",
+    "sender-packets/F-HPU-checklist.json": "806ae713206d48aec81d86f2396e497d5bd8312566d9a24c2b22da5a326ff877",
+    "sender-packets/F-HPU-none.json": "534e6630428129e399fd28bbbaf6545447191103a9506c09a71f670640e81f20",
+    "sender-packets/F-HPU-t4.json": "49605199eda124ad50601a79a619403c728c3bf238509123b1d829e70d22c108",
+    "sender-packets/F-PDP-checklist.json": "28ae25829d051552e79f5d1ebe466662820deb5aa74728a99e81da0c25ab89a3",
+    "sender-packets/F-PDP-none.json": "1290add7162d1ace00117da72b85f0fcfdff70784e313fb8178ce704a11f9c41",
+    "sender-packets/F-PDP-t4.json": "7de87484f5cec13f72705f1c03b9360670c89ea5a26e550c048231a281593871",
+    "sender-packets/F-RT-checklist.json": "30a3fe08135a5f197d862e666ce39606338af8f1a7df02db9a933d1f54ab8a7b",
+    "sender-packets/F-RT-none.json": "bb166d0deb349ce0187029119f1d3a6e875e3ea0cdf034ad74736be6c179a27a",
+    "sender-packets/F-RT-t4.json": "8f98341d1b21fe7274a804bf5912432b26aaced23fe9ad9a0f3f5371ef63d70c",
+    "source-memos/F-CAU.txt": "ba401327d5fa8e31c5b49454a14542e474ffd220b04e3a1cd0895a14a443685d",
+    "source-memos/F-CV.txt": "a03d24821c957d2279e1563d0e25f904fe25ea799c39bf0bef7a41a17727dabb",
+    "source-memos/F-GR.txt": "65b88ff0195e1be84ab9a7b137944b8f4f591339aed5aa060d467e208d1e34ee",
+    "source-memos/F-HPU.txt": "fa6b07865f84821108d38798289391a475d0b16c8d1b0eda02b927977a8f0d25",
+    "source-memos/F-PDP.txt": "b40a4123c6a4fc681c35894470947a82b375dba5571208a3635c9159e0003ad5",
+    "source-memos/F-RT.txt": "60bf2cb2045308a3f42e2179e07da6684ca808886970b3e946e2fc7862f669c6",
+    "validation-design.json": "1fda8029efa06b5934c1d78bba22aba05b4b611beb1cb86e2eecee6e09446278",
+    "verify-design.py": "0b34c18c25b7db1efabd1f5461baa5e2f2f0d5f468e10146d3155d2e968bff0f",
+    "../../20260926-t4-equipment/cards.json": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+    "../../20260926-t4-equipment/equipment-map.json": "04783856723ee24fd0b169e9bb8187aa3ad429f739a71236990a6818d23c2a3b",
+    "../catalog-projection.json": "af76954b6dd5488db3a6a70836121d7070740fbcc91eac94c183c1fcf841fff6"
+  }
+}

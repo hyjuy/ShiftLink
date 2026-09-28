@@ -1,0 +1,58 @@
+{
+  "static_validation": "pass",
+  "author_check_only": true,
+  "scenario_count": 6,
+  "sender_packets": 18,
+  "receiver_templates": 6,
+  "planned_pairs": 54,
+  "planned_role_calls": 108,
+  "executed_role_calls": 0,
+  "fact_atoms": 69,
+  "unknown_atoms": 27,
+  "selected_catalog_refs_resolved": 21,
+  "support_characters": [
+    {
+      "scenario": "F-HPU",
+      "none": 0,
+      "checklist": 91,
+      "t4": 453
+    },
+    {
+      "scenario": "F-GR",
+      "none": 0,
+      "checklist": 91,
+      "t4": 405
+    },
+    {
+      "scenario": "F-RT",
+      "none": 0,
+      "checklist": 91,
+      "t4": 443
+    },
+    {
+      "scenario": "F-CV",
+      "none": 0,
+      "checklist": 91,
+      "t4": 463
+    },
+    {
+      "scenario": "F-PDP",
+      "none": 0,
+      "checklist": 91,
+      "t4": 400
+    },
+    {
+      "scenario": "F-CAU",
+      "none": 0,
+      "checklist": 91,
+      "t4": 455
+    }
+  ],
+  "independent_design_review": "not_evaluated_by_this_static_check",
+  "freeze": "not_evaluated_by_this_static_check",
+  "semantic_leakage_review": "not_evaluated_by_this_static_check",
+  "final_status_sources": [
+    "review-design.json",
+    "../freeze.json"
+  ]
+}

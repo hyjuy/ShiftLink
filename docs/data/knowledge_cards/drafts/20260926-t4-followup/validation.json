@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-09-25T16:48:12.540784+00:00",
+  "status": "pass",
+  "schema_pass": 5,
+  "required_field_negative_rejections": 50,
+  "dev_load_rejections": 5,
+  "draft_L0_exclusions_in_memory_only": 5,
+  "original_files_unchanged": 67,
+  "scenario_snapshots_unchanged": 5,
+  "scenario_fact_references_checked": 74,
+  "boundary_case_structure_checks": 9,
+  "independent_content_review": "pass_current_hashes",
+  "input_hashes": {
+    "specs.json": "02e1f51a838d86420e5af772a3c90d70d3db42cf11ddf538270739f54661dd9a",
+    "cards.json": "6a8f02f4c3a1287885ad75605a1a99049c84a194fc2ffebd7f919243fb6a8066",
+    "cards.md": "a245df5b527df6ff97c12f66633868641e2648568ea7cc6774a2ce0396962862",
+    "synthetic-sources.json": "9a1e125393f570bc8af323ccc095915e0a09ae03ec293c372b06c1c1f5b4fd31",
+    "changes.json": "9cdc44bc382b49aa0aa48fbdc7fe6f2a877f8d5396b9395e961baa84bd3afd66",
+    "linked-scenarios.json": "1b94098e4808ab9ab19004ea86e31ea8bdc9ff3f614afc0abbb1ce7f289d4044",
+    "scenario-links.json": "ef0974082d435575acf2bcc5f08f3be28c7187e4f21ea0268a94b68f854f04d3",
+    "boundary-cases.json": "4b53f66416a3348e729ebb41336905f9b3fa175ace782c63e7d28ded9e29fe13",
+    "lineage.json": "0de18c3ff046b0e041bbd3543cea69241e1ce1dc64a9af845215f2abb51a00ca",
+    "verify.py": "b2f3dc408b5a1f81c3c81ff9a8ae9a520ccd50ca8bfb2521e622068336f0beee"
+  },
+  "limits": "정적 스키마·참조·불변성 검사. 경계 사례 의미는 독립 내용 검토. 역할 실행·효과·현장 검증 아님. 기존 sealed/holdout 사건을 검증 입력으로 사용하지 않음.",
+  "independent_design_review": "pass_current_hashes",
+  "design_review_inputs_checked": 55,
+  "design_initial_snapshots_checked": 7,
+  "frozen_inputs_match": 72
+}

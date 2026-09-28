@@ -1,0 +1,380 @@
+{
+  "review_scope": "로컬 보관본의 관련 절 검토; 사람의 출처 승인·안전 검토 아님",
+  "sources": [
+    {
+      "path": "docs/data/events/CV/brochure-conveyor-solutions-handbook-4230-en.pdf",
+      "sha256": "edab71cc6e1f9094e5b4ef015eedef3c191f584fb8793fdf1f633dfaff0c86ee",
+      "pdf_pages": 248,
+      "classification": "제품 핸드북",
+      "reviewed_locations": "PDF p.1, 3, 5 및 제품별 절",
+      "finding": "Edition 2; 벨트·부품 선정 자료. 제품별 문의를 교대 인계로 바꾸지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/CV/Convey-All-TroubleshootingGuide.pdf",
+      "sha256": "5ed3e0813983a459c851c46e9d5317ee0a3ab3d47f97023f72afd9a50ff66261",
+      "pdf_pages": 4,
+      "classification": "제품 고장 지침",
+      "reviewed_locations": "PDF pp.1–4, Troubleshooting Guide",
+      "finding": "증상·가능 원인·권장 대책 표. 실제 조치·결과나 인계 절차가 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "sha256": "aa576f4e07a07daa39f4aada74f494afbe3418e4b0a3eae5fd04ac12b56a49a2",
+      "pdf_pages": 74,
+      "classification": "제품 운전 매뉴얼",
+      "reviewed_locations": "PDF p.9(인쇄 p.5) §§3.1, 3.1.2; p.10(6) §3.1.3; p.69(65) §§10, 10.1",
+      "finding": "December 2022. 보고·운전측 반환·교육 서명이 서로 다른 문맥. 프로젝트 CV 모델 대응 미확인.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/CV/Martin_C4_CR_18_09_4_Manual.pdf",
+      "sha256": "36841af3fb1c5257f1fed4b2951d4ca8e164c05e3e85ed20a586ef1ff0363137",
+      "pdf_pages": 16,
+      "classification": "제품 설치·정비 매뉴얼",
+      "reviewed_locations": "PDF pp.2–5 안전; pp.7–15 점검·고장 표",
+      "finding": "작업 안전과 아이들러 정비 지침. 고장 문의 권고는 있으나 인계 수신 확인 없음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/26867443.pdf",
+      "sha256": "eeff8728552b228531767ec576a2123168d479631405b1d5c3280ffa558757c3",
+      "pdf_pages": 64,
+      "classification": "제품 설치·운전 매뉴얼",
+      "reviewed_locations": "PDF p.4 §1.1; p.45 §9.1 Customer service; pp.53–61 Contact Information",
+      "finding": "ML..2 & ML..V2. 문의 시 명판·고장 범위·발생 시점·주변 상황·추정 원인. 연락처 목록은 인계 채널의 의무 규정이 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/26873427.pdf",
+      "sha256": "95eb69c0469e75dbf3d245419381036531741d796da9d97cc2c43b90dbb72cc2",
+      "pdf_pages": 86,
+      "classification": "제품 카탈로그",
+      "reviewed_locations": "PDF pp.3–6, Contents/Introduction/Product Description",
+      "finding": "ML..2 & ML..V2 제품 소개·설계 자료. 운전 지침 26867443.pdf와 같은 문서로 합치지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/Failure analysis and countermeasures of gearbox in cold rolling mill.pdf",
+      "sha256": "860a3896ff97fc4ee0342b4d4b44106aa7173dc754e187b7e50a9df8c911b8b3",
+      "pdf_pages": 3,
+      "classification": "일반 설명·사건 후보 단편",
+      "reviewed_locations": "PDF pp.1–2; p.2 Specific cases of failure analysis; p.3",
+      "finding": "사건 도입문 뒤 상세 분석이 보관본에 없음. 제목만으로 완성된 고장 대응 사례로 계산하지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/Roll Drive Design Considerations for Steel Mill Rolling Operations.pdf",
+      "sha256": "a1594cff41958428123b9b6fca10fedb541be9ff37450505da71411054734922",
+      "pdf_pages": 14,
+      "classification": "설계 백서·제품 배경",
+      "reviewed_locations": "PDF pp.3–5 Introduction; p.10 Availability",
+      "finding": "구동계 설계와 공급 서비스 설명. 현장 사건이나 인계 규정 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/roller-table (1).pdf",
+      "sha256": "1b57618bda2704a493a7890eab1b9d789bb90f73f9da2754228155263b5ec6f6",
+      "pdf_pages": 12,
+      "classification": "제품 카탈로그",
+      "reviewed_locations": "PDF pp.1–4 Roller Table Motor",
+      "finding": "WEG 유럽시장 전동기 기술 카탈로그. 롤러 테이블 모터와 감속기를 동일 설비로 간주하지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/GR/xu-zhang-2024-research-on-the-service-life-of-bearings-in-the-gearbox-of-rolling-mill-transmission-system-under-non.pdf",
+      "sha256": "dbfffb8db7a266ea9c52150106854a528d9f723cfc338a889b9702807ba40e1c",
+      "pdf_pages": 15,
+      "classification": "연구·현장 고장 언급 후보",
+      "reviewed_locations": "PDF pp.1–2 서론; pp.12–14 수명 검증·Conclusion",
+      "finding": "2024, Vol.16(9), DOI 10.1177/16878132241276941. 고장·관측·수명 연구를 인계 수행·복구 기록으로 바꾸지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+      "sha256": "25bca5ce3426409e0044b4c366b98c30e59549ab50fac42d799a416ab56f68dc",
+      "pdf_pages": 37,
+      "classification": "범용 진단 지침·가정 예시",
+      "reviewed_locations": "PDF pp.3–4 Line Service/Checking Faults; p.9 Machine malfunction procedure; p.34 Algo 0.6; p.35 가정 예시",
+      "finding": "재가동 예고와 인지 여부 분기는 있으나 회신 방법 미기재. p.34의 safety interlocks 제거 문구는 작업 지침으로 채택하지 않음. p.35 Assume 예시는 실제 사건 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/AX189986484780en-000501.pdf",
+      "sha256": "12a44fc16a2c90f5600ad79d1460c9b1b5aefdf6e15c30f5956e74909316b0d3",
+      "pdf_pages": 67,
+      "classification": "제품 서비스 매뉴얼",
+      "reviewed_locations": "PDF pp.2–6 판본·Introduction; pp.37–39 Troubleshooting",
+      "finding": "D1 High Power Open Circuit Pumps, October 2024. 공장 인증 서비스망 설명은 수신 확인 절차가 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/AX549927744283en-000201.pdf",
+      "sha256": "2fd09ba7b0ca72c7fc71f86fae994a45b16250b3ace010c92a1c49f691f1f91e",
+      "pdf_pages": 25,
+      "classification": "제품 서비스 가이드",
+      "reviewed_locations": "PDF pp.2–3 §§1.1–1.2; p.21 §7",
+      "finding": "PVMX, 2026.09. 유지보수·진단 권고. 적용 펌프와 인계 방법 미확인.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/HY13-PMDSPS1M_US.pdf",
+      "sha256": "a375d19628cc583d5a9596aa419c55747f22ff7b50f75bd35b7f2e1675dd1c66",
+      "pdf_pages": 40,
+      "classification": "제품 설치·정비 매뉴얼",
+      "reviewed_locations": "PDF p.4 목차; p.26(인쇄 p.22) Field and factory service; pp.38–39 Offer of Sale",
+      "finding": "스크루 펌프 서비스 지원·계약 문구. 계약 acknowledgement를 현장 인계 수신 확인으로 사용하지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/HY29-0022-UK.pdf",
+      "sha256": "c5805c031046a8f3a7564fd04502150a1e97a22ac2c2e38ac1ee1509d1073fdb",
+      "pdf_pages": 60,
+      "classification": "제품 고장 분석 지침",
+      "reviewed_locations": "PDF p.3(인쇄 p.4) §§1.1–1.2; p.53(54) §4.2",
+      "finding": "Denison vane pump/motor 고장 사진·진단 표. 특정 공장 사건·실행된 조치·보고 체계 없음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/MAN-C-012.pdf",
+      "sha256": "2d504ca266c7781d3bac04db6fc31530c66366c0e781e2b0bf94748a32a2a62d",
+      "pdf_pages": 11,
+      "classification": "제품 유지보수 수첩·빈 양식",
+      "reviewed_locations": "PDF p.3(인쇄 p.4) HPU identification; p.8(9) §2; pp.9–11(10–12) §3",
+      "finding": "MAN-C-012-EN/0. 날짜·작업 유형·내용·작업자·서명 양식. 서명은 인수자의 수신 확인으로 명시되지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/HPU/ServMan_DHM.pdf",
+      "sha256": "3a1967a1b00b5b58c292e155c7f15b81b69d5d9535890c643904a61c5dc121bf",
+      "pdf_pages": 4,
+      "classification": "제품 서비스 매뉴얼",
+      "reviewed_locations": "PDF pp.1–4; p.2 Trouble Shooting Guide",
+      "finding": "Series D/H/M, Bulletin 2630-C1, January 2000. 권장 정비와 고장 표이며 실제 사례 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/RT/1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+      "sha256": "39e0a0df9b913cca145911df6fa7d693d74ca2c6a4b133cc8a960b8741c07ccb",
+      "pdf_pages": 64,
+      "classification": "제품 설치·운전 매뉴얼",
+      "reviewed_locations": "PDF p.6 Introduction; p.8 Intended use; p.36 사고·고장; pp.51–53 진단·부품",
+      "finding": "SH 1110, Version 1.0 (06/2022). 후속 운전자에게 매뉴얼 전달, 자격자 통보는 있으나 수신 확인 없음. 상자·포장 식품 등 적용 설명으로 냉간코일 RT 모델 일치 미확인.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/RT/830CC-V1.pdf",
+      "sha256": "db63d77b7cf17eb82f5c533777deac297c9a79418c50570edc46394766362cc3",
+      "pdf_pages": 37,
+      "classification": "제품 매뉴얼·외부 운송 검사 포함",
+      "reviewed_locations": "PDF pp.1–3 식별·검사; p.12 Lift Blocking Instructions; p.21 윤활 문의",
+      "finding": "Trojan Coil Car, Version 1.0, 09/2001. p.3 운송 손상 서면 신고는 공장 내부 고장 인계 범위 밖. RT 적용 모델로 매핑하지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/RT/Coil-Cars.pdf",
+      "sha256": "884d4867d57fc43579b78aa8c9a1cb3f1ace5424b626d691400b7a7a51dd2174",
+      "pdf_pages": 18,
+      "classification": "제품 매뉴얼",
+      "reviewed_locations": "PDF pp.1–4 식별·Introduction; pp.8–9 안전",
+      "finding": "Southworth, July 2015. 문의 창구와 사용 전 숙지. 프로젝트 RT 적용 모델이나 수신 확인 방식 미확인.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/FUCHS-RENOLIT-CXS-AM-1.html",
+      "sha256": "718605817b0a76d61b9b573a3c8cc84a6f5941386f157da945e5f909e20dbeeb",
+      "pdf_pages": null,
+      "classification": "제조사 공개 사례·제품 홍보",
+      "reviewed_locations": "HTML main: Case Study - RENOLIT CXS AM 1 / Challenge / Application / Solution / Results",
+      "finding": "Application은 Cold Rolling Mill Work - Roll Bearing & Chock Lubrication을 명시. 원문에 시험·교육·효과 주장이 있으나 프로젝트 설비 대응·고장 인계 방법·독립 현장 검증은 없음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/hydraulic_maintenance.pdf",
+      "sha256": "b0263c2a11a99e05ae9442363d3a061600502842a5794c5b84964f230063acf5",
+      "pdf_pages": 27,
+      "classification": "범용 교육 슬라이드",
+      "reviewed_locations": "PDF pp.4–7 Mentally Prepare / Obtain Documentation / Starting the Process / Predictability",
+      "finding": "도면 확보·증상 파악·예측의 교육 자료. 현장 수행 기록이나 통보 수신 확인 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/NSK-Case-Study-Cold-Rolling-Mill_SteelStrip.pdf",
+      "sha256": "ff5b1099cefc93494fe6c7f81a491653ec882af60497cbacdf72b312b7029e8e",
+      "pdf_pages": 2,
+      "classification": "제조사 공개 냉간압연 사례",
+      "reviewed_locations": "PDF pp.1–2 Key facts / Value proposals / Product features",
+      "finding": "철분 유입·베어링 분석·제품 변경 및 수명 개선 주장. GR/RT 부품 대응과 인계 행위 미확인.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/Rolling mill bearing reliability_ three case studies, one conclusion - Euro Bearing.pdf",
+      "sha256": "0000b5b793b39aea36c2fc2ed00c8f2135f76e39df8d14dc05c9702b1a8aa66b",
+      "pdf_pages": 5,
+      "classification": "유통사 공개 사례·일반 권고",
+      "reviewed_locations": "PDF p.2 The cold mill with a vibration problem nobody could locate; p.3 What a rolling mill programme should actually contain",
+      "finding": "냉간압연 백업롤 사례와 로그 권고. 열간·형강 사례는 별도 범위. 익명 사례의 1차 기록·인계 방법 미확보.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/shell-sls-whitepaper-02-v7edited.pdf",
+      "sha256": "6319dc610c286b91a51ede5f35f5ce57b443c945772088caa80643596df7e3f6",
+      "pdf_pages": 12,
+      "classification": "윤활 백서·공개 홍보 사례",
+      "reviewed_locations": "PDF pp.3–8 이슈 설명; p.11(인쇄 p.09) Shell Tellus in action",
+      "finding": "wire rod mill·기타 유압 적용의 효과 주장. 냉간코일 공정 대응·인계 원문 미확보. 표의 사례를 자동 Event화하지 않음.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/SKF-10404_EN_Driveline_for_Metals.pdf",
+      "sha256": "615b313d31f12c7bb3d1539fad51323f8a108a25acd84289cb6919cc6f133e04",
+      "pdf_pages": 2,
+      "classification": "제품·서비스 배경 자료",
+      "reviewed_locations": "PDF pp.1–2 Drivelines / SKF 360° Solution",
+      "finding": "구동계 신뢰성·서비스·유지보수 투자 설명. 오류→실제 조치→결과→인계가 연결된 사건 기록 아님.",
+      "verified_site_event": false
+    },
+    {
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "sha256": "ca68a757c233d8214e101713a38a6eeb586d24f4b32c3e561f7a6d6697be691c",
+      "pdf_pages": 100,
+      "classification": "범용 안전·정비 지침",
+      "reviewed_locations": "PDF pp.13–15 §1.5; pp.24–27 §3; pp.86–87 Annex 1 B; p.92 Annex 1 F",
+      "finding": "DGUV Information 209-071, March 2015. 독일 자료의 보관 판본 검토이며 국내 현장 표준·현행 법률 확인이 아님.",
+      "verified_site_event": false
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_ref": "SEW-FAULT",
+      "path": "docs/data/events/GR/26867443.pdf",
+      "pdf_page": 45,
+      "locator": "§9.1, Customer service",
+      "excerpt": "Please have the following information available when contacting our customer service:  Complete nameplate data.  Nature and extent of the fault.  Time of occurrence and accompanying circumstances of the fault.  Presumed cause.",
+      "excerpt_sha256": "60dc461a26d55193189a8d4853726bebdcf5f74dbb62a6965b0f84ec0ec9349f"
+    },
+    {
+      "evidence_ref": "DGUV-REPORT",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 24,
+      "locator": "§3 Troubleshooting",
+      "excerpt": "Thus, it is important that the machine operator reports all failures and errors to the supervi- sor or the maintenance department immediately.",
+      "excerpt_sha256": "818a80177d554ca8e98a9843e403c709c5168d921ef02ef29f6df1016579c267"
+    },
+    {
+      "evidence_ref": "MISUMI-SAFETY",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 9,
+      "locator": "인쇄 p.5 §3.1.2",
+      "excerpt": "Make it mandatory for the operating and mainte- nance personnel to immediately report any deficien- cies in safety to their superiors as soon as they occur or are identified!",
+      "excerpt_sha256": "92ef8d9f0aac857fb8b295756e0fb9035bf380343faacbeffc2020f8e4db0841"
+    },
+    {
+      "evidence_ref": "MISUMI-RECUR",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 69,
+      "locator": "인쇄 p.65 §10",
+      "excerpt": "In the case of recurring faults, immediately notify qualified staff.",
+      "excerpt_sha256": "01ae0dd2efba9eb74c841a61879fabe9bb17401be2cff286274fd50c54a826d8"
+    },
+    {
+      "evidence_ref": "DGUV-MAINT-NOTICE",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 86,
+      "locator": "Annex 1 B",
+      "excerpt": "All employees have to be informed before starting any maintenance works. • The maintenance area has to be secured in a wide-ranging manner before starting any works. • Corresponding signs have to inform about maintenance works. • Signposts have to be attached to the control cabinet, the circuit breaker, actuators, and access in particular.",
+      "excerpt_sha256": "e829e1aa5e6491e5dd74ac2134bf4b2f31a184009cb9f6c10a55e74a5f5035d7"
+    },
+    {
+      "evidence_ref": "DGUV-RESTART",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 87,
+      "locator": "Annex 1 B, last bullet",
+      "excerpt": "The personnel have to be informed about restarting the machine/system beforehand at all times.",
+      "excerpt_sha256": "57dd4f3d481696cb71f3027b155ae2d7569a71c267738b7a271b1a061de29d35"
+    },
+    {
+      "evidence_ref": "VICKERS-AWARE",
+      "path": "docs/data/events/HPU/100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+      "pdf_page": 34,
+      "locator": "Algo 0.6, awareness diamond and alarm box",
+      "excerpt": "Are all personnel aware the machine is re-starting Sound alarm or inform all personnel",
+      "excerpt_sha256": "c99eab760d697279136df39684ba9ae627184894792da0d25f077ccab18bb625"
+    },
+    {
+      "evidence_ref": "MISUMI-RETURN",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 69,
+      "locator": "인쇄 p.65 §10.1",
+      "excerpt": "5. Restart with test run 6. Turn over to operating personnel",
+      "excerpt_sha256": "93d38b45b3ca04a561ff8ca2179a40a367cee9d1ae90f7bb5dee1f1ab3d65770"
+    },
+    {
+      "evidence_ref": "ATOS-LOG",
+      "path": "docs/data/events/HPU/MAN-C-012.pdf",
+      "pdf_page": 9,
+      "locator": "인쇄 p.10 §3",
+      "excerpt": "HANDBOOK OF REPAIRS AND MAINTENANCE Date *Type Description Operator Signature",
+      "excerpt_sha256": "9ccd29f71fa8f877d9dddb4b6b0d64a9498cd318dd2a0f1fcdd0ddc6fd1b9c0e"
+    },
+    {
+      "evidence_ref": "DGUV-LOG",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 27,
+      "locator": "§3 Troubleshooting",
+      "excerpt": "It is recommended to document the implemented work steps, adjustment values, as well as their modifications. All modifications to the system have to be documented in a traceable manner, e. g. in the machine documentation and, if required, in a maintenance book or log. A list of eliminated failures and error causes supports troubleshooting procedures in the future.",
+      "excerpt_sha256": "2f6f17d725565612ef61731a3a25942441f79b799b20a3740300ce8cfa97cdd0"
+    },
+    {
+      "evidence_ref": "DGUV-INTERVIEW",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 25,
+      "locator": "§3 Troubleshooting",
+      "excerpt": "The machine operators should be questioned regarding error behavior, failures, and reac- tions of the machine and system. If a maintenance book or log exists, it should be used to investigate if this or similar failures have already occurred. Furthermore, the error lists in the operating instructions of the manufacturer have to be taken into consideration.",
+      "excerpt_sha256": "319375850faa29bcceb01240e522e8592ab375e2bad633c9be07dad59fbe16fc"
+    },
+    {
+      "evidence_ref": "DGUV-TIMING",
+      "path": "docs/data/events/shared/Troubleshooting.pdf",
+      "pdf_page": 24,
+      "locator": "§3 Troubleshooting",
+      "excerpt": "At the beginning of troubleshooting, the required technical documents and information should be available, e. g. operating instructions, circuit and electrical diagrams, including measuring points and a list of items.",
+      "excerpt_sha256": "f79ce0e3499dae8be5e5dbe0b16c890adaedce6b1889cbb24b3cf97cf394cc09"
+    },
+    {
+      "evidence_ref": "MISUMI-BEFORE",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 9,
+      "locator": "인쇄 p.5 §3.1",
+      "excerpt": "Carefully read the operating instructions before the first commissioning.",
+      "excerpt_sha256": "8c9206e79ca8d26935cca780505b7643b682770f06e69b3d7cca11d7babbcfb2"
+    },
+    {
+      "evidence_ref": "MISUMI-SIGN",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 9,
+      "locator": "인쇄 p.5 §3.1.2",
+      "excerpt": "Personnel must have understood the operating in- structions. Have this confirmed by signature! ▪ Guarantee that a copy of the complete operating manual is on hand and always available in the area of the machine! ▪ Check the operating manual regularly to ensure that they are complete and legible!",
+      "excerpt_sha256": "9b361f0b30217268e8eaff6fc215bc714c6b2d7fa04bc74bf035b17dde28a2e0"
+    },
+    {
+      "evidence_ref": "MISUMI-OPERATORS",
+      "path": "docs/data/events/CV/conveyor-manual-0323-en.pdf",
+      "pdf_page": 10,
+      "locator": "인쇄 p.6 §3.1.3",
+      "excerpt": "The system may only be used by trained person- nel. New operators must be trained by existing operators.",
+      "excerpt_sha256": "8314996b58d283287620275eabc3c1dcea84215b2b0dba1585c97d7a46cd2040"
+    }
+  ],
+  "input_hashes": {
+    "docs/data/events/README.md": "6a53d06ab5fe6e102ccec752cf792745d2c0bbc10b06dc7cbd5adba0419bb338",
+    "seeds/카드_작성_가이드_초안.md": "b5b73900cf9ebbdb7c4c301457e99568a2e186b7f48403ca5fb004aae34e6146",
+    "shiftlink/agent/schemas.py": "7c22ffd3ddda25db05a346b7d8038f8cc458f04a6373954c775701881bcfb12f",
+    "docs/guides/persona-narrative.md": "b1a98a1f3b341e0f0332ca04bc47718d7e17929c187d4d29836422d1e9b2fdb6",
+    "docs/guides/card-generation.md": "75aca6ed94d8bb4db6ac23702e77267dd4002e5bd433ee656cfdc5347ef7a7dd",
+    "seeds/personas_v0.1.yaml": "072290bb4fa8dfb1448d1746a9f256efa37c83e9653ab41a0172d0d10185622d",
+    "docs/data/policies/source-and-split-contract.md": "a9f993c3b62e33bd2c7b235c67a38e9d6b52f7227c45a6c7797bb65194b5e0f2",
+    "seeds/source_registry.json": "349ed7fd21cdbaa674d9dca27ee93619f858cb26b50436c1f4ab3ba20147f274"
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "reviewer": "/root/content_review",
+  "non_author": true,
+  "author": "/root",
+  "review_kind": "independent_semantic_review_of_synthetic_draft_and_script_contracts",
+  "reviewed_version": "synthetic-followup-7f44e65733f0",
+  "review_scope": "후속 COMMON 카드 M07/M08/M13/M16/M18 전체 본문·필드·연결 대본과 새 경계사례 9건의 의미 정합성. 합성 문안 검토이며 역할 실행, 현장 검증 또는 효과 평가가 아니다.",
+  "read_files_sha256": {
+    "specs.json": "02e1f51a838d86420e5af772a3c90d70d3db42cf11ddf538270739f54661dd9a",
+    "cards.json": "6a8f02f4c3a1287885ad75605a1a99049c84a194fc2ffebd7f919243fb6a8066",
+    "cards.md": "a245df5b527df6ff97c12f66633868641e2648568ea7cc6774a2ce0396962862",
+    "changes.json": "9cdc44bc382b49aa0aa48fbdc7fe6f2a877f8d5396b9395e961baa84bd3afd66",
+    "synthetic-sources.json": "9a1e125393f570bc8af323ccc095915e0a09ae03ec293c372b06c1c1f5b4fd31",
+    "linked-scenarios.json": "1b94098e4808ab9ab19004ea86e31ea8bdc9ff3f614afc0abbb1ce7f289d4044",
+    "scenario-links.json": "ef0974082d435575acf2bcc5f08f3be28c7187e4f21ea0268a94b68f854f04d3",
+    "boundary-cases.json": "4b53f66416a3348e729ebb41336905f9b3fa175ace782c63e7d28ded9e29fe13",
+    "lineage.json": "0de18c3ff046b0e041bbd3543cea69241e1ce1dc64a9af845215f2abb51a00ca",
+    "../20260925-t4-synthetic/specs-01-13.json": "29687a1aa54a92a2c0347d139f2ce0ad1cf8f2c752553a246a3b2abfb5fe153a",
+    "../20260925-t4-synthetic/specs-14-25.json": "fcd1211d43fd8c723d5ae3dd47af85d8b935ef4bc0befe8df58fd46161e7cc11",
+    "../20260925-t4-synthetic/cards.json": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172",
+    "../20260926-t4-persona-scenarios/scenarios-01-13.json": "e1744e7c27acc1b94f1ff0976036f0fee12cdf042807550287c4947aa9af757c",
+    "../20260926-t4-persona-scenarios/scenarios-14-25.json": "8a45cf244416b984a8a2fd4be4161b4f468bb31b3fbd01bd9140adb1f9eccc13"
+  },
+  "reading_and_comparison": {
+    "draft_files": "지정된 9개 파일의 전체 내용을 읽었다. cards.json 및 cards.md 전체 5개 카드와 linked-scenarios.json의 5개 대본을 의미 검토했다.",
+    "original_selection": "원본 specs 두 파일과 cards.json은 M07/M08/M13/M16/M18 및 대응 card_id만 선택 출력해 읽었다. 원본 시나리오는 해당 5개만 선택해 읽은 연결 대본과 구조화 내용 동일성을 대조했고 모두 일치했다.",
+    "selected_original_scenarios_equal_linked_snapshots": [
+      "M07",
+      "M08",
+      "M13",
+      "M16",
+      "M18"
+    ],
+    "restricted_materials_read": false,
+    "restricted_materials": "카탈로그 원본, sealed 및 holdout 내용은 열람하지 않았다. lineage.json에 적힌 다른 파일들의 경로·해시는 참조 메타데이터로만 읽었으며 그 파일들을 열지 않았다.",
+    "content_files_modified_by_reviewer": false,
+    "schema_validation": "부모 작성자가 별도로 수행한다. 이 검토는 스키마 검증 통과를 주장하지 않는다."
+  },
+  "card_verdicts": [
+    {
+      "method_key": "M07",
+      "card_id": "K-0007",
+      "verdict": "pass_within_synthetic_content_scope",
+      "evidence": [
+        "기존 unresolved_handling의 자료 부족 시 인계 미완료 표현이, 진술·로그 부재와 답변 미확인 상태를 정확히 인수한 범위는 수신 확인하고 자료·답변은 보완 대기로 두는 문장으로 바뀌었다.",
+        "카드 procedure 및 acknowledgement가 현재 진술과 과거 로그를 별도 출처로 되짚게 한다. 일부 회신을 전체 수신으로 확대하지 않는 규칙과 과거 유사성을 현재 원인으로 확정하지 않는 규칙이 함께 있다.",
+        "연결 대본에서 OBS-G의 간헐적 긁힘과 HIST-G의 일정한 울림을 나누어 받으며 원인 동일 여부·최초 발생 시점을 unresolved로 보존한다. 따라서 information_receipt=confirmed와 information_resolution=pending은 함께 성립한다.",
+        "실패 회신의 같은 원인 확정은 F3의 미확인 설정에 위배된다. 수신 확인만으로 현장 진단·새 관측·작업 승인 사실을 만들지 않는다."
+      ],
+      "boundary_case_refs": [
+        "B02",
+        "B08"
+      ]
+    },
+    {
+      "method_key": "M08",
+      "card_id": "K-0008",
+      "verdict": "pass_within_synthetic_content_scope",
+      "evidence": [
+        "기존의 결측 미보완과 무회신을 모두 인계 미완료로 묶던 규칙을 해체하여 실제 입력과 결측의 정확한 수신 확인, 결측 보완 대기, 회신 없는 범위의 수신 확인 대기를 구분한다.",
+        "연결 대본은 압력의 상대 추세, 절대값·단위 결측, 교대 인계 준비 중이라는 제한된 시점 표현과 정확한 시각 미확인을 함께 전달한다. 정상 범위나 고압 판정을 생성하지 않는다.",
+        "모의 회신도 상대 추세와 결측·정상 여부 미해결을 보존한다. 수신 확인은 관측 내용 전달의 확인이며 계측 수행이나 현장 상태 확인을 새로 수행한 결과가 아니다.",
+        "B01은 결측 상태 수신 확인을, B03은 A행만 회신된 경우 B행·전체 수신 대기를 각각 보여 준다."
+      ],
+      "boundary_case_refs": [
+        "B01",
+        "B03",
+        "B08"
+      ]
+    },
+    {
+      "method_key": "M13",
+      "card_id": "K-0013",
+      "verdict": "pass_within_synthetic_content_scope",
+      "evidence": [
+        "충돌 해소 또는 부재 원문 확보와 그 현황의 수신 확인이 별도다. 원문 한쪽 부재를 받았다고 해서 양쪽 원문 내용을 모두 받았다고 확대하지 말라는 문장이 있다.",
+        "연결 대본의 NOTE-M-a 입구측과 NOTE-M-b 출구측은 각각 유지되고, 같은 관측인지와 정확한 위치는 미해결로 남는다. 중앙 위치로 절충하는 실패 회신을 거부하는 근거가 구체적이다.",
+        "B02의 두 출처 차이 인수와 B09의 LOG-을 원문 미확보 인수는 구별된다. 어느 기록이 사실인지 또는 실제 현장의 위치를 확인한 것으로 쓰지 않는다."
+      ],
+      "boundary_case_refs": [
+        "B02",
+        "B08",
+        "B09"
+      ]
+    },
+    {
+      "method_key": "M16",
+      "card_id": "K-0016",
+      "verdict": "pass_within_synthetic_content_scope",
+      "evidence": [
+        "기존 acknowledgement의 승인·미승인 단정 회신 일괄 거부를 근거 없는 단정의 정정으로 좁혔다. 새 증빙을 포함한 회신은 대조 대상으로 연결하므로 영구 미확인 규칙이 아니다.",
+        "procedure는 기존 공백을 보존하면서 새 원문 참조·대상 범위·판본·내용과 기존 기록의 관계를 대조하게 한다. unresolved_handling과 acknowledgement는 유효성 미확인·충돌을 별도 확인 대상으로 두고 존재·판본만으로 유효성을 확정하지 않는다.",
+        "연결 대본은 DOC-GR-다 색인만 공유되고 새 증빙 도착 전이라는 F2·F5 범위에 한정된다. 그 단계에서 수신 확인은 가능하고 승인증빙 존재·내용 확인은 pending인 결론이 타당하다.",
+        "B06의 도착 알림과 B07의 원문·대상·판본·유효성 대조 완료는 다른 근거 단계다. B07은 해당 기록 조회 요청만 해결로 갱신하며 현재 수신자의 운전·정비·재가동 승인권을 만들지 않는다. 이는 기록 상태 갱신과 새 작업 승인 사이의 경계를 보존한다."
+      ],
+      "boundary_case_refs": [
+        "B06",
+        "B07",
+        "B08"
+      ]
+    },
+    {
+      "method_key": "M18",
+      "card_id": "K-0018",
+      "verdict": "pass_within_synthetic_content_scope",
+      "evidence": [
+        "원기록에 명시된 미회신은 답변 대기로, 전달 묶음에 회신 기록이 없을 뿐인 경우는 원기록 확보·회신 여부 확인 대기로 분리한다. 단순 미첨부에서 실제 무응답을 추정하지 않는다.",
+        "이번 인계 수신자의 현황 인수 회신을 원래 의뢰 대상의 기술 답변으로 대체하지 않는다. 현재 인수자의 누락·무응답은 해당 인계 범위의 수신 확인 대기이고 원의뢰의 답변 상태와 별도다.",
+        "연결 대본의 ASK-마는 접수 안내, 제품 표기 답변, 판본 대응 명시적 미회신이라는 F2·F3를 구분한다. 모의 회신의 의뢰 인계 확인 뒤에도 판본 답변 대기가 남으므로 일부 회신을 전체 해결로 확대하지 않는다.",
+        "B04/B05는 같은 판본 문의를 명시적 미회신과 기록 미첨부로 나눠 대조한다. 일부 회신의 범위는 ASK-마 연결 대본이 접수 안내·제품 표기 회신과 판본 답변 대기를 구별하여 보여 준다."
+      ],
+      "boundary_case_refs": [
+        "B04",
+        "B05",
+        "B08"
+      ]
+    }
+  ],
+  "boundary_case_verdicts": [
+    {
+      "id": "B01",
+      "verdict": "pass_within_script_scope",
+      "evidence": "압력 추세 및 절대값·단위·시각 미기록을 정확히 되짚고 수치 보완을 대기로 남긴다. 결측 보완이 없어도 현황 수신은 확인할 수 있으며 새 정상 계측값은 만들지 않는다."
+    },
+    {
+      "id": "B02",
+      "verdict": "pass_within_script_scope",
+      "evidence": "NOTE-갑과 LOG-을의 위치 표현을 각각 보존하고 동일 관측·원인 미해결을 명시한다. 중앙 위치나 원인 해결로 병합하는 reject가 입력과 직접 대조된다."
+    },
+    {
+      "id": "B03",
+      "verdict": "pass_within_script_scope",
+      "evidence": "M08만 적용 대상으로 남겼다. 단위 결측 A행만 정확히 회신되어 A confirmed, B pending, whole pending 및 partial 판정이 적합하다. 기존 의뢰 맥락이 없는 이 사례를 M18 검증으로 확대하지 않는다.",
+      "resolved_finding_refs": [
+        "CR-01"
+      ]
+    },
+    {
+      "id": "B04",
+      "verdict": "pass_within_script_scope",
+      "evidence": "추적 기록이 판본 답변 미회신을 명시하므로 answer_wait 근거가 있다. 현황 인수자의 정확한 수신 확인은 원의뢰의 판본 답변을 대신하지 않는다."
+    },
+    {
+      "id": "B05",
+      "verdict": "pass_within_script_scope",
+      "evidence": "기록 미첨부 및 외부 회신 여부 불명이 명시되어 있으므로 response_status_verification_wait가 맞다. 실제 미회신 확정은 자료 범위를 넘는다. B04와 적절한 상태 대조쌍이다."
+    },
+    {
+      "id": "B06",
+      "verdict": "pass_within_script_scope",
+      "evidence": "파일 도착 알림·대상 표기만 있고 원문 내용·유효성 대조 전이다. 도착 상태의 수신은 확인하면서 원문·범위·판본·유효성 대조를 대기로 남긴다. 도착만으로 재가동 허가를 만들지 않는다."
+    },
+    {
+      "id": "B07",
+      "verdict": "pass_within_script_scope",
+      "evidence": "입력에서 증빙 조회 담당의 원문·대상·판본·유효성 대조와 승인 기록 확인 회신을 명시했으므로 해당 기록 조회 요청의 해결 갱신은 가능하다. 수신자에게 새 작업 승인권은 부여하지 않아 영구 미확인과 승인권 생성 양쪽 오류를 배제한다."
+    },
+    {
+      "id": "B08",
+      "verdict": "pass_within_script_scope",
+      "evidence": "내용 보완 미해결이 기존 기록에 명시되었다는 입력과 이번 수신자의 무응답을 각각 근거로 삼는다. information_receipt=pending 및 information_resolution=pending은 서로 다른 명시 근거가 있어 수신 무응답에서 내용 미해결을 추론하지 않는다.",
+      "resolved_finding_refs": [
+        "CR-02"
+      ]
+    },
+    {
+      "id": "B09",
+      "verdict": "pass_within_script_scope",
+      "evidence": "NOTE-갑 참조와 LOG-을 원문 미확보 상태만 받았음을 정확히 되짚는다. LOG-을 확보·충돌 대조 대기는 유지하며 양쪽 원문 내용 수신 완료로 확대하지 않는다."
+    }
+  ],
+  "major_findings": [],
+  "minor_findings": [],
+  "overall_verdict": "pass",
+  "overall_basis": "5개 카드와 5개 연결 대본의 상태 분리, M16 증빙 대조 후 기록 조회 범위 내 갱신, M18 명시적 미회신·기록 미첨부의 구분이 내용상 적합하다. 경계사례 B03의 부적절한 M18 매핑은 제거되었고 B08에는 정보 미해결의 독립 전제가 명시되어 초기 minor 두 건이 해소되었다. 이 통과는 지정된 합성 개발 문안의 의미 정합성에 한정하며 현장 확인·실행 효과·승인을 뜻하지 않는다.",
+  "limitations": [
+    "이 판단은 합성 개발 문서와 명시된 가상 입력에 대한 의미 정합성 검토다. 실제 수신자 실행이나 현장 확인을 관측하지 않았다.",
+    "과거 점수·실험 결과를 승계하거나 이번 후속 문구의 효과·성능을 주장하지 않는다.",
+    "기록 조회 요청의 해결은 현장 작업·운전·재가동 승인이나 실제 물리 상태 검증을 뜻하지 않는다.",
+    "새 9개 경계사례는 작성된 대본의 대조이며 독립 역할 실험 또는 관측 표본이 아니다.",
+    "검토 판정은 위 SHA256으로 고정한 내용에 한정한다. 이후 파일 변경은 해당 부분의 재검토가 필요하다."
+  ],
+  "verdict": "pass",
+  "input_hashes": {
+    "specs.json": "02e1f51a838d86420e5af772a3c90d70d3db42cf11ddf538270739f54661dd9a",
+    "cards.json": "6a8f02f4c3a1287885ad75605a1a99049c84a194fc2ffebd7f919243fb6a8066",
+    "cards.md": "a245df5b527df6ff97c12f66633868641e2648568ea7cc6774a2ce0396962862",
+    "changes.json": "9cdc44bc382b49aa0aa48fbdc7fe6f2a877f8d5396b9395e961baa84bd3afd66",
+    "synthetic-sources.json": "9a1e125393f570bc8af323ccc095915e0a09ae03ec293c372b06c1c1f5b4fd31",
+    "linked-scenarios.json": "1b94098e4808ab9ab19004ea86e31ea8bdc9ff3f614afc0abbb1ce7f289d4044",
+    "scenario-links.json": "ef0974082d435575acf2bcc5f08f3be28c7187e4f21ea0268a94b68f854f04d3",
+    "boundary-cases.json": "4b53f66416a3348e729ebb41336905f9b3fa175ace782c63e7d28ded9e29fe13",
+    "lineage.json": "0de18c3ff046b0e041bbd3543cea69241e1ce1dc64a9af845215f2abb51a00ca",
+    "../20260925-t4-synthetic/specs-01-13.json": "29687a1aa54a92a2c0347d139f2ce0ad1cf8f2c752553a246a3b2abfb5fe153a",
+    "../20260925-t4-synthetic/specs-14-25.json": "fcd1211d43fd8c723d5ae3dd47af85d8b935ef4bc0befe8df58fd46161e7cc11",
+    "../20260925-t4-synthetic/cards.json": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172",
+    "../20260926-t4-persona-scenarios/scenarios-01-13.json": "e1744e7c27acc1b94f1ff0976036f0fee12cdf042807550287c4947aa9af757c",
+    "../20260926-t4-persona-scenarios/scenarios-14-25.json": "8a45cf244416b984a8a2fd4be4161b4f468bb31b3fbd01bd9140adb1f9eccc13"
+  },
+  "resolved_findings": [
+    {
+      "id": "CR-01",
+      "location": "boundary-cases.json#B03.method_keys/input",
+      "issue": "단위·시각 결측 인계 사례에 M18을 연결했지만 기존 의뢰의 요청 원문이나 회신 현황 인계라는 설정이 없다.",
+      "impact": "부분 수신 범위의 일반 규칙은 검토할 수 있으나 M18의 의뢰 현황 인계 적용 경계를 검토했다고 보기에는 사례 근거가 약하다.",
+      "requested_change": "M18 매핑을 제거하거나 A/B가 기존 의뢰별 현황 인계임을 입력에 명시해 회신 상태와 이번 현황 인수자의 회신을 구분한다.",
+      "status": "resolved",
+      "resolution_evidence": "B03.method_keys가 [M08]로 바뀌어 기존 의뢰 맥락 없는 사례를 M18 적용 근거로 확대하지 않는다. A행 confirmed, B행·전체 pending의 부분 수신 대조는 그대로 유효하다."
+    },
+    {
+      "id": "CR-02",
+      "location": "boundary-cases.json#B08.input/expected.information_resolution",
+      "issue": "이번 수신자의 무응답만으로는 전달 정보의 내용 해결 상태가 pending인지 알 수 없다.",
+      "impact": "수신 확인과 정보 해결을 분리하려는 대조에서, 수신 무응답을 정보 미해결의 근거로 오해할 수 있다.",
+      "requested_change": "입력에 해당 정보·증빙·답변이 아직 미해결이라는 사전 상태를 추가하거나, information_resolution은 기존 근거의 상태를 보존하며 무응답만으로 바꾸지 않는다고 범위를 좁힌다.",
+      "status": "resolved",
+      "resolution_evidence": "B08.input에 내용 보완 미해결이 기존 기록에 명시되어 있다는 전제가 추가되었고, 무응답에서 추론한 상태가 아니라고 명확히 했다. receipt pending은 수신자 무응답, resolution pending은 기존 미해결 기록이라는 각각의 근거를 갖는다."
+    }
+  ],
+  "re_review": {
+    "initial_review": "review-content-initial.json",
+    "initial_boundary_sha256": "11a52d364a0dfbbaabe8d4b30dcf2985d09fecc5dc6a0c943fc743e1ca6bc71a",
+    "changed_input_files": [
+      "boundary-cases.json"
+    ],
+    "method": "변경 경계파일 전체 9건을 다시 읽고 수정 의미를 검토했다. 나머지 입력 13개 파일 SHA256은 초기 검토와 동일함을 직접 확인했다.",
+    "untouched_originals_verified": true
+  }
+}

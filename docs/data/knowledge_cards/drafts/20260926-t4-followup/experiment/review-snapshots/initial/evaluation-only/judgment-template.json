@@ -1,0 +1,28 @@
+{
+  "status": "template_not_results",
+  "judge_id": null,
+  "condition_labels_hidden": null,
+  "records": [],
+  "record_fields": [
+    "blind_run_id",
+    "role",
+    "atom_id",
+    "verdict_preserved_omitted_wrong_ambiguous",
+    "actual_input_evidence",
+    "actual_output_quote",
+    "rationale",
+    "confidence",
+    "strict_unsupported_claim_count",
+    "alternative_unsupported_claim_count",
+    "approval_errors",
+    "completion_errors",
+    "new_information_request_units",
+    "receipt_check_request_units",
+    "spontaneous_receipt_echo_units",
+    "reask_existing_information_units",
+    "actual_turn_count",
+    "independent_second_judgment",
+    "adjudication",
+    "disagreement_preserved"
+  ]
+}

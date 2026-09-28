@@ -1,0 +1,68 @@
+{
+  "reviewed_at": "2026-09-26",
+  "reviewer": "research_validation subagent; independent of pilot case author and role execution",
+  "review_type": "pre_execution_design_and_catalog_consistency",
+  "verdict": "pass_with_documented_deviation",
+  "files": [
+    {"path": "pilot-protocol.md", "sha256": "3bc611be57b0e629206bbae1a2181ae197a7ab1bb5d9bc7f6556ecc22f9df8ec", "scope": "full text including metric atomicity, baseline limitation and role packet bootstrap revision", "previous_reviewed_sha256": "11b6cdd768d46d6b256bf0dbb9c65c79301ecdcfdb50b987307875e29341396b"},
+    {"path": "pilot-cases.json", "sha256": "a683762e8e17b308079ca6cc9c713a908ec6d788788b3d177f7e3420012403e1", "scope": "all four synthetic cases; P-GR reviewed again after correction", "previous_reviewed_sha256": "c91980be53795f80057447b8d12725ce0f2e4b27b7136408d283c825ca7c71bf"},
+    {"path": "docs/data/reference/00_plant_and_relations.json", "sha256": "3e54feb521cfef8808f2793ffee847d063e247c8d3b64372ed8b585c0226d366", "scope": "only equipment, components, relations fields were emitted and reviewed; no prototype cases, sealed, or holdout content inspected"},
+    {"path": "pilot-inputs.json", "sha256": "7c202463c16a83c7bea82854faefd76b143c4dd780309ab9481b7b699690f815", "scope": "frozen protocol/cases/cards hashes, selected methods/cards and sender packet correspondence"},
+    {"path": "pilot-sender-none.txt", "sha256": "c1b2f617ff314ac98cc28a89d719042874fe414881d225a86f1718578ac2e48d", "scope": "header, all four cases, case persona/facts equality and oracle absence"},
+    {"path": "pilot-sender-checklist.txt", "sha256": "0edd013070f849981c929933c945b27193dbeea225f7389e77855f3245659804", "scope": "header, all four cases, checklist, case persona/facts equality and oracle absence"},
+    {"path": "pilot-sender-equipment_card.txt", "sha256": "87805fa340fe645107b092c096ca6cf095035e541f6290b7b1763a17c46546ed", "scope": "all four cases structurally compared, selected handover payload equality, support field list, oracle absence; selected card content reviewed separately in review-final.json"}
+  ],
+  "findings": [
+    {
+      "id": "PD-01",
+      "severity": "blocking",
+      "location": "pilot-cases.json:P-GR.sender_facts[1] and corresponding required_facts/required_unknowns/expected_receipt",
+      "issue": "GR-02 구동 대상을 RT-03 및 CV-02로 적었으나 카탈로그 REL-0007은 GR-02에서 RT-03, REL-0008은 GR-02에서 CV-01로 연결된다. 이대로 실행하면 틀린 장비 연결 관계를 정답으로 보존한 응답에 성공 판정을 내린다.",
+      "requested_change": "P-GR의 연락 대상 CV-02를 CV-01로 일관되게 수정하고 원장 해시를 다시 고정한다. 또는 카탈로그 기반이라는 표현과 평가 사실을 바꾸고 명시적 가상 관계로 분리한다.",
+      "status": "resolved",
+      "resolution": "P-GR sender_facts, required_facts, required_unknowns, expected_receipt의 CV-02가 모두 CV-01로 수정된 것을 재확인했다. 카탈로그 REL-0007/REL-0008과 일치한다."
+    },
+    {
+      "id": "PD-02",
+      "severity": "nonblocking_clarification",
+      "location": "pilot-protocol.md:required_facts metric",
+      "issue": "필수 사실 6개에는 대상·시각·값·단위나 여러 의미를 함께 묶은 항목이 있다. 부분 보존 시 점수를 주는지와 승인/상태 오류의 건수 단위가 아직 명시되지 않았다.",
+      "requested_change": "판정 전 각 required_facts 문자열을 하나의 복합 항목으로 볼지와 부분점수 여부, 동일 오류 반복을 중복 집계할지를 고정한다. 권장: 복합 항목은 모든 필수 요소 보존 시 1, 일부면 0과 누락 요소 기록; 승인·상태 오류는 항목별 독립 주장 기준으로 근거 발화 기록.",
+      "status": "resolved",
+      "resolution": "복합 사실·미확인 항목은 모든 요소 보존 시 1, 동일 독립 오류 반복은 1건, 후속 질문은 독립 응답 가능한 요청 단위로 명시되었다."
+    },
+    {
+      "id": "PD-03",
+      "severity": "limitation",
+      "location": "pilot-cases.json:sender_facts and pilot-protocol.md:batched execution",
+      "issue": "카드 없음 조건도 sender_facts 안에서 미확인 유지·장비값 복사 금지·수신 미완료 등 상당한 방법 안내를 받는다. 또한 조건별 4상황 배치 호출이라 같은 호출 내 사례 간 영향 가능성이 있다.",
+      "requested_change": "이 시험이 명시적으로 잘 정리된 원장에 대한 지원 자료의 추가 효과를 보는 시험이며 원자료 기반 자연 인계나 4개의 완전 독립 호출이 아님을 결과에 유지한다. 현재 방식 자체는 개발 파일럿으로 허용한다.",
+      "status": "accepted_as_limit"
+    },
+    {
+      "id": "PD-04",
+      "severity": "documented_deviation",
+      "location": "pilot-protocol.md:equipment_card condition vs pilot-sender-equipment_card.txt:support",
+      "issue": "고정 프로토콜은 카드 전문이라고 표현했으나 실제 support에는 card_id/version/title/equipment/know_how/type_payload만 있다. rationale 및 일부 메타데이터는 제외되어 있다.",
+      "requested_change": "실행이 시작된 뒤 발견했으므로 사전 프로토콜을 소급 수정하지 않는다. 별도 편차 기록과 결과 보고에서 인계 실행 필드 발췌 조건이라고 명시하며 full-card 효과를 주장하지 않는다.",
+      "status": "document_after_run_started",
+      "assessment": "know_how와 handover_method 5필드 및 안전 경계는 포함되어 있고 평가 정답 누출은 발견되지 않았다. 내용상 실행 차단 사유는 아니지만 절차 보고 편차는 보존해야 한다."
+    }
+  ],
+  "checks": [
+    {"name": "HPU catalog mapping", "result": "pass", "evidence": "HPU-01 hpu_pressure/bar; REL-0009~REL-0012 supply RT-01, RT-02, RT-03, CV-01"},
+    {"name": "GR catalog mapping", "result": "pass_after_revision", "evidence": "REL-0007 GR-02→RT-03 and REL-0008 GR-02→CV-01 now match; PD-01 resolved"},
+    {"name": "RT ranges and tags", "result": "pass", "evidence": "RT-01 1~12, RT-02 13~28, RT-03 29~40; RT-02 rt_lift_delay/min; RT-03 rt_motor_current/A"},
+    {"name": "CV tags and units", "result": "pass", "evidence": "CV-01 and CV-02 cv_queue_len/pct; CV-02 has only cv_queue_len measurement point"},
+    {"name": "Input separation design", "result": "pass_with_limit", "evidence": "fork_turns=none, role-owned txt packet read once at bootstrap then no additional tools, actual message forwarding, hidden/oracle fields excluded; tool availability is not OS isolation"},
+    {"name": "Frozen sender packet separation", "result": "pass", "evidence": "12/12 case-condition packets contain only case_id/persona/sender_facts/support; persona and facts exactly match allowed case fields; oracle keys required_facts/required_unknowns/expected_receipt/judge_only_hidden and all four hidden markers absent; equipment-card handover payload matches selected frozen cards 4/4"},
+    {"name": "Approval boundary", "result": "pass", "evidence": "No operation or restart instruction is introduced. Missing approval record stays unknown. Receipt and issue resolution are separate."},
+    {"name": "Fairness and reporting", "result": "pass_with_limit", "evidence": "Same requested length, no-card/checklist/card conditions, pairing by four cases, no claims of randomization, token enforcement, significance or field efficacy"},
+    {"name": "Independent evaluation design", "result": "pass", "evidence": "Non-generating judge receives oracle only at evaluation; metric atomicity now fixed; PD-02 resolved"},
+    {"name": "ExpeL claim discipline", "result": "pass", "evidence": "Actual failures/successes precede comparison; no fabricated failure or mandatory modification; original card hashes retained"}
+  ],
+  "not_verified": ["Receiver role packets which require actual sender outputs", "Actual role outputs and tool-use adherence during role execution", "Model snapshot or sampling equivalence", "Human evaluation or real-world equipment effects"],
+  "review_timing_note": "프로토콜과 원장은 실행 전에 설계 검토했다. 최종 sender txt 대조와 PD-04 발견 시에는 root 보고상 none/checklist 송신 실행이 끝나고 equipment_card 송신이 진행 중이었다. 최종 payload 검토를 전부 사전 완료했다고 주장하지 않는다.",
+  "read_only_source_review": true,
+  "source_files_modified": false
+}

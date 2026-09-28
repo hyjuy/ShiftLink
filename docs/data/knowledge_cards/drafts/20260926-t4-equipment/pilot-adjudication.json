@@ -1,0 +1,62 @@
+{
+  "reviewed_at": "2026-09-26",
+  "reviewer": "research_validation subagent",
+  "case_id": "P-HPU",
+  "condition": "equipment_card",
+  "verdict": "ambiguous",
+  "scope": "수신자의 대체 금지 문장에 포함된 RT-03 클램프 대상의 입력 지지 여부와 사전 지표상 오류 집계만 판정한다.",
+  "independence": "pilot-judgment.json 및 그 작성자의 결론을 읽지 않고 이 판정을 작성했다. 이 검토자는 앞선 카드·프로토콜 검토에는 참여했으므로 장비 지식을 전혀 모르는 맹검 평가자가 아니다. 그 배경지식은 수신자 입력의 근거로 인정하지 않았다.",
+  "input_hashes": {
+    "pilot-cases.json": "a683762e8e17b308079ca6cc9c713a908ec6d788788b3d177f7e3420012403e1",
+    "pilot-senders.json": "317ab40ba5fa8ecfc2fe5f070c82e6e4c103482c2b127a19b2a82334484a8326",
+    "pilot-receivers.json": "66d1447fa64a2eda24dd9c85c89cb30a5f8422e24b2346dd403c7ec6d1e903d3",
+    "pilot-protocol.md": "3bc611be57b0e629206bbae1a2181ae197a7ab1bb5d9bc7f6556ecc22f9df8ec",
+    "pilot-deviations.json": "d44515f6c86c905d50a399839be28f7c1a17a52d7f472208005e306152207dac"
+  },
+  "target_paths": [
+    "pilot-cases.json:cases[case_id=P-HPU].receiver_initial",
+    "pilot-senders.json:equipment_card.results[case_id=P-HPU].message",
+    "pilot-receivers.json:equipment_card.results[case_id=P-HPU].response"
+  ],
+  "evidence": {
+    "receiver_initial": "다음 조 유압·이송 인계 취합 담당. H-17 기록과 설비 상태는 아직 보지 못했다. 받은 메시지에 있는 정보만 인수한다.",
+    "sender_rt02": "RT-02 행: 현장 클램프 압력값·관측시각 미확인.",
+    "sender_rt03": "RT-03 행: 압력값·관측시각 미확인. 14:04 요청 후 14:06 마감까지 미회신으로 수신 확인을 보류합니다.",
+    "sender_boundary": "HPU 공급 표시를 말단 압력으로 대신하거나 원인을 확정하지 않습니다.",
+    "receiver_target_sentence": "이 값을 RT-02·RT-03의 말단 클램프 압력으로 대체하지 않는다.",
+    "receiver_later_rt03": "RT-03도 압력값·관측시각이 미확인이고 14:04 요청 후 14:06 마감까지 미회신이므로 수신 확인을 보류한다.",
+    "protocol_metric": "수신자 초기 정보와 전송문 어느 쪽에도 없는 구체 사실 주장 수",
+    "protocol_explicit_exception": "의문형 제안은 사실 주장으로 세지 않는다."
+  },
+  "input_support_finding": {
+    "rt02_clamp_target_transmitted": true,
+    "rt03_pressure_target_transmitted": true,
+    "rt03_clamp_target_transmitted": false,
+    "reason": "송신자는 RT-02에만 클램프라는 부품 수식어를 사용한다. RT-03은 압력이라고만 적고 수신자 초기 정보에도 클램프 대상이 없다. RT-02와 RT-03을 묶는 과정에서 클램프 수식어가 RT-03까지 확장되었다. 카탈로그상 실제로 맞는지와 무관하게 허용된 수신 입력의 지지는 없다."
+  },
+  "reason_for_ambiguous": "입력에 없는 대상 구체화는 확인된다. 다만 표적 문장의 명시적 행위는 공급원 값을 말단 값으로 대체하지 않겠다는 부정형 제한이며, RT-03의 클램프 측정값이나 확인 결과를 긍정적으로 주장하지는 않는다. 사전 프로토콜은 의문형 제안의 예외만 정하고 부정형 제한 안의 대상 전제·수식어를 구체 사실 주장으로 세는지는 정하지 않았다. 따라서 이를 확정 오류 1건 또는 무오류 0건으로 단정하기보다 판정 경계 사례로 보존한다.",
+  "alternative_interpretations": [
+    {
+      "interpretation": "strict_embedded_target_claim",
+      "verdict": "error",
+      "unsupported_fact_count_for_this_sentence": 1,
+      "reason": "'RT-02·RT-03의 말단 클램프 압력'은 두 RT 모두에서 인계하는 대상이 클램프라는 전제를 담은 확정적 명사구다. 부정의 범위는 대체 행위이지 부품 대상이 아니므로 RT-03 부품 구체화를 입력 밖 독립 주장 한 건으로 센다."
+    },
+    {
+      "interpretation": "negative_replacement_rule_only",
+      "verdict": "no_error",
+      "unsupported_fact_count_for_this_sentence": 0,
+      "reason": "해당 문장을 새 사건 사실 보고가 아니라 공급원 값의 잘못된 대체를 금지하는 일반 원칙의 요약으로 읽는다. 이후 RT-03의 값·시각을 미확인으로 유지하며 클램프 관측의 수행·확인·수치를 만들어내지 않았으므로 사건 사실 오류에는 넣지 않는다. 다만 표현의 근거 없는 세부화는 별도로 지적한다."
+    }
+  ],
+  "reporting_recommendation": "원 판정과 이견을 함께 보존하고 이 문장에 한해 엄격 해석 1건/행위 제한 해석 0건의 민감도를 표시한다. 프로토콜을 사후 수정해 사전 합의된 기준이었던 것처럼 쓰지 않는다. 다음 시험에는 부정형·조건형 문장 안의 장비 대상 전제도 집계하는지 사전에 명시한다.",
+  "wording_that_avoids_ambiguity": "이 값을 RT-02·RT-03의 말단 압력으로 대체하지 않는다.",
+  "not_inferred": [
+    "평가 정답이나 비공개 파일을 실제로 읽었다는 정보 누출 경로",
+    "도구 격리 준수 또는 위반",
+    "카드 효과의 우열",
+    "작업·재가동 승인 오류",
+    "현장 성능 또는 다른 상황으로의 일반화"
+  ],
+  "source_files_modified": false
+}

@@ -1,0 +1,3759 @@
+{
+  "schema_version": "independent-pilot-judgment-1",
+  "judge": {
+    "role": "카드/상황/역할응답 생성에 참여하지 않은 독립 평가 에이전트",
+    "condition_blinded": false,
+    "same_model_family": true,
+    "scope": "지정된 8개 입력 파일만 읽어 판정. 연구 문헌이나 기존 실험·생산 데이터는 읽지 않음."
+  },
+  "input_sha256": {
+    "pilot-protocol.md": "3bc611be57b0e629206bbae1a2181ae197a7ab1bb5d9bc7f6556ecc22f9df8ec",
+    "pilot-deviations.json": "d44515f6c86c905d50a399839be28f7c1a17a52d7f472208005e306152207dac",
+    "pilot-cases.json": "a683762e8e17b308079ca6cc9c713a908ec6d788788b3d177f7e3420012403e1",
+    "pilot-inputs.json": "7c202463c16a83c7bea82854faefd76b143c4dd780309ab9481b7b699690f815",
+    "pilot-senders.json": "317ab40ba5fa8ecfc2fe5f070c82e6e4c103482c2b127a19b2a82334484a8326",
+    "pilot-receiver-inputs.json": "99a5f5f7c91e9d8f304fa038d2486bff880b0e73dd86b92da1cfb0e59a425d25",
+    "pilot-receivers.json": "66d1447fa64a2eda24dd9c85c89cb30a5f8422e24b2346dd403c7ec6d1e903d3",
+    "pilot-audit.json": "3b4dcc2a4c6a6b4cd9d68b50560ae978197de7705db87fc325cbec1736012dd8"
+  },
+  "actual_exposure": {
+    "none": "sender_facts + persona, support=null",
+    "checklist": "동일 사건정보 + 일반 T4 5항목 안내",
+    "equipment_card": "동일 사건정보 + card_id/version/title/equipment/know_how/type_payload 실행 필드 발췌. 카드 전문 아님.",
+    "receiver": "해당 조건의 initial + actual sender message만. 모든 12건에 저장된 수신 입력과 실제 송신문 일치 확인."
+  },
+  "scoring_rules": {
+    "preservation": "F1~F6 및 U1~U3 복합 항목은 모든 요소를 송신과 수신에서 보존하면 1. 각각의 단계 점수도 저장. 일부 누락은 0이며 누락 요소 기록.",
+    "unsupported_facts": "수신 initial + 해당 actual sender에 없는 구체 사실 배정/주장. 원장 또는 송신자 카드에만 존재해도 수신 근거로 인정하지 않음. 질문·미확인 표시·조건부 요청은 사실 생성으로 세지 않음. 반복 동일 주장은 1개.",
+    "followups": "독립 답변 가능한 대상별 요청 필드로 분해. 값/관측시각, 진동/온도, 시선/방향, 만적/인터록을 분리. 기존 인계 묶음의 되짚기는 대상별 하나의 수신 확인 행위. 동일 요청 반복/조건부 대안은 중복 제외. 단순 미확인 서술은 요청 수에 넣지 않음.",
+    "no_composite_score": true
+  },
+  "results": [
+    {
+      "condition": "none",
+      "case_id": "P-HPU",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 6,
+        "followup_ledger_unknown_or_unsupplied": 6,
+        "followup_transmitted_information_requestion": 0
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "HPU-01 14:03 112 bar는 공급 표시",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "H-17: 14:03 HPU-01 공급 표시 hpu_pressure는 112 bar였습니다."
+          ],
+          "receiver_evidence": [
+            "H-17 인수: 14:03 HPU-01 공급 표시 hpu_pressure는 112 bar였다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "요청 범위 RT-02 및 RT-03",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다."
+          ],
+          "receiver_evidence": [
+            "이번 확인 대상은 RT-02와 RT-03뿐이다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-02는 접수만 회신했고 말단 압력은 미회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았고 현장 클램프 압력값은 미확인입니다."
+          ],
+          "receiver_evidence": [
+            "RT-02 수신 상태: 14:05 'RT-02 요청 접수' 회신만 확인됐다.",
+            "현장 클램프 압력값과 관측시각은 미확인으로, 접수를 압력 확인 완료로 처리하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03은 14:06까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03 수신 상태: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없었다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측시각과 값/미확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "각 대상의 압력 관측시각과 값 또는 미확인을 대상별 별도 행으로 회신받아 주세요."
+          ],
+          "receiver_evidence": [
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "공급 표시로 말단 값이나 원인 확정 불가",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "H-17: 14:03 HPU-01 공급 표시 hpu_pressure는 112 bar였습니다.",
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 확정할 수 없습니다."
+          ],
+          "receiver_evidence": [
+            "H-17 인수: 14:03 HPU-01 공급 표시 hpu_pressure는 112 bar였다.",
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 판단할 수 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "RT-02 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 확정할 수 없습니다.",
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다.",
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았고 현장 클램프 압력값은 미확인입니다."
+          ],
+          "receiver_evidence": [
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 판단할 수 없다.",
+            "이번 확인 대상은 RT-02와 RT-03뿐이다.",
+            "RT-02 수신 상태: 14:05 'RT-02 요청 접수' 회신만 확인됐다.",
+            "현장 클램프 압력값과 관측시각은 미확인으로, 접수를 압력 확인 완료로 처리하지 않는다.",
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 확정할 수 없습니다.",
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다.",
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았고 현장 클램프 압력값은 미확인입니다.",
+            "RT-03: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없습니다."
+          ],
+          "receiver_evidence": [
+            "정상 판정 기준은 제공되지 않았으며, 이 값만으로 RT-02·RT-03 말단 압력이나 원인을 판단할 수 없다.",
+            "이번 확인 대상은 RT-02와 RT-03뿐이다.",
+            "현장 클램프 압력값과 관측시각은 미확인으로, 접수를 압력 확인 완료로 처리하지 않는다.",
+            "RT-03 수신 상태: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없었다.",
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라.",
+            "정상 판정 기준과 RT-03의 기록 마감 이후 회신 유무도 확인이 필요하다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전·정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "운전·정비·재가동 승인 기록은 이 입력에 없습니다."
+          ],
+          "receiver_evidence": [
+            "승인 해석: 운전·정비·재가동 승인 기록은 입력에 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-02 접수 확인과 측정정보 미해결을 분리; RT-03 회신 대기; 전체 대상 완료 아님",
+        "matches": true,
+        "sender_evidence": [
+          "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았고 현장 클램프 압력값은 미확인입니다.",
+          "RT-03: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없습니다.",
+          "접수 회신을 압력 확인 완료로 처리하지 마세요."
+        ],
+        "receiver_evidence": [
+          "RT-02 수신 상태: 14:05 'RT-02 요청 접수' 회신만 확인됐다.",
+          "현장 클램프 압력값과 관측시각은 미확인으로, 접수를 압력 확인 완료로 처리하지 않는다.",
+          "RT-03 수신 상태: 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없었다.",
+          "요청 전달이나 접수 회신을 해당 승인으로 해석하지 않는다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "운전·정비·재가동 승인 기록은 이 입력에 없습니다."
+        ],
+        "receiver": [
+          "승인 해석: 운전·정비·재가동 승인 기록은 입력에 없다.",
+          "요청 전달이나 접수 회신을 해당 승인으로 해석하지 않는다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "RT-02 압력 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ]
+        },
+        {
+          "request": "RT-02 압력값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ]
+        },
+        {
+          "request": "RT-03 압력 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ]
+        },
+        {
+          "request": "RT-03 압력값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "후속 질문: RT-02와 RT-03 각각 현장 압력 관측시각과 값을 별도 행으로 회신해 달라."
+          ]
+        },
+        {
+          "request": "정상 판정 기준",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "정상 판정 기준과 RT-03의 기록 마감 이후 회신 유무도 확인이 필요하다."
+          ]
+        },
+        {
+          "request": "RT-03 마감 이후 회신 유무",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "정상 판정 기준과 RT-03의 기록 마감 이후 회신 유무도 확인이 필요하다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "none",
+      "case_id": "P-GR",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 10,
+        "followup_ledger_unknown_or_unsupplied": 9,
+        "followup_transmitted_information_requestion": 1
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "GR-02 소리 15:10 출측 통로, 부품 위치 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "G-22: 15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리를 들었습니다.",
+            "부품 단위 위치는 미확인입니다."
+          ],
+          "receiver_evidence": [
+            "G-22 인수: 15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리가 관측됐다.",
+            "부품 단위 위치는 미확인이다.",
+            "소리의 부품 단위 위치와 정량 진동값·온도값은 추가 확인이 필요하다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "GR-02 구동 대상 RT-03 및 CV-01",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이지만, 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이나, 소리가 어느 수신 설비에서 발생했는지는 판정되지 않았다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-03은 관측 못함을 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03 수신 상태: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라는 회신이 있었다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-01는 회신 기록 미첨부이며 실제 무응답 확정 아님",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이지만, 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 않았습니다.",
+            "CV-01: 인계 묶음에 응답 기록이 첨부되지 않았습니다.",
+            "실제 미회신 여부는 모르므로 응답 기록 존재 여부부터 확인해 주세요."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이나, 소리가 어느 수신 설비에서 발생했는지는 판정되지 않았다.",
+            "CV-01 수신 상태: 인계 묶음에 응답 기록이 첨부되지 않았다.",
+            "실제 미회신인지는 알 수 없다.",
+            "후속 질문: CV-01 응답 기록이 존재하는지 먼저 확인해 달라.",
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측과 시각 및 CV-01 기록 존재 확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "실제 미회신 여부는 모르므로 응답 기록 존재 여부부터 확인해 주세요.",
+            "두 대상에 각각 관측 여부와 관측시각을 요청해 주세요."
+          ],
+          "receiver_evidence": [
+            "후속 질문: CV-01 응답 기록이 존재하는지 먼저 확인해 달라.",
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "소리가 특정 수신 설비 또는 특정 고장 원인으로 확정되지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이지만, 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 않았습니다.",
+            "GR-02 정량 진동값·온도값은 없으며 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이나, 소리가 어느 수신 설비에서 발생했는지는 판정되지 않았다.",
+            "GR-02 정량 진동값·온도값은 없고, 기어 손상이나 베어링 고장도 확정되지 않았다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "GR-02 진동·온도 수치",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02 정량 진동값·온도값은 없으며 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "GR-02 정량 진동값·온도값은 없고, 기어 손상이나 베어링 고장도 확정되지 않았다.",
+            "소리의 부품 단위 위치와 정량 진동값·온도값은 추가 확인이 필요하다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "CV-01 실제 회신 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이지만, 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 않았습니다.",
+            "CV-01: 인계 묶음에 응답 기록이 첨부되지 않았습니다.",
+            "실제 미회신 여부는 모르므로 응답 기록 존재 여부부터 확인해 주세요."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 구동 대상은 RT-03과 CV-01이나, 소리가 어느 수신 설비에서 발생했는지는 판정되지 않았다.",
+            "CV-01 수신 상태: 인계 묶음에 응답 기록이 첨부되지 않았다.",
+            "실제 미회신인지는 알 수 없다.",
+            "후속 질문: CV-01 응답 기록이 존재하는지 먼저 확인해 달라.",
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 착수·재가동 승인 기록도 없습니다."
+          ],
+          "receiver_evidence": [
+            "승인 해석: 정비 착수·재가동 승인 기록은 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-03의 미관측 상태는 인수 가능; CV-01 회신 여부 확인 대기; 원인 해결과 분리",
+        "matches": true,
+        "sender_evidence": [
+          "부품 단위 위치는 미확인입니다.",
+          "카탈로그상 구동 대상은 RT-03과 CV-01이지만, 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 않았습니다.",
+          "RT-03: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했습니다.",
+          "CV-01: 인계 묶음에 응답 기록이 첨부되지 않았습니다."
+        ],
+        "receiver_evidence": [
+          "부품 단위 위치는 미확인이다.",
+          "카탈로그상 구동 대상은 RT-03과 CV-01이나, 소리가 어느 수신 설비에서 발생했는지는 판정되지 않았다.",
+          "RT-03 수신 상태: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라는 회신이 있었다.",
+          "CV-01 수신 상태: 인계 묶음에 응답 기록이 첨부되지 않았다.",
+          "후속 질문: CV-01 응답 기록이 존재하는지 먼저 확인해 달라.",
+          "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "정비 착수·재가동 승인 기록도 없습니다."
+        ],
+        "receiver": [
+          "승인 해석: 정비 착수·재가동 승인 기록은 없다.",
+          "소리 관측이나 수신 회신으로 승인이 있었다고 판단하지 않는다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-01 응답 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: CV-01 응답 기록이 존재하는지 먼저 확인해 달라."
+          ]
+        },
+        {
+          "request": "RT-03 소재 흐름 관측 여부",
+          "category": "transmitted_information_requestion",
+          "note": "RT-03은 같은 시각의 미관측이 이미 전달되어 재질문으로 분류. 새 위치나 새 관측을 요청한 것으로 읽으면 미확인 질문으로 이동 가능.",
+          "id": "Q2",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "RT-03 소리 관측 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "RT-03 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "CV-01 소재 흐름 관측 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "CV-01 소리 관측 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "CV-01 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q7",
+          "evidence": [
+            "RT-03과 CV-01 각각 해당 시각의 소재 흐름 및 소리 관측 여부와 관측시각을 회신해 달라."
+          ]
+        },
+        {
+          "request": "소리의 부품 단위 위치",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q8",
+          "evidence": [
+            "소리의 부품 단위 위치와 정량 진동값·온도값은 추가 확인이 필요하다."
+          ]
+        },
+        {
+          "request": "정량 진동값",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q9",
+          "evidence": [
+            "소리의 부품 단위 위치와 정량 진동값·온도값은 추가 확인이 필요하다."
+          ]
+        },
+        {
+          "request": "온도값",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q10",
+          "evidence": [
+            "소리의 부품 단위 위치와 정량 진동값·온도값은 추가 확인이 필요하다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "none",
+      "case_id": "P-RT",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 9,
+        "followup_ledger_unknown_or_unsupplied": 9,
+        "followup_transmitted_information_requestion": 0
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "RT-02 중앙 구간 16:20 간헐적 소재 정체 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "R-08: 16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습을 보았습니다."
+          ],
+          "receiver_evidence": [
+            "R-08 인수 및 되짚기: 16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습이 관측됐다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "RT-02 롤러 13~28, 정확한 번호 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02의 카탈로그 범위는 롤러 13~28이며, 정확한 롤러 번호는 관측하지 못했습니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "RT-02의 카탈로그 범위는 롤러 13~28이며, 정확한 롤러 번호는 관측하지 못해 미확인이다.",
+            "정확한 롤러 번호를 확인했는지, 확인하지 못했다면 미확인 상태인지 회신을 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "16:21 rt_lift_delay 0.6 min은 RT-02 값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "16:21 화면의 RT-02 rt_lift_delay는 0.6 min이었습니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "16:21 화면의 RT-02 rt_lift_delay는 0.6 min이었다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03 rt_motor_current와 RT-02 값 구분",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 않습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 배정하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "정비 연락 담당은 아직 응답하지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 연락 담당은 아직 응답하지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "정비 연락 담당은 아직 응답하지 않았다.",
+            "후속 질문: 정비 연락 담당에게 연락 접수 여부를 확인하고 RT-02 현장 확인 결과와 관측시각을 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "관측·계측과 정체 원인 판정 분리",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이 값이 관측된 멈춤의 원인이라고 판단하지 않았습니다.",
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "이 값이 멈춤의 원인이라고 판단하지 않았다.",
+            "승인 해석: 원인·정지 해제·재가동 승인 기록은 제공되지 않았다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "정확한 롤러 번호",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02의 카탈로그 범위는 롤러 13~28이며, 정확한 롤러 번호는 관측하지 못했습니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "RT-02의 카탈로그 범위는 롤러 13~28이며, 정확한 롤러 번호는 관측하지 못해 미확인이다.",
+            "정확한 롤러 번호를 확인했는지, 확인하지 못했다면 미확인 상태인지 회신을 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 전류값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 않습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 배정하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "승인 해석: 원인·정지 해제·재가동 승인 기록은 제공되지 않았다.",
+            "소재 흐름 멈춤 관측을 설비 정지 상태 확정으로 확대하지 않으며, 이번 인수나 계측값을 정지 해제·재가동 승인으로 해석하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "다음 조가 미확인 포함 정보를 정확히 받으면 해당 수신 확인 가능; 정비 담당 수신은 대기; 원인 미해결",
+        "matches": true,
+        "sender_evidence": [
+          "이 값이 관측된 멈춤의 원인이라고 판단하지 않았습니다.",
+          "정비 연락 담당은 아직 응답하지 않았습니다.",
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+        ],
+        "receiver_evidence": [
+          "이 값이 멈춤의 원인이라고 판단하지 않았다.",
+          "정비 연락 담당은 아직 응답하지 않았다.",
+          "후속 질문: 정비 연락 담당에게 연락 접수 여부를 확인하고 RT-02 현장 확인 결과와 관측시각을 요청한다.",
+          "승인 해석: 원인·정지 해제·재가동 승인 기록은 제공되지 않았다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+        ],
+        "receiver": [
+          "승인 해석: 원인·정지 해제·재가동 승인 기록은 제공되지 않았다.",
+          "소재 흐름 멈춤 관측을 설비 정지 상태 확정으로 확대하지 않으며, 이번 인수나 계측값을 정지 해제·재가동 승인으로 해석하지 않는다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "정비 담당 연락 접수 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: 정비 연락 담당에게 연락 접수 여부를 확인하고 RT-02 현장 확인 결과와 관측시각을 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 현장 확인 결과",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "후속 질문: 정비 연락 담당에게 연락 접수 여부를 확인하고 RT-02 현장 확인 결과와 관측시각을 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 현장 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "후속 질문: 정비 연락 담당에게 연락 접수 여부를 확인하고 RT-02 현장 확인 결과와 관측시각을 요청한다."
+          ]
+        },
+        {
+          "request": "정확한 롤러 번호 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "정확한 롤러 번호를 확인했는지, 확인하지 못했다면 미확인 상태인지 회신을 요청한다."
+          ]
+        },
+        {
+          "request": "추가 계측이 있다면 설비",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "존재를 전제하지 않는 조건부 요청. 값이 없다는 대안 응답을 별도 질문으로 중복 집계하지 않음.",
+          "id": "Q5",
+          "evidence": [
+            "추가 계측값이 있다면 설비·태그·값·단위·관측시각을 명시해 달라."
+          ]
+        },
+        {
+          "request": "추가 계측이 있다면 태그",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "존재를 전제하지 않는 조건부 요청. 값이 없다는 대안 응답을 별도 질문으로 중복 집계하지 않음.",
+          "id": "Q6",
+          "evidence": [
+            "추가 계측값이 있다면 설비·태그·값·단위·관측시각을 명시해 달라."
+          ]
+        },
+        {
+          "request": "추가 계측이 있다면 값",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "존재를 전제하지 않는 조건부 요청. 값이 없다는 대안 응답을 별도 질문으로 중복 집계하지 않음.",
+          "id": "Q7",
+          "evidence": [
+            "추가 계측값이 있다면 설비·태그·값·단위·관측시각을 명시해 달라."
+          ]
+        },
+        {
+          "request": "추가 계측이 있다면 단위",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "존재를 전제하지 않는 조건부 요청. 값이 없다는 대안 응답을 별도 질문으로 중복 집계하지 않음.",
+          "id": "Q8",
+          "evidence": [
+            "추가 계측값이 있다면 설비·태그·값·단위·관측시각을 명시해 달라."
+          ]
+        },
+        {
+          "request": "추가 계측이 있다면 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "존재를 전제하지 않는 조건부 요청. 값이 없다는 대안 응답을 별도 질문으로 중복 집계하지 않음.",
+          "id": "Q9",
+          "evidence": [
+            "추가 계측값이 있다면 설비·태그·값·단위·관측시각을 명시해 달라."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "none",
+      "case_id": "P-CV",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 2,
+        "followup_ledger_unknown_or_unsupplied": 1,
+        "followup_transmitted_information_requestion": 1
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "CV-01 17:10 65 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-01: 17:10, 65 pct.",
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "CV-01은 17:10에 65 pct, CV-02는 17:12에 40 pct로 측정시각이 다르다.",
+            "CV-01 수신 상태: 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 사실이 확인됐다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "CV-02 17:12 40 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-02: 17:12, 40 pct."
+          ],
+          "receiver_evidence": [
+            "CV-01은 17:10에 65 pct, CV-02는 17:12에 40 pct로 측정시각이 다르다.",
+            "CV-02의 40 pct와 17:12를 되짚는 회신은 아직 확인되지 않았으므로 전체 인계 완료로 표시하지 않는다.",
+            "후속 질문: CV-02 담당에게 cv_queue_len·40 pct·17:12를 되짚어 회신해 달라고 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "대기율 백분율이며 개수 아님, 비동시 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "두 값은 소재 개수가 아닌 대기율 백분율이며 측정시각도 다릅니다."
+          ],
+          "receiver_evidence": [
+            "C-31 인수: cv_queue_len은 소재 개수가 아닌 대기율 백분율이다.",
+            "CV-01은 17:10에 65 pct, CV-02는 17:12에 40 pct로 측정시각이 다르다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-02는 대기율만 등록, 속도·장력 값 미제공",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 카탈로그에서 CV-02는 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01 속도·장력값도 입력에 없으며 다른 장비 값을 CV-02에 복사하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "미확인 항목: 이번 카탈로그에서 CV-02는 cv_queue_len만 등록돼 있고 속도·벨트 장력값은 제공되지 않았다.",
+            "CV-01 속도·장력값도 입력에 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "CV-01은 시각·값 수신 확인 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "CV-01 수신 상태: 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 사실이 확인됐다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "CV-02는 17:15까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "다음 조 담당에게 보낸 묶음은 17:15까지 회신이 없습니다."
+          ],
+          "receiver_evidence": [
+            "CV-02 수신 상태: 다음 조 담당에게 보낸 묶음은 17:15까지 회신이 없었다.",
+            "17:15 이후 회신이 있었는지도 확인한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "CV-02 속도·장력값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 카탈로그에서 CV-02는 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01 속도·장력값도 입력에 없으며 다른 장비 값을 CV-02에 복사하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "미확인 항목: 이번 카탈로그에서 CV-02는 cv_queue_len만 등록돼 있고 속도·벨트 장력값은 제공되지 않았다.",
+            "CV-01 속도·장력값도 입력에 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "대기 발생 원인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "대기율만으로 벨트 고장이나 병목 원인을 확정하지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "대기율만으로 벨트 고장이나 병목 원인을 확정할 수 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전조건 변경·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "운전조건 변경·재가동 승인 기록은 없습니다."
+          ],
+          "receiver_evidence": [
+            "승인 해석: 운전조건 변경·재가동 승인 기록은 없다.",
+            "CV-01의 되짚기 회신이나 향후 CV-02 수신 확인을 운전조건 변경·재가동 승인으로 해석하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "CV-01 정보 수신 확인, CV-02 회신 대기, 전체 대상 수신 미완료; 원인·승인과 별개",
+        "matches": true,
+        "sender_evidence": [
+          "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다.",
+          "다음 조 담당에게 보낸 묶음은 17:15까지 회신이 없습니다.",
+          "전체 인계 완료로 표시하지 마세요."
+        ],
+        "receiver_evidence": [
+          "CV-01 수신 상태: 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 사실이 확인됐다.",
+          "CV-02 수신 상태: 다음 조 담당에게 보낸 묶음은 17:15까지 회신이 없었다.",
+          "CV-02의 40 pct와 17:12를 되짚는 회신은 아직 확인되지 않았으므로 전체 인계 완료로 표시하지 않는다.",
+          "17:15 이후 회신이 있었는지도 확인한다.",
+          "CV-01의 되짚기 회신이나 향후 CV-02 수신 확인을 운전조건 변경·재가동 승인으로 해석하지 않는다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "운전조건 변경·재가동 승인 기록은 없습니다."
+        ],
+        "receiver": [
+          "승인 해석: 운전조건 변경·재가동 승인 기록은 없다.",
+          "CV-01의 되짚기 회신이나 향후 CV-02 수신 확인을 운전조건 변경·재가동 승인으로 해석하지 않는다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-02 태그·값·시각 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "동일 인계 기록을 확인하는 회신 행위 1개.",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: CV-02 담당에게 cv_queue_len·40 pct·17:12를 되짚어 회신해 달라고 요청한다."
+          ]
+        },
+        {
+          "request": "17:15 이후 회신 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "17:15 이후 회신이 있었는지도 확인한다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-HPU",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 6,
+        "followup_ledger_unknown_or_unsupplied": 6,
+        "followup_transmitted_information_requestion": 0
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "HPU-01 14:03 112 bar는 공급 표시",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "HPU-01 공급 표시 hpu_pressure는 14:03에 112 bar였으며 정상 판정 기준은 없습니다."
+          ],
+          "receiver_evidence": [
+            "H-17 인수: HPU-01 공급 표시 hpu_pressure는 14:03에 112 bar였고 정상 판정 기준은 미제공입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "요청 범위 RT-02 및 RT-03",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다."
+          ],
+          "receiver_evidence": [
+            "확인 대상은 RT-02와 RT-03뿐이며, 공급 표시로 두 대상의 말단 압력이나 원인을 확정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-02는 접수만 회신했고 말단 압력은 미회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았으며 현장 클램프 압력값은 미회신입니다."
+          ],
+          "receiver_evidence": [
+            "대상별 수신 상태: RT-02는 14:05 'RT-02 요청 접수' 회신만 있어 요청 접수는 확인되나 현장 클램프 압력은 미회신입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03은 14:06까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03: 14:04 전달한 요청에 14:06 기록 마감까지 회신이 없습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03은 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없으며 이후 상태는 미확인입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측시각과 값/미확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "각 대상 담당에게 압력 관측시각과 값 또는 미확인을 별도 행으로 요청하고, 대상별 회신을 확인해 주세요."
+          ],
+          "receiver_evidence": [
+            "후속 질문: RT-02 담당은 압력 관측시각과 값 또는 미확인을 별도 행으로 회신해 주세요.",
+            "RT-03 담당도 요청 수신 여부와 압력 관측시각·값 또는 미확인을 별도 행으로 회신해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "공급 표시로 말단 값이나 원인 확정 불가",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "HPU-01 공급 표시 hpu_pressure는 14:03에 112 bar였으며 정상 판정 기준은 없습니다.",
+            "공급 표시만으로 두 대상의 말단 압력이나 원인을 확정할 수 없습니다."
+          ],
+          "receiver_evidence": [
+            "H-17 인수: HPU-01 공급 표시 hpu_pressure는 14:03에 112 bar였고 정상 판정 기준은 미제공입니다.",
+            "확인 대상은 RT-02와 RT-03뿐이며, 공급 표시로 두 대상의 말단 압력이나 원인을 확정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "RT-02 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다.",
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았으며 현장 클램프 압력값은 미회신입니다."
+          ],
+          "receiver_evidence": [
+            "확인 대상은 RT-02와 RT-03뿐이며, 공급 표시로 두 대상의 말단 압력이나 원인을 확정하지 않습니다.",
+            "대상별 수신 상태: RT-02는 14:05 'RT-02 요청 접수' 회신만 있어 요청 접수는 확인되나 현장 클램프 압력은 미회신입니다.",
+            "후속 질문: RT-02 담당은 압력 관측시각과 값 또는 미확인을 별도 행으로 회신해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 확인 대상은 RT-02와 RT-03뿐입니다.",
+            "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았으며 현장 클램프 압력값은 미회신입니다.",
+            "RT-03: 14:04 전달한 요청에 14:06 기록 마감까지 회신이 없습니다."
+          ],
+          "receiver_evidence": [
+            "확인 대상은 RT-02와 RT-03뿐이며, 공급 표시로 두 대상의 말단 압력이나 원인을 확정하지 않습니다.",
+            "RT-03은 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없으며 이후 상태는 미확인입니다.",
+            "RT-03 담당도 요청 수신 여부와 압력 관측시각·값 또는 미확인을 별도 행으로 회신해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전·정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "운전·정비·재가동 승인 기록은 이 입력에 없습니다."
+          ],
+          "receiver_evidence": [
+            "운전·정비·재가동 승인 기록이 없으므로 이 인계를 승인으로 해석하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-02 접수 확인과 측정정보 미해결을 분리; RT-03 회신 대기; 전체 대상 완료 아님",
+        "matches": true,
+        "sender_evidence": [
+          "RT-02: 14:05 'RT-02 요청 접수' 회신만 받았으며 현장 클램프 압력값은 미회신입니다.",
+          "RT-03: 14:04 전달한 요청에 14:06 기록 마감까지 회신이 없습니다.",
+          "접수 회신을 압력 확인으로 처리하지 마세요."
+        ],
+        "receiver_evidence": [
+          "대상별 수신 상태: RT-02는 14:05 'RT-02 요청 접수' 회신만 있어 요청 접수는 확인되나 현장 클램프 압력은 미회신입니다.",
+          "RT-03은 14:04 요청 전달 후 14:06 기록 마감까지 회신이 없으며 이후 상태는 미확인입니다.",
+          "접수 회신을 압력 확인으로 처리하지 않으며 대상별 회신 확인 전 전체 확인 완료로 처리하지 않습니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "운전·정비·재가동 승인 기록은 이 입력에 없습니다."
+        ],
+        "receiver": [
+          "운전·정비·재가동 승인 기록이 없으므로 이 인계를 승인으로 해석하지 않습니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "RT-02 압력 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: RT-02 담당은 압력 관측시각과 값 또는 미확인을 별도 행으로 회신해 주세요."
+          ]
+        },
+        {
+          "request": "RT-02 압력값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "후속 질문: RT-02 담당은 압력 관측시각과 값 또는 미확인을 별도 행으로 회신해 주세요."
+          ]
+        },
+        {
+          "request": "RT-03 압력 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "RT-03 담당도 요청 수신 여부와 압력 관측시각·값 또는 미확인을 별도 행으로 회신해 주세요."
+          ]
+        },
+        {
+          "request": "RT-03 압력값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "RT-03 담당도 요청 수신 여부와 압력 관측시각·값 또는 미확인을 별도 행으로 회신해 주세요."
+          ]
+        },
+        {
+          "request": "RT-03 요청 수신 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "RT-03 담당도 요청 수신 여부와 압력 관측시각·값 또는 미확인을 별도 행으로 회신해 주세요."
+          ]
+        },
+        {
+          "request": "인계 전달 채널",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "인계에 사용할 전달 채널을 명시해 주세요."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-GR",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 6,
+        "followup_ledger_unknown_or_unsupplied": 5,
+        "followup_transmitted_information_requestion": 1
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "GR-02 소리 15:10 출측 통로, 부품 위치 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리를 들었습니다.",
+            "부품 단위 위치는 미확인입니다."
+          ],
+          "receiver_evidence": [
+            "G-22 인수: 15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리를 들었다는 관측을 받았습니다.",
+            "부품 단위 위치는 미확인입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "GR-02 구동 대상 RT-03 및 CV-01",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02는 카탈로그상 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 못했습니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02는 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 미판정입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-03은 관측 못함을 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "대상별 수신 상태: RT-03은 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했으며, 이는 흐름 정상이나 소리 발생 위치 확인을 뜻하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-01는 회신 기록 미첨부이며 실제 무응답 확정 아님",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02는 카탈로그상 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 못했습니다.",
+            "CV-01: 응답 기록이 인계 묶음에 없으며 실제 미회신인지는 모릅니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02는 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 미판정입니다.",
+            "CV-01은 인계 묶음에 응답 기록이 없고 실제 미회신 여부는 미확인입니다.",
+            "후속 질문: CV-01의 응답 기록이 존재하는지 먼저 확인해 주세요.",
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측과 시각 및 CV-01 기록 존재 확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "먼저 응답 기록 존재 여부를 확인해 주세요.",
+            "두 대상 담당에게 각각 관측 여부와 관측시각을 요청하고 대상별 답변을 확인해 주세요."
+          ],
+          "receiver_evidence": [
+            "후속 질문: CV-01의 응답 기록이 존재하는지 먼저 확인해 주세요.",
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "소리가 특정 수신 설비 또는 특정 고장 원인으로 확정되지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02는 카탈로그상 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 못했습니다.",
+            "GR-02 정량 진동·온도값은 없고 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02는 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 미판정입니다.",
+            "대상별 수신 상태: RT-03은 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했으며, 이는 흐름 정상이나 소리 발생 위치 확인을 뜻하지 않습니다.",
+            "GR-02 정량 진동·온도값이 없고 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "GR-02 진동·온도 수치",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02 정량 진동·온도값은 없고 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "GR-02 정량 진동·온도값이 없고 기어 손상이나 베어링 고장은 확정되지 않았습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "CV-01 실제 회신 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "GR-02는 카탈로그상 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 못했습니다.",
+            "CV-01: 응답 기록이 인계 묶음에 없으며 실제 미회신인지는 모릅니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02는 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 미판정입니다.",
+            "CV-01은 인계 묶음에 응답 기록이 없고 실제 미회신 여부는 미확인입니다.",
+            "후속 질문: CV-01의 응답 기록이 존재하는지 먼저 확인해 주세요.",
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 착수·재가동 승인 기록도 없습니다."
+          ],
+          "receiver_evidence": [
+            "대상별 답변 확인이 남아 있으며 정비 착수·재가동 승인 기록이 없으므로 이 인계를 승인으로 해석하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-03의 미관측 상태는 인수 가능; CV-01 회신 여부 확인 대기; 원인 해결과 분리",
+        "matches": true,
+        "sender_evidence": [
+          "부품 단위 위치는 미확인입니다.",
+          "GR-02는 카탈로그상 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 판정하지 못했습니다.",
+          "RT-03: 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했습니다.",
+          "CV-01: 응답 기록이 인계 묶음에 없으며 실제 미회신인지는 모릅니다.",
+          "두 대상 담당에게 각각 관측 여부와 관측시각을 요청하고 대상별 답변을 확인해 주세요."
+        ],
+        "receiver_evidence": [
+          "부품 단위 위치는 미확인입니다.",
+          "카탈로그상 GR-02는 RT-03과 CV-01을 구동하지만 이번 소리가 어느 수신 설비에서 발생했는지는 미판정입니다.",
+          "대상별 수신 상태: RT-03은 15:12 '해당 시각 소재 흐름은 내 위치에서 확인 못함'이라고 회신했으며, 이는 흐름 정상이나 소리 발생 위치 확인을 뜻하지 않습니다.",
+          "CV-01은 인계 묶음에 응답 기록이 없고 실제 미회신 여부는 미확인입니다.",
+          "후속 질문: CV-01의 응답 기록이 존재하는지 먼저 확인해 주세요.",
+          "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요.",
+          "대상별 답변 확인이 남아 있으며 정비 착수·재가동 승인 기록이 없으므로 이 인계를 승인으로 해석하지 않습니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "정비 착수·재가동 승인 기록도 없습니다."
+        ],
+        "receiver": [
+          "대상별 답변 확인이 남아 있으며 정비 착수·재가동 승인 기록이 없으므로 이 인계를 승인으로 해석하지 않습니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-01 응답 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: CV-01의 응답 기록이 존재하는지 먼저 확인해 주세요."
+          ]
+        },
+        {
+          "request": "RT-03 관측 여부",
+          "category": "transmitted_information_requestion",
+          "note": "RT-03의 기존 미관측 답변 확인을 재질문으로 분류.",
+          "id": "Q2",
+          "evidence": [
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ]
+        },
+        {
+          "request": "RT-03 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ]
+        },
+        {
+          "request": "CV-01 관측 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ]
+        },
+        {
+          "request": "CV-01 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "RT-03과 CV-01 담당은 각각 관측 여부와 관측시각을 회신하고, 관측하지 못했다면 그 상태를 명시해 주세요."
+          ]
+        },
+        {
+          "request": "인계 전달 채널",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "인계에 사용할 전달 채널도 명시해 주세요."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-RT",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 5,
+        "followup_ledger_unknown_or_unsupplied": 5,
+        "followup_transmitted_information_requestion": 0
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "RT-02 중앙 구간 16:20 간헐적 소재 정체 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습을 보았습니다."
+          ],
+          "receiver_evidence": [
+            "R-08 인수 및 되짚기: 16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습을 관측했다는 내용을 받았습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "RT-02 롤러 13~28, 정확한 번호 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 RT-02는 롤러 13~28 구간이며 정확한 롤러 번호는 관측하지 못했습니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, 태그 rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 RT-02는 롤러 13~28 구간이며 정확한 롤러 번호는 미확인입니다.",
+            "후속 질문: 정확한 롤러 번호를 확인했는지, 확인했다면 관측시각과 번호를 알려 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "16:21 rt_lift_delay 0.6 min은 RT-02 값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판단한 것은 아닙니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, 태그 rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03 rt_motor_current와 RT-02 값 구분",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 마세요."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없고 RT-02 계측값으로 배정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "정비 연락 담당은 아직 응답하지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 연락 담당은 아직 응답하지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "정비 연락 담당은 아직 응답하지 않았습니다.",
+            "정비 연락 담당은 요청 수신 여부와 확인 내용을 회신해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "관측·계측과 정체 원인 판정 분리",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판단한 것은 아닙니다.",
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판정하지 않습니다.",
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았으므로 원인을 확정하거나 이 인계를 정지 해제·재가동 승인으로 해석하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "정확한 롤러 번호",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 RT-02는 롤러 13~28 구간이며 정확한 롤러 번호는 관측하지 못했습니다.",
+            "RT-02 구간 범위, 정확한 롤러 번호 미확인, 태그 rt_lift_delay·0.6 min·16:21을 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 RT-02는 롤러 13~28 구간이며 정확한 롤러 번호는 미확인입니다.",
+            "후속 질문: 정확한 롤러 번호를 확인했는지, 확인했다면 관측시각과 번호를 알려 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 전류값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 마세요."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없고 RT-02 계측값으로 배정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+          ],
+          "receiver_evidence": [
+            "원인·정지 해제·재가동 승인 기록은 제공되지 않았으므로 원인을 확정하거나 이 인계를 정지 해제·재가동 승인으로 해석하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "다음 조가 미확인 포함 정보를 정확히 받으면 해당 수신 확인 가능; 정비 담당 수신은 대기; 원인 미해결",
+        "matches": true,
+        "sender_evidence": [
+          "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판단한 것은 아닙니다.",
+          "정비 연락 담당은 아직 응답하지 않았습니다.",
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+        ],
+        "receiver_evidence": [
+          "16:21 화면의 rt_lift_delay는 RT-02 계측값 0.6 min이며 멈춤의 원인으로 판정하지 않습니다.",
+          "대상별 수신 상태: 다음 조 RT 운전 담당으로서 위 범위·번호 미확인·태그·값·시각을 이 응답에서 되짚습니다.",
+          "정비 연락 담당은 아직 응답하지 않았습니다.",
+          "RT-01·RT-03 담당의 수신 상태는 제공되지 않았습니다.",
+          "정비 연락 담당은 요청 수신 여부와 확인 내용을 회신해 주세요.",
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았으므로 원인을 확정하거나 이 인계를 정지 해제·재가동 승인으로 해석하지 않습니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았습니다."
+        ],
+        "receiver": [
+          "원인·정지 해제·재가동 승인 기록은 제공되지 않았으므로 원인을 확정하거나 이 인계를 정지 해제·재가동 승인으로 해석하지 않습니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "정확한 롤러 번호 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: 정확한 롤러 번호를 확인했는지, 확인했다면 관측시각과 번호를 알려 주세요."
+          ]
+        },
+        {
+          "request": "롤러 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "후속 질문: 정확한 롤러 번호를 확인했는지, 확인했다면 관측시각과 번호를 알려 주세요."
+          ]
+        },
+        {
+          "request": "정비 담당 요청 수신 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "정비 연락 담당은 요청 수신 여부와 확인 내용을 회신해 주세요."
+          ]
+        },
+        {
+          "request": "정비 담당 확인 내용",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "정비 연락 담당은 요청 수신 여부와 확인 내용을 회신해 주세요."
+          ]
+        },
+        {
+          "request": "인계 전달 채널",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "인계에 사용할 전달 채널도 명시해 주세요."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-CV",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 2,
+        "followup_ledger_unknown_or_unsupplied": 1,
+        "followup_transmitted_information_requestion": 1
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "CV-01 17:10 65 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-01: cv_queue_len은 17:10에 65 pct.",
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "C-31 인수: CV-01의 cv_queue_len은 17:10에 65 pct, CV-02의 cv_queue_len은 17:12에 40 pct입니다.",
+            "대상별 수신 상태: CV-01은 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 상태입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "CV-02 17:12 40 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-02: cv_queue_len은 17:12에 40 pct.",
+            "CV-02 담당은 장비명·태그·40 pct·17:12를 되짚어 회신해 주세요."
+          ],
+          "receiver_evidence": [
+            "C-31 인수: CV-01의 cv_queue_len은 17:10에 65 pct, CV-02의 cv_queue_len은 17:12에 40 pct입니다.",
+            "후속 질문: CV-02 담당은 장비명 CV-02·태그 cv_queue_len·40 pct·17:12를 되짚어 회신해 주세요."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "대기율 백분율이며 개수 아님, 비동시 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "두 값은 소재 개수가 아닌 대기율 백분율이며 측정시각도 다릅니다."
+          ],
+          "receiver_evidence": [
+            "두 값은 소재 개수가 아닌 대기율 백분율이고 측정시각이 다릅니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-02는 대기율만 등록, 속도·장력 값 미제공",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-02는 이번 카탈로그에 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01 속도·장력값도 입력에 없으며 다른 설비 값을 복사하지 마세요."
+          ],
+          "receiver_evidence": [
+            "CV-02는 이번 카탈로그에 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01의 속도·장력값도 입력에 없으며 다른 설비 값을 복사하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "CV-01은 시각·값 수신 확인 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다."
+          ],
+          "receiver_evidence": [
+            "대상별 수신 상태: CV-01은 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 상태입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "CV-02는 17:15까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "전달한 묶음에 17:15까지 회신이 없어 전체 인계 완료로 표시하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "CV-02는 전달한 묶음에 17:15까지 회신이 없으며 이후 회신 여부는 미확인입니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "CV-02 속도·장력값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-02는 이번 카탈로그에 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01 속도·장력값도 입력에 없으며 다른 설비 값을 복사하지 마세요."
+          ],
+          "receiver_evidence": [
+            "CV-02는 이번 카탈로그에 cv_queue_len만 등록되어 있고 속도·벨트 장력값은 제공되지 않았습니다.",
+            "CV-01의 속도·장력값도 입력에 없으며 다른 설비 값을 복사하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "대기 발생 원인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "대기율만으로 벨트 고장이나 병목 원인은 확정하지 않았으며 운전조건 변경·재가동 승인 기록은 없습니다."
+          ],
+          "receiver_evidence": [
+            "대기율만으로 벨트 고장이나 병목 원인을 확정하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전조건 변경·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "대기율만으로 벨트 고장이나 병목 원인은 확정하지 않았으며 운전조건 변경·재가동 승인 기록은 없습니다."
+          ],
+          "receiver_evidence": [
+            "운전조건 변경·재가동 승인 기록이 없으므로 이 인계나 수신 회신을 해당 승인으로 해석하지 않습니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "CV-01 정보 수신 확인, CV-02 회신 대기, 전체 대상 수신 미완료; 원인·승인과 별개",
+        "matches": true,
+        "sender_evidence": [
+          "다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신했습니다.",
+          "전달한 묶음에 17:15까지 회신이 없어 전체 인계 완료로 표시하지 않습니다.",
+          "전달 채널은 미기재이므로 인계 시 명시하고 대상별 수신 상태를 유지해 주세요."
+        ],
+        "receiver_evidence": [
+          "대상별 수신 상태: CV-01은 다음 조 담당이 17:14에 65 pct와 17:10을 되짚어 회신한 상태입니다.",
+          "CV-02는 전달한 묶음에 17:15까지 회신이 없으며 이후 회신 여부는 미확인입니다.",
+          "따라서 전체 인계 완료로 표시하지 않습니다.",
+          "채널은 현재 미기재이며 대상별 수신 상태를 따로 유지합니다.",
+          "운전조건 변경·재가동 승인 기록이 없으므로 이 인계나 수신 회신을 해당 승인으로 해석하지 않습니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "대기율만으로 벨트 고장이나 병목 원인은 확정하지 않았으며 운전조건 변경·재가동 승인 기록은 없습니다."
+        ],
+        "receiver": [
+          "운전조건 변경·재가동 승인 기록이 없으므로 이 인계나 수신 회신을 해당 승인으로 해석하지 않습니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-02 장비·태그·값·시각 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속 질문: CV-02 담당은 장비명 CV-02·태그 cv_queue_len·40 pct·17:12를 되짚어 회신해 주세요."
+          ]
+        },
+        {
+          "request": "인계 전달 채널",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "인계에 사용할 전달 채널을 명시해 주세요."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-HPU",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 1,
+        "followup_question_count": 13,
+        "followup_ledger_unknown_or_unsupplied": 9,
+        "followup_transmitted_information_requestion": 4
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "HPU-01 14:03 112 bar는 공급 표시",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "공급원 행: HPU-01 hpu_pressure = 112 bar, 14:03."
+          ],
+          "receiver_evidence": [
+            "H-17 인수: HPU-01의 공급원 표시 hpu_pressure는 14:03에 112 bar이며 정상 판정 기준은 제공되지 않았다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "요청 범위 RT-02 및 RT-03",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 요청 대상은 RT-02·RT-03뿐입니다."
+          ],
+          "receiver_evidence": [
+            "요청 대상은 RT-02·RT-03뿐이다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-02는 접수만 회신했고 말단 압력은 미회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02 행: 현장 클램프 압력값·관측시각 미확인.",
+            "14:05 ‘RT-02 요청 접수’ 회신만 있어 접수 사실은 확인되나 압력 정보와 미확인 내용의 되짚기 확인은 미완료입니다."
+          ],
+          "receiver_evidence": [
+            "이 값을 RT-02·RT-03의 말단 클램프 압력으로 대체하지 않는다.",
+            "RT-02는 현장 클램프 압력값·관측시각이 미확인이다.",
+            "14:05 ‘RT-02 요청 접수’ 회신은 접수 사실만 확인하며 압력 정보와 미확인 내용의 되짚기는 미완료다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03은 14:06까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "14:04 요청 후 14:06 마감까지 미회신으로 수신 확인을 보류합니다."
+          ],
+          "receiver_evidence": [
+            "RT-03도 압력값·관측시각이 미확인이고 14:04 요청 후 14:06 마감까지 미회신이므로 수신 확인을 보류한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측시각과 값/미확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "각 담당은 대상별 별도 행에 압력의 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚어 주세요."
+          ],
+          "receiver_evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "공급 표시로 말단 값이나 원인 확정 불가",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "HPU 공급 표시를 말단 압력으로 대신하거나 원인을 확정하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "정확히 되짚은 미확인 범위는 수신 확인할 수 있지만 압력 정보와 원인은 미해결로 유지한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "RT-02 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02 행: 현장 클램프 압력값·관측시각 미확인.",
+            "14:05 ‘RT-02 요청 접수’ 회신만 있어 접수 사실은 확인되나 압력 정보와 미확인 내용의 되짚기 확인은 미완료입니다.",
+            "이번 요청 대상은 RT-02·RT-03뿐입니다."
+          ],
+          "receiver_evidence": [
+            "이 값을 RT-02·RT-03의 말단 클램프 압력으로 대체하지 않는다.",
+            "RT-02는 현장 클램프 압력값·관측시각이 미확인이다.",
+            "14:05 ‘RT-02 요청 접수’ 회신은 접수 사실만 확인하며 압력 정보와 미확인 내용의 되짚기는 미완료다.",
+            "요청 대상은 RT-02·RT-03뿐이다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 말단 압력",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02 행: 현장 클램프 압력값·관측시각 미확인.",
+            "RT-03 행: 압력값·관측시각 미확인.",
+            "이번 요청 대상은 RT-02·RT-03뿐입니다."
+          ],
+          "receiver_evidence": [
+            "이 값을 RT-02·RT-03의 말단 클램프 압력으로 대체하지 않는다.",
+            "RT-02는 현장 클램프 압력값·관측시각이 미확인이다.",
+            "RT-03도 압력값·관측시각이 미확인이고 14:04 요청 후 14:06 마감까지 미회신이므로 수신 확인을 보류한다.",
+            "요청 대상은 RT-02·RT-03뿐이다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전·정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "운전·정비·재가동 승인 기록은 없으며 수신 확인은 허가가 아닙니다."
+          ],
+          "receiver_evidence": [
+            "운전·정비·재가동 승인 기록은 없으며 접수나 수신 확인을 허가로 해석하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-02 접수 확인과 측정정보 미해결을 분리; RT-03 회신 대기; 전체 대상 완료 아님",
+        "matches": true,
+        "sender_evidence": [
+          "14:05 ‘RT-02 요청 접수’ 회신만 있어 접수 사실은 확인되나 압력 정보와 미확인 내용의 되짚기 확인은 미완료입니다.",
+          "14:04 요청 후 14:06 마감까지 미회신으로 수신 확인을 보류합니다."
+        ],
+        "receiver_evidence": [
+          "14:05 ‘RT-02 요청 접수’ 회신은 접수 사실만 확인하며 압력 정보와 미확인 내용의 되짚기는 미완료다.",
+          "RT-03도 압력값·관측시각이 미확인이고 14:04 요청 후 14:06 마감까지 미회신이므로 수신 확인을 보류한다.",
+          "운전·정비·재가동 승인 기록은 없으며 접수나 수신 확인을 허가로 해석하지 않는다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": [
+          {
+            "claim": "RT-03의 말단 압력을 클램프 압력으로 구체 배정",
+            "quote": "이 값을 RT-02·RT-03의 말단 클램프 압력으로 대체하지 않는다.",
+            "actual_sender_evidence": [
+              "RT-02 행: 현장 클램프 압력값·관측시각 미확인.",
+              "RT-03 행: 압력값·관측시각 미확인."
+            ],
+            "reason": "대체 금지 자체는 올바르나 명사구가 RT-03→클램프라는 구체 측정 대상 관계를 전제한다. 수신 initial과 actual sender에는 이 관계가 없다. 송신자용 카드의 RT-03 클램프 예시는 수신자 근거로 인정하지 않는다. 압력값 생성이나 승인 주장으로는 세지 않는다.",
+            "confidence": "medium",
+            "alternative_interpretation": "부정형 금지문 전체를 비사실적 지시로만 읽으면 구체 사실 주장 0건. 주집계는 명사구의 측정 대상 배정을 1건으로 포함하며 이 해석 차이에만 조건 합계가 민감하다."
+          }
+        ]
+      },
+      "approval_evidence": {
+        "sender": [
+          "운전·정비·재가동 승인 기록은 없으며 수신 확인은 허가가 아닙니다."
+        ],
+        "receiver": [
+          "운전·정비·재가동 승인 기록은 없으며 접수나 수신 확인을 허가로 해석하지 않는다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "RT-02 압력 항목명",
+          "category": "transmitted_information_requestion",
+          "note": "항목명은 전달된 압력/클램프 압력의 재확인으로 분류. 더 세분된 태그 명칭을 요구한 것으로 읽으면 미확인 질문으로 이동 가능.",
+          "id": "Q1",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 계측 위치",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 단위",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-02 전달 내용 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "관측 필드의 신규 보고와 별도로 요청한 인계 내용의 수신 확인 행위.",
+          "id": "Q6",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 압력 항목명",
+          "category": "transmitted_information_requestion",
+          "note": "항목명은 전달된 압력/클램프 압력의 재확인으로 분류. 더 세분된 태그 명칭을 요구한 것으로 읽으면 미확인 질문으로 이동 가능.",
+          "id": "Q7",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 계측 위치",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q8",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 단위",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q9",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q10",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 값 또는 미확인",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q11",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "RT-03 전달 내용 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "관측 필드의 신규 보고와 별도로 요청한 인계 내용의 수신 확인 행위.",
+          "id": "Q12",
+          "evidence": [
+            "각 담당에게 별도 행으로 압력 항목명·계측 위치·단위·관측시각·값 또는 미확인을 회신하고 전달 내용을 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "정상 판단이 필요할 때 적용 기준",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q13",
+          "evidence": [
+            "정상 판단이 필요하면 적용 기준도 확인해야 한다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-GR",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 12,
+        "followup_ledger_unknown_or_unsupplied": 9,
+        "followup_transmitted_information_requestion": 3
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "GR-02 소리 15:10 출측 통로, 부품 위치 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리를 들었습니다.",
+            "부품 단위 위치는 미확인이고 정량 진동값·온도값은 없습니다."
+          ],
+          "receiver_evidence": [
+            "G-22 인수: 15:10 출측 통로에서 GR-02 주변의 평소와 다른 소리가 관측되었다.",
+            "부품 단위 위치는 미확인이며 정량 진동값·온도값은 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "GR-02 구동 대상 RT-03 및 CV-01",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01입니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01이지만 이 관계와 소리 관측만으로 발생 설비를 특정하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "RT-03은 관측 못함을 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03 행: 15:12 ‘해당 시각 소재 흐름은 내 위치에서 확인 못함’ 회신."
+          ],
+          "receiver_evidence": [
+            "RT-03은 15:12 ‘해당 시각 소재 흐름은 내 위치에서 확인 못함’이라고 회신했다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-01는 회신 기록 미첨부이며 실제 무응답 확정 아님",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01입니다.",
+            "해당 관측은 미확인이며 이 회신을 CV-01에 적용하지 않습니다.",
+            "CV-01 행: 응답 기록이 인계 묶음에 없습니다.",
+            "실제 미회신 여부는 모르므로 먼저 기록 존재 여부를 확인해 주세요.",
+            "CV-01 수신 확인은 기록 확인·대조 전 보류합니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01이지만 이 관계와 소리 관측만으로 발생 설비를 특정하지 않는다.",
+            "이는 자체 관측 미확인 보고이며 CV-01에 적용하지 않는다.",
+            "CV-01은 인계 묶음에 응답 기록이 없을 뿐 실제 미회신인지는 알 수 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "대상별 관측과 시각 및 CV-01 기록 존재 확인 요청",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "실제 미회신 여부는 모르므로 먼저 기록 존재 여부를 확인해 주세요.",
+            "두 대상 각각에 자체 관측 여부·내용·관측시각 또는 미확인을 요청합니다."
+          ],
+          "receiver_evidence": [
+            "먼저 별도 응답 기록이 존재하는지 확인·대조하고 그전까지 수신 확인을 보류한다.",
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "소리가 특정 수신 설비 또는 특정 고장 원인으로 확정되지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "기어 손상이나 베어링 고장으로 확정하지 않았습니다.",
+            "이 관계나 소리 관측만으로 어느 수신 설비에서 발생했는지 판단할 수 없습니다."
+          ],
+          "receiver_evidence": [
+            "기어 손상이나 베어링 고장으로 확정할 수 없다.",
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01이지만 이 관계와 소리 관측만으로 발생 설비를 특정하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "GR-02 진동·온도 수치",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "부품 단위 위치는 미확인이고 정량 진동값·온도값은 없습니다."
+          ],
+          "receiver_evidence": [
+            "부품 단위 위치는 미확인이며 정량 진동값·온도값은 없다.",
+            "부품 위치와 정량 진동·온도 기록의 존재 여부도 확인한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "CV-01 실제 회신 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01입니다.",
+            "해당 관측은 미확인이며 이 회신을 CV-01에 적용하지 않습니다.",
+            "CV-01 행: 응답 기록이 인계 묶음에 없습니다.",
+            "실제 미회신 여부는 모르므로 먼저 기록 존재 여부를 확인해 주세요.",
+            "CV-01 수신 확인은 기록 확인·대조 전 보류합니다."
+          ],
+          "receiver_evidence": [
+            "카탈로그상 GR-02 구동 대상은 RT-03·CV-01이지만 이 관계와 소리 관측만으로 발생 설비를 특정하지 않는다.",
+            "이는 자체 관측 미확인 보고이며 CV-01에 적용하지 않는다.",
+            "CV-01은 인계 묶음에 응답 기록이 없을 뿐 실제 미회신인지는 알 수 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "정비·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 착수·재가동 승인 기록은 없고 수신 확인은 허가가 아닙니다."
+          ],
+          "receiver_evidence": [
+            "정비 착수·재가동 승인 기록은 없으며 수신 확인은 허가가 아니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "RT-03의 미관측 상태는 인수 가능; CV-01 회신 여부 확인 대기; 원인 해결과 분리",
+        "matches": true,
+        "sender_evidence": [
+          "부품 단위 위치는 미확인이고 정량 진동값·온도값은 없습니다.",
+          "카탈로그상 GR-02 구동 대상은 RT-03·CV-01입니다.",
+          "RT-03 행: 15:12 ‘해당 시각 소재 흐름은 내 위치에서 확인 못함’ 회신.",
+          "해당 관측은 미확인이며 이 회신을 CV-01에 적용하지 않습니다.",
+          "CV-01 행: 응답 기록이 인계 묶음에 없습니다.",
+          "두 대상 각각에 자체 관측 여부·내용·관측시각 또는 미확인을 요청합니다.",
+          "미확인을 정확히 되짚은 범위는 수신 확인 가능하나 정보 해결과는 별개입니다.",
+          "CV-01 수신 확인은 기록 확인·대조 전 보류합니다."
+        ],
+        "receiver_evidence": [
+          "부품 단위 위치는 미확인이며 정량 진동값·온도값은 없다.",
+          "카탈로그상 GR-02 구동 대상은 RT-03·CV-01이지만 이 관계와 소리 관측만으로 발생 설비를 특정하지 않는다.",
+          "RT-03은 15:12 ‘해당 시각 소재 흐름은 내 위치에서 확인 못함’이라고 회신했다.",
+          "이는 자체 관측 미확인 보고이며 CV-01에 적용하지 않는다.",
+          "이 미확인 내용을 되짚은 범위는 수신 확인 가능하지만 소재 흐름 정보가 해결된 것은 아니다.",
+          "CV-01은 인계 묶음에 응답 기록이 없을 뿐 실제 미회신인지는 알 수 없다.",
+          "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "정비 착수·재가동 승인 기록은 없고 수신 확인은 허가가 아닙니다."
+        ],
+        "receiver": [
+          "정비 착수·재가동 승인 기록은 없으며 수신 확인은 허가가 아니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-01 별도 응답 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "먼저 별도 응답 기록이 존재하는지 확인·대조하고 그전까지 수신 확인을 보류한다."
+          ]
+        },
+        {
+          "request": "RT-03 관측 여부",
+          "category": "transmitted_information_requestion",
+          "note": "RT-03 미관측 여부는 전달됨; 새 관측 내용을 요청하는 필드는 미확인 요청으로 분류.",
+          "id": "Q2",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "RT-03 관측 내용",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "RT-03 미관측 여부는 전달됨; 새 관측 내용을 요청하는 필드는 미확인 요청으로 분류.",
+          "id": "Q3",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "RT-03 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "RT-03 미관측 여부는 전달됨; 새 관측 내용을 요청하는 필드는 미확인 요청으로 분류.",
+          "id": "Q4",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "RT-03 받은 보고와 자체 관측을 구분한 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "CV-01 관측 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "CV-01 관측 내용",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q7",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "CV-01 관측시각",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q8",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "CV-01 받은 보고와 자체 관측을 구분한 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "",
+          "id": "Q9",
+          "evidence": [
+            "두 대상에 각각 자체 관측 여부·내용·관측시각 또는 미확인을 요청하며 전달받은 보고와 자체 관측을 구분해 되짚도록 한다."
+          ]
+        },
+        {
+          "request": "부품 위치 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q10",
+          "evidence": [
+            "부품 위치와 정량 진동·온도 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "정량 진동 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q11",
+          "evidence": [
+            "부품 위치와 정량 진동·온도 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "온도 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q12",
+          "evidence": [
+            "부품 위치와 정량 진동·온도 기록의 존재 여부도 확인한다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-RT",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 5,
+        "followup_ledger_unknown_or_unsupplied": 4,
+        "followup_transmitted_information_requestion": 1
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "RT-02 중앙 구간 16:20 간헐적 소재 정체 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "육안 관측: 16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습을 보았습니다."
+          ],
+          "receiver_evidence": [
+            "R-08 인수: 16:20 운전 위치에서 RT-02 중앙 구간의 소재 흐름이 간헐적으로 멈추는 모습이 육안 관측되었다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "RT-02 롤러 13~28, 정확한 번호 미확인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02 안의 정확한 롤러 번호는 관측하지 못했고 시선·방향 기준은 제공되지 않았습니다.",
+            "구간 대응: 카탈로그 RT-01 = 롤러 1~12, RT-02 = 13~28, RT-03 = 29~40.",
+            "인수 시 RT-02 코드·중앙 구간·13~28 범위·정확한 번호 미확인·방향 기준 미확인과 계측 태그·값·단위·시각을 되짚어 주세요."
+          ],
+          "receiver_evidence": [
+            "정확한 롤러 번호는 관측하지 못했고 시선·방향 기준도 미제공이다.",
+            "카탈로그 범위는 RT-01 롤러 1~12, RT-02 롤러 13~28, RT-03 롤러 29~40이다.",
+            "RT-02의 13~28은 장비 범위이며 개별 발생 롤러를 확정하지 않는다.",
+            "본 인수에서는 RT-02 코드·중앙 구간·13~28 범위·정확한 번호 및 방향 기준 미확인과 계측 태그·값·단위·시각을 되짚은 범위만 수신 확인한다.",
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "16:21 rt_lift_delay 0.6 min은 RT-02 값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "화면 계측: 16:21 RT-02 rt_lift_delay = 0.6 min."
+          ],
+          "receiver_evidence": [
+            "화면 계측은 16:21 RT-02의 rt_lift_delay = 0.6 min이다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "RT-03 rt_motor_current와 RT-02 값 구분",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 않습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없고 RT-02 계측으로 귀속하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "정비 연락 담당은 아직 응답하지 않음",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "정비 연락 담당은 아직 미응답이므로 별도로 추적합니다."
+          ],
+          "receiver_evidence": [
+            "정비 연락 담당은 아직 미응답이므로 별도 수신 추적이 필요하다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "관측·계측과 정체 원인 판정 분리",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이 값이 관측된 멈춤의 원인이라는 판단은 하지 않았습니다.",
+            "정확히 되짚은 범위만 수신 확인하고 위치·원인 미해결은 유지합니다.",
+            "원인·정지 해제·재가동 승인 기록은 없으며 수신 확인은 조작이나 승인으로 보지 않습니다."
+          ],
+          "receiver_evidence": [
+            "이 값과 관측된 멈춤 사이의 원인은 확인되지 않았다.",
+            "위치와 원인은 미해결이다.",
+            "원인·정지 해제·재가동 승인 기록은 없으며 이번 수신 확인은 조작이나 승인이 아니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "정확한 롤러 번호",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-02 안의 정확한 롤러 번호는 관측하지 못했고 시선·방향 기준은 제공되지 않았습니다.",
+            "인수 시 RT-02 코드·중앙 구간·13~28 범위·정확한 번호 미확인·방향 기준 미확인과 계측 태그·값·단위·시각을 되짚어 주세요."
+          ],
+          "receiver_evidence": [
+            "정확한 롤러 번호는 관측하지 못했고 시선·방향 기준도 미제공이다.",
+            "본 인수에서는 RT-02 코드·중앙 구간·13~28 범위·정확한 번호 및 방향 기준 미확인과 계측 태그·값·단위·시각을 되짚은 범위만 수신 확인한다.",
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "RT-03 전류값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "RT-03 rt_motor_current 값은 기록에 없으며 RT-02 계측으로 붙이지 않습니다."
+          ],
+          "receiver_evidence": [
+            "RT-03의 rt_motor_current 값은 기록에 없고 RT-02 계측으로 귀속하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "원인·정지 해제·재가동 승인 기록은 없으며 수신 확인은 조작이나 승인으로 보지 않습니다."
+          ],
+          "receiver_evidence": [
+            "원인·정지 해제·재가동 승인 기록은 없으며 이번 수신 확인은 조작이나 승인이 아니다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "다음 조가 미확인 포함 정보를 정확히 받으면 해당 수신 확인 가능; 정비 담당 수신은 대기; 원인 미해결",
+        "matches": true,
+        "sender_evidence": [
+          "이 값이 관측된 멈춤의 원인이라는 판단은 하지 않았습니다.",
+          "정확히 되짚은 범위만 수신 확인하고 위치·원인 미해결은 유지합니다.",
+          "정비 연락 담당은 아직 미응답이므로 별도로 추적합니다.",
+          "원인·정지 해제·재가동 승인 기록은 없으며 수신 확인은 조작이나 승인으로 보지 않습니다."
+        ],
+        "receiver_evidence": [
+          "이 값과 관측된 멈춤 사이의 원인은 확인되지 않았다.",
+          "본 인수에서는 RT-02 코드·중앙 구간·13~28 범위·정확한 번호 및 방향 기준 미확인과 계측 태그·값·단위·시각을 되짚은 범위만 수신 확인한다.",
+          "위치와 원인은 미해결이다.",
+          "정비 연락 담당은 아직 미응답이므로 별도 수신 추적이 필요하다.",
+          "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다.",
+          "원인·정지 해제·재가동 승인 기록은 없으며 이번 수신 확인은 조작이나 승인이 아니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "원인·정지 해제·재가동 승인 기록은 없으며 수신 확인은 조작이나 승인으로 보지 않습니다."
+        ],
+        "receiver": [
+          "원인·정지 해제·재가동 승인 기록은 없으며 이번 수신 확인은 조작이나 승인이 아니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "관측자의 시선 기준",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q1",
+          "evidence": [
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ]
+        },
+        {
+          "request": "방향 기준",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q2",
+          "evidence": [
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ]
+        },
+        {
+          "request": "정확한 롤러 위치 확인 기록",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ]
+        },
+        {
+          "request": "정비 담당 수신 여부",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ]
+        },
+        {
+          "request": "정비 담당 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "후속으로 관측자의 시선·방향 기준, 정확한 롤러 위치를 확인할 수 있는 기록, 정비 담당의 수신 및 되짚기 회신을 요청한다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-CV",
+      "actual_context_verified": true,
+      "metrics": {
+        "facts_correct": 6,
+        "facts_denominator": 6,
+        "unknowns_preserved": 3,
+        "unknowns_denominator": 3,
+        "unsupported_approval_claims": 0,
+        "false_completion_claims": 0,
+        "receiver_unsupported_facts": 0,
+        "followup_question_count": 7,
+        "followup_ledger_unknown_or_unsupplied": 5,
+        "followup_transmitted_information_requestion": 2
+      },
+      "items": [
+        {
+          "id": "F1",
+          "type": "fact",
+          "requirement": "CV-01 17:10 65 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-01 행: cv_queue_len = 65 pct, 17:10.",
+            "다음 조 담당이 17:14에 CV-01의 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위의 수신 확인은 기록할 수 있습니다."
+          ],
+          "receiver_evidence": [
+            "C-31 인수: CV-01의 cv_queue_len은 17:10에 65 pct이다.",
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위만 수신 확인을 기록할 수 있다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F2",
+          "type": "fact",
+          "requirement": "CV-02 17:12 40 pct",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-02 행: cv_queue_len = 40 pct, 17:12."
+          ],
+          "receiver_evidence": [
+            "CV-02의 cv_queue_len은 17:12에 40 pct이며 17:15까지 미회신으로 수신 확인이 미완료다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F3",
+          "type": "fact",
+          "requirement": "대기율 백분율이며 개수 아님, 비동시 관측",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "두 값은 대기율 백분율로 소재 개수가 아니며 측정시각도 다릅니다."
+          ],
+          "receiver_evidence": [
+            "두 값은 소재 개수가 아닌 대기율 백분율이고 측정시각이 서로 다르다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F4",
+          "type": "fact",
+          "requirement": "CV-02는 대기율만 등록, 속도·장력 값 미제공",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "이번 카탈로그의 CV-02 등록 계측은 cv_queue_len뿐입니다.",
+            "CV-01·CV-02 속도·장력값은 모두 제공되지 않았고 장비 간 복사하지 않습니다.",
+            "각 담당은 CV 코드·태그·값·pct 의미·시각과 육안/신호 기록 미확인, CV-02 등록 범위를 되짚어 주세요."
+          ],
+          "receiver_evidence": [
+            "이번 카탈로그에서 CV-02 등록 계측은 cv_queue_len뿐이다.",
+            "CV-01·CV-02의 속도·장력값은 모두 미제공이며 장비 간 복사하지 않는다.",
+            "각 담당에게 CV 코드·태그·값·pct 의미·시각, 육안/신호 기록 미확인 및 CV-02 등록 범위를 되짚도록 요청한다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F5",
+          "type": "fact",
+          "requirement": "CV-01은 시각·값 수신 확인 회신",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "다음 조 담당이 17:14에 CV-01의 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위의 수신 확인은 기록할 수 있습니다."
+          ],
+          "receiver_evidence": [
+            "다음 조 담당이 17:14에 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위만 수신 확인을 기록할 수 있다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "F6",
+          "type": "fact",
+          "requirement": "CV-02는 17:15까지 무응답",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "전달 묶음은 17:15까지 미회신으로 해당 수신 확인은 미완료이며 전체 인계 완료로 표시하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "CV-02의 cv_queue_len은 17:12에 40 pct이며 17:15까지 미회신으로 수신 확인이 미완료다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U1",
+          "type": "unknown",
+          "requirement": "CV-02 속도·장력값",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "CV-01·CV-02 속도·장력값은 모두 제공되지 않았고 장비 간 복사하지 않습니다."
+          ],
+          "receiver_evidence": [
+            "CV-01·CV-02의 속도·장력값은 모두 미제공이며 장비 간 복사하지 않는다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U2",
+          "type": "unknown",
+          "requirement": "대기 발생 원인",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없습니다."
+          ],
+          "receiver_evidence": [
+            "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        },
+        {
+          "id": "U3",
+          "type": "unknown",
+          "requirement": "운전조건 변경·재가동 승인 여부",
+          "score": 1,
+          "sender_score": 1,
+          "receiver_score": 1,
+          "sender_evidence": [
+            "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없습니다."
+          ],
+          "receiver_evidence": [
+            "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없다."
+          ],
+          "missing_elements": [],
+          "judgment": "명시된 복합 필수 요소가 송신 및 수신 내용에서 모두 보존됨. 미확인 항목은 값이나 승인으로 보완되지 않음.",
+          "confidence": "high"
+        }
+      ],
+      "receipt": {
+        "expected": "CV-01 정보 수신 확인, CV-02 회신 대기, 전체 대상 수신 미완료; 원인·승인과 별개",
+        "matches": true,
+        "sender_evidence": [
+          "다음 조 담당이 17:14에 CV-01의 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위의 수신 확인은 기록할 수 있습니다.",
+          "전달 묶음은 17:15까지 미회신으로 해당 수신 확인은 미완료이며 전체 인계 완료로 표시하지 않습니다.",
+          "수신 확인은 허가가 아닙니다."
+        ],
+        "receiver_evidence": [
+          "다음 조 담당이 17:14에 65 pct와 17:10을 되짚었으므로 해당 값·시각 범위만 수신 확인을 기록할 수 있다.",
+          "CV-02의 cv_queue_len은 17:12에 40 pct이며 17:15까지 미회신으로 수신 확인이 미완료다.",
+          "전체 인계를 완료로 표시하지 않는다.",
+          "미확인을 정확히 되짚어 수신 확인하더라도 정보는 미해결로 유지한다.",
+          "수신 확인은 허가가 아니다."
+        ],
+        "reason": "부분 접수/미관측 인수와 남은 회신·내용 해결·승인을 분리함. 현재 수신자의 인수 표현을 외부 모든 대상의 완료로 확대하지 않음."
+      },
+      "errors": {
+        "unsupported_approval_claims": [],
+        "false_completion_claims": [],
+        "receiver_unsupported_facts": []
+      },
+      "approval_evidence": {
+        "sender": [
+          "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없습니다.",
+          "수신 확인은 허가가 아닙니다."
+        ],
+        "receiver": [
+          "대기율만으로 벨트 고장·병목 원인을 확정하지 않으며 운전조건 변경·재가동 승인 기록은 없다.",
+          "수신 확인은 허가가 아니다."
+        ]
+      },
+      "followup_questions": [
+        {
+          "request": "CV-01 장비·태그·값·pct 의미·시각·미확인/등록 범위 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "요청된 기존 인계 묶음의 수신 확인 행위는 대상별 1개. 내부 필드를 새로운 사실 질문으로 중복 집계하지 않음.",
+          "id": "Q1",
+          "evidence": [
+            "각 담당에게 CV 코드·태그·값·pct 의미·시각, 육안/신호 기록 미확인 및 CV-02 등록 범위를 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "CV-02 장비·태그·값·pct 의미·시각·미확인/등록 범위 되짚기 회신",
+          "category": "transmitted_information_requestion",
+          "note": "요청된 기존 인계 묶음의 수신 확인 행위는 대상별 1개. 내부 필드를 새로운 사실 질문으로 중복 집계하지 않음.",
+          "id": "Q2",
+          "evidence": [
+            "각 담당에게 CV 코드·태그·값·pct 의미·시각, 육안/신호 기록 미확인 및 CV-02 등록 범위를 되짚도록 요청한다."
+          ]
+        },
+        {
+          "request": "대기율 산정 구간",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q3",
+          "evidence": [
+            "산정 구간·분모와 별도 육안·신호 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "대기율 분모",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q4",
+          "evidence": [
+            "산정 구간·분모와 별도 육안·신호 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "별도 육안 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q5",
+          "evidence": [
+            "산정 구간·분모와 별도 육안·신호 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "만적 신호 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q6",
+          "evidence": [
+            "산정 구간·분모와 별도 육안·신호 기록의 존재 여부도 확인한다."
+          ]
+        },
+        {
+          "request": "인터록 신호 기록 존재",
+          "category": "ledger_unknown_or_unsupplied",
+          "note": "",
+          "id": "Q7",
+          "evidence": [
+            "산정 구간·분모와 별도 육안·신호 기록의 존재 여부도 확인한다."
+          ]
+        }
+      ],
+      "question_count_confidence": "medium",
+      "limitations": [
+        "질문 분해는 문장 수가 아니라 답변할 정보 필드/대상과 확인 행위를 기준으로 한 해석이다. 새 값/관측시각은 분리하되 기존 묶음의 되짚기 회신은 대상별 1개 확인 행위로 센다.",
+        "관측 여부의 재확인과 새 관측 요청 사이의 경계는 질문별 note에 명시했다. 질문 수의 많고 적음은 품질이나 부담의 직접 측정이 아니다."
+      ]
+    }
+  ],
+  "condition_totals": {
+    "none": {
+      "cases": 4,
+      "facts_correct": 24,
+      "facts_denominator": 24,
+      "unknowns_preserved": 12,
+      "unknowns_denominator": 12,
+      "unsupported_approval_claims": 0,
+      "false_completion_claims": 0,
+      "receiver_unsupported_facts": 0,
+      "followup_question_count": 27,
+      "followup_ledger_unknown_or_unsupplied": 25,
+      "followup_transmitted_information_requestion": 2
+    },
+    "checklist": {
+      "cases": 4,
+      "facts_correct": 24,
+      "facts_denominator": 24,
+      "unknowns_preserved": 12,
+      "unknowns_denominator": 12,
+      "unsupported_approval_claims": 0,
+      "false_completion_claims": 0,
+      "receiver_unsupported_facts": 0,
+      "followup_question_count": 19,
+      "followup_ledger_unknown_or_unsupplied": 17,
+      "followup_transmitted_information_requestion": 2
+    },
+    "equipment_card": {
+      "cases": 4,
+      "facts_correct": 24,
+      "facts_denominator": 24,
+      "unknowns_preserved": 12,
+      "unknowns_denominator": 12,
+      "unsupported_approval_claims": 0,
+      "false_completion_claims": 0,
+      "receiver_unsupported_facts": 1,
+      "followup_question_count": 37,
+      "followup_ledger_unknown_or_unsupplied": 27,
+      "followup_transmitted_information_requestion": 10
+    }
+  },
+  "boundary_sensitivity": {
+    "case": "equipment_card/P-HPU",
+    "primary_receiver_unsupported_facts": 1,
+    "alternative_receiver_unsupported_facts": 0,
+    "effect": "다른 11건과 모든 사실/미확인/승인/완료 점수는 변하지 않음. 이 단일 경계 사례로 카드의 효과나 악화를 확정하지 않음.",
+    "cross_judgment_reported_by_parent": {
+      "source": "pilot-adjudication.json",
+      "independently_read_by_this_judge": false,
+      "reported_summary": "상위 에이전트가 전달한 별도 교차판정: RT-03 클램프 명칭 확장은 입력 밖이나, 부정형 명사구 전제를 사실 주장으로 셀지 사전 정의가 구체화되지 않아 ambiguous(엄격 1 / 행위제한 요약 0).",
+      "handling": "독립 원판정 1을 보존하고 0~1 민감도를 보고함. 교차판정 파일은 지정된 입력 8개 제한에 따라 이 평가자가 열람하지 않음."
+    }
+  },
+  "audit_checks": {
+    "hashes_match_existing_audit": true,
+    "sender_packet_facts_match_ledger": true,
+    "receiver_packet_matches_actual_sender_and_initial": true,
+    "hidden_marker_output_hits": [],
+    "hidden_marker_limit": "표식 부재는 semantic 정보누출 전체의 부재를 증명하지 않는다. 실제 수신 입력 대비 의미 대조에서 HPU 경계 1건을 별도 발견.",
+    "tool_access": "6개 역할 결과 모두 additional_tool_access_used=false. 자기보고와 제공된 audit 수준의 확인이며 OS 차단 또는 전체 실행 추적을 독립 입증하지 않음.",
+    "length_checks": [
+      {
+        "condition": "none",
+        "case_id": "P-HPU",
+        "role": "sender",
+        "characters": 356,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-GR",
+        "role": "sender",
+        "characters": 371,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-RT",
+        "role": "sender",
+        "characters": 387,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-CV",
+        "role": "sender",
+        "characters": 422,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-HPU",
+        "role": "receiver",
+        "characters": 495,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-GR",
+        "role": "receiver",
+        "characters": 545,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-RT",
+        "role": "receiver",
+        "characters": 560,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "none",
+        "case_id": "P-CV",
+        "role": "receiver",
+        "characters": 595,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-HPU",
+        "role": "sender",
+        "characters": 425,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-GR",
+        "role": "sender",
+        "characters": 431,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-RT",
+        "role": "sender",
+        "characters": 462,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-CV",
+        "role": "sender",
+        "characters": 491,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-HPU",
+        "role": "receiver",
+        "characters": 510,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-GR",
+        "role": "receiver",
+        "characters": 534,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-RT",
+        "role": "receiver",
+        "characters": 606,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "checklist",
+        "case_id": "P-CV",
+        "role": "receiver",
+        "characters": 579,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-HPU",
+        "role": "sender",
+        "characters": 484,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-GR",
+        "role": "sender",
+        "characters": 557,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-RT",
+        "role": "sender",
+        "characters": 566,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-CV",
+        "role": "sender",
+        "characters": 629,
+        "limit": 900,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-HPU",
+        "role": "receiver",
+        "characters": 488,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-GR",
+        "role": "receiver",
+        "characters": 539,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-RT",
+        "role": "receiver",
+        "characters": 588,
+        "limit": 1600,
+        "within_limit": true
+      },
+      {
+        "condition": "equipment_card",
+        "case_id": "P-CV",
+        "role": "receiver",
+        "characters": 641,
+        "limit": 1600,
+        "within_limit": true
+      }
+    ]
+  },
+  "interpretation_limits": [
+    "신규 합성 개발 상황 4개 × 조건 3개 × 각 1회. 독립 일반화 벤치마크/holdout 아님.",
+    "같은 계열 AI 생성과 평가이며 조건 라벨이 보이는 비맹검 판정.",
+    "조건별 4개 상황을 한 호출에 배치. 12개 독립 모델 샘플로 취급하지 않음.",
+    "기준 원장에 이미 요청·미확인·승인 금지 정보가 풍부하여 baseline이 강함.",
+    "카드 전문 대신 실행필드발췌 노출. 순서 무작위화·반복 없음, 송신 호출 실행시간 중첩 가능.",
+    "요청 글자수만 동일하고 강제 API 토큰 예산 아님. 모델 스냅샷/샘플링 재현성 미확인.",
+    "현장검증없음. 유의성·효능·일반화·현장 안전성 또는 임의 성공률을 주장하지 않음.",
+    "파일럿 전 후보 수정은 이 실행 결과에 따른 ExpeL 효과로 해석하지 않음."
+  ],
+  "expel_style_comparison": [
+    {
+      "case_id": "P-HPU",
+      "paired_observation": "세 조건 모두 6/6·3/3과 접수/압력 확인 분리를 보존. none/checklist에는 없는 RT-03 클램프 배정이 카드 조건 수신 응답에서만 나타남. 이는 부정형 금지문에 포함된 명사구의 경계 오류로 확신도 중간이며 원인 효과는 미확정.",
+      "card_change_decision": "수정하지 않음; 제안만 기록",
+      "proposal": "후보 제안: 수요처별 항목명도 실제 받은 메시지 범위만 유지하고 카드 예시의 부품명을 다른 장비에 확장하지 않도록 명시하는 방안을 새 사례에서 검토. 수신자 프롬프트/전달 단계의 원인일 수도 있어 카드 결함으로 확정하거나 즉시 수정할 근거는 부족.",
+      "reusable_lesson": "수신자가 알 수 있는 사실은 실제 수신 문맥으로 제한하고, 수신 확인·정보 해결·승인을 분리하며 대상별 미회신/기록 누락을 그대로 남긴다. 이는 이번 실행에서 관측된 공통 패턴이며 검증된 일반 원칙 효과를 뜻하지 않는다."
+    },
+    {
+      "case_id": "P-GR",
+      "paired_observation": "세 조건 모두 기록 미첨부와 실제 무응답을 구분하고 6/6·3/3 보존. 카드 조건은 받은 보고와 자체 관측 구분을 더 명시했으나 다른 조건의 실패가 없어 필수지표 개선 근거 없음.",
+      "card_change_decision": "수정하지 않음; 제안만 기록",
+      "proposal": "이번 사례에는 실패 대비 성공의 차이가 없어 카드 수정 근거 없음. 추가 질문과 명시성만으로 수정 또는 효능을 주장하지 않음.",
+      "reusable_lesson": "수신자가 알 수 있는 사실은 실제 수신 문맥으로 제한하고, 수신 확인·정보 해결·승인을 분리하며 대상별 미회신/기록 누락을 그대로 남긴다. 이는 이번 실행에서 관측된 공통 패턴이며 검증된 일반 원칙 효과를 뜻하지 않는다."
+    },
+    {
+      "case_id": "P-RT",
+      "paired_observation": "세 조건 모두 6/6·3/3 보존. none 수신자는 전달되지 않은 RT-01/RT-03 롤러 범위를 주장하지 않았고, 나머지 두 조건은 actual sender가 전한 범위만 되짚음. 카드 조건의 방향 기준 미확인은 새 값 생성이 아님.",
+      "card_change_decision": "수정하지 않음; 제안만 기록",
+      "proposal": "이번 사례에는 실패 대비 성공의 차이가 없어 카드 수정 근거 없음. 추가 질문과 명시성만으로 수정 또는 효능을 주장하지 않음.",
+      "reusable_lesson": "수신자가 알 수 있는 사실은 실제 수신 문맥으로 제한하고, 수신 확인·정보 해결·승인을 분리하며 대상별 미회신/기록 누락을 그대로 남긴다. 이는 이번 실행에서 관측된 공통 패턴이며 검증된 일반 원칙 효과를 뜻하지 않는다."
+    },
+    {
+      "case_id": "P-CV",
+      "paired_observation": "세 조건 모두 6/6·3/3 보존하고 부분 수신을 전체 완료로 확대하지 않음. 카드 조건은 산정 구간/분모·육안·신호의 미확인을 추가했으나 원래 조건들에서 필수 오류가 없으므로 효과 차이는 입증되지 않음.",
+      "card_change_decision": "수정하지 않음; 제안만 기록",
+      "proposal": "이번 사례에는 실패 대비 성공의 차이가 없어 카드 수정 근거 없음. 추가 질문과 명시성만으로 수정 또는 효능을 주장하지 않음.",
+      "reusable_lesson": "수신자가 알 수 있는 사실은 실제 수신 문맥으로 제한하고, 수신 확인·정보 해결·승인을 분리하며 대상별 미회신/기록 누락을 그대로 남긴다. 이는 이번 실행에서 관측된 공통 패턴이며 검증된 일반 원칙 효과를 뜻하지 않는다."
+    }
+  ]
+}

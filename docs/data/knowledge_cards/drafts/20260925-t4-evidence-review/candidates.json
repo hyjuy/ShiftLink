@@ -1,0 +1,425 @@
+{
+  "label_policy": "Q01–Q08와 evidence_ref는 보고서 내부 참조이며 K/EV/AR/SD ID, group_id, split 배정이 아님",
+  "management_gaps": [
+    "요청자가 제공한 card_id",
+    "카드 version",
+    "근거 있는 confidence 입력",
+    "확정 계보와 split 배정",
+    "실제 생성 실행에 맞는 provenance",
+    "component·scenario 적용 근거",
+    "사람이 검토한 출처 사용 범위"
+  ],
+  "candidates": [
+    {
+      "candidate_ref": "Q01",
+      "disposition": "보완 대기",
+      "title": "제조사 고장 문의에 식별·발생 맥락을 묶어 전달",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "명판 전체 정보",
+            "고장의 성격과 범위",
+            "발생 시점과 동반 상황",
+            "추정 원인"
+          ],
+          "evidence_refs": [
+            "SEW-FAULT"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "SEW-EURODRIVE 고객 서비스",
+          "evidence_refs": [
+            "SEW-FAULT"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "고객 서비스에 고장을 문의할 때",
+          "evidence_refs": [
+            "SEW-FAULT"
+          ]
+        },
+        "channel": {
+          "support": "missing",
+          "note": "연락처 목록은 있으나 고장 인계에 사용할 채널의 선택·사용 절차 미확인.",
+          "evidence_refs": []
+        },
+        "acknowledgement": {
+          "support": "missing",
+          "note": "문의 접수·내용 이해를 확인하는 방법 미기재.",
+          "evidence_refs": []
+        }
+      },
+      "substantive_difference": "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+      "required_additional_source": "동일 제품·현장의 서비스 의뢰 절차: 전송 채널, 접수 또는 내용 확인 절차. 프로젝트 적용 제품과 사용 범위 확인.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q02",
+      "disposition": "보완 대기",
+      "title": "고장·안전결함을 담당 조직에 즉시 알리기",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "발견한 고장·오류 또는 안전결함"
+          ],
+          "evidence_refs": [
+            "DGUV-REPORT",
+            "MISUMI-SAFETY"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "상급자 또는 정비 부서; 안전결함은 상급자",
+          "evidence_refs": [
+            "DGUV-REPORT",
+            "MISUMI-SAFETY"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "발견 시 즉시",
+          "evidence_refs": [
+            "DGUV-REPORT",
+            "MISUMI-SAFETY"
+          ]
+        },
+        "channel": {
+          "support": "missing",
+          "note": "전화·무전·시스템 등 보고 채널 미기재.",
+          "evidence_refs": []
+        },
+        "acknowledgement": {
+          "support": "missing",
+          "note": "보고를 받은 측의 회신·내용 확인 방식 미기재.",
+          "evidence_refs": []
+        }
+      },
+      "substantive_difference": "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+      "required_additional_source": "현장 이상 보고 절차의 보고 채널·수신 확인 규칙 및 역할 정의. MISUMI 반복 고장 통보도 동일 방법 계열로 병합.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q03",
+      "disposition": "보완 대기",
+      "title": "정비 예정 사실을 작업 전 표지로 알리기",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "정비 작업을 실시한다는 사실"
+          ],
+          "evidence_refs": [
+            "DGUV-MAINT-NOTICE"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "모든 직원",
+          "evidence_refs": [
+            "DGUV-MAINT-NOTICE"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "정비 작업을 시작하기 전",
+          "evidence_refs": [
+            "DGUV-MAINT-NOTICE"
+          ]
+        },
+        "channel": {
+          "support": "supported",
+          "value": "제어반·차단기·액추에이터·접근부 등의 정비 표지",
+          "evidence_refs": [
+            "DGUV-MAINT-NOTICE"
+          ]
+        },
+        "acknowledgement": {
+          "support": "missing",
+          "note": "표지를 게시한 뒤 대상 직원의 수신·이해를 확인하는 방법 없음.",
+          "evidence_refs": []
+        }
+      },
+      "substantive_difference": "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+      "required_additional_source": "정비 사전 고지의 대상 범위·수신 확인 절차. 게시가 개인별 통지를 대신할 수 있는지도 현장 절차로 확인.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q04",
+      "disposition": "보완 대기",
+      "title": "재가동 예정 사실을 미리 알리고 인지 여부 확인",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "기계·시스템이 재가동될 예정이라는 사실"
+          ],
+          "evidence_refs": [
+            "DGUV-RESTART"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "직원; Vickers 도식은 모든 인원",
+          "evidence_refs": [
+            "DGUV-RESTART",
+            "VICKERS-AWARE"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "재가동 전에",
+          "evidence_refs": [
+            "DGUV-RESTART"
+          ]
+        },
+        "channel": {
+          "support": "supported",
+          "value": "경보를 울리거나 모든 인원에게 알림(Vickers 도식의 선택지)",
+          "evidence_refs": [
+            "VICKERS-AWARE"
+          ]
+        },
+        "acknowledgement": {
+          "support": "partial",
+          "note": "인지 여부의 질문은 있으나 누가 어떤 응답으로 확인하는지 미기재. 경보 송출 자체는 수신 확인이 아님.",
+          "evidence_refs": [
+            "VICKERS-AWARE"
+          ]
+        }
+      },
+      "substantive_difference": "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님.",
+      "required_additional_source": "현재 현장 재가동 사전 통보·응답 확인 절차. Vickers p.34의 safety interlocks 제거 문구와 별개로 적용 가능한 안전 검토가 필요.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q05",
+      "disposition": "보완 대기",
+      "title": "고장 처리 후 운전 담당자에게 반환할 때 인계",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "partial",
+          "note": "고장 수정·기능시험 선행 맥락은 있으나 무엇을 전달할지 명시된 정보 목록 없음.",
+          "evidence_refs": [
+            "MISUMI-RETURN"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "운전 담당자",
+          "evidence_refs": [
+            "MISUMI-RETURN"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "문서 절차상 시험 운전 다음, 운전 담당자에게 반환하는 단계",
+          "evidence_refs": [
+            "MISUMI-RETURN"
+          ]
+        },
+        "channel": {
+          "support": "missing",
+          "note": "반환·인계에 쓰는 전달 채널 없음.",
+          "evidence_refs": []
+        },
+        "acknowledgement": {
+          "support": "missing",
+          "note": "인수자의 확인 절차 없음. 시험 운전은 수신 확인이 아님.",
+          "evidence_refs": []
+        }
+      },
+      "substantive_difference": "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름.",
+      "required_additional_source": "정비→운전 인계 표준·양식: 전달 정보, 채널, 인수자 확인. 원문의 시험 운전 순서를 프로젝트 재가동 권한으로 전용하지 않음.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q06",
+      "disposition": "보완 대기",
+      "title": "정비 내용과 변경 이력을 추적 가능한 기록으로 남겨 전달",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "날짜·작업 유형·내용·작업자",
+            "실시 작업 단계·설정값과 변경 내용"
+          ],
+          "evidence_refs": [
+            "ATOS-LOG",
+            "DGUV-LOG"
+          ]
+        },
+        "recipient_role": {
+          "support": "missing",
+          "note": "기록 작성자와 maintenance manager 표기만으로 인계 수신자를 지정할 수 없음.",
+          "evidence_refs": []
+        },
+        "timing": {
+          "support": "missing",
+          "note": "기록 대상은 있으나 인계 마감·교대 시점은 미기재.",
+          "evidence_refs": []
+        },
+        "channel": {
+          "support": "supported",
+          "value": "수리·정비 수첩, 기계 문서 또는 정비 로그",
+          "evidence_refs": [
+            "ATOS-LOG",
+            "DGUV-LOG"
+          ]
+        },
+        "acknowledgement": {
+          "support": "partial",
+          "note": "작업자 Signature 칸은 있으나 인수자 서명이라는 근거 없음.",
+          "evidence_refs": [
+            "ATOS-LOG"
+          ]
+        }
+      },
+      "substantive_difference": "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음.",
+      "required_additional_source": "정비기록 작성과 인계의 연결 절차: 지정 수신자, 전달 시점, 수신 확인. ATOS 양식과 DGUV 권고를 결합해 새로운 현장 양식을 확정하지 않음.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q07",
+      "disposition": "보완 대기",
+      "title": "진단 시작 시 운전자 설명과 과거 고장 로그를 대조",
+      "boundary": "고장·정비 관련 T4 후보",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "오류 거동·고장·기계와 시스템의 반응",
+            "기존 정비 수첩·로그가 있으면 같거나 유사한 과거 고장"
+          ],
+          "evidence_refs": [
+            "DGUV-INTERVIEW"
+          ]
+        },
+        "recipient_role": {
+          "support": "partial",
+          "note": "운전자는 질문 대상이지만 질문을 받는 정보를 인수할 담당 역할은 해당 문장에서 명시되지 않음.",
+          "evidence_refs": [
+            "DGUV-INTERVIEW"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "고장 진단을 시작할 때",
+          "evidence_refs": [
+            "DGUV-TIMING"
+          ]
+        },
+        "channel": {
+          "support": "supported",
+          "value": "운전자에게 질문하고, 기존 정비 수첩·로그가 있으면 조회",
+          "evidence_refs": [
+            "DGUV-INTERVIEW"
+          ]
+        },
+        "acknowledgement": {
+          "support": "partial",
+          "note": "진단용 질문·이력 조회는 인계 내용의 되읽기·수신 확인 절차로 명시되지 않음.",
+          "evidence_refs": [
+            "DGUV-INTERVIEW"
+          ]
+        }
+      },
+      "substantive_difference": "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름.",
+      "required_additional_source": "운전→진단 담당 면담·인계 절차: 정보 인수 역할, 설명 확인·되읽기 등의 실제 규칙. 진단(T3)과 인계(T4) 목적 경계 검토.",
+      "count_as_valid_draft": false
+    },
+    {
+      "candidate_ref": "Q08",
+      "disposition": "보완 대기",
+      "title": "운영 지침을 전달하고 이해 여부를 서명으로 확인",
+      "boundary": "교육·문서 지식 전달의 T4 경계 후보; 교대·고장 인계로의 확장은 근거 없음",
+      "fields": {
+        "required_context": {
+          "support": "supported",
+          "value": [
+            "운영 지침과 그 안의 안전 정보가 포함된 완전한 매뉴얼"
+          ],
+          "evidence_refs": [
+            "MISUMI-BEFORE",
+            "MISUMI-SIGN"
+          ]
+        },
+        "recipient_role": {
+          "support": "supported",
+          "value": "매뉴얼을 이해해야 하는 직원·운전자",
+          "evidence_refs": [
+            "MISUMI-SIGN",
+            "MISUMI-OPERATORS"
+          ]
+        },
+        "timing": {
+          "support": "supported",
+          "value": "최초 시운전 전에 운영 지침을 읽음",
+          "evidence_refs": [
+            "MISUMI-BEFORE"
+          ]
+        },
+        "channel": {
+          "support": "supported",
+          "value": "설비 구역에서 항상 이용할 수 있는 완전한 운영 매뉴얼 사본",
+          "evidence_refs": [
+            "MISUMI-SIGN"
+          ]
+        },
+        "acknowledgement": {
+          "support": "supported",
+          "value": "직원이 운영 지침을 이해했음을 서명으로 확인",
+          "evidence_refs": [
+            "MISUMI-SIGN"
+          ]
+        }
+      },
+      "substantive_difference": "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음.",
+      "required_additional_source": "일반 교육·매뉴얼 전달을 T4 범위에 포함할지 검토. 교대 인계로 쓰려면 담당 변경 시점·전달 정보·확인 절차를 명시한 별도 원문. 출처 범위와 실제 관리 입력도 필요.",
+      "count_as_valid_draft": false
+    }
+  ],
+  "duplicate_review": {
+    "scope": "이번 후보 묶음; 기존 전체 KB와 의미 중복 검사는 미실시. 통과 카드가 없어 기존 KB 중복 통과를 주장하지 않음.",
+    "merged_variants": [
+      {
+        "kept": "Q01",
+        "variants": [
+          "SEW 소음 문의",
+          "SEW 누유 문의",
+          "SEW 과열 문의"
+        ],
+        "reason": "동일한 문의 정보 패키지"
+      },
+      {
+        "kept": "Q02",
+        "variants": [
+          "DGUV 고장 보고",
+          "DGUV Annex 1 F 위험 보고",
+          "MISUMI 안전결함 보고",
+          "MISUMI 반복고장 자격자 통보",
+          "Interroll 사고·고장 자격자 통보"
+        ],
+        "reason": "동일한 이상 발견 후 담당자 통보 계열. 설비명과 수신 호칭 차이로 독립 카드 수를 늘리지 않음."
+      },
+      {
+        "kept": "Q06",
+        "variants": [
+          "ATOS 수첩 3쪽 반복 양식",
+          "DGUV 작업·변경 기록"
+        ],
+        "reason": "정비 이력의 기록·추적이라는 동일 목적. 서로 다른 문서의 양식을 현장 표준으로 합치지 않음."
+      }
+    ],
+    "independent_site_events": 0
+  }
+}

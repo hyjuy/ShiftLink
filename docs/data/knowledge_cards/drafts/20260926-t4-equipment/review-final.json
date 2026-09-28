@@ -1,0 +1,69 @@
+{
+  "reviewed_at": "2026-09-26",
+  "reviewer": "research_validation subagent; not a card author or pilot role agent",
+  "review_type": "final_content_rereview_after_consolidation",
+  "verdict": "pass",
+  "input_hashes": {
+    "specs-hpu-gr.json": "d00ee9305d3b770803f03be9fe55bc0493882c2c7638b58c899b2f80119d9a2f",
+    "specs-rt-cv.json": "3e76a66468baf825674b1e30377ed5ed96013cfc4d224df3b2ee6c0743b3a519",
+    "cards.json": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+    "equipment-map.json": "04783856723ee24fd0b169e9bb8187aa3ad429f739a71236990a6818d23c2a3b",
+    "review-decisions.json": "db89eb52613b5165b880448348276462187f5cda323aee32bb35b7109285e462",
+    "candidate-specs-hpu-gr.json": "348c96e12c1820fa1c473be5e4111c1d25d76201019a39a00fcb8320efb38bed",
+    "candidate-specs-rt-cv.json": "6ba16436c535c2b6da44fa79593f52f5eee0be6bd6ae259bc21b368753b6f941",
+    "../20260925-t4-synthetic/cards.json": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172"
+  },
+  "review_basis": "원본 26개에 대한 review-independent.json의 내용 검토를 유지하고 최종 명세의 필드별 diff, 6개 제외/통합 결정, cards.json과 명세의 5필드·절차 대응, equipment-map의 primary/related 구분을 다시 확인했다.",
+  "verification": {
+    "final_card_count": 20,
+    "knowledge_card_model_validate_pass": 20,
+    "handover_payload_exactly_matches_spec": 20,
+    "spec_procedure_present_in_card_know_how": 20,
+    "card_spec_map_primary_equipment_match": 20,
+    "all_status": "draft",
+    "all_grade": "L0",
+    "all_split": "dev",
+    "all_safety_review_status": "pending_review",
+    "original_snapshots_match_original_review_hashes": true,
+    "excluded_from_final": ["HPU-04", "RT-03", "RT-06", "RT-07", "CV-05", "CAU-02"]
+  },
+  "resolved_findings": [
+    {"id": "DUP-01", "result": "RT-06은 최종 카드에서 제외되고 HPU-01 merged_candidate_keys에 기록되었다. 관련 RT-01/02/03 및 CV-01을 related_equipment_ids로 유지하며 primary HPU enum을 바꾸지 않았다."},
+    {"id": "DUP-02", "result": "RT-03은 최종 카드에서 제외되고 GR-04 merged_candidate_keys에 기록되었다. RT-03은 related로 연결하며 primary GR 적용은 EQ-0005로 유지한다."},
+    {"id": "COUNT-01", "result": "HPU-04, RT-07, CV-05, CAU-02를 기존 공통 방법 또는 선택된 경로 카드의 변형으로 추가 제외했다. 38개 제안, 26개 작성 후보, 최종20개를 구분했다. 최종20개는 장비별 적용 카드이며 새로운 보편 메커니즘20개의 실증 주장이 아니다."},
+    {"id": "CONDITIONAL-HPU03", "result": "유온 기록이 없는 경우를 procedure와 acknowledgement 모두 허용하도록 수정했다. 유온 계측이 실제 존재했다는 사실을 강제하지 않는다."},
+    {"id": "CONDITIONAL-GR04", "result": "계측점 대응 문서가 있을 때도 무조건 미확인으로 만드는 문장을 확보·확인 상태 또는 미확인으로 수정했다."},
+    {"id": "ROLE-PDP02", "result": "V-11은 송신 관찰자이고 V-13은 주수신 접수자임을 명료화했다. 승인권은 생성하지 않았다."},
+    {"id": "REFS-PDP03", "result": "전력 직접 공급 REL-0013~0015에 더해 하류 drive/hydraulic_supply REL-0005~0012 전체가 catalog_refs에 포함되어 전달 범위를 추적할 수 있다."}
+  ],
+  "cards": [
+    {"card_id": "K-0026", "method_key": "CAU-01", "verdict": "pass", "reason": "CAU 압력과 CV 디버터 관측의 양 끝을 구분하고 미등록 사용처 태그·ID·동작기준을 만들지 않는다. COMMON+EQ-0003 설계 적용 범위가 명시되어 있다."},
+    {"card_id": "K-0028", "method_key": "CV-01", "verdict": "pass", "reason": "pct 대기율·육안 적재·신호를 구분하며 CV-02의 미등록 속도/장력을 CV-01에서 복사하지 않는다."},
+    {"card_id": "K-0029", "method_key": "CV-02", "verdict": "pass", "reason": "cv_belt_tension/kPa 표시 정의의 확보 상태를 별도 인계하고 N 인장력이나 텐셔너 내부 압력으로 추정하지 않는다."},
+    {"card_id": "K-0030", "method_key": "CV-03", "verdict": "pass", "reason": "벨트와 적재물 관측 대상 및 시선 기준을 함께 되짚으며 적재물 치우침을 사행 확정으로 바꾸지 않는다."},
+    {"card_id": "K-0031", "method_key": "CV-04", "verdict": "pass", "reason": "GR/HPU/CAU의 구동·유압·공압 전달 범위를 나누고 일부 역할 회신을 전체 완료로 처리하지 않는다."},
+    {"card_id": "K-0033", "method_key": "GR-01", "verdict": "pass", "reason": "공유 계측 태그를 장비ID·위치표지에 묶어 대조하고 GR-02 상세 부품 코드를 생성하지 않는다."},
+    {"card_id": "K-0034", "method_key": "GR-02", "verdict": "pass", "reason": "GR-01 계측값·센서 이력·베어링 소견의 세 확인 범위를 구분하며 EQ-0004만 적용한다."},
+    {"card_id": "K-0035", "method_key": "GR-03", "verdict": "pass", "reason": "카탈로그의 각 GR 구동 대상 목록과 대상별 관측·회신을 대조한다. GR-02의 CV 대상은 CV-01로 정확하다."},
+    {"card_id": "K-0036", "method_key": "GR-04", "verdict": "pass", "reason": "GR-02/RT-03 전류를 같은 계측점으로 대체하지 않는다. 대응문서 상태의 조건화와 related RT-03 매핑, RT-03 중복 제외를 확인했다."},
+    {"card_id": "K-0037", "method_key": "HPU-01", "verdict": "pass", "reason": "공급원과 분기별 수요처 관측·단위·시각·회신을 구분한다. RT-06 중복을 제외하고 관련 RT/CV를 sidecar로 연결했다."},
+    {"card_id": "K-0038", "method_key": "HPU-02", "verdict": "pass", "reason": "토출압·필터차압의 같은 bar 단위와 유량의 시각을 구별하고 동시 계측이나 고장 진단을 만들지 않는다."},
+    {"card_id": "K-0039", "method_key": "HPU-03", "verdict": "pass", "reason": "유온 계측의 실제 확보 상태와 쿨러 확인 기록을 분리한다. 기록 존재를 강제하던 표현이 조건화되었다."},
+    {"card_id": "K-0041", "method_key": "HPU-05", "verdict": "pass", "reason": "유압 oil 관계와 common_mode signal 관계를 다른 기록 경로로 전달하며 정의된 관계를 실제 발생 증거로 사용하지 않는다."},
+    {"card_id": "K-0042", "method_key": "PDP-01", "verdict": "pass", "reason": "bus_voltage/pct 표시와 미확인 기준 전압을 보존하며 V 환산·상별 정보·전기 작업 승인을 만들지 않는다."},
+    {"card_id": "K-0043", "method_key": "PDP-02", "verdict": "pass", "reason": "외부 관찰과 내부 확인 기록을 구분하고 V-11 송신/V-13 수신 역할을 명료화했다. 내부 상태 추정이나 새 점검 지시가 없다."},
+    {"card_id": "K-0044", "method_key": "PDP-03", "verdict": "pass", "reason": "PDP 직접 전력 공급과 하류 drive/hydraulic 관계를 구분하며 관련 전체 관계 참조를 보완했다."},
+    {"card_id": "K-0045", "method_key": "RT-01", "verdict": "pass", "reason": "구간별 롤러 번호 범위와 원문 번호·시선 기준을 교차 대조하며 개별 부품ID나 불명확한 위치를 확정하지 않는다."},
+    {"card_id": "K-0046", "method_key": "RT-02", "verdict": "pass", "reason": "min 지연량·관측 시각·bar 클램프압을 구분하고 승강 실린더 압력으로 대체하지 않는다."},
+    {"card_id": "K-0048", "method_key": "RT-04", "verdict": "pass", "reason": "송출/도착 원문의 소재 식별과 시각 대응을 대조하며 카탈로그 lag를 실측 이동시간으로 쓰지 않는다."},
+    {"card_id": "K-0049", "method_key": "RT-05", "verdict": "pass", "reason": "소재와 신호의 반대 방향, 선택 CV-02 경로의 적용과 실제 작동을 구분한다. 인터록 해소나 재가동 절차를 생성하지 않는다."}
+  ],
+  "remaining_limits": [
+    "20개는 장비별 합성 개발 카드의 내용 검토 결과이며 필드 정확도나 현장 효과 점수가 아니다.",
+    "equipment-map은 설계 적용 범위일 뿐 production routing을 강제하지 않는다. PDP/CAU의 COMMON enum 및 related 장비는 운영 검색 배치 완료를 의미하지 않는다.",
+    "관계·태그·단위는 프로젝트의 가상 카탈로그 기준이며 실제 설치장비 사양 검증은 아니다.",
+    "이 리뷰는 파일럿 실행 결과를 판정하지 않는다. 별도 독립 효과 판정이 필요하다.",
+    "별도 사람 안전 검토가 없으므로 카드 safety_review pending_review를 유지한다."
+  ],
+  "source_files_modified": false
+}

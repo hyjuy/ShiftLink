@@ -1,0 +1,107 @@
+{
+  "reviewer": "/root/design_review",
+  "author_independent": true,
+  "review_date": "2026-09-26",
+  "review_stage": "initial_pre_freeze",
+  "verdict": "revise",
+  "role_execution_performed": false,
+  "scope": "Experiment design files only; selected cards.json read to verify six selected know_how values and source hash; catalog-projection.json allowed projection only. No original catalog, sealed/holdout, prior scripts or broad repository search.",
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "required_before_freeze",
+      "paths": [
+        "evaluation-only/rubric.md",
+        "evaluation-only/judgment-template.json"
+      ],
+      "evidence": "Receiver input fidelity is defined as actual delivered related atoms, but no input-atom enumeration, segmentation or denominator recording is provided. The template has only fixed atom_id records, mixing per-atom and response-level counts.",
+      "impact": "Evaluators can choose different denominators. A receiver faithfully repeating an incorrect sender claim can be confused with end-to-end correctness; per-response error counts can be duplicated across ledger rows.",
+      "requested_change": "Define dynamic actual-input atoms with quote/source, inclusion/segmentation/deduplication rules and explicit denominator; keep fidelity versus end-to-end and propagated misinformation separate. Provide role-level counts, per-claim evidence/deduplication and request-unit decomposition fields separate from fixed ledger judgments."
+    },
+    {
+      "id": "R2",
+      "severity": "required_before_freeze",
+      "paths": [
+        "evaluation-only/fact-ledger.json",
+        "assemble-design.py",
+        "evaluation-only/rubric.md"
+      ],
+      "evidence": "F-CAU-U04 combines actual photo receipt and content confirmation. F-GR-P11 and F-CAU-P05/P08/P09/P10 combine status and time although most other status/time facts are split.",
+      "impact": "Partial preservation has no fixed decision boundary and atomic denominators use different granularity. Actual receipt can be known while content confirmation is unknown.",
+      "requested_change": "Split independently answerable state/time propositions before freeze, update counts/code, and specify how remaining context-bearing atoms treat partial preservation. Keep raw memos and role packets unchanged."
+    },
+    {
+      "id": "R3",
+      "severity": "required_before_freeze",
+      "paths": [
+        "sender-packets/F-HPU-t4.json",
+        "card-selection.json",
+        "protocol.md",
+        "evaluation-only/rubric.md"
+      ],
+      "evidence": "The selected unchanged HPU support says '카탈로그 공급 관계에 맞춰' but no catalog is in the packet and all other file reads are forbidden. General unit/tag knowledge versus the torn note's unobserved unit is not concretely illustrated.",
+      "impact": "An evaluator could silently treat remembered catalog supply links or usual units as incident evidence, or mistake a reference instruction for an instruction to retrieve forbidden data.",
+      "requested_change": "Keep original know_how intact; explicitly record the unavailable catalog dependency and input-only evidence boundary. Add normal/error examples for guessed concrete supply links and assigning an unobserved unit versus clearly marked general knowledge or a verification question. State that referenced material is not authorization for another tool read."
+    }
+  ],
+  "confirmed": [
+    "Six families HPU/GR/RT/CV/PDP/CAU, one preselected card each, 18 sender packets, six receiver templates, 54 unique planned pairs and three repeats per scenario-condition.",
+    "All three sender conditions have identical task/access_rule/notes JSON values; only support differs. none is empty, checklist is the same generic five items, t4 exactly matches selected original know_how and selection text.",
+    "Source memos are unstructured fragments with source gaps/conflicts and no answer-like checklist or oracle instructions. Blank lines separate memo fragments in .txt; they are not extra facts.",
+    "Receiver templates expose only task/access_rule/initial/handoff:null; protocol requires actual full sender output substitution and no other edits.",
+    "No semantic answer leakage from fact ledger/examples into roles identified. Support is the intended intervention and contains method guidance, not scenario observations.",
+    "Source cards SHA256 independently equals 37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff; selected version synthetic-f7c3411308f7.",
+    "Strict versus sensitivity negative-target rules, normal/ambiguous examples, independent second judgment, question types and independent answer units, and exactly two planned conversational turns are specified.",
+    "Fresh fork_turns=none, one packet read, no repeated contexts, unavailable tool-observation cases, and lack of OS isolation are explicit. Judge blinding limits are explicit.",
+    "Length confounding is disclosed as package effect; 1800 Unicode code points per output, basic108 roles, maximum216 attempts and194400 baseline requested characters are explicit; tokens/cost/total wall-clock enforcement unavailable.",
+    "Fixed order, stop criteria, infrastructure-only single retry, missing/ineligible handling, complete-triplet primary analysis and excluded-output supplementary reporting are specified.",
+    "Development lineage and non-generalization limits are explicit; later revisions require failure evidence, old/new versions, independent review and separately designed new situations before generalization evaluation."
+  ],
+  "verification": "Independent structured comparison of all18 sender packets, all6 templates, selected source know_how, run cardinality and manual semantic reading of all6 memo sets and fixed atom entries. Author static checker read; this initial review is not a freeze or role execution.",
+  "input_hashes": {
+    "assemble-design.py": "cd4f8b12df62589d567075198207db424dab5ed172d37af41f0f7ef1e4acf264",
+    "card-selection.json": "b6f311d8d788a6803b26ff207c7f2c5d859022d57822414b41ddb54f85d73026",
+    "coverage-and-lineage.json": "350b60ff76eae6796ba595b002a66f0b477414bc42cecf386efb95b3b76cb9d7",
+    "evaluation-only/fact-ledger.json": "e62eaee857220b32692a5bb0a415ad7a5facde877f4b269e95f4ccc697b97428",
+    "evaluation-only/judgment-template.json": "78a4bc6bf723694798407b208b6e50b5dbd8db5e9fdac84cff9822cd32dcd5bb",
+    "evaluation-only/rubric.md": "e17b204ea9bd47e60a65e2af58230a86e4b8449c694733ade2ee7fd3be6fd627",
+    "execution-log-template.json": "697d58b230b60fc3c7ea4eb899dc52896dfe325240630d638ac21295aa06a755",
+    "input-lengths.json": "644196ede78ae13cfed1d657b9e47a51ac34c1868aeb38ced9e61a7a58c3b6ae",
+    "protocol.md": "a3f3707aa53031ec142367a29e17702a3ec53e53e8e9125a3daaf59c84af2730",
+    "README.md": "4ed0709ff962f64b581438c780580f0d4c69a87391a4f535bb36d66a915e2e14",
+    "receiver-templates/F-CAU.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-CV.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-GR.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-HPU.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-PDP.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "receiver-templates/F-RT.json": "3e3baed5c6ce3c48a7f9edc6d8b6dfc71013727f2d0466039c821c5087795af6",
+    "run-plan.json": "e8453b756a52e6baac31880de2cba094b5656c6a1af3790322339ea3193b474c",
+    "sender-packets/F-CAU-checklist.json": "7010a8b23b54686404541f93903448d76cdb12a21e07b25ea0a1c79bae0b07cc",
+    "sender-packets/F-CAU-none.json": "dba349b6865a176bd1c6c27fff869addbe902d87e38754275777fa438df8d8aa",
+    "sender-packets/F-CAU-t4.json": "7a999175cce20a775751dedd92a3135ad2d79b160bc9229e9469b236f7d81f7d",
+    "sender-packets/F-CV-checklist.json": "fea857937e902c56cf819cffab9bcc1549aec32471c3a21100eee4569c108e31",
+    "sender-packets/F-CV-none.json": "d2f7db22abdf02df05ab614e10826ce071b90a540dedec4f86be7667a1ef61da",
+    "sender-packets/F-CV-t4.json": "fede96353aa73c40d4326a51b358c5de30bf31c0af091246530cc59c9b0f73f2",
+    "sender-packets/F-GR-checklist.json": "590a741334e8a8021346232aee8c755999d60b5af3f48515ea0c90e5edb44d10",
+    "sender-packets/F-GR-none.json": "97dc4b754d2a609ac6f19d89bd54f0320d2f0104fd9b313b988f419197023c06",
+    "sender-packets/F-GR-t4.json": "45a44fcedcb268f43cc90fd31cd94abb7579b2f04cf6c20f853a8a9c64c4a550",
+    "sender-packets/F-HPU-checklist.json": "806ae713206d48aec81d86f2396e497d5bd8312566d9a24c2b22da5a326ff877",
+    "sender-packets/F-HPU-none.json": "534e6630428129e399fd28bbbaf6545447191103a9506c09a71f670640e81f20",
+    "sender-packets/F-HPU-t4.json": "49605199eda124ad50601a79a619403c728c3bf238509123b1d829e70d22c108",
+    "sender-packets/F-PDP-checklist.json": "28ae25829d051552e79f5d1ebe466662820deb5aa74728a99e81da0c25ab89a3",
+    "sender-packets/F-PDP-none.json": "1290add7162d1ace00117da72b85f0fcfdff70784e313fb8178ce704a11f9c41",
+    "sender-packets/F-PDP-t4.json": "7de87484f5cec13f72705f1c03b9360670c89ea5a26e550c048231a281593871",
+    "sender-packets/F-RT-checklist.json": "30a3fe08135a5f197d862e666ce39606338af8f1a7df02db9a933d1f54ab8a7b",
+    "sender-packets/F-RT-none.json": "bb166d0deb349ce0187029119f1d3a6e875e3ea0cdf034ad74736be6c179a27a",
+    "sender-packets/F-RT-t4.json": "8f98341d1b21fe7274a804bf5912432b26aaced23fe9ad9a0f3f5371ef63d70c",
+    "source-memos/F-CAU.txt": "ba401327d5fa8e31c5b49454a14542e474ffd220b04e3a1cd0895a14a443685d",
+    "source-memos/F-CV.txt": "a03d24821c957d2279e1563d0e25f904fe25ea799c39bf0bef7a41a17727dabb",
+    "source-memos/F-GR.txt": "65b88ff0195e1be84ab9a7b137944b8f4f591339aed5aa060d467e208d1e34ee",
+    "source-memos/F-HPU.txt": "fa6b07865f84821108d38798289391a475d0b16c8d1b0eda02b927977a8f0d25",
+    "source-memos/F-PDP.txt": "b40a4123c6a4fc681c35894470947a82b375dba5571208a3635c9159e0003ad5",
+    "source-memos/F-RT.txt": "60bf2cb2045308a3f42e2179e07da6684ca808886970b3e946e2fc7862f669c6",
+    "verify-design.py": "0f3e3a9f468540d3a456fcb588b10ffe065340447b24c7bc3c29df3751fa039c",
+    "D:\\obsd\\Projects\\ShiftLink\\docs\\data\\knowledge_cards\\drafts\\20260926-t4-equipment\\cards.json": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+    "D:\\obsd\\Projects\\ShiftLink\\docs\\data\\knowledge_cards\\drafts\\20260926-t4-followup\\catalog-projection.json": "af76954b6dd5488db3a6a70836121d7070740fbcc91eac94c183c1fcf841fff6"
+  }
+}

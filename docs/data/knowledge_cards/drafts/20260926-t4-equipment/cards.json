@@ -1,0 +1,1270 @@
+[
+  {
+    "card_id": "K-0026",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "COMMON",
+    "component": "CAU-01 공압 공급·CV-01 디버터",
+    "scenario": "S1",
+    "title": "[합성·개발용] 공기압 공급원 표시와 디버터 동작 관측을 양 끝 자료로 인계하기",
+    "know_how": "[합성 인계 방법] 공급원 표시값을 CAU-01 태그에 연결한다. 디버터 동작은 별도 사용처 원문으로 붙이고 없는 관측을 공급원 값으로 대체하지 않는다. 각 역할의 양 끝 정보 회신을 대조하고 시간 대응 미확인을 남긴다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 디버터 기록이 없으면 사용처 동작 미확보로 둔다. 공급 압력이나 수신 회신만으로 디버터 정상·작업 가능을 판정하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: CAU-01 air_pressure(kPa)의 공급원 관측과 CV-01 디버터 동작의 사용처 관측을 양 끝으로 나눈다. 카탈로그는 pneumatic_supply 관계를 제공할 뿐 디버터 측 압력 태그·부품 ID·응답 기준은 제공하지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-CAU-01"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-CAU-01",
+          "locator": "synthetic-sources.json#CAU-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "CAU-01 air_pressure 원문 값·kPa 단위·측정 시각 또는 각 미확인",
+          "CV-01 디버터 육안 동작 원문의 대상·시각·출처 또는 미확보",
+          "CAU-01→CV-01 pneumatic_supply 관계와 양 끝 관측 시간 대응 여부",
+          "디버터 측 압력·부품 ID·동작 기준 자료의 별도 확보 여부"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 CAU-01 공기압 기록 인수 역할과 CV-01 이송 운전 인수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 공압 공급원 메모와 사용처 동작 메모를 교대 간 연결해 넘길 때",
+        "channel": "합성 시나리오에서 정한 채널: CAU 공급원/CV 디버터 양 끝을 분리한 합성 공압 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 각 수신자는 CAU air_pressure의 단위·시각 상태와 CV 디버터 관측 확보 상태를 구분하고 양 끝 모두 확인되었는지 여부를 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0028",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "CV",
+    "component": "CV 적재 대기 관측",
+    "scenario": "S1",
+    "title": "[합성·개발용] 적재 대기율을 소재 개수·만적 신호와 구분해 인계하기",
+    "know_how": "[합성 인계 방법] cv_queue_len은 원문 태그와 pct 단위를 함께 적는다. 육안 적재물과 신호 기록을 별도 출처로 붙이고 대기 개수를 계산해 만들지 않는다. 수신자가 세 종류의 정보를 바꾸어 읽지 않았는지 회신과 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 대기율의 산정 구간·분모가 원문에 없으면 산정 정의 미확인을 유지한다. 대기율만으로 만적·인터록 작동 여부를 만들지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: 두 CV의 cv_queue_len은 pct 단위 대기율로 전달하며 실물 개수·육안 적재 상태·인터록 신호 기록은 다른 칸에 둔다. CV-02에는 대기율만 등록되어 있다는 범위를 적용해 CV-01의 속도·장력을 복사하지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-CV-01"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-CV-01",
+          "locator": "synthetic-sources.json#CV-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "CV 코드와 cv_queue_len 원문 값·pct 단위·관측 시각 또는 미확인",
+          "적재부 육안 기록의 위치·대상·관측 시각 또는 미확인",
+          "만적 또는 인터록 신호 원문 존재 여부; 대기율로 대신하지 않음",
+          "CV-01/CV-02별 등록 계측 범위"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 출측 적재·스크랩 이송 운전 인수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 적재 대기 상황을 교대에 넘기며 수치·개수·신호를 요약하기 전",
+        "channel": "합성 시나리오에서 정한 채널: 대기율/육안 적재/신호 기록을 분리한 CV 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자는 CV 코드와 pct 단위의 의미, 육안 관측과 신호의 별도 확보 상태, CV-02의 등록 범위를 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0029",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "CV",
+    "component": "CV-01-TNS 텐셔너",
+    "scenario": "S1",
+    "title": "[합성·개발용] 벨트 장력 표시와 유압 공급 기록의 물리량을 보존해 인계하기",
+    "know_how": "[합성 인계 방법] 두 계측은 각 태그·단위·측정 위치·시각을 보존해 별도 행으로 적는다. 공급 관계를 연결하되 수치 환산으로 서로 대체하지 않는다. 장력 표시의 상세 정의가 없으면 정의 미확인을 표시한 뒤 회신을 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 표시 의미의 정의가 없으면 실제 벨트 인장력이나 텐셔너 내부 압력으로 해석하지 않는다. 수신확인과 계측 의미 확인은 별도로 둔다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: CV-01 cv_belt_tension은 카탈로그에 kPa로 등록된 표시 항목이며 HPU 원문은 별도 공급원 측정이다. 같은 압력 차원의 단위라는 이유로 물리량·측정 위치가 같은 것으로 대체하거나 벨트 인장력 N으로 해석하지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-CV-02"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-CV-02",
+          "locator": "synthetic-sources.json#CV-02",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "CV-01 cv_belt_tension의 태그·kPa 단위·원문 값·시각 또는 각 미확인",
+          "CV-01-TNS와 HPU-01 공급 관계",
+          "HPU 측 원문 태그·측정 위치·단위·시각 또는 미확인",
+          "cv_belt_tension 표시 의미·보정 정의가 확보되었는지 여부"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 CV-01 운전 인수 역할과 텐셔너 관련 정비 기록 접수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 벨트·텐셔너 관련 기록을 HPU 자료와 함께 넘길 때",
+        "channel": "합성 시나리오에서 정한 채널: CV 장력 표시/HPU 공급원 기록을 분리한 계측 의미 대조표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자는 cv_belt_tension 태그와 kPa 단위, HPU와 측정 대상이 별개임, 표시 의미 정의의 확보 상태를 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0030",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "CV",
+    "component": "CV-01-BLT 벨트",
+    "scenario": "S1",
+    "title": "[합성·개발용] 벨트 사행 묘사의 관찰 기준과 적재 위치를 묶어 인계하기",
+    "know_how": "[합성 인계 방법] 벨트와 적재물의 원문 관측 문장을 따로 적는다. 시선 기준이 없으면 좌우 표현을 확정 방향으로 바꾸지 않는다. 수신자의 대상·방향·시선 기준 회신을 원문 범위와 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 시선 또는 관측 대상이 불명확하면 해당 범위의 미확인을 유지한다. 확인을 위해 접근·접촉·시험 운전을 지시하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: 벨트 진행 방향에 대한 관찰자의 시선 기준, 벨트 자체의 위치 표현, 적재물 위치 표현을 분리한 뒤 한 묶음으로 전달한다. 소재가 치우친 관측을 벨트 사행 관측으로 자동 바꾸지 않는 대조가 포함된다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-CV-03"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-CV-03",
+          "locator": "synthetic-sources.json#CV-03",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "CV-01-BLT 식별과 원문 관측 시각 또는 미확인",
+          "관찰자가 바라본 방향·기준 위치 또는 시선 기준 미확인",
+          "벨트 자체와 적재물 각각의 위치·방향 묘사 또는 관측 없음",
+          "제공된 관측 메모·그림의 참조 위치; 새 관찰 수행을 요구하지 않음"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 CV-01 다음 교대 운전 인수 역할과 벨트 관측 기록 접수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 사행 또는 적재물 치우침 묘사를 교대나 정비 접수에 옮길 때",
+        "channel": "합성 시나리오에서 정한 채널: 벨트/적재물 두 항목과 관찰 시선란이 있는 합성 관측 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자는 어느 대상이 치우쳐 보였는지, 어느 시선 기준에서의 방향인지, 확인되지 않은 방향 항목을 함께 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0031",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "CV",
+    "component": "CV-01 구동·텐셔너·디버터 관측",
+    "scenario": "S1",
+    "title": "[합성·개발용] 컨베이어의 구동·유압·공압 기록을 부품별 수신 범위로 나눠 인계하기",
+    "know_how": "[합성 인계 방법] 원문을 GR 구동·HPU 텐셔너·CAU 디버터 범위에 대응하고 범위 불명은 별도 남긴다. 디버터의 등록 부품 ID 없음과 관측 존재 여부를 분리한다. 역할별 범위 회신을 해당 행과 대조하고 일부 회신을 전체 완료로 확대하지 않는다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 공급 관계를 보았다는 사실로 부품 상태를 채우지 않는다. 역할·범위 미확정 행과 미회신 행은 별도 추적한다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: GR-02 drive, HPU-01 텐셔너 hydraulic_supply, CAU-01 디버터 pneumatic_supply를 세 범위로 대응한다. 디버터는 관계 note의 명칭으로만 유지하며 미등록 부품 ID를 만들지 않고 각 접수 역할의 회신 범위를 구분한다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-CV-04"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-CV-04",
+          "locator": "synthetic-sources.json#CV-04",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "CV-01의 전달 대상 관측과 각 원문 출처·시각 또는 미확인",
+          "GR-02 구동/HPU-01 텐셔너/CAU-01 디버터 관계별 관측 확보 상태",
+          "관계에 등장한 부품과 실제 등록된 부품 ID의 구분",
+          "각 기록 접수 역할에 넘길 범위와 역할별 회신 상태"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 CV-01 운전 인수 역할 및 합성 시나리오에서 범위를 나눈 구동·유압·공압 기록 접수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: CV-01 관련 복수 계통의 메모를 분담 접수하거나 다음 교대로 넘길 때",
+        "channel": "합성 시나리오에서 정한 채널: 관계별 3행과 역할별 회신란이 있는 CV-01 합성 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 각 역할은 자신의 공급·구동원, CV-01 측 전달 대상, 관측 확보 상태만 되짚고 다른 계통의 수신확인을 대신하지 않는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0033",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "GR",
+    "component": "구동 설비 계측 묶음",
+    "scenario": "S1",
+    "title": "[합성·개발용] 같은 GR 계측 태그를 장비 ID·설치 위치와 묶어 인계",
+    "know_how": "[합성 인계 방법] 계측 발췌마다 식별 가능한 GR 코드와 위치 표지를 붙인다. 원문에 인스턴스가 없으면 추정 배치하지 않고 미확인 행으로 둔다. GR-02에 GR-01 부품 코드를 복사하지 않은 채 기록을 전달한다. 수신 회신의 장비와 태그의 짝을 원문과 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 동일 태그를 쓰는 두 장비 사이의 전사 혼동을 찾기 위한 합성 인계 방법이다. 계측 정상 여부나 장비 우열을 평가하지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-GR-01"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-GR-01",
+          "locator": "synthetic-sources.json#GR-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] GR-01(EQ-0004/MK-E-01) 또는 GR-02(EQ-0005/MK-X-01)의 식별정보",
+          "[합성 필수맥락 제안] gr_vib_rms(mm_s), gr_brg_temp(degC), gr_current(A)의 값·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] 화면이나 원문이 어느 GR을 가리키는지 확인 가능한 범위",
+          "[합성 필수맥락 제안] GR-02 상세 부품 코드 미등록이라는 카탈로그 한계"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: GR 상태 기록을 받는 교대 취합 담당 V-11과 정비 담당 V-13. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 여러 GR의 계측 발췌를 한 문서로 묶어 넘기는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 장비 ID와 위치 표지를 행 머리에 고정한 계측 인계표. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 GR 코드·EQ ID·위치 표지·태그를 한 묶음으로 되짚는다. 태그는 맞지만 인스턴스가 바뀌었으면 해당 행을 정정하며 장비를 식별할 수 없는 발췌는 인스턴스 미확인으로 수신한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0034",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "GR",
+    "component": "입력측 베어링·진동 센서·베어링 온도 센서",
+    "scenario": "S1",
+    "title": "[합성·개발용] GR 베어링 관측과 진동·온도 센서 이력의 확인 범위를 나눠 인계",
+    "know_how": "[합성 인계 방법] 계측값과 센서 이력, 베어링 소견의 실제 입력 기록을 분리한다. 이력 조회가 없으면 센서 이력 미확인, 소견이 없으면 베어링 소견 미확인으로 기록한다. 서로 다른 세 확인 범위를 같은 인계표로 전달한다. 수신자가 하나의 확인을 다른 부품의 확인으로 확대하지 않았는지 회신과 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 계측을 만드는 부품과 측정 대상 부품의 기록 상태가 뒤섞이지 않도록 구성한 합성 방법이다. 센서 불량 또는 베어링 고장을 판정하는 절차는 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-GR-02"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-GR-02",
+          "locator": "synthetic-sources.json#GR-02",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] GR-01 gr_vib_rms·gr_brg_temp의 값·단위·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] GR-01-VIB·GR-01-TMP 센서 이력 기록의 참조 또는 미확인",
+          "[합성 필수맥락 제안] GR-01-BRG에 관한 실제 소견 기록의 참조 또는 미확인",
+          "[합성 필수맥락 제안] 센서 상태 추정과 기계 부품 상태 추정의 원문 구분"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: GR 운전 인계를 받는 V-11 및 정비 이력 기록을 다루는 V-13. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 계측 보고와 정비 이력 메모를 합쳐 운전 측으로 넘길 때. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 계측값·센서 이력·베어링 소견의 별도 칸을 가진 서면 인계표. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 계측 기록 유무, 센서 이력 확인 여부, 베어링 소견 보유 여부를 각각 회신한다. 센서 기록만으로 베어링 확인 완료라고 요약하거나 값이 있다는 이유로 센서 정상이라고 말하면 해당 칸을 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0035",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "GR",
+    "component": "구동 모터·감속 구동 계통",
+    "scenario": "S1",
+    "title": "[합성·개발용] 공유 GR 구동원 보고를 연결된 수요 장비별 수신 범위로 인계",
+    "know_how": "[합성 인계 방법] 보고 대상 GR을 먼저 식별하고 카탈로그에서 해당 drive 대상만 인계표에 연결한다. 대상별 관측이 없으면 구동원의 보고를 복제하지 않고 미관측으로 둔다. 같은 수신 역할이 여러 대상을 맡더라도 대상별 회신 범위를 구분해 요청한다. 회신 범위와 관측 범위를 별도로 대조해 누락 대상을 남긴다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 공유 구동원의 관계 범위를 잘못 확장하거나 대상별 인계를 일괄 완료하는 오류를 점검하기 위한 합성 설계이다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-GR-03"
+      ],
+      "persona_id": "V-11",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-GR-03",
+          "locator": "synthetic-sources.json#GR-03",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] 구동원 GR 코드와 관측 원문·시각",
+          "[합성 필수맥락 제안] 카탈로그 drive 관계의 구동 대상 목록",
+          "[합성 필수맥락 제안] 각 RT·CV 대상의 받은 보고 범위와 자체 관측 유무",
+          "[합성 필수맥락 제안] 구동 대상별 수신 회신 유무와 미관측 범위"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: GR 교대 취합 담당 V-11과 연결된 RT·CV의 이송 운전·계측 담당 V-12. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 공유 구동원 보고를 관련 장비의 교대 항목에 연결하는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: GR 한 행 아래 실제 구동 대상별 회신 칸을 둔 서면 인계표. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 선택한 GR에 실제 연결된 대상 목록을 읽고 각 대상의 받은 내용과 미확인 관측을 별도로 회신한다. RT-03의 회신을 CV-01 회신으로 대신하거나 GR-01 보고를 RT-03에 연결하면 관계 표와 대조해 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0036",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "GR",
+    "component": "구동 모터·장비별 계측",
+    "scenario": "S1",
+    "title": "[합성·개발용] GR 전류와 RT 모터 전류를 같은 A 단위의 별도 지표로 인계",
+    "know_how": "[합성 인계 방법] 각 전류를 출처 장비와 태그 그대로 기록한다. 같은 단위라는 이유로 값이 같아야 한다고 표시하지 않는다. 계측점 대응 문서가 입력되지 않았으면 미확인으로 명시해 전달한다. 수신 회신에서 두 값이 합쳐지거나 대체되었는지 확인한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 구동 관계와 동일 단위가 실제 계측점 동등성의 근거로 잘못 사용되는지를 점검하는 합성 인계 방법이다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-GR-04"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-GR-04",
+          "locator": "synthetic-sources.json#GR-04",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] GR-02 gr_current의 값·A·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] RT-03 rt_motor_current의 값·A·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] 각 태그가 어느 장비 기록에서 왔는지의 원문 참조",
+          "[합성 필수맥락 제안] 두 태그의 실제 계측점 대응 문서 보유 여부 또는 미확인"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: GR 정비 기록 접수 담당 V-13과 이송 운전·계측 담당 V-12. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 구동원과 수요 장비의 전류 기록을 통합 인계하는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 장비 코드와 태그를 함께 쓰는 전류 대조표 및 원문 참조. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 두 전류의 장비·태그를 별도로 회신하고 계측점 대응 문서의 확보·확인 상태 또는 미확인을 되짚는다. 하나를 다른 태그의 대체값으로 옮겼거나 합산했다면 해당 전사 해석을 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0037",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "HPU",
+    "component": "주 공급 계통",
+    "scenario": "S1",
+    "title": "[합성·개발용] 공급원 압력과 수요처 작동값을 유압 분기별로 나눠 인계",
+    "know_how": "[합성 인계 방법] 입력에 있는 HPU 토출압을 공급원 행에 적고 카탈로그 공급 관계에 맞춰 전달 대상 분기를 나눈다. 수요처 관측은 고유 항목명과 단위를 보존해 각 행에 기록하고 없는 값은 공급원 값으로 대신하지 않는다. 분기별 관측 시각이 다르면 각각 남긴 채 표를 전달한다. 수신자에게 분기 대상과 측정 의미를 읽어 달라고 요청해 원문과 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 공급원을 이해한 것과 모든 수요처를 확인한 것을 구분할 수 있게 설계한 합성 방법이며 현장 효과는 검증되지 않았다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-HPU-01"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-HPU-01",
+          "locator": "synthetic-sources.json#HPU-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] HPU-01 hpu_pressure의 값·bar·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] REL-0009~0012의 실제 전달 대상: RT-01 클램프, RT-02 승강·클램프, RT-03 클램프, CV-01 텐셔너",
+          "[합성 필수맥락 제안] 받는 장비별 관측 종류·계측 위치·단위·시각 및 미관측 분기",
+          "[합성 필수맥락 제안] RT 클램프압·승강 지연과 CV 벨트 장력 지표를 HPU 토출압과 구분한 항목명"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: 이송 운전·계측 담당 V-12와 HPU 교대 취합 담당 V-11. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 공급 상태 보고를 수요처별 교대 기록으로 옮기기 전. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: HPU 공급원 행과 RT·CV 수요처 행을 분리한 서면 분기표 및 그 표를 참조한 대화. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 각 수요처의 항목명·단위·시각을 되짚고 HPU 값만 있는 분기는 수요처 미확인이라고 회신한다. bar 값끼리의 동일시나 kPa 값을 토출압으로 전사한 경우 해당 행만 정정해 다시 대조한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0038",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "HPU",
+    "component": "주 베인펌프·리턴 필터",
+    "scenario": "S1",
+    "title": "[합성·개발용] HPU 토출압·유량·필터 차압을 서로 다른 관측량으로 묶어 인계",
+    "know_how": "[합성 인계 방법] 입력의 압력 보고에서 토출압인지 필터 차압인지 식별 가능한 범위만 옮긴다. 세 관측량을 별도 칸에 기록하고 식별 불가능한 압력 표현은 태그 미확인으로 남긴다. 관측 시각이 일치하지 않으면 동시 측정 묶음으로 이름 붙이지 않는다. 수신자에게 태그와 단위, 각 시각의 짝을 되짚게 해 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 관측량의 정체성과 시간 짝을 보존하기 위한 합성 방법이다. 어떤 값의 조합도 고장 진단이나 운전 판단으로 바꾸지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-HPU-02"
+      ],
+      "persona_id": "V-11",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-HPU-02",
+          "locator": "synthetic-sources.json#HPU-02",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] hpu_pressure(bar), hpu_flow(L_min), hpu_filter_dp(bar)의 개별 값 또는 미확인",
+          "[합성 필수맥락 제안] 각 값의 원문 표기·관측 시각·조회 화면 출처",
+          "[합성 필수맥락 제안] 토출압과 리턴 필터 차압의 구분",
+          "[합성 필수맥락 제안] 동일 시점으로 묶을 근거의 존재 여부"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: HPU 운전 인계를 받는 V-11 및 계측 기록 접수를 맡은 V-13. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: HPU 압력 관련 구두 보고를 교대 기록에 정리하는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 세 계측 태그를 별도 열로 둔 관측표와 표의 각 칸을 읽는 구두 인계. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 토출압과 차압의 태그를 각각 되짚고 유량의 별도 관측 시각을 유지한 채 회신한다. 하나의 bar 값이 두 태그에 복제됐거나 시각이 합쳐졌으면 원문 칸과 대조해 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0039",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "HPU",
+    "component": "오일 쿨러",
+    "scenario": "S1",
+    "title": "[합성·개발용] 유온 기록과 오일 쿨러 관련 관찰의 근거 범위를 나눠 인계",
+    "know_how": "[합성 인계 방법] 유온 기록이 있으면 태그와 시각을 그대로 옮기고 없으면 기록 미확인으로 남긴다. 쿨러 관련 문장을 실제 관찰과 추정으로 구분하고 근거가 없으면 쿨러 확인 기록 미확인으로 남긴다. 두 기록을 연관 참조하되 동일한 측정이라고 합치지 않는다. 수신자에게 유온과 쿨러 확인 범위를 각각 되짚게 한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 일반적 사실·추정 분리를 HPU의 실제 등록 태그와 미등록 쿨러 성능 정보의 경계에 적용한 합성 인계 방법이다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-HPU-03"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-HPU-03",
+          "locator": "synthetic-sources.json#HPU-03",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] hpu_oil_temp 값·degC·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] 쿨러 관련 진술의 원문과 관찰 위치·대상 또는 해당 정보 부재",
+          "[합성 필수맥락 제안] 쿨러 성능을 직접 확인한 기록의 보유 여부",
+          "[합성 필수맥락 제안] 유온 변화 기록과 쿨러에 대한 추정의 구분"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: HPU 교대 취합 담당 V-11과 정비 기록 접수 담당 V-13. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 유온 관련 기록과 쿨러 관련 진술을 같은 인계 항목에 첨부할 때. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 유온 관측·쿨러 관찰·추정을 분리한 서면 인계 항목. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 유온 계측 기록의 확보 여부 또는 미확인 상태와 쿨러 성능 확인 기록의 별도 확보 상태를 구분해 회신한다. 유온 기록만으로 쿨러 이상 또는 정상 확인으로 바꿔 읽으면 해당 진술을 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0041",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "HPU",
+    "component": "주 공급 계통·라인 모드 신호 관계",
+    "scenario": "S1",
+    "title": "[합성·개발용] HPU 유압 공급 기록과 라인 저속 모드 기록의 전달 경로를 분리",
+    "know_how": "[합성 인계 방법] 입력 관측을 장비별 유압 작동부와 라인 모드 표시로 나눠 기록한다. 카탈로그 경로는 대상 식별에만 사용하고 발생 증거 칸은 실제 입력 유무로 채운다. 관측 시각과 기록 없는 경로를 유지해 두 역할에 전달한다. 수신자가 어느 경로를 관측 사실로 이해했는지 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 카탈로그의 관계 존재와 사건별 작동 사실을 구분하기 위한 합성 인계 설계이다. 라인 저속 조건의 적용·원인 판정은 포함하지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-HPU-05"
+      ],
+      "persona_id": "V-11",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-HPU-05",
+          "locator": "synthetic-sources.json#HPU-05",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] HPU 압력 관측 원문과 시각 또는 미확인",
+          "[합성 필수맥락 제안] RT·CV의 개별 작동부 관측 원문과 시각",
+          "[합성 필수맥락 제안] 라인 모드 표시 기록·출처·시각 또는 미확인",
+          "[합성 필수맥락 제안] hydraulic_supply와 common_mode 관계의 대상·매체 구분"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: HPU 교대 취합 담당 V-11 및 이송 운전·계측 담당 V-12. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 여러 장비 증상과 라인 모드가 묶인 인계 문안을 확정하기 전. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 유압 공급 경로와 모드 신호 경로를 나눠 적은 관계별 서면 인계표. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 장비 작동부 관측과 라인 모드 표시를 다른 행으로 요약하고 기록 없는 경로는 미확인이라고 회신한다. 카탈로그 관계가 있다는 사실을 이번 사건의 모드 전환 확인으로 읽으면 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0042",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "COMMON",
+    "component": "배전반 전압 표시",
+    "scenario": "S1",
+    "title": "[합성·개발용] PDP 전압 비율 표시의 기준 미확인을 유지해 인계",
+    "know_how": "[합성 인계 방법] 입력에 있는 PDP 전압 표시를 원래 단위와 시각으로 옮긴다. 기준 전압이나 상별 정보가 없으면 각각 미확인으로 적는다. 표시값만으로 전원 안전 상태나 정비 가능 여부를 덧붙이지 않고 전달한다. 수신자가 읽은 단위와 표시 범위를 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] PDP에 등록된 비율 표시가 다른 물리량으로 전사되는 오류를 찾기 위한 합성 인계 방법이다. 전기 상태 판정이나 조작을 다루지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-PDP-01"
+      ],
+      "persona_id": "V-11",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-PDP-01",
+          "locator": "synthetic-sources.json#PDP-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] PDP-01(EQ-0002)의 bus_voltage 표시값·pct·시각·출처 또는 미확인",
+          "[합성 필수맥락 제안] 기준 전압 정의 기록의 보유 여부 또는 미확인",
+          "[합성 필수맥락 제안] 표시 화면 범위와 원문 단위",
+          "[합성 필수맥락 제안] 상별 전압·전원 상태 등 표시 밖 정보의 미확인 범위"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: 배전반 외부 순회 보고를 취합하는 V-11과 전기 정비 기록 접수 담당 V-13. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 전압 표시를 구두 보고에서 서면 인계로 옮기는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 원문 단위를 유지한 전압 표시 인계 항목과 그 항목을 참조하는 대화. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 bus_voltage의 단위를 pct로 읽고 기준 전압이 없으면 V로 환산할 수 없다는 상태를 회신한다. 전압 비율을 절대 전압이나 상별 측정으로 옮겼으면 원문으로 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0043",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "COMMON",
+    "component": "배전반 외부 표시·외관",
+    "scenario": "S1",
+    "title": "[합성·개발용] 배전반 외부 관찰과 내부 확인 기록을 다른 범위로 인계",
+    "know_how": "[합성 인계 방법] 입력에 존재하는 외부 관찰만 종류와 위치로 정리한다. 표시등의 뜻이나 내부 부품 명칭이 없으면 미확인으로 남긴다. 내부 점검 기록과 외부 관찰을 별도 칸으로 전달한다. 회신에서 외부 관찰이 내부 확인으로 바뀌지 않았는지 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 관찰자의 접근 범위와 정비 기록의 확인 범위가 섞이지 않도록 하는 합성 인계 방법이다. 새 점검 동작이나 전기 작업 절차는 제안하지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-PDP-02"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-PDP-02",
+          "locator": "synthetic-sources.json#PDP-02",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] PDP-01의 위치 표지 MK-UTIL-A2와 원문에 있는 관찰 위치",
+          "[합성 필수맥락 제안] 외부 표시·소리·냄새 등 실제 입력된 관찰 종류·시각·표현",
+          "[합성 필수맥락 제안] 표시등 명칭과 의미를 확인할 문서의 보유 여부 또는 미확인",
+          "[합성 필수맥락 제안] 내부 점검 기록의 참조 유무와 외부 관찰만 있는 범위"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 주수신 역할: 외부 순회 메모를 받는 전기 정비 기록 접수 담당 V-13. V-11은 외부 관찰을 제공하는 송신자이며 이 인계의 수신 대상에 중복 포함하지 않는다. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 배전반 외부 순회 메모를 정비 접수 담당에게 전달하는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: 외부 관찰 원문과 확인 범위 표를 붙인 서면 접수 기록. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 외부에서 관찰한 종류와 위치를 되짚고 내부 상태는 별도 기록 없으면 미확인이라고 회신한다. 표시등이나 냄새 진술을 특정 내부 부품 고장으로 확대했으면 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0044",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "COMMON",
+    "component": "배전 공급 관계",
+    "scenario": "S1",
+    "title": "[합성·개발용] PDP 전력 공급원 보고와 HPU·GR의 다른 전달 경로를 분리해 인계",
+    "know_how": "[합성 인계 방법] PDP 직접 전력 공급 대상을 카탈로그 관계로 식별한다. 대상별 기록 유무를 채우고 RT·CV 관측은 해당 구동·유압 경로를 붙여 별도 첨부한다. 여러 관측이 함께 있다는 사실을 전기 원인 확정으로 바꾸지 않고 전달한다. 수신자가 이해한 직접 대상과 하류 경로 및 미확인 범위를 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 전력·유압·구동의 매체와 관계 대상을 구분하여 여러 단계의 보고 범위를 보존하기 위한 합성 방법이다. 원인 탐색 순서나 전기 진단은 제시하지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-PDP-03"
+      ],
+      "persona_id": "V-13",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-PDP-03",
+          "locator": "synthetic-sources.json#PDP-03",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "[합성 필수맥락 제안] PDP-01 공급원 보고의 원문·시각 또는 미확인",
+          "[합성 필수맥락 제안] 직접 전력 공급 대상 GR-01·GR-02·HPU-01별 관측 기록 유무",
+          "[합성 필수맥락 제안] 하류 RT·CV 관측이 첨부된 경우 해당 drive 또는 hydraulic_supply 경로",
+          "[합성 필수맥락 제안] 각 직접 대상의 수신 범위와 원인 미확정 표지"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 수신 역할: PDP 정비 기록 접수 담당 V-13, HPU·GR 교대 취합 담당 V-11 및 하류 관측 제공 담당 V-12. 실제 현장 역할·배정은 미확인.",
+        "timing": "합성 시나리오에서 정한 전달 시점: 배전 공급원과 구동·유압 수요 장비 보고를 함께 교대 취합하는 시점. 실제 현장 규칙은 미확인.",
+        "channel": "합성 시나리오에서 정한 채널: PDP 직접 공급 대상과 하류 관계를 다른 열로 둔 관계별 서면 인계표. 실제 운영 채널은 미확인.",
+        "acknowledgement": "합성 시나리오에서 정한 수신 확인: 수신자가 직접 전력 공급 대상 세 장비와 하류의 다른 관계를 구분해 회신한다. RT·CV를 직접 공급 대상으로 적거나 한 대상의 수신을 모든 경로의 관측 완료로 확장하면 해당 연결과 상태를 정정한다. 전달 항목과 미확인 표지를 정확히 되짚으면 수신 확인 완료로 기록할 수 있다. 이는 정보 해결이나 작업 허가가 아니다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0045",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "RT",
+    "component": "롤러 위치",
+    "scenario": "S1",
+    "title": "[합성·개발용] 롤러 번호와 구간 경계를 함께 되짚어 위치 관측을 인계하기",
+    "know_how": "[합성 인계 방법] 원문 위치 표현을 그대로 보존하고 롤러 번호·방향 기준의 누락을 표시한다. 원문 번호가 확인된 경우에만 카탈로그 구간과 대응하며 서로 어긋나면 양쪽 표현을 보존한다. 관측 위치를 인계표에 연결하고 수신자에게 코드·번호·구간·방향 기준을 되짚게 한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 구간 불일치는 위치 미확정, 번호·시선 부재는 해당 정보 미확인으로 남긴다. 수신자가 그 불확실성을 정확히 되짚어도 위치 확인 자체가 끝난 것은 아니다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: 입측 1~12번·중앙 13~28번·출측 29~40번이라는 카탈로그 구간과 원문 롤러 번호를 교차 대조한다. 단순 위치 기록에 더해 설비 코드와 구간 경계의 조합을 수신자가 재구성하며 좌우 기준이 없으면 방향 미확인을 남긴다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-RT-01"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-RT-01",
+          "locator": "synthetic-sources.json#RT-01",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "관측 원문의 설비 코드·롤러 번호·관측 시각 또는 각각 미확인",
+          "관측 위치 표현과 시선 기준·좌우 표현 또는 방향 기준 미확인",
+          "카탈로그 설비별 롤러 번호 범위와 원문 간 일치 여부; 개별 롤러 고유 부품 ID는 등록된 것으로 가정하지 않음"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 다음 교대 이송 운전·계측 인수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 롤러 위치 관측을 다음 교대에 넘기며 설비 구간을 확정해 적기 전",
+        "channel": "합성 시나리오에서 정한 채널: 롤러 구간 대응표와 원문 관측 메모를 연결한 교대 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자가 설비 코드, 롤러 번호 또는 번호 미확인, 해당 구간, 방향 기준의 확인 상태를 한 묶음으로 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0046",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "RT",
+    "component": "RT-02-LFT 승강 실린더",
+    "scenario": "S1",
+    "title": "[합성·개발용] 승강 지연의 시간량과 클램프 압력을 별도 관측 묶음으로 인계하기",
+    "know_how": "[합성 인계 방법] 승강 지연량의 단위를 원문대로 적고 관측 시각과 다른 칸에 둔다. 클램프 압력은 측정 대상 명칭을 붙여 별도 기록하고 승강 실린더 압력으로 바꾸지 않는다. 시간 대응과 부품별 계측의 미확인을 표시한 뒤 역할별로 회신을 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 지연의 시작·종료 기준이나 시각 대응이 없으면 측정 의미·시간 대응 미확인을 유지하며 기준을 만들지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: RT-02 전용 rt_lift_delay는 분(min) 단위의 지연량이고 rt_clamp_press는 bar 단위 압력이다. 관측 시각·지연량·압력을 세 항목으로 나누며 클램프 압력을 승강 실린더의 실측 압력으로 치환하지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-RT-02"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-RT-02",
+          "locator": "synthetic-sources.json#RT-02",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "RT-02 식별정보 및 RT-02-LFT 부품 코드",
+          "rt_lift_delay의 원문 값·min 단위·관측 시각·기록 출처 또는 각 미확인",
+          "rt_clamp_press의 원문 값·bar 단위·관측 시각·기록 출처 또는 각 미확인",
+          "두 관측의 시간 대응 여부와 승강 실린더 자체 압력 정보의 확보 여부"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 다음 교대 이송 운전·계측 인수 역할과 승강 관련 기록을 접수하는 정비 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 승강 지연 관측을 교대 또는 정비 문의로 옮길 때",
+        "channel": "합성 시나리오에서 정한 채널: 승강 지연량·클램프 압력·관측 시각을 분리한 합성 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 각 수신자는 rt_lift_delay의 의미와 min 단위, rt_clamp_press의 측정 대상과 bar 단위, 시각 대응 여부를 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0048",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "RT",
+    "component": "RT 간 소재 전달 경계",
+    "scenario": "S1",
+    "title": "[합성·개발용] 인접 롤러 테이블 사이 소재 이동 관측의 양 끝을 인계하기",
+    "know_how": "[합성 인계 방법] 송출측 관측과 도착측 관측을 각 원문에 연결한다. 경계 관계를 표시하고 동일 소재 확인 여부를 별도 항목에 둔다. 한쪽 관측이 없으면 반대편에서 본 것만으로 보완하지 않고 양 끝 대조를 요청한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 도착 관측·소재 식별·시각이 없으면 해당 공백을 유지한다. 전달 접수를 소재 이동 완료로 기록하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: RT-01→RT-02 또는 RT-02→RT-03 물류 경계의 송출 관측과 도착 관측을 쌍으로 전달한다. 소재 식별과 시각 대응이 없으면 같은 소재의 이동 완료로 묶지 않으며 카탈로그 lag를 실측 이동 시간으로 쓰지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-RT-04"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-RT-04",
+          "locator": "synthetic-sources.json#RT-04",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "선택한 RT 상류·하류 코드와 material_flow 관계",
+          "송출측 및 도착측 관측 위치·시각·소재 식별 표현 또는 각 미확인",
+          "두 원문이 같은 소재를 가리키는지의 확인 상태",
+          "관측 공백 구간과 관측자별 기록 출처"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 해당 상류·하류 구간의 다음 교대 이송 운전 인수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: RT 경계의 소재 흐름 메모를 다음 교대에 묶어 전달할 때",
+        "channel": "합성 시나리오에서 정한 채널: 상류 송출/하류 도착 두 칸의 소재 이동 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자는 선택한 경계 양 끝, 각 관측의 소재 식별·시각 상태, 동일 소재 여부를 각각 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  },
+  {
+    "card_id": "K-0049",
+    "version": "synthetic-f7c3411308f7",
+    "grade": "L0",
+    "tacit_type": "T4",
+    "equipment": "RT",
+    "component": "RT-03 배출 경계",
+    "scenario": "S1",
+    "title": "[합성·개발용] 출측 배출 경로와 되돌아오는 인터록 신호 경로를 구분해 인계하기",
+    "know_how": "[합성 인계 방법] 소재 이동과 신호 기록을 별도 행에 놓고 화살표의 출발·도착 코드를 적는다. CV-02 경로는 적용 기록이 없으면 선택 관계 적용 미확인으로 표시한다. 수신자가 관계 정의와 관측 상태를 분리해 회신했는지 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 관측 기록이 없으면 인터록 작동 여부 미확인으로 유지한다. 경로 접수를 인터록 해소나 작업 허가로 전환하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "rationale": "[합성 설계 이유] 합성 설계 가정: 소재는 RT-03에서 CV로, 인터록 관계는 CV에서 RT-03으로 향한다는 두 방향을 별도 행으로 전달한다. CV-01 경로와 선택 관계인 CV-02 경로의 적용 여부를 구분하고 관계 존재를 실제 신호 작동으로 바꾸지 않는다. 이 방법의 효과는 현장 검증되지 않았다. 카탈로그 참조는 가상 설비 구성의 근거이며 인계 방법의 현장 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "[합성 설계 경계] 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "SYN-T4-EQ-RT-05"
+      ],
+      "persona_id": "V-12",
+      "event_ids": [],
+      "generator": "Codex delegated synthetic design + docs/data/knowledge_cards/drafts/20260926-t4-equipment/build.py",
+      "generated_at": "2026-09-25T15:51:45.366692Z",
+      "sources": [
+        {
+          "source_id": "SYN-T4-EQ-RT-05",
+          "locator": "synthetic-sources.json#RT-05",
+          "document_version": "synthetic-f7c3411308f7"
+        }
+      ],
+      "extraction_method": "explicit_synthetic_equipment_handover_design",
+      "prompt_version": "equipment-t4-synthetic-v1",
+      "schema_version": "1.1"
+    },
+    "split": "dev",
+    "status": "draft",
+    "type_payload": {
+      "handover_method": {
+        "required_context": [
+          "합성 설계 가정: 아래 맥락과 recipient_role·timing·channel·acknowledgement를 포함한 인계 방법 5필드는 모두 합성 제안이며 현장 확인 전이다.",
+          "RT-03 배출 대상 CV 코드 또는 배출 경로 미확인",
+          "RT-03→CV의 소재 관측 출처·시각과 CV→RT-03 신호 기록 출처·시각 또는 미확인",
+          "CV-01 관계와 CV-02 선택 관계 중 해당 상황에서의 적용 확인 상태",
+          "관계 정의·실제 관측·원인 가설을 나눈 기록"
+        ],
+        "recipient_role": "합성 시나리오에서 정한 출측 이송 운전 인수 역할과 인터록 관련 기록 접수 역할; 정보 접수 역할이며 승인권을 부여하지 않음",
+        "timing": "합성 시나리오에서 정한 시점: 출측 배출 현황과 인터록 관련 메모를 함께 넘길 때",
+        "channel": "합성 시나리오에서 정한 채널: 소재 화살표와 신호 화살표를 별도 행으로 둔 RT-03 인계표",
+        "acknowledgement": "합성 시나리오에서 정한 수신확인: 수신자는 소재 방향, 신호 관계 방향, 선택 경로 적용 여부, 실제 신호 관측 여부를 각각 되짚는다. 미확인 상태를 정확히 되짚은 경우에도 해당 내용의 수신확인은 가능하다. 회신 누락·불일치는 별도 미완료로 남기며 수신확인을 문제 해결·현장 확인·작업 허가로 해석하지 않는다."
+      },
+      "tried_and_failed": []
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "합성 장비 인계 개발용. 적용 범위는 equipment-map.json 참조. 실제 현장 검증 없음.",
+      "confidence_basis": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence."
+    },
+    "safety_review": {
+      "status": "pending_review",
+      "review_triggers": []
+    }
+  }
+]

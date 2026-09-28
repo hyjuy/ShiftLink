@@ -1,0 +1,12 @@
+{
+  "new_cards": 20,
+  "existing_common_cards": 25,
+  "combined_unique_cards": 45,
+  "equipment_instances_covered": 10,
+  "card_review_hashes_match": true,
+  "pilot_judgment_input_hashes_match": true,
+  "pilot_totals_recomputed": true,
+  "json_files_parsed": 27,
+  "broken_markdown_links": [],
+  "production_files_modified": false
+}

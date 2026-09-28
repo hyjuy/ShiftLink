@@ -1,0 +1,30 @@
+{
+  "is_synthetic": true,
+  "kind": "원문 검토 메모의 합성 인계문 예시",
+  "not_event_or_artifact": true,
+  "counts_as_evidence": false,
+  "note": "사건 원장이 없으므로 narrative.py를 실행하거나 Event·Artifact ID를 만들지 않았다. 아래 세 문체는 동일한 SEW 매뉴얼 절의 부족사항을 서술한다. 실제 작업·측정·통보·회신 사실을 뜻하지 않는다.",
+  "narratives": [
+    {
+      "persona_id": "V-11",
+      "is_synthetic": true,
+      "source_candidate_ref": "Q01",
+      "style_only": "짧은 핵심 전달",
+      "text": "[합성·원문 검토 메모] 고객 서비스 문의 때는 명판 정보, 고장의 성격과 범위, 발생 시점과 동반 상황, 추정 원인을 준비하라고 적혀 있다. 실제 설비 값은 입력이 없다. 연락 채널과 접수 확인 방식은 보완 대기다."
+    },
+    {
+      "persona_id": "V-12",
+      "is_synthetic": true,
+      "source_candidate_ref": "Q01",
+      "style_only": "확인·미확인 체크리스트",
+      "text": "[합성·원문 검토 메모]\n- 원문 확인: 명판 전체 정보 / 고장 성격·범위 / 발생 시점·동반 상황 / 추정 원인.\n- 미확인: 이번 사건의 실제 값, 사용할 채널, 수신 확인 방법.\n- 다음 검토: 다섯 필드의 근거가 연결되면 카드화 가능 여부를 검토한다."
+    },
+    {
+      "persona_id": "V-13",
+      "is_synthetic": true,
+      "source_candidate_ref": "Q01",
+      "style_only": "맥락을 설명하는 정비 메모 문체",
+      "text": "[합성·원문 검토 메모] SEW 운전 지침의 고객 서비스 절에는 문의 시 명판 전체 정보와 고장의 성격·범위, 발생 시점·동반 상황 및 추정 원인을 준비하도록 되어 있다. 이 문구는 문의에 필요한 정보의 근거이며 이번 현장의 정비 수행 기록은 아니다. 인계 채널과 수신 확인 절차가 확보되지 않았으므로 보완 대기에 둔다."
+    }
+  ]
+}

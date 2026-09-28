@@ -1,0 +1,381 @@
+{
+  "original_review_sha256": "6e2422f86ceae353dd13202e91e8a5683bca5eb47c874c7425c2abdabbae2c65",
+  "original_review": "review-design-initial.json",
+  "snapshots": [
+    {
+      "snapshot_path": "review-snapshots/initial/assemble-design.py",
+      "original_review_sha256": "cd4f8b12df62589d567075198207db424dab5ed172d37af41f0f7ef1e4acf264",
+      "original_path": "assemble-design.py",
+      "snapshot_sha256": "cd4f8b12df62589d567075198207db424dab5ed172d37af41f0f7ef1e4acf264",
+      "revised_sha256": "83d8ee4991a93da874811ac8567625cfb603e9b51e68f67012cacd01d2fa2b98"
+    },
+    {
+      "snapshot_path": "review-snapshots/initial/evaluation-only/fact-ledger.json",
+      "original_review_sha256": "e62eaee857220b32692a5bb0a415ad7a5facde877f4b269e95f4ccc697b97428",
+      "original_path": "evaluation-only/fact-ledger.json",
+      "snapshot_sha256": "e62eaee857220b32692a5bb0a415ad7a5facde877f4b269e95f4ccc697b97428",
+      "revised_sha256": "17ac7ce682fefe7f71b9e8380e0d8b4e28ac80e8ceebe884fbc2e954414213dc"
+    },
+    {
+      "snapshot_path": "review-snapshots/initial/evaluation-only/judgment-template.json",
+      "original_review_sha256": "78a4bc6bf723694798407b208b6e50b5dbd8db5e9fdac84cff9822cd32dcd5bb",
+      "original_path": "evaluation-only/judgment-template.json",
+      "snapshot_sha256": "78a4bc6bf723694798407b208b6e50b5dbd8db5e9fdac84cff9822cd32dcd5bb",
+      "revised_sha256": "38727fa3c4fbbdf3d92cedf5c8cedaf27991d2e539f75ac71eb555339b2bd97c"
+    },
+    {
+      "snapshot_path": "review-snapshots/initial/evaluation-only/rubric.md",
+      "original_review_sha256": "e17b204ea9bd47e60a65e2af58230a86e4b8449c694733ade2ee7fd3be6fd627",
+      "original_path": "evaluation-only/rubric.md",
+      "snapshot_sha256": "e17b204ea9bd47e60a65e2af58230a86e4b8449c694733ade2ee7fd3be6fd627",
+      "revised_sha256": "c1d0ff63609f6728dcbd6fc6d834dc3aa2bf89a2a12427cee9351e11a829bb4f"
+    },
+    {
+      "snapshot_path": "review-snapshots/initial/protocol.md",
+      "original_review_sha256": "a3f3707aa53031ec142367a29e17702a3ec53e53e8e9125a3daaf59c84af2730",
+      "original_path": "protocol.md",
+      "snapshot_sha256": "a3f3707aa53031ec142367a29e17702a3ec53e53e8e9125a3daaf59c84af2730",
+      "revised_sha256": "0b0c937ee6d1d61c595e0b65ff2b925426c66b5fbe5baac41f207022e5325c76"
+    },
+    {
+      "snapshot_path": "review-snapshots/initial/verify-design.py",
+      "original_review_sha256": "0f3e3a9f468540d3a456fcb588b10ffe065340447b24c7bc3c29df3751fa039c",
+      "original_path": "verify-design.py",
+      "snapshot_sha256": "0f3e3a9f468540d3a456fcb588b10ffe065340447b24c7bc3c29df3751fa039c",
+      "revised_sha256": "0b34c18c25b7db1efabd1f5461baa5e2f2f0d5f468e10146d3155d2e968bff0f"
+    },
+    {
+      "original_review_sha256": "697d58b230b60fc3c7ea4eb899dc52896dfe325240630d638ac21295aa06a755",
+      "snapshot_sha256": "697d58b230b60fc3c7ea4eb899dc52896dfe325240630d638ac21295aa06a755",
+      "original_path": "execution-log-template.json",
+      "snapshot_path": "review-snapshots/initial/execution-log-template.json",
+      "revised_sha256": "434f6f5dc418978417c759d188e5f3f7eb668e1d5e305883a465e112e73b2b6f"
+    }
+  ],
+  "author": "/root/experiment_design_fresh",
+  "status": "author_revision_complete_pending_independent_recheck",
+  "findings": [
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "changes": [
+    {
+      "finding": "R1",
+      "change": "Separate fixed-ledger atoms, actual-input atoms, receiver fidelity, claim evidence, request/echo units, and one per-response summary. Freeze dynamic input atoms before reading receiver output; distinguish inherited misinformation."
+    },
+    {
+      "finding": "R2",
+      "change": "Split GR/CAU status and time, CV no-response status and cutoff, CAU receipt and content confirmation; facts64->69. Keep raw memos and all role packets unchanged."
+    },
+    {
+      "finding": "R2_additional",
+      "change": "Remove PDP prior U04 phase-voltage mandatory unknown because term is not in raw notes; narrow CV prior U05 to generic signal state rather than support-only full/interlock terms. With CAU unknown split, total unknowns remain27. Support-only detail is optional, never a fixed required item."
+    },
+    {
+      "finding": "R3",
+      "change": "Document unavailable HPU catalog dependency and forbidden extra lookup; distinguish explicit support relations, inferred relations, generic unit explanation and unobserved incident unit assignment."
+    },
+    {
+      "finding": "traceability",
+      "change": "Add task_prompt_path and actual_packet_utf8_bytes to execution-log fields; verify21 selected catalog refs using allowed projection and match map/card/coverage/version. Static check does not determine review/freeze status."
+    }
+  ],
+  "atom_revisions": [
+    {
+      "scenario_id": "F-HPU",
+      "before_facts": 12,
+      "after_facts": 12,
+      "before_unknowns": 6,
+      "after_unknowns": 6,
+      "removed_or_replaced_atoms": [],
+      "added_or_split_atoms": []
+    },
+    {
+      "scenario_id": "F-GR",
+      "before_facts": 12,
+      "after_facts": 13,
+      "before_unknowns": 4,
+      "after_unknowns": 4,
+      "removed_or_replaced_atoms": [
+        {
+          "atom_id": "F-GR-P11",
+          "kind": "fact",
+          "expected": "정비 연락 담당에 대한 11:12 전화는 무응답으로 기록됐다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ],
+      "added_or_split_atoms": [
+        {
+          "atom_id": "F-GR-P11",
+          "kind": "fact",
+          "expected": "정비 연락 담당에게 건 전화는 무응답으로 기록됐다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-GR-P12",
+          "kind": "fact",
+          "expected": "정비 연락 담당에게 전화한 기록시각은 11:12다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ]
+    },
+    {
+      "scenario_id": "F-RT",
+      "before_facts": 9,
+      "after_facts": 9,
+      "before_unknowns": 4,
+      "after_unknowns": 4,
+      "removed_or_replaced_atoms": [],
+      "added_or_split_atoms": []
+    },
+    {
+      "scenario_id": "F-CV",
+      "before_facts": 12,
+      "after_facts": 13,
+      "before_unknowns": 5,
+      "after_unknowns": 5,
+      "removed_or_replaced_atoms": [
+        {
+          "atom_id": "F-CV-P12",
+          "kind": "fact",
+          "expected": "CV-02 담당은 13:27까지 응답이 없었다고 기록됐다.",
+          "evidence_memo_index": 5,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CV-U05",
+          "kind": "unknown",
+          "expected": "실제 만적/인터록 신호 상태는 자료에서 확인할 수 없다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ],
+      "added_or_split_atoms": [
+        {
+          "atom_id": "F-CV-P12",
+          "kind": "fact",
+          "expected": "CV-02 담당의 응답은 없었다고 기록됐다.",
+          "evidence_memo_index": 5,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CV-P13",
+          "kind": "fact",
+          "expected": "CV-02 담당 무응답 기록의 확인 시한은 13:27이다.",
+          "evidence_memo_index": 5,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CV-U05",
+          "kind": "unknown",
+          "expected": "실제 신호 상태는 자료에서 확인할 수 없다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ]
+    },
+    {
+      "scenario_id": "F-PDP",
+      "before_facts": 9,
+      "after_facts": 9,
+      "before_unknowns": 4,
+      "after_unknowns": 3,
+      "removed_or_replaced_atoms": [
+        {
+          "atom_id": "F-PDP-U04",
+          "kind": "unknown",
+          "expected": "상별 전압은 제공 자료에서 미확인이다.",
+          "evidence_memo_index": 2,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ],
+      "added_or_split_atoms": []
+    },
+    {
+      "scenario_id": "F-CAU",
+      "before_facts": 10,
+      "after_facts": 13,
+      "before_unknowns": 4,
+      "after_unknowns": 5,
+      "removed_or_replaced_atoms": [
+        {
+          "atom_id": "F-CAU-P05",
+          "kind": "fact",
+          "expected": "15:06 사진 전송은 실패로 기록됐다.",
+          "evidence_memo_index": 2,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P08",
+          "kind": "fact",
+          "expected": "CV-01 쪽 15:09 회신은 사진이 오지 않았다는 내용이다.",
+          "evidence_memo_index": 3,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P09",
+          "kind": "fact",
+          "expected": "15:12 전송함에는 사진 재전송 완료 표시가 있다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P10",
+          "kind": "fact",
+          "expected": "15:12 이후 사진의 읽음 표시는 아직 없다고 기록됐다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-U04",
+          "kind": "unknown",
+          "expected": "재전송 사진의 실제 수신·내용 확인은 제공 자료에서 미확인이다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ],
+      "added_or_split_atoms": [
+        {
+          "atom_id": "F-CAU-P05",
+          "kind": "fact",
+          "expected": "최초 사진 전송은 실패로 기록됐다.",
+          "evidence_memo_index": 2,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P06",
+          "kind": "fact",
+          "expected": "최초 사진 전송 시각은 15:06이다.",
+          "evidence_memo_index": 2,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P09",
+          "kind": "fact",
+          "expected": "CV-01 쪽 회신은 사진이 오지 않았다는 내용이다.",
+          "evidence_memo_index": 3,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P10",
+          "kind": "fact",
+          "expected": "CV-01 쪽의 회신시각은 15:09다.",
+          "evidence_memo_index": 3,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P11",
+          "kind": "fact",
+          "expected": "전송함에는 사진 재전송 완료 표시가 있다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P12",
+          "kind": "fact",
+          "expected": "사진 재전송 완료 표시의 시각은 15:12다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-P13",
+          "kind": "fact",
+          "expected": "재전송 사진의 읽음 표시는 아직 없다고 기록됐다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-U04",
+          "kind": "unknown",
+          "expected": "재전송 사진의 실제 수신 여부는 제공 자료에서 미확인이다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        },
+        {
+          "atom_id": "F-CAU-U05",
+          "kind": "unknown",
+          "expected": "재전송 사진의 내용 확인 여부는 제공 자료에서 미확인이다.",
+          "evidence_memo_index": 4,
+          "sender_observability": "notes",
+          "sender_required": true,
+          "receiver_end_to_end_required": true,
+          "receiver_input_fidelity": "Judge against initial plus actual handoff; a ledger match alone is not support."
+        }
+      ]
+    }
+  ],
+  "unchanged_role_and_memo_files_checked": 30,
+  "role_calls_executed": 0,
+  "verification_command": "python docs/data/knowledge_cards/drafts/20260926-t4-followup/experiment/verify-design.py",
+  "verification_result": "pass: 6 scenarios,18 sender packets,6 receiver templates,54 pairs,69 fact atoms,27 unknown atoms,21 selected catalog references resolve"
+}

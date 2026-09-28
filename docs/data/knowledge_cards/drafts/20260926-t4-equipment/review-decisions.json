@@ -1,0 +1,66 @@
+{
+  "original_proposals": 38,
+  "original_drafted_candidates": 26,
+  "author_excluded": 12,
+  "cross_review_excluded_or_merged": 6,
+  "final_new_cards": 20,
+  "decisions": [
+    {
+      "method_key": "HPU-03",
+      "decision": "revise",
+      "reason": "유온 계측 기록의 존재를 입력에 따라 조건화"
+    },
+    {
+      "method_key": "HPU-04",
+      "decision": "merge_or_exclude",
+      "retained_method": "M09/M11",
+      "reason": "일반 위치·관측/추정 인계의 장비명 변형으로 제외"
+    },
+    {
+      "method_key": "GR-04",
+      "decision": "revise",
+      "reason": "대응 문서 존재를 조건화하고 RT-03 적용 경계 통합"
+    },
+    {
+      "method_key": "PDP-02",
+      "decision": "revise",
+      "reason": "송신 V-11과 주수신 V-13의 범위 분리"
+    },
+    {
+      "method_key": "PDP-03",
+      "decision": "revise",
+      "reason": "하류 RT/CV 경로 전체를 추적하는 catalog_refs 보완"
+    },
+    {
+      "method_key": "RT-03",
+      "decision": "merge_or_exclude",
+      "retained_method": "GR-04",
+      "reason": "같은 GR-02/RT-03 계측 분리 방법으로 통합"
+    },
+    {
+      "method_key": "RT-06",
+      "decision": "merge_or_exclude",
+      "retained_method": "HPU-01",
+      "reason": "HPU 공급/수요처 측정 분리 방법으로 통합"
+    },
+    {
+      "method_key": "RT-07",
+      "decision": "merge_or_exclude",
+      "retained_method": "M12",
+      "reason": "동시 관측과 인과를 분리하는 공통 방법의 적용 예시"
+    },
+    {
+      "method_key": "CV-05",
+      "decision": "merge_or_exclude",
+      "retained_method": "RT-05/CV-01",
+      "reason": "소재/인터록 방향과 대기율 경계의 기존 방법 조합"
+    },
+    {
+      "method_key": "CAU-02",
+      "decision": "merge_or_exclude",
+      "retained_method": "M08/M09",
+      "reason": "관측 종류별 기록·위치 보존 공통 방법의 적용 예시"
+    }
+  ],
+  "original_review_file_semantics": "Original review hashes now resolve to candidate-specs-*.json snapshots, not revised specs. Final rereview is separate."
+}

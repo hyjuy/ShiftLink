@@ -1,0 +1,112 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "F-HPU",
+      "family": "HPU",
+      "equipment_codes": [
+        "HPU-01",
+        "RT-02",
+        "RT-03",
+        "CV-01"
+      ],
+      "selected_card_id": "K-0037",
+      "schema_equipment": "HPU",
+      "failure_mechanism": "시각이 어긋난 공급/수요 관측과 일부 수치 회신; 항목명이 없는 RT-03 회신",
+      "parent_event_group": "F-HPU",
+      "lineage": "P-HPU의 공급/수요 구분 및 대상명 경계에서 착안; 독립 holdout 아님",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    },
+    {
+      "scenario_id": "F-GR",
+      "family": "GR",
+      "equipment_codes": [
+        "GR-01",
+        "GR-02"
+      ],
+      "selected_card_id": "K-0033",
+      "schema_equipment": "GR",
+      "failure_mechanism": "동명 태그의 인스턴스 결측·출처시각 충돌과 무응답/기록미첨부 구별",
+      "parent_event_group": "F-GR",
+      "lineage": "P-GR 보고서의 기록미첨부 경계에서 착안; 이번 동명태그 메모는 새 작성",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    },
+    {
+      "scenario_id": "F-RT",
+      "family": "RT",
+      "equipment_codes": [
+        "RT-01",
+        "RT-02"
+      ],
+      "selected_card_id": "K-0048",
+      "schema_equipment": "RT",
+      "failure_mechanism": "소재 식별 일부 판독과 뒤늦게 도착한 사진의 촬영시각 결측",
+      "parent_event_group": "F-RT",
+      "lineage": "P-RT의 위치/방향 관측과 다른 소재 이동 경계 사건; 같은 인계 연구의 개발 계보",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    },
+    {
+      "scenario_id": "F-CV",
+      "family": "CV",
+      "equipment_codes": [
+        "CV-01",
+        "CV-02"
+      ],
+      "selected_card_id": "K-0028",
+      "schema_equipment": "CV",
+      "failure_mechanism": "대기율의 수정 주장에 시각이 없고 육안 개수·신호 발췌가 서로 다른 범위",
+      "parent_event_group": "F-CV",
+      "lineage": "P-CV의 대기율/신호 구별과 연관; 새로운 값만의 치환으로 독립 일반화 주장하지 않음",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    },
+    {
+      "scenario_id": "F-PDP",
+      "family": "PDP",
+      "equipment_codes": [
+        "PDP-01"
+      ],
+      "selected_card_id": "K-0042",
+      "schema_equipment": "COMMON",
+      "failure_mechanism": "표시 전압 비율과 타인의 절대전압 환산 메모 충돌; 외부 관찰·접수 범위",
+      "parent_event_group": "F-PDP",
+      "lineage": "기존 네 장비 파일럿에는 PDP가 없었음; K-0042의 방법을 보고 만든 개발 상황",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    },
+    {
+      "scenario_id": "F-CAU",
+      "family": "CAU",
+      "equipment_codes": [
+        "CAU-01",
+        "CV-01"
+      ],
+      "selected_card_id": "K-0026",
+      "schema_equipment": "COMMON",
+      "failure_mechanism": "공급원 표시와 시간·대상 범위가 어긋난 디버터 육안 기록; 해결과 재전송의 구별",
+      "parent_event_group": "F-CAU",
+      "lineage": "기존 네 장비 파일럿에는 CAU가 없었음; K-0026의 방법을 보고 만든 개발 상황",
+      "repeats_are_independent_scenarios": false,
+      "generation": "New memo fragments composed by /root/experiment_design_fresh on 2026-09-26; no prior scripts/holdout opened.",
+      "independent_generalization_set": false
+    }
+  ],
+  "counts": {
+    "common_cards_preserved": 25,
+    "equipment_cards_preserved": 20,
+    "total_cards": 45,
+    "selected_cards": 6,
+    "scenarios": 6,
+    "conditions": 3,
+    "repeats_per_scenario_condition": 3
+  },
+  "count_policy": "25 and 45 are current inventory, not a target or ceiling. No cards created or edited here.",
+  "omissions": "14 equipment cards untested; no full-card exposure, no field study, no validation of every scenario in any family."
+}

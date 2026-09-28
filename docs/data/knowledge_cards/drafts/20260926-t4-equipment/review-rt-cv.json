@@ -1,0 +1,297 @@
+{
+  "review_type": "author_independent_cross_review_of_rt_cv_cau_specs",
+  "reviewer": "author_hpu_gr subagent; RT/CV/CAU 원저자 아님; HG 비교 묶음의 저자이므로 인간·외부 독립검증 아님",
+  "reviewed_at": "2026-09-25T15:55:30.5199572Z",
+  "input_hashes": [
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260926-t4-equipment/specs-rt-cv.json",
+      "sha256": "6ba16436c535c2b6da44fa79593f52f5eee0be6bd6ae259bc21b368753b6f941"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260926-t4-equipment/specs-hpu-gr.json",
+      "sha256": "348c96e12c1820fa1c473be5e4111c1d25d76201019a39a00fcb8320efb38bed"
+    },
+    {
+      "path": "docs/data/knowledge_cards/drafts/20260925-t4-synthetic/cards.json",
+      "sha256": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172"
+    },
+    {
+      "path": "docs/data/reference/00_plant_and_relations.json",
+      "sha256": "3e54feb521cfef8808f2793ffee847d063e247c8d3b64372ed8b585c0226d366"
+    },
+    {
+      "path": "seeds/personas_v0.1.yaml",
+      "sha256": "072290bb4fa8dfb1448d1746a9f256efa37c83e9653ab41a0172d0d10185622d"
+    }
+  ],
+  "method": "T4 다섯 필드, 카탈로그 JSON 포인터와 EQ ID, 관측·원인·승인 및 상태 경계는 기계 대조와 본문 읽기로 확인했다. 의미 중복은 기존 25 COMMON 카드의 방법과 신규 HG 및 동일 묶음의 전달 객체·대조 기준을 사람이 읽는 방식으로 비교한 AI 검토다. 수치 평점을 산출하지 않았다.",
+  "global_checks": {
+    "five_required_fields": "14/14 비공백·구조 존재 확인",
+    "catalog_pointers": "모든 catalog_refs JSON 포인터 존재 확인 및 내용 대조",
+    "equipment_ids": "14/14 적용 EQ ID 존재 및 장비군/COMMON 매핑 확인",
+    "synthetic_status": "14/14 다섯 필드 합성·현장 미검증 표지 있음",
+    "state_separation": "14/14 미확인 정확한 되짚기 수신 가능·누락/미회신 미완료·문제 해결/작업 허가 별도 유지",
+    "numeric_and_operational_generation": "새 계측값·임계값·조작 지시 없음. RT 롤러 번호 범위는 카탈로그와 일치하며 실제 수행 기록이 아님."
+  },
+  "decisions": [
+    {
+      "method_key": "RT-01",
+      "verdict": "pass",
+      "evidence": [
+        "equipment/5~7 location_text의 1~12·13~28·29~40 롤러 범위가 본문의 구간 경계와 일치한다.",
+        "components/12는 RT-03-ROL이며 본문이 RT-01·RT-02의 개별 롤러 ID를 생성하지 않는다.",
+        "M09의 위치·방향 보존에 더해 롤러 번호를 장비 구간 경계와 교차 대조하는 장비별 확인 조합이 있다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M09",
+        "M13"
+      ],
+      "equipment_specificity": "카탈로그 롤러 구간과 원문 번호의 대응 판정은 RT 구성에 의존한다."
+    },
+    {
+      "method_key": "RT-02",
+      "verdict": "pass",
+      "evidence": [
+        "equipment/6의 rt_lift_delay 단위 min, rt_clamp_press 단위 bar와 components/16 RT-02-LFT가 일치한다.",
+        "관측 시각과 지연량의 구분 및 클램프압을 승강 실린더 실측압으로 바꾸지 않는 의미 경계가 명시돼 있다.",
+        "HPU-01의 분기 대응과 달리 RT-02 자체의 시간량 정의·압력 측정 대상을 수신자가 되짚는다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M08",
+        "M10",
+        "HPU-01"
+      ],
+      "equipment_specificity": "RT-02 전용 승강 지연량과 클램프압의 서로 다른 의미를 대조한다."
+    },
+    {
+      "method_key": "RT-03",
+      "verdict": "reject",
+      "evidence": [
+        "장비 및 REL-0007 포인터는 정확하며 T4·안전 상태 경계에도 문제는 없다.",
+        "신규 GR-04가 동일한 GR-02 gr_current와 RT-03 rt_motor_current를 장비·태그·시각·출처별로 분리하고 같은 계측점으로 대체하지 않는 수신 대조를 이미 제공한다.",
+        "RT-03은 GR 관측을 일반 표현으로 넓히지만 동일 쌍의 값/자료 미확보 구분 이외에 별도 재사용 확인 메커니즘을 추가하지 않는다."
+      ],
+      "concrete_issue": {
+        "category": "cross_batch_semantic_duplicate",
+        "description": "RT 관점과 GR 관점으로 수신 역할을 바꾼 것만으로 같은 구동 장비 쌍의 계측 분리 방법을 독립 카드 두 개로 유지하기 어렵다.",
+        "recommended_action": "독립 RT-03 카드는 제외하고 GR-04의 연관 인스턴스 메타데이터 및 RT측 인계 예제로 병합한다. GR 관측 일반화가 꼭 필요하면 별도 판별 항목이 생기는지 먼저 입증한다."
+      },
+      "nearest_methods": [
+        "GR-04",
+        "M08",
+        "M23"
+      ],
+      "equipment_specificity": "장비별 내용은 있지만 신규 GR-04와 전달 객체·대조 방식이 중복된다."
+    },
+    {
+      "method_key": "RT-04",
+      "verdict": "pass",
+      "evidence": [
+        "REL-0001은 RT-01→RT-02, REL-0002는 RT-02→RT-03 material_flow로 본문과 일치한다.",
+        "송출·도착 관측의 동일 소재 식별을 독립 확인 대상으로 둬 일반 시각 출처 대조인 M10과 구분된다.",
+        "카탈로그 lag를 실측 이동 시간으로 쓰지 않고 전달 접수와 소재 이동 완료도 구분한다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M09",
+        "M10",
+        "M23"
+      ],
+      "equipment_specificity": "인접 구간의 소재 동일성·송출과 도착의 양 끝 관측 조합이 핵심이다."
+    },
+    {
+      "method_key": "RT-05",
+      "verdict": "pass",
+      "evidence": [
+        "REL-0003·0004의 RT-03→CV 방향과 REL-0017·0020의 CV→RT-03 방향이 맞는다.",
+        "REL-0020 note의 선택 관계를 적용 미확인과 실제 신호 작동 미확인으로 나눠 보존한다.",
+        "HPU-05도 매체 경로를 나누지만 RT-05는 반대 방향 소재/신호 및 선택 경로 여부를 수신자가 재구성하는 별도 조합이다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M11",
+        "M12",
+        "HPU-05",
+        "CV-05"
+      ],
+      "equipment_specificity": "배출과 인터록의 반대 방향 및 CV별 선택 적용 범위가 달라진다."
+    },
+    {
+      "method_key": "RT-06",
+      "verdict": "reject",
+      "evidence": [
+        "RT 계측·클램프 부품·REL-0009~0011 참조는 정확하다.",
+        "HPU-01은 이미 각 RT의 클램프압, RT-02 승강/클램프 분기와 공급원 hpu_pressure를 별도 행으로 두고 측정 위치·단위·시각·누락 범위를 되짚는다.",
+        "RT-06의 공급원/수요처 두 칸과 역할별 회신은 HPU-01의 RT 분기 부분집합이다."
+      ],
+      "concrete_issue": {
+        "category": "cross_batch_semantic_duplicate",
+        "description": "수요처를 카드 equipment로 지정한 차이 외에 HPU-01과 다른 전달 객체·검증 조합이 없다.",
+        "recommended_action": "독립 RT-06 카드는 제외하고 HPU-01에 RT-01·RT-02·RT-03 연관 적용 메타데이터 또는 검색 참조를 연결한다. 다른 equipment 값을 위한 본문 복제는 피한다."
+      },
+      "nearest_methods": [
+        "HPU-01",
+        "M08",
+        "M23"
+      ],
+      "equipment_specificity": "장비별 내용은 유효하나 같은 유압 분기 방법을 수요처 관점으로 반복한다."
+    },
+    {
+      "method_key": "RT-07",
+      "verdict": "reject",
+      "evidence": [
+        "REL-0019 co_occurrence·비인과·양방향 관계와 RT-02/RT-03 적용 대상은 정확하다.",
+        "기존 M12/K-0012는 대상별 관측·출처 보존, 동시성 근거, 별도 인과 근거, 미확정 범위 회신을 이미 명시한다.",
+        "RT-07은 같은 방법의 대상 쌍에 RT-02/RT-03과 태그·REL-0019를 채운 사례다. 서로 다른 태그를 유지하는 부분은 M08 적용으로 충분하다."
+      ],
+      "concrete_issue": {
+        "category": "common_method_instantiation",
+        "description": "카탈로그 관계 예시는 추가됐지만 전달 절차와 수신 대조 기준은 기존 M12와 같다.",
+        "recommended_action": "독립 카드는 제외하고 M12의 장비별 합성 예제·적용 메타데이터로 보존한다. REL-0019의 비인과 표지는 예제에 유지한다."
+      },
+      "nearest_methods": [
+        "M12",
+        "M08",
+        "M10"
+      ],
+      "equipment_specificity": "특정 관계의 사례화에 해당하며 새로운 인계 방법의 차이는 확보되지 않았다."
+    },
+    {
+      "method_key": "CV-01",
+      "verdict": "pass",
+      "evidence": [
+        "두 CV의 cv_queue_len은 pct이고 CV-02는 이 항목만 등록돼 있어 본문과 일치한다.",
+        "대기율·실물 개수·육안 상태·만적/인터록 신호를 구분하는 값의 의미와 관측 유형 대조가 명시돼 있다.",
+        "산정 정의가 없으면 분모나 소재 개수를 생성하지 않는 미확인 처리도 구체적이다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M08",
+        "M11",
+        "PDP-01"
+      ],
+      "equipment_specificity": "동일 pct라도 CV 대기율을 개수·만적 신호로 바꾸지 않는 확인이 PDP 전압 비율과 다르다."
+    },
+    {
+      "method_key": "CV-02",
+      "verdict": "pass",
+      "evidence": [
+        "equipment/8의 cv_belt_tension(kPa), components/15 CV-01-TNS, REL-0012 연결이 정확하다.",
+        "HPU-01과 공급/수요 관측 분리는 겹치지만 이 카드는 장력이라는 이름의 kPa 표시를 물리 인장력 N이나 텐셔너 내부 실측압으로 해석하지 않는 별도 확인을 둔다.",
+        "표시 의미·보정 정의 확보 여부를 수신 대조 대상으로 삼고 새로운 단위 환산을 만들지 않는다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "HPU-01",
+        "M08"
+      ],
+      "equipment_specificity": "장력 표시 태그의 명칭·단위·보정 정의 사이 의미 공백을 인계한다.",
+      "retention_condition": "향후 HPU-01에 이 표시 의미·보정 정의 확인까지 통합하면 다시 중복 검토할 것."
+    },
+    {
+      "method_key": "CV-03",
+      "verdict": "pass",
+      "evidence": [
+        "components/14는 CV-01-BLT로 실제 적용 범위와 일치한다.",
+        "M09의 방향 보존을 사용하면서 벨트 자체와 적재물의 관찰 대상을 분리하고 소재 치우침을 벨트 사행 확인으로 바꾸지 않는 쌍 대조를 명시한다.",
+        "관찰 시선이 없으면 방향을 확정하지 않고 새 접근·접촉을 요구하지 않는다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M09",
+        "M11",
+        "HPU-04"
+      ],
+      "equipment_specificity": "함께 움직이는 벨트와 적재물 중 무엇이 치우쳤는지를 구분하는 장비별 전달 객체가 있다."
+    },
+    {
+      "method_key": "CV-04",
+      "verdict": "pass",
+      "evidence": [
+        "REL-0008 GR-02→CV-01 drive, REL-0012 HPU-01→CV-01 hydraulic_supply, REL-0016 CAU-01→CV-01 pneumatic_supply가 맞다.",
+        "디버터를 관계 note상의 명칭으로 제한하고 미등록 부품 코드를 만들지 않는다.",
+        "M23의 역할별 수신 확인에 실제 부품·구동/유압/공압 매체의 대응을 추가하여 같은 CV 안에서도 서로 다른 확인 범위를 나눈다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "M23",
+        "GR-03",
+        "PDP-03",
+        "CAU-01"
+      ],
+      "equipment_specificity": "한 장비의 서로 다른 작동부가 세 계통에 연결되는 매체-대상-역할 대응이 핵심이다."
+    },
+    {
+      "method_key": "CV-05",
+      "verdict": "reject",
+      "evidence": [
+        "CV-02·REL-0004·REL-0020 포인터 및 선택 관계의 상태 분리는 정확하다.",
+        "RT-05가 이미 RT-03→CV-02 소재 경로, CV-02→RT-03 선택 인터록, 적용 여부와 작동 여부의 독립 미확인을 다룬다.",
+        "CV-02의 pct 대기율 및 미등록 속도·부품 범위는 CV-01 카드가 이미 전달 맥락에 포함한다."
+      ],
+      "concrete_issue": {
+        "category": "within_batch_semantic_duplicate",
+        "description": "RT-05의 CV-02 분기와 CV-01의 계측 범위를 묶은 부분집합으로, 독립된 수신 확인 방법은 추가되지 않는다.",
+        "recommended_action": "독립 CV-05 카드는 제외하고 RT-05에 CV-02 연관 적용 메타데이터를 남기며 스크랩 대기율은 CV-01을 참조한다."
+      },
+      "nearest_methods": [
+        "RT-05",
+        "CV-01",
+        "M14"
+      ],
+      "equipment_specificity": "장비 특수성은 있으나 같은 배치의 다른 두 방법이 이미 제공한다."
+    },
+    {
+      "method_key": "CAU-01",
+      "verdict": "pass",
+      "evidence": [
+        "CAU-01 air_pressure(kPa) 및 REL-0016 CAU-01→CV-01 pneumatic_supply가 일치한다.",
+        "CAU 공급원 수치와 디버터 육안 동작이라는 서로 다른 관측 종류를 양 끝 자료로 전달하고 사용처 압력 태그·부품 ID·응답 기준 미확보를 명시한다.",
+        "HPU-01은 등록 계측 분기들의 의미 대조를 주로 다루며 이 카드는 미등록 사용자측 태그를 수치로 만들어내지 않도록 정성 동작 기록의 확보 상태를 별도로 확인한다."
+      ],
+      "concrete_issue": null,
+      "nearest_methods": [
+        "HPU-01",
+        "CV-04",
+        "M08",
+        "M23"
+      ],
+      "equipment_specificity": "공압 공급원 수치와 디버터 정성 동작 사이의 관측 방식 차이를 보존한다."
+    },
+    {
+      "method_key": "CAU-02",
+      "verdict": "reject",
+      "evidence": [
+        "V-12 페르소나에 CAU 표시·드레인 배출 상태·배관 누설음 관측 범위가 있으므로 소재 자체는 근거가 있다.",
+        "방법은 세 관측 항목을 나눠 위치·시각·출처·미확인을 보존하고 각각 되짚는 것으로 M08과 M09의 결합과 같다.",
+        "장비명을 빼고 다른 설비의 수치/외관/소리 항목을 넣어도 전달 구조와 대조 기준이 그대로다. CAU만의 공급 관계·측정 의미·부품 대응은 수신 검증에 사용하지 않는다."
+      ],
+      "concrete_issue": {
+        "category": "common_method_instantiation",
+        "description": "관측 목록을 CAU 용어로 바꾼 일반 체크리스트이며 독립 장비별 인계 방법의 필요성이 부족하다.",
+        "recommended_action": "독립 카드는 제외하고 M08·M09의 CAU 합성 연습 예제로 보존한다. 관측 목록을 늘리거나 문장을 바꿔 독립 카드를 유지하지 않는다."
+      },
+      "nearest_methods": [
+        "M08",
+        "M09",
+        "M07"
+      ],
+      "equipment_specificity": "현 상태에서는 CAU 전용 관측 사례이나 별도 대조 메커니즘은 없다."
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "revise": 0,
+    "reject": 5,
+    "rejection_reason": "의미 중복 또는 COMMON 사례화",
+    "note": "reject는 독립 카드 채택 제외 제안이며 원문 삭제나 현장 적용 부적합 판정이 아니다."
+  },
+  "limitations": [
+    "최종 KnowledgeCard 스키마 빌드 검증은 root 실행기로 별도 수행해야 한다.",
+    "이 검토는 설계와 근거 대조이며 실제 송수신 목표 달성이나 현장 효과를 입증하지 않는다.",
+    "검토한 기존 COMMON에는 정보미해결과 인계미완료 표현이 섞인 카드가 있으므로 사례를 COMMON에 연결할 때 새 카드의 상태 분리를 유지해야 한다.",
+    "원본 specs 및 다른 산출물은 수정하지 않았다."
+  ]
+}

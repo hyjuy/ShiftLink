@@ -1,0 +1,837 @@
+{
+  "status": "not_run_not_frozen",
+  "design_author": "/root/experiment_design_fresh",
+  "planned_pairs": 54,
+  "planned_role_calls": 108,
+  "maximum_role_attempts_including_one_infrastructure_retry_each": 216,
+  "baseline_requested_output_character_total_max": 194400,
+  "failed_and_retried_outputs": "Preserve separately without truncation; not counted as replacements that erase attempts.",
+  "total_tokens_budget": "unavailable",
+  "total_cost_budget": "unavailable",
+  "enforced_total_wall_clock_limit": "unavailable",
+  "roles_per_pair": 2,
+  "schedule": [
+    {
+      "order": 1,
+      "run_id": "F-HPU-none-R1",
+      "scenario_id": "F-HPU",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-HPU-none.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 2,
+      "run_id": "F-HPU-checklist-R1",
+      "scenario_id": "F-HPU",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-HPU-checklist.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 3,
+      "run_id": "F-HPU-t4-R1",
+      "scenario_id": "F-HPU",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-HPU-t4.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 4,
+      "run_id": "F-GR-none-R1",
+      "scenario_id": "F-GR",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-GR-none.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 5,
+      "run_id": "F-GR-checklist-R1",
+      "scenario_id": "F-GR",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-GR-checklist.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 6,
+      "run_id": "F-GR-t4-R1",
+      "scenario_id": "F-GR",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-GR-t4.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 7,
+      "run_id": "F-RT-none-R1",
+      "scenario_id": "F-RT",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-RT-none.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 8,
+      "run_id": "F-RT-checklist-R1",
+      "scenario_id": "F-RT",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-RT-checklist.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 9,
+      "run_id": "F-RT-t4-R1",
+      "scenario_id": "F-RT",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-RT-t4.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 10,
+      "run_id": "F-CV-none-R1",
+      "scenario_id": "F-CV",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CV-none.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 11,
+      "run_id": "F-CV-checklist-R1",
+      "scenario_id": "F-CV",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CV-checklist.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 12,
+      "run_id": "F-CV-t4-R1",
+      "scenario_id": "F-CV",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CV-t4.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 13,
+      "run_id": "F-PDP-none-R1",
+      "scenario_id": "F-PDP",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-PDP-none.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 14,
+      "run_id": "F-PDP-checklist-R1",
+      "scenario_id": "F-PDP",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-PDP-checklist.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 15,
+      "run_id": "F-PDP-t4-R1",
+      "scenario_id": "F-PDP",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-PDP-t4.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 16,
+      "run_id": "F-CAU-none-R1",
+      "scenario_id": "F-CAU",
+      "condition": "none",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CAU-none.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 17,
+      "run_id": "F-CAU-checklist-R1",
+      "scenario_id": "F-CAU",
+      "condition": "checklist",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CAU-checklist.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 18,
+      "run_id": "F-CAU-t4-R1",
+      "scenario_id": "F-CAU",
+      "condition": "t4",
+      "repeat": 1,
+      "sender_packet": "sender-packets/F-CAU-t4.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 19,
+      "run_id": "F-RT-checklist-R2",
+      "scenario_id": "F-RT",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-RT-checklist.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 20,
+      "run_id": "F-RT-t4-R2",
+      "scenario_id": "F-RT",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-RT-t4.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 21,
+      "run_id": "F-RT-none-R2",
+      "scenario_id": "F-RT",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-RT-none.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 22,
+      "run_id": "F-CV-checklist-R2",
+      "scenario_id": "F-CV",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CV-checklist.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 23,
+      "run_id": "F-CV-t4-R2",
+      "scenario_id": "F-CV",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CV-t4.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 24,
+      "run_id": "F-CV-none-R2",
+      "scenario_id": "F-CV",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CV-none.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 25,
+      "run_id": "F-PDP-checklist-R2",
+      "scenario_id": "F-PDP",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-PDP-checklist.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 26,
+      "run_id": "F-PDP-t4-R2",
+      "scenario_id": "F-PDP",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-PDP-t4.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 27,
+      "run_id": "F-PDP-none-R2",
+      "scenario_id": "F-PDP",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-PDP-none.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 28,
+      "run_id": "F-CAU-checklist-R2",
+      "scenario_id": "F-CAU",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CAU-checklist.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 29,
+      "run_id": "F-CAU-t4-R2",
+      "scenario_id": "F-CAU",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CAU-t4.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 30,
+      "run_id": "F-CAU-none-R2",
+      "scenario_id": "F-CAU",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-CAU-none.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 31,
+      "run_id": "F-HPU-checklist-R2",
+      "scenario_id": "F-HPU",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-HPU-checklist.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 32,
+      "run_id": "F-HPU-t4-R2",
+      "scenario_id": "F-HPU",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-HPU-t4.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 33,
+      "run_id": "F-HPU-none-R2",
+      "scenario_id": "F-HPU",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-HPU-none.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 34,
+      "run_id": "F-GR-checklist-R2",
+      "scenario_id": "F-GR",
+      "condition": "checklist",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-GR-checklist.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 35,
+      "run_id": "F-GR-t4-R2",
+      "scenario_id": "F-GR",
+      "condition": "t4",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-GR-t4.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 36,
+      "run_id": "F-GR-none-R2",
+      "scenario_id": "F-GR",
+      "condition": "none",
+      "repeat": 2,
+      "sender_packet": "sender-packets/F-GR-none.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 37,
+      "run_id": "F-PDP-t4-R3",
+      "scenario_id": "F-PDP",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-PDP-t4.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 38,
+      "run_id": "F-PDP-none-R3",
+      "scenario_id": "F-PDP",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-PDP-none.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 39,
+      "run_id": "F-PDP-checklist-R3",
+      "scenario_id": "F-PDP",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-PDP-checklist.json",
+      "receiver_template": "receiver-templates/F-PDP.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 40,
+      "run_id": "F-CAU-t4-R3",
+      "scenario_id": "F-CAU",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CAU-t4.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 41,
+      "run_id": "F-CAU-none-R3",
+      "scenario_id": "F-CAU",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CAU-none.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 42,
+      "run_id": "F-CAU-checklist-R3",
+      "scenario_id": "F-CAU",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CAU-checklist.json",
+      "receiver_template": "receiver-templates/F-CAU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 43,
+      "run_id": "F-HPU-t4-R3",
+      "scenario_id": "F-HPU",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-HPU-t4.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 44,
+      "run_id": "F-HPU-none-R3",
+      "scenario_id": "F-HPU",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-HPU-none.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 45,
+      "run_id": "F-HPU-checklist-R3",
+      "scenario_id": "F-HPU",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-HPU-checklist.json",
+      "receiver_template": "receiver-templates/F-HPU.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 46,
+      "run_id": "F-GR-t4-R3",
+      "scenario_id": "F-GR",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-GR-t4.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 47,
+      "run_id": "F-GR-none-R3",
+      "scenario_id": "F-GR",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-GR-none.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 48,
+      "run_id": "F-GR-checklist-R3",
+      "scenario_id": "F-GR",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-GR-checklist.json",
+      "receiver_template": "receiver-templates/F-GR.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 49,
+      "run_id": "F-RT-t4-R3",
+      "scenario_id": "F-RT",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-RT-t4.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 50,
+      "run_id": "F-RT-none-R3",
+      "scenario_id": "F-RT",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-RT-none.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 51,
+      "run_id": "F-RT-checklist-R3",
+      "scenario_id": "F-RT",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-RT-checklist.json",
+      "receiver_template": "receiver-templates/F-RT.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 52,
+      "run_id": "F-CV-t4-R3",
+      "scenario_id": "F-CV",
+      "condition": "t4",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CV-t4.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 53,
+      "run_id": "F-CV-none-R3",
+      "scenario_id": "F-CV",
+      "condition": "none",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CV-none.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    },
+    {
+      "order": 54,
+      "run_id": "F-CV-checklist-R3",
+      "scenario_id": "F-CV",
+      "condition": "checklist",
+      "repeat": 3,
+      "sender_packet": "sender-packets/F-CV-checklist.json",
+      "receiver_template": "receiver-templates/F-CV.json",
+      "roles_in_order": [
+        "sender",
+        "receiver"
+      ],
+      "fork_turns_for_each_role": "none",
+      "status": "not_run"
+    }
+  ],
+  "model_policy": "Use the same resolved model/configuration for all roles; inherit current host default without model override. Record exposed model identity before running. If configuration changes, stop this version.",
+  "model_id": "unavailable_until_execution",
+  "model_snapshot": "unavailable",
+  "temperature": "unavailable",
+  "top_p": "unavailable",
+  "seed": "unavailable",
+  "max_output_tokens": "unavailable",
+  "output_length_metric": "Unicode code points including all spaces and newlines; Python len(text)",
+  "requested_max_characters_each_role": 1800,
+  "per_role_timeout_seconds": 600,
+  "role_context_rule": "New agent per scenario/condition/repeat/role, fork_turns=none; no role batching or reuse.",
+  "turns": "Exactly one sender message and one receiver response. No follow-up answer generation or conversational repair in this protocol."
+}

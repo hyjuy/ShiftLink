@@ -1,0 +1,905 @@
+{
+  "checked_at": "2026-09-25T14:52:58.569589+00:00",
+  "schema_version": "1.1",
+  "runtime": {
+    "python": "3.12.14",
+    "pydantic": "2.13.5",
+    "pypdf": "6.10.0"
+  },
+  "packet_integrity_passed": true,
+  "source_files_checked": 27,
+  "pdf_pages_in_inventory": 1047,
+  "exact_source_hash_duplicates": [],
+  "excerpts_verified_against_pdf": 15,
+  "candidate_schema_probes": [
+    {
+      "candidate_ref": "Q01",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement",
+        "channel"
+      ],
+      "method_errors": [
+        {
+          "location": "channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q02",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement",
+        "channel"
+      ],
+      "method_errors": [
+        {
+          "location": "channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q03",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement"
+      ],
+      "method_errors": [
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q04",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement"
+      ],
+      "method_errors": [
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q05",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement",
+        "channel",
+        "required_context"
+      ],
+      "method_errors": [
+        {
+          "location": "required_context",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.required_context",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.channel",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q06",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement",
+        "recipient_role",
+        "timing"
+      ],
+      "method_errors": [
+        {
+          "location": "recipient_role",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "timing",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.recipient_role",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.timing",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q07",
+      "method_schema_passed": false,
+      "missing_method_fields": [
+        "acknowledgement",
+        "recipient_role"
+      ],
+      "method_errors": [
+        {
+          "location": "recipient_role",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.recipient_role",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "type_payload.handover_method.acknowledgement",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    },
+    {
+      "candidate_ref": "Q08",
+      "method_schema_passed": true,
+      "missing_method_fields": [],
+      "method_errors": [],
+      "knowledge_card_completion_probe_passed": false,
+      "knowledge_card_completion_errors": [
+        {
+          "location": "card_id",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "version",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "equipment",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "component",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "scenario",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "know_how",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "rationale",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "confidence",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "provenance",
+          "type": "missing",
+          "message": "Field required"
+        },
+        {
+          "location": "split",
+          "type": "missing",
+          "message": "Field required"
+        }
+      ]
+    }
+  ],
+  "method_schema_pass_count": 1,
+  "whole_card_completion_pass_count": 0,
+  "draft_cards_submitted_to_schema": 0,
+  "draft_schema_check": "not_applicable_no_eligible_cards",
+  "normalized_method_duplicates": [],
+  "pairwise_review_basis": [
+    {
+      "left": "Q01",
+      "right": "Q02",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q03",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q04",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q05",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q06",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q07",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q01",
+      "right": "Q08",
+      "comparison_basis": [
+        "외부 서비스가 대상 설비와 고장 맥락을 식별하도록 묶는 정보 패키지. 소음·누유·과열별로 나누지 않음.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q03",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q04",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q05",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q06",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q07",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q02",
+      "right": "Q08",
+      "comparison_basis": [
+        "외부 문의(Q01)와 달리 내부 책임 조직에 이상 존재를 즉시 전달하는 최초 보고. 반복 고장 통보는 별도 카드로 늘리지 않음.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q03",
+      "right": "Q04",
+      "comparison_basis": [
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님."
+      ]
+    },
+    {
+      "left": "Q03",
+      "right": "Q05",
+      "comparison_basis": [
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름."
+      ]
+    },
+    {
+      "left": "Q03",
+      "right": "Q06",
+      "comparison_basis": [
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음."
+      ]
+    },
+    {
+      "left": "Q03",
+      "right": "Q07",
+      "comparison_basis": [
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q03",
+      "right": "Q08",
+      "comparison_basis": [
+        "정비 전 주변 인원에 대한 사전 고지이며, 표지 위치가 원문에 있음. 보고 대상·방향이 내부 고장 보고와 다름.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q04",
+      "right": "Q05",
+      "comparison_basis": [
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님.",
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름."
+      ]
+    },
+    {
+      "left": "Q04",
+      "right": "Q06",
+      "comparison_basis": [
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님.",
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음."
+      ]
+    },
+    {
+      "left": "Q04",
+      "right": "Q07",
+      "comparison_basis": [
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q04",
+      "right": "Q08",
+      "comparison_basis": [
+        "정비 개시 고지(Q03)와 달리 재가동 예정 정보의 사전 전달. 인계 내용은 재가동 승인이나 조작 지시가 아님.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q05",
+      "right": "Q06",
+      "comparison_basis": [
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름.",
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음."
+      ]
+    },
+    {
+      "left": "Q05",
+      "right": "Q07",
+      "comparison_basis": [
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q05",
+      "right": "Q08",
+      "comparison_basis": [
+        "정비 측에서 운전 측으로 설비를 반환하는 경계의 인계. 재가동 예고와 수신 대상·업무 단계가 다름.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q06",
+      "right": "Q07",
+      "comparison_basis": [
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음.",
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름."
+      ]
+    },
+    {
+      "left": "Q06",
+      "right": "Q08",
+      "comparison_basis": [
+        "작업·변경 이력의 추적성이 목적. 장비·작업 유형·서식 페이지를 바꾸어 여러 카드로 분리하지 않음.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    },
+    {
+      "left": "Q07",
+      "right": "Q08",
+      "comparison_basis": [
+        "기술 진단을 시작하기 위한 관측 설명·과거 이력의 수집과 대조. 긴급 통보나 작업 완료 기록과 전달 정보가 다름.",
+        "서명이 실제 이해 확인에 연결된 문서 교육·지식 전달. 이 서명을 고장 보고·교대 인수 서명으로 전용하지 않음."
+      ]
+    }
+  ],
+  "semantic_review": "Assistant source-based comparison documented in review.md; not a human review or a general semantic detector.",
+  "global_kb_duplicate_check": "not_performed_no_eligible_cards",
+  "target": 25,
+  "valid_drafts": 0,
+  "shortfall": 25,
+  "independent_verified_site_events": 0,
+  "human_source_approval_performed": false,
+  "human_safety_review_performed": false,
+  "card_adoption_performed": false,
+  "pipeline_generation_run": "not_run_missing_evidence_and_operator_inputs",
+  "output_hashes": {
+    "sources.json": "bd837c5ce51c50d66fb01e8b2a0f1b6b29d68c9afd6771f112d3ed723c6bad7b",
+    "candidates.json": "a9776ff03d734291517fc0f609f68ce6fbc637f5ab5197d578191d9fd7128bc2",
+    "cards.json": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+    "synthetic-narratives.json": "d77c45b43cf7cc06b85999ae402694157fd6eb6b99a1ae50513aac03ed7fb13e",
+    "review.md": "51e6c1681e9789d7be8ee0aef84c7fa08ca995a327159c228027d1aebe20deb0",
+    "verify.py": "9ba8346e93f114af1d19612a30fed11663c37e65ec6b76800f0d6ea3487cd173"
+  }
+}

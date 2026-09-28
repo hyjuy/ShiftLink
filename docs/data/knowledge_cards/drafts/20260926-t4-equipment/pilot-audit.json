@@ -1,0 +1,189 @@
+{
+  "checked_at": "2026-09-25T16:07:57.856296+00:00",
+  "role_calls": 6,
+  "paired_situations": 4,
+  "condition_results": 12,
+  "forbidden_oracle_keys_in_prompts": 0,
+  "hidden_canary_output_hits": 0,
+  "tool_access": "One bootstrap read of own role packet permitted. All roles self-report no additional access; no security sandbox claim.",
+  "length_checks": [
+    {
+      "condition": "none",
+      "case_id": "P-HPU",
+      "role": "sender",
+      "characters": 356,
+      "requested_limit": 900
+    },
+    {
+      "condition": "none",
+      "case_id": "P-GR",
+      "role": "sender",
+      "characters": 371,
+      "requested_limit": 900
+    },
+    {
+      "condition": "none",
+      "case_id": "P-RT",
+      "role": "sender",
+      "characters": 387,
+      "requested_limit": 900
+    },
+    {
+      "condition": "none",
+      "case_id": "P-CV",
+      "role": "sender",
+      "characters": 422,
+      "requested_limit": 900
+    },
+    {
+      "condition": "none",
+      "case_id": "P-HPU",
+      "role": "receiver",
+      "characters": 495,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "none",
+      "case_id": "P-GR",
+      "role": "receiver",
+      "characters": 545,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "none",
+      "case_id": "P-RT",
+      "role": "receiver",
+      "characters": 560,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "none",
+      "case_id": "P-CV",
+      "role": "receiver",
+      "characters": 595,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-HPU",
+      "role": "sender",
+      "characters": 425,
+      "requested_limit": 900
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-GR",
+      "role": "sender",
+      "characters": 431,
+      "requested_limit": 900
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-RT",
+      "role": "sender",
+      "characters": 462,
+      "requested_limit": 900
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-CV",
+      "role": "sender",
+      "characters": 491,
+      "requested_limit": 900
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-HPU",
+      "role": "receiver",
+      "characters": 510,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-GR",
+      "role": "receiver",
+      "characters": 534,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-RT",
+      "role": "receiver",
+      "characters": 606,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "checklist",
+      "case_id": "P-CV",
+      "role": "receiver",
+      "characters": 579,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-HPU",
+      "role": "sender",
+      "characters": 484,
+      "requested_limit": 900
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-GR",
+      "role": "sender",
+      "characters": 557,
+      "requested_limit": 900
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-RT",
+      "role": "sender",
+      "characters": 566,
+      "requested_limit": 900
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-CV",
+      "role": "sender",
+      "characters": 629,
+      "requested_limit": 900
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-HPU",
+      "role": "receiver",
+      "characters": 488,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-GR",
+      "role": "receiver",
+      "characters": 539,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-RT",
+      "role": "receiver",
+      "characters": 588,
+      "requested_limit": 1600
+    },
+    {
+      "condition": "equipment_card",
+      "case_id": "P-CV",
+      "role": "receiver",
+      "characters": 641,
+      "requested_limit": 1600
+    }
+  ],
+  "findings": [],
+  "input_hashes": {
+    "pilot-protocol.md": "3bc611be57b0e629206bbae1a2181ae197a7ab1bb5d9bc7f6556ecc22f9df8ec",
+    "pilot-cases.json": "a683762e8e17b308079ca6cc9c713a908ec6d788788b3d177f7e3420012403e1",
+    "pilot-inputs.json": "7c202463c16a83c7bea82854faefd76b143c4dd780309ab9481b7b699690f815",
+    "pilot-senders.json": "317ab40ba5fa8ecfc2fe5f070c82e6e4c103482c2b127a19b2a82334484a8326",
+    "pilot-receiver-inputs.json": "99a5f5f7c91e9d8f304fa038d2486bff880b0e73dd86b92da1cfb0e59a425d25",
+    "pilot-receivers.json": "66d1447fa64a2eda24dd9c85c89cb30a5f8422e24b2346dd403c7ec6d1e903d3"
+  },
+  "semantic_leakage_evaluation": "See independent pilot-judgment.json; canary checks alone are not leakage proof."
+}

@@ -1,0 +1,15 @@
+{
+  "policy_version": "equipment-t4-synthetic-v1",
+  "quantity_rule": "No quota or maximum. Retain distinct applicable handover mechanisms; log exclusions and coverage gaps.",
+  "confidence_definition": "Local development convention inherited from prior synthetic T4: directly supported original method fields / 5. All five fields here are synthetic, so 0; not efficacy or production requester confidence.",
+  "safety_boundary": "합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+  "instance_mapping": "equipment is schema family; equipment-map.json declares design scope, not an enforced production routing rule. PDP/CAU use COMMON per catalog.",
+  "id_inventory_scope": [
+    "docs/data/knowledge_cards/01_kb_cards_shared.json",
+    "docs/data/knowledge_cards/drafts/20260924/cards.json",
+    "docs/data/knowledge_cards/drafts/20260924-synthetic/cards.json",
+    "docs/data/knowledge_cards/drafts/20260925-t4-evidence-review/cards.json",
+    "docs/data/knowledge_cards/drafts/20260925-t4-synthetic/cards.json"
+  ],
+  "global_id_certification": false
+}

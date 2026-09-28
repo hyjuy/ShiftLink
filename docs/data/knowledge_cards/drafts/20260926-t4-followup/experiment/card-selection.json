@@ -1,0 +1,97 @@
+{
+  "author": "/root/experiment_design_fresh",
+  "source_cards_sha256": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+  "selection_timing": "Before role execution; no outcome-based card selection",
+  "selections": [
+    {
+      "scenario_id": "F-HPU",
+      "card_id": "K-0037",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] 입력에 있는 HPU 토출압을 공급원 행에 적고 카탈로그 공급 관계에 맞춰 전달 대상 분기를 나눈다. 수요처 관측은 고유 항목명과 단위를 보존해 각 행에 기록하고 없는 값은 공급원 값으로 대신하지 않는다. 분기별 관측 시각이 다르면 각각 남긴 채 표를 전달한다. 수신자에게 분기 대상과 측정 의미를 읽어 달라고 요청해 원문과 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "ccf3046b78b6885734a562c9dd7d282a7ad1cad2df6ad9b545d010931525dfa5"
+    },
+    {
+      "scenario_id": "F-GR",
+      "card_id": "K-0033",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] 계측 발췌마다 식별 가능한 GR 코드와 위치 표지를 붙인다. 원문에 인스턴스가 없으면 추정 배치하지 않고 미확인 행으로 둔다. GR-02에 GR-01 부품 코드를 복사하지 않은 채 기록을 전달한다. 수신 회신의 장비와 태그의 짝을 원문과 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "75adf7c0cf56ae6edcf9fbed1c523734eece5bf3c71e74dbad7e143288c204be"
+    },
+    {
+      "scenario_id": "F-RT",
+      "card_id": "K-0048",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] 송출측 관측과 도착측 관측을 각 원문에 연결한다. 경계 관계를 표시하고 동일 소재 확인 여부를 별도 항목에 둔다. 한쪽 관측이 없으면 반대편에서 본 것만으로 보완하지 않고 양 끝 대조를 요청한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 도착 관측·소재 식별·시각이 없으면 해당 공백을 유지한다. 전달 접수를 소재 이동 완료로 기록하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "fb90baf054e5c51452947a679daa49b41d97f06a0cee6c069fb0ed0c0b5c38e3"
+    },
+    {
+      "scenario_id": "F-CV",
+      "card_id": "K-0028",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] cv_queue_len은 원문 태그와 pct 단위를 함께 적는다. 육안 적재물과 신호 기록을 별도 출처로 붙이고 대기 개수를 계산해 만들지 않는다. 수신자가 세 종류의 정보를 바꾸어 읽지 않았는지 회신과 대조한다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 대기율의 산정 구간·분모가 원문에 없으면 산정 정의 미확인을 유지한다. 대기율만으로 만적·인터록 작동 여부를 만들지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "ebf993a83b15ce951b41700911f6dd28ef04d2c928e0fbe64123a114a77a1933"
+    },
+    {
+      "scenario_id": "F-PDP",
+      "card_id": "K-0042",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] 입력에 있는 PDP 전압 표시를 원래 단위와 시각으로 옮긴다. 기준 전압이나 상별 정보가 없으면 각각 미확인으로 적는다. 표시값만으로 전원 안전 상태나 정비 가능 여부를 덧붙이지 않고 전달한다. 수신자가 읽은 단위와 표시 범위를 대조한다. 미완료 처리: 미확인 정보를 정확히 되짚은 경우 수신 확인은 완료 가능하되 정보 해결은 미해결로 유지한다. 전달 항목 누락·대상 불일치·미회신은 별도 목록으로 추적하고 해당 범위의 수신 확인을 보류한다. 미확인 값을 추정 보완하지 않으며 수신 확인을 운전·정비·재가동 허가로 사용하지 않는다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "bd2332e7b5dd293a22538fe4038f13cc8a78af0c58b810b163226db051a4586b"
+    },
+    {
+      "scenario_id": "F-CAU",
+      "card_id": "K-0026",
+      "version": "synthetic-f7c3411308f7",
+      "split": "dev",
+      "status": "draft",
+      "grade": "L0",
+      "source_file": "20260926-t4-equipment/cards.json",
+      "exposed_fields": [
+        "know_how"
+      ],
+      "excluded_fields": "全 other fields, including card_id, title, rationale, type_payload, provenance and evaluation",
+      "exposed_text": "[합성 인계 방법] 공급원 표시값을 CAU-01 태그에 연결한다. 디버터 동작은 별도 사용처 원문으로 붙이고 없는 관측을 공급원 값으로 대체하지 않는다. 각 역할의 양 끝 정보 회신을 대조하고 시간 대응 미확인을 남긴다. 수신자가 미확인을 포함한 내용을 정확히 되짚으면 그 범위의 수신확인을 기록한다. 정보 해결·설비 상태 확인·작업 승인 여부는 별개로 유지하며 누락·미회신 범위는 추적한다. 미완료 처리: 디버터 기록이 없으면 사용처 동작 미확보로 둔다. 공급 압력이나 수신 회신만으로 디버터 정상·작업 가능을 판정하지 않는다. 회신 누락·내용 불일치는 해당 범위의 수신확인 미완료로 남기고, 문제의 미해결 상태는 수신확인 상태와 별도로 보존한다. 합성 개발용 인계 방법이며 현장 표준이 아니다. 수신 확인, 정보 해결, 작업·운전·재가동 승인은 별개다. 기록에 없는 원인·수치·차단점·승인권을 생성하지 않는다.",
+      "exposed_text_sha256": "4d6bd9d1aa7c462fa1d74bcaa5a5ff84c528c7842f4001dbc43d78645d02c4ad"
+    }
+  ]
+}

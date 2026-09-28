@@ -1,0 +1,50 @@
+{
+  "reviewed_at": "2026-09-26",
+  "reviewer": "research_validation subagent",
+  "independence": "두 장비 명세 파일과 기존 COMMON 카드의 저자가 아니다. 논문 적용 기준과 파일럿 설계 검토에는 참여했다. 이 검토는 문서 내용 검토이며 역할 실행·사람 평가·현장 검증이 아니다.",
+  "review_scope": "26개 장비 명세의 T4 5필드, 장비 적용, 관측과 추정 경계, 신규/기존 방법 중복, 합성·연구 적용 주장. 기존 COMMON 25개의 handover_method 전문과 비교했다. 카탈로그 equipment/components/relations만 대조하고 sealed/holdout/사건 prototype은 읽지 않았다.",
+  "input_hashes": {
+    "specs-hpu-gr.json": "348c96e12c1820fa1c473be5e4111c1d25d76201019a39a00fcb8320efb38bed",
+    "specs-rt-cv.json": "6ba16436c535c2b6da44fa79593f52f5eee0be6bd6ae259bc21b368753b6f941",
+    "../20260925-t4-synthetic/cards.json": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172",
+    "docs/data/reference/00_plant_and_relations.json": "3e54feb521cfef8808f2793ffee847d063e247c8d3b64372ed8b585c0226d366",
+    "seeds/personas_v0.1.yaml": "072290bb4fa8dfb1448d1746a9f256efa37c83e9653ab41a0172d0d10185622d"
+  },
+  "summary": {"reviewed": 26, "pass": 24, "revise": 2, "reject": 0, "verdict": "revise_duplicate_method_count"},
+  "global_findings": [
+    {"id": "DUP-01", "severity": "revise", "methods": ["HPU-01", "RT-06"], "finding": "같은 HPU-01→세 RT의 공급원/클램프 관측을 분리하고 대상별 미확인과 회신 범위를 대조한다. RT-06은 HPU-01의 수요측 부분집합이며 반대 관점·태그 강조만으로 독립 신규 방법을 세기 어렵다.", "resolution": "RT-06을 HPU-01로 병합하고 RT 적용 인스턴스/관점은 보조 매핑에 유지하거나, 파생 적용 카드로 명시하고 독립 방법 수에서 제외한다."},
+    {"id": "DUP-02", "severity": "revise", "methods": ["GR-04", "RT-03"], "finding": "GR-02와 RT-03이라는 같은 구동 쌍에서 전류·관측을 같은 계측점으로 합치지 않는 전달·대조가 중복된다. RT-03의 일반 관측 표현과 역할 구분은 GR-04를 병합 보완할 수 있다.", "resolution": "RT-03을 GR-04로 병합하여 관측의 범위와 확보/조회 요청 구분을 보완하고 RT 검색/적용은 보조 매핑에 유지하거나 독립 방법 수에서 제외한다."},
+    {"id": "COUNT-01", "severity": "reporting_limit", "finding": "새 카드 상당수는 기존 M08/M09/M11/M12/M23의 장비 적용·결합이다. 장비별 전달 객체·태그 의미·관계 경계의 구체화는 유용하지만 모든 카드를 완전히 새로운 보편 인계 메커니즘으로 해석하면 과장이다.", "resolution": "장비별 적용 카드 수와 중복 제거 후 보편 방법 수를 같은 지표로 보고하지 않는다. 특히 RT-07은 M12의 카탈로그 기반 적용 사례임을 유지한다."},
+    {"id": "METHOD-01", "severity": "reporting_limit", "finding": "staged_context는 단계별 명세의 존재를 보여 주지만 독립 다단계 생성 호출이나 일관성 필터의 효과를 증명하지 않는다. 합성 대본은 실제 성공·실패 궤적이 아니다.", "resolution": "PersonaGen에서 착안한 단계별 명세로 보고하고 ExpeL 적용 완료는 실제 실행 비교 후 산출물에만 기록한다. 현재 명세에는 그런 허위 완료 주장이 없다."}
+  ],
+  "cards": [
+    {"method_key": "HPU-01", "verdict": "pass", "reason": "공급원 압력과 RT 클램프/승강·CV 텐셔너 관측을 관계별로 분리하고 단위·시각·미관측 분기를 수신자가 되짚는다. M08/M23보다 유압 분기와 측정 의미가 구체적이다. RT-06 중복은 이 방법으로 통합 권장.", "closest_existing": ["M08", "M12", "M23"]},
+    {"method_key": "HPU-02", "verdict": "pass", "reason": "hpu_pressure/bar와 hpu_filter_dp/bar의 동일 단위 혼동, hpu_flow/L_min의 비동시 관측을 구분한다. 계측점과 시각의 짝을 수신 확인 대상으로 삼으며 진단·운전 판단을 만들지 않는다.", "closest_existing": ["M08", "M10"]},
+    {"method_key": "HPU-03", "verdict": "pass", "reason": "hpu_oil_temp 측정과 쿨러 관찰·성능 확인 기록을 다른 범위로 인계한다. 카탈로그에 없는 쿨러 입출구 센서나 온도 차 계산을 생성하지 않는 경계가 명시되어 있다.", "closest_existing": ["M11", "M14"]},
+    {"method_key": "HPU-04", "verdict": "pass", "reason": "유체 흔적의 관찰 위치와 HPU-01-HOS/HPU-01-PMP 발생 부품 추정을 분리한다. 관찰과 원인 대조를 결합한 장비 적용이며 접근·내부 점검을 지시하지 않는다.", "closest_existing": ["M09", "M11"]},
+    {"method_key": "HPU-05", "verdict": "pass", "reason": "hydraulic_supply의 oil 매체 장비 관계와 common_mode의 signal 매체 라인 관계를 다른 행으로 인계한다. 관계 정의를 실제 모드 전환 발생 증거로 사용하지 않는다.", "closest_existing": ["M11", "M12"]},
+    {"method_key": "GR-01", "verdict": "pass", "reason": "두 GR이 공유하는 동일 태그를 EQ ID·위치 표지에 묶어 전사 대상 오류를 확인한다. GR-02의 미등록 상세 부품 코드를 만들지 않는다.", "closest_existing": ["M08", "M09"]},
+    {"method_key": "GR-02", "verdict": "pass", "reason": "GR-01 베어링 소견, 진동/온도 센서 이력, 계측값을 세 확인 범위로 분리한다. 상세 부품이 있는 EQ-0004만 적용해 GR-02까지 부품 이력을 복제하지 않는다.", "closest_existing": ["M05", "M07", "M11"]},
+    {"method_key": "GR-03", "verdict": "pass", "reason": "GR-01→RT-01/RT-02, GR-02→RT-03/CV-01의 실제 카탈로그 drive 대상별 수신 범위와 관측 범위를 나눈다. 대상 한 곳의 회신을 다른 곳의 회신으로 대체하지 않는다.", "closest_existing": ["M18", "M23"]},
+    {"method_key": "GR-04", "verdict": "pass", "reason": "gr_current/A와 rt_motor_current/A는 같은 단위여도 대응 계측점 근거가 없다는 점을 수신 확인한다. 합산·대체를 막으며 실제 회로 구조는 미확인으로 둔다. RT-03 중복은 이 방법으로 통합 권장.", "closest_existing": ["M08", "M11"]},
+    {"method_key": "PDP-01", "verdict": "pass", "reason": "bus_voltage의 등록 단위 pct를 보존하고 기준 전압 없이 V로 환산하거나 상별 정보를 만들지 않는다. COMMON 매핑은 현 스키마에 맞으며 전기 작업 승인권을 부여하지 않는다.", "closest_existing": ["M08", "M11"]},
+    {"method_key": "PDP-02", "verdict": "pass", "reason": "MK-UTIL-A2 외부 관찰과 내부 점검 기록의 서로 다른 확보 범위를 인계한다. 미등록 표시등 의미·내부 부품 코드를 임의 식별하지 않고 새 전기 점검을 요구하지 않는다.", "closest_existing": ["M02", "M09", "M11"]},
+    {"method_key": "PDP-03", "verdict": "pass", "reason": "PDP 직접 power_supply 대상 GR-01/GR-02/HPU-01과 하류 drive/hydraulic_supply를 구분한다. 관계상 연결을 전기 원인이나 모든 경로의 확인 완료로 바꾸지 않는다.", "closest_existing": ["M12", "M23"]},
+    {"method_key": "RT-01", "verdict": "pass", "reason": "롤러 범위 1~12/13~28/29~40와 원문 번호·방향 기준을 대조한다. 개별 롤러 ID를 만들어내지 않으며 번호 없는 '출측'만으로 RT-03을 확정하지 않는다.", "closest_existing": ["M09", "M13"]},
+    {"method_key": "RT-02", "verdict": "pass", "reason": "rt_lift_delay/min의 시간량을 관측 시각 및 rt_clamp_press/bar와 구별하고 승강 실린더 압력으로 대체하지 않는다. RT-02-LFT 및 EQ-0007 적용이 맞다.", "closest_existing": ["M08", "M10"]},
+    {"method_key": "RT-03", "verdict": "revise", "reason": "T4 필드와 합성 경계는 적합하지만 GR-04와 같은 GR-02/RT-03 관측의 계측점 분리·대체 금지 방법이다. 반대 인수 역할만으로 독립 신규 방법으로 계산하지 말아야 한다.", "finding_ids": ["DUP-02"], "closest_existing": ["M08", "M23", "GR-04"]},
+    {"method_key": "RT-04", "verdict": "pass", "reason": "상류 송출/하류 도착을 동일 소재 식별과 시각에 묶어 대조한다. 한쪽 관측만으로 이동 완료를 추정하지 않고 카탈로그 lag를 실측으로 쓰지 않는 별도 경계 조건이 있다.", "closest_existing": ["M09", "M10", "M23"]},
+    {"method_key": "RT-05", "verdict": "pass", "reason": "RT-03→CV 소재 경로와 CV→RT-03 신호 경로의 반대 방향을 구분한다. CV-02 선택 관계 적용과 실제 신호 작동을 분리하며 인터록 해소나 작업을 지시하지 않는다.", "closest_existing": ["M11", "M14"]},
+    {"method_key": "RT-06", "verdict": "revise", "reason": "T4 내용은 적합하나 HPU-01의 HPU 공급원/RT 클램프 관측 분리·미확인 회신과 동일하다. RT 관점의 부분집합이므로 병합하거나 파생 적용 카드로 구분해 수량 과장을 막아야 한다.", "finding_ids": ["DUP-01"], "closest_existing": ["M08", "M23", "HPU-01"]},
+    {"method_key": "RT-07", "verdict": "pass", "reason": "REL-0019 co_occurrence를 원인으로 승격하지 않고 RT-02/RT-03의 다른 태그와 동시성 미확인을 보존한다. M12의 장비별 적용으로 타당하며 새로운 보편 메커니즘으로 별도 주장하지 않는 조건이다.", "closest_existing": ["M12"], "finding_ids": ["COUNT-01"]},
+    {"method_key": "CV-01", "verdict": "pass", "reason": "cv_queue_len/pct, 육안 적재, 인터록 신호를 구분하고 CV-02의 등록 계측 범위를 보존한다. 개수 계산이나 CV-01 속도·장력의 복사를 차단하는 구체 전달 대조가 있다.", "closest_existing": ["M08", "M11"]},
+    {"method_key": "CV-02", "verdict": "pass", "reason": "cv_belt_tension/kPa 표시의 상세 정의를 미확인으로 두고 인장력 N·텐셔너 내부 압력으로 해석하지 않는다. HPU-01보다 표시 정의·환산 경계에 초점이 있어 별도 적용 카드로 허용한다.", "closest_existing": ["M08", "M11", "HPU-01"]},
+    {"method_key": "CV-03", "verdict": "pass", "reason": "벨트와 적재물의 위치를 각각 기록하고 관찰자의 시선 기준을 되짚는다. 적재물 치우침을 벨트 사행으로 바꾸지 않는 장비별 대상 경계가 있으며 접근·접촉을 요구하지 않는다.", "closest_existing": ["M09", "M11"]},
+    {"method_key": "CV-04", "verdict": "pass", "reason": "CV-01의 GR 구동/HPU 텐셔너/CAU 디버터 세 계통을 역할별 수신 범위로 나눈다. 디버터 명칭은 관계 note에서 가져온 것으로 부품 ID가 없음을 유지한다.", "closest_existing": ["M23"]},
+    {"method_key": "CV-05", "verdict": "pass", "reason": "RT-05와 경로가 겹치지만 CV-02 등록 범위·스크랩 분기·열린 선택 관계 적용 질문을 별도로 인수하는 초점이 있다. 선택 관계의 적용과 실제 작동을 구분하며 RT-05와 완전히 다른 보편 메커니즘으로 주장하지 않는다.", "closest_existing": ["M09", "M14", "RT-05"]},
+    {"method_key": "CAU-01", "verdict": "pass", "reason": "CAU air_pressure/kPa와 CV 디버터 동작의 양 끝 관측을 구분한다. HPU 공급/수요 원리를 공압의 미등록 사용처 태그·부품 ID·동작 기준 경계에 적용한 카드이며 COMMON+EQ-0003 매핑이 적합하다.", "closest_existing": ["M08", "M11", "M23", "HPU-01"]},
+    {"method_key": "CAU-02", "verdict": "pass", "reason": "등록 수치 태그 air_pressure와 정성 배출 상태·배관 소리의 출처·위치·시각을 나눈다. V-13은 V-12 기록의 인수 관점이며 자체 관측을 만든 것이 아니다. 배출·밸브 조작 지시가 없다.", "closest_existing": ["M07", "M08", "M09"]}
+  ],
+  "not_claimed": ["26개 모두 서로 다른 보편 인계 메커니즘", "스키마 검사 또는 실제 실행을 이 문서만으로 통과", "서로 다른 모델을 통한 독립 평가", "사람 안전 검토", "실제 장비 타당성 또는 현장 효과"],
+  "source_files_modified": false
+}

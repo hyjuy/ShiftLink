@@ -1,0 +1,471 @@
+{
+  "is_synthetic": true,
+  "routing_note": "equipment is schema family; equipment-map.json declares design scope, not an enforced production routing rule. PDP/CAU use COMMON per catalog.",
+  "cards": [
+    {
+      "card_id": "K-0026",
+      "method_key": "CAU-01",
+      "equipment_family": "CAU",
+      "schema_equipment": "COMMON",
+      "applicable_equipment_ids": [
+        "EQ-0003"
+      ],
+      "applicable_codes": [
+        "CAU-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/2",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/8",
+        "docs/data/reference/00_plant_and_relations.json#/relations/15"
+      ],
+      "trigger": "CAU-01 공기압 확인 메모를 CV-01 디버터도 확인한 기록으로 넘길 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0028",
+      "method_key": "CV-01",
+      "equipment_family": "CV",
+      "schema_equipment": "CV",
+      "applicable_equipment_ids": [
+        "EQ-0009",
+        "EQ-0010"
+      ],
+      "applicable_codes": [
+        "CV-01",
+        "CV-02"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/8",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/9",
+        "docs/data/reference/00_plant_and_relations.json#/relations/16",
+        "docs/data/reference/00_plant_and_relations.json#/relations/19"
+      ],
+      "trigger": "cv_queue_len 이름이나 현장 육안 메모 때문에 대기율을 대기 개수 또는 만적 신호로 바꿔 전달할 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0029",
+      "method_key": "CV-02",
+      "equipment_family": "CV",
+      "schema_equipment": "CV",
+      "applicable_equipment_ids": [
+        "EQ-0009"
+      ],
+      "applicable_codes": [
+        "CV-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/8",
+        "docs/data/reference/00_plant_and_relations.json#/components/15",
+        "docs/data/reference/00_plant_and_relations.json#/relations/11"
+      ],
+      "trigger": "CV-01의 cv_belt_tension 표시값과 HPU 공급 기록이 모두 압력 단위를 써 같은 값으로 합쳐질 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0030",
+      "method_key": "CV-03",
+      "equipment_family": "CV",
+      "schema_equipment": "CV",
+      "applicable_equipment_ids": [
+        "EQ-0009"
+      ],
+      "applicable_codes": [
+        "CV-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/8",
+        "docs/data/reference/00_plant_and_relations.json#/components/14"
+      ],
+      "trigger": "CV-01 벨트가 '오른쪽으로 갔다'는 짧은 육안 설명만 남아 후속 교대가 반대 방향으로 이해할 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0031",
+      "method_key": "CV-04",
+      "equipment_family": "CV",
+      "schema_equipment": "CV",
+      "applicable_equipment_ids": [
+        "EQ-0009"
+      ],
+      "applicable_codes": [
+        "CV-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/8",
+        "docs/data/reference/00_plant_and_relations.json#/components/14",
+        "docs/data/reference/00_plant_and_relations.json#/components/15",
+        "docs/data/reference/00_plant_and_relations.json#/relations/7",
+        "docs/data/reference/00_plant_and_relations.json#/relations/11",
+        "docs/data/reference/00_plant_and_relations.json#/relations/15"
+      ],
+      "trigger": "CV-01 정비 접수 메모에 구동·장력·분기 동작 이야기가 섞여 한 공급 계통의 확인을 전체 확인으로 오독할 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0033",
+      "method_key": "GR-01",
+      "equipment_family": "GR",
+      "schema_equipment": "GR",
+      "applicable_equipment_ids": [
+        "EQ-0004",
+        "EQ-0005"
+      ],
+      "applicable_codes": [
+        "GR-01",
+        "GR-02"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0004]",
+        "equipment[equipment_id=EQ-0005]"
+      ],
+      "trigger": "GR-01과 GR-02의 같은 이름 계측값이 같은 교대 기록이나 화면 발췌에 포함될 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0034",
+      "method_key": "GR-02",
+      "equipment_family": "GR",
+      "schema_equipment": "GR",
+      "applicable_equipment_ids": [
+        "EQ-0004"
+      ],
+      "applicable_codes": [
+        "GR-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "components[component_id=CP-0007]",
+        "components[component_id=CP-0011]",
+        "components[component_id=CP-0012]",
+        "equipment[equipment_id=EQ-0004].measurement_points"
+      ],
+      "trigger": "GR-01 베어링 관련 계측 보고에 센서 상태 또는 교정 이력에 관한 진술이 함께 전달될 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0035",
+      "method_key": "GR-03",
+      "equipment_family": "GR",
+      "schema_equipment": "GR",
+      "applicable_equipment_ids": [
+        "EQ-0004",
+        "EQ-0005"
+      ],
+      "applicable_codes": [
+        "GR-01",
+        "GR-02"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "relations[relation_id=REL-0005]",
+        "relations[relation_id=REL-0006]",
+        "relations[relation_id=REL-0007]",
+        "relations[relation_id=REL-0008]"
+      ],
+      "trigger": "GR 한 대의 상태 보고를 둘 이상의 구동 대상 장비 담당 기록으로 넘길 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0036",
+      "method_key": "GR-04",
+      "equipment_family": "GR",
+      "schema_equipment": "GR",
+      "applicable_equipment_ids": [
+        "EQ-0005"
+      ],
+      "applicable_codes": [
+        "GR-02"
+      ],
+      "related_equipment_ids": [
+        "EQ-0008"
+      ],
+      "related_codes": [
+        "RT-03"
+      ],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0005].measurement_points[signal=gr_current]",
+        "equipment[equipment_id=EQ-0008].measurement_points[signal=rt_motor_current]",
+        "relations[relation_id=REL-0007]"
+      ],
+      "trigger": "GR-02와 RT-03의 전류 보고를 한 인계 문서에 나란히 놓을 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0037",
+      "method_key": "HPU-01",
+      "equipment_family": "HPU",
+      "schema_equipment": "HPU",
+      "applicable_equipment_ids": [
+        "EQ-0001"
+      ],
+      "applicable_codes": [
+        "HPU-01"
+      ],
+      "related_equipment_ids": [
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008",
+        "EQ-0009"
+      ],
+      "related_codes": [
+        "RT-01",
+        "RT-02",
+        "RT-03",
+        "CV-01"
+      ],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0001].measurement_points",
+        "relations[relation_id=REL-0009]",
+        "relations[relation_id=REL-0010]",
+        "relations[relation_id=REL-0011]",
+        "relations[relation_id=REL-0012]"
+      ],
+      "trigger": "HPU 공급 상태와 RT 클램프·승강 또는 CV 텐셔너 상태를 함께 넘길 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0038",
+      "method_key": "HPU-02",
+      "equipment_family": "HPU",
+      "schema_equipment": "HPU",
+      "applicable_equipment_ids": [
+        "EQ-0001"
+      ],
+      "applicable_codes": [
+        "HPU-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0001].measurement_points",
+        "components[component_id=CP-0001]",
+        "components[component_id=CP-0002]"
+      ],
+      "trigger": "짧은 압력 보고를 다음 조 또는 정비 접수 역할에 넘길 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0039",
+      "method_key": "HPU-03",
+      "equipment_family": "HPU",
+      "schema_equipment": "HPU",
+      "applicable_equipment_ids": [
+        "EQ-0001"
+      ],
+      "applicable_codes": [
+        "HPU-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0001].measurement_points[signal=hpu_oil_temp]",
+        "components[component_id=CP-0005]"
+      ],
+      "trigger": "유온 기록에 쿨러 상태에 대한 말이나 메모가 함께 붙어 넘어올 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0041",
+      "method_key": "HPU-05",
+      "equipment_family": "HPU",
+      "schema_equipment": "HPU",
+      "applicable_equipment_ids": [
+        "EQ-0001"
+      ],
+      "applicable_codes": [
+        "HPU-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "relations[relation_id=REL-0018]",
+        "relations[relation_id=REL-0009]",
+        "relations[relation_id=REL-0012]",
+        "equipment[equipment_id=EQ-0001]"
+      ],
+      "trigger": "HPU 관련 인계에 여러 장비의 응답과 라인 저속 모드 진술이 함께 포함될 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0042",
+      "method_key": "PDP-01",
+      "equipment_family": "PDP",
+      "schema_equipment": "COMMON",
+      "applicable_equipment_ids": [
+        "EQ-0002"
+      ],
+      "applicable_codes": [
+        "PDP-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0002].measurement_points[signal=bus_voltage]",
+        "equipment_types[equipment_type_id=ET-0005]"
+      ],
+      "trigger": "PDP-01 전압 표시를 교대 기록이나 정비 접수 문안으로 옮길 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0043",
+      "method_key": "PDP-02",
+      "equipment_family": "PDP",
+      "schema_equipment": "COMMON",
+      "applicable_equipment_ids": [
+        "EQ-0002"
+      ],
+      "applicable_codes": [
+        "PDP-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "equipment[equipment_id=EQ-0002]",
+        "equipment_types[equipment_type_id=ET-0005]"
+      ],
+      "trigger": "외부 순회 관찰을 배전반 정비 접수 기록으로 넘길 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0044",
+      "method_key": "PDP-03",
+      "equipment_family": "PDP",
+      "schema_equipment": "COMMON",
+      "applicable_equipment_ids": [
+        "EQ-0002"
+      ],
+      "applicable_codes": [
+        "PDP-01"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "relations[relation_id=REL-0013]",
+        "relations[relation_id=REL-0014]",
+        "relations[relation_id=REL-0015]",
+        "relations[relation_id=REL-0007]",
+        "relations[relation_id=REL-0011]",
+        "relations[relation_id=REL-0005]",
+        "relations[relation_id=REL-0006]",
+        "relations[relation_id=REL-0008]",
+        "relations[relation_id=REL-0009]",
+        "relations[relation_id=REL-0010]",
+        "relations[relation_id=REL-0012]"
+      ],
+      "trigger": "PDP 전력 보고에 HPU와 GR 및 이송 장비 관측이 함께 첨부될 때",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0045",
+      "method_key": "RT-01",
+      "equipment_family": "RT",
+      "schema_equipment": "RT",
+      "applicable_equipment_ids": [
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008"
+      ],
+      "applicable_codes": [
+        "RT-01",
+        "RT-02",
+        "RT-03"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/5",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/6",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/7",
+        "docs/data/reference/00_plant_and_relations.json#/components/12"
+      ],
+      "trigger": "롤러 부근 관측을 '중앙 쪽'이나 '끝부분'으로 축약해 다른 RT 구간으로 전달할 수 있는 합성 교대 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0046",
+      "method_key": "RT-02",
+      "equipment_family": "RT",
+      "schema_equipment": "RT",
+      "applicable_equipment_ids": [
+        "EQ-0007"
+      ],
+      "applicable_codes": [
+        "RT-02"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/6",
+        "docs/data/reference/00_plant_and_relations.json#/components/16",
+        "docs/data/reference/00_plant_and_relations.json#/relations/9"
+      ],
+      "trigger": "RT-02의 승강 응답 설명과 클램프 압력 메모를 함께 넘기며 지연량을 시각 또는 압력으로 오독할 수 있는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0048",
+      "method_key": "RT-04",
+      "equipment_family": "RT",
+      "schema_equipment": "RT",
+      "applicable_equipment_ids": [
+        "EQ-0006",
+        "EQ-0007",
+        "EQ-0008"
+      ],
+      "applicable_codes": [
+        "RT-01",
+        "RT-02",
+        "RT-03"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/5",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/6",
+        "docs/data/reference/00_plant_and_relations.json#/equipment/7",
+        "docs/data/reference/00_plant_and_relations.json#/relations/0",
+        "docs/data/reference/00_plant_and_relations.json#/relations/1"
+      ],
+      "trigger": "앞 구간에서 소재가 나갔다는 메모와 뒤 구간에서 봤다는 메모를 동일 이동으로 이어 전달하는 합성 상황",
+      "scope_enforced_in_production": false
+    },
+    {
+      "card_id": "K-0049",
+      "method_key": "RT-05",
+      "equipment_family": "RT",
+      "schema_equipment": "RT",
+      "applicable_equipment_ids": [
+        "EQ-0008"
+      ],
+      "applicable_codes": [
+        "RT-03"
+      ],
+      "related_equipment_ids": [],
+      "related_codes": [],
+      "catalog_refs": [
+        "docs/data/reference/00_plant_and_relations.json#/equipment/7",
+        "docs/data/reference/00_plant_and_relations.json#/relations/2",
+        "docs/data/reference/00_plant_and_relations.json#/relations/3",
+        "docs/data/reference/00_plant_and_relations.json#/relations/16",
+        "docs/data/reference/00_plant_and_relations.json#/relations/19"
+      ],
+      "trigger": "RT-03 배출 관측과 CV 상태·인터록 메모가 함께 전달되며 소재와 신호의 방향이 혼동되는 합성 상황",
+      "scope_enforced_in_production": false
+    }
+  ]
+}

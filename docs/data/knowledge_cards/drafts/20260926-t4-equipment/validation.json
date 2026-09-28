@@ -1,0 +1,165 @@
+{
+  "checked_at": "2026-09-25T16:07:57.620117+00:00",
+  "cards_sha256": "37f6d48f8af765ba6f4adbd99ff7d9a0d80c7de441c0751d6c60ebe2ef443aff",
+  "schema_passed": 20,
+  "negative_probes_rejected": 200,
+  "negative_groups": {
+    "missing": 100,
+    "blank": 100
+  },
+  "dev_gate_blocked": 20,
+  "draft_L0_excluded": 20,
+  "equipment_family_counts": {
+    "CAU": 1,
+    "CV": 4,
+    "GR": 4,
+    "HPU": 4,
+    "PDP": 3,
+    "RT": 4
+  },
+  "instance_coverage": {
+    "HPU-01": 4,
+    "PDP-01": 3,
+    "CAU-01": 1,
+    "GR-01": 3,
+    "GR-02": 3,
+    "RT-01": 2,
+    "RT-02": 3,
+    "RT-03": 3,
+    "CV-01": 4,
+    "CV-02": 1
+  },
+  "all_card_pairs_checked": 990,
+  "top_lexical_pairs": [
+    {
+      "left": "K-0030",
+      "right": "K-0046",
+      "similarity": 0.6884
+    },
+    {
+      "left": "K-0028",
+      "right": "K-0048",
+      "similarity": 0.6831
+    },
+    {
+      "left": "K-0028",
+      "right": "K-0045",
+      "similarity": 0.6824
+    },
+    {
+      "left": "K-0048",
+      "right": "K-0049",
+      "similarity": 0.6824
+    },
+    {
+      "left": "K-0030",
+      "right": "K-0045",
+      "similarity": 0.6821
+    },
+    {
+      "left": "K-0045",
+      "right": "K-0048",
+      "similarity": 0.6816
+    },
+    {
+      "left": "K-0026",
+      "right": "K-0028",
+      "similarity": 0.6778
+    },
+    {
+      "left": "K-0034",
+      "right": "K-0039",
+      "similarity": 0.6771
+    },
+    {
+      "left": "K-0028",
+      "right": "K-0049",
+      "similarity": 0.6744
+    },
+    {
+      "left": "K-0029",
+      "right": "K-0046",
+      "similarity": 0.6726
+    },
+    {
+      "left": "K-0026",
+      "right": "K-0046",
+      "similarity": 0.672
+    },
+    {
+      "left": "K-0045",
+      "right": "K-0046",
+      "similarity": 0.6662
+    },
+    {
+      "left": "K-0046",
+      "right": "K-0049",
+      "similarity": 0.663
+    },
+    {
+      "left": "K-0039",
+      "right": "K-0042",
+      "similarity": 0.6613
+    },
+    {
+      "left": "K-0030",
+      "right": "K-0048",
+      "similarity": 0.6608
+    },
+    {
+      "left": "K-0045",
+      "right": "K-0049",
+      "similarity": 0.6599
+    },
+    {
+      "left": "K-0028",
+      "right": "K-0029",
+      "similarity": 0.6585
+    },
+    {
+      "left": "K-0029",
+      "right": "K-0030",
+      "similarity": 0.6572
+    },
+    {
+      "left": "K-0038",
+      "right": "K-0039",
+      "similarity": 0.6555
+    },
+    {
+      "left": "K-0026",
+      "right": "K-0029",
+      "similarity": 0.654
+    },
+    {
+      "left": "K-0036",
+      "right": "K-0042",
+      "similarity": 0.6536
+    },
+    {
+      "left": "K-0029",
+      "right": "K-0049",
+      "similarity": 0.6511
+    },
+    {
+      "left": "K-0036",
+      "right": "K-0039",
+      "similarity": 0.6506
+    },
+    {
+      "left": "K-0026",
+      "right": "K-0049",
+      "similarity": 0.6483
+    },
+    {
+      "left": "K-0035",
+      "right": "K-0039",
+      "similarity": 0.6482
+    }
+  ],
+  "original_method_support_fields": 0,
+  "operational_adoption": false,
+  "final_review_hashes_verified": true,
+  "scope": "Schema, inventory, declared applicability, provenance, gates, lexical triage. Not semantic proof or efficacy.",
+  "verifier_sha256": "254f7681349fbfa45a8f916c022157b00581d8b07ec1a95541a3b3ae52a90a40"
+}

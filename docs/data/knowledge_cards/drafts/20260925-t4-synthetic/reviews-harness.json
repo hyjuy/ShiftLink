@@ -1,0 +1,575 @@
+{
+  "reviewer": "harness_review",
+  "review_type": "AI independent review; not human approval",
+  "cards_sha256": "3050b2e0bc0fbdfd77b9780fed57dc3f80ea0f41035bd03174ec2963d0b54172",
+  "rubric_version": "synthetic-t4-development-v1",
+  "harness_audit": {
+    "method": "Separate read-only Python probes; did not rerun evaluate.py or overwrite harness-results.json; read no peer review score files",
+    "independent_positive_passed": 25,
+    "independent_negative_passed": 250,
+    "independent_dev_blocked": 25,
+    "independent_draft_excluded": 25,
+    "source_direct_fields": 5,
+    "source_total_fields": 125,
+    "original_complete_cards": 0,
+    "source_direct_field_ratio": 0.04,
+    "exact_duplicate_pairs": 0,
+    "pairwise_semantic_comparisons": 300,
+    "pair_review_scope": "All 25 purpose/information/acknowledgement designs cross-compared; high-overlap families recorded below. AI judgment, not empirical semantic benchmark.",
+    "semantic_duplication_findings": [
+      {
+        "methods": [
+          "M06",
+          "M24"
+        ],
+        "duplicate": false,
+        "reason": "정비 기록의 실제 시간상 변경과 인계 메시지의 오류 정정은 전달 대상 및 정정의 의미가 다르다."
+      },
+      {
+        "methods": [
+          "M08",
+          "M25"
+        ],
+        "duplicate": false,
+        "reason": "관측 자료 내부 결측과 전달자가 보유한 첨부 전송 누락은 공백의 원인과 확인 대상이 다르다."
+      },
+      {
+        "methods": [
+          "M19",
+          "M20"
+        ],
+        "duplicate": false,
+        "reason": "보유한 양측 문서의 판본 대조와 원문 자체 미확보 요청은 서로 다른 단계다."
+      },
+      {
+        "methods": [
+          "M14",
+          "M18",
+          "M21",
+          "M23"
+        ],
+        "duplicate": false,
+        "reason": "질문 접수 범위, 기존 의뢰 미회신 상태, 역할 불일치 재전달, 복수 역할별 전체 커버리지가 각각 별도 상태와 확인 대상을 가진다."
+      },
+      {
+        "methods": [
+          "M11",
+          "M12"
+        ],
+        "duplicate": false,
+        "reason": "사실과 가설의 일반 분류와 복수 대상의 동시성 인과 혼동은 관련되지만 전달 정보 구조가 달라 별도 개발용 카드로 유지 가능하다. 독립 현장 사례 수는 늘지 않는다."
+      },
+      {
+        "methods": [
+          "M07",
+          "M13",
+          "M17"
+        ],
+        "duplicate": false,
+        "reason": "초기 운전자 면담과 과거 이력 대조, 상충 주장 보존, 중복 의심 보고 연결의 목적과 확인 대상이 다르다."
+      }
+    ],
+    "card_text_matches_full_design": true,
+    "report_card_hash_and_code_hashes_match": true,
+    "reported_input_hashes_match": true,
+    "lint_flagged": 0,
+    "prior_code_review_findings_addressed": true,
+    "quality_score_is_category_b_result": false,
+    "score_scope": "Scores assess clarity and utility of synthetic development protocols only; not factual confidence, site safety, human approval or production readiness.",
+    "confidence_scope": "0.0/0.2/0.4 are measured source-supported field fractions only; not quality ratings or probability.",
+    "remaining_limits": [
+      "ID inventory is scoped JSON inventory, not global DB or holdout collision certification.",
+      "All field-level original support inherits prior excerpts and candidate review; this audit did not re-translate every PDF page.",
+      "No fact-grounded complete T4 card or independently verified field event is established.",
+      "AI semantic review is fallible; no human acceptance is claimed."
+    ],
+    "major_findings": []
+  },
+  "reviews": [
+    {
+      "method_key": "M01",
+      "card_id": "K-0001",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "고장 문의마다 적용할 식별정보 묶음이다",
+        "specificity": "회신 정보가 명시됐으나 문의 접수표 실물은 아직 없다",
+        "consistency": "동일 문의와 설비를 송수신 양쪽에서 대조한다",
+        "boundary": "문의 접수와 정비 착수 승인을 구별한다",
+        "distinctness": "외부 문의의 제품 식별 묶음으로 내부 보고와 구별된다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M02",
+      "card_id": "K-0002",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "반복되는 최초 이상 보고 방법이다",
+        "specificity": "위치와 미확인 범위 회신이 있으나 조직별 창구는 후속 설정이다",
+        "consistency": "발견 사실과 미확인 범위를 응답에서도 보존한다",
+        "boundary": "보고 응답을 운전 판단으로 보지 않는다",
+        "distinctness": "M01과 확인 구조는 같지만 내부 최초 보고의 대상 정보가 다르다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M03",
+      "card_id": "K-0003",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "예정 고지와 기존 표지를 반복 대조한다",
+        "specificity": "문구와 위치를 확인하되 대상 범위 설정 예시는 없다",
+        "consistency": "통지와 표지의 동일 대상을 회신으로 확인한다",
+        "boundary": "표지 게시 사실을 창작하지 않고 착수 허가를 부여하지 않는다",
+        "distinctness": "다른 사전 통보와 달리 공간 표지와 문구를 연결한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M04",
+      "card_id": "K-0004",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "예정 통보의 승인 오독 방지를 반복 적용한다",
+        "specificity": "예정과 승인 구분 회신은 구체적이나 통보 대상은 미정이다",
+        "consistency": "회신이 승인으로 해석되면 정정하는 구조다",
+        "boundary": "재가동 수행 및 승인으로 연결하지 않는다",
+        "distinctness": "M03과 사전 통지 구조는 공유하나 승인 오독 확인이 다르다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M05",
+      "card_id": "K-0005",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "정비 기록 반환 시 반복 사용할 경계 인계다",
+        "specificity": "결과 존재와 미해결 항목을 구분해 회신한다",
+        "consistency": "정비 원문과 수신자의 완료 범위 요약을 대조한다",
+        "boundary": "시험 기록 없는 완료와 제한 해제를 만들지 않는다",
+        "distinctness": "정비에서 운전으로 반환하는 경계와 결과 범위가 고유하다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M06",
+      "card_id": "K-0006",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "이전본과 후속본 변경 전달을 재사용한다",
+        "specificity": "두 기록 식별정보와 변경 항목의 회신이 명확하다",
+        "consistency": "변경 근거와 비교 불가 항목을 함께 유지한다",
+        "boundary": "설정 변경 수행이나 허가와 분리한다",
+        "distinctness": "M24 메시지 오류 정정과 달리 작업 이력 자체의 변화다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M07",
+      "card_id": "K-0007",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "진술과 이력의 출처 분리를 반복 적용한다",
+        "specificity": "질문과 로그 비교가 명확하나 비교표 예시는 미제공이다",
+        "consistency": "두 출처를 나누어 요약하고 불일치를 남긴다",
+        "boundary": "과거 유사성을 현재 원인으로 확정하지 않는다",
+        "distinctness": "M13과 비교 구조가 닮았지만 초기 면담의 출처별 정보 수집이다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M08",
+      "card_id": "K-0008",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 3,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "계측 결측 전달에 반복 적용한다",
+        "specificity": "값 단위 시점 칸이 구체적이나 완료 상태 구분을 개선할 수 있다",
+        "consistency": "결측 보존 회신과 결측 미보완 시 인계 미완료의 경계가 다소 모호하다",
+        "boundary": "추정값이나 계측 수행 사실을 만들지 않는다",
+        "distinctness": "M25 파일 전달과 달리 원자료의 값 자체가 비어 있다"
+      },
+      "findings": [
+        {
+          "severity": "minor",
+          "detail": "결측 상태를 정확히 인수했다는 확인과 결측 데이터 보완 완료를 별도 상태로 나누면, 결측값이 채워지기 전 정보 전달까지 무조건 미완료가 되는 해석을 줄일 수 있다."
+        }
+      ]
+    },
+    {
+      "method_key": "M09",
+      "card_id": "K-0009",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "정성 관측의 공간 의미를 보존하는 방법이다",
+        "specificity": "대상 위치 방향을 자료 안에서 지정하도록 한다",
+        "consistency": "수신 지목과 원문 표현을 직접 대조한다",
+        "boundary": "현장 접근을 지시하지 않고 관측 사실을 만들지 않는다",
+        "distinctness": "수치 결측과 다른 공간적 의미 확인을 다룬다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M10",
+      "card_id": "K-0010",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "기록 간 시각 기준 불일치에 반복 적용한다",
+        "specificity": "원래 시각 출처와 미확정 순서를 별도 전달한다",
+        "consistency": "순서 회신이 원문 근거를 넘으면 정정한다",
+        "boundary": "임의 시각과 보정값을 만들지 않는다",
+        "distinctness": "M12 인과 판단과 달리 선후관계 자체의 불확실성이다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M11",
+      "card_id": "K-0011",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "관측과 가설을 구별하는 반복 방법이다",
+        "specificity": "항목별 분류 응답으로 이해를 확인한다",
+        "consistency": "관측과 가설 분류를 출처에 대조한다",
+        "boundary": "원인 확정이나 조치 선택을 대신하지 않는다",
+        "distinctness": "M12와 인과 오독 방지를 공유하지만 단일 설명의 상태 분류다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M12",
+      "card_id": "K-0012",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "복수 대상 동시 관측 묶음에 적용한다",
+        "specificity": "대상별 답변은 구체적이나 인과 입력 처리 예시는 없다",
+        "consistency": "동시성과 별도 인과 근거를 나누어 회신한다",
+        "boundary": "공급 구동 관계와 원인 연결을 창작하지 않는다",
+        "distinctness": "M11의 일반 원칙보다 좁지만 대상 쌍과 동시성 근거가 추가된다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M13",
+      "card_id": "K-0013",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 3,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "상충 기록의 병합 오독을 반복 예방한다",
+        "specificity": "원문 식별과 충돌 항목이 명확하나 전달완료와 분쟁해결 상태를 더 분리할 수 있다",
+        "consistency": "불일치 보존 회신 후에도 인계 미완료인지 문구가 양자택일이다",
+        "boundary": "어느 쪽을 사실로 정하거나 원문을 폐기하지 않는다",
+        "distinctness": "M07과 유사한 대조 방식이나 이미 충돌한 기록 보존이라는 목적이 있다"
+      },
+      "findings": [
+        {
+          "severity": "minor",
+          "detail": "불일치를 그대로 인수한 전달 확인과 원문 간 분쟁 해결을 별도 상태로 명시하면 인계 미완료 또는 항목 보완 요청이라는 양자택일 표현이 명확해진다."
+        }
+      ]
+    },
+    {
+      "method_key": "M14",
+      "card_id": "K-0014",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "열린 질문의 접수 범위를 반복 확인한다",
+        "specificity": "접수 가능 불가 범위는 명확하나 접수표 예시는 없다",
+        "consistency": "전달 확인과 질문 답변 상태를 별도로 유지한다",
+        "boundary": "질문 전달을 작업 책임 위임으로 바꾸지 않는다",
+        "distinctness": "M18은 기존 의뢰 추적이고 이 방법은 질문 접수 가능 범위를 정한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M15",
+      "card_id": "K-0015",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "기존 제한정보의 담당 교체 인계다",
+        "specificity": "출처 범위 해제 근거 확인 상태를 각각 회신한다",
+        "consistency": "제한 내용과 기록 확인 여부가 대응한다",
+        "boundary": "새 제한이나 해제 권한을 만들지 않는다",
+        "distinctness": "M16 승인 증빙 공백과 달리 기존 제한 내용의 연속성이다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M16",
+      "card_id": "K-0016",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "승인 증빙 공백을 반복 전달한다",
+        "specificity": "누락과 승인 여부를 구별하나 확인 요청표 실물은 없다",
+        "consistency": "문서 공백과 승인 상태를 별도 문장으로 확인한다",
+        "boundary": "미승인 승인 어느 쪽도 임의 확정하지 않는다",
+        "distinctness": "M20 원문 확보의 특수 상황이지만 승인 상태 오독이라는 확인 항목이 다르다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M17",
+      "card_id": "K-0017",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "중복 의심 보고를 연결해 넘기는 방법이다",
+        "specificity": "식별자 전체와 차이 회신으로 원문 보존을 확인한다",
+        "consistency": "동일성 미확정 상태와 별도 참조를 유지한다",
+        "boundary": "독립 사건 수를 임의로 확정하지 않는다",
+        "distinctness": "M13 충돌 자료와 달리 동일 사건일 가능성 및 중복 관계를 보존한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M18",
+      "card_id": "K-0018",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "기존 의뢰의 미회신 범위를 계속 인계한다",
+        "specificity": "답변 항목과 접수 상태가 구체적이나 추적표 예시는 없다",
+        "consistency": "접수와 답변을 별도 상태로 유지한다",
+        "boundary": "작업 진행률과 마감시간을 추가하지 않는다",
+        "distinctness": "M14 질문 접수와 달리 기존 의뢰의 부분 회신 이력에 집중한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M19",
+      "card_id": "K-0019",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "양측 문서 판본 일치를 반복 확인한다",
+        "specificity": "식별 판본 절 세 항목을 그대로 회신한다",
+        "consistency": "판본 일치와 적용 범위 검토를 분리한다",
+        "boundary": "판본 미표시를 추정하거나 적용 승인으로 바꾸지 않는다",
+        "distinctness": "M20 확보 이전 단계와 달리 보유한 양측 문서의 동일성 검사다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M20",
+      "card_id": "K-0020",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 3
+      },
+      "reasons": {
+        "reusability": "원문 미확보 공백을 반복 인계한다",
+        "specificity": "문서 절 보류 주장이 명확하나 자료 담당 범위는 미정이다",
+        "consistency": "접수와 실제 파일 확보 완료를 구별한다",
+        "boundary": "요약과 제목을 원문 사실 근거로 대체하지 않는다",
+        "distinctness": "M25 보유첨부 누락과 달리 전달자도 원문을 확인할 수 없는 상황이다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M21",
+      "card_id": "K-0021",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "수신 역할 불일치에 반복 적용한다",
+        "specificity": "경로 확인 역할과 최종 인수 역할의 연결표를 추가하면 더 명확하다",
+        "consistency": "역할 확인 후 같은 항목에 재전달을 연결한다",
+        "boundary": "임의 책임자 지정이나 작업 책임 인수를 피한다",
+        "distinctness": "M14 접수 범위와 달리 기존 전달 경로의 역할 오류를 정정한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M22",
+      "card_id": "K-0022",
+      "scores": {
+        "reusability": 4,
+        "specificity": 3,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "확인된 채널 장애에 동일 인계를 재전달한다",
+        "specificity": "허용된 대체 경로 선택의 실제 목록은 후속 설정이다",
+        "consistency": "채널만 변경하고 수신 역할과 식별자를 유지한다",
+        "boundary": "미회신을 임의 시간 기준으로 실패 판정하지 않는다",
+        "distinctness": "M21 대상 역할 변경과 달리 전송 경로만 바뀐다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M23",
+      "card_id": "K-0023",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "복수 수신 역할의 개별 범위를 반복 확인한다",
+        "specificity": "각 역할 행의 항목별 회신으로 누락을 특정한다",
+        "consistency": "부분 확인과 전체 완료를 분리한다",
+        "boundary": "대표자에게 없는 대리 권한을 부여하지 않는다",
+        "distinctness": "M14 단일 접수와 달리 복수 역할 전체 범위의 확인 문제다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M24",
+      "card_id": "K-0024",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "잘못된 인계 진술의 정정 관계를 재사용한다",
+        "specificity": "이전 새 진술 식별자와 정정 근거를 회신한다",
+        "consistency": "원문 보존과 정정 참조 표시가 함께 있다",
+        "boundary": "대체 사실 조치 결과를 임의로 만들지 않는다",
+        "distinctness": "M06 작업기록 변화와 달리 전달문 자체의 오류를 정정한다"
+      },
+      "findings": []
+    },
+    {
+      "method_key": "M25",
+      "card_id": "K-0025",
+      "scores": {
+        "reusability": 4,
+        "specificity": 4,
+        "consistency": 4,
+        "boundary": 4,
+        "distinctness": 4
+      },
+      "reasons": {
+        "reusability": "보유 첨부의 송수신 차이를 반복 확인한다",
+        "specificity": "파일별 식별정보 열람 여부를 회신한다",
+        "consistency": "본문 수신과 첨부 수신을 별도로 유지한다",
+        "boundary": "보유 미확인 파일을 첨부 누락으로 단정하지 않는다",
+        "distinctness": "M08 값 결측 M20 원문 부재와 다른 전송 완전성 문제다"
+      },
+      "findings": []
+    }
+  ]
+}

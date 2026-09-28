@@ -1,0 +1,169 @@
+{
+  "reviewer": "harness_review",
+  "review_type": "AI independent content review of synthetic Script-mode examples; not human approval",
+  "source_hashes": {
+    "scenarios-01-13.json": "e1744e7c27acc1b94f1ff0976036f0fee12cdf042807550287c4947aa9af757c",
+    "scenarios-14-25.json": "8a45cf244416b984a8a2fd4be4161b4f468bb31b3fbd01bd9140adb1f9eccc13"
+  },
+  "checks": [
+    {
+      "method_key": "M01",
+      "outcome": "pass",
+      "rationale": "GR-A 소음 문의에서 V-11이 명판·문의 범위·미확정 시점을 보완하며 문의 수신과 원인 해결·교체 의뢰를 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M02",
+      "outcome": "pass",
+      "rationale": "CV-A 조작반 표시와 실물 관측을 V-12의 체크 항목으로 나누고 미확인 실물 상태를 확정하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M03",
+      "outcome": "pass",
+      "rationale": "CV-B 정비 예정 문안과 표지 배치 초안을 V-13이 설명하며 게시 완료·작업 착수 승인과 분리한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M04",
+      "outcome": "pass",
+      "rationale": "RT-B 예정 통보에 빠진 시각·승인 미확정을 V-11이 보완하고 모의회신도 예정 사실만 인수한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M05",
+      "outcome": "pass",
+      "rationale": "CV-C 반환 문서와 시험 결과 미첨부를 V-12가 대조하여 자료 수신을 정비 완료·복귀 허가로 확대하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M06",
+      "outcome": "pass",
+      "rationale": "V-13이 GR-B 이전본·후속본의 사진 참조 추가만 전달하여 M24의 메시지 오류 정정 및 물리 변경과 구별한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M07",
+      "outcome": "pass",
+      "rationale": "V-11이 GR-C 현재 소리와 과거 로그를 별도 출처로 설명하고 동일 원인을 미확정으로 유지한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M08",
+      "outcome": "pass",
+      "rationale": "V-12가 HPU-A 압력 추세와 결측값을 구분해 전달하여 결측 상태의 수신 완료와 데이터 보완 대기를 분리한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M09",
+      "outcome": "pass",
+      "rationale": "수정본은 MAP-I의 출구를 바라보는 화살표 기준 왼쪽으로 통일되며 V-13이 현장 재관찰 없이 기록 위치만 확인한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M10",
+      "outcome": "pass",
+      "rationale": "V-11이 RT-E·CV-E 자료의 편집 순서와 발생 순서를 구별하고 서로 다른 화면 시계 기준을 미확정으로 유지한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M11",
+      "outcome": "pass",
+      "rationale": "V-12가 GR-D 표시 관측 메모와 센서 가설 메모를 나눠 인수시키며 직접 계측이나 고장 확정을 새로 주장하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M12",
+      "outcome": "pass",
+      "rationale": "V-13이 RT-F·CV-F 공용 화면의 동시 표시를 대상별로 전달하고 근거 없는 인과·설비 관계를 추가하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M13",
+      "outcome": "pass",
+      "rationale": "V-11이 CV-G의 상충 위치 기록을 보존하며 충돌 상태의 수신 완료와 정답 위치 해결을 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M14",
+      "outcome": "pass",
+      "rationale": "V-12가 이송표 도착지 공란 질문의 접수 범위를 기록 경위 확인으로 한정하고 이동 지시·새 도착지 지정과 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M15",
+      "outcome": "pass",
+      "rationale": "V-13이 검사 컨베이어 제한 문서의 구역·해제 근거 미확인을 전달하며 수신 확인을 제한 해제로 바꾸지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M16",
+      "outcome": "pass",
+      "rationale": "V-11이 승인증빙 색인의 공백과 조회 범위를 설명하고 새 증빙 도착 전 승인·미승인을 단정하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M17",
+      "outcome": "pass",
+      "rationale": "V-12가 이송대 소리 보고의 서로 다른 전사록·메모를 비교하며 중복 의심과 동일 관측 확정·원문 삭제를 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M18",
+      "outcome": "pass",
+      "rationale": "V-13이 HPU 문의의 부분 회신과 대장에 명시된 판본 미회신을 나눠 전달해 접수·인계와 답변 완료를 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M19",
+      "outcome": "pass",
+      "rationale": "V-11이 공유규약에서 미리 드러나지 않는 판본을 보완발화로 지정하고 수신본 일치를 현장 적용 승인과 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M20",
+      "outcome": "pass",
+      "rationale": "V-12가 GR 원문 미확보·필요 절·보류 질문을 전달하며 회신도 가상 원장의 접근 권한 확인 필요 표시를 그대로 유지한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M21",
+      "outcome": "pass",
+      "rationale": "V-13이 반환 메모와 가상 역할표에 근거해 정보 수신 경로를 정정하고 작업 책임이나 승인권을 새로 부여하지 않는다.",
+      "findings": []
+    },
+    {
+      "method_key": "M22",
+      "outcome": "pass",
+      "rationale": "V-11이 명시적 저장 실패 뒤 같은 식별자·내용·수신 역할로 대체 전달하여 전달 해결과 장애 원인 해결을 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M23",
+      "outcome": "pass",
+      "rationale": "V-12와 관리자의 현황 인수 회신이 포장 역할 미회신을 대리하지 않아 PACK-차 전체 수신을 pending으로 유지한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M24",
+      "outcome": "pass",
+      "rationale": "V-13이 검사 서식 위치의 이전·정정 메시지를 대조 근거에 연결하고 원문 보존 및 정보 정정을 실제 작업 변화와 구분한다.",
+      "findings": []
+    },
+    {
+      "method_key": "M25",
+      "outcome": "pass",
+      "rationale": "V-11이 보유 첨부의 누락 파일명과 같은 인계 식별자를 보완하고 고정된 후반 대본의 파일별 열람 응답으로 전달 범위만 확인한다.",
+      "findings": []
+    }
+  ],
+  "limitations": [
+    "이 pass는 구체 제조업 가상 설정, 페르소나 문체·관측 출처, 원장과 대화의 일관성, 정보 수신·해결·승인 상태 분리, 기존 M01~M25 방법과의 연결에 대한 작성예시 내부 타당성 판정이다. 실제 현장 원문 부재만을 이유로 부적격 판정하지 않았다.",
+    "작성 모델은 송수신 양측과 예정 모의응답을 보는 Script-mode 대본을 작성했다. visibility에 송신전용 사실·공유규약을 구분했어도 실제 격리된 송신자·수신자 모델을 실행한 것은 아니다. 정보비대칭 하 대화 성공률이나 현장 효과를 검증하지 않는다.",
+    "F8은 누구에게도 사전 공개되지 않는 평가용 고정 응답이며 확인 사실·5필드 근거에서 제외했다. 예정된 정답 응답을 실제 수신 관측이나 독립 사실 증거로 세지 않는다.",
+    "참조 ID와 visible_to의 정합성은 원문 문장의 모든 세부가 수신자에게 전달되었다는 의미 검증을 완전히 대체하지 못한다. 현재 검토는 전체 25개 대화와 원장을 읽은 AI 판단이며 사람 검토나 독립 모델 실험이 아니다.",
+    "설비·문서·역할·관측·전달·응답은 가상이다. 실제 안전 표준, 승인 권한, 복구 결과, 출처 승인, 카드 채택을 확정하지 않는다. resolved는 각 예시에서 명시한 정보 문제 범위에 한정된다.",
+    "새 25개는 기존 25개 인계 방법의 가상 적용 연습이다. 새 독립 현장 사례 25건 또는 추가 지식카드 25건으로 중복 계산하지 않는다. 이전 합성 설계 품질 점수를 새 시나리오 점수로 재사용하지 않았다.",
+    "이 검토에서 시나리오를 작성하거나 설비 운전 조치를 수행하지 않았다. M09 방향 기준, M19 공유규약의 판본 노출, M20 상태 표현, F8 자기지지 참조를 작성자에게 돌려 수정받고 최종 해시를 확인했다."
+  ]
+}

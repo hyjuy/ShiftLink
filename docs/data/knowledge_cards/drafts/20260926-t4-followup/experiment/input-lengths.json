@@ -1,0 +1,164 @@
+[
+  {
+    "scenario_id": "F-HPU",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 216,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-HPU",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 216,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-HPU",
+    "condition": "t4",
+    "support_unicode_characters": 453,
+    "support_utf8_bytes": 1098,
+    "notes_unicode_characters": 216,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-GR",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 264,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-GR",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 264,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-GR",
+    "condition": "t4",
+    "support_unicode_characters": 405,
+    "support_utf8_bytes": 966,
+    "notes_unicode_characters": 264,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-RT",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 177,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-RT",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 177,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-RT",
+    "condition": "t4",
+    "support_unicode_characters": 443,
+    "support_utf8_bytes": 1080,
+    "notes_unicode_characters": 177,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CV",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 277,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CV",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 277,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CV",
+    "condition": "t4",
+    "support_unicode_characters": 463,
+    "support_utf8_bytes": 1110,
+    "notes_unicode_characters": 277,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-PDP",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 160,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-PDP",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 160,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-PDP",
+    "condition": "t4",
+    "support_unicode_characters": 400,
+    "support_utf8_bytes": 971,
+    "notes_unicode_characters": 160,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CAU",
+    "condition": "none",
+    "support_unicode_characters": 0,
+    "support_utf8_bytes": 0,
+    "notes_unicode_characters": 209,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CAU",
+    "condition": "checklist",
+    "support_unicode_characters": 91,
+    "support_utf8_bytes": 201,
+    "notes_unicode_characters": 209,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  },
+  {
+    "scenario_id": "F-CAU",
+    "condition": "t4",
+    "support_unicode_characters": 455,
+    "support_utf8_bytes": 1103,
+    "notes_unicode_characters": 209,
+    "token_count": "unavailable",
+    "output_requested_unicode_characters_max": 1800
+  }
+]

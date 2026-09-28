@@ -1,0 +1,71 @@
+{
+  "kind": "synthetic_script_contract_cases_not_role_experiment",
+  "author": "/root",
+  "scope": "이 사례는 내용 검토용이며 역할 입력·실행·효과 검증이 아니다. 기존 대본의 후속 예시와 최소 대조쌍이다.",
+  "cases": [
+    {
+      "id": "B01", "method_keys": ["M08"],
+      "input": "OBS-추가: 압력 추세 상승. 절대값·단위·시각 미기록.",
+      "reply": "OBS-추가의 압력 상승 추세와 절대값·단위·시각 미기록을 받았습니다. 수치 보완은 대기입니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "reject": "결측값이 없어 수신도 무조건 미완료 / 지금 계측한 정상값으로 확인"
+    },
+    {
+      "id": "B02", "method_keys": ["M07", "M13"],
+      "input": "진술 NOTE-갑은 입구 소리, 과거 LOG-을은 출구 소리. 동일 관측·원인 여부 미확인.",
+      "reply": "NOTE-갑의 입구와 LOG-을의 출구를 각각 받았습니다. 동일 관측·원인 여부는 미해결입니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "reject": "평균 위치인 중앙 소리로 합의 / 두 출처를 받았으므로 원인 해결"
+    },
+    {
+      "id": "B03", "method_keys": ["M08", "M18"],
+      "input": "HAND-추가 A행은 단위 미기록, B행은 시각 미기록. 이번 인수자는 A행만 답함.",
+      "reply": "HAND-추가 A행의 단위 미기록을 받았습니다.",
+      "expected": {"information_receipt": "partial", "information_resolution": "pending", "physical_action_authorized": false},
+      "receipt_scopes": {"A": "confirmed", "B": "pending", "whole": "pending"},
+      "reject": "A행 회신만으로 B행이나 전체 수신 완료"
+    },
+    {
+      "id": "B04", "method_keys": ["M18"],
+      "input": "ASK-추가 원요청은 판본 문의. 추적 기록에 판본 답변 미회신이 명시됨. 다음 담당에게 현황 전달.",
+      "reply": "ASK-추가 판본 답변의 명시적 미회신 현황을 받았습니다. 답변 대기로 유지합니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "pending_kind": "answer_wait", "reject": "현황 인수자의 회신을 의뢰 대상자의 판본 답변으로 대체"
+    },
+    {
+      "id": "B05", "method_keys": ["M18"],
+      "input": "ASK-추가 원요청은 판본 문의. 전달 묶음에는 회신 기록이 미첨부됨. 다른 곳의 회신 여부는 알 수 없음.",
+      "reply": "ASK-추가의 회신 기록 미첨부를 받았습니다. 실제 무응답으로 단정하지 않고 원기록 확보와 회신 여부 확인을 기다립니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "pending_kind": "response_status_verification_wait", "reject": "회신 기록 미첨부이므로 실제 미회신 확정"
+    },
+    {
+      "id": "B06", "method_keys": ["M16"],
+      "input": "AP-추가 색인의 연결 칸은 비어 있었음. 이후 DOC-추가 r2 파일 도착 알림과 AP-추가 대상 표기만 있음. 원문 내용·유효성은 아직 대조하지 않음.",
+      "reply": "기존 빈 연결 칸과 새 DOC-추가 r2 도착을 구분해 받았습니다. AP-추가 원문·범위·판본·유효성 대조 요청을 남깁니다. 도착 알림을 작업 승인으로 해석하지 않습니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "reject": "새 증빙이므로 회신 자체 거부 / 도착했으므로 재가동 허가"
+    },
+    {
+      "id": "B07", "method_keys": ["M16"],
+      "input": "AP-추가의 증빙 조회 담당이 DOC-추가 r2 원문·대상·판본·유효성을 대조했고 해당 문서에 승인 기록 있음으로 확인해 회신함. 이번 수신자는 기록 접수 역할이며 작업 승인권 부여 없음.",
+      "reply": "AP-추가의 DOC-추가 r2에 해당 범위 승인 기록이 있음을 대조한 회신으로 받았습니다. 이 기록 존재 확인 요청은 해결로 갱신합니다. 제 정보 인수를 운전·정비·재가동 허가로 전환하지 않습니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "resolved_within_record_query_scope", "physical_action_authorized": false},
+      "reject": "과거 공백이 있었으므로 새 확인 근거도 영구 미확인 / 인수자가 새 작업 허가 생성"
+    },
+    {
+      "id": "B08", "method_keys": ["M07", "M08", "M13", "M16", "M18"],
+      "input": "HAND-추가 전달 뒤 이번 인계 수신자가 응답하지 않았다는 실행 상태가 명시됨.",
+      "reply": "",
+      "expected": {"information_receipt": "pending", "information_resolution": "pending", "physical_action_authorized": false},
+      "reject": "이전 역할의 회신이나 게시 성공만으로 이번 수신 완료"
+    },
+    {
+      "id": "B09", "method_keys": ["M13"],
+      "input": "비교 목록에 NOTE-갑 참조만 있고 LOG-을 원문 미확보라고 명시됨.",
+      "reply": "NOTE-갑 참조와 LOG-을 원문 미확보 상태를 받았습니다. LOG-을 확보와 충돌 대조는 대기입니다.",
+      "expected": {"information_receipt": "confirmed", "information_resolution": "pending", "physical_action_authorized": false},
+      "reject": "미확보 상태의 인수를 양쪽 원문 내용 수신 완료로 확대"
+    }
+  ]
+}

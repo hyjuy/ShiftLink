@@ -1,0 +1,37 @@
+[
+  {
+    "method_key": "M07",
+    "card_id": "K-0007",
+    "card_version": "synthetic-followup-7f44e65733f0",
+    "scenario_status": "unchanged_script_snapshot_not_execution",
+    "original_path": "../20260926-t4-persona-scenarios/scenarios-01-13.json"
+  },
+  {
+    "method_key": "M08",
+    "card_id": "K-0008",
+    "card_version": "synthetic-followup-7f44e65733f0",
+    "scenario_status": "unchanged_script_snapshot_not_execution",
+    "original_path": "../20260926-t4-persona-scenarios/scenarios-01-13.json"
+  },
+  {
+    "method_key": "M13",
+    "card_id": "K-0013",
+    "card_version": "synthetic-followup-7f44e65733f0",
+    "scenario_status": "unchanged_script_snapshot_not_execution",
+    "original_path": "../20260926-t4-persona-scenarios/scenarios-01-13.json"
+  },
+  {
+    "method_key": "M16",
+    "card_id": "K-0016",
+    "card_version": "synthetic-followup-7f44e65733f0",
+    "scenario_status": "unchanged_script_snapshot_not_execution",
+    "original_path": "../20260926-t4-persona-scenarios/scenarios-14-25.json"
+  },
+  {
+    "method_key": "M18",
+    "card_id": "K-0018",
+    "card_version": "synthetic-followup-7f44e65733f0",
+    "scenario_status": "unchanged_script_snapshot_not_execution",
+    "original_path": "../20260926-t4-persona-scenarios/scenarios-14-25.json"
+  }
+]

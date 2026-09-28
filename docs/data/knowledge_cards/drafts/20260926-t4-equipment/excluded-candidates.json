@@ -1,0 +1,110 @@
+[
+  {
+    "title": "HPU 축압기 압력 정상 확인 인계",
+    "nearest_method": "HPU-02 / M08",
+    "reason": "축압기 전용 계측·확인 원문이 없고 HPU 토출압을 축압기 상태로 바꾸면 근거 없는 진단이 된다. 미확인 일반 전달만 남으면 COMMON과 중복된다."
+  },
+  {
+    "title": "HPU 릴리프 밸브 설정 변경 승인 인계",
+    "nearest_method": "M16",
+    "reason": "실제 설정 기록·현장 승인권 미확보이며 조작·승인 절차를 생성할 수 없다. 일반 승인 공백 전달은 M16에 이미 있다."
+  },
+  {
+    "title": "GR-02 베어링·센서 부품 코드별 인계",
+    "nearest_method": "GR-01 / GR-02",
+    "reason": "GR-02 상세 부품 인스턴스가 등록되지 않았다. GR-01 부품 코드를 복사하거나 새 코드를 만들지 않고 장비 계측 인계만 적용한다."
+  },
+  {
+    "title": "GR 커플링 교체 기록의 이전본과 변경분 인계",
+    "nearest_method": "M06 / M19",
+    "reason": "장비명과 부품명만 바꾼 M06·M19 변형이며 현재 근거로 별도 전달 메커니즘을 확보하지 못했다."
+  },
+  {
+    "title": "PDP 차단기 조작과 재가동 승인 인계",
+    "nearest_method": "M15 / M16",
+    "reason": "카탈로그에 차단기 인스턴스·차단점·현장 절차가 없고 T5·T6로 넘어가는 내용이다."
+  },
+  {
+    "title": "PDP 단순 미회신 재전송",
+    "nearest_method": "M22",
+    "reason": "PDP 전용 전달 객체나 대조 방식이 추가되지 않는 COMMON 복제다."
+  },
+  {
+    "title": "HPU 누유 표현의 관찰 위치와 지목 부품을 대조해 인계",
+    "method_key": "HPU-04",
+    "reason": "일반 위치·관측/추정 인계의 장비명 변형으로 제외",
+    "nearest_method": "M09/M11",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-hpu-gr.json"
+  },
+  {
+    "title": "RT·CV에서 계측 시각을 빠뜨리지 않기",
+    "reason": "장비명만 바꾸면 M08과 동일해 독립 장비 카드로 만들지 않음. 측정 위치·물리량·경계가 달라지는 후보에만 반영.",
+    "nearest_method": "M08"
+  },
+  {
+    "title": "CV-02 속도·장력 비교로 스크랩 막힘 원인 확인",
+    "reason": "CV-02는 대기율만 등록되어 있고 원인 확인은 T3 범위임. 없는 속도·장력 태그와 진단 절차를 만들지 않음.",
+    "nearest_method": "CV-05"
+  },
+  {
+    "title": "RT-02와 RT-03 동시 경보이면 HPU 원인으로 인계",
+    "reason": "REL-0019는 동시발생 관계이며 인과 근거로 사용 금지. 원인 단정 대신 두 관측과 불확실성만 인계.",
+    "nearest_method": "RT-07"
+  },
+  {
+    "title": "CAU 드레인 배출 주기와 밸브 조작 순서를 인계",
+    "reason": "현장 배출 주기·작업 절차가 확보되지 않았고 관측 전달에서 작업 지시로 벗어남.",
+    "nearest_method": "CAU-02"
+  },
+  {
+    "title": "RT·CV 재가동 조건이 맞으면 다음 교대가 가동",
+    "reason": "T6 작업 절차 및 승인권을 생성하게 되므로 제외. 수신확인과 승인 상태의 분리는 모든 방법에 유지.",
+    "nearest_method": "M04"
+  },
+  {
+    "title": "벨트 표시 kPa를 인장력 N으로 바꿔 인계",
+    "reason": "변환 모델과 센서 정의가 없으므로 물리량을 추정할 수 없음.",
+    "nearest_method": "CV-02"
+  },
+  {
+    "title": "출측 롤러 전류와 연결 감속기 관측의 측정 대상을 맞춰 인계하기",
+    "method_key": "RT-03",
+    "reason": "같은 GR-02/RT-03 계측 분리 방법으로 통합",
+    "nearest_method": "GR-04",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-rt-cv.json"
+  },
+  {
+    "title": "클램프 측 압력과 HPU 공급원 기록을 측정 위치별로 인계하기",
+    "method_key": "RT-06",
+    "reason": "HPU 공급/수요처 측정 분리 방법으로 통합",
+    "nearest_method": "HPU-01",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-rt-cv.json"
+  },
+  {
+    "title": "공유 유압 분기 두 RT의 동시 관측을 설비별 행으로 인계하기",
+    "method_key": "RT-07",
+    "reason": "동시 관측과 인과를 분리하는 공통 방법의 적용 예시",
+    "nearest_method": "M12",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-rt-cv.json"
+  },
+  {
+    "title": "스크랩 분기 관측과 선택 인터록 적용 여부를 분리해 인계하기",
+    "method_key": "CV-05",
+    "reason": "소재/인터록 방향과 대기율 경계의 기존 방법 조합",
+    "nearest_method": "RT-05/CV-01",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-rt-cv.json"
+  },
+  {
+    "title": "공압 순회 관측의 배출·누설음·표시값을 관측 종류별로 인계하기",
+    "method_key": "CAU-02",
+    "reason": "관측 종류별 기록·위치 보존 공통 방법의 적용 예시",
+    "nearest_method": "M08/M09",
+    "review_phase": "cross_review",
+    "original_spec_snapshot": "candidate-specs-rt-cv.json"
+  }
+]

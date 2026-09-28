@@ -1,0 +1,16 @@
+{
+  "protocol_immutable_after_start": true,
+  "items": [
+    {
+      "kind": "documentation_clarification",
+      "noticed": "After none/checklist sender calls; before receiver calls",
+      "issue": "Frozen protocol says full card; frozen equipment_card support actually includes card_id, version, title, equipment, know_how, type_payload only.",
+      "handling": "Preserve original protocol and frozen inputs. Report the condition as card execution-field excerpt, not full-card exposure. Actual payload is exactly pilot-inputs.json; no runtime payload was changed."
+    },
+    {
+      "kind": "execution_order_clarification",
+      "issue": "Conditions were dispatched none, checklist, equipment_card, but fresh sender tasks can overlap in wall-clock time.",
+      "handling": "Independent contexts, no shared role messages. No claim of serial timing or randomized order."
+    }
+  ]
+}

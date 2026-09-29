@@ -15,7 +15,8 @@ class SafetyNotice(BaseModel):
 
 
 class StepRender(BaseModel):
-    """Resolution step in order."""
+    """Resolution step in order. `card_id` keeps each T3 card's sequence separate."""
+    card_id: str | None = None
     step_id: str
     order: int
     action: str
@@ -25,6 +26,14 @@ class StepRender(BaseModel):
     rollback_action: str | None = None
     escalation_target: str | None = None
     escalation_channel: str | None = None
+
+
+def steps_by_card(steps: list[StepRender]) -> dict[str | None, list[StepRender]]:
+    """Group steps per source card, in first-appearance order. Each card is its own procedure."""
+    groups: dict[str | None, list[StepRender]] = {}
+    for step in steps:
+        groups.setdefault(step.card_id, []).append(step)
+    return groups
 
 
 class HandoverMethodRender(BaseModel):
@@ -137,6 +146,7 @@ def build_response(
         if card.get("tacit_type") == "T3" and type_payload and type_payload.get("steps"):
             for step_dict in type_payload["steps"]:
                 step = StepRender(
+                    card_id=card_id,
                     step_id=step_dict.get("step_id", ""),
                     order=step_dict.get("order", 0),
                     action=step_dict.get("action", ""),
@@ -249,10 +259,13 @@ def render_response(resp: AgentResponse) -> str:
     if resp.steps:
         lines.append("")
         lines.append("## 조치 단계")
-        # Sort by order to preserve T3 sequence
-        sorted_steps = sorted(resp.steps, key=lambda s: s.order)
+        # One procedure per card; sort only within a card so procedures never interleave.
+        sorted_steps = [
+            s for group in steps_by_card(resp.steps).values() for s in sorted(group, key=lambda s: s.order)
+        ]
         for step in sorted_steps:
-            lines.append(f"### {step.step_id} (단계 {step.order})")
+            prefix = f"{step.card_id} · " if step.card_id else ""
+            lines.append(f"### {prefix}{step.step_id} (단계 {step.order})")
             lines.append(f"- 조치: {step.action}")
             lines.append(f"- 예상 결과: {step.expected_result}")
             if step.stop_conditions:
@@ -398,11 +411,11 @@ def validate_response(
     if missing_safety:
         errors.append(f"Missing safety cards in notices: {missing_safety}")
 
-    # 3. Check steps order preservation
-    if resp.steps:
-        orders = [s.order for s in resp.steps]
+    # 3. Check steps order preservation, per card (each T3 card restarts at order 1)
+    for card_id, group in steps_by_card(resp.steps).items():
+        orders = [s.order for s in group]
         if orders != sorted(orders):
-            errors.append(f"Steps not in ascending order: {orders}")
+            errors.append(f"Steps not in ascending order for {card_id or 'unknown card'}: {orders}")
 
     # 4. Check stop_conditions not lost
     expected_stop_conds = set()

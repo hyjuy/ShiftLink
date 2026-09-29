@@ -905,6 +905,25 @@ def test_validate_response_steps_order_preserved() -> None:
     assert any("not in ascending order" in e for e in errors)
 
 
+def test_multiple_t3_cards_keep_separate_procedures() -> None:
+    """Each T3 card restarts at order 1: no false order error, and steps never interleave."""
+    cards = [make_card_t3("K-0003").model_dump(mode="json"), make_card_t3("K-0004").model_dump(mode="json")]
+    tool_results = {"cards": cards, "equipment": [], "checklist": []}
+    resp = build_response("query", None, tool_results)
+
+    assert [(s.card_id, s.order) for s in resp.steps] == [("K-0003", 1), ("K-0003", 2), ("K-0004", 1), ("K-0004", 2)]
+    assert not any("ascending" in e for e in validate_response(resp, tool_results))
+
+    headers = [line for line in render_response(resp).splitlines() if line.startswith("### ")]
+    assert [h.split(" (")[0] for h in headers] == [
+        "### K-0003 · ST-01", "### K-0003 · ST-02", "### K-0004 · ST-01", "### K-0004 · ST-02",
+    ]
+
+    # A single card whose own steps are out of order is still rejected.
+    resp.steps[0], resp.steps[1] = resp.steps[1], resp.steps[0]
+    assert any("K-0003" in e and "ascending" in e for e in validate_response(resp, tool_results))
+
+
 def test_validate_response_no_lost_stop_conditions() -> None:
     """Validator checks stop_conditions from cards appear in response."""
     card = make_card_t3()  # Has stop_conditions

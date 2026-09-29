@@ -151,6 +151,23 @@ def _search_tokens(card: KnowledgeCard) -> set[str]:
     return set(re.findall(r'\w+', ' '.join(text for text in texts if text).lower()))
 
 
+# 제목·증상이 질문과 겹치면 다른 필드보다 이 배수만큼 더 친다(안전 여부와 무관).
+SYMPTOM_TITLE_WEIGHT = 2
+
+
+def _stems(tokens: set[str]) -> set[str]:
+    """Two-syllable prefixes so Korean inflections match (소리가/소리, 벗어난다/벗어나고)."""
+    # ponytail: 앞 두 글자 비교라 형태소 분석기보다 거칠다. 오매칭이 늘면 형태소 분석으로 바꾼다.
+    return {token[:2] for token in tokens if len(token) >= 2}
+
+
+def _relevance(query_tokens: set[str], card: KnowledgeCard) -> int:
+    """Token overlap over all fields plus weighted stem overlap with title and symptom."""
+    focus = _stems(set(re.findall(r'\w+', f"{card.title} {card.symptom or ''}".lower())))
+    focus_hits = sum(1 for token in query_tokens if len(token) >= 2 and token[:2] in focus)
+    return SYMPTOM_TITLE_WEIGHT * focus_hits + len(query_tokens & _search_tokens(card))
+
+
 def check_card_rules(card: KnowledgeCard) -> list[str]:
     """Check P5 deterministic validation rules. Return list of error messages (empty if valid)."""
     errors = []
@@ -274,7 +291,7 @@ class InMemoryToolProvider:
         """
         Search cards by query with equipment filter and condition matching.
 
-        Returns top-k results (deterministic ranking by token overlap, then card_id).
+        Returns top-k results (deterministic ranking by _relevance, then card_id).
         """
         query_tokens = set(re.findall(r'\w+', query.lower()))
         resolved = self._resolve_equipment(equipment_ids)
@@ -289,7 +306,7 @@ class InMemoryToolProvider:
                     continue
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
-                    score = len(query_tokens & _search_tokens(card))
+                    score = _relevance(query_tokens, card)
                     yield (-score, card.card_id, card, status)
 
         # Select before serializing: large provenance/payloads only copied for top-k.

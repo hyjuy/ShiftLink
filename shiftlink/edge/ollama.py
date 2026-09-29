@@ -11,6 +11,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import socket
 import time
@@ -49,6 +50,7 @@ MODEL_CARD_FIELDS = (
 )
 
 # A의 validate_model_output(response.py)과 같은 제약을 모델 쪽에도 걸어 실패를 줄인다.
+# 호출마다 output_schema()가 복사본에 후보 ID enum을 건다. 이 원본은 바꾸지 않는다.
 OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -70,18 +72,36 @@ SYSTEM_PROMPT = (
     "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n"
     "규칙:\n"
     f"1. answer는 항상 한국어 두세 문장, {ANSWER_MAX_CHARS}자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
-    "2. cited_card_ids에는 위 카드 목록에 실제로 있는 card_id를 최소 한 개 넣는다.\n"
-    "   목록에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 카드를 인용한다.\n"
+    "2. cited_card_ids에는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n"
+    "   질문의 증상과 카드의 증상·제목이 가장 일치하는 카드를 먼저 인용하라.\n"
+    "   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 후보를 인용한다.\n"
+    "   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n"
     "3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n"
     "4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n"
     "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
 )
 
-RETRY_PROMPT = (
-    "\n\n[재시도] 직전 출력이 검증에 실패했다. "
-    '{"answer": "...", "cited_card_ids": ["K-0000"]} 형태의 JSON 객체 하나만 출력하고, '
-    "cited_card_ids에는 위 카드 목록에 실제로 있는 ID만 넣어라."
-)
+
+def retry_prompt(candidate_ids: list[str]) -> str:
+    """재시도 안내. 예시 ID 대신 이번 호출의 실제 후보 ID를 보여준다."""
+    example = json.dumps({"answer": "...", "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False)
+    return (
+        "\n\n[재시도] 직전 출력이 검증에 실패했다. "
+        f"{example} 형태의 JSON 객체 하나만 출력하고, "
+        f"cited_card_ids에는 답변 후보 ID({', '.join(candidate_ids)}) 중에서만 넣어라."
+    )
+
+
+def output_schema(candidate_ids: list[str]) -> dict[str, Any]:
+    """OUTPUT_SCHEMA 복사본에 이번 후보 ID를 enum으로 건다. 모델이 후보 밖 ID를 낼 수 없다."""
+    schema = copy.deepcopy(OUTPUT_SCHEMA)
+    cited = schema["properties"]["cited_card_ids"]
+    if candidate_ids:
+        cited["items"] = {"type": "string", "enum": candidate_ids}
+    else:
+        # 후보가 없으면 인용을 강요하지 않는다. 빈 배열은 파이프라인 검증기가 검토 큐로 보낸다.
+        cited["minItems"] = 0
+    return schema
 
 
 # 호출자가 잡을 오류 4종. A 계약 §3대로 표준 예외만 쓴다 — agent가 edge를 import할 필요가 없다.
@@ -105,6 +125,24 @@ def card_context(tool_results: dict[str, Any]) -> tuple[list[dict[str, Any]], li
     return context, dropped
 
 
+def split_context(
+    tool_results: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    """축약 카드를 답변 후보(검색 순위 순)와 안전 참고(검색에 안 걸린 안전 카드)로 나눈다.
+
+    검색 결과에 든 안전 카드는 후보로 남는다. ranked_cards가 없는 구 호출자는 전부 후보다.
+    """
+    cards, dropped = card_context(tool_results)
+    ranked = tool_results.get("ranked_cards")
+    if ranked is None:
+        return cards, [], dropped
+    ranked_ids = [card.get("card_id") for card in ranked]
+    by_id = {card.get("card_id"): card for card in cards}
+    candidates = [by_id[card_id] for card_id in ranked_ids if card_id in by_id]
+    references = [card for card in cards if card.get("card_id") not in ranked_ids]
+    return candidates, references, dropped
+
+
 def build_messages(
     mode: str,
     request: Any,
@@ -112,7 +150,8 @@ def build_messages(
     retry: bool = False,
 ) -> tuple[list[dict[str, str]], list[str]]:
     """Ollama /api/chat용 messages와, 카나리로 제외된 카드 ID 목록을 만든다."""
-    cards, dropped = card_context(tool_results)
+    candidates, references, dropped = split_context(tool_results)
+    candidate_ids = [card.get("card_id") for card in candidates]
     dropped = sorted(set(dropped + tool_results.get("dropped_canary_card_ids", [])))
     # 질의는 question, 인계는 memo_text — 라우터가 둘 중 하나만 채운다.
     ask = getattr(request, "question", None) or getattr(request, "memo_text", "")
@@ -125,10 +164,21 @@ def build_messages(
     parts = [f"모드: {mode}", f"입력: {ask}"]
     if observations:
         parts.append(f"관측값: {json.dumps(observations, ensure_ascii=False)}")
-    parts.append(f"지식 카드:\n{json.dumps(cards, ensure_ascii=False, indent=1)}")
+    # 후보 한 줄 색인: 긴 JSON보다 먼저 제목·증상으로 질문과 맞춰 보게 한다.
+    index = "\n".join(
+        f"{card.get('card_id')}: {card.get('title', '')} / {card.get('symptom') or '-'}"
+        for card in candidates
+    )
+    parts.append(f"답변 후보 색인:\n{index}")
+    parts.append(f"답변 후보 카드:\n{json.dumps(candidates, ensure_ascii=False, indent=1)}")
+    if references:
+        parts.append(
+            "안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\n"
+            f"{json.dumps(references, ensure_ascii=False, indent=1)}"
+        )
     user = "\n\n".join(parts)
     if retry:
-        user += RETRY_PROMPT
+        user += retry_prompt(candidate_ids)
 
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -167,11 +217,12 @@ class OllamaModel:
                 f"{mode!r} 모드는 아직 어댑터 범위 밖이다. query만 처리한다."
             )
         messages, dropped = build_messages(mode, request, tool_results, retry)
+        candidate_ids = [card.get("card_id") for card in split_context(tool_results)[0]]
         payload = {
             "model": self.model,
             "messages": messages,
             "stream": False,
-            "format": OUTPUT_SCHEMA,
+            "format": output_schema(candidate_ids),
             "keep_alive": KEEP_ALIVE,
             "options": {"temperature": 0, "num_ctx": self.num_ctx, "num_predict": NUM_PREDICT},
         }
@@ -184,6 +235,7 @@ class OllamaModel:
             "retry": retry,
             "latency_s": round(elapsed, 3),
             "dropped_canary_card_ids": dropped,
+            "candidate_card_ids": candidate_ids,
             "load_duration_s": round(body.get("load_duration", 0) / 1e9, 3),
             "eval_count": body.get("eval_count"),
             "output": output,

@@ -94,6 +94,10 @@ def _evaluate_condition(cond: Condition, observations: dict[str, Any] | None) ->
         return None  # Signal missing, unknown status
 
     obs_value = observations[cond.signal]
+    if isinstance(obs_value, dict) and set(obs_value) == {"value", "unit"}:
+        if cond.unit is not None and obs_value["unit"] != cond.unit:
+            return None
+        obs_value = obs_value["value"]
     op = cond.op
     target = cond.value
 
@@ -273,11 +277,15 @@ class InMemoryToolProvider:
         Returns top-k results (deterministic ranking by token overlap, then card_id).
         """
         query_tokens = set(re.findall(r'\w+', query.lower()))
-        equipment_codes = {code for _, code, _ in self._resolve_equipment(equipment_ids)}
+        resolved = self._resolve_equipment(equipment_ids)
+        equipment_codes = {code for _, code, _ in resolved}
+        canonical_ids = {identifier for identifier, _, _ in resolved}
 
         def candidates():
             for card in self.cards:
                 if card.equipment not in equipment_codes and card.equipment != "COMMON":
+                    continue
+                if card.mes_equipment_id and card.mes_equipment_id not in canonical_ids:
                     continue
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
@@ -306,10 +314,13 @@ class InMemoryToolProvider:
         Condition matching follows §4.2 rules.
         """
         # Equipment filter
-        equipment_codes = {code for _, code, _ in self._resolve_equipment(equipment_ids)}
+        resolved = self._resolve_equipment(equipment_ids)
+        equipment_codes = {code for _, code, _ in resolved}
+        canonical_ids = {identifier for identifier, _, _ in resolved}
         candidate_cards = [
             c for c in self.cards
             if c.safety_flag and (c.equipment in equipment_codes or c.equipment == "COMMON")
+            and (not c.mes_equipment_id or c.mes_equipment_id in canonical_ids)
         ]
 
         # Condition matching with observations

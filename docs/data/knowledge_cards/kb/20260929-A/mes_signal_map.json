@@ -56,7 +56,7 @@
       ],
       "link_strength": "직접",
       "evidence": "symptom: \"펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\" / ST-08: \"릴리프 밸브 탱크 라인으로 유량이 흐르는지 확인한다.\"",
-      "note": "hpu_pressure low가 증상과 같은 현상(직접). hpu_flow는 ST-08 확인 항목이지만 MES 유량은 릴리프 탱크 라인이 아니라 공급 유량이라 간접. 카드는 '압력 없음(0)'이고 hydraulic_fault는 120 bar(정상 하한 145 미만)로 low 상태만 같다. 축 회전·회전 방향·프라이밍은 MES로 관측 불가.",
+      "note": "hpu_pressure low가 증상과 같은 현상(직접). hpu_flow는 ST-08 확인 항목이지만 MES 유량은 릴리프 탱크 라인이 아니라 공급 유량이라 간접. 카드는 '압력 없음(0)'이고 hydraulic_fault의 압력은 120 bar(정상 하한 145 미만)다. 이때 hpu_flow=0은 HPU 정지에 따른 값이므로 펌프 원인을 독립적으로 증명하지 않는다. 축 회전·회전 방향·프라이밍은 MES로 관측 불가.",
       "card_conditions": []
     },
     {
@@ -123,6 +123,12 @@
           "direction": "low",
           "unit": "bar",
           "equipment": "HPU-01"
+        },
+        {
+          "signal": "hpu_oil_level",
+          "direction": "any",
+          "unit": "pct",
+          "equipment": "HPU-01"
         }
       ],
       "alarms": [
@@ -137,7 +143,7 @@
       ],
       "link_strength": "직접",
       "evidence": "symptom: \"펌프 소음이 평소보다 크고, 요구 유량이나 압력이 나오지 않으며, 탱크 유면이 거품으로 우유빛(milky)을 띤다.\"",
-      "note": "유량·압력 미달은 MES low 상태와 같은 현상. 그러나 카드 판별의 핵심인 소음·우유빛 거품은 관측 불가라 MES만으로 에어레이션을 다른 원인과 구분할 수 없다. hydraulic_fault는 압력만 낮추고 유량은 정상으로 둔다.",
+      "note": "유량·압력 미달은 MES low 상태와 같은 현상. hpu_oil_level은 본문의 탱크 유면 확인을 돕는 가상 pct 관측이며 흡입구 대비 높이나 에어레이션 판정값은 아니다. 카드 판별의 핵심인 소음·우유빛 거품은 관측 불가다. hydraulic_fault는 압력을 120 bar로 낮추고 HPU를 정지시키므로 hpu_flow=0이지만, 이 유량은 정지 결과여서 에어레이션을 증명하지 않는다.",
       "card_conditions": []
     },
     {
@@ -530,6 +536,12 @@
           "direction": "high",
           "unit": "degC",
           "equipment": "GR-01/GR-02"
+        },
+        {
+          "signal": "gr_oil_level",
+          "direction": "any",
+          "unit": "pct",
+          "equipment": "GR-01/GR-02"
         }
       ],
       "alarms": [
@@ -544,7 +556,7 @@
       ],
       "link_strength": "직접",
       "evidence": "symptom: \"감속기 베어링부 온도가 평소보다 높다.\"",
-      "note": "증상과 신호가 같은 현상. 단 gearbox_overheat는 원인을 냉각 계통(component_id=cooling)으로 가정하고, 카드 원인 후보는 오일 부족·과다·노후·베어링 손상이라 복구 동작은 다르다. 유면·오일 상태는 관측 불가.",
+      "note": "온도 증상과 gr_brg_temp가 같은 현상이다. gr_oil_level은 본문의 유면 확인을 돕는 가상 pct 관측이며 사이트글라스 중간·딥스틱 적정 범위와 동일한 매뉴얼 수치가 아니다. gearbox_overheat는 냉각 계통을 원인으로 가정하지만 카드 원인 후보는 오일 부족·과다·노후·베어링 손상이다. 점도·오염 상태는 관측 불가다.",
       "card_conditions": []
     },
     {
@@ -576,6 +588,12 @@
           "direction": "high",
           "unit": "bool",
           "equipment": "GR-01/GR-02"
+        },
+        {
+          "signal": "gr_oil_level",
+          "direction": "any",
+          "unit": "pct",
+          "equipment": "GR-01/GR-02"
         }
       ],
       "alarms": [
@@ -590,7 +608,7 @@
       ],
       "link_strength": "직접",
       "evidence": "symptom: \"감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·밸브·브리더 플러그에서 오일이 샌다.\"",
-      "note": "gr_oil_leak는 00_plant_and_relations.json에 없고 scenarios/priority.expand()가 drive 설비에 추가하는 0/1 신호(정상 0). 방향 high = 1(감지). 누유 위치 구분·길들이기 24시간 예외는 표현 불가. catalog GR-01-GBX failure_modes에 누유 항목이 없다.",
+      "note": "gr_oil_leak는 00_plant_and_relations.json에 없고 scenarios/priority.expand()가 drive 설비에 추가하는 0/1 신호(정상 0). 방향 high = 1(감지). gr_oil_level은 본문의 오일 과다 여부를 확인할 보조 관측일 뿐 누유 원인·위치의 증거가 아니다. 누유 위치 구분·길들이기 24시간 예외는 표현 불가다. catalog GR-01-GBX failure_modes에 누유 항목이 없다.",
       "card_conditions": []
     },
     {
@@ -649,15 +667,24 @@
   "unlinked": {
     "signals": [
       "hpu_filter_dp",
+      "hpu_pump_current",
       "bus_voltage",
+      "bus_current",
+      "breaker_trip",
       "air_pressure",
+      "air_flow",
+      "compressor_current",
       "gr_current",
+      "gr_rpm",
       "rt_speed",
       "rt_clamp_press",
       "rt_motor_current",
+      "rt_vib_rms",
       "cv_speed",
       "cv_belt_tension",
-      "cv_queue_len"
+      "cv_queue_len",
+      "cv_motor_current",
+      "cv_vib_rms"
     ],
     "alarm_codes": [
       "AL-DSB-QUE"

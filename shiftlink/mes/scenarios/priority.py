@@ -42,6 +42,42 @@ COMPONENTS = {
     "cv": (("belt", "이송 벨트"), ("bearing", "구동 베어링")),
 }
 
+# Demo-only nominal bands. These are observation channels, not field limits.
+ADDITIONAL_SIGNALS = {
+    "HPU": (
+        SignalSpec("hpu_oil_level", "유압유 탱크 유면", "pct", 70, 100),
+        SignalSpec("hpu_pump_current", "유압 펌프 전류", "A", 15, 25),
+    ),
+    "PDP": (
+        SignalSpec("bus_current", "배전반 전류", "A", 20, 40),
+        SignalSpec("breaker_trip", "차단기 트립 (0 정상 / 1 트립)", "bool", 0, 0),
+    ),
+    "CAU": (
+        SignalSpec("air_flow", "압축공기 유량", "L_min", 100, 150),
+        SignalSpec("compressor_current", "압축기 전류", "A", 8, 16),
+    ),
+    "GR": (
+        SignalSpec("gr_oil_level", "감속기 오일 레벨", "pct", 70, 100),
+        SignalSpec("gr_rpm", "감속기 회전속도", "rpm", 900, 1100, zero_when_stopped=True),
+        SignalSpec("gr_oil_leak", "누유 감지 (0 없음 / 1 감지)", "bool", 0, 0),
+    ),
+    "RT": (
+        SignalSpec("rt_motor_current", "롤러 모터 전류", "A", 8, 16),
+        SignalSpec("rt_vib_rms", "롤러 진동 RMS", "mm_s", 0.8, 1.8),
+    ),
+    "CV": (
+        SignalSpec("cv_speed", "컨베이어 속도", "m_min", 8, 12, zero_when_stopped=True),
+        SignalSpec("cv_motor_current", "컨베이어 모터 전류", "A", 10, 20),
+        SignalSpec("cv_vib_rms", "컨베이어 구동부 진동 RMS", "mm_s", 0.8, 1.8),
+    ),
+}
+
+STOPPED_ZERO_SIGNALS = frozenset({
+    "hpu_flow", "hpu_pump_current", "air_flow", "compressor_current",
+    "gr_vib_rms", "gr_current", "gr_rpm", "rt_speed", "rt_motor_current",
+    "rt_vib_rms", "cv_speed", "cv_motor_current", "cv_vib_rms",
+})
+
 
 def expand(config):
     """Add missing priority scenarios to the catalog baseline; preserve old run configs."""
@@ -49,7 +85,13 @@ def expand(config):
     existing = {s.scenario_id for s in config.scenarios}
     available = {cap for eq in config.equipment if eq.active for cap in eq.capabilities}
     additions = tuple(s for s in PRIORITY_SCENARIOS if s.scenario_id not in existing and s.cause_capability in available)
-    equipment = tuple(replace(eq, signals=eq.signals + (
-        SignalSpec("gr_oil_leak", "누유 감지 (0 없음 / 1 감지)", "bool", 0, 0),
-    )) if "drive" in eq.capabilities and not any(s.signal == "gr_oil_leak" for s in eq.signals) else eq for eq in config.equipment)
-    return finalize(replace(config, equipment=equipment, scenarios=config.scenarios + additions))
+    equipment = []
+    for eq in config.equipment:
+        existing = {signal.signal for signal in eq.signals}
+        added = (signal for signal in ADDITIONAL_SIGNALS.get(eq.code.split("-", 1)[0], ())
+                 if signal.signal not in existing)
+        signals = tuple(replace(signal, zero_when_stopped=True)
+                        if signal.signal in STOPPED_ZERO_SIGNALS and not signal.zero_when_stopped else signal
+                        for signal in (*eq.signals, *added))
+        equipment.append(replace(eq, signals=signals))
+    return finalize(replace(config, equipment=tuple(equipment), scenarios=config.scenarios + additions))

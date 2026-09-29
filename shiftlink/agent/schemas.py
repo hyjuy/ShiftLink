@@ -141,6 +141,8 @@ class KnowledgeCard(BaseModel):
     tacit_type: Literal["T1", "T2", "T3", "T4", "T5", "T6"]
     equipment: Equipment
     component: str
+    mes_equipment_id: NonBlank | None = None
+    mes_component_code: NonBlank | None = None
     scenario: Literal["S1", "S2", "S3"]
     title: str
     symptom: NonBlank | None = None

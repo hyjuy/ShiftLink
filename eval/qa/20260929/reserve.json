@@ -1,0 +1,183 @@
+[
+ {
+  "qid": "Q-009",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "procedure",
+  "question": "작동유 보충하려는데 뭐 확인하고 넣어야 되나",
+  "observations": {},
+  "writer_note": "오일 보충 절차·유종 확인",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "작동유 보충 절차·유종 확인 카드 없음. K-1007 점도 등급은 저온 조건 카드라 보충 절차 답이 아님."
+ },
+ {
+  "qid": "Q-015",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "status",
+  "question": "압력이 좀 낮게 뜨는데 유량도 같이 떨어졌어요. 이거 어떻게 봐야 하나요?",
+  "observations": {
+   "hpu_pressure": {
+    "value": 138,
+    "unit": "bar"
+   },
+   "hpu_flow": {
+    "value": 33,
+    "unit": "L_min"
+   }
+  },
+  "writer_note": "압력·유량 동반 저하 → 펌프 마모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "압력 138(정상 하한 145 미만)·유량 33(정상 하한 38 미만) 동반 저하. K-1001은 압력 '없음', K-1004는 소음·거품 동반이라 불일치."
+ },
+ {
+  "qid": "Q-021",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "벨트가 모터는 도는데 가끔 미끄러지는 느낌이에요. 코일 올라가면 더 심하고요.",
+  "observations": {},
+  "writer_note": "[OOS 추정] 벨트 장력 부족·슬립",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "벨트 슬립 카드 없음."
+ },
+ {
+  "qid": "Q-023",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "벨트 밑에 고무 가루가 평소보다 많이 떨어져 있네요. 어디가 긁히고 있는 걸까요?",
+  "observations": {},
+  "writer_note": "벨트 마모·스크레이퍼 접촉",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "고무 가루 증상 카드 없음. K-1016은 커버 부풂."
+ },
+ {
+  "qid": "Q-030",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "safety",
+  "question": "점검 덮개 하나가 볼트 빠져서 헐거운데, 일단 운전 계속해도 될까요?",
+  "observations": {},
+  "writer_note": "방호 덮개 결손 운전 가능 여부",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1014"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "덮개 볼트 결손 상태 운전 가부 카드 없음. K-1014는 운전 중 개방 금지라 직접 답 아님, 안전 맥락으로만 표시."
+ },
+ {
+  "qid": "Q-033",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "status",
+  "question": "출측 대기율이 높아요. 이 정도면 롤러테이블 쪽에도 영향 가나요?",
+  "observations": {
+   "cv_queue_len": {
+    "value": 88,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "대기율 경고→RT 감속 인터록",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "대기율 88%는 정상 상한 70 초과·알람 90 미만. CV→RT 영향 카드 없음."
+ },
+ {
+  "qid": "Q-039",
+  "eq_id": "RT",
+  "persona_id": "V-13",
+  "intent": "symptom",
+  "question": "클램프가 코일을 잡은 뒤에 서서히 풀리는 현상이 보고됐습니다. 유압 누설인지 밸브 문제인지 구분할 방법이 있을까요.",
+  "observations": {},
+  "writer_note": "클램프 유지압 저하",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "클램프 유지압 저하 카드 없음. K-1023은 리프트 자연 하강(다운 밸브)으로 부품이 다름."
+ },
+ {
+  "qid": "Q-053",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "other",
+  "question": "코일카 쪽 레일 위치 센서가 자꾸 오검출되는데 이것도 여기서 볼 수 있나요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 다른 설비(코일카)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "코일카 레일 센서는 KB 범위 밖."
+ },
+ {
+  "qid": "Q-062",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "procedure",
+  "question": "출력축 오일 씰 교체를 계획하고 있습니다. 분해 전 준비와 조립 후 확인 순서를 알려주세요.",
+  "observations": {},
+  "writer_note": "오일 씰 교체",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "오일 씰 교체 절차 카드 없음."
+ },
+ {
+  "qid": "Q-068",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "status",
+  "question": "전류는 이 정도. 문제없는 거지",
+  "observations": {
+   "gr_current": {
+    "value": 24,
+    "unit": "A"
+   }
+  },
+  "writer_note": "정상값 확인",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "전류 24 A는 정상 범위(18~30). MES 범위만으로 답하며 근거 카드 없음."
+ }
+]

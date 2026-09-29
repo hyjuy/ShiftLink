@@ -1,0 +1,635 @@
+[
+ {
+  "qid": "Q-003",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "롤러 승강이 느려졌는데요, 유압 쪽 압력이 오르다 말고 떨어지는 느낌이면 어디부터 의심해야 할까요?",
+  "observations": {},
+  "writer_note": "릴리프 밸브 설정·누설로 압력 미형성",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "승강 느림+압력 형성 후 하락은 어느 카드 증상과도 불일치(K-1020 릴리프 끽 소리·K-1022 펌프 고착과 다름). K-1003은 설정 안전 카드일 뿐 진단 아님.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-004",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "symptom",
+  "question": "오일 쿨러 지나서 나오는 기름이 그다지 안 식는 거 같은데",
+  "observations": {},
+  "writer_note": "쿨러 냉각수 막힘·팬 불량",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1002"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "냉각기 출구 유온이 너무 높은지 먼저 확인",
+   "오일 입·출구 온도차가 있으면 냉각기 정상 작동",
+   "냉각수 공급·써모스탯·냉각수 온도·유량 순 확인"
+  ],
+  "difficulty": "medium",
+  "label_note": "쿨러 출구 유온이 안 떨어짐 = K-1002 증상.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-010",
+  "eq_id": "HPU",
+  "persona_id": "V-13",
+  "intent": "procedure",
+  "question": "리턴 필터 엘리먼트 교체 작업 순서하고, 교체 후에 확인할 항목이 뭐가 있는지 정리해 주세요.",
+  "observations": {},
+  "writer_note": "[OOS 추정] 필터 교체 절차",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "리턴 필터 교체 절차 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-011",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "procedure",
+  "question": "작동유 샘플 채취해서 오염도 분석 보내야 한다는데, 채취 위치랑 방법이 정해져 있나요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 오일 샘플링 절차",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "샘플링 위치·방법 카드 없음. K-1008은 수분 분석 필요만 언급.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-012",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "safety",
+  "question": "HPU 돌아가는 중에 배관 이음부 조여도 되냐",
+  "observations": {},
+  "writer_note": "운전 중 가압 배관 작업 금지",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1006"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1006"
+  ],
+  "key_facts": [
+   "HPU 정비는 설비 작동 중에 하지 않는다",
+   "정비 전 반드시 해당 계통 감압",
+   "정지·감압 미확인 시 작업 보류, 담당자 확인"
+  ],
+  "difficulty": "medium",
+  "label_note": "운전 중 배관 조임 = 운전 중 정비 금지 K-1006.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-013",
+  "eq_id": "HPU",
+  "persona_id": "V-13",
+  "intent": "safety",
+  "question": "펌프 정지했으면 바로 유압 라인 풀어도 되는지, 축압기 달려 있어서 좀 걸립니다.",
+  "observations": {},
+  "writer_note": "축압기 잔압 위험",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1006"
+  ],
+  "acceptable_card_ids": [
+   "K-1005"
+  ],
+  "safety_card_ids": [
+   "K-1006"
+  ],
+  "key_facts": [
+   "정비 전 반드시 해당 계통 부분의 압력을 뺀다",
+   "정지·감압 미확인 시 작업 보류, 담당자 확인"
+  ],
+  "difficulty": "medium",
+  "label_note": "펌프 정지만으로 불충분, 감압 필요 = K-1006. K-1005의 '펌프 정지 후 축압기 배출' 단계가 보조 근거.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-014",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "status",
+  "question": "유온 이 정도면 계속 돌려도 되나",
+  "observations": {
+   "hpu_oil_temp": {
+    "value": 66,
+    "unit": "degC"
+   }
+  },
+  "writer_note": "유온 알람 상한 초과",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1002"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "출구 유온이 너무 높으면 냉각수 공급부터 확인",
+   "써모스탯 조정, 냉각수 입·출구 온도 확인",
+   "냉각기 통과 오일 유량 확인"
+  ],
+  "difficulty": "hard",
+  "label_note": "유온 66℃는 alarm_high 65 초과. 계속 운전 가부는 카드에 없고 K-1002가 고유온 점검 순서만 제공(부분 답).",
+  "split": "test"
+ },
+ {
+  "qid": "Q-016",
+  "eq_id": "HPU",
+  "persona_id": "V-13",
+  "intent": "status",
+  "question": "필터 차압 값이 교대 시작 때보다 올라 있습니다. 지금 수치로 판단하면 어떤 상태인지 알려주세요.",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 1.7,
+    "unit": "bar"
+   }
+  },
+  "writer_note": "필터 차압 경고 구간",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "필터 차압 1.7 bar는 정상 상한 1.2 초과·알람 2.0 미만. 필터 차압 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-022",
+  "eq_id": "CV",
+  "persona_id": "V-11",
+  "intent": "symptom",
+  "question": "아이들러 하나가 안 돈다. 벨트가 그 위로 끌리고 있음",
+  "observations": {},
+  "writer_note": "아이들러 베어링 고착",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1011"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "부착물 없이 굼뜨면 내부 막힘·베어링 고장 임박 의심",
+   "베어링 고장 임박은 대개 높은 끽끽 소리로 나타남",
+   "이상 롤은 즉시 태그, 계통 정지 때 떼어 냄"
+  ],
+  "difficulty": "medium",
+  "label_note": "아이들러 롤 멈춤 = K-1011 증상.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-025",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "적재 대기율이 계속 높게 잡히는데 실제로 코일은 별로 안 쌓여 있어요. 이런 경우 뭘 의심해야 하나요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 센서 오검출",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "센서 오검출 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-029",
+  "eq_id": "CV",
+  "persona_id": "V-11",
+  "intent": "safety",
+  "question": "벨트 돌고 있는데 밑에 낀 거 손으로 빼도 되나",
+  "observations": {},
+  "writer_note": "운전 중 끼임 제거 금지",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1015"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "운전 중 고장 시 전원 분리→재기동 방지→경고 표지",
+   "자격자가 고장 조치 후 시운전·인계"
+  ],
+  "difficulty": "hard",
+  "label_note": "운전 중 끼임 제거를 직접 다룬 카드는 없으나 K-1015 순서(전원 분리 먼저)로 '안 된다'를 답할 수 있다고 판정(경계 사례).",
+  "split": "test"
+ },
+ {
+  "qid": "Q-031",
+  "eq_id": "CV",
+  "persona_id": "V-13",
+  "intent": "safety",
+  "question": "당김줄 비상정지 스위치 동작 시험을 운전 중에 해도 되는지, 아니면 정지 상태에서만 해야 하는지 확인 부탁드립니다.",
+  "observations": {},
+  "writer_note": "비상정지 스위치 시험 조건",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "당김줄 비상정지 시험 조건 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-032",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "status",
+  "question": "벨트 장력 값이 낮게 나오는데 속도는 정상이에요. 이 조합이면 어떤 상태로 보면 될까요?",
+  "observations": {
+   "cv_belt_tension": {
+    "value": 340,
+    "unit": "kPa"
+   },
+   "cv_speed": {
+    "value": 35,
+    "unit": "m_min"
+   }
+  },
+  "writer_note": "장력 저하·속도 정상",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "장력 340 kPa는 정상 하한 380 미만·알람 330 초과. 장력 저하 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-034",
+  "eq_id": "CV",
+  "persona_id": "V-13",
+  "intent": "other",
+  "question": "적재 컨베이어 벨트 교체 예정일이 언제로 잡혀 있는지 확인할 수 있나요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 정비 일정",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "정비 일정은 KB 범위 밖.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-038",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "승강 명령 줬는데 가끔 아예 안 움직여요. 다시 주면 되고요.",
+  "observations": {},
+  "writer_note": "솔레노이드 밸브 간헐 불량",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "간헐적 무반응 카드 없음. K-1022는 모터 웅웅·퓨즈 단선 동반의 상승 불가.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-040",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "반송 모터에서 윙 하는 소리가 평소보다 커졌는데, 전류는 크게 안 변했어요.",
+  "observations": {},
+  "writer_note": "모터 베어링·커플링",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1017"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1017"
+  ],
+  "key_facts": [
+   "이상 소음 원인은 롤러 베어링, 다음 모터·기어박스",
+   "이상 소음 시 모듈 즉시 정지·재기동 방지",
+   "모터·기어박스면 RollerDrive 설명서로 분석"
+  ],
+  "difficulty": "hard",
+  "label_note": "반송 모터 소음 증가. K-1017은 롤러 컨베이어 이상 소음 원인으로 모터·기어박스를 포함하고 정지 지시가 있어 답 가능(경계 사례).",
+  "split": "test"
+ },
+ {
+  "qid": "Q-042",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "symptom",
+  "question": "코일이 테이블 지나가면서 한쪽으로 틀어지는데요, 롤러 정렬 문제일까요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 롤러 정렬·레벨",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "코일 틀어짐·롤러 정렬 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-043",
+  "eq_id": "RT",
+  "persona_id": "V-13",
+  "intent": "procedure",
+  "question": "승강 실린더 교체 작업 계획을 세우고 있습니다. 실린더 떼기 전 하강 고정과 잔압 제거를 어떻게 해야 하는지 알려주세요.",
+  "observations": {},
+  "writer_note": "실린더 교체 전 기계적 고정",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1018"
+  ],
+  "acceptable_card_ids": [
+   "K-1019"
+  ],
+  "safety_card_ids": [
+   "K-1018",
+   "K-1019"
+  ],
+  "key_facts": [
+   "하중을 내리고 정비용 잠금장치 두 개를 모두 건다",
+   "하강 스위치를 몇 초 더 눌러 압력을 뺀다",
+   "차단 후 주전원 스위치를 끈다"
+  ],
+  "difficulty": "medium",
+  "label_note": "실린더 교체 전 기계적 고정·압력 해제 = K-1018 차단 절차. K-1019 좌우 정비 장치도 동일 취지.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-045",
+  "eq_id": "RT",
+  "persona_id": "V-11",
+  "intent": "procedure",
+  "question": "롤러 하나 갈아야 된다. 순서",
+  "observations": {},
+  "writer_note": "롤러 교체 절차",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "롤러 교체 절차 카드 없음. K-1017은 '해당 롤러 교체'만 언급.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-046",
+  "eq_id": "RT",
+  "persona_id": "V-13",
+  "intent": "procedure",
+  "question": "클램프 압력 스위치 설정값 재조정이 필요한데, 조정 절차와 승인 필요 여부를 알려주세요.",
+  "observations": {},
+  "writer_note": "클램프 압력 설정 변경",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "클램프 압력 스위치 조정 카드 없음. K-1003(릴리프)·K-1005(축압기 압력 스위치)는 다른 부품.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-047",
+  "eq_id": "RT",
+  "persona_id": "V-11",
+  "intent": "safety",
+  "question": "롤러 돌 때 사이에 낀 스케일 막대기로 긁어내도 됨?",
+  "observations": {},
+  "writer_note": "회전 중 롤러 사이 접근",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "회전 중 롤러 사이 이물 제거 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-052",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "status",
+  "question": "출측 반송 모터 전류가 올라가 있는데 속도는 정상 범위에요. 이거 괜찮은 건가요?",
+  "observations": {
+   "rt_motor_current": {
+    "value": 18.5,
+    "unit": "A"
+   },
+   "rt_speed": {
+    "value": 60,
+    "unit": "m_min"
+   }
+  },
+  "writer_note": "모터 과부하 징후",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "모터 전류 18.5 A는 정상 상한 16 초과·알람 20 미만. 해당 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-055",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "symptom",
+  "question": "감속기 입력축 베어링부가 옆 설비보다 뜨겁다는 보고가 있었습니다. 먼저 확인할 사항이 무엇인지요.",
+  "observations": {},
+  "writer_note": "베어링 과열 원인",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1025"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1025"
+  ],
+  "key_facts": [
+   "전원 차단·재기동 방지 후 감속기가 식을 때까지 대기",
+   "사이트글라스 유면 중간·딥스틱 범위 확인",
+   "오일 점도·오염 확인, 베어링 손상 시 점검·교체"
+  ],
+  "difficulty": "easy",
+  "label_note": "베어링부 고온 = K-1025 제목·증상.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-057",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "symptom",
+  "question": "감속기에서 딱딱 끊어지는 주기성 타격음이 납니다. 부하 걸릴 때 더 뚜렷하고요. 어떤 손상을 의심해야 합니까.",
+  "observations": {},
+  "writer_note": "기어 치 결손",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1026"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [
+   "두드리는(knocking) 소리는 기어 치형 불규칙 의심",
+   "치형 의심 시 고객 서비스에 문의",
+   "갈리는 소리면 베어링 손상 의심"
+  ],
+  "difficulty": "medium",
+  "label_note": "주기적 타격음 = 규칙적 두드림, 치형(K-1026). 이상음 시 정지 판단 K-1024 동반.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-058",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "symptom",
+  "question": "감속기 오일 색이 까맣다. 쇳가루도 보이는 것 같고",
+  "observations": {},
+  "writer_note": "오일 오염·마모분",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "오일 흑변·쇳가루 증상 카드 없음. K-1028은 불규칙 이상음 기반, K-1025는 베어링 고온 기반이라 증상 불일치.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-063",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "procedure",
+  "question": "감속기 유면 확인 어떻게 하냐. 돌 때 봐, 섰을 때 봐?",
+  "observations": {},
+  "writer_note": "유면 점검 방법",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1025"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1025"
+  ],
+  "key_facts": [
+   "전원 차단·재기동 방지 후 감속기가 식을 때 확인",
+   "사이트글라스는 유면이 중간에 있는지 확인",
+   "딥스틱 장착형은 표시된 적정 범위 확인"
+  ],
+  "difficulty": "hard",
+  "label_note": "유면 확인 방법은 K-1025 2) 단계에 있음(정지·냉각 후). 카드 주제는 베어링 고온이라 간접.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-065",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "safety",
+  "question": "진동 측정을 위해 운전 중인 감속기 베어링 하우징에 휴대용 센서를 직접 대도 되는지 확인이 필요합니다.",
+  "observations": {},
+  "writer_note": "운전 중 회전부 인접 계측",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "운전 중 휴대용 진동 계측 카드 없음.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-066",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "status",
+  "question": "진동 이거 올라간 거 맞지",
+  "observations": {
+   "gr_vib_rms": {
+    "value": 4.8,
+    "unit": "mm_s"
+   }
+  },
+  "writer_note": "진동 알람 초과",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1024"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [
+   "진동이 정상과 다르고 판단이 안 서면 주 모터 정지",
+   "원인 확인, 필요시 제조사에 문의"
+  ],
+  "difficulty": "medium",
+  "label_note": "진동 4.8 mm/s는 알람 4.5 초과. 이상 진동 대응 K-1024.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-069",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "other",
+  "question": "GR-02 감속기 베어링 마지막 교체 이력이 언제인지 조회할 수 있을까요?",
+  "observations": {},
+  "writer_note": "[OOS 추정] 정비 이력 조회",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "정비 이력 조회는 KB 범위 밖.",
+  "split": "test"
+ },
+ {
+  "qid": "Q-070",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "other",
+  "question": "감속기 오일 무슨 등급 넣냐",
+  "observations": {},
+  "writer_note": "[OOS 추정] 윤활유 사양",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "easy",
+  "label_note": "감속기 오일 등급 카드 없음.",
+  "split": "test"
+ }
+]

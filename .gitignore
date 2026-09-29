@@ -38,9 +38,8 @@ seeds/*
 eval/results/*
 !eval/results/.gitkeep
 
-# graphify 생성 산출물은 로컬에 두고 사용법 README만 추적한다.
-graphify-out/*
-!graphify-out/README.md
+# graphify 지식그래프는 PC 로컬 산출물. 저장소에 올리지 않는다.
+graphify-out/
 
 # 제조사·민간 원문 PDF는 재배포 권한 미확인 → 로컬 보관, 공유 드라이브로 전달 (docs/sources/manual/download-status.md)
 docs/sources/manual/bosch-*.pdf

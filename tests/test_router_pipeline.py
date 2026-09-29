@@ -122,7 +122,7 @@ def test_handover_pipeline_lists_existing_items_before_one_model_call() -> None:
     assert model.calls == 1
 
 
-def test_six_tool_stubs_are_explicitly_unimplemented() -> None:
+def test_six_tool_functions_require_a_bound_provider() -> None:
     calls = {
         "lookup_equipment": lambda: tool_stubs.lookup_equipment(equipment_ids=["RT-01"]),
         "search_cards": lambda: tool_stubs.search_cards(
@@ -137,8 +137,9 @@ def test_six_tool_stubs_are_explicitly_unimplemented() -> None:
     }
 
     assert tuple(calls) == tool_stubs.TOOL_STUBS
+    tool_stubs.bind_tool_provider(None)
     for call in calls.values():
-        with pytest.raises(NotImplementedError):
+        with pytest.raises(RuntimeError, match="카드 로더"):
             call()
 
 

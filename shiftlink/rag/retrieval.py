@@ -194,6 +194,7 @@ class InMemoryToolProvider:
         handover_db: list[dict[str, Any]] | None = None,
         checklist_db: list[dict[str, Any]] | None = None,
         equipment_types: list[dict[str, Any]] | None = None,
+        include_draft: bool = False,
     ) -> None:
         """
         Initialize with KB cards and optional equipment/handover/checklist data.
@@ -215,8 +216,10 @@ class InMemoryToolProvider:
                     raise ValueError(
                         f"InMemoryToolProvider does not accept dev/sealed cards: {card.card_id}"
                     )
-                # Gate: only accept accepted/kb/L1
-                if card.status == "accepted" and card.split == "kb" and card.grade == "L1":
+                # Gate: accepted/kb/L1. Draft kb cards load only when include_draft is set.
+                accepted = card.status == "accepted" and card.split == "kb" and card.grade == "L1"
+                draft = include_draft and card.status == "draft" and card.split == "kb"
+                if accepted or draft:
                     self.cards.append(card)
 
         self.equipment_db = equipment_db or []

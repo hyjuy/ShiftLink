@@ -1,0 +1,75 @@
+{
+  "card_id": "K-1023",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "RT",
+  "component": "승강부 하강 솔레노이드 밸브",
+  "scenario": "S2",
+  "title": "올린 리프트가 서서히 내려앉을 때 하강 솔레노이드 코일을 떼어 다운 밸브 카트리지를 판정한다",
+  "symptom": "올려 둔 리프트가 버튼을 누르지 않았는데도 서서히 내려앉는다.",
+  "know_how": "하강 솔레노이드 코일을 떼어 낸 상태에서 리프트가 위치를 유지하는지 다시 확인한다. 코일을 떼어도 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요시 교체한다. 위치를 유지하면 카트리지 분리 단계로 진행하지 않는다. 원문은 이 결과의 후속 조치를 제시하지 않으므로 Autoquip에 점검 지시를 요청한다. 배관·호스·피팅 누유와 체크밸브 미착좌도 같은 증상의 가능한 원인이다. 하중을 내리고 시저 기구를 차단하기 전에는 플랫폼 아래로 들어가지 않는다.",
+  "rationale": "830CC 고장 분석표의 Lift raises, then lowers back slowly 항목은 코일 제거 후에도 리프트가 위치를 유지하지 못할 때 카트리지를 세척하거나 교체하도록 지시한다. 코일 제거 후 위치를 유지하는 경우의 조치는 제시하지 않는다. 이 경우 Autoquip에 문의한다는 문구는 막다른 분기를 해소하기 위해 카드에 추가한 에스컬레이션이며, 원문의 직접 지시가 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "830CC p.32 DANGER는 하중을 내리고 시저 기구를 열린 위치에서 확실히 차단하기 전 플랫폼 아래로 들어가지 말라고 경고한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S23"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:25:27+09:00",
+    "sources": [
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "p.32 / Troubleshooting Analysis – Lift raises, then lowers back slowly, DANGER | https://autoquip.com/wp-content/uploads/2018/03/830CC-V1.pdf",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "preconditions": [
+          "플랫폼 아래로 들어가지 않는다."
+        ],
+        "action": "하강(Down) 솔레노이드 코일을 떼어 낸 뒤 리프트가 위치를 유지하는지 다시 확인한다.",
+        "expected_result": "유지하지 못하면 ST-02로 간다.",
+        "stop_conditions": [
+          "유지하면 원문에 이 분기의 후속 조치는 없다. 카트리지를 분리하지 않고 Autoquip에 점검 지시를 요청한다."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "preconditions": [
+          "1단계에서 코일 제거 상태로도 리프트가 내려앉았다."
+        ],
+        "action": "코일을 떼어도 위치를 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요시 교체한다.",
+        "expected_result": "조치 후 위치 유지 여부를 다시 확인한다. 원문은 조치 후 합격 기준을 따로 제시하지 않는다. 문제가 계속되면 Autoquip에 후속 지시를 요청한다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Autoquip Trojan Coil Car 830CC의 하강 밸브 계통에 한정한다. 원문 표는 원인 목록이며 이 카드의 순서는 첫 항목의 조건문만 따른다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

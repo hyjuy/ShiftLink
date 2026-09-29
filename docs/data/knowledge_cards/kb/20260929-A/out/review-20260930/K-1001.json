@@ -1,0 +1,131 @@
+{
+  "card_id": "K-1001",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "HPU",
+  "component": "주 베인펌프",
+  "scenario": "S2",
+  "title": "기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기",
+  "symptom": "펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.",
+  "know_how": "1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다.",
+  "rationale": "Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S01"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:24:33+09:00",
+    "sources": [
+      {
+        "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+        "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps",
+        "document_version": "Vickers General Product Support GBB9003 (8/84)"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "펌프 출구 압력계에서 압력이 읽히는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "압력이 없으면(NO) ST-02로 진행한다.",
+        "stop_conditions": [
+          "압력이 읽히면(YES) 이 카드 범위가 아니다. Algo A.1 우측 분기(정상 계통압 여부 확인)로 넘어간다."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "펌프 축이 회전하는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "회전하면(YES) ST-03으로 진행한다.",
+        "stop_conditions": [
+          "축이 돌지 않으면(NO) 펌프 구동부를 점검한다(Check drive to pump)."
+        ]
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "계통이 무부하(off-loaded) 상태인지 확인한다.",
+        "preconditions": [],
+        "expected_result": "무부하가 아니면(NO) ST-04로 진행한다.",
+        "stop_conditions": [
+          "무부하이면(YES) 계통에 부하를 건다(Load system)."
+        ]
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "action": "액추에이터 동작이 일어나고 있는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "동작이 없으면(NO) ST-05로 진행한다.",
+        "stop_conditions": [
+          "동작이 있으면(YES) 동작이 멈춘 상태에서 압력을 확인한다(Check pressure when motion has stopped)."
+        ]
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "action": "구동 회전 방향이 맞는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "맞으면(YES) ST-06으로 진행한다.",
+        "stop_conditions": [
+          "틀리면(NO) 회전 방향을 바로잡는다(Correct rotation)."
+        ]
+      },
+      {
+        "step_id": "ST-06",
+        "order": 6,
+        "action": "펌프가 회전 방향에 맞게 조립되었는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "맞으면(YES) ST-07로 진행한다.",
+        "stop_conditions": [
+          "아니면(NO) 펌프를 올바르게 재조립한다(Reassemble pump correctly)."
+        ]
+      },
+      {
+        "step_id": "ST-07",
+        "order": 7,
+        "action": "펌프가 프라이밍되었는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "프라이밍되어 있으면(YES) ST-08로 진행한다.",
+        "stop_conditions": [
+          "아니면(NO) 펌프를 프라이밍한다(Prime pump)."
+        ]
+      },
+      {
+        "step_id": "ST-08",
+        "order": 8,
+        "action": "릴리프 밸브 탱크 라인으로 유량이 흐르는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "흐르면(YES) 릴리프 밸브를 점검하고, 흐르지 않으면(NO) 펌프를 점검한다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Vickers Algo A.1 흐름도의 '출구 압력 없음' 분기에 한정한다. 대상 HPU 펌프 모델 적합성은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

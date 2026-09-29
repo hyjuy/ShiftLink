@@ -1,0 +1,55 @@
+{
+  "card_id": "K-1018",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T5",
+  "equipment": "RT",
+  "component": "승강부(시저 리프트) 정비용 잠금장치",
+  "scenario": "S1",
+  "title": "하중을 실은 채로 리프트를 차단하지 않는다 — 하중 제거·양쪽 잠금·주전원 차단 후에만 플랫폼 아래로",
+  "symptom": null,
+  "know_how": "코일카 플랫폼 아래로 들어가거나 정비하기 전에는 먼저 플랫폼의 하중을 모두 내린다. 하중이 실린 상태에서는 리프트를 차단하지 않는다. 플랫폼을 올려 정비용 잠금장치 두 개를 모두 걸고, 하강 스위치를 몇 초 더 눌러 압력이 다 빠져 플랫폼이 잠금장치에만 얹히게 한다. 차단한 뒤에는 누가 켜지 못하도록 주전원 스위치를 끈다. 잠금장치가 휘었거나 손상됐거나 제 기능을 못 하면 바로 교체한다.",
+  "rationale": "830CC 설명서 Lift Blocking Instructions(p.12)의 1~5단계와 DANGER 문구, DANGERS 절(p.5)이 하중 제거와 확실한 차단 전 플랫폼 아래 진입을 금지한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "830CC 설명서 Lift Blocking Instructions 1~5단계가 하중 제거·양쪽 잠금장치 체결·압력 해제·주전원 차단의 차단 절차를, 같은 절 첫 번째 DANGER와 DANGERS 절(인쇄 p.5)이 하중 제거와 열린 위치에서의 확실한 차단('securely blocked in the open position') 전 플랫폼 아래 진입 금지를, 두 번째 DANGER가 휘거나 손상되거나 작동하지 않는 잠금장치의 즉시 교체를 제시한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S18"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:25:27+09:00",
+    "sources": [
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.12 / Lift Blocking Instructions 1~6, DANGER",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      },
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.5 / Dangers, Warnings & Cautions 'Do not work under lift without maintenance device'",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Autoquip Trojan Coil Car 830CC의 리프트 차단 절차에 한정한다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

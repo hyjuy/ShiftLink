@@ -1,0 +1,96 @@
+{
+  "card_id": "K-1012",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "CV",
+  "component": "벨트",
+  "scenario": "S2",
+  "title": "직접구동형 소형 벨트 컨베이어 사행 보정은 수평부터 맞추고 치우친 쪽 장력 나사를 조금씩",
+  "symptom": "벨트 교체 후 또는 사용 중 벨트가 중앙을 벗어나 한쪽으로 쏠린다.",
+  "know_how": "벨트 교체 후나 사용 중 벨트가 중앙을 벗어나면 컨베이어를 운전 상태로 두고, 수평을 맞춘 뒤 치우친 쪽 장력 조정 나사를 조금씩 조이며 벨트 주행을 계속 눈으로 보면서 단계적으로 보정한다.",
+  "rationale": "MISUMI 매뉴얼 §8.3·§8.3.1(직접구동형 컨베이어)이 보정 순서와 각 단계의 관찰 기준을 제시하고, 한쪽만 과하게 조이면 벨트에 과부하가 걸려 벨트 가장자리가 손상될 수 있다고 경고한다. 이 절차는 직접구동형에 한정하며, 센터 드라이브·일체형 드라이브는 §8.3.2·§8.3.3을 따른다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S12"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T15:00:00+09:00",
+    "sources": [
+      {
+        "source_id": "conveyor-manual-0323-en.pdf",
+        "locator": "PDF p.62 / 인쇄 p.58 / 8.3 Alignment Correction, 8.3.1 Direct Drive Conveyors",
+        "document_version": "Conveyor Systems - Operating Instructions, December 2022"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "컨베이어를 평평하고 안정된 면에 놓고, 필요하면 바닥에 고정한다.",
+        "expected_result": "컨베이어가 평평하고 안정된 면에 놓인다.",
+        "preconditions": [
+          "정렬 보정은 컨베이어가 운전 중인 상태에서 한다(§8.3)."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "수준기로 컨베이어 수평을 맞춘다.",
+        "expected_result": "컨베이어가 수평이다."
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "벨트가 쏠리는 쪽 장력 조정 나사의 너트를 풀고 나사를 천천히 조인다.",
+        "expected_result": "쏠림이 줄어들고, 벨트가 반대쪽으로 움직이지 않는다.",
+        "stop_conditions": [
+          "너무 조여 벨트가 반대쪽으로 움직이면 나사를 다시 푼다.",
+          "한쪽만 과하게 조이지 않는다(벨트 과부하로 가장자리 손상 위험). 보정은 벨트를 계속 보면서 단계적으로 한다."
+        ]
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "action": "벨트 주행을 관찰하고, 쏠림이 남아 있으면 3단계를 반복한다.",
+        "expected_result": "벨트 쏠림이 더 이상 보이지 않는다."
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "action": "너트를 조인다.",
+        "expected_result": "장력 조정 나사가 보정된 위치에 고정된다."
+      },
+      {
+        "step_id": "ST-06",
+        "order": 6,
+        "action": "컨베이어를 한동안 운전해 벨트 주행을 안정시킨다.",
+        "expected_result": "벨트 주행이 안정된다."
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "MISUMI 직접구동(direct drive)형 컨베이어의 정렬 보정에 한정한다. 센터 드라이브·일체형 드라이브는 조정 나사 위치가 다르다(§8.3.2·§8.3.3). 조임 양 수치는 원문에 없다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

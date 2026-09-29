@@ -1,0 +1,123 @@
+{
+  "card_id": "K-1005",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "HPU",
+  "component": "축압기",
+  "scenario": "S2",
+  "title": "축압기 프리차지·충전 압력 확인 순서 — Algo J.1",
+  "symptom": "축압기가 계통에서 제 역할을 하는지 의심되어 가스 프리차지와 충전 압력 확인이 필요하다.",
+  "know_how": "1) 제조사 지침대로 가스측에 시험 게이지를 단다. 2) 축압기의 유체를 배출하고 가스압(프리차지)을 확인한다. 틀리면 질소로 정상 압력까지 충전한다. 3) 펌프를 정지하고 축압기를 배출한다. 4) 유체 라인에 압력계를 단다. 5) 축압기를 유체 계통 압력까지 충전한다. 6) 압력 읽음이 맞는지 본다. 틀리면 7) 압력 스위치 설정, 8) 릴리프 밸브·보상기 조정을 차례로 확인한다.",
+  "rationale": "Vickers 흐름도 Algo J.1(축압기 계통 시험)은 가스측 게이지 설치→프리차지 확인→펌프 정지·배출→유체측 게이지→충전→압력 확인→압력 스위치→릴리프/보상기 순으로 분기와 조치를 명시한다. 프리차지·계통 압력의 정상값은 원문에 없고 제조사 지침을 따르게 되어 있다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S05"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:24:33+09:00",
+    "sources": [
+      {
+        "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+        "locator": "PDF p.28 / 인쇄 p.28 / Algo J.1 System test for accumulators",
+        "document_version": "Vickers General Product Support GBB9003 (8/84)"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "제조사 지침에 따라 축압기 가스측에 시험 게이지를 설치한다.",
+        "preconditions": [],
+        "expected_result": "가스측 압력을 읽을 수 있게 된다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "축압기에서 유체를 배출하고 가스 압력을 확인한다.",
+        "preconditions": [],
+        "expected_result": "프리차지 압력이 맞으면(YES) ST-03으로 진행한다.",
+        "stop_conditions": [
+          "프리차지 압력이 틀리면(NO) 질소로 정상 압력까지 충전한다(Charge with nitrogen to correct pressure)."
+        ]
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "펌프를 정지하고 축압기를 배출한다.",
+        "preconditions": [],
+        "expected_result": "축압기가 배출된 상태가 된다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "action": "유체 라인에 압력계를 설치한다.",
+        "preconditions": [],
+        "expected_result": "유체측 압력을 읽을 수 있게 된다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "action": "축압기를 유체 계통 압력까지 충전한다.",
+        "preconditions": [],
+        "expected_result": "축압기가 계통 압력으로 충전된다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-06",
+        "order": 6,
+        "action": "압력 읽음이 맞는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "틀리면(NO) ST-07로 진행한다.",
+        "stop_conditions": [
+          "맞으면(YES) 목록의 다음 장치를 점검한다."
+        ]
+      },
+      {
+        "step_id": "ST-07",
+        "order": 7,
+        "action": "압력 스위치 설정이 맞는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "맞으면(YES) ST-08로 진행한다.",
+        "stop_conditions": [
+          "틀리면(NO) 압력 스위치를 재조정한다."
+        ]
+      },
+      {
+        "step_id": "ST-08",
+        "order": 8,
+        "action": "릴리프 밸브 또는 보상기가 올바르게 조정되어 있는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "맞으면(YES) 제조사 지침에 따라 축압기를 점검한다. 틀리면(NO) 릴리프 밸브 또는 보상기를 재조정한다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Vickers Algo J.1에 한정한다. 대상 HPU 축압기의 프리차지 기준값과 가스측 작업 절차는 해당 제조사 지침으로 확인해야 한다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

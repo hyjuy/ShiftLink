@@ -1,0 +1,95 @@
+{
+  "card_id": "K-1021",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "RT",
+  "component": "승강 실린더 속도 퓨즈(velocity fuse)",
+  "scenario": "S2",
+  "title": "리프트가 내려가지 않고 속도 퓨즈 잠김이 의심될 때의 4단계 복구 순서",
+  "symptom": "하강 버튼을 눌러도 리프트가 내려가지 않는다. 속도 퓨즈 잠김은 원문이 제시한 가능한 원인 중 하나다.",
+  "know_how": "1) 리프트의 하중을 내리고 피팅·호스 등 유압 부품의 누유와 손상을 확인한다. 누유·손상이 보이면 복구 조작을 진행하지 않고 Autoquip에 후속 지시를 요청한다. 2) 이상이 없으면 상승 버튼을 몇 초 눌러 실린더에 압을 건 뒤, 떼자마자 하강 버튼을 누른다. 내려가기 시작하면 완전히 내려올 때까지 계속 누른다. 3) 내려가지 않으면 약 10~15분 기다려 유압 계통의 압력이 균형을 이루게 한 뒤 하강 버튼을 누른다. 그래도 완전히 내려오지 않으면 Autoquip에 후속 지시를 요청한다. 4) 완전히 내려온 경우 하강 버튼을 약 60초 눌러 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 여러 번 반복한다. 속도 퓨즈는 분리하지 않는다. 문제가 해결되지 않으면 Autoquip에 문의한다.",
+  "rationale": "830CC 고장 분석표의 Lift won’t lower 항목은 속도 퓨즈 잠김에 대해 1~4단계와, 해당 조치로 해결되지 않을 때 Autoquip에 연락하라는 지시를 제시한다. 원문 2단계는 누유·손상이 없을 때만 진행한다. 누유·손상 발견 시 Autoquip에 문의한다는 문구는 카드에 추가한 안전상 후속 조치이며, 원문 1단계의 직접 지시는 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "830CC p.34는 속도 퓨즈를 분리하려 하지 말라고 지시한다. p.6 WARNING은 정비 블록으로 리프트를 지지하고 승강 실린더·호스의 유압을 모두 제거하기 전 속도 퓨즈 분리를 금지한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S21"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:25:27+09:00",
+    "sources": [
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "p.34 / Troubleshooting Analysis – Lift won’t lower, velocity fuse steps 1~4 | https://autoquip.com/wp-content/uploads/2018/03/830CC-V1.pdf",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      },
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "p.6 / Dangers, Warnings & Cautions, WARNING | https://autoquip.com/wp-content/uploads/2018/03/830CC-V1.pdf",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "preconditions": [
+          "속도 퓨즈를 분리하지 않는다.",
+          "플랫폼 아래로 들어가지 않는다."
+        ],
+        "action": "리프트의 하중을 모두 내리고 피팅·호스 등 유압 부품의 누유와 손상을 육안 점검한다.",
+        "expected_result": "누유·손상이 없으면 ST-02로 간다.",
+        "stop_conditions": [
+          "누유·손상이 있으면 ST-02의 복구 조작을 진행하지 않고 Autoquip에 후속 지시를 요청한다. 문의 조치는 원문 1단계에 명시되지 않은 카드의 안전상 에스컬레이션이다."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "상승 버튼을 몇 초 눌러 실린더에 압을 건 뒤, 버튼을 떼자마자 하강 버튼을 누른다.",
+        "expected_result": "내려가기 시작하면 완전히 내려올 때까지 하강 버튼을 계속 누른 후 ST-04로 간다. 내려가지 않으면 ST-03으로 간다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "약 10~15분 기다려 유압 계통의 압력이 균형을 이루게 한 뒤 하강 버튼을 누른다.",
+        "expected_result": "완전히 내려오면 ST-04로 간다.",
+        "stop_conditions": [
+          "그래도 내려오지 않으면 ST-04를 진행하지 않고 Autoquip에 후속 조치 지시를 요청한다."
+        ]
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "escalation_target": "제조사(Autoquip) — 위 단계로 해결되지 않을 때 추가 조치 지시를 받는다.",
+        "action": "완전히 내려온 상태에서 하강 버튼을 약 60초 눌러 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 여러 번 반복한다.",
+        "expected_result": "공기 빼기 조치를 수행했다. 원문은 완료 판정 기준을 제시하지 않는다. 문제가 해결되지 않으면 Autoquip에 문의한다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Autoquip Trojan Coil Car 830CC의 속도 퓨즈 잠김 대응에 한정한다. 원문은 4단계 완료 판정 기준을 주지 않는다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

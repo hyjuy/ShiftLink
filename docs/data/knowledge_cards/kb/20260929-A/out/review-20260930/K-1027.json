@@ -1,0 +1,93 @@
+{
+  "card_id": "K-1027",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S2",
+  "title": "감속기 누유 위치별 확인: 커버·오일실·드레인·브리더 원인에 따라 조치한다",
+  "symptom": "감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·밸브·브리더 플러그에서 오일이 샌다.",
+  "know_how": "1) 운전 초기 24시간의 오일실 소량 누유인지 먼저 구분한다. 2) 커버·플랜지 가스켓 누유가 의심되면 해당 볼트를 조이고 관찰한다. 계속 새면 SEW‑EURODRIVE 고객 서비스에 문의한다. 3) 별도 원인으로, 오일실 립 뒤집힘이 의심되면 감속기를 벤트하고 관찰한다. 계속 새면 고객 서비스에 문의한다. 오일실 손상·마모가 의심되면 바로 문의한다. 4) 드레인·브리더 누유는 오일 과다 여부와 브리더 장착 상태에 따라 유면과 장착 상태를 바로잡는다. 그래도 계속 새면 사용을 보류하고 SEW‑EURODRIVE에 후속 지시를 요청한다.",
+  "rationale": "제조사 고장표는 누유 위치와 가능한 원인별 조치, 길들이기 중 정상 누유 예외를 제시한다. 커버 볼트 조임과 오일실 립 뒤집힘에 대한 벤트는 연속 절차가 아닌 별도 분기다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S27"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T15:00:00+09:00",
+    "sources": [
+      {
+        "source_id": "26867443.pdf",
+        "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Oil leaking (각주 1 포함) | https://download.sew-eurodrive.com/download/pdf/26867443.pdf",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "preconditions": [],
+        "action": "감속기가 길들이기 단계인 운전 초기 24시간에 있고, 누유가 오일실에서 나오는 소량의 오일·그리스인지 확인한다.",
+        "expected_result": "두 조건에 모두 해당하면 원문의 정상 누유 예외로 구분한다. 그 밖의 누유는 위치와 가능한 원인에 맞는 분기로 간다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "preconditions": [],
+        "escalation_target": "SEW-EURODRIVE 고객 서비스",
+        "action": "커버판·하우징 커버·베어링 커버·장착 플랜지의 가스켓 누유가 의심되면 해당 볼트를 조이고 감속기를 관찰한다.",
+        "expected_result": "누유 여부를 다시 확인한다.",
+        "stop_conditions": [
+          "조인 뒤에도 계속 새면 SEW‑EURODRIVE 고객 서비스에 문의한다. 3단계의 벤트로 이어서 진행하지 않는다."
+        ]
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "preconditions": [],
+        "escalation_target": "SEW-EURODRIVE 고객 서비스",
+        "action": "오일실 립 뒤집힘이 의심되면 감속기를 벤트하고 관찰한다. 오일실 손상·마모가 의심되면 고객 서비스에 문의한다.",
+        "expected_result": "벤트 후 누유 여부를 다시 확인한다.",
+        "stop_conditions": [
+          "계속 새면 고객 서비스에 문의한다."
+        ]
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "preconditions": [],
+        "action": "드레인 플러그·밸브 또는 브리더 플러그에서 새면, 오일이 과다한 경우 유면을 교정한다. 브리더 장착이 잘못된 경우 브리더 플러그를 올바르게 장착하고 유면을 교정한다.",
+        "expected_result": "교정 후 누유 여부를 다시 확인한다.",
+        "stop_conditions": [
+          "계속 새면 사용을 보류하고 SEW‑EURODRIVE에 후속 지시를 요청한다."
+        ]
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

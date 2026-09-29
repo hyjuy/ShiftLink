@@ -1,0 +1,103 @@
+{
+  "card_id": "K-1015",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "CV",
+  "component": "컨베이어 계통(전원·안전장치)",
+  "scenario": "S2",
+  "title": "운전 중 고장 대응 순서: 전원 분리·재기동 방지·표지 후 조치, 시운전 뒤 인계",
+  "symptom": "운전 중 컨베이어에 오작동·고장이 발생한다.",
+  "know_how": "운전 중 고장이 나면 전원 분리 → 재기동 방지 → 경고 표지 → 자격자 고장 조치 → 시운전 재기동 → 운전원 인계 순서로 진행한다. 고장이 고쳐지고 기능시험을 마치기 전에는 운전을 시작하지 않는다.",
+  "rationale": "MISUMI 매뉴얼 §10.1이 이 순서를, §10.2가 전기설비 작업 전 전원 차단 확인을, §10.1 아래 경고문이 재기동 시 가동부 위치 불명·축적 에너지 방출 위험과 기능시험 후 운전 개시 조건을 제시하고, §10 도입부의 경고·위험 박스와 기술 지원 안내가 잔류 전기에너지 위험, 인가·자격 인원의 작업, 우발적·무단 재기동 방지, 반복 고장 보고와 제조사 문의를 제시한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S15"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T15:00:00+09:00",
+    "sources": [
+      {
+        "source_id": "conveyor-manual-0323-en.pdf",
+        "locator": "PDF p.69 / 인쇄 p.65 / 10. Fault Clearance, 10.1·10.2",
+        "document_version": "Conveyor Systems - Operating Instructions, December 2022"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "주전원 스위치를 꺼 컨베이어 시스템을 전원에서 분리한다.",
+        "expected_result": "전원이 꺼져 있음이 확인된다(§10.2 3).",
+        "stop_conditions": [
+          "전원을 분리해도 케이블·전기설비에 잔류 전기에너지가 남을 수 있으므로 전기설비 조치는 인가된 인원만 한다."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "우발적·무단 재기동이 되지 않도록 컨베이어 시스템을 고정·확보한다.",
+        "expected_result": "재기동 방지 상태가 된다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "컨베이어 시스템에 경고 표지를 붙인다.",
+        "expected_result": "설비에 경고 표지가 붙어 있다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "escalation_target": "자격자(반복 고장) / 제조사(자체 해결 불가)",
+        "action": "훈련받고 설비를 잘 아는 자격자가 고장을 찾아 조치한다(증상별 확인 항목은 §10.3 FAQ).",
+        "expected_result": "고장이 해결된다.",
+        "stop_conditions": [
+          "고장이 반복되면 즉시 자격자에게 알린다.",
+          "자체적으로 해결할 수 없으면 제조사에 문의한다."
+        ]
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "action": "안전장치를 점검한 뒤 시운전(test run)으로 재기동한다.",
+        "expected_result": "고장이 해결되었고 기능시험이 수행되었다.",
+        "stop_conditions": [
+          "고장이 고쳐지고 기능시험을 마치기 전에는 운전을 시작하지 않는다(가동부 위치 불명, 급기동·축적 에너지 방출 위험)."
+        ]
+      },
+      {
+        "step_id": "ST-06",
+        "order": 6,
+        "action": "컨베이어 시스템을 운전 인원에게 인계한다.",
+        "expected_result": "설비가 운전 인원에게 넘겨진다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "MISUMI 컨베이어 시스템의 운전 중 고장 처리 순서에 한정한다. 고장별 원인 확인은 §10.3 FAQ를 따르며 이 카드에 포함하지 않는다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

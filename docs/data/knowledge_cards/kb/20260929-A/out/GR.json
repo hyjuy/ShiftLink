@@ -2,7 +2,7 @@
  {
   "card_id": "K-1024",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "GR",
   "component": "감속 기어박스",
@@ -39,7 +39,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -52,19 +52,19 @@
  {
   "card_id": "K-1025",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "GR",
-  "component": "입력측 베어링",
+  "component": "감속기 베어링부",
   "scenario": "S2",
-  "title": "감속기 베어링부 온도가 높을 때 오일 → 교환 이력 → 베어링 순으로 확인한다",
+  "title": "감속기 베어링부 온도가 높을 때 오일 상태와 베어링을 확인한다",
   "symptom": "감속기 베어링부 온도가 평소보다 높다.",
-  "know_how": "1) 전원 차단·재기동 방지 후 식힌다. 2) 오일 사이트글라스로 유면이 중간인지 본다. 부족하거나 많으면 맞춘다. 3) 마지막 오일 교환 시점을 확인하고 필요하면 교환한다. 4) 드레인 플러그에서 오일을 조금 받아 점도·상태를 본다. 오염이 심하면 주기와 상관없이 교환한다. 5) 오일에 문제가 없으면 베어링을 점검하고 필요하면 교체하며 고객 서비스에 문의한다.",
-  "rationale": "제조사 고장표는 베어링부 온도 과다의 원인을 오일 부족·과다, 오일 노후, 베어링 손상 세 가지로 들고 각각의 조치를 제시한다. 유면·오일 점검 방법은 §8.3에 있다.",
+  "know_how": "1) 모터 전원을 차단하고 재기동을 방지한 뒤 감속기가 식을 때까지 기다린다. 2) 사이트글라스가 있으면 유면이 중간에 있는지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 부족하거나 많으면 유면을 맞춘다. 3) 마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 본다. 필요하면 오일을 교환한다. 오염이 심하면 제조사는 교환 주기와 관계없이 교환을 권고한다. 4) 베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다.",
+  "rationale": "제조사 고장표는 베어링부 온도 과다의 가능한 원인으로 오일 부족·과다, 오일 노후, 베어링 손상을 각각 제시한다. 유면과 오일 상태를 확인하는 방법은 §8.3에 있다. 고장표의 원인들은 각각의 분기이며, 하나를 반드시 마친 뒤 다음 원인으로 넘어가는 제조사 지정 절차는 아니다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": true,
-  "safety_basis": "26867443.pdf p.42–43 §8.3: 오일 점검·교환 전 모터 전원을 차단하고 의도치 않은 재기동을 막아야 하며, 감속기가 식을 때까지 기다려야 한다(화상 위험).",
+  "safety_basis": "26867443.pdf p.42–43 §8.3은 오일 점검·교환 전에 모터 전원을 차단하고 의도치 않은 재기동을 방지하며, 화상을 피하도록 감속기가 식을 때까지 기다리도록 지시한다.",
   "conflict_group": null,
   "confidence": 0.0,
   "provenance": {
@@ -79,72 +79,72 @@
    "sources": [
     {
      "source_id": "26867443.pdf",
-     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Bearing point temperatures too high",
+     "locator": "p.45 §9.1 Bearing point temperatures too high",
      "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
     },
     {
      "source_id": "26867443.pdf",
-     "locator": "PDF p.42–43 / 인쇄 p.42–43 / §8.3 Checking the oil level, Checking the oil",
+     "locator": "p.42–43 §8.3 Checking the oil level, Checking the oil",
      "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
    "model_version": "claude-opus-5-5",
    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
      "step_id": "ST-01",
      "order": 1,
-     "action": "모터 전원을 차단하고 의도치 않은 재기동을 막는 조치를 한다. 감속기가 식을 때까지 기다린다(화상 위험).",
      "preconditions": [],
-     "expected_result": "모터가 재기동될 수 없는 상태이고 감속기가 식어 있다.",
+     "action": "모터 전원을 차단하고 재기동을 방지한다. 감속기가 식을 때까지 기다린다.",
+     "expected_result": "전원 차단·재기동 방지와 냉각을 확인했다.",
      "stop_conditions": [
-      "감속기가 뜨거운 상태면 점검을 시작하지 않는다(화상 위험)."
+      "감속기가 뜨거우면 점검을 시작하지 않는다."
      ]
     },
     {
      "step_id": "ST-02",
      "order": 2,
-     "action": "오일 사이트글라스로 유면을 확인하고, 부족하거나 많으면 맞춘다.",
      "preconditions": [
       "ST-01 완료"
      ],
-     "expected_result": "유면이 사이트글라스 중간에 있다.",
+     "action": "사이트글라스가 있으면 유면이 중간인지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 부족하거나 많으면 유면을 맞춘다.",
+     "expected_result": "해당 유면 확인 장치의 기준에 맞는다.",
      "stop_conditions": []
     },
     {
      "step_id": "ST-03",
      "order": 3,
-     "action": "마지막 오일 교환 시점을 확인하고 필요하면 오일을 교환한다.",
      "preconditions": [
       "ST-01 완료"
      ],
-     "expected_result": "오일 교환 이력이 확인되고 교환 주기를 넘긴 오일은 교환되었다.",
+     "action": "마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 확인한다.",
+     "expected_result": "교환 이력과 오일 상태가 확인되었다.",
      "stop_conditions": []
     },
     {
      "step_id": "ST-04",
      "order": 4,
-     "action": "드레인 플러그에서 오일을 조금 받아 점도와 상태를 본다.",
      "preconditions": [
       "ST-01 완료"
      ],
-     "expected_result": "오일 오염이 심하지 않다. 심하게 오염되었으면 정비 주기와 상관없이 오일을 교환한다.",
+     "action": "교환 이력과 오일 상태를 바탕으로 필요하면 오일을 교환한다. 오염이 심하면 교환 주기와 관계없이 교환하라는 제조사 권고를 따른다.",
+     "expected_result": "필요한 오일 조치가 이루어졌다.",
      "stop_conditions": []
     },
     {
      "step_id": "ST-05",
      "order": 5,
-     "action": "오일 쪽에 이상이 없으면 베어링을 점검하고 필요하면 교체한다.",
      "preconditions": [],
-     "expected_result": "베어링 손상 여부가 판단되었다.",
-     "stop_conditions": [],
-     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+     "escalation_target": "SEW-EURODRIVE 고객 서비스",
+     "action": "베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다.",
+     "expected_result": "베어링 상태와 후속 조치가 확인되었다.",
+     "stop_conditions": []
     }
    ]
   },
@@ -159,7 +159,7 @@
  {
   "card_id": "K-1026",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "GR",
   "component": "감속 기어박스",
@@ -196,7 +196,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -209,15 +209,15 @@
  {
   "card_id": "K-1027",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "GR",
   "component": "감속 기어박스",
   "scenario": "S2",
-  "title": "감속기 누유 위치별 확인 순서: 커버·실부는 조임 후 관찰, 드레인·브리더는 유면과 브리더 장착",
-  "symptom": "감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·브리더 플러그에서 오일이 샌다.",
-  "know_how": "1) 신품 운전 초기(24시간)의 오일실 소량 누유는 정상이므로 먼저 구분한다. 2) 커버판·커버·플랜지 쪽이면 해당 볼트를 조이고 관찰한다. 3) 계속 새면 감속기를 벤트하고(오일실 립 뒤집힘) 다시 관찰한다. 여전히 새거나 오일실 손상·마모면 고객 서비스에 문의한다. 4) 드레인 플러그·브리더 플러그 쪽이면 유면을 맞추고 브리더 플러그가 올바른 위치에 장착됐는지 확인한다.",
-  "rationale": "제조사 고장표가 누유 위치별 원인과 조치, 길들이기 중 정상 누유 예외를 함께 제시한다.",
+  "title": "감속기 누유 위치별 확인: 커버·오일실·드레인·브리더 원인에 따라 조치한다",
+  "symptom": "감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·밸브·브리더 플러그에서 오일이 샌다.",
+  "know_how": "1) 운전 초기 24시간의 오일실 소량 누유인지 먼저 구분한다. 2) 커버·플랜지 가스켓 누유가 의심되면 해당 볼트를 조이고 관찰한다. 계속 새면 SEW‑EURODRIVE 고객 서비스에 문의한다. 3) 별도 원인으로, 오일실 립 뒤집힘이 의심되면 감속기를 벤트하고 관찰한다. 계속 새면 고객 서비스에 문의한다. 오일실 손상·마모가 의심되면 바로 문의한다. 4) 드레인·브리더 누유는 오일 과다 여부와 브리더 장착 상태에 따라 유면과 장착 상태를 바로잡는다. 그래도 계속 새면 사용을 보류하고 SEW‑EURODRIVE에 후속 지시를 요청한다.",
+  "rationale": "제조사 고장표는 누유 위치와 가능한 원인별 조치, 길들이기 중 정상 누유 예외를 제시한다. 커버 볼트 조임과 오일실 립 뒤집힘에 대한 벤트는 연속 절차가 아닌 별도 분기다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": false,
@@ -236,56 +236,58 @@
    "sources": [
     {
      "source_id": "26867443.pdf",
-     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Oil leaking (각주 1 포함)",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Oil leaking (각주 1 포함) | https://download.sew-eurodrive.com/download/pdf/26867443.pdf",
      "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
    "model_version": "claude-opus-5-5",
    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
      "step_id": "ST-01",
      "order": 1,
-     "action": "감속기가 길들이기 단계(운전 24시간 이내)이고 누유가 오일실의 소량 오일·그리스인지 확인한다.",
      "preconditions": [],
-     "expected_result": "길들이기 중 소량 누유면 정상으로 보고 관찰을 이어간다. 그 밖의 누유면 다음 단계로 간다.",
+     "action": "감속기가 길들이기 단계인 운전 초기 24시간에 있고, 누유가 오일실에서 나오는 소량의 오일·그리스인지 확인한다.",
+     "expected_result": "두 조건에 모두 해당하면 원문의 정상 누유 예외로 구분한다. 그 밖의 누유는 위치와 가능한 원인에 맞는 분기로 간다.",
      "stop_conditions": []
     },
     {
      "step_id": "ST-02",
      "order": 2,
-     "action": "누유가 커버판·하우징 커버·베어링 커버·장착 플랜지 쪽이면 해당 커버 볼트를 조이고 감속기를 관찰한다.",
      "preconditions": [],
-     "expected_result": "누유가 멈춘다.",
+     "escalation_target": "SEW-EURODRIVE 고객 서비스",
+     "action": "커버판·하우징 커버·베어링 커버·장착 플랜지의 가스켓 누유가 의심되면 해당 볼트를 조이고 감속기를 관찰한다.",
+     "expected_result": "누유 여부를 다시 확인한다.",
      "stop_conditions": [
-      "조인 뒤에도 계속 새면 고객 서비스에 문의한다."
-     ],
-     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+      "조인 뒤에도 계속 새면 SEW‑EURODRIVE 고객 서비스에 문의한다. 3단계의 벤트로 이어서 진행하지 않는다."
+     ]
     },
     {
      "step_id": "ST-03",
      "order": 3,
-     "action": "오일실 립이 뒤집혔을 가능성이 있으면 감속기를 벤트하고 관찰한다.",
      "preconditions": [],
-     "expected_result": "누유가 멈춘다.",
+     "escalation_target": "SEW-EURODRIVE 고객 서비스",
+     "action": "오일실 립 뒤집힘이 의심되면 감속기를 벤트하고 관찰한다. 오일실 손상·마모가 의심되면 고객 서비스에 문의한다.",
+     "expected_result": "벤트 후 누유 여부를 다시 확인한다.",
      "stop_conditions": [
-      "계속 새거나 오일실이 손상·마모되었으면 고객 서비스에 문의한다."
-     ],
-     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+      "계속 새면 고객 서비스에 문의한다."
+     ]
     },
     {
      "step_id": "ST-04",
      "order": 4,
-     "action": "누유가 드레인 플러그·밸브나 브리더 플러그 쪽이면 유면을 맞추고 브리더 플러그를 올바른 위치에 장착한다.",
      "preconditions": [],
-     "expected_result": "유면이 적정하고 브리더 플러그가 장착 위치에 맞게 달려 있어 누유가 멈춘다.",
-     "stop_conditions": []
+     "action": "드레인 플러그·밸브 또는 브리더 플러그에서 새면, 오일이 과다한 경우 유면을 교정한다. 브리더 장착이 잘못된 경우 브리더 플러그를 올바르게 장착하고 유면을 교정한다.",
+     "expected_result": "교정 후 누유 여부를 다시 확인한다.",
+     "stop_conditions": [
+      "계속 새면 사용을 보류하고 SEW‑EURODRIVE에 후속 지시를 요청한다."
+     ]
     }
    ]
   },
@@ -300,7 +302,7 @@
  {
   "card_id": "K-1028",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "GR",
   "component": "감속 기어박스",
@@ -337,7 +339,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -350,7 +352,7 @@
  {
   "card_id": "K-1029",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "GR",
   "component": "감속 기어박스",
@@ -394,7 +396,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -407,7 +409,7 @@
  {
   "card_id": "K-1030",
   "version": "1.0-draft-KB-20260929-A",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "GR",
   "component": "감속 기어박스",
@@ -444,7 +446,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],

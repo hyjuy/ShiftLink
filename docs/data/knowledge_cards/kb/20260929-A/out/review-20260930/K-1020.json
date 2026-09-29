@@ -1,0 +1,65 @@
+{
+  "card_id": "K-1020",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "RT",
+  "component": "승강부 유압 파워유닛 릴리프 밸브",
+  "scenario": "S1",
+  "title": "상승 버튼을 누를 때 끽 하는 날카로운 소리가 나면 릴리프가 열린 것이다 — 몇 초 넘게 계속 누르지 않는다",
+  "symptom": "상승 버튼을 누르는 동안 파워유닛 밸브에서 끽 하는 날카로운 소리(squealing)가 나고 플랫폼은 더 올라가지 않는다.",
+  "know_how": "상승 버튼을 누르고 있는데 밸브에서 끽 하는 날카로운 소리가 나면 파워유닛이 릴리프 상태로 돌고 있다는 뜻이다. 원문은 리프트가 최상단 물리 스토퍼에 닿았거나, 업스톱 밸브가 유로를 막았거나, 과적 상태일 때 펌프 오일이 릴리프로 넘어간다고 설명한다. 릴리프 상태로 몇 초 넘게 운전하지 않는다. 리프트가 올라가지 않거나 끝까지 올라간 상태에서는 상승 버튼을 계속 누르지 않는다. 계속 누르면 모터나 펌프가 영구 손상될 수 있다.",
+  "rationale": "830CC 설명서 CAUTION 문구(p.7, p.17, p.28)가 릴리프 작동 시 소리를 직접 기술하고 수 초 이상 운전을 금지하며, p.6·p.17 CAUTION이 상승 불능·최상단 도달 시 상승 버튼 지속 조작을 금지한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S20"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:25:27+09:00",
+    "sources": [
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.7 / Dangers, Warnings & Cautions – CAUTION(relief, squealing sound)",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      },
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.28 / General Maintenance – Lift Up-Stop Valve, CAUTION",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      },
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.6 / Dangers, Warnings & Cautions – CAUTION(UP button, not raising or fully raised)",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      },
+      {
+        "source_id": "830CC-V1.pdf",
+        "locator": "PDF p.17 / Operating Instructions – CAUTION(UP button), CAUTION(relief, squealing sound)",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Autoquip Trojan Coil Car 830CC의 유압 파워유닛에 한정한다. 프로젝트 RT 승강 실린더 유압 구성과의 대응은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

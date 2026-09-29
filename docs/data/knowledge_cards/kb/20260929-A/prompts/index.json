@@ -1,0 +1,67 @@
+{
+ "batch_id": "KB-20260929-A",
+ "seed": 20260929,
+ "template_sha256": "655ae0b32c513ab9e2b3e7528a2acfda56efd76c5d8f06f89546395b963222f3",
+ "prompts": {
+  "HPU": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+   "sha256": "189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+   "card_ids": [
+    "K-1001",
+    "K-1002",
+    "K-1003",
+    "K-1004",
+    "K-1005",
+    "K-1006",
+    "K-1007",
+    "K-1008"
+   ]
+  },
+  "CV": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md",
+   "sha256": "55a5055cc649958cf19bec8b0a76214e1df54e6441bfe966432cd548de05e46d",
+   "card_ids": [
+    "K-1009",
+    "K-1010",
+    "K-1011",
+    "K-1012",
+    "K-1013",
+    "K-1014",
+    "K-1015",
+    "K-1016"
+   ]
+  },
+  "RT": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+   "sha256": "794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
+   "card_ids": [
+    "K-1017",
+    "K-1018",
+    "K-1019",
+    "K-1020",
+    "K-1021",
+    "K-1022",
+    "K-1023"
+   ]
+  },
+  "GR": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "sha256": "744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+   "card_ids": [
+    "K-1024",
+    "K-1025",
+    "K-1026",
+    "K-1027",
+    "K-1028",
+    "K-1029",
+    "K-1030"
+   ]
+  }
+ },
+ "dispatch": {
+  "agent_type": "general-purpose",
+  "model": "claude-opus-5-5",
+  "dispatched_at": "2026-09-29",
+  "wrapper": "프롬프트 파일 {path} (sha256 {sha256})를 Read로 읽고, 그 내용을 이번 작업 지시로 삼아 그대로 수행하라. 파일의 frontmatter는 기록용이다."
+ }
+}

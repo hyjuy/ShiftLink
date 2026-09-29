@@ -1,0 +1,438 @@
+[
+  {
+    "card_id": "K-1017",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T1",
+    "equipment": "RT",
+    "component": "롤러 세트(롤러 베어링)",
+    "scenario": "S1",
+    "title": "롤러 컨베이어에서 소음·끽끽·휘파람 소리가 나면 즉시 세우고 롤러 베어링을 의심한다",
+    "symptom": "운전 중 롤러 컨베이어에서 평소와 다른 소음, 끽끽거리는 소리 또는 휘파람 같은 소리가 난다.",
+    "know_how": "롤러 컨베이어 운전 중 평소에 없던 소음, 끽끽거리는 소리, 휘파람 같은 소리가 나면 원문 고장표는 원인으로 롤러 베어링 결함을 먼저 들고, 그다음 모터나 기어박스 손상을 든다. 롤러 베어링이면 해당 롤러를 교체하고, 모터·기어박스면 RollerDrive 설명서에 따라 분석한다. 원문 안전 절은 이상 소음이 나면 모듈을 즉시 세우고 우발 재기동을 막은 뒤, 자격 있는 인원이 원인을 확인하도록 정한다. 월간 소음 점검, 연간 주행 소음 점검 항목도 있다.",
+    "rationale": "Interroll SH 1110 설명서 고장표(p.52)가 '소음 발생/끽끽/휘파람 소리'를 롤러 베어링 결함·모터 또는 기어박스 손상과 연결하고, 안전 절(p.11)이 이상 소음 시 즉시 정지를 요구한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "SH 1110 p.11: 이상 소음(unusual noise)이 있으면 모듈을 즉시 정지하고 우발적으로 기동되지 않게 한 뒤 자격 인원이 원인을 확인한다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S17"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+          "locator": "PDF p.52 / Troubleshooting 표 'Noise development/squeaking/whistling'",
+          "document_version": "Interroll Roller Conveyor SH 1110, T. Nr. 1131919, Version 1.0 (06/2022) en"
+        },
+        {
+          "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+          "locator": "PDF p.11 / Safety – Dangers 'Stop the module at once … unusual noise'",
+          "document_version": "Interroll Roller Conveyor SH 1110, T. Nr. 1131919, Version 1.0 (06/2022) en"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": null,
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Interroll SH 1110 롤러 컨베이어의 고장표·안전 절에 한정한다. 프로젝트 RT 롤러 모델과의 일치는 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1018",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T5",
+    "equipment": "RT",
+    "component": "승강부(시저 리프트) 정비용 잠금장치",
+    "scenario": "S1",
+    "title": "하중을 실은 채로 리프트를 차단하지 않는다 — 하중 제거·양쪽 잠금·주전원 차단 후에만 플랫폼 아래로",
+    "symptom": null,
+    "know_how": "코일카 플랫폼 아래로 들어가거나 정비하기 전에는 먼저 플랫폼의 하중을 모두 내린다. 하중이 실린 상태에서는 리프트를 차단하지 않는다. 플랫폼을 올려 정비용 잠금장치 두 개를 모두 걸고, 하강 스위치를 몇 초 더 눌러 압력이 다 빠져 플랫폼이 잠금장치에만 얹히게 한다. 차단한 뒤에는 누가 켜지 못하도록 주전원 스위치를 끈다. 잠금장치가 휘었거나 손상됐거나 제 기능을 못 하면 바로 교체한다.",
+    "rationale": "830CC 설명서 Lift Blocking Instructions(p.12)의 1~5단계와 DANGER 문구, DANGERS 절(p.5)이 하중 제거와 확실한 차단 전 플랫폼 아래 진입을 금지한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "830CC p.12: 'Never block the lift when loaded', 'NEVER go under the platform until the load is removed and the lift is securely blocked', 차단 시 주전원 차단. p.5 DANGER: 정비 장치 없이 리프트 아래 작업 금지.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S18"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.12 / Lift Blocking Instructions 1~6, DANGER",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        },
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.5 / Dangers, Warnings & Cautions 'Do not work under lift without maintenance device'",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": null,
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Autoquip Trojan Coil Car 830CC의 리프트 차단 절차에 한정한다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1019",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T5",
+    "equipment": "RT",
+    "component": "승강부(시저 리프트) 정비 장치",
+    "scenario": "S1",
+    "title": "코일카 아래 작업이나 유량 조절 전에는 좌우 정비 장치를 둘 다 끼운다",
+    "symptom": null,
+    "know_how": "코일카 아래에서 작업할 때는 짐을 내리고 테이블을 끝까지 올린 뒤 좌우 정비 장치 두 개를 모두 끼우고, 롤러가 장치에 확실히 얹히도록 내린다. 한쪽만 쓰면 안 된다. 잠깐만 들어가는 경우에도 매번 이 절차를 반복한다. 유량 조절 밸브를 조정할 때도 먼저 테이블을 올리고 정비 장치 두 개를 끼운다. 하강 버튼을 누른 채로 유량 조절을 시도하면 테이블이 갑자기 떨어질 수 있다.",
+    "rationale": "Southworth 설명서 Safe Servicing(p.7), Figure 1 경고(p.8), HAZARDS(p.9)가 좌우 장치를 모두 쓰도록 반복 경고하고, 유량 조절 시 두 장치 삽입과 하강 버튼 조작 금지를 명시한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "Coil-Cars p.8~9 WARNING: 'Both the left and right devices … must be used to support the table safely'. p.9: 유량 조절 시 테이블을 올리고 두 장치를 삽입하며, 하강 버튼을 누른 채 조정하지 말 것(테이블 급강하 위험).",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S19"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "Coil-Cars.pdf",
+          "locator": "PDF p.7~8 / Safe Servicing of the Lift, Figure 1 WARNING",
+          "document_version": "Southworth Coil Car Owner's Manual (Powered Lift), July 2015"
+        },
+        {
+          "source_id": "Coil-Cars.pdf",
+          "locator": "PDF p.9 / HAZARDS – WARNING(flow control, both maintenance devices)",
+          "document_version": "Southworth Coil Car Owner's Manual (Powered Lift), July 2015"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": null,
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Southworth Coil Car(Powered Lift)의 정비 안전 절차에 한정한다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1020",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T1",
+    "equipment": "RT",
+    "component": "승강부 유압 파워유닛 릴리프 밸브",
+    "scenario": "S1",
+    "title": "상승 버튼을 누를 때 끽 하는 날카로운 소리가 나면 릴리프가 열린 것이다 — 몇 초 넘게 계속 누르지 않는다",
+    "symptom": "상승 버튼을 누르는 동안 파워유닛 밸브에서 끽 하는 날카로운 소리(squealing)가 나고 플랫폼은 더 올라가지 않는다.",
+    "know_how": "상승 버튼을 누르고 있는데 밸브에서 끽 하는 날카로운 소리가 나면 파워유닛이 릴리프 상태로 돌고 있다는 뜻이다. 원문은 리프트가 최상단 물리 스토퍼에 닿았거나, 업스톱 밸브가 유로를 막았거나, 과적 상태일 때 펌프 오일이 릴리프로 넘어간다고 설명한다. 릴리프 상태로 몇 초 넘게 운전하지 않는다. 리프트가 올라가지 않거나 끝까지 올라간 상태에서는 상승 버튼을 계속 누르지 않는다. 계속 누르면 모터나 펌프가 영구 손상될 수 있다.",
+    "rationale": "830CC 설명서 CAUTION 문구(p.7, p.17, p.28)가 릴리프 작동 시 소리를 직접 기술하고 수 초 이상 운전을 금지하며, p.6·p.17 CAUTION이 상승 불능·최상단 도달 시 상승 버튼 지속 조작을 금지한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": false,
+    "safety_basis": null,
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S20"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.7 / Dangers, Warnings & Cautions – CAUTION(relief, squealing sound)",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        },
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.28 / General Maintenance – Lift Up-Stop Valve, CAUTION",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": null,
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Autoquip Trojan Coil Car 830CC의 유압 파워유닛에 한정한다. 프로젝트 RT 승강 실린더 유압 구성과의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1021",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T3",
+    "equipment": "RT",
+    "component": "승강 실린더 속도 퓨즈(velocity fuse)",
+    "scenario": "S2",
+    "title": "리프트가 내려가지 않고 속도 퓨즈 잠김이 의심될 때의 4단계 복구 순서",
+    "symptom": "하강 버튼을 눌러도 리프트가 내려가지 않는다. 솔레노이드 코일 쪽 원인이 아니면 속도 퓨즈 잠김이 의심된다.",
+    "know_how": "1) 하중을 내리고 피팅·호스·유압 부품의 누유와 손상을 본다. 2) 이상이 없으면 상승 버튼을 몇 초 눌러 실린더에 압을 걸고, 떼자마자 하강 버튼을 누른다. 내려가기 시작하면 끝까지 계속 누른다. 3) 그래도 내려가지 않으면 약 10~15분 기다려 압을 균형시킨 뒤 하강 버튼을 끝까지 누른다. 4) 완전히 내려오면 하강 버튼을 약 60초 눌러 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 몇 번 반복한다. 속도 퓨즈는 분리하지 않는다. 이 단계로 해결되지 않으면 제조사 지시를 받는다.",
+    "rationale": "830CC 고장 분석표 'Lift won't lower' 항목(p.34)이 속도 퓨즈 잠김 시 번호 붙은 1~4단계와 최종 연락처를 제시한다. p.6 WARNING은 차단·압력 제거 전 속도 퓨즈 분리를 금지한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "830CC p.34: 속도 퓨즈를 분리하려 하지 말 것. p.6 WARNING: 정비 블록이 리프트를 지지하고 실린더·호스의 유압이 모두 제거되기 전에는 속도 퓨즈 분리 금지(부상·사망 위험).",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S21"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.34 / Troubleshooting Analysis – 'Lift won't lower' velocity fuse steps 1~4",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        },
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.6 / Dangers, Warnings & Cautions – WARNING(velocity fuse removal)",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": {
+      "steps": [
+        {
+          "step_id": "ST-01",
+          "order": 1,
+          "action": "리프트 위 하중을 모두 내리고 피팅·호스 등 유압 부품의 누유와 손상을 육안 점검한다.",
+          "preconditions": [
+            "속도 퓨즈를 분리하지 않는다.",
+            "플랫폼 아래로 들어가지 않는다."
+          ],
+          "expected_result": "누유나 손상이 보이지 않는다.",
+          "stop_conditions": [
+            "누유나 손상이 보이면 2단계로 넘어가지 않는다(원문은 이상이 없을 때만 2단계를 진행한다)."
+          ]
+        },
+        {
+          "step_id": "ST-02",
+          "order": 2,
+          "action": "상승 버튼을 몇 초 눌러 실린더에 압을 건 뒤, 버튼을 떼자마자 하강 버튼을 누른다.",
+          "expected_result": "리프트가 내려가기 시작하면 하강 버튼을 계속 눌러 완전히 내린다."
+        },
+        {
+          "step_id": "ST-03",
+          "order": 3,
+          "action": "2단계로 내려가지 않으면 약 10~15분 기다려 유압 계통 압력이 균형을 이루게 한 뒤 하강 버튼을 누른다.",
+          "expected_result": "리프트가 완전히 내려온다."
+        },
+        {
+          "step_id": "ST-04",
+          "order": 4,
+          "action": "완전히 내려온 상태에서 하강 버튼을 약 60초 누르고 있어 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 여러 번 반복한다.",
+          "expected_result": "유압 계통의 공기가 빠진다(원문은 완료 판정 기준을 제시하지 않는다).",
+          "escalation_target": "제조사(Autoquip) — 위 단계로 해결되지 않을 때 추가 조치 지시를 받는다."
+        }
+      ]
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Autoquip Trojan Coil Car 830CC의 속도 퓨즈 잠김 대응에 한정한다. 원문은 4단계 완료 판정 기준을 주지 않는다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1022",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T1",
+    "equipment": "RT",
+    "component": "승강부 유압 파워유닛 펌프·모터",
+    "scenario": "S1",
+    "title": "상승이 안 되면서 모터가 웅웅거리기만 하거나 퓨즈가 끊기면 펌프 고착을 의심한다",
+    "symptom": "상승 버튼을 눌러도 리프트가 오르지 않고, 모터가 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어진다.",
+    "know_how": "상승 버튼을 눌러도 리프트가 올라가지 않는데 모터가 돌지 못하고 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어지면 펌프가 고착됐을 수 있다. 원문은 펌프를 떼어 내 손으로 돌아가는지 확인하고, 하우징에 균열이 있는지 보라고 한다. 이 상태에서 상승 버튼을 계속 누르지 않는다. 원문은 계속 누르면 모터·펌프가 영구 손상될 수 있다고 경고한다.",
+    "rationale": "830CC 고장 분석표 'Lift does not raise' 마지막 항목(p.33)이 모터 웅웅거림·퓨즈 끊김을 펌프 고착과 연결하고 확인 방법을 적는다. p.6 CAUTION이 상승 불능 시 상승 버튼 지속 조작을 금지한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": false,
+    "safety_basis": null,
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S22"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.33 / Troubleshooting Analysis – 'Lift does not raise' (pump seized)",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        },
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.6 / Dangers, Warnings & Cautions – CAUTION(UP button)",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": null,
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Autoquip Trojan Coil Car 830CC의 파워유닛에 한정한다. 같은 증상의 다른 원인(단상 운전, 저전압 등)은 원문 표의 다른 항목이다. 프로젝트 RT 구성과의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1023",
+    "version": "1.0-draft-KB-20260929-A",
+    "grade": "L0",
+    "tacit_type": "T3",
+    "equipment": "RT",
+    "component": "승강부 하강 솔레노이드 밸브",
+    "scenario": "S2",
+    "title": "올린 리프트가 서서히 내려앉을 때 하강 솔레노이드 코일을 떼어 보고 다운 밸브 카트리지를 판정한다",
+    "symptom": "올려 둔 리프트가 버튼을 누르지 않았는데도 서서히 내려앉거나, 하강 속도가 매우 느리다.",
+    "know_how": "1) 하강 솔레노이드 코일을 떼어 낸 상태에서 리프트가 위치를 유지하는지 다시 본다. 2) 코일을 떼어도 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요하면 교체한다. 같은 증상의 다른 원인으로 원문은 배관·호스·피팅 누유, 체크밸브 불량, 이물·손상으로 인한 하강 솔레노이드 오작동, 눌린 배관, 저온에서 오일 점도가 높아진 경우를 함께 든다. 점검 중에도 차단하지 않은 플랫폼 아래로 들어가지 않는다.",
+    "rationale": "830CC 고장 분석표 'Lift raises, then lowers back slowly' 첫 항목(p.32)이 코일 제거 확인과 그 결과에 따른 카트리지 조치를 조건문으로 적는다. 같은 쪽 DANGER가 차단 전 플랫폼 아래 진입을 금지한다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "830CC p.32 DANGER: 하중을 내리고 시저 기구를 열린 위치로 확실히 차단하기 전에는 플랫폼 아래로 들어가지 않는다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260929-A:seed=20260929",
+        "slot:S23"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+        {
+          "source_id": "830CC-V1.pdf",
+          "locator": "PDF p.32 / Troubleshooting Analysis – 'Lift raises, then lowers back slowly', DANGER",
+          "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "draft",
+    "type_payload": {
+      "steps": [
+        {
+          "step_id": "ST-01",
+          "order": 1,
+          "action": "하강(Down) 솔레노이드 코일을 떼어 낸 뒤 리프트가 위치를 유지하는지 다시 관찰한다.",
+          "preconditions": [
+            "플랫폼 아래로 들어가지 않는다."
+          ],
+          "expected_result": "코일을 뗀 상태에서 리프트가 위치를 유지하는지 여부가 확인된다."
+        },
+        {
+          "step_id": "ST-02",
+          "order": 2,
+          "action": "코일을 떼어도 리프트가 위치를 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하고, 필요하면 교체한다.",
+          "preconditions": [
+            "1단계에서 코일 제거 상태로도 리프트가 내려앉았다."
+          ],
+          "expected_result": "카트리지 세척·교체 후 리프트가 올린 위치를 유지한다(원문은 조치 후 확인 기준을 따로 적지 않는다)."
+        }
+      ]
+    },
+    "generalization_evidence": {
+      "supporting_event_ids": [],
+      "contradicting_event_ids": [],
+      "generalization_scope": "Autoquip Trojan Coil Car 830CC의 하강 밸브 계통에 한정한다. 원문 표는 원인 목록이며 이 카드의 순서는 첫 항목의 조건문만 따른다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+      "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처는 source_registry 미등록(approved_scope 없음)이고, 프로젝트 RT 설비와 원문 제품의 대응도 미확인이다. 사람의 내용·안전 검토와 현장 적용성 평가는 미완료다."
+    },
+    "safety_review": null
+  }
+]

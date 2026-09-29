@@ -111,12 +111,15 @@ def test_request_payload_follows_documented_options(monkeypatch):
     assert sent["stream"] is False
     # 문자열 "-1"이면 Ollama가 400을 내므로 타입까지 고정한다.
     assert sent["keep_alive"] == -1 and isinstance(sent["keep_alive"], int)
-    assert sent["options"] == {"temperature": 0, "num_ctx": 2048}
+    # num_predict 없으면 JSON 모드 생성이 끝나지 않아 타임아웃까지 멈춘다(9/29 Jetson 3/20건).
+    assert sent["options"] == {"temperature": 0, "num_ctx": 2048, "num_predict": 256}
     # A의 validate_model_output과 같은 제약을 모델 쪽에도 걸어야 재시도가 줄어든다.
     schema = sent["format"]
     assert schema["required"] == ["answer", "cited_card_ids"]
     assert schema["additionalProperties"] is False
     assert schema["properties"]["answer"]["minLength"] == 1
+    # answer가 출력 상한 안에서 스스로 닫혀야 잘린 JSON이 생기지 않는다.
+    assert schema["properties"]["answer"]["maxLength"] == 160
     cited = schema["properties"]["cited_card_ids"]
     assert cited["minItems"] == 1 and cited["uniqueItems"] is True
     assert cited["items"]["pattern"] == r"^K-\d{4}$"

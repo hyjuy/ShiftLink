@@ -1,1 +1,0 @@
-{"nodes": [{"id": "docs_design_mes_operator_design_2d_map", "label": "2D Equipment Map", "file_type": "concept", "source_file": "docs/design/mes-operator-design.md", "rationale": "Recommended UI structure using 2D relations over 3D models for clarity in sensor-based diagnostics."}], "edges": [], "hyperedges": []}

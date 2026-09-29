@@ -1,1 +1,0 @@
-{"nodes": [{"id": "docs_sources_safety_public_incidents_readme_md", "label": "README.md (Public Incidents)", "file_type": "document", "source_file": "docs/sources/safety/public_incidents/README.md", "rationale": "Classifies public safety incidents and excludes them from verified action data due to lack of confirmed countermeasures."}], "edges": [], "hyperedges": []}

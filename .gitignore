@@ -38,17 +38,9 @@ seeds/*
 eval/results/*
 !eval/results/.gitkeep
 
-# graphify 지식그래프 — 공유본만 커밋, PC별 경로 파일·백업은 제외 (graphify-out/README.md)
+# graphify 생성 산출물은 로컬에 두고 사용법 README만 추적한다.
 graphify-out/*
 !graphify-out/README.md
-!graphify-out/graph.json
-!graphify-out/graph.html
-!graphify-out/GRAPH_REPORT.md
-!graphify-out/manifest.json
-!graphify-out/cost.json
-!graphify-out/.graphify_labels.json
-!graphify-out/.graphify_labels.json.sig
-!graphify-out/cache/
 
 # 제조사·민간 원문 PDF는 재배포 권한 미확인 → 로컬 보관, 공유 드라이브로 전달 (docs/sources/manual/download-status.md)
 docs/sources/manual/bosch-*.pdf

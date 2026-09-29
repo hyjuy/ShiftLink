@@ -1,1 +1,0 @@
-{"nodes": [{"id": "docs_testing_mock_mes_tdd", "label": "Mock MES Integration TDD", "file_type": "document", "source_file": "docs/testing/mock-mes.tdd.md", "rationale": "Evidence for deterministic simulation and observation isolation."}], "edges": [], "hyperedges": []}

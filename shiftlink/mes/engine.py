@@ -328,10 +328,6 @@ class MesEngine:
         random = Random(f"{self.run.seed}:{self._sequence}:{equipment.equipment_id}:{signal_spec.signal}")
         value = (float(low) + float(high)) / 2 + (random.random() - 0.5) * (float(high) - float(low)) * 0.08
 
-        # zero_when_stopped
-        if signal_spec.zero_when_stopped and self._states()[0][equipment.equipment_id][0] != "running":
-            return 0.0
-
         # signal_effects from scenario
         if self._scenario != "normal":
             spec = self._scenario_by_id.get(self._scenario)
@@ -342,6 +338,10 @@ class MesEngine:
                     if (not verified and equipment.equipment_id == self._find_equipment_with_capability(spec.cause_capability)
                             and effect.capability in equipment.capabilities and effect.signal == signal_spec.signal):
                         return round(effect.value, 3)
+
+        # Preserve an injected, observable fault reading even when the fault stops the drive.
+        if signal_spec.zero_when_stopped and self._states()[0][equipment.equipment_id][0] != "running":
+            return 0.0
 
         return round(value, 3)
 

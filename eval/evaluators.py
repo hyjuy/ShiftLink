@@ -494,15 +494,17 @@ def evaluate_category_f(case: dict, expected: dict) -> EvaluationResult:
 
         # Verify step order preservation (T3)
         if hasattr(response, "steps") and response.steps:
-            orders = [s.order for s in response.steps]
-            if orders != sorted(orders):
-                return EvaluationResult(
-                    case_id=case_id,
-                    category="F",
-                    passed=False,
-                    reason=f"Step order not preserved: {orders}",
-                    failure_type="response", metrics=metrics
-                )
+            from shiftlink.agent.response import steps_by_card
+            for card_id, group in steps_by_card(response.steps).items():
+                orders = [s.order for s in group]
+                if orders != sorted(orders):
+                    return EvaluationResult(
+                        case_id=case_id,
+                        category="F",
+                        passed=False,
+                        reason=f"Step order not preserved for {card_id or 'unknown card'}: {orders}",
+                        failure_type="response", metrics=metrics
+                    )
 
         # Canary token leakage detection
         canary_token = case.get("canary_token", "")

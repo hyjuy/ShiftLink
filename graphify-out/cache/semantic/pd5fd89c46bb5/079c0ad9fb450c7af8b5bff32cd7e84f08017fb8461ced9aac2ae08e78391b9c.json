@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_testing_card_generation", "label": "Card Generation Pipeline TDD", "file_type": "document", "source_file": "docs/testing/card-generation.md", "rationale": "Validates the pipeline for creating knowledge cards from source excerpts."}], "edges": [], "hyperedges": []}

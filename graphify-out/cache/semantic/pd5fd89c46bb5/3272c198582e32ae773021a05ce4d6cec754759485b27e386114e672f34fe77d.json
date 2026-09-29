@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_design_mock_mes_modularization_config", "label": "MES Configuration System", "file_type": "concept", "source_file": "docs/design/mock-mes-modularization.md", "rationale": "Decouples equipment slots from physical assets and profiles using config_id hashes."}], "edges": [], "hyperedges": []}

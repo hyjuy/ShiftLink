@@ -1,0 +1,1 @@
+{"nodes": [{"id": "ui_industrial_agent", "label": "UI Industrial Agent", "file_type": "code", "source_file": ".claude/agents/ui_industrial.md", "rationale": "Specialized agent for industrial handheld UI design."}], "edges": [], "hyperedges": []}

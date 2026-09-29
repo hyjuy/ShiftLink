@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_testing_no_knowledge_tdd", "label": "No Knowledge Handling TDD", "file_type": "document", "source_file": "docs/testing/no-knowledge.tdd.md", "rationale": "Ensures the agent skips LLM calls when no relevant knowledge cards are found."}], "edges": [], "hyperedges": []}

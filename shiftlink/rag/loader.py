@@ -10,7 +10,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from shiftlink.agent.schemas import KnowledgeCard
-from shiftlink.rag.retrieval import InMemoryToolProvider
+from shiftlink.rag.retrieval import KB_MIN_TOP_RELEVANCE, InMemoryToolProvider
 
 _CARD_KEYS = ("knowledge_cards", "cards")
 _STORE_KEYS = {
@@ -33,7 +33,9 @@ class CardLoad:
         return len(self.provider.cards)
 
 
-def load_card_provider(path: str | Path, *, include_draft: bool = False) -> CardLoad:
+def load_card_provider(
+    path: str | Path, *, include_draft: bool = False, min_top_relevance: int = KB_MIN_TOP_RELEVANCE,
+) -> CardLoad:
     """Read a card JSON file or a directory of them.
 
     A file may be a card object, a list of cards, or an object with
@@ -41,6 +43,7 @@ def load_card_provider(path: str | Path, *, include_draft: bool = False) -> Card
     ``equipment_types``, ``handover``, and ``checklist`` lists are passed
     through to the provider. Only accepted/kb/L1 cards stay loaded,
     unless ``include_draft`` is set, which also keeps draft/kb cards.
+    ``min_top_relevance`` is the KB "no matching card" floor; pass 0 to always rank.
     """
     root = Path(path)
     files = _json_files(root)
@@ -51,7 +54,8 @@ def load_card_provider(path: str | Path, *, include_draft: bool = False) -> Card
         cards.extend(file_cards)
         for name, rows in file_stores.items():
             stores[name].extend(rows)
-    provider = InMemoryToolProvider(cards=cards, include_draft=include_draft, **stores)
+    provider = InMemoryToolProvider(cards=cards, include_draft=include_draft,
+                                    min_top_relevance=min_top_relevance, **stores)
     return CardLoad(provider=provider, seen=len(cards))
 
 

@@ -17,6 +17,7 @@ from shiftlink.edge.ollama import (
     OUTPUT_SCHEMA,
     OllamaModel,
     build_messages,
+    _parse_output,
     card_context,
 )
 from shiftlink.rag.loader import load_card_provider
@@ -267,9 +268,15 @@ def test_enum_is_candidates_in_rank_order_without_safety_references(monkeypatch)
     assert model.last_call["candidate_card_ids"] == ["K-0201", "K-0200"]
     user = sent["messages"][1]["content"]
     assert "K-0201: 펌프 소음 / 소리가 크다" in user
-    # 안전 참고 카드는 보이되 후보 블록 뒤에 따로, 인용 금지로 나간다.
-    assert user.index("안전 참고 카드") < user.index('"card_id": "K-0108"')
+    # 안전 참고 카드는 후보 블록 뒤에 제목 한 줄만, 인용 금지로 나간다(본문 없음).
+    refs = user[user.index("안전 참고 카드"):]
+    assert refs.count("K-0108") == 1 and '"card_id": "K-0108"' not in user
     assert "증상·제목이 가장 일치하는 카드를 먼저 인용하라" in sent["messages"][0]["content"]
+
+
+def test_duplicate_citations_are_collapsed_in_order():
+    body = {"message": {"content": '{"answer": "a", "cited_card_ids": ["K-0201", "K-0200", "K-0201"]}'}}
+    assert _parse_output(body)["cited_card_ids"] == ["K-0201", "K-0200"]
 
 
 def test_safety_card_found_by_search_stays_a_candidate(monkeypatch):

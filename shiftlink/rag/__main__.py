@@ -23,6 +23,7 @@ from shiftlink.edge.ollama import (
     build_messages,
 )
 from shiftlink.rag.loader import load_card_provider
+from shiftlink.rag.retrieval import KB_MIN_TOP_RELEVANCE
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -43,9 +44,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="accepted/kb/L1 외에 draft/kb 카드도 검색에 싣는다",
     )
+    parser.add_argument("--min-relevance", type=int, default=KB_MIN_TOP_RELEVANCE,
+                        help="1위 카드 관련도가 이보다 낮으면 '해당 지식 없음'(0이면 항상 검색)")
     args = parser.parse_args(argv)
 
-    loaded = load_card_provider(args.cards, include_draft=args.include_draft)
+    loaded = load_card_provider(args.cards, include_draft=args.include_draft,
+                                min_top_relevance=args.min_relevance)
     bind_tool_provider(loaded.provider)
     payload = {
         "question": args.question,

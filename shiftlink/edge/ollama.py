@@ -172,10 +172,9 @@ def build_messages(
     parts.append(f"답변 후보 색인:\n{index}")
     parts.append(f"답변 후보 카드:\n{json.dumps(candidates, ensure_ascii=False, indent=1)}")
     if references:
-        parts.append(
-            "안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\n"
-            f"{json.dumps(references, ensure_ascii=False, indent=1)}"
-        )
+        # 제목만 준다. 본문을 주면 모델이 질문 대신 안전 카드를 요약했다(9/29 exaone 측정).
+        titles = "\n".join(f"{card.get('card_id')}: {card.get('title', '')}" for card in references)
+        parts.append(f"안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\n{titles}")
     user = "\n\n".join(parts)
     if retry:
         user += retry_prompt(candidate_ids)
@@ -296,5 +295,6 @@ def _parse_output(body: dict[str, Any]) -> dict[str, Any]:
         raise ValueError(f"answer가 비어 있지 않은 문자열이 아님: {parsed!r}")
     if not isinstance(cited, list) or not all(isinstance(item, str) for item in cited):
         raise ValueError(f"cited_card_ids가 문자열 배열이 아님: {parsed!r}")
-    # 인용 ID의 실존 대조는 파이프라인 검증기 몫이다. 여기서는 형식만 본다.
-    return {"answer": answer, "cited_card_ids": cited}
+    # Ollama 문법은 uniqueItems를 강제하지 못한다. 중복만으로 재시도하지 않게 순서를 지켜 한 번씩 남긴다
+    # (9/29 exaone 재시도 8/20의 주원인). 인용 ID의 실존 대조는 파이프라인 검증기 몫이다.
+    return {"answer": answer, "cited_card_ids": list(dict.fromkeys(cited))}

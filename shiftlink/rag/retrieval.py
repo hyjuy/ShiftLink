@@ -153,6 +153,10 @@ def _search_tokens(card: KnowledgeCard) -> set[str]:
 
 # 제목·증상이 질문과 겹치면 다른 필드보다 이 배수만큼 더 친다(안전 여부와 무관).
 SYMPTOM_TITLE_WEIGHT = 2
+# 실제 KB에서 1위 관련도가 이보다 낮으면 "답할 카드 없음"으로 본다(load_card_provider가 건다).
+# 9/30 평가 개발용 30건: 답 있는 11건의 1위는 모두 5 이상, 답 없는 19건 중 11건은 5 미만.
+# ponytail: 토큰 겹침 점수라 긴 질문일수록 점수가 커진다. 오판이 잦으면 질문 길이로 정규화하거나 임베딩 유사도로 바꾼다.
+KB_MIN_TOP_RELEVANCE = 5
 
 
 def _stems(tokens: set[str]) -> set[str]:
@@ -216,6 +220,7 @@ class InMemoryToolProvider:
         checklist_db: list[dict[str, Any]] | None = None,
         equipment_types: list[dict[str, Any]] | None = None,
         include_draft: bool = False,
+        min_top_relevance: int = 0,
     ) -> None:
         """
         Initialize with KB cards and optional equipment/handover/checklist data.
@@ -226,10 +231,12 @@ class InMemoryToolProvider:
             handover_db: Optional existing handovers.
             checklist_db: Optional checklists.
             equipment_types: Catalog equipment_type_id/type_code records.
+            min_top_relevance: search_cards returns nothing when the best card scores lower.
 
         Raises:
             ValueError: If dev or sealed cards are mixed in (gate enforcement).
         """
+        self.min_top_relevance = min_top_relevance
         self.cards: list[KnowledgeCard] = []
         if cards:
             for card in cards:
@@ -310,8 +317,11 @@ class InMemoryToolProvider:
                     yield (-score, card.card_id, card, status)
 
         # Select before serializing: large provenance/payloads only copied for top-k.
+        top = nsmallest(k, candidates(), key=lambda item: item[:2])
+        if top and -top[0][0] < self.min_top_relevance:
+            return []  # weakest-possible match only: let the pipeline answer "no knowledge"
         results = []
-        for _, _, card, status in nsmallest(k, candidates(), key=lambda item: item[:2]):
+        for _, _, card, status in top:
             card_dict = card.model_dump(mode="json")
             card_dict["condition_status"] = status
             results.append(card_dict)

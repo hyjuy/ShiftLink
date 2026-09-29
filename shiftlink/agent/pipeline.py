@@ -83,11 +83,13 @@ class FixedPipeline:
                     card for card in tool_results[key] if not has_canary(card)
                 ]
             tool_results["dropped_canary_card_ids"] = sorted(dropped)
-        if routed.mode == "query" and not tool_results["cards"]:
-            return PipelineResult(
-                mode=routed.mode, tool_results=tool_results,
-                output=AgentResponse(mode=routed.mode, no_knowledge=True),
-            )
+        # No ranked card answers the question -> "no knowledge" without a model call.
+        # Applicable safety cards are still shown; they warn but do not answer (9/30 eval).
+        if routed.mode == "query" and not tool_results["ranked_cards"]:
+            output = build_response(routed.mode, routed.request, tool_results)
+            output.cited_card_ids = []
+            output.no_knowledge = True
+            return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
         model_output, model_error, retryable = self._call_model(
             mode=routed.mode, request=routed.request, tool_results=tool_results
         )

@@ -140,7 +140,7 @@ def test_empty_handover_still_calls_model():
     assert result.output.no_knowledge is False
 
 
-def test_safety_only_search_is_not_treated_as_empty():
+def test_safety_only_search_is_no_knowledge_but_keeps_safety_notice():
     class SafetyOnlyProvider(InMemoryToolProvider):
         def search_cards(self, **kwargs):
             return []
@@ -148,15 +148,22 @@ def test_safety_only_search_is_not_treated_as_empty():
     calls = []
     result = FixedPipeline(
         tools=SafetyOnlyProvider(cards=[make_card_t1(safety_flag=True)]),
-        model=lambda **kw: calls.append(kw) or {
-            "answer": "안전 카드에 근거한 안내입니다.",
-            "cited_card_ids": [kw["tool_results"]["cards"][0]["card_id"]],
-        },
+        model=lambda **kw: calls.append(kw),
     ).run(dict(question="test", line_id="L1", eq_id="HPU"))
-    assert len(calls) == 1
+    assert calls == []
     assert result.tool_results["ranked_cards"] == []
-    assert result.output.no_knowledge is False
+    assert result.output.no_knowledge is True
+    assert result.output.cited_card_ids == []
     assert result.output.safety_notices[0].card_id == "K-0001"
+    rendered = render_response(result.output)
+    assert "해당 지식 없음" in rendered and "K-0001" in rendered
+
+
+def test_min_top_relevance_empties_weak_search():
+    card = make_card_t1()
+    assert InMemoryToolProvider(cards=[card]).search_cards(query="zzz", equipment_ids=["HPU"])
+    assert InMemoryToolProvider(cards=[card], min_top_relevance=1).search_cards(
+        query="zzz", equipment_ids=["HPU"]) == []
 
 
 @pytest.mark.parametrize("collision", ["duplicate_id", "id_matches_other_code"])

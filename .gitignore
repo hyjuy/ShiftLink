@@ -38,7 +38,13 @@ seeds/*
 eval/results/*
 !eval/results/.gitkeep
 
+# graphify 지식그래프 산출물 (로컬 전용)
+graphify-out/
+
 # 제조사·민간 원문 PDF는 재배포 권한 미확인 → 로컬 보관, 공유 드라이브로 전달 (docs/sources/manual/download-status.md)
 docs/sources/manual/bosch-*.pdf
 docs/sources/manual/parker-*.pdf
 docs/sources/manual/BR-*.pdf
+
+# Aiven CA 등 인증서
+*.pem

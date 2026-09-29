@@ -1,0 +1,457 @@
+[
+ {
+  "card_id": "K-1024",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T5",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S1",
+  "title": "감속기 온도·소음·진동이 평소와 다르면 주 모터를 멈추고 원인을 확인한다",
+  "symptom": null,
+  "know_how": "운전 중 온도 상승, 소음, 진동처럼 정상 운전과 다른 변화가 생기고 판단이 서지 않으면 주 모터를 끈다. 원인을 확인하고 필요하면 제조사(SEW-EURODRIVE)에 문의한다. 시험 운전이라도 감시·보호 장치를 무력화하지 않는다.",
+  "rationale": "제조사 지침 §2 Safety Notes의 기동·운전 항목이 이상 변화 시 주 모터 정지와 원인 확인, 감시·보호 장치 유지를 직접 요구한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "26867443.pdf p.5 §2 Startup/operation: 정상 운전과 다른 변화(온도 상승·소음·진동 등)가 있으면 의심스러운 경우 주 모터를 끄고 원인을 확인한다. 시험 모드에서도 감시·보호 장치를 무력화하지 않는다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S24"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.5 / 인쇄 p.5 / §2 Safety Notes, Startup/operation",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1025",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "GR",
+  "component": "입력측 베어링",
+  "scenario": "S2",
+  "title": "감속기 베어링부 온도가 높을 때 오일 → 교환 이력 → 베어링 순으로 확인한다",
+  "symptom": "감속기 베어링부 온도가 평소보다 높다.",
+  "know_how": "1) 전원 차단·재기동 방지 후 식힌다. 2) 오일 사이트글라스로 유면이 중간인지 본다. 부족하거나 많으면 맞춘다. 3) 마지막 오일 교환 시점을 확인하고 필요하면 교환한다. 4) 드레인 플러그에서 오일을 조금 받아 점도·상태를 본다. 오염이 심하면 주기와 상관없이 교환한다. 5) 오일에 문제가 없으면 베어링을 점검하고 필요하면 교체하며 고객 서비스에 문의한다.",
+  "rationale": "제조사 고장표는 베어링부 온도 과다의 원인을 오일 부족·과다, 오일 노후, 베어링 손상 세 가지로 들고 각각의 조치를 제시한다. 유면·오일 점검 방법은 §8.3에 있다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "26867443.pdf p.42–43 §8.3: 오일 점검·교환 전 모터 전원을 차단하고 의도치 않은 재기동을 막아야 하며, 감속기가 식을 때까지 기다려야 한다(화상 위험).",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S25"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Bearing point temperatures too high",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    },
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.42–43 / 인쇄 p.42–43 / §8.3 Checking the oil level, Checking the oil",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "모터 전원을 차단하고 의도치 않은 재기동을 막는 조치를 한다. 감속기가 식을 때까지 기다린다(화상 위험).",
+     "preconditions": [],
+     "expected_result": "모터가 재기동될 수 없는 상태이고 감속기가 식어 있다.",
+     "stop_conditions": [
+      "감속기가 뜨거운 상태면 점검을 시작하지 않는다(화상 위험)."
+     ]
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "오일 사이트글라스로 유면을 확인하고, 부족하거나 많으면 맞춘다.",
+     "preconditions": [
+      "ST-01 완료"
+     ],
+     "expected_result": "유면이 사이트글라스 중간에 있다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "마지막 오일 교환 시점을 확인하고 필요하면 오일을 교환한다.",
+     "preconditions": [
+      "ST-01 완료"
+     ],
+     "expected_result": "오일 교환 이력이 확인되고 교환 주기를 넘긴 오일은 교환되었다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "드레인 플러그에서 오일을 조금 받아 점도와 상태를 본다.",
+     "preconditions": [
+      "ST-01 완료"
+     ],
+     "expected_result": "오일 오염이 심하지 않다. 심하게 오염되었으면 정비 주기와 상관없이 오일을 교환한다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-05",
+     "order": 5,
+     "action": "오일 쪽에 이상이 없으면 베어링을 점검하고 필요하면 교체한다.",
+     "preconditions": [],
+     "expected_result": "베어링 손상 여부가 판단되었다.",
+     "stop_conditions": [],
+     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1026",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S1",
+  "title": "감속기 규칙적 이상음: 갈리는 소리는 베어링, 두드리는 소리는 치형을 의심한다",
+  "symptom": "감속기에서 평소와 다른 규칙적인 운전음이 난다.",
+  "know_how": "규칙적인 이상음이 맞물림·갈리는(grinding) 소리면 베어링 손상을 의심하고 오일을 점검한 뒤 베어링을 교체한다. 두드리는(knocking) 소리면 기어 치형의 불규칙을 의심하고 고객 서비스에 문의한다.",
+  "rationale": "제조사 고장표가 규칙적 이상음을 소리의 성격에 따라 두 원인(베어링 손상, 치형 불규칙)과 각기 다른 조치로 나눈다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S26"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Unusual, regular running noise",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1027",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S2",
+  "title": "감속기 누유 위치별 확인 순서: 커버·실부는 조임 후 관찰, 드레인·브리더는 유면과 브리더 장착",
+  "symptom": "감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·브리더 플러그에서 오일이 샌다.",
+  "know_how": "1) 신품 운전 초기(24시간)의 오일실 소량 누유는 정상이므로 먼저 구분한다. 2) 커버판·커버·플랜지 쪽이면 해당 볼트를 조이고 관찰한다. 3) 계속 새면 감속기를 벤트하고(오일실 립 뒤집힘) 다시 관찰한다. 여전히 새거나 오일실 손상·마모면 고객 서비스에 문의한다. 4) 드레인 플러그·브리더 플러그 쪽이면 유면을 맞추고 브리더 플러그가 올바른 위치에 장착됐는지 확인한다.",
+  "rationale": "제조사 고장표가 누유 위치별 원인과 조치, 길들이기 중 정상 누유 예외를 함께 제시한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S27"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Oil leaking (각주 1 포함)",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "감속기가 길들이기 단계(운전 24시간 이내)이고 누유가 오일실의 소량 오일·그리스인지 확인한다.",
+     "preconditions": [],
+     "expected_result": "길들이기 중 소량 누유면 정상으로 보고 관찰을 이어간다. 그 밖의 누유면 다음 단계로 간다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "누유가 커버판·하우징 커버·베어링 커버·장착 플랜지 쪽이면 해당 커버 볼트를 조이고 감속기를 관찰한다.",
+     "preconditions": [],
+     "expected_result": "누유가 멈춘다.",
+     "stop_conditions": [
+      "조인 뒤에도 계속 새면 고객 서비스에 문의한다."
+     ],
+     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "오일실 립이 뒤집혔을 가능성이 있으면 감속기를 벤트하고 관찰한다.",
+     "preconditions": [],
+     "expected_result": "누유가 멈춘다.",
+     "stop_conditions": [
+      "계속 새거나 오일실이 손상·마모되었으면 고객 서비스에 문의한다."
+     ],
+     "escalation_target": "SEW-EURODRIVE 고객 서비스"
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "누유가 드레인 플러그·밸브나 브리더 플러그 쪽이면 유면을 맞추고 브리더 플러그를 올바른 위치에 장착한다.",
+     "preconditions": [],
+     "expected_result": "유면이 적정하고 브리더 플러그가 장착 위치에 맞게 달려 있어 누유가 멈춘다.",
+     "stop_conditions": []
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1028",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S1",
+  "title": "감속기 불규칙 이상음은 오일 속 이물을 의심하고 구동을 멈춘다",
+  "symptom": "감속기에서 평소와 다른 불규칙한 운전음이 난다.",
+  "know_how": "불규칙한 이상음은 오일 속 이물질을 의심한다. 오일을 점검하고 구동을 정지한 뒤 고객 서비스에 문의한다. 규칙적인 이상음(베어링·치형)과는 원인과 조치가 다르다.",
+  "rationale": "제조사 고장표가 불규칙 이상음의 원인을 오일 내 이물로 들고 구동 정지와 고객 서비스 문의를 조치로 제시한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "26867443.pdf p.45 §9.1: 불규칙 이상음(오일 내 이물)은 오일 점검 후 구동을 정지하고 고객 서비스에 문의한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S28"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Unusual, irregular running noise",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1029",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S2",
+  "title": "옥외·다습 환경 감속기는 오일 수분을 확인하고 300 ppm을 넘기지 않는다",
+  "symptom": null,
+  "know_how": "감속기를 옥외나 다습한 환경에서 운전하면 운전 3000시간마다, 늦어도 6개월마다 오일의 수분 함량을 확인한다. 수분 함량은 0.03 %(300 ppm)를 넘으면 안 된다.",
+  "rationale": "제조사 점검 주기표가 옥외·다습 운전 조건에 한해 오일 수분 확인과 한계값을 정한다.",
+  "conditions": [
+   {
+    "signal": "installation_outdoor_or_humid",
+    "op": "==",
+    "value": true,
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S29"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.41 / 인쇄 p.41 / §8.1 Inspection and maintenance intervals, Every 3000 hours / 6 months",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1030",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "GR",
+  "component": "감속 기어박스",
+  "scenario": "S1",
+  "title": "감속기 장착부 주변 이상음은 장착 볼트 풀림을 의심한다",
+  "symptom": "감속기 장착부 주변에서 평소와 다른 소리가 난다.",
+  "know_how": "장착부 주변 이상음은 감속기 장착이 풀린 것을 의심한다. 고정 볼트·너트를 규정 토크로 조이고, 손상·불량 볼트나 너트는 교체한다. 규정 토크값은 이 표에 없으므로 해당 설치 자료를 확인한다.",
+  "rationale": "제조사 고장표가 장착부 이상음의 원인을 장착 풀림으로, 조치를 규정 토크 체결과 불량 체결물 교체로 제시한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260929-A:seed=20260929",
+    "slot:S30"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+   "generated_at": "2026-09-29T15:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "26867443.pdf",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions, Unusual noise in the area of the gear unit mounting",
+     "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ }
+]

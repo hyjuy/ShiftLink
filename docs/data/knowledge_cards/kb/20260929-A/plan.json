@@ -1,0 +1,187 @@
+{
+ "batch_id": "KB-20260929-A",
+ "seed": 20260929,
+ "generator": "plan.py",
+ "slots": [
+  {
+   "slot": "S01",
+   "card_id": "K-1001",
+   "equipment": "HPU",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S02",
+   "card_id": "K-1002",
+   "equipment": "HPU",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S03",
+   "card_id": "K-1003",
+   "equipment": "HPU",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S04",
+   "card_id": "K-1004",
+   "equipment": "HPU",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S05",
+   "card_id": "K-1005",
+   "equipment": "HPU",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S06",
+   "card_id": "K-1006",
+   "equipment": "HPU",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S07",
+   "card_id": "K-1007",
+   "equipment": "HPU",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S08",
+   "card_id": "K-1008",
+   "equipment": "HPU",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S09",
+   "card_id": "K-1009",
+   "equipment": "CV",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S10",
+   "card_id": "K-1010",
+   "equipment": "CV",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S11",
+   "card_id": "K-1011",
+   "equipment": "CV",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S12",
+   "card_id": "K-1012",
+   "equipment": "CV",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S13",
+   "card_id": "K-1013",
+   "equipment": "CV",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S14",
+   "card_id": "K-1014",
+   "equipment": "CV",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S15",
+   "card_id": "K-1015",
+   "equipment": "CV",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S16",
+   "card_id": "K-1016",
+   "equipment": "CV",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S17",
+   "card_id": "K-1017",
+   "equipment": "RT",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S18",
+   "card_id": "K-1018",
+   "equipment": "RT",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S19",
+   "card_id": "K-1019",
+   "equipment": "RT",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S20",
+   "card_id": "K-1020",
+   "equipment": "RT",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S21",
+   "card_id": "K-1021",
+   "equipment": "RT",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S22",
+   "card_id": "K-1022",
+   "equipment": "RT",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S23",
+   "card_id": "K-1023",
+   "equipment": "RT",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S24",
+   "card_id": "K-1024",
+   "equipment": "GR",
+   "tacit_type": "T5"
+  },
+  {
+   "slot": "S25",
+   "card_id": "K-1025",
+   "equipment": "GR",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S26",
+   "card_id": "K-1026",
+   "equipment": "GR",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S27",
+   "card_id": "K-1027",
+   "equipment": "GR",
+   "tacit_type": "T3"
+  },
+  {
+   "slot": "S28",
+   "card_id": "K-1028",
+   "equipment": "GR",
+   "tacit_type": "T1"
+  },
+  {
+   "slot": "S29",
+   "card_id": "K-1029",
+   "equipment": "GR",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S30",
+   "card_id": "K-1030",
+   "equipment": "GR",
+   "tacit_type": "T1"
+  }
+ ]
+}

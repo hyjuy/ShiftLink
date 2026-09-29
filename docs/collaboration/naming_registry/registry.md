@@ -95,6 +95,8 @@
 | `build_prompt()` | `shiftlink/data/narrative.py` | 정답지·타 페르소나 관측·sealed를 제외한 Stage A 프롬프트 조립 | 허재원 |
 | `shop_floor_names()` | `shiftlink/data/narrative.py` | 내부 ID → 현장 호칭(`EQ-0008` → `RT-03`) 매핑 | 허재원 |
 | `lint_card()` / `lint_cards()` | `shiftlink/data/card_lint.py` | 카드 작성 가이드 §2·§3·§5·§7 중 **스키마가 못 잡는** 유형 경계·안전 표시를 자문 수준으로 지적 | 허재원 |
+| `verdict()` | `eval/qa/report.py` | 채점 JSON 한 문항의 자동 판정 (hit/partial/abstain_ok/miss) | 최재영 |
+| `render_report()` | `eval/qa/report.py` | 채점 JSON + 문항 파일 → 마크다운 검수표. 틀린 문항이 앞 | 최재영 |
 
 > `search_cards()`에 `scope_id`·`source_kind` 필드 추가가 고도화 초안 §4.5(Q4)에서 제안됐지만 **미결**이므로 현재 공개 시그니처에는 포함하지 않는다. 결정되면 여기 시그니처 변경 이력을 한 줄 추가할 것.
 

@@ -1,0 +1,127 @@
+"""Render a markdown review sheet from a score.py result JSON and a QA file.
+
+    python eval/qa/report.py eval/results/qa_20260929/qa_dev.json eval/qa/20260929/qa_dev.json \
+        --out eval/results/qa_20260929/qa_dev.md
+
+Wrong items (not hit, not abstain_ok) come first. Key facts and fabrication stay blank for a person.
+"""
+import argparse
+import json
+from pathlib import Path
+
+OK = ("hit", "abstain_ok")
+
+
+def verdict(score: dict) -> str:
+    """Automatic label: hit, partial, abstain_ok, or miss."""
+    if score.get("hit"):
+        return "hit"
+    if score.get("partial"):
+        return "partial"
+    if score.get("abstain_ok"):
+        return "abstain_ok"
+    return "miss"
+
+
+def render_report(result: dict, items: list[dict]) -> str:
+    """Markdown review sheet. `items` is qa_dev.json or qa_test.json."""
+    by_qid = {item["qid"]: item for item in items}
+    missing = [row["qid"] for row in result["rows"] if row["qid"] not in by_qid]
+    if missing:
+        raise ValueError(f"문항에 없는 qid: {', '.join(missing)}")
+
+    ranked = []
+    for row in result["rows"]:
+        label = verdict(row["score"])
+        ranked.append((0 if label not in OK else 1, row["qid"], row, by_qid[row["qid"]], label))
+    ranked.sort(key=lambda item: (item[0], item[1]))
+
+    lines = ["# QA 검수표", "", _summary_table(result.get("summary") or {}), ""]
+    for _, _, row, item, label in ranked:
+        lines.extend(_question(row, item, label))
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _summary_table(summary: dict) -> str:
+    labels = [
+        ("n", "문항"),
+        ("answerable", "답 있음"),
+        ("unanswerable", "답 없음"),
+        ("citation_hit", "인용 적중"),
+        ("citation_partial", "부분 인용"),
+        ("retrieval_hit_at_1", "검색 1위 적중"),
+        ("retrieval_hit_at_k", "검색 상위 적중"),
+        ("wrong_cite_rate", "오인용 비율"),
+        ("safety_ok", "안전 카드"),
+        ("abstain_ok", "모름 처리"),
+        ("review_queue", "review_queue"),
+        ("errors", "오류"),
+        ("cold_s", "cold_s"),
+        ("p50_s", "p50_s"),
+        ("p95_s", "p95_s"),
+    ]
+    rows = ["| 항목 | 값 |", "|---|---|"]
+    for key, name in labels:
+        if key in summary:
+            rows.append(f"| {name} | {summary[key]} |")
+    return "\n".join(rows)
+
+
+def _question(row: dict, item: dict, label: str) -> list[str]:
+    top3 = row.get("ranked") or []
+    top3 = top3[:3]
+    return [
+        f"## {row['qid']} · {row['eq_id']} · {label}",
+        "",
+        "| 항목 | 내용 |",
+        "|---|---|",
+        f"| qid | {row['qid']} |",
+        f"| 설비 | {row['eq_id']} |",
+        f"| 질문 | {_cell(item['question'])} |",
+        f"| 기대 정답 카드 | primary: {_ids(item['primary_card_ids'])} / acceptable: {_ids(item['acceptable_card_ids'])} |",
+        f"| 실제 인용 | {_ids(row.get('cited') or [])} |",
+        f"| 검색 상위 3 | {_ids(top3)} |",
+        f"| 표시된 안전 카드 | {_ids(row.get('safety') or [])} |",
+        f"| 자동 판정 | {label} |",
+        "",
+        "### 답변 원문",
+        "",
+        "```text",
+        row.get("answer") or "",
+        "```",
+        "",
+        "### 사람 판정",
+        "",
+        "- 핵심 사실: [ ] 전부  [ ] 일부  [ ] 없음",
+        "- 지어낸 내용: [ ] 있음  [ ] 없음",
+        "",
+    ]
+
+
+def _ids(values: list) -> str:
+    return ", ".join(values) if values else "없음"
+
+
+def _cell(text: str) -> str:
+    return " ".join(text.split())
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("result_json")
+    ap.add_argument("qa_file")
+    ap.add_argument("--out")
+    args = ap.parse_args()
+    result = json.loads(Path(args.result_json).read_text(encoding="utf-8"))
+    items = json.loads(Path(args.qa_file).read_text(encoding="utf-8"))
+    text = render_report(result, items)
+    if args.out:
+        path = Path(args.out)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8", newline="\n")
+    else:
+        print(text, end="")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_testing_equipment_resolution_tdd", "label": "Equipment ID Resolution TDD", "file_type": "document", "source_file": "docs/testing/equipment-resolution.tdd.md", "rationale": "Validates mapping between equipment codes (HPU-01) and formal IDs (EQ-0001)."}], "edges": [], "hyperedges": []}

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_testing_condition_policy_tdd", "label": "Condition Policy TDD", "file_type": "document", "source_file": "docs/testing/condition-policy.tdd.md", "rationale": "Governs how applicability conditions filter cards during retrieval."}], "edges": [], "hyperedges": []}

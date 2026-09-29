@@ -1,0 +1,1 @@
+{"nodes": [{"id": "docs_testing_observation_validation_tdd", "label": "Observation Validation TDD", "file_type": "document", "source_file": "docs/testing/observation-validation.tdd.md", "rationale": "Ensures signal/value/unit structures are validated before processing."}], "edges": [], "hyperedges": []}

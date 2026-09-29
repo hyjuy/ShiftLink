@@ -1,1 +1,0 @@
-{"nodes": [{"id": "docs_data_policies_source_and_split_contract", "label": "Source and Split Contract v1", "file_type": "document", "source_file": "docs/data/policies/source-and-split-contract.md", "rationale": "Defines data split ratios (7:2:3) and source registry management rules."}], "edges": [], "hyperedges": []}

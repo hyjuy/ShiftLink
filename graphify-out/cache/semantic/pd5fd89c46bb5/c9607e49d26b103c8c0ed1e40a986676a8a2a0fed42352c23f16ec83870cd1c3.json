@@ -1,1 +1,0 @@
-{"nodes": [{"id": "shiftlink_mes_web_pda_html", "label": "pda.html", "file_type": "code", "source_file": "docs/design/pda_ui/prototype/pda.html", "rationale": "New PDA UI entry point added to mock MES static serving."}], "edges": [], "hyperedges": []}

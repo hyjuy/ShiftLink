@@ -45,6 +45,9 @@ graphify-out/
 docs/sources/manual/bosch-*.pdf
 docs/sources/manual/parker-*.pdf
 docs/sources/manual/BR-*.pdf
+# 사건·카드 원문 자료도 로컬에만 보관 (2026-09-30 회의 결정). README.md만 추적
+docs/data/sources/**/*.pdf
+docs/data/sources/**/*.html
 
 # Aiven CA 등 인증서
 *.pem

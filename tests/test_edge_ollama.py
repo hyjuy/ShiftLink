@@ -1,20 +1,27 @@
 """가짜 HTTP 응답으로 Ollama 어댑터의 계약을 검증한다. 실제 모델을 부르지 않는다."""
 
+import copy
 import io
 import json
 import socket
 import urllib.error
+from pathlib import Path
 
 import pytest
 
+from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.router import QueryRequest
 from shiftlink.edge.ollama import (
     CANARY_PREFIXES,
     MODEL_CARD_FIELDS,
+    OUTPUT_SCHEMA,
     OllamaModel,
     build_messages,
     card_context,
 )
+from shiftlink.rag.loader import load_card_provider
+
+KB_CARDS = Path(__file__).resolve().parents[1] / "docs/data/knowledge_cards/kb/20260929-A/cards.json"
 
 
 def make_request():
@@ -122,7 +129,8 @@ def test_request_payload_follows_documented_options(monkeypatch):
     assert schema["properties"]["answer"]["maxLength"] == 160
     cited = schema["properties"]["cited_card_ids"]
     assert cited["minItems"] == 1 and cited["uniqueItems"] is True
-    assert cited["items"]["pattern"] == r"^K-\d{4}$"
+    # 후보 카드 ID만 문법으로 허용한다(ranked_cards 없는 구 호출자는 전 카드가 후보).
+    assert cited["items"]["enum"] == ["K-0108"]
 
 
 def test_retry_flag_changes_the_prompt(monkeypatch):
@@ -229,3 +237,85 @@ def test_prompt_carries_question_observations_and_cards():
     assert "호스 압력이 낮다" in user
     assert '"signal": "pressure"' in user
     assert "K-0108" in user
+
+
+def make_split_results():
+    """안전 카드 K-0108은 검색에 안 걸렸고, 검색 순위는 K-0201 > K-0200이다."""
+    safety = make_tool_results()["cards"][0]
+    ranked = [
+        {"card_id": "K-0201", "title": "펌프 소음", "symptom": "소리가 크다", "know_how": "a"},
+        {"card_id": "K-0200", "title": "유온 상승", "symptom": "오일이 뜨겁다", "know_how": "b"},
+    ]
+    return {"cards": [safety, *ranked], "ranked_cards": ranked, "safety_cards": [safety]}
+
+
+def call_with(monkeypatch, tool_results, **kwargs):
+    monkeypatch.setattr("urllib.request.urlopen", FakeHTTP(
+        json.dumps({"answer": "a", "cited_card_ids": ["K-0201"]})))
+    sent = []
+    model = OllamaModel()
+    real_post = model._post
+    model._post = lambda path, payload: (sent.append(payload), real_post(path, payload))[1]
+    model(mode="query", request=make_request(), tool_results=tool_results, **kwargs)
+    return model, sent[0]
+
+
+def test_enum_is_candidates_in_rank_order_without_safety_references(monkeypatch):
+    model, sent = call_with(monkeypatch, make_split_results())
+    items = sent["format"]["properties"]["cited_card_ids"]["items"]
+    assert items == {"type": "string", "enum": ["K-0201", "K-0200"]}
+    assert model.last_call["candidate_card_ids"] == ["K-0201", "K-0200"]
+    user = sent["messages"][1]["content"]
+    assert "K-0201: 펌프 소음 / 소리가 크다" in user
+    # 안전 참고 카드는 보이되 후보 블록 뒤에 따로, 인용 금지로 나간다.
+    assert user.index("안전 참고 카드") < user.index('"card_id": "K-0108"')
+    assert "증상·제목이 가장 일치하는 카드를 먼저 인용하라" in sent["messages"][0]["content"]
+
+
+def test_safety_card_found_by_search_stays_a_candidate(monkeypatch):
+    results = make_split_results()
+    results["ranked_cards"] = [results["cards"][0], *results["ranked_cards"]]
+    _, sent = call_with(monkeypatch, results)
+    enum = sent["format"]["properties"]["cited_card_ids"]["items"]["enum"]
+    assert enum == ["K-0108", "K-0201", "K-0200"]
+    assert "안전 참고 카드" not in sent["messages"][1]["content"]
+
+
+def test_no_candidates_allows_empty_citation(monkeypatch):
+    results = make_split_results()
+    results["ranked_cards"] = []
+    _, sent = call_with(monkeypatch, results)
+    assert sent["format"]["properties"]["cited_card_ids"]["minItems"] == 0
+
+
+def test_retry_prompt_lists_real_candidate_ids(monkeypatch):
+    _, sent = call_with(monkeypatch, make_split_results(), retry=True)
+    user = sent["messages"][1]["content"]
+    retry = user[user.index("[재시도]"):]
+    assert "K-0201, K-0200" in retry and "K-0108" not in retry
+    assert all("K-0000" not in message["content"] for message in sent["messages"])
+
+
+def test_global_output_schema_is_not_mutated(monkeypatch):
+    before = copy.deepcopy(OUTPUT_SCHEMA)
+    call_with(monkeypatch, make_split_results())
+    call_with(monkeypatch, {**make_split_results(), "ranked_cards": []})
+    assert OUTPUT_SCHEMA == before
+
+
+def test_symptom_match_ranks_first_and_leads_the_enum(monkeypatch):
+    """실제 KB: 소음·우유빛 거품 질문은 에어레이션(K-1004)이 수분 오염(K-1008)보다 앞선다."""
+    provider = load_card_provider(KB_CARDS).provider
+    question = "베인펌프 소리가 커지고 오일 표면에 우유빛 거품이 있다"
+    ids = [card["card_id"] for card in
+           provider.search_cards(query=question, equipment_ids=["HPU"])]
+    assert ids.index("K-1004") < ids.index("K-1008")
+
+    sent = []
+    model = OllamaModel()
+    model._post = lambda path, payload: (sent.append(payload), {"message": {"content": json.dumps(
+        {"answer": "a", "cited_card_ids": ["K-1004"]})}})[1]
+    FixedPipeline(model=model, tools=provider).run(
+        {"question": question, "line_id": "LN-0001", "eq_id": "HPU"})
+    enum = sent[0]["format"]["properties"]["cited_card_ids"]["items"]["enum"]
+    assert enum == ids and enum[0] == "K-1004"

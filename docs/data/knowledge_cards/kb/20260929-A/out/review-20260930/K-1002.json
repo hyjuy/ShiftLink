@@ -1,0 +1,119 @@
+{
+  "card_id": "K-1002",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "HPU",
+  "component": "오일 쿨러",
+  "scenario": "S2",
+  "title": "수냉식 오일 쿨러 출구 유온 확인 순서 — Algo J.2",
+  "symptom": "냉각기 출구 포트의 오일 온도가 높거나, 냉각기가 제 역할을 하는지 판단이 필요하다.",
+  "know_how": "1) 냉각기 출구 포트에서 유온이 너무 높은지 확인한다. 너무 높으면 3)으로, 너무 높지 않으면 2)로 간다. 2) 오일 입·출구 온도차가 있는지 본다. 차이가 있으면 냉각기는 정상 작동 중이고, 없으면 오일이 작동 온도에 도달했을 때 다시 확인한다. 3) 냉각수 공급, 4) 써모스탯 조정, 5) 냉각수 출구 온도>입구 온도 여부, 6) 냉각수 입구 온도가 너무 높은지, 7) 냉각기 통과 오일 유량을 차례로 확인한다.",
+  "rationale": "Vickers 흐름도 Algo J.2(냉각기 계통 시험)는 출구 유온 확인에서 시작해 냉각수 공급→써모스탯→수온 상승→입구 수온→오일 유량 순으로 YES/NO 분기와 조치를 명시한다. '너무 높다'의 온도 기준값은 원문에 없다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S02"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:24:33+09:00",
+    "sources": [
+      {
+        "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+        "locator": "PDF p.29 / 인쇄 p.29 / Algo J.2 System test for coolers",
+        "document_version": "Vickers General Product Support GBB9003 (8/84)"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "냉각기 출구 포트에서 오일 온도를 확인한다.",
+        "preconditions": [],
+        "expected_result": "온도가 너무 높으면(YES) ST-03으로 진행한다. 너무 높지 않으면(NO) ST-02로 진행한다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "오일 입구·출구 온도 사이에 차이가 있는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "차이가 있으면(YES) 냉각기는 작동 중이다. 목록의 다음 장치를 점검한다.",
+        "stop_conditions": [
+          "차이가 없으면(NO) 오일이 작동 온도에 도달한 뒤 다시 확인한다."
+        ]
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "냉각수 공급이 켜져 있는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "켜져 있으면(YES) ST-04로 진행한다.",
+        "stop_conditions": [
+          "꺼져 있으면(NO) 냉각수 밸브를 연다(Open water valve)."
+        ]
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "action": "써모스탯이 조정되어 있는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "조정되어 있으면(YES) ST-05로 진행한다.",
+        "stop_conditions": [
+          "아니면(NO) 써모스탯을 재조정한다."
+        ]
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "action": "냉각수 출구 온도가 냉각수 입구 온도보다 높은지 확인한다.",
+        "preconditions": [],
+        "expected_result": "높으면(YES) ST-06으로 진행한다.",
+        "stop_conditions": [
+          "높지 않으면(NO) 냉각기를 점검한다."
+        ]
+      },
+      {
+        "step_id": "ST-06",
+        "order": 6,
+        "action": "냉각수 입구 온도가 너무 높은지 확인한다.",
+        "preconditions": [],
+        "expected_result": "너무 높지 않으면(NO) ST-07로 진행한다.",
+        "stop_conditions": [
+          "너무 높으면(YES) 냉각수 공급을 점검한다."
+        ]
+      },
+      {
+        "step_id": "ST-07",
+        "order": 7,
+        "action": "냉각기를 통과하는 오일 유량이 맞는지 확인한다.",
+        "preconditions": [],
+        "expected_result": "유량이 맞으면(YES) 냉각기를 점검한다. 맞지 않으면(NO) 계통의 손실을 확인한다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "수냉식 냉각기에 대한 Vickers Algo J.2에 한정한다. 대상 HPU 오일 쿨러의 냉각 방식과 정상 온도 범위는 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

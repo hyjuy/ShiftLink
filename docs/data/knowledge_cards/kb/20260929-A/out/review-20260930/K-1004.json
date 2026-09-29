@@ -1,0 +1,55 @@
+{
+  "card_id": "K-1004",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "HPU",
+  "component": "주 베인펌프",
+  "scenario": "S1",
+  "title": "베인펌프 소음 증가와 유면 우유빛 거품 — 에어레이션 징후",
+  "symptom": "펌프 소음이 평소보다 크고, 요구 유량이나 압력이 나오지 않으며, 탱크 유면이 거품으로 우유빛(milky)을 띤다.",
+  "know_how": "이 세 가지가 함께 보이면 작동유에 공기가 섞였을(에어레이션) 가능성을 먼저 의심한다. 추가로 흡입 배관 밀봉 상태, 축 씰 상태, 리턴 라인 끝이 유면 아래에 있는지, 흡입구가 리턴 라인 정면에 있지 않은지, 탱크 유면이 흡입 위치보다 충분히 높은지를 확인해 기록한다. 우유빛 외관은 수분 오염으로 생긴 거품에서도 나타나므로 이것만으로 원인을 단정하지 않는다.",
+  "rationale": "Denison 베인펌프 고장 가이드 §2.4 2)는 공기 혼입 시 베인이 불균형해져 가장 두드러진 것이 비정상 소음이며, 심한 마모 전에 유량·압력 미달과 유면의 우유빛 거품이 나타난다고 설명하고, 흡입관 누설·축 씰 열화·리턴 라인 위치·낮은 유면 등을 원인으로 든다. 같은 가이드 §6은 수분 오염 거품도 우유빛이라고 적는다. 정상/이상 외관의 정량 경계는 원문에 없다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S04"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T10:24:33+09:00",
+    "sources": [
+      {
+        "source_id": "HY29-0022-UK.pdf",
+        "locator": "PDF p.24~27 / 인쇄 p.25~28 / §2.4 2) Air contamination - a) Aeration, b) Consequences of aeration",
+        "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+      },
+      {
+        "source_id": "HY29-0022-UK.pdf",
+        "locator": "PDF p.36 / 인쇄 p.37 / §6 Consequences of water contamination",
+        "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "Denison 베인펌프 가이드의 에어레이션 설명에 한정한다. 대상 HPU 주 베인펌프 모델 적합성은 미확인이다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

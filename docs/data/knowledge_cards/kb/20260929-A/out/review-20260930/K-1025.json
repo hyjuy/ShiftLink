@@ -1,0 +1,107 @@
+{
+  "card_id": "K-1025",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "GR",
+  "component": "감속기 베어링부",
+  "scenario": "S2",
+  "title": "감속기 베어링부 온도가 높을 때 오일 상태와 베어링을 확인한다",
+  "symptom": "감속기 베어링부 온도가 평소보다 높다.",
+  "know_how": "1) 모터 전원을 차단하고 재기동을 방지한 뒤 감속기가 식을 때까지 기다린다. 2) 사이트글라스가 있으면 유면이 중간에 있는지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 부족하거나 많으면 유면을 맞춘다. 3) 마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 본다. 필요하면 오일을 교환한다. 오염이 심하면 제조사는 교환 주기와 관계없이 교환을 권고한다. 4) 베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다.",
+  "rationale": "제조사 고장표는 베어링부 온도 과다의 가능한 원인으로 오일 부족·과다, 오일 노후, 베어링 손상을 각각 제시한다. 유면과 오일 상태를 확인하는 방법은 §8.3에 있다. 고장표의 원인들은 각각의 분기이며, 하나를 반드시 마친 뒤 다음 원인으로 넘어가는 제조사 지정 절차는 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "26867443.pdf p.42–43 §8.3은 오일 점검·교환 전에 모터 전원을 차단하고 의도치 않은 재기동을 방지하며, 화상을 피하도록 감속기가 식을 때까지 기다리도록 지시한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S25"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T15:00:00+09:00",
+    "sources": [
+      {
+        "source_id": "26867443.pdf",
+        "locator": "p.45 §9.1 Bearing point temperatures too high",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+      },
+      {
+        "source_id": "26867443.pdf",
+        "locator": "p.42–43 §8.3 Checking the oil level, Checking the oil",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "preconditions": [],
+        "action": "모터 전원을 차단하고 재기동을 방지한다. 감속기가 식을 때까지 기다린다.",
+        "expected_result": "전원 차단·재기동 방지와 냉각을 확인했다.",
+        "stop_conditions": [
+          "감속기가 뜨거우면 점검을 시작하지 않는다."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "preconditions": [
+          "ST-01 완료"
+        ],
+        "action": "사이트글라스가 있으면 유면이 중간인지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 부족하거나 많으면 유면을 맞춘다.",
+        "expected_result": "해당 유면 확인 장치의 기준에 맞는다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "preconditions": [
+          "ST-01 완료"
+        ],
+        "action": "마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 확인한다.",
+        "expected_result": "교환 이력과 오일 상태가 확인되었다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "preconditions": [
+          "ST-01 완료"
+        ],
+        "action": "교환 이력과 오일 상태를 바탕으로 필요하면 오일을 교환한다. 오염이 심하면 교환 주기와 관계없이 교환하라는 제조사 권고를 따른다.",
+        "expected_result": "필요한 오일 조치가 이루어졌다.",
+        "stop_conditions": []
+      },
+      {
+        "step_id": "ST-05",
+        "order": 5,
+        "preconditions": [],
+        "escalation_target": "SEW-EURODRIVE 고객 서비스",
+        "action": "베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다.",
+        "expected_result": "베어링 상태와 후속 조치가 확인되었다.",
+        "stop_conditions": []
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

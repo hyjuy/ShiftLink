@@ -1,0 +1,89 @@
+{
+  "card_id": "K-1010",
+  "version": "1.0-draft-KB-20260929-A",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "CV",
+  "component": "아이들러",
+  "scenario": "S2",
+  "title": "벨트 사행 시 빈 벨트 운전으로 정렬부터 보고, 풀리가 아닌 상류 아이들러로 잡는다",
+  "symptom": "아이들러·벨트 설치 후 또는 운전 중 벨트가 아이들러 중앙을 벗어나 한쪽으로 치우쳐 돈다.",
+  "know_how": "벨트 정렬 확인은 빈 벨트 운전 → 상류측 아이들러 조정 → 만재 하중 확인 순서로 한다. 빈 벨트가 똑바로 돌지 않아도 헤드·테일 풀리를 조정해 바로잡으려 하지 않는다.",
+  "rationale": "Martin 매뉴얼 Belt Training 절이 이 순서와 각 단계의 판정 기준(아이들러 중앙 주행, 트레이너 개입 없음)을 제시하고, 풀리 조정은 베어링·스플라이스·프레임에 무리를 줄 뿐 문제를 고치지 못한다고 경고한다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "Martin_C4_CR_18_09_4_Manual.pdf PDF p.7 / 인쇄 p.5 Belt Training 2, 두 번째 CAUTION: \"Failure to follow these precautions may result in serious PERSONAL injury or damage to equipment.\" (이 예방 조치를 따르지 않으면 심각한 인명 부상이나 설비 손상이 생길 수 있다.)",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+    "seed_ids": [
+      "KB-20260929-A:seed=20260929",
+      "slot:S10"
+    ],
+    "persona_id": "claude-card-author",
+    "event_ids": [],
+    "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+    "generated_at": "2026-09-29T15:00:00+09:00",
+    "sources": [
+      {
+        "source_id": "Martin_C4_CR_18_09_4_Manual.pdf",
+        "locator": "PDF p.7 / 인쇄 p.5 / Belt Training 1~3",
+        "document_version": "IDB-M&TG 0222 (©2018)"
+      }
+    ],
+    "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+    "model_version": "claude-opus-5-5",
+    "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md",
+    "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+    "steps": [
+      {
+        "step_id": "ST-01",
+        "order": 1,
+        "action": "벨트를 완전히 비운 상태로 컨베이어를 운전해 전체 계통 정렬을 본다.",
+        "expected_result": "모든 부품이 제대로 정렬되어 있으면 빈 벨트가 아이들러 중앙에서 고르게 돈다.",
+        "preconditions": [
+          "아이들러와 벨트 설치 완료"
+        ],
+        "stop_conditions": [
+          "빈 벨트가 똑바로 돌지 않아도 헤드·테일 풀리를 조정해 바로잡으려 하지 않는다(베어링·벨트 스플라이스·프레임에 무리가 가고 문제는 해결되지 않음)."
+        ]
+      },
+      {
+        "step_id": "ST-02",
+        "order": 2,
+        "action": "빈 벨트가 한쪽으로 치우치면 상류측 여러 아이들러의 장착 볼트를 풀고, 벨트가 벗어나는 쪽을 벨트 진행 방향 앞으로 조금 틀어 준다.",
+        "expected_result": "아이들러 한쪽을 다른 쪽보다 앞으로 옮기면 벨트는 뒤쪽에 있는 편으로 이동하며, 벨트가 똑바로 돌 때까지 옮긴다.",
+        "preconditions": [
+          "정비 전 개폐기 회로를 열고 스위치를 OFF 위치에 자물쇠로 잠갔다(원문 Belt Training 첫머리 CAUTION)."
+        ]
+      },
+      {
+        "step_id": "ST-03",
+        "order": 3,
+        "action": "장착 볼트를 다시 조이고, 스위치 자물쇠를 풀어 잠금을 해제한 뒤 컨베이어를 재기동해 전체 계통을 확인한다.",
+        "expected_result": "벨트가 전 구간에서 똑바로 돈다."
+      },
+      {
+        "step_id": "ST-04",
+        "order": 4,
+        "action": "만재 하중 조건에서 벨트 정렬을 확인한다.",
+        "expected_result": "정렬이 맞고 적재된 벨트는 아이들러 중앙을 돌며 트레이닝 아이들러의 보정 동작이 필요 없다.",
+        "stop_conditions": [
+          "하중 시 반복·지속 사행이 보이면 대개 편심 적재가 원인이므로, 슈트를 조정해 하중이 벨트 중앙에 고르게 실리게 한다."
+        ]
+      }
+    ]
+  },
+  "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "CEMA C·D·E 아이들러를 쓰는 벨트 컨베이어의 설치 후 정렬(training) 절차에 한정한다. 조정 각도·볼트 토크 수치는 원문에 없다.",
+    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인·사람의 내용 및 안전 검토·현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+}

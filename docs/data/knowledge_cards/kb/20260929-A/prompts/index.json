@@ -63,5 +63,38 @@
   "model": "claude-opus-5-5",
   "dispatched_at": "2026-09-29",
   "wrapper": "프롬프트 파일 {path} (sha256 {sha256})를 Read로 읽고, 그 내용을 이번 작업 지시로 삼아 그대로 수행하라. 파일의 frontmatter는 기록용이다."
+ },
+ "review_prompts": {
+  "review-sync-20260930": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/review-sync-20260930.md",
+   "sha256": "f39d2dee9ebd2f32a8b2cfcdffe95d1f52cffa9f4bb9f5bf9338f5de0195cad5",
+   "card_ids": [
+    "K-1015",
+    "K-1018",
+    "K-1021",
+    "K-1023",
+    "K-1025",
+    "K-1027"
+   ],
+   "input": "docs/data/knowledge_cards/kb/20260929-A/review_20260930_reviewed.md",
+   "input_sha256": "2a087be8b454d391f7224e342c33efe9846b455ca57f205db697ba883e6a0967",
+   "dispatched_at": "2026-09-30"
+  },
+  "review-fix-20260930": {
+   "path": "docs/data/knowledge_cards/kb/20260929-A/prompts/review-fix-20260930.md",
+   "sha256": "be367f1e8c99c5e1233dd940e1caac70117c0949f0bd049da5cc646e4eeba359",
+   "card_ids": [
+    "K-1001",
+    "K-1002",
+    "K-1004",
+    "K-1005",
+    "K-1010",
+    "K-1012",
+    "K-1020"
+   ],
+   "input": "docs/data/knowledge_cards/kb/20260929-A/review_20260930_reviewed.md",
+   "input_sha256": "2a087be8b454d391f7224e342c33efe9846b455ca57f205db697ba883e6a0967",
+   "dispatched_at": "2026-09-30"
+  }
  }
 }

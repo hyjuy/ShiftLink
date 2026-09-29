@@ -22,9 +22,14 @@ from shiftlink.agent.canary import CANARY_PREFIXES, has_canary
 
 DEFAULT_MODEL = "qwen2.5:3b-instruct-q4_K_M"  # models.lock plan-B
 DEFAULT_HOST = "http://localhost:11434"
-# Jetson 최초 로드 30.7s 실측(docs/reports/Jetson_실측_PRE01-04.md) 때문에 넉넉히 잡는다.
-DEFAULT_TIMEOUT_S = 120.0
+# 호출 1건 상한 = 최초 로드(Jetson 29~31s 실측) + 입력 처리(~2s) + 출력 상한 생성(NUM_PREDICT/23tok/s ≈ 11s).
+# 9/29 15W 측정에서 상한 없는 출력이 180s까지 멈춘 사례 3/20 — 오래 기다리지 않고 재시도·검토 큐로 넘긴다.
+DEFAULT_TIMEOUT_S = 60.0
 NUM_CTX = 2048
+# 출력 토큰 상한. answer(ANSWER_MAX_CHARS자)+인용 JSON이 들어가고, 끝없이 이어지는 생성을 끊는다.
+# 9/29 측정: 상한 없을 때 평균 243토큰 → 생성이 지연의 대부분(입력 처리는 1~2s).
+NUM_PREDICT = 256
+ANSWER_MAX_CHARS = 160
 # 모델 상주, 재로딩 방지. 반드시 정수 -1 — 문자열 "-1"은 Ollama가 duration 파싱에 실패해 400을 낸다.
 KEEP_ALIVE = -1
 
@@ -47,11 +52,13 @@ MODEL_CARD_FIELDS = (
 OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
-        "answer": {"type": "string", "minLength": 1},
+        # maxLength: 문법 제약으로 answer가 스스로 닫히게 해 NUM_PREDICT에 잘려 JSON이 깨지지 않게 한다.
+        "answer": {"type": "string", "minLength": 1, "maxLength": ANSWER_MAX_CHARS},
         "cited_card_ids": {
             "type": "array",
             "items": {"type": "string", "pattern": "^K-\\d{4}$"},
             "minItems": 1,
+            "maxItems": 3,
             "uniqueItems": True,
         },
     },
@@ -62,7 +69,7 @@ OUTPUT_SCHEMA = {
 SYSTEM_PROMPT = (
     "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n"
     "규칙:\n"
-    "1. answer는 항상 한국어 두세 문장으로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
+    f"1. answer는 항상 한국어 두세 문장, {ANSWER_MAX_CHARS}자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
     "2. cited_card_ids에는 위 카드 목록에 실제로 있는 card_id를 최소 한 개 넣는다.\n"
     "   목록에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 카드를 인용한다.\n"
     "3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n"
@@ -166,7 +173,7 @@ class OllamaModel:
             "stream": False,
             "format": OUTPUT_SCHEMA,
             "keep_alive": KEEP_ALIVE,
-            "options": {"temperature": 0, "num_ctx": self.num_ctx},
+            "options": {"temperature": 0, "num_ctx": self.num_ctx, "num_predict": NUM_PREDICT},
         }
         started = time.monotonic()
         body = self._post("/api/chat", payload)

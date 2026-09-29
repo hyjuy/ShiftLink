@@ -74,7 +74,7 @@ def test_loader_keeps_accepted_kb_cards_and_sidecar_rows(tmp_path: Path):
         "checklist": [{"equipment_id": "EQ-0001", "text": "점검"}],
     })
 
-    loaded = load_card_provider(path)
+    loaded = load_card_provider(path, min_top_relevance=0)  # toy card: one-word query
 
     assert loaded.seen == 3
     assert loaded.loaded == 2
@@ -125,7 +125,7 @@ def test_cli_dry_run_puts_loaded_card_in_the_prompt(tmp_path: Path, capsys):
         "--cards", str(path),
         "--equipment", "HPU",
         "--question", "압력이 떨어졌다",
-        "--dry-run",
+        "--dry-run", "--min-relevance", "0",
     ])
 
     assert status == 0
@@ -163,6 +163,7 @@ def test_cli_answers_from_cards_through_ollama_adapter(tmp_path: Path, monkeypat
         "--cards", str(path),
         "--equipment", "HPU",
         "--question", "압력이 떨어졌다",
+        "--min-relevance", "0",
     ])
 
     assert status == 0

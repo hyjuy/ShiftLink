@@ -105,8 +105,11 @@ def test_trip_has_zero_current_and_other_symptoms_remain_observable_while_runnin
     assert (state.operating_state, state.fault_level) == ("running", "warning")
     assert engine.snapshot.active_alarms[0].severity == "warning"
     engine.set_scenario("symptom_EQ-0002_pdp_trip")
+    assert engine.snapshot.active_alarms[0].severity == "critical"
     values = {m.signal: m.value for m in engine.snapshot.measurements if m.equipment_id == "EQ-0002"}
     assert values["breaker_trip"] == 1 and values["bus_current"] == 0
+    engine.set_scenario("symptom_EQ-0002_pdp_current")
+    assert engine.snapshot.active_alarms[0].severity == "warning"
     assert from_payload(to_payload(CONFIG)) == CONFIG
 
 

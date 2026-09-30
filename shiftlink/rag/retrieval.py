@@ -160,6 +160,8 @@ KB_MIN_TOP_RELEVANCE = 5
 # 카드의 이 비율보다 많이 나오는 단어는 질의 점수에서 뺀다 (카드 수 기준, 목록을 손으로 관리하지 않는다).
 COMMON_TOKEN_SHARE = 0.2
 COMMON_TOKEN_MIN_CARDS = 20
+# 근거 사건 문장(build_kb.py evidence_text)에만 있는 단어 하나당 점수. 카드 본문(1)보다 낮게 둔다.
+EVIDENCE_WEIGHT = 0.5
 # 현장 말투(질문 앞 두 글자) -> 카드가 쓰는 말. 설비 일반 어휘만 둔다 (평가 질문 문구를 옮기지 않는다).
 FIELD_SYNONYMS = {"기름": {"오일", "작동유"}, "소리": {"소음"}, "끼익": {"끽"}, "새요": {"누유"}, "샌다": {"누유"},
                   "새는": {"누유"}, "뜨거": {"온도", "과열"}, "쏠려": {"사행"}, "쏠리": {"사행"}}
@@ -227,6 +229,7 @@ class InMemoryToolProvider:
         equipment_types: list[dict[str, Any]] | None = None,
         include_draft: bool = False,
         min_top_relevance: int = 0,
+        evidence_text: dict[str, str] | None = None,
     ) -> None:
         """
         Initialize with KB cards and optional equipment/handover/checklist data.
@@ -264,6 +267,11 @@ class InMemoryToolProvider:
         # A frequency needs a real KB behind it; tiny fixture KBs would lose every word.
         common = len(self.cards) >= COMMON_TOKEN_MIN_CARDS
         self._common_tokens = {t for t, n in df.items() if common and n > COMMON_TOKEN_SHARE * len(self.cards)}
+        # Evidence-event words the card itself lacks; scored at EVIDENCE_WEIGHT (see build_kb.evidence_text).
+        self._evidence_tokens = {
+            card.card_id: set(re.findall(r'\w+', evidence_text[card.card_id].lower())) - _search_tokens(card)
+            for card in self.cards if card.card_id in (evidence_text or {})
+        }
 
         self.equipment_db = equipment_db or []
         self.equipment_types = equipment_types or []
@@ -309,17 +317,21 @@ class InMemoryToolProvider:
         equipment_ids: list[str],
         k: int = 5,
         observations: dict[str, object] | None = None,
+        handover: bool = False,
     ) -> list[dict[str, Any]]:
         """
         Search cards by query with equipment filter and condition matching.
 
         Returns top-k results (deterministic ranking by _relevance, then card_id).
+        handover: a shift-handover memo; T4 evidence-event text is scored only then, so a
+        symptom question never ranks a handover card on its source records (9/30 Q-067).
         """
         query_tokens = set(re.findall(r'\w+', query.lower())) - self._common_tokens
         query_tokens |= {alt for stem, alts in FIELD_SYNONYMS.items() if stem in _stems(query_tokens) for alt in alts}
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
+        evidence = self._evidence_tokens if handover else {}
 
         def candidates():
             for card in self.cards:
@@ -330,6 +342,7 @@ class InMemoryToolProvider:
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
                     score = _relevance(query_tokens, card)
+                    score += EVIDENCE_WEIGHT * len(query_tokens & evidence.get(card.card_id, set()))
                     yield (-score, card.card_id, card, status)
 
         # Select before serializing: large provenance/payloads only copied for top-k.

@@ -232,6 +232,45 @@ CAU는 압력↓·유량↓와 압력↓·공급 총유량↑를 분리하며 �
 
 신규 시나리오는 `unlinked`로 유지한다. 관측 조합은 MES 상태 API·운영 화면에 제공하며 승인 카드의 조건·출처 승인·계보 등록을 대신하지 않는다. 논문과 프로젝트 가설, 설치 위치·파형 등 부족한 근거는 조사 문서와 결과의 `limitation`에 명시한다.
 
+### 조합 시나리오별 가상 주입값과 필수 관측 조합
+
+추가한 22개 조합 시나리오의 수치와 정상 대조 신호를 함께 기록한다. 기준은 [기본 구성 생성](../../shiftlink/mes/configuration.py)과 [증상 조합 정의·생성](../../shiftlink/mes/symptoms.py)이며, 논문별 근거와 적용 한계는 [조사 문서](../research/mes-symptom-screening.md)에 유지한다.
+
+작성 기준 기본 구성의 `config_id`는 `6d925aff49f83f1d762c824a220474b3f8d118a445a8cdc2f121be1f9dfac622`다. 정상 범위와 단위는 위의 **전체 센서별 가상 이상 관측값** 표를 따른다. 일반적인 low 주입값은 양수 정상 하한의 80%, high는 정상 상한의 125%, normal 대조값은 정상 구간 중간값이며 소수 셋째 자리로 반올림한다. 논리 채널은 숫자 0/1, 트립 후 전류는 0 A를 사용한다. 아래 값은 **시연용 명시적 주입값**이며 실제 사고 실측값·제조사 임계값·논문의 고장 경계가 아니다. 실행 시 해당 run의 저장된 구성과 `config_id`를 확인하고, 정상 범위가 바뀌면 수치와 조합을 재검수한다.
+
+**필수 관측 조합은 MES 증상 후보 선별 기준**이다. 같은 행의 신호는 정상 대조를 포함해 모두 일치해야 한다. `low`는 정상 하한 미만, `high`는 정상 상한 초과, `normal`은 양끝을 포함한 정상 구간이다. PDP 트립의 `bus_current == 0 A`는 일반적인 low보다 좁은 원값 조건이며 `bus_current_zero_state` 같은 파생 신호를 만들지 않는다. 이 표를 승인 카드의 `conditions`로 자동 복사하지 않는다.
+
+| 시나리오 ID | 대상 설비 | 명시적 주입값 (정상 대조 포함) | MES 선별용 필수 관측 조합 (모두 충족) |
+| --- | --- | --- | --- |
+| `symptom_EQ-0001_hpu_delivery` | HPU-01 | `hpu_pressure=116 bar` / `hpu_flow=30.4 L_min` / `hpu_filter_dp=0.6 bar` | `hpu_pressure: low` / `hpu_flow: low` / `hpu_filter_dp: normal` |
+| `symptom_EQ-0001_hpu_restriction` | HPU-01 | `hpu_pressure=116 bar` / `hpu_flow=30.4 L_min` / `hpu_filter_dp=1.5 bar` | `hpu_pressure: low` / `hpu_flow: low` / `hpu_filter_dp: high` |
+| `symptom_EQ-0001_hpu_heat` | HPU-01 | `hpu_oil_temp=72.5 degC` / `hpu_flow=42 L_min` / `hpu_pump_current=20 A` | `hpu_oil_temp: high` / `hpu_flow: normal` / `hpu_pump_current: normal` |
+| `symptom_EQ-0002_pdp_voltage` | PDP-01 | `bus_voltage=77.6 pct` / `bus_current=30 A` / `breaker_trip=0 bool` | `bus_voltage: low` / `bus_current: normal` / `breaker_trip == 0 bool` |
+| `symptom_EQ-0002_pdp_current` | PDP-01 | `bus_voltage=100 pct` / `bus_current=50 A` / `breaker_trip=0 bool` | `bus_voltage: normal` / `bus_current: high` / `breaker_trip == 0 bool` |
+| `symptom_EQ-0002_pdp_trip` | PDP-01 | `bus_voltage=100 pct` / `bus_current=0 A` / `breaker_trip=1 bool` | `bus_voltage: normal` / `bus_current == 0 A` / `breaker_trip == 1 bool` |
+| `symptom_EQ-0003_cau_supply` | CAU-01 | `air_pressure=440 kPa` / `air_flow=80 L_min` / `compressor_current=20 A` | `air_pressure: low` / `air_flow: low` / `compressor_current: high` |
+| `symptom_EQ-0003_cau_flow_demand` | CAU-01 | `air_pressure=440 kPa` / `air_flow=187.5 L_min` / `compressor_current=20 A` | `air_pressure: low` / `air_flow: high` / `compressor_current: high` |
+| `symptom_EQ-0004_gr_lubrication` | GR-01 | `gr_vib_rms=3.5 mm_s` / `gr_brg_temp=77.5 degC` / `gr_oil_level=56 pct` / `gr_current=24 A` / `gr_rpm=1000 rpm` | `gr_vib_rms: high` / `gr_brg_temp: high` / `gr_oil_level: low` / `gr_current: normal` / `gr_rpm: normal` |
+| `symptom_EQ-0004_gr_load` | GR-01 | `gr_current=37.5 A` / `gr_rpm=720 rpm` / `gr_vib_rms=1.65 mm_s` / `gr_brg_temp=46 degC` | `gr_current: high` / `gr_rpm: low` / `gr_vib_rms: normal` / `gr_brg_temp: normal` |
+| `symptom_EQ-0005_gr_lubrication` | GR-02 | `gr_vib_rms=3.5 mm_s` / `gr_brg_temp=77.5 degC` / `gr_oil_level=56 pct` / `gr_current=24 A` / `gr_rpm=1000 rpm` | `gr_vib_rms: high` / `gr_brg_temp: high` / `gr_oil_level: low` / `gr_current: normal` / `gr_rpm: normal` |
+| `symptom_EQ-0005_gr_load` | GR-02 | `gr_current=37.5 A` / `gr_rpm=720 rpm` / `gr_vib_rms=1.65 mm_s` / `gr_brg_temp=46 degC` | `gr_current: high` / `gr_rpm: low` / `gr_vib_rms: normal` / `gr_brg_temp: normal` |
+| `symptom_EQ-0006_rt_resistance` | RT-01 | `rt_speed=16 m_min` / `rt_motor_current=20 A` / `rt_vib_rms=2.25 mm_s` / `rt_clamp_press=105 bar` | `rt_speed: low` / `rt_motor_current: high` / `rt_vib_rms: high` / `rt_clamp_press: normal` |
+| `symptom_EQ-0006_rt_clamp` | RT-01 | `rt_clamp_press=76 bar` / `rt_speed=70 m_min` / `rt_motor_current=12 A` | `rt_clamp_press: low` / `rt_speed: normal` / `rt_motor_current: normal` |
+| `symptom_EQ-0007_rt_resistance` | RT-02 | `rt_speed=16 m_min` / `rt_motor_current=20 A` / `rt_vib_rms=2.25 mm_s` / `rt_clamp_press=105 bar` | `rt_speed: low` / `rt_motor_current: high` / `rt_vib_rms: high` / `rt_clamp_press: normal` |
+| `symptom_EQ-0007_rt_clamp` | RT-02 | `rt_clamp_press=76 bar` / `rt_speed=70 m_min` / `rt_motor_current=12 A` | `rt_clamp_press: low` / `rt_speed: normal` / `rt_motor_current: normal` |
+| `symptom_EQ-0007_rt_lift` | RT-02 | `rt_lift_delay=0.062 min` / `rt_clamp_press=76 bar` / `rt_motor_current=12 A` | `rt_lift_delay: high` / `rt_clamp_press: low` / `rt_motor_current: normal` |
+| `symptom_EQ-0008_rt_resistance` | RT-03 | `rt_speed=16 m_min` / `rt_motor_current=20 A` / `rt_vib_rms=2.25 mm_s` / `rt_clamp_press=105 bar` | `rt_speed: low` / `rt_motor_current: high` / `rt_vib_rms: high` / `rt_clamp_press: normal` |
+| `symptom_EQ-0008_rt_clamp` | RT-03 | `rt_clamp_press=76 bar` / `rt_speed=70 m_min` / `rt_motor_current=12 A` | `rt_clamp_press: low` / `rt_speed: normal` / `rt_motor_current: normal` |
+| `symptom_EQ-0009_cv_slip` | CV-01 | `cv_speed=8 m_min` / `cv_belt_tension=304 kPa` / `cv_motor_current=15 A` | `cv_speed: low` / `cv_belt_tension: low` / `cv_motor_current: normal` |
+| `symptom_EQ-0009_cv_resistance` | CV-01 | `cv_speed=8 m_min` / `cv_motor_current=25 A` / `cv_queue_len=87.5 pct` | `cv_speed: low` / `cv_motor_current: high` / `cv_queue_len: high` |
+| `symptom_EQ-0010_cv_resistance` | CV-02 | `cv_speed=6.4 m_min` / `cv_motor_current=25 A` / `cv_queue_len=87.5 pct` | `cv_speed: low` / `cv_motor_current: high` / `cv_queue_len: high` |
+
+유효한 수집 상태에서 동일 run의 연속 sequence와 증가하는 시각으로 3회 관측하고, 필수 신호의 `quality=good`·유한 숫자·정확한 단위·관측 시각과 해당 프레임의 `simulated_at` 일치가 확인되어야 `candidate`가 된다. 논리 채널은 숫자 0/1만 유효하다. 3회는 가상 시연 기준이며 실제 진단 시간 창이 아니다. 근거 미확인은 `unverified`, 지속 관측 전은 `observing`이며 결과는 항상 `confirmed=False`, `threshold_basis=synthetic_config`다. 일시정지 시 관측 창을 비운다.
+
+`symptom_EQ-0002_pdp_trip`은 버스 전압 100 pct·전류 0 A·트립 1을 주입한다. 버스 전압은 차단기 상위 측정이라는 가상 가정이며 무전압 확인이나 전기작업 안전 판단에 사용하지 않는다. 기존 공정 시나리오 `pdp_trip`의 90 pct·55 A·트립 1과 구분한다. 조합 시나리오는 지정 설비에만 적용하고 공급 관계 전파를 추가하지 않으며, PDP 트립 외에는 warning 상태로 운전을 유지한다. 승인 카드 연결은 기존대로 `unlinked`이며 카드별 출처·적용 범위 검수가 별도로 필요하다.
+
+사람이 카드의 수치·측정 위치·모델 적용성을 확인하고 판정을 기록할 곳은 [통합 사람 검수 목록](../data/knowledge_cards/kb/human-review-checklist-20260930.md)이다. 대상은 A 7장·T4 2장·C 19장, 총 28장이다. 현재 카드 원본과 C 배치 검수표 링크는 해당 목록에 있으며, [관측 표현 변경 검토 기록](../data/knowledge_cards/kb/observation-review-20260930.md)을 함께 대조한다. 아래 조합 시나리오 수치와 카드의 실제 적용 기준을 혼동하지 않도록 위 표도 함께 확인한다.
+
 ## 어댑터 사용과 검수 대기
 
 `MesCardAdapter(observer, config, provider).search(run_id, "GR", question)`은 `GR`을 실제 `GR-01` (`EQ-0004`)로 해석한다. `GR-02` 또는 `EQ-0005`는 명시적으로 지정한다. `PDP`·`CAU`도 `PDP-01`·`CAU-01`로 해석하고, 카드 `equipment`는 그 유형을 그대로 쓴다. `COMMON`으로 바꾸지 않는다. PDP-01·CAU-01은 가상 설비라 제조사 매뉴얼의 차단·검전·잔압 절차를 이 설비의 확정 절차로 쓰지 않는다. RT-02 승강이 K-1018~1023 코일카 시저 리프트와 같은 구조인지는 아직 확인되지 않았다. 결과의 `request.observations`는 검색용 원값과 상태값, `evidence`는 시각·원신호·값·단위·품질·활성 알람, `answer`와 `handover_record`는 같은 근거와 verified/unverified 카드 ID를 담는 구조화된 기록이다. 별도 모델 답변이나 MES 웹 화면에 자동으로 연결되는 경로는 아직 없다. ground truth는 어느 결과에도 복사하지 않는다. 기존 안전 카드는 검색 결과 앞에 둔다.

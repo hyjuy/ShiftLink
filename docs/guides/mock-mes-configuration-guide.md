@@ -28,7 +28,7 @@ print(f"주경로: {' → '.join(config.route)}")
 | 설비 수 | 10대 (HPU-01, PDP-01, CAU-01, GR-01, GR-02, RT-01, RT-02, RT-03, CV-01, CV-02) |
 | 주경로 | EQ-0006 → EQ-0007 → EQ-0008 → EQ-0009 |
 | 분기 | EQ-0008 → EQ-0010 (20 m_min, branches로 기록) |
-| 시나리오 | drive_fault, hydraulic_fault, downstream_block |
+| 시나리오 | 활성 `config.scenarios` 기준. 2026-09-30 기본 구성은 정상 포함 기존 9개 + 독립 센서 46개 + 증상 조합 22개 = 77개 |
 | 특수 신호 | rt_speed/cv_speed는 비가동 시 0 (zero_when_stopped=True) |
 
 ## 2. 동일 기능 교체: HPU 자산 교체 (구성 B)
@@ -192,36 +192,54 @@ payload_d['branches'] = [
     if r['from_id'] != 'EQ-0010' and r['to_id'] != 'EQ-0010'
 ]
 
+# 제거 설비를 명시적으로 지정한 센서·증상 시나리오도 제거
+payload_d['scenarios'] = [
+    s for s in payload_d['scenarios'] if s.get('cause_equipment_id') != 'EQ-0010'
+]
+# 화면 배치에서도 제거
+for group in payload_d['layout']:
+    group['equipment_ids'] = [i for i in group['equipment_ids'] if i != 'EQ-0010']
+
 config_d = from_payload(payload_d)
 errors = validate(config_d)
 ```
 
 ## 5. 신호 변경
 
-단위 변경, 신호 삭제는 validate()에서 오류를 보낸다.
+단위 변경 자체는 허용된다. `validate()`는 단위 누락, 중복 신호, 지정한 원인 설비에 없는 시나리오 효과 등을 검사한다. 필수 신호 삭제를 모든 profile에 대해 자동 차단하는 검증은 구현되어 있지 않다. `diff()`의 `signal_changed`를 검토하고 관련 카드 조건·시나리오 효과·단위를 함께 재검수한다.
 
 ### 단위 변경: bar → kPa
 
 ```python
-# hpu_pressure: bar(100 = ~10 MPa) → kPa (1000 kPa ~ 10 MPa)
+# 1 bar = 100 kPa. 100 bar = 10 MPa = 10000 kPa.
 for eq in payload['equipment']:
     if eq['equipment_id'] == 'EQ-0001':
         for sig in eq['signals']:
             if sig['signal'] == 'hpu_pressure':
                 sig['unit'] = 'kPa'
-                sig['normal_min'] = 1000  # 10 MPa → 1000 kPa (근사)
-                sig['normal_max'] = 1200
+                sig['normal_min'] *= 100
+                sig['normal_max'] *= 100
+# 동일 설비의 압력 효과값도 변환한다. 단위 문자열만 바꾸면 안 된다.
+for scenario in payload['scenarios']:
+    if (scenario['cause_capability'] == 'hydraulic_supply'
+            and scenario.get('cause_equipment_id') in (None, 'EQ-0001')):
+        for effect in scenario['signal_effects']:
+            if effect['signal'] == 'hpu_pressure':
+                effect['value'] *= 100
 ```
 
 ### 신호 삭제
 
-선택 신호는 제거 가능. 필수 신호(required=True) 제거는 검증 실패.
+신호를 제거할 때는 그 신호를 사용하는 지정 설비 시나리오도 함께 검토한다. `required=True`의 삭제를 일반적으로 차단하지 않으므로 필수 관측 계약을 사람이 확인해야 한다. 아래는 센서와 해당 센서를 사용하는 지정 설비 시나리오를 함께 제거하는 예다.
 
 ```python
-# cv_belt_tension (선택) 삭제
+# CV-01의 cv_belt_tension 삭제 (기본 구성에서는 required=True이므로 계약 재검수 필요)
 for eq in payload['equipment']:
     if eq['equipment_id'] == 'EQ-0009':
         eq['signals'] = [s for s in eq['signals'] if s['signal'] != 'cv_belt_tension']
+payload['scenarios'] = [s for s in payload['scenarios']
+    if not (s.get('cause_equipment_id') == 'EQ-0009'
+            and any(e['signal'] == 'cv_belt_tension' for e in s['signal_effects']))]
 ```
 
 ## 6. 검증과 diff
@@ -248,12 +266,13 @@ print(f"교체됨: {[(c['equipment_id'], c['old_asset_id'], c['new_asset_id']) f
 
 - `config_a.json`: 기본 10대 구성
 - `config_b_hpu_swap.json`: HPU 자산 교체
-- `config_c_add_rt.json`: RT-04 추가
+- `config_c_add_transport.json`: RT-04 추가
 - `config_d_remove_valid.json`: CV-02 제거 (유효)
 - `config_d_remove_invalid.json`: 참조 남은 제거 시도 (오류)
-- `config_e_signal_unit_change.json`: hpu_pressure bar→kPa
-- `config_f_unknown_capability.json`: 알 수 없는 capability (검증 오류)
-- `config_g_explicit_route.json`: EQ-0008→EQ-0010 경유 주경로
+- `config_e_signal_change.json`: 신호 단위 변경
+- `config_e_missing_required.json`: 필수 신호 삭제 검토 예
+- `config_f_unknown_profile.json`: 알 수 없는 capability (`future_capability`, 검증 거부용). profile 이름이 미지원인 경우의 일반 설비 표현과 구분한다.
+- `config_g_branch.json`: 분기 구성 예
 
 ## 참고: 설비 시나리오 도출
 
@@ -267,25 +286,27 @@ print(f"교체됨: {[(c['equipment_id'], c['old_asset_id'], c['new_asset_id']) f
 
 ### 신호 효과
 
-signal_effects는 capability와 신호명으로 대상을 선택한다. 설비 코드명(GR-01 등)은 사용하지 않는다.
+`cause_equipment_id`가 있으면 해당 설치를 지정하며 없으면 해당 capability의 첫 활성 설비를 원인 대상으로 선택한다. 없는·비활성·기능이 다른 지정 설비를 다른 설비로 대체하지 않는다. `signal_effects`는 원인 설비의 해당 신호만 바꾼다. 전파는 원인에서 `propagation_relation`으로 직접 연결된 설비에만 적용하며 연쇄 전파하지 않는다.
 
 ```python
 ScenarioSpec(
     scenario_id='hydraulic_fault',
-    cause_capability='hydraulic_supply',  # HPU-01, HPU-02 등 해당 capability 설비 모두 영향
-    propagation_relation='hydraulic_supply',  # 이 유형의 관계로 연쇄
+    cause_capability='hydraulic_supply',  # 해당 기능의 첫 활성 설비 선택
+    propagation_relation='hydraulic_supply',  # 원인에서 이 유형으로 직접 연결된 설비만 대기
     ...
     signal_effects=(
         SignalEffect(
-            capability='hydraulic_supply',  # 대상: hydraulic_supply capability를 가진 모든 설비
+            capability='hydraulic_supply',  # 원인으로 선택된 설비만 측정값 변경
             signal='hpu_pressure',
-            value=120.0  # 정상: 150~180 bar에서 비정상: 120 bar로 강제
+            value=120.0  # 기본 정상 145~165 bar에 대한 가상 low; 변경 구성에서는 재검수
         ),
     )
 )
 ```
 
 ## 자산 ID 정책
+
+기본 시연 수치와 조합은 [신호 사전](mes-card-signals.md), [논문 조사](../research/mes-symptom-screening.md)를 따른다. `bool` 채널은 숫자 0/1만 사용한다. 정상 범위가 변경되어 요청한 low/high 조합을 만들 수 없으면 새 증상 시나리오 생성에서 제외하며, 저장된 기존 구성의 시나리오 값은 자동 재작성하지 않는다. 사용자 업로드 구성은 자동 보강하지 않는다.
 
 - 새로운 자산: `AS-{equipment_id}-{序号}` (예: AS-EQ-0001-002)
 - 폐기 자산의 ID는 절대 재사용하지 않는다.

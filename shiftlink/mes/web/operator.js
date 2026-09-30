@@ -41,7 +41,9 @@
         (signal.unit!=="bool" || m.value===0 || m.value===1) && Number.isFinite(age) && age>=0 && age<=10;
       const hasRange = signal.normal_min!=null || signal.normal_max!=null;
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
-      return {...signal, observation:m, known, trustworthy, hasRange, inRange,
+      // Engine emits 0 for these signals whenever the equipment is not running; that is expected, not "low".
+      const stoppedZero = trustworthy && signal.zero_when_stopped===true && m.value===0 && selected.operating_state!=="running";
+      return {...signal, observation:m, known, trustworthy, hasRange, inRange, stoppedZero,
         relevant:selected.equipment_id===cause?.equipment_id && (spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
     }).sort((a,b)=>Number(b.relevant)-Number(a.relevant));
     return {snapshot, config, nodes, links, faults, selected, cause, spec, problemPart, selectedPart, parts, measurements,
@@ -145,7 +147,7 @@
     const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"관측된 영향 대기":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
     const measurements=model.measurements.map(s=>{
       const band=s.normal_min==null&&s.normal_max==null?"기준 없음":`${s.normal_min??"하한 없음"} ~ ${s.normal_max??"상한 없음"}`;
-      const finding=!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
+      const finding=!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":s.stoppedZero?"정지 중 0 · 정상":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
       return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small></th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
     }).join("");
     const diagnoses=(model.snapshot.symptom_diagnostics || []).filter(d=>d.equipment_id===eq.equipment_id).map(d=>
@@ -160,7 +162,22 @@
     return `<p class="part-caption">${part?`시연에서 가정한 문제 부품: <b>${esc(partNames[part] || part)}</b> · 센서만으로 확정한 진단이 아닙니다.`:"문제 부품 미확정 · 아래는 구성된 모의 부품입니다."}</p><div class="part-locator" role="group" aria-label="부품 위치 개념도 · 실제 조립 위치 아님">${model.parts.map(p=>`<button type="button" data-part="${esc(p.component_id)}" aria-pressed="${chosen?.component_id===p.component_id}" class="part-target ${p.component_id===part?"suspect":""}"><span aria-hidden="true">${p.component_id===part?"!":"◇"}</span><b>${esc(p.name)}</b><small>${p.component_id===part?"시연 가정 부품":"모의 구성 부품"}</small></button>`).join("")}</div>${chosen?`<p class="part-context"><b>${esc(chosen.name)}</b> · 모의 건전도 ${Number(chosen.health_percent).toFixed(1)}% · 운전 ${(chosen.operating_seconds/3600).toFixed(3)} h · 정비 ${Number(chosen.maintenance_count)}회</p>`:""}<p class="hint">위치는 기능별 개념 배치입니다. 실제 잔여수명·고장 확률을 뜻하지 않습니다.</p>`;
   }
 
-  const api={legendView,buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
+  // Handoff draft for people and models. Built only from observation-boundary fields (see mes/adapters.py):
+  // no scenario-derived relevant/affected/problem part/recovery, signals in configured order, relations as a summary.
+  function contextDraft(model, mode, stale) {
+    const s=model.snapshot, eq=model.selected;
+    const status=m=>!m.known?"unknown":!m.trustworthy?"untrusted":m.stoppedZero?"stopped_zero":!m.hasRange?"no_range":m.inRange?"normal":
+      m.normal_min!=null&&m.observation.value<m.normal_min?"low":"high";
+    return {purpose:"ShiftLink 인계용 초안 · 합성 데이터 · 사람 확인 필요", view_mode:mode, stale, run_id:s.run_id, sequence:s.sequence, observed_at:s.simulated_at,
+      equipment:{equipment_id:eq.equipment_id, code:eq.code, role:eq.role?.[0], operating_state:eq.operating_state, fault_level:eq.fault_level, wait_reason:eq.wait_reason, coils:(eq.coils || []).map(c=>c.coil_id)},
+      signals:(eq.signals || []).map(sig=>model.measurements.find(m=>m.signal===sig.signal)).map(m=>({signal:m.signal, value:m.known?m.observation.value:null, unit:m.unit,
+        normal_min:m.normal_min, normal_max:m.normal_max, quality:m.observation?.quality ?? null, status:status(m)})),
+      relations:model.links.filter(l=>[l.from_id,l.to_id].includes(eq.equipment_id)).map(l=>({relation_type:l.relation_type, from:title(l.from), to:title(l.to),
+        ...(({operating_state, fault_level})=>({other_state:operating_state, other_fault_level:fault_level}))(l.from_id===eq.equipment_id?l.to:l.from)})),
+      unconfirmed:["실제 원인","실제 조립 위치","실제 점검 성공","안전 재가동 가능 여부"], held_coils:model.held.map(c=>c.coil_id)};
+  }
+
+  const api={contextDraft,legendView,buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
   if (typeof module!=="undefined") module.exports=api;
   if (typeof window!=="undefined") window.MesOperator=api;
 })();

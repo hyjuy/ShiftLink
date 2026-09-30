@@ -65,6 +65,29 @@ def test_wrong_items_first_and_human_blanks():
     assert "| 자동 판정 | abstain_ok |" in text
 
 
+def test_handover_rows_show_handover_method_and_blank():
+    method = {"required_context": ["소리 성질", "들은 시각"], "recipient_role": "다음 조 설비 담당자",
+              "timing": "교대 인계 시", "channel": "인계 메모", "acknowledgement": "정비 기록에 확인 기재"}
+    handover_row = row("H-001", {"hit": True, "partial": False}, cited=["K-1104"])
+    handover_row["handover_method"] = method
+    empty_row = row("H-002", {"hit": False, "partial": False})
+    empty_row["handover_method"] = None
+    result = {"mode": "handover", "rows": [handover_row, empty_row]}
+
+    text = render_report(result, [item("H-001", primary=["K-1104"]), item("H-002", primary=["K-1101"])])
+
+    assert text.startswith("# QA 검수표 (인계 모드)\n")
+    assert "| 전달 정보 | 소리 성질; 들은 시각 |" in text
+    assert "| 대상 | 다음 조 설비 담당자 |" in text
+    assert text.count("### 인계 항목") == 2 and "### 인계 항목\n\n없음" in text
+    assert text.count("- 인계 항목: [ ] 메모 상황에 맞음  [ ] 일부  [ ] 안 맞음") == 2
+
+
+def test_query_rows_have_no_handover_section():
+    text = render_report({"rows": [row("Q-001", {"hit": True})]}, [item("Q-001")])
+    assert "인계 항목" not in text
+
+
 def test_missing_qid_raises():
     with pytest.raises(ValueError, match="Q-009"):
         render_report({"rows": [row("Q-009", {"hit": False})]}, [item("Q-001")])

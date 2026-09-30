@@ -2,6 +2,10 @@
 
     python eval/qa/score.py eval/qa/20260929/qa_dev.json --host http://127.0.0.1:11435 \
         --model exaone3.5:2.4b-instruct-q4_K_M --out eval/results/qa_dev_exaone.json
+    python eval/qa/score.py eval/qa/20260930-T4/qa_dev_t4.json --mode handover --host ... --model ... --out ...
+
+--mode handover sends each question as a handover memo (HandoverRequest) and keeps the
+rendered handover method per row.
 
 Automatic items only (see docs/collaboration/eval-qa-set-assignment-20260930.md);
 key facts and fabrication are graded by a person from the saved answers.
@@ -60,21 +64,33 @@ def summarize(rows: list[dict]) -> dict:
     }
 
 
-def run(items: list[dict], pipe: FixedPipeline) -> list[dict]:
+def payload(item: dict, mode: str = "query", shift: str = "A") -> dict:
+    """Pipeline input for one question. Handover requests carry no observations."""
+    if mode == "handover":
+        if item["observations"]:
+            raise ValueError(f"{item['qid']}: 인계 모드는 관측값을 받지 않습니다")
+        return {"memo_text": item["question"], "shift": shift, "eq_ids": [item["eq_id"]]}
+    obs = [{"signal": s, **v} for s, v in item["observations"].items()]
+    return {"question": item["question"], "line_id": "L1", "eq_id": item["eq_id"], **({"observations": obs} if obs else {})}
+
+
+def run(items: list[dict], pipe: FixedPipeline, mode: str = "query", shift: str = "A") -> list[dict]:
     rows = []
     for item in items:
-        obs = [{"signal": s, **v} for s, v in item["observations"].items()]
-        payload = {"question": item["question"], "line_id": "L1", "eq_id": item["eq_id"], **({"observations": obs} if obs else {})}
         t, err = time.monotonic(), None
         try:
-            res = pipe.run(payload)
+            res = pipe.run(payload(item, mode, shift))
             o = res.output
             out = {"answer": o.answer, "cited": list(o.cited_card_ids), "safety": [n.card_id for n in o.safety_notices],
                    "ranked": [c["card_id"] for c in res.tool_results.get("ranked_cards", [])],
                    "no_knowledge": o.no_knowledge, "review_queue": o.review_queue}
+            if mode == "handover":
+                out["handover_method"] = o.handover_method.model_dump() if o.handover_method else None
         except Exception as e:  # keep scoring; a failure is a result
             err = f"{type(e).__name__}: {e}"[:200]
             out = {"answer": "", "cited": [], "safety": [], "ranked": [], "no_knowledge": False, "review_queue": None}
+            if mode == "handover":
+                out["handover_method"] = None
         row = {"qid": item["qid"], "eq_id": item["eq_id"], "answerable": item["answerable"],
                "e2e_s": round(time.monotonic() - t, 3), "error": err, **out}
         row["score"] = score_item(item, out)
@@ -89,15 +105,17 @@ def main():
     ap.add_argument("--host", required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--mode", choices=["query", "handover"], default="query")
+    ap.add_argument("--shift", choices=["A", "B", "C"], default="A", help="인계 모드 근무조")
     args = ap.parse_args()
 
     items = json.loads(Path(args.qa_file).read_text(encoding="utf-8"))
     loaded = load_card_provider(KB)
     bind_tool_provider(loaded.provider)
     pipe = FixedPipeline(model=OllamaModel(host=args.host, model=args.model), tools=loaded.provider)
-    rows = run(items, pipe)
+    rows = run(items, pipe, args.mode, args.shift)
     rev = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-    report = {"qa_file": args.qa_file, "model": args.model, "git_rev": rev, "kb": str(KB.relative_to(ROOT)),
+    report = {"qa_file": args.qa_file, "mode": args.mode, "model": args.model, "git_rev": rev, "kb": str(KB.relative_to(ROOT)),
               "summary": summarize(rows), "rows": rows}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")

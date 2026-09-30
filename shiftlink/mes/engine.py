@@ -64,6 +64,7 @@ class MesEngine:
         return self.snapshot
 
     def pause(self) -> Snapshot:
+        self._symptom_frames.clear()
         if self._running:
             self._resume_mode = self._snapshot.line_mode
         self._running = False

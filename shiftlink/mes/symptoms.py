@@ -146,7 +146,15 @@ def screen_symptoms(frames, config):
         return []
     run_id = frames[-1].get("run_id")
     frames = list({f.get("sequence"): f for f in frames if f.get("run_id") == run_id}.values())[-3:]
-    consecutive = len(frames) == 3 and all(b.get("sequence") == a.get("sequence") + 1 for a, b in zip(frames, frames[1:]))
+    try:
+        times = [f["simulated_at"] if isinstance(f.get("simulated_at"), datetime)
+                 else datetime.fromisoformat(f["simulated_at"]) for f in frames]
+        consecutive = (len(frames) == 3
+            and all(f.get("line_mode") not in {"paused", "stopped", "recovering", "quality_hold"} for f in frames)
+            and all(b.get("sequence") == a.get("sequence") + 1 for a, b in zip(frames, frames[1:]))
+            and all(a < b for a, b in zip(times, times[1:])))
+    except (TypeError, ValueError, KeyError):
+        consecutive = False
     records = []
     for eq in config.equipment:
         if not eq.active:

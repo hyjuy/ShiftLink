@@ -53,9 +53,11 @@ def load_card_provider(
     files = _json_files(root)
     cards: list[KnowledgeCard] = []
     stores: dict[str, list[Any]] = {name: [] for name in _STORE_KEYS.values()}
+    evidence: dict[str, str] = {}
     for file in files:
         file_cards, file_stores = _read_file(file)
         cards.extend(file_cards)
+        evidence.update(file_stores.pop("evidence_text", {}))
         for name, rows in file_stores.items():
             stores[name].extend(rows)
     if catalog is not None and not stores["equipment_db"] and not stores["equipment_types"]:
@@ -63,7 +65,7 @@ def load_card_provider(
         stores["equipment_db"] = plant["equipment"]
         stores["equipment_types"] = plant["equipment_types"]
     provider = InMemoryToolProvider(cards=cards, include_draft=include_draft,
-                                    min_top_relevance=min_top_relevance, **stores)
+                                    min_top_relevance=min_top_relevance, evidence_text=evidence, **stores)
     return CardLoad(provider=provider, seen=len(cards))
 
 
@@ -114,5 +116,7 @@ def _card_items(data: Any, source: Path) -> tuple[list[Any], dict[str, list[Any]
                 if not isinstance(rows, list):
                     raise ValueError(f"{source}: {raw_key}는 목록이어야 합니다")
                 stores[field] = rows
+            if isinstance(data.get("evidence_text"), dict):  # kb_cards.json: T4 evidence-event text
+                stores["evidence_text"] = data["evidence_text"]
             return items, stores
     raise ValueError(f"{source}: 카드 목록을 찾을 수 없습니다")

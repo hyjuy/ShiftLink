@@ -22,9 +22,10 @@ QA = ROOT / "eval/qa/20260929"
 KB = ROOT / "docs/data/knowledge_cards/kb/kb_cards.json"
 
 
-def route(provider, item: dict) -> list[str]:
+def route(provider, item: dict, handover: bool = False) -> list[str]:
     obs = {s: v["value"] for s, v in item.get("observations", {}).items()} or None
-    hits = provider.search_cards(query=item["question"], equipment_ids=[item["eq_id"]], k=5, observations=obs)
+    hits = provider.search_cards(query=item["question"], equipment_ids=[item["eq_id"]], k=5, observations=obs,
+                                 handover=handover)
     return [c["card_id"] for c in hits]
 
 
@@ -34,8 +35,8 @@ def route_ok(item: dict, ranked: list[str]) -> bool:
     return not ranked
 
 
-def score(provider, items: list[dict]) -> tuple[int, list[str]]:
-    misses = [x["qid"] for x in items if not route_ok(x, route(provider, x))]
+def score(provider, items: list[dict], handover: bool = False) -> tuple[int, list[str]]:
+    misses = [x["qid"] for x in items if not route_ok(x, route(provider, x, handover))]
     return len(items) - len(misses), misses
 
 
@@ -50,7 +51,7 @@ def main():
     d, d_miss = score(provider, dev)
     s, s_miss = score(provider, sanity)
     t4 = json.loads((QA.parent / "20260930-T4/qa_dev_t4.json").read_text(encoding="utf-8"))
-    h, h_miss = score(provider, t4)
+    h, h_miss = score(provider, t4, handover=True)  # handover memos run in handover mode in the pipeline
     print(f"dev_route_acc: {d}/{len(dev)}")
     print(f"t4_route_acc: {h}/{len(t4)}")
     print(f"sanity_route_acc: {s}/{len(sanity)}")

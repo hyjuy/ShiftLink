@@ -9,9 +9,9 @@
   "mes_equipment_id": "EQ-0008",
   "mes_component_code": null,
   "scenario": "S2",
-  "title": "반송 속도 low에서는 롤러 미기동과 물품 미이송을 구분한다",
+  "title": "반송 속도 < 20 m_min에서는 롤러 미기동과 물품 미이송을 구분한다",
   "symptom": "반송 지시가 있지만 물품이 이동하지 않는다.",
-  "know_how": "운전 지시가 없는 정상 정지라면 적용하지 않는다. 반송 지시가 있는데 RollerDrive가 돌지 않으면 주 스위치·제어 전원 상태, 전원선 손상, RollerDrive 고장을 확인하는 경로로 간다. 물품이 이송되지 않는 증상에는 별도 표 항목으로 PolyVee 구동 벨트, 허용 이송중량, MultiControl을 확인하는 경로로 나눈다. 부품 교체는 대상이 원문과 같은 구동 구조인지 확인한 담당자가 수행한다. 원문 두 번째 항목은 롤러가 회전 중이라고 명시하지 않으며 두 증상이 겹칠 수 있다. 구동부 관측을 함께 남겨 담당자가 관련 항목을 확인한다.",
+  "know_how": "운전 지시가 없는 정상 정지라면 적용하지 않는다. 반송 지시가 있는데 RollerDrive가 돌지 않으면 주 스위치·제어 전원 상태, 전원선 손상, RollerDrive 고장을 확인하는 경로로 간다. 물품이 이송되지 않는 증상에는 별도 표 항목으로 PolyVee 구동 벨트, 허용 이송중량, MultiControl을 확인하는 경로로 나눈다. 부품 교체는 대상이 원문과 같은 구동 구조인지 확인한 담당자가 수행한다. 원문 두 번째 항목은 롤러가 회전 중이라고 명시하지 않으며 두 증상이 겹칠 수 있다. 구동부 관측을 함께 남겨 담당자가 관련 항목을 확인한다. 검색 관측 기준: rt_speed < 20.0 m_min(가상 정상 범위 20.0–120.0 m_min). 이 수치는 기본 가상 MES의 정상 범위 경계이며 제조사 고장·작업 기준이 아니다. 해당 run의 config_id·신호 단위·quality=good을 확인하고, 실제 계측과 대상 모델 기준을 별도로 대조한다.",
   "rationale": "Interroll p.51 표는 Transport process cannot be started and RollerDrive does not run과 Conveying goods are not being transported를 별도 항목으로 둔다. 클램프 원문 근거가 없어 계획 예시를 반송 분기로 대체했다.",
   "conditions": [
    {
@@ -69,9 +69,9 @@
   "mes_equipment_id": "EQ-0008",
   "mes_component_code": null,
   "scenario": "S2",
-  "title": "전류 high에서는 실제 과전류 차단과 이송중량 초과를 먼저 구분한다",
-  "symptom": "반송 중 전류가 높게 관측되고 모터 차단 상태 확인이 필요하다.",
-  "know_how": "MES 전류 high만으로 과전류 차단을 확정하지 않는다. 실제 모터 차단기가 과전류로 동작한 경우에만 원문 항목을 적용한다. 이송중량이 대상 설비 허용중량을 초과하면 허용중량을 지키는 경로로 간다. 중량 초과 여부와 별도로 전기 담당자가 단락과 전기 연결 상태를 확인하고 결함 부품을 처리하는 경로로 간다. 실제 과전류 차단이 확인되지 않으면 이 원문 항목으로 원인이나 조치를 확정하지 않는다. 중량 초과와 단락은 배타적인 원인이 아니며 중량 확인만으로 전기 점검 필요를 없애지 않는다.",
+  "title": "전류 > 16 A(가상 정상 범위 8–16 A)에서는 실제 과전류 차단과 이송중량 초과를 먼저 구분한다",
+  "symptom": "반송 중 rt_motor_current > 16 A(가상 정상 범위 8–16 A)가 관측되고 모터 차단 상태 확인이 필요하다.",
+  "know_how": "MES rt_motor_current > 16 A(가상 정상 범위 8–16 A)만으로 과전류 차단을 확정하지 않는다. 실제 모터 차단기가 과전류로 동작한 경우에만 원문 항목을 적용한다. 이송중량이 대상 설비 허용중량을 초과하면 허용중량을 지키는 경로로 간다. 중량 초과 여부와 별도로 전기 담당자가 단락과 전기 연결 상태를 확인하고 결함 부품을 처리하는 경로로 간다. 실제 과전류 차단이 확인되지 않으면 이 원문 항목으로 원인이나 조치를 확정하지 않는다. 중량 초과와 단락은 배타적인 원인이 아니며 중량 확인만으로 전기 점검 필요를 없애지 않는다. 이 수치는 기본 가상 MES의 정상 범위 경계이며 제조사 고장·작업 기준이 아니다. 해당 run의 config_id·신호 단위·quality=good을 확인하고, 실제 계측과 대상 모델 기준을 별도로 대조한다.",
   "rationale": "Interroll p.52 Motor circuit breaker is triggered due to excessive current consumption 항목은 원인으로 Short circuit과 Transport weight too high를 구분한다. rt_motor_current는 RT-03, rt_lift_delay는 RT-02에 있으므로 지연과 전류를 한 설비 조건으로 묶지 않았다.",
   "conditions": [
    {

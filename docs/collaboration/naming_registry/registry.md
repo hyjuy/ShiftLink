@@ -102,6 +102,8 @@
 
 2026-09-22: `search_cards(*, query, equipment_ids, k=5, observations=None)`로 확장. 일반 검색도 안전 검색과 같은 관측값·조건 평가를 사용한다.
 
+2026-09-30: `search_cards(*, query, equipment_ids, k=5, observations=None, handover=False)`. `handover=True`(파이프라인 인계 모드)일 때만 T4 카드의 근거 사건 문장(`kb_cards.json`의 `evidence_text`)을 낮은 가중치로 점수에 더한다.
+
 2026-09-24: `MODEL_CALL_ERRORS` = `(NotImplementedError, TimeoutError, ConnectionError, ValueError)` — `shiftlink/edge/ollama.py`의 어댑터가 올리는 오류 4종 묶음(담당 허재원). 호출자가 `except MODEL_CALL_ERRORS`로 한 번에 잡을 때만 쓰고, 개별 판단은 예외 타입으로 한다.
 
 2026-09-24: D-26~29 §4.4의 모델 입력 화이트리스트 상수 `MODEL_CARD_FIELDS`는 `shiftlink/edge/ollama.py`에 둔다(담당 허재원). 모델 프롬프트를 만드는 유일한 지점이라 여기 한 곳에만 있어야 한다. 파이프라인이 나중에 같은 화이트리스트를 쓰게 되면 이 상수를 import하고 복제하지 않는다.

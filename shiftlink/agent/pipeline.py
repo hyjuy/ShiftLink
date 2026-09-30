@@ -14,7 +14,7 @@ class ToolProvider(Protocol):
 
     def search_cards(
         self, *, query: str, equipment_ids: list[str], k: int = 5,
-        observations: dict[str, object] | None = None,
+        observations: dict[str, object] | None = None, handover: bool = False,
     ) -> list[dict[str, Any]]: ...
 
     def search_safety_cards(
@@ -164,6 +164,7 @@ class FixedPipeline:
                 equipment_ids=equipment_ids,
                 k=k,
                 observations=observations_dict,
+                handover=isinstance(request, HandoverRequest),
             ),
         }
 

@@ -42,6 +42,7 @@ def search_cards(
     equipment_ids: list[str],
     k: int = 5,
     observations: dict[str, object] | None = None,
+    handover: bool = False,
 ) -> list[dict[str, Any]]:
     """Return visible knowledge cards or published manual clauses."""
     return _provider_or_raise().search_cards(
@@ -49,6 +50,7 @@ def search_cards(
         equipment_ids=equipment_ids,
         k=k,
         observations=observations,
+        handover=handover,
     )
 
 

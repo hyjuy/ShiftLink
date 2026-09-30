@@ -84,21 +84,21 @@ T6 = 정지 후 재가동·상태 복귀 지식과 **실패 경험**. T4 근거 
 | **PDP-01** 배전반 (EQ-0002, 유틸리티실 A동) | 기본 `bus_voltage`, 보강 `bus_current`·`breaker_trip` | GR-01·GR-02에 전력 공급 | `PDP/15001-20000_16339.pdf` — UNIDO 1987 세미나 *Electrical and Mechanical Maintenance in Rolling Mills* (210쪽, 스캔 OCR 품질 낮음) · `PDP/d2e0a4ea3d7e62b24193679803b73e6.pdf` — ABB *Electrical System Service* 소개 자료 (8쪽) |
 
 **자료 한계**
-- PDP 원문은 절차·수치 근거가 약하다. UNIDO 자료는 스캔본이라 쪽 단위로 직접 읽어 대조해야 하고, ABB 자료는 서비스 소개 브로슈어다. **T5(전기 작업 안전)는 KOSHA 전기작업 지침 같은 공식 안전 자료를 추가로 확보한 뒤** 쓴다(현재 로컬에 없음).
+- PDP 원문은 절차·수치 근거가 약하다. UNIDO 자료는 스캔본이라 쪽 단위로 직접 읽어 대조해야 하고, ABB 자료는 서비스 소개 브로슈어다. **T5(전기 작업 안전)는 공식 안전 자료로** 쓴다 — 9/30 `docs/sources/safety/`에 확보(로컬 전용): KOSHA E-7-2012 전기작업, E-105-2011 전기작업안전, E-154-2016 전기작업계획서, E-14-2012 감전 응급조치, E-92-2017 접지설비, 산업안전보건기준에 관한 규칙(2026-03-02), KOSHA Guide 길라잡이·목록.
 - CAU 자료는 에너지 효율 중심이라 고장 진단·재가동 근거는 부분적이다.
 
 ### 선행 조건 (없으면 카드를 못 싣는다)
 
 1. **스키마** — **완료**: PR [#84](https://github.com/hyjuy/ShiftLink/pull/84)로 `KnowledgeCard.equipment`에 PDP·CAU가 들어갔고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석한다 (Q7 (c) 결정).
-2. **신호 표**: `air_flow`·`compressor_current`·`bus_current`·`breaker_trip`이 [`mes-card-signals.md`](../guides/mes-card-signals.md) 표에 들어가야 T2 조건을 쓸 수 있다(유현준, 10/2).
-3. **정답지·커버리지 매트릭스 개정** (유현준): 설비 6종 기준으로 바뀐 형식이 나오면 배치 D 카드(최재영·Claude)와 평가셋 라벨을 거기에 맞춘다.
+2. **신호 표** — **완료**(PR #98): `air_flow`·`compressor_current`·`bus_current`·`breaker_trip`이 [`mes-card-signals.md`](../guides/mes-card-signals.md) 표에 들어가야 T2 조건을 쓸 수 있다(유현준, 10/2).
+3. **정답지·커버리지 매트릭스 개정** — **완료**(PR #99, 유현준): 설비 6종 기준으로 바뀐 형식이 나오면 배치 D 카드(최재영·Claude)와 평가셋 라벨을 거기에 맞춘다.
 
 ### 슬롯 (10장 제안)
 
 | 설비 | T1 | T3 | T5 | T2 | 합 |
 |---|---|---|---|---|---|
 | CAU | 2 (압력 저하·이상음) | 1 (압력 저하 확인 순서) | 1 (압축공기 안전) | 1 (`air_pressure` + `compressor_current`) | 5 |
-| PDP | 2 (차단기 동작·전압 변동) | 1 (차단기 트립 후 확인 순서) | 1 (충전부 작업 금기 — 공식 안전 자료 확보 후) | 1 (`bus_voltage` + `breaker_trip`) | 5 |
+| PDP | 2 (차단기 동작·전압 변동) | 1 (차단기 트립 후 확인 순서) | 1 (충전부 작업 금기 — KOSHA E-7·E-105) | 1 (`bus_voltage` + `breaker_trip`) | 5 |
 
 - 60장 목표와 별개로 **70장**이 된다. 60장 안에 넣으려면 배치 C에서 칸을 줄여야 한다 → 결정 필요 (7절).
 - 관계를 이용한 카드(예: CAU 압력 저하 → CV 디버터 동작 이상)는 원인 확정 근거로 쓰지 않는다(`QC-CAUSE-02`). "같이 확인할 곳"까지만.
@@ -147,6 +147,6 @@ python -m pytest -q && python eval/qa/route_score.py
 ## 8. 결정이 필요한 것
 
 1. ~~담당~~ — 결정됨(9/30): 배치 C 유현준, 배치 D 최재영·Claude.
-2. CAU·PDP를 60장 **안에** 넣을지(배치 C 칸 축소) **밖에**(70장) 둘지.
-3. PDP T5 근거 자료 — 어떤 공식 안전 자료를 확보할지.
+2. ~~CAU·PDP를 60장 안/밖~~ — 밖: 배치 C가 19장 그대로 들어와(#97) 배치 D(21장, 1~3차)까지 **81장**.
+3. ~~PDP T5 근거 자료~~ — 확보(9/30, `docs/sources/safety/` KOSHA E 시리즈 5종 + 기준규칙).
 4. 선행 조건: PDP·CAU 스키마(유현준·Cursor), 보강 신호 표(유현준, 10/2).

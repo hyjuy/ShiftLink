@@ -1,0 +1,185 @@
+{
+ "batch_id": "KB-20260930-D",
+ "seed": 20260930,
+ "generator": "plan.py",
+ "slots": [
+  {
+   "slot": "S01",
+   "card_id": "K-1301",
+   "equipment": "CAU",
+   "tacit_type": "T1",
+   "hint": "압력 저하"
+  },
+  {
+   "slot": "S02",
+   "card_id": "K-1302",
+   "equipment": "CAU",
+   "tacit_type": "T1",
+   "hint": "이상음"
+  },
+  {
+   "slot": "S03",
+   "card_id": "K-1303",
+   "equipment": "CAU",
+   "tacit_type": "T3",
+   "hint": "압력 저하 확인 순서"
+  },
+  {
+   "slot": "S04",
+   "card_id": "K-1304",
+   "equipment": "CAU",
+   "tacit_type": "T5",
+   "hint": "압축공기 안전"
+  },
+  {
+   "slot": "S05",
+   "card_id": "K-1305",
+   "equipment": "CAU",
+   "tacit_type": "T2",
+   "hint": "air_pressure + compressor_current"
+  },
+  {
+   "slot": "S06",
+   "card_id": "K-1306",
+   "equipment": "PDP",
+   "tacit_type": "T1",
+   "hint": "차단기 동작"
+  },
+  {
+   "slot": "S07",
+   "card_id": "K-1307",
+   "equipment": "PDP",
+   "tacit_type": "T1",
+   "hint": "전압 변동"
+  },
+  {
+   "slot": "S08",
+   "card_id": "K-1308",
+   "equipment": "PDP",
+   "tacit_type": "T3",
+   "hint": "차단기 트립 후 확인 순서"
+  },
+  {
+   "slot": "S09",
+   "card_id": "K-1309",
+   "equipment": "PDP",
+   "tacit_type": "T5",
+   "hint": "충전부 작업 금기"
+  },
+  {
+   "slot": "S10",
+   "card_id": "K-1310",
+   "equipment": "PDP",
+   "tacit_type": "T2",
+   "hint": "bus_voltage + breaker_trip"
+  },
+  {
+   "slot": "S11",
+   "card_id": "K-1311",
+   "equipment": "CAU",
+   "tacit_type": "T1",
+   "hint": "압축기 과부하 트립·고온 정지",
+   "round": 2
+  },
+  {
+   "slot": "S12",
+   "card_id": null,
+   "equipment": "CAU",
+   "tacit_type": "T1",
+   "hint": "압축기 이상음·진동",
+   "round": 2,
+   "generated_as": "K-1312",
+   "dropped": true
+  },
+  {
+   "slot": "S13",
+   "card_id": "K-1312",
+   "equipment": "CAU",
+   "tacit_type": "T3",
+   "hint": "부하 운전 불가·공급량 부족 확인 순서",
+   "round": 2,
+   "generated_as": "K-1313"
+  },
+  {
+   "slot": "S14",
+   "card_id": "K-1313",
+   "equipment": "CAU",
+   "tacit_type": "T3",
+   "hint": "정기 정비 순서(필터·분리기·오일)",
+   "round": 2,
+   "generated_as": "K-1314"
+  },
+  {
+   "slot": "S15",
+   "card_id": "K-1314",
+   "equipment": "CAU",
+   "tacit_type": "T5",
+   "hint": "정비 전 압력 해제·재기동 방지",
+   "round": 2,
+   "generated_as": "K-1315"
+  },
+  {
+   "slot": "S16",
+   "card_id": "K-1315",
+   "equipment": "PDP",
+   "tacit_type": "T1",
+   "hint": "열화상·접속부 과열",
+   "round": 2,
+   "generated_as": "K-1316"
+  },
+  {
+   "slot": "S17",
+   "card_id": "K-1316",
+   "equipment": "PDP",
+   "tacit_type": "T1",
+   "hint": "차단기 조작 불량·동작 지연",
+   "round": 2,
+   "generated_as": "K-1317"
+  },
+  {
+   "slot": "S18",
+   "card_id": "K-1317",
+   "equipment": "PDP",
+   "tacit_type": "T3",
+   "hint": "배선차단기 트립 후 점검 순서",
+   "round": 2,
+   "generated_as": "K-1318"
+  },
+  {
+   "slot": "S19",
+   "card_id": "K-1318",
+   "equipment": "PDP",
+   "tacit_type": "T3",
+   "hint": "차단기 시험 순서",
+   "round": 2,
+   "generated_as": "K-1319"
+  },
+  {
+   "slot": "S20",
+   "card_id": "K-1319",
+   "equipment": "PDP",
+   "tacit_type": "T5",
+   "hint": "수변전설비 점검·조작 안전",
+   "round": 2,
+   "generated_as": "K-1320"
+  },
+  {
+   "slot": "S21",
+   "card_id": "K-1320",
+   "equipment": "CAU",
+   "tacit_type": "T5",
+   "hint": "공압 계통 잔압·축적 에너지",
+   "round": 3,
+   "generated_as": "K-1321"
+  },
+  {
+   "slot": "S22",
+   "card_id": "K-1321",
+   "equipment": "CAU",
+   "tacit_type": "T5",
+   "hint": "압축공기 사용 금지 행위",
+   "round": 3,
+   "generated_as": "K-1322"
+  }
+ ]
+}

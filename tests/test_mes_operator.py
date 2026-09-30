@@ -167,3 +167,30 @@ console.log('Topology, isolation, part assumption, evidence, and graph checks pa
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ContextDraftTests(unittest.TestCase):
+    def test_draft_hides_injected_cause_marks_stopped_zero_and_stays_small(self):
+        service = MesService(Path("docs/data/reference/00_plant_and_relations.json"))
+        self.addCleanup(service.storage.close)
+        service.control({"command": "reset"}); service.control({"command": "start"})
+        service.control({"command": "scenario", "scenario_id": "sensor_anomaly_EQ-0007_rt_clamp_press"})
+        service.tick()
+        result = subprocess.run(["node", "-e", r'''
+const assert = require('node:assert/strict');
+const {buildOperatorModel, contextDraft} = require('./shiftlink/mes/web/operator.js');
+const {config, state} = JSON.parse(require('node:fs').readFileSync(0, 'utf8'));
+const id = config.equipment.find(e=>e.code==='RT-02').equipment_id;
+const model = buildOperatorModel(state, config, id);
+const draft = contextDraft(model, 'live', false), text = JSON.stringify(draft);
+assert.ok(model.measurements.some(m=>m.relevant), 'screen still highlights the scenario signal');
+for (const leak of ['relevant','affected','recovery','next_check','assumption','scenario']) assert.ok(!text.includes(leak), leak);
+assert.deepEqual(draft.signals.map(s=>s.signal), model.selected.signals.map(s=>s.signal), 'configured order, not relevance order');
+if (model.selected.operating_state!=='running') for (const s of draft.signals)
+  if (model.selected.signals.find(c=>c.signal===s.signal).zero_when_stopped && s.value===0) assert.equal(s.status,'stopped_zero');
+assert.ok(draft.signals.some(s=>s.status==='stopped_zero'), 'fixture must exercise stopped zeros');
+assert.deepEqual(draft.equipment.coils, model.selected.coils.map(c=>c.coil_id), 'loaded coils kept');
+assert.ok(draft.relations.every(r=>r.other_fault_level), 'neighbour fault level kept');
+assert.ok(text.length < 2500, `compact draft: ${text.length} chars`);
+'''], input=json.dumps({"config": service.config()["config"], "state": service.state()}), text=True, capture_output=True, encoding="utf-8")
+        self.assertEqual(result.returncode, 0, result.stderr)

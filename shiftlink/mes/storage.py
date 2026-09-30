@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import json
 import sqlite3
+from contextlib import nullcontext
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from pathlib import Path
@@ -79,9 +80,9 @@ class MesStorage:
         """)
         self.connection.commit()
 
-    def create_run(self, run: Run) -> None:
+    def create_run(self, run: Run, *, commit: bool = True) -> None:
         try:
-            with self.connection:
+            with self.connection if commit else nullcontext():
                 self.connection.execute("INSERT INTO runs VALUES (?, ?, ?)", (run.run_id, run.started_at.isoformat(), _dump(run)))
         except sqlite3.IntegrityError as error:
             raise ValueError(f"run already exists: {run.run_id}") from error
@@ -117,20 +118,21 @@ class MesStorage:
         except sqlite3.IntegrityError as error:
             raise ValueError(f"ground truth already exists or run is unknown: {truth.run_id}") from error
 
-    def save_configuration(self, config_id: str, canonical_payload: str, created_at: datetime | None = None) -> None:
+    def save_configuration(self, config_id: str, canonical_payload: str, created_at: datetime | None = None, *, commit: bool = True) -> None:
         """Idempotent: the same config_id always carries the same canonical payload (hash-addressed)."""
         self.connection.execute(
             "INSERT OR IGNORE INTO configurations VALUES (?, ?, ?)",
             (config_id, (created_at or datetime.now().astimezone()).isoformat(), canonical_payload),
         )
-        self.connection.commit()
+        if commit:
+            self.connection.commit()
 
     def get_configuration(self, config_id: str) -> dict[str, Any] | None:
         row = self.connection.execute("SELECT payload FROM configurations WHERE config_id = ?", (config_id,)).fetchone()
         return json.loads(row[0]) if row else None
 
-    def record_config_change(self, change: dict[str, Any]) -> None:
-        with self.connection:
+    def record_config_change(self, change: dict[str, Any], *, commit: bool = True) -> None:
+        with self.connection if commit else nullcontext():
             self.connection.execute(
                 "INSERT INTO config_changes VALUES (:change_id, :requested_at, :applied_at, :base_config_id,"
                 " :new_config_id, :reason, :actor, :actor_self_reported, :status, :detail, :run_id)",
@@ -139,6 +141,16 @@ class MesStorage:
                     "actor": None, "actor_self_reported": 1, "detail": None, "run_id": None, **change,
                 },
             )
+
+    def apply_configuration(self, config_id: str, payload: str, run: Run, change: dict[str, Any]) -> None:
+        """Commit configuration, run, and applied audit record together."""
+        try:
+            with self.connection:
+                self.save_configuration(config_id, payload, commit=False)
+                self.create_run(run, commit=False)
+                self.record_config_change(change, commit=False)
+        except sqlite3.Error as error:
+            raise ValueError("configuration storage failed") from error
 
     def list_config_changes(self) -> list[dict[str, Any]]:
         cursor = self.connection.execute("SELECT * FROM config_changes ORDER BY requested_at")

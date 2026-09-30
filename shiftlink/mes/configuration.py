@@ -364,6 +364,14 @@ def validate(config: Configuration) -> list[str]:
     for scenario in config.scenarios:
         if not isinstance(scenario.stop_on_fault, bool):
             errors.append(f"{scenario.scenario_id}: stop_on_fault must be boolean")
+        effect_target = next((eq for eq in config.equipment if eq.active
+            and scenario.cause_capability in eq.capabilities
+            and (scenario.cause_equipment_id is None or eq.equipment_id == scenario.cause_equipment_id)), None)
+        if effect_target:
+            bool_signals = {s.signal for s in effect_target.signals if s.unit == "bool"}
+            for effect in scenario.signal_effects:
+                if effect.signal in bool_signals and (isinstance(effect.value, bool) or effect.value not in (0, 1)):
+                    errors.append(f"{scenario.scenario_id}.{effect.signal}: boolean effect must be numeric 0 or 1")
         if scenario.cause_equipment_id is not None:
             target = eq_by_id.get(scenario.cause_equipment_id)
             if not target or not target.active or scenario.cause_capability not in target.capabilities:

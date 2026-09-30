@@ -105,7 +105,15 @@ def symptom_scenarios(equipment):
                 if state == "zero": value = 0
                 elif state == "low": value = s.normal_min * 0.8
                 elif state == "high": value = 1 if s.unit == "bool" else s.normal_max + max(abs(s.normal_max) * 0.25, 0.001)
-                effects.append(SignalEffect(eq.capabilities[0], signal, round(value, 3)))
+                value = round(value, 3)
+                if state == "low" and value >= s.normal_min:
+                    value = round(max(0, s.normal_min - 0.001), 3)
+                if ((s.unit == "bool" and value not in (0, 1))
+                    or state == "low" and value >= s.normal_min
+                    or state == "high" and value <= s.normal_max
+                    or state == "normal" and not s.normal_min <= value <= s.normal_max):
+                    break  # This configuration cannot represent the requested observation.
+                effects.append(SignalEffect(eq.capabilities[0], signal, value))
             else:
                 yield ScenarioSpec(f"symptom_{eq.equipment_id}_{pattern.pattern_id}", eq.capabilities[0], "", "", "AL-SYMPTOM",
                     tuple(effects), title=f"{eq.code} · {pattern.symptom} (가상)", cause_equipment_id=eq.equipment_id,
@@ -124,13 +132,14 @@ def _states(frame, eq):
         value = m.get("value")
         valid = (m.get("quality") == "good" and m.get("unit") == s.unit
                  and isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value)
+                 and (s.unit != "bool" or value in (0, 1))
                  and s.normal_min is not None and s.normal_max is not None)
         try:
             observed = m.get("observed_at")
             now = frame.get("simulated_at")
             observed = observed if isinstance(observed, datetime) else datetime.fromisoformat(observed)
             now = now if isinstance(now, datetime) else datetime.fromisoformat(now)
-            valid = valid and observed == now
+            valid = valid and observed.tzinfo is not None and now.tzinfo is not None and observed == now
         except (TypeError, ValueError):
             valid = False
         states[signal] = ("low" if value < s.normal_min else "high" if value > s.normal_max else "normal") if valid else None
@@ -145,6 +154,8 @@ def screen_symptoms(frames, config):
     if not frames or frames[-1].get("line_mode") in {"paused", "stopped", "recovering", "quality_hold"}:
         return []
     run_id = frames[-1].get("run_id")
+    if not isinstance(run_id, str) or not run_id:
+        return []
     frames = list({f.get("sequence"): f for f in frames if f.get("run_id") == run_id}.values())[-3:]
     try:
         times = [f["simulated_at"] if isinstance(f.get("simulated_at"), datetime)

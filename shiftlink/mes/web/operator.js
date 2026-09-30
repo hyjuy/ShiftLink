@@ -37,7 +37,8 @@
       const m = (snapshot.measurements || []).find(m=>m.equipment_id===selected.equipment_id && m.signal===signal.signal);
       const age = m ? (Date.parse(snapshot.simulated_at)-Date.parse(m.observed_at))/1000 : NaN;
       const known = Boolean(m && Number.isFinite(m.value));
-      const trustworthy = known && m.quality==="good" && Number.isFinite(age) && age>=0 && age<=10;
+      const trustworthy = known && m.quality==="good" && m.unit===signal.unit &&
+        (signal.unit!=="bool" || m.value===0 || m.value===1) && Number.isFinite(age) && age>=0 && age<=10;
       const hasRange = signal.normal_min!=null || signal.normal_max!=null;
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
       return {...signal, observation:m, known, trustworthy, hasRange, inRange,

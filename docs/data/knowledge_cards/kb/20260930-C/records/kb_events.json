@@ -1,0 +1,680 @@
+[
+  {
+    "event_id": "EV-0401",
+    "scenario": "S3",
+    "equipment": "HPU",
+    "timeline": [
+      "D0 08:10 필터 또는 오일 교환 완료 후 정비 담당이 차단·잠금 절차 완료를 확인. 정지 원인 확인·인터록 작동 조건 해소·지정 승인자가 시험운전만 승인한 상태.",
+      "D0 08:15 압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+      "D0 08:18 정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류",
+      "D0 10:00 첫 정비 복귀 단계의 미확인 사항을 담당자가 확인하고 지정 승인 후 시험운전 정상. 이후 계획 정상정지로 전환; 다음 단계 D1에 재개.",
+      "D1 08:20 야간 계획 정상정지 뒤 현장 저온기동 절차 조회. 정지 사유 확인·인터록 조건 해소·지정 승인자가 시험운전만 승인.",
+      "D1 08:25 hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+      "D1 08:28 정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+    ],
+    "measurements": {
+      "hpu_pressure": 133,
+      "hpu_flow": 32,
+      "hpu_oil_temp": 28
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4001",
+        "restart_type": "maintenance_restart",
+        "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+        "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0401",
+          "AR-0401",
+          "AR-0402"
+        ]
+      },
+      {
+        "attempt_id": "AT-4002",
+        "restart_type": "normal_stop_restart",
+        "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+        "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0401",
+          "AR-0401",
+          "AR-0402"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0402",
+    "scenario": "S3",
+    "equipment": "HPU",
+    "timeline": [
+      "D0 08:10 필터 또는 오일 교환 완료 후 정비 담당이 차단·잠금 절차 완료를 확인. 정지 원인 확인·인터록 작동 조건 해소·지정 승인자가 시험운전만 승인한 상태.",
+      "D0 08:15 압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+      "D0 08:18 정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+    ],
+    "measurements": {
+      "hpu_pressure": 152,
+      "hpu_flow": 34,
+      "hpu_oil_temp": 46
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4004",
+        "restart_type": "maintenance_restart",
+        "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+        "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0402",
+          "AR-0403",
+          "AR-0404"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0403",
+    "scenario": "S3",
+    "equipment": "GR",
+    "timeline": [
+      "D0 08:10 정비 완료 오더를 받은 뒤 준비 확인.",
+      "D0 08:15 오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+      "D0 08:18 정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록",
+      "D0 10:00 첫 정비 복귀 단계의 미확인 사항을 담당자가 확인하고 지정 승인 후 시험운전 정상. 이후 계획 정상정지로 전환; 다음 단계 D30에 재개.",
+      "D30 08:20 계획 정상정지 뒤 복귀 준비 확인.",
+      "D30 08:25 30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+      "D30 08:28 담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+    ],
+    "measurements": {
+      "gr_vib_rms": 0,
+      "gr_brg_temp": 31,
+      "gr_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4007",
+        "restart_type": "maintenance_restart",
+        "action": "주입량 기록만으로 복귀 준비를 진행하다 유면 확인란이 비어 있어 기동을 보류",
+        "observed_result": "오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0403",
+          "AR-0405",
+          "AR-0406"
+        ]
+      },
+      {
+        "attempt_id": "AT-4008",
+        "restart_type": "normal_stop_restart",
+        "action": "이전 운전이 정상이라는 이유로 준비를 진행하다 현재 유면 확인 기록이 없어 기동 보류",
+        "observed_result": "30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0403",
+          "AR-0405",
+          "AR-0406"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0404",
+    "scenario": "S3",
+    "equipment": "GR",
+    "timeline": [
+      "D0 08:10 정비 완료 오더를 받은 뒤 준비 확인.",
+      "D0 08:15 오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+      "D0 08:18 정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록",
+      "D0 10:00 첫 정비 복귀 단계의 미확인 사항을 담당자가 확인하고 지정 승인 후 시험운전 정상. 이후 계획 정상정지로 전환; 다음 단계 D30에 재개.",
+      "D30 08:20 계획 정상정지 뒤 복귀 준비 확인.",
+      "D30 08:25 30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+      "D30 08:28 담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+    ],
+    "measurements": {
+      "gr_vib_rms": 0,
+      "gr_brg_temp": 31,
+      "gr_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4010",
+        "restart_type": "maintenance_restart",
+        "action": "주입량 기록만으로 복귀 준비를 진행하다 유면 확인란이 비어 있어 기동을 보류",
+        "observed_result": "오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0404",
+          "AR-0407",
+          "AR-0408"
+        ]
+      },
+      {
+        "attempt_id": "AT-4011",
+        "restart_type": "normal_stop_restart",
+        "action": "이전 운전이 정상이라는 이유로 준비를 진행하다 현재 유면 확인 기록이 없어 기동 보류",
+        "observed_result": "30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0404",
+          "AR-0407",
+          "AR-0408"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0405",
+    "scenario": "S3",
+    "equipment": "CV",
+    "timeline": [
+      "D0 08:10 벨트 정비 완료. 방호 복구·작업구역 철수 확인, 정지 원인 확인·인터록 조건 해소 후 지정 승인자가 시험운전만 승인.",
+      "D0 08:15 cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+      "D0 08:18 정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+    ],
+    "measurements": {
+      "cv_speed": 25,
+      "cv_belt_tension": 420,
+      "cv_queue_len": 10
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4013",
+        "restart_type": "maintenance_restart",
+        "action": "장력 표시가 정상인 상태에서 시험운전했으나 벨트가 한쪽으로 치우쳐 중단",
+        "observed_result": "cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0405",
+          "AR-0409",
+          "AR-0410"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0406",
+    "scenario": "S3",
+    "equipment": "CV",
+    "timeline": [
+      "D0 08:10 벨트 정비 완료. 방호 복구·작업구역 철수 확인, 정지 원인 확인·인터록 조건 해소 후 지정 승인자가 시험운전만 승인.",
+      "D0 08:15 cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+      "D0 08:18 정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+    ],
+    "measurements": {
+      "cv_speed": 25,
+      "cv_belt_tension": 420,
+      "cv_queue_len": 10
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4016",
+        "restart_type": "maintenance_restart",
+        "action": "장력 표시가 정상인 상태에서 시험운전했으나 벨트가 한쪽으로 치우쳐 중단",
+        "observed_result": "cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0406",
+          "AR-0411",
+          "AR-0412"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0407",
+    "scenario": "S3",
+    "equipment": "RT",
+    "timeline": [
+      "D0 08:10 정비 완료 오더를 받은 뒤 준비 확인.",
+      "D0 08:15 정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+      "D0 08:18 정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+    ],
+    "measurements": {
+      "rt_speed": 0,
+      "rt_clamp_press": 104,
+      "rt_motor_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4019",
+        "restart_type": "maintenance_restart",
+        "action": "정비 완료만 보고 복귀 준비를 진행했으나 작업구역 정리 확인이 없어 기동 보류",
+        "observed_result": "정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0407",
+          "AR-0413",
+          "AR-0414"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0408",
+    "scenario": "S3",
+    "equipment": "RT",
+    "timeline": [
+      "D0 08:10 정비 완료 오더를 받은 뒤 준비 확인.",
+      "D0 08:15 정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+      "D0 08:18 정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+    ],
+    "measurements": {
+      "rt_speed": 0,
+      "rt_clamp_press": 104,
+      "rt_motor_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4022",
+        "restart_type": "maintenance_restart",
+        "action": "정비 완료만 보고 복귀 준비를 진행했으나 작업구역 정리 확인이 없어 기동 보류",
+        "observed_result": "정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0408",
+          "AR-0415",
+          "AR-0416"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0409",
+    "scenario": "S3",
+    "equipment": "CV",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+      "D0 08:18 정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+    ],
+    "measurements": {
+      "cv_speed": 0,
+      "cv_belt_tension": 415,
+      "cv_queue_len": 65
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4025",
+        "restart_type": "abnormal_stop_restart",
+        "action": "비상정지 표시 해제만으로 복귀 준비를 진행하다 걸림 제거 확인이 없어 기동 보류",
+        "observed_result": "비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0409",
+          "AR-0417",
+          "AR-0418"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0410",
+    "scenario": "S3",
+    "equipment": "CV",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+      "D0 08:18 정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+    ],
+    "measurements": {
+      "cv_speed": 0,
+      "cv_belt_tension": 415,
+      "cv_queue_len": 65
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4028",
+        "restart_type": "abnormal_stop_restart",
+        "action": "비상정지 표시 해제만으로 복귀 준비를 진행하다 걸림 제거 확인이 없어 기동 보류",
+        "observed_result": "비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0410",
+          "AR-0419",
+          "AR-0420"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0411",
+    "scenario": "S3",
+    "equipment": "GR",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+      "D0 08:18 정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+    ],
+    "measurements": {
+      "gr_vib_rms": 1.8,
+      "gr_brg_temp": 49,
+      "gr_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4031",
+        "restart_type": "abnormal_stop_restart",
+        "action": "온도 하강만 보고 복귀 준비를 진행하다 원인 확인 기록이 없어 기동 보류",
+        "observed_result": "정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0411",
+          "AR-0421",
+          "AR-0422"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0412",
+    "scenario": "S3",
+    "equipment": "GR",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+      "D0 08:18 정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+    ],
+    "measurements": {
+      "gr_vib_rms": 1.8,
+      "gr_brg_temp": 49,
+      "gr_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4034",
+        "restart_type": "abnormal_stop_restart",
+        "action": "온도 하강만 보고 복귀 준비를 진행하다 원인 확인 기록이 없어 기동 보류",
+        "observed_result": "정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0412",
+          "AR-0423",
+          "AR-0424"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0413",
+    "scenario": "S3",
+    "equipment": "RT",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+      "D0 08:18 권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+    ],
+    "measurements": {
+      "rt_speed": 0,
+      "rt_clamp_press": 106,
+      "rt_motor_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4037",
+        "restart_type": "abnormal_stop_restart",
+        "action": "인터록 해제 표시만 보고 복귀 준비를 진행하다 조건 해소 확인이 없어 기동 보류",
+        "observed_result": "인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0413",
+          "AR-0425",
+          "AR-0426"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0414",
+    "scenario": "S3",
+    "equipment": "RT",
+    "timeline": [
+      "D0 08:10 이상으로 정지한 뒤 복귀 준비 확인.",
+      "D0 08:15 인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+      "D0 08:18 권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+    ],
+    "measurements": {
+      "rt_speed": 0,
+      "rt_clamp_press": 106,
+      "rt_motor_current": 0
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4040",
+        "restart_type": "abnormal_stop_restart",
+        "action": "인터록 해제 표시만 보고 복귀 준비를 진행하다 조건 해소 확인이 없어 기동 보류",
+        "observed_result": "인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0414",
+          "AR-0427",
+          "AR-0428"
+        ]
+      }
+    ],
+    "split": "kb"
+  },
+  {
+    "event_id": "EV-0415",
+    "scenario": "S3",
+    "equipment": "HPU",
+    "timeline": [
+      "D0 08:10 야간 계획 정상정지 뒤 현장 저온기동 절차 조회. 정지 사유 확인·인터록 조건 해소·지정 승인자가 시험운전만 승인.",
+      "D0 08:15 hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+      "D0 08:18 정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+    ],
+    "measurements": {
+      "hpu_pressure": 133,
+      "hpu_flow": 32,
+      "hpu_oil_temp": 28
+    },
+    "restart_attempts": [
+      {
+        "attempt_id": "AT-4043",
+        "restart_type": "normal_stop_restart",
+        "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+        "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+        "failure_reason": null,
+        "evidence_gap": "not_recorded",
+        "next_observations": [
+          "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+        ],
+        "required_data": [
+          "정지 원인 확인 기록",
+          "인터록 작동 조건 해소 확인",
+          "지정 승인자의 승인·작업 제한 기록"
+        ],
+        "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+        "evidence_ids": [
+          "EV-0415",
+          "AR-0429",
+          "AR-0430"
+        ]
+      }
+    ],
+    "split": "kb"
+  }
+]

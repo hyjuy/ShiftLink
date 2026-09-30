@@ -1,0 +1,463 @@
+{
+ "batch": "KB-20260930-C",
+ "seed": 20260930,
+ "is_synthetic": true,
+ "events": [
+  {
+   "event_id": "EV-0401",
+   "scenario": "S3",
+   "equipment": "HPU",
+   "mes_equipment_id": "EQ-0001",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0401",
+    "AR-0402"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1211",
+    "K-1218"
+   ],
+   "restart_types": [
+    "maintenance_restart",
+    "normal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0401",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0402",
+   "scenario": "S3",
+   "equipment": "HPU",
+   "mes_equipment_id": "EQ-0001",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0403",
+    "AR-0404"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1211"
+   ],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0401",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0403",
+   "scenario": "S3",
+   "equipment": "GR",
+   "mes_equipment_id": "EQ-0004",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0405",
+    "AR-0406"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1212",
+    "K-1219"
+   ],
+   "restart_types": [
+    "maintenance_restart",
+    "normal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0403",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0404",
+   "scenario": "S3",
+   "equipment": "GR",
+   "mes_equipment_id": "EQ-0004",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0407",
+    "AR-0408"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1212",
+    "K-1219"
+   ],
+   "restart_types": [
+    "maintenance_restart",
+    "normal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0403",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0405",
+   "scenario": "S3",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0409",
+    "AR-0410"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1213"
+   ],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0405",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0406",
+   "scenario": "S3",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0411",
+    "AR-0412"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1213"
+   ],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0405",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0407",
+   "scenario": "S3",
+   "equipment": "RT",
+   "mes_equipment_id": "EQ-0008",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0413",
+    "AR-0414"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1214"
+   ],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0407",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0408",
+   "scenario": "S3",
+   "equipment": "RT",
+   "mes_equipment_id": "EQ-0008",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0415",
+    "AR-0416"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1214"
+   ],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0407",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0409",
+   "scenario": "S3",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0417",
+    "AR-0418"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1215"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0409",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0410",
+   "scenario": "S3",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0419",
+    "AR-0420"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1215"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0409",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0411",
+   "scenario": "S3",
+   "equipment": "GR",
+   "mes_equipment_id": "EQ-0004",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0421",
+    "AR-0422"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1216"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0411",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0412",
+   "scenario": "S3",
+   "equipment": "GR",
+   "mes_equipment_id": "EQ-0004",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0423",
+    "AR-0424"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1216"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0411",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0413",
+   "scenario": "S3",
+   "equipment": "RT",
+   "mes_equipment_id": "EQ-0008",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0425",
+    "AR-0426"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1217"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0413",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0414",
+   "scenario": "S3",
+   "equipment": "RT",
+   "mes_equipment_id": "EQ-0008",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0427",
+    "AR-0428"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [
+    "K-1217"
+   ],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0413",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0415",
+   "scenario": "S3",
+   "equipment": "HPU",
+   "mes_equipment_id": "EQ-0001",
+   "split": "kb",
+   "artifact_ids": [
+    "AR-0429",
+    "AR-0430"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [
+    "K-1218"
+   ],
+   "restart_types": [
+    "normal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0401",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0416",
+   "scenario": "S2",
+   "equipment": "HPU",
+   "mes_equipment_id": "EQ-0001",
+   "split": "dev",
+   "artifact_ids": [
+    "AR-0431",
+    "AR-0432"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0401",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0417",
+   "scenario": "S2",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "dev",
+   "artifact_ids": [
+    "AR-0433",
+    "AR-0434"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [],
+   "restart_types": [
+    "maintenance_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0405",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0418",
+   "scenario": "S2",
+   "equipment": "CV",
+   "mes_equipment_id": "EQ-0009",
+   "split": "dev",
+   "artifact_ids": [
+    "AR-0435",
+    "AR-0436"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0409",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0419",
+   "scenario": "S2",
+   "equipment": "RT",
+   "mes_equipment_id": "EQ-0008",
+   "split": "dev",
+   "artifact_ids": [
+    "AR-0437",
+    "AR-0438"
+   ],
+   "persona_id": "V-12",
+   "cards_expected": [],
+   "restart_types": [
+    "abnormal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0413",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  },
+  {
+   "event_id": "EV-0420",
+   "scenario": "S2",
+   "equipment": "HPU",
+   "mes_equipment_id": "EQ-0001",
+   "split": "dev",
+   "artifact_ids": [
+    "AR-0439",
+    "AR-0440"
+   ],
+   "persona_id": "V-11",
+   "cards_expected": [],
+   "restart_types": [
+    "normal_stop_restart"
+   ],
+   "omitted_handover_element": null,
+   "measurement_context": "최종 단계의 시도 관측; 모든 단계는 timeline·기록 텍스트에서 별도 확인",
+   "lineage_group_candidate": "KB-20260930-C:EV-0401",
+   "evaluation_eligible": false,
+   "split_assignment_status": "historical_only; pending lineage review"
+  }
+ ]
+}

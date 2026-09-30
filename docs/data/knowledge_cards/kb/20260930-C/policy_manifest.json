@@ -1,0 +1,624 @@
+{
+ "contract": "docs/data/policies/source-and-split-contract.md",
+ "policy_status": "pending_review",
+ "source_id_map": {
+  "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf": "M-C-001",
+  "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf": "M-C-002",
+  "26867443.pdf": "M-C-003",
+  "Convey-All-TroubleshootingGuide.pdf": "M-C-004",
+  "HY29-0022-UK.pdf": "M-C-005",
+  "MAN-C-012.pdf": "M-C-006",
+  "conveyor-manual-0323-en.pdf": "M-C-007",
+  "AR-0401": "SC-C-AR-0401",
+  "AR-0402": "SC-C-AR-0402",
+  "AR-0403": "SC-C-AR-0403",
+  "AR-0404": "SC-C-AR-0404",
+  "AR-0405": "SC-C-AR-0405",
+  "AR-0406": "SC-C-AR-0406",
+  "AR-0407": "SC-C-AR-0407",
+  "AR-0408": "SC-C-AR-0408",
+  "AR-0409": "SC-C-AR-0409",
+  "AR-0410": "SC-C-AR-0410",
+  "AR-0411": "SC-C-AR-0411",
+  "AR-0412": "SC-C-AR-0412",
+  "AR-0413": "SC-C-AR-0413",
+  "AR-0414": "SC-C-AR-0414",
+  "AR-0415": "SC-C-AR-0415",
+  "AR-0416": "SC-C-AR-0416",
+  "AR-0417": "SC-C-AR-0417",
+  "AR-0418": "SC-C-AR-0418",
+  "AR-0419": "SC-C-AR-0419",
+  "AR-0420": "SC-C-AR-0420",
+  "AR-0421": "SC-C-AR-0421",
+  "AR-0422": "SC-C-AR-0422",
+  "AR-0423": "SC-C-AR-0423",
+  "AR-0424": "SC-C-AR-0424",
+  "AR-0425": "SC-C-AR-0425",
+  "AR-0426": "SC-C-AR-0426",
+  "AR-0427": "SC-C-AR-0427",
+  "AR-0428": "SC-C-AR-0428",
+  "AR-0429": "SC-C-AR-0429",
+  "AR-0430": "SC-C-AR-0430",
+  "EV-0401": "SC-C-EV-0401",
+  "EV-0402": "SC-C-EV-0402",
+  "EV-0403": "SC-C-EV-0403",
+  "EV-0404": "SC-C-EV-0404",
+  "EV-0405": "SC-C-EV-0405",
+  "EV-0406": "SC-C-EV-0406",
+  "EV-0407": "SC-C-EV-0407",
+  "EV-0408": "SC-C-EV-0408",
+  "EV-0409": "SC-C-EV-0409",
+  "EV-0410": "SC-C-EV-0410",
+  "EV-0411": "SC-C-EV-0411",
+  "EV-0412": "SC-C-EV-0412",
+  "EV-0413": "SC-C-EV-0413",
+  "EV-0414": "SC-C-EV-0414",
+  "EV-0415": "SC-C-EV-0415"
+ },
+ "groups": [
+  {
+   "group_id": "KB-20260930-C:EV-0401",
+   "event_ids": [
+    "EV-0401",
+    "EV-0402",
+    "EV-0415",
+    "EV-0416",
+    "EV-0420"
+   ],
+   "artifact_ids": [
+    "AR-0401",
+    "AR-0402",
+    "AR-0403",
+    "AR-0404",
+    "AR-0429",
+    "AR-0430",
+    "AR-0431",
+    "AR-0432",
+    "AR-0439",
+    "AR-0440"
+   ],
+   "original_splits": [
+    "dev",
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "kb",
+   "bucket": 6,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0403",
+   "event_ids": [
+    "EV-0403",
+    "EV-0404"
+   ],
+   "artifact_ids": [
+    "AR-0405",
+    "AR-0406",
+    "AR-0407",
+    "AR-0408"
+   ],
+   "original_splits": [
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "kb",
+   "bucket": 5,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0405",
+   "event_ids": [
+    "EV-0405",
+    "EV-0406",
+    "EV-0417"
+   ],
+   "artifact_ids": [
+    "AR-0409",
+    "AR-0410",
+    "AR-0411",
+    "AR-0412",
+    "AR-0433",
+    "AR-0434"
+   ],
+   "original_splits": [
+    "dev",
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "kb",
+   "bucket": 6,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0407",
+   "event_ids": [
+    "EV-0407",
+    "EV-0408"
+   ],
+   "artifact_ids": [
+    "AR-0413",
+    "AR-0414",
+    "AR-0415",
+    "AR-0416"
+   ],
+   "original_splits": [
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "sealed",
+   "bucket": 10,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0409",
+   "event_ids": [
+    "EV-0409",
+    "EV-0410",
+    "EV-0418"
+   ],
+   "artifact_ids": [
+    "AR-0417",
+    "AR-0418",
+    "AR-0419",
+    "AR-0420",
+    "AR-0435",
+    "AR-0436"
+   ],
+   "original_splits": [
+    "dev",
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "kb",
+   "bucket": 2,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0411",
+   "event_ids": [
+    "EV-0411",
+    "EV-0412"
+   ],
+   "artifact_ids": [
+    "AR-0421",
+    "AR-0422",
+    "AR-0423",
+    "AR-0424"
+   ],
+   "original_splits": [
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "dev",
+   "bucket": 8,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  },
+  {
+   "group_id": "KB-20260930-C:EV-0413",
+   "event_ids": [
+    "EV-0413",
+    "EV-0414",
+    "EV-0419"
+   ],
+   "artifact_ids": [
+    "AR-0425",
+    "AR-0426",
+    "AR-0427",
+    "AR-0428",
+    "AR-0437",
+    "AR-0438"
+   ],
+   "original_splits": [
+    "dev",
+    "kb"
+   ],
+   "lineage_review_status": "pending_review",
+   "candidate_split": "kb",
+   "bucket": 3,
+   "assignment_active": false,
+   "is_synthetic": true,
+   "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+   "independent_evaluation_eligible": false
+  }
+ ],
+ "event_groups": {
+  "EV-0401": "KB-20260930-C:EV-0401",
+  "EV-0402": "KB-20260930-C:EV-0401",
+  "EV-0403": "KB-20260930-C:EV-0403",
+  "EV-0404": "KB-20260930-C:EV-0403",
+  "EV-0405": "KB-20260930-C:EV-0405",
+  "EV-0406": "KB-20260930-C:EV-0405",
+  "EV-0407": "KB-20260930-C:EV-0407",
+  "EV-0408": "KB-20260930-C:EV-0407",
+  "EV-0409": "KB-20260930-C:EV-0409",
+  "EV-0410": "KB-20260930-C:EV-0409",
+  "EV-0411": "KB-20260930-C:EV-0411",
+  "EV-0412": "KB-20260930-C:EV-0411",
+  "EV-0413": "KB-20260930-C:EV-0413",
+  "EV-0414": "KB-20260930-C:EV-0413",
+  "EV-0415": "KB-20260930-C:EV-0401",
+  "EV-0416": "KB-20260930-C:EV-0401",
+  "EV-0417": "KB-20260930-C:EV-0405",
+  "EV-0418": "KB-20260930-C:EV-0409",
+  "EV-0419": "KB-20260930-C:EV-0413",
+  "EV-0420": "KB-20260930-C:EV-0401"
+ },
+ "independent_dev_event_ids": [],
+ "quarantined_dev_event_ids": [
+  "EV-0416",
+  "EV-0417",
+  "EV-0418",
+  "EV-0419",
+  "EV-0420"
+ ],
+ "current_splits_are_historical": true,
+ "cards": {
+  "K-1204": {
+   "source_ids": [
+    "M-C-004",
+    "M-C-007"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1205": {
+   "source_ids": [
+    "M-C-004",
+    "M-C-007"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1206": {
+   "source_ids": [
+    "M-C-007"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1209": {
+   "source_ids": [
+    "M-C-003"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1210": {
+   "source_ids": [
+    "M-C-003"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1201": {
+   "source_ids": [
+    "M-C-006"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1202": {
+   "source_ids": [
+    "M-C-006"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1203": {
+   "source_ids": [
+    "M-C-001"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1207": {
+   "source_ids": [
+    "M-C-002"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1208": {
+   "source_ids": [
+    "M-C-002"
+   ],
+   "group_ids": [],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 0,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability"
+   ]
+  },
+  "K-1211": {
+   "source_ids": [
+    "M-C-005",
+    "SC-C-AR-0401",
+    "SC-C-AR-0402",
+    "SC-C-AR-0403",
+    "SC-C-AR-0404",
+    "SC-C-EV-0401",
+    "SC-C-EV-0402"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0401"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1212": {
+   "source_ids": [
+    "M-C-003",
+    "SC-C-AR-0405",
+    "SC-C-AR-0406",
+    "SC-C-AR-0407",
+    "SC-C-AR-0408",
+    "SC-C-EV-0403",
+    "SC-C-EV-0404"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0403"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1213": {
+   "source_ids": [
+    "M-C-007",
+    "SC-C-AR-0409",
+    "SC-C-AR-0410",
+    "SC-C-AR-0411",
+    "SC-C-AR-0412",
+    "SC-C-EV-0405",
+    "SC-C-EV-0406"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0405"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1214": {
+   "source_ids": [
+    "M-C-002",
+    "SC-C-AR-0413",
+    "SC-C-AR-0414",
+    "SC-C-AR-0415",
+    "SC-C-AR-0416",
+    "SC-C-EV-0407",
+    "SC-C-EV-0408"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0407"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1215": {
+   "source_ids": [
+    "M-C-007",
+    "SC-C-AR-0417",
+    "SC-C-AR-0418",
+    "SC-C-AR-0419",
+    "SC-C-AR-0420",
+    "SC-C-EV-0409",
+    "SC-C-EV-0410"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0409"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1216": {
+   "source_ids": [
+    "M-C-003",
+    "SC-C-AR-0421",
+    "SC-C-AR-0422",
+    "SC-C-AR-0423",
+    "SC-C-AR-0424",
+    "SC-C-EV-0411",
+    "SC-C-EV-0412"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0411"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1217": {
+   "source_ids": [
+    "M-C-002",
+    "SC-C-AR-0425",
+    "SC-C-AR-0426",
+    "SC-C-AR-0427",
+    "SC-C-AR-0428",
+    "SC-C-EV-0413",
+    "SC-C-EV-0414"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0413"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1218": {
+   "source_ids": [
+    "M-C-005",
+    "SC-C-AR-0401",
+    "SC-C-AR-0402",
+    "SC-C-AR-0429",
+    "SC-C-AR-0430",
+    "SC-C-EV-0401",
+    "SC-C-EV-0415"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0401"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  },
+  "K-1219": {
+   "source_ids": [
+    "M-C-003",
+    "SC-C-AR-0405",
+    "SC-C-AR-0406",
+    "SC-C-AR-0407",
+    "SC-C-AR-0408",
+    "SC-C-EV-0403",
+    "SC-C-EV-0404"
+   ],
+   "group_ids": [
+    "KB-20260930-C:EV-0403"
+   ],
+   "status": "pending_review",
+   "kb_adoption_allowed": false,
+   "independent_supporting_group_count": 1,
+   "required_reviews": [
+    "source_scope_approval",
+    "equipment_applicability",
+    "lineage_confirmation",
+    "group_assignment",
+    "independent_repeat_evidence"
+   ]
+  }
+ }
+}

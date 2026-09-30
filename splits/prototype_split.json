@@ -115,5 +115,190 @@
       "registered_at": "2026-09-24"
     }
   ],
-  "conflict_action": "quarantine_new_item_and_review_evaluation_contamination"
+  "conflict_action": "quarantine_new_item_and_review_evaluation_contamination",
+  "pending_groups": [
+    {
+      "group_id": "KB-20260930-C:EV-0401",
+      "event_ids": [
+        "EV-0401",
+        "EV-0402",
+        "EV-0415",
+        "EV-0416",
+        "EV-0420"
+      ],
+      "artifact_ids": [
+        "AR-0401",
+        "AR-0402",
+        "AR-0403",
+        "AR-0404",
+        "AR-0429",
+        "AR-0430",
+        "AR-0431",
+        "AR-0432",
+        "AR-0439",
+        "AR-0440"
+      ],
+      "original_splits": [
+        "dev",
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "kb",
+      "bucket": 6,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0403",
+      "event_ids": [
+        "EV-0403",
+        "EV-0404"
+      ],
+      "artifact_ids": [
+        "AR-0405",
+        "AR-0406",
+        "AR-0407",
+        "AR-0408"
+      ],
+      "original_splits": [
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "kb",
+      "bucket": 5,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0405",
+      "event_ids": [
+        "EV-0405",
+        "EV-0406",
+        "EV-0417"
+      ],
+      "artifact_ids": [
+        "AR-0409",
+        "AR-0410",
+        "AR-0411",
+        "AR-0412",
+        "AR-0433",
+        "AR-0434"
+      ],
+      "original_splits": [
+        "dev",
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "kb",
+      "bucket": 6,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0407",
+      "event_ids": [
+        "EV-0407",
+        "EV-0408"
+      ],
+      "artifact_ids": [
+        "AR-0413",
+        "AR-0414",
+        "AR-0415",
+        "AR-0416"
+      ],
+      "original_splits": [
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "sealed",
+      "bucket": 10,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0409",
+      "event_ids": [
+        "EV-0409",
+        "EV-0410",
+        "EV-0418"
+      ],
+      "artifact_ids": [
+        "AR-0417",
+        "AR-0418",
+        "AR-0419",
+        "AR-0420",
+        "AR-0435",
+        "AR-0436"
+      ],
+      "original_splits": [
+        "dev",
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "kb",
+      "bucket": 2,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0411",
+      "event_ids": [
+        "EV-0411",
+        "EV-0412"
+      ],
+      "artifact_ids": [
+        "AR-0421",
+        "AR-0422",
+        "AR-0423",
+        "AR-0424"
+      ],
+      "original_splits": [
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "dev",
+      "bucket": 8,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    },
+    {
+      "group_id": "KB-20260930-C:EV-0413",
+      "event_ids": [
+        "EV-0413",
+        "EV-0414",
+        "EV-0419"
+      ],
+      "artifact_ids": [
+        "AR-0425",
+        "AR-0426",
+        "AR-0427",
+        "AR-0428",
+        "AR-0437",
+        "AR-0438"
+      ],
+      "original_splits": [
+        "dev",
+        "kb"
+      ],
+      "lineage_review_status": "pending_review",
+      "candidate_split": "kb",
+      "bucket": 3,
+      "assignment_active": false,
+      "is_synthetic": true,
+      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
+      "independent_evaluation_eligible": false
+    }
+  ]
 }

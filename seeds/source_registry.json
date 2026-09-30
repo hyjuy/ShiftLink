@@ -741,6 +741,1960 @@
    "url_role": null,
    "generation_gate": "합성 원문. 실제 현장 기록이 아니며 사람 검토 전이다.",
    "human_review_required": true
+  },
+  {
+   "source_id": "M-C-001",
+   "aliases": [
+    "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf"
+   ],
+   "source_family": "M-C-001",
+   "title": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "Vickers GBB9003 (8/84)",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1203-1",
+     "card_id": "K-1203",
+     "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps, 출구 압력 있음 분기",
+     "document_version": "Vickers GBB9003 (8/84)",
+     "pdf_pages": [
+      17
+     ],
+     "text_sha256": "5bc77ca364f14858e161e622752ba06ed736dff08e231a20282d3c7864933e53",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/HPU/100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+    "bytes": 613967,
+    "sha256": "25bca5ce3426409e0044b4c366b98c30e59549ab50fac42d799a416ab56f68dc"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "M-C-002",
+   "aliases": [
+    "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf"
+   ],
+   "source_family": "M-C-002",
+   "title": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1207-1",
+     "card_id": "K-1207",
+     "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "pdf_pages": [
+      51
+     ],
+     "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1208-2",
+     "card_id": "K-1208",
+     "locator": "PDF p.52 / 인쇄 p.52 / Troubleshooting: Motor circuit breaker is triggered due to excessive current consumption",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "pdf_pages": [
+      52
+     ],
+     "text_sha256": "e320b24989881e7fbfb69806830623fc816705690f6ac1a4e0dbeda9fb3a37a7",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1208-3",
+     "card_id": "K-1208",
+     "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: In case of a fault (전원 차단·우발 기동 방지·전기 담당 자격)",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "pdf_pages": [
+      51
+     ],
+     "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1214-4",
+     "card_id": "K-1214",
+     "locator": "PDF/인쇄 35~36쪽, Initial startup / Before every operation start",
+     "document_version": "Version 1.0 (06/2022)",
+     "pdf_pages": [
+      35,
+      36
+     ],
+     "text_sha256": "48a2d2faccb73f6095a54cffb6b9f94a5264e0fc79b007812ded5745f9ee8312",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1217-5",
+     "card_id": "K-1217",
+     "locator": "PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault",
+     "document_version": "Version 1.0 (06/2022)",
+     "pdf_pages": [
+      36
+     ],
+     "text_sha256": "52a87d91a07d3ee9ca7c3531648b29d505121c644b4143a1f0f242fb0f7786ff",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/RT/1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+    "bytes": 5802953,
+    "sha256": "39e0a0df9b913cca145911df6fa7d693d74ca2c6a4b133cc8a960b8741c07ccb"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "M-C-003",
+   "aliases": [
+    "26867443.pdf"
+   ],
+   "source_family": "M-C-003",
+   "title": "26867443.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1209-1",
+     "card_id": "K-1209",
+     "locator": "PDF p.5 / Safety notes / Startup/operation",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "pdf_pages": [
+      5
+     ],
+     "text_sha256": "1be0db0432b342f318dd9fb512245372712f633034bf7ce6690bcf5be2a8ec60",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1209-2",
+     "card_id": "K-1209",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "pdf_pages": [
+      45
+     ],
+     "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1210-3",
+     "card_id": "K-1210",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "pdf_pages": [
+      45
+     ],
+     "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1210-4",
+     "card_id": "K-1210",
+     "locator": "PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "pdf_pages": [
+      42
+     ],
+     "text_sha256": "e40843b7bf4ba07d7efae435414249646a557a249501c27e7a6563196892c7c1",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1212-5",
+     "card_id": "K-1212",
+     "locator": "PDF/인쇄 p.39~40 및 p.42~43 / §7.1 Startup 및 §8.3 Checking the oil level / Changing the oil",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "pdf_pages": [
+      39,
+      40,
+      42,
+      43
+     ],
+     "text_sha256": "83b0c42ed1a3c4f73335620cd9e43a3a1476ec988d297b16a614b9da21ed51eb",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1216-6",
+     "card_id": "K-1216",
+     "locator": "PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "pdf_pages": [
+      5,
+      45
+     ],
+     "text_sha256": "545793d9c99909659f0c62195fb033377763f9262f655c297284e07776b573cb",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1219-7",
+     "card_id": "K-1219",
+     "locator": "PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "pdf_pages": [
+      39,
+      40
+     ],
+     "text_sha256": "096601151396a53ddd27a535cd505fa903aade1e7f3eddcaa8b3689d9fcef317",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/GR/26867443.pdf",
+    "bytes": 10784620,
+    "sha256": "eeff8728552b228531767ec576a2123168d479631405b1d5c3280ffa558757c3"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "SC-C-AR-0401",
+   "aliases": [
+    "AR-0401"
+   ],
+   "source_family": "SC-C-AR-0401",
+   "title": "AR-0401",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0401"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0401",
+    "item_sha256": "b6f6e1d7b540c9aab0aa60ab32513e4be034f6b32d5207c3e24b175571f5a717"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0402",
+   "aliases": [
+    "AR-0402"
+   ],
+   "source_family": "SC-C-AR-0402",
+   "title": "AR-0402",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0402"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0402",
+    "item_sha256": "1d8a392052b785744b79c8f5cf94a1a05b45561d9f03f3d9728ef9e5aa8a19ab"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0403",
+   "aliases": [
+    "AR-0403"
+   ],
+   "source_family": "SC-C-AR-0403",
+   "title": "AR-0403",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0403"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0403",
+    "item_sha256": "ae09c411a81e1b859193fde2544c7e488b50e24a1396e4f47bbb33a507e2a748"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0404",
+   "aliases": [
+    "AR-0404"
+   ],
+   "source_family": "SC-C-AR-0404",
+   "title": "AR-0404",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0404"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0404",
+    "item_sha256": "40d047d1735159372a53489affb76d562d8542325959a27cb54f2c8b6318fce8"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0405",
+   "aliases": [
+    "AR-0405"
+   ],
+   "source_family": "SC-C-AR-0405",
+   "title": "AR-0405",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "AR-0405"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0405",
+    "item_sha256": "2dfc775ce7e5918dde183a8681d2b39afd4007674c3b6a3947d0b13ce7c5ffad"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0406",
+   "aliases": [
+    "AR-0406"
+   ],
+   "source_family": "SC-C-AR-0406",
+   "title": "AR-0406",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "AR-0406"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0406",
+    "item_sha256": "c21f505e4296ca2283b2f794aecea9b5c557bab0f61f3aa8966449d34275a681"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0407",
+   "aliases": [
+    "AR-0407"
+   ],
+   "source_family": "SC-C-AR-0407",
+   "title": "AR-0407",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "AR-0407"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0407",
+    "item_sha256": "427fbb71f89f27b0bbe3245e55c0cdeca4afd8dff20eddcab96cab685dbc060c"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0408",
+   "aliases": [
+    "AR-0408"
+   ],
+   "source_family": "SC-C-AR-0408",
+   "title": "AR-0408",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "AR-0408"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0408",
+    "item_sha256": "8624c2d0948db9df09d087be52a2454fa5fa70406b66593f37dac83023d8ab34"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0409",
+   "aliases": [
+    "AR-0409"
+   ],
+   "source_family": "SC-C-AR-0409",
+   "title": "AR-0409",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "AR-0409"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0409",
+    "item_sha256": "a04cba13195f723ef7f296ad87f17a2de60fe39606f2efbec647056f560649fa"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0410",
+   "aliases": [
+    "AR-0410"
+   ],
+   "source_family": "SC-C-AR-0410",
+   "title": "AR-0410",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "AR-0410"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0410",
+    "item_sha256": "84c952f778a732406c866fd2665d96ae22878937325258b17969e80d1815f578"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0411",
+   "aliases": [
+    "AR-0411"
+   ],
+   "source_family": "SC-C-AR-0411",
+   "title": "AR-0411",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "AR-0411"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0411",
+    "item_sha256": "f37c9c0ebcee99a8e9f143831ca58b87478373bf38b93d1702e45724406ec0a7"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0412",
+   "aliases": [
+    "AR-0412"
+   ],
+   "source_family": "SC-C-AR-0412",
+   "title": "AR-0412",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "AR-0412"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0412",
+    "item_sha256": "51aaef276766a7bdf9c8fbc4dc5d1c166f8ba0fd9b8c3e6cdcc9b633c11955a8"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0413",
+   "aliases": [
+    "AR-0413"
+   ],
+   "source_family": "SC-C-AR-0413",
+   "title": "AR-0413",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "AR-0413"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0413",
+    "item_sha256": "d2624fac8aaacf36742f384005c2b44150ac44bef4c1dd329aef18264d7dead3"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0414",
+   "aliases": [
+    "AR-0414"
+   ],
+   "source_family": "SC-C-AR-0414",
+   "title": "AR-0414",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "AR-0414"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0414",
+    "item_sha256": "b4ed5a86630a6d122102f9272151205c6256e2797c459263d06b324a517e1c82"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0415",
+   "aliases": [
+    "AR-0415"
+   ],
+   "source_family": "SC-C-AR-0415",
+   "title": "AR-0415",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "AR-0415"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0415",
+    "item_sha256": "00f3905e660f13bfaef1986d9ad183cdf0bad5d10030354374b38d215d003786"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0416",
+   "aliases": [
+    "AR-0416"
+   ],
+   "source_family": "SC-C-AR-0416",
+   "title": "AR-0416",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "AR-0416"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0416",
+    "item_sha256": "78c9b4e46e0fd2739c9a112f65272d167ab4f9a9e36166475f48172415e6b3bd"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0417",
+   "aliases": [
+    "AR-0417"
+   ],
+   "source_family": "SC-C-AR-0417",
+   "title": "AR-0417",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "AR-0417"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0417",
+    "item_sha256": "a8fb209306df68a846acd656119318826b5cf81659f3b0589c6e9112386c055e"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0418",
+   "aliases": [
+    "AR-0418"
+   ],
+   "source_family": "SC-C-AR-0418",
+   "title": "AR-0418",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "AR-0418"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0418",
+    "item_sha256": "9e2da09f2b68f1cfd08172ac5438fadcfad886f01038e903626dd1bb601d686a"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0419",
+   "aliases": [
+    "AR-0419"
+   ],
+   "source_family": "SC-C-AR-0419",
+   "title": "AR-0419",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "AR-0419"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0419",
+    "item_sha256": "1c5c96317cef4a36431a66ce56670c4d6fcfd2b2d2a128cffd923572abac8595"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0420",
+   "aliases": [
+    "AR-0420"
+   ],
+   "source_family": "SC-C-AR-0420",
+   "title": "AR-0420",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "AR-0420"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0420",
+    "item_sha256": "c0319020fbeed35436508f6b7642e56cbf86ce94dced29a78d502a62ea197a77"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0421",
+   "aliases": [
+    "AR-0421"
+   ],
+   "source_family": "SC-C-AR-0421",
+   "title": "AR-0421",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "AR-0421"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0421",
+    "item_sha256": "64d25bc3871eff040b3dd79c42ee6cd10684bed542e60709f1a62daef181f5ea"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0422",
+   "aliases": [
+    "AR-0422"
+   ],
+   "source_family": "SC-C-AR-0422",
+   "title": "AR-0422",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "AR-0422"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0422",
+    "item_sha256": "58bf10100893c1222de2113500a13edbb98ffe161eba66deef53b1c485386d63"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0423",
+   "aliases": [
+    "AR-0423"
+   ],
+   "source_family": "SC-C-AR-0423",
+   "title": "AR-0423",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "AR-0423"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0423",
+    "item_sha256": "e95a6eb1b87123556dee45fee83b1e233a195ef177e6a724923a1b1f46029635"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0424",
+   "aliases": [
+    "AR-0424"
+   ],
+   "source_family": "SC-C-AR-0424",
+   "title": "AR-0424",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "AR-0424"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0424",
+    "item_sha256": "adb423a9af27a151ae2b93335ef4d0a3efd4bf3c349cdfee934e14d34fa2fec7"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0425",
+   "aliases": [
+    "AR-0425"
+   ],
+   "source_family": "SC-C-AR-0425",
+   "title": "AR-0425",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "AR-0425"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0425",
+    "item_sha256": "6f2e5f6c5ec2fa6658e2e70ee6a3eda33803c84ee38bd277b8afa8513a98bae5"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0426",
+   "aliases": [
+    "AR-0426"
+   ],
+   "source_family": "SC-C-AR-0426",
+   "title": "AR-0426",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "AR-0426"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0426",
+    "item_sha256": "5d8b9634fc648b030ceb191d4095243bb7871f2bcce0e5e1933c70384e3b130a"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0427",
+   "aliases": [
+    "AR-0427"
+   ],
+   "source_family": "SC-C-AR-0427",
+   "title": "AR-0427",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "AR-0427"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0427",
+    "item_sha256": "31c27e2e5a7b7f45528198d20c9cebbc2d6c1065479acb9a63d24d21debc0b99"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0428",
+   "aliases": [
+    "AR-0428"
+   ],
+   "source_family": "SC-C-AR-0428",
+   "title": "AR-0428",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "AR-0428"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0428",
+    "item_sha256": "1906fb44dc2d2ae0bb6c51780f31474520f7b4baef42e4855da2fe858d15523c"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0429",
+   "aliases": [
+    "AR-0429"
+   ],
+   "source_family": "SC-C-AR-0429",
+   "title": "AR-0429",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0429"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0429",
+    "item_sha256": "3720126fe305b3e4f183623bcd572855e42d912281aeb89ce6cc9f743325d708"
+   }
+  },
+  {
+   "source_id": "SC-C-AR-0430",
+   "aliases": [
+    "AR-0430"
+   ],
+   "source_family": "SC-C-AR-0430",
+   "title": "AR-0430",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "AR-0430"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
+    "item_id": "AR-0430",
+    "item_sha256": "fea495cafd39e63555670bbf08ca0c42ba0ae754f82f5664d7e60a45ff8ddf05"
+   }
+  },
+  {
+   "source_id": "M-C-004",
+   "aliases": [
+    "Convey-All-TroubleshootingGuide.pdf"
+   ],
+   "source_family": "M-C-004",
+   "title": "Convey-All-TroubleshootingGuide.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "April 28, 2017",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1204-1",
+     "card_id": "K-1204",
+     "locator": "PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping",
+     "document_version": "April 28, 2017",
+     "pdf_pages": [
+      1
+     ],
+     "text_sha256": "b746c804fd68bf48d8645e9a599d52db384136c7b7e4c1aade3526f998a8a9ae",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1205-2",
+     "card_id": "K-1205",
+     "locator": "PDF p.2 / General Conveyor / Low conveying capacity",
+     "document_version": "April 28, 2017",
+     "pdf_pages": [
+      2
+     ],
+     "text_sha256": "170128c0f07f50960b7d005e63df2937ad6917c61f40689d5ffea5e68fa1d326",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/CV/Convey-All-TroubleshootingGuide.pdf",
+    "bytes": 74551,
+    "sha256": "5ed3e0813983a459c851c46e9d5317ee0a3ab3d47f97023f72afd9a50ff66261"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "SC-C-EV-0401",
+   "aliases": [
+    "EV-0401"
+   ],
+   "source_family": "SC-C-EV-0401",
+   "title": "EV-0401",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "EV-0401"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0401",
+    "item_sha256": "2df9c6ace384213d2240a20de23975224d5409124ca76a550011dadf191d877f"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0402",
+   "aliases": [
+    "EV-0402"
+   ],
+   "source_family": "SC-C-EV-0402",
+   "title": "EV-0402",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "EV-0402"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0402",
+    "item_sha256": "91ffca27cb19ad08afeba71fe1b7e9dd067107b3447f401c4d204f5caf43d116"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0403",
+   "aliases": [
+    "EV-0403"
+   ],
+   "source_family": "SC-C-EV-0403",
+   "title": "EV-0403",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "EV-0403"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0403",
+    "item_sha256": "952301f51475344a7597d968f64eb46de77d37030c2deb2335c097752feea5cb"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0404",
+   "aliases": [
+    "EV-0404"
+   ],
+   "source_family": "SC-C-EV-0404",
+   "title": "EV-0404",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0403",
+   "reference_ids": [
+    "EV-0404"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0404",
+    "item_sha256": "921650da02e22d158b338f798434dec38bd5d095bb929e9e939ebf9cafff667d"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0405",
+   "aliases": [
+    "EV-0405"
+   ],
+   "source_family": "SC-C-EV-0405",
+   "title": "EV-0405",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "EV-0405"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0405",
+    "item_sha256": "447903d7af416d0879d41bb46dc7c6a0d286d5936b4b771ab0c04825572059b0"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0406",
+   "aliases": [
+    "EV-0406"
+   ],
+   "source_family": "SC-C-EV-0406",
+   "title": "EV-0406",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0405",
+   "reference_ids": [
+    "EV-0406"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0406",
+    "item_sha256": "fda9edfa7024103653d0abf0110fce9b0b48bb79acb27eb77b680b76d2f3aecb"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0407",
+   "aliases": [
+    "EV-0407"
+   ],
+   "source_family": "SC-C-EV-0407",
+   "title": "EV-0407",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "EV-0407"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0407",
+    "item_sha256": "6db11e8ab23360a5f5a987931370a02a48a15c1a6e45c022fee0629a1a737560"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0408",
+   "aliases": [
+    "EV-0408"
+   ],
+   "source_family": "SC-C-EV-0408",
+   "title": "EV-0408",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0407",
+   "reference_ids": [
+    "EV-0408"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0408",
+    "item_sha256": "4c69b6834a6200bb69194f2f90f89073619ee1ebee21184b8714d12fd2c033b0"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0409",
+   "aliases": [
+    "EV-0409"
+   ],
+   "source_family": "SC-C-EV-0409",
+   "title": "EV-0409",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "EV-0409"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0409",
+    "item_sha256": "380f79d06e6cce00ab95846ec59922e4f756a1b58fc86df1a3023c98b5a31881"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0410",
+   "aliases": [
+    "EV-0410"
+   ],
+   "source_family": "SC-C-EV-0410",
+   "title": "EV-0410",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0409",
+   "reference_ids": [
+    "EV-0410"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0410",
+    "item_sha256": "2c2c8c1a47e88a5ad8d784f1ee297a421c44952cdd5717be941b58301932dd89"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0411",
+   "aliases": [
+    "EV-0411"
+   ],
+   "source_family": "SC-C-EV-0411",
+   "title": "EV-0411",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "EV-0411"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0411",
+    "item_sha256": "78dada0a2621857dc4cec0689ecb555769b3e05c4984687d08c2afc1a30e7fa3"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0412",
+   "aliases": [
+    "EV-0412"
+   ],
+   "source_family": "SC-C-EV-0412",
+   "title": "EV-0412",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0411",
+   "reference_ids": [
+    "EV-0412"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0412",
+    "item_sha256": "6c4b1d5598d2a3ab4804d11f93ddbe2a115dbf6eed211bb0742c4ed4cd85b678"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0413",
+   "aliases": [
+    "EV-0413"
+   ],
+   "source_family": "SC-C-EV-0413",
+   "title": "EV-0413",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "EV-0413"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0413",
+    "item_sha256": "105cbece36b9ea393a661169d77c26e846aabad5a38e6447ee65a831cf919a48"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0414",
+   "aliases": [
+    "EV-0414"
+   ],
+   "source_family": "SC-C-EV-0414",
+   "title": "EV-0414",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0413",
+   "reference_ids": [
+    "EV-0414"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0414",
+    "item_sha256": "8f2601efe79e18110e8d18e4540155a407410d4e8234e24a3ce5d46f5c2c0cc7"
+   }
+  },
+  {
+   "source_id": "SC-C-EV-0415",
+   "aliases": [
+    "EV-0415"
+   ],
+   "source_family": "SC-C-EV-0415",
+   "title": "EV-0415",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": true,
+   "document_version": "합성 원장; true_cause 미사용",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [],
+   "purpose": "합성 KB 관측 투영; 현장 경험 아님",
+   "group_id": "KB-20260930-C:EV-0401",
+   "reference_ids": [
+    "EV-0415"
+   ],
+   "lineage_review_status": "pending_review",
+   "local_snapshot": {
+    "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
+    "item_id": "EV-0415",
+    "item_sha256": "394e470ae1ad4700757f7db2777874a6a85bd08bfb810f261f5aea9c638771e0"
+   }
+  },
+  {
+   "source_id": "M-C-005",
+   "aliases": [
+    "HY29-0022-UK.pdf"
+   ],
+   "source_family": "M-C-005",
+   "title": "HY29-0022-UK.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "Catalogue HY29-0022/UK",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1211-1",
+     "card_id": "K-1211",
+     "locator": "PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+     "document_version": "Catalogue HY29-0022/UK",
+     "pdf_pages": [
+      6,
+      24
+     ],
+     "text_sha256": "164fafd8bca2900535a9608dfcbd8cb2dabcf9547ecbc0d24e56553e15e4ec21",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1218-2",
+     "card_id": "K-1218",
+     "locator": "PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+     "document_version": "Catalogue HY29-0022/UK",
+     "pdf_pages": [
+      6,
+      37,
+      38,
+      49
+     ],
+     "text_sha256": "fe060039db078a7cfc136ba7a2f2b594b7e806e69c0a1f7b29f0bf3b52df5f2f",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/HPU/HY29-0022-UK.pdf",
+    "bytes": 65610883,
+    "sha256": "c5805c031046a8f3a7564fd04502150a1e97a22ac2c2e38ac1ee1509d1073fdb"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "M-C-006",
+   "aliases": [
+    "MAN-C-012.pdf"
+   ],
+   "source_family": "M-C-006",
+   "title": "MAN-C-012.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1201-1",
+     "card_id": "K-1201",
+     "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+     "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
+     "pdf_pages": [
+      6
+     ],
+     "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1202-2",
+     "card_id": "K-1202",
+     "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+     "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
+     "pdf_pages": [
+      6
+     ],
+     "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/HPU/MAN-C-012.pdf",
+    "bytes": 362484,
+    "sha256": "2d504ca266c7781d3bac04db6fc31530c66366c0e781e2b0bf94748a32a2a62d"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "M-C-007",
+   "aliases": [
+    "conveyor-manual-0323-en.pdf"
+   ],
+   "source_family": "M-C-007",
+   "title": "conveyor-manual-0323-en.pdf",
+   "url": null,
+   "url_role": null,
+   "review_status": "pending_review",
+   "approved_scope": [],
+   "is_synthetic": false,
+   "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+   "reviewed_notes": [
+    "docs/data/knowledge_cards/kb/20260930-C/review_round2.md"
+   ],
+   "registered_at": "2026-09-30",
+   "registered_by": "Codex; registration only",
+   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "review_candidates": [
+    {
+     "scope_id": "K-1204-1",
+     "card_id": "K-1204",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "pdf_pages": [
+      11
+     ],
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1205-2",
+     "card_id": "K-1205",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "pdf_pages": [
+      11
+     ],
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1206-3",
+     "card_id": "K-1206",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "pdf_pages": [
+      11
+     ],
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1206-4",
+     "card_id": "K-1206",
+     "locator": "PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "pdf_pages": [
+      70
+     ],
+     "text_sha256": "5f13bb0f2cb380885f7c91cc87d726a50c40db445b690e34fec85350b784f79f",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1213-5",
+     "card_id": "K-1213",
+     "locator": "PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023",
+     "pdf_pages": [
+      62,
+      63
+     ],
+     "text_sha256": "9f6f78a74797c59dd2ba4f2811e8f901c7db262faba9edb30ab0ead4b38db356",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    },
+    {
+     "scope_id": "K-1215-6",
+     "card_id": "K-1215",
+     "locator": "PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023",
+     "pdf_pages": [
+      69
+     ],
+     "text_sha256": "ff9c02499052772aeb88771d2d9eef05d58133aa6be09ac883c27893085e1d93",
+     "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
+     "approval_status": "pending_review"
+    }
+   ],
+   "local_snapshot": {
+    "path": "docs/data/sources/CV/conveyor-manual-0323-en.pdf",
+    "bytes": 4875908,
+    "sha256": "aa576f4e07a07daa39f4aada74f494afbe3418e4b0a3eae5fd04ac12b56a49a2"
+   },
+   "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
+   "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
   }
  ]
 }

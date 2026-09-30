@@ -1,0 +1,203 @@
+[
+ {
+  "card_id": "K-1204",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "CV",
+  "component": "벨트·구동부",
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "장력 low에서 미끄럼의 실제 느슨함 여부에 따라 조치를 나눈다",
+  "symptom": "운전 지시가 있는 컨베이어에서 벨트가 미끄러지거나 돌지 않는다.",
+  "know_how": "장력 low만으로 느슨한 벨트를 확정하지 않는다. 정지 상태에서 실제 벨트 느슨함이 확인되면 벨트 장력과 정렬을 바로잡는다. 벨트가 늘어나 느슨해진 경우는 원문이 벨트 길이 단축을 구분해 제시하므로 일반 장력 조정으로 끝내지 않는다. 실제 벨트 느슨함이 없으면 벨트·롤러에 끼인 이물질과 거칠거나 고착된 베어링을 확인하는 경로로 옮긴다. 정비 작업은 설비 정지 후 자격을 갖춘 담당자가 수행한다.",
+  "rationale": "Convey-All 표는 Belt loose와 Conveyor belt loose because it has stretched에 각각 Tighten and align, Shorten belt를 제시하고, 다른 미끄럼 원인에 이물질과 고착 베어링을 든다. 가상 장력 상태가 물리적 늘어남을 증명하지는 않는다.",
+  "conditions": [
+   {
+    "signal": "cv_belt_tension_state",
+    "op": "==",
+    "value": "low",
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "MISUMI §3.2.2: 운전 중 작동영역에 손을 넣지 않으며, 기계 작업은 정지 후 자격을 갖춘 담당자만 수행한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S04"
+   ],
+   "persona_id": "codex-t2-author",
+   "event_ids": [],
+   "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+   "generated_at": "2026-09-30T11:24:42.755872+09:00",
+   "sources": [
+    {
+     "source_id": "M-C-004",
+     "locator": "Convey-All-TroubleshootingGuide.pdf | PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping",
+     "document_version": "April 28, 2017"
+    },
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+    }
+   ],
+   "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "일반 벨트 컨베이어의 미끄럼·미회전 증상 확인에 한정한다. 원문 모델의 길이 조정 방법을 CV-01 확정 절차로 옮기지 않는다.",
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1205",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "CV",
+  "component": "벨트·구동 롤러",
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "장력 normal인데 이송량이 줄면 벨트와 롤러 표면 상태를 나눈다",
+  "symptom": "운전 중 이송 능력이 떨어졌으며 장력 검색 상태는 normal이다.",
+  "know_how": "장력 normal을 구동 정상으로 간주하지 않는다. 실제 컨베이어 벨트가 미끄러지는지 확인한다. 벨트 느슨함이 확인되면 장력과 정렬을 조정하는 경로로 간다. 느슨함이 확인되지 않으면 구동 롤러의 마모·미끄럼 및 롤러 래깅 마모를 확인한다. 구동 롤러 관련 항목에는 V-belt 교체가, 래깅 마모에는 롤러 교체 또는 재래깅이 원문 조치로 제시되어 있으므로 실제 원인과 구동 구조를 확인한 뒤 담당자가 조치를 선택한다.",
+  "rationale": "Convey-All Low conveying capacity 표는 conveyor belt slipping, drive roller worn/slipping, roller lagging worn을 서로 다른 원인·조치로 구분한다. 장력 normal은 가상 검색 상태로만 사용하고 실제 느슨함 확인을 생략하지 않는다.",
+  "conditions": [
+   {
+    "signal": "cv_belt_tension_state",
+    "op": "==",
+    "value": "normal",
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "MISUMI §3.2.2: 기계 작업은 정지 후 자격을 갖춘 담당자만 수행한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S05"
+   ],
+   "persona_id": "codex-t2-author",
+   "event_ids": [],
+   "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+   "generated_at": "2026-09-30T11:24:42.755941+09:00",
+   "sources": [
+    {
+     "source_id": "M-C-004",
+     "locator": "Convey-All-TroubleshootingGuide.pdf | PDF p.2 / General Conveyor / Low conveying capacity",
+     "document_version": "April 28, 2017"
+    },
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+    }
+   ],
+   "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "Low conveying capacity 증상이 별도로 확인된 일반 벨트 컨베이어에 한정한다. V-belt와 래깅 구조가 없는 CV-01에는 해당 교체 항목을 적용하지 않는다.",
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1206",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "CV",
+  "component": "벨트·구동 영역",
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "속도 low와 대기열 high에서는 실제 막힘과 느린 벨트를 구분한다",
+  "symptom": "운전 지시가 있는데 벨트가 느리고 이송물이 쌓인다.",
+  "know_how": "운전 지시가 없는 정상 정지라면 이 카드를 적용하지 않는다. 대기열 high는 막힘을 직접 증명하지 않으므로 실제 끼임·쐐기 상태를 확인한다. 이송물이 실제로 끼었으면 즉시 정지하고 도구로 제거하며 맨손으로 빼지 않는다. 끼임이 없고 벨트가 실제로 느리면 풀리·장력 롤러·안내 롤러의 먼지나 오염을 확인하고, 벨트 마모가 확인되면 교체 경로로 간다. 대기열 숫자만 보고 속도 설정을 올리지 않는다.",
+  "rationale": "MISUMI §3.2.2는 적체 원인 제거 시 정지와 도구 사용을 요구하고, §10.3 Belt moving slower는 구동 영역 오염과 벨트 마모를 확인하도록 한다. 대기열과 속도의 인과관계는 원문에 없으므로 현장 증상에 따라 두 원문 경로를 선택한다.",
+  "conditions": [
+   {
+    "signal": "cv_speed_state",
+    "op": "==",
+    "value": "low",
+    "unit": null
+   },
+   {
+    "signal": "cv_queue_len_state",
+    "op": "==",
+    "value": "high",
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "MISUMI §3.2.2: 고장 시 즉시 정지한다. 끼인 이송물은 도구로 제거하고 맨손을 사용하지 않는다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S06"
+   ],
+   "persona_id": "codex-t2-author",
+   "event_ids": [],
+   "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+   "generated_at": "2026-09-30T11:24:42.755987+09:00",
+   "sources": [
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+    },
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+    }
+   ],
+   "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "CV-01에 운전 지시가 있고 실제 느린 이송 또는 끼임이 확인된 경우의 확인 경로다. cv_queue_len은 적체 위치·원인 판정값이 아니다.",
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+  },
+  "safety_review": null
+ }
+]

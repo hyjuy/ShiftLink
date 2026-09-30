@@ -1,0 +1,18 @@
+{
+ "batch_id": "KB-20260930-C",
+ "seed": 20260930,
+ "prompts": {
+  "stage-a-records": {
+   "path": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-a-records.md",
+   "sha256": "866505ae71d66e135b31e760c70ec8058c84b80b67261f984f5fd6f187a8700c"
+  },
+  "stage-b-cards": {
+   "path": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md",
+   "sha256": "c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c"
+  },
+  "T2": {
+   "path": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md",
+   "sha256": "4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be"
+  }
+ }
+}

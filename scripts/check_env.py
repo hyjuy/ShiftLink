@@ -6,7 +6,7 @@ import urllib.request
 from pathlib import Path
 
 REQUIRED_PACKAGES = ["pydantic", "yaml", "requests", "pytest"]
-REQUIRED_ENV_KEYS = ["MYSQL_DATABASE_URL", "GENERATION_API_KEY", "OLLAMA_HOST"]
+REQUIRED_ENV_KEYS = ["MYSQL_DATABASE_URL", "OLLAMA_HOST"]
 OLLAMA_URL = "http://localhost:11434/api/tags"
 
 

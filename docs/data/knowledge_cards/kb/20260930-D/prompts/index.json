@@ -1,0 +1,35 @@
+{
+ "batch_id": "KB-20260930-D",
+ "seed": 20260930,
+ "template_sha256": "868a3d4209da49dacd476e7ba338aacea3d5388e9f99dca9adced7faeca1d5d0",
+ "prompts": {
+  "CAU": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "sha256": "9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
+   "card_ids": [
+    "K-1301",
+    "K-1302",
+    "K-1303",
+    "K-1304",
+    "K-1305"
+   ]
+  },
+  "PDP": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md",
+   "sha256": "3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "card_ids": [
+    "K-1306",
+    "K-1307",
+    "K-1308",
+    "K-1309",
+    "K-1310"
+   ]
+  }
+ },
+ "dispatch": {
+  "agent_type": "general-purpose",
+  "model": "claude-opus-5-5",
+  "dispatched_at": "2026-09-30",
+  "wrapper": "프롬프트 파일 {path} (sha256 {sha256})를 Read로 읽고, 그 내용을 이번 작업 지시로 삼아 그대로 수행하라. 파일의 frontmatter는 기록용이다."
+ }
+}

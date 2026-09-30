@@ -1,0 +1,637 @@
+[
+ {
+  "card_id": "K-1301",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축공기 배관·이음부",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "압축공기 압력 저하 — 누설과 계통 압력강하 부위 의심",
+  "symptom": "압축공기 압력 저하, 공기공구·공압 설비 출력 저하",
+  "know_how": "계통 압력이 떨어지고 공압 기기 출력이 약해지면 먼저 공기 누설을 의심한다. 누설은 이음부·접속부에서 가장 많이 생기므로 커플링, 피팅, 배관 구간, 호스, 조인트, 드레인 트랩, 밸브 스템을 우선 본다. 누설 외에 흐름 저항으로 인한 압력강하 부위(애프터쿨러, 필터, 수분 분리기, 드라이어, 배관, 체크밸브, 가는 배관·퀵커플러·레귤레이터·긴 호스)도 같이 확인할 곳으로 기록한다. 압력 저하만으로 원인을 한 곳으로 단정하지 않는다.",
+  "rationale": "CEATI 가이드 9a절은 누설의 수·크기와 계통 압력 사이에 강한 인과관계가 있고 낮은 압력이 공기공구·설비의 기계적 출력을 줄인다고 적으며, 누설이 가장 흔한 곳으로 이음부·접속부와 커플링·피팅·배관·호스·조인트·드레인 트랩·밸브 스템을 든다. 같은 가이드 9b절은 압력강하 문제 부위로 애프터쿨러·필터·수분 분리기·드라이어·배관·체크밸브, 말단의 가는 배관·퀵커플러·필터·레귤레이터·호스를 든다. 에너지 효율 자료이며 고장 진단 절차가 아니다. 가상 설비 CAU-01의 air_pressure 경계와는 관계없다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S01"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {
+     "source_id": "compressed-air-ref-eng.pdf",
+     "locator": "PDF p.79~80, 83 / 인쇄 p.79~80, 83 / 9a Compressed Air System Leaks, How to Track Down Air Leaks",
+     "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"
+    },
+    {
+     "source_id": "compressed-air-ref-eng.pdf",
+     "locator": "PDF p.85, 87 / 인쇄 p.85, 87 / 9b Lower Compressor Discharge Pressure by Minimizing Pressure Drops",
+     "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md@sha256:9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "CEATI 가이드의 일반 압축공기 계통 설명에 한정한다. 가상 설비 CAU-01의 배관 구성은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1302",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축공기 배관·이음부",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "압축공기 누설음 — 청취·초음파·비눗물로 위치 찾기",
+  "symptom": "압축공기 배관·이음부 누설음",
+  "know_how": "누설음은 팬·기계 소음이 큰 환경에서는 잘 들리지 않는다. 설비가 쉬는 시간(야간·주말)에 배관 경로를 따라 걸으며 중간중간 멈춰 소리를 듣고, 손상된 피팅·갈라진 호스를 본다. 배경 소음이 있으면 초음파 누설 탐지기로 대략의 위치를 찾고, 의심 부위에 비눗물을 발라 확인한다. 찾은 위치는 적고 약도로 남기며 태그를 붙여 수리 대상으로 표시한다. 탐지 작업 때는 보안경·청력 보호구를 쓰고, 높은 곳 작업은 해당 안전 절차를 따른다.",
+  "rationale": "CEATI 가이드 9a절 'How to Track Down Air Leaks'는 배경 소음이 큰 곳에서 누설이 잘 보이거나 들리지 않고, 정지 중에는 들을 수 있으며, 소음이 있으면 초음파 탐지기를 쓰고 비눗물로 확인하라고 적는다. 비생산 시간에 배관을 따라 걸으며 청취·기록·태그하는 방법과 보안경·청력 보호구 주의 문구도 같은 절에 있다. UNEP/TERI 매뉴얼 4.3.4절도 초음파 탐지기가 누설 지점에서 가장 크게 반응하고 가청 배경 소음의 영향을 거의 받지 않는다고 적는다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S02"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {
+     "source_id": "compressed-air-ref-eng.pdf",
+     "locator": "PDF p.82~83 / 인쇄 p.82~83 / 9a How to Track Down Air Leaks, Caution",
+     "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"
+    },
+    {
+     "source_id": "Manual-on-Energy-Efficiency.pdf",
+     "locator": "PDF p.75 / 인쇄 p.57 / 4.3.4 Energy efficiency in compressed air system — Compressed air system leaks",
+     "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md@sha256:9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "압축공기 배관 누설 탐지 일반론에 한정한다. 압축기 본체 내부 이상음(베어링·밸브 등)은 원문에 없으며 이 카드 범위가 아니다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1303",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "CAU",
+  "component": "압축기·배관 계통",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "압력 저하 시 누설 부하 추정 — 압축기 정지·기동 압력 하강·상승 시간 시험",
+  "symptom": "압축공기 계통 압력 저하, 누설 의심",
+  "know_how": "1) 비생산 시간에 시험하고, 압력 변동으로 핵심 설비가 영향을 받는지 먼저 확인한다. 2) 압축기 1대로 계통 운전이 가능한지 확인한다. 3) 압축기를 정지하고, 정상 계통압보다 10 psi 낮은 점에서 30 psi 낮은 점까지(20 psi 하강) 떨어지는 시간을 잰다. 4) 압축기를 기동하고 같은 두 점 사이를 올라가는 시간을 잰다. 5) 시간당 모터 기동 4회를 넘지 않게 여러 번 반복한다. 6) 상승 시간 ÷ (상승+하강 시간)을 압축기 토출량(cfm)에 곱해 누설 부하를 추정한다. 두 번째 압축기가 필요했다면 그 용량을 더한다. 10·30 psi와 시간당 4회는 원문 시험 방법의 값이며 가상 설비 CAU-01의 air_pressure 경계가 아니다.",
+  "rationale": "CEATI 가이드 9a절 'Estimating Total Air Leaks'는 비생산 시간의 저부하 시험을 누설 대응의 첫 단계로 두고, 압축기 1대 운전 시 정지 후 하강 시간과 기동 후 상승 시간을 재어 적재율로 누설량을 추정하는 방법과, 시험이 큰 압력 변동을 일으키므로 핵심 설비 영향을 먼저 판단할 것, 시간당 기동 4회를 넘지 말 것을 적는다. 에너지 진단용 추정 방법이며 제조사 고장 진단 절차가 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S03"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {
+     "source_id": "compressed-air-ref-eng.pdf",
+     "locator": "PDF p.81~82 / 인쇄 p.81~82 / 9a Estimating Total Air Leaks",
+     "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md@sha256:9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "비생산 시간을 잡고, 시험 중 압력 변동이 핵심 설비에 영향을 주는지 확인한다.",
+     "preconditions": [],
+     "expected_result": "영향이 없으면 ST-02로 진행한다.",
+     "stop_conditions": [
+      "핵심 설비가 압력 변동의 영향을 받으면 시험하지 않는다."
+     ]
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "압축기 1대로 계통 운전이 가능한지 확인한다.",
+     "preconditions": [],
+     "expected_result": "1대 운전이 가능하면 ST-03으로 진행한다.",
+     "stop_conditions": [
+      "1대 운전이 불가하면 이 정지·기동 시험 대신 부하/무부하 시간 측정 또는 유량계·용량 게이지로 추정한다."
+     ]
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "압축기를 정지하고, 정상 계통압보다 10 psi 낮은 점에서 30 psi 낮은 점까지 압력이 떨어지는 시간을 잰다.",
+     "preconditions": [],
+     "expected_result": "하강 시간이 기록된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "압축기를 기동하고, 같은 두 압력 점 사이를 올라가는 시간을 잰다.",
+     "preconditions": [],
+     "expected_result": "상승 시간이 기록된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-05",
+     "order": 5,
+     "action": "ST-03~ST-04를 여러 번 반복한다.",
+     "preconditions": [],
+     "expected_result": "반복 측정값이 확보된다.",
+     "stop_conditions": [
+      "시간당 모터 기동 4회를 넘기면 반복을 멈춘다."
+     ]
+    },
+    {
+     "step_id": "ST-06",
+     "order": 6,
+     "action": "상승 시간 ÷ (상승+하강 시간)으로 적재율을 구하고 압축기 토출량(cfm)을 곱해 누설 부하를 추정한다. 두 번째 압축기가 필요했으면 그 용량을 더한다.",
+     "preconditions": [],
+     "expected_result": "누설 부하 추정값이 기록된다.",
+     "stop_conditions": []
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "CEATI 가이드의 누설 부하 추정 시험에 한정한다. 가상 설비 CAU-01의 압축기 대수·제어 방식·토출량은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1304",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T5",
+  "equipment": "CAU",
+  "component": "안전밸브",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "공기압축기 안전밸브 — 압축기·단별 설치, 전후단 차단밸브 금지, 작동 확인",
+  "symptom": null,
+  "know_how": "정변위 압축기에는 과압 폭발 방지용 안전밸브(또는 파열판)를 두고, 다단형 압축기나 직렬로 접속된 공기압축기는 각 단 또는 각 압축기마다 둔다. 안전밸브는 보호 대상 설비의 최고사용압력 이하에서 작동해야 한다. 안전밸브 전단·후단에 차단밸브를 두지 않는다(법령이 정한 예외는 자물쇠형 등만 허용). 설정압력에서의 작동은 교정된 압력계로 검사하며, 공기 취급 용기의 안전밸브로 레버·고리로 수시 작동 확인이 되는 경우는 그 방법으로 확인한다. 정비 계획에는 안전밸브 작동 점검을 넣는다. 안전밸브를 떼거나 막거나 설정을 바꿀 일이 있으면 운전하지 말고 담당자에게 알린다.",
+  "rationale": "산업안전보건기준에 관한 규칙 제261조는 정변위 압축기를 안전밸브등 설치 대상으로 정하고 다단형·직렬 공기압축기의 단별·압축기별 설치를 요구하며, 설정압력 작동 검사와 공기 취급 용기의 레버 확인 예외를 둔다. 제264조는 최고사용압력 이하 작동, 제266조는 전후단 차단밸브 설치 금지를 정한다. UNEP/TERI 매뉴얼 5.3.1절의 급유식 회전 압축기 O&M 표는 매월 안전밸브 작동 점검을 적는다. 해당 조항은 규칙 제2편 제2장 제4절(화학설비·압력용기 등)에 있으며, 가상 설비 CAU-01에 대한 적용 판단과 검사주기는 담당자 확인이 필요하다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙 제261조①2호·②: 정변위 압축기에 과압 폭발 방지용 안전밸브등 설치, 다단형 또는 직렬 접속 공기압축기는 각 단·각 압축기별 설치. 같은 조③: 설정압력에서 적정 작동 검사(공기 취급 용기 안전밸브는 레버·고리로 수시 확인 가능 시 예외). 제264조: 보호 설비 최고사용압력 이하에서 작동. 제266조: 안전밸브등 전단·후단 차단밸브 설치 금지(자물쇠형 등 예외).",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S04"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {
+     "source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf",
+     "locator": "PDF p.46~47 / 제2편 제2장 제4절 제261조, 제264조, 제266조",
+     "document_version": "고용노동부령 제450호, 시행 2026-03-02 (국가법령정보센터)"
+    },
+    {
+     "source_id": "Manual-on-Energy-Efficiency.pdf",
+     "locator": "PDF p.93 / 인쇄 p.75 / 5.3.1 O&M practices and schedule — Monthly: Check safety valve operation",
+     "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md@sha256:9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "법령 조항의 공기압축기 안전밸브 요구에 한정한다. 검사주기(제261조③ 각 호)와 가상 설비 CAU-01의 최고사용압력은 이 카드에 넣지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1306",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "PDP",
+  "component": "차단기",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "차단기 트립 후 재투입하니 멀쩡하면 해결이 아니라 간헐 고장 징후로 본다",
+  "symptom": "차단기 트립, 재투입 후 정상 복귀, 원인 흔적 없음",
+  "know_how": "설비가 멈췄다가 다시 켜니 이상이 없고 원인도 찾지 못한 경우는 해결된 것이 아니라 간헐(sporadic) 고장의 징후로 본다. 원문은 이때 설비에 소재(steel)가 없는 조건에서 이벤트 기록계(transient recorder)를 연결해 전류·전압·속도를 먼저 기록하고, 트리거 시점·저장 시간·분해능이 제대로 동작하는지 시험한 뒤, 다음 고장이 났을 때 기록으로 원인을 분석하라고 한다. 다음 고장에서도 찾지 못하면 기록 항목을 늘린다. 계측기나 프로브를 연결하기 전에는 그 저항을 먼저 확인한다. 트립 직후에는 경보·기록계에 남은 최초 신호와 신호 순서·시각을 적어 둔다. 차단기 재투입 여부 자체는 이 카드가 정하지 않으며, 회로·기기가 안전하다고 증명되기 전에는 재투입하지 않는다(산업안전보건기준에 관한 규칙 제317조제1항제5호).",
+  "rationale": "UNIDO 1987 압연설비 전기 정비 자료(VA.-30.02.10.34) 2.7절은 고장으로 설비가 멈췄다가 다시 켜면 모두 정상이고 아무것도 찾지 못하는 경우가 있다고 적고, 이어서 간헐 고장이면 이벤트 기록계를 연결해 전류·전압·속도를 기록하고 다음 고장 뒤 분석하라고 한다. 1절은 최초 신호와 신호 순서가 중요하다고 한다. 원문은 압연기 구동 계통 기준이며 PDP-01(가상 배전반)의 기록 장치 구성과 같다고 확인되지 않았다. 간헐 고장이라는 해석은 징후의 의미이고 원인을 확정하지 않는다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙(고용노동부령 제450호, 2026.3.2.) 제317조제1항제5호: 차단기 등의 과전류 차단장치에 의하여 자동 차단된 후에는 전기회로 또는 전기기계·기구가 안전하다는 것이 증명되기 전까지는 과전류 차단장치를 재투입하지 않도록 할 것. UNIDO 원문 p.104: 소재가 설비 안에 있는 동안 배선·시험장비를 옮기지 말 것.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S06"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:05:00+09:00",
+   "sources": [
+    {
+     "source_id": "15001-20000_16339.pdf",
+     "locator": "PDF p.103-104 / 인쇄 020-021 OF 022 / 2.7 General",
+     "document_version": "UNIDO 1987 Electrical and Mechanical Maintenance in Rolling Mills, VA.-30.02.10.34 (85-09-23)"
+    },
+    {
+     "source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf",
+     "locator": "PDF p.57 / 제317조제1항제5호",
+     "document_version": "고용노동부령 제450호 (2026-03-02)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md@sha256:3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1307",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "PDP",
+  "component": "배전 버스",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "대형 모터 기동·부하 피크 때 버스 전압이 잠깐 떨어지는 것은 기동 전류에 따른 전압 강하 후보다",
+  "symptom": "대형 모터 기동·부하 피크 시점 버스 전압 순간 강하",
+  "know_how": "버스 전압이 잠깐 떨어진 시각이 큰 모터의 기동이나 부하 피크와 겹치면 기동 전류·부하 피크에 따른 전압 강하(dip)를 먼저 후보로 둔다. 강하 시각과 같은 시각의 부하 전류(bus_current)와 급전 대상 설비의 기동 기록을 함께 본다. 시각이 겹친다는 사실만으로 배전반이나 급전 대상 설비의 고장을 확정하지 않는다. 기동·부하 피크와 겹치지 않는 강하는 이 카드의 범위가 아니다. 원문의 '부하 피크 때 전압 강하 10% 이하'는 전원 계통 설계 조건이며 PDP-01 버스 전압(pct)의 경계값으로 쓰지 않는다.",
+  "rationale": "ABB Electrical System Service 소개 자료의 Motor Starting Study 항목은 모터 기동 시 큰 기동 전류가 모터가 연결된 버스와 계통에 전압 강하를 일으킬 수 있다고 적는다. UNIDO 1987 자료 4절(Network)은 최대 부하 피크에서 전압 강하가 10%를 넘지 않도록 공급 계통의 단락 용량이 충분해야 한다고 적어, 부하 피크와 전압 강하의 관계를 뒷받침한다. 두 자료 모두 현상 설명이며 현장 진단 절차가 아니다. ABB 자료는 브로슈어라 절차 근거로 약하다. PDP-01이 급전하는 설비(GR·HPU)와의 관계는 같이 확인할 곳일 뿐 원인 근거가 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S07"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:05:00+09:00",
+   "sources": [
+    {
+     "source_id": "d2e0a4ea3d7e62b24193679803b73e6.pdf",
+     "locator": "PDF p.6 / 인쇄 p.6 / 3. ABB Electrical System Study - Motor Starting Study",
+     "document_version": "ABB Electrical System Service 소개 자료 (판본 표기 없음)"
+    },
+    {
+     "source_id": "15001-20000_16339.pdf",
+     "locator": "PDF p.56 / 인쇄 046 OF 046 / 4. Network",
+     "document_version": "UNIDO 1987 Electrical and Mechanical Maintenance in Rolling Mills, VA.-15.70.20.11 (86-03-25)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md@sha256:3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1308",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "PDP",
+  "component": "차단기·급전 회로",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "차단기 트립으로 급전 설비가 멈췄을 때 최초 신호부터 퓨즈·제어회로·전압 순으로 좁힌다",
+  "symptom": "배전반 차단기 트립, 급전 설비 정지",
+  "know_how": "1) 경보·기록계·프린터의 정보와 수신 시각·신호 순서를 적고 최초 신호를 확인한다. 2) 운전자에게 정확한 경위와 순서를 듣는다. 3) 기계부를 포함해 설비 전체를 본다(베어링 과열이 원인이어도 신호는 '과전류'로 뜬다). 4) 주회로를 차단한 채 모든 퓨즈를 점검한다. 5) 주회로 차단을 유지하고 제어회로만 투입해 접촉기·릴레이 동작을 확인한다. 6) 정상 동작하지 않으면 선로 전압과 제어 전압을 확인하고, 제어 전압은 급전점부터 회로도를 따라 계기나 시험등으로 한 단계씩 확인한다. 7) 운전 조작부·리밋 스위치 등의 신호를 하나씩 전기적·기계적으로 확인한다. 8) 점검 뒤 제어 전압을 끄고 선로-대지 절연저항을 잰다(측정 전압은 선로 전압 이상). 원인과 안전이 확인되기 전에는 차단기를 재투입하지 않는다. 전기작업은 유자격자가 정전 절차에 따라 한다.",
+  "rationale": "UNIDO 1987 자료(VA.-30.02.10.34) 1절 'Trouble shooting - signals'는 생산 중단 신호를 받으면 경보·기록 정보와 신호 순서·최초 신호를 모으고, 운전자 진술을 듣고, 기계부를 포함한 설비 전체를 보라고 한다. 2.1절(AC 구동)은 주회로 차단→퓨즈 점검→주회로 차단 상태에서 제어회로 투입 후 접촉기·릴레이 확인→선로·제어 전압 확인→신호 개별 확인→제어 전압 차단 후 절연저항 측정 순서를 적는다. 원문은 압연기 교류 구동 기준 권고 절차이며 PDP-01 급전 대상의 회로 구성과 같다고 확인되지 않았다. 재투입 금지는 산업안전보건기준에 관한 규칙 제317조, 유자격자 요건은 제318조에서 가져왔다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙(고용노동부령 제450호, 2026.3.2.) 제317조제1항제5호: 과전류 차단장치에 의해 자동 차단된 후 전기회로·기기가 안전하다고 증명되기 전까지 재투입 금지. 제318조: 전기작업은 유자격자가 수행. 제319조: 노출 충전부 작업 전 전로 차단·잠금·꼬리표·검전.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S08"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:05:00+09:00",
+   "sources": [
+    {
+     "source_id": "15001-20000_16339.pdf",
+     "locator": "PDF p.86-88 / 인쇄 003-005 OF 022 / 1. Trouble shooting - signals, 2.1 AC-Drives",
+     "document_version": "UNIDO 1987 Electrical and Mechanical Maintenance in Rolling Mills, VA.-30.02.10.34 (85-09-23)"
+    },
+    {
+     "source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf",
+     "locator": "PDF p.57-58 / 제317조제1항제5호, 제318조, 제319조",
+     "document_version": "고용노동부령 제450호 (2026-03-02)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md@sha256:3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "경보(annunciator)·기록계·프린터에 남은 정보와 정보 수신 시각, 신호 순서를 적고 최초 신호(First Signal)를 확인한다.",
+     "preconditions": [],
+     "expected_result": "최초 신호와 신호 순서가 기록된다.",
+     "stop_conditions": [
+      "원인과 회로 안전이 확인되기 전에는 차단기를 재투입하지 않는다(규칙 제317조제1항제5호)."
+     ]
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "운전자나 현장 인원에게 정지 경위를 정확히, 순서대로 듣는다.",
+     "preconditions": [],
+     "expected_result": "경보 기록과 대조할 진술이 확보된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "기계부를 포함해 급전 설비 전체를 둘러본다. 베어링 과열처럼 기계 원인이어도 신호는 '과전류'로 나타날 수 있다.",
+     "preconditions": [],
+     "expected_result": "기계적 이상 흔적 유무가 확인된다.",
+     "stop_conditions": [
+      "기계적 원인이 보이면 폐루프 제어를 정밀 조사하지 않고 해당 설비 점검으로 넘긴다."
+     ]
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "주회로를 차단한 채 모든 퓨즈를 점검한다.",
+     "preconditions": [
+      "유자격자가 수행한다(규칙 제318조).",
+      "노출 충전부 접근 시 전로 차단·잠금·꼬리표·검전을 마친다(규칙 제319조)."
+     ],
+     "expected_result": "용단된 퓨즈 유무가 확인된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-05",
+     "order": 5,
+     "action": "주회로 차단을 유지한 상태에서 제어회로만 투입해 접촉기·릴레이가 제대로 동작하는지 확인한다.",
+     "preconditions": [
+      "주회로가 차단된 상태다."
+     ],
+     "expected_result": "정상 동작하면 제어회로 쪽 문제는 좁혀진다. 정상 동작하지 않으면 ST-06으로 진행한다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-06",
+     "order": 6,
+     "action": "선로 전압과 제어 전압을 확인한다. 제어 전압은 급전점부터 회로도를 따라 계기나 시험등으로 한 단계씩 확인한다.",
+     "preconditions": [
+      "ST-05에서 정상 동작하지 않았다."
+     ],
+     "expected_result": "전압이 끊기거나 낮아지는 위치가 좁혀진다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-07",
+     "order": 7,
+     "action": "운전 조작부·리밋 스위치 등에서 오는 신호를 하나씩 전기적·기계적으로 확인한다.",
+     "preconditions": [],
+     "expected_result": "잘못된 신호 입력 유무가 확인된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-08",
+     "order": 8,
+     "action": "점검이 끝나면 제어 전압을 끄고 계기로 선로-대지 절연저항을 잰다. 측정 전압은 선로 전압 이상으로 한다.",
+     "preconditions": [
+      "제어 전압이 차단된 상태다."
+     ],
+     "expected_result": "절연 이상 유무가 확인된다.",
+     "stop_conditions": [
+      "절연 이상이나 원인이 남아 있으면 재투입하지 않고 담당 전기 책임자에게 넘긴다(규칙 제317조제1항제5호)."
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1309",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T5",
+  "equipment": "PDP",
+  "component": "배전반 충전부",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "트립 표시나 전압 표시만 보고 배전반 충전부에 손대지 않는다 — 차단·잠금·검전 후에만",
+  "symptom": "차단기 트립 표시, 배전반 충전부 작업 전",
+  "know_how": "차단기 트립 표시나 버스 전압 표시만으로 정전됐다고 판단하고 배전반 충전부에 접촉하지 않는다. 활선·활선근접 작업은 원칙적으로 하지 않는다. 노출 충전부나 그 부근에서 작업하기 전에는 1) 공급되는 모든 전원을 도면·배선도로 확인하고, 2) 전원을 차단한 뒤 단로기를 개방·확인하고, 3) 차단장치·단로기에 잠금장치와 꼬리표를 달고, 4) 축적 전하가 있는 기기는 잔류전하를 방전하고, 5) 사용 전후 점검한 검전기로 충전 여부를 확인하고, 6) 역송전·유도 우려가 있으면 단락 접지기구로 접지한다. 오조작 가능성이 있는 멀티미터는 정전 확인용으로 쓰지 않는다. 작업은 유자격자가 한다.",
+  "rationale": "산업안전보건기준에 관한 규칙 제319조는 노출 충전부 또는 그 부근 작업 전 전로 차단과 그 절차(전원 확인·단로기 개방·잠금장치와 꼬리표·잔류전하 방전·검전기 확인·단락 접지)를 정한다. KOSHA GUIDE E-7-2012 5.3.1은 활선·활선근접 작업을 원칙적으로 금지하고, 5.3.12(2)는 정전된 기기라도 작업 전 검전기로 정전 여부를 반드시 확인하며 검전기는 사용 전후 시험하고 멀티미터는 정전 검증용으로 권장하지 않는다고 적는다. MES의 breaker_trip·bus_voltage 값은 가상 시연 신호이며 무전압·작업 안전 판정 근거가 아니다. PDP-01은 가상 설비이므로 실제 차단·검전 순서는 사업장 전기작업 절차를 따른다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙(고용노동부령 제450호, 2026.3.2.) 제319조제1항·제2항(노출 충전부 작업 전 전로 차단, 전원 확인·단로기 개방·잠금장치 및 꼬리표·잔류전하 방전·검전기 확인·단락 접지), 제318조(유자격자). KOSHA GUIDE E-7-2012 전기작업에 관한 기술지침 5.3.1(1) 활선·활선근접 작업 원칙적 금지, 5.3.12(2) 정전 기기 작업 전 검전기로 정전 확인·검전기 사용 전후 시험·멀티미터 정전 검증 비권장.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S09"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:05:00+09:00",
+   "sources": [
+    {
+     "source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf",
+     "locator": "PDF p.57-58 / 제318조, 제319조",
+     "document_version": "고용노동부령 제450호 (2026-03-02)"
+    },
+    {
+     "source_id": "E-7-2012 전기작업에 관한 기술지침.pdf",
+     "locator": "PDF p.9 / 인쇄 p.7 / 5.3.1; PDF p.15 / 인쇄 p.13 / 5.3.12(2)",
+     "document_version": "KOSHA GUIDE E-7-2012"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md@sha256:3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1310",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "PDP",
+  "component": "차단기",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "버스 전압 low와 차단기 트립이 겹치면 부하측 고장 단정 전에 전원측 전압 상실을 먼저 본다",
+  "symptom": "버스 전압 저하, 차단기 트립 동시 발생",
+  "know_how": "버스 전압 low와 차단기 트립이 함께 관측되면, 트립을 부하측(급전 대상 설비) 고장으로 바로 단정하지 않는다. 원문은 선로 전압이 끊기면 통전 중인 사이리스터가 전류를 넘기지 못해, 고속 차단기가 전기자 회로를 끊어 퓨즈 용단을 막도록 되어 있다고 한다. 즉 전원측 전압 상실에 대한 보호 동작으로도 트립이 난다. 먼저 전원측(상위 급전) 전압 상태와 전압 저하·트립의 시각 선후를 확인한다. 사이리스터 변환기와 고속 차단기가 있는 급전이면 초고속 퓨즈 용단 여부도 본다. 원문상 초고속 퓨즈는 변환기 내부 고장에서만 끊어져야 하므로, 퓨즈까지 끊겼으면 차단기의 트리거 수준(마모로 변함)이나 변환기 내부를 담당 전기 책임자에게 확인 요청한다. 두 조건 중 하나만 이상이면 이 카드를 적용하지 않는다. 원인과 안전이 확인되기 전에는 재투입하지 않는다.",
+  "rationale": "UNIDO 1987 자료(VA.-15.70.20.11) 1.10절 과전류 보호와 2.4절 고속 차단기는 선로 전압이 끊기면 사이리스터가 전류를 넘기지 못하므로 고속 차단기가 끊지 않으면 초고속 퓨즈가 끊어진다고 적는다. 선택도 항목은 모터·계통 고장은 고속 차단기만으로 끊고 초고속 퓨즈는 변환기·게이트 제어 내부 고장에서만 끊어져야 한다고 하며, 정비 항목은 직류 리플로 차단기 기구가 떨려 트리거 수준이 마모에 따라 변한다고 적는다. 전압 조건에 따라 트립의 해석과 확인 위치가 달라지므로 T2로 둔다. 원문은 압연기 직류 구동 기준이며 PDP-01 급전 계통에 사이리스터 변환기·고속 차단기가 있는지는 확인되지 않았다. 신호 조합은 검색 조건일 뿐 원인 근거가 아니며, bus_voltage(pct)를 V로 환산하지 않는다.",
+  "conditions": [
+   {
+    "signal": "bus_voltage_state",
+    "op": "==",
+    "value": "low",
+    "unit": null
+   },
+   {
+    "signal": "breaker_trip",
+    "op": "==",
+    "value": 1,
+    "unit": "bool"
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙(고용노동부령 제450호, 2026.3.2.) 제317조제1항제5호: 과전류 차단장치에 의해 자동 차단된 후 전기회로·기기가 안전하다고 증명되기 전까지 재투입 금지. 트립 표시만으로 무전압·작업 안전을 판정하지 않는다(docs/guides/mes-card-signals.md).",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S10"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:05:00+09:00",
+   "sources": [
+    {
+     "source_id": "15001-20000_16339.pdf",
+     "locator": "PDF p.36, 44, 46-47 / 인쇄 026, 034, 036-037 OF 046 / 1.10 Overcurrent protection, 2.4 High Speed Circuit Breaker",
+     "document_version": "UNIDO 1987 Electrical and Mechanical Maintenance in Rolling Mills, VA.-15.70.20.11 (86-03-25)"
+    },
+    {
+     "source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf",
+     "locator": "PDF p.57 / 제317조제1항제5호",
+     "document_version": "고용노동부령 제450호 (2026-03-02)"
+    }
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md@sha256:3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": null,
+  "safety_review": null
+ }
+]

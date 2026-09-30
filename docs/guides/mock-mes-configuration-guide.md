@@ -28,7 +28,7 @@ print(f"주경로: {' → '.join(config.route)}")
 | 설비 수 | 10대 (HPU-01, PDP-01, CAU-01, GR-01, GR-02, RT-01, RT-02, RT-03, CV-01, CV-02) |
 | 주경로 | EQ-0006 → EQ-0007 → EQ-0008 → EQ-0009 |
 | 분기 | EQ-0008 → EQ-0010 (20 m_min, branches로 기록) |
-| 시나리오 | 활성 `config.scenarios` 기준. 2026-09-30 기본 구성은 정상 포함 기존 9개 + 독립 센서 46개 + 증상 조합 22개 = 77개 |
+| 시나리오 | 활성 `config.scenarios` 기준. 2026-09-30 기본 구성은 기존 공정·복구 시연 9개 + 독립 센서 46개 + 증상 조합 22개 = 77개 |
 | 특수 신호 | rt_speed/cv_speed는 비가동 시 0 (zero_when_stopped=True) |
 
 ## 2. 동일 기능 교체: HPU 자산 교체 (구성 B)

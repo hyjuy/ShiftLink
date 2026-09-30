@@ -32,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
             stream.reconfigure(errors="backslashreplace")
     parser = argparse.ArgumentParser(prog="python -m shiftlink.rag")
     parser.add_argument("--cards", required=True, help="카드 JSON 파일 또는 디렉터리")
-    parser.add_argument("--equipment", required=True, help="설비 ID 또는 HPU/GR/RT/CV")
+    parser.add_argument("--equipment", required=True, help="설비 ID 또는 HPU/GR/RT/CV/PDP/CAU")
     parser.add_argument("--question", required=True)
     parser.add_argument("--line-id", default="L1")
     parser.add_argument("--model", default=DEFAULT_MODEL)

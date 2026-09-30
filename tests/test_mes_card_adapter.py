@@ -80,6 +80,11 @@ def test_existing_safety_card_stays_first():
     assert result["cards"][0]["card_id"] == "K-1006"
 
 
+def test_pdp_and_cau_class_codes_select_catalog_installations():
+    assert adapter([]).search("run", "PDP", "voltage")["request"].eq_id == "EQ-0002"
+    assert adapter([]).search("run", "CAU", "pressure")["request"].eq_id == "EQ-0003"
+
+
 def test_installation_specific_card_does_not_cross_to_second_gearbox():
     subject = adapter([measurement(equipment_id="EQ-0005")])
     card = next(c for c in subject.cards.cards if c.card_id == "K-1025")
@@ -110,12 +115,6 @@ def test_derived_state_has_no_physical_unit():
     card.conditions = [Condition(signal="gr_brg_temp_state", op="==", value="high", unit="degC")]
     result = subject.search("run", "GR-01", "temperature")
     assert next(c for c in result["cards"] if c["card_id"] == "K-1025")["condition_status"] == "unverified"
-
-
-@pytest.mark.parametrize("equipment", ["PDP", "CAU"])
-def test_catalog_only_equipment_classes_stay_unsupported(equipment):
-    with pytest.raises(ValueError, match="equipment"):
-        adapter([]).search("run", equipment, "status")
 
 
 def test_latest_reading_uses_absolute_time():

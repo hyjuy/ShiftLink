@@ -9,7 +9,7 @@ SCHEMA_VERSION = "1.1"
 
 
 Split = Literal["kb", "dev", "sealed"]
-Equipment = Literal["HPU", "GR", "RT", "CV", "COMMON"]
+Equipment = Literal["HPU", "GR", "RT", "CV", "PDP", "CAU", "COMMON"]
 
 NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 RestartType = Literal["normal_stop_restart", "abnormal_stop_restart", "maintenance_restart", "unknown"]

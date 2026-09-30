@@ -1,0 +1,302 @@
+[
+ {
+  "qid": "T4-0321",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "HPU-01 릴리프 밸브 점검을 17:40에 요청했는데 아직 결과를 못 받았어요. 인계에는 확인 완료 항목과 점검 결과 대기만 적혀 있습니다. 다음 조가 이 요청을 놓치지 않게 무엇을 더 적어야 할까요?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0321; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1109"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "요청 접수·회신 대기 상태를 미해결에 적는다",
+   "접수처와 접수 시각을 함께 적는다",
+   "다음 조 확인 항목에 회신 여부를 넣는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "요청만 접수되고 결과가 없는 상황의 인계는 K-1109가 직접 답한다. 접수처가 구체적으로 없으면 확인 대상으로 남긴다.",
+  "split": "test",
+  "source_event_id": "EV-0321",
+  "source_artifact_ids": [
+   "AR-0341",
+   "AR-0342"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0322",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "GR-01은 00:05 전원 차단과 재기동 방지를 했고 베어링 점검은 다음 정비 일정으로 넘겼습니다. 원인은 아직 미확인입니다. 다음 조가 임의로 재가동하지 않도록 인계 첫머리와 복귀 조건에 무엇을 명시해야 합니까?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0322; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1103"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1103"
+  ],
+  "key_facts": [
+   "정지 시각과 재기동 방지 조치 내용을 먼저 적는다",
+   "원인 확인·인터록 해소·지정 승인자 승인을 적는다",
+   "조건 충족 전 재가동 금지와 대기 사유를 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "전원 차단·재기동 방지 상태 인계는 K-1103에 직접 해당. 승인자 이름·예정 시각은 기록에 없으므로 만들지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0322",
+  "source_artifact_ids": [
+   "AR-0343",
+   "AR-0344"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0323",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "CV-01 대기율은 10:24에 93%, 13:10에 71%였어요. 10:28 인터록 작동, 13:10 해제, 13:40 RT-03 재가동 승인 확인 후 복귀를 기록했습니다. 다음 조가 같은 확인을 반복하지 않게 이 확인 결과를 어떻게 묶어 넘기면 될까요?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0323; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "앞 조가 확인한 항목과 단계별 결과를 적는다",
+   "정상으로 확인된 항목도 기록한다",
+   "인수자는 어디까지 확인됐는지 되묻고 확인 표시한다"
+  ],
+  "difficulty": "medium",
+  "label_note": "확인 완료 항목과 그 결과의 전달 방법을 묻는다. 사건의 재가동 승인 사실은 제공 정보이며 K-1101에서 새로 추정하는 것이 아니다.",
+  "split": "test",
+  "source_event_id": "EV-0323",
+  "source_artifact_ids": [
+   "AR-0345",
+   "AR-0346"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0324",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "GR-01에서 17:36에 두드리는 소리를 들었고 갈리는 소리와는 달랐습니다. 17:45 모터를 정지했고 원인은 정비 담당 확인 중입니다. 다음 조가 소리 관측을 이어받을 수 있게 인계에 어떤 항목을 남겨야 합니까?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0324; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1108"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [
+   "소리의 성질과 규칙·불규칙 여부를 적는다",
+   "들은 위치와 시각을 함께 적는다",
+   "계측에 남지 않는 관측을 문장으로 남긴다"
+  ],
+  "difficulty": "medium",
+  "label_note": "소리 인계는 K-1104, 원인 미확정 구분은 K-1108 보조. 규칙성은 제공되지 않았으므로 확인 대상으로 남긴다. 이상 소음 안전 K-1024를 함께 표시한다.",
+  "split": "test",
+  "source_event_id": "EV-0324",
+  "source_artifact_ids": [
+   "AR-0347",
+   "AR-0348"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0325",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "HPU-01 냉각수 밸브를 01:55에 열었고 유온이 03:10에 64도, 05:20에 55도로 내려왔어요. 다음 조에 조치 결과를 넘길 때 무엇을 한 묶음으로 적고, 아직 정해지지 않은 재확인 시각은 어떻게 다뤄야 할까요?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0325; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1102"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "손댄 부품과 조치 내용을 기록한다",
+   "조치 후 계측값과 확인 시각을 함께 기록한다",
+   "다음 재확인 시각을 정해 함께 남긴다"
+  ],
+  "difficulty": "medium",
+  "label_note": "조정 부품·조치 후 값·재확인 시각은 K-1102의 세 요소. 03:10 값은 첫 기록값이며 조치 직후 측정으로 바꾸지 않는다. 미정 시각은 임의로 만들지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0325",
+  "source_artifact_ids": [
+   "AR-0349",
+   "AR-0350"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0326",
+  "eq_id": "RT",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "RT-02 속도 16 m/min, 승강 지연 0.14 min이다. 10:30 HPU-01 압력 147 bar 정상, 11:20 GR-01도 정상으로 확인했다. 다음 조가 공급원부터 다시 헤매지 않게 이 결과를 어떻게 넘기나? RT의 고장 부품은 아직 모른다.",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0326; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1107"
+  ],
+  "acceptable_card_ids": [
+   "K-1108"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "증상 설비와 공급원 계측값·확인 시각을 함께 적는다",
+   "공급원 정상 여부와 좁혀진 원인 범위를 적는다",
+   "다음 조가 다시 읽을 공급원 신호를 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "공급·구동 확인 결과 전달은 K-1107. 부품·승강 구조를 확정하지 않는 구분은 K-1108 보조. 공급원 정상만으로 고장 부품을 단정하지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0326",
+  "source_artifact_ids": [
+   "AR-0351",
+   "AR-0352"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0327",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "GR-01을 18:20에 벤트한 뒤 21:10에도 누유가 계속됐습니다. 인계에는 내압 상승이 원인이 아니라고 적었지만 오일실 립 상태는 분해 전이라 확인하지 못했습니다. 관측 결과와 원인 추정을 어떻게 구분해서 적어야 합니까?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0327; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1108"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "직접 관측한 사실과 원인 추정을 구분한다",
+   "추정은 추정이라고 표시한다",
+   "확인하지 못한 사항은 확인 못 함으로 남긴다"
+  ],
+  "difficulty": "medium",
+  "label_note": "관측과 배제 추론을 구분하는 K-1108이 직접 답한다. 누유 지속만으로 원인을 배제하지 않는다. 사건의 조치 내용을 새로운 작업 지시로 권하지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0327",
+  "source_artifact_ids": [
+   "AR-0353",
+   "AR-0354"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0328",
+  "eq_id": "COMMON",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "PDP-01 전압 표시가 07:50에 93%, 10:20에 94%였다. 외부 표시만 확인했고 문은 안 열었다. 12:30 전기 담당에 접수했는데 회신은 아직 없다. 다음 조에 처리 끝난 걸로 보이지 않게 어떻게 적나?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0328; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1109"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "요청 접수·회신 대기로 미해결 항목에 적는다",
+   "전기 담당 접수처와 접수 시각을 남긴다",
+   "다음 조 확인 항목에 회신 여부를 넣는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "회신 대기 인계는 K-1109. 원본 사건 equipment=COMMON을 유지한다. 전기 작업 절차나 문 개방 권한을 추정하지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0328",
+  "source_artifact_ids": [
+   "AR-0355",
+   "AR-0356"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0329",
+  "eq_id": "CV",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "CV-01 장력은 16:30에 351 kPa, 20:40에 349 kPa였고 속도는 두 번 다 8 m/min으로 확인했습니다. 정상 하한은 각각 380 kPa, 10 m/min인데 알람은 없었습니다. 알람이 없어도 이 값들을 어떻게 인계해야 합니까?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0329; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1105"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "알람이 없어도 정상 범위 밖 계측값을 인계한다",
+   "값·읽은 시각·정상 범위·변화 추이를 적는다",
+   "다음 조 재확인 신호와 판단 기준을 지정한다"
+  ],
+  "difficulty": "medium",
+  "label_note": "알람 없는 범위 이탈 값 전달은 K-1105. 카탈로그에 없는 새로운 임계값·운전 허용 조건은 만들지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0329",
+  "source_artifact_ids": [
+   "AR-0357",
+   "AR-0358"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ },
+ {
+  "qid": "T4-0330",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "HPU-01 필터 차압이 00:50에 1.6 bar, 02:20에 1.7 bar다. 압력·유량은 정상이고 05:30 정비 담당에 접수했다. 필터 차압 조치 절차 카드는 없다. 다음 조에 내가 순서를 만들어 적어도 되나, 뭘 남겨야 하나?",
+  "observations": {},
+  "writer_note": "평가 사건 EV-0330; 근무일지·인계 메모에 기록된 정보만 질문에 사용.",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1106"
+  ],
+  "acceptable_card_ids": [
+   "K-1109"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "정해진 조치 절차가 없다는 사실을 적는다",
+   "관측값·시각과 접수처·접수 시각을 남긴다",
+   "절차를 만들지 않고 회신·값 재확인을 넘긴다"
+  ],
+  "difficulty": "medium",
+  "label_note": "절차 없는 증상의 인계는 K-1106이며 접수 대기는 K-1109 보조. 필터 교체 절차는 생성하지 않는다.",
+  "split": "test",
+  "source_event_id": "EV-0330",
+  "source_artifact_ids": [
+   "AR-0359",
+   "AR-0360"
+  ],
+  "review_status": "draft_pending_human_review_and_card_revision"
+ }
+]

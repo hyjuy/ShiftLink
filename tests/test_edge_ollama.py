@@ -10,9 +10,10 @@ from pathlib import Path
 import pytest
 
 from shiftlink.agent.pipeline import FixedPipeline
-from shiftlink.agent.router import QueryRequest
+from shiftlink.agent.router import HandoverRequest, QueryRequest
 from shiftlink.edge.ollama import (
     CANARY_PREFIXES,
+    HANDOVER_SYSTEM_PROMPT,
     MODEL_CARD_FIELDS,
     OUTPUT_SCHEMA,
     OllamaModel,
@@ -23,6 +24,7 @@ from shiftlink.edge.ollama import (
 from shiftlink.rag.loader import load_card_provider
 
 KB_CARDS = Path(__file__).resolve().parents[1] / "docs/data/knowledge_cards/kb/20260929-A/cards.json"
+KB_MERGED = Path(__file__).resolve().parents[1] / "docs/data/knowledge_cards/kb/kb_cards.json"
 
 
 def make_request():
@@ -202,12 +204,69 @@ def test_timeout_is_not_swallowed_as_connection_error(monkeypatch):
     assert not isinstance(exc.value, ConnectionError)
 
 
-def test_handover_mode_is_rejected_not_silently_answered(monkeypatch):
-    """계약 §2: handover를 query처럼 처리하면 안 된다. 모델도 부르지 않는다."""
+def test_unknown_mode_is_rejected_without_a_model_call(monkeypatch):
     fake = FakeHTTP(json.dumps({"answer": "a", "cited_card_ids": []}))
     with pytest.raises(NotImplementedError):
-        call(monkeypatch, fake, mode="handover")
+        call(monkeypatch, fake, mode="summary")
     assert fake.calls == []
+
+
+HANDOVER_METHOD = {
+    "required_context": ["소리 변화", "처음 들린 시각"],
+    "recipient_role": "다음 근무 설비 담당",
+    "timing": "교대 시",
+    "channel": "인계 메모",
+    "acknowledgement": "받는 사람 서명",
+}
+
+
+def make_handover_results():
+    card = {"card_id": "K-0104", "tacit_type": "T4", "equipment": "COMMON",
+            "title": "소리 변화 인계", "know_how": "소리 변화를 시각과 함께 적는다",
+            "type_payload": {"handover_method": HANDOVER_METHOD}}
+    return {"cards": [card], "ranked_cards": [card]}
+
+
+def test_handover_mode_uses_memo_and_card_handover_method(monkeypatch):
+    fake = FakeHTTP(json.dumps({"answer": "소리 변화 확인 필요", "cited_card_ids": ["K-0104"]}))
+    monkeypatch.setattr("urllib.request.urlopen", fake)
+    request = HandoverRequest(memo_text="HPU 소리가 거칠다", shift="A", eq_ids=["HPU"])
+
+    output = OllamaModel()(mode="handover", request=request, tool_results=make_handover_results())
+
+    assert output == {"answer": "소리 변화 확인 필요", "cited_card_ids": ["K-0104"]}
+    system, user = (message["content"] for message in fake.calls[0]["messages"])
+    assert system == HANDOVER_SYSTEM_PROMPT
+    assert "인계 메모: HPU 소리가 거칠다" in user
+    assert '"recipient_role": "다음 근무 설비 담당"' in user
+    assert fake.calls[0]["format"]["properties"]["cited_card_ids"]["items"]["enum"] == ["K-0104"]
+
+
+def test_handover_pipeline_renders_t4_card_as_handover_memo():
+    """실제 KB: 인계 메모 → T4 후보 인용 → 인계 방법 블록이 카드에서 렌더된다."""
+    provider = load_card_provider(KB_MERGED).provider
+    sent = []
+
+    def post(path, payload):
+        sent.append(payload)
+        first = payload["format"]["properties"]["cited_card_ids"]["items"]["enum"][0]
+        return {"message": {"content": json.dumps({"answer": "인계 요지", "cited_card_ids": [first]})}}
+
+    model = OllamaModel()
+    model._post = post
+    result = FixedPipeline(model=model, tools=provider).run({
+        "memo_text": "HPU 운전 중 소리가 평소보다 거칠어졌는데 아직 원인은 모른다. 인계 때 뭘 적어야 해?",
+        "shift": "A", "eq_ids": ["HPU-01"]})
+
+    assert result.mode == "handover" and not result.output.review_queue
+    assert sent[0]["messages"][0]["content"] == HANDOVER_SYSTEM_PROMPT
+    assert result.output.cited_card_ids and result.output.handover_method is not None
+    assert "K-1110" in {notice.card_id for notice in result.output.safety_notices}
+
+
+def test_query_mode_does_not_send_handover_method():
+    messages, _ = build_messages("query", make_request(), make_handover_results())
+    assert "handover_method" not in messages[1]["content"]
 
 
 def test_card_context_applies_whitelist():

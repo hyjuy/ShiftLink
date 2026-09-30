@@ -152,6 +152,21 @@ def test_cli_dry_run_puts_loaded_card_in_the_prompt(tmp_path: Path, capsys):
     assert "압력이 떨어졌다" in text
 
 
+def test_cli_dry_run_handover_memo_uses_handover_prompt(tmp_path: Path, capsys):
+    path = write_json(tmp_path / "cards.json", [card()])
+
+    status = main([
+        "--cards", str(path), "--equipment", "HPU-01",
+        "--memo", "압력이 떨어졌다", "--shift", "A",
+        "--dry-run", "--min-relevance", "0",
+    ])
+
+    assert status == 0
+    text = capsys.readouterr().out
+    assert '"memo_text": "압력이 떨어졌다"' in text
+    assert "인계 메모: 압력이 떨어졌다" in text
+
+
 def test_cli_answers_from_cards_through_ollama_adapter(tmp_path: Path, monkeypatch, capsys):
     path = write_json(tmp_path / "cards.json", [card()])
 

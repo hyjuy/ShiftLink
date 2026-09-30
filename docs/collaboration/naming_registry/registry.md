@@ -86,7 +86,7 @@
 | `to_payload()` / `from_payload()` | `shiftlink/mes/configuration.py` | Configuration ↔ JSON dict | 유현준 |
 | `finalize()` | `shiftlink/mes/configuration.py` | 내용 기반 config_id(sha256) 채움 | 유현준 |
 | `build_messages()` | `shiftlink/edge/ollama.py` | 모드·질문·관측값·카드 → Ollama `/api/chat` messages (+카나리 제외 카드 ID) | 허재원 |
-| `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5) | 허재원 |
+| `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5). `mode="handover"`면 T4 `handover_method`도 포함 | 허재원 |
 | `main()` | `shiftlink/edge/__main__.py` | 픽스처 카드 + 실제 Ollama로 파이프라인 1건 실행하는 진입점 | 허재원 |
 | `build_scenario()` | `shiftlink/data/scenario.py` | 사건 명세 → 검증된 합성 시나리오 + split 배정 제안 (배정표는 고치지 않음) | 허재원 |
 | `resolve_prototype()` | `shiftlink/data/scenario.py` | 원형 식별 4키로 계보 판정. 기존·미등록 배정이 해시보다 우선 | 허재원 |

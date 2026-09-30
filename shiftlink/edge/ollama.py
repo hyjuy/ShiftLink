@@ -4,6 +4,8 @@
     model(mode=..., request=..., tool_results=..., retry=False)
         -> {"answer": str, "cited_card_ids": list[str]}
 
+- mode는 query·handover. 출력 계약은 같고 시스템 프롬프트와 카드 문맥만 다르다.
+
 - 이 어댑터는 호출 1건당 모델을 정확히 1회 부른다. 재시도는 파이프라인이 관리한다.
 - 실패는 부분 결과를 돌려주지 않고 ModelCallError로 올린다.
 - "검색 결과 없음" 게이트는 파이프라인이 모델 호출 전에 처리한다(D-26~29 §4.4).
@@ -81,6 +83,22 @@ SYSTEM_PROMPT = (
     "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
 )
 
+HANDOVER_SYSTEM_PROMPT = (
+    "너는 제조 현장 교대 인계 보조다. 입력은 넘기는 사람이 쓴 인계 메모다. "
+    "아래 지식 카드의 인계 방법에 맞춰 다음 근무자에게 넘길 요지를 정리한다.\n"
+    "규칙:\n"
+    f"1. answer는 항상 한국어 두세 문장, {ANSWER_MAX_CHARS}자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
+    "   메모에 적힌 사실 중 카드의 '인계할 정보'(required_context)에 해당하는 것을 담는다.\n"
+    "   카드가 요구하는데 메모에 없는 항목은 '확인 필요'로 적는다.\n"
+    "2. cited_card_ids에는 메모 상황에 가장 맞는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n"
+    "   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다.\n"
+    "   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n"
+    "3. 메모와 카드에 없는 사실(수치·원인·조치)은 절대 만들어내지 않는다.\n"
+    "4. 인계 대상·시점·방법·확인 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n"
+    "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
+)
+SYSTEM_PROMPTS = {"query": SYSTEM_PROMPT, "handover": HANDOVER_SYSTEM_PROMPT}
+
 
 def retry_prompt(candidate_ids: list[str]) -> str:
     """재시도 안내. 예시 ID 대신 이번 호출의 실제 후보 ID를 보여준다."""
@@ -108,8 +126,13 @@ def output_schema(candidate_ids: list[str]) -> dict[str, Any]:
 MODEL_CALL_ERRORS = (NotImplementedError, TimeoutError, ConnectionError, ValueError)
 
 
-def card_context(tool_results: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
-    """카드를 화이트리스트 필드로 축약한다. 카나리가 섞인 카드는 빼고 ID를 함께 돌려준다."""
+def card_context(
+    tool_results: dict[str, Any], mode: str = "query",
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """카드를 화이트리스트 필드로 축약한다. 카나리가 섞인 카드는 빼고 ID를 함께 돌려준다.
+
+    인계 모드에서는 T4 카드의 handover_method(5요소)도 함께 넘긴다.
+    """
     context: list[dict[str, Any]] = []
     dropped: list[str] = []
     for card in tool_results.get("cards", []):
@@ -118,6 +141,9 @@ def card_context(tool_results: dict[str, Any]) -> tuple[list[dict[str, Any]], li
             for field in MODEL_CARD_FIELDS
             if card.get(field) is not None
         }
+        method = (card.get("type_payload") or {}).get("handover_method")
+        if mode == "handover" and method:
+            trimmed["handover_method"] = method
         if has_canary(card):
             dropped.append(card.get("card_id", "<no-id>"))
             continue
@@ -126,13 +152,13 @@ def card_context(tool_results: dict[str, Any]) -> tuple[list[dict[str, Any]], li
 
 
 def split_context(
-    tool_results: dict[str, Any],
+    tool_results: dict[str, Any], mode: str = "query",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
     """축약 카드를 답변 후보(검색 순위 순)와 안전 참고(검색에 안 걸린 안전 카드)로 나눈다.
 
     검색 결과에 든 안전 카드는 후보로 남는다. ranked_cards가 없는 구 호출자는 전부 후보다.
     """
-    cards, dropped = card_context(tool_results)
+    cards, dropped = card_context(tool_results, mode)
     ranked = tool_results.get("ranked_cards")
     if ranked is None:
         return cards, [], dropped
@@ -150,18 +176,19 @@ def build_messages(
     retry: bool = False,
 ) -> tuple[list[dict[str, str]], list[str]]:
     """Ollama /api/chat용 messages와, 카나리로 제외된 카드 ID 목록을 만든다."""
-    candidates, references, dropped = split_context(tool_results)
+    candidates, references, dropped = split_context(tool_results, mode)
     candidate_ids = [card.get("card_id") for card in candidates]
     dropped = sorted(set(dropped + tool_results.get("dropped_canary_card_ids", [])))
     # 질의는 question, 인계는 memo_text — 라우터가 둘 중 하나만 채운다.
     ask = getattr(request, "question", None) or getattr(request, "memo_text", "")
+    ask_label = "인계 메모" if mode == "handover" else "입력"
     # observations는 Observation 모델 목록이다(구 호출자는 dict를 넘길 수 있어 둘 다 받는다).
     observations = [
         obs.model_dump(mode="json") if hasattr(obs, "model_dump") else obs
         for obs in (getattr(request, "observations", None) or [])
     ]
 
-    parts = [f"모드: {mode}", f"입력: {ask}"]
+    parts = [f"모드: {mode}", f"{ask_label}: {ask}"]
     if observations:
         parts.append(f"관측값: {json.dumps(observations, ensure_ascii=False)}")
     # 후보 한 줄 색인: 긴 JSON보다 먼저 제목·증상으로 질문과 맞춰 보게 한다.
@@ -180,7 +207,7 @@ def build_messages(
         user += retry_prompt(candidate_ids)
 
     return [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": SYSTEM_PROMPTS[mode]},
         {"role": "user", "content": user},
     ], dropped
 
@@ -210,13 +237,12 @@ class OllamaModel:
         tool_results: dict[str, Any],
         retry: bool = False,
     ) -> dict[str, Any]:
-        # 계약 §2: 오늘 범위는 query뿐. handover를 query처럼 조용히 처리하지 않는다.
-        if mode != "query":
+        if mode not in SYSTEM_PROMPTS:
             raise NotImplementedError(
-                f"{mode!r} 모드는 아직 어댑터 범위 밖이다. query만 처리한다."
+                f"{mode!r} 모드는 어댑터 범위 밖이다. query·handover만 처리한다."
             )
         messages, dropped = build_messages(mode, request, tool_results, retry)
-        candidate_ids = [card.get("card_id") for card in split_context(tool_results)[0]]
+        candidate_ids = [card.get("card_id") for card in split_context(tool_results, mode)[0]]
         payload = {
             "model": self.model,
             "messages": messages,

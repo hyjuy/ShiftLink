@@ -2,6 +2,7 @@
 
     python -m shiftlink.rag --cards cards.json --equipment HPU --question "압력이 떨어졌다"
     python -m shiftlink.rag --cards cards.json --equipment HPU --question "..." --dry-run
+    python -m shiftlink.rag --cards cards.json --equipment HPU --memo "..." --shift A
 """
 
 from __future__ import annotations
@@ -33,7 +34,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m shiftlink.rag")
     parser.add_argument("--cards", required=True, help="카드 JSON 파일 또는 디렉터리")
     parser.add_argument("--equipment", required=True, help="설비 ID 또는 HPU/GR/RT/CV/PDP/CAU")
-    parser.add_argument("--question", required=True)
+    ask = parser.add_mutually_exclusive_group(required=True)
+    ask.add_argument("--question", help="질의 모드")
+    ask.add_argument("--memo", help="인계 모드: 넘기는 사람이 쓴 인계 메모")
+    parser.add_argument("--shift", choices=["A", "B", "C"], help="인계 모드 근무조 (--memo와 함께)")
     parser.add_argument("--line-id", default="L1")
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--host", default=DEFAULT_HOST)
@@ -47,15 +51,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-relevance", type=int, default=KB_MIN_TOP_RELEVANCE,
                         help="1위 카드 관련도가 이보다 낮으면 '해당 지식 없음'(0이면 항상 검색)")
     args = parser.parse_args(argv)
+    if args.memo is not None and args.shift is None:
+        parser.error("--memo에는 --shift가 필요합니다")
 
     loaded = load_card_provider(args.cards, include_draft=args.include_draft,
                                 min_top_relevance=args.min_relevance)
     bind_tool_provider(loaded.provider)
-    payload = {
-        "question": args.question,
-        "line_id": args.line_id,
-        "eq_id": args.equipment,
-    }
+    if args.memo is not None:
+        payload = {"memo_text": args.memo, "shift": args.shift, "eq_ids": [args.equipment]}
+    else:
+        payload = {
+            "question": args.question,
+            "line_id": args.line_id,
+            "eq_id": args.equipment,
+        }
     model = OllamaModel(model=args.model, host=args.host, timeout_s=args.timeout)
     print(
         f"# cards seen={loaded.seen} loaded={loaded.loaded} "

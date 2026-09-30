@@ -111,7 +111,7 @@
 | 이름 | 뜻 | 담당자 |
 | --- | --- | --- |
 | `MYSQL_DATABASE_URL` | Aiven MySQL 접속 문자열 | 유현준 |
-| `GENERATION_API_KEY` | 합성 데이터 생성 외부 API 키 | 최재영 |
+| ~~`GENERATION_API_KEY`~~ | 폐기(2026-09-30): 외부 API 생성을 하지 않기로 함 ([N-7](../../reports/N-7_생성API_비교.md)) | 최재영 |
 | `OLLAMA_HOST` | Ollama 서버 주소 | 최재영 |
 
 ## ID 접두어 규칙 `[기존 — 01_고도화_초안 §7.1]`

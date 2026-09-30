@@ -1,0 +1,262 @@
+[
+ {
+  "qid": "S-01",
+  "eq_id": "HPU",
+  "question": "펌프 출구 압력계에 압력이 안 잡힌다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1001"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-02",
+  "eq_id": "HPU",
+  "question": "오일 쿨러 나가는 쪽 유온이 높은 것 같다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1002"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-03",
+  "eq_id": "HPU",
+  "question": "베인펌프 소리가 커지고 오일 표면에 우유빛 거품이 있다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1004"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-04",
+  "eq_id": "HPU",
+  "question": "작동유가 크림색으로 변했고 탱크에 젤리 같은 덩어리가 있다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1008"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-05",
+  "eq_id": "HPU",
+  "question": "축압기 충전 압력을 어떻게 확인하나",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1005"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-06",
+  "eq_id": "CV",
+  "question": "벨트가 한쪽으로 치우쳐 돈다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1010"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-07",
+  "eq_id": "CV",
+  "question": "아이들러에서 끽끽 소리가 나고 롤이 잘 안 돈다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1011"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-08",
+  "eq_id": "CV",
+  "question": "벨트 커버에 점처럼 부푼 곳이 생겼다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1016"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-09",
+  "eq_id": "CV",
+  "question": "벨트 특정 부분만 계속 옆으로 벗어난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1013"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-10",
+  "eq_id": "CV",
+  "question": "운전 중에 고장이 나면 어떤 순서로 조치하나",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1015"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-11",
+  "eq_id": "RT",
+  "question": "롤러 컨베이어에서 휘파람 같은 소리가 난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1017"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-12",
+  "eq_id": "RT",
+  "question": "리프트가 안 내려간다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1021"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-13",
+  "eq_id": "RT",
+  "question": "올려 둔 리프트가 천천히 내려앉는다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1023"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-14",
+  "eq_id": "RT",
+  "question": "상승 버튼 누르면 끽 하는 날카로운 소리가 난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1020"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-15",
+  "eq_id": "RT",
+  "question": "상승이 안 되고 모터가 웅웅거리기만 한다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1022"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-16",
+  "eq_id": "GR",
+  "question": "감속기 베어링 쪽 온도가 평소보다 높다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1025"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-17",
+  "eq_id": "GR",
+  "question": "감속기에서 갈리는 소리가 규칙적으로 난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1026"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-18",
+  "eq_id": "GR",
+  "question": "감속기 커버 쪽에서 오일이 샌다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1027"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-19",
+  "eq_id": "GR",
+  "question": "감속기에서 불규칙한 이상음이 난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1028"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ },
+ {
+  "qid": "S-20",
+  "eq_id": "GR",
+  "question": "감속기 장착부 근처에서 이상음이 난다",
+  "observations": {},
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1030"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "note": "9/29 Jetson bench, written from cards (not blind) — sanity only"
+ }
+]

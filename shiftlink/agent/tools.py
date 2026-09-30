@@ -76,9 +76,11 @@ def search_safety_cards(
     *,
     equipment_ids: list[str],
     observations: dict[str, object] | None = None,
+    include_handover: bool = False,
 ) -> list[dict[str, Any]]:
     """Return all applicable safety cards (safety_flag=True) regardless of k limit."""
     return _provider_or_raise().search_safety_cards(
         equipment_ids=equipment_ids,
         observations=observations,
+        include_handover=include_handover,
     )

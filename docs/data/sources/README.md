@@ -11,6 +11,8 @@
 | `RT/` | 코일카 매뉴얼의 범용 승강 안전 참고자료. 현재 RT 적용 모델은 아님 |
 | `CV/` | 컨베이어·아이들러 매뉴얼과 범용 안전 참고자료 |
 | `shared/` | 단일 설비군에 대응시키기 어려운 제철·냉간압연 사례와 제품 배경자료 |
+| `CAU/` | 압축공기 설비(CAU-01) 에너지 효율·운전 참고자료 (2026-09-30 추가) |
+| `PDP/` | 배전반(PDP-01)·압연 설비 전기 정비 참고자료 (2026-09-30 추가) |
 
 원문 파일은 각 폴더에 두고, 이 README만 루트에 둔다. 사건 후보와 일반 매뉴얼은 아래의 **분류와 사용 범위**로 구분한다.
 
@@ -33,6 +35,10 @@
 | `RT/830CC-V1.pdf`, `RT/Coil-Cars.pdf` | 코일카 매뉴얼. 일반적인 승강·정비 안전 주의사항 때문에 보관; 프로젝트 RT 롤러·클램프·승강부의 적용 모델로 간주하지 않음 |
 | `CV/brochure-conveyor-solutions-handbook-4230-en.pdf` | Metso 컨베이어 제품 핸드북. 일반 안전 내용과 벨트·부품 설명 참고용 |
 | `CV/Martin_C4_CR_18_09_4_Manual.pdf` | Martin 아이들러 설치·유지보수·고장 매뉴얼. 회전체 방호 등 일반 안전 내용 보관; 모델별 절차 전용 금지 |
+| `CAU/compressed-air-ref-eng.pdf` | CEATI Compressed Air Energy Efficiency Reference Guide(118쪽). 압축공기 계통 효율·누설·압력 관리 참고. 고장 진단 근거는 부분적 |
+| `CAU/Manual-on-Energy-Efficiency.pdf` | UNEP/TERI 철강 압연 산업 에너지 효율 기술·모범 사례(116쪽). 압축공기 절 참고용 |
+| `PDP/15001-20000_16339.pdf` | UNIDO 1987 세미나 "Electrical and Mechanical Maintenance in Rolling Mills"(210쪽, 스캔본). 쪽 단위 직접 대조 필요 |
+| `PDP/d2e0a4ea3d7e62b24193679803b73e6.pdf` | ABB Electrical System Service 소개 자료(8쪽). 점검 항목 참고, 절차·수치 근거로 쓰지 않음 |
 
 판재 굽힘기, 열간압연 중심 자료, 제품 사양만 있는 코일카 브로슈어는 [범위 밖 후보](../../archive/event-source-out-of-scope/README.md)로 옮겼다. 기존 검토 기록은 [원문 검토 보고서](../../reports/event-source-card-review-20260923.md)에 남아 있다.
 

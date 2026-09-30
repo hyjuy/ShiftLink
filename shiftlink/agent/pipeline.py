@@ -18,7 +18,8 @@ class ToolProvider(Protocol):
     ) -> list[dict[str, Any]]: ...
 
     def search_safety_cards(
-        self, *, equipment_ids: list[str], observations: dict[str, object] | None = None
+        self, *, equipment_ids: list[str], observations: dict[str, object] | None = None,
+        include_handover: bool = False,
     ) -> list[dict[str, Any]]: ...
 
     def list_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
@@ -173,6 +174,7 @@ class FixedPipeline:
         safety_cards = self.tools.search_safety_cards(
             equipment_ids=equipment_ids,
             observations=observations_dict,
+            include_handover=isinstance(request, HandoverRequest),
         )
 
         # Merge safety_cards and cards: remove duplicates by card_id, safety cards first.

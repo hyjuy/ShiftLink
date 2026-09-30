@@ -1,14 +1,17 @@
 """Every installed sensor has an explicit anomaly, without targeting a sibling."""
 
 from dataclasses import replace
+import json
+import subprocess
 
 import pytest
 
 from shiftlink.agent.schemas import Condition
 from shiftlink.mes.card_adapter import MesCardAdapter
 from shiftlink.mes.configuration import finalize, from_catalog, from_payload, to_payload, validate
-from shiftlink.mes.contracts import Run
+from shiftlink.mes.contracts import Run, SignalSpec
 from shiftlink.mes.engine import MesEngine
+from shiftlink.mes.scenarios.priority import sensor_anomalies
 from shiftlink.rag.retrieval import InMemoryToolProvider, _evaluate_condition
 from tests.test_mes_utility_scenarios import CATALOG, Observer
 
@@ -76,3 +79,46 @@ def test_invalid_exact_target_never_falls_back_to_first_capability(target):
     engine = MesEngine(Run.create(seed=3), broken)
     with pytest.raises(ValueError):
         engine.set_scenario(scenario.scenario_id)
+
+
+@pytest.mark.parametrize("signal,expected", [
+    (SignalSpec("trip", "trip", "bool", 1, 1), 0),
+    (SignalSpec("tiny_pressure", "pressure", "bar", 0.001, 0.002), 0),
+    (SignalSpec("trip", "trip", "bool", 0, 1), None),
+])
+def test_custom_boolean_and_small_ranges_have_valid_anomalies(signal, expected):
+    eq = replace(CONFIG.equipment[0], signals=(signal,))
+    specs = list(sensor_anomalies([eq]))
+    if expected is None:
+        assert specs == []
+    else:
+        assert len(specs) == 1
+        value = specs[0].signal_effects[0].value
+        assert value == expected
+        assert not signal.normal_min <= value <= signal.normal_max
+
+
+def test_operator_screen_uses_exact_targets_for_all_sensor_scenarios():
+    frames = []
+    for eq, signal in SENSORS:
+        engine = MesEngine(Run.create(seed=3, config_id=CONFIG.config_id), CONFIG)
+        engine.start()
+        engine.set_scenario(f"sensor_anomaly_{eq.equipment_id}_{signal.signal}")
+        frames.append({"eq_id": eq.equipment_id, "signal": signal.signal, "snapshot": engine.snapshot.as_dict()})
+    result = subprocess.run(["node", "-e", """
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const {buildOperatorModel} = require('./shiftlink/mes/web/operator.js');
+const {config, frames} = JSON.parse(fs.readFileSync(0, 'utf8'));
+for (const f of frames) {
+  const own = buildOperatorModel(f.snapshot, config, f.eq_id);
+  assert.equal(own.cause.equipment_id, f.eq_id);
+  assert.equal(own.measurements.find(m=>m.signal===f.signal).relevant, true);
+  for (const eq of config.equipment.filter(e=>e.equipment_id!==f.eq_id)) {
+    const other = buildOperatorModel(f.snapshot, config, eq.equipment_id);
+    assert.equal(other.measurements.some(m=>m.relevant), false);
+  }
+}
+"""], input=json.dumps({"config": to_payload(CONFIG), "frames": frames}, default=str),
+        text=True, encoding="utf-8", capture_output=True)
+    assert result.returncode == 0, result.stdout + result.stderr

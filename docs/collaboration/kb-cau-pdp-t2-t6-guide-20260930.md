@@ -1,6 +1,6 @@
 # 업무 가이드: 지식 카드 배치 C(T2·T6)·D(CAU·PDP) 생성
 
-> 작성 2026-09-30 최재영 · 담당 **미정** · 목표 **10/7 accepted** · KB 목록 [`kb/kb_cards.json`](../data/knowledge_cards/kb/kb_cards.json)
+> 작성 2026-09-30 최재영 · 담당 **배치 C 미정 · 배치 D 유현준**(Q7 (c) 결정, 9/30) · 목표 **10/7 accepted** · KB 목록 [`kb/kb_cards.json`](../data/knowledge_cards/kb/kb_cards.json)
 
 ## 한 줄 요약
 
@@ -88,8 +88,9 @@ T6 = 정지 후 재가동·상태 복귀 지식과 **실패 경험**. T4 근거 
 
 ### 선행 조건 (없으면 카드를 못 싣는다)
 
-1. **스키마**: `KnowledgeCard.equipment`가 지금 `HPU/GR/RT/CV/COMMON`만 허용한다. PDP·CAU를 추가하고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석해야 한다. (Cursor PR [#84](https://github.com/hyjuy/ShiftLink/pull/84) — 유현준 확인 후 머지)
+1. **스키마** — **완료**: PR [#84](https://github.com/hyjuy/ShiftLink/pull/84)로 `KnowledgeCard.equipment`에 PDP·CAU가 들어갔고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석한다 (Q7 (c) 결정).
 2. **신호 표**: `air_flow`·`compressor_current`·`bus_current`·`breaker_trip`이 [`mes-card-signals.md`](../guides/mes-card-signals.md) 표에 들어가야 T2 조건을 쓸 수 있다(유현준, 10/2).
+3. **정답지·커버리지 매트릭스 개정** (유현준): 설비 6종 기준으로 바뀐 형식에 맞춰 배치 D 카드와 평가셋 라벨을 붙인다.
 
 ### 슬롯 (10장 제안)
 
@@ -144,7 +145,7 @@ python -m pytest -q && python eval/qa/route_score.py
 
 ## 8. 결정이 필요한 것
 
-1. 담당 — 배치 C·D 각각.
+1. 담당 — 배치 C (배치 D는 유현준으로 결정, 9/30).
 2. CAU·PDP를 60장 **안에** 넣을지(배치 C 칸 축소) **밖에**(70장) 둘지.
 3. PDP T5 근거 자료 — 어떤 공식 안전 자료를 확보할지.
 4. 선행 조건: PDP·CAU 스키마(유현준·Cursor), 보강 신호 표(유현준, 10/2).

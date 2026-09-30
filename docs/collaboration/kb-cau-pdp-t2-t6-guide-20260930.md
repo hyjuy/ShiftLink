@@ -88,7 +88,7 @@ T6 = 정지 후 재가동·상태 복귀 지식과 **실패 경험**. T4 근거 
 
 ### 선행 조건 (없으면 카드를 못 싣는다)
 
-1. **스키마**: `KnowledgeCard.equipment`가 지금 `HPU/GR/RT/CV/COMMON`만 허용한다. PDP·CAU를 추가하고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석해야 한다. (Cursor 로컬 브랜치 `feat/rag-pdp-cau-equipment`에 작업이 있으나 미푸시 — 유현준의 스키마 결정과 함께 확정)
+1. **스키마**: `KnowledgeCard.equipment`가 지금 `HPU/GR/RT/CV/COMMON`만 허용한다. PDP·CAU를 추가하고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석해야 한다. (Cursor PR [#84](https://github.com/hyjuy/ShiftLink/pull/84) — 유현준 확인 후 머지)
 2. **신호 표**: `air_flow`·`compressor_current`·`bus_current`·`breaker_trip`이 [`mes-card-signals.md`](../guides/mes-card-signals.md) 표에 들어가야 T2 조건을 쓸 수 있다(유현준, 10/2).
 
 ### 슬롯 (10장 제안)

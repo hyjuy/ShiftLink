@@ -28,8 +28,12 @@ from shiftlink.rag.loader import load_card_provider  # noqa: E402
 KB = ROOT / "docs/data/knowledge_cards/kb/kb_cards.json"
 
 
-def score_item(item: dict, out: dict) -> dict:
-    """Automatic per-question metrics from a label and a pipeline outcome."""
+def score_item(item: dict, out: dict, *, error: str | None = None) -> dict:
+    """Automatic per-question metrics from a label and a pipeline outcome.
+
+    An execution error is not a successful abstain: an empty citation list
+    after a crash must not raise abstain_ok.
+    """
     cited = out["cited"]
     primary, acceptable = set(item["primary_card_ids"]), set(item["acceptable_card_ids"])
     abstained = out["no_knowledge"] or not cited
@@ -43,7 +47,7 @@ def score_item(item: dict, out: dict) -> dict:
         row["retrieval_hit_at_1"] = out["ranked"][:1] != [] and out["ranked"][0] in primary
         row["retrieval_hit_at_k"] = bool(primary & set(out["ranked"]))
     else:
-        row["abstain_ok"] = abstained
+        row["abstain_ok"] = abstained and not error
     return row
 
 
@@ -93,7 +97,7 @@ def run(items: list[dict], pipe: FixedPipeline, mode: str = "query", shift: str 
                 out["handover_method"] = None
         row = {"qid": item["qid"], "eq_id": item["eq_id"], "answerable": item["answerable"],
                "e2e_s": round(time.monotonic() - t, 3), "error": err, **out}
-        row["score"] = score_item(item, out)
+        row["score"] = score_item(item, out, error=err)
         rows.append(row)
         print(f"{item['qid']} {item['eq_id']} {row['e2e_s']:5.1f}s cited={out['cited']} {row['score']}", flush=True)
     return rows

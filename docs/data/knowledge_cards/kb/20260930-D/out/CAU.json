@@ -2,7 +2,7 @@
  {
   "card_id": "K-1301",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축공기 배관·이음부",
@@ -35,7 +35,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -48,7 +48,7 @@
  {
   "card_id": "K-1302",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축공기 배관·이음부",
@@ -81,7 +81,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -94,7 +94,7 @@
  {
   "card_id": "K-1303",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "CAU",
   "component": "압축기·배관 계통",
@@ -126,7 +126,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {"step_id": "ST-01", "order": 1, "action": "비생산 시간을 잡고, 시험 중 압력 변동이 핵심 설비에 영향을 주는지 확인한다.", "preconditions": [], "expected_result": "영향이 없으면 ST-02로 진행한다.", "stop_conditions": ["핵심 설비가 압력 변동의 영향을 받으면 시험하지 않는다."]},
@@ -148,7 +148,7 @@
  {
   "card_id": "K-1304",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "CAU",
   "component": "안전밸브",
@@ -181,7 +181,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],

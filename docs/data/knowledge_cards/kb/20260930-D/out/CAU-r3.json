@@ -1,7 +1,7 @@
 [
  {
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "equipment": "CAU",
   "mes_equipment_id": "EQ-0003",
   "mes_component_code": null,
@@ -12,7 +12,7 @@
   "conflict_group": null,
   "confidence": 0.0,
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "safety_review": null,
   "tacit_type": "T5",
@@ -58,7 +58,7 @@
  },
  {
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "equipment": "CAU",
   "mes_equipment_id": "EQ-0003",
   "mes_component_code": null,
@@ -69,7 +69,7 @@
   "conflict_group": null,
   "confidence": 0.0,
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "safety_review": null,
   "tacit_type": "T5",

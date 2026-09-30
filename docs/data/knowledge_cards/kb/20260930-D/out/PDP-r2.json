@@ -2,7 +2,7 @@
   {
     "card_id": "K-1315",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T1",
     "equipment": "PDP",
     "component": "배선차단기·접속부",
@@ -46,7 +46,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null
@@ -54,7 +54,7 @@
   {
     "card_id": "K-1316",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T1",
     "equipment": "PDP",
     "component": "차단기 조작기구·래치",
@@ -98,7 +98,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null
@@ -106,7 +106,7 @@
   {
     "card_id": "K-1317",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T3",
     "equipment": "PDP",
     "component": "배선차단기(MCCB)",
@@ -150,7 +150,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": {
       "steps": [
         {
@@ -222,7 +222,7 @@
   {
     "card_id": "K-1318",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T3",
     "equipment": "PDP",
     "component": "배선차단기(MCCB) 트립 요소",
@@ -266,7 +266,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": {
       "steps": [
         {
@@ -360,7 +360,7 @@
   {
     "card_id": "K-1319",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T5",
     "equipment": "PDP",
     "component": "계기용 변류기(CT) 2차 회로",
@@ -404,7 +404,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null

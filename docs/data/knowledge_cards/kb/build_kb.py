@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).parent
-BATCHES = ["20260929-A", "20260930-T4"]
+BATCHES = ["20260929-A", "20260930-T4", "20260930-D"]
 OUT = HERE / "kb_cards.json"
 
 

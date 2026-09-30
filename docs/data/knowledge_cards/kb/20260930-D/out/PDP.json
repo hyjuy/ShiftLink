@@ -2,7 +2,7 @@
   {
     "card_id": "K-1306",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T1",
     "equipment": "PDP",
     "component": "차단기",
@@ -35,7 +35,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null
@@ -43,7 +43,7 @@
   {
     "card_id": "K-1307",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T1",
     "equipment": "PDP",
     "component": "배전 버스",
@@ -76,7 +76,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null
@@ -84,7 +84,7 @@
   {
     "card_id": "K-1308",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T3",
     "equipment": "PDP",
     "component": "차단기·급전 회로",
@@ -117,7 +117,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": {
       "steps": [
         {"step_id": "ST-01", "order": 1, "action": "경보(annunciator)·기록계·프린터에 남은 정보와 정보 수신 시각, 신호 순서를 적고 최초 신호(First Signal)를 확인한다.", "preconditions": [], "expected_result": "최초 신호와 신호 순서가 기록된다.", "stop_conditions": ["원인과 회로 안전이 확인되기 전에는 차단기를 재투입하지 않는다(규칙 제317조제1항제5호)."]},
@@ -136,7 +136,7 @@
   {
     "card_id": "K-1309",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T5",
     "equipment": "PDP",
     "component": "배전반 충전부",
@@ -169,7 +169,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null
@@ -177,7 +177,7 @@
   {
     "card_id": "K-1310",
     "version": "1.0-draft-KB-20260930-D",
-    "grade": "L0",
+    "grade": "L1",
     "tacit_type": "T2",
     "equipment": "PDP",
     "component": "차단기",
@@ -213,7 +213,7 @@
       "schema_version": "1.1"
     },
     "split": "kb",
-    "status": "draft",
+    "status": "accepted",
     "type_payload": null,
     "generalization_evidence": null,
     "safety_review": null

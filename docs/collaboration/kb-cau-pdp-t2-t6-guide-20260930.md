@@ -89,8 +89,8 @@ T6 = 정지 후 재가동·상태 복귀 지식과 **실패 경험**. T4 근거 
 ### 선행 조건 (없으면 카드를 못 싣는다)
 
 1. **스키마** — **완료**: PR [#84](https://github.com/hyjuy/ShiftLink/pull/84)로 `KnowledgeCard.equipment`에 PDP·CAU가 들어갔고 검색이 `PDP-01`·`CAU-01`을 해당 유형으로 해석한다 (Q7 (c) 결정).
-3. **정답지·커버리지 매트릭스 개정** (유현준): 설비 6종 기준으로 바뀐 형식에 맞춰 배치 D 카드와 평가셋 라벨을 붙인다.
 2. **신호 표**: `air_flow`·`compressor_current`·`bus_current`·`breaker_trip`이 [`mes-card-signals.md`](../guides/mes-card-signals.md) 표에 들어가야 T2 조건을 쓸 수 있다(유현준, 10/2).
+3. **정답지·커버리지 매트릭스 개정** (유현준): 설비 6종 기준으로 바뀐 형식에 맞춰 배치 D 카드와 평가셋 라벨을 붙인다.
 
 ### 슬롯 (10장 제안)
 

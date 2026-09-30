@@ -18,7 +18,7 @@ MES 쪽 부품은 다 들어왔다(모의 MES, 신호 카탈로그, `MesCardAdap
 2. 카드 로더(`load_card_provider`)로 만든 provider에는 **설비 기준정보가 없다**. 그래서 `EQ-0001`·`HPU-01` 같은 설치 ID로 질의하면 `Unknown equipment identifier`가 난다. 지금은 `HPU` 같은 유형 코드만 된다.
 3. 카메라는 설비 **유형**(HPU/GR/RT/CV)만 구분한다. GR-02, RT-02/03처럼 같은 유형의 설치가 여럿이면 어느 설치로 볼지 규칙이 없다 (어댑터는 `-01` 고정).
 4. `mes-card-signals.md`의 신호 표에 보강 신호(`hpu_oil_level`, `hpu_pump_current`, `gr_oil_level`, `gr_rpm`, `rt_vib_rms`, `cv_motor_current`, `cv_vib_rms`, `bus_current`, `breaker_trip`, `air_flow`, `compressor_current`)가 없다. 허재원의 카드 배치 B·T4 사건이 이 표를 보고 신호 이름을 쓴다.
-5. 구조 결정 두 가지가 미정이다. **RT**: 카드는 코일카 시저 리프트(K-1018~1023), MES RT-02 승강은 HPU-01 공급 — 같은 구조로 볼지. **PDP·CAU**: 카탈로그엔 있으나 `KnowledgeCard.equipment`가 허용하지 않아 카드를 못 만든다.
+5. **RT** 구조는 미정이다. 카드 K-1018~1023은 코일카 시저 리프트이고, MES RT-02 승강은 HPU-01 공급이라 같은 구조로 볼지 확인 전이다. 새 카드에서 RT-02 승강 고장을 다룰 때 이 절차를 그대로 가져오지 않는다. **PDP·CAU**는 `KnowledgeCard.equipment`와 검색이 `PDP`·`CAU`를 받는다. `COMMON`으로 바꾸지 않는다. PDP-01·CAU-01은 가상 설비다.
 6. `<signal>_state` 판정이 어댑터 안에만 있다. 평가셋 채점(`eval/qa/score.py`)도 같은 규칙으로 상태값을 만들어야 점수가 운영과 같아진다.
 
 ## 단계별 분장

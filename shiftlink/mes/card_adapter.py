@@ -39,7 +39,7 @@ class MesCardAdapter:
                as_of: datetime | None = None, k: int = 5) -> dict[str, Any]:
         # Class codes select the catalog's -01 installation; explicit codes/IDs
         # select their own installation. Never borrow another installation's values.
-        identifier = f"{equipment}-01" if equipment in {"HPU", "GR", "RT", "CV"} else equipment
+        identifier = f"{equipment}-01" if equipment in {"HPU", "GR", "RT", "CV", "PDP", "CAU"} else equipment
         matches = [eq for eq in self.config.equipment
                    if identifier in (eq.equipment_id, eq.code) and eq.active]
         if len(matches) != 1:

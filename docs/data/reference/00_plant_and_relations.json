@@ -216,7 +216,7 @@
       "model_name": "가상-PDP-400",
       "manufacturer_label": "가상-C",
       "spec_ref_seed_ids": [],
-      "_note": "[신규 제안] 기존 enum(HPU/GR/RT/CV/COMMON) 밖의 유형. K-01의 equipment 값은 COMMON으로 매핑한다",
+      "_note": "카드 equipment는 PDP다. COMMON으로 바꾸지 않는다. 가상 설비라 제조사 매뉴얼 모델과 동일하지 않다.",
       "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
     },
     {
@@ -225,7 +225,7 @@
       "model_name": "가상-CAU-75",
       "manufacturer_label": "가상-C",
       "spec_ref_seed_ids": [],
-      "_note": "[신규 제안] 위와 동일",
+      "_note": "카드 equipment는 CAU다. COMMON으로 바꾸지 않는다. 가상 설비라 제조사 매뉴얼 모델과 동일하지 않다.",
       "_seed_note": "구조 참고 공개 시드 미확보. 전부 가상 정의이며 그 사실을 데이터 카드에 명기한다"
     }
   ],

@@ -54,7 +54,7 @@ def test_catalog_equipment_ids_and_codes_share_card_search(equipment_provider, i
         {"equipment_id": "EQ-0001", "text": "fixture"}]
 
 
-@pytest.mark.parametrize("identifier", ["HPU-99", "EQ-9999", "PDP-01"])
+@pytest.mark.parametrize("identifier", ["HPU-99", "EQ-9999"])
 def test_unresolved_equipment_stops_before_model(equipment_provider, identifier):
     calls = []
     with pytest.raises(ValueError, match="equipment"):
@@ -94,6 +94,18 @@ def test_ambiguous_or_missing_equipment_mapping_is_rejected(equipment_provider, 
 def test_direct_equipment_types_remain_supported(equipment_provider):
     assert {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=["HPU"])} == {
         "K-0001", "K-0002", "K-0004"}
+
+
+def test_pdp_and_cau_cards_keep_their_type(equipment_provider):
+    equipment_provider.cards.extend([
+        make_card_t1("K-0005", equipment="PDP"),
+        make_card_t1("K-0006", equipment="CAU"),
+    ])
+    assert {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=["PDP-01"])} == {
+        "K-0004", "K-0005"}
+    assert {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=["CAU"])} == {
+        "K-0004", "K-0006"}
+    assert "K-0005" not in {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=["HPU"])}
 
 
 @pytest.mark.parametrize("reason", ["empty_kb", "condition_false", "excluded"])

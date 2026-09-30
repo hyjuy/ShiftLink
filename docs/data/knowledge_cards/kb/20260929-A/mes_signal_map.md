@@ -9,7 +9,7 @@
 ## MES 쪽 사실 (코드에서 확인)
 
 - 현재 기본 구성의 고유 신호 28개: catalog 16개 + `scenarios/priority.expand()`가 추가한 고유 신호 12개(`gr_oil_leak` 포함). 새 신호 중 `hpu_oil_level`·`gr_oil_level`은 아래 카드의 **확인 항목**에만 연결했고 자동 검색 조건으로 삼지 않는다. 나머지 새 신호 9개는 미연결 목록에 두었다. 동일 신호가 여러 설비에 있어 실제 계측점은 46개다.
-- 기본 공정 시나리오 9개 + 센서별 시연 46개, 총 55개 (`from_catalog` + `PRIORITY_SCENARIOS` + `sensor_anomalies`):
+- 기본 공정 시나리오 9개 + 센서별 시연 46개, 증상 조합 시연 22개를 더해 총 77개 (`from_catalog` + `PRIORITY_SCENARIOS` + `sensor_anomalies`):
 
 | scenario_id | 원인 설비 | 신호 효과 | alarm_code | 전파 대상 wait_reason |
 |---|---|---|---|---|
@@ -120,3 +120,7 @@ catalog `manual_sections[].applies_conditions`가 이미 `{field, op, value}`를
    {"field": "fluid_viscosity", "source": "manual_input", "op": "gt", "value": 2000, "unit": "cSt"}
    ```
    K-1029·K-1007 기존 조건을 옮긴 예. `source`가 `mes`가 아니면 자동 매칭 대상에서 뺀다.
+
+## 증상 조합 시연 추가 (2026-09-30)
+
+22개 `symptom_` 시나리오와 `AL-SYMPTOM`은 승인 카드에 자동 연결하지 않고 `unlinked`에 등록했다. [논문 조사 및 숫자 표](../../../../research/mes-symptom-screening.md)를 참고한다. 원인 후보는 관측 조합으로 선별하며 확정 진단이 아니다.

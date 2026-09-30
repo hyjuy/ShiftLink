@@ -76,7 +76,8 @@ notes = {key: (HERE / "out" / f"{key}_notes.md").read_text(encoding="utf-8") if 
 all_notes = "\n".join(notes.values()).splitlines()
 blocks = [f"# {index['batch_id']} 검수표\n\n판정 칸에 `accepted` / `rejected` / `수정` 중 하나를 적는다. accepted면 grade를 L1로 올린다.\n"]
 for c in cards:
-    note = next((ln for ln in reversed(all_notes) if c["card_id"] in ln), "")  # round-2 note wins (K-1305 retry)
+    # match the card_id column only (notes mention other cards in 비고); round-2 note wins (K-1305 retry)
+    note = next((ln for ln in reversed(all_notes) if ln.count("|") > 2 and ln.split("|")[2].strip() == c["card_id"]), "")
     lines = [f"## {c['card_id']} · {c['equipment']} · {c['tacit_type']}{' · ⚠ 안전' if c['safety_flag'] else ''} — {c['title']}", "",
              f"- **부품**: {c['component']}"]
     if c.get("symptom"):

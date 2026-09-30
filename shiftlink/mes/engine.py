@@ -397,7 +397,7 @@ class MesEngine:
             spec = self._scenario_by_id.get(self._scenario)
             code = spec.alarm_code if spec else "UNKNOWN"
             previous = self._active_alarms.get(equipment_id)
-            if previous and previous.code != code:
+            if previous and (previous.code != code or previous.severity != state_map[equipment_id][1]):
                 self._event("alarm_cleared", equipment_id, previous.code)
                 del self._active_alarms[equipment_id]
             if equipment_id not in self._active_alarms:

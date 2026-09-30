@@ -1,0 +1,1825 @@
+{
+  "reviewer": "independent_review",
+  "round": 1,
+  "changes": [
+    {
+      "card_id": "K-1204",
+      "file": "out\\CV.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S04"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755872+09:00",
+            "sources": [
+              {
+                "source_id": "Convey-All-TroubleshootingGuide.pdf",
+                "locator": "PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping",
+                "document_version": "April 28, 2017"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S04"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755872+09:00",
+            "sources": [
+              {
+                "source_id": "Convey-All-TroubleshootingGuide.pdf",
+                "locator": "PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping",
+                "document_version": "April 28, 2017"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1205",
+      "file": "out\\CV.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S05"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755941+09:00",
+            "sources": [
+              {
+                "source_id": "Convey-All-TroubleshootingGuide.pdf",
+                "locator": "PDF p.2 / General Conveyor / Low conveying capacity",
+                "document_version": "April 28, 2017"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S05"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755941+09:00",
+            "sources": [
+              {
+                "source_id": "Convey-All-TroubleshootingGuide.pdf",
+                "locator": "PDF p.2 / General Conveyor / Low conveying capacity",
+                "document_version": "April 28, 2017"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1206",
+      "file": "out\\CV.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S06"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755987+09:00",
+            "sources": [
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S06"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755987+09:00",
+            "sources": [
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)",
+                "document_version": "MISUMI conveyor systems operating instructions 03/2023"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1209",
+      "file": "out\\GR.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S09"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756101+09:00",
+            "sources": [
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.5 / Safety notes / Startup/operation",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S09"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756101+09:00",
+            "sources": [
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.5 / Safety notes / Startup/operation",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1210",
+      "file": "out\\GR.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S10"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756205+09:00",
+            "sources": [
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S10"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756205+09:00",
+            "sources": [
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level",
+                "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1201",
+      "file": "out\\HPU.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S01"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756137+09:00",
+            "sources": [
+              {
+                "source_id": "MAN-C-012.pdf",
+                "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+                "document_version": "MAN-C-012-EN/0 Maintenance Handbook"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S01"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756137+09:00",
+            "sources": [
+              {
+                "source_id": "MAN-C-012.pdf",
+                "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+                "document_version": "MAN-C-012-EN/0 Maintenance Handbook"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1202",
+      "file": "out\\HPU.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "know_how": {
+          "before": "설치된 막힘 표시기가 카트리지 교체 필요를 실제로 표시하면 원문은 표시가 요구할 때마다 카트리지를 교체하도록 한다. 교체 표시가 확인되지 않으면 차압 high만으로 그 조치를 확정하지 않고 표시기 확인과 정기 교체 계획 검토로 남긴다. 표시가 없는 경우에도 원문은 최소 연 1회 교체를 강하게 권고하므로 마지막 교체 이력과 해당 모델의 정기 교체 지침을 확인한다. 실제 교체는 현장 절차와 모델 적용성을 확인한 정비 담당자가 수행한다.",
+          "after": "설치된 막힘 표시기가 카트리지 교체 필요를 실제로 표시하면 원문은 표시가 요구할 때마다 카트리지를 교체하도록 한다. 교체 표시가 확인되지 않으면 차압 high만으로 그 조치를 확정하지 않고 표시기 확인과 정기 교체 계획 검토로 남긴다. 표시가 없는 경우에도 원문은 최소 연 1회 교체를 강하게 권고하므로 마지막 교체 이력과 해당 모델의 정기 교체 지침을 확인한다. 교체 필요가 표시된 경우 정비 담당자에게 현장 절차·모델 적용성·작업 전 안전 조건을 확인하도록 요청한다. 이 카드는 교체 작업 방법이나 작업 허가를 정하지 않는다."
+        },
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S02"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756171+09:00",
+            "sources": [
+              {
+                "source_id": "MAN-C-012.pdf",
+                "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+                "document_version": "MAN-C-012-EN/0 Maintenance Handbook"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S02"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756171+09:00",
+            "sources": [
+              {
+                "source_id": "MAN-C-012.pdf",
+                "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+                "document_version": "MAN-C-012-EN/0 Maintenance Handbook"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1203",
+      "file": "out\\HPU.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "know_how": {
+          "before": "MES 압력 low는 확인 시작 신호다. 먼저 펌프 출구의 실제 압력을 해당 계통의 정상 작업압과 대조한다. 정상 작업압이 아니면 릴리프 밸브 설정이 올바른지 확인한다. 설정이 맞는데 동작이 진행 중이면 동작이 멈춘 상태에서 압력을 다시 확인하고, 동작이 없으면 밸브 리턴 라인의 유량 유무를 확인한다. 실제 압력이 정상 작업압이고 문제가 유량 부족이면 펌프 출구 유량을 확인한다. 펌프 유량이 정상일 때는 목록의 다음 장치를 확인하고, 정상이지 않으면 릴리프 탱크 라인으로 흐르는 유량이 있는지에 따라 릴리프 밸브 또는 펌프 점검으로 나눈다. MES flow low/normal만으로 원문 유량 판정을 대신하지 않는다.",
+          "after": "MES 압력 low는 확인 시작 신호다. 먼저 펌프 출구의 실제 압력을 해당 계통의 정상 작업압과 대조한다. 정상 작업압이 아니면 릴리프 밸브 설정이 올바른지 확인한다. 설정이 맞는데 동작이 진행 중이면 동작이 멈춘 상태에서 압력을 다시 확인하고, 동작이 없으면 밸브 리턴 라인의 유량 유무를 확인한다. 실제 압력이 정상 작업압이고 문제가 유량 부족이면 펌프 출구 유량을 확인한다. 펌프 유량이 정상일 때는 목록의 다음 장치를 확인하고, 정상이지 않으면 릴리프 탱크 라인으로 흐르는 유량이 있는지에 따라 릴리프 밸브 또는 펌프 점검으로 나눈다. MES flow low/normal만으로 원문 유량 판정을 대신하지 않는다. 이 흐름도는 확인 경로의 요약이며, 유량계 설치·계통 작동·밸브 조정은 담당자가 대상 모델의 작업표준과 안전 조건을 확인한 범위에서만 수행한다."
+        },
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S03"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755221+09:00",
+            "sources": [
+              {
+                "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps, 출구 압력 있음 분기",
+                "document_version": "Vickers GBB9003 (8/84)"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S03"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.755221+09:00",
+            "sources": [
+              {
+                "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps, 출구 압력 있음 분기",
+                "document_version": "Vickers GBB9003 (8/84)"
+              }
+            ],
+            "extraction_method": "로컬 PDF p.17 Algo A.1 흐름도 렌더링 독립 분기 대조; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1207",
+      "file": "out\\RT.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "know_how": {
+          "before": "운전 지시가 없는 정상 정지라면 적용하지 않는다. 반송 지시가 있는데 RollerDrive가 돌지 않으면 주 스위치·제어 전원 상태, 전원선 손상, RollerDrive 고장을 확인하는 경로로 간다. 롤러가 도는데 물품이 이송되지 않으면 PolyVee 구동 벨트, 허용 이송중량, MultiControl을 확인하는 경로로 나눈다. 부품 교체는 대상이 원문과 같은 구동 구조인지 확인한 담당자가 수행한다.",
+          "after": "운전 지시가 없는 정상 정지라면 적용하지 않는다. 반송 지시가 있는데 RollerDrive가 돌지 않으면 주 스위치·제어 전원 상태, 전원선 손상, RollerDrive 고장을 확인하는 경로로 간다. 물품이 이송되지 않는 증상에는 별도 표 항목으로 PolyVee 구동 벨트, 허용 이송중량, MultiControl을 확인하는 경로로 나눈다. 부품 교체는 대상이 원문과 같은 구동 구조인지 확인한 담당자가 수행한다. 원문 두 번째 항목은 롤러가 회전 중이라고 명시하지 않으며 두 증상이 겹칠 수 있다. 구동부 관측을 함께 남겨 담당자가 관련 항목을 확인한다."
+        },
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S07"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756028+09:00",
+            "sources": [
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S07"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756028+09:00",
+            "sources": [
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1208",
+      "file": "out\\RT.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "know_how": {
+          "before": "MES 전류 high만으로 과전류 차단을 확정하지 않는다. 실제 모터 차단기가 과전류로 동작한 경우에만 원문 항목을 적용한다. 이송중량이 대상 설비 허용중량을 초과하면 허용중량을 지키는 경로로 간다. 이송중량 초과가 확인되지 않으면 전기 담당자가 단락과 전기 연결 상태를 확인하고 결함 부품을 처리하는 경로로 간다. 실제 과전류 차단이 확인되지 않으면 이 원문 항목으로 원인이나 조치를 확정하지 않는다.",
+          "after": "MES 전류 high만으로 과전류 차단을 확정하지 않는다. 실제 모터 차단기가 과전류로 동작한 경우에만 원문 항목을 적용한다. 이송중량이 대상 설비 허용중량을 초과하면 허용중량을 지키는 경로로 간다. 중량 초과 여부와 별도로 전기 담당자가 단락과 전기 연결 상태를 확인하고 결함 부품을 처리하는 경로로 간다. 실제 과전류 차단이 확인되지 않으면 이 원문 항목으로 원인이나 조치를 확정하지 않는다. 중량 초과와 단락은 배타적인 원인이 아니며 중량 확인만으로 전기 점검 필요를 없애지 않는다."
+        },
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S08"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756065+09:00",
+            "sources": [
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.52 / 인쇄 p.52 / Troubleshooting: Motor circuit breaker is triggered due to excessive current consumption",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              },
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              }
+            ],
+            "extraction_method": "로컬 PDF PyMuPDF 텍스트 직접 대조; HPU Algo A.1 렌더링 분기 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S08"
+            ],
+            "persona_id": "codex-t2-author",
+            "event_ids": [],
+            "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+            "generated_at": "2026-09-30T11:24:42.756065+09:00",
+            "sources": [
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.52 / 인쇄 p.52 / Troubleshooting: Motor circuit breaker is triggered due to excessive current consumption",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              },
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: In case of a fault (전원 차단·우발 기동 방지·전기 담당 자격)",
+                "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en"
+              }
+            ],
+            "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+            "schema_version": "1.1"
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1211",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S11"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0401",
+              "EV-0402"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0401",
+                "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0402",
+                "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0401",
+                "locator": "restart_attempts: AT-4001",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0403",
+                "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0404",
+                "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0402",
+                "locator": "restart_attempts: AT-4004",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "HPU/HY29-0022-UK.pdf",
+                "locator": "PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+                "document_version": "Catalogue HY29-0022/UK"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S11"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0401",
+              "EV-0402"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0401",
+                "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0402",
+                "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0401",
+                "locator": "restart_attempts: AT-4001",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0403",
+                "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0404",
+                "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0402",
+                "locator": "restart_attempts: AT-4004",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "HY29-0022-UK.pdf",
+                "locator": "PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+                "document_version": "Catalogue HY29-0022/UK"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0401",
+              "EV-0402"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0401",
+              "EV-0402"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1212",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S12"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0405",
+                "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0406",
+                "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0403",
+                "locator": "restart_attempts: AT-4007",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0407",
+                "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0408",
+                "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0404",
+                "locator": "restart_attempts: AT-4010",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "GR/26867443.pdf",
+                "locator": "PDF/인쇄 39~40·43쪽, 7.1 및 8.3",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S12"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0405",
+                "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0406",
+                "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0403",
+                "locator": "restart_attempts: AT-4007",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0407",
+                "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0408",
+                "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0404",
+                "locator": "restart_attempts: AT-4010",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF/인쇄 p.39~40 및 p.42~43 / §7.1 Startup 및 §8.3 Checking the oil level / Changing the oil",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1213",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S13"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0405",
+              "EV-0406"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0409",
+                "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0410",
+                "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0405",
+                "locator": "restart_attempts: AT-4013",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0411",
+                "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0412",
+                "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0406",
+                "locator": "restart_attempts: AT-4016",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "CV/conveyor-manual-0323-en.pdf",
+                "locator": "PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5",
+                "document_version": "Conveyor Systems Operating Instructions 03/2023"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S13"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0405",
+              "EV-0406"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0409",
+                "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0410",
+                "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0405",
+                "locator": "restart_attempts: AT-4013",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0411",
+                "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0412",
+                "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0406",
+                "locator": "restart_attempts: AT-4016",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5",
+                "document_version": "Conveyor Systems Operating Instructions 03/2023"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0405",
+              "EV-0406"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0009의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0405",
+              "EV-0406"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0009의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 원문 §8.3의 운전 중 정렬 조정은 이 카드에 이전하지 않았다. 이 카드는 승인된 시험운전 관찰·정지·담당자 보고만 다룬다.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1214",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S14"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0407",
+              "EV-0408"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0413",
+                "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0414",
+                "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0407",
+                "locator": "restart_attempts: AT-4019",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0415",
+                "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0416",
+                "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0408",
+                "locator": "restart_attempts: AT-4022",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "RT/1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF/인쇄 35~36쪽, Initial startup / Before every operation start",
+                "document_version": "Version 1.0 (06/2022)"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S14"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0407",
+              "EV-0408"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0413",
+                "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0414",
+                "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0407",
+                "locator": "restart_attempts: AT-4019",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0415",
+                "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0416",
+                "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0408",
+                "locator": "restart_attempts: AT-4022",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF/인쇄 35~36쪽, Initial startup / Before every operation start",
+                "document_version": "Version 1.0 (06/2022)"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0407",
+              "EV-0408"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0008의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0407",
+              "EV-0408"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0008의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1215",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S15"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0409",
+              "EV-0410"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0417",
+                "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0418",
+                "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0409",
+                "locator": "restart_attempts: AT-4025",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0419",
+                "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0420",
+                "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0410",
+                "locator": "restart_attempts: AT-4028",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "CV/conveyor-manual-0323-en.pdf",
+                "locator": "PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions",
+                "document_version": "Conveyor Systems Operating Instructions 03/2023"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S15"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0409",
+              "EV-0410"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0417",
+                "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0418",
+                "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0409",
+                "locator": "restart_attempts: AT-4025",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0419",
+                "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0420",
+                "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0410",
+                "locator": "restart_attempts: AT-4028",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "conveyor-manual-0323-en.pdf",
+                "locator": "PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions",
+                "document_version": "Conveyor Systems Operating Instructions 03/2023"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0409",
+              "EV-0410"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0009의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0409",
+              "EV-0410"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0009의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1216",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S16"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0411",
+              "EV-0412"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0421",
+                "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0422",
+                "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0411",
+                "locator": "restart_attempts: AT-4031",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0423",
+                "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0424",
+                "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0412",
+                "locator": "restart_attempts: AT-4034",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "GR/26867443.pdf",
+                "locator": "PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S16"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0411",
+              "EV-0412"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0421",
+                "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0422",
+                "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0411",
+                "locator": "restart_attempts: AT-4031",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0423",
+                "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0424",
+                "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0412",
+                "locator": "restart_attempts: AT-4034",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0411",
+              "EV-0412"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0411",
+              "EV-0412"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1217",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S17"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0413",
+              "EV-0414"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0425",
+                "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0426",
+                "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0413",
+                "locator": "restart_attempts: AT-4037",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0427",
+                "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0428",
+                "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0414",
+                "locator": "restart_attempts: AT-4040",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "RT/1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault",
+                "document_version": "Version 1.0 (06/2022)"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S17"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0413",
+              "EV-0414"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0425",
+                "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0426",
+                "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0413",
+                "locator": "restart_attempts: AT-4037",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0427",
+                "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0428",
+                "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0414",
+                "locator": "restart_attempts: AT-4040",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
+                "locator": "PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault",
+                "document_version": "Version 1.0 (06/2022)"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0413",
+              "EV-0414"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0008의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0413",
+              "EV-0414"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0008의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1218",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S18"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0401",
+              "EV-0415"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0401",
+                "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0402",
+                "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0401",
+                "locator": "restart_attempts: AT-4002",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0429",
+                "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0430",
+                "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0415",
+                "locator": "restart_attempts: AT-4043",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "HPU/HY29-0022-UK.pdf",
+                "locator": "PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+                "document_version": "Catalogue HY29-0022/UK"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S18"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0401",
+              "EV-0415"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0401",
+                "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0402",
+                "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0401",
+                "locator": "restart_attempts: AT-4002",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0429",
+                "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0430",
+                "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0415",
+                "locator": "restart_attempts: AT-4043",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "HY29-0022-UK.pdf",
+                "locator": "PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+                "document_version": "Catalogue HY29-0022/UK"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0401",
+              "EV-0415"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0401",
+              "EV-0415"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    },
+    {
+      "card_id": "K-1219",
+      "file": "out\\T6.json",
+      "basis": "review_round1.md",
+      "fields": {
+        "provenance": {
+          "before": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S19"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0405",
+                "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0406",
+                "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0403",
+                "locator": "restart_attempts: AT-4008",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0407",
+                "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0408",
+                "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0404",
+                "locator": "restart_attempts: AT-4011",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "GR/26867443.pdf",
+                "locator": "PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          },
+          "after": {
+            "seed_ids": [
+              "KB-20260930-C:seed=20260930",
+              "slot:S19"
+            ],
+            "persona_id": "codex-t6-author",
+            "event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "generator": "Codex GPT-6; synthetic-record extraction",
+            "generated_at": "2026-09-30T16:00:00+09:00",
+            "sources": [
+              {
+                "source_id": "AR-0405",
+                "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0406",
+                "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0403",
+                "locator": "restart_attempts: AT-4008",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "AR-0407",
+                "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "AR-0408",
+                "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+              },
+              {
+                "source_id": "EV-0404",
+                "locator": "restart_attempts: AT-4011",
+                "document_version": "합성 원장; true_cause 미사용"
+              },
+              {
+                "source_id": "26867443.pdf",
+                "locator": "PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation",
+                "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+              }
+            ],
+            "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+            "model_version": "GPT-6",
+            "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+            "schema_version": "1.1"
+          }
+        },
+        "generalization_evidence": {
+          "before": {
+            "supporting_event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 합성 기록 2건의 동일 재가동 유형 관측 반복. 실제 현장경험·유효성 검증·사람 승인 없음; 원인 진단은 미기록."
+          },
+          "after": {
+            "supporting_event_ids": [
+              "EV-0403",
+              "EV-0404"
+            ],
+            "contradicting_event_ids": [],
+            "generalization_scope": "EQ-0004의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음.",
+            "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다."
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+ "batch_id": "KB-20260930-C",
+ "seed": 20260930,
+ "generator": "plan.py",
+ "slots": [
+  {
+   "slot": "S01",
+   "card_id": "K-1201",
+   "equipment": "HPU",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S02",
+   "card_id": "K-1202",
+   "equipment": "HPU",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S03",
+   "card_id": "K-1203",
+   "equipment": "HPU",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S04",
+   "card_id": "K-1204",
+   "equipment": "CV",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S05",
+   "card_id": "K-1205",
+   "equipment": "CV",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S06",
+   "card_id": "K-1206",
+   "equipment": "CV",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S07",
+   "card_id": "K-1207",
+   "equipment": "RT",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S08",
+   "card_id": "K-1208",
+   "equipment": "RT",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S09",
+   "card_id": "K-1209",
+   "equipment": "GR",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S10",
+   "card_id": "K-1210",
+   "equipment": "GR",
+   "tacit_type": "T2"
+  },
+  {
+   "slot": "S11",
+   "card_id": "K-1211",
+   "equipment": "HPU",
+   "tacit_type": "T6",
+   "restart_type": "maintenance_restart"
+  },
+  {
+   "slot": "S12",
+   "card_id": "K-1212",
+   "equipment": "GR",
+   "tacit_type": "T6",
+   "restart_type": "maintenance_restart"
+  },
+  {
+   "slot": "S13",
+   "card_id": "K-1213",
+   "equipment": "CV",
+   "tacit_type": "T6",
+   "restart_type": "maintenance_restart"
+  },
+  {
+   "slot": "S14",
+   "card_id": "K-1214",
+   "equipment": "RT",
+   "tacit_type": "T6",
+   "restart_type": "maintenance_restart"
+  },
+  {
+   "slot": "S15",
+   "card_id": "K-1215",
+   "equipment": "CV",
+   "tacit_type": "T6",
+   "restart_type": "abnormal_stop_restart"
+  },
+  {
+   "slot": "S16",
+   "card_id": "K-1216",
+   "equipment": "GR",
+   "tacit_type": "T6",
+   "restart_type": "abnormal_stop_restart"
+  },
+  {
+   "slot": "S17",
+   "card_id": "K-1217",
+   "equipment": "RT",
+   "tacit_type": "T6",
+   "restart_type": "abnormal_stop_restart"
+  },
+  {
+   "slot": "S18",
+   "card_id": "K-1218",
+   "equipment": "HPU",
+   "tacit_type": "T6",
+   "restart_type": "normal_stop_restart"
+  },
+  {
+   "slot": "S19",
+   "card_id": "K-1219",
+   "equipment": "GR",
+   "tacit_type": "T6",
+   "restart_type": "normal_stop_restart"
+  }
+ ]
+}

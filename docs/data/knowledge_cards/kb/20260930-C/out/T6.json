@@ -1,0 +1,1208 @@
+[
+ {
+  "card_id": "K-1211",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "HPU",
+  "component": "필터·오일 정비 후 유압 회로",
+  "mes_equipment_id": "EQ-0001",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "필터·오일 정비 후에는 압력 회복만 보고 복귀하지 말고 기포·소음과 유량을 함께 확인한다",
+  "know_how": "필터 또는 오일 정비 뒤 재가동에서는 압력이 회복됐더라도 펌프 쪽 소음·관찰 가능한 기포와 유량을 함께 본다. 기록의 시험기동에서는 압력 회복과 소음·기포가 동시에 나타났다. 같은 상태가 다시 보이면 반복 기동으로 밀어붙이지 말고 정지 상태에서 정비 담당에게 충유·공기 제거 확인을 요청한다. 공기 제거 방법과 무부하 운전 설정은 해당 설비 작업표준으로 확인하며 이 카드에서 정하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0401, EV-0402에서 허용된 시험기동을 시작했으나 소음과 기포가 보여 정지 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S11"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0401",
+    "EV-0402"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0401",
+     "locator": "AR-0401 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0402",
+     "locator": "AR-0402 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0401",
+     "locator": "EV-0401 | restart_attempts: AT-4001",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0403",
+     "locator": "AR-0403 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0404",
+     "locator": "AR-0404 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0402",
+     "locator": "EV-0402 | restart_attempts: AT-4004",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-005",
+     "locator": "HY29-0022-UK.pdf | PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+     "document_version": "Catalogue HY29-0022/UK"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "maintenance_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4001",
+     "restart_type": "maintenance_restart",
+     "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+     "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0401",
+      "AR-0401",
+      "AR-0402"
+     ]
+    },
+    {
+     "attempt_id": "AT-4004",
+     "restart_type": "maintenance_restart",
+     "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+     "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0402",
+      "AR-0403",
+      "AR-0404"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0401",
+    "EV-0402"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1212",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "GR",
+  "component": "오일 교환 후 감속기",
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "오일 교환 후에는 주입량 기록과 실제 유면을 대조하고 시험운전 관측을 남긴다",
+  "know_how": "오일 교환 완료나 주입량만으로 재가동 준비가 끝났다고 보지 않는다. 정비 오더의 오일 종류·주입 기록과 해당 모델 기준의 실제 유면 확인이 모두 있는지 대조한다. 유면 확인이 빠지면 전원을 넣기 전에 보완한다. 정지 원인 확인과 작업 제한 해제, 인터록 조건 해소, 지정 승인 후에만 현장 절차의 시험운전을 진행하고 소음·진동·누유 관측을 남긴다. 새 설비의 길들이기 시간이나 부하 단계는 이 합성 기록에서 도출하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0403, EV-0404에서 주입량 기록만으로 복귀 준비를 진행하다 유면 확인란이 비어 있어 기동을 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S12"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0403",
+    "EV-0404"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0405",
+     "locator": "AR-0405 | EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0406",
+     "locator": "AR-0406 | EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0403",
+     "locator": "EV-0403 | restart_attempts: AT-4007",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0407",
+     "locator": "AR-0407 | EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0408",
+     "locator": "AR-0408 | EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0404",
+     "locator": "EV-0404 | restart_attempts: AT-4010",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF/인쇄 p.39~40 및 p.42~43 / §7.1 Startup 및 §8.3 Checking the oil level / Changing the oil",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "maintenance_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4007",
+     "restart_type": "maintenance_restart",
+     "action": "주입량 기록만으로 복귀 준비를 진행하다 유면 확인란이 비어 있어 기동을 보류",
+     "observed_result": "오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0403",
+      "AR-0405",
+      "AR-0406"
+     ]
+    },
+    {
+     "attempt_id": "AT-4010",
+     "restart_type": "maintenance_restart",
+     "action": "주입량 기록만으로 복귀 준비를 진행하다 유면 확인란이 비어 있어 기동을 보류",
+     "observed_result": "오일 교환 오더는 완료됐으나 유면 확인 서명이 없었음. 전원 투입 없는 준비 확인에서 중단.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 해당 모델 유면 확인, 방호 복구 및 지정 승인자 확인 후 시험운전 결과 기록"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0404",
+      "AR-0407",
+      "AR-0408"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0403",
+    "EV-0404"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0004의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1213",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "CV",
+  "component": "벨트 정비 후 컨베이어",
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "벨트 정비 후에는 장력 표시와 별도로 시험운전의 편주를 확인한다",
+  "know_how": "벨트 정비 뒤 장력 표시가 가상 MES 정상범위에 있어도 정렬과 주행까지 확인된 것은 아니다. 방호 복구·도구 제거와 재가동 선행조건을 확인한 뒤 승인된 시험운전에서 허용된 관찰 위치로 편주를 본다. 편주가 나타나면 생산 복귀를 보류하고 정비 담당에게 관측 시각과 방향을 전달한다. 장력 표시만으로 조정 완료를 판단하지 않는다. 운전 중 손대거나 조정하는 방법은 이 카드에 포함하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0405, EV-0406에서 장력 표시가 정상인 상태에서 시험운전했으나 벨트가 한쪽으로 치우쳐 중단 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S13"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0405",
+    "EV-0406"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0409",
+     "locator": "AR-0409 | EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0410",
+     "locator": "AR-0410 | EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0405",
+     "locator": "EV-0405 | restart_attempts: AT-4013",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0411",
+     "locator": "AR-0411 | EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0412",
+     "locator": "AR-0412 | EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0406",
+     "locator": "EV-0406 | restart_attempts: AT-4016",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "maintenance_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4013",
+     "restart_type": "maintenance_restart",
+     "action": "장력 표시가 정상인 상태에서 시험운전했으나 벨트가 한쪽으로 치우쳐 중단",
+     "observed_result": "cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0405",
+      "AR-0409",
+      "AR-0410"
+     ]
+    },
+    {
+     "attempt_id": "AT-4016",
+     "restart_type": "maintenance_restart",
+     "action": "장력 표시가 정상인 상태에서 시험운전했으나 벨트가 한쪽으로 치우쳐 중단",
+     "observed_result": "cv_belt_tension 420 kPa. 허용된 관찰 위치에서 벨트 가장자리 편주가 보여 시험운전을 정지함.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정지·차단·잠금 후 정비 담당에게 편주 관측을 전달하고 해당 모델 정비 절차 확인"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0406",
+      "AR-0411",
+      "AR-0412"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0405",
+    "EV-0406"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0009의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 원문 §8.3의 운전 중 정렬 조정은 이 카드에 이전하지 않았다. 이 카드는 승인된 시험운전 관찰·정지·담당자 보고만 다룬다. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0405)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1214",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "RT",
+  "component": "반송부 정비 복귀",
+  "mes_equipment_id": "EQ-0008",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "RT 정비 완료와 재가동 승인을 구분하고 방호·작업구역 복구를 확인한다",
+  "know_how": "RT 정비 완료 오더와 운전 복귀 승인을 구분한다. 재가동 준비 시 방호장치 복구, 작업구역의 도구·불필요한 자재 철수, 걸림 여부와 지정 승인자의 기록을 대조한다. 확인이 빠진 항목은 미확인 상태로 남기고 기동을 보류한다. 완료 오더나 정상 클램프압 표시로 그 확인을 대신하지 않는다. 실제 RT와 원문 롤러 컨베이어의 구조가 같다고 확인되지 않아 잠금 해제 순서·승강 조작·클램프 조정은 제시하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0407, EV-0408에서 정비 완료만 보고 복귀 준비를 진행했으나 작업구역 정리 확인이 없어 기동 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S14"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0407",
+    "EV-0408"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0413",
+     "locator": "AR-0413 | EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0414",
+     "locator": "AR-0414 | EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0407",
+     "locator": "EV-0407 | restart_attempts: AT-4019",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0415",
+     "locator": "AR-0415 | EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0416",
+     "locator": "AR-0416 | EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0408",
+     "locator": "EV-0408 | restart_attempts: AT-4022",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-002",
+     "locator": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF/인쇄 35~36쪽, Initial startup / Before every operation start",
+     "document_version": "Version 1.0 (06/2022)"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "maintenance_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4019",
+     "restart_type": "maintenance_restart",
+     "action": "정비 완료만 보고 복귀 준비를 진행했으나 작업구역 정리 확인이 없어 기동 보류",
+     "observed_result": "정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0407",
+      "AR-0413",
+      "AR-0414"
+     ]
+    },
+    {
+     "attempt_id": "AT-4022",
+     "restart_type": "maintenance_restart",
+     "action": "정비 완료만 보고 복귀 준비를 진행했으나 작업구역 정리 확인이 없어 기동 보류",
+     "observed_result": "정비 완료 서명은 있었지만 도구 철수와 방호 복구의 최종 확인란이 비어 있었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 방호·도구 철수 확인과 지정 승인자의 재가동 승인을 별도로 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0408",
+      "AR-0415",
+      "AR-0416"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0407",
+    "EV-0408"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0008의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0407)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1215",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "CV",
+  "component": "비상정지 후 컨베이어",
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "CV 비상정지 표시가 풀려도 걸림 제거·기능시험 기록이 없으면 복귀를 보류한다",
+  "know_how": "끼임으로 비상정지한 CV에서는 표시가 해제됐다는 사실과 고장이 제거됐다는 사실을 나눠 확인한다. 걸림 제거와 안전장치 확인, 기능시험 승인 기록이 없으면 재가동 준비를 중단하고 정비 담당에게 확인을 요청한다. 정지 원인 확인·인터록 조건 해소·지정 승인 후 허가된 기능시험을 거쳐 운전 담당에게 넘긴다. 정지 표시 해제나 화면 정상값만으로 복귀시키지 않고 안전장치를 우회하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0409, EV-0410에서 비상정지 표시 해제만으로 복귀 준비를 진행하다 걸림 제거 확인이 없어 기동 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S15"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0409",
+    "EV-0410"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0417",
+     "locator": "AR-0417 | EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0418",
+     "locator": "AR-0418 | EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0409",
+     "locator": "EV-0409 | restart_attempts: AT-4025",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0419",
+     "locator": "AR-0419 | EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0420",
+     "locator": "AR-0420 | EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0410",
+     "locator": "EV-0410 | restart_attempts: AT-4028",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-007",
+     "locator": "conveyor-manual-0323-en.pdf | PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "abnormal_stop_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4025",
+     "restart_type": "abnormal_stop_restart",
+     "action": "비상정지 표시 해제만으로 복귀 준비를 진행하다 걸림 제거 확인이 없어 기동 보류",
+     "observed_result": "비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0409",
+      "AR-0417",
+      "AR-0418"
+     ]
+    },
+    {
+     "attempt_id": "AT-4028",
+     "restart_type": "abnormal_stop_restart",
+     "action": "비상정지 표시 해제만으로 복귀 준비를 진행하다 걸림 제거 확인이 없어 기동 보류",
+     "observed_result": "비상정지 상태 표시가 해제됐으나 걸림 제거 확인과 기능시험 승인 기록이 없었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당의 고장 제거 확인, 안전장치 기능시험과 지정 승인자의 기록 확인"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0410",
+      "AR-0419",
+      "AR-0420"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0409",
+    "EV-0410"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0009의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0409)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1216",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "GR",
+  "component": "과열 정지 후 감속기",
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "과열 정지 후 온도가 내려와도 원인 확인과 재가동 관측을 생략하지 않는다",
+  "know_how": "과열로 멈춘 GR은 냉각 후 표시가 정상범위로 내려와도 정지 원인이 확인됐다고 간주하지 않는다. 정비 담당에게 유면·오일 교환 이력과 해당 설비의 냉각 구성 확인 결과를 요청하고 원인 확인·작업 제한 해제·인터록 조건 해소·지정 승인 후 현장 절차로 복귀한다. 승인된 재가동 관측에서 온도·진동·소음의 재상승이 보이면 정지해 담당자에게 알린다. 원문 감속기 운전온도와 가상 MES 베어링온도를 같은 임계값으로 쓰지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0411, EV-0412에서 온도 하강만 보고 복귀 준비를 진행하다 원인 확인 기록이 없어 기동 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S16"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0411",
+    "EV-0412"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0421",
+     "locator": "AR-0421 | EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0422",
+     "locator": "AR-0422 | EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0411",
+     "locator": "EV-0411 | restart_attempts: AT-4031",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0423",
+     "locator": "AR-0423 | EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0424",
+     "locator": "AR-0424 | EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0412",
+     "locator": "EV-0412 | restart_attempts: AT-4034",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "abnormal_stop_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4031",
+     "restart_type": "abnormal_stop_restart",
+     "action": "온도 하강만 보고 복귀 준비를 진행하다 원인 확인 기록이 없어 기동 보류",
+     "observed_result": "정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0411",
+      "AR-0421",
+      "AR-0422"
+     ]
+    },
+    {
+     "attempt_id": "AT-4034",
+     "restart_type": "abnormal_stop_restart",
+     "action": "온도 하강만 보고 복귀 준비를 진행하다 원인 확인 기록이 없어 기동 보류",
+     "observed_result": "정지 전 gr_brg_temp 75 degC, 냉각 후 49 degC. 정지 원인 확인 서명이 없어 전원 투입 없이 보류.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당에게 유면·오일 이력·냉각 구성의 확인 기록을 요청하고 원인 확정 전 복귀 보류"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0412",
+      "AR-0423",
+      "AR-0424"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0411",
+    "EV-0412"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0004의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0411)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1217",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "RT",
+  "component": "인터록 정지 후 반송부",
+  "mes_equipment_id": "EQ-0008",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "RT 인터록 정지 후에는 해제 표시와 작동 조건 해소·승인을 각각 확인한다",
+  "know_how": "인터록으로 멈춘 RT는 해제 표시만 보고 기동하지 않는다. 작동 조건인 반송부 걸림이 해소됐는지 담당 확인 기록을 받고 안전장치·작업구역과 지정 승인자의 재가동 승인을 따로 대조한다. 미확인 항목이 있으면 기동을 보류하며 인터록을 강제 해제하거나 우회하지 않는다. 매뉴얼이 특정 RT 회로를 설명한다고 간주하지 않으며 승강부 구조와 해제 회로는 현장 작업표준에서 확인한다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0413, EV-0414에서 인터록 해제 표시만 보고 복귀 준비를 진행하다 조건 해소 확인이 없어 기동 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S17"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0413",
+    "EV-0414"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0425",
+     "locator": "AR-0425 | EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0426",
+     "locator": "AR-0426 | EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0413",
+     "locator": "EV-0413 | restart_attempts: AT-4037",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0427",
+     "locator": "AR-0427 | EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0428",
+     "locator": "AR-0428 | EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0414",
+     "locator": "EV-0414 | restart_attempts: AT-4040",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-002",
+     "locator": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault",
+     "document_version": "Version 1.0 (06/2022)"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "abnormal_stop_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4037",
+     "restart_type": "abnormal_stop_restart",
+     "action": "인터록 해제 표시만 보고 복귀 준비를 진행하다 조건 해소 확인이 없어 기동 보류",
+     "observed_result": "인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0413",
+      "AR-0425",
+      "AR-0426"
+     ]
+    },
+    {
+     "attempt_id": "AT-4040",
+     "restart_type": "abnormal_stop_restart",
+     "action": "인터록 해제 표시만 보고 복귀 준비를 진행하다 조건 해소 확인이 없어 기동 보류",
+     "observed_result": "인터록 해제 표시를 확인했지만 반송부 걸림 해소 확인과 지정 승인 기록이 없었음. 전원 투입 없음.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "권한 있는 담당자의 걸림 해소 확인, 안전장치 기능 확인, 지정 승인자 재가동 기록 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0414",
+      "AR-0427",
+      "AR-0428"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0413",
+    "EV-0414"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0008의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0413)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1218",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "HPU",
+  "component": "정상정지 후 저온 기동",
+  "mes_equipment_id": "EQ-0001",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "HPU 저온 기동은 유온만으로 복귀를 정하지 않고 오일 적합성·흡입 조건을 확인한다",
+  "know_how": "야간 정상정지 뒤 저온에서 압력·유량 저하와 소음이 나타나면 반복 기동으로 정상값을 만들려 하지 않는다. 유온 관측과 소음 발생 시각을 함께 적고 정비 담당에게 사용 오일의 온도별 점도 적합성 및 흡입 조건 확인을 요청한다. 유온만으로 점도를 계산하거나 제조사의 점도 한계를 넘었다고 단정하지 않는다. 예열 방법·속도·압력은 확인된 해당 설비 저온기동 절차와 승인에 따른다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0401, EV-0415에서 야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S18"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0401",
+    "EV-0415"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0401",
+     "locator": "AR-0401 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0402",
+     "locator": "AR-0402 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0401",
+     "locator": "EV-0401 | restart_attempts: AT-4002",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0429",
+     "locator": "AR-0429 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0430",
+     "locator": "AR-0430 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0415",
+     "locator": "EV-0415 | restart_attempts: AT-4043",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-005",
+     "locator": "HY29-0022-UK.pdf | PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+     "document_version": "Catalogue HY29-0022/UK"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "normal_stop_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4002",
+     "restart_type": "normal_stop_restart",
+     "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+     "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0401",
+      "AR-0401",
+      "AR-0402"
+     ]
+    },
+    {
+     "attempt_id": "AT-4043",
+     "restart_type": "normal_stop_restart",
+     "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+     "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0415",
+      "AR-0429",
+      "AR-0430"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0401",
+    "EV-0415"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ },
+ {
+  "card_id": "K-1219",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T6",
+  "equipment": "GR",
+  "component": "장기 정상정지 후 감속기",
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null,
+  "scenario": "S3",
+  "title": "장기 정상정지 뒤에는 이전 운전 성공과 별도로 유면·윤활 준비를 다시 확인한다",
+  "know_how": "계획된 장기 정상정지 뒤에는 정지 전 정상 운전 기록을 현재 재가동 준비의 확인으로 대신하지 않는다. 현재 유면과 윤활 준비, 방호·감시장치 확인을 담당자에게 요청하고 현장 장기정지 복귀 절차를 확인한다. 미확인 상태에서는 기동을 보류한다. 기록에 없는 보관처리나 부식방지 조치는 있었다고 가정하지 않는다. 매뉴얼의 장기 보관 조건·최초 길들이기 시간·운전 주기는 30일 정상정지 사건에 그대로 이식하지 않는다.",
+  "rationale": "서로 다른 합성 KB 사건 EV-0403, EV-0404에서 이전 운전이 정상이라는 이유로 준비를 진행하다 현재 유면 확인 기록이 없어 기동 보류 패턴이 반복됐다. 관측 결과와 보류 사유를 넘어 고장 원인을 확정하지 않았으며, 해당 원문은 안전 범위와 확인 항목의 배경만 제공한다. 가상 설비와 원문 모델의 동일성은 확인되지 않았다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S19"
+   ],
+   "persona_id": "codex-t6-author",
+   "event_ids": [
+    "EV-0403",
+    "EV-0404"
+   ],
+   "generator": "Codex GPT-6; synthetic-record extraction",
+   "generated_at": "2026-09-30T16:00:00+09:00",
+   "sources": [
+    {
+     "source_id": "SC-C-AR-0405",
+     "locator": "AR-0405 | EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0406",
+     "locator": "AR-0406 | EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0403",
+     "locator": "EV-0403 | restart_attempts: AT-4008",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "SC-C-AR-0407",
+     "locator": "AR-0407 | EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-AR-0408",
+     "locator": "AR-0408 | EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+    },
+    {
+     "source_id": "SC-C-EV-0404",
+     "locator": "EV-0404 | restart_attempts: AT-4011",
+     "document_version": "합성 원장; true_cause 미사용"
+    },
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions"
+    }
+   ],
+   "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "restart_type": "normal_stop_restart",
+   "tried_and_failed": [
+    {
+     "attempt_id": "AT-4008",
+     "restart_type": "normal_stop_restart",
+     "action": "이전 운전이 정상이라는 이유로 준비를 진행하다 현재 유면 확인 기록이 없어 기동 보류",
+     "observed_result": "30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0403",
+      "AR-0405",
+      "AR-0406"
+     ]
+    },
+    {
+     "attempt_id": "AT-4011",
+     "restart_type": "normal_stop_restart",
+     "action": "이전 운전이 정상이라는 이유로 준비를 진행하다 현재 유면 확인 기록이 없어 기동 보류",
+     "observed_result": "30일 전 시험운전은 정상으로 기록됨. 현재 유면 및 윤활 준비 확인란이 비어 있어 전원 투입 없이 보류.",
+     "failure_reason": null,
+     "evidence_gap": "not_recorded",
+     "next_observations": [
+      "담당자에게 현재 유면·윤활 준비 및 보호장치 확인 요청, 현장 장기정지 복귀 절차 조회"
+     ],
+     "required_data": [
+      "정지 원인 확인 기록",
+      "인터록 작동 조건 해소 확인",
+      "지정 승인자의 승인·작업 제한 기록"
+     ],
+     "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자",
+     "evidence_ids": [
+      "EV-0404",
+      "AR-0407",
+      "AR-0408"
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [
+    "EV-0403",
+    "EV-0404"
+   ],
+   "contradicting_event_ids": [],
+   "generalization_scope": "EQ-0004의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+  }
+ }
+]

@@ -1,0 +1,132 @@
+[
+ {
+  "card_id": "K-1209",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "GR",
+  "component": "기어박스·베어링",
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "진동 high에서 베어링 온도 동반 여부에 따라 추가 확인을 나눈다",
+  "symptom": "정상 운전과 비교해 진동이 증가했으며 베어링 온도 변화 확인이 필요하다.",
+  "know_how": "평상시와 다른 진동·소음·온도 변화가 있고 판단이 불확실하면 주 모터를 정지하고 원인을 확인한다. 베어링 온도 high가 실제 베어링부 과열로 확인되면 오일 부족·과다, 오일 교환 이력, 베어링 손상을 확인하는 온도 점검 경로를 추가한다. 온도 normal이어도 새로운 진동을 정상으로 취급하지 않으며 소음 종류를 확인한다. 규칙적인 갈림 소음이면 오일과 베어링 확인, 두드리는 소음이면 서비스 문의, 불규칙한 소음이면 오일 확인 후 구동을 정지하고 서비스에 문의하는 원문 소음 분기로 나눈다.",
+  "rationale": "SEW p.5는 정상 운전 대비 온도·소음·진동 변화 시 불확실하면 주 모터를 정지하고 원인을 찾도록 한다. p.45는 베어링부 고온과 각 소음 유형의 점검·조치를 별도로 제시한다. 진동 RMS만으로 특정 소음이나 베어링 고장을 확정하지 않는다.",
+  "conditions": [
+   {
+    "signal": "gr_vib_rms_state",
+    "op": "==",
+    "value": "high",
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "SEW p.5 Startup/operation: 정상 운전 대비 변화가 있고 의심되면 주 모터를 정지하고 원인을 확인한다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S09"
+   ],
+   "persona_id": "codex-t2-author",
+   "event_ids": [],
+   "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+   "generated_at": "2026-09-30T11:24:42.756101+09:00",
+   "sources": [
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF p.5 / Safety notes / Startup/operation",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+    },
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+    }
+   ],
+   "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "GR-01 검색 후보. 실제 정상 운전 대비 변화·소음 유형·베어링부 온도 확인이 필요하다. MES 온도 normal은 운전 지속 허가가 아니다. SEW 모델 적용성은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1210",
+  "version": "1.0-draft-KB-20260930-C",
+  "grade": "L0",
+  "tacit_type": "T2",
+  "equipment": "GR",
+  "component": "베어링·윤활유",
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "베어링 온도 high에서는 확인된 유면과 오일 이력에 따라 조치를 나눈다",
+  "symptom": "실제 베어링부 온도가 높아졌으며 윤활 상태 확인이 필요하다.",
+  "know_how": "MES 온도 high는 확인 시작 신호이며 실제 베어링부 과열을 확인한다. 정비 점검은 모터 전원을 차단하고 우발 재기동을 막은 뒤 기어박스가 식을 때까지 기다린다. 유면 부족이나 과다가 확인되면 해당 설치 자세의 유면 기준으로 수정하는 경로로 간다. 유면 문제는 확인되지 않았지만 오일 교환 이력이 오래되어 대상 제조사 교환 기준에 해당하면 오일 교환 경로로 간다. 이 두 사유가 확인되지 않으면 베어링 손상을 확인하고 필요시 서비스에 문의한다. 관측되지 않은 손상이나 오일 노화를 원인으로 확정하지 않는다.",
+  "rationale": "SEW §9.1 Bearing point temperatures too high는 오일 부족/과다, 오일 노화, 베어링 손상을 원인과 조치별로 구분한다. §8.3은 유면 점검 전에 전원 차단·재기동 방지·냉각 대기를 명시한다. GR 전류와 부하의 조치 근거가 없어 온도 기반 원문 분기로 대체했다.",
+  "conditions": [
+   {
+    "signal": "gr_brg_temp_state",
+    "op": "==",
+    "value": "high",
+    "unit": null
+   }
+  ],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "SEW §8.3: 모터 전원을 차단하고 우발 재기동을 막으며 기어박스가 식을 때까지 기다린다.",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-C:seed=20260930",
+    "slot:S10"
+   ],
+   "persona_id": "codex-t2-author",
+   "event_ids": [],
+   "generator": "Codex subagent t2_cards; batch KB-20260930-C",
+   "generated_at": "2026-09-30T11:24:42.756205+09:00",
+   "sources": [
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+    },
+    {
+     "source_id": "M-C-003",
+     "locator": "26867443.pdf | PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions"
+    }
+   ],
+   "extraction_method": "로컬 PDF 실제 페이지 독립 텍스트 대조 및 표 렌더링 확인; AI 요약",
+   "model_version": "GPT-6",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be",
+   "schema_version": "1.1",
+   "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "GR-01 베어링부 온도 확인 후보. GR 전류→토크·과부하 추론은 하지 않는다. 대상 SEW 모델·설치 자세·오일 교체 지침 적합성 미확인이다. 기존 T1 온도 증상 카드와 달리 실제 확인된 유면/이력에 따른 조치 분기를 다룬다.",
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+  },
+  "safety_review": null
+ }
+]

@@ -19,6 +19,7 @@ _STORE_KEYS = {
     "handover": "handover_db",
     "checklist": "checklist_db",
 }
+PLANT_CATALOG = Path(__file__).resolve().parents[2] / "docs/data/reference/00_plant_and_relations.json"
 
 
 @dataclass(frozen=True)
@@ -35,13 +36,16 @@ class CardLoad:
 
 def load_card_provider(
     path: str | Path, *, include_draft: bool = False, min_top_relevance: int = KB_MIN_TOP_RELEVANCE,
+    catalog: str | Path | None = PLANT_CATALOG,
 ) -> CardLoad:
     """Read a card JSON file or a directory of them.
 
     A file may be a card object, a list of cards, or an object with
     ``knowledge_cards`` or ``cards``. Optional ``equipment``,
     ``equipment_types``, ``handover``, and ``checklist`` lists are passed
-    through to the provider. Only accepted/kb/L1 cards stay loaded,
+    through to the provider. When the card files carry no equipment rows,
+    ``equipment``/``equipment_types`` come from ``catalog`` so installation
+    codes (HPU-01) and IDs (EQ-0001) resolve. Only accepted/kb/L1 cards stay loaded,
     unless ``include_draft`` is set, which also keeps draft/kb cards.
     ``min_top_relevance`` is the KB "no matching card" floor; pass 0 to always rank.
     """
@@ -54,6 +58,10 @@ def load_card_provider(
         cards.extend(file_cards)
         for name, rows in file_stores.items():
             stores[name].extend(rows)
+    if catalog is not None and not stores["equipment_db"] and not stores["equipment_types"]:
+        plant = json.loads(Path(catalog).read_text(encoding="utf-8"))
+        stores["equipment_db"] = plant["equipment"]
+        stores["equipment_types"] = plant["equipment_types"]
     provider = InMemoryToolProvider(cards=cards, include_draft=include_draft,
                                     min_top_relevance=min_top_relevance, **stores)
     return CardLoad(provider=provider, seen=len(cards))

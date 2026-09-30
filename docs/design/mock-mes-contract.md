@@ -4,7 +4,7 @@
 
 ## 상태 모델
 
-- 런타임 `scenario_id`는 활성 `Configuration.scenarios`에 등록된 ID를 사용한다. `normal`은 정상 상태 ID다. 2026-09-30 기본 구성은 정상 포함 기존 9개·독립 센서 시연 46개·증상 조합 시연 22개, 총 77개다. 과거 저장 구성과 사용자 구성의 목록은 서로 다를 수 있다.
+- 런타임 `scenario_id`는 활성 `Configuration.scenarios`에 등록된 ID를 사용한다. `normal`은 정상 상태 ID다. 2026-09-30 기본 구성은 기존 공정·복구 시연 9개·독립 센서 시연 46개·증상 조합 시연 22개, 총 77개다. 과거 저장 구성과 사용자 구성의 목록은 서로 다를 수 있다.
 - 지원 목적 `support_scenario`: 기존 `S1`, `S2`, `S3` 값과 분리한다.
 - `Snapshot`의 식별자는 `(run_id, sequence)`이며 `simulated_at`은 런의 시작 시각과 tick으로 계산한다.
 - `operating_state`와 `fault_level`은 독립이다. 예를 들어 하류 정체로 멈춘 정상 설비는 `waiting` / `normal`이다.

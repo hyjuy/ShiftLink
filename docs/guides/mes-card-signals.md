@@ -11,7 +11,11 @@
 | EQ-0001 / HPU-01 | `hpu_filter_dp` | bar | 0–1.2 | <0 low; >1.2 high | 없음 |
 | EQ-0001 / HPU-01 | `hpu_flow` | L_min | 38–46 | <38 low; >46 high | 없음 |
 | EQ-0002 / PDP-01 | `bus_voltage` | pct | 97–103 | <97 low; >103 high | 없음 |
+| EQ-0002 / PDP-01 | `bus_current` | A | 20–40 | <20 low; >40 high | 없음 |
+| EQ-0002 / PDP-01 | `breaker_trip` | bool | 0 (정상); 1은 트립 | 0 normal; 1 high (수치 경계: <0 low; >0 high) | 없음 |
 | EQ-0003 / CAU-01 | `air_pressure` | kPa | 550–700 | <550 low; >700 high | 없음 |
+| EQ-0003 / CAU-01 | `air_flow` | L_min | 100–150 | <100 low; >150 high | 없음 |
+| EQ-0003 / CAU-01 | `compressor_current` | A | 8–16 | <8 low; >16 high | 없음 |
 | EQ-0004 / GR-01 | `gr_vib_rms` | mm_s | 0.5–2.8 | <0.5 low; >2.8 high | 없음 |
 | EQ-0004 / GR-01 | `gr_brg_temp` | degC | 30–62 | <30 low; >62 high | 없음 |
 | EQ-0004 / GR-01 | `gr_current` | A | 18–30 | <18 low; >30 high | 없음 |
@@ -30,6 +34,43 @@
 | EQ-0009 / CV-01 | `cv_belt_tension` | kPa | 380–460 | <380 low; >460 high | 없음 |
 | EQ-0009 / CV-01 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
 | EQ-0010 / CV-02 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
+
+## CAU·PDP 보강 신호와 T2 작성 기준
+
+보강 신호 4개는 기준정보 JSON의 측정점이 아니라 [`ADDITIONAL_SIGNALS`](../../shiftlink/mes/scenarios/priority.py)의 가상 시연 정의에서 가져왔다. [`from_catalog()`](../../shiftlink/mes/configuration.py)가 확장한 구성에서 사용한다. 저장된 과거 run 구성에는 없을 수 있으므로 해당 run의 `config_id`와 실제 신호·단위·정상 범위를 우선 확인한다. 위 표의 범위를 다른 구성에 그대로 적용하지 않는다.
+
+| 설비 / 카드 필드 | 보강 신호 | 의미 | 검색 조건 후보 | 적용 시 확인할 점 |
+| --- | --- | --- | --- | --- |
+| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `air_flow` | 압축공기 유량 | `air_flow_state == low` | 정지 중 0이 생성된다. 낮은 유량만으로 고장·누설을 확정하지 않는다. |
+| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `compressor_current` | 압축기 전류 | `compressor_current_state == high` | 정지 중 0은 low로 분류될 수 있다. 전류만으로 과부하 원인을 확정하지 않는다. |
+| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `bus_current` | 배전반 전류 | `bus_current_state == high` | 가상 정상 범위 초과이며 차단기 정격·설정값이나 전기작업 허가 기준이 아니다. |
+| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `breaker_trip` | 차단기 트립 상태, 숫자 0/1 | `breaker_trip == 1`, `unit="bool"` | `true/false` 관측값은 현재 어댑터가 조건 입력에서 제외한다. 트립 표시만으로 무전압·작업 안전을 판정하지 않는다. |
+
+파생 상태 조건의 `unit`은 `null`이다. `breaker_trip_state == high`도 현재 수치 판정으로 생성되지만, 트립 조건은 숫자 `1`과의 일치를 사용해 의도를 명시한다. 정상 범위 0–0을 처리하는 어댑터는 음수나 1 초과도 low/high로 분류할 수 있으므로, 작성·검수 시 트립 관측값이 0/1인지 확인한다. 신호가 없거나 품질·단위가 맞지 않으면 정상이나 미트립으로 대체하지 않고 `unverified`로 남긴다.
+
+아래는 **검수용 T2 검색 조건 조합**이다. 원문 근거에서 해당 조건에 따라 요령이 달라지는 것이 확인된 카드에만 사용한다. 신호 조합 자체는 고장 원인이나 조치의 근거가 아니다. 같은 카드의 `conditions`는 모두 충족해야 하므로 두 신호 중 하나만 이상인 사례까지 다루려는 카드에 그대로 붙이지 않는다.
+
+CAU: 압력 저하와 압축기 전류 상승이 함께 관측된 상황의 후보:
+
+```json
+[
+  {"signal":"air_pressure_state","op":"==","value":"low","unit":null},
+  {"signal":"compressor_current_state","op":"==","value":"high","unit":null}
+]
+```
+
+PDP: 버스 전압 저하와 차단기 트립이 함께 관측된 상황의 후보:
+
+```json
+[
+  {"signal":"bus_voltage_state","op":"==","value":"low","unit":null},
+  {"signal":"breaker_trip","op":"==","value":1,"unit":"bool"}
+]
+```
+
+`bus_voltage`의 단위 `pct`는 가상 백분율이다. 기준 전압이 확인되지 않은 상태에서 V로 환산하지 않는다. T2 카드 본문의 진단·조치에는 승인된 출처와 적용 범위가 별도로 필요하다. PDP T5 카드의 전기작업 금기·절차에는 공식 안전 자료의 적용 조항 검토가 필요하며, 이 신호 표로 안전 근거를 대신하지 않는다.
+
+## 부품 코드
 
 `부품 코드 없음`은 계측점에 부품 FK가 없다는 뜻이다. 별도 기준정보의 부품 코드는 다음과 같다.
 

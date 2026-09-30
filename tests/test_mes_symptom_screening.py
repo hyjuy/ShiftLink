@@ -135,3 +135,33 @@ assert.match(html,/확정 진단/);
         assert result.returncode == 0, result.stdout + result.stderr
     finally:
         service.storage.close()
+
+
+@pytest.mark.parametrize("change", ["paused", "same_time", "reverse_time"])
+def test_observation_window_requires_running_frames_and_increasing_time(change):
+    from shiftlink.mes.symptoms import screen_symptoms
+    engine = MesEngine(Run.create(seed=3), CONFIG)
+    engine.start()
+    engine.set_scenario("symptom_EQ-0002_pdp_current")
+    frames = [asdict(engine.tick()) for _ in range(3)]
+    if change == "paused":
+        frames[1]["line_mode"] = "paused"
+    else:
+        times = [f["simulated_at"] for f in frames]
+        for i, frame in enumerate(frames):
+            frame["simulated_at"] = times[0] if change == "same_time" else times[2-i]
+            for m in frame["measurements"]: m["observed_at"] = frame["simulated_at"]
+    assert all(r["status"] != "candidate" for r in screen_symptoms(frames, CONFIG))
+
+
+def test_resume_requires_fresh_observation_window():
+    engine = MesEngine(Run.create(seed=3), CONFIG)
+    engine.start()
+    engine.set_scenario("symptom_EQ-0002_pdp_current")
+    engine.tick(3)
+    assert any(r["status"] == "candidate" for r in engine.symptom_diagnostics())
+    engine.pause()
+    engine.resume()
+    assert all(r["status"] != "candidate" for r in engine.symptom_diagnostics())
+    engine.tick(3)
+    assert any(r["status"] == "candidate" for r in engine.symptom_diagnostics())

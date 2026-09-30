@@ -26,6 +26,8 @@ python3.10 -m pytest -q tests/test_mes_utility_scenarios.py tests/test_mes_senso
 
 독립 검토자는 새 시나리오·신호 대응표·복구 테스트를 별도 실행해 14 passed를 확인했다. 수정된 파일의 `git diff --check`도 통과했다.
 
+push 전 전체 프로젝트 검증: `python3.10 -m pytest -q tests --basetemp=artifacts/utility-push-pytest-20260930-01 --tb=short` — **447 passed in 11.10s**. push 대상 커밋 차이에 대한 `git diff origin/mes/develop...HEAD --check`도 통과했다. 로컬 테스트 결과이며 원격 CI 결과를 뜻하지 않는다.
+
 ## 커버리지와 한계
 
 동일한 62개 검증을 `coverage run --source=shiftlink.mes.scenarios.priority -m pytest`로 실행하고 `coverage report --fail-under=80 -m`으로 확인했다. 대상 `priority.py`는 21 statements, 0 missed, **100%**다. 커버리지 파일은 `artifacts/utility-scenarios.coverage`에 저장한다. 전체 프로젝트 커버리지를 뜻하지 않는다.

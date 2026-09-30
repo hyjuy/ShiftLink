@@ -13,14 +13,15 @@ index = json.loads((HERE / "prompts" / "index.json").read_text(encoding="utf-8")
 plan = {s["card_id"]: s for s in json.loads((HERE / "plan.json").read_text(encoding="utf-8"))["slots"]}
 
 cards, rows, problems = [], [], []
-for eq, meta in index["prompts"].items():
+for key, meta in index["prompts"].items():
+    eq = meta.get("equipment", key)  # round-2 prompts are keyed "<EQ>-r2"
     prompt_file = ROOT / meta["path"]
     actual = hashlib.sha256(prompt_file.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
     if actual != meta["sha256"]:
         problems.append(f"{eq}: prompt file changed after dispatch ({actual[:12]} != {meta['sha256'][:12]})")
-    out = HERE / "out" / f"{eq}.json"
+    out = HERE / "out" / f"{key}.json"
     if not out.exists():
-        problems.append(f"{eq}: out/{eq}.json missing")
+        problems.append(f"{key}: out/{key}.json missing")
         continue
     for c in json.loads(out.read_text(encoding="utf-8")):
         slot = plan.get(c.get("card_id"))
@@ -35,7 +36,7 @@ for eq, meta in index["prompts"].items():
         cards.append(c)
         src = "; ".join(f"{s['source_id']} {s.get('locator') or ''}".strip() for s in c["provenance"]["sources"])
         rows.append(f"| {c['card_id']} | {slot['slot']} | {eq} | {c['tacit_type']} | {c['title']} | "
-                    f"[prompts/{eq}.md](prompts/{eq}.md) | `{meta['sha256'][:12]}` | {src} |")
+                    f"[prompts/{key}.md](prompts/{key}.md) | `{meta['sha256'][:12]}` | {src} |")
 
 cards.sort(key=lambda c: c["card_id"])
 rows.sort()
@@ -70,11 +71,12 @@ readme = f"""# KB 카드 배치 {index['batch_id']}
 import re  # noqa: E402
 prev = (HERE / "review.md").read_text(encoding="utf-8") if (HERE / "review.md").exists() else ""
 verdicts = dict(re.findall(r"^## (K-\d{4}).*?^- \*\*판정\*\*: ?([^\n]*)$", prev, re.M | re.S))
-notes = {eq: (HERE / "out" / f"{eq}_notes.md").read_text(encoding="utf-8") if (HERE / "out" / f"{eq}_notes.md").exists() else ""
-         for eq in index["prompts"]}
+notes = {key: (HERE / "out" / f"{key}_notes.md").read_text(encoding="utf-8") if (HERE / "out" / f"{key}_notes.md").exists() else ""
+         for key in index["prompts"]}
+all_notes = "\n".join(notes.values()).splitlines()
 blocks = [f"# {index['batch_id']} 검수표\n\n판정 칸에 `accepted` / `rejected` / `수정` 중 하나를 적는다. accepted면 grade를 L1로 올린다.\n"]
 for c in cards:
-    note = next((ln for ln in notes[c["equipment"]].splitlines() if c["card_id"] in ln), "")
+    note = next((ln for ln in reversed(all_notes) if c["card_id"] in ln), "")  # round-2 note wins (K-1305 retry)
     lines = [f"## {c['card_id']} · {c['equipment']} · {c['tacit_type']}{' · ⚠ 안전' if c['safety_flag'] else ''} — {c['title']}", "",
              f"- **부품**: {c['component']}"]
     if c.get("symptom"):

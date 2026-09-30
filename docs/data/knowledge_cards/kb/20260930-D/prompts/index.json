@@ -5,6 +5,8 @@
  "prompts": {
   "CAU": {
    "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "equipment": "CAU",
+   "round": 1,
    "sha256": "9299048aa6596982783e04f296543deaa9df414368948fbb37567e1e5d6b6a80",
    "card_ids": [
     "K-1301",
@@ -16,6 +18,8 @@
   },
   "PDP": {
    "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP.md",
+   "equipment": "PDP",
+   "round": 1,
    "sha256": "3a052cb6c859afc39f2265570fa5e32d27f6bdee0dcd68db8e3c4ea9521861d6",
    "card_ids": [
     "K-1306",
@@ -23,6 +27,43 @@
     "K-1308",
     "K-1309",
     "K-1310"
+   ]
+  },
+  "CAU-r2": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r2.md",
+   "equipment": "CAU",
+   "round": 2,
+   "sha256": "4c7fc2fbb1c726ec989bf1d7045aac3d50ac20abedead321722d3227ebf6c865",
+   "card_ids": [
+    "K-1311",
+    "K-1312",
+    "K-1313",
+    "K-1314",
+    "K-1315",
+    "K-1305"
+   ]
+  },
+  "PDP-r2": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+   "equipment": "PDP",
+   "round": 2,
+   "sha256": "18787d6ca44a58190238dc8d2a8267254dc86f8a24ba510a6bf8e615e7415222",
+   "card_ids": [
+    "K-1316",
+    "K-1317",
+    "K-1318",
+    "K-1319",
+    "K-1320"
+   ]
+  },
+  "CAU-r3": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r3.md",
+   "equipment": "CAU",
+   "round": 3,
+   "sha256": "8b0aca65cf55c188b4e8d86b1388bf98f579aca0d02e57d4b93ae704cf716d69",
+   "card_ids": [
+    "K-1321",
+    "K-1322"
    ]
   }
  },

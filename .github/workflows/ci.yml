@@ -14,10 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      # Floors from docs/collaboration/t4-retrieval-improvement-guide-20260930.md §6.
-      # Raise them when a PR moves the baseline up on purpose.
-      MIN_DEV_ROUTE: 18
-      MIN_SANITY_ROUTE: 26
+      # Floors = current main route_score. Raise them when a PR moves the baseline up on purpose.
+      MIN_DEV_ROUTE: 20
+      MIN_SANITY_ROUTE: 28
     steps:
       - uses: actions/checkout@v4
 

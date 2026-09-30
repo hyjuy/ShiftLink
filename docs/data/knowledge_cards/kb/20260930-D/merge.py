@@ -40,7 +40,7 @@ for key, meta in index["prompts"].items():
 
 cards.sort(key=lambda c: c["card_id"])
 rows.sort()
-(HERE / "cards.json").write_text(json.dumps(cards, ensure_ascii=False, indent=1), encoding="utf-8")
+(HERE / "cards.json").write_text(json.dumps(cards, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
 skipped = sorted(set(plan) - {c["card_id"] for c in cards})
 
 readme = f"""# KB 카드 배치 {index['batch_id']}
@@ -64,7 +64,7 @@ readme = f"""# KB 카드 배치 {index['batch_id']}
 
 {', '.join(skipped) if skipped else '없음'} — 사유는 `out/<설비>_notes.md`.
 """
-(HERE / "README.md").write_text(readme, encoding="utf-8")
+(HERE / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
 # review.md: one readable block per card for human accept/reject.
 # Verdicts already typed into review.md survive regeneration.
@@ -88,12 +88,14 @@ for c in cards:
     for cond in c.get("conditions", []):
         lines.append(f"- **조건**: `{cond['signal']} {cond['op']} {cond['value']}{' ' + cond['unit'] if cond.get('unit') else ''}`")
     for st in ((c.get("type_payload") or {}).get("steps") or []):
+        pre = f"[전제: {'; '.join(st['preconditions'])}] " if st.get("preconditions") else ""  # reviewers must see step preconditions
         stop = f" / 중지: {'; '.join(st['stop_conditions'])}" if st.get("stop_conditions") else ""
-        lines.append(f"  {st['order']}. {st['action']} → {st['expected_result']}{stop}")
+        esc = f" / 넘김: {st['escalation_target']}" if st.get("escalation_target") else ""
+        lines.append(f"  {st['order']}. {pre}{st['action']} → {st['expected_result']}{stop}{esc}")
     lines += [f"- **출처**: " + "; ".join(f"{s['source_id']} {s.get('locator') or ''}" for s in c["provenance"]["sources"]),
               f"- **작성 노트**: {note.strip() or '-'}", f"- **판정**: {verdicts.get(c['card_id'], '').strip()}", ""]
     blocks.append("\n".join(lines))
-(HERE / "review.md").write_text("\n".join(blocks), encoding="utf-8")
+(HERE / "review.md").write_text("\n".join(blocks), encoding="utf-8", newline="\n")
 print(f"cards: {len(cards)} / slots: {len(plan)} / skipped: {len(skipped)}")
 for p in problems:
     print("PROBLEM:", p)

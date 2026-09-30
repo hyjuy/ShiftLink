@@ -157,8 +157,8 @@
   "scenario": "S1",
   "title": "공기압축기 안전밸브 — 압축기·단별 설치, 전후단 차단밸브 금지, 작동 확인",
   "symptom": null,
-  "know_how": "정변위 압축기에는 과압 폭발 방지용 안전밸브(또는 파열판)를 두고, 다단형 압축기나 직렬로 접속된 공기압축기는 각 단 또는 각 압축기마다 둔다. 안전밸브는 보호 대상 설비의 최고사용압력 이하에서 작동해야 한다. 안전밸브 전단·후단에 차단밸브를 두지 않는다(법령이 정한 예외는 자물쇠형 등만 허용). 설정압력에서의 작동은 교정된 압력계로 검사하며, 공기 취급 용기의 안전밸브로 레버·고리로 수시 작동 확인이 되는 경우는 그 방법으로 확인한다. 정비 계획에는 안전밸브 작동 점검을 넣는다. 안전밸브를 떼거나 막거나 설정을 바꿀 일이 있으면 운전하지 말고 담당자에게 알린다.",
-  "rationale": "산업안전보건기준에 관한 규칙 제261조는 정변위 압축기를 안전밸브등 설치 대상으로 정하고 다단형·직렬 공기압축기의 단별·압축기별 설치를 요구하며, 설정압력 작동 검사와 공기 취급 용기의 레버 확인 예외를 둔다. 제264조는 최고사용압력 이하 작동, 제266조는 전후단 차단밸브 설치 금지를 정한다. UNEP/TERI 매뉴얼 5.3.1절의 급유식 회전 압축기 O&M 표는 매월 안전밸브 작동 점검을 적는다. 해당 조항은 규칙 제2편 제2장 제4절(화학설비·압력용기 등)에 있으며, 가상 설비 CAU-01에 대한 적용 판단과 검사주기는 담당자 확인이 필요하다.",
+  "know_how": "정변위 압축기에는 과압 폭발 방지용 안전밸브(또는 파열판)를 두고, 다단형 압축기나 직렬로 접속된 공기압축기는 각 단 또는 각 압축기마다 둔다. 안전밸브는 보호 대상 설비의 최고사용압력 이하에서 작동해야 한다. 안전밸브 전단·후단에 차단밸브를 두지 않는다(법령이 정한 예외는 자물쇠형 등만 허용). 설정압력에서의 작동은 교정된 압력계로 검사하며, 공기 취급 용기의 안전밸브로 레버·고리로 수시 작동 확인이 되는 경우는 그 방법으로 확인한다. 정비 계획에는 안전밸브 작동 점검을 넣는다(원문 O&M 표는 매주). 안전밸브를 떼거나 막거나 설정을 바꿀 일이 있으면 운전하지 말고 담당자에게 알린다.",
+  "rationale": "산업안전보건기준에 관한 규칙 제261조는 정변위 압축기를 안전밸브등 설치 대상으로 정하고 다단형·직렬 공기압축기의 단별·압축기별 설치를 요구하며, 설정압력 작동 검사와 공기 취급 용기의 레버 확인 예외를 둔다. 제264조는 최고사용압력 이하 작동, 제266조는 전후단 차단밸브 설치 금지를 정한다. UNEP/TERI 매뉴얼 5.3.1절의 급유식 회전 압축기 O&M 표는 매주(Weekly) 안전밸브 작동 점검을 적는다. 해당 조항은 규칙 제2편 제2장 제4절(화학설비·압력용기 등)에 있으며, 가상 설비 CAU-01에 대한 적용 판단과 검사주기는 담당자 확인이 필요하다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": true,
@@ -173,7 +173,7 @@
    "generated_at": "2026-09-30T14:02:41+09:00",
    "sources": [
     {"source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf", "locator": "PDF p.46~47 / 제2편 제2장 제4절 제261조, 제264조, 제266조", "document_version": "고용노동부령 제450호, 시행 2026-03-02 (국가법령정보센터)"},
-    {"source_id": "Manual-on-Energy-Efficiency.pdf", "locator": "PDF p.93 / 인쇄 p.75 / 5.3.1 O&M practices and schedule — Monthly: Check safety valve operation", "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"}
+    {"source_id": "Manual-on-Energy-Efficiency.pdf", "locator": "PDF p.93 / 인쇄 p.75 / 5.3.1 O&M practices and schedule — Weekly: Check safety valve operation", "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"}
    ],
    "extraction_method": "pdftotext 원문 대조, AI 요약",
    "model_version": "claude-opus-5-5",

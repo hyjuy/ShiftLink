@@ -687,15 +687,21 @@
       "cv_vib_rms"
     ],
     "alarm_codes": [
-      "AL-DSB-QUE"
+      "AL-DSB-QUE",
+      "AL-AIR-LOW",
+      "AL-PDP-TRIP"
     ],
     "scenarios": [
       "downstream_block",
-      "coil_quality_hold"
+      "coil_quality_hold",
+      "cau_supply_fault",
+      "pdp_trip"
     ],
     "wait_reasons": [
       "downstream_block",
       "quality_hold",
+      "pneumatic_supply_low",
+      "power_supply_fault",
       "recovery"
     ]
   },

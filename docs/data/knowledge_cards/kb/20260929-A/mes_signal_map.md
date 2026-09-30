@@ -9,7 +9,7 @@
 ## MES 쪽 사실 (코드에서 확인)
 
 - 현재 기본 구성의 고유 신호 28개: catalog 16개 + `scenarios/priority.expand()`가 추가한 고유 신호 12개(`gr_oil_leak` 포함). 새 신호 중 `hpu_oil_level`·`gr_oil_level`은 아래 카드의 **확인 항목**에만 연결했고 자동 검색 조건으로 삼지 않는다. 나머지 새 신호 9개는 미연결 목록에 두었다. 동일 신호가 여러 설비에 있어 실제 계측점은 46개다.
-- 시나리오 7개 (`from_catalog` + `PRIORITY_SCENARIOS`):
+- 시나리오 9개 (`from_catalog` + `PRIORITY_SCENARIOS`):
 
 | scenario_id | 원인 설비 | 신호 효과 | alarm_code | 전파 대상 wait_reason |
 |---|---|---|---|---|
@@ -20,6 +20,10 @@
 | hydraulic_overheat | HPU-01 | hpu_oil_temp=78 (high) | AL-HYD-HOT | hydraulic_supply_low → RT-01·RT-02·RT-03·CV-01 |
 | gearbox_leak | GR-01 | gr_oil_leak=1 (high) | AL-GR-LEAK | upstream_drive_fault → RT-01·RT-02 |
 | coil_quality_hold | (코일) | 없음 | 없음 | quality_hold → 코일이 있는 설비 |
+| cau_supply_fault | CAU-01 | air_pressure=450 (low), air_flow=70 (low), compressor_current=22 (high) | AL-AIR-LOW | pneumatic_supply_low → CV-01 |
+| pdp_trip | PDP-01 | bus_voltage=90 (low), bus_current=55 (high), breaker_trip=1 (트립) | AL-PDP-TRIP | power_supply_fault → GR-01·GR-02·HPU-01 |
+
+CAU·PDP의 수치는 가상 이상 관측값이다. 기존 승인 카드와의 연결은 미정으로 JSON의 `unlinked`에 기록한다. 실제 제조사 임계값이나 작업 안전 판정을 뜻하지 않으며, 복귀는 기존 2 ticks 모의 상태 전환을 사용한다.
 
 - 원인 설비는 `operating_state=stopped`, `fault_level=critical`, `wait_reason=self_fault`, 알람 severity `critical`. 복구 중엔 전 설비 `waiting`/`recovery`.
 - engine은 capability의 **첫 설비**에만 시나리오를 건다. GR-02는 어떤 시나리오의 원인도 되지 않는다.

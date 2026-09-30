@@ -8,6 +8,15 @@ PARKER = "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_
 SAP = "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-"
 
 PRIORITY_SCENARIOS = (
+    # Synthetic observation fixtures; not OEM fault limits or maintenance procedures.
+    ScenarioSpec("cau_supply_fault", "pneumatic_supply", "pneumatic_supply", "pneumatic_supply_low", "AL-AIR-LOW",
+        (SignalEffect("pneumatic_supply", "air_pressure", 450),
+         SignalEffect("pneumatic_supply", "air_flow", 70),
+         SignalEffect("pneumatic_supply", "compressor_current", 22)), title="압축공기 공급 이상 (가상)"),
+    ScenarioSpec("pdp_trip", "power_supply", "power_supply", "power_supply_fault", "AL-PDP-TRIP",
+        (SignalEffect("power_supply", "bus_voltage", 90),
+         SignalEffect("power_supply", "bus_current", 55),
+         SignalEffect("power_supply", "breaker_trip", 1)), title="배전반 트립 (가상)"),
     ScenarioSpec("gearbox_overheat", "drive", "drive", "upstream_drive_fault", "AL-GR-HOT",
         (SignalEffect("drive", "gr_brg_temp", 85),), title="감속기 과열", source_url=SEW, component_id="cooling",
         recovery_actions=(

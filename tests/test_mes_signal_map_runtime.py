@@ -24,6 +24,8 @@ EXPECTED = (
     ("gearbox_overheat", "EQ-0004", "gr_brg_temp", 85.0, "AL-GR-HOT", ("EQ-0006", "EQ-0007")),
     ("hydraulic_overheat", "EQ-0001", "hpu_oil_temp", 78.0, "AL-HYD-HOT", ("EQ-0006", "EQ-0007", "EQ-0008", "EQ-0009")),
     ("gearbox_leak", "EQ-0004", "gr_oil_leak", 1.0, "AL-GR-LEAK", ("EQ-0006", "EQ-0007")),
+    ("cau_supply_fault", "EQ-0003", "air_pressure", 450.0, "AL-AIR-LOW", ("EQ-0009",)),
+    ("pdp_trip", "EQ-0002", "breaker_trip", 1.0, "AL-PDP-TRIP", ("EQ-0004", "EQ-0005", "EQ-0001")),
 )
 
 

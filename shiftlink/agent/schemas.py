@@ -137,7 +137,7 @@ class Provenance(BaseModel):
 class KnowledgeCard(BaseModel):
     card_id: str = Field(pattern=r"^K-\d{4}$")
     version: str
-    grade: Literal["L0", "L1", "L2", "L3"] = "L0"
+    grade: Literal["L0", "L1"] = "L0"  # 경량 계획(9/29): L2/L3 승격 없음
     tacit_type: Literal["T1", "T2", "T3", "T4", "T5", "T6"]
     equipment: Equipment
     component: str
@@ -156,14 +156,8 @@ class KnowledgeCard(BaseModel):
     confidence: float = Field(ge=0, le=1)
     provenance: Provenance
     split: Split
-    status: Literal[
-        "draft",
-        "accepted",
-        "rejected_rule",
-        "rejected_judge",
-        "rejected_human",
-        "rejected_safety",
-    ] = "draft"
+    # 경량 계획(9/29): 탈락 사유 4종을 rejected 하나로 합쳤다. 사유는 검수 기록에 남긴다.
+    status: Literal["draft", "accepted", "rejected"] = "draft"
     type_payload: TypePayload | None = None
     generalization_evidence: GeneralizationEvidence | None = None
     safety_review: SafetyReview | None = None

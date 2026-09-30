@@ -388,7 +388,7 @@
 | `confidence` | 확신도 | enum | 예 | `high`/`medium`/`low` | — | 생성 | **기존** | |
 | `provenance` | 계보 | obj{seed_ids[],persona_id,event_ids[],generator,generated_at} | 예 | — | — | 코드계산 | **기존** | |
 | `split` | 분할 | enum | 예 | `kb`/`dev`/`sealed` | — | 코드계산 | **기존** | Event에서 상속 |
-| `status` | 처리 상태 | enum | 예 | `draft`/`accepted`/`rejected_rule`/`rejected_judge`/`rejected_human`/`rejected_safety` | `draft` | 코드계산 | **기존** | |
+| `status` | 처리 상태 | enum | 예 | `draft`/`accepted`/`rejected` | `draft` | 코드계산 | **기존** | 경량 계획(9/29)으로 `rejected_*` 4종을 `rejected`로 통합. 사유는 검수 기록에 |
 | `scope_level` | 지식 적용 계층 | enum | 예 | `line`/`segment`/`equipment_group`/`equipment`/`component` | `equipment` | 생성 | **신규 확장** | 사용자 요구 "라인 운전 절차 / 공정별 / 장비·부품별 절차" |
 | `line_id` / `segment_ids[]` / `equipment_ids[]` / `component_ids[]` | 적용 대상 | str / list[str] | 조건부 | FK | — | 생성 | **신규 확장** | `scope_level`에 맞는 것만 채움(QC-REF-05) |
 | `relation_ids[]` | 전제 관계 | list[str] | 아니오 | FK(REL-) | `[]` | 생성 | **신규 확장** | "상류 HPU 압력이 정상일 때만 적용" 같은 관계 전제 |

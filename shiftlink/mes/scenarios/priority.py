@@ -99,12 +99,14 @@ def sensor_anomalies(equipment):
             if low is None or high is None:
                 continue
             if signal.unit == "bool":
-                if low <= 1 <= high:
+                if low <= 0 <= high and low <= 1 <= high:
                     continue  # Both legal boolean values are normal; no numeric anomaly exists.
-                value = 1
+                value = 0 if low <= 1 <= high else 1
             elif low > 0 and (signal.signal.endswith(("pressure", "press", "flow", "speed", "rpm", "oil_level"))
                               or signal.unit == "pct" and high >= 100):
                 value = round(low * 0.8, 3)
+                if value >= low:
+                    value = round(max(0, low - 0.001), 3)
             else:
                 value = round(high + max(abs(high) * 0.25, 0.001), 3)
             yield ScenarioSpec(f"sensor_anomaly_{eq.equipment_id}_{signal.signal}", capability, "", "", "AL-SENSOR-ANOMALY",

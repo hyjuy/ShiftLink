@@ -10,30 +10,48 @@
 | EQ-0001 / HPU-01 | `hpu_oil_temp` | degC | 35–58 | <35 low; >58 high | 없음 |
 | EQ-0001 / HPU-01 | `hpu_filter_dp` | bar | 0–1.2 | <0 low; >1.2 high | 없음 |
 | EQ-0001 / HPU-01 | `hpu_flow` | L_min | 38–46 | <38 low; >46 high | 없음 |
+| EQ-0001 / HPU-01 | `hpu_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0001 / HPU-01 | `hpu_pump_current` | A | 15–25 | <15 low; >25 high | 없음 |
 | EQ-0002 / PDP-01 | `bus_voltage` | pct | 97–103 | <97 low; >103 high | 없음 |
 | EQ-0002 / PDP-01 | `bus_current` | A | 20–40 | <20 low; >40 high | 없음 |
-| EQ-0002 / PDP-01 | `breaker_trip` | bool | 0 (정상); 1은 트립 | 0 normal; 1 high (수치 경계: <0 low; >0 high) | 없음 |
+| EQ-0002 / PDP-01 | `breaker_trip` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0003 / CAU-01 | `air_pressure` | kPa | 550–700 | <550 low; >700 high | 없음 |
 | EQ-0003 / CAU-01 | `air_flow` | L_min | 100–150 | <100 low; >150 high | 없음 |
 | EQ-0003 / CAU-01 | `compressor_current` | A | 8–16 | <8 low; >16 high | 없음 |
 | EQ-0004 / GR-01 | `gr_vib_rms` | mm_s | 0.5–2.8 | <0.5 low; >2.8 high | 없음 |
 | EQ-0004 / GR-01 | `gr_brg_temp` | degC | 30–62 | <30 low; >62 high | 없음 |
 | EQ-0004 / GR-01 | `gr_current` | A | 18–30 | <18 low; >30 high | 없음 |
+| EQ-0004 / GR-01 | `gr_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0004 / GR-01 | `gr_rpm` | rpm | 900–1100 | <900 low; >1100 high | 없음 |
+| EQ-0004 / GR-01 | `gr_oil_leak` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0005 / GR-02 | `gr_vib_rms` | mm_s | 0.5–2.8 | <0.5 low; >2.8 high | 없음 |
 | EQ-0005 / GR-02 | `gr_brg_temp` | degC | 30–62 | <30 low; >62 high | 없음 |
 | EQ-0005 / GR-02 | `gr_current` | A | 18–30 | <18 low; >30 high | 없음 |
+| EQ-0005 / GR-02 | `gr_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0005 / GR-02 | `gr_rpm` | rpm | 900–1100 | <900 low; >1100 high | 없음 |
+| EQ-0005 / GR-02 | `gr_oil_leak` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0006 / RT-01 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0006 / RT-01 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
+| EQ-0006 / RT-01 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0006 / RT-01 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0007 / RT-02 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0007 / RT-02 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
 | EQ-0007 / RT-02 | `rt_lift_delay` | min | 0–0.05 | <0 low; >0.05 high | 없음 |
+| EQ-0007 / RT-02 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0007 / RT-02 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0008 / RT-03 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0008 / RT-03 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
 | EQ-0008 / RT-03 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0008 / RT-03 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0009 / CV-01 | `cv_speed` | m_min | 10–60 | <10 low; >60 high | 없음 |
 | EQ-0009 / CV-01 | `cv_belt_tension` | kPa | 380–460 | <380 low; >460 high | 없음 |
 | EQ-0009 / CV-01 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
+| EQ-0009 / CV-01 | `cv_motor_current` | A | 10–20 | <10 low; >20 high | 없음 |
+| EQ-0009 / CV-01 | `cv_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0010 / CV-02 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
+| EQ-0010 / CV-02 | `cv_speed` | m_min | 8–12 | <8 low; >12 high | 없음 |
+| EQ-0010 / CV-02 | `cv_motor_current` | A | 10–20 | <10 low; >20 high | 없음 |
+| EQ-0010 / CV-02 | `cv_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 
 ## CAU·PDP 보강 신호와 T2 작성 기준
 
@@ -86,6 +104,65 @@ PDP: 버스 전압 저하와 차단기 트립이 함께 관측된 상황의 후�
 `recover()` 후 2 ticks가 완료되면 정상 관측값으로 복귀한다. 이 복귀는 시뮬레이션 상태 전환이며, 실제 정비·전기작업 안전 확인을 뜻하지 않는다. 새 구성에는 시나리오가 추가되므로 `config_id`가 달라진다. 과거 run에 저장된 구성은 변경하지 않는다. 기존 승인 카드와의 연결은 미정이며 신호 대응표의 `unlinked`에 기록한다.
 
 `bus_voltage`의 단위 `pct`는 가상 백분율이다. 기준 전압이 확인되지 않은 상태에서 V로 환산하지 않는다. T2 카드 본문의 진단·조치에는 승인된 출처와 적용 범위가 별도로 필요하다. PDP T5 카드의 전기작업 금기·절차에는 공식 안전 자료의 적용 조항 검토가 필요하며, 이 신호 표로 안전 근거를 대신하지 않는다.
+
+## 전체 센서별 가상 이상 관측값
+
+2026-09-30 기본 런타임 구성은 **10대 설비·46개 센서 위치**다. 기존 시나리오가 수치를 직접 주입하던 위치는 12개였으며, 전체 46개에 독립 센서 시연 시나리오를 추가했다. 같은 신호 이름이 여러 설비에 있어도 별도 위치로 센다. 시나리오 ID는 `sensor_anomaly_<설비 ID>_<신호 이름>`이며, 예를 들어 `sensor_anomaly_EQ-0005_gr_current`는 GR-02에만 적용한다.
+
+각 시나리오는 지정한 센서 한 개에 수치를 명시적으로 주입한다. 가상 관측 채널을 검증하는 시연이며 고장 원인·정비 조치를 증명하지 않는다. 원인 설비가 정지하므로 다른 운동 의존 센서는 0이 될 수 있다. 이 동반 low는 별도의 이상 수치를 주입한 것으로 세지 않는다. 센서 시연은 공급 관계로 전파하지 않으며 `AL-SENSOR-ANOMALY` 알람을 지정 설비에 생성한다. 기존 9개 공정 시나리오는 유지한다.
+
+수치는 현재 정상 경계의 20% 아래(low) 또는 25% 위(high)를 사용하고 소수 셋째 자리로 반올림한다. 기본 구성의 트립·누유 감지는 숫자 1, 오일 레벨은 0–100 안의 낮은 값, 하한 0인 연속 센서는 양수 high로 생성한다. 모든 수치는 가상 시연 가정이며 제조사 임계값이 아니다. 구성의 정상 범위가 바뀌면 새 시나리오의 수치와 카드 조건을 다시 검수한다. 정상 범위가 없는 센서나 0/1 모두 정상인 논리 센서는 이 숫자 생성 규칙의 대상이 아니다. 사용자 구성의 논리 정상값이 1이면 반대값 0을 쓰며, 반올림으로 낮은 수치가 정상 경계에 들어가면 하한보다 0.001 낮은 비음수 값으로 보정한다.
+
+| 설비 | 센서 | 단위 | 가상 정상 범위 | 명시적 이상 주입값 | 판정 | 숫자 조건 후보 |
+| --- | --- | --- | --- | --- | --- | --- |
+| HPU-01 (EQ-0001) | `hpu_pressure` | bar | 145–165 | 116 | low | `hpu_pressure < 145` |
+| HPU-01 (EQ-0001) | `hpu_oil_temp` | degC | 35–58 | 72.5 | high | `hpu_oil_temp > 58` |
+| HPU-01 (EQ-0001) | `hpu_filter_dp` | bar | 0–1.2 | 1.5 | high | `hpu_filter_dp > 1.2` |
+| HPU-01 (EQ-0001) | `hpu_flow` | L_min | 38–46 | 30.4 | low | `hpu_flow < 38` |
+| HPU-01 (EQ-0001) | `hpu_oil_level` | pct | 70–100 | 56 | low | `hpu_oil_level < 70` |
+| HPU-01 (EQ-0001) | `hpu_pump_current` | A | 15–25 | 31.25 | high | `hpu_pump_current > 25` |
+| PDP-01 (EQ-0002) | `bus_voltage` | pct | 97–103 | 77.6 | low | `bus_voltage < 97` |
+| PDP-01 (EQ-0002) | `bus_current` | A | 20–40 | 50 | high | `bus_current > 40` |
+| PDP-01 (EQ-0002) | `breaker_trip` | bool | 0–0 | 1 | high | `breaker_trip == 1` |
+| CAU-01 (EQ-0003) | `air_pressure` | kPa | 550–700 | 440 | low | `air_pressure < 550` |
+| CAU-01 (EQ-0003) | `air_flow` | L_min | 100–150 | 80 | low | `air_flow < 100` |
+| CAU-01 (EQ-0003) | `compressor_current` | A | 8–16 | 20 | high | `compressor_current > 16` |
+| GR-01 (EQ-0004) | `gr_vib_rms` | mm_s | 0.5–2.8 | 3.5 | high | `gr_vib_rms > 2.8` |
+| GR-01 (EQ-0004) | `gr_brg_temp` | degC | 30–62 | 77.5 | high | `gr_brg_temp > 62` |
+| GR-01 (EQ-0004) | `gr_current` | A | 18–30 | 37.5 | high | `gr_current > 30` |
+| GR-01 (EQ-0004) | `gr_oil_level` | pct | 70–100 | 56 | low | `gr_oil_level < 70` |
+| GR-01 (EQ-0004) | `gr_rpm` | rpm | 900–1100 | 720 | low | `gr_rpm < 900` |
+| GR-01 (EQ-0004) | `gr_oil_leak` | bool | 0–0 | 1 | high | `gr_oil_leak == 1` |
+| GR-02 (EQ-0005) | `gr_vib_rms` | mm_s | 0.5–2.8 | 3.5 | high | `gr_vib_rms > 2.8` |
+| GR-02 (EQ-0005) | `gr_brg_temp` | degC | 30–62 | 77.5 | high | `gr_brg_temp > 62` |
+| GR-02 (EQ-0005) | `gr_current` | A | 18–30 | 37.5 | high | `gr_current > 30` |
+| GR-02 (EQ-0005) | `gr_oil_level` | pct | 70–100 | 56 | low | `gr_oil_level < 70` |
+| GR-02 (EQ-0005) | `gr_rpm` | rpm | 900–1100 | 720 | low | `gr_rpm < 900` |
+| GR-02 (EQ-0005) | `gr_oil_leak` | bool | 0–0 | 1 | high | `gr_oil_leak == 1` |
+| RT-01 (EQ-0006) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-01 (EQ-0006) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-01 (EQ-0006) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-01 (EQ-0006) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| RT-02 (EQ-0007) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-02 (EQ-0007) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-02 (EQ-0007) | `rt_lift_delay` | min | 0–0.05 | 0.062 | high | `rt_lift_delay > 0.05` |
+| RT-02 (EQ-0007) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-02 (EQ-0007) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| RT-03 (EQ-0008) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-03 (EQ-0008) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-03 (EQ-0008) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-03 (EQ-0008) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| CV-01 (EQ-0009) | `cv_speed` | m_min | 10–60 | 8 | low | `cv_speed < 10` |
+| CV-01 (EQ-0009) | `cv_belt_tension` | kPa | 380–460 | 575 | high | `cv_belt_tension > 460` |
+| CV-01 (EQ-0009) | `cv_queue_len` | pct | 0–70 | 87.5 | high | `cv_queue_len > 70` |
+| CV-01 (EQ-0009) | `cv_motor_current` | A | 10–20 | 25 | high | `cv_motor_current > 20` |
+| CV-01 (EQ-0009) | `cv_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `cv_vib_rms > 1.8` |
+| CV-02 (EQ-0010) | `cv_queue_len` | pct | 0–70 | 87.5 | high | `cv_queue_len > 70` |
+| CV-02 (EQ-0010) | `cv_speed` | m_min | 8–12 | 6.4 | low | `cv_speed < 8` |
+| CV-02 (EQ-0010) | `cv_motor_current` | A | 10–20 | 25 | high | `cv_motor_current > 20` |
+| CV-02 (EQ-0010) | `cv_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `cv_vib_rms > 1.8` |
+
+숫자 조건의 `unit`은 표의 단위와 같아야 한다. 정상 경계값은 이상 조건에 포함하지 않는다. `quality=good`·유한 숫자·정확한 단위가 확인되지 않으면 `unverified`로 남긴다. `recover()` 후 2 ticks에 모의 정상 상태로 복귀한다. 기존 승인 카드와의 연결은 `unlinked`이며 카드 본문·출처 승인을 대신하지 않는다.
 
 ## 부품 코드
 

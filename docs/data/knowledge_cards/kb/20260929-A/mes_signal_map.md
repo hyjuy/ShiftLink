@@ -9,7 +9,7 @@
 ## MES 쪽 사실 (코드에서 확인)
 
 - 현재 기본 구성의 고유 신호 28개: catalog 16개 + `scenarios/priority.expand()`가 추가한 고유 신호 12개(`gr_oil_leak` 포함). 새 신호 중 `hpu_oil_level`·`gr_oil_level`은 아래 카드의 **확인 항목**에만 연결했고 자동 검색 조건으로 삼지 않는다. 나머지 새 신호 9개는 미연결 목록에 두었다. 동일 신호가 여러 설비에 있어 실제 계측점은 46개다.
-- 시나리오 9개 (`from_catalog` + `PRIORITY_SCENARIOS`):
+- 기본 공정 시나리오 9개 + 센서별 시연 46개, 총 55개 (`from_catalog` + `PRIORITY_SCENARIOS` + `sensor_anomalies`):
 
 | scenario_id | 원인 설비 | 신호 효과 | alarm_code | 전파 대상 wait_reason |
 |---|---|---|---|---|
@@ -24,6 +24,8 @@
 | pdp_trip | PDP-01 | bus_voltage=90 (low), bus_current=55 (high), breaker_trip=1 (트립) | AL-PDP-TRIP | power_supply_fault → GR-01·GR-02·HPU-01 |
 
 CAU·PDP의 수치는 가상 이상 관측값이다. 기존 승인 카드와의 연결은 미정으로 JSON의 `unlinked`에 기록한다. 실제 제조사 임계값이나 작업 안전 판정을 뜻하지 않으며, 복귀는 기존 2 ticks 모의 상태 전환을 사용한다.
+
+센서별 시연은 `sensor_anomaly_<설비 ID>_<신호 이름>`이며 지정한 설비의 해당 센서 한 개만 명시적으로 주입한다. HPU 6·PDP 3·CAU 3·GR 12·RT 13·CV 9, 총 46개 위치를 포함한다. 수치와 조건은 [전체 센서 표](../../../../guides/mes-card-signals.md#전체-센서별-가상-이상-관측값)를 따른다. 알람은 `AL-SENSOR-ANOMALY`이며 공급 관계 전파는 없다. 기존 승인 카드에 연결하지 않고 JSON의 `unlinked.scenarios`에 46개 ID를 기록했다. 원인 정지에 따른 다른 센서의 0값은 명시적 이상 주입으로 세지 않는다.
 
 - 원인 설비는 `operating_state=stopped`, `fault_level=critical`, `wait_reason=self_fault`, 알람 severity `critical`. 복구 중엔 전 설비 `waiting`/`recovery`.
 - engine은 capability의 **첫 설비**에만 시나리오를 건다. GR-02는 어떤 시나리오의 원인도 되지 않는다.

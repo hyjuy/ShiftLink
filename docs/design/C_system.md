@@ -664,6 +664,8 @@ RRF 파라미터 [제안값]: `k_rrf = 60`(관례값), 가중 `w_fts = 1.0`, `w_
 
 ### C6.1 (a) 카드 `status` — 기존 보존
 
+> **경량 계획(2026-09-29)으로 대체됨.** 코드(`schemas.py`)는 2026-09-30부터 `status`를 `draft` / `accepted` / `rejected` 3종, `grade`를 `L0` / `L1`로 쓴다. 탈락 사유(규칙·judge·사람·안전)는 상태값 대신 검수 기록에 남긴다. `accepted ⇒ grade=L1` 규칙은 유지. 아래 원안은 이력으로 둔다.
+
 **[기존 4.7.4·4.10]** `draft` / `accepted` / `rejected_rule` / `rejected_judge` / `rejected_human` / `rejected_safety`. 이 6개 값과 `grade`(L0~L3) 분리, `accepted ⇒ grade=L1` 규칙은 **그대로 유지한다**.
 
 확장 필요 여부 판단: **필요 없음.** 신규 요구(개정·승인)는 **문서·절**의 상태이고, 카드 상태와 섞으면 [기존 4.10]의 `approved_expert`(L2, 범위 밖)와 혼동된다. 카드에는 상태를 추가하지 않고, 대신 개정 산출물이 카드를 참조하는 방향으로 둔다.

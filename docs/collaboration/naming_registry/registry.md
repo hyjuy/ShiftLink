@@ -33,7 +33,7 @@
 | `CardCitation` | `shiftlink/agent/response.py` | 인용 카드 + 등급 표기 (4.10) | 유현준 |
 | `HandoverCandidate` | `shiftlink/agent/response.py` | 인계 등록 후보 (수락 전·미저장, F-04) | 유현준 |
 | `StepRender` | `shiftlink/agent/response.py` | T3 단계 렌더링 (v1.0) | 유현준 |
-| `HandoverMethodRender` | `shiftlink/agent/response.py` | T4 인계 방법 렌더링 (v1.0) | 유현준 |
+| `HandoverMethodRender` | `shiftlink/agent/response.py` | T4 인계 방법 렌더링 (v1.0). `card_id`로 카드별 구분 | 유현준 |
 | `RestartFailure` | `shiftlink/agent/response.py` | 재가동 실패 렌더링 (v1.0) | 유현준 |
 | `InMemoryToolProvider` | `shiftlink/rag/retrieval.py` | 인메모리 KB 검색 구현 (v1.0) | 유현준 |
 | `Configuration` | `shiftlink/mes/contracts.py` | 모의 MES 구성 버전(설비·관계·경로·시나리오·배치 묶음, config_id=sha256) | 유현준 |

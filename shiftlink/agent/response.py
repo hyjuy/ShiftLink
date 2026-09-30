@@ -2,7 +2,7 @@
 
 import re
 from typing import Any
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, computed_field
 from shiftlink.agent.router import QueryRequest, HandoverRequest
 from shiftlink.agent.schemas import EvidenceGap, GeneralizationEvidence, Provenance, SafetyReview
 
@@ -37,7 +37,8 @@ def steps_by_card(steps: list[StepRender]) -> dict[str | None, list[StepRender]]
 
 
 class HandoverMethodRender(BaseModel):
-    """T4 handover method (5 elements)."""
+    """T4 handover method (5 elements). `card_id` keeps each T4 card's method separate."""
+    card_id: str | None = None
     required_context: list[str] = Field(min_length=1)
     recipient_role: str
     timing: str
@@ -71,7 +72,7 @@ class AgentResponse(BaseModel):
     mode: str  # "query" or "handover"
     safety_notices: list[SafetyNotice] = Field(default_factory=list)
     steps: list[StepRender] = Field(default_factory=list)
-    handover_method: HandoverMethodRender | None = None
+    handover_methods: list[HandoverMethodRender] = Field(default_factory=list)
     restart_failures: list[RestartFailure] = Field(default_factory=list)
     cited_card_ids: list[str] = Field(default_factory=list)
     answer: str = ""
@@ -80,6 +81,12 @@ class AgentResponse(BaseModel):
     card_metadata: dict[str, CardMetadata] = Field(default_factory=dict)
     review_queue: bool = False
     no_knowledge: bool = False
+
+    @computed_field
+    @property
+    def handover_method(self) -> HandoverMethodRender | None:
+        """First T4 method; kept so the §4.3 field name still works. Use handover_methods for all."""
+        return self.handover_methods[0] if self.handover_methods else None
 
 
 def build_response(
@@ -162,13 +169,14 @@ def build_response(
         # T4 handover_method
         if card.get("tacit_type") == "T4" and type_payload and type_payload.get("handover_method"):
             hm_dict = type_payload["handover_method"]
-            resp.handover_method = HandoverMethodRender(
+            resp.handover_methods.append(HandoverMethodRender(
+                card_id=card_id,
                 required_context=hm_dict.get("required_context", []),
                 recipient_role=hm_dict.get("recipient_role", ""),
                 timing=hm_dict.get("timing", ""),
                 channel=hm_dict.get("channel", ""),
                 acknowledgement=hm_dict.get("acknowledgement", ""),
-            )
+            ))
 
         # T6 / tried_and_failed
         if type_payload and type_payload.get("tried_and_failed"):
@@ -278,10 +286,9 @@ def render_response(resp: AgentResponse) -> str:
                     lines.append(f"- {label}: {value}")
 
     # Handover method (T4)
-    if resp.handover_method:
+    for hm in resp.handover_methods:
         lines.append("")
-        lines.append("## 인계 방법 (T4)")
-        hm = resp.handover_method
+        lines.append(f"## 인계 방법 (T4, {hm.card_id})" if len(resp.handover_methods) > 1 else "## 인계 방법 (T4)")
         lines.append(f"- 대상: {hm.recipient_role}")
         lines.append(f"- 시점: {hm.timing}")
         lines.append(f"- 방법: {hm.channel}")

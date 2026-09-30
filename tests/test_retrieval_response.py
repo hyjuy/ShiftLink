@@ -742,6 +742,15 @@ def test_build_response_extracts_t4_handover() -> None:
     assert len(resp.handover_method.required_context) == 2
 
 
+def test_build_response_keeps_every_t4_handover() -> None:
+    """A second T4 card must not overwrite the first (D-27)."""
+    cards = [make_card_t4("K-0004"), make_card_t4("K-0014")]
+    resp = build_response("query", None, {"cards": [c.model_dump(mode="json") for c in cards]})
+    assert [hm.card_id for hm in resp.handover_methods] == ["K-0004", "K-0014"]
+    assert resp.handover_method.card_id == "K-0004"
+    assert render_response(resp).count("## 인계 방법 (T4") == 2
+
+
 def test_build_response_extracts_restart_failures() -> None:
     """tried_and_failed attempts populate restart_failures."""
     attempt = FailedAttempt(

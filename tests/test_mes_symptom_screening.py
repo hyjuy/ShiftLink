@@ -70,7 +70,7 @@ def test_incomplete_or_unreliable_evidence_does_not_confirm_candidates(change):
     frames = [asdict(engine.tick()) for _ in range(3)]
     for f in frames:
         reading = next(m for m in f["measurements"] if m["equipment_id"] == "EQ-0009" and m["signal"] == "cv_belt_tension")
-        if change == "missing": f["measurements"].remove(reading)
+        if change == "missing": f["measurements"] = tuple(m for m in f["measurements"] if m is not reading)
         elif change == "bad_quality": reading["quality"] = "bad"
         elif change == "unit": reading["unit"] = "bar"
         elif change == "nan": reading["value"] = float("nan")

@@ -94,6 +94,7 @@ class ScenarioSpec:
     component_id: str = ""
     product_hold: bool = False
     cause_equipment_id: str | None = None
+    stop_on_fault: bool = True
 
 
 @dataclass(frozen=True)

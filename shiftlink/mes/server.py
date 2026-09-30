@@ -74,6 +74,7 @@ class MesService:
             return json.loads(json.dumps(asdict(self.engine.snapshot), default=_json)) | {
                 "speed": self.speed,
                 "config_id": self.active_config.config_id,
+                "symptom_diagnostics": self.engine.symptom_diagnostics(),
             }
 
     def events(self, after_sequence: int) -> dict[str, object]:

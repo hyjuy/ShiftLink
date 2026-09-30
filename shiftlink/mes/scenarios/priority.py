@@ -132,4 +132,6 @@ def expand(config):
     scenarios = config.scenarios + additions
     existing = {s.scenario_id for s in scenarios}
     sensors = tuple(s for s in sensor_anomalies(equipment) if s.scenario_id not in existing)
-    return finalize(replace(config, equipment=tuple(equipment), scenarios=scenarios + sensors))
+    from ..symptoms import symptom_scenarios
+    symptoms = tuple(s for s in symptom_scenarios(equipment) if s.scenario_id not in existing)
+    return finalize(replace(config, equipment=tuple(equipment), scenarios=scenarios + sensors + symptoms))

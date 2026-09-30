@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from collections import deque
 from dataclasses import replace
 from random import Random
 from typing import Any
@@ -39,12 +40,20 @@ class MesEngine:
         self._pending_events: list[tuple[str, str | None, str]] = []
         self._active_alarms: dict[str, Alarm] = {}
         self._next_coil = 1
+        self._symptom_frames = deque(maxlen=3)
         self._coils = [self._new_coil(equipment_id, position) for equipment_id, position in zip(config.route, (0.2, 0.5, 0.8))]
         self._snapshot = self._build_snapshot()
 
     @property
     def snapshot(self) -> Snapshot:
         return self._snapshot
+
+    def symptom_diagnostics(self):
+        from .symptoms import screen_symptoms
+        frames = list(self._symptom_frames)
+        if frames:
+            frames[-1] = self.snapshot
+        return screen_symptoms(frames, self.config)
 
     def start(self) -> Snapshot:
         if self._running:
@@ -147,6 +156,7 @@ class MesEngine:
         return self.snapshot
 
     def reset(self) -> Run:
+        self._symptom_frames.clear()
         self.run = Run.create(seed=self.run.seed, started_at=self.run.started_at, config_id=self.run.config_id)
         self._sequence = 0
         self._running = False
@@ -307,7 +317,8 @@ class MesEngine:
         # Find cause equipment by capability
         cause_eq_id = self._cause_equipment_id(spec)
         if cause_eq_id and cause_eq_id in states:
-            states[cause_eq_id] = ("stopped", "critical", "self_fault")
+            states[cause_eq_id] = (("stopped", "critical", "self_fault") if spec.stop_on_fault
+                                   else ("running", "warning", "observed_deviation"))
 
         # Find affected equipment via propagation_relation
         affected_ids = []
@@ -368,12 +379,17 @@ class MesEngine:
                     signal_spec.unit, at
                 ))
         active = self._update_alarms(state_map, at)
-        return Snapshot(
+        snapshot = Snapshot(
             self.run.run_id, self._sequence, at, self.config.line_id, line_mode, self._scenario,
             equipment=equipment, coils=tuple(dict(coil) for coil in self._coils),
             measurements=tuple(measurements), active_alarms=active,
             recovery=self._recovery_status(), components=tuple(dict(c) for c in self._components)
         )
+        if self._symptom_frames and self._symptom_frames[-1].sequence == snapshot.sequence:
+            self._symptom_frames[-1] = snapshot
+        else:
+            self._symptom_frames.append(snapshot)
+        return snapshot
 
     def _update_alarms(self, state_map: dict[str, tuple[str, str, str | None]], at) -> tuple[Alarm, ...]:
         fault_ids = {equipment_id for equipment_id, (_, level, _) in state_map.items() if level != "normal"}
@@ -385,7 +401,7 @@ class MesEngine:
                 self._event("alarm_cleared", equipment_id, previous.code)
                 del self._active_alarms[equipment_id]
             if equipment_id not in self._active_alarms:
-                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, "critical", at)
+                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, state_map[equipment_id][1], at)
                 self._event("alarm_raised", equipment_id, code)
         for equipment_id in tuple(self._active_alarms):
             if equipment_id not in fault_ids:

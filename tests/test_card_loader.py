@@ -90,6 +90,23 @@ def test_loader_keeps_accepted_kb_cards_and_sidecar_rows(tmp_path: Path):
     assert propose_handover(extraction_result={"memo": "기록"}) == []
 
 
+def test_plant_catalog_resolves_type_code_installation_code_and_id(tmp_path: Path):
+    safety = card(card_id="K-0002", safety_flag=True, safety_basis="방압 후 작업")
+    other = card(card_id="K-0003", equipment="GR")
+    path = write_json(tmp_path / "cards.json", [card(), safety, other])
+
+    provider = load_card_provider(path, min_top_relevance=0).provider
+
+    found = {
+        identifier: (
+            {row["card_id"] for row in provider.search_cards(query="압력", equipment_ids=[identifier])},
+            [row["card_id"] for row in provider.search_safety_cards(equipment_ids=[identifier])],
+        )
+        for identifier in ("HPU", "HPU-01", "EQ-0001")
+    }
+    assert found["HPU"] == found["HPU-01"] == found["EQ-0001"] == ({"K-0001", "K-0002"}, ["K-0002"])
+
+
 def test_include_draft_loads_draft_kb_cards(tmp_path: Path):
     path = write_json(tmp_path / "cards.json", [card(status="draft", grade="L0")])
 

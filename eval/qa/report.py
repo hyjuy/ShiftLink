@@ -4,6 +4,7 @@
         --out eval/results/qa_20260929/qa_dev.md
 
 Wrong items (not hit, not abstain_ok) come first. Key facts and fabrication stay blank for a person.
+Handover-mode results (score.py --mode handover) also show the rendered handover method and a blank for it.
 """
 import argparse
 import json
@@ -36,7 +37,8 @@ def render_report(result: dict, items: list[dict]) -> str:
         ranked.append((0 if label not in OK else 1, row["qid"], row, by_qid[row["qid"]], label))
     ranked.sort(key=lambda item: (item[0], item[1]))
 
-    lines = ["# QA 검수표", "", _summary_table(result.get("summary") or {}), ""]
+    title = "# QA 검수표 (인계 모드)" if result.get("mode") == "handover" else "# QA 검수표"
+    lines = [title, "", _summary_table(result.get("summary") or {}), ""]
     for _, _, row, item, label in ranked:
         lines.extend(_question(row, item, label))
     return "\n".join(lines).rstrip() + "\n"
@@ -70,6 +72,7 @@ def _summary_table(summary: dict) -> str:
 def _question(row: dict, item: dict, label: str) -> list[str]:
     top3 = row.get("ranked") or []
     top3 = top3[:3]
+    handover = _handover(row["handover_method"]) if "handover_method" in row else []
     return [
         f"## {row['qid']} · {row['eq_id']} · {label}",
         "",
@@ -90,10 +93,29 @@ def _question(row: dict, item: dict, label: str) -> list[str]:
         row.get("answer") or "",
         "```",
         "",
+        *handover,
         "### 사람 판정",
         "",
         "- 핵심 사실: [ ] 전부  [ ] 일부  [ ] 없음",
         "- 지어낸 내용: [ ] 있음  [ ] 없음",
+        *(["- 인계 항목: [ ] 메모 상황에 맞음  [ ] 일부  [ ] 안 맞음"] if handover else []),
+        "",
+    ]
+
+
+def _handover(method: dict | None) -> list[str]:
+    """Rendered T4 handover method for handover-mode rows."""
+    lines = ["### 인계 항목", ""]
+    if not method:
+        return lines + ["없음", ""]
+    return lines + [
+        "| 항목 | 내용 |",
+        "|---|---|",
+        f"| 전달 정보 | {_cell('; '.join(method.get('required_context') or [])) or '없음'} |",
+        f"| 대상 | {_cell(method.get('recipient_role') or '')} |",
+        f"| 시점 | {_cell(method.get('timing') or '')} |",
+        f"| 방법 | {_cell(method.get('channel') or '')} |",
+        f"| 확인 | {_cell(method.get('acknowledgement') or '')} |",
         "",
     ]
 

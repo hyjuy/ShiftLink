@@ -483,9 +483,8 @@
     setView("#equipment-results",query ? matches.map(e=>`<button type="button" data-equipment="${escape(e.equipment_id)}">${escape(e.code)} · ${escape(roleFor(e)[0])}</button>`).join("") || '<p role="status">일치하는 설비 없음</p>' : "");
   };
   $("#download-context").onclick=()=>{
-    if (!lastSnapshot) return;
-    const model=operator.buildOperatorModel(lastSnapshot,currentConfig(),selectedId,selectedPartId);
-    const draft={purpose:"ShiftLink 인계용 초안 · 합성 데이터 · 사람 확인 필요",view_mode:mode,stale:mode==="live"&&stale,run_id:lastSnapshot.run_id,sequence:lastSnapshot.sequence,observed_at:lastSnapshot.simulated_at,equipment:model.selected,observations:model.measurements,configured_relations:model.links.filter(l=>[l.from_id,l.to_id].includes(selectedId)),assumption:model.problemPart?`시연 가정 부품: ${model.problemPart}`:"문제 부품 미확정",unconfirmed:["실제 원인","실제 조립 위치","실제 점검 성공","안전 재가동 가능 여부"],next_check:lastSnapshot.recovery?.actions?.find(a=>!a.completed)||null,recovery:lastSnapshot.recovery,held_coils:model.held};
+    if (!lastSnapshot || !selectedId) return setText("#context-message","설비를 먼저 선택하세요.");
+    const draft=operator.contextDraft(operator.buildOperatorModel(lastSnapshot,currentConfig(),selectedId,selectedPartId),mode,mode==="live"&&stale);
     const url=URL.createObjectURL(new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}));
     const link=document.createElement("a"); link.href=url; link.download=`shiftlink-context-${lastSnapshot.sequence}.json`; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
     setText("#context-message","확인 맥락 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");

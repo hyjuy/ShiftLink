@@ -1,0 +1,412 @@
+[
+  {
+    "card_id": "K-1315",
+    "version": "1.0-draft-KB-20260930-D",
+    "grade": "L1",
+    "tacit_type": "T1",
+    "equipment": "PDP",
+    "component": "배선차단기·접속부",
+    "mes_equipment_id": "EQ-0002",
+    "mes_component_code": null,
+    "scenario": "S2",
+    "title": "차단기 외함·접속 도체 변색이나 열화상 상간 온도차는 접속부 느슨함·접점 열화 징후로 본다",
+    "symptom": "차단기 외함·접속 도체 변색, 열화상 상간 온도차, 핫스폿",
+    "know_how": "차단기 외함이나 접속 도체의 변색·박리·부풀음은 과열 흔적이고, 과열의 주된 원인은 접속부 느슨함이다. 변색·박리·부풀음이 보이면 해당 차단기를 즉시 교체 대상으로 넘긴다. 과열은 불필요한 트립(nuisance trip)과 결국 고장으로 이어질 수 있다. 열화상은 설비가 정상 운전·정상 부하 상태일 때 찍는다(원문은 전원 차단 직후 몇 초 안의 촬영도 인정하지만 현장 기준은 정상 부하 중 촬영이다). 3극 차단기의 극끼리, 연결 도체끼리, 비슷한 부하의 같은 종류 차단기끼리 온도를 비교한다. 원문은 극·도체 사이 3~4 °C를 넘는 차이를 고저항 접점이나 접속 불량 징후로 본다. 외함 표면에 보이는 온도는 내부 실제 온도보다 훨씬 낮을 수 있으므로(원문: 내부가 최대 4배) 작아 보이는 핫스폿도 조사 대상으로 넘기고, 스캔 결과는 추세로 남긴다. 접속부를 다시 조였으면 부하 상태에서 다시 스캔해 과열이 없어졌는지 확인한다. 재조임으로 해소되지 않으면 접점 열화로 보고 차단기 교체 판단을 전기 담당에게 넘긴다. 단자 조임·재체결, 내부 청소, 커버·차폐물 탈거처럼 충전부에 닿거나 닿을 수 있는 작업은 정전·잠금표지(LOTO)와 무전압 확인 뒤에 한다. 부하 중 촬영을 위해 패널 문을 열거나 커버를 떼어 충전부가 노출될 수 있으면 일반 운전 조작이 아니라 활선·활선근접 작업으로 관리한다. 이 작업은 현장 전기안전관리 기준에 따라 지정된 유자격 전기작업자가 위험성평가, 작업계획·작업허가, 접근 통제, 설비별 보호구와 절연·방호 조치를 갖추고 한다. 운전원이 열 수 있는 범위는 충전부 노출 여부와 설비별 SOP로 따로 정한다. IR 윈도우, 고정형 열화상 센서, 밖에서 볼 수 있는 구조가 있으면 먼저 써서 충전부 노출 개방을 줄인다. 원문 온도 기준은 PDP-01의 MES 경계값이 아니다.",
+    "rationale": "USBR FIST 3-16 3.2.1.1은 느슨한 접속부로 인한 차단기 과열이 불필요한 트립과 고장을 부를 수 있고 외함·도체의 변색·박리·부풀음이 과열 징후이며 보이면 즉시 교체하라고 적는다. 3.3.2는 열화상을 투입·부하 상태에서 하거나 차단 직후 몇 초 안에 해야 하고, 극·연결 도체 사이 3~4 °C를 넘는 차이는 고저항 접점이나 느슨한 접속 문제이며, 외함 표시보다 내부가 최대 4배 뜨거울 수 있고, 재조임 후 부하 상태에서 재스캔해야 한다고 적는다. 4.2.8 주의는 운전 중 패널 개방이 충전부 작업이며 아크 플래시 위험이 있다고 한다. KOSHA B-E-13-2026 6.2(2)는 도체 접속부 과열 시 동 도체가 변색되고, 조임은 정전 상태에서 적정 토크로 하며, 통전 상태에서는 일정 거리를 둔 적외선 카메라·비접촉 온도계를 쓸 수 있다고 한다. 촬영 조건(정상 부하 중 촬영)과 충전부 작업 관리 문단(LOTO, 활선·활선근접 작업 관리, 유자격 전기작업자, IR 윈도우 우선)은 FIST·KOSHA 원문이 아니라 현장 전기안전관리 기준(2026-09-30 확정)이다. 원문은 수력발전소 차단기·일반 수변전설비 기준이며 PDP-01(가상 배전반)의 차단기 구성과 같다고 확인되지 않았다. 과열 징후는 원인 후보이고 원인을 확정하지 않는다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "USBR FIST 3-16 4.2.8 Note: 운전 중 패널 문 개방·패널 제거로 충전부가 노출되면 충전부 작업이며 아크 플래시 위험이 있다. KOSHA GUIDE B-E-13-2026 6.2(2)(가)·(나): 접속부 조임은 정전 상태에서 적정 토크로 하고, 통전 상태에서는 일정 거리를 두고 적외선 카메라나 비접촉식 온도 측정기를 사용할 수 있다. 현장 전기안전관리 기준(2026-09-30 확정, 원문 아님): 충전부 접촉 가능 작업은 LOTO·무전압 확인 뒤, 충전부 노출 가능 개방은 활선·활선근접 작업으로 유자격 전기작업자가 위험성평가·작업허가·접근 통제·보호구를 갖추고 한다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260930-D:seed=20260930",
+        "slot:S16"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+      "generated_at": "2026-09-30T14:35:00+09:00",
+      "sources": [
+        {
+          "source_id": "USBR_FIST_3-16_Maintenance_of_Power_Circuit_Breakers_2020.pdf",
+          "locator": "PDF p.32-33, 36-39, 45 / 인쇄 p.20-21, 24-27, 33 / 3.2.1.1 Signs of excessive heating, 3.3.2 Infrared Scan and Thermal Analysis, 4.2.8 Note",
+          "document_version": "US Bureau of Reclamation FIST Volume 3-16 Maintenance of Power Circuit Breakers, FIST 015 (06/05/2020)"
+        },
+        {
+          "source_id": "B-E-13-2026 수변전설비에 관한 기술지원규정.pdf",
+          "locator": "PDF p.13 / 인쇄 p.10 / 6.2(2) 도체",
+          "document_version": "KOSHA GUIDE B-E-13-2026 수변전설비에 관한 기술지원규정 (2026.1.30. 공표; 표지 표기 B-E-16-2026)"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "accepted",
+    "type_payload": null,
+    "generalization_evidence": null,
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1316",
+    "version": "1.0-draft-KB-20260930-D",
+    "grade": "L1",
+    "tacit_type": "T1",
+    "equipment": "PDP",
+    "component": "차단기 조작기구·래치",
+    "mes_equipment_id": "EQ-0002",
+    "mes_component_code": null,
+    "scenario": "S2",
+    "title": "오래 조작하지 않은 차단기의 첫 동작 지연·핸들 뻑뻑함은 조작기구 윤활 경화·래치 고착 징후로 본다",
+    "symptom": "장기 미조작 차단기, 조작 핸들 뻑뻑함, 첫 개폐 동작 지연",
+    "know_how": "오랫동안 개폐하지 않은 차단기는 조작기구 윤활제가 말라 끈적해져 첫 동작이 느려지고, 래치 기구에 먼지·부식·산화가 쌓여 아예 동작하지 않을 수도 있다(이 경우 고장 전류를 끊지 못한다). 첫 동작이 기구 상태를 가장 잘 보여 주고, 두 번째부터는 윤활제가 섞여 정상처럼 보일 수 있다. 그래서 첫 동작이 느렸던 사실을 '한 번 더 해 보니 괜찮다'로 넘기지 않고 차단기 번호·시각과 함께 적어 전기 담당에게 넘긴다. 핸들은 걸림 없이 부드럽게 움직여야 하며, 핸들이 손상·파손되었으면 교체 대상이다(조작이 어려운 차단기에서 핸들 손상이 잘 생긴다). 내부 기구가 고장 나면 한두 극 접점이 붙은 채로 핸들이 개방·트립 위치를 가리킬 수 있으므로 핸들 위치만으로 개방을 단정하지 않는다. 구속·느린 동작·작동 지연은 운전에 들어가기 전에 시정 대상이다. 조작기구에 침투유(WD-40 등)를 뿌리지 않는다(용제가 날아간 뒤 더 끈적한 잔류물이 남는다). 배선차단기 수동 개폐는 충전부 작업으로 보고 보호구를 갖추며, 조작기구 자체 작업은 저장 에너지를 방출하거나 차단기가 동작하지 못하게 막은 뒤 유자격 전기 담당이 한다.",
+    "rationale": "USBR FIST 3-16 2.2는 오래 동작하지 않은 차단기는 윤활제가 말라 점성이 높아져 첫 트립이 제조사 규격보다 느려질 수 있고 첫 동작 뒤에는 다음 동작이 규격을 만족할 수 있다고 적는다(그래서 2.3 첫 트립 시험이 기구 상태를 보여 준다). 3.2는 수년간 개폐가 없던 배선차단기는 래치 기구에 먼지·부식·산화가 쌓여 동작 불능이 될 수 있고, 내부 기구 고장 시 일부 접점이 닫힌 채 핸들이 개방·트립을 표시할 수 있으며, 손상된 핸들은 교체 대상이라고 적는다. 2.1은 침투유 사용 금지를, 3.2.2는 핸들이 걸림 없이 움직여야 하고 수동 개폐가 충전부 작업이라고 적는다. KOSHA B-E-13-2026 7.1(5)(나)는 닫힘·열림 동작이 빠르고 능동적이어야 하며 구속·느린 동작·작동 지연은 운전 전에 시정해야 한다고 적는다. 원문은 발전소·수변전설비 차단기 기준이며 PDP-01 차단기 형식과 같다고 확인되지 않았다. 윤활 경화·래치 고착은 원인 후보이고 확정 원인이 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "USBR FIST 3-16 3.2.2: 배선차단기 수동 개폐는 충전부 작업으로 간주하며 적절한 개인보호구를 사용한다. 2.1 Note: 저장 에너지를 방출하거나 차단기가 동작·방출하지 못하게 막기 전에는 조작기구 어느 부분도 작업하지 않는다. KOSHA GUIDE B-E-13-2026 7.1(5)(나)②: 구속·느린 동작·작동 지연·정상 트립 여부는 운전에 들어가기 전에 시정한다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260930-D:seed=20260930",
+        "slot:S17"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+      "generated_at": "2026-09-30T14:35:00+09:00",
+      "sources": [
+        {
+          "source_id": "USBR_FIST_3-16_Maintenance_of_Power_Circuit_Breakers_2020.pdf",
+          "locator": "PDF p.19-20, 30-31, 34 / 인쇄 p.7-8, 18-19, 22 / 2.1 Note, 2.2 Manual Operation, 3.2, 3.2.2",
+          "document_version": "US Bureau of Reclamation FIST Volume 3-16 Maintenance of Power Circuit Breakers, FIST 015 (06/05/2020)"
+        },
+        {
+          "source_id": "B-E-13-2026 수변전설비에 관한 기술지원규정.pdf",
+          "locator": "PDF p.20 / 인쇄 p.17 / 7.1(5) 조작장치",
+          "document_version": "KOSHA GUIDE B-E-13-2026 수변전설비에 관한 기술지원규정 (2026.1.30. 공표; 표지 표기 B-E-16-2026)"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "accepted",
+    "type_payload": null,
+    "generalization_evidence": null,
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1317",
+    "version": "1.0-draft-KB-20260930-D",
+    "grade": "L1",
+    "tacit_type": "T3",
+    "equipment": "PDP",
+    "component": "배선차단기(MCCB)",
+    "mes_equipment_id": "EQ-0002",
+    "mes_component_code": null,
+    "scenario": "S2",
+    "title": "배선차단기가 트립하면 과부하로 단정하기 전에 트립 이력·부하·접속부 과열·주위 조건을 차례로 본다",
+    "symptom": "배선차단기 트립, 트립 원인 미확인",
+    "know_how": "1) 바로 재투입하지 않고 트립 시각과 과거 트립 이력(단락 트립 횟수)을 적는다. 단락 트립이 두 번째면 교체 대상이다. 2) 연속 부하가 정격에 비해 과했는지 부하 기록과 정격을 대조한다(원문 권고: 3시간 이상 연속 사용 시 정격 80 % 이하). 3) 정전·잠금 후 외함·접속 도체의 변색·박리·부풀음과 외함 균열을 본다. 흔적이 있으면 교체 대상이다. 4) 상·하단 접속부 느슨함을 점검하고 제조자 토크로 조인다. 5) 주위 온도 과다, 차단 기구로의 열 전달, 플러그인 부품 손상, 오염·습기, 침수 이력을 확인한다. 6) 불량 차단기는 폐기하거나 불량 표시해 다시 쓰지 않게 하고, 재투입은 원인 제거 뒤 전기 담당이 판단한다. 배선차단기는 과전류가 아니어도 주위 온도·불량 접속부·과도한 열 전달로 트립할 수 있다. 또 일반 배선차단기는 저수준 지락을 감지하지 못하므로, 트립하지 않았다고 지락이 없다고 보지 않는다. 전기작업은 유자격자가 한다.",
+    "rationale": "KOSHA GUIDE E-57-2020 5.1은 배선차단기가 정격 이상 연속 전류뿐 아니라 지나치게 높은 주위 온도, 불량·부적합 접속부, 손상된 플러그인 부품, 차단 기구로 전달되는 과도한 열 때문에도 과전류와 관계없이 트립할 수 있고, 3시간 이상 연속 사용 시 정격의 80 %를 넘지 않는 것이 바람직하다고 적는다. 5.3은 일반 배선차단기가 저수준 지락을 차단하지 못한다고, 6.2.1·6.2.2는 외함 균열 시 교체와 느슨한 접속부가 과열·불필요 트립의 가장 흔한 원인이며 제조자 토크로 조이라고 적는다. 4.1(2)는 원인을 제거하면 재투입할 수 있다고 적는다. USBR FIST 3-16 3.2는 단락 고장을 두 번 겪은 배선차단기의 즉시 교체, 하단 접속부 과열이 열동 트립에 주는 영향, 불량 차단기의 폐기·영구 불량 표시를, 3.2.1은 과열 흔적·균열·침수 이력 시 교체를 적는다. 단계 순서는 두 원문의 점검 항목을 트립 직후 현장 흐름에 맞춰 배열한 것이며 원문이 이 순서를 정하지는 않는다. PDP-01(가상 배전반)의 차단기 형식·정격은 확인되지 않았다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "KOSHA GUIDE E-57-2020 4.1(2): 과전류로 차단되었을 때 원인을 제거하면 재투입이 가능하다(원인 제거 전 재투입 보류). USBR FIST 3-16 3.2 Note: 결함·손상·동작 불능 배선차단기는 폐기하거나 영구히 불량 표시해 실수로 다시 쓰이지 않게 한다. 외함·접속부 점검은 정전·잠금 후 유자격 전기 담당이 한다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260930-D:seed=20260930",
+        "slot:S18"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+      "generated_at": "2026-09-30T14:35:00+09:00",
+      "sources": [
+        {
+          "source_id": "E-57-2020 배선차단기 일반관리에 관한 기술지침.pdf",
+          "locator": "PDF p.5, 10-12 / 인쇄 p.3, 8-10 / 4.1(2), 5.1, 5.3, 6.2.1, 6.2.2",
+          "document_version": "KOSHA GUIDE E-57-2020 (2020.12.)"
+        },
+        {
+          "source_id": "USBR_FIST_3-16_Maintenance_of_Power_Circuit_Breakers_2020.pdf",
+          "locator": "PDF p.30-34 / 인쇄 p.18-22 / 3.2, 3.2.1.1-3.2.1.3",
+          "document_version": "US Bureau of Reclamation FIST Volume 3-16 Maintenance of Power Circuit Breakers, FIST 015 (06/05/2020)"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "accepted",
+    "type_payload": {
+      "steps": [
+        {
+          "step_id": "ST-01",
+          "order": 1,
+          "action": "트립한 배선차단기는 바로 재투입하지 않고, 트립 시각과 같은 차단기의 과거 트립 이력(특히 단락 트립 횟수)을 확인해 적는다.",
+          "preconditions": [],
+          "expected_result": "트립 이력이 정리된다. 단락 트립이 두 번째인 차단기는 교체 대상으로 분류된다.",
+          "stop_conditions": [
+            "트립 원인이 제거되기 전에는 재투입하지 않는다(E-57 4.1(2)는 원인을 제거하면 재투입할 수 있다고 적는다)."
+          ]
+        },
+        {
+          "step_id": "ST-02",
+          "order": 2,
+          "action": "해당 회로의 연속 부하가 차단기 정격에 비해 과했는지 부하 기록과 정격을 대조해 전기 담당에게 확인을 요청한다.",
+          "preconditions": [],
+          "expected_result": "과부하 트립 가능성이 좁혀진다. 원문 권고는 3시간 이상 연속 사용 시 정격전류의 80 %를 넘지 않는 것이다.",
+          "stop_conditions": []
+        },
+        {
+          "step_id": "ST-03",
+          "order": 3,
+          "action": "정전·잠금 후 차단기 외함과 접속 도체의 변색·박리·부풀음, 외함 균열을 눈으로 확인한다.",
+          "preconditions": [
+            "유자격 전기 담당이 수행한다.",
+            "차단기 1차·2차측 전원을 차단·잠금하고 검전을 마친다."
+          ],
+          "expected_result": "과열 흔적·균열 유무가 확인된다.",
+          "stop_conditions": [
+            "과열 흔적이나 균열이 있으면 재사용하지 않고 교체 대상으로 넘긴다."
+          ]
+        },
+        {
+          "step_id": "ST-04",
+          "order": 4,
+          "action": "상단·하단 접속부의 느슨함과 과열 흔적을 점검하고 느슨하면 제조자 권고 토크로 조인다. 하단 접속부 과열은 열동 트립 기구와 가까워 트립에 영향을 줄 수 있다.",
+          "preconditions": [
+            "정전·잠금 상태가 유지된다."
+          ],
+          "expected_result": "느슨한 접속부가 조여지고 기록된다.",
+          "stop_conditions": []
+        },
+        {
+          "step_id": "ST-05",
+          "order": 5,
+          "action": "과전류 외 트립 요인을 확인한다: 주위 온도 과다, 차단 기구로 전달되는 열, 플러그인 부품 손상, 먼지·그을음·기름·습기 오염, 침수·스프링클러 방수 이력.",
+          "preconditions": [],
+          "expected_result": "과전류가 아닌 트립 요인 유무가 확인된다.",
+          "stop_conditions": [
+            "침수나 스프링클러 방수를 겪은 차단기는 재사용하지 않고 교체 대상으로 넘긴다."
+          ]
+        },
+        {
+          "step_id": "ST-06",
+          "order": 6,
+          "action": "결함으로 판정된 차단기는 폐기하거나 불량 표시를 영구히 해 다시 설치되지 않게 하고, 조치 내용과 재투입 여부 판단을 전기 담당에게 넘긴다.",
+          "preconditions": [],
+          "expected_result": "불량 차단기가 재사용되지 않고, 재투입은 원인 제거 뒤 담당자가 판단한다.",
+          "stop_conditions": [
+            "원인이 확인되지 않으면 재투입하지 않고 전기 담당 판단으로 보류한다."
+          ]
+        }
+      ]
+    },
+    "generalization_evidence": null,
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1318",
+    "version": "1.0-draft-KB-20260930-D",
+    "grade": "L1",
+    "tacit_type": "T3",
+    "equipment": "PDP",
+    "component": "배선차단기(MCCB) 트립 요소",
+    "mes_equipment_id": "EQ-0002",
+    "mes_component_code": null,
+    "scenario": "S2",
+    "title": "배선차단기 시험은 위험성 평가 뒤 외관→수동 개폐 3회→극별 300 % 반한시 트립→순시 트립→절연·접촉저항 순으로 한다",
+    "symptom": "배선차단기 정기 시험, 트립 동작 확인",
+    "know_how": "1) 위험성 평가, 시험 구역 분리, 시험 장비 전원 누전차단기. 2) 외관: 과열 흔적·오염·균열(있으면 교체 대상). 3) 수동 ON·OFF 3회, 누름 트립 버튼이 있으면 그것으로도 트립(충전부 작업으로 보고 보호구 착용). 4) 극별 트립 정격 300 % 반한시 트립 시험, 최대 트립 시간 미만인지 확인. 5) 전용 장비로 순시 트립 시험(장비가 없으면 하지 않음). 6) (선택) 극별 1분 절연저항, 제조자 값 또는 1,000 V DC 이상, 제조자 값이 없으면 1 MΩ 이상. 7) (선택) 저저항계로 접촉저항, 멀티미터로 재지 않는다. 불합격 차단기는 폐기하거나 영구 불량 표시한다. 리드선 연결과 전원 인가는 시험 대상이 격리된 상태에서만 한다. 원문 수치는 시험 기준이며 PDP-01의 MES 경계값이 아니다.",
+    "rationale": "USBR FIST 3-16 3.2는 배선차단기 정비를 외관 점검(3.2.1), 수동 개폐(3.2.2: ON·OFF 3회, 누름 트립 사용, 충전부 작업·보호구), 전기 시험(3.2.3: 극별 300 % 반한시 트립 시험, 전용 장비가 필요한 run-up·펄스 순시 트립 시험) 순서로 적고, 3.3.3은 선택 시험으로 절연저항(1분, 1,000 V DC 이상, 최소 1 MΩ)과 접촉저항(멀티미터 부적합, 정격 전류 또는 500 A)을 적는다. 3.2 Note는 불량 차단기의 폐기·영구 불량 표시를 요구한다. KOSHA GUIDE E-40-2013 5는 시험 전 위험성 평가 항목을, 6.1(6)(라)는 장비 격리 중에만 리드선을 연결하고 전원을 인가하도록, 6.2(3)은 시험 구역 분리를, 7(2)는 정전 상태 작업을, 7(4)(마)는 시험 장비 전원의 누전차단기를 적는다. 원문은 발전소 중요 배선차단기 기준이며 PDP-01(가상 배전반)의 차단기 형식·정격과 같다고 확인되지 않았다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "KOSHA GUIDE E-40-2013 5(위험성 평가), 6.1(6)(라)(장비 격리 중에만 리드선 연결·전원 인가), 6.2(3)(시험 구역 분리·출입 통제), 7(2)(정전 상태 작업 원칙), 7(4)(마)(시험 장비 전원에 누전차단기). USBR FIST 3-16 3.2.2: 배선차단기 수동 개폐는 충전부 작업이며 개인보호구를 사용한다.",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260930-D:seed=20260930",
+        "slot:S19"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+      "generated_at": "2026-09-30T14:35:00+09:00",
+      "sources": [
+        {
+          "source_id": "USBR_FIST_3-16_Maintenance_of_Power_Circuit_Breakers_2020.pdf",
+          "locator": "PDF p.31-36, 39-40 / 인쇄 p.19-24, 27-28 / 3.2 Note, 3.2.1, 3.2.2, 3.2.3.1, 3.2.3.2, 3.3.3",
+          "document_version": "US Bureau of Reclamation FIST Volume 3-16 Maintenance of Power Circuit Breakers, FIST 015 (06/05/2020)"
+        },
+        {
+          "source_id": "E-40-2013 차단기 시험에 관한 기술지침.pdf",
+          "locator": "PDF p.5-10 / 인쇄 p.3-8 / 5, 6.1(6), 6.2, 7",
+          "document_version": "KOSHA GUIDE E-40-2013 (2013.8.30.)"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "accepted",
+    "type_payload": {
+      "steps": [
+        {
+          "step_id": "ST-01",
+          "order": 1,
+          "action": "시험 전에 위험성 평가를 한다: 정전 상태로 시험할 수 있는지, 충전부 근처 작업이 필요한지, 필요한 조치, 작업자 숙련도와 감독. 시험 구역은 분리해 허가받지 않은 사람의 출입을 막고, 시험·계측 장비 전원에는 누전차단기를 둔다.",
+          "preconditions": [
+            "충분히 교육받고 현장 위험성 평가를 할 수 있는 작업자가 수행한다."
+          ],
+          "expected_result": "시험 구역과 시험 장비 전원 보호가 준비된다.",
+          "stop_conditions": [
+            "위험성 평가에서 정한 예방 조치가 갖춰지지 않으면 시험을 시작하지 않는다."
+          ]
+        },
+        {
+          "step_id": "ST-02",
+          "order": 2,
+          "action": "외관을 점검한다: 외함·도체의 변색·박리·부풀음(과열), 먼지·그을음·기름·습기, 외함 균열.",
+          "preconditions": [],
+          "expected_result": "과열·오염·균열 유무가 확인된다.",
+          "stop_conditions": [
+            "균열이나 과열 흔적이 있으면 시험하지 않고 교체 대상으로 넘긴다."
+          ]
+        },
+        {
+          "step_id": "ST-03",
+          "order": 3,
+          "action": "차단기를 수동으로 ON·OFF 3회 조작한다. 누름 트립(push-to-trip) 버튼이 있으면 그 버튼으로도 트립시켜 트립 기구를 동작시킨다. 수동 조작은 충전부 작업으로 보고 보호구를 착용한다.",
+          "preconditions": [
+            "가능하면 부하를 전기적으로 분리한다.",
+            "수동 조작은 충전부 작업으로 보고 보호구를 착용한다."
+          ],
+          "expected_result": "핸들이 걸림 없이 부드럽게 움직이고 트립 기구가 동작한다.",
+          "stop_conditions": []
+        },
+        {
+          "step_id": "ST-04",
+          "order": 4,
+          "action": "전기 시험 전에 시험 대상 차단기를 정전하고 격리한다. 격리 장치에는 재투입을 막는 표식·잠금을 둔다.",
+          "preconditions": [],
+          "expected_result": "시험 대상이 정전·격리되고 부주의·무허가 재투입이 막힌다.",
+          "stop_conditions": [
+            "정전·격리를 확인할 수 없으면 전기 시험을 하지 않는다."
+          ]
+        },
+        {
+          "step_id": "ST-05",
+          "order": 5,
+          "action": "반한시(열동) 과전류 트립 시험: 극별로 트립 정격의 300 % 전류를 흘려 트립 시간을 잰다.",
+          "preconditions": [
+            "ST-04에서 격리된 동안에만 리드선을 연결하고 시험 전원을 인가한다(E-40 6.1(6)(라))."
+          ],
+          "expected_result": "제조자 데이터 또는 NEMA 권장표의 최대 트립 시간보다 짧게 트립한다. 시험 조건이 부적절하면 최대값을 넘을 수 있으므로 조건을 먼저 점검한다.",
+          "stop_conditions": []
+        },
+        {
+          "step_id": "ST-06",
+          "order": 6,
+          "action": "순시 트립 시험: 일정 상승률(run-up) 또는 펄스 방식으로 순시 트립 전류를 확인한다.",
+          "preconditions": [
+            "일정 상승률·펄스 전류를 낼 수 있는 전용 시험 장비와 정확한 전류 계측 장비가 있다."
+          ],
+          "expected_result": "순시 트립이 제조자 절차 기준대로 동작한다.",
+          "stop_conditions": [
+            "전용 시험 장비가 없으면 이 시험을 하지 않는다."
+          ]
+        },
+        {
+          "step_id": "ST-07",
+          "order": 7,
+          "action": "(선택) 절연저항 시험: 극별로 1분간 제조자 값 또는 1,000 V DC 이상을 인가한다. 차단기를 닫고 미사용 극·프레임을 접지해 재고, 열고 한쪽을 접지해 개방 극도 잰다.",
+          "preconditions": [],
+          "expected_result": "제조자 최소값 이상(제조자 값이 없으면 1 MΩ 이상)이다.",
+          "stop_conditions": []
+        },
+        {
+          "step_id": "ST-08",
+          "order": 8,
+          "action": "(선택) 접촉저항 시험: 멀티미터가 아닌 저저항계나 4단자 측정기로, 차단기 정격과 같은 시험 전류(정격 500 A 이상이면 500 A)를 흘려 극별 접촉저항을 잰다.",
+          "preconditions": [],
+          "expected_result": "제조자 규격 안이다. 높으면 접점 산화막 또는 접점·접점 스프링 압력 문제로 본다.",
+          "stop_conditions": [
+            "불합격한 차단기는 폐기하거나 영구히 불량 표시해 다시 설치되지 않게 한다."
+          ]
+        }
+      ]
+    },
+    "generalization_evidence": null,
+    "safety_review": null
+  },
+  {
+    "card_id": "K-1319",
+    "version": "1.0-draft-KB-20260930-D",
+    "grade": "L1",
+    "tacit_type": "T5",
+    "equipment": "PDP",
+    "component": "계기용 변류기(CT) 2차 회로",
+    "mes_equipment_id": "EQ-0002",
+    "mes_component_code": null,
+    "scenario": "S1",
+    "title": "통전 중인 변류기(CT) 2차 회로를 열지 않는다 — 열기 전 2차 단자 단락",
+    "symptom": "배전반 계기·보호계전기 점검, 변류기 2차 배선 분리 전",
+    "know_how": "통전 중인 계기용 변류기(CT)의 2차 회로를 열면 매우 높은 전압이 생긴다. 배전반 계기나 보호계전기를 떼거나 CT 2차 배선을 풀기 전에는 반드시 2차 단자를 먼저 단락시키고, 시험이 끝나면 단락 점퍼를 제거한다. 단락 장치(쇼팅 스크루)는 2차 회로가 완성된 것을 확인한 뒤에만 떼고, 접지 스크루는 떼지 않는다. 운전원은 CT 2차 배선을 직접 다루지 않고 유자격 전기 담당에게 넘긴다. 계기 표시가 이상하다는 이유로 운전 중 계기 단자를 풀지 않는다(원문의 '통전 CT 2차 개방 금지'를 이 상황에 적용한 작성자 해석). PDP-01은 가상 설비이며 CT 구성과 단락 장치 위치는 사업장 도면으로 확인한다.",
+    "rationale": "KOSHA GUIDE B-E-13-2026 7.5(5)(가)는 통전 상태인 계기용 변류기 2차측 회로를 개방하면 매우 높은 전압이 유기되므로 개방 전 2차측 단자를 단락하고 시험 완료 후 단락 점퍼선을 제거하라고 적는다. ABB MaxSG 저압 배전반 매뉴얼 7장(Short Circuiting Device)은 CT 2차 회로가 완성되었는지 확인한 뒤 단락 스크루를 떼고 접지 스크루는 떼지 말며 통전 차단기의 2차를 개방하지 말라고, 8장 주의는 통전 CT 2차 회로를 결코 개방하지 말라고 적는다. MES의 bus_current 값은 가상 시연 신호이며 CT 2차 회로 상태나 작업 안전 판정 근거가 아니다.",
+    "conditions": [],
+    "exclusions": [],
+    "safety_flag": true,
+    "safety_basis": "KOSHA GUIDE B-E-13-2026 7.5(5)(가): 통전상태인 계기용 변류기 2차측 회로의 개방은 매우 높은 전압을 유기시키므로 개방 전 2차측 단자를 단락시키고 시험 완료 후 단락 점퍼선을 제거한다. ABB MaxSG LV082 7장 Short Circuiting Device 1항(Do not open circuit the secondary of an energized breaker), 8장 Note(The secondary circuits of energized current transformers should never be open circuited).",
+    "conflict_group": null,
+    "confidence": 0.0,
+    "provenance": {
+      "seed_ids": [
+        "KB-20260930-D:seed=20260930",
+        "slot:S20"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+      "generated_at": "2026-09-30T14:35:00+09:00",
+      "sources": [
+        {
+          "source_id": "B-E-13-2026 수변전설비에 관한 기술지원규정.pdf",
+          "locator": "PDF p.25 / 인쇄 p.22 / 7.5(5)(가) 보호계전기",
+          "document_version": "KOSHA GUIDE B-E-13-2026 수변전설비에 관한 기술지원규정 (2026.1.30. 공표; 표지 표기 B-E-16-2026)"
+        },
+        {
+          "source_id": "ABB_MaxSG_LV_Switchgear_1SXU900082M0201.pdf",
+          "locator": "PDF p.18, 20 / 인쇄 p.14, 16 / 7 Testing and Final Inspection – Short Circuiting Device; 8 Placing Switchgear into Service – Note",
+          "document_version": "ABB MaxSG Low Voltage Switchgear, LV082 [1SXU 900 082 M0201] 5/07"
+        }
+      ],
+      "extraction_method": "pdftotext 원문 대조, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r2.md",
+      "schema_version": "1.1"
+    },
+    "split": "kb",
+    "status": "accepted",
+    "type_payload": null,
+    "generalization_evidence": null,
+    "safety_review": null
+  }
+]

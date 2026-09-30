@@ -1,0 +1,194 @@
+[
+ {
+  "card_id": "K-1301",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축공기 배관·이음부",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "압축공기 압력 저하 — 누설과 계통 압력강하 부위 의심",
+  "symptom": "압축공기 압력 저하, 공기공구·공압 설비 출력 저하",
+  "know_how": "계통 압력이 떨어지고 공압 기기 출력이 약해지면 먼저 공기 누설을 의심한다. 누설은 이음부·접속부에서 가장 많이 생기므로 커플링, 피팅, 배관 구간, 호스, 조인트, 드레인 트랩, 밸브 스템을 우선 본다. 누설 외에 흐름 저항으로 인한 압력강하 부위(애프터쿨러, 필터, 수분 분리기, 드라이어, 배관, 체크밸브, 가는 배관·퀵커플러·레귤레이터·긴 호스)도 같이 확인할 곳으로 기록한다. 압력 저하만으로 원인을 한 곳으로 단정하지 않는다.",
+  "rationale": "CEATI 가이드 9a절은 누설의 수·크기와 계통 압력 사이에 강한 인과관계가 있고 낮은 압력이 공기공구·설비의 기계적 출력을 줄인다고 적으며, 누설이 가장 흔한 곳으로 이음부·접속부와 커플링·피팅·배관·호스·조인트·드레인 트랩·밸브 스템을 든다. 같은 가이드 9b절은 압력강하 문제 부위로 애프터쿨러·필터·수분 분리기·드라이어·배관·체크밸브, 말단의 가는 배관·퀵커플러·필터·레귤레이터·호스를 든다. 에너지 효율 자료이며 고장 진단 절차가 아니다. 가상 설비 CAU-01의 air_pressure 경계와는 관계없다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": ["KB-20260930-D:seed=20260930", "slot:S01"],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {"source_id": "compressed-air-ref-eng.pdf", "locator": "PDF p.79~80, 83 / 인쇄 p.79~80, 83 / 9a Compressed Air System Leaks, How to Track Down Air Leaks", "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"},
+    {"source_id": "compressed-air-ref-eng.pdf", "locator": "PDF p.85, 87 / 인쇄 p.85, 87 / 9b Lower Compressor Discharge Pressure by Minimizing Pressure Drops", "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"}
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "CEATI 가이드의 일반 압축공기 계통 설명에 한정한다. 가상 설비 CAU-01의 배관 구성은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1302",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축공기 배관·이음부",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "압축공기 누설음 — 청취·초음파·비눗물로 위치 찾기",
+  "symptom": "압축공기 배관·이음부 누설음",
+  "know_how": "누설음은 팬·기계 소음이 큰 환경에서는 잘 들리지 않는다. 설비가 쉬는 시간(야간·주말)에 배관 경로를 따라 걸으며 중간중간 멈춰 소리를 듣고, 손상된 피팅·갈라진 호스를 본다. 배경 소음이 있으면 초음파 누설 탐지기로 대략의 위치를 찾고, 의심 부위에 비눗물을 발라 확인한다. 찾은 위치는 적고 약도로 남기며 태그를 붙여 수리 대상으로 표시한다. 탐지 작업 때는 보안경·청력 보호구를 쓰고, 높은 곳 작업은 해당 안전 절차를 따른다.",
+  "rationale": "CEATI 가이드 9a절 'How to Track Down Air Leaks'는 배경 소음이 큰 곳에서 누설이 잘 보이거나 들리지 않고, 정지 중에는 들을 수 있으며, 소음이 있으면 초음파 탐지기를 쓰고 비눗물로 확인하라고 적는다. 비생산 시간에 배관을 따라 걸으며 청취·기록·태그하는 방법과 보안경·청력 보호구 주의 문구도 같은 절에 있다. UNEP/TERI 매뉴얼 4.3.4절도 초음파 탐지기가 누설 지점에서 가장 크게 반응하고 가청 배경 소음의 영향을 거의 받지 않는다고 적는다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": ["KB-20260930-D:seed=20260930", "slot:S02"],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {"source_id": "compressed-air-ref-eng.pdf", "locator": "PDF p.82~83 / 인쇄 p.82~83 / 9a How to Track Down Air Leaks, Caution", "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"},
+    {"source_id": "Manual-on-Energy-Efficiency.pdf", "locator": "PDF p.75 / 인쇄 p.57 / 4.3.4 Energy efficiency in compressed air system — Compressed air system leaks", "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"}
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "압축공기 배관 누설 탐지 일반론에 한정한다. 압축기 본체 내부 이상음(베어링·밸브 등)은 원문에 없으며 이 카드 범위가 아니다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1303",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T3",
+  "equipment": "CAU",
+  "component": "압축기·배관 계통",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "압력 저하 시 누설 부하 추정 — 압축기 정지·기동 압력 하강·상승 시간 시험",
+  "symptom": "압축공기 계통 압력 저하, 누설 의심",
+  "know_how": "1) 비생산 시간에 시험하고, 압력 변동으로 핵심 설비가 영향을 받는지 먼저 확인한다. 2) 압축기 1대로 계통 운전이 가능한지 확인한다. 3) 압축기를 정지하고, 정상 계통압보다 10 psi 낮은 점에서 30 psi 낮은 점까지(20 psi 하강) 떨어지는 시간을 잰다. 4) 압축기를 기동하고 같은 두 점 사이를 올라가는 시간을 잰다. 5) 시간당 모터 기동 4회를 넘지 않게 여러 번 반복한다. 6) 상승 시간 ÷ (상승+하강 시간)을 압축기 토출량(cfm)에 곱해 누설 부하를 추정한다. 두 번째 압축기가 필요했다면 그 용량을 더한다. 10·30 psi와 시간당 4회는 원문 시험 방법의 값이며 가상 설비 CAU-01의 air_pressure 경계가 아니다.",
+  "rationale": "CEATI 가이드 9a절 'Estimating Total Air Leaks'는 비생산 시간의 저부하 시험을 누설 대응의 첫 단계로 두고, 압축기 1대 운전 시 정지 후 하강 시간과 기동 후 상승 시간을 재어 적재율로 누설량을 추정하는 방법과, 시험이 큰 압력 변동을 일으키므로 핵심 설비 영향을 먼저 판단할 것, 시간당 기동 4회를 넘지 말 것을 적는다. 에너지 진단용 추정 방법이며 제조사 고장 진단 절차가 아니다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": ["KB-20260930-D:seed=20260930", "slot:S03"],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {"source_id": "compressed-air-ref-eng.pdf", "locator": "PDF p.81~82 / 인쇄 p.81~82 / 9a Estimating Total Air Leaks", "document_version": "CEATI Compressed Air Energy Efficiency Reference Guide (2007)"}
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": {
+   "steps": [
+    {"step_id": "ST-01", "order": 1, "action": "비생산 시간을 잡고, 시험 중 압력 변동이 핵심 설비에 영향을 주는지 확인한다.", "preconditions": [], "expected_result": "영향이 없으면 ST-02로 진행한다.", "stop_conditions": ["핵심 설비가 압력 변동의 영향을 받으면 시험하지 않는다."]},
+    {"step_id": "ST-02", "order": 2, "action": "압축기 1대로 계통 운전이 가능한지 확인한다.", "preconditions": [], "expected_result": "1대 운전이 가능하면 ST-03으로 진행한다.", "stop_conditions": ["1대 운전이 불가하면 이 정지·기동 시험 대신 부하/무부하 시간 측정 또는 유량계·용량 게이지로 추정한다."]},
+    {"step_id": "ST-03", "order": 3, "action": "압축기를 정지하고, 정상 계통압보다 10 psi 낮은 점에서 30 psi 낮은 점까지 압력이 떨어지는 시간을 잰다.", "preconditions": [], "expected_result": "하강 시간이 기록된다.", "stop_conditions": []},
+    {"step_id": "ST-04", "order": 4, "action": "압축기를 기동하고, 같은 두 압력 점 사이를 올라가는 시간을 잰다.", "preconditions": [], "expected_result": "상승 시간이 기록된다.", "stop_conditions": []},
+    {"step_id": "ST-05", "order": 5, "action": "ST-03~ST-04를 여러 번 반복한다.", "preconditions": [], "expected_result": "반복 측정값이 확보된다.", "stop_conditions": ["시간당 모터 기동 4회를 넘기면 반복을 멈춘다."]},
+    {"step_id": "ST-06", "order": 6, "action": "상승 시간 ÷ (상승+하강 시간)으로 적재율을 구하고 압축기 토출량(cfm)을 곱해 누설 부하를 추정한다. 두 번째 압축기가 필요했으면 그 용량을 더한다.", "preconditions": [], "expected_result": "누설 부하 추정값이 기록된다.", "stop_conditions": []}
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "CEATI 가이드의 누설 부하 추정 시험에 한정한다. 가상 설비 CAU-01의 압축기 대수·제어 방식·토출량은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1304",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T5",
+  "equipment": "CAU",
+  "component": "안전밸브",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "공기압축기 안전밸브 — 압축기·단별 설치, 전후단 차단밸브 금지, 작동 확인",
+  "symptom": null,
+  "know_how": "정변위 압축기에는 과압 폭발 방지용 안전밸브(또는 파열판)를 두고, 다단형 압축기나 직렬로 접속된 공기압축기는 각 단 또는 각 압축기마다 둔다. 안전밸브는 보호 대상 설비의 최고사용압력 이하에서 작동해야 한다. 안전밸브 전단·후단에 차단밸브를 두지 않는다(법령이 정한 예외는 자물쇠형 등만 허용). 설정압력에서의 작동은 교정된 압력계로 검사하며, 공기 취급 용기의 안전밸브로 레버·고리로 수시 작동 확인이 되는 경우는 그 방법으로 확인한다. 정비 계획에는 안전밸브 작동 점검을 넣는다(원문 O&M 표는 매주). 안전밸브를 떼거나 막거나 설정을 바꿀 일이 있으면 운전하지 말고 담당자에게 알린다.",
+  "rationale": "산업안전보건기준에 관한 규칙 제261조는 정변위 압축기를 안전밸브등 설치 대상으로 정하고 다단형·직렬 공기압축기의 단별·압축기별 설치를 요구하며, 설정압력 작동 검사와 공기 취급 용기의 레버 확인 예외를 둔다. 제264조는 최고사용압력 이하 작동, 제266조는 전후단 차단밸브 설치 금지를 정한다. UNEP/TERI 매뉴얼 5.3.1절의 급유식 회전 압축기 O&M 표는 매주(Weekly) 안전밸브 작동 점검을 적는다. 해당 조항은 규칙 제2편 제2장 제4절(화학설비·압력용기 등)에 있으며, 가상 설비 CAU-01에 대한 적용 판단과 검사주기는 담당자 확인이 필요하다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": true,
+  "safety_basis": "산업안전보건기준에 관한 규칙 제261조①2호·②: 정변위 압축기에 과압 폭발 방지용 안전밸브등 설치, 다단형 또는 직렬 접속 공기압축기는 각 단·각 압축기별 설치. 같은 조③: 설정압력에서 적정 작동 검사(공기 취급 용기 안전밸브는 레버·고리로 수시 확인 가능 시 예외). 제264조: 보호 설비 최고사용압력 이하에서 작동. 제266조: 안전밸브등 전단·후단 차단밸브 설치 금지(자물쇠형 등 예외).",
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": ["KB-20260930-D:seed=20260930", "slot:S04"],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code subagent (general-purpose), batch KB-20260930-D",
+   "generated_at": "2026-09-30T14:02:41+09:00",
+   "sources": [
+    {"source_id": "산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20260302).pdf", "locator": "PDF p.46~47 / 제2편 제2장 제4절 제261조, 제264조, 제266조", "document_version": "고용노동부령 제450호, 시행 2026-03-02 (국가법령정보센터)"},
+    {"source_id": "Manual-on-Energy-Efficiency.pdf", "locator": "PDF p.93 / 인쇄 p.75 / 5.3.1 O&M practices and schedule — Weekly: Check safety valve operation", "document_version": "UNEP/TERI Energy Efficient Technologies and Best Practices in Steel Rolling Industries (Indonesia), 2014"}
+   ],
+   "extraction_method": "pdftotext 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "법령 조항의 공기압축기 안전밸브 요구에 한정한다. 검사주기(제261조③ 각 호)와 가상 설비 CAU-01의 최고사용압력은 이 카드에 넣지 않았다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 안전 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ }
+]

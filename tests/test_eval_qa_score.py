@@ -1,4 +1,12 @@
-from eval.qa.score import score_item, summarize
+import json
+from pathlib import Path
+
+from eval.qa.score import KB, payload, run, score_item, summarize
+from shiftlink.agent.pipeline import FixedPipeline
+from shiftlink.edge.ollama import OllamaModel
+from shiftlink.rag.loader import load_card_provider
+
+T4_DEV = Path(__file__).resolve().parents[1] / "eval/qa/20260930-T4/qa_dev_t4.json"
 
 LABEL = {"answerable": True, "primary_card_ids": ["K-1004"], "acceptable_card_ids": ["K-1008"], "safety_card_ids": ["K-1006"]}
 
@@ -23,6 +31,46 @@ def test_unanswerable_abstain():
     assert score_item(label, out([], no_knowledge=True))["abstain_ok"]
     s = score_item(label, out(["K-1001"]))
     assert not s["abstain_ok"] and s["wrong_cite_rate"] == 1.0
+
+
+def test_execution_error_is_not_abstain_success():
+    label = {"answerable": False, "primary_card_ids": [], "acceptable_card_ids": [], "safety_card_ids": []}
+    assert not score_item(label, out([]), error="RuntimeError: down")["abstain_ok"]
+
+    class Boom:
+        def run(self, payload):
+            raise RuntimeError("down")
+
+    item = {
+        "qid": "Q-000", "eq_id": "HPU-01", "question": "막힌 질문", "observations": {},
+        "answerable": False, "primary_card_ids": [], "acceptable_card_ids": [], "safety_card_ids": [],
+    }
+    rows = run([item], Boom())
+    assert rows[0]["error"].startswith("RuntimeError")
+    assert rows[0]["cited"] == []
+    assert rows[0]["score"]["abstain_ok"] is False
+    assert summarize(rows)["abstain_ok"] == 0.0 and summarize(rows)["errors"] == 1
+
+
+def test_handover_mode_sends_memo_and_keeps_handover_method():
+    item = json.loads(T4_DEV.read_text(encoding="utf-8"))[0]
+    assert payload(item, "handover", "B") == {"memo_text": item["question"], "shift": "B", "eq_ids": [item["eq_id"]]}
+
+    sent = []
+
+    def post(path, body):
+        sent.append(body)
+        first = body["format"]["properties"]["cited_card_ids"]["items"]["enum"][0]
+        return {"message": {"content": json.dumps({"answer": "인계 요지", "cited_card_ids": [first]})}}
+
+    model = OllamaModel()
+    model._post = post
+    rows = run([item], FixedPipeline(model=model, tools=load_card_provider(KB).provider), mode="handover")
+
+    assert "인계 메모:" in sent[0]["messages"][1]["content"]
+    assert rows[0]["error"] is None and rows[0]["cited"]
+    assert rows[0]["handover_method"]["recipient_role"]
+    assert "hit" in rows[0]["score"]
 
 
 def test_summary_rates_and_latency():

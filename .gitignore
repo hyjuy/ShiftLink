@@ -47,6 +47,8 @@ docs/sources/manual/parker-*.pdf
 docs/sources/manual/BR-*.pdf
 # 사건·카드 원문 자료도 로컬에만 보관 (2026-09-30 회의 결정). README.md만 추적
 docs/data/sources/**/*.pdf
+# KOSHA 기술지침·법령 PDF도 로컬 보관 (9/30 결정: 원문 PDF는 저장소에 올리지 않음). 이미 추적 중인 M-101은 그대로
+docs/sources/safety/*.pdf
 docs/data/sources/**/*.html
 
 # Aiven CA 등 인증서

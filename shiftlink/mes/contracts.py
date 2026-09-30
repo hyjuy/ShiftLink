@@ -93,6 +93,7 @@ class ScenarioSpec:
     recovery_actions: tuple[RecoveryAction, ...] = ()
     component_id: str = ""
     product_hold: bool = False
+    cause_equipment_id: str | None = None
 
 
 @dataclass(frozen=True)

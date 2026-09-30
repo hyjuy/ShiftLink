@@ -20,7 +20,8 @@
     const lookup = id => nodes.find(n=>n.equipment_id===id);
     const faults = nodes.filter(n=>n.fault_level && n.fault_level!=="normal");
     const spec = config?.scenarios?.find(s=>s.scenario_id===snapshot.scenario_id);
-    const cause = nodes.find(n=>n.active!==false && (n.capabilities || []).includes(spec?.cause_capability));
+    const cause = nodes.find(n=>n.active!==false && (n.capabilities || []).includes(spec?.cause_capability) &&
+      (spec?.cause_equipment_id == null || n.equipment_id===spec.cause_equipment_id));
     const selected = lookup(selectedId);
     const links = relations.filter(r=>lookup(r.from_id) && lookup(r.to_id)).map(r=>{
       const from = lookup(r.from_id), to = lookup(r.to_id);
@@ -40,7 +41,7 @@
       const hasRange = signal.normal_min!=null || signal.normal_max!=null;
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
       return {...signal, observation:m, known, trustworthy, hasRange, inRange,
-        relevant:(spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
+        relevant:selected.equipment_id===cause?.equipment_id && (spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
     }).sort((a,b)=>Number(b.relevant)-Number(a.relevant));
     return {snapshot, config, nodes, links, faults, selected, cause, spec, problemPart, selectedPart, parts, measurements,
       held:(snapshot.coils || []).filter(c=>c.quality_status==="hold"), lookup};

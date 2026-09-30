@@ -72,7 +72,7 @@ class MesEngine:
             raise ValueError(f"unknown scenario: {scenario_id}")
         spec = self._scenario_by_id[scenario_id]
         if scenario_id != "normal":
-            cause_eq = self._find_equipment_with_capability(spec.cause_capability)
+            cause_eq = self._cause_equipment_id(spec)
             if not cause_eq:
                 raise ValueError(f"cannot apply {scenario_id} (requires {spec.cause_capability} capability) to this configuration")
         self._scenario = scenario_id
@@ -84,7 +84,7 @@ class MesEngine:
                 coil["quality_status"] = "hold"
                 self._queue_event("coil_held", coil["equipment_id"], str(coil["coil_id"]))
         for component in self._components:
-            if component["equipment_id"] == self._find_equipment_with_capability(spec.cause_capability) and component["component_id"] == spec.component_id:
+            if component["equipment_id"] == self._cause_equipment_id(spec) and component["component_id"] == spec.component_id:
                 component["health_percent"] = min(component["health_percent"], 25.0 if spec.component_id == "seal" else 35.0)
         self._queue_event("scenario_selected", None, scenario_id)
         self._refresh_snapshot()
@@ -100,7 +100,7 @@ class MesEngine:
             raise ValueError("화면에 표시된 다음 조치부터 순서대로 완료하세요.")
         action = spec.recovery_actions[len(self._completed_actions)]
         self._completed_actions.append(action_id)
-        cause = self._find_equipment_with_capability(spec.cause_capability)
+        cause = self._cause_equipment_id(spec)
         if action_id == "repair":
             for component in self._components:
                 if component["equipment_id"] == cause and component["component_id"] == spec.component_id:
@@ -186,7 +186,7 @@ class MesEngine:
                  else "ready" if len(self._completed_actions) == len(spec.recovery_actions) else "actions")
         return {"title": spec.title, "source_url": spec.source_url, "stage": stage,
                 "remaining_ticks": self._recovery_ticks, "product_hold": spec.product_hold,
-                "equipment_id": self._find_equipment_with_capability(spec.cause_capability),
+                "equipment_id": self._cause_equipment_id(spec),
                 "actions": [{"action_id": a.action_id, "title": a.title, "detail": a.detail,
                              "completed": a.action_id in self._completed_actions} for a in spec.recovery_actions]}
 
@@ -206,6 +206,12 @@ class MesEngine:
             if eq.active and capability in eq.capabilities:
                 return eq.equipment_id
         return None
+
+    def _cause_equipment_id(self, spec: ScenarioSpec) -> str | None:
+        if spec.cause_equipment_id is None:
+            return self._find_equipment_with_capability(spec.cause_capability)
+        eq = self._equipment_by_id.get(spec.cause_equipment_id)
+        return eq.equipment_id if eq and eq.active and spec.cause_capability in eq.capabilities else None
 
     def _at(self):
         return self.run.started_at + timedelta(seconds=self._sequence * self.run.tick_seconds)
@@ -299,7 +305,7 @@ class MesEngine:
             return states, "quality_hold"
 
         # Find cause equipment by capability
-        cause_eq_id = self._find_equipment_with_capability(spec.cause_capability)
+        cause_eq_id = self._cause_equipment_id(spec)
         if cause_eq_id and cause_eq_id in states:
             states[cause_eq_id] = ("stopped", "critical", "self_fault")
 
@@ -335,7 +341,7 @@ class MesEngine:
                 for effect in spec.signal_effects:
                     # Match by capability and signal
                     verified = spec.recovery_actions and len(self._completed_actions) == len(spec.recovery_actions)
-                    if (not verified and equipment.equipment_id == self._find_equipment_with_capability(spec.cause_capability)
+                    if (not verified and equipment.equipment_id == self._cause_equipment_id(spec)
                             and effect.capability in equipment.capabilities and effect.signal == signal_spec.signal):
                         return round(effect.value, 3)
 

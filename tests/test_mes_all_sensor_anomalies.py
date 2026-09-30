@@ -6,7 +6,7 @@ import pytest
 
 from shiftlink.agent.schemas import Condition
 from shiftlink.mes.card_adapter import MesCardAdapter
-from shiftlink.mes.configuration import from_catalog, from_payload, to_payload, validate
+from shiftlink.mes.configuration import finalize, from_catalog, from_payload, to_payload, validate
 from shiftlink.mes.contracts import Run
 from shiftlink.mes.engine import MesEngine
 from shiftlink.rag.retrieval import InMemoryToolProvider, _evaluate_condition
@@ -62,7 +62,7 @@ def test_each_installed_sensor_anomaly_reaches_search_and_recovers(eq, signal):
 def test_exact_target_roundtrip_and_legacy_payload_are_preserved():
     assert validate(CONFIG) == []
     assert from_payload(to_payload(CONFIG)) == CONFIG
-    legacy = replace(CONFIG, scenarios=tuple(s for s in CONFIG.scenarios if not s.scenario_id.startswith("sensor_anomaly_")))
+    legacy = finalize(replace(CONFIG, scenarios=tuple(s for s in CONFIG.scenarios if not s.scenario_id.startswith("sensor_anomaly_"))))
     payload = to_payload(legacy)
     assert all("cause_equipment_id" not in s for s in payload["scenarios"])
     assert from_payload(payload) == legacy

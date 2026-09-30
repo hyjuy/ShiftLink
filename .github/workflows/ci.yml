@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Floors from docs/collaboration/t4-retrieval-improvement-guide-20260930.md §6.
+      # Raise them when a PR moves the baseline up on purpose.
+      MIN_DEV_ROUTE: 18
+      MIN_SANITY_ROUTE: 26
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: pytest
+        run: python -m pytest -q
+
+      - name: route_score
+        run: |
+          python eval/qa/route_score.py | tee route_score.txt
+          {
+            echo "### route_score"
+            echo '```'
+            cat route_score.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          python - <<'EOF'
+          import os, re, sys
+          text = open("route_score.txt", encoding="utf-8").read()
+          failed = False
+          for name, floor in (("dev_route_acc", "MIN_DEV_ROUTE"), ("sanity_route_acc", "MIN_SANITY_ROUTE")):
+              hit, total = map(int, re.search(rf"^{name}: (\d+)/(\d+)", text, re.M).groups())
+              need = int(os.environ[floor])
+              if hit < need:
+                  print(f"::error::{name} {hit}/{total} is below the floor {need}")
+                  failed = True
+          sys.exit(failed)
+          EOF

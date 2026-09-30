@@ -267,7 +267,8 @@ def load_draft(payload: dict[str, Any], *, source: str) -> Configuration:
             recovery_ticks=int(sc.get("recovery_ticks", 2)),
             title=sc.get("title", ""), source_url=sc.get("source_url", ""),
             recovery_actions=tuple(RecoveryAction(**a) for a in sc.get("recovery_actions", [])),
-            component_id=sc.get("component_id", ""), product_hold=sc.get("product_hold", False)
+            component_id=sc.get("component_id", ""), product_hold=sc.get("product_hold", False),
+            cause_equipment_id=sc.get("cause_equipment_id"), stop_on_fault=sc.get("stop_on_fault", True)
         )
         for sc in payload.get("scenarios", [])
     )
@@ -361,6 +362,23 @@ def validate(config: Configuration) -> list[str]:
     if len(scenario_ids) != len(set(scenario_ids)):
         errors.append("Duplicate scenario_id")
     for scenario in config.scenarios:
+        if not isinstance(scenario.stop_on_fault, bool):
+            errors.append(f"{scenario.scenario_id}: stop_on_fault must be boolean")
+        effect_target = next((eq for eq in config.equipment if eq.active
+            and scenario.cause_capability in eq.capabilities
+            and (scenario.cause_equipment_id is None or eq.equipment_id == scenario.cause_equipment_id)), None)
+        if effect_target:
+            bool_signals = {s.signal for s in effect_target.signals if s.unit == "bool"}
+            for effect in scenario.signal_effects:
+                if effect.signal in bool_signals and (isinstance(effect.value, bool) or effect.value not in (0, 1)):
+                    errors.append(f"{scenario.scenario_id}.{effect.signal}: boolean effect must be numeric 0 or 1")
+        if scenario.cause_equipment_id is not None:
+            target = eq_by_id.get(scenario.cause_equipment_id)
+            if not target or not target.active or scenario.cause_capability not in target.capabilities:
+                errors.append(f"{scenario.scenario_id}: invalid cause equipment {scenario.cause_equipment_id}")
+            elif any(e.capability not in target.capabilities or e.signal not in {s.signal for s in target.signals}
+                     for e in scenario.signal_effects):
+                errors.append(f"{scenario.scenario_id}: effect not available on cause equipment")
         actions = scenario.recovery_actions
         if scenario.recovery_ticks < 1:
             errors.append(f"{scenario.scenario_id}: recovery_ticks must be positive")
@@ -551,6 +569,8 @@ def to_payload(config: Configuration) -> dict[str, Any]:
                     for eff in s.signal_effects
                 ],
                 "recovery_ticks": s.recovery_ticks,
+                **({"cause_equipment_id": s.cause_equipment_id} if s.cause_equipment_id is not None else {}),
+                **({"stop_on_fault": False} if not s.stop_on_fault else {}),
                 **({"title": s.title, "source_url": s.source_url,
                     "component_id": s.component_id, "product_hold": s.product_hold,
                     "recovery_actions": [{"action_id": a.action_id, "title": a.title, "detail": a.detail} for a in s.recovery_actions]}

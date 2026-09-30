@@ -1,4 +1,4 @@
-/* Pure observation-to-view mapping. No plant control or inferred fault diagnosis. */
+/* Observation and candidate-screening views. No plant control or confirmed diagnosis. */
 (() => {
   const esc = value => String(value ?? "—").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
   const types = {material_flow:"소재 이송",drive:"구동 전달",hydraulic_supply:"유압 공급",power_supply:"전력 공급",pneumatic_supply:"공압 공급",interlock:"인터록",common_mode:"공통 영향",co_occurrence:"동시 발생 관계"};
@@ -20,7 +20,8 @@
     const lookup = id => nodes.find(n=>n.equipment_id===id);
     const faults = nodes.filter(n=>n.fault_level && n.fault_level!=="normal");
     const spec = config?.scenarios?.find(s=>s.scenario_id===snapshot.scenario_id);
-    const cause = nodes.find(n=>n.active!==false && (n.capabilities || []).includes(spec?.cause_capability));
+    const cause = nodes.find(n=>n.active!==false && (n.capabilities || []).includes(spec?.cause_capability) &&
+      (spec?.cause_equipment_id == null || n.equipment_id===spec.cause_equipment_id));
     const selected = lookup(selectedId);
     const links = relations.filter(r=>lookup(r.from_id) && lookup(r.to_id)).map(r=>{
       const from = lookup(r.from_id), to = lookup(r.to_id);
@@ -36,11 +37,12 @@
       const m = (snapshot.measurements || []).find(m=>m.equipment_id===selected.equipment_id && m.signal===signal.signal);
       const age = m ? (Date.parse(snapshot.simulated_at)-Date.parse(m.observed_at))/1000 : NaN;
       const known = Boolean(m && Number.isFinite(m.value));
-      const trustworthy = known && m.quality==="good" && Number.isFinite(age) && age>=0 && age<=10;
+      const trustworthy = known && m.quality==="good" && m.unit===signal.unit &&
+        (signal.unit!=="bool" || m.value===0 || m.value===1) && Number.isFinite(age) && age>=0 && age<=10;
       const hasRange = signal.normal_min!=null || signal.normal_max!=null;
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
       return {...signal, observation:m, known, trustworthy, hasRange, inRange,
-        relevant:(spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
+        relevant:selected.equipment_id===cause?.equipment_id && (spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
     }).sort((a,b)=>Number(b.relevant)-Number(a.relevant));
     return {snapshot, config, nodes, links, faults, selected, cause, spec, problemPart, selectedPart, parts, measurements,
       held:(snapshot.coils || []).filter(c=>c.quality_status==="hold"), lookup};
@@ -146,7 +148,9 @@
       const finding=!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
       return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small></th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
     }).join("");
-    return `${relationNote}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption><thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead><tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div><details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
+    const diagnoses=(model.snapshot.symptom_diagnostics || []).filter(d=>d.equipment_id===eq.equipment_id).map(d=>
+      `<section class="symptom-candidate"><h4>증상별 원인 후보 · ${esc(d.symptom)}</h4><p>${esc(d.status==="candidate"?"3회 연속 관측":d.status==="unverified"?"근거 미확인":"추가 관측 대기")} · 확정 진단 아님</p><ul>${(d.candidates || []).map(c=>`<li>${esc(c)}</li>`).join("")}</ul><p>추가 확인: ${(d.checks || []).map(esc).join(" · ")}</p><small>${esc(d.limitation)}</small></section>`).join("");
+    return `${relationNote}${diagnoses}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption><thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead><tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div><details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
   }
 
   function partView(model) {

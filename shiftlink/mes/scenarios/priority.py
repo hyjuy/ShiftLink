@@ -8,6 +8,15 @@ PARKER = "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_
 SAP = "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-"
 
 PRIORITY_SCENARIOS = (
+    # Synthetic observation fixtures; not OEM fault limits or maintenance procedures.
+    ScenarioSpec("cau_supply_fault", "pneumatic_supply", "pneumatic_supply", "pneumatic_supply_low", "AL-AIR-LOW",
+        (SignalEffect("pneumatic_supply", "air_pressure", 450),
+         SignalEffect("pneumatic_supply", "air_flow", 70),
+         SignalEffect("pneumatic_supply", "compressor_current", 22)), title="압축공기 공급 이상 (가상)"),
+    ScenarioSpec("pdp_trip", "power_supply", "power_supply", "power_supply_fault", "AL-PDP-TRIP",
+        (SignalEffect("power_supply", "bus_voltage", 90),
+         SignalEffect("power_supply", "bus_current", 55),
+         SignalEffect("power_supply", "breaker_trip", 1)), title="배전반 트립 (가상)"),
     ScenarioSpec("gearbox_overheat", "drive", "drive", "upstream_drive_fault", "AL-GR-HOT",
         (SignalEffect("drive", "gr_brg_temp", 85),), title="감속기 과열", source_url=SEW, component_id="cooling",
         recovery_actions=(
@@ -79,6 +88,32 @@ STOPPED_ZERO_SIGNALS = frozenset({
 })
 
 
+def sensor_anomalies(equipment):
+    """One synthetic numeric anomaly per bounded sensor, scoped to its installation."""
+    for eq in equipment:
+        if not eq.active or not eq.capabilities:
+            continue
+        capability = eq.capabilities[0]
+        for signal in eq.signals:
+            low, high = signal.normal_min, signal.normal_max
+            if low is None or high is None:
+                continue
+            if signal.unit == "bool":
+                if low <= 0 <= high and low <= 1 <= high:
+                    continue  # Both legal boolean values are normal; no numeric anomaly exists.
+                value = 0 if low <= 1 <= high else 1
+            elif low > 0 and (signal.signal.endswith(("pressure", "press", "flow", "speed", "rpm", "oil_level"))
+                              or signal.unit == "pct" and high >= 100):
+                value = round(low * 0.8, 3)
+                if value >= low:
+                    value = round(max(0, low - 0.001), 3)
+            else:
+                value = round(high + max(abs(high) * 0.25, 0.001), 3)
+            yield ScenarioSpec(f"sensor_anomaly_{eq.equipment_id}_{signal.signal}", capability, "", "", "AL-SENSOR-ANOMALY",
+                (SignalEffect(capability, signal.signal, value),),
+                title=f"{eq.code} · {signal.name} 이상 (가상)", cause_equipment_id=eq.equipment_id)
+
+
 def expand(config):
     """Add missing priority scenarios to the catalog baseline; preserve old run configs."""
     from ..configuration import finalize
@@ -94,4 +129,9 @@ def expand(config):
                         if signal.signal in STOPPED_ZERO_SIGNALS and not signal.zero_when_stopped else signal
                         for signal in (*eq.signals, *added))
         equipment.append(replace(eq, signals=signals))
-    return finalize(replace(config, equipment=tuple(equipment), scenarios=config.scenarios + additions))
+    scenarios = config.scenarios + additions
+    existing = {s.scenario_id for s in scenarios}
+    sensors = tuple(s for s in sensor_anomalies(equipment) if s.scenario_id not in existing)
+    from ..symptoms import symptom_scenarios
+    symptoms = tuple(s for s in symptom_scenarios(equipment) if s.scenario_id not in existing)
+    return finalize(replace(config, equipment=tuple(equipment), scenarios=scenarios + sensors + symptoms))

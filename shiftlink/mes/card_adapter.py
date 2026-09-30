@@ -65,7 +65,7 @@ class MesCardAdapter:
             value = reading.get("value")
             valid = (reading.get("quality") == "good" and reading.get("unit") == spec.unit
                      and isinstance(value, (int, float)) and not isinstance(value, bool)
-                     and isfinite(value))
+                     and isfinite(value) and (spec.unit != "bool" or value in (0, 1)))
             evidence.append({
                 "equipment_id": eq.equipment_id, "signal": signal,
                 "value": value, "unit": reading.get("unit"),

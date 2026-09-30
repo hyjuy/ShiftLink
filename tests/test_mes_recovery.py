@@ -124,7 +124,8 @@ class RecoveryTests(unittest.TestCase):
 
     def test_baseline_restart_adds_scenarios_without_rewriting_past_config(self):
         payload = configuration.to_payload(self.engine.config)
-        payload["scenarios"] = [s for s in payload["scenarios"] if s["scenario_id"] not in SCENARIOS]
+        payload["scenarios"] = [s for s in payload["scenarios"]
+                                if s["scenario_id"] in {"drive_fault", "hydraulic_fault", "downstream_block"}]
         for eq in payload["equipment"]:
             eq["signals"] = [s for s in eq["signals"] if s["signal"] != "gr_oil_leak"]
         old = configuration.from_payload(payload)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from collections import deque
 from dataclasses import replace
 from random import Random
 from typing import Any
@@ -39,12 +40,20 @@ class MesEngine:
         self._pending_events: list[tuple[str, str | None, str]] = []
         self._active_alarms: dict[str, Alarm] = {}
         self._next_coil = 1
+        self._symptom_frames = deque(maxlen=3)
         self._coils = [self._new_coil(equipment_id, position) for equipment_id, position in zip(config.route, (0.2, 0.5, 0.8))]
         self._snapshot = self._build_snapshot()
 
     @property
     def snapshot(self) -> Snapshot:
         return self._snapshot
+
+    def symptom_diagnostics(self):
+        from .symptoms import screen_symptoms
+        frames = list(self._symptom_frames)
+        if frames:
+            frames[-1] = self.snapshot
+        return screen_symptoms(frames, self.config)
 
     def start(self) -> Snapshot:
         if self._running:
@@ -55,6 +64,7 @@ class MesEngine:
         return self.snapshot
 
     def pause(self) -> Snapshot:
+        self._symptom_frames.clear()
         if self._running:
             self._resume_mode = self._snapshot.line_mode
         self._running = False
@@ -72,7 +82,7 @@ class MesEngine:
             raise ValueError(f"unknown scenario: {scenario_id}")
         spec = self._scenario_by_id[scenario_id]
         if scenario_id != "normal":
-            cause_eq = self._find_equipment_with_capability(spec.cause_capability)
+            cause_eq = self._cause_equipment_id(spec)
             if not cause_eq:
                 raise ValueError(f"cannot apply {scenario_id} (requires {spec.cause_capability} capability) to this configuration")
         self._scenario = scenario_id
@@ -84,7 +94,7 @@ class MesEngine:
                 coil["quality_status"] = "hold"
                 self._queue_event("coil_held", coil["equipment_id"], str(coil["coil_id"]))
         for component in self._components:
-            if component["equipment_id"] == self._find_equipment_with_capability(spec.cause_capability) and component["component_id"] == spec.component_id:
+            if component["equipment_id"] == self._cause_equipment_id(spec) and component["component_id"] == spec.component_id:
                 component["health_percent"] = min(component["health_percent"], 25.0 if spec.component_id == "seal" else 35.0)
         self._queue_event("scenario_selected", None, scenario_id)
         self._refresh_snapshot()
@@ -100,7 +110,7 @@ class MesEngine:
             raise ValueError("화면에 표시된 다음 조치부터 순서대로 완료하세요.")
         action = spec.recovery_actions[len(self._completed_actions)]
         self._completed_actions.append(action_id)
-        cause = self._find_equipment_with_capability(spec.cause_capability)
+        cause = self._cause_equipment_id(spec)
         if action_id == "repair":
             for component in self._components:
                 if component["equipment_id"] == cause and component["component_id"] == spec.component_id:
@@ -147,6 +157,7 @@ class MesEngine:
         return self.snapshot
 
     def reset(self) -> Run:
+        self._symptom_frames.clear()
         self.run = Run.create(seed=self.run.seed, started_at=self.run.started_at, config_id=self.run.config_id)
         self._sequence = 0
         self._running = False
@@ -186,7 +197,7 @@ class MesEngine:
                  else "ready" if len(self._completed_actions) == len(spec.recovery_actions) else "actions")
         return {"title": spec.title, "source_url": spec.source_url, "stage": stage,
                 "remaining_ticks": self._recovery_ticks, "product_hold": spec.product_hold,
-                "equipment_id": self._find_equipment_with_capability(spec.cause_capability),
+                "equipment_id": self._cause_equipment_id(spec),
                 "actions": [{"action_id": a.action_id, "title": a.title, "detail": a.detail,
                              "completed": a.action_id in self._completed_actions} for a in spec.recovery_actions]}
 
@@ -206,6 +217,12 @@ class MesEngine:
             if eq.active and capability in eq.capabilities:
                 return eq.equipment_id
         return None
+
+    def _cause_equipment_id(self, spec: ScenarioSpec) -> str | None:
+        if spec.cause_equipment_id is None:
+            return self._find_equipment_with_capability(spec.cause_capability)
+        eq = self._equipment_by_id.get(spec.cause_equipment_id)
+        return eq.equipment_id if eq and eq.active and spec.cause_capability in eq.capabilities else None
 
     def _at(self):
         return self.run.started_at + timedelta(seconds=self._sequence * self.run.tick_seconds)
@@ -299,9 +316,10 @@ class MesEngine:
             return states, "quality_hold"
 
         # Find cause equipment by capability
-        cause_eq_id = self._find_equipment_with_capability(spec.cause_capability)
+        cause_eq_id = self._cause_equipment_id(spec)
         if cause_eq_id and cause_eq_id in states:
-            states[cause_eq_id] = ("stopped", "critical", "self_fault")
+            states[cause_eq_id] = (("stopped", "critical", "self_fault") if spec.stop_on_fault
+                                   else ("running", "warning", "observed_deviation"))
 
         # Find affected equipment via propagation_relation
         affected_ids = []
@@ -335,7 +353,7 @@ class MesEngine:
                 for effect in spec.signal_effects:
                     # Match by capability and signal
                     verified = spec.recovery_actions and len(self._completed_actions) == len(spec.recovery_actions)
-                    if (not verified and equipment.equipment_id == self._find_equipment_with_capability(spec.cause_capability)
+                    if (not verified and equipment.equipment_id == self._cause_equipment_id(spec)
                             and effect.capability in equipment.capabilities and effect.signal == signal_spec.signal):
                         return round(effect.value, 3)
 
@@ -362,12 +380,17 @@ class MesEngine:
                     signal_spec.unit, at
                 ))
         active = self._update_alarms(state_map, at)
-        return Snapshot(
+        snapshot = Snapshot(
             self.run.run_id, self._sequence, at, self.config.line_id, line_mode, self._scenario,
             equipment=equipment, coils=tuple(dict(coil) for coil in self._coils),
             measurements=tuple(measurements), active_alarms=active,
             recovery=self._recovery_status(), components=tuple(dict(c) for c in self._components)
         )
+        if self._symptom_frames and self._symptom_frames[-1].sequence == snapshot.sequence:
+            self._symptom_frames[-1] = snapshot
+        else:
+            self._symptom_frames.append(snapshot)
+        return snapshot
 
     def _update_alarms(self, state_map: dict[str, tuple[str, str, str | None]], at) -> tuple[Alarm, ...]:
         fault_ids = {equipment_id for equipment_id, (_, level, _) in state_map.items() if level != "normal"}
@@ -375,11 +398,11 @@ class MesEngine:
             spec = self._scenario_by_id.get(self._scenario)
             code = spec.alarm_code if spec else "UNKNOWN"
             previous = self._active_alarms.get(equipment_id)
-            if previous and previous.code != code:
+            if previous and (previous.code != code or previous.severity != state_map[equipment_id][1]):
                 self._event("alarm_cleared", equipment_id, previous.code)
                 del self._active_alarms[equipment_id]
             if equipment_id not in self._active_alarms:
-                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, "critical", at)
+                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, state_map[equipment_id][1], at)
                 self._event("alarm_raised", equipment_id, code)
         for equipment_id in tuple(self._active_alarms):
             if equipment_id not in fault_ids:

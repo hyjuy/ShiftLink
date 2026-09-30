@@ -14,6 +14,8 @@ MES 쪽 부품은 다 들어왔다(모의 MES, 신호 카탈로그, `MesCardAdap
 | 카드 작성 계약 (`mes_equipment_id`, `mes_component_code`, `*_state` 조건) | `docs/guides/mes-card-signals.md` |
 
 ## 확인된 빈틈
+
+2026-09-30 재검토: 아래는 분장 작성 시점의 목록이다. 4번 신호 표는 현재 10대·46개 센서 위치의 정상 범위·이상 수치가 기록되어 보완됐다. PDP·CAU는 현재 스키마·검색 지원을 유지하며 포함 여부를 다시 미정으로 취급하지 않는다. RT 승강 구조 확인과 모델 답변·평가 판정 함수 연결은 여전히 별도 작업이다. MES 증상 후보 화면은 승인 카드·모델 답변 연결의 완료를 뜻하지 않는다. [재검토 기록](../testing/scenario-criteria-review.md) 참고.
 1. `MesCardAdapter`는 **검색까지만** 한다. `FixedPipeline`·`OllamaModel`을 부르는 경로와 화면 연결이 없다 (문서에도 "아직 없다"로 적혀 있음). 코드에서 이 어댑터를 쓰는 곳은 테스트뿐이다.
 2. 카드 로더(`load_card_provider`)로 만든 provider에는 **설비 기준정보가 없다**. 그래서 `EQ-0001`·`HPU-01` 같은 설치 ID로 질의하면 `Unknown equipment identifier`가 난다. 지금은 `HPU` 같은 유형 코드만 된다.
 3. 카메라는 설비 **유형**(HPU/GR/RT/CV)만 구분한다. GR-02, RT-02/03처럼 같은 유형의 설치가 여럿이면 어느 설치로 볼지 규칙이 없다 (어댑터는 `-01` 고정).

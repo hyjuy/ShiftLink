@@ -10,65 +10,159 @@
 | EQ-0001 / HPU-01 | `hpu_oil_temp` | degC | 35–58 | <35 low; >58 high | 없음 |
 | EQ-0001 / HPU-01 | `hpu_filter_dp` | bar | 0–1.2 | <0 low; >1.2 high | 없음 |
 | EQ-0001 / HPU-01 | `hpu_flow` | L_min | 38–46 | <38 low; >46 high | 없음 |
+| EQ-0001 / HPU-01 | `hpu_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0001 / HPU-01 | `hpu_pump_current` | A | 15–25 | <15 low; >25 high | 없음 |
 | EQ-0002 / PDP-01 | `bus_voltage` | pct | 97–103 | <97 low; >103 high | 없음 |
 | EQ-0002 / PDP-01 | `bus_current` | A | 20–40 | <20 low; >40 high | 없음 |
-| EQ-0002 / PDP-01 | `breaker_trip` | bool | 0 (정상); 1은 트립 | 0 normal; 1 high (수치 경계: <0 low; >0 high) | 없음 |
+| EQ-0002 / PDP-01 | `breaker_trip` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0003 / CAU-01 | `air_pressure` | kPa | 550–700 | <550 low; >700 high | 없음 |
 | EQ-0003 / CAU-01 | `air_flow` | L_min | 100–150 | <100 low; >150 high | 없음 |
 | EQ-0003 / CAU-01 | `compressor_current` | A | 8–16 | <8 low; >16 high | 없음 |
 | EQ-0004 / GR-01 | `gr_vib_rms` | mm_s | 0.5–2.8 | <0.5 low; >2.8 high | 없음 |
 | EQ-0004 / GR-01 | `gr_brg_temp` | degC | 30–62 | <30 low; >62 high | 없음 |
 | EQ-0004 / GR-01 | `gr_current` | A | 18–30 | <18 low; >30 high | 없음 |
+| EQ-0004 / GR-01 | `gr_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0004 / GR-01 | `gr_rpm` | rpm | 900–1100 | <900 low; >1100 high | 없음 |
+| EQ-0004 / GR-01 | `gr_oil_leak` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0005 / GR-02 | `gr_vib_rms` | mm_s | 0.5–2.8 | <0.5 low; >2.8 high | 없음 |
 | EQ-0005 / GR-02 | `gr_brg_temp` | degC | 30–62 | <30 low; >62 high | 없음 |
 | EQ-0005 / GR-02 | `gr_current` | A | 18–30 | <18 low; >30 high | 없음 |
+| EQ-0005 / GR-02 | `gr_oil_level` | pct | 70–100 | <70 low; >100 high | 없음 |
+| EQ-0005 / GR-02 | `gr_rpm` | rpm | 900–1100 | <900 low; >1100 high | 없음 |
+| EQ-0005 / GR-02 | `gr_oil_leak` | bool | 0 (정상); 1은 감지 | 0 normal; 1 high (유효값 0/1) | 없음 |
 | EQ-0006 / RT-01 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0006 / RT-01 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
+| EQ-0006 / RT-01 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0006 / RT-01 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0007 / RT-02 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0007 / RT-02 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
 | EQ-0007 / RT-02 | `rt_lift_delay` | min | 0–0.05 | <0 low; >0.05 high | 없음 |
+| EQ-0007 / RT-02 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0007 / RT-02 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0008 / RT-03 | `rt_speed` | m_min | 20–120 | <20 low; >120 high | 없음 |
 | EQ-0008 / RT-03 | `rt_clamp_press` | bar | 95–115 | <95 low; >115 high | 없음 |
 | EQ-0008 / RT-03 | `rt_motor_current` | A | 8–16 | <8 low; >16 high | 없음 |
+| EQ-0008 / RT-03 | `rt_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0009 / CV-01 | `cv_speed` | m_min | 10–60 | <10 low; >60 high | 없음 |
 | EQ-0009 / CV-01 | `cv_belt_tension` | kPa | 380–460 | <380 low; >460 high | 없음 |
 | EQ-0009 / CV-01 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
+| EQ-0009 / CV-01 | `cv_motor_current` | A | 10–20 | <10 low; >20 high | 없음 |
+| EQ-0009 / CV-01 | `cv_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 | EQ-0010 / CV-02 | `cv_queue_len` | pct | 0–70 | <0 low; >70 high | 없음 |
+| EQ-0010 / CV-02 | `cv_speed` | m_min | 8–12 | <8 low; >12 high | 없음 |
+| EQ-0010 / CV-02 | `cv_motor_current` | A | 10–20 | <10 low; >20 high | 없음 |
+| EQ-0010 / CV-02 | `cv_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 
 ## CAU·PDP 보강 신호와 T2 작성 기준
 
 보강 신호 4개는 기준정보 JSON의 측정점이 아니라 [`ADDITIONAL_SIGNALS`](../../shiftlink/mes/scenarios/priority.py)의 가상 시연 정의에서 가져왔다. [`from_catalog()`](../../shiftlink/mes/configuration.py)가 확장한 구성에서 사용한다. 저장된 과거 run 구성에는 없을 수 있으므로 해당 run의 `config_id`와 실제 신호·단위·정상 범위를 우선 확인한다. 위 표의 범위를 다른 구성에 그대로 적용하지 않는다.
 
-| 설비 / 카드 필드 | 보강 신호 | 의미 | 검색 조건 후보 | 적용 시 확인할 점 |
-| --- | --- | --- | --- | --- |
-| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `air_flow` | 압축공기 유량 | `air_flow_state == low` | 정지 중 0이 생성된다. 낮은 유량만으로 고장·누설을 확정하지 않는다. |
-| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `compressor_current` | 압축기 전류 | `compressor_current_state == high` | 정지 중 0은 low로 분류될 수 있다. 전류만으로 과부하 원인을 확정하지 않는다. |
-| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `bus_current` | 배전반 전류 | `bus_current_state == high` | 가상 정상 범위 초과이며 차단기 정격·설정값이나 전기작업 허가 기준이 아니다. |
-| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `breaker_trip` | 차단기 트립 상태, 숫자 0/1 | `breaker_trip == 1`, `unit="bool"` | `true/false` 관측값은 현재 어댑터가 조건 입력에서 제외한다. 트립 표시만으로 무전압·작업 안전을 판정하지 않는다. |
+| 설비 / 카드 필드 | 보강 신호 | 의미 | 시나리오 이상 관측값 | 검색 조건 후보 | 적용 시 확인할 점 |
+| --- | --- | --- | --- | --- | --- |
+| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `air_flow` | 압축공기 유량 | 70 L_min (low) | `air_flow < 100`, `unit="L_min"` | 정지 중 0이 생성된다. 낮은 유량만으로 고장·누설을 확정하지 않는다. |
+| CAU-01 / `equipment="CAU"`, `mes_equipment_id="EQ-0003"` | `compressor_current` | 압축기 전류 | 22 A (high) | `compressor_current > 16`, `unit="A"` | 정지 중 0은 low로 분류될 수 있다. 전류만으로 과부하 원인을 확정하지 않는다. |
+| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `bus_current` | 배전반 전류 | 55 A (high) | `bus_current > 40`, `unit="A"` | 가상 정상 범위 초과이며 차단기 정격·설정값이나 전기작업 허가 기준이 아니다. |
+| PDP-01 / `equipment="PDP"`, `mes_equipment_id="EQ-0002"` | `breaker_trip` | 차단기 트립 상태, 숫자 0/1 | 1 bool (트립) | `breaker_trip == 1`, `unit="bool"` | `true/false` 관측값은 현재 어댑터가 조건 입력에서 제외한다. 트립 표시만으로 무전압·작업 안전을 판정하지 않는다. |
 
 파생 상태 조건의 `unit`은 `null`이다. `breaker_trip_state == high`도 현재 수치 판정으로 생성되지만, 트립 조건은 숫자 `1`과의 일치를 사용해 의도를 명시한다. 정상 범위 0–0을 처리하는 어댑터는 음수나 1 초과도 low/high로 분류할 수 있으므로, 작성·검수 시 트립 관측값이 0/1인지 확인한다. 신호가 없거나 품질·단위가 맞지 않으면 정상이나 미트립으로 대체하지 않고 `unverified`로 남긴다.
 
 아래는 **검수용 T2 검색 조건 조합**이다. 원문 근거에서 해당 조건에 따라 요령이 달라지는 것이 확인된 카드에만 사용한다. 신호 조합 자체는 고장 원인이나 조치의 근거가 아니다. 같은 카드의 `conditions`는 모두 충족해야 하므로 두 신호 중 하나만 이상인 사례까지 다루려는 카드에 그대로 붙이지 않는다.
 
-CAU: 압력 저하와 압축기 전류 상승이 함께 관측된 상황의 후보:
+CAU: 압력 저하와 압축기 전류 상승이 함께 관측된 상황의 후보. 기본 가상 정상 범위 기준이며 550 kPa·16 A의 경계값은 조건에 포함하지 않는다:
 
 ```json
 [
-  {"signal":"air_pressure_state","op":"==","value":"low","unit":null},
-  {"signal":"compressor_current_state","op":"==","value":"high","unit":null}
+  {"signal":"air_pressure","op":"<","value":550,"unit":"kPa"},
+  {"signal":"compressor_current","op":">","value":16,"unit":"A"}
 ]
 ```
 
-PDP: 버스 전압 저하와 차단기 트립이 함께 관측된 상황의 후보:
+PDP: 버스 전압 저하와 차단기 트립이 함께 관측된 상황의 후보. 기본 가상 정상 범위 기준이며 97 pct의 경계값은 조건에 포함하지 않는다:
 
 ```json
 [
-  {"signal":"bus_voltage_state","op":"==","value":"low","unit":null},
+  {"signal":"bus_voltage","op":"<","value":97,"unit":"pct"},
   {"signal":"breaker_trip","op":"==","value":1,"unit":"bool"}
 ]
 ```
 
+### MES 이상 시나리오에 적용한 수치
+
+아래 수치는 [`PRIORITY_SCENARIOS`](../../shiftlink/mes/scenarios/priority.py)에 적용한 **가상 이상 관측값**이다. 정상 범위는 유지하고, 선택한 시나리오가 해당 설비의 측정값을 아래 값으로 바꾼다. 제조사 임계값이나 실제 사고 측정값으로 표시하지 않는다.
+
+| 시나리오 / 원인 설비 | 신호 | 정상 범위 | 주입값 | 판정 |
+| --- | --- | --- | --- | --- |
+| `cau_supply_fault` / CAU-01 | `air_pressure` | 550–700 kPa | 450 kPa | low |
+| `cau_supply_fault` / CAU-01 | `air_flow` | 100–150 L_min | 70 L_min | low |
+| `cau_supply_fault` / CAU-01 | `compressor_current` | 8–16 A | 22 A | high |
+| `pdp_trip` / PDP-01 | `bus_voltage` | 97–103 pct | 90 pct | low |
+| `pdp_trip` / PDP-01 | `bus_current` | 20–40 A | 55 A | high |
+| `pdp_trip` / PDP-01 | `breaker_trip` | 0 bool | 1 bool | 트립 (파생 상태 high) |
+
+기본 구성에서 CAU 시나리오는 `AL-AIR-LOW` 알람과 CV-01의 `pneumatic_supply_low` 대기를, PDP 시나리오는 `AL-PDP-TRIP` 알람과 GR-01·GR-02·HPU-01의 `power_supply_fault` 대기를 생성한다. 엔진은 직접 공급 관계만 적용하며, 지연 시간이나 하위 설비로의 연쇄 전파를 보장하지 않는다. 명시적으로 주입한 이상 관측값은 원인 설비가 정지해도 유지된다.
+
+`recover()` 후 2 ticks가 완료되면 정상 관측값으로 복귀한다. 이 복귀는 시뮬레이션 상태 전환이며, 실제 정비·전기작업 안전 확인을 뜻하지 않는다. 새 구성에는 시나리오가 추가되므로 `config_id`가 달라진다. 과거 run에 저장된 구성은 변경하지 않는다. 기존 승인 카드와의 연결은 미정이며 신호 대응표의 `unlinked`에 기록한다.
+
 `bus_voltage`의 단위 `pct`는 가상 백분율이다. 기준 전압이 확인되지 않은 상태에서 V로 환산하지 않는다. T2 카드 본문의 진단·조치에는 승인된 출처와 적용 범위가 별도로 필요하다. PDP T5 카드의 전기작업 금기·절차에는 공식 안전 자료의 적용 조항 검토가 필요하며, 이 신호 표로 안전 근거를 대신하지 않는다.
+
+## 전체 센서별 가상 이상 관측값
+
+2026-09-30 기본 런타임 구성은 **10대 설비·46개 센서 위치**다. 기존 시나리오가 수치를 직접 주입하던 위치는 12개였으며, 전체 46개에 독립 센서 시연 시나리오를 추가했다. 같은 신호 이름이 여러 설비에 있어도 별도 위치로 센다. 시나리오 ID는 `sensor_anomaly_<설비 ID>_<신호 이름>`이며, 예를 들어 `sensor_anomaly_EQ-0005_gr_current`는 GR-02에만 적용한다.
+
+각 시나리오는 지정한 센서 한 개에 수치를 명시적으로 주입한다. 가상 관측 채널을 검증하는 시연이며 고장 원인·정비 조치를 증명하지 않는다. 원인 설비가 정지하므로 다른 운동 의존 센서는 0이 될 수 있다. 이 동반 low는 별도의 이상 수치를 주입한 것으로 세지 않는다. 센서 시연은 공급 관계로 전파하지 않으며 `AL-SENSOR-ANOMALY` 알람을 지정 설비에 생성한다. 기존 9개 공정 시나리오는 유지한다.
+
+수치는 현재 정상 경계의 20% 아래(low) 또는 25% 위(high)를 사용하고 소수 셋째 자리로 반올림한다. 기본 구성의 트립·누유 감지는 숫자 1, 오일 레벨은 0–100 안의 낮은 값, 하한 0인 연속 센서는 양수 high로 생성한다. 모든 수치는 가상 시연 가정이며 제조사 임계값이 아니다. 구성의 정상 범위가 바뀌면 새 시나리오의 수치와 카드 조건을 다시 검수한다. 정상 범위가 없는 센서나 0/1 모두 정상인 논리 센서는 이 숫자 생성 규칙의 대상이 아니다. 사용자 구성의 논리 정상값이 1이면 반대값 0을 쓰며, 반올림으로 낮은 수치가 정상 경계에 들어가면 하한보다 0.001 낮은 비음수 값으로 보정한다.
+
+| 설비 | 센서 | 단위 | 가상 정상 범위 | 명시적 이상 주입값 | 판정 | 숫자 조건 후보 |
+| --- | --- | --- | --- | --- | --- | --- |
+| HPU-01 (EQ-0001) | `hpu_pressure` | bar | 145–165 | 116 | low | `hpu_pressure < 145` |
+| HPU-01 (EQ-0001) | `hpu_oil_temp` | degC | 35–58 | 72.5 | high | `hpu_oil_temp > 58` |
+| HPU-01 (EQ-0001) | `hpu_filter_dp` | bar | 0–1.2 | 1.5 | high | `hpu_filter_dp > 1.2` |
+| HPU-01 (EQ-0001) | `hpu_flow` | L_min | 38–46 | 30.4 | low | `hpu_flow < 38` |
+| HPU-01 (EQ-0001) | `hpu_oil_level` | pct | 70–100 | 56 | low | `hpu_oil_level < 70` |
+| HPU-01 (EQ-0001) | `hpu_pump_current` | A | 15–25 | 31.25 | high | `hpu_pump_current > 25` |
+| PDP-01 (EQ-0002) | `bus_voltage` | pct | 97–103 | 77.6 | low | `bus_voltage < 97` |
+| PDP-01 (EQ-0002) | `bus_current` | A | 20–40 | 50 | high | `bus_current > 40` |
+| PDP-01 (EQ-0002) | `breaker_trip` | bool | 0–0 | 1 | high | `breaker_trip == 1` |
+| CAU-01 (EQ-0003) | `air_pressure` | kPa | 550–700 | 440 | low | `air_pressure < 550` |
+| CAU-01 (EQ-0003) | `air_flow` | L_min | 100–150 | 80 | low | `air_flow < 100` |
+| CAU-01 (EQ-0003) | `compressor_current` | A | 8–16 | 20 | high | `compressor_current > 16` |
+| GR-01 (EQ-0004) | `gr_vib_rms` | mm_s | 0.5–2.8 | 3.5 | high | `gr_vib_rms > 2.8` |
+| GR-01 (EQ-0004) | `gr_brg_temp` | degC | 30–62 | 77.5 | high | `gr_brg_temp > 62` |
+| GR-01 (EQ-0004) | `gr_current` | A | 18–30 | 37.5 | high | `gr_current > 30` |
+| GR-01 (EQ-0004) | `gr_oil_level` | pct | 70–100 | 56 | low | `gr_oil_level < 70` |
+| GR-01 (EQ-0004) | `gr_rpm` | rpm | 900–1100 | 720 | low | `gr_rpm < 900` |
+| GR-01 (EQ-0004) | `gr_oil_leak` | bool | 0–0 | 1 | high | `gr_oil_leak == 1` |
+| GR-02 (EQ-0005) | `gr_vib_rms` | mm_s | 0.5–2.8 | 3.5 | high | `gr_vib_rms > 2.8` |
+| GR-02 (EQ-0005) | `gr_brg_temp` | degC | 30–62 | 77.5 | high | `gr_brg_temp > 62` |
+| GR-02 (EQ-0005) | `gr_current` | A | 18–30 | 37.5 | high | `gr_current > 30` |
+| GR-02 (EQ-0005) | `gr_oil_level` | pct | 70–100 | 56 | low | `gr_oil_level < 70` |
+| GR-02 (EQ-0005) | `gr_rpm` | rpm | 900–1100 | 720 | low | `gr_rpm < 900` |
+| GR-02 (EQ-0005) | `gr_oil_leak` | bool | 0–0 | 1 | high | `gr_oil_leak == 1` |
+| RT-01 (EQ-0006) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-01 (EQ-0006) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-01 (EQ-0006) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-01 (EQ-0006) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| RT-02 (EQ-0007) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-02 (EQ-0007) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-02 (EQ-0007) | `rt_lift_delay` | min | 0–0.05 | 0.062 | high | `rt_lift_delay > 0.05` |
+| RT-02 (EQ-0007) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-02 (EQ-0007) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| RT-03 (EQ-0008) | `rt_speed` | m_min | 20–120 | 16 | low | `rt_speed < 20` |
+| RT-03 (EQ-0008) | `rt_clamp_press` | bar | 95–115 | 76 | low | `rt_clamp_press < 95` |
+| RT-03 (EQ-0008) | `rt_motor_current` | A | 8–16 | 20 | high | `rt_motor_current > 16` |
+| RT-03 (EQ-0008) | `rt_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `rt_vib_rms > 1.8` |
+| CV-01 (EQ-0009) | `cv_speed` | m_min | 10–60 | 8 | low | `cv_speed < 10` |
+| CV-01 (EQ-0009) | `cv_belt_tension` | kPa | 380–460 | 575 | high | `cv_belt_tension > 460` |
+| CV-01 (EQ-0009) | `cv_queue_len` | pct | 0–70 | 87.5 | high | `cv_queue_len > 70` |
+| CV-01 (EQ-0009) | `cv_motor_current` | A | 10–20 | 25 | high | `cv_motor_current > 20` |
+| CV-01 (EQ-0009) | `cv_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `cv_vib_rms > 1.8` |
+| CV-02 (EQ-0010) | `cv_queue_len` | pct | 0–70 | 87.5 | high | `cv_queue_len > 70` |
+| CV-02 (EQ-0010) | `cv_speed` | m_min | 8–12 | 6.4 | low | `cv_speed < 8` |
+| CV-02 (EQ-0010) | `cv_motor_current` | A | 10–20 | 25 | high | `cv_motor_current > 20` |
+| CV-02 (EQ-0010) | `cv_vib_rms` | mm_s | 0.8–1.8 | 2.25 | high | `cv_vib_rms > 1.8` |
+
+숫자 조건의 `unit`은 표의 단위와 같아야 한다. 정상 경계값은 이상 조건에 포함하지 않는다. `quality=good`·유한 숫자·정확한 단위가 확인되지 않으면 `unverified`로 남긴다. `recover()` 후 2 ticks에 모의 정상 상태로 복귀한다. 기존 승인 카드와의 연결은 `unlinked`이며 카드 본문·출처 승인을 대신하지 않는다.
 
 ## 부품 코드
 
@@ -129,6 +223,14 @@ PDP: 버스 전압 저하와 차단기 트립이 함께 관측된 상황의 후�
 첫 예시는 `K-1025`처럼 베어링부 온도 상승이 직접 관련된 카드의 **검수용 후보**다. 카드에 실제로 추가하면 온도가 정상인 경우 검색에서 제외되므로 적용 범위 검수가 필요하다. 원문 절차·수치·출처는 `know_how`와 `provenance.sources`에 그대로 둔다. `K-1029`의 300 ppm은 원문 수분 점검 수치이며 `gr_brg_temp_state`와 관계없다. `K-1025`에는 300 ppm 조건이 없다.
 
 조건을 붙이면 안 되는 예: `K-1007`의 `fluid_viscosity > 2000 cSt`를 `hpu_oil_temp_state == low`로 바꾸기. 점도 측정점은 카탈로그에 없고, 저온만으로 점도를 추정할 수 없다. 기존 조건은 신호가 없을 때 `unverified`로 남는다.
+
+## 논문을 참고한 증상 조합 시연 (2026-09-30)
+
+[논문 조사·주입값 표](../research/mes-symptom-screening.md)에 HPU·CAU·PDP·GR·RT·CV의 15개 관측 조합과 설비별 시나리오 22개를 기록했다. 기존 공정 9개·독립 센서 46개와 합쳐 기본 구성은 총 77개다. 이 추가분은 여러 신호의 방향과 정상 대조 신호를 함께 관측해 원인 후보와 추가 확인 항목을 표시한다. 센서 하나의 범위 이탈을 곧바로 원인으로 확정하지 않는다.
+
+CAU는 압력↓·유량↓와 압력↓·공급 총유량↑를 분리하며 후자는 누설 또는 수요 증가 후보다. PDP는 트립 전 전류 상승과 트립 후 전류 0을 분리한다. 기존 `pdp_trip`의 55 A·트립 1 동시 주입은 합성 채널 테스트이며 트립 후 실제 전류의 근거가 아니다. 모든 숫자 경계와 3회 연속 관측 설정은 가상 구성 기준이다. 논문이 제시한 제조사 임계값이나 실제 진단 정확도로 표시하지 않는다.
+
+신규 시나리오는 `unlinked`로 유지한다. 관측 조합은 MES 상태 API·운영 화면에 제공하며 승인 카드의 조건·출처 승인·계보 등록을 대신하지 않는다. 논문과 프로젝트 가설, 설치 위치·파형 등 부족한 근거는 조사 문서와 결과의 `limitation`에 명시한다.
 
 ## 어댑터 사용과 검수 대기
 

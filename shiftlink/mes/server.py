@@ -74,6 +74,7 @@ class MesService:
             return json.loads(json.dumps(asdict(self.engine.snapshot), default=_json)) | {
                 "speed": self.speed,
                 "config_id": self.active_config.config_id,
+                "symptom_diagnostics": self.engine.symptom_diagnostics(),
             }
 
     def events(self, after_sequence: int) -> dict[str, object]:
@@ -125,10 +126,10 @@ class MesService:
             leftover = [dict(coil) for coil in self.engine.snapshot.coils]
             old_config_id = self.active_config.config_id
             try:
-                self.storage.save_configuration(draft.config_id, json.dumps(configuration.to_payload(draft), sort_keys=True, ensure_ascii=False))
                 new_run = Run.create(seed=previous_run.seed, config_id=draft.config_id)
-                self.storage.create_run(new_run)
-                self.storage.record_config_change({
+                new_engine = MesEngine(new_run, draft)
+                self.storage.apply_configuration(draft.config_id,
+                    json.dumps(configuration.to_payload(draft), sort_keys=True, ensure_ascii=False), new_run, {
                     **base, "applied_at": utc_now().isoformat(),
                     "base_config_id": old_config_id, "new_config_id": draft.config_id,
                     "status": "applied", "run_id": new_run.run_id,
@@ -142,7 +143,7 @@ class MesService:
                 raise
             # Swap in-memory state only after every write succeeded.
             self.active_config = draft
-            self.engine = MesEngine(new_run, draft)
+            self.engine = new_engine
             self._saved_sequences = set()
             return {"run_id": new_run.run_id, "config_id": draft.config_id,
                     "previous_run_id": previous_run.run_id, "leftover_coils": leftover,

@@ -1,0 +1,46 @@
+{
+ "batch_id": "KB-20260930-T4",
+ "seed": 20260930,
+ "source_instruction": {
+  "path": "docs/collaboration/t4-handover-cards-prompt-20260930.md",
+  "sha256": "b37bfb6c9580f29b4325b256be4610921a7cce19b23bbec374622ba10c959941"
+ },
+ "assignment": {
+  "path": "docs/collaboration/t4-handover-cards-assignment-20260930.md",
+  "sha256": "cc768a4ad29fd4a475a2545f642371e94089660de7a2305465d6d0620741f34d"
+ },
+ "prompts": {
+  "stage-a-records": {
+   "path": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-a-records.md",
+   "sha256": "0a2d10a93a962aafc0b586e5e5e09551817d6283874e3d405849df8b8592d0f9",
+   "model": "claude-opus-5[1m]",
+   "run_at": "2026-09-29T17:46:37+09:00",
+   "outputs": [
+    "events.json",
+    "artifacts.json"
+   ]
+  },
+  "stage-b-cards": {
+   "path": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md",
+   "sha256": "c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+   "model": "claude-opus-5[1m]",
+   "run_at": "2026-09-29T17:46:37+09:00",
+   "outputs": [
+    "cards.json"
+   ],
+   "card_ids": [
+    "K-1101",
+    "K-1102",
+    "K-1103",
+    "K-1104",
+    "K-1105",
+    "K-1106",
+    "K-1107",
+    "K-1108",
+    "K-1109",
+    "K-1110",
+    "K-1111"
+   ]
+  }
+ }
+}

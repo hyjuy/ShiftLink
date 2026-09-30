@@ -1,0 +1,690 @@
+{
+ "batch_id": "KB-20260930-T4",
+ "seed": 20260930,
+ "generator": "plan.py",
+ "handover_elements": [
+  "current_state",
+  "prior_action",
+  "failed_attempt",
+  "unresolved",
+  "next_check"
+ ],
+ "card_id_start": "K-1101",
+ "events": [
+  {
+   "event_id": "EV-0301",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S2",
+   "persona_id": "V-12",
+   "mes_scenario": "hydraulic_fault",
+   "signal_focus": [
+    "hpu_pressure"
+   ],
+   "cards_expected": [
+    "K-1001"
+   ],
+   "artifact_ids": [
+    "AR-0301",
+    "AR-0302"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "압력 저하 알람. 출구 압력 없음 확인 순서로 이어진다"
+  },
+  {
+   "event_id": "EV-0302",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S3",
+   "persona_id": "V-11",
+   "mes_scenario": "hydraulic_fault",
+   "signal_focus": [
+    "hpu_pressure",
+    "hpu_flow"
+   ],
+   "cards_expected": [
+    "K-1004"
+   ],
+   "artifact_ids": [
+    "AR-0303",
+    "AR-0304"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "압력·유량 미달 + 소음·우유빛 거품은 작업자 관측으로만 기록(MES 신호 없음)"
+  },
+  {
+   "event_id": "EV-0303",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S1",
+   "persona_id": "V-11",
+   "mes_scenario": "hydraulic_overheat",
+   "signal_focus": [
+    "hpu_oil_temp"
+   ],
+   "cards_expected": [
+    "K-1002"
+   ],
+   "artifact_ids": [
+    "AR-0305",
+    "AR-0306"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "유온 상승. 냉각기 계통 확인 순서"
+  },
+  {
+   "event_id": "EV-0304",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": "gearbox_overheat",
+   "signal_focus": [
+    "gr_brg_temp"
+   ],
+   "cards_expected": [
+    "K-1025"
+   ],
+   "artifact_ids": [
+    "AR-0307",
+    "AR-0308"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "document",
+   "ack_note": "인수자가 전원 차단·재기동 방지 상태를 확인하고 정비 기록에 이름을 적음",
+   "design_note": "베어링부 온도 상승. 오일 상태·베어링 확인"
+  },
+  {
+   "event_id": "EV-0305",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": "drive_fault",
+   "signal_focus": [
+    "gr_vib_rms"
+   ],
+   "cards_expected": [
+    "K-1024"
+   ],
+   "artifact_ids": [
+    "AR-0309",
+    "AR-0310"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "document",
+   "ack_note": "정지·재가동 보류 상태를 인수자가 정비 오더에 확인 기재",
+   "design_note": "진동 상승. 주 모터 정지 후 원인 확인"
+  },
+  {
+   "event_id": "EV-0306",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-11",
+   "mes_scenario": "gearbox_leak",
+   "signal_focus": [
+    "gr_oil_leak"
+   ],
+   "cards_expected": [
+    "K-1027"
+   ],
+   "artifact_ids": [
+    "AR-0311",
+    "AR-0312"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "누유 검출. 위치별 확인(커버·오일실·드레인·브리더)"
+  },
+  {
+   "event_id": "EV-0307",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S1",
+   "persona_id": "V-11",
+   "mes_scenario": "hydraulic_fault",
+   "signal_focus": [
+    "hpu_pressure",
+    "hpu_flow"
+   ],
+   "cards_expected": [
+    "K-1001",
+    "K-1004"
+   ],
+   "artifact_ids": [
+    "AR-0313",
+    "AR-0314"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "verbal",
+   "ack_note": "받는 조가 '필터는 원인 아님'을 짚어 되묻고 확인",
+   "design_note": "압력 저하가 교대 넘어 이어진 사건. 앞 조 조치 결과를 인계받아 재확인"
+  },
+  {
+   "event_id": "EV-0308",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-11",
+   "mes_scenario": "gearbox_overheat",
+   "signal_focus": [
+    "gr_brg_temp",
+    "gr_current"
+   ],
+   "cards_expected": [
+    "K-1024",
+    "K-1025"
+   ],
+   "artifact_ids": [
+    "AR-0315",
+    "AR-0316"
+   ],
+   "omitted_handover_element": "next_check",
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "온도·전류 동반 상승. 정지 판단과 정비 요청이 교대에 걸친다"
+  },
+  {
+   "event_id": "EV-0309",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S2",
+   "persona_id": "V-12",
+   "mes_scenario": "hydraulic_overheat",
+   "signal_focus": [
+    "hpu_oil_temp"
+   ],
+   "cards_expected": [
+    "K-1002"
+   ],
+   "artifact_ids": [
+    "AR-0317",
+    "AR-0318"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "유온 상승 재발. 앞 조 조치(쿨러 냉각수 확인) 결과 인계"
+  },
+  {
+   "event_id": "EV-0310",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-02",
+   "scenario": "S1",
+   "persona_id": "V-11",
+   "mes_scenario": "gearbox_leak",
+   "signal_focus": [
+    "gr_oil_leak"
+   ],
+   "cards_expected": [
+    "K-1027"
+   ],
+   "artifact_ids": [
+    "AR-0319",
+    "AR-0320"
+   ],
+   "omitted_handover_element": "unresolved",
+   "ack_method": "verbal_no_time",
+   "ack_note": "구두로 짚어 넘겼으나 확인 시각을 적지 않음",
+   "design_note": "GR-02 누유. engine은 GR-02에 시나리오를 걸지 않으므로 신호는 사람이 읽은 값으로 기록"
+  },
+  {
+   "event_id": "EV-0311",
+   "split": "kb",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-11",
+   "mes_scenario": "drive_fault",
+   "signal_focus": [
+    "gr_vib_rms"
+   ],
+   "cards_expected": [
+    "K-1024"
+   ],
+   "artifact_ids": [
+    "AR-0321",
+    "AR-0322"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "진동 상승 + 갈리는 소리(관측). 정비 대기 상태를 인계"
+  },
+  {
+   "event_id": "EV-0312",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S3",
+   "persona_id": "V-12",
+   "mes_scenario": "hydraulic_fault",
+   "signal_focus": [
+    "hpu_pressure"
+   ],
+   "cards_expected": [
+    "K-1001"
+   ],
+   "artifact_ids": [
+    "AR-0323",
+    "AR-0324"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "checklist",
+   "ack_note": "재확인 시각을 체크리스트에 적고 인수자 확인 표시",
+   "design_note": "압력 저하. 필터 교체 후 미회복이라 재확인 시각을 넘긴다"
+  },
+  {
+   "event_id": "EV-0313",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S2",
+   "persona_id": "V-12",
+   "mes_scenario": null,
+   "signal_focus": [
+    "hpu_filter_dp"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0325",
+    "AR-0326"
+   ],
+   "omitted_handover_element": "current_state",
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "필터 차압만 상승. 카드 없음 -> 조치는 '정비 담당 확인'으로 둔다"
+  },
+  {
+   "event_id": "EV-0314",
+   "split": "kb",
+   "equipment": "CV",
+   "target_equipment": "CV-01",
+   "scenario": "S2",
+   "persona_id": "V-13",
+   "mes_scenario": "downstream_block",
+   "signal_focus": [
+    "cv_queue_len"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0327",
+    "AR-0328"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "적재 대기율 초과로 RT-03 인터록. 출측 정체는 카드 없음"
+  },
+  {
+   "event_id": "EV-0315",
+   "split": "kb",
+   "equipment": "CV",
+   "target_equipment": "CV-01",
+   "scenario": "S3",
+   "persona_id": "V-12",
+   "mes_scenario": null,
+   "signal_focus": [
+    "cv_belt_tension"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0329",
+    "AR-0330"
+   ],
+   "omitted_handover_element": "current_state",
+   "ack_method": "checklist",
+   "ack_note": "다음 조 확인 항목에 인수자 확인 표시",
+   "design_note": "벨트 장력 저하. 알람 없이 신호만 벗어난 사건"
+  },
+  {
+   "event_id": "EV-0316",
+   "split": "kb",
+   "equipment": "COMMON",
+   "target_equipment": "PDP-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": null,
+   "signal_focus": [
+    "bus_voltage"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0331",
+    "AR-0332"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "배전반 전압 저하. V-11은 문을 열지 않고 외부 순회 관측만 기록"
+  },
+  {
+   "event_id": "EV-0317",
+   "split": "kb",
+   "equipment": "CV",
+   "target_equipment": "CAU-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": null,
+   "signal_focus": [
+    "air_pressure"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0333",
+    "AR-0334"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "document",
+   "ack_note": "공압 저하 소견을 인수자가 읽고 정비 기록에 확인 기재",
+   "design_note": "공압 저하로 CV-01 디버터 동작 지연. 카드 없음"
+  },
+  {
+   "event_id": "EV-0318",
+   "split": "kb",
+   "equipment": "RT",
+   "target_equipment": "RT-03",
+   "scenario": "S2",
+   "persona_id": "V-11",
+   "mes_scenario": null,
+   "signal_focus": [
+    "rt_clamp_press"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0335",
+    "AR-0336"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "verbal",
+   "ack_note": "공급원 확인 결과를 구두로 짚어 전달",
+   "design_note": "클램프압 저하. RT는 MES 신호만 쓰고 승강부 구조를 가정하지 않는다"
+  },
+  {
+   "event_id": "EV-0319",
+   "split": "kb",
+   "equipment": "RT",
+   "target_equipment": "RT-03",
+   "scenario": "S3",
+   "persona_id": "V-12",
+   "mes_scenario": null,
+   "signal_focus": [
+    "rt_motor_current"
+   ],
+   "cards_expected": [
+    "K-1017"
+   ],
+   "artifact_ids": [
+    "AR-0337",
+    "AR-0338"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "모터 전류 상승 + 롤러 쪽 끽끽 소리(관측). 롤러 베어링 의심"
+  },
+  {
+   "event_id": "EV-0320",
+   "split": "kb",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S2",
+   "persona_id": "V-12",
+   "mes_scenario": null,
+   "signal_focus": [
+    "hpu_pressure"
+   ],
+   "cards_expected": [
+    "K-1006"
+   ],
+   "artifact_ids": [
+    "AR-0339",
+    "AR-0340"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": "checklist_gap",
+   "ack_note": "인수 확인은 했으나 감압 항목이 서식에 없어 확인에서 빠짐",
+   "design_note": "정지 상태인데 MES 압력은 정상값으로 나온다. 감압 여부는 사람이 확인해 적어야 하는 인계 정보"
+  },
+  {
+   "event_id": "EV-0321",
+   "split": "dev",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S3",
+   "persona_id": "V-12",
+   "mes_scenario": "hydraulic_fault",
+   "signal_focus": [
+    "hpu_pressure"
+   ],
+   "cards_expected": [
+    "K-1001"
+   ],
+   "artifact_ids": [
+    "AR-0341",
+    "AR-0342"
+   ],
+   "omitted_handover_element": "next_check",
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 압력 저하"
+  },
+  {
+   "event_id": "EV-0322",
+   "split": "dev",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": "gearbox_overheat",
+   "signal_focus": [
+    "gr_brg_temp"
+   ],
+   "cards_expected": [
+    "K-1025"
+   ],
+   "artifact_ids": [
+    "AR-0343",
+    "AR-0344"
+   ],
+   "omitted_handover_element": "failed_attempt",
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 베어링 온도 상승"
+  },
+  {
+   "event_id": "EV-0323",
+   "split": "dev",
+   "equipment": "CV",
+   "target_equipment": "CV-01",
+   "scenario": "S3",
+   "persona_id": "V-12",
+   "mes_scenario": "downstream_block",
+   "signal_focus": [
+    "cv_queue_len"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0345",
+    "AR-0346"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 출측 정체"
+  },
+  {
+   "event_id": "EV-0324",
+   "split": "dev",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": "drive_fault",
+   "signal_focus": [
+    "gr_vib_rms"
+   ],
+   "cards_expected": [
+    "K-1024"
+   ],
+   "artifact_ids": [
+    "AR-0347",
+    "AR-0348"
+   ],
+   "omitted_handover_element": "unresolved",
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 진동 상승"
+  },
+  {
+   "event_id": "EV-0325",
+   "split": "dev",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S2",
+   "persona_id": "V-12",
+   "mes_scenario": "hydraulic_overheat",
+   "signal_focus": [
+    "hpu_oil_temp"
+   ],
+   "cards_expected": [
+    "K-1002"
+   ],
+   "artifact_ids": [
+    "AR-0349",
+    "AR-0350"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 유온 상승"
+  },
+  {
+   "event_id": "EV-0326",
+   "split": "dev",
+   "equipment": "RT",
+   "target_equipment": "RT-02",
+   "scenario": "S1",
+   "persona_id": "V-11",
+   "mes_scenario": null,
+   "signal_focus": [
+    "rt_speed",
+    "rt_lift_delay"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0351",
+    "AR-0352"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 반송 속도 저하와 승강 지연"
+  },
+  {
+   "event_id": "EV-0327",
+   "split": "dev",
+   "equipment": "GR",
+   "target_equipment": "GR-01",
+   "scenario": "S3",
+   "persona_id": "V-13",
+   "mes_scenario": "gearbox_leak",
+   "signal_focus": [
+    "gr_oil_leak"
+   ],
+   "cards_expected": [
+    "K-1027"
+   ],
+   "artifact_ids": [
+    "AR-0353",
+    "AR-0354"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 누유"
+  },
+  {
+   "event_id": "EV-0328",
+   "split": "dev",
+   "equipment": "COMMON",
+   "target_equipment": "PDP-01",
+   "scenario": "S1",
+   "persona_id": "V-11",
+   "mes_scenario": null,
+   "signal_focus": [
+    "bus_voltage"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0355",
+    "AR-0356"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 전압 저하"
+  },
+  {
+   "event_id": "EV-0329",
+   "split": "dev",
+   "equipment": "CV",
+   "target_equipment": "CV-01",
+   "scenario": "S2",
+   "persona_id": "V-13",
+   "mes_scenario": null,
+   "signal_focus": [
+    "cv_belt_tension",
+    "cv_speed"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0357",
+    "AR-0358"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 장력·속도 저하"
+  },
+  {
+   "event_id": "EV-0330",
+   "split": "dev",
+   "equipment": "HPU",
+   "target_equipment": "HPU-01",
+   "scenario": "S3",
+   "persona_id": "V-11",
+   "mes_scenario": null,
+   "signal_focus": [
+    "hpu_filter_dp"
+   ],
+   "cards_expected": [],
+   "artifact_ids": [
+    "AR-0359",
+    "AR-0360"
+   ],
+   "omitted_handover_element": null,
+   "ack_method": null,
+   "ack_note": null,
+   "design_note": "평가용. 필터 차압 상승"
+  }
+ ]
+}

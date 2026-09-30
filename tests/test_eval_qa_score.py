@@ -33,6 +33,25 @@ def test_unanswerable_abstain():
     assert not s["abstain_ok"] and s["wrong_cite_rate"] == 1.0
 
 
+def test_execution_error_is_not_abstain_success():
+    label = {"answerable": False, "primary_card_ids": [], "acceptable_card_ids": [], "safety_card_ids": []}
+    assert not score_item(label, out([]), error="RuntimeError: down")["abstain_ok"]
+
+    class Boom:
+        def run(self, payload):
+            raise RuntimeError("down")
+
+    item = {
+        "qid": "Q-000", "eq_id": "HPU-01", "question": "막힌 질문", "observations": {},
+        "answerable": False, "primary_card_ids": [], "acceptable_card_ids": [], "safety_card_ids": [],
+    }
+    rows = run([item], Boom())
+    assert rows[0]["error"].startswith("RuntimeError")
+    assert rows[0]["cited"] == []
+    assert rows[0]["score"]["abstain_ok"] is False
+    assert summarize(rows)["abstain_ok"] == 0.0 and summarize(rows)["errors"] == 1
+
+
 def test_handover_mode_sends_memo_and_keeps_handover_method():
     item = json.loads(T4_DEV.read_text(encoding="utf-8"))[0]
     assert payload(item, "handover", "B") == {"memo_text": item["question"], "shift": "B", "eq_ids": [item["eq_id"]]}

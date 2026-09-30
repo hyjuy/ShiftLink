@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 from shiftlink.agent.schemas import KnowledgeCard  # noqa: E402
 
 index = json.loads((HERE / "prompts" / "index.json").read_text(encoding="utf-8"))
-plan = {s["card_id"]: s for s in json.loads((HERE / "plan.json").read_text(encoding="utf-8"))["slots"]}
+plan = {s["card_id"]: s for s in json.loads((HERE / "plan.json").read_text(encoding="utf-8"))["slots"] if not s.get("dropped")}
 
 cards, rows, problems = [], [], []
 for key, meta in index["prompts"].items():

@@ -1,6 +1,6 @@
 [
   {
-    "card_id": "K-1316",
+    "card_id": "K-1315",
     "version": "1.0-draft-KB-20260930-D",
     "grade": "L0",
     "tacit_type": "T1",
@@ -52,7 +52,7 @@
     "safety_review": null
   },
   {
-    "card_id": "K-1317",
+    "card_id": "K-1316",
     "version": "1.0-draft-KB-20260930-D",
     "grade": "L0",
     "tacit_type": "T1",
@@ -104,7 +104,7 @@
     "safety_review": null
   },
   {
-    "card_id": "K-1318",
+    "card_id": "K-1317",
     "version": "1.0-draft-KB-20260930-D",
     "grade": "L0",
     "tacit_type": "T3",
@@ -220,7 +220,7 @@
     "safety_review": null
   },
   {
-    "card_id": "K-1319",
+    "card_id": "K-1318",
     "version": "1.0-draft-KB-20260930-D",
     "grade": "L0",
     "tacit_type": "T3",
@@ -348,7 +348,7 @@
     "safety_review": null
   },
   {
-    "card_id": "K-1320",
+    "card_id": "K-1319",
     "version": "1.0-draft-KB-20260930-D",
     "grade": "L0",
     "tacit_type": "T5",

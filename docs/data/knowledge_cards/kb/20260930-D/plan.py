@@ -46,6 +46,19 @@ for eq, rows in TABLE_R3.items():
                       "tacit_type": t, "hint": hint, "round": 3})
         next_id += 1
 
+# 2026-09-30 renumbering (user request): the skipped K-1312 slot (CAU T1 이상음·진동 — no source basis) is dropped
+# and later cards move up one number. Prompts were dispatched with the old IDs, so each slot keeps "generated_as"
+# and render_prompts.py renders the old IDs to reproduce the dispatched prompt bytes (sha256 in prompts/index.json).
+DROPPED = {"K-1312"}
+next_id = FIRST_ID
+for s in slots:
+    if s["card_id"] in DROPPED:
+        s["generated_as"], s["card_id"], s["dropped"] = s["card_id"], None, True
+        continue
+    if s["card_id"] != f"K-{next_id}":
+        s["generated_as"], s["card_id"] = s["card_id"], f"K-{next_id}"
+    next_id += 1
+
 out = {"batch_id": BATCH, "seed": SEED, "generator": "plan.py", "slots": slots}
 Path(__file__).with_name("plan.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps({eq: [s["tacit_type"] for s in slots if s["equipment"] == eq] for eq in TABLE}, ensure_ascii=False))

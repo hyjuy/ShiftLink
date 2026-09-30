@@ -54,17 +54,18 @@ for key, eq, rnd, sources in jobs:
     slots = [s for s in plan["slots"] if s["equipment"] == eq and s.get("round", 1) == rnd]
     if rnd == 2:
         slots += [s for s in plan["slots"] if s["card_id"] in RETRY.get(eq, [])]
+    gen = lambda s: s.get("generated_as") or s["card_id"]  # IDs as dispatched (before renumbering)
     path = f"{REL}/prompts/{key}.md"
     text = (tpl.replace("{PROMPT_ID}", f"{plan['batch_id']}/{key}")
                .replace("{EQ}", eq)
                .replace("{MES_ID}", MES_ID[eq])
                .replace("{PROMPT_PATH}", path)
-               .replace("{SLOTS}", "\n".join(f"- {s['slot']} · {s['card_id']} · {s['tacit_type']} · {s['hint']}" for s in slots))
+               .replace("{SLOTS}", "\n".join(f"- {s['slot']} · {gen(s)} · {s['tacit_type']} · {s['hint']}" for s in slots))
                .replace("{SOURCES}", "\n".join(f"- {x}" for x in sources)))
     (HERE / "prompts" / f"{key}.md").write_text(text, encoding="utf-8", newline="\n")  # hash == file bytes
     index["prompts"][key] = {"path": path, "equipment": eq, "round": rnd,
                              "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-                             "card_ids": [s["card_id"] for s in slots]}
+                             "card_ids": [gen(s) for s in slots]}
 old = HERE / "prompts" / "index.json"
 if old.exists():
     for k, v in json.loads(old.read_text(encoding="utf-8")).items():

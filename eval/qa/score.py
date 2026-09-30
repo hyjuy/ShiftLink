@@ -21,7 +21,7 @@ from shiftlink.agent.tools import bind_tool_provider  # noqa: E402
 from shiftlink.edge.ollama import OllamaModel  # noqa: E402
 from shiftlink.rag.loader import load_card_provider  # noqa: E402
 
-KB = ROOT / "docs/data/knowledge_cards/kb/20260929-A/cards.json"
+KB = ROOT / "docs/data/knowledge_cards/kb/manifest.json"
 
 
 def score_item(item: dict, out: dict) -> dict:

@@ -4,6 +4,7 @@
 
 Primary  dev_route_acc: dev answerable Qs whose search rank-1 is a primary card
                         + dev unanswerable Qs that get no search result ("해당 지식 없음"), over all dev Qs.
+Handover t4_route_acc: the same on eval/qa/20260930-T4/qa_dev_t4.json (20 blind handover questions, dev only).
 Secondary sanity_route_acc: the same on sanity.json (card-derived 9/29 bench, answerable) + reserve.json (unanswerable).
 qa_test.json is never read here: it is for the final score only.
 """
@@ -18,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 from shiftlink.rag.loader import load_card_provider  # noqa: E402
 
 QA = ROOT / "eval/qa/20260929"
-KB = ROOT / "docs/data/knowledge_cards/kb/manifest.json"
+KB = ROOT / "docs/data/knowledge_cards/kb/kb_cards.json"
 
 
 def route(provider, item: dict) -> list[str]:
@@ -48,9 +49,13 @@ def main():
     sanity = load("sanity.json") + load("reserve.json")
     d, d_miss = score(provider, dev)
     s, s_miss = score(provider, sanity)
+    t4 = json.loads((QA.parent / "20260930-T4/qa_dev_t4.json").read_text(encoding="utf-8"))
+    h, h_miss = score(provider, t4)
     print(f"dev_route_acc: {d}/{len(dev)}")
+    print(f"t4_route_acc: {h}/{len(t4)}")
     print(f"sanity_route_acc: {s}/{len(sanity)}")
     print(f"dev_misses: {' '.join(d_miss)}")
+    print(f"t4_misses: {' '.join(h_miss)}")
     print(f"sanity_misses: {' '.join(s_miss)}")
 
 

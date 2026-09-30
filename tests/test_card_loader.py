@@ -170,13 +170,3 @@ def test_cli_answers_from_cards_through_ollama_adapter(tmp_path: Path, monkeypat
     text = capsys.readouterr().out
     assert "축압기 압력을 확인한다." in text
     assert "K-0001" in text
-
-
-def test_manifest_merges_batches_without_copies():
-    kb = Path(__file__).resolve().parents[1] / "docs/data/knowledge_cards/kb"
-    manifest = json.loads((kb / "manifest.json").read_text(encoding="utf-8"))
-    each = [load_card_provider(kb / item).seen for item in manifest["include"]]
-    loaded = load_card_provider(kb / "manifest.json")
-    assert loaded.seen == sum(each)
-    ids = [c.card_id for c in loaded.provider.cards]
-    assert len(ids) == len(set(ids))

@@ -17,7 +17,7 @@
 | 고정 (수정 금지) | `eval/qa/**`, `docs/data/knowledge_cards/**`, `shiftlink/agent/**`, `tests/**`, 이 파일 |
 | 주 지표 | `dev_route_acc` (개발용 30: 답 있는 문항은 검색 1위가 정답, 답 없는 문항은 검색 결과 없음) |
 | 보조 지표 | `sanity_route_acc` (9/29 20문항 + 예비 10) |
-| 기준선 | main `f71a77f`, KB 41장: dev **18/30**, sanity **26/30** |
+| 기준선 | main `f71a77f`, KB 41장(`kb_cards.json`): dev **18/30**, 인계 t4 **5/20**(보고용, 판정은 dev), sanity **26/30** |
 
 반복:
 1. 가설 하나를 정하고 `retrieval.py`를 고친다.

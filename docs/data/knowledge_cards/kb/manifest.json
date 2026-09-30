@@ -1,7 +1,0 @@
-{
- "_comment": "운영·평가가 싣는 KB. 배치를 추가하면 여기에 한 줄 넣는다. 카드를 복사하지 않는다(verify.py의 ID 충돌 검사).",
- "include": [
-  "20260929-A/cards.json",
-  "20260930-T4/cards.json"
- ]
-}

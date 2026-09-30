@@ -1,0 +1,353 @@
+[
+ {
+  "qid": "H-001",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1108"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "소리 성질(갈림·두드림·끽끽)을 문장으로 적는다",
+   "규칙적인지 불규칙한지 적는다",
+   "들은 위치와 시각을 같이 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "수치 없는 소리 관측 인계는 K-1104가 직접 답함. K-1004(베인펌프 소음)는 진단 카드라 인계 방법 답이 아님."
+ },
+ {
+  "qid": "H-002",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1105"
+  ],
+  "acceptable_card_ids": [
+   "K-1111"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "값과 읽은 시각, 정상 범위 기준을 적는다",
+   "같은 조에서 다시 읽은 값이 있으면 추이를 적는다",
+   "다음 조가 무엇을 어떤 기준으로 다시 읽을지 지정"
+  ],
+  "difficulty": "medium",
+  "label_note": "값·시각·추이·재확인 기준 지정이 K-1105 핵심. K-1105 전제(정상 범위 이탈)는 질문에 명시되지 않아 medium."
+ },
+ {
+  "qid": "H-003",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1109"
+  ],
+  "acceptable_card_ids": [
+   "K-1103"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "요청만 된 건은 '요청 접수됨·회신 대기'로 미해결에 적는다",
+   "접수 시각과 접수처를 함께 적는다",
+   "다음 조 확인 항목에 회신 여부를 넣는다"
+  ],
+  "difficulty": "hard",
+  "label_note": "오더 번호만 적으면 되나에는 K-1109가 답함(미해결로 유지). 운전 제한 전달 방법은 어느 카드에도 없음. K-1103의 대기 사유(부품 입고)는 정지·재기동 방지 전제라 보조로만 둠. 경계 사례."
+ },
+ {
+  "qid": "H-004",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101"
+  ],
+  "acceptable_card_ids": [
+   "K-1108"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "정상으로 나온 항목도 결과와 함께 적는다",
+   "받는 사람은 어디까지 확인됐는지 되물어 확인한다"
+  ],
+  "difficulty": "hard",
+  "label_note": "근거 없는 '정상' 인계 수령. K-1101의 받는 쪽 되묻기와 정상 항목 기록 규칙이 답. HPU 누유 자체 진단 카드는 없음."
+ },
+ {
+  "qid": "H-005",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "수당 규정, KB 범위 밖."
+ },
+ {
+  "qid": "H-006",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1105"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "계측에 안 남는 외관 관측은 인계 메모에 문장으로 적는다",
+   "다음 조가 재현할 수 없어 안 적으면 근거가 사라진다",
+   "위치와 시각을 같이 적는다"
+  ],
+  "difficulty": "hard",
+  "label_note": "1회성 걸림은 계측·알람에 안 남는 외관 관측이라 K-1104. K-1105의 '알람 없다고 빼지 않는다'는 계측값 전제라 보조."
+ },
+ {
+  "qid": "H-007",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1103"
+  ],
+  "acceptable_card_ids": [
+   "K-1110"
+  ],
+  "safety_card_ids": [
+   "K-1103",
+   "K-1110"
+  ],
+  "key_facts": [
+   "정지·재기동 방지 상태를 인계 메모 맨 앞에 적는다",
+   "정지 시각과 재기동 방지 조치 내용을 적는다",
+   "받는 사람은 현장에서 함께 확인하고 오더에 인수 기재"
+  ],
+  "difficulty": "medium",
+  "label_note": "잠금 상태 인계는 K-1103이 직접 답함. 개인 잠금장치를 두고 가도 되는지(잠금 이관 규칙)는 KB에 없음."
+ },
+ {
+  "qid": "H-008",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1111"
+  ],
+  "safety_card_ids": [
+   "K-1010"
+  ],
+  "key_facts": [
+   "외관 변화는 인계 메모에 문장으로 적는다",
+   "관측한 위치와 시각을 같이 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "육안 사행 관측 기록은 K-1104(외관·위치·시각), 수치 없음 명시는 K-1111 보조. 방향 표기 규칙은 카드에 없음. 받는 조의 조정 위험 때문에 사행 안전 카드 K-1010 포함."
+ },
+ {
+  "qid": "H-009",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1103",
+   "K-1109"
+  ],
+  "acceptable_card_ids": [
+   "K-1015"
+  ],
+  "safety_card_ids": [
+   "K-1103"
+  ],
+  "key_facts": [
+   "정지 원인 확인·인터록 해소·승인자 승인 필요",
+   "경력이나 직급으로 재가동을 판단하지 않는다",
+   "요청만 적힌 건은 미해결·회신 대기로 본다"
+  ],
+  "difficulty": "hard",
+  "label_note": "재가동 조건은 K-1103, '정비 요청함'만 있는 상태는 K-1109로 동등하게 답함. K-1015(고장 수리·기능시험 전 운전 금지)는 보조."
+ },
+ {
+  "qid": "H-010",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "근무표·작업 인원 배정, KB 범위 밖."
+ },
+ {
+  "qid": "H-011",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1102"
+  ],
+  "acceptable_card_ids": [
+   "K-1104"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "무엇을 손댔는지 적는다",
+   "조치 직후 계측값과 재확인 시각을 같이 적는다",
+   "값이 정상으로 안 돌아왔으면 그 사실을 분명히 적는다"
+  ],
+  "difficulty": "hard",
+  "label_note": "감속 운전을 '조정'으로 보고 K-1102를 primary로 둠. 운전 조건 변경·승인자 기록을 직접 다루는 카드는 없고, 처짐 위치 기록은 K-1104 보조. 경계 사례."
+ },
+ {
+  "qid": "H-012",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101",
+   "K-1106"
+  ],
+  "acceptable_card_ids": [
+   "K-1107"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "어느 확인 단계까지 갔고 무엇이 나왔는지 적는다",
+   "정상으로 나온 항목도 적는다",
+   "절차가 없다는 사실을 적고 순서를 지어내지 않는다"
+  ],
+  "difficulty": "hard",
+  "label_note": "원인 미확인 미해결 인계는 K-1101, RT 클램프 압력 알람 절차 카드가 없으므로 K-1106 동등. RT-02 클램프는 HPU-01 유압 공급이라 K-1107 보조."
+ },
+ {
+  "qid": "H-013",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1103"
+  ],
+  "acceptable_card_ids": [
+   "K-1110"
+  ],
+  "safety_card_ids": [
+   "K-1103"
+  ],
+  "key_facts": [
+   "운전 복귀에 필요한 것(지정 승인자 승인)을 적는다",
+   "승인 전에는 돌리지 말라는 지시를 적는다",
+   "무엇을 기다리는지와 예상 시점을 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "잠금은 해제됐지만 재가동 승인 대기라 K-1103의 복귀 조건·승인 주체·대기 사유 규칙이 그대로 적용."
+ },
+ {
+  "qid": "H-014",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1101",
+   "K-1017"
+  ],
+  "safety_card_ids": [
+   "K-1017"
+  ],
+  "key_facts": [
+   "소리 성질과 규칙·불규칙 여부를 적어야 한다",
+   "들은 위치와 시각도 같이 적는다",
+   "적지 않으면 다음 조의 판단 근거가 사라진다"
+  ],
+  "difficulty": "hard",
+  "label_note": "구두 이상음 인계 수령: 소리 성질·위치·시각을 문장으로 받아야 함(K-1104), 어디까지 확인했는지 되묻기(K-1101). 롤러 컨베이어 이상음 즉시 정지 K-1017은 안전·보조. 수령 행동을 직접 규정한 카드가 없어 경계 사례."
+ },
+ {
+  "qid": "H-015",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "당일 인원 배치 조회, KB 범위 밖."
+ },
+ {
+  "qid": "H-016",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [
+   "K-1108",
+   "K-1111"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [
+   "'크다'로 끝내지 말고 갈림·두드림 등 성질을 적는다",
+   "규칙적인지 불규칙한지 적는다",
+   "들은 위치와 시각을 같이 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "소리만 적은 인계는 부족. K-1104가 소리 기술 방법, 온도 미확인은 K-1108('확인 못 함')/K-1111 보조. 감속기 소음 변화라 K-1024 안전."
+ },
+ {
+  "qid": "H-017",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1105"
+  ],
+  "acceptable_card_ids": [
+   "K-1108",
+   "K-1025"
+  ],
+  "safety_card_ids": [
+   "K-1024",
+   "K-1025"
+  ],
+  "key_facts": [
+   "값과 읽은 시각, 정상 범위 기준을 적는다",
+   "알람 상한까지 얼마나 남았는지 함께 적는다",
+   "다음 조가 무엇을 어떤 기준으로 다시 읽을지 지정"
+  ],
+  "difficulty": "hard",
+  "label_note": "온도 상승 값 인계는 K-1105, 소견(추정)과 관측 구분은 K-1108 보조. 운전 계속 여부 판단 규칙은 T4 카드에 없고 K-1024/K-1025(정지 후 확인)는 안전으로 표시. 경계 사례."
+ },
+ {
+  "qid": "H-018",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1105"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [
+   "다음 조가 무엇을 어떤 기준으로 다시 읽을지 지정",
+   "알람 상한까지 얼마나 남았는지 함께 적는다",
+   "같은 조에서 다시 읽은 값이 있으면 추이를 적는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "조건부 재확인 기준 지정은 K-1105 핵심. 진동 이상 시 주 모터 정지 K-1024 안전."
+ },
+ {
+  "qid": "H-019",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1103"
+  ],
+  "acceptable_card_ids": [
+   "K-1110",
+   "K-1101"
+  ],
+  "safety_card_ids": [
+   "K-1103",
+   "K-1110"
+  ],
+  "key_facts": [
+   "정비가 안 끝났으면 무엇을 기다리는지 적어야 한다",
+   "재가동 금지 상태를 현장에서 함께 확인한다",
+   "정비 오더에 인수 기재한다"
+  ],
+  "difficulty": "hard",
+  "label_note": "미완료 작업 인수: K-1103의 받는 쪽 현장 확인·오더 인수 기재. 감압·차단 기록 없으면 미수행으로 보고 보류하는 K-1110 보조·안전. '작업 완료 확인 방법' 자체는 카드에 없음. 경계 사례."
+ },
+ {
+  "qid": "H-020",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "연장근무 규정, KB 범위 밖."
+ }
+]

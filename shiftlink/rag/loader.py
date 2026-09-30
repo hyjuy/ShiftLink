@@ -44,11 +44,9 @@ def load_card_provider(
     through to the provider. Only accepted/kb/L1 cards stay loaded,
     unless ``include_draft`` is set, which also keeps draft/kb cards.
     ``min_top_relevance`` is the KB "no matching card" floor; pass 0 to always rank.
-    A manifest object ``{"include": ["<batch>/cards.json", ...]}`` loads the listed
-    files (paths relative to the manifest), so batches merge without copying cards.
     """
     root = Path(path)
-    files = [f for file in _json_files(root) for f in _included(file)]
+    files = _json_files(root)
     cards: list[KnowledgeCard] = []
     stores: dict[str, list[Any]] = {name: [] for name in _STORE_KEYS.values()}
     for file in files:
@@ -59,16 +57,6 @@ def load_card_provider(
     provider = InMemoryToolProvider(cards=cards, include_draft=include_draft,
                                     min_top_relevance=min_top_relevance, **stores)
     return CardLoad(provider=provider, seen=len(cards))
-
-
-def _included(path: Path) -> list[Path]:
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return [path]  # _read_file reports the parse error with its path
-    if isinstance(data, dict) and "include" in data:
-        return [path.parent / item for item in data["include"]]
-    return [path]
 
 
 def _json_files(path: Path) -> list[Path]:

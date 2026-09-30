@@ -333,12 +333,15 @@ class InMemoryToolProvider:
         *,
         equipment_ids: list[str],
         observations: dict[str, object] | None = None,
+        include_handover: bool = False,
     ) -> list[dict[str, Any]]:
         """
         Return all applicable safety cards (safety_flag=True).
 
         k limit does not apply; all matching safety cards are returned.
-        Condition matching follows §4.2 rules.
+        Condition matching follows §4.2 rules. T4 handover cards are always-on
+        notices only in handover mode (include_handover); a query still shows one
+        when search_cards ranks it.
         """
         # Equipment filter
         resolved = self._resolve_equipment(equipment_ids)
@@ -346,7 +349,8 @@ class InMemoryToolProvider:
         canonical_ids = {identifier for identifier, _, _ in resolved}
         candidate_cards = [
             c for c in self.cards
-            if c.safety_flag and (c.equipment in equipment_codes or c.equipment == "COMMON")
+            if c.safety_flag and (include_handover or c.tacit_type != "T4")
+            and (c.equipment in equipment_codes or c.equipment == "COMMON")
             and (not c.mes_equipment_id or c.mes_equipment_id in canonical_ids)
         ]
 

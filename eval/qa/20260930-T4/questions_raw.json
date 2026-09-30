@@ -1,0 +1,182 @@
+[
+ {
+  "qid": "H-001",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "HPU 펌프 소리 좀 거칠어졌는데 아직 돌고 있음. 다음 조에 뭐라고 넘겨야 됨?",
+  "observations": {},
+  "writer_note": "감각 징후만 있고 수치 없는 상태의 인계 문구 | 상황: {\"sound\": \"펌프 쪽 평소보다 거친 소리\", \"state\": \"운전 중\"}"
+ },
+ {
+  "qid": "H-002",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "HPU-01 압력 순회 때 두 번 읽었는데 조금씩 내려가는 것 같아요. 인계장에 값이랑 시각을 어떤 식으로 적어야 다음 조가 추세를 이어서 볼 수 있을까요?",
+  "observations": {},
+  "writer_note": "추세 계측값 기록 형식 | 상황: {\"readings\": [{\"time\": \"02:10\", \"value\": \"가상값A\"}, {\"time\": \"05:40\", \"value\": \"가상값A보다 낮음\"}]}"
+ },
+ {
+  "qid": "H-003",
+  "eq_id": "HPU",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "HPU-01 리턴 필터 교체 오더는 냈고 부품 대기 중인 상태로 교대하게 됐습니다. 운전 쪽에 제한 사항이 있으면 그걸 어떻게 전달해야 하는지, 오더 번호만 적으면 되는 건지 궁금합니다.",
+  "observations": {},
+  "writer_note": "정비 대기 중 운전 제한 전달 | 상황: {\"order_status\": \"부품 대기\"}"
+ },
+ {
+  "qid": "H-004",
+  "eq_id": "HPU",
+  "persona_id": "V-12",
+  "intent": "handover_receive",
+  "question": "전 조 인계에 'HPU 누유 확인, 정상'만 써 있어요. 이거 그대로 믿고 넘어가도 되는지, 제가 뭘 더 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "근거 없는 '정상' 인계 수령 시 확인 | 상황: {\"prev_note\": \"HPU 누유 확인, 정상\"}"
+ },
+ {
+  "qid": "H-005",
+  "eq_id": "HPU",
+  "persona_id": "V-11",
+  "intent": "other",
+  "question": "HPU 유압유 보충하면 수당 따로 나옴?",
+  "observations": {},
+  "writer_note": "수당·인사 규정, KB 범위 밖"
+ },
+ {
+  "qid": "H-006",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "CV-01 적재부에서 코일 하나 걸렸다가 넘어갔는데 알람은 안 떴어요. 한 번뿐이라 애매한데 이것도 인계에 올려야 하나요?",
+  "observations": {},
+  "writer_note": "알람 없는 1회성 이상 인계 여부 | 상황: {\"alarm\": \"없음\", \"count\": 1}"
+ },
+ {
+  "qid": "H-007",
+  "eq_id": "CV",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "CV-01 벨트 텐셔너 점검 때문에 잠금 걸어둔 상태에서 교대 시간이 됐습니다. 제 잠금장치를 그대로 두고 가도 되는지, 다음 조에 잠금 상태를 어떻게 넘겨야 하는지 알려주세요.",
+  "observations": {},
+  "writer_note": "잠금 상태 인계 | 상황: {\"lockout\": \"적용 중\", \"work\": \"텐셔너 점검 미완료\"}"
+ },
+ {
+  "qid": "H-008",
+  "eq_id": "CV",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "CV-02 벨트 한쪽으로 쏠리는 거 봤음. 어디쯤인지 방향은 어떻게 적어야 다음 조가 알아먹음?",
+  "observations": {},
+  "writer_note": "육안 관측 위치·방향 기록 | 상황: {\"visual\": \"벨트 사행 의심\"}"
+ },
+ {
+  "qid": "H-009",
+  "eq_id": "CV",
+  "persona_id": "V-12",
+  "intent": "handover_receive",
+  "question": "교대 들어왔는데 CV-01 정지 상태고 인계장엔 '정비 요청함'만 있어요. 재가동해도 되는지 뭐부터 확인해야 하죠?",
+  "observations": {},
+  "writer_note": "정지 상태 인수 시 확인 순서 | 상황: {\"state\": \"정지\", \"prev_note\": \"정비 요청함\"}"
+ },
+ {
+  "qid": "H-010",
+  "eq_id": "CV",
+  "persona_id": "V-13",
+  "intent": "other",
+  "question": "CV 벨트 교체 작업 다음 주에 하면 몇 조가 들어가는지, 근무표는 어디서 보나요?",
+  "observations": {},
+  "writer_note": "근무표, KB 범위 밖"
+ },
+ {
+  "qid": "H-011",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "RT-03 롤러 몇 번째인지에서 소재 처짐 보였고 속도는 반장 승인받고 낮춰서 돌리는 중이에요. 이거 인계할 때 빠뜨리면 안 되는 항목이 뭐예요?",
+  "observations": {},
+  "writer_note": "운전 조건 변경 중 인계 항목 | 상황: {\"visual\": \"소재 처짐\", \"speed_change\": \"감속 운전(반장 승인)\"}"
+ },
+ {
+  "qid": "H-012",
+  "eq_id": "RT",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "RT-02 클램프 압력 알람 한 번 떴다 사라짐. 원인 못 찾았는데 미해결로 어떻게 넘김?",
+  "observations": {},
+  "writer_note": "원인 미확인 알람 미해결 인계 | 상황: {\"alarm\": \"1회 발생 후 해제\"}"
+ },
+ {
+  "qid": "H-013",
+  "eq_id": "RT",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "RT-01 이물 제거 끝내고 잠금 풀었는데, 재가동 승인은 아직 못 받은 상태로 교대입니다. 운전 쪽이 뭘 기다려야 하는지 인계장에 어떻게 써야 오해가 없을까요?",
+  "observations": {},
+  "writer_note": "재가동 승인 대기 상태 인계 | 상황: {\"lockout\": \"해제\", \"restart_approval\": \"미승인\"}"
+ },
+ {
+  "qid": "H-014",
+  "eq_id": "RT",
+  "persona_id": "V-11",
+  "intent": "handover_receive",
+  "question": "전 조가 RT-03 이상음 있다고 구두로만 말하고 갔음. 이거 받으면 내가 뭐부터 챙겨야 됨?",
+  "observations": {},
+  "writer_note": "구두 인계 수령 후 확인 | 상황: {\"prev_handover\": \"구두만\"}"
+ },
+ {
+  "qid": "H-015",
+  "eq_id": "RT",
+  "persona_id": "V-12",
+  "intent": "other",
+  "question": "오늘 야간 RT 구간 담당이 누구로 배정돼 있어요?",
+  "observations": {},
+  "writer_note": "당일 배치 조회, KB 범위 밖"
+ },
+ {
+  "qid": "H-016",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "handover_give",
+  "question": "GR-01 감속기 웅웅거리는 소리 커짐. 온도는 못 봤음. 이대로 인계 써도 됨?",
+  "observations": {},
+  "writer_note": "소리 관측과 누락 수치 인계 | 상황: {\"sound\": \"감속기 웅웅 소리 커짐\", \"temp\": \"미확인\"}"
+ },
+ {
+  "qid": "H-017",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "handover_give",
+  "question": "GR-02 베어링 온도가 평소보다 올라서 상태감시 값은 확인했는데 분해는 다음 정지 때로 미뤘습니다. 소견이랑 운전 계속 여부를 한 인계에 같이 쓰려면 어떻게 정리해야 할까요?",
+  "observations": {},
+  "writer_note": "정비 소견과 운전 계속 여부 인계 | 상황: {\"bearing_temp\": \"평소 대비 상승\", \"disassembly\": \"다음 정지 때\"}"
+ },
+ {
+  "qid": "H-018",
+  "eq_id": "GR",
+  "persona_id": "V-12",
+  "intent": "handover_give",
+  "question": "GR-01 진동값이 교대 중에 기준 근처까지 올라갔다 내려왔어요. 다음 조한테 어느 값 넘으면 보고하라고 조건을 달아 넘기는 게 맞나요?",
+  "observations": {},
+  "writer_note": "조건부 확인 항목 인계 | 상황: {\"vibration\": \"기준 근처까지 상승 후 하강\"}"
+ },
+ {
+  "qid": "H-019",
+  "eq_id": "GR",
+  "persona_id": "V-13",
+  "intent": "handover_receive",
+  "question": "교대 인수했는데 GR-02 커플링 점검 기록이 '진행 중'으로 남아 있고 담당자는 퇴근했습니다. 작업이 끝났는지 제가 어떻게 확인하고 받아야 하나요?",
+  "observations": {},
+  "writer_note": "미완료 작업 인수 확인 | 상황: {\"prev_record\": \"커플링 점검 진행 중\"}"
+ },
+ {
+  "qid": "H-020",
+  "eq_id": "GR",
+  "persona_id": "V-11",
+  "intent": "other",
+  "question": "교대 끝나고 남아서 GR 정비 도와주면 연장근무로 올려도 됨?",
+  "observations": {},
+  "writer_note": "연장근무 규정, KB 범위 밖"
+ }
+]

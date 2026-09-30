@@ -2,7 +2,7 @@
  {
   "card_id": "K-1301",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축공기 배관·이음부",
@@ -46,7 +46,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -59,7 +59,7 @@
  {
   "card_id": "K-1302",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축공기 배관·이음부",
@@ -103,7 +103,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -116,7 +116,7 @@
  {
   "card_id": "K-1303",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "CAU",
   "component": "압축기·배관 계통",
@@ -155,7 +155,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -225,7 +225,7 @@
  {
   "card_id": "K-1304",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "CAU",
   "component": "안전밸브",
@@ -269,7 +269,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -282,7 +282,7 @@
  {
   "card_id": "K-1305",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "CAU",
   "component": "압축기 용량 제어(언로드) 계통·모터",
@@ -339,7 +339,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -352,7 +352,7 @@
  {
   "card_id": "K-1306",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "PDP",
   "component": "차단기",
@@ -396,7 +396,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -404,7 +404,7 @@
  {
   "card_id": "K-1307",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "PDP",
   "component": "배전 버스",
@@ -448,7 +448,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -456,7 +456,7 @@
  {
   "card_id": "K-1308",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "PDP",
   "component": "차단기·급전 회로",
@@ -500,7 +500,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -590,7 +590,7 @@
  {
   "card_id": "K-1309",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "PDP",
   "component": "배전반 충전부",
@@ -634,7 +634,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -642,7 +642,7 @@
  {
   "card_id": "K-1310",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "PDP",
   "component": "차단기",
@@ -699,7 +699,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -707,7 +707,7 @@
  {
   "card_id": "K-1311",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축기 본체·모터·냉각 계통",
@@ -751,7 +751,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -764,7 +764,7 @@
  {
   "card_id": "K-1312",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "CAU",
   "component": "흡기필터·흡입밸브·유분리기",
@@ -808,7 +808,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -887,7 +887,7 @@
  {
   "card_id": "K-1313",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "CAU",
   "component": "흡기필터·오일필터·유분리기·윤활유",
@@ -931,7 +931,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -993,7 +993,7 @@
  {
   "card_id": "K-1314",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "CAU",
   "component": "압축기 전원·압력 계통",
@@ -1042,7 +1042,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
@@ -1055,7 +1055,7 @@
  {
   "card_id": "K-1315",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "PDP",
   "component": "배선차단기·접속부",
@@ -1099,7 +1099,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -1107,7 +1107,7 @@
  {
   "card_id": "K-1316",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "PDP",
   "component": "차단기 조작기구·래치",
@@ -1151,7 +1151,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
@@ -1159,7 +1159,7 @@
  {
   "card_id": "K-1317",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "PDP",
   "component": "배선차단기(MCCB)",
@@ -1203,7 +1203,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -1275,7 +1275,7 @@
  {
   "card_id": "K-1318",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "PDP",
   "component": "배선차단기(MCCB) 트립 요소",
@@ -1319,7 +1319,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -1413,7 +1413,7 @@
  {
   "card_id": "K-1319",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T5",
   "equipment": "PDP",
   "component": "계기용 변류기(CT) 2차 회로",
@@ -1457,14 +1457,14 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": null,
   "safety_review": null
  },
  {
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "equipment": "CAU",
   "mes_equipment_id": "EQ-0003",
   "mes_component_code": null,
@@ -1475,7 +1475,7 @@
   "conflict_group": null,
   "confidence": 0.0,
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "safety_review": null,
   "tacit_type": "T5",
@@ -1521,7 +1521,7 @@
  },
  {
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "equipment": "CAU",
   "mes_equipment_id": "EQ-0003",
   "mes_component_code": null,
@@ -1532,7 +1532,7 @@
   "conflict_group": null,
   "confidence": 0.0,
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "safety_review": null,
   "tacit_type": "T5",

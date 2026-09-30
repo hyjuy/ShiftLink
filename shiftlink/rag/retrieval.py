@@ -157,6 +157,12 @@ SYMPTOM_TITLE_WEIGHT = 2
 # 9/30 평가 개발용 30건: 답 있는 11건의 1위는 모두 5 이상, 답 없는 19건 중 11건은 5 미만.
 # ponytail: 토큰 겹침 점수라 긴 질문일수록 점수가 커진다. 오판이 잦으면 질문 길이로 정규화하거나 임베딩 유사도로 바꾼다.
 KB_MIN_TOP_RELEVANCE = 5
+# 카드의 이 비율보다 많이 나오는 단어는 질의 점수에서 뺀다 (카드 수 기준, 목록을 손으로 관리하지 않는다).
+COMMON_TOKEN_SHARE = 0.2
+COMMON_TOKEN_MIN_CARDS = 20
+# 현장 말투(질문 앞 두 글자) -> 카드가 쓰는 말. 설비 일반 어휘만 둔다 (평가 질문 문구를 옮기지 않는다).
+FIELD_SYNONYMS = {"기름": {"오일", "작동유"}, "소리": {"소음"}, "끼익": {"끽"}, "새요": {"누유"}, "샌다": {"누유"},
+                  "새는": {"누유"}, "뜨거": {"온도", "과열"}, "쏠려": {"사행"}, "쏠리": {"사행"}}
 
 
 def _stems(tokens: set[str]) -> set[str]:
@@ -250,6 +256,15 @@ class InMemoryToolProvider:
                 if accepted or draft:
                     self.cards.append(card)
 
+        # Words in more than COMMON_TOKEN_SHARE of the cards (확인·운전·후…) say nothing about which card fits.
+        df: dict[str, int] = {}
+        for card in self.cards:
+            for token in _search_tokens(card):
+                df[token] = df.get(token, 0) + 1
+        # A frequency needs a real KB behind it; tiny fixture KBs would lose every word.
+        common = len(self.cards) >= COMMON_TOKEN_MIN_CARDS
+        self._common_tokens = {t for t, n in df.items() if common and n > COMMON_TOKEN_SHARE * len(self.cards)}
+
         self.equipment_db = equipment_db or []
         self.equipment_types = equipment_types or []
         self.handover_db = handover_db or []
@@ -300,7 +315,8 @@ class InMemoryToolProvider:
 
         Returns top-k results (deterministic ranking by _relevance, then card_id).
         """
-        query_tokens = set(re.findall(r'\w+', query.lower()))
+        query_tokens = set(re.findall(r'\w+', query.lower())) - self._common_tokens
+        query_tokens |= {alt for stem, alts in FIELD_SYNONYMS.items() if stem in _stems(query_tokens) for alt in alts}
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}

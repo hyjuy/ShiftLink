@@ -161,7 +161,7 @@ def split_context(
     """축약 카드를 답변 후보(검색 순위 순)와 안전 참고(검색에 안 걸린 안전 카드)로 나눈다.
 
     검색 결과에 든 안전 카드는 후보로 남는다. ranked_cards가 없는 구 호출자는 전부 후보다.
-    검색 상위 MAX_CANDIDATES장만 후보로 둔다.
+    검색 상위 MAX_CANDIDATES장만 후보로 둔다. 조건 미확인 카드는 인용할 수 없으므로 건너뛴다.
     """
     cards, dropped = card_context(tool_results, mode)
     ranked = tool_results.get("ranked_cards")
@@ -170,7 +170,9 @@ def split_context(
     ranked_ids = [card.get("card_id") for card in ranked]
     by_id = {card.get("card_id"): card for card in cards}
     candidates = [by_id[card_id] for card_id in ranked_ids if card_id in by_id]
-    candidates = candidates[:MAX_CANDIDATES]
+    # The validator rejects citing an unverified card, so a lone unverified candidate only produced an
+    # empty answer (10/1 Jetson: 11 review-queue rows). Skip them; they stay listed as checks to make.
+    candidates = [card for card in candidates if card.get("condition_status") != "unverified"][:MAX_CANDIDATES]
     references = [card for card in cards if card.get("card_id") not in ranked_ids]
     return candidates, references, dropped
 

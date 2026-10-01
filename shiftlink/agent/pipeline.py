@@ -88,7 +88,11 @@ class FixedPipeline:
         # Applicable safety cards are still shown; they warn but do not answer (9/30 eval).
         # Handover too (10/1 T4 run: with no ranked card the model cited a safety card, abstain 0/4).
         # Revisit the handover case once memo item extraction exists (D26-29 contract §4.4).
-        if not tool_results["ranked_cards"]:
+        # Top card's conditions unverified (no reading for its signal): the validator would reject citing
+        # it, and falling to the next card answered from an unrelated one (10/1 Jetson: 6/6 wrong). Show it
+        # as a card to check instead of answering.
+        top_unverified = bool(tool_results["ranked_cards"]) and             tool_results["ranked_cards"][0].get("condition_status") == "unverified"
+        if not tool_results["ranked_cards"] or top_unverified:
             output = build_response(routed.mode, routed.request, tool_results)
             output.cited_card_ids = []
             output.no_knowledge = True

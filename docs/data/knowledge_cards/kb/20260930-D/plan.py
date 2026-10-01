@@ -70,6 +70,9 @@ for eq, rows in TABLE_R4.items():
                       "tacit_type": t, "hint": hint, "round": 4})
         next_id += 1
 
+# Review 45e1090: K-1302 is a diagnostic procedure (T3); preserve dispatched prompt tables above.
+next(s for s in slots if s["card_id"] == "K-1302")["tacit_type"] = "T3"
+
 out = {"batch_id": BATCH, "seed": SEED, "generator": "plan.py", "slots": slots}
 Path(__file__).with_name("plan.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps({eq: [s["tacit_type"] for s in slots if s["equipment"] == eq] for eq in TABLE}, ensure_ascii=False))

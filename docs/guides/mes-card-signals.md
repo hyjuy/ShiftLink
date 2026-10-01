@@ -53,6 +53,28 @@
 | EQ-0010 / CV-02 | `cv_motor_current` | A | 10–20 | <10 low; >20 high | 없음 |
 | EQ-0010 / CV-02 | `cv_vib_rms` | mm_s | 0.8–1.8 | <0.8 low; >1.8 high | 없음 |
 
+## 첫 10장 검수 카드의 위치별 추가 관측 신호
+
+2026-10-01: `ADDITIONAL_SIGNALS`를 통해 가상 MES 구성·계측 스냅샷·카드 검색에 연결했다. 기본 구성에 11종, 설비별 13개 측정 위치를 추가한다. 기존 run의 저장된 구성은 변경하지 않으므로 새 실행의 구성에서 확인한다. 아래는 프로젝트 시연용 범위이며 실제 센서 설치·현장 측정 기록이나 제조사 설정값이 아니다. 범위 양끝은 정상에 포함한다.
+
+| 설비 | 신호 | 단위 | 정상 범위 | 연결 카드 |
+| --- | --- | --- | --- | --- |
+| HPU-01 | `hpu_cooler_oil_in_temp` | degC | 35–58 | K-1002 |
+| HPU-01 | `hpu_cooler_oil_out_temp` | degC | 35–58 | K-1002 |
+| HPU-01 | `hpu_cooler_water_in_temp` | degC | 15–30 | K-1002 |
+| HPU-01 | `hpu_cooler_water_out_temp` | degC | 20–40 | K-1002 |
+| HPU-01 | `hpu_cooler_oil_flow` | L_min | 38–46 | K-1002 |
+| HPU-01 | `hpu_accumulator_gas_pressure` | bar | 130–140 | K-1005 |
+| HPU-01 | `hpu_accumulator_fluid_pressure` | bar | 145–165 | K-1005 |
+| HPU-01 | `hpu_return_submergence` | mm | 100–200 | K-1004 |
+| HPU-01 | `hpu_suction_head` | mm | 100–200 | K-1004 |
+| GR-01·GR-02 | `gr_surface_temp` | degC | 20–40 | K-1025 |
+| CV-01·CV-02 | `cv_idler_speed_ratio` | pct | 80–100 | K-1011 |
+
+냉각기 입출구 온도는 각각의 채널로 비교한다. 온도차 >0 분기는 단일 채널의 normal 상태로 대체하지 않는다. 가스측 압력은 유체 배출 후 프리차지 확인 조건에서만 해석한다. 표면 온도는 베어링 온도와 별도이며 점검 허가를 뜻하지 않는다. 아이들러 회전 비율은 동일 운전 조건의 정상 회전 기준 대비 가상 관측값으로, 벨트 속도를 변환한 값이 아니다. 정지 중 비율 0은 고장 확정 근거가 아니다. 소음·거품·누유 위치 및 잠금·감압 수행 기록은 별도 관찰 항목으로 유지한다.
+
+각 위치에 `sensor_anomaly_<equipment_id>_<signal>` 시나리오가 생성된다. 위에 없던 하한·상한(냉각수 입구 15, 출구 20–40, 치수 상한 200 등)은 정상 시연값 생성을 위한 가정이다. 기존 카드의 <100 mm 또는 >30 degC 분기를 추가 상한·하한으로 바꾸지 않는다.
+
 ## CAU·PDP 보강 신호와 T2 작성 기준
 
 보강 신호 4개는 기준정보 JSON의 측정점이 아니라 [`ADDITIONAL_SIGNALS`](../../shiftlink/mes/scenarios/priority.py)의 가상 시연 정의에서 가져왔다. [`from_catalog()`](../../shiftlink/mes/configuration.py)가 확장한 구성에서 사용한다. 저장된 과거 run 구성에는 없을 수 있으므로 해당 run의 `config_id`와 실제 신호·단위·정상 범위를 우선 확인한다. 위 표의 범위를 다른 구성에 그대로 적용하지 않는다.

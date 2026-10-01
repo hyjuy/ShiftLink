@@ -56,6 +56,16 @@ ADDITIONAL_SIGNALS = {
     "HPU": (
         SignalSpec("hpu_oil_level", "유압유 탱크 유면", "pct", 70, 100),
         SignalSpec("hpu_pump_current", "유압 펌프 전류", "A", 15, 25),
+        # Card-specific locations; demo bands, separate from bulk HPU readings.
+        SignalSpec("hpu_cooler_oil_in_temp", "냉각기 오일 입구 온도", "degC", 35, 58),
+        SignalSpec("hpu_cooler_oil_out_temp", "냉각기 오일 출구 온도", "degC", 35, 58),
+        SignalSpec("hpu_cooler_water_in_temp", "냉각수 입구 온도", "degC", 15, 30),
+        SignalSpec("hpu_cooler_water_out_temp", "냉각수 출구 온도", "degC", 20, 40),
+        SignalSpec("hpu_cooler_oil_flow", "냉각기 통과 오일 유량", "L_min", 38, 46),
+        SignalSpec("hpu_accumulator_gas_pressure", "축압기 가스측 압력", "bar", 130, 140),
+        SignalSpec("hpu_accumulator_fluid_pressure", "축압기 유체측 압력", "bar", 145, 165),
+        SignalSpec("hpu_return_submergence", "리턴 라인 유면 아래 잠김 깊이", "mm", 100, 200),
+        SignalSpec("hpu_suction_head", "유면과 흡입 위치 높이차", "mm", 100, 200),
     ),
     "PDP": (
         SignalSpec("bus_current", "배전반 전류", "A", 20, 40),
@@ -67,6 +77,7 @@ ADDITIONAL_SIGNALS = {
     ),
     "GR": (
         SignalSpec("gr_oil_level", "감속기 오일 레벨", "pct", 70, 100),
+        SignalSpec("gr_surface_temp", "감속기 표면 온도", "degC", 20, 40),
         SignalSpec("gr_rpm", "감속기 회전속도", "rpm", 900, 1100, zero_when_stopped=True),
         SignalSpec("gr_oil_leak", "누유 감지 (0 없음 / 1 감지)", "bool", 0, 0),
     ),
@@ -76,6 +87,7 @@ ADDITIONAL_SIGNALS = {
     ),
     "CV": (
         SignalSpec("cv_speed", "컨베이어 속도", "m_min", 8, 12, zero_when_stopped=True),
+        SignalSpec("cv_idler_speed_ratio", "동일 조건 정상 대비 아이들러 회전 비율", "pct", 80, 100, zero_when_stopped=True),
         SignalSpec("cv_motor_current", "컨베이어 모터 전류", "A", 10, 20),
         SignalSpec("cv_vib_rms", "컨베이어 구동부 진동 RMS", "mm_s", 0.8, 1.8),
     ),

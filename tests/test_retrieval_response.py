@@ -140,16 +140,15 @@ def test_empty_query_does_not_invoke_custom_output_validator():
     assert result.output.no_knowledge is True
 
 
-def test_empty_handover_still_calls_model():
+def test_empty_handover_skips_model_and_renders_no_knowledge():
+    """인계도 근거 카드가 없으면 모델 없이 '해당 지식 없음'이다 (질의와 같은 규칙, 통합본 §근거 없음)."""
     calls = []
-    def unsupported_model(**kw):
-        calls.append(kw)
-        raise NotImplementedError
-
-    result = FixedPipeline(tools=InMemoryToolProvider(), model=unsupported_model).run(
+    result = FixedPipeline(tools=InMemoryToolProvider(), model=lambda **kw: calls.append(kw)).run(
         dict(memo_text="점검 미완료", shift="A", eq_ids=["HPU"]))
-    assert len(calls) == 1
-    assert result.output.no_knowledge is False
+    assert calls == []
+    assert result.output.no_knowledge is True
+    assert result.output.cited_card_ids == []
+    assert "해당 지식 없음" in render_response(result.output)
 
 
 def test_safety_only_search_is_no_knowledge_but_keeps_safety_notice():

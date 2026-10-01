@@ -1,6 +1,6 @@
 # Jetson 실험 중 다운 — 원인과 해결 (2026-10-01)
 
-작성: 최재영·Claude · 장비: Jetson Orin Nano Super (jetson-06, 7.6GB RAM, 15W) · ollama 0.34.1
+작성: 최재영·Claude · 장비: Jetson Orin Nano Super (jetson-06, 7.6GB RAM, 15W) · ollama 0.34.1 · 같은 내용 HTML: [jetson-ollama-memory-20261001.html](jetson-ollama-memory-20261001.html)
 
 ## 요약
 
@@ -100,8 +100,7 @@ sudo mkdir -p /etc/systemd/system/ollama.service.d && printf '[Service]\nEnviron
 
 ## 6. 남은 일
 
-- [ ] Jetson 설치 절차 문서에 `LLAMA_ARG_CACHE_RAM=0` 추가 (Jetson 담당 유현준)
-- [ ] 서비스 코드의 `KEEP_ALIVE=-1`은 이 설정이 있으면 그대로 써도 된다. 다른 Jetson에 배포할 때 설정이 빠지지 않게 한다.
+- Jetson은 한 대뿐이고 이미 적용했으므로 장비 쪽 추가 작업은 없다. 서비스 코드의 `KEEP_ALIVE=-1`도 그대로 쓴다.
 - [ ] `score.py` 오류 집계 검토 (5-1)
 
 ## 부록: 같은 날 모델 선택 실험 결과 (exaone3.5:2.4b, 카드 62장, 31문항 중 정답이 후보에 든 29문항)

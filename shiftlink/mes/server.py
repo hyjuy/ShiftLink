@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import csv
+from collections import deque
 from io import StringIO
 import threading
 from dataclasses import asdict, is_dataclass
@@ -22,6 +23,7 @@ from .storage import MesStorage
 
 _CONTROL_BODY_LIMIT = 8192
 _CONFIG_BODY_LIMIT = 256 * 1024
+_SCAN_KEEP = 50
 _ROOT = Path(__file__).resolve().parents[2]
 # kb split only: dev/sealed evaluation files are never opened here (C-099).
 _KB_CARDS = _ROOT / "docs" / "data" / "knowledge_cards" / "kb" / "kb_cards.json"
@@ -67,6 +69,39 @@ class MesService:
         self.speed = 1.0
         self._saved_sequences: set[tuple[str, int]] = set()
         self._lock = threading.RLock()
+        # ponytail: 메모리에만 둔다(재시작하면 사라짐). 인계가 아니라 버려도 되는 값이다(작업계획 D1).
+        self._scans: deque[dict[str, object]] = deque(maxlen=_SCAN_KEEP)
+
+    def record_scan(self, body: dict[str, Any]) -> dict[str, object]:
+        """웹캠 CNN 확정 결과 {class, conf, device_id, ts} → 설비 기록 (작업계획 C2)."""
+        if not isinstance(body, dict):
+            raise ValueError("scan body must be an object")
+        label, conf, device_id, ts = body.get("class"), body.get("conf"), body.get("device_id"), body.get("ts")
+        type_ids = {t["type_code"]: t["equipment_type_id"] for t in self.catalog.data.get("equipment_types", [])}
+        if label not in type_ids:
+            raise ValueError(f"unknown class: {label!r}")
+        if isinstance(conf, bool) or not isinstance(conf, (int, float)) or not 0 <= conf <= 1:
+            raise ValueError("conf must be a number in 0..1")
+        if not isinstance(device_id, str) or not 0 < len(device_id) <= 64:
+            raise ValueError("device_id must be a 1..64 char string")
+        if ts is not None and not (isinstance(ts, str) and len(ts) <= 64):
+            raise ValueError("ts must be a string")
+        # ponytail: CNN은 형식만 구분하므로 GR·RT처럼 여러 대인 형식은 equipment_id가 가장 작은 설비로 고정한다.
+        # 대수까지 구분하려면 설비마다 다른 객체를 정해 클래스를 늘린다.
+        equipment = min((e for e in self.catalog.equipment.values() if e["equipment_type_id"] == type_ids[label]),
+                        key=lambda e: e["equipment_id"])
+        scan = {"scan_id": f"SC-{uuid4().hex[:12]}", "class": label, "conf": float(conf), "device_id": device_id, "ts": ts,
+                "equipment_id": equipment["equipment_id"], "code": equipment["code"], "received_at": utc_now().isoformat()}
+        with self._lock:
+            self._scans.append(scan)
+        return {"scan": scan, "is_synthetic": True}
+
+    def recent_scans(self, limit: int) -> dict[str, object]:
+        """최신 인식 결과부터 limit개 (작업계획 C3)."""
+        if not 1 <= limit <= _SCAN_KEEP:
+            raise ValueError(f"limit must be 1..{_SCAN_KEEP}")
+        with self._lock:
+            return {"scans": list(self._scans)[::-1][:limit], "is_synthetic": True}
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -269,6 +304,8 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
+            if parsed.path == "/api/equipment/scan/recent":
+                self._send(200, self.service.recent_scans(int(parse_qs(parsed.query).get("limit", ["5"])[0]))); return
             if parsed.path.startswith("/api/runs/") and parsed.path.endswith("/replay"):
                 run_id = parsed.path.split("/")[3]; sequence = int(parse_qs(parsed.query).get("sequence", ["-1"])[0])
                 self._send(200, self.service.replay(run_id, sequence)); return
@@ -296,6 +333,7 @@ class _Handler(BaseHTTPRequestHandler):
             if self.path == "/api/control": self._send(200, self.service.control(payload)); return
             if self.path == "/api/config/validate": self._send(200, self.service.validate_config(payload)); return
             if self.path == "/api/config/apply": self._send(200, self.service.apply_config(payload)); return
+            if self.path == "/api/equipment/scan": self._send(201, self.service.record_scan(payload)); return
             self._send(404, {"error": "not found", "is_synthetic": True})
         except ConflictError as error:
             self._send(409, {"error": str(error), "is_synthetic": True})

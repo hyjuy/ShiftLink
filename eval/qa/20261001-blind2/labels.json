@@ -1,0 +1,346 @@
+[
+ {
+  "qid": "BN-001",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1305"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "K-1305의 가상 MES 정상 범위는 air_pressure 550–700 kPa이고, 720 kPa는 상한을 넘는다",
+   "압력 high만으로 원인을 확정하지 않고 압축기가 운전 중인지, 전류가 함께 높은지 확인한다",
+   "라인 압력이 압축기 최대 운전 압력을 넘지 않는지와 언로드 동작을 확인하고, 안전밸브 설정은 바꾸거나 막지 않는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "정책 A: K-1305가 air_pressure 정상 범위(550–700 kPa)를 명시. 720 kPa는 상한 초과라 K-1305 확인 항목 적용. 전류 동반 여부는 질문에 없음(검증 단계 수정, 재라벨링 시 범위 누락)"
+ },
+ {
+  "qid": "BN-002",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1305"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "610 kPa는 K-1305의 가상 MES 정상 범위(550–700 kPa) 안이다",
+   "이 범위는 가상 MES 기준이며 압축기 설정압·모터 정격이 아니다"
+  ],
+  "difficulty": "medium",
+  "label_note": "정책 A: K-1305의 정상 범위(550–700 kPa) 안이라 '정상 범위, 계속 관찰'이 정답(검증 단계 수정, 재라벨링 시 범위 누락)"
+ },
+ {
+  "qid": "BN-003",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1302"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T2: 진동·냄새 확인 카드 없음"
+ },
+ {
+  "qid": "BN-004",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1305"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "운전 중 압력과 전류가 함께 높으면, 언로드 동작과 운전 압력을 확인한다"
+  ],
+  "difficulty": "easy",
+  "label_note": "K-1305: 압력 상승과 전류 상승 동시 알람 진단"
+ },
+ {
+  "qid": "BN-005",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1312"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 필터 규격 확인 카드 없음"
+ },
+ {
+  "qid": "BN-006",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1322"
+  ],
+  "safety_card_ids": [
+   "K-1314",
+   "K-1320"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 알람 초기화 후 재가동 절차 카드 없음. K-1322는 정전 후 재기동"
+ },
+ {
+  "qid": "BN-007",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1322"
+  ],
+  "safety_card_ids": [
+   "K-1314",
+   "K-1320"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 점검 후 재가동 절차 카드 없음. K-1322는 정전 후 재기동에만 해당"
+ },
+ {
+  "qid": "BN-008",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 정상 전압 범위 기준 카드 없음"
+ },
+ {
+  "qid": "BN-009",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 정상 전압 범위 기준 카드 없음"
+ },
+ {
+  "qid": "BN-010",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1310은 voltage LOW 조건인데, 질문은 정상 표시 상태. 조건 불일치"
+ },
+ {
+  "qid": "BN-011",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1315"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 열감·팬소리 확인 카드 없음"
+ },
+ {
+  "qid": "BN-012",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1324"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T6: 일반 재가동 절차 카드 없음. K-1324는 배전반 전원 투입 순서(T3)"
+ },
+ {
+  "qid": "BN-013",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1324"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T6: 알람 초기화 후 재가동 절차 카드 없음. K-1324는 전원 투입 순서"
+ },
+ {
+  "qid": "BN-014",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1324"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [
+   "배전반에 전원을 넣기 전에 모든 장치의 기계 동작을 점검하고 차단기·계전기를 손으로 조작해 걸림이 없는지, 뒤쪽에 이물이 없는지 본다"
+  ],
+  "difficulty": "medium",
+  "label_note": "K-1324: 전원 투입 순서를 인계 항목으로 적용"
+ },
+ {
+  "qid": "BN-015",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1201",
+   "K-1202"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "필터 차압 0.8 bar는 카드 기준(1.2 bar) 미만이므로 막힘 표시기 확인 대상 아님. 정상 범위 내"
+  ],
+  "difficulty": "medium",
+  "label_note": "Policy A 적용: 질문값 < 카드 기준값. 정상 범위 결론 가능 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+ },
+ {
+  "qid": "BN-016",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1211"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "필터 정비 후 재가동: 압력 회복해도 유량·기포·소음을 함께 확인한다"
+  ],
+  "difficulty": "easy",
+  "label_note": "K-1211: 정비 후 다중 신호 확인"
+ },
+ {
+  "qid": "BN-017",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1206"
+  ],
+  "acceptable_card_ids": [
+   "K-1204"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "속도 12 m/min은 카드 기준(10 m/min) 이상이고, 대기율 40%는 기준(70%) 미만이므로 카드 적용 범위 밖"
+  ],
+  "difficulty": "medium",
+  "label_note": "Policy A 적용: 질문값이 K-1206의 두 조건 중 하나만 만족 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+ },
+ {
+  "qid": "BN-018",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1215",
+   "K-1213"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1215는 비상정지 후 절차이지 센서 교체 후 절차 아님"
+ },
+ {
+  "qid": "BN-019",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1209"
+  ],
+  "acceptable_card_ids": [
+   "K-1210"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "진동 1.2 mm/s는 카드 기준(2.8 mm/s) 미만이므로 진동 기준상 문제 아님. 베어링 온도 기준 없음"
+  ],
+  "difficulty": "medium",
+  "label_note": "Policy A 적용: 진동값 < 카드 기준 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+ },
+ {
+  "qid": "BN-020",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1216",
+   "K-1212"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1216은 과열 후 냉각 온도 관찰이지, 진동 알람 초기화 일반 절차 아님"
+ },
+ {
+  "qid": "BN-021",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1207"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1208은 모터 전류 기준(rt_motor_current)이지 클램프 압력(rt_clamp_press) 아님"
+ },
+ {
+  "qid": "BN-022",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1214"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1018"
+  ],
+  "key_facts": [
+   "RT 정비 완료와 재가동 승인을 구분한다"
+  ],
+  "difficulty": "easy",
+  "label_note": "K-1214: 정비 완료 vs 재가동 승인 구분"
+ },
+ {
+  "qid": "BN-023",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1212"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "GR 자유: 부품 모델 추적 카드 없음"
+ },
+ {
+  "qid": "BN-024",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "RT 자유: 알람 기록 판단 기준 카드 없음"
+ },
+ {
+  "qid": "BN-025",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1025"
+  ],
+  "acceptable_card_ids": [
+   "K-1210"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "감속기 베어링부 온도 측정값이 정상 상한을 초과하면 오일 상태와 베어링을 확인한다"
+  ],
+  "difficulty": "medium",
+  "label_note": "K-1025: 베어링 온도 측정 절차"
+ }
+]

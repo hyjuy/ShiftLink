@@ -11,22 +11,22 @@ PRIORITY_SCENARIOS = (
     ScenarioSpec("hpu_accumulator_precharge", "hydraulic_supply", "", "", "",
         (SignalEffect("hydraulic_supply", "hpu_accumulator_gas_pressure", 135),
          SignalEffect("hydraulic_supply", "hpu_accumulator_fluid_pressure", 0),
-         SignalEffect("hydraulic_supply", "hpu_pressure", 0)), title="축압기 유체 배출 후 프리차지 측정 (가상)"),
+         SignalEffect("hydraulic_supply", "hpu_pressure", 0)), title="축압기 유체 배출 후 프리차지 측정"),
     ScenarioSpec("air_nozzle_overpressure", "pneumatic_supply", "", "", "AL-SENSOR-ANOMALY",
-        (SignalEffect("pneumatic_supply", "air_nozzle_pressure", 0.25),), title="공기분사기 유출 압력 초과 (가상)"),
+        (SignalEffect("pneumatic_supply", "air_nozzle_pressure", 0.25),), title="공기분사기 유출 압력 초과"),
     ScenarioSpec("hpu_no_outlet_pressure", "hydraulic_supply", "", "", "AL-SENSOR-ANOMALY",
-        (SignalEffect("hydraulic_supply", "hpu_pump_outlet_pressure", 0),), title="펌프 출구 무압 관측 (가상)"),
+        (SignalEffect("hydraulic_supply", "hpu_pump_outlet_pressure", 0),), title="펌프 출구 무압 관측"),
     ScenarioSpec("hpu_high_viscosity", "hydraulic_supply", "", "", "AL-SENSOR-ANOMALY",
-        (SignalEffect("hydraulic_supply", "fluid_viscosity", 2500),), title="작동유 점도 2000 cSt 초과 (가상)"),
+        (SignalEffect("hydraulic_supply", "fluid_viscosity", 2500),), title="작동유 점도 2000 cSt 초과"),
     # Synthetic observation fixtures; not OEM fault limits or maintenance procedures.
     ScenarioSpec("cau_supply_fault", "pneumatic_supply", "pneumatic_supply", "pneumatic_supply_low", "AL-AIR-LOW",
         (SignalEffect("pneumatic_supply", "air_pressure", 450),
          SignalEffect("pneumatic_supply", "air_flow", 70),
-         SignalEffect("pneumatic_supply", "compressor_current", 22)), title="압축공기 공급 이상 (가상)"),
+         SignalEffect("pneumatic_supply", "compressor_current", 22)), title="압축공기 공급 이상"),
     ScenarioSpec("pdp_trip", "power_supply", "power_supply", "power_supply_fault", "AL-PDP-TRIP",
         (SignalEffect("power_supply", "bus_voltage", 90),
          SignalEffect("power_supply", "bus_current", 55),
-         SignalEffect("power_supply", "breaker_trip", 1)), title="배전반 트립 (가상)"),
+         SignalEffect("power_supply", "breaker_trip", 1)), title="배전반 트립"),
     ScenarioSpec("gearbox_overheat", "drive", "drive", "upstream_drive_fault", "AL-GR-HOT",
         (SignalEffect("drive", "gr_brg_temp", 85),), title="감속기 과열", source_url=SEW, component_id="cooling",
         recovery_actions=(
@@ -143,7 +143,7 @@ def sensor_anomalies(equipment):
                 value = round(high + max(abs(high) * 0.25, 0.001), 3)
             yield ScenarioSpec(f"sensor_anomaly_{eq.equipment_id}_{signal.signal}", capability, "", "", "AL-SENSOR-ANOMALY",
                 (SignalEffect(capability, signal.signal, value),),
-                title=f"{eq.code} · {signal.name} 이상 (가상)", cause_equipment_id=eq.equipment_id)
+                title=f"{eq.code} · {signal.name} 이상", cause_equipment_id=eq.equipment_id)
 
 
 def expand(config):
@@ -171,7 +171,11 @@ def expand(config):
         signals = tuple(replace(signal, semantics=definition(signal.signal))
                         if not signal.semantics else signal for signal in signals)
         equipment.append(replace(eq, signals=signals))
-    scenarios = config.scenarios + additions
+    scenarios = config.scenarios
+    if config.source == 'catalog' and config.version_label == 'baseline':
+        # Stored baselines predate the label cleanup; new runs show the plain titles.
+        scenarios = tuple(replace(s, title=s.title.removesuffix(' (가상)')) for s in scenarios)
+    scenarios = scenarios + additions
     existing = {s.scenario_id for s in scenarios}
     sensors = tuple(s for s in sensor_anomalies(equipment) if s.scenario_id not in existing)
     from ..symptoms import symptom_scenarios

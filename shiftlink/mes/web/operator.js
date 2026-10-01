@@ -48,7 +48,9 @@
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
       // Engine emits 0 for these signals whenever the equipment is not running; that is expected, not "low".
       const stoppedZero = trustworthy && signal.zero_when_stopped===true && m.value===0 && selected.operating_state!=="running";
-      return {...signal, observation:m, known, trustworthy, hasRange, inRange, stoppedZero, eventUnavailable, precharge,
+      const outOfRange = hasRange && trustworthy && !inRange && !stoppedZero;
+      const direction = outOfRange ? (signal.normal_min!=null && m.value<signal.normal_min ? "low" : "high") : null;
+      return {...signal, observation:m, known, trustworthy, hasRange, inRange, stoppedZero, eventUnavailable, precharge, outOfRange, direction,
         relevant:selected.equipment_id===cause?.equipment_id && (spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
     }).sort((a,b)=>Number(b.relevant)-Number(a.relevant));
     return {snapshot, config, nodes, links, faults, selected, cause, spec, problemPart, selectedPart, parts, measurements,
@@ -150,16 +152,43 @@
     const related=model.links.filter(l=>l.from_id===eq.equipment_id || l.to_id===eq.equipment_id);
     const relation=model.links.find(l=>relationKey(l)===selectedRelation);
     const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"관측된 영향 대기":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
-    const measurements=model.measurements.map(s=>{
+    const num=v=>String(Number(Number(v).toFixed(3)));
+    // Distance past the violated bound, so the size of a deviation reads at a glance.
+    const deviation=s=>{
+      const bound=s.direction==="low"?s.normal_min:s.normal_max, diff=s.observation.value-bound;
+      const pct=bound?` (${diff>0?"+":""}${Math.round(diff/Math.abs(bound)*100)}%)`:"";
+      return `${s.direction==="low"?"하한":"상한"} ${num(bound)} 대비 ${diff>0?"+":""}${num(diff)} ${s.unit}${pct}`;
+    };
+    const rangeBar=s=>{
+      if (s.unit==="bool" || s.normal_min==null || s.normal_max==null || !s.known) return "";
+      const span=(s.normal_max-s.normal_min) || Math.abs(s.normal_max) || 1, lo=s.normal_min-span/2, hi=s.normal_max+span/2;
+      const pos=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100)).toFixed(1);
+      return `<span class="range-bar" aria-hidden="true"><span class="range-band" style="left:${pos(s.normal_min)}%;width:${(pos(s.normal_max)-pos(s.normal_min)).toFixed(1)}%"></span><span class="range-mark" style="left:${pos(s.observation.value)}%"></span></span>`;
+    };
+    const row=s=>{
       const band=s.normal_min==null&&s.normal_max==null?"기준 없음":`${s.normal_min??"하한 없음"} ~ ${s.normal_max??"상한 없음"}`;
-      const finding=s.eventUnavailable?"이벤트 기록 없음":!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":s.precharge&&s.signal==="hpu_accumulator_fluid_pressure"&&s.inRange?"유체 배출 확인":s.stoppedZero?"정지 중 0 · 정상":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
+      const finding=s.eventUnavailable?"이벤트 기록 없음":!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":s.precharge&&s.signal==="hpu_accumulator_fluid_pressure"&&s.inRange?"유체 배출 확인":s.stoppedZero?"정지 중 0 · 정상":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":`${s.direction==="low"?"▼ 하한 미만":"▲ 상한 초과"} · 구성 범위 이탈`;
       const acquisition={continuous:"연속 계측",derived:"계측값 기반 계산",event:"이벤트 기록",manual_sample:"시료·수동 측정"}[s.semantics?.acquisition];
       const context=[acquisition,s.semantics?.location,s.semantics?.reference].filter(Boolean).map(esc).join(" · ");
-      return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small>${context?`<small>${context}</small>`:""}</th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
-    }).join("");
+      const cls=[s.relevant&&"relevant", s.outOfRange&&`out-of-range ${s.direction}`, !s.outOfRange&&s.known&&!s.trustworthy&&"untrusted", (s.stoppedZero||s.eventUnavailable)&&"muted"].filter(Boolean).join(" ");
+      return `<tr id="signal-${esc(eq.equipment_id)}-${esc(s.signal)}" class="${cls}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small>${context?`<small>${context}</small>`:""}</th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}${rangeBar(s)}<small class="finding">${esc(finding)}</small>${s.outOfRange?`<small class="deviation">${esc(deviation(s))}</small>`:""}</td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
+    };
+    // Out-of-range and untrusted rows first; in-range rows fold away once something needs attention.
+    const attention=model.measurements.filter(s=>s.outOfRange || (s.known && !s.trustworthy && !s.eventUnavailable));
+    const rest=model.measurements.filter(s=>!attention.includes(s));
+    const counts=[["out",attention.filter(s=>s.outOfRange)],["check",attention.filter(s=>!s.outOfRange)],["ok",rest.filter(s=>s.inRange || s.stoppedZero)],["none",rest.filter(s=>!s.inRange && !s.stoppedZero)]];
+    const labels={out:"범위 이탈",check:"품질·시각 확인",ok:"정상",none:"판정 불가·기록 없음"};
+    const summary=model.measurements.length?`<p class="signal-summary" role="status">${counts.map(([k,list])=>{
+      const text=`${labels[k]} ${list.length}`;
+      return list.length && k!=="ok" && k!=="none" ? `<a class="count-${k}" href="#signal-${esc(eq.equipment_id)}-${esc(list[0].signal)}">${text}</a>` : `<span class="count-${k}">${text}</span>`;
+    }).join(" · ")}</p>`:"";
+    const head='<thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead>';
+    const folded=attention.length && rest.length;
+    const measurements=(folded?attention:model.measurements).map(row).join("");
+    const restTable=folded?`<details class="signal-rest"><summary>나머지 ${rest.length}개 보기 · 범위 내·정지 중 0·기록 없음</summary><div class="evidence-scroll"><table class="evidence-table">${head}<tbody>${rest.map(row).join("")}</tbody></table></div></details>`:"";
     const diagnoses=(model.snapshot.symptom_diagnostics || []).filter(d=>d.equipment_id===eq.equipment_id).map(d=>
       `<section class="symptom-candidate"><h4>증상별 원인 후보 · ${esc(d.symptom)}</h4><p>${esc(d.status==="candidate"?"3회 연속 관측":d.status==="unverified"?"근거 미확인":"추가 관측 대기")} · 확정 진단 아님</p><ul>${(d.candidates || []).map(c=>`<li>${esc(c)}</li>`).join("")}</ul><p>추가 확인: ${(d.checks || []).map(esc).join(" · ")}</p><small>${esc(d.limitation)}</small></section>`).join("");
-    return `${relationNote}${diagnoses}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption><thead><tr><th>측정 항목</th><th>현재 관측</th><th>정상 범위 / 품질·시각</th></tr></thead><tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div><details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
+    return `${relationNote}${diagnoses}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}${summary}<div class="evidence-scroll"><table class="evidence-table"><caption>관측 근거 · 정상 범위는 시연 구성값이며 안전 재가동 기준이 아닙니다.</caption>${head}<tbody>${measurements || '<tr><td colspan="3">관측 신호 정의 없음</td></tr>'}</tbody></table></div>${restTable}<details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
   }
 
   function partView(model) {

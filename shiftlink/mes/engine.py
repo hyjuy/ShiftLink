@@ -9,7 +9,7 @@ from random import Random
 from typing import Any
 
 from .contracts import (
-    Alarm, Configuration, EquipmentConfig, EquipmentState, Measurement, RelationConfig,
+    Alarm, Configuration, EquipmentConfig, EquipmentState, Measurement, RecoveryAction, RelationConfig,
     Run, RuntimeEvent, ScenarioSpec, SignalEffect, SignalSpec, Snapshot
 )
 from .scenarios.priority import COMPONENTS
@@ -77,7 +77,7 @@ class MesEngine:
         return self.start()
 
     def set_scenario(self, scenario_id: str) -> Snapshot:
-        if self._scenario != "normal" and self._recovery_spec:
+        if self._scenario != "normal" and self._recovery_required():
             raise ValueError("현재 시나리오의 조치·복귀를 완료하거나 새 실행을 시작하세요.")
         if scenario_id not in self._scenario_by_id:
             raise ValueError(f"unknown scenario: {scenario_id}")
@@ -88,7 +88,7 @@ class MesEngine:
                 raise ValueError(f"cannot apply {scenario_id} (requires {spec.cause_capability} capability) to this configuration")
         self._scenario = scenario_id
         self._recovery_ticks = 0
-        self._recovery_spec = spec if spec.recovery_actions else None
+        self._recovery_spec = None if scenario_id == "normal" else self._recovery_plan(spec)
         self._completed_actions = []
         if spec.product_hold:
             for coil in self._coils:
@@ -125,7 +125,7 @@ class MesEngine:
     def recover(self) -> Snapshot:
         if self._scenario == "normal":
             return self.snapshot
-        if self._recovery_spec and len(self._completed_actions) < len(self._recovery_spec.recovery_actions):
+        if self._recovery_required() and len(self._completed_actions) < len(self._recovery_spec.recovery_actions):
             raise ValueError("필수 점검·조치·정상 확인을 모두 완료해야 복귀할 수 있습니다.")
         if self._recovery_ticks:
             return self.snapshot
@@ -198,6 +198,7 @@ class MesEngine:
                  else "ready" if len(self._completed_actions) == len(spec.recovery_actions) else "actions")
         return {"title": spec.title, "source_url": spec.source_url, "stage": stage,
                 "remaining_ticks": self._recovery_ticks, "product_hold": spec.product_hold,
+                "required": self._recovery_required(),
                 "equipment_id": self._cause_equipment_id(spec),
                 "actions": [{"action_id": a.action_id, "title": a.title, "detail": a.detail,
                              "completed": a.action_id in self._completed_actions} for a in spec.recovery_actions]}
@@ -342,9 +343,28 @@ class MesEngine:
 
         return states, "fault"
 
+    def _recovery_required(self) -> bool:
+        # Generic plans guide the demo but never block recovery or switching scenarios.
+        authored = self._scenario_by_id.get(self._scenario)
+        return bool(self._recovery_spec and authored and authored.recovery_actions)
+
+    def _recovery_plan(self, spec: ScenarioSpec) -> ScenarioSpec:
+        """Scenarios without authored steps get a generic synthetic check-repair-verify plan."""
+        if spec.recovery_actions:
+            return spec
+        eq = self._equipment_by_id.get(self._cause_equipment_id(spec))
+        names = {s.signal: s.name for s in (eq.signals if eq else ())}
+        signals = ", ".join(names.get(e.signal, e.signal) for e in spec.signal_effects) or "관측 신호"
+        code = eq.code if eq else "원인 설비"
+        return replace(spec, recovery_actions=(
+            RecoveryAction("inspect", "이상 신호 위치 확인", f"정지·에너지 차단 확인 후 {code}의 {signals} 측정 위치와 계측 상태를 점검한 것으로 기록합니다."),
+            RecoveryAction("repair", "원인 조치 기록", "이 시나리오에는 원인별 정비 절차가 정의되어 있지 않습니다. 확인된 원인에 대한 조치 완료를 모의 기록합니다."),
+            RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다.")))
+
     def _signal_effect(self, equipment, signal):
         spec = self._scenario_by_id.get(self._scenario)
-        if not spec or (spec.recovery_actions and len(self._completed_actions) == len(spec.recovery_actions)):
+        plan = self._recovery_spec
+        if not spec or (plan and len(self._completed_actions) == len(plan.recovery_actions)):
             return None
         return next((effect for effect in spec.signal_effects
                      if equipment.equipment_id == self._cause_equipment_id(spec)

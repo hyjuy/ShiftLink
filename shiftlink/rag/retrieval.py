@@ -120,6 +120,16 @@ def _evaluate_condition(cond: Condition, observations: dict[str, Any] | None) ->
         return None  # Comparison failed
 
 
+def _instance_matches(card: KnowledgeCard, canonical_ids: set[str], type_only: set[str]) -> bool:
+    """A card bound to one MES unit matches that unit, or any request naming only its type.
+
+    A type code ("CAU") resolves to no catalog row; the asker has not said which unit,
+    so cards bound to a unit of that type still apply (10/1: eval sets ask by type).
+    """
+    return (not card.mes_equipment_id or card.mes_equipment_id in canonical_ids
+            or card.equipment in type_only)
+
+
 def _condition_status(card: KnowledgeCard, observations: dict[str, Any] | None) -> str:
     """Reject definite mismatches; all checks must pass to be verified."""
     status = "verified"
@@ -163,8 +173,12 @@ COMMON_TOKEN_MIN_CARDS = 20
 # 근거 사건 문장(build_kb.py evidence_text)에만 있는 단어 하나당 점수. 카드 본문(1)보다 낮게 둔다.
 EVIDENCE_WEIGHT = 0.5
 # 현장 말투(질문 앞 두 글자) -> 카드가 쓰는 말. 설비 일반 어휘만 둔다 (평가 질문 문구를 옮기지 않는다).
-FIELD_SYNONYMS = {"기름": {"오일", "작동유"}, "소리": {"소음"}, "끼익": {"끽"}, "새요": {"누유"}, "샌다": {"누유"},
-                  "새는": {"누유"}, "뜨거": {"온도", "과열"}, "쏠려": {"사행"}, "쏠리": {"사행"}}
+# 10/1 블라인드(CAU·PDP·T2·T6)에서 채택: 새다→누설, 떨어지다→트립, 뜨끈→발열, 켜졌다·꺼졌다·멈췄다→기동·정지.
+# 유압 '누유'와 공압 '누설'을 함께 걸어도 설비 필터가 갈라 준다. dev·sanity·t4 무변화 확인.
+FIELD_SYNONYMS = {"기름": {"오일", "작동유"}, "소리": {"소음"}, "끼익": {"끽"}, "새요": {"누유", "누설"},
+                  "샌다": {"누유", "누설"}, "새는": {"누유", "누설"}, "새고": {"누설"}, "뜨거": {"온도", "과열", "발열"},
+                  "뜨끈": {"온도", "과열", "발열"}, "쏠려": {"사행"}, "쏠리": {"사행"}, "떨어": {"트립"},
+                  "켜졌": {"기동"}, "꺼졌": {"정지"}, "멈췄": {"정지"}, "멈춰": {"정지"}}
 
 
 def _stems(tokens: set[str]) -> set[str]:
@@ -331,13 +345,14 @@ class InMemoryToolProvider:
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
+        type_only = {code for _, code, row in resolved if row is None}
         evidence = self._evidence_tokens if handover else {}
 
         def candidates():
             for card in self.cards:
                 if card.equipment not in equipment_codes and card.equipment != "COMMON":
                     continue
-                if card.mes_equipment_id and card.mes_equipment_id not in canonical_ids:
+                if not _instance_matches(card, canonical_ids, type_only):
                     continue
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
@@ -376,11 +391,12 @@ class InMemoryToolProvider:
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
+        type_only = {code for _, code, row in resolved if row is None}
         candidate_cards = [
             c for c in self.cards
             if c.safety_flag and (include_handover or c.tacit_type != "T4")
             and (c.equipment in equipment_codes or c.equipment == "COMMON")
-            and (not c.mes_equipment_id or c.mes_equipment_id in canonical_ids)
+            and _instance_matches(c, canonical_ids, type_only)
         ]
 
         # Condition matching with observations

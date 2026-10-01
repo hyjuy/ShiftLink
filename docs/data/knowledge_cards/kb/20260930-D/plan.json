@@ -180,6 +180,30 @@
    "hint": "압축공기 사용 금지 행위",
    "round": 3,
    "generated_as": "K-1322"
+  },
+  {
+   "slot": "S23",
+   "card_id": "K-1322",
+   "equipment": "CAU",
+   "tacit_type": "T3",
+   "hint": "정전 후 압축기 재기동 확인 순서",
+   "round": 4
+  },
+  {
+   "slot": "S24",
+   "card_id": "K-1323",
+   "equipment": "CAU",
+   "tacit_type": "T1",
+   "hint": "지정 외 윤활유 사용 징후",
+   "round": 4
+  },
+  {
+   "slot": "S25",
+   "card_id": "K-1324",
+   "equipment": "PDP",
+   "tacit_type": "T3",
+   "hint": "배전반 전원 투입 순서",
+   "round": 4
   }
  ]
 }

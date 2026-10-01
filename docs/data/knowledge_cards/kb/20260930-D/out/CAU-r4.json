@@ -1,0 +1,163 @@
+[
+ {
+  "card_id": "K-1322",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T3",
+  "equipment": "CAU",
+  "component": "압축기 컨트롤러·기동 회로",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "정전 후 압축기 재기동 확인 순서 — 자동 재기동 설정, 재기동 지연, 저온 보호, 기동 불가 시 전원·퓨즈·비상정지",
+  "symptom": "정전 후 압축기 재기동, 복전 후 압축기 기동 불가",
+  "know_how": "정전 뒤에는 먼저 컨트롤러의 자동 재기동(Auto Restart) 설정을 본다. 켜져 있으면 전원이 돌아올 때 압축기가 스스로 기동하므로 주변 작업자에게 알리고 기동부에 손대지 않는다. 기동 버튼을 눌러도 바로 돌지 않으면 재기동 지연(Restart Delay) 설정 시간 동안 기동을 막는 동작일 수 있으므로 설정 시간을 확인하고 기다린다. 전원 투입 후 온도가 저온 보호 설정값보다 낮으면 기동하지 않고, 2분 뒤에도 낮으면 온도 센서 고장으로 정지 표시가 난다. 그래도 기동하지 않으면 제조사 고장 표의 '기동 불가' 순서대로 전원 공급, 입력 전압, 퓨즈, 기동 스위치, 비상정지 버튼 복귀, 모터 스타터 과부하 트립, 배선 접속을 확인한다. 표의 원인은 전부가 아니며, 설정값(초·온도)은 해당 제조사 제어기 값이라 가상 설비 CAU-01 기준이 아니다.",
+  "rationale": "Kaishan KRSP(V) 매뉴얼 5.1.3은 Auto Restart 아이콘을, 5.2 설정표는 'Auto Restart — Will Restart Compressor after Power Failure if Enabled', 'Restart Delay — Will stop compressor from starting for the duration of this setting', 'Low Temp Protection — After power on, if the temperature is detected lower than the set data, it is not allowed to start. Two minutes after power on ... reported temperature sensor fault and stop'으로 적는다. Table 8-1 'Fail to Start'는 원인·조치로 Power failure(전원 공급 확인), Low incoming voltage, Fuse blown, Faulty start switch, Emergency button(reset), Motor starter overload tripped, Loose wire connections, Air-end failure(대리점 연락)를 든다. 정전 후 재기동 절차를 한 절로 두지 않아 이 순서는 위 항목을 엮은 작성자 구성이다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S23"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code 메인 세션(서브에이전트 아님), batch KB-20260930-D round 4",
+   "generated_at": "2026-10-01T15:30:00+09:00",
+   "sources": [
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.21 / 인쇄 p.21 / 5.1.3 Icons display and functions (Auto Restart)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.26, p.28 / 인쇄 p.26, p.28 / 5.2 설정표 (Restart Delay, Low Temp Protection, Auto Restart)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.46 / 인쇄 p.46 / Table 8-1 Trouble Shooting Guide — Fail to Start",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    }
+   ],
+   "extraction_method": "PyMuPDF 텍스트 추출 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r4.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "컨트롤러 화면에서 자동 재기동(Auto Restart) 아이콘·설정이 켜져 있는지 본다.",
+     "preconditions": [],
+     "expected_result": "자동 재기동이 켜져 있으면 복전 시 스스로 기동할 수 있음을 알고 주변에 알린다.",
+     "stop_conditions": [
+      "정전 전 정비 중이었다면 잠금·표지를 유지하고 재기동하지 않는다(K-1314)."
+     ]
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "기동 버튼을 눌러도 바로 돌지 않으면 재기동 지연(Restart Delay) 설정 시간을 확인하고 기다린다.",
+     "preconditions": [],
+     "expected_result": "지연 시간이 지나면 기동한다. 지연 중에는 고장이 아니다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "기동하지 않고 저온 관련 표시가 있으면 저온 보호 설정과 온도 표시를 본다.",
+     "preconditions": [],
+     "expected_result": "온도가 설정값보다 낮아 기동이 막힌 것인지, 2분 뒤 온도 센서 고장 정지인지 구분된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "그래도 기동하지 않으면 전원 공급, 입력 전압, 퓨즈, 기동 스위치, 비상정지 버튼 복귀, 모터 스타터 과부하 트립, 배선 접속 순으로 확인한다.",
+     "preconditions": [
+      "전기 확인은 유자격 전기 담당이 한다.",
+      "충전부에 접근할 때는 차단·잠금·검전을 마친다(K-1309)."
+     ],
+     "expected_result": "기동 불가 원인 후보가 좁혀진다.",
+     "stop_conditions": [
+      "위 항목에서 원인을 못 찾고 압축기 본체(에어엔드) 고장이 의심되면 제조사 지정 대리점에 넘긴다."
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "급유식 스크루 압축기 제조사 매뉴얼의 제어기 설정과 고장 표에 한정한다. 가상 설비 CAU-01의 제어기에 같은 설정이 있는지는 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1323",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L1",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축기 윤활유(냉각유)",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "압축기에 지정 외 윤활유를 쓰면 토출 고온·윤활유 소비 증가가 나타날 수 있다 — 유종 코드 확인, 제조사 지정 윤활유 사용",
+  "symptom": "다른 회사·상표 오일 사용, 토출 고온, 윤활유 소비 증가, 윤활유 거품",
+  "know_how": "급유식 스크루 압축기의 윤활유는 냉각·밀봉·윤활을 함께 맡는다. 제조사 고장 표는 토출 고온의 원인 중 하나로 잘못된 윤활유 상표를 들고 유종 코드를 확인해 필요하면 교체하라고 하며, 윤활유 소비 과다의 원인으로 다른 오일 사용을 들고 제조사 지정 윤활유를 쓰라고 한다. 윤활유에 거품이 나면 빼내고 교체한다. 그래서 보충·교체 때 다른 제조사·상표 오일로 바꾸지 말고 지정 유종 코드를 확인한다. 다른 제품의 호환 여부를 판단할 근거는 원문에 없으므로 바꾸려면 제조사나 지정 대리점에 확인한다.",
+  "rationale": "Kaishan KRSP(V) 매뉴얼 p.9는 윤활유(fluid)가 냉각·밀봉·윤활 기능을 한다고 적는다. Table 8-1은 'High air discharge temperature'의 원인으로 'Incorrect fluid brand — Check oil code number, replace as necessary'를, 'Excessive Fluid Consumption'의 원인으로 'Different oil is being used — Use KRSP genuine fluid'를, 'Fluid foaming — Drain off oil and change'를 든다. 다른 제품과의 호환성 기준은 원문에 없다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S24"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code 메인 세션(서브에이전트 아님), batch KB-20260930-D round 4",
+   "generated_at": "2026-10-01T15:30:00+09:00",
+   "sources": [
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.9 / 인쇄 p.9 / 압축 과정 설명 (fluid의 세 기능)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.47~48 / 인쇄 p.47~48 / Table 8-1 — High air discharge temperature, Excessive Fluid Consumption",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    }
+   ],
+   "extraction_method": "PyMuPDF 텍스트 추출 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r4.md",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "accepted",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "급유식 스크루 압축기 제조사 매뉴얼의 고장 표에 한정한다. 가상 설비 CAU-01의 지정 유종은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ }
+]

@@ -44,12 +44,22 @@ SOURCES_R3 = {
             R3_OUT.format(eq="CAU")],
 }
 
+R4_OUT = R2_OUT.replace("-r2", "-r4").replace("2차", "4차").replace("1차 결과이므로", "1·2·3차 결과이므로")
+R4_NOTE = ("4차 슬롯 주제는 10/1 블라인드 질문의 카드 공백(BL-015·019·023)에서 정했다. 그래서 이 라운드는 평가셋에 대해 블라인드가 아니다. "
+           "카드 본문은 아래 원문만으로 쓴다. 작성: 메인 Claude Code 세션(서브에이전트 아님)")
+SOURCES_R4 = {
+    "CAU": [f"원문: `docs/data/sources/CAU/Kaishan_KRSP_V_Instruction_Manual.pdf` — 5.1.3 아이콘(Auto Restart), 5.2 설정표(Restart Delay·Low Temp Protection·Auto Restart), Table 8-1(Fail to Start, High air discharge temperature, Excessive Fluid Consumption)",
+            "중복 금지: K-1311(부하 운전 중 정지)·K-1313(정기 정비)·K-1314(정비 전 잠금·자동 재기동 주의)와 겹치지 않게 한다", R4_NOTE, R4_OUT.format(eq="CAU")],
+    "PDP": [f"원문: `docs/data/sources/PDP/ABB_MaxSG_LV_Switchgear_1SXU900082M0201.pdf` — Safety Precautions, Placing Switchgear into Service: Energizing the Main Bus (PDF p.20 / 인쇄 p.16)",
+            "중복 금지: K-1308(트립 후 확인 순서)·K-1309(충전부 작업 전 차단·잠금)·K-1319(CT 2차 개방 금지)와 겹치지 않게 한다", R4_NOTE, R4_OUT.format(eq="PDP")],
+}
+
 plan = json.loads((HERE / "plan.json").read_text(encoding="utf-8"))
 tpl = (HERE / "prompt_template.md").read_text(encoding="utf-8")
 index = {"batch_id": plan["batch_id"], "seed": plan["seed"],
          "template_sha256": hashlib.sha256(tpl.encode("utf-8")).hexdigest(), "prompts": {}}
 RETRY = {"CAU": ["K-1305"]}
-jobs = [(eq, eq, 1, SOURCES[eq]) for eq in SOURCES] + [(f"{eq}-r2", eq, 2, SOURCES_R2[eq]) for eq in SOURCES_R2] + [(f"{eq}-r3", eq, 3, SOURCES_R3[eq]) for eq in SOURCES_R3]
+jobs = [(eq, eq, 1, SOURCES[eq]) for eq in SOURCES] + [(f"{eq}-r2", eq, 2, SOURCES_R2[eq]) for eq in SOURCES_R2] + [(f"{eq}-r3", eq, 3, SOURCES_R3[eq]) for eq in SOURCES_R3] + [(f"{eq}-r4", eq, 4, SOURCES_R4[eq]) for eq in SOURCES_R4]
 for key, eq, rnd, sources in jobs:
     slots = [s for s in plan["slots"] if s["equipment"] == eq and s.get("round", 1) == rnd]
     if rnd == 2:

@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 15
     env:
       # Floors = current main route_score. Raise them when a PR moves the baseline up on purpose.
-      MIN_DEV_ROUTE: 20
+      MIN_DEV_ROUTE: 21
       MIN_SANITY_ROUTE: 28
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,542 @@
+[
+ {
+  "qid": "BL-001",
+  "eq_id": "HPU",
+  "persona_id": "V-blind",
+  "intent": "status",
+  "question": "아침에 기동하자마자 필터 차압 경보가 떴어요. 유온은 아직 낮은데 필터를 바로 갈아야 되나요, 아니면 좀 돌려보고 봐야 돼요?",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 2.3,
+    "unit": "bar"
+   },
+   "hpu_oil_temp": {
+    "value": 28,
+    "unit": "degC"
+   }
+  },
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1201",
+   "K-1007"
+  ],
+  "acceptable_card_ids": [
+   "K-1202",
+   "K-1218"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "저온 기동 차압 상승: 표시기 확인(K-1201)·저온 워밍업(K-1007). 관측값은 작성자의 '차압 높음, 유온 낮음'을 범위에 맞춰 수치화",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-002",
+  "eq_id": "HPU",
+  "persona_id": "V-blind",
+  "intent": "status",
+  "question": "유온이 계속 올라감. 쿨러 물은 잘 도는 것 같은데 세워야 됨?",
+  "observations": {
+   "hpu_oil_temp": {
+    "value": 63,
+    "unit": "degC"
+   }
+  },
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1002"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "쿨러 출구 유온 확인 순서. 냉각수 유량 신호는 MES에 없어 질문 문장에만 남김",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-003",
+  "eq_id": "CV",
+  "persona_id": "V-blind",
+  "intent": "status",
+  "question": "사행 알람이 떴다 꺼졌하는데 모터 전류는 평소랑 똑같아. 바로 세워서 올려야하나?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1010",
+   "K-1012"
+  ],
+  "acceptable_card_ids": [
+   "K-1013",
+   "K-1015"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "벨트 사행 대응. 사행 알람·CV 모터 전류 신호는 MES에 없어 관측값 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-004",
+  "eq_id": "RT",
+  "persona_id": "V-blind",
+  "intent": "status",
+  "question": "롤러 하나만 베어링 온도가 높네. 진동은 아직 괜찮은데 교대 끝날 때까지 돌려도 되나?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "RT 롤러 베어링 온도 카드 없음(K-1017은 소음 기준). RT 베어링 온도 신호도 MES에 없음. 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-005",
+  "eq_id": "GR",
+  "persona_id": "V-blind",
+  "intent": "status",
+  "question": "감속기 진동이 지난주보다 올랐습니다. 오일 온도는 정상입니다. 오일부터 뽑아야 하나요 아니면 세워야 하나요?",
+  "observations": {
+   "gr_vib_rms": {
+    "value": 3.4,
+    "unit": "mm_s"
+   }
+  },
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1209"
+  ],
+  "acceptable_card_ids": [
+   "K-1024"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "진동 > 2.8에서 베어링 온도 동반 여부로 분기(K-1209). '오일 온도'는 GR 신호에 없어 질문 문장에만 남김",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-006",
+  "eq_id": "HPU",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "펌프 교체하고 다시 돌렸는데 압력이 설정값까지 안 올라와요. 뭘 놓쳤을까요?",
+  "observations": {
+   "hpu_pressure": {
+    "value": 135,
+    "unit": "bar"
+   }
+  },
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1211",
+   "K-1203"
+  ],
+  "acceptable_card_ids": [
+   "K-1001",
+   "K-1004"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정비 후 재가동 압력·유량 확인(K-1211), 압력 부족 경로(K-1203)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-007",
+  "eq_id": "HPU",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "유압유 보충했는데 재가동 전에 뭘 봐야 해? 처음 해봐서 그래",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1211"
+  ],
+  "acceptable_card_ids": [
+   "K-1218",
+   "K-1004"
+  ],
+  "safety_card_ids": [
+   "K-1006"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "오일 정비 후 재가동 확인(K-1211)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-008",
+  "eq_id": "CV",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "벨트 이음 작업 끝내고 돌렸더니 벨트가 한쪽으로 쏠리네?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1213",
+   "K-1013"
+  ],
+  "acceptable_card_ids": [
+   "K-1010",
+   "K-1012"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "벨트 정비 후 시험운전 편주(K-1213), 스플라이스 구간 쏠림(K-1013)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-009",
+  "eq_id": "RT",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "모터 교체하고 다시 돌렸는데 그 롤러만 반대로 돌아",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "모터 결선·회전 방향 카드 없음(K-1214는 재가동 승인 구분). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-010",
+  "eq_id": "GR",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "감속기 오일 갈고 처음 돌리는데 소리가 좀 나는 것 같아요. 원래 이런가요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1212"
+  ],
+  "acceptable_card_ids": [
+   "K-1026",
+   "K-1028",
+   "K-1024"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "오일 교환 후 유면 대조·시험운전 관측(K-1212). 이음 성격별 카드는 함께 인정",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-011",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "symptom",
+  "question": "순회하는데 배관 쪽에서 쉭쉭 새는 소리가 나요. 운전 중에 찾아봐도 돼요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1302"
+  ],
+  "acceptable_card_ids": [
+   "K-1301",
+   "K-1303"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "누설음 위치 찾기(K-1302)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-012",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "symptom",
+  "question": "압축기가 평소보다 자주 켜졌다 꺼졌다 함. 뭐부터 봐야 되나",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1303"
+  ],
+  "acceptable_card_ids": [
+   "K-1301",
+   "K-1305"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "기동·정지 압력 하강·상승 시간으로 누설 부하 추정(K-1303)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-013",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "symptom",
+  "question": "에어 공구 쓰는데 끝에서 물이 튀어나오는데?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "압축공기 수분·드레인 카드 없음. 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-014",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "압축기가 과열로 멈췄어. 식으면 바로 다시 켜도 됨?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1311"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1314"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "부하 운전 중 정지·토출 고온 경보별 확인(K-1311). 과열 정지 신호는 MES에 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-015",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "정전 끝나고 압축기 다시 살릴 때 순서 있어요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1322"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "10/1 배치 D 4차 K-1322(CAU 정전 후 재기동 확인 순서) 승격으로 답 있음으로 변경. 이전: CAU 정전 후 재기동 순서 카드 없음(K-1314는 정비 전 잠금·자동 재기동 주의). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-016",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "safety",
+  "question": "차단기가 떨어졌는데 그냥 다시 올려도 돼요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1306",
+   "K-1317"
+  ],
+  "acceptable_card_ids": [
+   "K-1308",
+   "K-1310"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "재투입 후 멀쩡해도 간헐 고장(K-1306), 과부하 단정 전 확인(K-1317). breaker_trip 신호는 범위 정의가 없어 관측값 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-017",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "symptom",
+  "question": "배전반 문 열었더니 탄 냄새 남",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1315"
+  ],
+  "acceptable_card_ids": [
+   "K-1317"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "접속부 과열·변색 징후(K-1315). 냄새 표현은 카드에 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-018",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "symptom",
+  "question": "패널 하나만 손 대보면 뜨끈해요. 다른 데는 괜찮고요",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1315"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "국부 발열·핫스폿(K-1315)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-019",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "procedure",
+  "question": "정전 복구되면 차단기를 한꺼번에 올려요, 하나씩 올려요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1324"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "10/1 배치 D 4차 K-1324(배전반 전원 투입 순서) 승격으로 답 있음으로 변경. 이전: 정전 복구 투입 순서 카드 없음(K-1307은 기동 시 전압 강하). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-020",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "safety",
+  "question": "배전반 안에 단자 하나 조이려는데 메인만 내려도 돼?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1309"
+  ],
+  "acceptable_card_ids": [
+   "K-1319"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "충전부 작업 전 차단·잠금·검전(K-1309)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-021",
+  "eq_id": "HPU",
+  "persona_id": "V-blind",
+  "intent": "other",
+  "question": "어큐뮬레이터 질소 몇 bar 넣어야 돼요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "충전 압력 수치 없음(K-1005는 확인 순서만). 검색이 K-1005를 올리면 오답",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-022",
+  "eq_id": "CV",
+  "persona_id": "V-blind",
+  "intent": "other",
+  "question": "벨트 새로 주문하려는데 규격을 알려줘.",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "벨트 규격 카드 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-023",
+  "eq_id": "CAU",
+  "persona_id": "V-blind",
+  "intent": "other",
+  "question": "압축기 오일을 다른 회사 걸로 바꿔도 되나요?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1323"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "10/1 배치 D 4차 K-1323(지정 외 윤활유 징후) 승격으로 답 있음으로 변경. 이전: 윤활유 호환 카드 없음(K-1313은 교체 주기)",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-024",
+  "eq_id": "PDP",
+  "persona_id": "V-blind",
+  "intent": "other",
+  "question": "배전반에 부하 하나 더 물려도 돼요? 자리는 남는데",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "부하 증설 판단 카드 없음",
+  "split": "blind"
+ },
+ {
+  "qid": "BL-025",
+  "eq_id": "GR",
+  "persona_id": "V-blind",
+  "intent": "other",
+  "question": "감속기 기어 이 빠진 거 용접해서 써도 되냐?",
+  "observations": {},
+  "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "기어 보수 카드 없음",
+  "split": "blind"
+ }
+]

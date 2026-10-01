@@ -59,6 +59,17 @@ for s in slots:
         s["generated_as"], s["card_id"] = s["card_id"], f"K-{next_id}"
     next_id += 1
 
+# Round 4 (2026-10-01): gaps found by the 10/1 blind questions (eval/qa/20261001-blind BL-015·019·023) — the slot
+# topics come from those questions, so this round is NOT blind to the eval set; the card text is written from the
+# sources only. Written in the main Claude Code session (no subagent); IDs continue after the renumbering above.
+TABLE_R4 = {"CAU": [("T3", "정전 후 압축기 재기동 확인 순서"), ("T1", "지정 외 윤활유 사용 징후")],
+            "PDP": [("T3", "배전반 전원 투입 순서")]}
+for eq, rows in TABLE_R4.items():
+    for t, hint in rows:
+        slots.append({"slot": f"S{len(slots) + 1:02d}", "card_id": f"K-{next_id}", "equipment": eq,
+                      "tacit_type": t, "hint": hint, "round": 4})
+        next_id += 1
+
 out = {"batch_id": BATCH, "seed": SEED, "generator": "plan.py", "slots": slots}
 Path(__file__).with_name("plan.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps({eq: [s["tacit_type"] for s in slots if s["equipment"] == eq] for eq in TABLE}, ensure_ascii=False))

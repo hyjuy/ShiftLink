@@ -32,13 +32,15 @@
    }
   },
   "writer_note": "압력·유량 동반 저하 → 펌프 마모",
-  "answerable": false,
-  "primary_card_ids": [],
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1203"
+  ],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "hard",
-  "label_note": "압력 138(정상 하한 145 미만)·유량 33(정상 하한 38 미만) 동반 저하. K-1001은 압력 '없음', K-1004는 소음·거품 동반이라 불일치."
+  "label_note": "압력 138(정상 하한 145 미만)·유량 33(정상 하한 38 미만) 동반 저하. K-1001은 압력 '없음', K-1004는 소음·거품 동반이라 불일치. / 10/1 배치 C 승격(#125) 후 재레이블: K-1203(압력·유량 동반 부족 시 릴리프 설정·유량 확인 경로)이 답한다."
  },
  {
   "qid": "Q-021",
@@ -48,13 +50,15 @@
   "question": "벨트가 모터는 도는데 가끔 미끄러지는 느낌이에요. 코일 올라가면 더 심하고요.",
   "observations": {},
   "writer_note": "[OOS 추정] 벨트 장력 부족·슬립",
-  "answerable": false,
-  "primary_card_ids": [],
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1204"
+  ],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "easy",
-  "label_note": "벨트 슬립 카드 없음."
+  "label_note": "벨트 슬립 카드 없음. / 10/1 배치 C 승격(#125) 후 재레이블: K-1204(벨트 미끄럼, 장력 저하 여부로 조치 분기)가 답한다."
  },
  {
   "qid": "Q-023",
@@ -70,7 +74,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "고무 가루 증상 카드 없음. K-1016은 커버 부풂."
+  "label_note": "고무 가루 증상 카드 없음. K-1016은 커버 부풂. / 10/1 배치 C 승격(#125) 후 재레이블: 답 없음 유지. K-1204(미끄럼)는 고무 가루·긁힘과 다르다."
  },
  {
   "qid": "Q-030",

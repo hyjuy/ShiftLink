@@ -40,7 +40,7 @@
     "source_scope_unapproved:M-C-004",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "ed638b088e2bd4659e7453e65e473ee1e0fe202f05e694f2522d6cc5f74b3ed0",
+   "card_sha256": "4d797c0b567d7ceab39619fd2a313ae5b97ed48c01cc8e321fc15c8dafc09359",
    "review_block_sha256": "553222579d1d86bc5defd2b3ebbb738b0866a9e1b76dd0cd54a5e901563f938d"
   },
   "K-1205": {
@@ -50,7 +50,7 @@
     "source_scope_unapproved:M-C-004",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "b98194b49efd604de6fee2a8f9b15250b0dec09b13e37845f17392d26dec02f1",
+   "card_sha256": "3fe987241b3c3f946cea7f0259b1613237aeb3314b17106561e23bec52be760b",
    "review_block_sha256": "9a9a5c3d8f6226b334a2df8ed2ede008013a361020f35206c07cdbecb3160200"
   },
   "K-1206": {
@@ -60,7 +60,7 @@
     "source_scope_unapproved:M-C-007",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "41e225b664f942b6f961b5450618758e8e07698806bd0a59edeb0c23b240eba5",
+   "card_sha256": "73b5428d17c7a44b405c11a71a8113505a9f51a0761eb8aaa79fff419f9f8160",
    "review_block_sha256": "275ec881c41bbc4b4db72fe3f92126f4f5da86039f6906c0ba2fb1f13a4e20a2"
   },
   "K-1207": {
@@ -89,7 +89,7 @@
     "source_scope_unapproved:M-C-003",
     "source_scope_unapproved:M-C-003"
    ],
-   "card_sha256": "d0772b43cc3b304b944cf3a8a09b93ae9f9c30e0dcbf0602999f13d166b10d12",
+   "card_sha256": "af6b45963a7ddce489baf7c3a2420a60333ef18ae28a606f839f2da263007714",
    "review_block_sha256": "e1857f6c11449b36462abb999586debeadf0a1f36c4c0736c46f101bf10e570f"
   },
   "K-1210": {
@@ -116,7 +116,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0401",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "8f69039486d9c2272dccb2c09240f6f572f6222d486474bf4cd12a3f910cbcf3",
+   "card_sha256": "f8a4777da3805f758e692b2f60f87938036abc623703cc6d5249041fa3380dc8",
    "review_block_sha256": "4109b9aea0ff28c3d8aef49197360781e330b0ad8d6ecb982f6993e5ec99f1cb"
   },
   "K-1212": {
@@ -133,7 +133,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0403",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "c8c7bdad11dc06ff5606c81f5b559eccabfaae9d65e286bd0dc5f23cd4d6c3a1",
+   "card_sha256": "2d4e7fe453a5c7839165d57814c2f2b3510cc4f144526595f3128f20643b9251",
    "review_block_sha256": "bd85e7464ed97a3d65188a2ccfacc8fa01811ac0803c31ef6e2143169c80c37c"
   },
   "K-1213": {
@@ -150,7 +150,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0405",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "3dca7cfaa2ba6b68c9adc0f67ca5f37b010c41e4ef1e7ef7beb500bcd01a818f",
+   "card_sha256": "b98e8fd61ffc91ec042c6fd7d48efb32f394881d7e60dedae5092b4d5b732be0",
    "review_block_sha256": "e380334b3da09c7a1efc885cb40cdadc75f3cd3ef7714a7cab4df462e9b71a99"
   },
   "K-1214": {
@@ -256,5 +256,94 @@
    "review_block_sha256": "46bdec64dde99c1a5a265bac089067bd6de68d1876cd2214e5f087e02f73d12c"
   }
  },
- "review_hash_scope": "per_card_block; review_sha256_lf retains the original whole-file audit checksum"
+ "review_hash_scope": "per_card_block; review_sha256_lf retains the original whole-file audit checksum",
+ "amendments": [
+  {
+   "date": "2026-10-01",
+   "authorization": "explicit_user_request",
+   "request": "각 순서에 맞게 서브에이전트로 병렬처리할 수 있는건 병렬처리 순차처리는 순서에 맞게 완료가 보내지면 실행",
+   "scope": "요청된 카드 5장의 symptom 보완·명사형 정리만 반영. 기존 검수 판정·근거·정책 보류·출처·계보·현장 작업 안전 승인 범위는 유지한다.",
+   "baseline_commit": "47f0964052fc50ae4da8a4a1ce260363e67af098",
+   "cards": {
+    "K-1204": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "ed638b088e2bd4659e7453e65e473ee1e0fe202f05e694f2522d6cc5f74b3ed0",
+     "card_sha256": "4d797c0b567d7ceab39619fd2a313ae5b97ed48c01cc8e321fc15c8dafc09359",
+     "previous_symptom": "운전 지시가 있는 컨베이어에서 벨트가 미끄러지거나 돌지 않는다.",
+     "symptom": "운전 지시 중 벨트 미끄럼·정지"
+    },
+    "K-1209": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "d0772b43cc3b304b944cf3a8a09b93ae9f9c30e0dcbf0602999f13d166b10d12",
+     "card_sha256": "af6b45963a7ddce489baf7c3a2420a60333ef18ae28a606f839f2da263007714",
+     "previous_symptom": "정상 운전과 비교해 진동이 증가했으며 베어링 온도 변화 확인이 필요하다.",
+     "symptom": "정상 운전 대비 감속기 진동 상승, 베어링 온도 변화 동반 여부"
+    },
+    "K-1211": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "8f69039486d9c2272dccb2c09240f6f572f6222d486474bf4cd12a3f910cbcf3",
+     "card_sha256": "f8a4777da3805f758e692b2f60f87938036abc623703cc6d5249041fa3380dc8",
+     "previous_symptom": null,
+     "symptom": "필터·오일 정비 후 재가동, 압력 회복·유량 부족, 기포·소음"
+    },
+    "K-1212": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "c8c7bdad11dc06ff5606c81f5b559eccabfaae9d65e286bd0dc5f23cd4d6c3a1",
+     "card_sha256": "2d4e7fe453a5c7839165d57814c2f2b3510cc4f144526595f3128f20643b9251",
+     "previous_symptom": null,
+     "symptom": "감속기 오일 교환 후 시험운전, 유면 확인 누락, 소음·진동·누유 관측"
+    },
+    "K-1213": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "3dca7cfaa2ba6b68c9adc0f67ca5f37b010c41e4ef1e7ef7beb500bcd01a818f",
+     "card_sha256": "b98e8fd61ffc91ec042c6fd7d48efb32f394881d7e60dedae5092b4d5b732be0",
+     "previous_symptom": null,
+     "symptom": "벨트 정비 후 시험운전, 정상 장력·벨트 한쪽 쏠림"
+    }
+   }
+  },
+  {
+   "date": "2026-10-01",
+   "authorization": "explicit_user_request",
+   "request": "위에 **정답 라벨 재검토 → 카드 표현 정리 → 검색 개선 → 재평가** 순서로 작업을 실행 한단계마다 성능이 어떻게 변화하는지 확인, 성능에 변화가 없으면 적용하지 말 것.",
+   "scope": "단계 2 카드 K-1205·K-1206 symptom 명사형 정리만 반영. 기존 검수 판정·근거·정책 보류·출처·계보·현장 작업 안전 승인 범위 유지.",
+   "baseline_commit": "61a3cccbe8710ac91bd3127ae3d2b3b8e2794e93",
+   "validation": {
+    "sanity": "28/30 → 29/30",
+    "dev": "21/30 → 21/30",
+    "t4": "8/20 → 8/20",
+    "blind": "14/18 → 14/18"
+   },
+   "cards": {
+    "K-1206": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "41e225b664f942b6f961b5450618758e8e07698806bd0a59edeb0c23b240eba5",
+     "card_sha256": "73b5428d17c7a44b405c11a71a8113505a9f51a0761eb8aaa79fff419f9f8160",
+     "previous_symptom": "운전 지시가 있는데 벨트가 느리고 이송물이 쌓인다.",
+     "symptom": "운전 지시 중 벨트 저속·이송물 적체"
+    },
+    "K-1205": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "b98194b49efd604de6fee2a8f9b15250b0dec09b13e37845f17392d26dec02f1",
+     "card_sha256": "3fe987241b3c3f946cea7f0259b1613237aeb3314b17106561e23bec52be760b",
+     "previous_symptom": "운전 중 이송 능력이 떨어졌으며 cv_belt_tension은 380–460 kPa(가상 정상 범위)이다.",
+     "symptom": "운전 중 이송 능력 저하, cv_belt_tension 380–460 kPa(가상 정상 범위)"
+    }
+   }
+  }
+ ]
 }

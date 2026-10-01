@@ -70,6 +70,15 @@ for eq, rows in TABLE_R4.items():
                       "tacit_type": t, "hint": hint, "round": 4})
         next_id += 1
 
+# Round 5 (2026-10-01): two Korean papers the user added (KIFSE 2020 MCCB 접속부, KOSHAM 2019 배전반 화재위험) —
+# topic chosen from blind BL-017 (탄 냄새) follow-up; the papers do not mention smell, so the card covers what they do say.
+TABLE_R5 = {"PDP": [("T1", "차단기 미동작 상태의 접속부 과열(직렬 아크)")]}
+for eq, rows in TABLE_R5.items():
+    for t, hint in rows:
+        slots.append({"slot": f"S{len(slots) + 1:02d}", "card_id": f"K-{next_id}", "equipment": eq,
+                      "tacit_type": t, "hint": hint, "round": 5})
+        next_id += 1
+
 out = {"batch_id": BATCH, "seed": SEED, "generator": "plan.py", "slots": slots}
 Path(__file__).with_name("plan.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps({eq: [s["tacit_type"] for s in slots if s["equipment"] == eq] for eq in TABLE}, ensure_ascii=False))

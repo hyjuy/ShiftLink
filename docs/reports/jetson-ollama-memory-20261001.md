@@ -114,4 +114,4 @@ sudo mkdir -p /etc/systemd/system/ollama.service.d && printf '[Service]\nEnviron
 | v4 2단계 | 19 | 4.1초 |
 | 검색 1위 그대로 | **28** | — |
 
-모델이 검색 1위를 제치고 정답을 고른 경우는 없었다. qwen2.5:3b 결과를 본 뒤 질의 모드의 후보 수(`MAX_CANDIDATES`)를 정한다.
+모델이 검색 1위를 제치고 정답을 고른 경우는 Q-019 한 문항뿐이었다 (v1~v4). 대신 검색 1위가 맞은 문항을 6~23개 놓쳤다. qwen2.5:3b 결과를 본 뒤 질의 모드의 후보 수(`MAX_CANDIDATES`)를 정한다.

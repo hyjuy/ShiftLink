@@ -8,10 +8,9 @@
  *   C-102  검색 대상 = status=accepted AND split=kb AND grade=L1 (/api/kb/cards 가 거름)
  *   C-099  sealed 분할은 열지 않는다 — 서버가 kb 파일만 읽음
  *   D-41   확정되지 않았거나 구성에 없는 설비로는 검색하지 않는다
- *   D-42   원본 이미지는 단말 밖으로 나가지 않는다
- *   §5.3   QR 페이로드는 code(HPU-01). equipment_id(EQ-0001)가 아니다
+ *   D-42   원본 이미지는 단말 밖으로 나가지 않는다 — 분류는 라즈베리파이(shiftlink.vision.classify)가 하고
+ *          화면은 /api/equipment/scan/recent 결과만 받는다 (작업계획 C6)
  *   §9.2   QueryRequest.eq_id 에는 equipment_id 를 넣는다
- *   §6.1   신뢰도 대신 연속 프레임 일치 수(frame_votes)
  *
  * MES 정렬 (2026-10-01)
  *   설비·신호·정상 범위 = /api/config (현재 run 의 구성). 기준정보 alarm_low/high 는 상태 경계로 쓰지 않는다.
@@ -21,11 +20,8 @@
  */
 'use strict';
 
-const QR_PREFIX = 'SHIFTLINK:EQ:';
-const VOTE_WINDOW = 3;
-const MAX_ATTEMPTS = 3;
-const FRAMES_PER_ATTEMPT = 12;
-const SCAN_INTERVAL_MS = 120;
+const SCAN_POLL_MS = 500;
+const SCAN_TIMEOUT_MS = 20000;  // 이 안에 새 인식이 없으면 직접 선택으로
 const API_TIMEOUT_MS = 8000;
 const RECENT_MAX = 3;
 
@@ -35,12 +31,10 @@ const TYPE_BAND = { HPU:'빨강', GR:'파랑', RT:'노랑', CV:'초록', PDP:'�
 // ── 상태 ───────────────────────────────────────────────────────────
 const S = {
   screen:'boot', equipment:[], cards:[], handovers:[], groups:{}, types:{},
-  eq:null, source:null, scanId:null, markerValue:null, frameVotes:0,
+  eq:null, source:null, scanId:null,
   symptom:null,   // { text, other:boolean } — 선택된 증상
   observations:[], recent:[], outbox:[], online:null, netNote:null,
-  detector:null, stream:null, timer:null,
-  votes:[], noneFrames:0, attempts:0, pending:null,
-  scanStartedAt:0, lastScanMs:null, localScanSeq:0, mes:null, mesExcluded:[],
+  scanRun:0, scanStartedAt:0, lastScanMs:null, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0
 };
 
@@ -108,12 +102,12 @@ async function boot() {
 
 // ── 화면 전환 ──────────────────────────────────────────────────────
 function show(name) {
-  if (S.screen === 'scan' && name !== 'scan') stopCamera();
+  if (S.screen === 'scan' && name !== 'scan') S.scanRun += 1;  // 폴링 중단
   S.screen = name;
   document.querySelectorAll('.screen').forEach((el) => {
     el.classList.toggle('on', el.id === 's-' + name);
   });
-  const hideCtx = name === 'scan' || name === 'manual' || name === 'nocam' || name === 'boot';
+  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot';
   $('ctx').classList.toggle('on', !!S.eq && !hideCtx);
   $('net').hidden = (name === 'boot');
   const pane = document.querySelector('#s-' + name + ' .pane');
@@ -158,8 +152,6 @@ async function probeServer() { try { await api('/api/state'); } catch (_) {} }
 function setContext(eq, source, extra) {
   S.eq = eq; S.source = source;
   S.scanId = (extra && extra.scanId) || null;
-  S.markerValue = (extra && extra.markerValue) || null;
-  S.frameVotes = (extra && extra.frameVotes) || 0;
   S.observations = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   renderContext(); renderRecent(); renderObsSignals(); renderObsList();
@@ -175,9 +167,7 @@ function renderContext() {
   const camera = S.source === 'camera_scan';
   const src = $('ctxSrc');
   src.classList.toggle('manual', !camera);
-  src.textContent = (camera ? '✓ 카메라 확정' : '· 직접 선택')
-    + (S.scanId ? ' · ' + S.scanId : '')
-    + (camera && S.frameVotes ? ' · ' + S.frameVotes + '/' + VOTE_WINDOW + ' 프레임' : '');
+  src.textContent = (camera ? '✓ 카메라 확정' : '· 직접 선택') + (S.scanId ? ' · ' + S.scanId : '');
   $('ctxFoot').textContent = S.eq.equipment_id + ' · ' + S.eq.where;
 }
 
@@ -197,146 +187,57 @@ function renderRecent() {
 }
 
 // ── 스캔 ───────────────────────────────────────────────────────────
-function setScanState(kind, text, votes) {
+function setScanState(kind, text) {
   $('reticle').className = 'reticle' + (kind ? ' ' + kind : '');
   $('scanState').className = kind || '';
   $('scanText').textContent = text;
-  const bar = $('voteBar');
-  if (typeof votes === 'number' && votes > 0) {
-    bar.hidden = false;
-    [].forEach.call(bar.children, (el, i) => {
-      el.className = 'vote' + (i < votes ? (votes >= VOTE_WINDOW ? ' on' : ' pend') : '');
-    });
-  } else bar.hidden = true;
 }
 
-function resetScanState() {
-  S.votes = []; S.noneFrames = 0; S.attempts = 0; S.pending = null;
-  S.scanStartedAt = Date.now();
-  $('scanConfirm').hidden = true;
-  setScanState('', '상자를 프레임 안에', 0);
+async function latestScan() {
+  return (await getJson('/api/equipment/scan/recent?limit=1')).scans[0] || null;
 }
 
+/* 라즈베리파이가 확정해 Jetson에 올린 인식 결과를 폴링한다. 시작 시점의 최신 scan_id 보다 새 것만 받는다
+ * (파이·Jetson 시계를 비교하지 않으려고). 파이는 같은 객체를 한 번만 보내므로 이미 놓여 있던 상자는
+ * 치웠다가 다시 놓아야 잡힌다. */
 async function startScan() {
-  show('scan'); resetScanState();
-  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
-    return showNoCam('secure');
-  if (!('BarcodeDetector' in window)) return showNoCam('detector');
-  try { S.detector = new BarcodeDetector({ formats: ['qr_code'] }); }
-  catch (_) { return showNoCam('detector'); }
-  try {
-    S.stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } }, audio: false });
-  } catch (err) {
-    return showNoCam(err && err.name === 'NotAllowedError' ? 'permission' : 'device', err);
-  }
-  const v = $('video'); v.srcObject = S.stream;
-  try { await v.play(); } catch (_) {}
+  const run = ++S.scanRun;
+  show('scan'); setScanState('', 'Jetson 연결 확인 중…');
+  let base;
+  try { base = await latestScan(); } catch (_) { return failScan(run, 'Jetson에 연결할 수 없음 — 직접 선택'); }
+  if (S.scanRun !== run) return;
   S.scanStartedAt = Date.now();
-  S.timer = setInterval(tick, SCAN_INTERVAL_MS);
-}
-
-function stopCamera() {
-  if (S.timer) { clearInterval(S.timer); S.timer = null; }
-  if (S.stream) { S.stream.getTracks().forEach((t) => t.stop()); S.stream = null; }
-  const v = $('video'); if (v) v.srcObject = null;
-}
-
-async function tick() {
-  const v = $('video');
-  if (!S.detector || !v || v.readyState < 2) return;
-  let codes = [];
-  try { codes = await S.detector.detect(v); } catch (_) { return; }
-  feed(codes.map((c) => c.rawValue));
-}
-
-/* 디코딩 원문 → 판정. 진단 패널 주입도 같은 경로를 쓴다. */
-function feed(rawValues) {
-  let hit = null;
-  for (const raw of rawValues || []) {
-    const text = String(raw).trim();
-    if (text.indexOf(QR_PREFIX) !== 0) continue;      // 접두어 검사 = 1차 방어
-    const eq = findByCode(text.slice(QR_PREFIX.length)); // code → 카탈로그 = 2차 방어
-    if (!eq) continue;
-    hit = { eq: eq, marker: text }; break;
+  setScanState('', '웹캠 앞에 상자를 놓으세요');
+  while (Date.now() - S.scanStartedAt < SCAN_TIMEOUT_MS) {
+    await sleep(SCAN_POLL_MS);
+    if (S.scanRun !== run) return;
+    let scan = null;
+    try { scan = await latestScan(); } catch (_) { continue; }
+    if (S.scanRun !== run) return;
+    if (!scan || (base && scan.scan_id === base.scan_id)) continue;
+    base = scan;
+    // D-41: 현재 구성에 있는 설비만. 서버가 고른 code가 구성에 없으면 같은 유형의 첫 설비.
+    const eq = findByCode(scan.code) || S.equipment.find((e) => e.type === scan.class);
+    if (!eq) { setScanState('candidate', scan.class + ' — 현재 구성에 없는 설비, 무시'); continue; }
+    return lockScan(eq, scan);
   }
-  if (!hit) {
-    S.noneFrames += 1;
-    if (S.noneFrames >= FRAMES_PER_ATTEMPT) {
-      S.noneFrames = 0; S.attempts += 1;
-      if (S.attempts >= MAX_ATTEMPTS) return failScan();
-      setScanState('', '인식 안 됨 — 각도를 바꿔 보세요 (' + S.attempts + '/' + MAX_ATTEMPTS + ')', 0);
-    }
-    return;
-  }
-  S.noneFrames = 0;
-  S.votes.push(hit);
-  if (S.votes.length > VOTE_WINDOW) S.votes.shift();
-  const codes = S.votes.map((x) => x.eq.code);
-  const top = codes[codes.length - 1];
-  const agree = codes.filter((c) => c === top).length;
-  if (agree >= VOTE_WINDOW) return lockScan(hit, VOTE_WINDOW);
-  if (agree === 2 && S.votes.length >= VOTE_WINDOW) return askConfirm(hit, 2);
-  haptic(30);
-  setScanState('candidate', hit.eq.code + ' 확인 중…', agree);
+  if (S.scanRun === run) failScan(run, '인식 안 됨 — 직접 선택');
 }
 
-function askConfirm(hit, votes) {
-  S.pending = { hit: hit, votes: votes };
-  haptic(30);
-  setScanState('candidate', hit.eq.code + ' — 맞으면 확인을 누르세요', votes);
-  $('scanConfirm').hidden = false;
-}
-
-function lockScan(hit, votes) {
-  if (S.timer) { clearInterval(S.timer); S.timer = null; }
+function lockScan(eq, scan) {
   S.lastScanMs = Date.now() - S.scanStartedAt;
-  $('dScan').textContent = hit.eq.code + ' · ' + votes + '/' + VOTE_WINDOW + ' · '
-    + S.lastScanMs + 'ms' + (S.lastScanMs < 1000 ? ' (목표 충족)' : ' (목표 1000ms 초과)');
+  $('dScan').textContent = eq.code + ' · ' + scan.class + ' ' + Number(scan.conf).toFixed(2)
+    + ' · ' + scan.device_id + ' · 대기 ' + S.lastScanMs + 'ms';
   haptic([120]);
-  setScanState('locked', hit.eq.code + ' 확정', votes);
-  $('scanConfirm').hidden = true;
-  confirmScan(hit, votes);
-}
-
-function failScan() {
-  if (S.timer) { clearInterval(S.timer); S.timer = null; }
-  haptic([30, 60, 30]);
-  setScanState('failed', '인식 실패 — 직접 선택', 0);
-  setTimeout(() => { if (S.screen === 'scan') openManual(); }, 900);
-}
-
-function localScanId() {
-  S.localScanSeq += 1;
-  return 'SC-LOCAL-' + String(S.localScanSeq).padStart(4, '0');
-}
-
-/* ponytail: 서버 스캔 기록 API(작업계획 C2)는 2단계에서 만든다. 지금은 단말 안에서 scan_id 만 붙인다. */
-function confirmScan(hit, votes) {
-  setContext(hit.eq, 'camera_scan', { scanId: localScanId(), markerValue: hit.marker, frameVotes: votes });
+  setScanState('locked', eq.code + ' 확정');
+  setContext(eq, 'camera_scan', { scanId: scan.scan_id });
   setTimeout(() => { if (S.screen === 'scan') show('ctx'); }, 420);
 }
 
-function showNoCam(reason, err) {
-  stopCamera();
-  const box = $('nocamBox'), why = $('nocamWhy'), fix = $('nocamFix'), a = $('nocamAddr');
-  box.className = 'alert bad'; a.hidden = false;
-  a.textContent = location.origin + location.pathname;
-  if (reason === 'secure') {
-    why.textContent = '보안 컨텍스트가 아닙니다. 카메라는 HTTPS 또는 localhost에서만 열립니다.';
-    fix.textContent = '→ https:// 주소로 접속하세요. 자체 서명 인증서를 이 단말에 먼저 신뢰 등록해야 합니다.';
-  } else if (reason === 'detector') {
-    box.className = 'alert';
-    why.textContent = '이 브라우저는 QR 디코딩(BarcodeDetector)을 지원하지 않습니다. ArUco 경로는 아직 구현 범위가 아닙니다(U-9 미결).';
-    fix.textContent = '→ 직접 선택으로 계속하세요. 지원 브라우저는 Chrome 계열입니다.';
-  } else if (reason === 'permission') {
-    why.textContent = '카메라 권한이 거부되어 있습니다.';
-    fix.textContent = '→ 주소창의 자물쇠 아이콘에서 카메라를 허용한 뒤 다시 시도하세요.';
-  } else {
-    why.textContent = '카메라 장치를 열 수 없습니다.' + (err && err.name ? ' (' + err.name + ')' : '');
-    fix.textContent = '→ 다른 앱이 카메라를 쓰고 있지 않은지 확인하세요.';
-  }
-  show('nocam');
+function failScan(run, text) {
+  haptic([30, 60, 30]);
+  setScanState('failed', text);
+  setTimeout(() => { if (S.screen === 'scan' && S.scanRun === run) openManual(); }, 900);
 }
 
 // ── 직접 선택 ──────────────────────────────────────────────────────
@@ -977,20 +878,9 @@ function validateHandover() {
 // ── 진단 ───────────────────────────────────────────────────────────
 function renderSimOptions() {
   const sel = $('simValue'); sel.innerHTML = '';
-  S.equipment.forEach((e) => {
-    const o = document.createElement('option');
-    o.value = QR_PREFIX + e.code;
-    o.textContent = QR_PREFIX + e.code;
-    sel.appendChild(o);
+  [...new Set(S.equipment.map((e) => e.type))].forEach((t) => {
+    const o = document.createElement('option'); o.value = o.textContent = t; sel.appendChild(o);
   });
-  const bad = document.createElement('option');
-  bad.value = '1Z999AA10123456784';
-  bad.textContent = '1Z999AA10123456784 (잡 QR — 무시되어야 함)';
-  sel.appendChild(bad);
-  const unknown = document.createElement('option');
-  unknown.value = QR_PREFIX + 'HPU-99';
-  unknown.textContent = QR_PREFIX + 'HPU-99 (미등록 — 무시되어야 함)';
-  sel.appendChild(unknown);
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
@@ -1003,13 +893,9 @@ function on(id, fn) { const el = $(id); if (el) el.addEventListener('click', fn)
 on('toScan', startScan);
 on('scanClose', () => show('home'));
 on('scanManual', openManual);
-on('scanConfirm', () => { if (S.pending) lockScan(S.pending.hit, S.pending.votes); });
 on('toManual', openManual);
 on('manualClose', () => show(S.eq ? 'ctx' : 'home'));
 on('manualToScan', startScan);
-on('nocamClose', () => show('home'));
-on('nocamManual', openManual);
-on('nocamRetry', startScan);
 on('ctxBack', () => show('home'));
 on('ctxEdit', startScan);
 on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('ask'); loadMesObservations(); });
@@ -1050,16 +936,13 @@ on('obsAdd', () => {
 });
 
 on('toDiag', () => $('diag').classList.toggle('on'));
+// 파이 없이 C2→C3→화면 경로를 검증: 스캔 화면을 연 뒤 주입하면 파이가 보낸 것과 같게 처리된다.
 on('simFeed', () => {
-  if (S.screen !== 'scan') { show('scan'); resetScanState(); }
-  feed([$('simValue').value]);
+  api('/api/equipment/scan', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ class: $('simValue').value, conf: 1, device_id: 'pda-diag' }) }).catch(() => {});
 });
 
 // ── 기동 ───────────────────────────────────────────────────────────
-$('dSecure').textContent = window.isSecureContext
-  ? '보안 컨텍스트 (' + location.protocol + ')'
-  : '아님 (' + location.protocol + ') — 카메라 열리지 않음';
-$('dDetector').textContent = ('BarcodeDetector' in window) ? '지원' : '미지원 — 수동 선택 경로만';
 renderNet();
 probeServer();
 boot();

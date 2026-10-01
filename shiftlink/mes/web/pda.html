@@ -100,7 +100,6 @@
 
   /* 뷰파인더 */
   .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
-  .vf video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0E1319}
   .reticle{position:relative;z-index:1;width:min(72vw,240px);height:min(54vw,180px);border-radius:8px;
     border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
@@ -112,9 +111,6 @@
   #scanState.candidate{color:var(--warn)} #scanState.candidate .dot{background:var(--warn)}
   #scanState.locked{color:var(--ok)} #scanState.locked .dot{background:var(--ok)}
   #scanState.failed{color:var(--fail)} #scanState.failed .dot{background:var(--fail)}
-  .votes{display:flex;gap:4px;margin-left:auto;flex:0 0 auto}
-  .vote{width:16px;height:5px;border-radius:2px;background:var(--edge)}
-  .vote.on{background:var(--ok)} .vote.pend{background:var(--warn)}
   .scanfoot{flex:0 0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
     border-top:1px solid var(--edge)}
 
@@ -311,35 +307,11 @@
     <div class="appbar"><h1>스캔</h1><span class="sp"></span>
       <button class="ic" id="scanClose" type="button" aria-label="닫기">✕</button></div>
     <div class="pane flush" style="display:flex;flex-direction:column">
-      <div class="vf"><video id="video" playsinline muted autoplay></video>
-        <div class="reticle" id="reticle"></div></div>
-      <div id="scanState"><span class="dot"></span><span id="scanText">카메라 준비 중…</span>
-        <span class="votes" id="voteBar" hidden><i class="vote"></i><i class="vote"></i><i class="vote"></i></span></div>
+      <div class="vf"><div class="reticle" id="reticle"></div></div>
+      <div id="scanState"><span class="dot"></span><span id="scanText">Jetson 연결 확인 중…</span></div>
       <div class="scanfoot">
-        <button class="btn primary" id="scanConfirm" type="button" hidden>확인</button>
         <button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>
       </div>
-    </div>
-  </section>
-
-  <!-- 카메라 불가 -->
-  <section class="screen" id="s-nocam">
-    <div class="appbar"><h1>스캔</h1><span class="sp"></span>
-      <button class="ic" id="nocamClose" type="button" aria-label="닫기">✕</button></div>
-    <div class="pane">
-      <div class="alert bad" id="nocamBox">
-        <p class="hd">카메라를 열 수 없습니다</p>
-        <p class="p" id="nocamWhy"></p>
-        <code id="nocamAddr"></code>
-        <p class="p" id="nocamFix"></p>
-      </div>
-      <div class="alert">
-        <p class="hd">설비 미확정</p>
-        <p class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다.</p>
-      </div>
-      <div class="grow"></div>
-      <button class="btn primary" id="nocamManual" type="button">직접 선택으로 계속</button>
-      <button class="btn sm ghost" id="nocamRetry" type="button">다시 시도</button>
     </div>
   </section>
 
@@ -480,8 +452,6 @@
   <div id="diag">
     <span class="t">진단 · 프로토타입 전용</span>
     <dl>
-      <dt>보안 컨텍스트</dt><dd id="dSecure">—</dd>
-      <dt>BarcodeDetector</dt><dd id="dDetector">—</dd>
       <dt>MES 데이터</dt><dd id="dData">—</dd>
       <dt>서버</dt><dd id="dServer">—</dd>
       <dt>최근 스캔</dt><dd id="dScan">—</dd>
@@ -489,10 +459,10 @@
       <dt>outbox</dt><dd id="dOutbox">0건</dd>
     </dl>
     <div class="sim">
-      <select id="simValue" aria-label="마커 원문 모의 입력"></select>
+      <select id="simValue" aria-label="인식 클래스 모의 입력"></select>
       <button class="btn sm" id="simFeed" type="button">주입</button>
     </div>
-    <p class="hint">인쇄물 없이 디코딩 파이프라인을 검증합니다. 3회 주입하면 3/3 투표가 됩니다.</p>
+    <p class="hint">파이 없이 인식 경로를 검증합니다. 스캔 화면에서 주입하면 서버에 인식 1건이 기록되고 화면이 받습니다.</p>
   </div>
 
 </div>

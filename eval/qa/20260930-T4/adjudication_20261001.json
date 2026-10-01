@@ -1,0 +1,1707 @@
+{
+ "date": "2026-10-01",
+ "independent_reviews": [
+  "question_intent",
+  "card_applicability",
+  "evaluation_contract"
+ ],
+ "adjudication": "질문 원문과 카드 적용 조건을 우선하며 검색 순위로 라벨을 결정하지 않는다.",
+ "items": [
+  {
+   "qid": "H-008",
+   "original_question": "CV-02 벨트 한쪽으로 쏠리는 거 봤음. 어디쯤인지 방향은 어떻게 적어야 다음 조가 알아먹음?",
+   "question_action": "keep",
+   "requested_action": "벨트 쏠림을 인계에 기록",
+   "explicit_conditions": "벨트 쏠림 관측",
+   "missing_conditions": "조정 작업 여부·방향 기준",
+   "original_label": {
+    "qid": "H-008",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1104"
+    ],
+    "acceptable_card_ids": [
+     "K-1111"
+    ],
+    "safety_card_ids": [
+     "K-1010"
+    ],
+    "key_facts": [
+     "외관 변화는 인계 메모에 문장으로 적는다",
+     "관측한 위치와 시각을 같이 적는다"
+    ],
+    "difficulty": "medium",
+    "label_note": "육안 사행 관측 기록은 K-1104(외관·위치·시각), 수치 없음 명시는 K-1111 보조. 방향 표기 규칙은 카드에 없음. 받는 조의 조정 위험 때문에 사행 안전 카드 K-1010 포함."
+   },
+   "final_label": {
+    "qid": "H-008",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1104"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [
+     "관측한 벨트 쏠림의 위치·시점·보이는 상태를 구체적으로 기록한다."
+    ],
+    "difficulty": "medium",
+    "label_note": "관측 기록을 묻는다. 방향 기준을 새로 만들거나 벨트 조정 절차를 정답으로 넣지 않는다."
+   },
+   "candidates": [
+    {
+     "card_id": "K-1104",
+     "classification": "direct",
+     "reason": "감각적 관측의 위치·시점·상태 기록",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "계측값에 남지 않는 갈리는 소리·끽끽 소리·외관 변화를 현장에서 듣거나 봤는데, 들은 소리와 본 모습을 다음 조에 넘겨야 한다.",
+     "know_how": "소리의 성질, 냄새, 외관 변화처럼 계측 신호로 남지 않는 관측은 인계 메모에 문장으로 적는다. 소리는 '크다'로 끝내지 말고 갈리는 소리인지 두드리는 소리인지 끽끽거리는 소리인지, 규칙적인지 불규칙한지를 적는다. 어느 위치에서 들었는지와 들은 시각도 같이 적는다. 이 관측은 다음 조가 다시 만들어 낼 수 없으므로, 적지 않으면 판단 근거가 사라진다.",
+     "required_context": [
+      "소리의 성질(갈림·두드림·끽끽·휘파람), 규칙성, 들은 위치와 시각",
+      "외관·냄새 변화의 구체적 서술",
+      "같은 관측을 앞서 기록한 적이 있으면 그때와 견준 변화",
+      "그 관측이 판단(정지·보류)에 쓰였는지 여부"
+     ],
+     "generalization_scope": "계측 신호가 없는 감각 관측이 판단 근거에 포함된 경우. 계측만으로 판정이 끝나는 건에는 적용하지 않는다. 양·속도가 늘었는지 줄었는지처럼 변화를 수치로 비교해야 하는 관측은 K-1111을 따른다. 소리·외관이 앞선 관측보다 달라졌다는 서술은 이 카드에 둔다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S04"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0302",
+       "EV-0305",
+       "EV-0311",
+       "EV-0319"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0302",
+        "locator": "work_note AR-0303 펌프 소음·우유빛 거품 관측"
+       },
+       {
+        "source_id": "EV-0305",
+        "locator": "work_note AR-0309 23:24 규칙적으로 갈리는 소리"
+       },
+       {
+        "source_id": "EV-0311",
+        "locator": "handover AR-0322 [앞 근무자 조치] \"22:38 감속기 쪽 갈리는 소리 청취 — 전 조 기록보다 커진 것으로 들렸다\""
+       },
+       {
+        "source_id": "EV-0319",
+        "locator": "handover AR-0338 [다음 조 확인] 소음은 계측에 안 잡힘"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0319는 모터 전류가 알람 상한에 못 미쳐 알람이 없었고, 모듈을 세운 판단 근거는 롤러 쪽 끽끽 소리뿐이었다. 인계 메모에 그 관측이 적혀 있어 다음 조가 정지 사유를 이해할 수 있었다. EV-0305는 갈리는 소리, EV-0311은 그 소리가 커졌다는 비교, EV-0302는 펌프 소음과 우유빛 거품을 남겼다. 네 건 모두 계측만으로는 판단이 서지 않는 건이었다."
+    },
+    {
+     "card_id": "K-1111",
+     "classification": "partial",
+     "reason": "양·속도 비교이며 쏠림 기록을 독립적으로 답하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "누유량이 줄었는지 동작이 느려졌는지 눈대중으로만 봤고 잴 수단이 없어서, 다음 조가 수치로 비교하도록 넘겨야 한다.",
+     "know_how": "관측에 수치가 붙지 않았으면 그 사실을 적고, 다음 조가 같은 것을 수치로 남길 수 있게 무엇을 어떻게 재면 되는지 지정해 요청한다. '줄어든 것 같다', '느려 보인다' 같은 서술만 이어지면 추이 비교가 안 된다. 잴 수단이 없으면 없다는 것도 적는다.",
+     "required_context": [
+      "수치 없이 관측한 내용",
+      "수치가 없다는 사실과 그 이유(측정 수단 없음 등)",
+      "다음 조가 잴 대상과 방법",
+      "비교에 쓸 기준값이 있으면 함께"
+     ],
+     "generalization_scope": "계측 신호가 없거나 측정 수단이 없어 정성 서술만 남은 관측이 교대를 넘기는 경우. 소리·냄새처럼 관측의 성질 자체를 전달하는 건은 K-1104를 따른다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S11"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0310",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없음"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "handover AR-0334 [다음 조 확인] 동작 시간 계측 요청"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0317은 디버터 동작 지연을 눈으로만 봐 수치가 없다는 사실을 인계에 적고, 다음 조에 동작 시간을 재서 기록해 달라고 지정했다. EV-0310은 누유가 줄어든 것으로 보였으나 측정 수단이 없어 확증하지 못했다고 적었다. 두 건 모두 관측이 교대를 넘기면서 비교 기준이 필요했던 경우다."
+    },
+    {
+     "card_id": "K-1012",
+     "classification": "inapplicable",
+     "reason": "벨트 조정 절차와 모델 조건; 인계 기록 답이 아님",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": "벨트 교체 후 또는 사용 중 벨트가 중앙을 벗어나 한쪽으로 쏠린다.",
+     "know_how": "벨트 교체 후나 사용 중 벨트가 중앙을 벗어나면 컨베이어를 운전 상태로 두고, 수평을 맞춘 뒤 치우친 쪽 장력 조정 나사를 조금씩 조이며 벨트 주행을 계속 눈으로 보면서 단계적으로 보정한다. 해당 직접구동형의 지정 조정부에 한정하며 다른 모델의 운전 중 조정에 일반화하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "MISUMI 직접구동(direct drive)형 컨베이어의 정렬 보정에 한정한다. 센터 드라이브·일체형 드라이브는 조정 나사 위치가 다르다(§8.3.2·§8.3.3). 조임 양 수치는 원문에 없다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S12"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "conveyor-manual-0323-en.pdf",
+        "locator": "PDF p.62 / 인쇄 p.58 / 8.3 Alignment Correction, 8.3.1 Direct Drive Conveyors",
+        "document_version": "Conveyor Systems - Operating Instructions, December 2022"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md@sha256:55a5055cc649958cf19bec8b0a76214e1df54e6441bfe966432cd548de05e46d",
+      "schema_version": "1.1"
+     },
+     "rationale": "MISUMI 매뉴얼 §8.3·§8.3.1(직접구동형 컨베이어)이 보정 순서와 각 단계의 관찰 기준을 제시하고, 한쪽만 과하게 조이면 벨트에 과부하가 걸려 벨트 가장자리가 손상될 수 있다고 경고한다. 이 절차는 직접구동형에 한정하며, 센터 드라이브·일체형 드라이브는 §8.3.2·§8.3.3을 따른다. 검토 보완: MISUMI 직접구동형의 지정 장력 조정 나사 보정에만 적용한다. 일반 운전 중 정비 허용으로 확대하지 않으며 Martin 아이들러 조정(K-1010)과 서로 대체하지 않는다."
+    },
+    {
+     "card_id": "K-1010",
+     "classification": "conditional_safety",
+     "reason": "정비 작업 시 안전 참고; 기록 질문의 필수 안전 정답은 아님",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": "아이들러·벨트 설치 후 또는 운전 중 벨트가 아이들러 중앙을 벗어나 한쪽으로 치우쳐 돈다.",
+     "know_how": "벨트 정렬 확인은 빈 벨트 운전 → 상류측 아이들러 조정 → 만재 하중 확인 순서로 한다. 빈 벨트가 똑바로 돌지 않아도 헤드·테일 풀리를 조정해 바로잡으려 하지 않는다. 아이들러 볼트 조정은 정지·잠금 후 수행하고 조인 뒤 재기동해 확인한다. K-1012의 장력 조정 나사 절차와 대체하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "CEMA C·D·E 아이들러를 쓰는 벨트 컨베이어의 설치 후 정렬(training) 절차에 한정한다. 조정 각도·볼트 토크 수치는 원문에 없다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S10"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "Martin_C4_CR_18_09_4_Manual.pdf",
+        "locator": "PDF p.7 / 인쇄 p.5 / Belt Training 1~3",
+        "document_version": "IDB-M&TG 0222 (©2018)"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/CV.md@sha256:55a5055cc649958cf19bec8b0a76214e1df54e6441bfe966432cd548de05e46d",
+      "schema_version": "1.1"
+     },
+     "rationale": "Martin 매뉴얼 Belt Training 절이 이 순서와 각 단계의 판정 기준(아이들러 중앙 주행, 트레이너 개입 없음)을 제시하고, 풀리 조정은 베어링·스플라이스·프레임에 무리를 줄 뿐 문제를 고치지 못한다고 경고한다. 검토 보완: Martin CEMA C·D·E 아이들러 정렬 절차이며 K-1012의 MISUMI 직접구동형 장력 나사 보정과 대체하지 않는다. 원문은 볼트 조정 전 정지·잠금과 조정 후 재기동을 구분한다."
+    }
+   ]
+  },
+  {
+   "qid": "H-012",
+   "original_question": "RT-02 클램프 압력 알람 한 번 떴다 사라짐. 원인 못 찾았는데 미해결로 어떻게 넘김?",
+   "question_action": "keep",
+   "requested_action": "원인 미확인 상태를 인계",
+   "explicit_conditions": "압력 알람 한 번 발생 후 해제, 원인 미확인",
+   "missing_conditions": "압력 정상 복귀·절차 부재·다단계 조치 여부",
+   "original_label": {
+    "qid": "H-012",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1101",
+     "K-1106"
+    ],
+    "acceptable_card_ids": [
+     "K-1107"
+    ],
+    "safety_card_ids": [],
+    "key_facts": [
+     "어느 확인 단계까지 갔고 무엇이 나왔는지 적는다",
+     "정상으로 나온 항목도 적는다",
+     "절차가 없다는 사실을 적고 순서를 지어내지 않는다"
+    ],
+    "difficulty": "hard",
+    "label_note": "원인 미확인 미해결 인계는 K-1101, RT 클램프 압력 알람 절차 카드가 없으므로 K-1106 동등. RT-02 클램프는 HPU-01 유압 공급이라 K-1107 보조."
+   },
+   "final_label": {
+    "qid": "H-012",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1108"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [
+     "알람 발생 후 해제는 확인한 사실로, 원인은 미확인으로 구분한다.",
+     "알람 해제를 압력 정상 복귀로 단정하지 않는다."
+    ],
+    "difficulty": "hard",
+    "label_note": "미해결 증상의 인계 기록은 관측과 추정을 구분하는 K-1108로 답한다. 원인 미확인은 승인 절차 부재가 아니다."
+   },
+   "candidates": [
+    {
+     "card_id": "K-1108",
+     "classification": "direct",
+     "reason": "확인한 알람 이력과 미확인 원인 구분",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "원인이 짐작되지만 관측만으로는 확정하지 못했고 다른 원인 가능성도 남아 있어, 추정과 실제 관측을 나눠 다음 조에 넘겨야 한다.",
+     "know_how": "인계 메모에서 직접 보거나 읽은 것과 그로부터 추정한 것을 구분해 적는다. 추정은 추정이라고 표시한다. 같은 외관·증상이 다른 원인에서도 나오는 경우라면 그 사실을 적어 받는 조가 원인을 확정하고 들어가지 않게 한다. 관측 수단이 없어 확인하지 못한 것은 '확인 못 함'으로 적고 추정으로 메우지 않는다.",
+     "required_context": [
+      "직접 보거나 읽은 관측 사실",
+      "그로부터 세운 추정과 추정이라는 표시",
+      "같은 증상이 다른 원인에서도 나오는 경우 그 사실",
+      "관측 수단이 없어 확인하지 못한 항목"
+     ],
+     "generalization_scope": "관측만으로 원인이 확정되지 않는 증상. 계측으로 판정이 끝난 건에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S08"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0302",
+       "EV-0310",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0302",
+        "locator": "handover AR-0304 [다음 조 확인] 우유빛 단정 금지"
+       },
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없어 확증 못 함"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "work_note AR-0333 눈으로 본 인상임을 명시"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0302는 탱크 유면의 우유빛 거품을 공기 혼입 징후로 보면서도, 수분 오염에서도 같은 외관이 나오므로 단정하지 말라는 당부를 인계에 넣었다. EV-0310은 누유가 줄어든 것으로 보였으나 측정 수단이 없어 확증하지 못했다는 사실을 적었다. EV-0317은 디버터 동작이 느려 보였다는 것이 눈으로 본 인상일 뿐 시간을 잰 것이 아님을 밝혔다. 세 건 모두 관측의 한계를 함께 넘겨 받는 조의 판단을 좁히지 않았다."
+    },
+    {
+     "card_id": "K-1101",
+     "classification": "missing_context",
+     "reason": "여러 단계 조치의 완료·미완료 구분 전제가 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "원인을 못 찾은 상태로 여러 단계 확인이 이어지는데, 어디까지 확인했고 무엇이 정상으로 나왔는지 다음 조에 넘겨야 한다.",
+     "know_how": "미해결 증상을 넘길 때는 앞 조가 끝낸 확인 단계와 각 결과를 신호명·값·단위·확인 시각·운전 조건과 함께 적는다. 정상 범위 안이었던 결과도 당시 관측으로 남긴다. 같은 항목을 반복할 필요가 있는지는 받는 조가 현재 상태와 비교해 판단하며, 과거 정상값 하나로 원인을 배제하지 않는다. 절차 카드가 있으면 진행한 단계 번호와 아직 확인하지 못한 항목을 적는다. 받는 사람은 인계 시점에 확인 완료 범위와 재확인할 항목을 되물어 확인하고, 체크리스트 항목에 인수 확인을 표시한다.",
+     "required_context": [
+      "앞 조가 끝낸 확인 항목과 신호명·값·단위·확인 시각·운전 조건(정상 범위 안 결과 포함)",
+      "절차 카드가 있으면 진행한 단계 번호",
+      "당시 확인 결과로 다음 확인 대상으로 넘긴 항목과 판단의 한계",
+      "아직 확인하지 못한 항목과 현재 상태에서 재확인이 필요한 항목"
+     ],
+     "generalization_scope": "확인 절차가 여러 단계인 증상을 교대에 걸쳐 이어갈 때. 한 교대 안에 끝나는 건에는 적용하지 않는다. 조치 효과 판정(K-1102), 재가동 보류(K-1103), 요청 회신 대기(K-1109)만 넘기는 건에도 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S01"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0301",
+       "EV-0307",
+       "EV-0309",
+       "EV-0312"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0301",
+        "locator": "handover AR-0302 [확인 완료] K-1001 1~4단계"
+       },
+       {
+        "source_id": "EV-0307",
+        "locator": "handover AR-0314 [안 된 것] 필터 차압 정상 확인"
+       },
+       {
+        "source_id": "EV-0309",
+        "locator": "handover AR-0318 [확인 완료]·[다음 조 확인] 중복 금지"
+       },
+       {
+        "source_id": "EV-0312",
+        "locator": "handover AR-0324 [다음 조 확인] 중복 작업 금지"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "압력 저하·유온 상승처럼 확인 절차가 여러 단계인 증상이 교대를 넘길 때, 앞 조 결과가 적히지 않으면 받는 조가 같은 항목을 다시 본다. EV-0309에서는 앞 조가 확인한 냉각수 공급 밸브를 받는 조가 다시 확인했고 결과는 같았다. EV-0307에서는 앞 조가 교체한 리턴 필터의 차압이 정상이었다는 사실이 적혀 있어 받는 조가 당시 필터 확인 결과를 참고해 흡입 배관 확인을 이어갔다. 당시 차압 정상은 현재 필터 상태나 원인 배제의 확정 근거가 아니다. EV-0301과 EV-0312는 확인 완료 단계를 절차 카드 단계 번호로 적어 다음 조가 이어받게 했다."
+    },
+    {
+     "card_id": "K-1106",
+     "classification": "missing_context",
+     "reason": "최신 KB·현장 표준 확인 후 승인 절차 부재라는 전제가 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "따를 조치 절차가 정해지지 않은 신호 이상이라 현장에서 어떻게 조치할지 모르는데, 다음 조에 넘겨야 한다.",
+     "know_how": "최신 KB와 현장 표준을 확인했으나 대상 모델에 적용할 승인 절차가 없는 증상을 만나면 관측한 값과 시각, 허용된 범위에서 해 본 조치와 그 결과까지만 적고, 조치 절차가 없다는 사실을 그대로 적는다. 그럴듯한 순서를 지어내 인계에 적지 않는다. 담당에게 접수했으면 접수 시각과 접수처를 적고, 다음 조가 할 일은 회신 확인과 값 재확인으로 한정한다.",
+     "required_context": [
+      "확인한 최신 KB·현장 표준의 버전과 대상 모델에 적용 가능한 절차 유무",
+      "관측한 값과 시각, 정상 범위",
+      "허용된 범위에서 해 본 조치와 그 결과",
+      "정해진 조치 절차가 없다는 사실",
+      "접수처와 접수 시각",
+      "다음 조가 할 일(회신 확인·값 재확인)"
+     ],
+     "generalization_scope": "승인된 카드나 표준 절차가 없는 설비·신호 영역. 절차 카드가 있는 증상에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S06"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0313",
+       "EV-0315",
+       "EV-0317",
+       "EV-0318"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0313",
+        "locator": "handover AR-0326 [시도했으나 안 된 것] 조치 절차 없음"
+       },
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [시도했으나 안 된 것] \"조치 절차가 정해진 카드가 없어 값 기록과 접수만 했다\""
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "handover AR-0334 [다음 조 확인] \"조치 절차가 정해진 카드가 없어 정비 담당 확인 대상으로 두었다\""
+       },
+       {
+        "source_id": "EV-0318",
+        "locator": "handover AR-0336 [다음 조 확인] \"승강부 구조는 확인하지 않았고 가정도 하지 않았다\""
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "현재 통합 KB는 62장이다. 필터 차압, 벨트 장력, 공압, 클램프압에 적용할 승인 절차가 있는지는 최신 KB와 대상 모델의 현장 표준을 확인한다. 카드 수 자체를 적용 가능 절차 유무의 근거로 삼지 않는다. EV-0313·EV-0315·EV-0317은 기록에 '조치 절차가 정해진 카드가 없어'라고 적고 값 기록과 담당 접수까지만 했다. EV-0318은 승강부 구조를 확인하지도 가정하지도 않았다고 적어 같은 원칙을 보였다. 절차가 없는 상태에서 인계 메모에 임의 순서를 적으면 다음 조가 그것을 표준으로 읽을 수 있다."
+    },
+    {
+     "card_id": "K-1107",
+     "classification": "partial",
+     "reason": "공급 관계 점검은 미해결 기록을 독립적으로 답하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "공급받는 설비의 유지압·장력이 떨어졌는데, 공급원 설비도 이상인지 함께 봐서 다음 조에 넘겨야 한다.",
+     "know_how": "공급받는 설비와 공급원 설비의 계측값·단위·확인 시각을 함께 인계한다. HPU-01 압력 정상은 145–165 bar, RT-03 클램프압 정상은 95–115 bar, CV-01 장력 정상은 380–460 kPa(모두 양끝 포함)로 지정한다. EV-0318의 23:50 RT 압력 81 bar→02:40 79 bar는 하한 미만이고, 00:30 HPU 압력 152 bar는 범위 이내였다. 공급원 압력은 범위 이내지만 RT 쪽 확인이 필요하다는 관측 결론만 적고 공급원 전체 정상·고장 원인 배제를 확정하지 않는다. EV-0315의 장력 342→338 kPa는 하한 미만이지만 공급원 압력이 미기록이므로 원인 범위를 미확인으로 넘긴다. 다음 조는 공급원과 하위 설비를 재확인한다. 공급 관계는 기준정보 공급 관계표를 따른다.",
+     "required_context": [
+      "하위 설비 값·단위·시각: RT 압력 95–115 bar 또는 CV 장력 380–460 kPa와 비교",
+      "공급원 HPU 압력·단위·시각: 145–165 bar와 비교",
+      "범위 충족 여부와 미확인 원인: 공급원 전체 정상이나 원인 배제를 단정하지 않는다",
+      "다음 조가 재확인할 공급원·하위 설비 신호"
+     ],
+     "generalization_scope": "유압·전력·구동을 공급받는 설비에서 증상이 나타난 경우. 공급 관계가 없는 단독 설비에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S07"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0315",
+       "EV-0318"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [다음 조 확인] 공급원 압력 같이 읽기"
+       },
+       {
+        "source_id": "EV-0318",
+        "locator": "handover AR-0336 [앞 근무자 조치] 공급원 정상 확인"
+       },
+       {
+        "source_id": "docs/data/reference/00_plant_and_relations.json",
+        "locator": "relations REL-0009~REL-0016 공급 관계"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0318은 RT-03 클램프압이 떨어졌을 때 공급원 HPU-01 압력이 152 bar로 MES 정상 범위 145–165 bar 이내임을 확인하고 RT 회로 확인 대상으로 인계했다. 공급원 전체가 정상이라는 확정은 카드에서 제외했다. EV-0315는 반대 사례다 — 공급원을 읽지 않아 '공급원 HPU-01 쪽인지 텐셔너 자체인지 가리지 못했다'고 적고 다음 조에 공급원 압력을 같이 읽으라고 넘겼다. 공급 관계는 HPU-01이 RT·CV 클램프·텐셔너에, PDP-01이 GR·HPU에, GR이 롤러에 공급하는 구조다."
+    },
+    {
+     "card_id": "K-1105",
+     "classification": "missing_context",
+     "reason": "비정상 계측값·무알람 조건이 확인되지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "알람은 없는데 순회하며 읽은 값이 정상 범위를 벗어나 있어, 다음 조가 정한 시각에 다시 읽도록 넘겨야 한다.",
+     "know_how": "알람이 없어도 계측값이 정상 범위를 벗어났으면 신호명·값·단위·확인 시각·운전 상태를 인계에 적는다. 정상 범위의 출처와 같은 조 안에서 다시 읽은 추이를 남기고, 다음 조가 무엇을 언제 어떤 기준으로 재확인할지 지정한다. 실제 설비의 확인된 알람 설정값이 있으면 그 값과의 차이를 함께 기록한다. 알람 설정값이나 관측 품질이 없으면 여유를 계산하지 않고 미확인으로 남긴다. MES 정상 범위 경계를 실제 알람 설정값으로 대신하지 않는다. 알람 부재와 계측 신호 부재를 구분하고, 계측값이 없으면 정상으로 기록하지 않는다.",
+     "required_context": [
+      "신호명·값·단위·확인 시각·운전 상태 및 관측 품질",
+      "정상 범위와 출처; 확인된 실제 알람 설정값이 있을 때만 임계까지의 차이",
+      "설정값·관측값 미제공 항목은 미확인 표시",
+      "같은 조 안에서 재확인한 값과 추이",
+      "다음 조의 재확인 신호·시각·판단 기준"
+     ],
+     "generalization_scope": "계측값이 정상 범위를 벗어났으나 알람이 없는 경우. 알람이 발생한 건은 알람 코드와 함께 넘긴다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S05"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0310",
+       "EV-0313",
+       "EV-0315",
+       "EV-0316",
+       "EV-0318"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [다음 조 확인] 알람 없으니 눈으로 확인"
+       },
+       {
+        "source_id": "EV-0313",
+        "locator": "handover AR-0326 [다음 조 확인] 알람 상한 근접 여부"
+       },
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [다음 조 확인] 알람 하한 근접 여부"
+       },
+       {
+        "source_id": "EV-0316",
+        "locator": "handover AR-0332 [현재 상태] 알람 없음·정상 하한 미달 + [다음 조 확인] \"① 전압 표시 재확인(알람 하한 94 % 아래로 내려가는지)\""
+       },
+       {
+        "source_id": "EV-0318",
+        "locator": "handover AR-0336 [현재 상태] 알람 하한 미달인데 알람 없음 + [다음 조 확인] \"① 클램프압 재확인, 계속 내려가는지\""
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "모의 MES는 선택된 시나리오와 설비 상태에 따라 알람을 생성하며, 모든 active 설비의 구성 신호는 별도로 계측 스냅샷에 남는다. 따라서 알람이 없다는 사실은 신호가 없거나 정상이라는 뜻이 아니다. EV-0313은 필터 차압 1.7 → 1.8 bar, EV-0315는 벨트 장력 342 → 338 kPa를 알람 없이 기록했다. EV-0316의 배전반 전압, EV-0318의 클램프압, EV-0310의 GR-02 누유도 알람과 관측을 구분해 인계한 사례다. 실제 알람 설정값이 제공되지 않은 사례에서는 임계까지의 여유를 계산하지 않는다."
+    },
+    {
+     "card_id": "K-1021",
+     "classification": "inapplicable",
+     "reason": "리프트 하강 불가·Autoquip 830CC의 다른 증상/설비",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": "하강 버튼을 눌러도 리프트가 내려가지 않는다. 속도 퓨즈 잠김은 원문이 제시한 가능한 원인 중 하나다.",
+     "know_how": "1) 리프트의 하중을 내리고 피팅·호스 등 유압 부품의 누유와 손상을 확인한다. 누유·손상이 보이면 복구 조작을 진행하지 않고 Autoquip에 후속 지시를 요청한다. 2) 이상이 없으면 상승 버튼을 몇 초 눌러 실린더에 압을 건 뒤, 떼자마자 하강 버튼을 누른다. 내려가기 시작하면 완전히 내려올 때까지 계속 누른다. 3) 내려가지 않으면 약 10~15분 기다려 유압 계통의 압력이 균형을 이루게 한 뒤 하강 버튼을 누른다. 그래도 완전히 내려오지 않으면 Autoquip에 후속 지시를 요청한다. 4) 완전히 내려온 경우 하강 버튼을 약 60초 눌러 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 여러 번 반복한다. 속도 퓨즈는 분리하지 않는다. 문제가 해결되지 않으면 Autoquip에 문의한다.",
+     "required_context": [],
+     "generalization_scope": "Autoquip Trojan Coil Car 830CC의 속도 퓨즈 잠김 대응에 한정한다. 원문은 4단계 완료 판정 기준을 주지 않는다. 프로젝트 RT 승강부와의 대응은 미확인이다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S21"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T10:25:27+09:00",
+      "sources": [
+       {
+        "source_id": "830CC-V1.pdf",
+        "locator": "p.34 / Troubleshooting Analysis – Lift won’t lower, velocity fuse steps 1~4 | https://autoquip.com/wp-content/uploads/2018/03/830CC-V1.pdf",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+       },
+       {
+        "source_id": "830CC-V1.pdf",
+        "locator": "p.6 / Dangers, Warnings & Cautions, WARNING | https://autoquip.com/wp-content/uploads/2018/03/830CC-V1.pdf",
+        "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md@sha256:794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
+      "schema_version": "1.1"
+     },
+     "rationale": "830CC 고장 분석표의 Lift won’t lower 항목은 속도 퓨즈 잠김에 대해 1~4단계와, 해당 조치로 해결되지 않을 때 Autoquip에 연락하라는 지시를 제시한다. 원문 2단계는 누유·손상이 없을 때만 진행한다. 누유·손상 발견 시 Autoquip에 문의한다는 문구는 카드에 추가한 안전상 후속 조치이며, 원문 1단계의 직접 지시는 아니다. 검토 보완: 복구 목적상 T6 후보이나 기존 카드 소급 재분류를 금지한 계약을 따라 이번 검토에서는 T3 및 4단계 분기를 유지한다. 하강 불능만으로 정상 정지·이상 정지·정비 후 재가동 유형을 단정하지 않는다. 재분류는 별도 계약 검토 대상이다."
+    }
+   ]
+  },
+  {
+   "qid": "H-016",
+   "original_question": "GR-01 감속기 웅웅거리는 소리 커짐. 온도는 못 봤음. 이대로 인계 써도 됨?",
+   "question_action": "keep",
+   "requested_action": "소리 관측과 미확인 온도를 함께 인계",
+   "explicit_conditions": "웅웅 소리 증가, 온도 미확인",
+   "missing_conditions": "온도 수치·모델별 진단 조건",
+   "original_label": {
+    "qid": "H-016",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1104"
+    ],
+    "acceptable_card_ids": [
+     "K-1108",
+     "K-1111"
+    ],
+    "safety_card_ids": [
+     "K-1024"
+    ],
+    "key_facts": [
+     "'크다'로 끝내지 말고 갈림·두드림 등 성질을 적는다",
+     "규칙적인지 불규칙한지 적는다",
+     "들은 위치와 시각을 같이 적는다"
+    ],
+    "difficulty": "medium",
+    "label_note": "소리만 적은 인계는 부족. K-1104가 소리 기술 방법, 온도 미확인은 K-1108('확인 못 함')/K-1111 보조. 감속기 소음 변화라 K-1024 안전."
+   },
+   "final_label": {
+    "qid": "H-016",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1104",
+     "K-1108"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [
+     "웅웅 소리가 커진 관측을 구체적으로 기록한다.",
+     "온도는 미확인으로 표시하고 추정값을 채우지 않는다."
+    ],
+    "difficulty": "medium",
+    "label_note": "소리의 관측 기록과 미확인 온도의 구분이 모두 필요하다. 두 카드는 대체 가능한 정답이 아니다.",
+    "primary_card_sets": [
+     [
+      "K-1104",
+      "K-1108"
+     ]
+    ]
+   },
+   "candidates": [
+    {
+     "card_id": "K-1104",
+     "classification": "partial",
+     "reason": "소리 관측 기록 부분",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "계측값에 남지 않는 갈리는 소리·끽끽 소리·외관 변화를 현장에서 듣거나 봤는데, 들은 소리와 본 모습을 다음 조에 넘겨야 한다.",
+     "know_how": "소리의 성질, 냄새, 외관 변화처럼 계측 신호로 남지 않는 관측은 인계 메모에 문장으로 적는다. 소리는 '크다'로 끝내지 말고 갈리는 소리인지 두드리는 소리인지 끽끽거리는 소리인지, 규칙적인지 불규칙한지를 적는다. 어느 위치에서 들었는지와 들은 시각도 같이 적는다. 이 관측은 다음 조가 다시 만들어 낼 수 없으므로, 적지 않으면 판단 근거가 사라진다.",
+     "required_context": [
+      "소리의 성질(갈림·두드림·끽끽·휘파람), 규칙성, 들은 위치와 시각",
+      "외관·냄새 변화의 구체적 서술",
+      "같은 관측을 앞서 기록한 적이 있으면 그때와 견준 변화",
+      "그 관측이 판단(정지·보류)에 쓰였는지 여부"
+     ],
+     "generalization_scope": "계측 신호가 없는 감각 관측이 판단 근거에 포함된 경우. 계측만으로 판정이 끝나는 건에는 적용하지 않는다. 양·속도가 늘었는지 줄었는지처럼 변화를 수치로 비교해야 하는 관측은 K-1111을 따른다. 소리·외관이 앞선 관측보다 달라졌다는 서술은 이 카드에 둔다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S04"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0302",
+       "EV-0305",
+       "EV-0311",
+       "EV-0319"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0302",
+        "locator": "work_note AR-0303 펌프 소음·우유빛 거품 관측"
+       },
+       {
+        "source_id": "EV-0305",
+        "locator": "work_note AR-0309 23:24 규칙적으로 갈리는 소리"
+       },
+       {
+        "source_id": "EV-0311",
+        "locator": "handover AR-0322 [앞 근무자 조치] \"22:38 감속기 쪽 갈리는 소리 청취 — 전 조 기록보다 커진 것으로 들렸다\""
+       },
+       {
+        "source_id": "EV-0319",
+        "locator": "handover AR-0338 [다음 조 확인] 소음은 계측에 안 잡힘"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0319는 모터 전류가 알람 상한에 못 미쳐 알람이 없었고, 모듈을 세운 판단 근거는 롤러 쪽 끽끽 소리뿐이었다. 인계 메모에 그 관측이 적혀 있어 다음 조가 정지 사유를 이해할 수 있었다. EV-0305는 갈리는 소리, EV-0311은 그 소리가 커졌다는 비교, EV-0302는 펌프 소음과 우유빛 거품을 남겼다. 네 건 모두 계측만으로는 판단이 서지 않는 건이었다."
+    },
+    {
+     "card_id": "K-1108",
+     "classification": "partial",
+     "reason": "미확인 온도를 추정하지 않는 부분; K-1104와 함께 직접 답",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "원인이 짐작되지만 관측만으로는 확정하지 못했고 다른 원인 가능성도 남아 있어, 추정과 실제 관측을 나눠 다음 조에 넘겨야 한다.",
+     "know_how": "인계 메모에서 직접 보거나 읽은 것과 그로부터 추정한 것을 구분해 적는다. 추정은 추정이라고 표시한다. 같은 외관·증상이 다른 원인에서도 나오는 경우라면 그 사실을 적어 받는 조가 원인을 확정하고 들어가지 않게 한다. 관측 수단이 없어 확인하지 못한 것은 '확인 못 함'으로 적고 추정으로 메우지 않는다.",
+     "required_context": [
+      "직접 보거나 읽은 관측 사실",
+      "그로부터 세운 추정과 추정이라는 표시",
+      "같은 증상이 다른 원인에서도 나오는 경우 그 사실",
+      "관측 수단이 없어 확인하지 못한 항목"
+     ],
+     "generalization_scope": "관측만으로 원인이 확정되지 않는 증상. 계측으로 판정이 끝난 건에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S08"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0302",
+       "EV-0310",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0302",
+        "locator": "handover AR-0304 [다음 조 확인] 우유빛 단정 금지"
+       },
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없어 확증 못 함"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "work_note AR-0333 눈으로 본 인상임을 명시"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0302는 탱크 유면의 우유빛 거품을 공기 혼입 징후로 보면서도, 수분 오염에서도 같은 외관이 나오므로 단정하지 말라는 당부를 인계에 넣었다. EV-0310은 누유가 줄어든 것으로 보였으나 측정 수단이 없어 확증하지 못했다는 사실을 적었다. EV-0317은 디버터 동작이 느려 보였다는 것이 눈으로 본 인상일 뿐 시간을 잰 것이 아님을 밝혔다. 세 건 모두 관측의 한계를 함께 넘겨 받는 조의 판단을 좁히지 않았다."
+    },
+    {
+     "card_id": "K-1111",
+     "classification": "inapplicable",
+     "reason": "양·속도 비교와 소리 관측은 다름",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "누유량이 줄었는지 동작이 느려졌는지 눈대중으로만 봤고 잴 수단이 없어서, 다음 조가 수치로 비교하도록 넘겨야 한다.",
+     "know_how": "관측에 수치가 붙지 않았으면 그 사실을 적고, 다음 조가 같은 것을 수치로 남길 수 있게 무엇을 어떻게 재면 되는지 지정해 요청한다. '줄어든 것 같다', '느려 보인다' 같은 서술만 이어지면 추이 비교가 안 된다. 잴 수단이 없으면 없다는 것도 적는다.",
+     "required_context": [
+      "수치 없이 관측한 내용",
+      "수치가 없다는 사실과 그 이유(측정 수단 없음 등)",
+      "다음 조가 잴 대상과 방법",
+      "비교에 쓸 기준값이 있으면 함께"
+     ],
+     "generalization_scope": "계측 신호가 없거나 측정 수단이 없어 정성 서술만 남은 관측이 교대를 넘기는 경우. 소리·냄새처럼 관측의 성질 자체를 전달하는 건은 K-1104를 따른다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S11"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0310",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없음"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "handover AR-0334 [다음 조 확인] 동작 시간 계측 요청"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0317은 디버터 동작 지연을 눈으로만 봐 수치가 없다는 사실을 인계에 적고, 다음 조에 동작 시간을 재서 기록해 달라고 지정했다. EV-0310은 누유가 줄어든 것으로 보였으나 측정 수단이 없어 확증하지 못했다고 적었다. 두 건 모두 관측이 교대를 넘기면서 비교 기준이 필요했던 경우다."
+    },
+    {
+     "card_id": "K-1024",
+     "classification": "conditional_safety",
+     "reason": "감속기 진단·안전 조건; 제조사/모델 및 작업 조건 미확인",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": null,
+     "know_how": "운전 중 온도·소음·진동 측정값을 동일 운전 조건의 정상 기록 및 승인된 정상 범위와 비교해 변화를 기록한다. 이상 변화가 관측되고 판단이 서지 않으면 주 모터를 끈다. 프로젝트 관측 경계는 gr_brg_temp >62 degC(정상 30–62), gr_vib_rms >2.8 mm_s(정상 0.5–2.8)로 지정한다. 소음은 동일 조건 정상 기록 대비 증가 여부를 별도로 적는다. 두 MES 수치가 범위 안이어도 다른 이상 변화를 무시하지 않는다. 원인을 확인하고 필요하면 제조사(SEW-EURODRIVE)에 문의한다. 시험 운전이라도 감시·보호 장치를 무력화하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S24"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "26867443.pdf",
+        "locator": "PDF p.5 / 인쇄 p.5 / §2 Safety Notes, Startup/operation",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+      "schema_version": "1.1"
+     },
+     "rationale": "제조사 지침 §2 Safety Notes의 기동·운전 항목이 이상 변화 시 주 모터 정지와 원인 확인, 감시·보호 장치 유지를 직접 요구한다. 베어링 온도 62 degC·진동 2.8 mm_s는 MES 상한이며 원문에는 수치가 없다. 2026-10-01 사용자 요청으로 지정한 프로젝트 시연용 기준이다. 실제 작업·충전·조정·재가동 허가로 사용하지 않는다. MES 해당 run의 config_id·단위·quality=good을 확인하고, 추가 프로젝트 관측항목은 위치별 측정값이 없으면 미확인으로 남긴다. MES 신호·센서 연결을 추가한 것은 아니다."
+    }
+   ]
+  },
+  {
+   "qid": "H-017",
+   "original_question": "GR-02 베어링 온도가 평소보다 올라서 상태감시 값은 확인했는데 분해는 다음 정지 때로 미뤘습니다. 소견이랑 운전 계속 여부를 한 인계에 같이 쓰려면 어떻게 정리해야 할까요?",
+   "question_action": "keep",
+   "requested_action": "계측값·소견·운전 상태를 한 인계에 정리",
+   "explicit_conditions": "평소 대비 온도 상승, 상태감시 확인, 다음 정지 때 분해 예정",
+   "missing_conditions": "정상범위 이탈·알람 상태·현재 정지·운전 승인",
+   "original_label": {
+    "qid": "H-017",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1105"
+    ],
+    "acceptable_card_ids": [
+     "K-1108",
+     "K-1025"
+    ],
+    "safety_card_ids": [
+     "K-1024",
+     "K-1025"
+    ],
+    "key_facts": [
+     "값과 읽은 시각, 정상 범위 기준을 적는다",
+     "알람 상한까지 얼마나 남았는지 함께 적는다",
+     "다음 조가 무엇을 어떤 기준으로 다시 읽을지 지정"
+    ],
+    "difficulty": "hard",
+    "label_note": "온도 상승 값 인계는 K-1105, 소견(추정)과 관측 구분은 K-1108 보조. 운전 계속 여부 판단 규칙은 T4 카드에 없고 K-1024/K-1025(정지 후 확인)는 안전으로 표시. 경계 사례."
+   },
+   "final_label": {
+    "qid": "H-017",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1108"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [
+     "확인한 상태감시 값과 추정 소견·미확인 사항을 구분한다.",
+     "실제 운전 상태와 다음 정지 때 분해 예정이라는 사실을 기록하고 운전 승인을 추정하지 않는다."
+    ],
+    "difficulty": "hard",
+    "label_note": "운전 계속 허가를 내리는 질문이 아니라 소견과 운전 상태의 인계 방법을 묻는다. 정상범위 이탈·무알람·현재 정지를 추정하지 않는다."
+   },
+   "candidates": [
+    {
+     "card_id": "K-1108",
+     "classification": "direct",
+     "reason": "계측 사실·추정 소견·미확인 사항 구분; 운전 승인 판단을 제공하는 것은 아님",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "원인이 짐작되지만 관측만으로는 확정하지 못했고 다른 원인 가능성도 남아 있어, 추정과 실제 관측을 나눠 다음 조에 넘겨야 한다.",
+     "know_how": "인계 메모에서 직접 보거나 읽은 것과 그로부터 추정한 것을 구분해 적는다. 추정은 추정이라고 표시한다. 같은 외관·증상이 다른 원인에서도 나오는 경우라면 그 사실을 적어 받는 조가 원인을 확정하고 들어가지 않게 한다. 관측 수단이 없어 확인하지 못한 것은 '확인 못 함'으로 적고 추정으로 메우지 않는다.",
+     "required_context": [
+      "직접 보거나 읽은 관측 사실",
+      "그로부터 세운 추정과 추정이라는 표시",
+      "같은 증상이 다른 원인에서도 나오는 경우 그 사실",
+      "관측 수단이 없어 확인하지 못한 항목"
+     ],
+     "generalization_scope": "관측만으로 원인이 확정되지 않는 증상. 계측으로 판정이 끝난 건에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S08"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0302",
+       "EV-0310",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0302",
+        "locator": "handover AR-0304 [다음 조 확인] 우유빛 단정 금지"
+       },
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없어 확증 못 함"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "work_note AR-0333 눈으로 본 인상임을 명시"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0302는 탱크 유면의 우유빛 거품을 공기 혼입 징후로 보면서도, 수분 오염에서도 같은 외관이 나오므로 단정하지 말라는 당부를 인계에 넣었다. EV-0310은 누유가 줄어든 것으로 보였으나 측정 수단이 없어 확증하지 못했다는 사실을 적었다. EV-0317은 디버터 동작이 느려 보였다는 것이 눈으로 본 인상일 뿐 시간을 잰 것이 아님을 밝혔다. 세 건 모두 관측의 한계를 함께 넘겨 받는 조의 판단을 좁히지 않았다."
+    },
+    {
+     "card_id": "K-1105",
+     "classification": "missing_context",
+     "reason": "평소 대비 상승은 정상범위 이탈·무알람을 뜻하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "알람은 없는데 순회하며 읽은 값이 정상 범위를 벗어나 있어, 다음 조가 정한 시각에 다시 읽도록 넘겨야 한다.",
+     "know_how": "알람이 없어도 계측값이 정상 범위를 벗어났으면 신호명·값·단위·확인 시각·운전 상태를 인계에 적는다. 정상 범위의 출처와 같은 조 안에서 다시 읽은 추이를 남기고, 다음 조가 무엇을 언제 어떤 기준으로 재확인할지 지정한다. 실제 설비의 확인된 알람 설정값이 있으면 그 값과의 차이를 함께 기록한다. 알람 설정값이나 관측 품질이 없으면 여유를 계산하지 않고 미확인으로 남긴다. MES 정상 범위 경계를 실제 알람 설정값으로 대신하지 않는다. 알람 부재와 계측 신호 부재를 구분하고, 계측값이 없으면 정상으로 기록하지 않는다.",
+     "required_context": [
+      "신호명·값·단위·확인 시각·운전 상태 및 관측 품질",
+      "정상 범위와 출처; 확인된 실제 알람 설정값이 있을 때만 임계까지의 차이",
+      "설정값·관측값 미제공 항목은 미확인 표시",
+      "같은 조 안에서 재확인한 값과 추이",
+      "다음 조의 재확인 신호·시각·판단 기준"
+     ],
+     "generalization_scope": "계측값이 정상 범위를 벗어났으나 알람이 없는 경우. 알람이 발생한 건은 알람 코드와 함께 넘긴다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S05"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0310",
+       "EV-0313",
+       "EV-0315",
+       "EV-0316",
+       "EV-0318"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [다음 조 확인] 알람 없으니 눈으로 확인"
+       },
+       {
+        "source_id": "EV-0313",
+        "locator": "handover AR-0326 [다음 조 확인] 알람 상한 근접 여부"
+       },
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [다음 조 확인] 알람 하한 근접 여부"
+       },
+       {
+        "source_id": "EV-0316",
+        "locator": "handover AR-0332 [현재 상태] 알람 없음·정상 하한 미달 + [다음 조 확인] \"① 전압 표시 재확인(알람 하한 94 % 아래로 내려가는지)\""
+       },
+       {
+        "source_id": "EV-0318",
+        "locator": "handover AR-0336 [현재 상태] 알람 하한 미달인데 알람 없음 + [다음 조 확인] \"① 클램프압 재확인, 계속 내려가는지\""
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "모의 MES는 선택된 시나리오와 설비 상태에 따라 알람을 생성하며, 모든 active 설비의 구성 신호는 별도로 계측 스냅샷에 남는다. 따라서 알람이 없다는 사실은 신호가 없거나 정상이라는 뜻이 아니다. EV-0313은 필터 차압 1.7 → 1.8 bar, EV-0315는 벨트 장력 342 → 338 kPa를 알람 없이 기록했다. EV-0316의 배전반 전압, EV-0318의 클램프압, EV-0310의 GR-02 누유도 알람과 관측을 구분해 인계한 사례다. 실제 알람 설정값이 제공되지 않은 사례에서는 임계까지의 여유를 계산하지 않는다."
+    },
+    {
+     "card_id": "K-1103",
+     "classification": "missing_context",
+     "reason": "현재 정지·재기동 방지 전제 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "설비를 세우고 잠금·재기동 방지를 걸어 둔 상태로 정비 확인이나 부품 입고를 기다리며, 재가동 보류 상태를 다음 조에 넘겨야 한다.",
+     "know_how": "설비를 세우고 재기동 방지 조치를 건 상태로 교대하면 인계 메모 맨 앞에 그 상태를 적는다. 함께 적을 것은 정지 시각, 재기동 방지 조치 내용, 운전 복귀에 무엇이 필요한지(정지 원인 확인·인터록 조건 해소·지정 승인자 승인), 그리고 그 전에는 돌리지 말라는 지시다. 정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지와 예상 시점도 적는다. 대기 사유는 부품 입고·담당자 도착·이력 조회처럼 구체적으로 적어야 받는 조가 언제 다시 볼지 안다. 경력이나 직급으로 재가동을 판단하지 않는다. 인계받은 사람은 재가동 금지 상태를 현장에서 함께 확인하고 정비 오더에 인수 기재한다.",
+     "required_context": [
+      "정지 시각과 정지를 판단한 근거(계측값·관측)",
+      "재기동 방지 조치 내용과 조치한 사람",
+      "운전 복귀에 필요한 조건: 정지 원인 확인, 인터록 조건 해소, 지정 승인자 승인",
+      "승인 전 재가동 금지 지시",
+      "정지로 함께 멈춘 하위 설비 범위",
+      "정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지(부품 입고·담당자 도착·이력 조회)와 예상 시점"
+     ],
+     "generalization_scope": "설비를 세우고 재기동 방지 조치를 건 상태가 교대를 넘기는 경우. 정비가 교대 안에 끝나지 않아 작업 제한이 이어지는 경우를 포함한다. 운전 중 관찰만 넘기는 건에는 적용하지 않는다. 설비 상태는 K-1103, 요청 추적은 K-1109가 맡고, 두 상황이 겹치면 둘 다 적용한다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S03"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0304",
+       "EV-0305",
+       "EV-0308",
+       "EV-0311",
+       "EV-0319"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0304",
+        "locator": "handover AR-0308 [다음 조 확인] 운전 복귀 조건·재가동 보류"
+       },
+       {
+        "source_id": "EV-0305",
+        "locator": "handover AR-0310 [현재 상태] 정지·재가동 보류"
+       },
+       {
+        "source_id": "EV-0308",
+        "locator": "handover AR-0316 [현재 상태] 재기동 방지·작업 제한"
+       },
+       {
+        "source_id": "EV-0311",
+        "locator": "handover AR-0322 [다음 조 확인] 승인 전 재가동 금지"
+       },
+       {
+        "source_id": "EV-0319",
+        "locator": "handover AR-0338 [현재 상태] 우발 재기동 방지 조치"
+       },
+       {
+        "source_id": "OSHA 29 CFR 1910.147",
+        "locator": "(f)(4) [교대 인계 절차 참고]",
+        "document_version": "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출. 안전 근거는 S-03 조사 메모의 (f)(4) 항목 대조",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0305·EV-0311·EV-0308은 감속기를 세운 채 교대했고, EV-0319는 롤러 모듈을 세운 채 교대했다. 네 건 모두 인계 메모에 정지 상태와 재가동 조건을 적었고, 받는 조가 임의로 돌리지 않고 보류를 이어갔다. EV-0304는 운전 복귀가 베어링 점검 완료와 지정 승인자 승인 뒤에만 가능하다는 조건을 명시했다. 대기 사유는 사건마다 달랐다 — EV-0304는 오일·교체 부품이 준비되지 않아 착수하지 못했고, EV-0308은 정비 담당이 교대 시각까지 도착하지 않았으며, EV-0311은 교체 부품 입고를 기다리는 상태였다. 세 건 모두 무엇을 기다리는지 적어 받는 조가 대기 상태를 그대로 이어받았다. OSHA 29 CFR 1910.147(f)(4)는 교대·인원 변경 시 잠금·표지 보호의 연속성을 위한 절차를 두도록 정하는데, 이 카드는 그 연속성을 기록으로 잇는 방법이다."
+    },
+    {
+     "card_id": "K-1025",
+     "classification": "missing_context",
+     "reason": "진단/조치 적용 조건 부족; 인계 방법도 직접 답하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": "감속기 베어링부 온도 측정값이 MES 상한 62 degC를 초과한다(정상 30–62 degC). 이는 원문 제조사 임계값이 아닌 프로젝트 관측 기준이다.",
+     "know_how": "1) 모터 전원을 차단하고 재기동을 방지한 뒤 감속기 표면 온도를 측정해 프로젝트 냉각 관측 기준 40 degC 이하로 냉각된 것을 확인한다. 40 degC는 추가 표면온도 관측용 설정값이며 gr_brg_temp에서 대체하지 않는다. 실제 점검 가능 여부는 현장 안전 기준·작업 승인으로 확인한다. 2) 사이트글라스가 있으면 유면이 중간에 있는지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 사이트글라스 중간 기준 또는 딥스틱 표시 범위를 벗어나면 유면을 맞춘다. 3) 마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 본다. 필요하면 오일을 교환한다. 오염이 심하면 제조사는 교환 주기와 관계없이 교환을 권고한다. 4) 베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다. MES 유면 관측 범위는 gr_oil_level 70–100 pct(양끝 포함)로 지정하고 <70 또는 >100이면 유면 확인 대상으로 기록한다. 실제 사이트글라스 중간·딥스틱 표시를 pct에서 환산하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S25"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "26867443.pdf",
+        "locator": "p.45 §9.1 Bearing point temperatures too high",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       },
+       {
+        "source_id": "26867443.pdf",
+        "locator": "p.42–43 §8.3 Checking the oil level, Checking the oil",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+      "schema_version": "1.1"
+     },
+     "rationale": "제조사 고장표는 베어링부 온도 과다의 가능한 원인으로 오일 부족·과다, 오일 노후, 베어링 손상을 각각 제시한다. 유면과 오일 상태를 확인하는 방법은 §8.3에 있다. 고장표의 원인들은 각각의 분기이며, 하나를 반드시 마친 뒤 다음 원인으로 넘어가는 제조사 지정 절차는 아니다. 베어링 >62 degC·유면 70–100 pct는 MES 기준, 표면 ≤40 degC는 별도 프로젝트 냉각 관측값이다. 2026-10-01 사용자 요청으로 지정한 프로젝트 시연용 기준이다. 실제 작업·충전·조정·재가동 허가로 사용하지 않는다. MES 해당 run의 config_id·단위·quality=good을 확인하고, 추가 프로젝트 관측항목은 위치별 측정값이 없으면 미확인으로 남긴다. 위치별 추가 관측 신호는 가상 MES 새 실행 구성에서 조회한다. MES 위치별 연결 신호: gr_surface_temp. 새 실행의 config_id·단위·quality=good과 수집 방식·계측 위치·운전 상태·관측 시각을 확인한다."
+    },
+    {
+     "card_id": "K-1024",
+     "classification": "conditional_safety",
+     "reason": "모델·정비 작업 조건 확인 없이 필수 안전 정답으로 요구하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": null,
+     "know_how": "운전 중 온도·소음·진동 측정값을 동일 운전 조건의 정상 기록 및 승인된 정상 범위와 비교해 변화를 기록한다. 이상 변화가 관측되고 판단이 서지 않으면 주 모터를 끈다. 프로젝트 관측 경계는 gr_brg_temp >62 degC(정상 30–62), gr_vib_rms >2.8 mm_s(정상 0.5–2.8)로 지정한다. 소음은 동일 조건 정상 기록 대비 증가 여부를 별도로 적는다. 두 MES 수치가 범위 안이어도 다른 이상 변화를 무시하지 않는다. 원인을 확인하고 필요하면 제조사(SEW-EURODRIVE)에 문의한다. 시험 운전이라도 감시·보호 장치를 무력화하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S24"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "26867443.pdf",
+        "locator": "PDF p.5 / 인쇄 p.5 / §2 Safety Notes, Startup/operation",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+      "schema_version": "1.1"
+     },
+     "rationale": "제조사 지침 §2 Safety Notes의 기동·운전 항목이 이상 변화 시 주 모터 정지와 원인 확인, 감시·보호 장치 유지를 직접 요구한다. 베어링 온도 62 degC·진동 2.8 mm_s는 MES 상한이며 원문에는 수치가 없다. 2026-10-01 사용자 요청으로 지정한 프로젝트 시연용 기준이다. 실제 작업·충전·조정·재가동 허가로 사용하지 않는다. MES 해당 run의 config_id·단위·quality=good을 확인하고, 추가 프로젝트 관측항목은 위치별 측정값이 없으면 미확인으로 남긴다. MES 신호·센서 연결을 추가한 것은 아니다."
+    }
+   ]
+  },
+  {
+   "qid": "H-018",
+   "original_question": "GR-01 진동값이 교대 중에 기준 근처까지 올라갔다 내려왔어요. 다음 조한테 어느 값 넘으면 보고하라고 조건을 달아 넘기는 게 맞나요?",
+   "question_action": "keep_and_defer",
+   "requested_action": "다음 조의 조건부 보고 기준을 정해 인계",
+   "explicit_conditions": "진동값이 기준 근처까지 상승 후 하강",
+   "missing_conditions": "기준 종류·보고 설정값·정상범위 이탈·알람 상태",
+   "original_label": {
+    "qid": "H-018",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1105"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [
+     "K-1024"
+    ],
+    "key_facts": [
+     "다음 조가 무엇을 어떤 기준으로 다시 읽을지 지정",
+     "알람 상한까지 얼마나 남았는지 함께 적는다",
+     "같은 조에서 다시 읽은 값이 있으면 추이를 적는다"
+    ],
+    "difficulty": "medium",
+    "label_note": "조건부 재확인 기준 지정은 K-1105 핵심. 진동 이상 시 주 모터 정지 K-1024 안전."
+   },
+   "final_label": {
+    "qid": "H-018",
+    "answerable": false,
+    "primary_card_ids": [],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [],
+    "difficulty": "medium",
+    "label_note": "평가 보류: 기준의 종류·확인된 보고 설정값과 적용 범위가 없다. 정상범위 이탈 또는 무알람을 추정해 K-1105에 맞추지 않는다.",
+    "evaluation_status": "deferred",
+    "defer_reason": "평가 보류: 기준의 종류·확인된 보고 설정값과 적용 범위가 없다. 정상범위 이탈 또는 무알람을 추정해 K-1105에 맞추지 않는다."
+   },
+   "candidates": [
+    {
+     "card_id": "K-1105",
+     "classification": "partial",
+     "reason": "확인된 설정값의 조건부 인계는 관련 있으나 질문의 기준·범위·무알람 조건 미확인",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "알람은 없는데 순회하며 읽은 값이 정상 범위를 벗어나 있어, 다음 조가 정한 시각에 다시 읽도록 넘겨야 한다.",
+     "know_how": "알람이 없어도 계측값이 정상 범위를 벗어났으면 신호명·값·단위·확인 시각·운전 상태를 인계에 적는다. 정상 범위의 출처와 같은 조 안에서 다시 읽은 추이를 남기고, 다음 조가 무엇을 언제 어떤 기준으로 재확인할지 지정한다. 실제 설비의 확인된 알람 설정값이 있으면 그 값과의 차이를 함께 기록한다. 알람 설정값이나 관측 품질이 없으면 여유를 계산하지 않고 미확인으로 남긴다. MES 정상 범위 경계를 실제 알람 설정값으로 대신하지 않는다. 알람 부재와 계측 신호 부재를 구분하고, 계측값이 없으면 정상으로 기록하지 않는다.",
+     "required_context": [
+      "신호명·값·단위·확인 시각·운전 상태 및 관측 품질",
+      "정상 범위와 출처; 확인된 실제 알람 설정값이 있을 때만 임계까지의 차이",
+      "설정값·관측값 미제공 항목은 미확인 표시",
+      "같은 조 안에서 재확인한 값과 추이",
+      "다음 조의 재확인 신호·시각·판단 기준"
+     ],
+     "generalization_scope": "계측값이 정상 범위를 벗어났으나 알람이 없는 경우. 알람이 발생한 건은 알람 코드와 함께 넘긴다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S05"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0310",
+       "EV-0313",
+       "EV-0315",
+       "EV-0316",
+       "EV-0318"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0310",
+        "locator": "handover AR-0320 [다음 조 확인] 알람 없으니 눈으로 확인"
+       },
+       {
+        "source_id": "EV-0313",
+        "locator": "handover AR-0326 [다음 조 확인] 알람 상한 근접 여부"
+       },
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [다음 조 확인] 알람 하한 근접 여부"
+       },
+       {
+        "source_id": "EV-0316",
+        "locator": "handover AR-0332 [현재 상태] 알람 없음·정상 하한 미달 + [다음 조 확인] \"① 전압 표시 재확인(알람 하한 94 % 아래로 내려가는지)\""
+       },
+       {
+        "source_id": "EV-0318",
+        "locator": "handover AR-0336 [현재 상태] 알람 하한 미달인데 알람 없음 + [다음 조 확인] \"① 클램프압 재확인, 계속 내려가는지\""
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "모의 MES는 선택된 시나리오와 설비 상태에 따라 알람을 생성하며, 모든 active 설비의 구성 신호는 별도로 계측 스냅샷에 남는다. 따라서 알람이 없다는 사실은 신호가 없거나 정상이라는 뜻이 아니다. EV-0313은 필터 차압 1.7 → 1.8 bar, EV-0315는 벨트 장력 342 → 338 kPa를 알람 없이 기록했다. EV-0316의 배전반 전압, EV-0318의 클램프압, EV-0310의 GR-02 누유도 알람과 관측을 구분해 인계한 사례다. 실제 알람 설정값이 제공되지 않은 사례에서는 임계까지의 여유를 계산하지 않는다."
+    },
+    {
+     "card_id": "K-1025",
+     "classification": "missing_context",
+     "reason": "진동 진단·조치 조건 부족, 보고 기준을 제공하지 않음",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": "감속기 베어링부 온도 측정값이 MES 상한 62 degC를 초과한다(정상 30–62 degC). 이는 원문 제조사 임계값이 아닌 프로젝트 관측 기준이다.",
+     "know_how": "1) 모터 전원을 차단하고 재기동을 방지한 뒤 감속기 표면 온도를 측정해 프로젝트 냉각 관측 기준 40 degC 이하로 냉각된 것을 확인한다. 40 degC는 추가 표면온도 관측용 설정값이며 gr_brg_temp에서 대체하지 않는다. 실제 점검 가능 여부는 현장 안전 기준·작업 승인으로 확인한다. 2) 사이트글라스가 있으면 유면이 중간에 있는지 확인한다. 딥스틱 장착형이면 표시된 적정 범위를 확인한다. 사이트글라스 중간 기준 또는 딥스틱 표시 범위를 벗어나면 유면을 맞춘다. 3) 마지막 오일 교환 시점을 확인하고, 드레인 플러그에서 오일을 조금 받아 점도와 오염 상태를 본다. 필요하면 오일을 교환한다. 오염이 심하면 제조사는 교환 주기와 관계없이 교환을 권고한다. 4) 베어링 손상이 의심되면 베어링을 점검하고 필요시 교체하며 SEW‑EURODRIVE 고객 서비스에 문의한다. MES 유면 관측 범위는 gr_oil_level 70–100 pct(양끝 포함)로 지정하고 <70 또는 >100이면 유면 확인 대상으로 기록한다. 실제 사이트글라스 중간·딥스틱 표시를 pct에서 환산하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S25"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "26867443.pdf",
+        "locator": "p.45 §9.1 Bearing point temperatures too high",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       },
+       {
+        "source_id": "26867443.pdf",
+        "locator": "p.42–43 §8.3 Checking the oil level, Checking the oil",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+      "schema_version": "1.1"
+     },
+     "rationale": "제조사 고장표는 베어링부 온도 과다의 가능한 원인으로 오일 부족·과다, 오일 노후, 베어링 손상을 각각 제시한다. 유면과 오일 상태를 확인하는 방법은 §8.3에 있다. 고장표의 원인들은 각각의 분기이며, 하나를 반드시 마친 뒤 다음 원인으로 넘어가는 제조사 지정 절차는 아니다. 베어링 >62 degC·유면 70–100 pct는 MES 기준, 표면 ≤40 degC는 별도 프로젝트 냉각 관측값이다. 2026-10-01 사용자 요청으로 지정한 프로젝트 시연용 기준이다. 실제 작업·충전·조정·재가동 허가로 사용하지 않는다. MES 해당 run의 config_id·단위·quality=good을 확인하고, 추가 프로젝트 관측항목은 위치별 측정값이 없으면 미확인으로 남긴다. 위치별 추가 관측 신호는 가상 MES 새 실행 구성에서 조회한다. MES 위치별 연결 신호: gr_surface_temp. 새 실행의 config_id·단위·quality=good과 수집 방식·계측 위치·운전 상태·관측 시각을 확인한다."
+    },
+    {
+     "card_id": "K-1103",
+     "classification": "missing_context",
+     "reason": "정지·재기동 방지 전제 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "설비를 세우고 잠금·재기동 방지를 걸어 둔 상태로 정비 확인이나 부품 입고를 기다리며, 재가동 보류 상태를 다음 조에 넘겨야 한다.",
+     "know_how": "설비를 세우고 재기동 방지 조치를 건 상태로 교대하면 인계 메모 맨 앞에 그 상태를 적는다. 함께 적을 것은 정지 시각, 재기동 방지 조치 내용, 운전 복귀에 무엇이 필요한지(정지 원인 확인·인터록 조건 해소·지정 승인자 승인), 그리고 그 전에는 돌리지 말라는 지시다. 정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지와 예상 시점도 적는다. 대기 사유는 부품 입고·담당자 도착·이력 조회처럼 구체적으로 적어야 받는 조가 언제 다시 볼지 안다. 경력이나 직급으로 재가동을 판단하지 않는다. 인계받은 사람은 재가동 금지 상태를 현장에서 함께 확인하고 정비 오더에 인수 기재한다.",
+     "required_context": [
+      "정지 시각과 정지를 판단한 근거(계측값·관측)",
+      "재기동 방지 조치 내용과 조치한 사람",
+      "운전 복귀에 필요한 조건: 정지 원인 확인, 인터록 조건 해소, 지정 승인자 승인",
+      "승인 전 재가동 금지 지시",
+      "정지로 함께 멈춘 하위 설비 범위",
+      "정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지(부품 입고·담당자 도착·이력 조회)와 예상 시점"
+     ],
+     "generalization_scope": "설비를 세우고 재기동 방지 조치를 건 상태가 교대를 넘기는 경우. 정비가 교대 안에 끝나지 않아 작업 제한이 이어지는 경우를 포함한다. 운전 중 관찰만 넘기는 건에는 적용하지 않는다. 설비 상태는 K-1103, 요청 추적은 K-1109가 맡고, 두 상황이 겹치면 둘 다 적용한다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S03"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0304",
+       "EV-0305",
+       "EV-0308",
+       "EV-0311",
+       "EV-0319"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0304",
+        "locator": "handover AR-0308 [다음 조 확인] 운전 복귀 조건·재가동 보류"
+       },
+       {
+        "source_id": "EV-0305",
+        "locator": "handover AR-0310 [현재 상태] 정지·재가동 보류"
+       },
+       {
+        "source_id": "EV-0308",
+        "locator": "handover AR-0316 [현재 상태] 재기동 방지·작업 제한"
+       },
+       {
+        "source_id": "EV-0311",
+        "locator": "handover AR-0322 [다음 조 확인] 승인 전 재가동 금지"
+       },
+       {
+        "source_id": "EV-0319",
+        "locator": "handover AR-0338 [현재 상태] 우발 재기동 방지 조치"
+       },
+       {
+        "source_id": "OSHA 29 CFR 1910.147",
+        "locator": "(f)(4) [교대 인계 절차 참고]",
+        "document_version": "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출. 안전 근거는 S-03 조사 메모의 (f)(4) 항목 대조",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0305·EV-0311·EV-0308은 감속기를 세운 채 교대했고, EV-0319는 롤러 모듈을 세운 채 교대했다. 네 건 모두 인계 메모에 정지 상태와 재가동 조건을 적었고, 받는 조가 임의로 돌리지 않고 보류를 이어갔다. EV-0304는 운전 복귀가 베어링 점검 완료와 지정 승인자 승인 뒤에만 가능하다는 조건을 명시했다. 대기 사유는 사건마다 달랐다 — EV-0304는 오일·교체 부품이 준비되지 않아 착수하지 못했고, EV-0308은 정비 담당이 교대 시각까지 도착하지 않았으며, EV-0311은 교체 부품 입고를 기다리는 상태였다. 세 건 모두 무엇을 기다리는지 적어 받는 조가 대기 상태를 그대로 이어받았다. OSHA 29 CFR 1910.147(f)(4)는 교대·인원 변경 시 잠금·표지 보호의 연속성을 위한 절차를 두도록 정하는데, 이 카드는 그 연속성을 기록으로 잇는 방법이다."
+    },
+    {
+     "card_id": "K-1024",
+     "classification": "conditional_safety",
+     "reason": "실제 적용 조건 없는 안전 카드",
+     "evidence_file": "docs/data/knowledge_cards/kb/kb_cards.json",
+     "symptom": null,
+     "know_how": "운전 중 온도·소음·진동 측정값을 동일 운전 조건의 정상 기록 및 승인된 정상 범위와 비교해 변화를 기록한다. 이상 변화가 관측되고 판단이 서지 않으면 주 모터를 끈다. 프로젝트 관측 경계는 gr_brg_temp >62 degC(정상 30–62), gr_vib_rms >2.8 mm_s(정상 0.5–2.8)로 지정한다. 소음은 동일 조건 정상 기록 대비 증가 여부를 별도로 적는다. 두 MES 수치가 범위 안이어도 다른 이상 변화를 무시하지 않는다. 원인을 확인하고 필요하면 제조사(SEW-EURODRIVE)에 문의한다. 시험 운전이라도 감시·보호 장치를 무력화하지 않는다.",
+     "required_context": [],
+     "generalization_scope": "SEW-EURODRIVE ML..2·ML..V2 산업용 감속기 설치·운전 지침의 해당 항목에 한정한다. 현장 GR 감속기의 제조사·모델 일치는 확인되지 않았다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260929-A:seed=20260929",
+       "slot:S24"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [],
+      "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+      "generated_at": "2026-09-29T15:00:00+09:00",
+      "sources": [
+       {
+        "source_id": "26867443.pdf",
+        "locator": "PDF p.5 / 인쇄 p.5 / §2 Safety Notes, Startup/operation",
+        "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
+       }
+      ],
+      "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+      "model_version": "claude-opus-5-5",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
+      "schema_version": "1.1"
+     },
+     "rationale": "제조사 지침 §2 Safety Notes의 기동·운전 항목이 이상 변화 시 주 모터 정지와 원인 확인, 감시·보호 장치 유지를 직접 요구한다. 베어링 온도 62 degC·진동 2.8 mm_s는 MES 상한이며 원문에는 수치가 없다. 2026-10-01 사용자 요청으로 지정한 프로젝트 시연용 기준이다. 실제 작업·충전·조정·재가동 허가로 사용하지 않는다. MES 해당 run의 config_id·단위·quality=good을 확인하고, 추가 프로젝트 관측항목은 위치별 측정값이 없으면 미확인으로 남긴다. MES 신호·센서 연결을 추가한 것은 아니다."
+    }
+   ]
+  },
+  {
+   "qid": "H-019",
+   "original_question": "교대 인수했는데 GR-02 커플링 점검 기록이 '진행 중'으로 남아 있고 담당자는 퇴근했습니다. 작업이 끝났는지 제가 어떻게 확인하고 받아야 하나요?",
+   "question_action": "keep_and_reactivate_with_source_procedure",
+   "requested_action": "점검 완료 여부 확인 후 인수",
+   "explicit_conditions": "진행 중 기록, 담당자 퇴근",
+   "missing_conditions": "현재 정지·잠금·완료 증거·미착수 여부",
+   "original_label": {
+    "qid": "H-019",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1103"
+    ],
+    "acceptable_card_ids": [
+     "K-1110",
+     "K-1101"
+    ],
+    "safety_card_ids": [
+     "K-1103",
+     "K-1110"
+    ],
+    "key_facts": [
+     "정비가 안 끝났으면 무엇을 기다리는지 적어야 한다",
+     "재가동 금지 상태를 현장에서 함께 확인한다",
+     "정비 오더에 인수 기재한다"
+    ],
+    "difficulty": "hard",
+    "label_note": "미완료 작업 인수: K-1103의 받는 쪽 현장 확인·오더 인수 기재. 감압·차단 기록 없으면 미수행으로 보고 보류하는 K-1110 보조·안전. '작업 완료 확인 방법' 자체는 카드에 없음. 경계 사례."
+   },
+   "final_label": {
+    "qid": "H-019",
+    "answerable": true,
+    "primary_card_ids": [
+     "K-1401"
+    ],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [
+     "진행 중 기록과 담당자 퇴근만으로 완료·미완료를 단정하지 않는다.",
+     "현장 작업 오더·체크리스트의 완료 항목·결과와 수행자·시각을 정비 책임자에게 확인한다.",
+     "작업허가제 적용 여부를 확인하고 적용되는 경우 수행자 완료 확인·허가 종료자 상태 확인·운전 담당자 인수를 구분한다.",
+     "근거가 없으면 완료 여부 미확인과 미결 항목·다음 확인 담당/시점을 인계 기록에 남긴다.",
+     "작업 완료 확인은 재가동 승인이 아니며 임의 기동·분해·잠금 해제를 하지 않는다."
+    ],
+    "difficulty": "hard",
+    "label_note": "HSE 원문에 근거한 별도 문헌 기반 T4 K-1401로 완료 확인 방법을 안내할 수 있다. GR-02가 실제 완료됐다는 판정은 하지 않는다. 기존 K-1103·K-1110의 정지·격리 조건을 가정하지 않는다.",
+    "evaluation_status": "active"
+   },
+   "candidates": [
+    {
+     "card_id": "K-1103",
+     "classification": "missing_context",
+     "reason": "정지·재기동 방지 상태가 질문에 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "설비를 세우고 잠금·재기동 방지를 걸어 둔 상태로 정비 확인이나 부품 입고를 기다리며, 재가동 보류 상태를 다음 조에 넘겨야 한다.",
+     "know_how": "설비를 세우고 재기동 방지 조치를 건 상태로 교대하면 인계 메모 맨 앞에 그 상태를 적는다. 함께 적을 것은 정지 시각, 재기동 방지 조치 내용, 운전 복귀에 무엇이 필요한지(정지 원인 확인·인터록 조건 해소·지정 승인자 승인), 그리고 그 전에는 돌리지 말라는 지시다. 정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지와 예상 시점도 적는다. 대기 사유는 부품 입고·담당자 도착·이력 조회처럼 구체적으로 적어야 받는 조가 언제 다시 볼지 안다. 경력이나 직급으로 재가동을 판단하지 않는다. 인계받은 사람은 재가동 금지 상태를 현장에서 함께 확인하고 정비 오더에 인수 기재한다.",
+     "required_context": [
+      "정지 시각과 정지를 판단한 근거(계측값·관측)",
+      "재기동 방지 조치 내용과 조치한 사람",
+      "운전 복귀에 필요한 조건: 정지 원인 확인, 인터록 조건 해소, 지정 승인자 승인",
+      "승인 전 재가동 금지 지시",
+      "정지로 함께 멈춘 하위 설비 범위",
+      "정비가 교대 안에 끝나지 않았으면 무엇을 기다리는지(부품 입고·담당자 도착·이력 조회)와 예상 시점"
+     ],
+     "generalization_scope": "설비를 세우고 재기동 방지 조치를 건 상태가 교대를 넘기는 경우. 정비가 교대 안에 끝나지 않아 작업 제한이 이어지는 경우를 포함한다. 운전 중 관찰만 넘기는 건에는 적용하지 않는다. 설비 상태는 K-1103, 요청 추적은 K-1109가 맡고, 두 상황이 겹치면 둘 다 적용한다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S03"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0304",
+       "EV-0305",
+       "EV-0308",
+       "EV-0311",
+       "EV-0319"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0304",
+        "locator": "handover AR-0308 [다음 조 확인] 운전 복귀 조건·재가동 보류"
+       },
+       {
+        "source_id": "EV-0305",
+        "locator": "handover AR-0310 [현재 상태] 정지·재가동 보류"
+       },
+       {
+        "source_id": "EV-0308",
+        "locator": "handover AR-0316 [현재 상태] 재기동 방지·작업 제한"
+       },
+       {
+        "source_id": "EV-0311",
+        "locator": "handover AR-0322 [다음 조 확인] 승인 전 재가동 금지"
+       },
+       {
+        "source_id": "EV-0319",
+        "locator": "handover AR-0338 [현재 상태] 우발 재기동 방지 조치"
+       },
+       {
+        "source_id": "OSHA 29 CFR 1910.147",
+        "locator": "(f)(4) [교대 인계 절차 참고]",
+        "document_version": "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출. 안전 근거는 S-03 조사 메모의 (f)(4) 항목 대조",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0305·EV-0311·EV-0308은 감속기를 세운 채 교대했고, EV-0319는 롤러 모듈을 세운 채 교대했다. 네 건 모두 인계 메모에 정지 상태와 재가동 조건을 적었고, 받는 조가 임의로 돌리지 않고 보류를 이어갔다. EV-0304는 운전 복귀가 베어링 점검 완료와 지정 승인자 승인 뒤에만 가능하다는 조건을 명시했다. 대기 사유는 사건마다 달랐다 — EV-0304는 오일·교체 부품이 준비되지 않아 착수하지 못했고, EV-0308은 정비 담당이 교대 시각까지 도착하지 않았으며, EV-0311은 교체 부품 입고를 기다리는 상태였다. 세 건 모두 무엇을 기다리는지 적어 받는 조가 대기 상태를 그대로 이어받았다. OSHA 29 CFR 1910.147(f)(4)는 교대·인원 변경 시 잠금·표지 보호의 연속성을 위한 절차를 두도록 정하는데, 이 카드는 그 연속성을 기록으로 잇는 방법이다."
+    },
+    {
+     "card_id": "K-1109",
+     "classification": "inapplicable",
+     "reason": "요청만 접수되고 미착수·회신 대기인 사건과 다름",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "정비·전기 담당에게 점검을 요청하거나 접수만 해 두고 아직 회신이나 착수가 없는 상태로 다음 조에 넘겨야 한다.",
+     "know_how": "정비·전기 담당에게 점검이나 확인을 요청했는데 회신이나 착수가 없는 채로 교대하면, 그 건을 '요청 접수됨·회신 대기'로 미해결 항목에 적는다. 접수 시각과 접수처를 함께 적는다. 요청했다는 사실만 적고 미해결에서 빼면 받는 조가 처리 중인 것으로 읽어 추적이 끊긴다. 다음 조 확인 항목에 회신 여부를 넣는다.",
+     "required_context": [
+      "요청한 내용과 접수처, 접수 시각",
+      "회신·착수 여부(없으면 '대기'로 명시)",
+      "요청 대상이 확인해야 할 항목",
+      "다음 조가 회신을 확인할 시점"
+     ],
+     "generalization_scope": "담당에게 요청했으나 회신·착수 없이 교대하는 경우. 요청이 처리 완료된 건에는 적용하지 않는다. 설비 상태는 K-1103, 요청 추적은 K-1109가 맡고, 두 상황이 겹치면 둘 다 적용한다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S09"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0301",
+       "EV-0308",
+       "EV-0313",
+       "EV-0315",
+       "EV-0316",
+       "EV-0317"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0301",
+        "locator": "handover AR-0302 [미확인] 점검 요청만 접수"
+       },
+       {
+        "source_id": "EV-0308",
+        "locator": "handover AR-0316 [안 된 것] 정비 담당 미도착"
+       },
+       {
+        "source_id": "EV-0313",
+        "locator": "handover AR-0326 [다음 조 확인] 정비 담당 회신 여부"
+       },
+       {
+        "source_id": "EV-0315",
+        "locator": "handover AR-0330 [다음 조 확인] 정비 담당 회신 여부"
+       },
+       {
+        "source_id": "EV-0316",
+        "locator": "handover AR-0332 [미해결] 전기 담당 회신 대기"
+       },
+       {
+        "source_id": "EV-0317",
+        "locator": "handover AR-0334 [미해결] 컴프레서 확인 결과 미수령"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0301은 14:48에 스트레이너 점검을 요청했으나 접수 상태로 교대했고, EV-0308은 17:30에 요청한 정비 담당이 19:40까지 오지 않아 미착수 상태로 넘겼다. EV-0313·EV-0315·EV-0316·EV-0317도 담당 접수까지만 하고 회신을 받지 못한 채 교대했다. 여섯 건 모두 인계 메모에 접수 사실과 회신 대기 상태를 적고, 다음 조 확인 항목에 회신 여부를 넣었다."
+    },
+    {
+     "card_id": "K-1110",
+     "classification": "missing_context",
+     "reason": "정지·에너지 격리 전제 없음",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "정비하려고 세운 설비의 차단·감압을 했는지 기록이 없고, MES 압력 표시만으로는 잔압이 남았는지 모르는 상태로 다음 조에 넘기거나 받는다.",
+     "know_how": "정비를 위해 설비를 세웠으면 전원 차단과 감압을 실제로 했는지, 누가 언제 했는지를 인계 기록에 남긴다. 계측 표시값으로 감압 여부를 판단하지 않는다. 정지 상태에서도 정상 범위 값이 표시될 수 있어 잔압이 남았는지 알려주지 못한다. 앞 조 기록에 감압 항목이 없으면 감압되지 않은 것으로 보고 작업을 보류한 뒤 담당자에게 확인한다. 현장 압력계와 작업 기록으로 확인한다. MES hpu_pressure 정상은 145–165 bar(양끝 포함)이며 EV-0320의 06:35 표시값 149 bar도 범위 이내였지만 감압은 미실시였다. <145 bar나 표시 0 bar도 격리·감압 완료로 판정하지 않는다. 현장 압력계 측정값·단위와 차단·감압 수행자·시각·현장 확인 결과를 기록하고, 기록이 없으면 미확인으로 남긴다.",
+     "required_context": [
+      "전원 차단·감압 실시 여부",
+      "수행 시각과 수행자",
+      "확인에 쓴 수단(현장 압력계·작업 기록). 계측 표시값은 근거로 쓰지 않는다",
+      "감압이 확인되지 않았으면 작업 보류 상태라는 표시",
+      "정비 완료 후 상태 해제 절차를 누가 밟을지",
+      "MES 표시 149 bar·정상 145–165 bar와 현장 압력계 값을 구분한다. 낮은 값·0 bar 표시로 감압 완료를 판정하지 않는다."
+     ],
+     "generalization_scope": "정비를 위해 설비를 세우고 에너지 차단·감압이 교대를 넘기는 경우. 운전 중 관찰만 넘기는 건에는 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S10"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0304",
+       "EV-0320"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0320",
+        "locator": "work_note AR-0339 \"MES 압력 표시는 정지 상태에서도 정상값으로 나온다. 감압 여부 판단에 쓰면 안 된다\"·06:35 표시값 149 bar·07:00 현장 잔압·08:30 감압 미실시 확인 / handover AR-0340 [시도했으나 안 된 것]"
+       },
+       {
+        "source_id": "EV-0304",
+        "locator": "handover AR-0308 [앞 근무자 조치] 전원 차단·재기동 방지"
+       },
+       {
+        "source_id": "OSHA 29 CFR 1910.147",
+        "locator": "(f)(4), (d)(1)~(6) [교대 인계 절차 참고]",
+        "document_version": "docs/sources/safety/S-03_OSHA_29_CFR_1910_147.md"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출. 안전 근거는 S-03 조사 메모의 (f)(4)·(d) 항목 대조",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "EV-0320에서 정지 상태의 HPU-01은 계측 표시가 149 bar로 MES 정상 범위 145–165 bar 이내였지만 현장 압력계에는 잔압이 남아 있었고, 앞 조 기록에 감압 항목이 없어 확인에 2시간이 걸렸다. 확인 결과 감압은 실시되지 않은 상태였다. EV-0304는 전원 차단과 재기동 방지 조치를 시각과 함께 기록으로 남겨 받는 조가 상태를 그대로 이어받은 사례다. OSHA 29 CFR 1910.147(f)(4)는 교대·인원 변경 시 잠금·표지 보호의 연속성 절차를 두도록 정하며, 에너지 격리 상태와 담당자를 남기는 것이 그 연속성의 기록 측면이다."
+    },
+    {
+     "card_id": "K-1101",
+     "classification": "missing_context",
+     "reason": "여러 단계 조치의 증거가 없으며 작업 완료 확인을 독립적으로 답하지 못함",
+     "evidence_file": "docs/data/knowledge_cards/kb/20260930-T4/cards.json",
+     "symptom": "원인을 못 찾은 상태로 여러 단계 확인이 이어지는데, 어디까지 확인했고 무엇이 정상으로 나왔는지 다음 조에 넘겨야 한다.",
+     "know_how": "미해결 증상을 넘길 때는 앞 조가 끝낸 확인 단계와 각 결과를 신호명·값·단위·확인 시각·운전 조건과 함께 적는다. 정상 범위 안이었던 결과도 당시 관측으로 남긴다. 같은 항목을 반복할 필요가 있는지는 받는 조가 현재 상태와 비교해 판단하며, 과거 정상값 하나로 원인을 배제하지 않는다. 절차 카드가 있으면 진행한 단계 번호와 아직 확인하지 못한 항목을 적는다. 받는 사람은 인계 시점에 확인 완료 범위와 재확인할 항목을 되물어 확인하고, 체크리스트 항목에 인수 확인을 표시한다.",
+     "required_context": [
+      "앞 조가 끝낸 확인 항목과 신호명·값·단위·확인 시각·운전 조건(정상 범위 안 결과 포함)",
+      "절차 카드가 있으면 진행한 단계 번호",
+      "당시 확인 결과로 다음 확인 대상으로 넘긴 항목과 판단의 한계",
+      "아직 확인하지 못한 항목과 현재 상태에서 재확인이 필요한 항목"
+     ],
+     "generalization_scope": "확인 절차가 여러 단계인 증상을 교대에 걸쳐 이어갈 때. 한 교대 안에 끝나는 건에는 적용하지 않는다. 조치 효과 판정(K-1102), 재가동 보류(K-1103), 요청 회신 대기(K-1109)만 넘기는 건에도 적용하지 않는다.",
+     "conditions": [],
+     "exclusions": [],
+     "provenance": {
+      "seed_ids": [
+       "KB-20260930-T4:seed=20260930",
+       "slot:S01"
+      ],
+      "persona_id": "claude-card-author",
+      "event_ids": [
+       "EV-0301",
+       "EV-0307",
+       "EV-0309",
+       "EV-0312"
+      ],
+      "generator": "Claude Code (Opus 5), batch KB-20260930-T4",
+      "generated_at": "2026-09-29T15:35:00+09:00",
+      "sources": [
+       {
+        "source_id": "EV-0301",
+        "locator": "handover AR-0302 [확인 완료] K-1001 1~4단계"
+       },
+       {
+        "source_id": "EV-0307",
+        "locator": "handover AR-0314 [안 된 것] 필터 차압 정상 확인"
+       },
+       {
+        "source_id": "EV-0309",
+        "locator": "handover AR-0318 [확인 완료]·[다음 조 확인] 중복 금지"
+       },
+       {
+        "source_id": "EV-0312",
+        "locator": "handover AR-0324 [다음 조 확인] 중복 작업 금지"
+       }
+      ],
+      "extraction_method": "KB용 사건 20건(EV-0301~0320)의 handover·work_note에서 2건 이상 반복된 인계 패턴 추출",
+      "model_version": "claude-opus-5[1m]",
+      "prompt_version": "docs/data/knowledge_cards/kb/20260930-T4/prompts/stage-b-cards.md@sha256:c913ebf4ff92512eca5eb397048a71e11a6d2c0d6174a7e18b728a5d9be56c10",
+      "schema_version": "1.1"
+     },
+     "rationale": "압력 저하·유온 상승처럼 확인 절차가 여러 단계인 증상이 교대를 넘길 때, 앞 조 결과가 적히지 않으면 받는 조가 같은 항목을 다시 본다. EV-0309에서는 앞 조가 확인한 냉각수 공급 밸브를 받는 조가 다시 확인했고 결과는 같았다. EV-0307에서는 앞 조가 교체한 리턴 필터의 차압이 정상이었다는 사실이 적혀 있어 받는 조가 당시 필터 확인 결과를 참고해 흡입 배관 확인을 이어갔다. 당시 차압 정상은 현재 필터 상태나 원인 배제의 확정 근거가 아니다. EV-0301과 EV-0312는 확인 완료 단계를 절차 카드 단계 번호로 적어 다음 조가 이어받게 했다."
+    },
+    {
+     "card_id": "K-1401",
+     "classification": "direct",
+     "reason": "실제 완료 상태를 가정하지 않고 완료 근거와 책임자 확인·인수 방법을 안내",
+     "evidence_file": "docs/data/knowledge_cards/kb/20261001-handover-completion/cards.json",
+     "symptom": "진행 중 정비 점검, 담당자 퇴근·작업 완료 증거 누락",
+     "know_how": "현장 인계 절차와 지정 정비 책임자를 확인하고 작업 오더·체크리스트에서 대상 설비, 작업 범위, 완료 확인 항목과 결과를 대조한다. 문서이 진행 중으로 남아 있거나 수행자가 퇴근해 결과가 불명확하면 정비 책임자에게 실제 완료 항목·결과·수행자·완료 시각과 미결 항목의 확인을 요청한다. 확인이 없으면 완료 여부 미확인으로 남긴다. 작업허가제가 적용되는지 확인한다. 적용 시 수행 책임자의 완료 확인, 허가 종료 책임자의 현장 상태 확인, 운전 담당자의 인수 확인을 현장 절차에 따라 대조한다. 적용 여부가 미확인이면 지정 책임자에게 절차를 확인한다. 확인한 완료 범위, 미결 항목, 설비 현재 상태, 다음 확인 담당과 시점을 인계 문서에 남기고 인수 확인을 받는다. 작업 완료 확인과 재가동 승인을 구분한다. 담당자 퇴근이나 문서 상태만으로 완료·미완료를 단정하지 않는다. 확인을 위해 임의 기동·분해·잠금 해제를 하지 않는다. 커플링 점검의 측정 항목·허용값은 해당 모델 작업표준에서 확인한다.",
+     "provenance": {
+      "seed_ids": [
+       "KB-20261001-handover-completion:source-review"
+      ],
+      "persona_id": "source-reviewer",
+      "event_ids": [],
+      "generator": "Codex source review",
+      "generated_at": "2026-10-01T16:48:59+09:00",
+      "sources": [
+       {
+        "source_id": "https://www.hse.gov.uk/humanfactors/topics/shift-handover.htm",
+        "locator": "Why is handover important? / incoming personnel cross-checking",
+        "document_version": "HSE web page, accessed 2026-10-01"
+       },
+       {
+        "source_id": "https://books.hse.gov.uk/gempdf/hsg250.pdf",
+        "locator": "PDF/printed p.13 §23–24; p.14 §25; p.24 Figure 1 items 12–13",
+        "document_version": "HSG250, First edition 2005"
+       },
+       {
+        "source_id": "docs/sources/safety/S-04_HSE_work_completion_handover.md",
+        "locator": "적용 및 해석",
+        "document_version": "2026-10-01"
+       }
+      ],
+      "extraction_method": "공식 HSE 웹페이지·PDF 원문 대조 후 범위를 제한한 문헌 기반 절차 작성",
+      "model_version": "gpt-6",
+      "prompt_version": "docs/sources/safety/S-04_HSE_work_completion_handover.md@sha256:0696c278d41c61b73b89771dfc2d289a7e01999d9679b2ea9667c0c98d326c26",
+      "schema_version": "1.1"
+     },
+     "rationale": "HSE Shift handover의 인수자 교차 확인 원칙과 HSG250 p.13 §23–24의 완료 확인·인수 역할 구분, p.14 §25의 현장 확인, p.24 Figure 1의 완료 반환과 운전 복귀 구분을 대조했다. 작업 오더·체크리스트의 구체적 확인 항목은 일반 원칙의 프로젝트 적용 해석이며 현장 절차로 대조한다. 사건 기반 T4 일반화나 GR-02 작업 완료 사실을 주장하지 않는다.",
+     "required_context": [
+      "작업 식별자·대상·범위와 수행 결과·완료 시각·수행자",
+      "완료 증거 및 책임자 회신 또는 미확인 표시",
+      "작업허가제 적용 여부와 해당 시 역할별 확인",
+      "미결 항목·설비 상태·후속 담당·재확인 시점"
+     ],
+     "generalization_scope": "정비 작업 완료 여부를 문서·책임자와 교차 확인하고 인수하는 정보 확인 절차. 작업허가서 역할 구분은 해당 제도가 적용될 때에 한정한다. 특정 설비 점검 기준·실제 완료 상태는 포함하지 않는다."
+    }
+   ],
+   "previous_deferred_label": {
+    "qid": "H-019",
+    "answerable": false,
+    "primary_card_ids": [],
+    "acceptable_card_ids": [],
+    "safety_card_ids": [],
+    "key_facts": [],
+    "difficulty": "hard",
+    "label_note": "평가 보류: 진행 중 기록과 담당자 퇴근만으로 작업 완료 확인 절차를 정할 수 없다. 정지·재기동 방지·미착수·회신 대기를 추정하지 않는다.",
+    "evaluation_status": "deferred",
+    "defer_reason": "평가 보류: 진행 중 기록과 담당자 퇴근만으로 작업 완료 확인 절차를 정할 수 없다. 정지·재기동 방지·미착수·회신 대기를 추정하지 않는다."
+   },
+   "source_followup": {
+    "source_note": "docs/sources/safety/S-04_HSE_work_completion_handover.md",
+    "new_card": "K-1401",
+    "basis": "HSE일반 인계 교차 확인 + HSG250 §23–25/ Figure 1, PTW 역할은 조건부",
+    "limits": "GR-02 실제 완료·격리·작업허가제 적용 여부는 미확인. 기존 사건을 완료 검증 반복 근거로 바꾸지 않음."
+   }
+  }
+ ]
+}

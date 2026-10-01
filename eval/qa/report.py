@@ -15,6 +15,8 @@ OK = ("hit", "abstain_ok")
 
 def verdict(score: dict) -> str:
     """Automatic label: hit, partial, abstain_ok, or miss."""
+    if score.get('evaluation_deferred'):
+        return 'deferred'
     if score.get("hit"):
         return "hit"
     if score.get("partial"):
@@ -47,6 +49,9 @@ def render_report(result: dict, items: list[dict]) -> str:
 def _summary_table(summary: dict) -> str:
     labels = [
         ("n", "문항"),
+        ("evaluated", "평가 대상"),
+        ("deferred", "평가 보류"),
+        ("retrieval_rank1_answerable_n", "검색 1위 평가 가능한 답 있음 문항"),
         ("answerable", "답 있음"),
         ("unanswerable", "답 없음"),
         ("citation_hit", "인용 적중"),
@@ -82,6 +87,10 @@ def _question(row: dict, item: dict, label: str) -> list[str]:
         f"| 설비 | {row['eq_id']} |",
         f"| 질문 | {_cell(item['question'])} |",
         f"| 기대 정답 카드 | primary: {_ids(item['primary_card_ids'])} / acceptable: {_ids(item['acceptable_card_ids'])} |",
+        *([f"| 완전 정답 조합 | {' 또는 '.join(' + '.join(group) for group in item['primary_card_sets'])} |"] if item.get('primary_card_sets') else []),
+        *([f"| 평가 보류 사유 | {_cell(item['defer_reason'])} |"] if item.get('defer_reason') else []),
+        *([f"| 확인할 핵심 사실 | {_cell('; '.join(item['key_facts']))} |"] if item.get('key_facts') else []),
+        *([f"| 라벨 판단 근거 | {_cell(item['label_note'])} |"] if item.get('label_note') else []),
         f"| 실제 인용 | {_ids(row.get('cited') or [])} |",
         f"| 검색 상위 3 | {_ids(top3)} |",
         f"| 표시된 안전 카드 | {_ids(row.get('safety') or [])} |",

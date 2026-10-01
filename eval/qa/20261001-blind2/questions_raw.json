@@ -1,0 +1,293 @@
+[
+ {
+  "qid": "BN-001",
+  "eq_id": "CAU",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "압축공기 압력이 720 kPa인데 계속 운전해도 괜찮은가요?",
+  "observations": {
+   "air_pressure": {
+    "value": 720,
+    "unit": "kPa"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-002",
+  "eq_id": "CAU",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "압축공기 압력이 610 kPa로 확인됐는데 확인 기준이 있나요?",
+  "observations": {
+   "air_pressure": {
+    "value": 610,
+    "unit": "kPa"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-003",
+  "eq_id": "CAU",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "압축공기 설비 주변 진동과 냄새 변화가 있는데 어떻게 확인하면 될까요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-004",
+  "eq_id": "CAU",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "압력 알람이 발생했는데 현재 압력 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-005",
+  "eq_id": "CAU",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "에어 필터 교체 작업 후 재가동 전에 필터 규격 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-006",
+  "eq_id": "CAU",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "압력 알람 초기화 작업 후 재가동 전에 확인할 상태가 있을까요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-007",
+  "eq_id": "CAU",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "압축공기 설비 점검 작업 후 재가동 전에 확인할 사항이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-008",
+  "eq_id": "PDP",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "배전반 전압이 98%인 상태에서 운전을 계속해도 되는지 확인이 필요한가요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 98,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-009",
+  "eq_id": "PDP",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "배전반 전압이 92%로 확인됐는데 점검 기준이 있나요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 92,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-010",
+  "eq_id": "PDP",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "전원 알람과 정상 전압 표시가 같이 있을 때 판단 방법이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-011",
+  "eq_id": "PDP",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "배전반 열감과 팬 소리 변화가 있는데 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-012",
+  "eq_id": "PDP",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "차단기 교체 작업 후 전압 정상 상태에서 재가동 가능한가요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 100,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-013",
+  "eq_id": "PDP",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "전원 알람 초기화 작업 후 정상 표시 확인 시 재가동 판단 기준이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-014",
+  "eq_id": "PDP",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "PDP 전원 점검 작업 후 인계 내용 기준으로 재가동 확인 방법이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-015",
+  "eq_id": "HPU",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "유압 필터 차압 0.8 bar와 유량 55 L_min 상태에서 확인 기준이 있나요?",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 0.8,
+    "unit": "bar"
+   },
+   "hpu_flow": {
+    "value": 55,
+    "unit": "L_min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-016",
+  "eq_id": "HPU",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "필터 교체 작업 후 유압 필터 차압이 0.3 bar인 상태에서 재가동 가능한가요?",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 0.3,
+    "unit": "bar"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-017",
+  "eq_id": "CV",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "컨베이어 대기율 40%와 속도 12 m/min 상태에서 판단이 필요한가요?",
+  "observations": {
+   "cv_queue_len": {
+    "value": 40,
+    "unit": "pct"
+   },
+   "cv_speed": {
+    "value": 12,
+    "unit": "m_min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-018",
+  "eq_id": "CV",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "CV 벨트 센서 교체 작업 후 재가동 전에 알람 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-019",
+  "eq_id": "GR",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "감속기 전류 35 A와 진동 1.2 mm/s 상태에서 확인 기준이 있나요?",
+  "observations": {
+   "gr_current": {
+    "value": 35,
+    "unit": "A"
+   },
+   "gr_vib_rms": {
+    "value": 1.2,
+    "unit": "mm_s"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-020",
+  "eq_id": "GR",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "진동 알람 초기화 작업 후 재가동 전에 확인할 사항이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-021",
+  "eq_id": "RT",
+  "slot": "T2",
+  "persona_id": "V-blind2",
+  "question": "롤러 클램프 압력 5 bar와 리프트 지연 1분 상태에서 판단 기준이 있나요?",
+  "observations": {
+   "rt_clamp_press": {
+    "value": 5,
+    "unit": "bar"
+   },
+   "rt_lift_delay": {
+    "value": 1,
+    "unit": "min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-022",
+  "eq_id": "RT",
+  "slot": "T6",
+  "persona_id": "V-blind2",
+  "question": "RT 롤러 센서 교체 작업 후 알람 상태 확인 시 재가동 가능한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-023",
+  "eq_id": "GR",
+  "slot": "자유",
+  "persona_id": "V-blind2",
+  "question": "감속기 사용 이력과 부품 모델 번호 확인이 필요한데 무엇을 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-024",
+  "eq_id": "RT",
+  "slot": "자유",
+  "persona_id": "V-blind2",
+  "question": "RT 롤러 위치 알람 기록 확인 후 판단 기준이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ },
+ {
+  "qid": "BN-025",
+  "eq_id": "GR",
+  "slot": "자유",
+  "persona_id": "V-blind2",
+  "question": "감속기 베어링 온도 확인이 필요한 상황인데 무엇을 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅"
+ }
+]

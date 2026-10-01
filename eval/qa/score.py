@@ -24,6 +24,7 @@ from shiftlink.agent.pipeline import FixedPipeline  # noqa: E402
 from shiftlink.agent.tools import bind_tool_provider  # noqa: E402
 from shiftlink.edge.ollama import OllamaModel  # noqa: E402
 from shiftlink.rag.loader import load_card_provider  # noqa: E402
+from eval.qa.label_contract import matches_primary, rank1_evaluable
 
 KB = ROOT / "docs/data/knowledge_cards/kb/kb_cards.json"
 
@@ -34,6 +35,8 @@ def score_item(item: dict, out: dict, *, error: str | None = None) -> dict:
     An execution error is not a successful abstain: an empty citation list
     after a crash must not raise abstain_ok.
     """
+    if item.get('evaluation_status') == 'deferred':
+        return {'evaluation_deferred': True}
     cited = out["cited"]
     primary, acceptable = set(item["primary_card_ids"]), set(item["acceptable_card_ids"])
     abstained = out["no_knowledge"] or not cited
@@ -42,10 +45,10 @@ def score_item(item: dict, out: dict, *, error: str | None = None) -> dict:
         "wrong_cite_rate": (sum(c not in primary | acceptable for c in cited) / len(cited)) if cited else 0.0,
     }
     if item["answerable"]:
-        row["hit"] = bool(primary & set(cited))
+        row["hit"] = matches_primary(item, cited)
         row["partial"] = not row["hit"] and bool(acceptable & set(cited))
-        row["retrieval_hit_at_1"] = out["ranked"][:1] != [] and out["ranked"][0] in primary
-        row["retrieval_hit_at_k"] = bool(primary & set(out["ranked"]))
+        row["retrieval_hit_at_1"] = matches_primary(item, out['ranked'][:1]) if rank1_evaluable(item) else None
+        row["retrieval_hit_at_k"] = matches_primary(item, out['ranked'])
     else:
         row["abstain_ok"] = abstained and not error
     return row
@@ -54,17 +57,22 @@ def score_item(item: dict, out: dict, *, error: str | None = None) -> dict:
 def summarize(rows: list[dict]) -> dict:
     ans = [r for r in rows if "hit" in r["score"]]
     unans = [r for r in rows if "abstain_ok" in r["score"]]
-    rate = lambda rs, k: round(sum(r["score"][k] for r in rs) / len(rs), 3) if rs else None  # noqa: E731
-    warm = sorted(r["e2e_s"] for r in rows[1:] if not r["error"])
+    evaluated = [r for r in rows if not r['score'].get('evaluation_deferred')]
+    def rate(rs, key):
+        values = [r['score'][key] for r in rs if r['score'].get(key) is not None]
+        return round(sum(values) / len(values), 3) if values else None
+    warm = sorted(r["e2e_s"] for r in evaluated[1:] if not r["error"])
     pick = lambda q: warm[max(0, -(-len(warm) * q // 100) - 1)] if warm else None  # noqa: E731  nearest-rank
     return {
         "n": len(rows), "answerable": len(ans), "unanswerable": len(unans),
+        "evaluated": len(evaluated), "deferred": len(rows) - len(evaluated),
+        "retrieval_rank1_answerable_n": sum(r['score'].get('retrieval_hit_at_1') is not None for r in ans),
         "citation_hit": rate(ans, "hit"), "citation_partial": rate(ans, "partial"),
         "retrieval_hit_at_1": rate(ans, "retrieval_hit_at_1"), "retrieval_hit_at_k": rate(ans, "retrieval_hit_at_k"),
-        "wrong_cite_rate": rate(ans, "wrong_cite_rate"), "safety_ok": rate(rows, "safety_ok"),  # unanswerable: see abstain_ok
+        "wrong_cite_rate": rate(ans, "wrong_cite_rate"), "safety_ok": rate(evaluated, "safety_ok"),  # unanswerable: see abstain_ok
         "abstain_ok": rate(unans, "abstain_ok"),
         "review_queue": sum(bool(r["review_queue"]) for r in rows), "errors": sum(bool(r["error"]) for r in rows),
-        "cold_s": rows[0]["e2e_s"] if rows else None, "p50_s": pick(50), "p95_s": pick(95),
+        "cold_s": evaluated[0]["e2e_s"] if evaluated else None, "p50_s": pick(50), "p95_s": pick(95),
     }
 
 
@@ -81,6 +89,12 @@ def payload(item: dict, mode: str = "query", shift: str = "A") -> dict:
 def run(items: list[dict], pipe: FixedPipeline, mode: str = "query", shift: str = "A") -> list[dict]:
     rows = []
     for item in items:
+        if item.get('evaluation_status') == 'deferred':
+            rows.append({'qid': item['qid'], 'eq_id': item['eq_id'], 'answerable': item['answerable'],
+                         'e2e_s': 0.0, 'error': None, 'answer': '', 'cited': [], 'safety': [], 'ranked': [],
+                         'no_knowledge': False, 'review_queue': None, 'score': {'evaluation_deferred': True}})
+            print(f"{item['qid']} deferred: {item['defer_reason']}", flush=True)
+            continue
         t, err = time.monotonic(), None
         try:
             res = pipe.run(payload(item, mode, shift))

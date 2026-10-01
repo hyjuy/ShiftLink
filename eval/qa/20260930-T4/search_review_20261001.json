@@ -1,0 +1,245 @@
+{
+ "kb_sha256": "4bf95c9f239d9451ff36da08d6d71044e706177ab636e00d1521bbb5bf43457a",
+ "mode": "handover",
+ "k": 5,
+ "rows": [
+  {
+   "qid": "H-008",
+   "question": "CV-02 벨트 한쪽으로 쏠리는 거 봤음. 어디쯤인지 방향은 어떻게 적어야 다음 조가 알아먹음?",
+   "ranked": [
+    "K-1012",
+    "K-1010",
+    "K-1013",
+    "K-1106",
+    "K-1205"
+   ],
+   "route_ok": false
+  },
+  {
+   "qid": "H-012",
+   "question": "RT-02 클램프 압력 알람 한 번 떴다 사라짐. 원인 못 찾았는데 미해결로 어떻게 넘김?",
+   "ranked": [
+    "K-1105",
+    "K-1106",
+    "K-1109",
+    "K-1208",
+    "K-1214"
+   ],
+   "route_ok": false
+  },
+  {
+   "qid": "H-016",
+   "question": "GR-01 감속기 웅웅거리는 소리 커짐. 온도는 못 봤음. 이대로 인계 써도 됨?",
+   "ranked": [
+    "K-1024",
+    "K-1104",
+    "K-1209",
+    "K-1025",
+    "K-1103"
+   ],
+   "route_ok": null
+  },
+  {
+   "qid": "H-017",
+   "question": "GR-02 베어링 온도가 평소보다 올라서 상태감시 값은 확인했는데 분해는 다음 정지 때로 미뤘습니다. 소견이랑 운전 계속 여부를 한 인계에 같이 쓰려면 어떻게 정리해야 할까요?",
+   "ranked": [
+    "K-1210",
+    "K-1103",
+    "K-1025",
+    "K-1027",
+    "K-1106"
+   ],
+   "route_ok": false
+  },
+  {
+   "qid": "H-018",
+   "question": "GR-01 진동값이 교대 중에 기준 근처까지 올라갔다 내려왔어요. 다음 조한테 어느 값 넘으면 보고하라고 조건을 달아 넘기는 게 맞나요?",
+   "ranked": [
+    "K-1210",
+    "K-1103",
+    "K-1025",
+    "K-1110",
+    "K-1029"
+   ],
+   "route_ok": null
+  },
+  {
+   "qid": "H-019",
+   "question": "교대 인수했는데 GR-02 커플링 점검 기록이 '진행 중'으로 남아 있고 담당자는 퇴근했습니다. 작업이 끝났는지 제가 어떻게 확인하고 받아야 하나요?",
+   "ranked": [
+    "K-1109",
+    "K-1106",
+    "K-1108",
+    "K-1110",
+    "K-1027"
+   ],
+   "route_ok": null
+  }
+ ],
+ "comparison": {
+  "validation": "20 unique IDs, JSON/label contract/card IDs, merged copies, untouched 14 items, T4 card copies passed",
+  "kb_unchanged": false,
+  "questions_unchanged": true,
+  "retrieval_improvement": false,
+  "rows": [
+   {
+    "qid": "H-008",
+    "ranks_unchanged": false,
+    "ranked": [
+     "K-1012",
+     "K-1010",
+     "K-1013",
+     "K-1106",
+     "K-1205"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": false,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "safety_ok": true,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    }
+   },
+   {
+    "qid": "H-012",
+    "ranks_unchanged": false,
+    "ranked": [
+     "K-1105",
+     "K-1106",
+     "K-1109",
+     "K-1208",
+     "K-1214"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": true,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": true
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "safety_ok": true,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    }
+   },
+   {
+    "qid": "H-016",
+    "ranks_unchanged": false,
+    "ranked": [
+     "K-1024",
+     "K-1104",
+     "K-1209",
+     "K-1025",
+     "K-1103"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": false,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": true
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "safety_ok": true,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": null,
+     "retrieval_hit_at_k": false
+    }
+   },
+   {
+    "qid": "H-017",
+    "ranks_unchanged": false,
+    "ranked": [
+     "K-1210",
+     "K-1103",
+     "K-1025",
+     "K-1027",
+     "K-1106"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": false,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "safety_ok": true,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    }
+   },
+   {
+    "qid": "H-018",
+    "ranks_unchanged": false,
+    "ranked": [
+     "K-1210",
+     "K-1103",
+     "K-1025",
+     "K-1110",
+     "K-1029"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": false,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "evaluation_deferred": true
+    }
+   },
+   {
+    "qid": "H-019",
+    "ranks_unchanged": true,
+    "ranked": [
+     "K-1109",
+     "K-1106",
+     "K-1108",
+     "K-1110",
+     "K-1027"
+    ],
+    "old_label_score_on_same_rank1_probe": {
+     "safety_ok": false,
+     "wrong_cite_rate": 1.0,
+     "hit": false,
+     "partial": false,
+     "retrieval_hit_at_1": false,
+     "retrieval_hit_at_k": false
+    },
+    "new_label_score_on_same_rank1_probe": {
+     "evaluation_deferred": true
+    }
+   }
+  ],
+  "limitations": [
+   "Old and new labels are scored on the SAME current ranks; an initial KB hash change prevents historical search comparison.",
+   "No LLM answers were generated; citation probes do not measure answer completeness.",
+   "Deferred items do not count as unanswerable abstention successes.",
+   "Scores on different eligible denominators must not be compared as search improvement."
+  ]
+ }
+}

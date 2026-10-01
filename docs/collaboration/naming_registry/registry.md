@@ -124,6 +124,13 @@
 | ~~`GENERATION_API_KEY`~~ | 폐기(2026-09-30): 외부 API 생성을 하지 않기로 함 ([N-7](../../reports/N-7_생성API_비교.md)) | 최재영 |
 | `OLLAMA_HOST` | Ollama 서버 주소 | 최재영 |
 
+## systemd 서비스 (`deploy/install_service.sh`)
+
+| 이름 | 장비 | 뜻 | 담당자 |
+| --- | --- | --- | --- |
+| `shiftlink-mes` | Jetson | `python -m shiftlink.mes --host 0.0.0.0 --port 8000` 자동 시작 (작업계획 E1) | 허재원 |
+| `shiftlink-vision` | 라즈베리파이 | `python -m shiftlink.vision.classify --headless --server ...` 자동 시작 (작업계획 D2) | 허재원 |
+
 ## ID 접두어 규칙 `[기존 — 01_고도화_초안 §7.1]`
 
 새 엔티티에 ID를 붙일 때 이 규칙을 따른다: **`접두어-4자리`** (예: `EV-0031`, `K-0001`). 기존 형식을 절대 깨지 않는다.

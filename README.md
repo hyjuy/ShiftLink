@@ -11,6 +11,10 @@
 | 모의 MES | 유현준·허재원 | `shiftlink/mes/` (실행 DB `mes_data/`) |
 | PM·QA / 검수·평가·시나리오 | 전혜민 | `eval/` |
 
+## 지식 카드
+
+통합 목록 `docs/data/knowledge_cards/kb/kb_cards.json`은 **84장**이다. 배치 A 30, T4 11, C 19, D 24(1~3차 21장 + 10/1 4차 K-1322~1324).
+
 ## 브랜치 전략
 자세한 내용은 [`docs/collaboration/branching.md`](docs/collaboration/branching.md) 참고.
 

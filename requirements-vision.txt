@@ -1,0 +1,11 @@
+# shiftlink.vision 전용 (CI의 requirements.txt와 분리)
+# 버전은 Python 3.10(CI)과 3.13(.venv) 양쪽에 휠이 있는 것으로 고정
+# PC(촬영·학습):  pip install -r requirements-vision.txt
+# 라즈베리파이(촬영·분류): pip install opencv-python==4.10.0.84 onnxruntime==1.20.1 numpy==2.1.3
+# GPU 학습이면 torch는 https://pytorch.org 의 CUDA 빌드 설치 명령을 따른다.
+torch==2.6.0
+torchvision==0.21.0
+onnx==1.18.0
+opencv-python==4.10.0.84
+onnxruntime==1.20.1
+numpy==2.1.3

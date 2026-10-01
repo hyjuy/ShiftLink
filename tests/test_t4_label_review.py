@@ -95,7 +95,27 @@ def test_reviewed_dataset_is_consistent_and_does_not_invent_question_facts():
     assert by_id['H-012']['primary_card_ids'] == ['K-1108']
     assert by_id['H-017']['primary_card_ids'] == ['K-1108']
     assert by_id['H-016']['primary_card_sets'] == [['K-1104', 'K-1108']]
-    assert by_id['H-018']['evaluation_status'] == by_id['H-019']['evaluation_status'] == 'deferred'
+    assert by_id['H-018']['evaluation_status'] == 'deferred'
+    assert by_id['H-019']['answerable'] is True
+    assert by_id['H-019']['primary_card_ids'] == ['K-1401']
+    assert by_id['H-019'].get('evaluation_status', 'active') == 'active'
+
+
+def test_completion_answer_is_backed_by_a_loaded_source_procedure():
+    from shiftlink.rag.loader import load_card_provider
+    from eval.qa.route_score import route
+    item = next(x for x in json.loads((BASE / 'qa_dev_t4.json').read_text(encoding='utf-8')) if x['qid'] == 'H-019')
+    provider = load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider
+    cards = {c.card_id: c for c in provider.cards}
+    assert 'K-1401' in cards
+    card = cards['K-1401']
+    assert card.tacit_type == 'T3'
+    assert card.provenance.event_ids == []
+    assert any('hsg250.pdf' in s.source_id for s in card.provenance.sources)
+    validate_label(item, {cid: c.model_dump() for cid, c in cards.items()})
+    ranked = route(provider, item, handover=True)
+    assert route_ok(item, ranked) is True
+    assert score_item(item, outcome(['K-1401']))['hit'] is True
 
 
 def test_report_exposes_adjudication_and_manual_fact_checks():

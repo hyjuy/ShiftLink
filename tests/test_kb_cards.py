@@ -56,7 +56,7 @@ def test_t4_evidence_text_is_kb_only_and_used_only_for_handover():
     provider = load_card_provider(KB / "kb_cards.json", min_top_relevance=0).provider
     card = next(c for c in provider.cards if c.card_id in evidence)
     word = sorted(provider._evidence_tokens[card.card_id] - provider._common_tokens)[0]
-    score = lambda handover: next(  # noqa: E731
-        i for i, c in enumerate(provider.search_cards(query=word, equipment_ids=["HPU"], k=100, handover=handover))
-        if c["card_id"] == card.card_id)
-    assert score(True) < score(False)  # evidence words lift the card only for a handover memo
+    ids = lambda handover: [c["card_id"] for c in  # noqa: E731
+                            provider.search_cards(query=word, equipment_ids=["HPU"], k=100, handover=handover)]
+    assert card.card_id in ids(True)  # evidence words reach the card for a handover memo
+    assert not any(i in t4_ids for i in ids(False))  # a symptom question never ranks a T4 card

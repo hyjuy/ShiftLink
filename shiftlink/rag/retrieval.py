@@ -387,6 +387,10 @@ class InMemoryToolProvider:
             for card in self.cards:
                 if card.equipment not in equipment_codes and card.equipment != "COMMON":
                     continue
+                # T4 cards are handover methods (all COMMON), not answers to a symptom question.
+                # 10/1 team meeting decision; dev·sanity·t4 route scores unchanged.
+                if card.tacit_type == "T4" and not handover:
+                    continue
                 if not _instance_matches(card, canonical_ids, type_only):
                     continue
                 status = _condition_status(card, observations)

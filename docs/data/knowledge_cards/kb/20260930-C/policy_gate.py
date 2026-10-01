@@ -73,6 +73,27 @@ def adoption_issues(cards, here=HERE, root=ROOT):
     return result
 
 
+def unapproved_adoption_issues(cards, here=HERE, root=ROOT):
+    """Honor the recorded user promotion only for its exact reviewed card snapshots."""
+    issues = adoption_issues(cards, here, root)
+    record_path = here / "l1-promotion-20261001.json"
+    if not record_path.exists():
+        return issues
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    checklist = root / record["review_file"]
+    checksum = hashlib.sha256(checklist.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    if record.get("authorization") != "explicit_user_request" or checksum != record["review_sha256_lf"]:
+        return issues
+    for card in cards:
+        entry = record["cards"].get(card["card_id"], {})
+        digest = hashlib.sha256(json.dumps(card, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+        if (entry.get("verdict") == "accepted" and entry.get("card_sha256") == digest
+                and (card["status"], card["grade"]) == ("accepted", "L1")
+                and set(issues.get(card["card_id"], [])) <= set(entry.get("pending_policy_issues", []))):
+            issues.pop(card["card_id"], None)
+    return issues
+
+
 if __name__ == "__main__":
     cards = json.loads((HERE / "cards.json").read_text(encoding="utf-8"))
     issues = adoption_issues(cards)

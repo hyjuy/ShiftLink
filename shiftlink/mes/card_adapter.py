@@ -66,12 +66,19 @@ class MesCardAdapter:
             valid = (reading.get("quality") == "good" and reading.get("unit") == spec.unit
                      and isinstance(value, (int, float)) and not isinstance(value, bool)
                      and isfinite(value) and (spec.unit != "bool" or value in (0, 1)))
+            if spec.semantics.get('acquisition') == 'manual_sample':
+                sampled_at = _instant(reading.get('observed_at'))
+                frame_at = _instant(snapshot.get('simulated_at'))
+                missing_time = datetime.min.replace(tzinfo=timezone.utc)
+                valid = (valid and frame_at != missing_time and sampled_at != missing_time
+                         and 0 <= (frame_at - sampled_at).total_seconds() < 60)
             evidence.append({
                 "equipment_id": eq.equipment_id, "signal": signal,
                 "value": value, "unit": reading.get("unit"),
                 "quality": reading.get("quality"),
                 "observed_at": _timestamp(reading.get("observed_at")),
                 "used_for_conditions": valid,
+                **({"semantics": spec.semantics} if spec.semantics else {}),
             })
             if not valid:
                 continue

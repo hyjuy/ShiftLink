@@ -38,6 +38,7 @@ class SignalSpec:
     normal_max: float | None = None
     required: bool = True
     zero_when_stopped: bool = False
+    semantics: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

@@ -45,4 +45,48 @@ def test_c_json_keeps_a_common_field_order_and_matches_outputs():
     for card in cards:
         common = [key for key in reference if key in card]
         assert list(card)[:len(common)] == common
-        assert card["status"] == "draft" and card["grade"] == "L0"
+        assert card["status"] == "accepted" and card["grade"] == "L1"
+
+
+def test_c_promotion_matches_human_review_and_runtime_kb():
+    import re
+    review = (KB / "human-review-checklist-20260930.md").read_text(encoding="utf-8")
+    cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
+    kb = json.loads((KB / "kb_cards.json").read_text(encoding="utf-8"))
+    merged = {c["card_id"]: c for c in kb["cards"]}
+    for card in cards:
+        block = next(b for b in re.split(r"(?=^## K-\d{4})", review, flags=re.M)
+                     if b.startswith("## " + card["card_id"] + " "))
+        assert re.search(r"^- \*\*판정\*\*: accepted$", block, re.M)
+        assert merged[card["card_id"]] == card
+
+
+def test_c_promotion_does_not_clear_policy_issues_or_approve_changed_cards(monkeypatch):
+    import copy
+    spec = importlib.util.spec_from_file_location("c_policy_gate", KB / "20260930-C/policy_gate.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
+    pending = module.adoption_issues(cards)
+    assert len(pending) == 19
+    assert module.unapproved_adoption_issues(cards) == {}
+    changed = copy.deepcopy(cards)
+    changed[0]["know_how"] += " changed"
+    assert changed[0]["card_id"] in module.unapproved_adoption_issues(changed)
+    pending[cards[0]["card_id"]].append("new_policy_issue")
+    monkeypatch.setattr(module, "adoption_issues", lambda *args: copy.deepcopy(pending))
+    assert "new_policy_issue" in module.unapproved_adoption_issues(cards)[cards[0]["card_id"]]
+
+
+def test_c_promotion_rejects_a_changed_checklist(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("c_policy_gate", KB / "20260930-C/policy_gate.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
+    pending = module.adoption_issues(cards)
+    monkeypatch.setattr(module, "adoption_issues", lambda *args: pending.copy())
+    record = json.loads((KB / "20260930-C/l1-promotion-20261001.json").read_text(encoding="utf-8"))
+    record["review_file"] = "review.md"
+    (tmp_path / "review.md").write_text("changed", encoding="utf-8")
+    (tmp_path / "l1-promotion-20261001.json").write_text(json.dumps(record), encoding="utf-8")
+    assert module.unapproved_adoption_issues(cards, tmp_path, tmp_path)

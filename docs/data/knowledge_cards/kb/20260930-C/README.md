@@ -2,7 +2,7 @@
 
 2026-09-30 생성. split=kb, confidence=0.0이며 실제 상태는 cards.json과 아래 검수표에서 확인한다.
 생성자 2명과 별도 독립 검토자가 출처 대조, 판정, 수정, 재검토를 수행했다.
-사람 승인 전이므로 통합 accepted KB 목록에는 아직 추가하지 않았다.
+현재 편입 상태와 승인 범위는 [승격 기록](l1-promotion-20261001.json)과 검수표에서 확인한다.
 
 ## 재현과 근거
 
@@ -12,7 +12,7 @@
 - 카드 추출 입력은 `records/kb_events.json`, `records/kb_artifacts.json` 관측 투영이다. 현재 split은 역사적 배정이며 계보 검토 전 활성 정책 배정으로 사용하지 않는다.
 - [out/](out/): 배치 카드 원본. [merge.py](merge.py)로 [cards.json](cards.json)을 생성하고 [verify.py](verify.py)로 검사한다.
 - [1차 판정](review_round1.md) → [변경 이력](review_changes.json) → [수정 후 재검토](review_round2.md). 생성 프롬프트·해시는 보존했다.
-- [review.md](review.md): 사람 검수 대기. [validation.md](validation.md): 실제 실행한 검증과 환경.
+- [review.md](review.md): 지정 통합 검수표와 동기화한 사람 판정. [validation.md](validation.md): 이전 검증과 환경.
 - [프로젝트 충돌 검증](integration-review.md): 출처 등록·분할 계보·dev 중복 해결 전 KB 통합 보류.
 - [상위 계약 반영](policy-alignment.md): 기준 출처 52개 등록, 계보 7개 후보, dev 격리, 승인·편입 게이트. 출처 승인과 계보 확정은 미완료이다.
 
@@ -27,8 +27,9 @@ GR 유면·온도 점검의 근거 있는 분기로 대체했다. 상세 사유�
 가상 MES 상태는 검색 후보를 고르는 조건이다. 실제 표시기·부하·소음 등은 수동 확인이 필요하다.
 원문 설비 모델과 가상 설치 구조의 일치는 미확정이다. T6는 합성 기록이며 동일 템플릿 반복을 실제 현장 경험으로 주장하지 않는다.
 독립 검토자의 원장 정답·dev 접근 편차는 1차/2차 보고에 기록했다. 블라인드 성능평가가 아니다.
-사람 검수 후에만 accepted/L1로 승격하고 상위 build_kb.py의 BATCHES에 추가한다.
-사람 판정 외에 출처 승인·계보·배정·독립 근거 게이트도 해소해야 한다. `verify.py --kb-ready`가 보완 대기이면 승격·통합하지 않는다.
+2026-10-01 사용자 요청과 human-review-checklist-20260930의 accepted 판정으로 19장을 accepted/L1로 승격하고 통합 KB에 편입했다.
+출처 승인·계보·배정·독립 근거 게이트는 보완 대기로 유지한다. `verify.py --kb-ready`는 해당 보류를 계속 보고한다.
+요청에 따른 편입은 승격 기록에 고정한 카드 본문과 검수표 해시에 한정하며, 이후 변경이나 새로운 정책 문제에 자동 적용하지 않는다.
 
 ## 카드 추적표
 

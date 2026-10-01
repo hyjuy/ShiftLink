@@ -397,7 +397,7 @@
   "mes_component_code": null,
   "scenario": "S3",
   "title": "차단기 트립 후 재투입하니 멀쩡하면 해결이 아니라 간헐 고장 징후로 본다",
-  "symptom": "차단기 트립, 재투입 후 정상 복귀, 원인 흔적 없음",
+  "symptom": "차단기 떨어짐(트립), 재투입 후 정상 복귀, 원인 흔적 없음",
   "know_how": "설비가 멈췄다가 다시 켜니 이상이 없고 원인도 찾지 못한 경우는 해결된 것이 아니라 간헐(sporadic) 고장의 징후로 본다. 원문은 이때 설비에 소재(steel)가 없는 조건에서 이벤트 기록계(transient recorder)를 연결해 전류·전압·속도를 먼저 기록하고, 트리거 시점·저장 시간·분해능이 제대로 동작하는지 시험한 뒤, 다음 고장이 났을 때 기록으로 원인을 분석하라고 한다. 다음 고장에서도 찾지 못하면 기록 항목을 늘린다. 계측기나 프로브를 연결하기 전에는 그 저항을 먼저 확인한다. 트립 직후에는 경보·기록계에 남은 최초 신호와 신호 순서·시각을 적어 둔다. 차단기 재투입 여부 자체는 이 카드가 정하지 않으며, 회로·기기가 안전하다고 증명되기 전에는 재투입하지 않는다(산업안전보건기준에 관한 규칙 제317조제1항제5호).",
   "rationale": "UNIDO 1987 압연설비 전기 정비 자료(VA.-30.02.10.34) 2.7절은 고장으로 설비가 멈췄다가 다시 켜면 모두 정상이고 아무것도 찾지 못하는 경우가 있다고 적고, 이어서 간헐 고장이면 이벤트 기록계를 연결해 전류·전압·속도를 기록하고 다음 고장 뒤 분석하라고 한다. 1절은 최초 신호와 신호 순서가 중요하다고 한다. 원문은 압연기 구동 계통 기준이며 PDP-01(가상 배전반)의 기록 장치 구성과 같다고 확인되지 않았다. 간헐 고장이라는 해석은 징후의 의미이고 원인을 확정하지 않는다.",
   "conditions": [],
@@ -646,7 +646,7 @@
   "mes_component_code": null,
   "scenario": "S1",
   "title": "트립 표시나 전압 표시만 보고 배전반 충전부에 손대지 않는다 — 차단·잠금·검전 후에만",
-  "symptom": "차단기 트립 표시, 배전반 충전부 작업 전",
+  "symptom": "차단기 트립 표시, 배전반 충전부·단자 작업 전, 메인 차단기만 내린 상태",
   "know_how": "차단기 트립 표시나 버스 전압 표시만으로 정전됐다고 판단하고 배전반 충전부에 접촉하지 않는다. 활선·활선근접 작업은 원칙적으로 하지 않는다. 노출 충전부나 그 부근에서 작업하기 전에는 1) 공급되는 모든 전원을 도면·배선도로 확인하고, 2) 전원을 차단한 뒤 단로기를 개방·확인하고, 3) 차단장치·단로기에 잠금장치와 꼬리표를 달고, 4) 축적 전하가 있는 기기는 잔류전하를 방전하고, 5) 사용 전후 점검한 검전기로 충전 여부를 확인하고, 6) 역송전·유도 우려가 있으면 단락 접지기구로 접지한다. 오조작 가능성이 있는 멀티미터는 정전 확인용으로 쓰지 않는다. 작업은 유자격자가 한다.",
   "rationale": "산업안전보건기준에 관한 규칙 제319조는 노출 충전부 또는 그 부근 작업 전 전로 차단과 그 절차(전원 확인·단로기 개방·잠금장치와 꼬리표·잔류전하 방전·검전기 확인·단락 접지)를 정한다. KOSHA GUIDE E-7-2012 5.3.1은 활선·활선근접 작업을 원칙적으로 금지하고, 5.3.12(2)는 정전된 기기라도 작업 전 검전기로 정전 여부를 반드시 확인하며 검전기는 사용 전후 시험하고 멀티미터는 정전 검증용으로 권장하지 않는다고 적는다. MES의 breaker_trip·bus_voltage 값은 가상 시연 신호이며 무전압·작업 안전 판정 근거가 아니다. PDP-01은 가상 설비이므로 실제 차단·검전 순서는 사업장 전기작업 절차를 따른다.",
   "conditions": [],
@@ -763,7 +763,7 @@
   "mes_component_code": null,
   "scenario": "S1",
   "title": "압축기 부하 운전 중 정지 — 토출 고온·과부하 경보가 가리키는 원인 후보",
-  "symptom": "압축기 부하 운전 중 정지, 과부하 트립, 토출 고온 경보",
+  "symptom": "압축기 부하 운전 중 정지, 과열 정지, 과부하 트립, 토출 고온 경보",
   "know_how": "먼저 컨트롤러 경보가 토출 고온인지 과부하인지 구분한다. 토출 고온이면 환기 상태와 윤활유 부족 여부를 본다. 과부하면 설정값, 공급 전압, 베어링, 관로 막힘 등 기계 계통을 본다. 부하 운전 중 정지가 반복되면 같이 확인할 곳으로 주위 온도 과다(급기구 확보, 뜨거운 배기를 덕트로 실외 배출), 공급 전압 저하, 운전 압력 과다(라인 압력이 압축기 최대 운전 압력을 넘지 않는지), fluid 부족 항목(원문에서 유량·유면·보충 대상의 의미를 재확인하기 전 보충 판단 보류), 컨트롤러의 분리기 정비 표시(분리기 엘리먼트 교체)를 적는다. 표의 원인은 전부가 아니며 한 곳으로 단정하지 않는다. 매뉴얼의 과부하 응답 시간(설정 전류 대비 배수별 초)은 해당 제조사 제어기 값이고, 가상 설비 CAU-01의 compressor_current 정상 범위와 관계없다.",
   "rationale": "Kaishan KRSP(V) 매뉴얼 5.4 Troubleshooting 표는 High discharge temperature의 원인을 환기 불량·오일 부족, 조치를 환기 상태·윤활유 량 확인으로, Overload의 원인을 저전압·관로 막힘·베어링 마모·기계 고장·설정값 오류, 조치를 설정값·전압·베어링·관로·기계 계통 확인으로 적는다. Table 8-1은 'Compressor shuts down during loaded condition'의 원인과 조치로 주위 온도 과다(급기구·배기 덕트), 저전압(전압·전원 확인), 운전 압력 과다(라인 압력이 최대 운전 압력 이하인지 확인), fluid 부족 항목(유량·유면·보충 대상 용어 재확인 필요), 분리기 정비 표시(엘리먼트 교체)를 들고, 표가 발생 가능한 고장의 전부가 아니라고 적는다. 제조사 특정 모델 매뉴얼이며 가상 설비 CAU-01과 같은 모델이 아니다. 이 카드는 정지·경보 징후에 대한 원인 후보 해석으로 범위를 좁혀 T1을 유지한다. 고온/과부하 경보별 검색 조건은 현재 MES 신호로 확인되지 않으므로 조건을 창작해 T2로 재분류하지 않는다. Kaishan 원문은 이번 검토 환경에 없어 fluid 용어의 의미와 보충 대상은 미확인으로 남긴다.",
   "conditions": [],
@@ -1589,7 +1589,7 @@
   "card_id": "K-1321",
   "component": "압축공기 사용 말단(공기분사기·호스)",
   "title": "압축공기 분사기·호스 사용 금지 사항 — 신체 분사 위험, 0.2MPa 이하 감압, 호스 재사용·허용압력 초과 금지",
-  "know_how": "압축공기를 몸에 대지 않는다. 입·귀·항문 등으로 들어가면 치명적 상해를 입힐 수 있고, 높은 압력은 피부로 스며들 수 있다. 공기분사기(에어건)는 유출 압력을 0.2MPa 이하로 감압해 쓰고, 노즐 주위 보호덮개가 있는 것이 바람직하다. 분사로 금속 파편·분말이 날려 눈과 몸을 다칠 수 있고, 인화성 먼지가 있는 곳은 폭발이나 유독 물질 확산 위험이 있으며, 분사기 사용 자체로 높은 소음이 난다(보호덮개가 있는 분사기는 소음 방지에도 도움이 된다). 호스·연결 부속은 다른 공압 장치에서 쓰던 것을 처음 설치에 재사용하지 않고, 최대 허용압력·유량 안에서만 쓰며, 한계 이상으로 꺾거나 당기지 않는다. 고정되지 않은 호스가 끊어지면 채찍현상과 분출이 생기므로 에어퓨즈 같은 차단 수단을 둔다. MES air_nozzle_pressure 관측값을 MPa 단위로 입력하고 유출 압력 0.2MPa 이하 여부를 확인한다. 노즐 사용 상태와 레귤레이터 하류 계측 위치·관측 시각을 함께 확인한다.",
+  "know_how": "압축공기를 몸에 대지 않는다. 입·귀·항문 등으로 들어가면 치명적 상해를 입힐 수 있고, 높은 압력은 피부로 스며들 수 있다. 공기분사기(에어건)는 유출 압력을 0.2MPa 이하로 감압해 쓰고, 노즐 주위 보호덮개가 있는 것이 바람직하다. 분사로 금속 파편·분말이 날려 눈과 몸을 다칠 수 있고, 인화성 먼지가 있는 곳은 폭발이나 유독 물질 확산 위험이 있으며, 분사기 사용 자체로 높은 소음이 난다(보호덮개가 있는 분사기는 소음 방지에도 도움이 된다). 호스·연결 부속은 다른 공압 장치에서 쓰던 것을 처음 설치에 재사용하지 않고, 최대 허용압력·유량 안에서만 쓰며, 한계 이상으로 꺾거나 당기지 않는다. 고정되지 않은 호스가 끊어지면 채찍현상과 분출이 생기므로 에어퓨즈 같은 차단 수단을 둔다. 0.2MPa는 공기분사기 유출 압력 기준이며 CAU-01 air_pressure 경계값이 아니다.",
   "rationale": "KOSHA G-17 4.1은 압축공기가 입·귀·항문 등을 통해 치명적 상해를 입히고, 높은 압력으로 피부에 스며들며, 날아온 물건·기름이 눈에 충격을 줄 수 있다고 적는다. 4.2.6(2)~(4)는 공기분사기 사용 시 금속 파편·분말 비산, 인화성 먼지 폭발·유독 물질 확산, 높은 소음 위험을, 4.3.6(2)는 유출 압력 0.2MPa 이하 감압과 노즐 보호덮개(소음 방지도 가능)를 정한다. 4.3.6(1)(다)~(바)와 M-103 6.4(1)~(4)는 호스 재사용 금지, 허용압력 안 사용, 과도한 굽힘·당김 금지, 채찍현상 차단 수단(에어퓨즈 예)을 정한다.",
   "safety_basis": "KOSHA G-17-2017 4.1(1)~(3): 신체 개구부 유입 시 치명적 상해, 피부 침투, 비산물·기름의 눈 충격. 4.2.6(2)~(4): 공기분사기 파편 비산, 인화성 먼지 폭발·유독 물질 확산, 높은 소음. 4.3.6(2): 공기분사기 유출 압력 0.2MPa 이하 감압, 노즐 보호덮개. 4.3.6(1)(다)~(바): 호스 재사용 금지, 허용 압력·유량 안 사용, 과도한 굽힘·당김 금지, 채찍현상·분출 차단 수단(에어퓨즈). KOSHA M-103-2017 6.4(1)~(4): 호스 재사용 금지, 최대 허용압력 안 사용, 굽힘 한계, 채찍 위험 차단 수단.",
   "provenance": {
@@ -1624,5 +1624,269 @@
    "generalization_scope": "압축공기 사용 말단(공기분사기·호스)의 KOSHA 기술지침 요지에 한정한다. 0.2MPa는 공기분사기 유출 압력 기준이며 가상 설비 CAU-01의 MES 경계값이 아니다. CAU-01 사용처의 분사기·호스 구성은 미확인이다.",
    "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 안전 검토와 현장 적용성 평가는 미완료다."
   }
+ },
+ {
+  "card_id": "K-1322",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "CAU",
+  "component": "압축기 컨트롤러·기동 회로",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "정전 후 압축기 재기동 확인 순서 — 자동 재기동 설정, 재기동 지연, 저온 보호, 기동 불가 시 전원·퓨즈·비상정지",
+  "symptom": "정전 후 압축기 재기동, 복전 후 압축기 기동 불가",
+  "know_how": "정전 뒤에는 먼저 컨트롤러의 자동 재기동(Auto Restart) 설정을 본다. 켜져 있으면 전원이 돌아올 때 압축기가 스스로 기동하므로 주변 작업자에게 알리고 기동부에 손대지 않는다. 기동 버튼을 눌러도 바로 돌지 않으면 재기동 지연(Restart Delay) 설정 시간 동안 기동을 막는 동작일 수 있으므로 설정 시간을 확인하고 기다린다. 전원 투입 후 온도가 저온 보호 설정값보다 낮으면 기동하지 않고, 2분 뒤에도 낮으면 온도 센서 고장으로 정지 표시가 난다. 그래도 기동하지 않으면 제조사 고장 표의 '기동 불가' 순서대로 전원 공급, 입력 전압, 퓨즈, 기동 스위치, 비상정지 버튼 복귀, 모터 스타터 과부하 트립, 배선 접속을 확인한다. 표의 원인은 전부가 아니며, 설정값(초·온도)은 해당 제조사 제어기 값이라 가상 설비 CAU-01 기준이 아니다.",
+  "rationale": "Kaishan KRSP(V) 매뉴얼 5.1.3은 Auto Restart 아이콘을, 5.2 설정표는 'Auto Restart — Will Restart Compressor after Power Failure if Enabled', 'Restart Delay — Will stop compressor from starting for the duration of this setting', 'Low Temp Protection — After power on, if the temperature is detected lower than the set data, it is not allowed to start. Two minutes after power on ... reported temperature sensor fault and stop'으로 적는다. Table 8-1 'Fail to Start'는 원인·조치로 Power failure(전원 공급 확인), Low incoming voltage, Fuse blown, Faulty start switch, Emergency button(reset), Motor starter overload tripped, Loose wire connections, Air-end failure(대리점 연락)를 든다. 정전 후 재기동 절차를 한 절로 두지 않아 이 순서는 위 항목을 엮은 작성자 구성이다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S23"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code 메인 세션(서브에이전트 아님), batch KB-20260930-D round 4",
+   "generated_at": "2026-10-01T15:30:00+09:00",
+   "sources": [
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.21 / 인쇄 p.21 / 5.1.3 Icons display and functions (Auto Restart)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.26, p.28 / 인쇄 p.26, p.28 / 5.2 설정표 (Restart Delay, Low Temp Protection, Auto Restart)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.46 / 인쇄 p.46 / Table 8-1 Trouble Shooting Guide — Fail to Start",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    }
+   ],
+   "extraction_method": "PyMuPDF 텍스트 추출 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r4.md@sha256:9cb0743b67ea16ef53cf0e26ad8288792237546b1c071b738abbfe113cd983a2",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "컨트롤러 화면에서 자동 재기동(Auto Restart) 아이콘·설정이 켜져 있는지 본다.",
+     "preconditions": [],
+     "expected_result": "자동 재기동이 켜져 있으면 복전 시 스스로 기동할 수 있음을 알고 주변에 알린다.",
+     "stop_conditions": [
+      "정전 전 정비 중이었다면 잠금·표지를 유지하고 재기동하지 않는다(K-1314)."
+     ]
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "기동 버튼을 눌러도 바로 돌지 않으면 재기동 지연(Restart Delay) 설정 시간을 확인하고 기다린다.",
+     "preconditions": [],
+     "expected_result": "지연 시간이 지나면 기동한다. 지연 중에는 고장이 아니다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "기동하지 않고 저온 관련 표시가 있으면 저온 보호 설정과 온도 표시를 본다.",
+     "preconditions": [],
+     "expected_result": "온도가 설정값보다 낮아 기동이 막힌 것인지, 2분 뒤 온도 센서 고장 정지인지 구분된다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "그래도 기동하지 않으면 전원 공급, 입력 전압, 퓨즈, 기동 스위치, 비상정지 버튼 복귀, 모터 스타터 과부하 트립, 배선 접속 순으로 확인한다.",
+     "preconditions": [
+      "전기 확인은 유자격 전기 담당이 한다.",
+      "충전부에 접근할 때는 차단·잠금·검전을 마친다(K-1309)."
+     ],
+     "expected_result": "기동 불가 원인 후보가 좁혀진다.",
+     "stop_conditions": [
+      "위 항목에서 원인을 못 찾고 압축기 본체(에어엔드) 고장이 의심되면 제조사 지정 대리점에 넘긴다."
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "급유식 스크루 압축기 제조사 매뉴얼의 제어기 설정과 고장 표에 한정한다. 가상 설비 CAU-01의 제어기에 같은 설정이 있는지는 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1323",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T1",
+  "equipment": "CAU",
+  "component": "압축기 윤활유(냉각유)",
+  "mes_equipment_id": "EQ-0003",
+  "mes_component_code": null,
+  "scenario": "S1",
+  "title": "지정 외 윤활유를 쓰면 토출 고온·윤활유 소비 증가가 나타날 수 있다 — 유종 코드 확인, 제조사 지정 윤활유 사용",
+  "symptom": "다른 제조사·상표 오일 사용, 토출 고온, 윤활유 소비 증가, 윤활유 거품",
+  "know_how": "급유식 스크루 압축기의 윤활유는 냉각·밀봉·윤활을 함께 맡는다. 제조사 고장 표는 토출 고온의 원인 중 하나로 잘못된 윤활유 상표를 들고 유종 코드를 확인해 필요하면 교체하라고 하며, 윤활유 소비 과다의 원인으로 다른 오일 사용을 들고 제조사 지정 윤활유를 쓰라고 한다. 윤활유에 거품이 나면 빼내고 교체한다. 그래서 보충·교체 때 다른 제조사·상표 오일로 바꾸지 말고 지정 유종 코드를 확인한다. 다른 제품의 호환 여부를 판단할 근거는 원문에 없으므로 바꾸려면 제조사나 지정 대리점에 확인한다.",
+  "rationale": "Kaishan KRSP(V) 매뉴얼 p.9는 윤활유(fluid)가 냉각·밀봉·윤활 기능을 한다고 적는다. Table 8-1은 'High air discharge temperature'의 원인으로 'Incorrect fluid brand — Check oil code number, replace as necessary'를, 'Excessive Fluid Consumption'의 원인으로 'Different oil is being used — Use KRSP genuine fluid'를, 'Fluid foaming — Drain off oil and change'를 든다. 다른 제품과의 호환성 기준은 원문에 없다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S24"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code 메인 세션(서브에이전트 아님), batch KB-20260930-D round 4",
+   "generated_at": "2026-10-01T15:30:00+09:00",
+   "sources": [
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.9 / 인쇄 p.9 / 압축 과정 설명 (fluid의 세 기능)",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    },
+    {
+     "source_id": "Kaishan_KRSP_V_Instruction_Manual.pdf",
+     "locator": "PDF p.47~48 / 인쇄 p.47~48 / Table 8-1 — High air discharge temperature, Excessive Fluid Consumption",
+     "document_version": "Kaishan KRSP(V) Series Instruction Manual, Direct Drive, PN 96002018000001, Release May 2018, Version A (USA)"
+    }
+   ],
+   "extraction_method": "PyMuPDF 텍스트 추출 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r4.md@sha256:9cb0743b67ea16ef53cf0e26ad8288792237546b1c071b738abbfe113cd983a2",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": null,
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "급유식 스크루 압축기 제조사 매뉴얼의 고장 표에 한정한다. 가상 설비 CAU-01의 지정 유종은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
+ },
+ {
+  "card_id": "K-1324",
+  "version": "1.0-draft-KB-20260930-D",
+  "grade": "L0",
+  "tacit_type": "T3",
+  "equipment": "PDP",
+  "component": "배전반 주차단기·분기 차단기",
+  "mes_equipment_id": "EQ-0002",
+  "mes_component_code": null,
+  "scenario": "S2",
+  "title": "배전반 전원 투입 순서 — 투입 전 기계 동작 확인, 수전측 → 주차단기 → 계기·계전기 확인 → 분기 차단기",
+  "symptom": "배전반 전원 투입, 정전 복구 후 차단기 투입 순서",
+  "know_how": "배전반에 전원을 넣기 전에 모든 장치의 기계 동작을 점검하고 차단기·계전기를 손으로 조작해 걸림이 없는지, 뒤쪽에 이물이 없는지 본다. 그다음 주차단기 입력측(수전측)에 전원을 넣고 계기·계전기가 맞게 동작하는지 본다. 별도 제어전원이 있으면 넣는다. 주차단기를 투입해 모선에 전원을 넣고 다시 계기·계전기를 본다. 이상이 없으면 분기·연계 차단기를 투입한다. 원문은 이 순서를 설치 후 처음 전원을 넣는 절차로 적으며, 정전 복구에 그대로 쓰라는 문구나 분기 차단기를 한꺼번에 넣을지 하나씩 넣을지는 적지 않는다. 통전 중인 변류기 2차 회로는 열지 않는다(K-1319).",
+  "rationale": "ABB MaxSG 저압 배전반 매뉴얼 'Safety Precautions'는 전원을 넣기 전 모든 장치의 기계 동작 점검, 차단기·계전기 수동 조작, 뒤쪽 이물 확인을 요구하고, 'Placing Switchgear into Service — Energizing the Main Bus'는 1) 주차단기 입력 모선에 전원 투입 후 계기·계전기 동작 확인 2) 별도 제어전원 투입 3) 주차단기 투입 후 계기·계전기 확인 4) 해당하면 분기·연계 차단기 투입 순으로 적는다. 같은 쪽에 '통전 중인 변류기 2차 회로를 개방하지 않는다'는 주의가 있다.",
+  "conditions": [],
+  "exclusions": [],
+  "safety_flag": false,
+  "safety_basis": null,
+  "conflict_group": null,
+  "confidence": 0.0,
+  "provenance": {
+   "seed_ids": [
+    "KB-20260930-D:seed=20260930",
+    "slot:S25"
+   ],
+   "persona_id": "claude-card-author",
+   "event_ids": [],
+   "generator": "Claude Code 메인 세션(서브에이전트 아님), batch KB-20260930-D round 4",
+   "generated_at": "2026-10-01T15:30:00+09:00",
+   "sources": [
+    {
+     "source_id": "ABB_MaxSG_LV_Switchgear_1SXU900082M0201.pdf",
+     "locator": "PDF p.20 / 인쇄 p.16 / Safety Precautions; Placing Switchgear into Service — Energizing the Main Bus 1~4",
+     "document_version": "ABB MaxSG Low Voltage Switchgear Installation and Maintenance Manual LV082 [1SXU 900 082 M0201] 5/07"
+    }
+   ],
+   "extraction_method": "PyMuPDF 텍스트 추출 원문 대조, AI 요약",
+   "model_version": "claude-opus-5-5",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r4.md@sha256:35202c98f400c62ef6fc7d5e482fb03bc7997e5c5cb89e0481146c22a5b0c6aa",
+   "schema_version": "1.1"
+  },
+  "split": "kb",
+  "status": "draft",
+  "type_payload": {
+   "steps": [
+    {
+     "step_id": "ST-01",
+     "order": 1,
+     "action": "전원을 넣기 전에 모든 장치의 기계 동작을 점검하고, 차단기·계전기를 손으로 조작해 걸림이 없는지, 뒤쪽에 이물이 없는지 본다.",
+     "preconditions": [
+      "유자격 전기 담당이 한다."
+     ],
+     "expected_result": "가동부가 걸림 없이 움직이고 이물이 없다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-02",
+     "order": 2,
+     "action": "주차단기 입력측(수전측)에 전원을 넣고 계기·계전기 동작을 본다.",
+     "preconditions": [],
+     "expected_result": "계기·계전기가 맞게 동작한다.",
+     "stop_conditions": [
+      "계기·계전기 동작이 맞지 않으면 다음 단계로 가지 않고 전기 책임자에게 넘긴다."
+     ]
+    },
+    {
+     "step_id": "ST-03",
+     "order": 3,
+     "action": "별도 제어전원이 있으면 넣는다.",
+     "preconditions": [],
+     "expected_result": "제어회로에 전원이 들어온다.",
+     "stop_conditions": []
+    },
+    {
+     "step_id": "ST-04",
+     "order": 4,
+     "action": "주차단기를 투입해 모선에 전원을 넣고 계기·계전기 동작을 다시 본다.",
+     "preconditions": [],
+     "expected_result": "모선 전압과 계전기 동작이 맞다.",
+     "stop_conditions": [
+      "계기·계전기 동작이 맞지 않으면 분기 차단기를 넣지 않는다."
+     ]
+    },
+    {
+     "step_id": "ST-05",
+     "order": 5,
+     "action": "분기·연계 차단기를 투입한다.",
+     "preconditions": [],
+     "expected_result": "분기 회로에 전원이 공급된다.",
+     "stop_conditions": [
+      "통전 중인 변류기 2차 회로는 열지 않는다(K-1319)."
+     ]
+    }
+   ]
+  },
+  "generalization_evidence": {
+   "supporting_event_ids": [],
+   "contradicting_event_ids": [],
+   "generalization_scope": "저압 배전반 제조사 매뉴얼의 최초 전원 투입 절차에 한정한다. 정전 복구 절차로 쓰는 것은 작성자 적용이며, 가상 설비 PDP-01의 차단기 구성은 미확인이다.",
+   "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
+  },
+  "safety_review": null
  }
 ]

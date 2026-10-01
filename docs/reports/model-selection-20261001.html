@@ -64,6 +64,7 @@ ul { padding-left: 1.2em; }
   <div><b>답</b>아니다. 10개 실행 모두 검색 1위(28/29)보다 낮음. 최고 exaone v3 22~23</div>
   <div><b>결정</b>질의 모드는 검색 1위 1장만 모델에 (<code>QUERY_MAX_CANDIDATES = 1</code>)</div>
   <div><b>확인</b>exaone 인용 정답 <span class="ok">28/29</span>, p50 4.9 → <span class="ok">4.2초</span></div>
+  <div><b>인계 모드 (7절)</b>근거 가중치 0.5 유지. 후보 1장일 때 인용 정답 2 → <span class="ok">4/16</span>. 답 없는 처리 <span class="bad">0/4</span></div>
 </div>
 
 <h2>1. 실험 계획</h2>
@@ -161,7 +162,7 @@ ul { padding-left: 1.2em; }
 <li>답변 문장 품질은 보지 않았다. 인계 모드는 범위 밖이다.</li>
 </ul>
 
-<h2>7. 다음 실험: T4 근거 검색 실측 (인계 모드)</h2>
+<h2>7. 후속 실험: T4 근거 검색 실측 (인계 모드)</h2>
 <p>#114의 근거 문장 가중치 0.5는 오프라인에서 인계 질문 16개 중 상위 5장 정답을 8 → 11개로 늘렸고 1위는 4개 그대로였다. 실제 모델이 늘어난 후보에서 정답을 인용하는지 본다.</p>
 <div class="table-wrap"><table>
 <tr><th>항목</th><th>계획</th></tr>
@@ -174,14 +175,49 @@ ul { padding-left: 1.2em; }
 </table></div>
 <p>인계 모드는 검색 1위 정답이 4/16로 낮아, 후보를 1장으로 줄이면 정답이 빠지는 문항이 많을 수 있다. 질의 모드와 결론이 다를 수 있다.</p>
 
+<h3>7-1. 결과</h3>
+<p class="meta">답 있는 16문항 기준. 모든 실행에서 오류 0, Jetson 연결 유지, 인계 5요소 20/20 생성, 안전 카드 누락 없음.</p>
+<div class="table-wrap"><table>
+<tr><th>조건</th><th>모델 1순위 정답</th><th>인용 중 정답</th><th>검색 1위</th><th>검색 상위 5</th><th>답 없는 처리</th><th>p50</th><th>p95</th></tr>
+<tr><td>① 가중치 0.5 + 후보 5장 (main)</td><td class="num">1</td><td class="num">2</td><td class="num">4</td><td class="num"><b>11</b></td><td class="num">0/4</td><td class="num">3.8초</td><td class="num">5.7초</td></tr>
+<tr><td>② 가중치 0 + 후보 5장</td><td class="num">0</td><td class="num">2</td><td class="num">4</td><td class="num">8</td><td class="num">0/4</td><td class="num">3.8초</td><td class="num">7.0초</td></tr>
+<tr class="hl"><td>③ 가중치 0.5 + 후보 1장</td><td class="num"><b>4</b></td><td class="num"><b>4</b></td><td class="num">4</td><td class="num">11</td><td class="num">0/4</td><td class="num">4.6초</td><td class="num">5.4초</td></tr>
+</table></div>
+<div class="table-wrap"><table class="pos">
+<tr><th>모델 1순위의 검색 순위</th><th>1위</th><th>2위</th><th>3위</th><th>4위</th><th>5위</th><th>인용 없음</th></tr>
+<tr><td>①</td><td class="num">0</td><td class="num">3</td><td class="num">0</td><td class="num">0</td><td class="num"><b>13</b></td><td class="num">0</td></tr>
+<tr><td>②</td><td class="num">1</td><td class="num">1</td><td class="num">3</td><td class="num">1</td><td class="num"><b>7</b></td><td class="num">3</td></tr>
+<tr><td>③</td><td class="num"><b>16</b></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+</table></div>
+
+<h3>7-2. 해석</h3>
+<ul>
+<li><b>근거 문장 가중치는 검색에서만 효과가 있다.</b> 상위 5 정답 8 → 11이지만 모델 인용 정답은 ①·② 모두 2.</li>
+<li><b>인계 모드에서 모델은 5번째 후보로 쏠린다</b> (① 13/16). 질의 모드의 4번째 쏠림과 같은 순서 편향.</li>
+<li><b>후보 1장이 가장 낫다</b> (③ 4/16 = 검색 1위). 남은 문제는 검색 1위 정확도(4/16)다.</li>
+<li><b>답 없는 4문항을 하나도 "모름"으로 처리하지 못했다.</b> 3개는 검색 결과가 비었는데 인계 안전 카드 K-1103을 인용했다. 질의 모드와 달리 인계 모드에는 "검색 결과 없음 → 모델 호출 없이 해당 지식 없음" 처리가 없다.</li>
+</ul>
+
+<h3>7-3. 판정과 후속</h3>
+<div class="table-wrap"><table>
+<tr><th>판정 기준</th><th>결과</th><th>결정</th></tr>
+<tr><td>①이 ②보다 인용 정답이 같거나 많고 답 없는 처리가 나빠지지 않음</td><td>2 = 2, 0/4 = 0/4</td><td><b>가중치 0.5 유지</b></td></tr>
+<tr><td>③이 ①보다 인용 정답이 많음</td><td>4 &gt; 2</td><td><b>인계 모드도 후보 1장</b></td></tr>
+</table></div>
+<ol>
+<li>인계 모드 후보 1장 — #119에 함께 반영 (승인 후)</li>
+<li>인계 모드에서 검색 결과가 비면 모델 호출 없이 "해당 지식 없음" (질의 모드와 같게)</li>
+<li>인계 모드 검색 1위 정확도(4/16) 개선 — 카드 문구(허재원)와 검색 쪽을 함께</li>
+</ol>
+
 <h2>8. 산출물</h2>
 <div class="table-wrap"><table>
 <tr><th>산출물</th><th>위치</th></tr>
 <tr><td>이 보고서</td><td><code>docs/reports/model-selection-20261001.md</code>, <code>.html</code></td></tr>
-<tr><td>실험 기록 11행</td><td><code>bench/experiments.tsv</code></td></tr>
+<tr><td>실험 기록 14행</td><td><code>bench/experiments.tsv</code></td></tr>
 <tr><td>코드 변경</td><td>브랜치 <code>feat/query-single-candidate</code>, 31e28dd</td></tr>
-<tr><td>실행 스크립트</td><td><code>exp_select.py</code>, <code>run.sh</code>, <code>leaktest.py</code> — 로컬 <code>ShiftLink-records/experiments/sel1001/</code></td></tr>
-<tr><td>원자료</td><td>실행별 결과 JSON 11개, 무효분 3개 — 같은 폴더</td></tr>
+<tr><td>실행 스크립트</td><td><code>exp_select.py</code>, <code>run.sh</code>, <code>leaktest.py</code>, <code>t4_run.py</code> — 로컬 <code>ShiftLink-records/experiments/sel1001/</code></td></tr>
+<tr><td>원자료</td><td>질의 실행 JSON 11개, 인계 실행 3개, 무효분 3개 — 같은 폴더</td></tr>
 <tr><td>장비 기록</td><td>Jetson <code>~/tegra_1001.log</code>, <code>~/memwatch_1001.log</code></td></tr>
 </table></div>
 <p class="meta">실행 스크립트와 원자료는 저장소에 넣지 않았다. 필요하면 <code>eval/</code> 아래로 정리해 올린다.</p>

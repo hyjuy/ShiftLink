@@ -92,7 +92,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "RT 롤러 베어링 온도 카드 없음(K-1017은 소음 기준). RT 베어링 온도 신호도 MES에 없음. 작성자 예상 '예' → 답 없음으로 판정",
+  "label_note": "RT 롤러 베어링 온도 카드 없음(K-1017은 소음 기준). RT 베어링 온도 신호도 MES에 없음. 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -212,7 +212,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "모터 결선·회전 방향 카드 없음(K-1214는 재가동 승인 구분). 작성자 예상 '예' → 답 없음으로 판정",
+  "label_note": "모터 결선·회전 방향 카드 없음(K-1214는 재가동 승인 구분). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -298,7 +298,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "압축공기 수분·드레인 카드 없음. 작성자 예상 '예' → 답 없음으로 판정",
+  "label_note": "압축공기 수분·드레인 카드 없음. 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -336,7 +336,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "CAU 정전 후 재기동 순서 카드 없음(K-1314는 정비 전 잠금·자동 재기동 주의). 작성자 예상 '예' → 답 없음으로 판정",
+  "label_note": "CAU 정전 후 재기동 순서 카드 없음(K-1314는 정비 전 잠금·자동 재기동 주의). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -422,7 +422,7 @@
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "정전 복구 투입 순서 카드 없음(K-1307은 기동 시 전압 강하). 작성자 예상 '예' → 답 없음으로 판정",
+  "label_note": "정전 복구 투입 순서 카드 없음(K-1307은 기동 시 전압 강하). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {

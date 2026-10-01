@@ -24,6 +24,12 @@ def test_kb_cards_json_matches_batches():
     assert load_card_provider(KB / "kb_cards.json").seen == kb["_meta"]["total"]
 
 
+def test_pump_noise_keeps_its_symptom_card_after_observation_review():
+    provider = load_card_provider(KB / "kb_cards.json").provider
+    hits = provider.search_cards(query="펌프 소음", equipment_ids=["HPU"])
+    assert hits and hits[0]["card_id"] == "K-1004"
+
+
 def test_t4_safety_cards_only_in_handover_mode():
     provider = load_card_provider(KB / "kb_cards.json").provider
     t4_safety = {c.card_id for c in provider.cards if c.tacit_type == "T4" and c.safety_flag}

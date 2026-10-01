@@ -9,7 +9,7 @@ ROOT = HERE.parents[4]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(HERE))
 from shiftlink.agent.schemas import KnowledgeCard
-from policy_gate import adoption_issues
+from policy_gate import unapproved_adoption_issues
 
 
 def merge():
@@ -27,7 +27,7 @@ def merge():
         path, digest = card["provenance"]["prompt_version"].rsplit("@sha256:", 1)
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest, f"changed prompt: {card['card_id']}"
     accepted = [card for card in cards if card["status"] == "accepted"]
-    blocked = adoption_issues(accepted, HERE, ROOT) if accepted else {}
+    blocked = unapproved_adoption_issues(accepted, HERE, ROOT) if accepted else {}
     assert not blocked, f"KB adoption blocked by source/lineage contract: {blocked}"
     index = {"batch_id": "KB-20260930-C", "seed": 20260930, "prompts": {}}
     for file in sorted((HERE / "prompts").glob("*.md")):

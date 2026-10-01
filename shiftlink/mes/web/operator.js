@@ -34,16 +34,21 @@
     const parts = (snapshot.components || []).filter(c=>c.equipment_id===selected?.equipment_id);
     const selectedPart = parts.find(p=>p.component_id===partId) || parts.find(p=>p.component_id===problemPart) || null;
     const measurements = (selected?.signals || []).map(signal=>{
+      const precharge = snapshot.scenario_id==="hpu_accumulator_precharge" && selected.profile_id==="hpu";
+      if (precharge && signal.signal==="hpu_accumulator_gas_pressure") signal={...signal,normal_min:130,normal_max:140};
+      if (precharge && signal.signal==="hpu_accumulator_fluid_pressure") signal={...signal,normal_min:0,normal_max:0};
       const m = (snapshot.measurements || []).find(m=>m.equipment_id===selected.equipment_id && m.signal===signal.signal);
       const age = m ? (Date.parse(snapshot.simulated_at)-Date.parse(m.observed_at))/1000 : NaN;
-      const known = Boolean(m && Number.isFinite(m.value));
+      const eventUnavailable = signal.semantics?.acquisition==="event" && m?.quality==="unavailable";
+      const known = Boolean(m && Number.isFinite(m.value) && !eventUnavailable);
       const trustworthy = known && m.quality==="good" && m.unit===signal.unit &&
-        (signal.unit!=="bool" || m.value===0 || m.value===1) && Number.isFinite(age) && age>=0 && age<=10;
+        (signal.unit!=="bool" || m.value===0 || m.value===1) && Number.isFinite(age) && age>=0 &&
+        (signal.semantics?.acquisition==="manual_sample" ? age<60 : age<=10);
       const hasRange = signal.normal_min!=null || signal.normal_max!=null;
       const inRange = hasRange && trustworthy && (signal.normal_min==null || m.value>=signal.normal_min) && (signal.normal_max==null || m.value<=signal.normal_max);
       // Engine emits 0 for these signals whenever the equipment is not running; that is expected, not "low".
       const stoppedZero = trustworthy && signal.zero_when_stopped===true && m.value===0 && selected.operating_state!=="running";
-      return {...signal, observation:m, known, trustworthy, hasRange, inRange, stoppedZero,
+      return {...signal, observation:m, known, trustworthy, hasRange, inRange, stoppedZero, eventUnavailable, precharge,
         relevant:selected.equipment_id===cause?.equipment_id && (spec?.signal_effects || []).some(e=>e.signal===signal.signal && (selected.capabilities || []).includes(e.capability))};
     }).sort((a,b)=>Number(b.relevant)-Number(a.relevant));
     return {snapshot, config, nodes, links, faults, selected, cause, spec, problemPart, selectedPart, parts, measurements,
@@ -147,8 +152,10 @@
     const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"관측된 영향 대기":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
     const measurements=model.measurements.map(s=>{
       const band=s.normal_min==null&&s.normal_max==null?"기준 없음":`${s.normal_min??"하한 없음"} ~ ${s.normal_max??"상한 없음"}`;
-      const finding=!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":s.stoppedZero?"정지 중 0 · 정상":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
-      return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small></th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
+      const finding=s.eventUnavailable?"이벤트 기록 없음":!s.known?"관측 없음":!s.trustworthy?"품질·시각 확인 필요":s.precharge&&s.signal==="hpu_accumulator_fluid_pressure"&&s.inRange?"유체 배출 확인":s.stoppedZero?"정지 중 0 · 정상":!s.hasRange?"기준 없음 · 판정 불가":s.inRange?"구성 범위 내":"구성 범위 이탈 · 확인 필요";
+      const acquisition={continuous:"연속 계측",derived:"계측값 기반 계산",event:"이벤트 기록",manual_sample:"시료·수동 측정"}[s.semantics?.acquisition];
+      const context=[acquisition,s.semantics?.location,s.semantics?.reference].filter(Boolean).map(esc).join(" · ");
+      return `<tr class="${s.relevant?"relevant":""}"><th scope="row">${esc(s.name || s.signal)}<small>${esc(s.signal)}</small>${context?`<small>${context}</small>`:""}</th><td><b>${s.known?esc(s.observation.value):"—"}</b> ${esc(s.unit)}<small>${esc(finding)}</small></td><td>${esc(band)} ${esc(s.unit)}<small>${s.observation?`${esc(s.observation.quality)} · ${esc(stamp(s.observation.observed_at))}`:"기록 없음"}</small></td></tr>`;
     }).join("");
     const diagnoses=(model.snapshot.symptom_diagnostics || []).filter(d=>d.equipment_id===eq.equipment_id).map(d=>
       `<section class="symptom-candidate"><h4>증상별 원인 후보 · ${esc(d.symptom)}</h4><p>${esc(d.status==="candidate"?"3회 연속 관측":d.status==="unverified"?"근거 미확인":"추가 관측 대기")} · 확정 진단 아님</p><ul>${(d.candidates || []).map(c=>`<li>${esc(c)}</li>`).join("")}</ul><p>추가 확인: ${(d.checks || []).map(esc).join(" · ")}</p><small>${esc(d.limitation)}</small></section>`).join("");

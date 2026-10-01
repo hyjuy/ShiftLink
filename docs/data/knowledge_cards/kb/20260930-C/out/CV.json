@@ -2,7 +2,7 @@
  {
   "card_id": "K-1204",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동부",
@@ -52,13 +52,13 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
    "contradicting_event_ids": [],
    "generalization_scope": "일반 벨트 컨베이어의 미끄럼·미회전 증상 확인에 한정한다. 원문 모델의 길이 조정 방법을 CV-01 확정 절차로 옮기지 않는다.",
-   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 검수표의 내용 판정은 accepted이며 현장 작업 안전 승인은 별도이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다."
   },
   "safety_review": null,
   "mes_equipment_id": "EQ-0009",
@@ -67,7 +67,7 @@
  {
   "card_id": "K-1205",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동 롤러",
@@ -117,13 +117,13 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
    "contradicting_event_ids": [],
    "generalization_scope": "Low conveying capacity 증상이 별도로 확인된 일반 벨트 컨베이어에 한정한다. V-belt와 래깅 구조가 없는 CV-01에는 해당 교체 항목을 적용하지 않는다.",
-   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 검수표의 내용 판정은 accepted이며 현장 작업 안전 승인은 별도이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다."
   },
   "safety_review": null,
   "mes_equipment_id": "EQ-0009",
@@ -132,7 +132,7 @@
  {
   "card_id": "K-1206",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동 영역",
@@ -188,13 +188,13 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],
    "contradicting_event_ids": [],
    "generalization_scope": "CV-01에 운전 지시가 있고 실제 느린 이송 또는 끼임이 확인된 경우의 확인 경로다. cv_queue_len은 적체 위치·원인 판정값이 아니다.",
-   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
+   "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 검수표의 내용 판정은 accepted이며 현장 작업 안전 승인은 별도이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다."
   },
   "safety_review": null,
   "mes_equipment_id": "EQ-0009",

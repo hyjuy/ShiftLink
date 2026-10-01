@@ -58,7 +58,13 @@ def test_each_installed_sensor_anomaly_reaches_search_and_recovers(eq, signal):
     engine.recover()
     engine.tick(2)
     recovered = next(m for m in engine.snapshot.measurements if m.equipment_id == eq.equipment_id and m.signal == signal.signal)
-    assert signal.normal_min <= recovered.value <= signal.normal_max
+    if signal.signal == 'cv_queue_len':
+        # A healthy moving coil can occupy every slot; recovery clears injection,
+        # not the actual material represented by this occupancy measurement.
+        count = sum(c['equipment_id'] == eq.equipment_id for c in engine.snapshot.coils)
+        assert recovered.value == min(100, round(100 * count / eq.coil_capacity, 3))
+    else:
+        assert signal.normal_min <= recovered.value <= signal.normal_max
     assert not engine.snapshot.active_alarms
 
 

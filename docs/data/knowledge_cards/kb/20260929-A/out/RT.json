@@ -175,11 +175,11 @@
   "title": "상승 버튼을 누를 때 끽 하는 날카로운 소리가 나면 릴리프가 열린 것이다 — 몇 초 넘게 계속 누르지 않는다",
   "symptom": "상승 버튼을 누르는 동안 파워유닛 밸브에서 끽 하는 날카로운 소리(squealing)가 나고 플랫폼은 더 올라가지 않는다.",
   "know_how": "상승 버튼을 누르고 있는데 밸브에서 끽 하는 날카로운 소리가 나면 파워유닛이 릴리프 상태로 돌고 있다는 뜻이다. 원문은 리프트가 최상단 물리 스토퍼에 닿았거나, 업스톱 밸브가 유로를 막았거나, 과적 상태일 때 펌프 오일이 릴리프로 넘어간다고 설명한다. 릴리프 상태로 몇 초 넘게 운전하지 않는다. 리프트가 올라가지 않거나 끝까지 올라간 상태에서는 상승 버튼을 계속 누르지 않는다. 계속 누르면 모터나 펌프가 영구 손상될 수 있다.",
-  "rationale": "830CC 설명서 CAUTION 문구(p.7, p.17, p.28)가 릴리프 작동 시 소리를 직접 기술하고 수 초 이상 운전을 금지하며, p.6·p.17 CAUTION이 상승 불능·최상단 도달 시 상승 버튼 지속 조작을 금지한다.",
+  "rationale": "830CC 설명서 CAUTION 문구(p.7, p.17, p.28)가 릴리프 작동 시 소리를 직접 기술하고 수 초 이상 운전을 금지하며, p.6·p.17 CAUTION이 상승 불능·최상단 도달 시 상승 버튼 지속 조작을 금지한다. 검토 보완: 원문 830CC의 CAUTION에 따른 금지 항목을 안전 근거로 구조화했다. RT 모델 대응과 현장 작업 승인은 별도 확인한다.",
   "conditions": [],
   "exclusions": [],
-  "safety_flag": false,
-  "safety_basis": null,
+  "safety_flag": true,
+  "safety_basis": "830CC-V1.pdf PDF p.6 / CAUTION: 리프트가 상승하지 않거나 완전히 올라간 상태에서 UP 버튼을 계속 누르면 모터·펌프가 영구 손상될 수 있으므로 지속 조작을 금지한다. 같은 문서 PDF p.7·p.17·p.28 CAUTION은 릴리프 상태로 수 초 이상 운전하지 말라고 경고한다.",
   "conflict_group": null,
   "confidence": 0.0,
   "provenance": {
@@ -213,9 +213,9 @@
      "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md@sha256:794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -240,7 +240,7 @@
   "title": "리프트가 내려가지 않고 속도 퓨즈 잠김이 의심될 때의 4단계 복구 순서",
   "symptom": "하강 버튼을 눌러도 리프트가 내려가지 않는다. 속도 퓨즈 잠김은 원문이 제시한 가능한 원인 중 하나다.",
   "know_how": "1) 리프트의 하중을 내리고 피팅·호스 등 유압 부품의 누유와 손상을 확인한다. 누유·손상이 보이면 복구 조작을 진행하지 않고 Autoquip에 후속 지시를 요청한다. 2) 이상이 없으면 상승 버튼을 몇 초 눌러 실린더에 압을 건 뒤, 떼자마자 하강 버튼을 누른다. 내려가기 시작하면 완전히 내려올 때까지 계속 누른다. 3) 내려가지 않으면 약 10~15분 기다려 유압 계통의 압력이 균형을 이루게 한 뒤 하강 버튼을 누른다. 그래도 완전히 내려오지 않으면 Autoquip에 후속 지시를 요청한다. 4) 완전히 내려온 경우 하강 버튼을 약 60초 눌러 공기를 뺀다. 필요하면 행정의 50%까지 올렸다 내리기를 여러 번 반복한다. 속도 퓨즈는 분리하지 않는다. 문제가 해결되지 않으면 Autoquip에 문의한다.",
-  "rationale": "830CC 고장 분석표의 Lift won’t lower 항목은 속도 퓨즈 잠김에 대해 1~4단계와, 해당 조치로 해결되지 않을 때 Autoquip에 연락하라는 지시를 제시한다. 원문 2단계는 누유·손상이 없을 때만 진행한다. 누유·손상 발견 시 Autoquip에 문의한다는 문구는 카드에 추가한 안전상 후속 조치이며, 원문 1단계의 직접 지시는 아니다.",
+  "rationale": "830CC 고장 분석표의 Lift won’t lower 항목은 속도 퓨즈 잠김에 대해 1~4단계와, 해당 조치로 해결되지 않을 때 Autoquip에 연락하라는 지시를 제시한다. 원문 2단계는 누유·손상이 없을 때만 진행한다. 누유·손상 발견 시 Autoquip에 문의한다는 문구는 카드에 추가한 안전상 후속 조치이며, 원문 1단계의 직접 지시는 아니다. 검토 보완: 복구 목적상 T6 후보이나 기존 카드 소급 재분류를 금지한 계약을 따라 이번 검토에서는 T3 및 4단계 분기를 유지한다. 하강 불능만으로 정상 정지·이상 정지·정비 후 재가동 유형을 단정하지 않는다. 재분류는 별도 계약 검토 대상이다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": true,
@@ -268,9 +268,9 @@
      "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md@sha256:794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -334,12 +334,12 @@
   "scenario": "S1",
   "title": "상승이 안 되면서 모터가 웅웅거리기만 하거나 퓨즈가 끊기면 펌프 고착을 의심한다",
   "symptom": "상승 버튼을 눌러도 리프트가 오르지 않고, 모터가 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어진다.",
-  "know_how": "상승 버튼을 눌러도 리프트가 올라가지 않는데 모터가 돌지 못하고 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어지면 펌프가 고착됐을 수 있다. 원문은 펌프를 떼어 내 손으로 돌아가는지 확인하고, 하우징에 균열이 있는지 보라고 한다. 이 상태에서 상승 버튼을 계속 누르지 않는다. 원문은 계속 누르면 모터·펌프가 영구 손상될 수 있다고 경고한다.",
-  "rationale": "830CC 고장 분석표 'Lift does not raise' 마지막 항목(p.33)이 모터 웅웅거림·퓨즈 끊김을 펌프 고착과 연결하고 확인 방법을 적는다. p.6 CAUTION이 상승 불능 시 상승 버튼 지속 조작을 금지한다.",
+  "know_how": "상승 버튼을 눌러도 리프트가 올라가지 않는데 모터가 돌지 못하고 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어지면 펌프가 고착됐을 수 있다. 원문은 펌프를 떼어 내 손으로 돌아가는지 확인하고, 하우징에 균열이 있는지 보라고 한다. 이 상태에서 상승 버튼을 계속 누르지 않는다. 원문은 계속 누르면 모터·펌프가 영구 손상될 수 있다고 경고한다. 펌프 분리·수동 회전 확인은 지지·전원 격리·압력 해제 및 작업 권한을 모델 지침으로 확인한 정비 담당자가 수행하며 조건 미확인 시 보류한다(카드 검토에서 추가한 제한).",
+  "rationale": "830CC 고장 분석표 'Lift does not raise' 마지막 항목(p.33)이 모터 웅웅거림·퓨즈 끊김을 펌프 고착과 연결하고 확인 방법을 적는다. p.6 CAUTION이 상승 불능 시 상승 버튼 지속 조작을 금지한다. 검토 보완: 펌프 고착은 원인 후보이며 펌프 분리는 즉시 수행 지시가 아니다. 해당 모델의 지지·전원 격리·압력 해제 절차와 작업 권한을 확인한 정비 담당자가 수행하도록 보류한다. 이 보류 조건은 카드 검토에서 추가한 적용 제한이다.",
   "conditions": [],
   "exclusions": [],
-  "safety_flag": false,
-  "safety_basis": null,
+  "safety_flag": true,
+  "safety_basis": "830CC-V1.pdf PDF p.6 / CAUTION: 리프트가 상승하지 않거나 완전히 올라간 상태에서 UP 버튼을 계속 누르면 모터·펌프가 영구 손상될 수 있으므로 지속 조작을 금지한다.",
   "conflict_group": null,
   "confidence": 0.0,
   "provenance": {
@@ -363,9 +363,9 @@
      "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md@sha256:794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -389,8 +389,8 @@
   "scenario": "S2",
   "title": "올린 리프트가 서서히 내려앉을 때 하강 솔레노이드 코일을 떼어 다운 밸브 카트리지를 판정한다",
   "symptom": "올려 둔 리프트가 버튼을 누르지 않았는데도 서서히 내려앉는다.",
-  "know_how": "하강 솔레노이드 코일을 떼어 낸 상태에서 리프트가 위치를 유지하는지 다시 확인한다. 코일을 떼어도 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요시 교체한다. 위치를 유지하면 카트리지 분리 단계로 진행하지 않는다. 원문은 이 결과의 후속 조치를 제시하지 않으므로 Autoquip에 점검 지시를 요청한다. 배관·호스·피팅 누유와 체크밸브 미착좌도 같은 증상의 가능한 원인이다. 하중을 내리고 시저 기구를 차단하기 전에는 플랫폼 아래로 들어가지 않는다.",
-  "rationale": "830CC 고장 분석표의 Lift raises, then lowers back slowly 항목은 코일 제거 후에도 리프트가 위치를 유지하지 못할 때 카트리지를 세척하거나 교체하도록 지시한다. 코일 제거 후 위치를 유지하는 경우의 조치는 제시하지 않는다. 이 경우 Autoquip에 문의한다는 문구는 막다른 분기를 해소하기 위해 카드에 추가한 에스컬레이션이며, 원문의 직접 지시가 아니다.",
+  "know_how": "하강 솔레노이드 코일을 떼어 낸 상태에서 리프트가 위치를 유지하는지 다시 확인한다. 코일을 떼어도 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요시 교체한다. 위치를 유지하면 카트리지 분리 단계로 진행하지 않는다. 원문은 이 결과의 후속 조치를 제시하지 않으므로 Autoquip에 점검 지시를 요청한다. 배관·호스·피팅 누유와 체크밸브 미착좌도 같은 증상의 가능한 원인이다. 하중을 내리고 시저 기구를 차단하기 전에는 플랫폼 아래로 들어가지 않는다. 코일 제거·카트리지 분리 및 유지 시험은 모델별 지지·전원 격리·잔압 해제·시험 구성·작업 권한 확인 전 보류한다(카드 검토에서 추가한 제한).",
+  "rationale": "830CC 고장 분석표의 Lift raises, then lowers back slowly 항목은 코일 제거 후에도 리프트가 위치를 유지하지 못할 때 카트리지를 세척하거나 교체하도록 지시한다. 코일 제거 후 위치를 유지하는 경우의 조치는 제시하지 않는다. 이 경우 Autoquip에 문의한다는 문구는 막다른 분기를 해소하기 위해 카드에 추가한 에스컬레이션이며, 원문의 직접 지시가 아니다. 검토 보완: p.32의 플랫폼 아래 진입 금지는 코일·카트리지 분해의 전체 안전 조건을 대신하지 않는다. 지지·전원 격리·잔압 해제와 코일 제거 후 유지 시험의 구성·작업 권한을 해당 모델 지침으로 확인한 담당자에게 넘긴다. 조건 미확인 시 분해·시험을 보류한다. 이는 카드 검토에서 추가한 적용 제한이다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": true,
@@ -413,9 +413,9 @@
      "document_version": "Autoquip Trojan Coil Car Item # 830CC, Version 1.0, 09/2001"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md)",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 본문 수정 반영(review_20260930_reviewed.md); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/RT.md@sha256:794ff2becaa8fec090a868feed45474e431bc0c752e0d8cb9daa58d1d00736ae",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -426,7 +426,8 @@
      "step_id": "ST-01",
      "order": 1,
      "preconditions": [
-      "플랫폼 아래로 들어가지 않는다."
+      "플랫폼 아래로 들어가지 않는다.",
+      "모델별 지지·전원 격리·잔압 해제와 유지 시험 구성·작업 권한을 확인한 담당자가 수행한다. 조건 미확인 시 분해·시험을 보류한다(카드 검토에서 추가한 제한)."
      ],
      "action": "하강(Down) 솔레노이드 코일을 떼어 낸 뒤 리프트가 위치를 유지하는지 다시 확인한다.",
      "expected_result": "유지하지 못하면 ST-02로 간다.",
@@ -438,7 +439,8 @@
      "step_id": "ST-02",
      "order": 2,
      "preconditions": [
-      "1단계에서 코일 제거 상태로도 리프트가 내려앉았다."
+      "1단계에서 코일 제거 상태로도 리프트가 내려앉았다.",
+      "모델별 지지·전원 격리·잔압 해제와 유지 시험 구성·작업 권한을 확인한 담당자가 수행한다. 조건 미확인 시 분해·시험을 보류한다(카드 검토에서 추가한 제한)."
      ],
      "action": "코일을 떼어도 위치를 유지하지 못하면 다운 밸브 카트리지를 분리해 세척하거나 필요시 교체한다.",
      "expected_result": "조치 후 위치 유지 여부를 다시 확인한다. 원문은 조치 후 합격 기준을 따로 제시하지 않는다. 문제가 계속되면 Autoquip에 후속 지시를 요청한다.",

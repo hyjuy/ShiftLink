@@ -13,6 +13,7 @@ from .contracts import (
     Run, RuntimeEvent, ScenarioSpec, SignalEffect, SignalSpec, Snapshot
 )
 from .scenarios.priority import COMPONENTS
+from .signal_semantics import MODEL, SAMPLES
 
 
 class MesEngine:
@@ -317,6 +318,13 @@ class MesEngine:
 
         # Find cause equipment by capability
         cause_eq_id = self._cause_equipment_id(spec)
+        if spec.scenario_id == 'hpu_accumulator_precharge':
+            if cause_eq_id in states:
+                states[cause_eq_id] = ('stopped', 'normal', 'precharge_measurement')
+                for relation in self.config.relations:
+                    if relation.from_id == cause_eq_id and relation.relation_type == 'hydraulic_supply':
+                        states[relation.to_id] = ('waiting', 'normal', 'precharge_measurement')
+            return states, 'running'
         if cause_eq_id and cause_eq_id in states:
             states[cause_eq_id] = (("stopped", "critical", "self_fault") if spec.stop_on_fault
                                    else ("running", "warning", "observed_deviation"))
@@ -334,7 +342,44 @@ class MesEngine:
 
         return states, "fault"
 
+    def _signal_effect(self, equipment, signal):
+        spec = self._scenario_by_id.get(self._scenario)
+        if not spec or (spec.recovery_actions and len(self._completed_actions) == len(spec.recovery_actions)):
+            return None
+        return next((effect for effect in spec.signal_effects
+                     if equipment.equipment_id == self._cause_equipment_id(spec)
+                     and effect.capability in equipment.capabilities and effect.signal == signal), None)
+
     def _measurement_value(self, equipment: EquipmentConfig, signal_spec: SignalSpec) -> float:
+        effect = self._signal_effect(equipment, signal_spec.signal)
+        if effect is not None:
+            return round(effect.value, 3)
+
+        if signal_spec.zero_when_stopped and self._states()[0][equipment.equipment_id][0] != "running":
+            return 0.0
+
+        if signal_spec.semantics.get('model') == MODEL:
+            signals = {s.signal: s for s in equipment.signals}
+            def related(name):
+                return self._measurement_value(equipment, signals[name]) if name in signals else None
+            dependencies = {
+                'hpu_cooler_oil_in_temp': ('hpu_oil_temp', 0),
+                'hpu_cooler_oil_out_temp': ('hpu_cooler_oil_in_temp', -5),
+                'hpu_cooler_water_out_temp': ('hpu_cooler_water_in_temp', 5),
+                'hpu_cooler_oil_flow': ('hpu_flow', 0),
+                'hpu_accumulator_gas_pressure': ('hpu_accumulator_fluid_pressure', 0),
+            }
+            if signal_spec.signal in dependencies:
+                source, offset = dependencies[signal_spec.signal]
+                value = related(source)
+                if value is not None:
+                    return round(value + offset, 3)
+            if signal_spec.signal == 'cv_queue_len':
+                count = sum(coil['equipment_id'] == equipment.equipment_id for coil in self._coils)
+                return round(min(100, 100 * count / equipment.coil_capacity), 3)
+            if signal_spec.semantics.get('acquisition') == 'event':
+                return 0.0  # No lift command/completion pair exists in this transport model.
+
         low, high = signal_spec.normal_min, signal_spec.normal_max
         if low is None and high is None:
             low = high = 0.0
@@ -343,23 +388,11 @@ class MesEngine:
         elif high is None:
             high = float(low) * 1.1
 
-        random = Random(f"{self.run.seed}:{self._sequence}:{equipment.equipment_id}:{signal_spec.signal}")
+        sequence = self._sequence
+        if signal_spec.semantics.get('model') == MODEL and signal_spec.signal in SAMPLES:
+            sequence = int(sequence * self.run.tick_seconds // 60)
+        random = Random(f"{self.run.seed}:{sequence}:{equipment.equipment_id}:{signal_spec.signal}")
         value = (float(low) + float(high)) / 2 + (random.random() - 0.5) * (float(high) - float(low)) * 0.08
-
-        # signal_effects from scenario
-        if self._scenario != "normal":
-            spec = self._scenario_by_id.get(self._scenario)
-            if spec:
-                for effect in spec.signal_effects:
-                    # Match by capability and signal
-                    verified = spec.recovery_actions and len(self._completed_actions) == len(spec.recovery_actions)
-                    if (not verified and equipment.equipment_id == self._cause_equipment_id(spec)
-                            and effect.capability in equipment.capabilities and effect.signal == signal_spec.signal):
-                        return round(effect.value, 3)
-
-        # Preserve an injected, observable fault reading even when the fault stops the drive.
-        if signal_spec.zero_when_stopped and self._states()[0][equipment.equipment_id][0] != "running":
-            return 0.0
 
         return round(value, 3)
 
@@ -375,9 +408,16 @@ class MesEngine:
             if not eq.active:
                 continue
             for signal_spec in eq.signals:
+                quality, observed_at = 'good', at
+                if signal_spec.semantics.get('model') == MODEL and self._signal_effect(eq, signal_spec.signal) is None:
+                    if signal_spec.semantics.get('acquisition') == 'event':
+                        quality = 'unavailable'
+                    elif signal_spec.signal in SAMPLES:
+                        elapsed = self._sequence * self.run.tick_seconds
+                        observed_at = self.run.started_at + timedelta(seconds=elapsed // 60 * 60)
                 measurements.append(Measurement(
                     eq.equipment_id, signal_spec.signal, self._measurement_value(eq, signal_spec),
-                    signal_spec.unit, at
+                    signal_spec.unit, observed_at, quality
                 ))
         active = self._update_alarms(state_map, at)
         snapshot = Snapshot(

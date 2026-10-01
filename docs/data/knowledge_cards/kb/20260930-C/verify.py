@@ -11,7 +11,7 @@ ROOT = HERE.parents[4]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(HERE))
 from shiftlink.agent.schemas import Artifact, Event, KnowledgeCard
-from policy_gate import adoption_issues
+from policy_gate import adoption_issues, unapproved_adoption_issues
 
 
 def read(name):
@@ -55,7 +55,10 @@ def main(require_kb_ready=False):
     signals = {m["signal"] for e in equipment.values() for m in e.get("measurement_points", [])}
     known_sources = {p.name for p in (ROOT / "docs/data/sources").rglob("*.pdf")}
     existing = json.loads((HERE.parent / "kb_cards.json").read_text(encoding="utf-8"))["cards"]
-    assert not {c.card_id for c in cards} & {c["card_id"] for c in existing}, "existing card collision"
+    existing_by_id = {c["card_id"]: c for c in existing}
+    for card in cards_raw:
+        if card["card_id"] in existing_by_id:
+            assert existing_by_id[card["card_id"]] == card, "integrated card differs from C batch"
     for a in artifacts:
         assert a.event_id in ev and a.split == ev[a.event_id].split, a.artifact_id
         assert ev[a.event_id].true_cause not in a.text, f"ground truth leak {a.artifact_id}"
@@ -126,7 +129,8 @@ def main(require_kb_ready=False):
             assert all(eid in ev and ev[eid].split == "kb" for eid in cited), f"non-KB evidence {c.card_id}"
             assert all(ev[eid].equipment == c.equipment for eid in ge.supporting_event_ids), c.card_id
     issues = adoption_issues(cards_raw, HERE, ROOT)
-    assert not {c.card_id for c in cards if c.status == "accepted"} & set(issues), "accepted card has unresolved policy gates"
+    unresolved = unapproved_adoption_issues(cards_raw, HERE, ROOT)
+    assert not {c.card_id for c in cards if c.status == "accepted"} & set(unresolved), "accepted card lacks promotion authorization"
     print("PASS: 19 cards, 20 historical events, 40 artifacts; registered source links and projections; active independent dev=0")
     print(f"KB policy readiness: {'READY' if not issues else 'PENDING'}; blocked cards={len(issues)}")
     if require_kb_ready and issues:

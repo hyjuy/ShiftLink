@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모델 후보 선택 실험</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1f2328; --muted: #5d6670; --line: #dcd8cf; --card: #ffffff;
+  --accent: #b5532a; --ok: #2f7a4b; --bad: #b3261e; --barbg: #ece8df; --code: #f1eee7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17191c; --fg: #e6e3dc; --muted: #9aa3ad; --line: #33373d; --card: #1f2226;
+    --accent: #e08a5f; --ok: #6cc28c; --bad: #f08a80; --barbg: #2a2e33; --code: #262a2f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17191c; --fg: #e6e3dc; --muted: #9aa3ad; --line: #33373d; --card: #1f2226;
+  --accent: #e08a5f; --ok: #6cc28c; --bad: #f08a80; --barbg: #2a2e33; --code: #262a2f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.65 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 1.7rem; line-height: 1.3; margin: 0 0 6px; }
+h2 { font-size: 1.2rem; margin: 40px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 1rem; margin: 24px 0 8px; }
+.meta { color: var(--muted); font-size: .9rem; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 24px 0; }
+.summary div { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.summary b { display: block; font-size: .8rem; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 8px 0; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: .88em; }
+pre { background: var(--code); padding: 12px; border-radius: 8px; overflow-x: auto; font-size: .82rem; white-space: pre-wrap; word-break: break-all; }
+.bad { color: var(--bad); font-weight: 600; }
+.ok { color: var(--ok); font-weight: 600; }
+.bars { display: grid; gap: 10px; margin: 12px 0; }
+.bar-row { display: grid; grid-template-columns: minmax(120px, 210px) 1fr; gap: 10px; align-items: center; font-size: .88rem; }
+.bar-pair { display: grid; gap: 3px; }
+.bar { height: 14px; border-radius: 3px; background: var(--barbg); position: relative; }
+.bar i { display: block; height: 100%; border-radius: 3px; }
+.bar span { position: absolute; left: calc(100% + 0px); top: -2px; font-size: .78rem; color: var(--muted); white-space: nowrap; transform: translateX(-100%); padding-right: 4px; }
+.legend { font-size: .82rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }
+figure { margin: 16px 0; }
+figcaption { font-size: .85rem; color: var(--muted); }
+svg text { fill: var(--muted); font-size: 11px; }
+ul { padding-left: 1.2em; }
+.hl td { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.pos td.num b { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+<h1>Jetson 모델 후보 선택 실험</h1>
+<p class="meta">2026-10-01 · 최재영·Claude · <a href="model-selection-20261001.md">md판</a> · 같은 날 <a href="jetson-ollama-memory-20261001.html">장애 보고서</a></p>
+
+<div class="summary">
+  <div><b>질문</b>검색 상위 5장을 주면 모델이 정답 카드를 골라 인용하는가?</div>
+  <div><b>답</b>아니다. 10개 실행 모두 검색 1위(28/29)보다 낮음. 최고 exaone v3 22~23</div>
+  <div><b>결정</b>질의 모드는 검색 1위 1장만 모델에 (<code>QUERY_MAX_CANDIDATES = 1</code>)</div>
+  <div><b>확인</b>exaone 인용 정답 <span class="ok">28/29</span>, p50 4.9 → <span class="ok">4.2초</span></div>
+</div>
+
+<h2>1. 실험 계획</h2>
+<p>9/29 벤치마크에서 exaone에 후보 5장을 주면 모델 1순위 인용 정답이 8/30, 검색 1위는 27/30이었다. 모델의 고르기를 프롬프트로 살릴 수 있는지, 아니면 빼야 하는지 확인했다.</p>
+<div class="table-wrap"><table>
+<tr><th>가설</th><th>방식</th></tr>
+<tr><td>답을 먼저 쓰고 인용을 붙여서 인용이 흐트러진다</td><td>v1 인용을 먼저 출력</td></tr>
+<tr><td><code>K-1004</code> 같은 ID가 비슷해 헷갈린다</td><td>v2 후보를 1~5 번호로</td></tr>
+<tr><td>카드 본문 JSON이 길어 제목·증상을 놓친다</td><td>v3 번호 + 한 줄 색인만</td></tr>
+<tr><td>고르기와 답 쓰기를 한 번에 하면 둘 다 나빠진다</td><td>v4 2단계 (번호 고르기 → 고른 카드로 답)</td></tr>
+</table></div>
+<div class="table-wrap"><table>
+<tr><th>고정 조건</th><th>값</th></tr>
+<tr><td>문항</td><td>31개 = dev 답 있는 11 + 9/29 벤치마크 20. 시험셋은 쓰지 않음. 채점은 정답이 후보 5장에 든 29문항</td></tr>
+<tr><td>카드</td><td>main <code>kb_cards.json</code> 62장 (#115 머지 전)</td></tr>
+<tr><td>모델</td><td>exaone3.5:2.4b-instruct-q4_K_M, qwen2.5:3b-instruct-q4_K_M (한 번에 하나)</td></tr>
+<tr><td>장비</td><td>Jetson Orin Nano Super 15W, ollama 0.34.1, temperature 0</td></tr>
+<tr><td>주 지표</td><td>sel@1 = 모델 1순위 인용이 정답인 문항 수</td></tr>
+<tr><td>판정</td><td>검색 1위를 넘는 방식이 있으면 채택, 없으면 질의 모드 후보를 1장으로</td></tr>
+</table></div>
+
+<h2>2. 진행</h2>
+<p>오전에 Jetson이 두 번 다운됐다 (원인: llama-server RAM 프롬프트 캐시, <a href="jetson-ollama-memory-20261001.html">장애 보고서</a>). 다운 뒤의 요청은 "인용 없음"으로 잘못 세져 exaone v2~v4를 무효 처리하고 다시 돌렸다. 실행 스크립트는 방식마다 앞뒤로 Jetson 연결을 확인하게 고쳤다. 10:35 설정 적용 후에는 우회 없이 돌렸다.</p>
+
+<h2>3. 결과</h2>
+<p class="legend">sel@1 (/29)<i style="background:var(--accent)"></i>exaone<i style="background:var(--muted)"></i>qwen<i style="background:var(--ok)"></i>검색 1위</p>
+<div class="bars">
+<div class="bar-row"><div>exaone base</div><div class="bar"><i style="width:17.2%;background:var(--accent)"></i><span>5</span></div></div>
+<div class="bar-row"><div>exaone v1 인용 먼저</div><div class="bar"><i style="width:31.0%;background:var(--accent)"></i><span>9</span></div></div>
+<div class="bar-row"><div>exaone v2 번호</div><div class="bar"><i style="width:69.0%;background:var(--accent)"></i><span>20</span></div></div>
+<div class="bar-row"><div>exaone v3 번호 + 색인만</div><div class="bar"><i style="width:75.9%;background:var(--accent)"></i><span>22</span></div></div>
+<div class="bar-row"><div>exaone v4 2단계</div><div class="bar"><i style="width:65.5%;background:var(--accent)"></i><span>19</span></div></div>
+<div class="bar-row"><div>qwen base</div><div class="bar"><i style="width:17.2%;background:var(--muted)"></i><span>5</span></div></div>
+<div class="bar-row"><div>qwen v1 인용 먼저</div><div class="bar"><i style="width:6.9%;background:var(--muted)"></i><span>2</span></div></div>
+<div class="bar-row"><div>qwen v2 번호</div><div class="bar"><i style="width:34.5%;background:var(--muted)"></i><span>10</span></div></div>
+<div class="bar-row"><div>qwen v3 번호 + 색인만</div><div class="bar"><i style="width:27.6%;background:var(--muted)"></i><span>8</span></div></div>
+<div class="bar-row"><div>qwen v4 2단계</div><div class="bar"><i style="width:34.5%;background:var(--muted)"></i><span>10</span></div></div>
+<div class="bar-row"><div><b>검색 1위 그대로</b></div><div class="bar"><i style="width:96.6%;background:var(--ok)"></i><span>28</span></div></div>
+<div class="bar-row"><div><b>후보 1장 (적용 후)</b></div><div class="bar"><i style="width:96.6%;background:var(--ok)"></i><span>28</span></div></div>
+</div>
+<div class="table-wrap"><table>
+<tr><th>모델</th><th>방식</th><th>sel@1</th><th>hit_any</th><th>p50</th><th>p95</th><th>검토 대기열</th></tr>
+<tr><td>exaone</td><td>base</td><td class="num">5</td><td class="num">9</td><td class="num">4.9초</td><td class="num">10.1초</td><td class="num">2</td></tr>
+<tr><td>exaone</td><td>v1 인용 먼저</td><td class="num">9</td><td class="num">10</td><td class="num">5.9초</td><td class="num">6.6초</td><td class="num">1</td></tr>
+<tr><td>exaone</td><td>v2 번호</td><td class="num">20</td><td class="num">20</td><td class="num">5.5초</td><td class="num">6.4*초</td><td class="num">1</td></tr>
+<tr class="hl"><td>exaone</td><td>v3 번호 + 색인만</td><td class="num">22</td><td class="num">22</td><td class="num">2.9초</td><td class="num">3.7초</td><td class="num">0</td></tr>
+<tr><td>exaone</td><td>v4 2단계</td><td class="num">19</td><td class="num">19</td><td class="num">4.1초</td><td class="num">4.5*초</td><td class="num">0</td></tr>
+<tr><td>qwen</td><td>base</td><td class="num">5</td><td class="num">10</td><td class="num">7.9초</td><td class="num">10.9초</td><td class="num">0</td></tr>
+<tr><td>qwen</td><td>v1 인용 먼저</td><td class="num">2</td><td class="num">2</td><td class="num">8.2초</td><td class="num">10.1초</td><td class="num">1</td></tr>
+<tr><td>qwen</td><td>v2 번호</td><td class="num">10</td><td class="num">11</td><td class="num">7.6초</td><td class="num">14.3초</td><td class="num">5</td></tr>
+<tr><td>qwen</td><td>v3 번호 + 색인만</td><td class="num">8</td><td class="num">9</td><td class="num">2.9초</td><td class="num">4.4초</td><td class="num">2</td></tr>
+<tr><td>qwen</td><td>v4 2단계</td><td class="num">10</td><td class="num">10</td><td class="num">3.4초</td><td class="num">4.2초</td><td class="num">1</td></tr>
+<tr><td>—</td><td><b>검색 1위 그대로</b></td><td class="num"><b>28</b></td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+<p class="meta">* 8문항마다 모델을 다시 올린 실행이라 다시 올린 직후 문항을 빼고 계산. exaone v3는 우회 실행 23, 우회 없이 22.</p>
+
+<h3>모델이 1순위로 고른 카드의 검색 순위</h3>
+<div class="table-wrap"><table class="pos">
+<tr><th>모델·방식</th><th>1위</th><th>2위</th><th>3위</th><th>4위</th><th>5위</th><th>인용 없음</th></tr>
+<tr><td>exaone base</td><td class="num">6</td><td class="num">3</td><td class="num">2</td><td class="num"><b>14</b></td><td class="num">4</td><td class="num">2</td></tr>
+<tr><td>exaone v1</td><td class="num">8</td><td class="num">2</td><td class="num">4</td><td class="num"><b>12</b></td><td class="num">4</td><td class="num">1</td></tr>
+<tr><td>exaone v2</td><td class="num"><b>20</b></td><td class="num">4</td><td class="num">3</td><td class="num">2</td><td class="num">1</td><td class="num">1</td></tr>
+<tr><td>exaone v3</td><td class="num"><b>23</b></td><td class="num">1</td><td class="num">4</td><td class="num">3</td><td class="num">0</td><td class="num">0</td></tr>
+<tr><td>exaone v4</td><td class="num"><b>18</b></td><td class="num">2</td><td class="num">6</td><td class="num">3</td><td class="num">2</td><td class="num">0</td></tr>
+<tr><td>qwen base</td><td class="num">7</td><td class="num">4</td><td class="num">2</td><td class="num"><b>11</b></td><td class="num">7</td><td class="num">0</td></tr>
+<tr><td>qwen v1</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td class="num"><b>13</b></td><td class="num">7</td><td class="num">1</td></tr>
+<tr><td>qwen v2</td><td class="num"><b>12</b></td><td class="num"><b>12</b></td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="num">5</td></tr>
+<tr><td>qwen v3</td><td class="num">8</td><td class="num">3</td><td class="num"><b>10</b></td><td class="num">6</td><td class="num">2</td><td class="num">2</td></tr>
+<tr><td>qwen v4</td><td class="num"><b>9</b></td><td class="num">5</td><td class="num">6</td><td class="num">5</td><td class="num">5</td><td class="num">1</td></tr>
+</table></div>
+<p class="meta">exaone v3 분포는 우회 실행(23/29) 기준 31문항.</p>
+<p>검색 1위가 틀렸는데 모델이 맞힌 문항은 <b>Q-019 하나</b>뿐이다 (검색 K-1012, K-1013, K-1010 중 3위 K-1010을 고름). 반대로 검색 1위가 맞았는데 다른 카드를 고른 문항은 실행마다 6~26개였다 (exaone 6~23, qwen 19~26).</p>
+
+<h2>4. 해석</h2>
+<ul>
+<li><b>모델은 고르기를 잘하지 못한다.</b> 가장 좋은 exaone v3도 검색 1위보다 5~6문항 낮다.</li>
+<li><b>좋아진 방식은 사실상 "1위를 고르게 만든" 방식이다.</b> v2·v3에서 늘어난 정답만큼 1위 선택이 늘었다.</li>
+<li><b>카드 ID로 보여 주면 4번째 후보로 쏠린다</b> (base·v1, 두 모델 공통). 원인은 확인하지 않았다.</li>
+<li><b>qwen은 모든 방식에서 exaone보다 낮고 대체로 느리다.</b> 답변 문장 품질은 따로 본다.</li>
+</ul>
+
+<h2>5. 결정과 반영</h2>
+<ul>
+<li><code>shiftlink/edge/ollama.py</code>: <code>QUERY_MAX_CANDIDATES = 1</code>. 질의 모드에서 검색 상위 1장만 후보로, 인용 enum도 그 1장. 안전 참고 카드는 그대로.</li>
+<li>검색(k=5)과 평가용 <code>ranked_cards</code>는 그대로라 <code>route_score</code>는 바뀌지 않는다.</li>
+<li>테스트: 여러 장 경로 3개는 상한 5로 계속 확인, 1장 테스트 추가. pytest 552 통과.</li>
+<li><b>실제 모델 확인</b> (exaone, 같은 31문항): sel@1 <b>28/29</b>, p50 <b>4.2초</b>, p95 4.7초, 검토 대기열 0.</li>
+<li>브랜치 <code>feat/query-single-candidate</code> (31e28dd)는 별도 PR.</li>
+</ul>
+
+<h2>6. 한계</h2>
+<ul>
+<li>문항 31개 중 20개는 카드에서 만든 벤치마크 문항이다. 블라인드 질문으로 다시 볼 필요가 있다.</li>
+<li>카드 62장 기준이다. #115(배치 C) 이후 검색 1위 정확도가 바뀔 수 있다.</li>
+<li>답변 문장 품질은 보지 않았다. 인계 모드는 범위 밖이다.</li>
+</ul>
+
+<h2>7. 다음 실험: T4 근거 검색 실측 (인계 모드)</h2>
+<p>#114의 근거 문장 가중치 0.5는 오프라인에서 인계 질문 16개 중 상위 5장 정답을 8 → 11개로 늘렸고 1위는 4개 그대로였다. 실제 모델이 늘어난 후보에서 정답을 인용하는지 본다.</p>
+<div class="table-wrap"><table>
+<tr><th>항목</th><th>계획</th></tr>
+<tr><td>문항</td><td><code>eval/qa/20260930-T4/qa_dev_t4.json</code> 20개 (답 있음 16, 없음 4), 인계 모드, 근무조 A</td></tr>
+<tr><td>모델</td><td>exaone3.5:2.4b</td></tr>
+<tr><td>조건</td><td>① 가중치 0.5 + 후보 5장 (현재 main) ② 가중치 0 + 후보 5장 ③ 가중치 0.5 + 후보 1장</td></tr>
+<tr><td>지표</td><td>인용 정답 (답 있는 16), 검색 1위·상위 5 정답, 답 없는 4개 처리, 인계 5요소 생성, p50·p95</td></tr>
+<tr><td>판정</td><td>①이 ②보다 인용 정답이 같거나 많고 답 없는 처리가 나빠지지 않으면 0.5 유지. ③이 ①보다 많으면 인계도 1장</td></tr>
+<tr><td>소요</td><td>조건당 약 3분, 합계 10~15분</td></tr>
+</table></div>
+<p>인계 모드는 검색 1위 정답이 4/16로 낮아, 후보를 1장으로 줄이면 정답이 빠지는 문항이 많을 수 있다. 질의 모드와 결론이 다를 수 있다.</p>
+
+<h2>8. 산출물</h2>
+<div class="table-wrap"><table>
+<tr><th>산출물</th><th>위치</th></tr>
+<tr><td>이 보고서</td><td><code>docs/reports/model-selection-20261001.md</code>, <code>.html</code></td></tr>
+<tr><td>실험 기록 11행</td><td><code>bench/experiments.tsv</code></td></tr>
+<tr><td>코드 변경</td><td>브랜치 <code>feat/query-single-candidate</code>, 31e28dd</td></tr>
+<tr><td>실행 스크립트</td><td><code>exp_select.py</code>, <code>run.sh</code>, <code>leaktest.py</code> — 로컬 <code>ShiftLink-records/experiments/sel1001/</code></td></tr>
+<tr><td>원자료</td><td>실행별 결과 JSON 11개, 무효분 3개 — 같은 폴더</td></tr>
+<tr><td>장비 기록</td><td>Jetson <code>~/tegra_1001.log</code>, <code>~/memwatch_1001.log</code></td></tr>
+</table></div>
+<p class="meta">실행 스크립트와 원자료는 저장소에 넣지 않았다. 필요하면 <code>eval/</code> 아래로 정리해 올린다.</p>
+</main>
+</body>
+</html>

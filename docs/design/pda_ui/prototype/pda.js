@@ -18,15 +18,9 @@
 // ── 정본 경로 (저장소 루트 기준) ────────────────────────────────────
 // dev(EV-0032)·sealed(EV-0033)는 읽지 않는다. 파일 단위 격리가 필터보다 확실하다.
 const DATA_ROOT = '../../../data/';
-/* main(#40)이 docs/data/ 를 재편했다. 새 경로를 먼저 시도하고 구 경로로 폴백한다
- * — 머지 전 트리와 머지 후 트리에서 모두 동작해야 하기 때문이다.
- * 머지가 끝나면 폴백(두 번째 항목)을 지운다. */
 const SOURCES = {
-  catalog: ['reference/00_plant_and_relations.json', '00_plant_and_relations.json'],
-  kb: [
-    ['knowledge_cards/01_kb_cards_shared.json', '01_kb_cards_shared.json'],
-    ['scenarios/EV-0031_upstream_cause.json', 'EV-0031_upstream_cause.json']
-  ]
+  catalog: ['reference/00_plant_and_relations.json'],
+  kb: 'knowledge_cards/kb/kb_cards.json'
 };
 const USED_PATHS = [];
 
@@ -39,6 +33,7 @@ const API_TIMEOUT_MS = 8000;
 const RECENT_MAX = 3;
 
 const TYPE_COLOR = { HPU:'hpu', GR:'gr', RT:'rt', CV:'cv', PDP:'pdp', CAU:'cau' };
+const EQUIPMENT_TYPES = ['HPU', 'CV', 'RT', 'GR', 'CAU', 'PDP'];
 const TYPE_BAND = { HPU:'빨강', GR:'파랑', RT:'노랑', CV:'초록', PDP:'보라', CAU:'하늘' };
 const SCOPE_RANK = { equipment:0, segment:1, line:2 };
 
@@ -81,11 +76,10 @@ async function boot() {
     }));
 
     const all = [];
-    for (const candidates of SOURCES.kb) {
-      const d = await fetchFirst(candidates);
-      (d.knowledge_cards || []).forEach((c) => all.push(c));
-      (d.handover_records || []).forEach((h) => S.handovers.push(h));
-    }
+    const kb = await fetchJson(DATA_ROOT + SOURCES.kb);
+    USED_PATHS.push(SOURCES.kb);
+    (kb.cards || []).forEach((c) => all.push(c));
+    (kb.handover_records || []).forEach((h) => S.handovers.push(h));
     // C-102 — 읽은 파일이 kb 전용이지만 방어적으로 한 번 더 거른다.
     S.cards = all.filter((c) =>
       c.status === 'accepted' && c.split === 'kb' && c.grade === 'L1');
@@ -437,9 +431,15 @@ function renderObsList() {
     const row = document.createElement('div');
     row.className = 'obs';
     row.innerHTML = '<span class="mono"></span><button class="x" type="button" aria-label="삭제">✕</button>';
-    row.querySelector('.mono').textContent = o.signal + ' = ' + o.value + ' ' + o.unit;
+    row.querySelector('.mono').textContent = o.signal + ' = ' + o.value + (o.unit ? ' ' + o.unit : '');
     row.querySelector('.x').addEventListener('click', () => {
-      S.observations.splice(i, 1); renderObsList();
+      const gone = S.observations[i];
+      S.observations.splice(i, 1);
+      if (gone && gone.signal.slice(-6) !== '_state') {
+        const j = S.observations.findIndex((x) => x.signal === gone.signal + '_state');
+        if (j >= 0) S.observations.splice(j, 1);
+      }
+      renderObsList();
     });
     box.appendChild(row);
   });
@@ -450,10 +450,18 @@ function renderObsList() {
  * 「기타」를 목록 항목과 같은 크기·같은 자리에 두는 이유 — 목록에서만 고를 수
  * 있으면 항상 무언가 찾히고 「해당 지식 없음」이 영영 나오지 않는다. 그 화면은
  * 이 시스템에서 실패가 아니라 기능이므로 도달 경로를 좁히면 안 된다. */
+/* 검색과 같은 규칙: 종류 코드 또는 COMMON이고, mes_equipment_id가 있으면 그 설비만. */
+function cardApplies(card, eq) {
+  if (card.equipment !== 'COMMON' && EQUIPMENT_TYPES.indexOf(card.equipment) === -1) return false;
+  if (card.equipment !== 'COMMON' && card.equipment !== eq.type) return false;
+  if (card.mes_equipment_id && card.mes_equipment_id !== eq.equipment_id) return false;
+  return true;
+}
+
 function symptomsFor(eq) {
   const out = [];
   S.cards.forEach((c) => {
-    if ((c.equipment_ids || []).indexOf(eq.equipment_id) === -1) return;
+    if (!cardApplies(c, eq)) return;
     const s = (c.symptom || '').trim();
     if (s && out.indexOf(s) === -1) out.push(s);
   });
@@ -508,20 +516,23 @@ function renderSymptoms() {
 // ── 조건 평가 ──────────────────────────────────────────────────────
 function cmp(op, a, b) {
   switch (op) {
-    case 'gte': return a >= b; case 'gt': return a > b;
-    case 'lte': return a <= b; case 'lt': return a < b;
-    case 'eq': return a === b;
-    case 'in': return Array.isArray(b) && b.indexOf(a) !== -1;
-    default: return false;
+    case '==': return a === b;
+    case '!=': return a !== b;
+    case '>': return a > b;
+    case '>=': return a >= b;
+    case '<': return a < b;
+    case '<=': return a <= b;
+    default: return null;
   }
 }
-const OPTXT = { gte:'≥', gt:'>', lte:'≤', lt:'<', eq:'=' };
+const OPTXT = { '==':'=', '!=':'≠', '>':'>', '>=':'≥', '<':'<', '<=':'≤' };
 
 /* 관측값이 없으면 "일치"로 속이지 않고 미평가로 남긴다. */
 function evalCondition(c) {
   const obs = S.observations.find((o) => o.signal === c.signal);
   if (!obs) return { state:'unknown', text: c.signal + ' — 관측값 없음' };
   const ok = cmp(c.op, obs.value, c.value);
+  if (ok === null) return { state:'unknown', text: c.signal + ' — 연산자 ' + c.op };
   const sym = OPTXT[c.op] || c.op;
   return {
     state: ok ? 'match' : 'miss',
@@ -544,7 +555,7 @@ function queryPayload() {
 }
 
 function rankCards(eq) {
-  const hits = S.cards.filter((c) => (c.equipment_ids || []).indexOf(eq.equipment_id) !== -1);
+  const hits = S.cards.filter((c) => cardApplies(c, eq));
   const safety = hits.filter((c) => c.safety_flag === true);
   const rest = hits.filter((c) => c.safety_flag !== true);
 
@@ -982,11 +993,37 @@ on('hoSave', () => {
 
 $('question').addEventListener('input', renderAskBlock);
 $('obsSignal').addEventListener('change', renderObsRange);
+function putObservation(signal, unit, value) {
+  const i = S.observations.findIndex((o) => o.signal === signal);
+  const row = { signal: signal, unit: unit, value: value };
+  if (i < 0) S.observations.push(row);
+  else S.observations[i] = row;
+}
+
+/* card_adapter와 같이 정상 범위 밖은 low/high, 안은 normal. 끝값은 정상이다. bool은 0/1만. */
+function derivedState(meta, value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (meta.unit === 'bool' && value !== 0 && value !== 1) return null;
+  if (meta.min == null && meta.max == null) return null;
+  if (meta.min != null && value < meta.min) return 'low';
+  if (meta.max != null && value > meta.max) return 'high';
+  return 'normal';
+}
+
 on('obsAdd', () => {
   const sel = $('obsSignal'), val = $('obsValue');
   if (!sel.value || val.value === '') return;
   const meta = S.eq.signals.find((x) => x.signal === sel.value) || { unit: '' };
-  S.observations.push({ signal: sel.value, unit: meta.unit, value: Number(val.value) });
+  const value = Number(val.value);
+  if (!Number.isFinite(value)) return;
+  if (meta.unit === 'bool' && value !== 0 && value !== 1) return;
+  putObservation(sel.value, meta.unit, value);
+  const state = derivedState(meta, value);
+  if (state) putObservation(sel.value + '_state', '', state);
+  else {
+    const j = S.observations.findIndex((o) => o.signal === sel.value + '_state');
+    if (j >= 0) S.observations.splice(j, 1);
+  }
   val.value = ''; renderObsList();
 });
 

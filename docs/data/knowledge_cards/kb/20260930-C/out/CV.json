@@ -6,8 +6,6 @@
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동부",
-  "mes_equipment_id": "EQ-0009",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "벨트 장력 < 380 kPa에서 미끄럼의 실제 느슨함 여부에 따라 조치를 나눈다",
   "symptom": "운전 지시가 있는 컨베이어에서 벨트가 미끄러지거나 돌지 않는다.",
@@ -62,7 +60,9 @@
    "generalization_scope": "일반 벨트 컨베이어의 미끄럼·미회전 증상 확인에 한정한다. 원문 모델의 길이 조정 방법을 CV-01 확정 절차로 옮기지 않는다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null
  },
  {
   "card_id": "K-1205",
@@ -71,8 +71,6 @@
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동 롤러",
-  "mes_equipment_id": "EQ-0009",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "벨트 장력 380–460 kPa(가상 정상 범위)인데 이송량이 줄면 벨트와 롤러 표면 상태를 나눈다",
   "symptom": "운전 중 이송 능력이 떨어졌으며 cv_belt_tension은 380–460 kPa(가상 정상 범위)이다.",
@@ -127,7 +125,9 @@
    "generalization_scope": "Low conveying capacity 증상이 별도로 확인된 일반 벨트 컨베이어에 한정한다. V-belt와 래깅 구조가 없는 CV-01에는 해당 교체 항목을 적용하지 않는다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null
  },
  {
   "card_id": "K-1206",
@@ -136,8 +136,6 @@
   "tacit_type": "T2",
   "equipment": "CV",
   "component": "벨트·구동 영역",
-  "mes_equipment_id": "EQ-0009",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "벨트 속도 < 10 m_min·대기열 > 70 pct에서는 실제 막힘과 느린 벨트를 구분한다",
   "symptom": "운전 지시가 있는데 벨트가 느리고 이송물이 쌓인다.",
@@ -198,6 +196,8 @@
    "generalization_scope": "CV-01에 운전 지시가 있고 실제 느린 이송 또는 끼임이 확인된 경우의 확인 경로다. cv_queue_len은 적체 위치·원인 판정값이 아니다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0009",
+  "mes_component_code": null
  }
 ]

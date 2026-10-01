@@ -313,6 +313,8 @@ def validate(config: Configuration) -> list[str]:
     eq_by_id = {e.equipment_id: e for e in config.equipment}
 
     for eq in config.equipment:
+        if not isinstance(eq.coil_capacity, int) or isinstance(eq.coil_capacity, bool) or eq.coil_capacity < 1:
+            errors.append(f"{eq.equipment_id}: coil_capacity must be a positive integer")
         sig_names = [s.signal for s in eq.signals]
         if len(sig_names) != len(set(sig_names)):
             errors.append(f"Duplicate signal in {eq.equipment_id}")
@@ -343,6 +345,14 @@ def validate(config: Configuration) -> list[str]:
         for sig in eq.signals:
             if not sig.unit:
                 errors.append(f"{eq.equipment_id}.{sig.signal}: missing unit")
+            if not isinstance(sig.semantics, dict):
+                errors.append(f"{eq.equipment_id}.{sig.signal}: semantics must be an object")
+            elif sig.semantics:
+                fields = ('acquisition', 'location', 'reference', 'applicability', 'model')
+                if any(not isinstance(sig.semantics.get(k), str) or not sig.semantics[k].strip() for k in fields):
+                    errors.append(f"{eq.equipment_id}.{sig.signal}: incomplete semantics")
+                if sig.semantics.get('acquisition') not in ('continuous', 'derived', 'event', 'manual_sample'):
+                    errors.append(f"{eq.equipment_id}.{sig.signal}: unknown acquisition")
 
     # Relation references must exist.
     for rel in config.relations + config.branches:
@@ -466,6 +476,12 @@ def diff(old: Configuration, new: Configuration) -> dict[str, list[dict[str, Any
                     "old_unit": old_sigs[sig_id].unit,
                     "new_unit": new_sigs[sig_id].unit
                 })
+            elif old_sigs[sig_id] != new_sigs[sig_id]:
+                from dataclasses import asdict
+                changes["signal_changed"].append({
+                    "equipment_id": eq_id, "signal": sig_id, "change": "definition",
+                    "old": asdict(old_sigs[sig_id]), "new": asdict(new_sigs[sig_id])
+                })
 
     # Route and layout changes.
     if old.route != new.route:
@@ -524,7 +540,8 @@ def to_payload(config: Configuration) -> dict[str, Any]:
                         "normal_min": s.normal_min,
                         "normal_max": s.normal_max,
                         "required": s.required,
-                        "zero_when_stopped": s.zero_when_stopped
+                        "zero_when_stopped": s.zero_when_stopped,
+                        **({"semantics": s.semantics} if s.semantics else {})
                     }
                     for s in e.signals
                 ],

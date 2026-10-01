@@ -1,18 +1,18 @@
 # KB-20260930-C 검수표
 
-A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `rejected` / `수정`을 기록하고 판정 근거를 남긴다. 사람 판정은 미정이며 이 문서를 작성하거나 재생성해도 카드 상태·등급은 자동 변경하지 않는다. 출처·계보·편입 게이트는 별도 검수 대상이다.
+A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `rejected` / `수정`을 기록하고 판정 근거를 남긴다. 현재 accepted/L1 카드는 19장이다. 이 문서를 작성하거나 재생성해도 카드 상태·등급은 자동 변경하지 않는다. 출처·계보 게이트와 요청에 따른 승격은 [승격 기록](l1-promotion-20261001.json)에서 구분한다.
 
 ## K-1201 · HPU · T2 — 필터 차압 > 1.2 bar에서 설치된 막힘 표시기 종류에 따라 확인 위치를 나눈다
 
 - **부품**: 필터 막힘 표시기
-- **증상**: hpu_filter_dp > 1.2 bar(가상 정상 범위 0–1.2 bar)이며 실제 막힘 표시 확인이 필요하다.
-- **노하우**: 필터 차압 > 1.2 bar는 표시기 확인을 시작하는 신호로만 쓴다. 대상 필터에 광학식 막힘 표시기가 설치되어 있으면 해당 표시기의 막힘 표시를 확인한다. 전기식 표시기가 설치되어 있으면 제어반에 직접 표시되는 고장 신호를 확인한다. 어느 표시기가 설치되어 있는지 확인되지 않으면 설비 담당자에게 표시기 사양을 확인하고 차압 값만으로 막힘이나 교체를 확정하지 않는다. 전기식 표시기에 차단 시퀀스를 설정할 수 있다는 원문 설명은 해당 HPU에 시퀀스가 구현되어 있다는 뜻이 아니다. 검색 관측 기준: hpu_filter_dp > 1.2 bar(가상 정상 범위 0.0–1.2 bar). 이 수치는 기본 가상 MES의 정상 범위 경계이며 제조사 고장·작업 기준이 아니다. 해당 run의 config_id·신호 단위·quality=good을 확인하고, 실제 계측과 대상 모델 기준을 별도로 대조한다.
-- **근거 설명**: MAN-C-012 §1.10은 optical/electrical clogging indicators를 구분하고 전기식 표시기의 고장 신호는 제어반에 직접 표시된다고 설명한다. 표시기 종류별 확인 위치만 요약한다. 저온과 차압을 인과관계로 묶을 근거가 없어 온도 예시를 대체했다.
+- **증상**: hpu_filter_dp > 1.2 bar(MES 정상 범위 0–1.2 bar)이며 실제 막힘 표시 확인이 필요하다.
+- **노하우**: 필터 차압 > 1.2 bar는 표시기 확인을 시작하는 신호로만 쓴다. 대상 필터에 광학식 막힘 표시기가 설치되어 있으면 해당 표시기의 막힘 표시를 확인한다. 전기식 표시기가 설치되어 있으면 제어반에 직접 표시되는 고장 신호를 확인한다. 어느 표시기가 설치되어 있는지 확인되지 않으면 설비 담당자에게 표시기 사양을 확인하고 차압 값만으로 막힘이나 교체를 확정하지 않는다. 전기식 표시기에 차단 시퀀스를 설정할 수 있다는 원문 설명은 해당 HPU에 시퀀스가 구현되어 있다는 뜻이 아니다. 검색 관측 기준: hpu_filter_dp > 1.2 bar(MES 정상 범위 0.0–1.2 bar). 이 수치는 기본 MES의 정상 범위 경계이며 제조사 고장·작업 기준이 아니다. 해당 run의 config_id·신호 단위·quality=good을 확인하고, 실제 계측과 대상 모델 기준을 별도로 대조한다. 시연용 비교 예시는 차압 1.5 bar >1.2 bar이며 실제 사건 관측값이 아닌 시연용 가정이다. 1.2 bar는 정상에 포함된다. 원문이 요구하는 표시기 확인 주기는 최소 주 1회이며, 이를 표시기의 차압 설정값으로 해석하지 않는다.
+- **근거 설명**: MAN-C-012 §1.10은 optical/electrical clogging indicators를 구분하고 전기식 표시기의 고장 신호는 제어반에 직접 표시된다고 설명한다. 표시기 종류별 확인 위치만 요약한다. 저온과 차압을 인과관계로 묶을 근거가 없어 온도 예시를 대체했다. 원문 PDF p.6/인쇄 p.7에서 표시기 확인 최소 주 1회도 확인했다. 1.5 bar 예시는 프로젝트 지정값이며 제조사 표시기 작동압이 아니다.
 - **조건**: `hpu_filter_dp_state == high`
 - **출처**: M-C-006 — MAN-C-012.pdf | PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 검토자: 유현준, 검토일: 2026-10-01. 승인 범위: 이 검수표의 MES 수치 표현·단위·상태 경계 및 적용 한계. 기준정보의 measurement_points와 가상 MES 신호 사전, 보강 신호 정의를 대조했다. 양끝 포함·측정 위치 구분·미확인 기준 보류를 확인했다. 현장 실측·모델 적합성·작업 안전 승인과 카드 JSON 전체 승인 상태 변경은 포함하지 않는다.
 
 ## K-1202 · HPU · T2 — 필터 차압 > 1.2 bar 후 실제 교체 표시가 있으면 정기 교체 시점과 별도로 처리한다
 
@@ -23,8 +23,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `hpu_filter_dp_state == high`
 - **출처**: M-C-006 — MAN-C-012.pdf | PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. §1.10: 표시기가 교체를 가리킬 때마다 교체, 그렇지 않아도 최소 연 1회 권고. 카드가 그 둘을 나눈다. G7: 1.2 bar는 가상 경계이며 표시기 임계값을 대체하지 않는다고 적었다.
 
 ## K-1203 · HPU · T2 — 압력 이상 여부에 따라 릴리프 설정과 유량 확인 경로를 나눈다
 
@@ -35,8 +35,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `hpu_pressure_state == low`
 - **출처**: M-C-001 — 100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf | PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps, 출구 압력 있음 분기
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. Algo A.1 PDF p.17 출구 압력 있음 쪽: 정상 작업압이 아니면 릴리프 설정, 동작 중이면 멈춘 뒤 압력, 유량 부족이면 출구 유량계, 펌프 유량이 아니면 릴리프 탱크 라인 유무로 릴리프 또는 펌프. G7: 145–165 bar, 38–46 L/min은 기준정보와 같고 원문 작업압이 아니라고 밝혔다. 무압력 분기의 진공 5 inHg는 이 카드에 넣지 않았다.
 
 ## K-1204 · CV · T2 · ⚠ 안전 — 벨트 장력 < 380 kPa에서 미끄럼의 실제 느슨함 여부에 따라 조치를 나눈다
 
@@ -48,8 +48,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `cv_belt_tension_state == low`
 - **출처**: M-C-004 — Convey-All-TroubleshootingGuide.pdf | PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping; M-C-007 — conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. G4 수정 반영. 증상을 장력 380 kPa 미만에서 느슨함·늘어남·이물질·고착 베어링을 나누는 범위로 좁혔다. Convey-All p.1의 호퍼 플래싱·동결·무전원·유압·펌프·모터는 이 카드 밖이다. 380–460 kPa는 기준정보 벨트 장력과 같고 이 범위를 판정 기준으로 쓴다.
 
 ## K-1205 · CV · T2 · ⚠ 안전 — 벨트 장력 380–460 kPa(가상 정상 범위)인데 이송량이 줄면 벨트와 롤러 표면 상태를 나눈다
 
@@ -61,8 +61,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `cv_belt_tension_state == normal`
 - **출처**: M-C-004 — Convey-All-TroubleshootingGuide.pdf | PDF p.2 / General Conveyor / Low conveying capacity; M-C-007 — conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. Convey-All PDF p.2 Low conveying capacity: 벨트 미끄럼→장력·정렬, 구동 롤러 마모·미끄럼→V-belt 교체, 래깅 마모→롤러 교체 또는 재래깅. 세 갈래가 카드와 같다. G7: 380–460 kPa는 정상 범위이고 구동 정상으로 보지 않는다고 적었다.
 
 ## K-1206 · CV · T2 · ⚠ 안전 — 벨트 속도 < 10 m_min·대기열 > 70 pct에서는 실제 막힘과 느린 벨트를 구분한다
 
@@ -75,8 +75,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `cv_queue_len_state == high`
 - **출처**: M-C-007 — conveyor-manual-0323-en.pdf | PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy; M-C-007 — conveyor-manual-0323-en.pdf | PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. MISUMI PDF p.11 §3.2.2: 고장 시 즉시 정지, 끼인 물은 도구로 제거하고 맨손 금지. PDF p.70 §10.3 Belt moving slower: 구동부 먼지, 벨트 마모 시 교체. 대기열 숫자와 속도의 인과는 원문에 없고 카드도 만들지 않았다. G7: 10–60 m/min, 0–70 %는 기준정보와 같다.
 
 ## K-1207 · RT · T2 · ⚠ 안전 — 반송 속도 < 20 m_min에서는 롤러 미기동과 물품 미이송을 구분한다
 
@@ -88,8 +88,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `rt_speed_state == low`
 - **출처**: M-C-002 — 1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. Interroll PDF p.51: RollerDrive 미기동은 주 스위치·제어, 전원선, RollerDrive 고장. 물품 미이송은 PolyVee, 허용중량, MultiControl. 중량 초과는 두 번째 항목이다. 안전 문구(전원 차단, 전기는 훈련된 담당)도 같은 쪽이다. G7: 20–120 m/min은 기준정보 반송 속도다.
 
 ## K-1208 · RT · T2 · ⚠ 안전 — 전류 > 16 A(가상 정상 범위 8–16 A)에서는 실제 과전류 차단과 이송중량 초과를 먼저 구분한다
 
@@ -101,8 +101,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `rt_motor_current_state == high`
 - **출처**: M-C-002 — 1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF p.52 / 인쇄 p.52 / Troubleshooting: Motor circuit breaker is triggered due to excessive current consumption; M-C-002 — 1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF p.51 / 인쇄 p.51 / Troubleshooting: In case of a fault (전원 차단·우발 기동 방지·전기 담당 자격)
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. Interroll PDF p.52: 과전류로 차단기가 동작한 경우 원인은 단락 또는 이송중량 초과. 카드는 가상 전류만으로 차단을 확정하지 않고 두 원인을 배타로 보지 않는다. G7: 8–16 A는 기준정보 모터 전류이며 제조사 전류 한계가 아니다.
 
 ## K-1209 · GR · T2 · ⚠ 안전 — 진동 RMS > 2.8 mm_s(가상 정상 범위 0.5–2.8 mm_s)에서 베어링 온도 동반 여부에 따라 추가 확인을 나눈다
 
@@ -114,8 +114,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `gr_vib_rms_state == high`
 - **출처**: M-C-003 — 26867443.pdf | PDF p.5 / Safety notes / Startup/operation; M-C-003 — 26867443.pdf | PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. 정지·원인 확인은 이미 accepted인 K-1024(같은 PDF p.5)와 같고, 갈림·두드림·불규칙 소음 분기는 K-1026·K-1028(p.45)과 같다. 베어링 온도 30–62 °C, 진동 0.5–2.8 mm/s는 기준정보와 같으며 이 범위를 판정 기준으로 쓴다. 온도가 정상 범위여도 새 진동을 정상으로 보지 않는다.
 
 ## K-1210 · GR · T2 · ⚠ 안전 — 베어링 온도 > 62 degC(가상 정상 범위 30–62 degC)에서는 확인된 유면과 오일 이력에 따라 조치를 나눈다
 
@@ -127,8 +127,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **조건**: `gr_brg_temp_state == high`
 - **출처**: M-C-003 — 26867443.pdf | PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions; M-C-003 — 26867443.pdf | PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level
 - **작성 노트**: 근거 사건: -; 재가동 유형: -; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/T2.md@sha256:4c4023b9a29976e399639d538fbb263814da95bd845f7148504fec1124d703be`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. 유면·오일 이력·베어링 분기와 냉각 후 점검은 이미 accepted인 K-1025(같은 PDF p.45 §9.1, p.42 §8.3)와 같다. 62 °C·30–62 °C는 기준정보 베어링 온도와 같고 이 범위를 판정 기준으로 쓴다. 전류로 과부하를 추정하지 않는다.
 
 ## K-1211 · HPU · T6 · ⚠ 안전 — 필터·오일 정비 후 압력 152 bar가 정상 범위여도 유량 34 L_min·기포·소음을 함께 확인한다
 
@@ -138,8 +138,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0401 — AR-0401 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0402 — AR-0402 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0401 — EV-0401 | restart_attempts: AT-4001; SC-C-AR-0403 — AR-0403 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0404 — AR-0404 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0402 — EV-0402 | restart_attempts: AT-4004; M-C-005 — HY29-0022-UK.pdf | PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1
 - **작성 노트**: 근거 사건: EV-0401, EV-0402; 재가동 유형: maintenance_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: 최재영 2026-10-01. kb_events EV-0401/0402 시험기동 관측 152 bar·34 L/min·기포·소음과 같다. 145–165 bar, 38–46 L/min은 기준정보다. 152 bar를 재가동 허가로 쓰지 않는다. HY29 p.6·p.24는 배경으로만 인용했다.
 
 ## K-1212 · GR · T6 · ⚠ 안전 — 오일 교환 후에는 주입량 기록과 실제 유면을 대조하고 시험운전 관측을 남긴다
 
@@ -149,8 +149,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0405 — AR-0405 | EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0406 — AR-0406 | EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0403 — EV-0403 | restart_attempts: AT-4007; SC-C-AR-0407 — AR-0407 | EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0408 — AR-0408 | EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0404 — EV-0404 | restart_attempts: AT-4010; M-C-003 — 26867443.pdf | PDF/인쇄 p.39~40 및 p.42~43 / §7.1 Startup 및 §8.3 Checking the oil level / Changing the oil
 - **작성 노트**: 근거 사건: EV-0403, EV-0404; 재가동 유형: maintenance_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1213 · CV · T6 · ⚠ 안전 — 벨트 정비 후 장력 420 kPa가 정상 범위여도 시험운전의 편주를 확인한다
 
@@ -160,8 +160,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0409 — AR-0409 | EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0410 — AR-0410 | EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0405 — EV-0405 | restart_attempts: AT-4013; SC-C-AR-0411 — AR-0411 | EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0412 — AR-0412 | EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0406 — EV-0406 | restart_attempts: AT-4016; M-C-007 — conveyor-manual-0323-en.pdf | PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5
 - **작성 노트**: 근거 사건: EV-0405, EV-0406; 재가동 유형: maintenance_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1214 · RT · T6 · ⚠ 안전 — RT 정비 완료와 재가동 승인을 구분하고 방호·작업구역 복구를 확인한다
 
@@ -171,8 +171,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0413 — AR-0413 | EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0414 — AR-0414 | EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0407 — EV-0407 | restart_attempts: AT-4019; SC-C-AR-0415 — AR-0415 | EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-AR-0416 — AR-0416 | EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인; SC-C-EV-0408 — EV-0408 | restart_attempts: AT-4022; M-C-002 — 1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF/인쇄 35~36쪽, Initial startup / Before every operation start
 - **작성 노트**: 근거 사건: EV-0407, EV-0408; 재가동 유형: maintenance_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1215 · CV · T6 · ⚠ 안전 — CV 비상정지 표시가 풀려도 걸림 제거·기능시험 기록이 없으면 복귀를 보류한다
 
@@ -182,8 +182,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0417 — AR-0417 | EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0418 — AR-0418 | EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0409 — EV-0409 | restart_attempts: AT-4025; SC-C-AR-0419 — AR-0419 | EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0420 — AR-0420 | EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0410 — EV-0410 | restart_attempts: AT-4028; M-C-007 — conveyor-manual-0323-en.pdf | PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions
 - **작성 노트**: 근거 사건: EV-0409, EV-0410; 재가동 유형: abnormal_stop_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1216 · GR · T6 · ⚠ 안전 — 정지 전 75 degC에서 냉각 후 49 degC로 변해도 원인 확인과 재가동 관측을 생략하지 않는다
 
@@ -193,8 +193,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0421 — AR-0421 | EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0422 — AR-0422 | EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0411 — EV-0411 | restart_attempts: AT-4031; SC-C-AR-0423 — AR-0423 | EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0424 — AR-0424 | EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0412 — EV-0412 | restart_attempts: AT-4034; M-C-003 — 26867443.pdf | PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high
 - **작성 노트**: 근거 사건: EV-0411, EV-0412; 재가동 유형: abnormal_stop_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1217 · RT · T6 · ⚠ 안전 — RT 인터록 정지 후에는 해제 표시와 작동 조건 해소·승인을 각각 확인한다
 
@@ -204,8 +204,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0425 — AR-0425 | EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0426 — AR-0426 | EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0413 — EV-0413 | restart_attempts: AT-4037; SC-C-AR-0427 — AR-0427 | EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0428 — AR-0428 | EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0414 — EV-0414 | restart_attempts: AT-4040; M-C-002 — 1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf | PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault
 - **작성 노트**: 근거 사건: EV-0413, EV-0414; 재가동 유형: abnormal_stop_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1218 · HPU · T6 · ⚠ 안전 — HPU 유온 < 35 degC 기동은 유온만으로 복귀를 정하지 않고 오일 적합성·흡입 조건을 확인한다
 
@@ -215,8 +215,8 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0401 — AR-0401 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0402 — AR-0402 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0401 — EV-0401 | restart_attempts: AT-4002; SC-C-AR-0429 — AR-0429 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0430 — AR-0430 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0415 — EV-0415 | restart_attempts: AT-4043; M-C-005 — HY29-0022-UK.pdf | PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure
 - **작성 노트**: 근거 사건: EV-0401, EV-0415; 재가동 유형: normal_stop_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -
 
 ## K-1219 · GR · T6 · ⚠ 안전 — 30일 정상정지 뒤에는 이전 운전 성공과 별도로 유면·윤활 준비를 다시 확인한다
 
@@ -226,5 +226,5 @@ A 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `re
 - **안전 근거**: 정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.
 - **출처**: SC-C-AR-0405 — AR-0405 | EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0406 — AR-0406 | EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0403 — EV-0403 | restart_attempts: AT-4008; SC-C-AR-0407 — AR-0407 | EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-AR-0408 — AR-0408 | EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인; SC-C-EV-0404 — EV-0404 | restart_attempts: AT-4011; M-C-003 — 26867443.pdf | PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation
 - **작성 노트**: 근거 사건: EV-0403, EV-0404; 재가동 유형: normal_stop_restart; 프롬프트: `docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c`; 정책 연결: `docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d` · [카드별 보완 항목](policy_manifest.json); 독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)
-- **판정**:
-- **판정 근거**:
+- **판정**: accepted
+- **판정 근거**: -

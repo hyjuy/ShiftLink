@@ -2,7 +2,7 @@
  {
   "card_id": "K-1211",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "HPU",
   "component": "필터·오일 정비 후 유압 회로",
@@ -71,7 +71,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "maintenance_restart",
    "tried_and_failed": [
@@ -128,7 +128,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0001",
   "mes_component_code": null
@@ -136,7 +136,7 @@
  {
   "card_id": "K-1212",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "GR",
   "component": "오일 교환 후 감속기",
@@ -205,7 +205,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "maintenance_restart",
    "tried_and_failed": [
@@ -262,7 +262,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0004의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0004",
   "mes_component_code": null
@@ -270,7 +270,7 @@
  {
   "card_id": "K-1213",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "CV",
   "component": "벨트 정비 후 컨베이어",
@@ -339,7 +339,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "maintenance_restart",
    "tried_and_failed": [
@@ -396,7 +396,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0009의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 원문 §8.3의 운전 중 정렬 조정은 이 카드에 이전하지 않았다. 이 카드는 승인된 시험운전 관찰·정지·담당자 보고만 다룬다. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0405)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0405)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0009",
   "mes_component_code": null
@@ -404,7 +404,7 @@
  {
   "card_id": "K-1214",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "RT",
   "component": "반송부 정비 복귀",
@@ -473,7 +473,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "maintenance_restart",
    "tried_and_failed": [
@@ -530,7 +530,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0008의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0407)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0407)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0008",
   "mes_component_code": null
@@ -538,7 +538,7 @@
  {
   "card_id": "K-1215",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "CV",
   "component": "비상정지 후 컨베이어",
@@ -607,7 +607,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "abnormal_stop_restart",
    "tried_and_failed": [
@@ -664,7 +664,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0009의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0409)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0409)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0009",
   "mes_component_code": null
@@ -672,7 +672,7 @@
  {
   "card_id": "K-1216",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "GR",
   "component": "과열 정지 후 감속기",
@@ -741,7 +741,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "abnormal_stop_restart",
    "tried_and_failed": [
@@ -798,7 +798,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0004의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0411)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0411)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0004",
   "mes_component_code": null
@@ -806,7 +806,7 @@
  {
   "card_id": "K-1217",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "RT",
   "component": "인터록 정지 후 반송부",
@@ -875,7 +875,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "abnormal_stop_restart",
    "tried_and_failed": [
@@ -932,7 +932,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0008의 abnormal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0413)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0413)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0008",
   "mes_component_code": null
@@ -940,7 +940,7 @@
  {
   "card_id": "K-1218",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "HPU",
   "component": "정상정지 후 저온 기동",
@@ -1009,7 +1009,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "normal_stop_restart",
    "tried_and_failed": [
@@ -1066,7 +1066,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0001",
   "mes_component_code": null
@@ -1074,7 +1074,7 @@
  {
   "card_id": "K-1219",
   "version": "1.0-draft-KB-20260930-C",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T6",
   "equipment": "GR",
   "component": "장기 정상정지 후 감속기",
@@ -1143,7 +1143,7 @@
    "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "restart_type": "normal_stop_restart",
    "tried_and_failed": [
@@ -1200,7 +1200,7 @@
    ],
    "contradicting_event_ids": [],
    "generalization_scope": "EQ-0004의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
-   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증·사람 승인 없음; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+   "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0403)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
   },
   "mes_equipment_id": "EQ-0004",
   "mes_component_code": null

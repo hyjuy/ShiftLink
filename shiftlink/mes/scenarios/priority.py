@@ -8,6 +8,16 @@ PARKER = "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_
 SAP = "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-"
 
 PRIORITY_SCENARIOS = (
+    ScenarioSpec("hpu_accumulator_precharge", "hydraulic_supply", "", "", "",
+        (SignalEffect("hydraulic_supply", "hpu_accumulator_gas_pressure", 135),
+         SignalEffect("hydraulic_supply", "hpu_accumulator_fluid_pressure", 0),
+         SignalEffect("hydraulic_supply", "hpu_pressure", 0)), title="축압기 유체 배출 후 프리차지 측정 (가상)"),
+    ScenarioSpec("air_nozzle_overpressure", "pneumatic_supply", "", "", "AL-SENSOR-ANOMALY",
+        (SignalEffect("pneumatic_supply", "air_nozzle_pressure", 0.25),), title="공기분사기 유출 압력 초과 (가상)"),
+    ScenarioSpec("hpu_no_outlet_pressure", "hydraulic_supply", "", "", "AL-SENSOR-ANOMALY",
+        (SignalEffect("hydraulic_supply", "hpu_pump_outlet_pressure", 0),), title="펌프 출구 무압 관측 (가상)"),
+    ScenarioSpec("hpu_high_viscosity", "hydraulic_supply", "", "", "AL-SENSOR-ANOMALY",
+        (SignalEffect("hydraulic_supply", "fluid_viscosity", 2500),), title="작동유 점도 2000 cSt 초과 (가상)"),
     # Synthetic observation fixtures; not OEM fault limits or maintenance procedures.
     ScenarioSpec("cau_supply_fault", "pneumatic_supply", "pneumatic_supply", "pneumatic_supply_low", "AL-AIR-LOW",
         (SignalEffect("pneumatic_supply", "air_pressure", 450),
@@ -54,19 +64,39 @@ COMPONENTS = {
 # Demo-only nominal bands. These are observation channels, not field limits.
 ADDITIONAL_SIGNALS = {
     "HPU": (
+        SignalSpec("hpu_pump_outlet_pressure", "펌프 출구 압력", "bar", 145, 165),
+        SignalSpec("fluid_viscosity", "작동유 동점도", "cSt", 20, 100),
         SignalSpec("hpu_oil_level", "유압유 탱크 유면", "pct", 70, 100),
         SignalSpec("hpu_pump_current", "유압 펌프 전류", "A", 15, 25),
+        # Card-specific locations; demo bands, separate from bulk HPU readings.
+        SignalSpec("hpu_cooler_oil_in_temp", "냉각기 오일 입구 온도", "degC", 35, 58),
+        SignalSpec("hpu_cooler_oil_out_temp", "냉각기 오일 출구 온도", "degC", 35, 58),
+        SignalSpec("hpu_cooler_water_in_temp", "냉각수 입구 온도", "degC", 15, 30),
+        SignalSpec("hpu_cooler_water_out_temp", "냉각수 출구 온도", "degC", 20, 40),
+        SignalSpec("hpu_cooler_oil_flow", "냉각기 통과 오일 유량", "L_min", 38, 46),
+        SignalSpec("hpu_accumulator_gas_pressure", "축압기 가스측 운전 압력", "bar", 145, 165),
+        SignalSpec("hpu_accumulator_fluid_pressure", "축압기 유체측 압력", "bar", 145, 165),
+        SignalSpec("hpu_return_submergence", "리턴 라인 유면 아래 잠김 깊이", "mm", 100, 200),
+        SignalSpec("hpu_suction_head", "유면과 흡입 위치 높이차", "mm", 100, 200),
     ),
     "PDP": (
+        SignalSpec("breaker_pole_l1_temp", "차단기 L1극 표면 온도", "degC", 30, 45),
+        SignalSpec("breaker_pole_l2_temp", "차단기 L2극 표면 온도", "degC", 30, 45),
+        SignalSpec("breaker_pole_l3_temp", "차단기 L3극 표면 온도", "degC", 30, 45),
         SignalSpec("bus_current", "배전반 전류", "A", 20, 40),
         SignalSpec("breaker_trip", "차단기 트립 (0 정상 / 1 트립)", "bool", 0, 0),
     ),
     "CAU": (
+        SignalSpec("compressor_discharge_temp", "압축기 토출 온도", "degC", 70, 90),
+        SignalSpec("compressor_separator_dp", "유분리기 차압", "bar", 0, 0.8),
+        SignalSpec("air_nozzle_pressure", "공기분사기 유출 압력", "MPa", 0.1, 0.2),
         SignalSpec("air_flow", "압축공기 유량", "L_min", 100, 150),
         SignalSpec("compressor_current", "압축기 전류", "A", 8, 16),
     ),
     "GR": (
+        SignalSpec("gr_oil_water_content", "감속기 오일 수분 함량", "ppm", 0, 300),
         SignalSpec("gr_oil_level", "감속기 오일 레벨", "pct", 70, 100),
+        SignalSpec("gr_surface_temp", "감속기 표면 온도", "degC", 20, 40),
         SignalSpec("gr_rpm", "감속기 회전속도", "rpm", 900, 1100, zero_when_stopped=True),
         SignalSpec("gr_oil_leak", "누유 감지 (0 없음 / 1 감지)", "bool", 0, 0),
     ),
@@ -76,13 +106,15 @@ ADDITIONAL_SIGNALS = {
     ),
     "CV": (
         SignalSpec("cv_speed", "컨베이어 속도", "m_min", 8, 12, zero_when_stopped=True),
+        SignalSpec("cv_idler_speed_ratio", "동일 조건 정상 대비 아이들러 회전 비율", "pct", 80, 100, zero_when_stopped=True),
         SignalSpec("cv_motor_current", "컨베이어 모터 전류", "A", 10, 20),
         SignalSpec("cv_vib_rms", "컨베이어 구동부 진동 RMS", "mm_s", 0.8, 1.8),
     ),
 }
 
 STOPPED_ZERO_SIGNALS = frozenset({
-    "hpu_flow", "hpu_pump_current", "air_flow", "compressor_current",
+    "hpu_flow", "hpu_pump_current", "hpu_cooler_oil_flow", "hpu_filter_dp",
+    "compressor_separator_dp", "air_flow", "compressor_current",
     "gr_vib_rms", "gr_current", "gr_rpm", "rt_speed", "rt_motor_current",
     "rt_vib_rms", "cv_speed", "cv_motor_current", "cv_vib_rms",
 })
@@ -117,6 +149,7 @@ def sensor_anomalies(equipment):
 def expand(config):
     """Add missing priority scenarios to the catalog baseline; preserve old run configs."""
     from ..configuration import finalize
+    from ..signal_semantics import definition
     existing = {s.scenario_id for s in config.scenarios}
     available = {cap for eq in config.equipment if eq.active for cap in eq.capabilities}
     additions = tuple(s for s in PRIORITY_SCENARIOS if s.scenario_id not in existing and s.cause_capability in available)
@@ -128,6 +161,15 @@ def expand(config):
         signals = tuple(replace(signal, zero_when_stopped=True)
                         if signal.signal in STOPPED_ZERO_SIGNALS and not signal.zero_when_stopped else signal
                         for signal in (*eq.signals, *added))
+        # Upgrade the old catalog's precharge-only band in the new run; stored
+        # configurations and explicitly customized bands remain independent.
+        if config.source == 'catalog' and config.version_label == 'baseline':
+            signals = tuple(replace(signal, name='축압기 가스측 운전 압력', normal_min=145, normal_max=165)
+                            if signal.signal == 'hpu_accumulator_gas_pressure'
+                            and not signal.semantics and (signal.normal_min, signal.normal_max) == (130, 140)
+                            else signal for signal in signals)
+        signals = tuple(replace(signal, semantics=definition(signal.signal))
+                        if not signal.semantics else signal for signal in signals)
         equipment.append(replace(eq, signals=signals))
     scenarios = config.scenarios + additions
     existing = {s.scenario_id for s in scenarios}

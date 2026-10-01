@@ -1,0 +1,238 @@
+{
+  "is_synthetic": true,
+  "config_id": "094ba088bb0f3f6f45bd84c5f4cfb357a124f496a2d38c932be1949aebf35157",
+  "run_id": "2239226fd5e54326ab6ea89f26613e15",
+  "seed": 3,
+  "observations": [
+    {
+      "card_id": "K-1001",
+      "equipment_id": "EQ-0001",
+      "signal": "hpu_pump_outlet_pressure",
+      "unit": "bar",
+      "normal_range": [
+        145,
+        165
+      ],
+      "normal_value": 155.557,
+      "anomaly_value": 0,
+      "quality": "good",
+      "scenario_id": "hpu_no_outlet_pressure",
+      "observed_at": "2026-10-01T00:00:01+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "펌프 출구, 체크밸브 앞",
+        "reference": "bar; 매니폴드 및 축압기 잔압 구간과 구분",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1007",
+      "equipment_id": "EQ-0001",
+      "signal": "fluid_viscosity",
+      "unit": "cSt",
+      "normal_range": [
+        20,
+        100
+      ],
+      "normal_value": 59.287,
+      "anomaly_value": 2500,
+      "quality": "good",
+      "scenario_id": "hpu_high_viscosity",
+      "observed_at": "2026-10-01T00:00:03+00:00",
+      "normal_observed_at": "2026-10-01T00:00:00+00:00",
+      "semantics": {
+        "acquisition": "manual_sample",
+        "location": "작동유 시료",
+        "reference": "cSt; 40 degC로 조건화한 동점도 시료의 시연값",
+        "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1029",
+      "equipment_id": "EQ-0004",
+      "signal": "gr_oil_water_content",
+      "unit": "ppm",
+      "normal_range": [
+        0,
+        300
+      ],
+      "normal_value": 154.017,
+      "anomaly_value": 375.0,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_water_content",
+      "observed_at": "2026-10-01T00:00:05+00:00",
+      "normal_observed_at": "2026-10-01T00:00:00+00:00",
+      "semantics": {
+        "acquisition": "manual_sample",
+        "location": "감속기 윤활유 시료",
+        "reference": "ppm; 윤활유 시료의 수분 함량",
+        "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1029",
+      "equipment_id": "EQ-0005",
+      "signal": "gr_oil_water_content",
+      "unit": "ppm",
+      "normal_range": [
+        0,
+        300
+      ],
+      "normal_value": 157.564,
+      "anomaly_value": 375.0,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_water_content",
+      "observed_at": "2026-10-01T00:00:07+00:00",
+      "normal_observed_at": "2026-10-01T00:00:00+00:00",
+      "semantics": {
+        "acquisition": "manual_sample",
+        "location": "감속기 윤활유 시료",
+        "reference": "ppm; 윤활유 시료의 수분 함량",
+        "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1311",
+      "equipment_id": "EQ-0003",
+      "signal": "compressor_discharge_temp",
+      "unit": "degC",
+      "normal_range": [
+        70,
+        90
+      ],
+      "normal_value": 80.097,
+      "anomaly_value": 112.5,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0003_compressor_discharge_temp",
+      "observed_at": "2026-10-01T00:00:09+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "압축기 토출부",
+        "reference": "degC; 벌크 토출 온도",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1312",
+      "equipment_id": "EQ-0003",
+      "signal": "compressor_separator_dp",
+      "unit": "bar",
+      "normal_range": [
+        0,
+        0.8
+      ],
+      "normal_value": 0.412,
+      "anomaly_value": 1.0,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0003_compressor_separator_dp",
+      "observed_at": "2026-10-01T00:00:11+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "압축기 유분리기 전후",
+        "reference": "bar; 운전 중 차압, 정지 시 0",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1315",
+      "equipment_id": "EQ-0002",
+      "signal": "breaker_pole_l1_temp",
+      "unit": "degC",
+      "normal_range": [
+        30,
+        45
+      ],
+      "normal_value": 37.361,
+      "anomaly_value": 56.25,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l1_temp",
+      "observed_at": "2026-10-01T00:00:13+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "차단기 L1극 외부 표면",
+        "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1315",
+      "equipment_id": "EQ-0002",
+      "signal": "breaker_pole_l2_temp",
+      "unit": "degC",
+      "normal_range": [
+        30,
+        45
+      ],
+      "normal_value": 37.672,
+      "anomaly_value": 56.25,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l2_temp",
+      "observed_at": "2026-10-01T00:00:15+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "차단기 L2극 외부 표면",
+        "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1315",
+      "equipment_id": "EQ-0002",
+      "signal": "breaker_pole_l3_temp",
+      "unit": "degC",
+      "normal_range": [
+        30,
+        45
+      ],
+      "normal_value": 37.979,
+      "anomaly_value": 56.25,
+      "quality": "good",
+      "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l3_temp",
+      "observed_at": "2026-10-01T00:00:17+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "차단기 L3극 외부 표면",
+        "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    },
+    {
+      "card_id": "K-1321",
+      "equipment_id": "EQ-0003",
+      "signal": "air_nozzle_pressure",
+      "unit": "MPa",
+      "normal_range": [
+        0.1,
+        0.2
+      ],
+      "normal_value": 0.152,
+      "anomaly_value": 0.25,
+      "quality": "good",
+      "scenario_id": "air_nozzle_overpressure",
+      "observed_at": "2026-10-01T00:00:19+00:00",
+      "normal_observed_at": "2026-10-01T00:00:01+00:00",
+      "semantics": {
+        "acquisition": "continuous",
+        "location": "레귤레이터 뒤 분사기 유출부",
+        "reference": "MPa; 공급 헤더 kPa와 위치·단위 구분",
+        "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+        "model": "synthetic_semantics_v1"
+      }
+    }
+  ]
+}

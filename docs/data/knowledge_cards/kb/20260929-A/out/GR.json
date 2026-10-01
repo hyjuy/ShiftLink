@@ -166,8 +166,8 @@
   "scenario": "S1",
   "title": "감속기 규칙적 이상음: 갈리는 소리는 베어링, 두드리는 소리는 치형을 의심한다",
   "symptom": "감속기에서 평소와 다른 규칙적인 운전음이 난다.",
-  "know_how": "규칙적인 이상음이 맞물림·갈리는(grinding) 소리면 베어링 손상을 의심하고 오일을 점검한 뒤 베어링을 교체한다. 두드리는(knocking) 소리면 기어 치형의 불규칙을 의심하고 고객 서비스에 문의한다.",
-  "rationale": "제조사 고장표가 규칙적 이상음을 소리의 성격에 따라 두 원인(베어링 손상, 치형 불규칙)과 각기 다른 조치로 나눈다.",
+  "know_how": "규칙적인 이상음이 맞물림·갈리는(grinding) 소리면 베어링 손상을 원인 후보로 의심한다. 원문 고장표의 조치는 오일 점검과 베어링 교체이며, 관측만으로 교체를 확정하지 않고 실제 손상 여부와 모델 지침을 정비 담당자가 확인한 뒤 교체 필요성을 판단한다. 두드리는(knocking) 소리면 기어 치형의 불규칙을 원인 후보로 의심하고 고객 서비스에 문의한다.",
+  "rationale": "제조사 고장표가 규칙적 이상음을 소리의 성격에 따라 두 원인(베어링 손상, 치형 불규칙)과 각기 다른 조치로 나눈다. 검토 보완: T1을 유지한다. grinding/knocking은 원인 후보를 구분하는 관측이며 실제 베어링 손상 확인과 교체 결정은 분리했다. 현장 모델의 적용성과 정비 판단을 확인한다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": false,
@@ -190,9 +190,9 @@
      "document_version": "SEW-EURODRIVE Installation and Operating Instructions - ML..2 & ML..V2 Series Helical and Bevel-Helical Gear Units, (c) 2021"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/GR.md@sha256:744fbbdd221d6aa2f68150b46a68a76f9d07287853585f87f81b73ceccc4cd47",
    "schema_version": "1.1"
   },
   "split": "kb",

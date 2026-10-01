@@ -65,6 +65,25 @@
     "K-1321",
     "K-1322"
    ]
+  },
+  "CAU-r4": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/CAU-r4.md",
+   "equipment": "CAU",
+   "round": 4,
+   "sha256": "9cb0743b67ea16ef53cf0e26ad8288792237546b1c071b738abbfe113cd983a2",
+   "card_ids": [
+    "K-1322",
+    "K-1323"
+   ]
+  },
+  "PDP-r4": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r4.md",
+   "equipment": "PDP",
+   "round": 4,
+   "sha256": "35202c98f400c62ef6fc7d5e482fb03bc7997e5c5cb89e0481146c22a5b0c6aa",
+   "card_ids": [
+    "K-1324"
+   ]
   }
  },
  "dispatch": {

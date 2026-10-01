@@ -2,7 +2,7 @@
  {
   "card_id": "K-1324",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "PDP",
   "component": "배전반 주차단기·분기 차단기",
@@ -41,7 +41,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {

@@ -330,13 +330,15 @@
   "question": "정전 끝나고 압축기 다시 살릴 때 순서 있어요?",
   "observations": {},
   "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
-  "answerable": false,
-  "primary_card_ids": [],
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1322"
+  ],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "CAU 정전 후 재기동 순서 카드 없음(K-1314는 정비 전 잠금·자동 재기동 주의). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "label_note": "10/1 배치 D 4차 K-1322(CAU 정전 후 재기동 확인 순서) 승격으로 답 있음으로 변경. 이전: CAU 정전 후 재기동 순서 카드 없음(K-1314는 정비 전 잠금·자동 재기동 주의). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -416,13 +418,15 @@
   "question": "정전 복구되면 차단기를 한꺼번에 올려요, 하나씩 올려요?",
   "observations": {},
   "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
-  "answerable": false,
-  "primary_card_ids": [],
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1324"
+  ],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "정전 복구 투입 순서 카드 없음(K-1307은 기동 시 전압 강하). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
+  "label_note": "10/1 배치 D 4차 K-1324(배전반 전원 투입 순서) 승격으로 답 있음으로 변경. 이전: 정전 복구 투입 순서 카드 없음(K-1307은 기동 시 전압 강하). 답 없음 확정(10/1 작성자 확인). 카드 공백 후보",
   "split": "blind"
  },
  {
@@ -490,13 +494,15 @@
   "question": "압축기 오일을 다른 회사 걸로 바꿔도 되나요?",
   "observations": {},
   "writer_note": "최재영 작성, 카드 미열람 상태로 작성했으나 배치 C·D 검수 경험 있음",
-  "answerable": false,
-  "primary_card_ids": [],
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1323"
+  ],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "medium",
-  "label_note": "윤활유 호환 카드 없음(K-1313은 교체 주기)",
+  "label_note": "10/1 배치 D 4차 K-1323(지정 외 윤활유 징후) 승격으로 답 있음으로 변경. 이전: 윤활유 호환 카드 없음(K-1313은 교체 주기)",
   "split": "blind"
  },
  {

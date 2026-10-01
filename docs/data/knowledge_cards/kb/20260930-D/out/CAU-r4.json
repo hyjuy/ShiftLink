@@ -2,7 +2,7 @@
  {
   "card_id": "K-1322",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T3",
   "equipment": "CAU",
   "component": "압축기 컨트롤러·기동 회로",
@@ -51,7 +51,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": {
    "steps": [
     {
@@ -106,15 +106,15 @@
  {
   "card_id": "K-1323",
   "version": "1.0-draft-KB-20260930-D",
-  "grade": "L0",
+  "grade": "L1",
   "tacit_type": "T1",
   "equipment": "CAU",
   "component": "압축기 윤활유(냉각유)",
   "mes_equipment_id": "EQ-0003",
   "mes_component_code": null,
   "scenario": "S1",
-  "title": "지정 외 윤활유를 쓰면 토출 고온·윤활유 소비 증가가 나타날 수 있다 — 유종 코드 확인, 제조사 지정 윤활유 사용",
-  "symptom": "다른 제조사·상표 오일 사용, 토출 고온, 윤활유 소비 증가, 윤활유 거품",
+  "title": "압축기에 지정 외 윤활유를 쓰면 토출 고온·윤활유 소비 증가가 나타날 수 있다 — 유종 코드 확인, 제조사 지정 윤활유 사용",
+  "symptom": "다른 회사·상표 오일 사용, 토출 고온, 윤활유 소비 증가, 윤활유 거품",
   "know_how": "급유식 스크루 압축기의 윤활유는 냉각·밀봉·윤활을 함께 맡는다. 제조사 고장 표는 토출 고온의 원인 중 하나로 잘못된 윤활유 상표를 들고 유종 코드를 확인해 필요하면 교체하라고 하며, 윤활유 소비 과다의 원인으로 다른 오일 사용을 들고 제조사 지정 윤활유를 쓰라고 한다. 윤활유에 거품이 나면 빼내고 교체한다. 그래서 보충·교체 때 다른 제조사·상표 오일로 바꾸지 말고 지정 유종 코드를 확인한다. 다른 제품의 호환 여부를 판단할 근거는 원문에 없으므로 바꾸려면 제조사나 지정 대리점에 확인한다.",
   "rationale": "Kaishan KRSP(V) 매뉴얼 p.9는 윤활유(fluid)가 냉각·밀봉·윤활 기능을 한다고 적는다. Table 8-1은 'High air discharge temperature'의 원인으로 'Incorrect fluid brand — Check oil code number, replace as necessary'를, 'Excessive Fluid Consumption'의 원인으로 'Different oil is being used — Use KRSP genuine fluid'를, 'Fluid foaming — Drain off oil and change'를 든다. 다른 제품과의 호환성 기준은 원문에 없다.",
   "conditions": [],
@@ -150,7 +150,7 @@
    "schema_version": "1.1"
   },
   "split": "kb",
-  "status": "draft",
+  "status": "accepted",
   "type_payload": null,
   "generalization_evidence": {
    "supporting_event_ids": [],

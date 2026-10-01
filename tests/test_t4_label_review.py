@@ -109,7 +109,7 @@ def test_completion_answer_is_backed_by_a_loaded_source_procedure():
     cards = {c.card_id: c for c in provider.cards}
     assert 'K-1401' in cards
     card = cards['K-1401']
-    assert card.tacit_type == 'T3'
+    assert card.tacit_type == 'T4'
     assert card.provenance.event_ids == []
     assert any('hsg250.pdf' in s.source_id for s in card.provenance.sources)
     validate_label(item, {cid: c.model_dump() for cid, c in cards.items()})

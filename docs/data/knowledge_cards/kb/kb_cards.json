@@ -1,12 +1,12 @@
 {
  "_meta": {
   "note": "자동 생성 — 직접 고치지 말고 배치 폴더를 고친 뒤 build_kb.py를 다시 실행",
-  "total": 85,
+  "total": 86,
   "by_tacit_type": {
    "T1": 19,
    "T2": 14,
    "T3": 19,
-   "T4": 11,
+   "T4": 12,
    "T5": 13,
    "T6": 9
   },
@@ -34,6 +34,12 @@
     "cards_in_file": 25,
     "included": 25,
     "sha256_lf": "e61044a11a2700dfad1aa76c6244a1db6e4419a777a68b82b38a79adb6dfee80"
+   },
+   {
+    "batch": "20261001-handover-completion",
+    "cards_in_file": 1,
+    "included": 1,
+    "sha256_lf": "a89965d0b5e63397b023ce45da122ebbf896f1e20b4599b3998c1352fae562ef"
    }
   ]
  },
@@ -6851,6 +6857,75 @@
     "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 사람의 내용 검토와 현장 적용성 평가는 미완료다."
    },
    "safety_review": null
+  },
+  {
+   "card_id": "K-1401",
+   "version": "1.0-KB-20261001-handover-completion",
+   "grade": "L1",
+   "tacit_type": "T4",
+   "equipment": "COMMON",
+   "component": "정비 작업 완료 근거",
+   "scenario": "S3",
+   "title": "정비 작업 완료 증거의 대조·책임자 회신·인수 문서",
+   "symptom": "진행 중 정비 점검, 담당자 퇴근·작업 완료 증거 누락",
+   "know_how": "현장 인계 절차와 지정 정비 책임자를 확인하고 작업 오더·체크리스트에서 대상 설비, 작업 범위, 완료 확인 항목과 결과를 대조한다. 문서이 진행 중으로 남아 있거나 수행자가 퇴근해 결과가 불명확하면 정비 책임자에게 실제 완료 항목·결과·수행자·완료 시각과 미결 항목의 확인을 요청한다. 확인이 없으면 완료 여부 미확인으로 남긴다. 작업허가제가 적용되는지 확인한다. 적용 시 수행 책임자의 완료 확인, 허가 종료 책임자의 현장 상태 확인, 운전 담당자의 인수 확인을 현장 절차에 따라 대조한다. 적용 여부가 미확인이면 지정 책임자에게 절차를 확인한다. 확인한 완료 범위, 미결 항목, 설비 현재 상태, 다음 확인 담당과 시점을 인계 문서에 남기고 인수 확인을 받는다. 작업 완료 확인과 재가동 승인을 구분한다. 담당자 퇴근이나 문서 상태만으로 완료·미완료를 단정하지 않는다. 확인을 위해 임의 기동·분해·잠금 해제를 하지 않는다. 커플링 점검의 측정 항목·허용값은 해당 모델 작업표준에서 확인한다.",
+   "rationale": "HSE Shift handover의 인수자 교차 확인 원칙과 HSG250 p.13 §23–24의 완료 확인·인수 역할 구분, p.14 §25의 현장 확인, p.24 Figure 1의 완료 반환과 운전 복귀 구분을 대조했다. 작업 오더·체크리스트의 구체적 확인 항목은 일반 원칙의 프로젝트 적용 해석이며 현장 절차로 대조한다. 사건 기반 T4 일반화나 GR-02 작업 완료 사실을 주장하지 않는다.",
+   "conditions": [],
+   "exclusions": [],
+   "safety_flag": false,
+   "confidence": 0.0,
+   "provenance": {
+    "seed_ids": [
+     "KB-20261001-handover-completion:source-review"
+    ],
+    "persona_id": "source-reviewer",
+    "event_ids": [],
+    "generator": "Codex source review",
+    "generated_at": "2026-10-01T16:48:59+09:00",
+    "sources": [
+     {
+      "source_id": "https://www.hse.gov.uk/humanfactors/topics/shift-handover.htm",
+      "locator": "Why is handover important? / incoming personnel cross-checking",
+      "document_version": "HSE web page, accessed 2026-10-01"
+     },
+     {
+      "source_id": "https://books.hse.gov.uk/gempdf/hsg250.pdf",
+      "locator": "PDF/printed p.13 §23–24; p.14 §25; p.24 Figure 1 items 12–13",
+      "document_version": "HSG250, First edition 2005"
+     },
+     {
+      "source_id": "docs/sources/safety/S-04_HSE_work_completion_handover.md",
+      "locator": "적용 및 해석",
+      "document_version": "2026-10-01"
+     }
+    ],
+    "extraction_method": "공식 HSE 웹페이지·PDF 원문 대조 후 범위를 제한한 문헌 기반 절차 작성",
+    "model_version": "gpt-6",
+    "prompt_version": "docs/sources/safety/S-04_HSE_work_completion_handover.md@sha256:0696c278d41c61b73b89771dfc2d289a7e01999d9679b2ea9667c0c98d326c26",
+    "schema_version": "1.1"
+   },
+   "split": "kb",
+   "status": "accepted",
+   "type_payload": {
+    "handover_method": {
+     "required_context": [
+      "작업 식별자·대상·범위와 수행 결과·완료 시각·수행자",
+      "완료 증거 및 책임자 회신 또는 미확인 표시",
+      "작업허가제 적용 여부와 해당 시 역할별 확인",
+      "미결 항목·설비 상태·후속 담당·재확인 시점"
+     ],
+     "recipient_role": "인수 조 담당자 및 지정 정비 책임자",
+     "timing": "정비 작업 상태가 불명확한 교대 인수 시",
+     "channel": "현장 작업 오더·체크리스트·인계 문서과 책임자 회신",
+     "acknowledgement": "문서와 책임자 회신을 대조해 완료 범위와 미결 항목을 남기고 인수자 확인을 받는다. 근거가 없으면 완료 여부 미확인으로 남긴다."
+    }
+   },
+   "generalization_evidence": {
+    "supporting_event_ids": [],
+    "contradicting_event_ids": [],
+    "generalization_scope": "정비 작업 완료 여부를 문서·책임자와 교차 확인하고 인수하는 정보 확인 절차. 작업허가서 역할 구분은 해당 제도가 적용될 때에 한정한다. 특정 설비 점검 기준·실제 완료 상태는 포함하지 않는다.",
+    "confidence_basis": "공식 원문과 프로젝트 적용 해석을 분리해 검토. 0.0은 미평가 sentinel. 현장 적용성과 실제 작업 완료는 미확인."
+   }
   }
  ],
  "evidence_text": {

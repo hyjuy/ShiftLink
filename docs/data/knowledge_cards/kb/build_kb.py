@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).parent
-BATCHES = ["20260929-A", "20260930-T4", "20260930-C", "20260930-D"]
+BATCHES = ["20260929-A", "20260930-T4", "20260930-C", "20260930-D", "20261001-handover-completion"]
 OUT = HERE / "kb_cards.json"
 # Batches whose events.json/artifacts.json back cards through generalization_evidence (T4).
 EVIDENCE_BATCHES = ["20260930-T4"]

@@ -3,6 +3,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 
 KB = Path(__file__).resolve().parents[1] / "docs/data/knowledge_cards/kb"
 
@@ -90,3 +92,35 @@ def test_c_promotion_rejects_a_changed_checklist(tmp_path, monkeypatch):
     (tmp_path / "review.md").write_text("changed", encoding="utf-8")
     (tmp_path / "l1-promotion-20261001.json").write_text(json.dumps(record), encoding="utf-8")
     assert module.unapproved_adoption_issues(cards, tmp_path, tmp_path)
+
+
+@pytest.mark.parametrize("change,allowed", [("unrelated", True), ("body", False), ("verdict", False), ("missing", False)])
+def test_c_promotion_checks_only_its_own_review_block(tmp_path, monkeypatch, change, allowed):
+    import copy
+    import re
+    spec = importlib.util.spec_from_file_location("c_policy_gate", KB / "20260930-C/policy_gate.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
+    pending = module.adoption_issues(cards)
+    monkeypatch.setattr(module, "adoption_issues", lambda *args: copy.deepcopy(pending))
+    record = json.loads((KB / "20260930-C/l1-promotion-20261001.json").read_text(encoding="utf-8"))
+    review = (KB / "human-review-checklist-20260930.md").read_text(encoding="utf-8")
+    if change == "unrelated":
+        review = "Unrelated A review update\n" + review
+    else:
+        blocks = re.split(r"(?=^## K-\d{4})", review, flags=re.M)
+        for index, block in enumerate(blocks):
+            if block.startswith("## K-1201 "):
+                if change == "body":
+                    blocks[index] = block.replace("- **노하우**:", "- **노하우**: changed", 1)
+                elif change == "verdict":
+                    blocks[index] = block.replace("- **판정**: accepted", "- **판정**: rejected", 1)
+                else:
+                    blocks[index] = ""
+        review = "".join(blocks)
+    record["review_file"] = "review.md"
+    (tmp_path / "review.md").write_text(review, encoding="utf-8")
+    (tmp_path / "l1-promotion-20261001.json").write_text(json.dumps(record), encoding="utf-8")
+    issues = module.unapproved_adoption_issues(cards, tmp_path, tmp_path)
+    assert ("K-1201" not in issues) is allowed

@@ -12,7 +12,8 @@
    "pending_policy_issues": [
     "source_scope_unapproved:M-C-006"
    ],
-   "card_sha256": "eeac30eedaabfbdaf58219169f339fdd7487bc3bc9b7a0b226fb105ff34ac474"
+   "card_sha256": "eeac30eedaabfbdaf58219169f339fdd7487bc3bc9b7a0b226fb105ff34ac474",
+   "review_block_sha256": "e7e951e8541868a19d57834cf7ad170fdf98dacb45911b95d73551e3919c4606"
   },
   "K-1202": {
    "verdict": "accepted",
@@ -20,7 +21,8 @@
    "pending_policy_issues": [
     "source_scope_unapproved:M-C-006"
    ],
-   "card_sha256": "1efbbef83e9571daa1c2576d911e431e28ba35dfb76a7a2963ebff074f6ffd78"
+   "card_sha256": "1efbbef83e9571daa1c2576d911e431e28ba35dfb76a7a2963ebff074f6ffd78",
+   "review_block_sha256": "1a5dd330bde5862a9408a66595c136715b280f372d2d7b1e8483238ee9385826"
   },
   "K-1203": {
    "verdict": "accepted",
@@ -28,7 +30,8 @@
    "pending_policy_issues": [
     "source_scope_unapproved:M-C-001"
    ],
-   "card_sha256": "50d239ea74450f1a7c7e3345098143c5826bc741bf352e4d950915187a168fc3"
+   "card_sha256": "50d239ea74450f1a7c7e3345098143c5826bc741bf352e4d950915187a168fc3",
+   "review_block_sha256": "08b7cb9a8fca96e8d68e9129811c87dbfdb9b2c176090e96d7c017bb37c56f9c"
   },
   "K-1204": {
    "verdict": "accepted",
@@ -37,7 +40,8 @@
     "source_scope_unapproved:M-C-004",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "ed638b088e2bd4659e7453e65e473ee1e0fe202f05e694f2522d6cc5f74b3ed0"
+   "card_sha256": "ed638b088e2bd4659e7453e65e473ee1e0fe202f05e694f2522d6cc5f74b3ed0",
+   "review_block_sha256": "553222579d1d86bc5defd2b3ebbb738b0866a9e1b76dd0cd54a5e901563f938d"
   },
   "K-1205": {
    "verdict": "accepted",
@@ -46,7 +50,8 @@
     "source_scope_unapproved:M-C-004",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "b98194b49efd604de6fee2a8f9b15250b0dec09b13e37845f17392d26dec02f1"
+   "card_sha256": "b98194b49efd604de6fee2a8f9b15250b0dec09b13e37845f17392d26dec02f1",
+   "review_block_sha256": "9a9a5c3d8f6226b334a2df8ed2ede008013a361020f35206c07cdbecb3160200"
   },
   "K-1206": {
    "verdict": "accepted",
@@ -55,7 +60,8 @@
     "source_scope_unapproved:M-C-007",
     "source_scope_unapproved:M-C-007"
    ],
-   "card_sha256": "41e225b664f942b6f961b5450618758e8e07698806bd0a59edeb0c23b240eba5"
+   "card_sha256": "41e225b664f942b6f961b5450618758e8e07698806bd0a59edeb0c23b240eba5",
+   "review_block_sha256": "275ec881c41bbc4b4db72fe3f92126f4f5da86039f6906c0ba2fb1f13a4e20a2"
   },
   "K-1207": {
    "verdict": "accepted",
@@ -63,7 +69,8 @@
    "pending_policy_issues": [
     "source_scope_unapproved:M-C-002"
    ],
-   "card_sha256": "ca7606a36b36e1f7525057fb2ab84ddf9d95a774d42f4dc7943e0467b79427e5"
+   "card_sha256": "ca7606a36b36e1f7525057fb2ab84ddf9d95a774d42f4dc7943e0467b79427e5",
+   "review_block_sha256": "34853fc719986aff7d5a02b3b27e6629481c99da9bec7b5ae94e1ca6882939b7"
   },
   "K-1208": {
    "verdict": "accepted",
@@ -72,7 +79,8 @@
     "source_scope_unapproved:M-C-002",
     "source_scope_unapproved:M-C-002"
    ],
-   "card_sha256": "20d2d517f54c6adeb54cb2ec0161d1528923bf9ae2b2a9d059c173243491cbbf"
+   "card_sha256": "20d2d517f54c6adeb54cb2ec0161d1528923bf9ae2b2a9d059c173243491cbbf",
+   "review_block_sha256": "c2855a2d8795e78c7703dfcd188244ab52a709fe21b2153d30191a11dbb5bc62"
   },
   "K-1209": {
    "verdict": "accepted",
@@ -81,7 +89,8 @@
     "source_scope_unapproved:M-C-003",
     "source_scope_unapproved:M-C-003"
    ],
-   "card_sha256": "d0772b43cc3b304b944cf3a8a09b93ae9f9c30e0dcbf0602999f13d166b10d12"
+   "card_sha256": "d0772b43cc3b304b944cf3a8a09b93ae9f9c30e0dcbf0602999f13d166b10d12",
+   "review_block_sha256": "e1857f6c11449b36462abb999586debeadf0a1f36c4c0736c46f101bf10e570f"
   },
   "K-1210": {
    "verdict": "accepted",
@@ -90,7 +99,8 @@
     "source_scope_unapproved:M-C-003",
     "source_scope_unapproved:M-C-003"
    ],
-   "card_sha256": "0e846da6ede50e7b00db0e00997b9a04af0a3cc1e35a85204c419364b7e5f894"
+   "card_sha256": "0e846da6ede50e7b00db0e00997b9a04af0a3cc1e35a85204c419364b7e5f894",
+   "review_block_sha256": "b44e666b6e4e74902bbc6601806603b2c0d1095e9ec7449fe19efd3f2317048a"
   },
   "K-1211": {
    "verdict": "accepted",
@@ -106,7 +116,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0401",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "8f69039486d9c2272dccb2c09240f6f572f6222d486474bf4cd12a3f910cbcf3"
+   "card_sha256": "8f69039486d9c2272dccb2c09240f6f572f6222d486474bf4cd12a3f910cbcf3",
+   "review_block_sha256": "4109b9aea0ff28c3d8aef49197360781e330b0ad8d6ecb982f6993e5ec99f1cb"
   },
   "K-1212": {
    "verdict": "accepted",
@@ -122,7 +133,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0403",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "c8c7bdad11dc06ff5606c81f5b559eccabfaae9d65e286bd0dc5f23cd4d6c3a1"
+   "card_sha256": "c8c7bdad11dc06ff5606c81f5b559eccabfaae9d65e286bd0dc5f23cd4d6c3a1",
+   "review_block_sha256": "bd85e7464ed97a3d65188a2ccfacc8fa01811ac0803c31ef6e2143169c80c37c"
   },
   "K-1213": {
    "verdict": "accepted",
@@ -138,7 +150,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0405",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "3dca7cfaa2ba6b68c9adc0f67ca5f37b010c41e4ef1e7ef7beb500bcd01a818f"
+   "card_sha256": "3dca7cfaa2ba6b68c9adc0f67ca5f37b010c41e4ef1e7ef7beb500bcd01a818f",
+   "review_block_sha256": "e380334b3da09c7a1efc885cb40cdadc75f3cd3ef7714a7cab4df462e9b71a99"
   },
   "K-1214": {
    "verdict": "accepted",
@@ -154,7 +167,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0407",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "a4cf33c5fb6c969627d103d8dfd6670f9716c13e1dd91f18117a477c2cad6cd0"
+   "card_sha256": "a4cf33c5fb6c969627d103d8dfd6670f9716c13e1dd91f18117a477c2cad6cd0",
+   "review_block_sha256": "9b849f29fb670d55bcd2134650136d861ee6580cfd99d3e970252b90ed6f64ab"
   },
   "K-1215": {
    "verdict": "accepted",
@@ -170,7 +184,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0409",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "9158f234d7898c0390592e33a204184c45f93b7d76c4bf07e25a0b4e5c009b9c"
+   "card_sha256": "9158f234d7898c0390592e33a204184c45f93b7d76c4bf07e25a0b4e5c009b9c",
+   "review_block_sha256": "1ccae6dca93b11f113afcfd01d9803d563869d2c8ea7cb83386acb79bdf11c39"
   },
   "K-1216": {
    "verdict": "accepted",
@@ -186,7 +201,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0411",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "371cb6d13681001725aa0a2ff8ca786d910f16155b6993268bb68c65dbf1460b"
+   "card_sha256": "371cb6d13681001725aa0a2ff8ca786d910f16155b6993268bb68c65dbf1460b",
+   "review_block_sha256": "62b348e9175fb68b934b2a927e2314bfa3f0c2ee2fc1c1f41f3c341393f827dc"
   },
   "K-1217": {
    "verdict": "accepted",
@@ -202,7 +218,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0413",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "aa0665f59949c992998c8d1507b0518c31b03c6688768aea0363558772ff8421"
+   "card_sha256": "aa0665f59949c992998c8d1507b0518c31b03c6688768aea0363558772ff8421",
+   "review_block_sha256": "05f67e8baa17e15637f3221d913578f427fb2db6ddf23185257601bbd98e82d0"
   },
   "K-1218": {
    "verdict": "accepted",
@@ -218,7 +235,8 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0401",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "1a769f6b385e3c188b37ff94a99a2b46493975b335b06042f6ddfba9daa89e8d"
+   "card_sha256": "1a769f6b385e3c188b37ff94a99a2b46493975b335b06042f6ddfba9daa89e8d",
+   "review_block_sha256": "4d14943829810f4b051818875ff8f958e7bc20a5a7878bc92ca16d15adf9e927"
   },
   "K-1219": {
    "verdict": "accepted",
@@ -234,7 +252,9 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0403",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "8b7b2339925f18fe08ae0745676b51a813cfeb5c7e358961c1a0d8d3c74b8944"
+   "card_sha256": "8b7b2339925f18fe08ae0745676b51a813cfeb5c7e358961c1a0d8d3c74b8944",
+   "review_block_sha256": "46bdec64dde99c1a5a265bac089067bd6de68d1876cd2214e5f087e02f73d12c"
   }
- }
+ },
+ "review_hash_scope": "per_card_block; review_sha256_lf retains the original whole-file audit checksum"
 }

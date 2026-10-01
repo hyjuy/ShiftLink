@@ -12,6 +12,7 @@ import pytest
 from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.router import HandoverRequest, QueryRequest
 from shiftlink.edge.ollama import (
+    QUERY_MAX_CANDIDATES,
     CANARY_PREFIXES,
     HANDOVER_SYSTEM_PROMPT,
     MODEL_CARD_FIELDS,
@@ -321,6 +322,7 @@ def call_with(monkeypatch, tool_results, **kwargs):
 
 
 def test_enum_is_candidates_in_rank_order_without_safety_references(monkeypatch):
+    monkeypatch.setattr("shiftlink.edge.ollama.QUERY_MAX_CANDIDATES", 5)  # 후보 여러 장 경로 확인
     model, sent = call_with(monkeypatch, make_split_results())
     items = sent["format"]["properties"]["cited_card_ids"]["items"]
     assert items == {"type": "string", "enum": ["K-0201", "K-0200"]}
@@ -338,7 +340,18 @@ def test_duplicate_citations_are_collapsed_in_order():
     assert _parse_output(body)["cited_card_ids"] == ["K-0201", "K-0200"]
 
 
+def test_query_sends_only_top_ranked_candidates(monkeypatch):
+    """질의 모드는 검색 상위 QUERY_MAX_CANDIDATES장만 모델에 넘긴다. 안전 참고는 그대로 나간다."""
+    assert QUERY_MAX_CANDIDATES == 1
+    model, sent = call_with(monkeypatch, make_split_results())
+    assert sent["format"]["properties"]["cited_card_ids"]["items"]["enum"] == ["K-0201"]
+    assert model.last_call["candidate_card_ids"] == ["K-0201"]
+    user = sent["messages"][1]["content"]
+    assert "K-0200" not in user and "안전 참고 카드" in user
+
+
 def test_safety_card_found_by_search_stays_a_candidate(monkeypatch):
+    monkeypatch.setattr("shiftlink.edge.ollama.QUERY_MAX_CANDIDATES", 5)  # 후보 여러 장 경로 확인
     results = make_split_results()
     results["ranked_cards"] = [results["cards"][0], *results["ranked_cards"]]
     _, sent = call_with(monkeypatch, results)
@@ -355,6 +368,7 @@ def test_no_candidates_allows_empty_citation(monkeypatch):
 
 
 def test_retry_prompt_lists_real_candidate_ids(monkeypatch):
+    monkeypatch.setattr("shiftlink.edge.ollama.QUERY_MAX_CANDIDATES", 5)  # 후보 여러 장 경로 확인
     _, sent = call_with(monkeypatch, make_split_results(), retry=True)
     user = sent["messages"][1]["content"]
     retry = user[user.index("[재시도]"):]
@@ -384,4 +398,4 @@ def test_symptom_match_ranks_first_and_leads_the_enum(monkeypatch):
     FixedPipeline(model=model, tools=provider).run(
         {"question": question, "line_id": "LN-0001", "eq_id": "HPU"})
     enum = sent[0]["format"]["properties"]["cited_card_ids"]["items"]["enum"]
-    assert enum == ids and enum[0] == "K-1004"
+    assert enum == ids[:QUERY_MAX_CANDIDATES] and enum[0] == "K-1004"

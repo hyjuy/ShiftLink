@@ -9,8 +9,8 @@
   "scenario": "S2",
   "title": "기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기",
   "symptom": "펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.",
-  "know_how": "1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다.",
-  "rationale": "Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다.",
+  "know_how": "1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다.",
+  "rationale": "Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다. 검토 보완: 원문 Algo A.1의 무압 분기에 한정한다. 회전 확인은 접촉 없는 관찰로 구분하고 재조립·구동 변경은 해당 모델의 작업 권한과 정지·격리 절차를 확인한 담당자에게 넘긴다. 이 제한은 카드 검토에서 추가한 적용 조건이다. hpu_pressure<145를 원문의 압력 없음으로 대체하지 않는다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": false,
@@ -33,9 +33,9 @@
      "document_version": "Vickers General Product Support GBB9003 (8/84)"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -46,7 +46,9 @@
      "step_id": "ST-01",
      "order": 1,
      "action": "펌프 출구 압력계에서 압력이 읽히는지 확인한다.",
-     "preconditions": [],
+     "preconditions": [
+      "원문 펌프 형식의 적용성과 모델별 정지·격리·작업 권한을 확인한다. 관찰 중 회전부에 접촉하지 않는다. 재조립·구동 변경은 담당자에게 넘긴다(카드 검토에서 추가한 제한)."
+     ],
      "expected_result": "압력이 없으면(NO) ST-02로 진행한다.",
      "stop_conditions": [
       "압력이 읽히면(YES) 이 카드 범위가 아니다. Algo A.1 우측 분기(정상 계통압 여부 확인)로 넘어간다."
@@ -259,8 +261,8 @@
   "scenario": "S1",
   "title": "용적형 펌프 과압 보호 없이 운전 금지·릴리프 설정을 펌프 최대 정격 위로 두지 않기",
   "symptom": null,
-  "know_how": "용적형 펌프는 배압과 관계없이 유량을 내보내려 하므로 과압 보호(릴리프 밸브) 없이 운전하지 않는다. 릴리프 밸브는 펌프 토출 라인에 가능한 가깝게, 사이에 다른 밸브 없이 연결한다. 설정은 실무상 가능한 낮게 하고, 100% 바이패스 시 압력 누적을 포함해 펌프 최대 정격 압력보다 높게 두지 않는다. 릴리프 리턴 라인을 펌프 흡입 라인으로 배관하지 않는다. 설정 변경이 필요하면 담당자 확인 후 진행한다.",
-  "rationale": "Parker 스크류 펌프 매뉴얼 §3.7.2가 DANGER 문구로 과압 보호 미비 시 펌프·구동기 고장과 펌프·배관 파열 위험을 명시하고, 설정 상한과 리턴 라인 배관 금지를 규정한다. 스크류 펌프 문서 기준이며 대상 HPU(베인펌프)의 정격 압력값은 원문에 없다.",
+  "know_how": "용적형 펌프는 배압과 관계없이 유량을 내보내려 하므로 과압 보호(릴리프 밸브) 없이 운전하지 않는다. 릴리프 밸브는 펌프 토출 라인에 가능한 가깝게, 사이에 다른 밸브 없이 연결한다. 설정은 실무상 가능한 낮게 하고, 100% 바이패스 시 압력 누적을 포함해 펌프 최대 정격 압력보다 높게 두지 않는다. 릴리프 리턴 라인을 펌프 흡입 라인으로 배관하지 않는다. 설정 변경이 필요하면 담당자 확인 후 진행한다. 이 배관·설정 규정은 출처의 스크류 펌프 기준이므로 대상 베인펌프 모델 지침 확인 전 적용을 보류한다.",
+  "rationale": "Parker 스크류 펌프 매뉴얼 §3.7.2가 DANGER 문구로 과압 보호 미비 시 펌프·구동기 고장과 펌프·배관 파열 위험을 명시하고, 설정 상한과 리턴 라인 배관 금지를 규정한다. 스크류 펌프 문서 기준이며 대상 HPU(베인펌프)의 정격 압력값은 원문에 없다. 검토 보완: Parker 스크류 펌프의 설치 규정이다. HPU 베인펌프에 적용하기 전 해당 모델의 과압 보호·배관·최대 정격 지침을 확인한다. MES 상한 165 bar는 펌프 정격이나 릴리프 설정값이 아니다.",
   "conditions": [],
   "exclusions": [],
   "safety_flag": true,
@@ -283,9 +285,9 @@
      "document_version": "Parker Three Screw Pump Series Manual, Catalog HY13-PMDSPS1M-M1/US"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
    "schema_version": "1.1"
   },
   "split": "kb",
@@ -537,8 +539,8 @@
   "scenario": "S2",
   "title": "작동유 점도 2000 cSt 초과(저온 등) 시 운전 전 워밍업",
   "symptom": null,
-  "know_how": "작동유 점도가 2000 cSt를 넘는 조건(주로 저온)에서는 흡입 저항으로 국부 진공·탈기가 생기고, 저속 회전이면 베인이 로터 슬롯에 붙어 토출이 없을 수 있다. 이 조건이면 운전 전에 계통을 워밍업하거나 예상 운전 온도에 맞는 점도 등급의 작동유를 쓴다. 조건 판단은 조건 목록의 점도값 하나로 하며, 점도를 직접 알 수 없으면 유온과 작동유 점도 자료로 담당자에게 확인한다.",
-  "rationale": "Denison 베인펌프 가이드 §7은 점도 2000 cSt(9240 SSU) 초과 시 저항 증가로 국부 진공(탈기)과 윤활 저하가 생기고 고점도·저속에서 베인 고착으로 토출이 없어진다고 적는다. 대응 조치(운전 전 워밍업 또는 적정 점도 등급 사용)는 Danfoss D1 펌프 매뉴얼 Troubleshooting의 '점도 허용 한계 초과' 항목에서 가져왔다. 2000 cSt는 베인펌프 가이드 기준이며, 조치 출처는 다른 형식(피스톤) 펌프 문서다.",
+  "know_how": "작동유 점도가 2000 cSt를 넘는 조건(주로 저온)에서는 흡입 저항으로 국부 진공·탈기가 생기고, 저속 회전이면 베인이 로터 슬롯에 붙어 토출이 없을 수 있다. 이 조건이면 운전 전에 계통을 워밍업하거나 예상 운전 온도에 맞는 점도 등급의 작동유를 쓴다. 조건 판단은 조건 목록의 점도값 하나로 하며, 점도를 직접 알 수 없으면 유온과 작동유 점도 자료로 담당자에게 확인한다. 점도 관측과 두 출처의 대상 모델 적합성이 확인되지 않으면 워밍업·작동유 변경을 보류한다.",
+  "rationale": "Denison 베인펌프 가이드 §7은 점도 2000 cSt(9240 SSU) 초과 시 저항 증가로 국부 진공(탈기)과 윤활 저하가 생기고 고점도·저속에서 베인 고착으로 토출이 없어진다고 적는다. 대응 조치(운전 전 워밍업 또는 적정 점도 등급 사용)는 Danfoss D1 펌프 매뉴얼 Troubleshooting의 '점도 허용 한계 초과' 항목에서 가져왔다. 2000 cSt는 베인펌프 가이드 기준이며, 조치 출처는 다른 형식(피스톤) 펌프 문서다. 검토 보완: 2000 cSt 기준은 Denison 베인펌프, 워밍업 조치는 Danfoss 피스톤펌프 문서에서 가져왔다. 현장 모델의 허용 점도와 워밍업 허용 조건을 확인한 경우에만 조치 후보로 사용한다. fluid_viscosity는 현재 MES 신호가 아니므로 측정값 또는 작동유 온도-점도 자료 확인 전 조건을 충족한 것으로 처리하지 않는다.",
   "conditions": [
    {
     "signal": "fluid_viscosity",
@@ -573,9 +575,9 @@
      "document_version": "Danfoss D1 High Power Open Circuit Pumps Service Manual AX189986484780en-000501 (October 2024)"
     }
    ],
-   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+   "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
    "model_version": "claude-opus-5-5",
-   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md",
+   "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
    "schema_version": "1.1"
   },
   "split": "kb",

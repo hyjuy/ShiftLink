@@ -44,7 +44,7 @@ class MesSignalMapRuntimeTests(unittest.TestCase):
         self.assertEqual({(item.equipment_id, item.signal) for item in snapshot.measurements},
                          {(eq.equipment_id, signal.signal) for eq in self.config.equipment
                           for signal in eq.signals if eq.active})
-        self.assertEqual(len(snapshot.measurements), 46)
+        self.assertEqual(len(snapshot.measurements), 59)
 
     def test_mapped_signal_units_and_equipment_match_configuration(self):
         equipment = {eq.code: eq for eq in self.config.equipment}

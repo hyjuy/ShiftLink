@@ -977,3 +977,19 @@ def test_validate_response_no_lost_stop_conditions() -> None:
     resp = AgentResponse(mode="query")
     errors = validate_response(resp, tool_results)
     assert any("Lost stop_conditions" in e for e in errors)
+
+
+@pytest.mark.parametrize("value,expected", [(138, "verified"), (155, "inapplicable")])
+def test_raw_reading_derives_state_for_t2_condition(equipment_provider, value, expected):
+    """T2 조건 hpu_pressure_state == low는 원값 hpu_pressure만 와도 카탈로그 정상 범위(145~165)로 판정된다."""
+    card = make_card_t1("K-0009")
+    card.conditions = [Condition(signal="hpu_pressure_state", op="==", value="low")]
+    equipment_provider.cards.append(card)
+    for eq in ("HPU", "HPU-01"):
+        hits = {c["card_id"]: c["condition_status"] for c in equipment_provider.search_cards(
+            query="test", equipment_ids=[eq], observations={"hpu_pressure": {"value": value, "unit": "bar"}})}
+        assert hits.get("K-0009", "inapplicable") == expected
+    # 관측값이 없으면 지금처럼 미확인이다.
+    assert {c["card_id"]: c["condition_status"] for c in equipment_provider.search_cards(
+        query="test", equipment_ids=["HPU"])}["K-0009"] == "unverified"
+

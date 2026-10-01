@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jetson 다운 보고서</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1f2328; --muted: #5d6670; --line: #dcd8cf; --card: #ffffff;
+  --accent: #b5532a; --ok: #2f7a4b; --bad: #b3261e; --barbg: #ece8df; --code: #f1eee7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17191c; --fg: #e6e3dc; --muted: #9aa3ad; --line: #33373d; --card: #1f2226;
+    --accent: #e08a5f; --ok: #6cc28c; --bad: #f08a80; --barbg: #2a2e33; --code: #262a2f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17191c; --fg: #e6e3dc; --muted: #9aa3ad; --line: #33373d; --card: #1f2226;
+  --accent: #e08a5f; --ok: #6cc28c; --bad: #f08a80; --barbg: #2a2e33; --code: #262a2f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.65 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 1.7rem; line-height: 1.3; margin: 0 0 6px; }
+h2 { font-size: 1.2rem; margin: 40px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 1rem; margin: 24px 0 8px; }
+.meta { color: var(--muted); font-size: .9rem; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 24px 0; }
+.summary div { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.summary b { display: block; font-size: .8rem; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 8px 0; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: .88em; }
+pre { background: var(--code); padding: 12px; border-radius: 8px; overflow-x: auto; font-size: .82rem; white-space: pre-wrap; word-break: break-all; }
+.bad { color: var(--bad); font-weight: 600; }
+.ok { color: var(--ok); font-weight: 600; }
+.bars { display: grid; gap: 10px; margin: 12px 0; }
+.bar-row { display: grid; grid-template-columns: minmax(120px, 210px) 1fr; gap: 10px; align-items: center; font-size: .88rem; }
+.bar-pair { display: grid; gap: 3px; }
+.bar { height: 14px; border-radius: 3px; background: var(--barbg); position: relative; }
+.bar i { display: block; height: 100%; border-radius: 3px; }
+.bar span { position: absolute; left: calc(100% + 0px); top: -2px; font-size: .78rem; color: var(--muted); white-space: nowrap; transform: translateX(-100%); padding-right: 4px; }
+.legend { font-size: .82rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }
+figure { margin: 16px 0; }
+figcaption { font-size: .85rem; color: var(--muted); }
+svg text { fill: var(--muted); font-size: 11px; }
+ul { padding-left: 1.2em; }
+</style>
+</head>
+<body>
+<main>
+<h1>Jetson 실험 중 다운 — 원인과 해결</h1>
+<p class="meta">2026-10-01 · 최재영·Claude · Jetson Orin Nano Super (jetson-06, 7.6GB, 15W) · ollama 0.34.1</p>
+
+<div class="summary">
+  <div><b>증상</b>모델 실험 5~10분 뒤 응답 없음, 재부팅 필요 (9/30 1회, 10/1 2회)</div>
+  <div><b>원인</b><code>llama-server</code> RAM 프롬프트 캐시. 기본 상한 8192MiB &gt; 장비 메모리</div>
+  <div><b>해결</b><code>LLAMA_ARG_CACHE_RAM=0</code> (ollama 서비스 설정). 코드 변경 없음</div>
+  <div><b>확인</b>요청당 메모리 증가 <span class="bad">12.5MB</span> → <span class="ok">0.1MB</span>, 정확도·속도 그대로</div>
+</div>
+
+<h2>1. 경과</h2>
+<div class="table-wrap"><table>
+<tr><th>시각</th><th>일</th></tr>
+<tr><td>09:20</td><td>모델 선택 실험 시작 (exaone3.5:2.4b, 31문항 × 5방식). base 완료</td></tr>
+<tr><td>09:30경</td><td>v1 도중 SSH·ping 모두 무응답</td></tr>
+<tr><td>09:39·09:41</td><td>재부팅 (09:41은 VNC로 수동 재시작)</td></tr>
+<tr><td>09:45</td><td><code>tegrastats</code> 2초 간격 기록을 켜고 v1부터 재개. v1 완료</td></tr>
+<tr><td>09:51~09:55</td><td>v2 도중 다시 무응답</td></tr>
+<tr><td>10:01</td><td>재부팅 후 기록 확인 → 메모리 고갈 확인</td></tr>
+<tr><td>10:02~10:30</td><td>메모리 감시 스크립트, 원인 분리 테스트</td></tr>
+<tr><td>10:35</td><td><code>LLAMA_ARG_CACHE_RAM=0</code> 적용 (VNC, sudo)</td></tr>
+<tr><td>10:36~10:42</td><td>재테스트, 실제 실험 재실행으로 확인</td></tr>
+</table></div>
+
+<h2>2. 원인 추적</h2>
+<h3>2-1. 전원·과열이 아니라 메모리</h3>
+<p>처음에는 전원 부족을 의심했다 (종료 기록 없이 꺼짐, 부하 중에만 발생). <code>tegrastats</code> 기록은 달랐다.</p>
+<div class="table-wrap"><table>
+<tr><th>항목</th><th>값</th><th>판단</th></tr>
+<tr><td>입력 전력 최대 (<code>VDD_IN</code>)</td><td class="num">20.6W</td><td>15W 모드의 순간 최대로 정상</td></tr>
+<tr><td>온도 최대 (<code>tj</code>)</td><td class="num">65.7°C</td><td>정상</td></tr>
+<tr><td>RAM</td><td class="num">1.8 → <span class="bad">7.4/7.6GB</span></td><td>6분 동안 분당 약 1GB 증가</td></tr>
+<tr><td>스왑</td><td class="num">0 → <span class="bad">3.8/3.8GB</span></td><td>가득 참</td></tr>
+</table></div>
+
+<figure>
+<svg viewBox="0 0 640 220" width="100%" role="img" aria-label="실험 중 RAM 사용량: 고치기 전 6분 만에 7.4GB까지 증가, 고친 뒤 4.7GB 근처에서 일정">
+  <line x1="50" y1="20" x2="50" y2="180" stroke="var(--line)"/>
+  <line x1="50" y1="180" x2="620" y2="180" stroke="var(--line)"/>
+  <line x1="50" y1="34" x2="620" y2="36" stroke="var(--bad)" stroke-dasharray="4 4" opacity=".6"/>
+  <text x="56" y="30">장비 한계 7.6GB</text>
+  <text x="44" y="184" text-anchor="end">0</text>
+  <text x="44" y="108" text-anchor="end">4GB</text>
+  <text x="50" y="198" text-anchor="middle">0분</text>
+  <text x="240" y="198" text-anchor="middle">2분</text>
+  <text x="430" y="198" text-anchor="middle">4분</text>
+  <text x="620" y="198" text-anchor="middle">6분</text>
+  <polyline fill="none" stroke="var(--bad)" stroke-width="2.5"
+    points="50,145 126,100 230,75 330,58 411,41 620,39"/>
+  <polyline fill="none" stroke="var(--ok)" stroke-width="2.5"
+    points="50,91 145,90 240,91 335,90 430,91 525,91 620,90"/>
+  <text x="540" y="58" style="fill:var(--bad)">고치기 전</text>
+  <text x="540" y="110" style="fill:var(--ok)">고친 뒤</text>
+</svg>
+<figcaption>실험 중 사용 RAM. 고치기 전(09:45~09:51 tegrastats)은 한계까지 올라가 스왑까지 찼다. 고친 뒤(10:40~10:42)는 남은 메모리 2.8~2.9GB로 일정.</figcaption>
+</figure>
+
+<h3>2-2. 메모리를 먹는 것은 <code>llama-server</code></h3>
+<p>실행 중 <code>llama-server</code>가 10초에 약 240MB씩 커졌다 (2.9GB → 3.1GB). 모델 크기는 1.7GB다. <code>ollama stop</code>으로 모델을 내리면 남은 메모리가 5.5GB로 돌아왔다.</p>
+
+<h3>2-3. 무엇이 늘리는가 — 4조건 테스트</h3>
+<p>같은 모델로 조건마다 30번 요청하고 <code>llama-server</code> 메모리 증가를 쟀다.</p>
+<p class="legend"><i style="background:var(--bad)"></i>고치기 전<i style="background:var(--ok)"></i>고친 뒤 (C·D만 재측정)</p>
+<div class="bars">
+  <div class="bar-row"><div>A 같은 입력, 형식 없음</div><div class="bar-pair">
+    <div class="bar"><i style="width:6.7%;background:var(--bad)"></i><span>25MB</span></div></div></div>
+  <div class="bar-row"><div>B 같은 입력, 같은 형식</div><div class="bar-pair">
+    <div class="bar"><i style="width:11.7%;background:var(--bad)"></i><span>44MB</span></div></div></div>
+  <div class="bar-row"><div>C 같은 입력, 형식만 매번 다름</div><div class="bar-pair">
+    <div class="bar"><i style="width:74.4%;background:var(--bad)"></i><span>279MB</span></div>
+    <div class="bar"><i style="width:5.6%;background:var(--ok)"></i><span>21MB</span></div></div></div>
+  <div class="bar-row"><div>D 입력이 매번 다름, 형식 없음</div><div class="bar-pair">
+    <div class="bar"><i style="width:100%;background:var(--bad)"></i><span>375MB</span></div>
+    <div class="bar"><i style="width:1%;background:var(--ok)"></i><span>2MB</span></div></div></div>
+</div>
+<p>A·B는 처음에만 늘고 멈췄고 C·D는 계속 늘었다. 출력 형식(JSON 스키마)만의 문제가 아니라, 처음 보는 입력이면 무엇이든 늘었다 (D).</p>
+
+<h3>2-4. 확정 — 프롬프트 캐시</h3>
+<ul>
+  <li>ollama 로그에 요청마다 <code>prompt_save: saving prompt with length 176, total state size = 12.893 MiB</code>가 찍혔다. 조건 D의 요청당 12.5MB와 같다.</li>
+  <li><code>llama-server --help</code>: <code>--cache-ram N … (default: 8192 …) (env: LLAMA_ARG_CACHE_RAM)</code></li>
+  <li>ollama가 <code>llama-server</code>를 띄우는 인자에 <code>--cache-ram</code>이 없어 기본값 8192MiB가 그대로 적용된다.</li>
+  <li>실제 실험 프롬프트는 약 1000토큰이라 한 번에 약 70MB가 쌓인다. 분당 약 1GB 증가와 맞는다.</li>
+  <li>9/29 벤치마크가 무사했던 것은 실행이 짧았기 때문으로 본다. ollama는 9/16 이후 바뀌지 않았다.</li>
+</ul>
+
+<h2>3. 해결</h2>
+<p>Jetson에서 실행 (sudo 필요):</p>
+<pre>sudo mkdir -p /etc/systemd/system/ollama.service.d &amp;&amp; printf '[Service]\nEnvironment="LLAMA_ARG_CACHE_RAM=0"\n' | sudo tee /etc/systemd/system/ollama.service.d/cache-ram.conf &amp;&amp; sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart ollama &amp;&amp; systemctl show ollama -p Environment | grep -o 'LLAMA_ARG_CACHE_RAM=0'</pre>
+<ul>
+  <li>마지막에 <code>LLAMA_ARG_CACHE_RAM=0</code>이 나오면 적용된 것이다. ollama 로그에는 <code>prompt cache is disabled</code>가 찍힌다.</li>
+  <li><code>sudo systemctl edit ollama</code>로 넣을 때 <code>### Lines below this comment will be discarded</code> 아래에 쓰면 버려진다. 첫 시도는 이것 때문에 적용되지 않았다.</li>
+  <li>drop-in 파일이라 ollama를 재설치해도 유지된다.</li>
+  <li>앞부분이 같은 요청(시스템 프롬프트)은 슬롯의 KV 캐시가 계속 재사용한다 (로그의 <code>cached n_tokens = 516</code>).</li>
+  <li>나중에 캐시가 필요하면 0 대신 작은 값(예: 512)을 쓴다. 8192는 이 장비에서 쓰면 안 된다.</li>
+</ul>
+
+<h2>4. 확인</h2>
+<div class="table-wrap"><table>
+<tr><th>항목</th><th>적용 전</th><th>적용 후</th></tr>
+<tr><td>조건 C 요청당 증가</td><td class="num">9.3MB</td><td class="num">0.7MB (처음에만)</td></tr>
+<tr><td>조건 D 요청당 증가</td><td class="num">12.5MB</td><td class="num">0.1MB</td></tr>
+<tr><td>실제 실험 (v3, 31문항) 중 남은 메모리</td><td class="num">분당 약 1GB 감소</td><td class="num">2.8~2.9GB 일정</td></tr>
+<tr><td>v3 모델 1순위 정답</td><td class="num">23/29 (8문항마다 재적재로 우회)</td><td class="num">22/29 (우회 없음)</td></tr>
+<tr><td>v3 응답 시간 p50</td><td class="num">2.81초</td><td class="num">2.87초</td></tr>
+</table></div>
+<p>정답 1개 차이는 GPU 연산의 비결정성 범위로 본다. 우회용 "8문항마다 모델 다시 올리기"는 실험 스크립트에서 뺐다.</p>
+
+<h2>5. 함께 드러난 문제</h2>
+<ol>
+  <li><b>연결 실패가 0점으로 기록됨.</b> Jetson이 꺼진 뒤의 요청은 파이프라인이 <code>ConnectionError</code>를 잡아 검토 대기열로 넘겨, 채점에서 오류가 아니라 "인용 없음"으로 세졌다. v2~v4의 0/29가 이렇게 나와 무효 처리하고 다시 돌렸다. 실험 스크립트는 방식마다 앞뒤로 Jetson 연결을 확인하고 끊기면 결과를 <code>.INVALID</code>로 표시하게 고쳤다.</li>
+  <li><b>멈춘 실험이 계속 요청을 보냄.</b> 백그라운드 실행을 멈춰도 Windows에서 자식 Python 프로세스가 남아 Jetson에 요청을 보냈다. 실험을 멈출 때 남은 프로세스도 확인한다.</li>
+</ol>
+
+<h2>6. 남은 일</h2>
+<ul>
+  <li>Jetson은 한 대뿐이고 이미 적용했으므로 장비 쪽 추가 작업은 없다. 서비스 코드의 <code>KEEP_ALIVE=-1</code>도 그대로 쓴다.</li>
+  <li>☐ <code>eval/qa/score.py</code>가 모델 오류(연결·시간 초과)를 따로 세게 할지 검토 (5-1)</li>
+</ul>
+
+<h2>부록: 같은 날 모델 선택 실험 (exaone3.5:2.4b)</h2>
+<p class="meta">카드 62장, 31문항 중 정답 카드가 후보에 든 29문항</p>
+<div class="table-wrap"><table>
+<tr><th>방식</th><th>모델 1순위 정답</th><th>p50</th></tr>
+<tr><td>base</td><td class="num">5</td><td class="num">4.9초</td></tr>
+<tr><td>v1 인용 먼저</td><td class="num">9</td><td class="num">5.9초</td></tr>
+<tr><td>v2 후보를 번호로</td><td class="num">20</td><td class="num">5.5초</td></tr>
+<tr><td>v3 번호 + 색인만</td><td class="num">23</td><td class="num">2.8초</td></tr>
+<tr><td>v4 2단계</td><td class="num">19</td><td class="num">4.1초</td></tr>
+<tr><td>검색 1위 그대로</td><td class="num"><b>28</b></td><td class="num">—</td></tr>
+</table></div>
+<p>모델이 검색 1위를 제치고 정답을 고른 경우는 없었다. qwen2.5:3b 결과를 본 뒤 질의 모드의 후보 수(<code>MAX_CANDIDATES</code>)를 정한다.</p>
+</main>
+</body>
+</html>

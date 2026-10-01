@@ -116,7 +116,7 @@ def symptom_scenarios(equipment):
                 effects.append(SignalEffect(eq.capabilities[0], signal, value))
             else:
                 yield ScenarioSpec(f"symptom_{eq.equipment_id}_{pattern.pattern_id}", eq.capabilities[0], "", "", "AL-SYMPTOM",
-                    tuple(effects), title=f"{eq.code} · {pattern.symptom} (가상)", cause_equipment_id=eq.equipment_id,
+                    tuple(effects), title=f"{eq.code} · {pattern.symptom}", cause_equipment_id=eq.equipment_id,
                     stop_on_fault=pattern.pattern_id == "pdp_trip")
 
 

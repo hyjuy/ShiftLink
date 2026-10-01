@@ -350,6 +350,15 @@ def test_sends_only_top_ranked_candidates(monkeypatch):
     assert "K-0200" not in user and "안전 참고 카드" in user
 
 
+def test_unverified_top_card_is_skipped_for_the_next_candidate(monkeypatch):
+    """조건 미확인 카드는 인용할 수 없으므로 1위여도 건너뛰고 다음 카드를 후보로 둔다(10/1 Jetson)."""
+    results = make_split_results()
+    results["ranked_cards"][0] = dict(results["ranked_cards"][0], condition_status="unverified")
+    results["cards"][1] = results["ranked_cards"][0]
+    _, sent = call_with(monkeypatch, results)
+    assert sent["format"]["properties"]["cited_card_ids"]["items"]["enum"] == ["K-0200"]
+
+
 def test_safety_card_found_by_search_stays_a_candidate(monkeypatch):
     monkeypatch.setattr("shiftlink.edge.ollama.MAX_CANDIDATES", 5)  # 후보 여러 장 경로 확인
     results = make_split_results()

@@ -4,25 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<title>ShiftLink PDA — 프로토타입</title>
+<title>ShiftLink PDA</title>
 <!--
-  동작하는 프로토타입 · 구상 검증용 · 커밋 전
+  동작하는 프로토타입 · 모의 MES 서버가 /pda.html 로 서빙한다
   ────────────────────────────────────────────────────────────────
-  설계   docs/planning/PDA_카메라_설비식별_고도화.md §7
-  구상   docs/design/pda_ui/pda_ui_mockup.html (화면 16장)
-  구성   분리형 — PDA(카메라+브라우저) ↔ LAN/Wi-Fi ↔ 거치형 Jetson
+  설계     docs/planning/PDA_카메라_설비식별_고도화.md §7
+  작업계획 docs/planning/PDA_라즈베리파이_모니터_작업계획_20261001.md (C4)
+  구상     docs/design/pda_ui/pda_ui_mockup.html (화면 16장)
 
-  이 파일은 shiftlink/ 밖에 있다. 설계안이 C-056·C-057 개정 승인을 전제하며
-  "승인 전 코드 착수 금지"를 명시하므로, server.py 화이트리스트와 네이밍
-  레지스트리를 건드리지 않는 위치에 둔다.
-
-  데이터는 정본 JSON을 런타임에 읽는다. 값을 복사해 두지 않으므로 어긋날 수 없다.
-  읽는 파일은 kb 분할만 든 둘뿐이고, dev·sealed 파일은 열지 않는다(C-099).
+  설비·신호·정상 범위는 /api/config, 관측은 /api/state, 카드는 /api/kb/cards 에서 읽는다.
+  값을 복사해 두지 않으므로 MES 구성과 어긋날 수 없다.
 
   D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 캡처·업로드 경로가 없다.
 
-  실행:  저장소 루트에서  python -m http.server 8791
-         http://localhost:8791/docs/design/pda_ui/prototype/pda.html
+  실행:  python -m shiftlink.mes  →  http://127.0.0.1:8000/pda.html
 -->
 <style>
   :root{
@@ -224,6 +219,16 @@
   .obs{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tx-2);
     border:1px solid var(--edge);border-radius:8px;padding:10px;background:var(--surface);flex:0 0 auto}
   .obs .x{margin-left:auto;min-width:44px;min-height:44px;display:grid;place-items:center;color:var(--tx-2)}
+  .obs .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .obs small{font-size:11.5px;color:var(--tx-3)}
+  .obs.out{border-color:var(--fail);background:#2A140C;box-shadow:inset 4px 0 0 var(--fail)}
+  .obs.out .mono{color:#FFD0B8;font-weight:700}
+  .obs.out small{color:#FFB48A;font-weight:700}
+  #obsList details{display:flex;flex-direction:column;gap:6px}
+  #obsList summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+  .mesline{font-size:13px;line-height:1.5;color:var(--tx-2);border:1px solid var(--edge);border-radius:10px;
+    padding:10px 12px;background:var(--surface)}
+  .mesline.bad{border-color:var(--fail);color:#FFD0B8;background:#2A140C}
 
   .alert{border-radius:10px;border:1px solid var(--warn);background:#2A1E06;padding:12px;
     display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
@@ -278,7 +283,7 @@
   <section class="screen on" id="s-boot">
     <div class="pane"><div class="grow"></div>
       <p class="lbl">ShiftLink PDA</p>
-      <p class="hint" id="bootMsg">정본 데이터를 읽는 중…</p>
+      <p class="hint" id="bootMsg">MES 데이터를 읽는 중…</p>
       <div id="bootErr"></div>
       <div class="grow"></div></div>
   </section>
@@ -358,6 +363,7 @@
     <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="뒤로">←</button>
       <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1></div>
     <div class="pane">
+      <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
       <p class="lbl">무엇을 하시겠습니까?</p>
       <button class="btn" id="toAsk" type="button">증상 질의</button>
       <button class="btn" id="toHandover" type="button">인계 확인</button>
@@ -378,14 +384,16 @@
         <textarea id="question" placeholder="증상을 직접 적어 주세요" autocomplete="off"></textarea>
         <p class="hint">목록에 없는 증상입니다. 등록된 카드가 없으면 「해당 지식 없음」이 나옵니다 — 추측으로 답하지 않습니다.</p>
       </div>
-      <p class="lbl">관측값 — 넣을수록 순위가 정확해집니다</p>
+      <p class="lbl">관측값 — MES 현재값을 자동으로 채웁니다</p>
+      <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
+      <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
+      <p class="hint">MES에 없는 값은 아래에서 직접 추가합니다. 같은 신호는 직접 입력값이 우선합니다.</p>
       <div class="obsrow">
         <select id="obsSignal" aria-label="신호"></select>
         <input type="number" id="obsValue" step="any" inputmode="decimal" placeholder="값" aria-label="값">
         <button class="btn sm" id="obsAdd" type="button">추가</button>
       </div>
       <p class="hint" id="obsRange"></p>
-      <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
       <div class="grow"></div>
       <div class="alert" id="askBlock" hidden><p class="p" id="askBlockWhy"></p></div>
       <button class="btn primary" id="doSearch" type="button">검색</button>
@@ -474,7 +482,7 @@
     <dl>
       <dt>보안 컨텍스트</dt><dd id="dSecure">—</dd>
       <dt>BarcodeDetector</dt><dd id="dDetector">—</dd>
-      <dt>정본 데이터</dt><dd id="dData">—</dd>
+      <dt>MES 데이터</dt><dd id="dData">—</dd>
       <dt>서버</dt><dd id="dServer">—</dd>
       <dt>최근 스캔</dt><dd id="dScan">—</dd>
       <dt>eq_id_source</dt><dd id="dSource">—</dd>
@@ -489,6 +497,6 @@
 
 </div>
 
-<script src="pda.js"></script>
+<script src="/static/pda.js"></script>
 </body>
 </html>

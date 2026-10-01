@@ -163,6 +163,23 @@ summary { cursor: pointer; line-height: 1.6; }
 .evidence-table th, .evidence-table td { padding: 9px 7px; border-bottom: 1px solid #43586b; vertical-align: top; overflow-wrap: anywhere; }
 .evidence-table th { font-weight: 600; }.evidence-table small { display: block; color: #bbccd9; font-size: 12px; line-height: 1.7; }
 .evidence-table .relevant { background: #243443; }
+.evidence-table tr.out-of-range { background: #3a2226; box-shadow: inset 4px 0 0 #ff7070; }
+.evidence-table tr.out-of-range td > b { color: #ffb0a8; font-size: 16px; }
+.evidence-table tr.out-of-range .finding { color: #ffc2bb; font-weight: 700; }
+.evidence-table .deviation { color: #ffd7d2; }
+.evidence-table tr.untrusted { box-shadow: inset 4px 0 0 #ffbd70; }
+.evidence-table tr.muted td, .evidence-table tr.muted th { color: #94a6b6; }
+.range-bar { position: relative; display: block; height: 6px; margin: 6px 0 2px; max-width: 160px; background: #2c3e4e; border-radius: 3px; }
+.range-band { position: absolute; top: 0; bottom: 0; min-width: 2px; background: #4f8a6f; border-radius: 3px; }
+.range-mark { position: absolute; top: -3px; width: 4px; height: 12px; margin-left: -2px; background: #e6edf5; border-radius: 2px; }
+.out-of-range .range-mark { background: #ff7070; }
+.signal-summary { font-size: 14px; margin: 12px 0 4px; }
+.signal-summary a, .signal-summary span { white-space: nowrap; }
+.signal-summary .count-out { color: #ffb0a8; font-weight: 700; }
+.signal-summary .count-check { color: #ffd59a; font-weight: 700; }
+.signal-summary .count-ok { color: #b8efd7; }
+.signal-summary .count-none { color: #94a6b6; }
+.signal-rest { font-size: 13px; margin-bottom: 12px; }
 .related-detail { font-size: 13px; }.related-detail ul { padding-left: 15px; }.related-detail li { margin: 8px 0; }
 #recovery-panel { margin-top: 20px; border-top: 1px solid #566d82; padding-top: 18px; }
 .recovery-heading { flex-wrap: wrap; gap: 8px; }.recovery-heading h3 { color: #e6edf5; font-size: 16px; margin: 8px 0; }.recovery-heading a { color: #9cdeee; font-size: 13px; }

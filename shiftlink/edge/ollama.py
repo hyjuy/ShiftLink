@@ -35,10 +35,10 @@ NUM_PREDICT = 256
 ANSWER_MAX_CHARS = 160
 # 모델 상주, 재로딩 방지. 반드시 정수 -1 — 문자열 "-1"은 Ollama가 duration 파싱에 실패해 400을 낸다.
 KEEP_ALIVE = -1
-# 질의 모드에서 모델에 넘기는 답변 후보 수. 10/1 Jetson 실측(31문항, 카드 62장): 후보 5장을 주면
-# 모델 1순위 인용 정답이 exaone 5~23/29, qwen 2~10/29로 검색 1위(28/29)보다 낮았다.
-# 1장만 넘기면 인용 정답 = 검색 1위 정답이다. 인계 모드는 T4 실측 전이라 그대로 둔다.
-QUERY_MAX_CANDIDATES = 1
+# 모델에 넘기는 답변 후보 수(질의·인계 공통). 10/1 Jetson 실측: 후보 5장을 주면 모델 1순위 인용 정답이
+# 질의 exaone 5~23/29·qwen 2~10/29, 인계 exaone 1/16으로 모두 검색 1위(28/29, 4/16)보다 낮았다.
+# 1장만 넘기면 인용 정답 = 검색 1위 정답이다. docs/reports/model-selection-20261001.md
+MAX_CANDIDATES = 1
 
 # §4.4 모델 입력 격리: 카드에서 이 필드만 프롬프트로 나간다.
 MODEL_CARD_FIELDS = (
@@ -161,7 +161,7 @@ def split_context(
     """축약 카드를 답변 후보(검색 순위 순)와 안전 참고(검색에 안 걸린 안전 카드)로 나눈다.
 
     검색 결과에 든 안전 카드는 후보로 남는다. ranked_cards가 없는 구 호출자는 전부 후보다.
-    질의 모드는 검색 상위 QUERY_MAX_CANDIDATES장만 후보로 둔다.
+    검색 상위 MAX_CANDIDATES장만 후보로 둔다.
     """
     cards, dropped = card_context(tool_results, mode)
     ranked = tool_results.get("ranked_cards")
@@ -170,8 +170,7 @@ def split_context(
     ranked_ids = [card.get("card_id") for card in ranked]
     by_id = {card.get("card_id"): card for card in cards}
     candidates = [by_id[card_id] for card_id in ranked_ids if card_id in by_id]
-    if mode == "query":
-        candidates = candidates[:QUERY_MAX_CANDIDATES]
+    candidates = candidates[:MAX_CANDIDATES]
     references = [card for card in cards if card.get("card_id") not in ranked_ids]
     return candidates, references, dropped
 

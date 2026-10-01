@@ -6,8 +6,6 @@
   "tacit_type": "T2",
   "equipment": "RT",
   "component": "롤러 반송부",
-  "mes_equipment_id": "EQ-0008",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "반송 속도 < 20 m_min에서는 롤러 미기동과 물품 미이송을 구분한다",
   "symptom": "반송 지시가 있지만 물품이 이동하지 않는다.",
@@ -57,7 +55,9 @@
    "generalization_scope": "RT-03 롤러 반송 확인 후보이며 Interroll RollerDrive/PolyVee/MultiControl 구조 일치가 확인된 경우에만 부품 조치를 적용한다. 클램프와 RT-02 승강 절차는 제외한다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0008",
+  "mes_component_code": null
  },
  {
   "card_id": "K-1208",
@@ -66,8 +66,6 @@
   "tacit_type": "T2",
   "equipment": "RT",
   "component": "반송 모터·차단기",
-  "mes_equipment_id": "EQ-0008",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "전류 > 16 A(가상 정상 범위 8–16 A)에서는 실제 과전류 차단과 이송중량 초과를 먼저 구분한다",
   "symptom": "반송 중 rt_motor_current > 16 A(가상 정상 범위 8–16 A)가 관측되고 모터 차단 상태 확인이 필요하다.",
@@ -122,6 +120,8 @@
    "generalization_scope": "RT-03 검색 후보. 실제 과전류 차단 증상 및 대상 차단기/구동 구조 확인이 전제다. RT-02 lift_delay와 연계한 진단은 하지 않는다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0008",
+  "mes_component_code": null
  }
 ]

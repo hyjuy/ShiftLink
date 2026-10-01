@@ -9,27 +9,38 @@ HERE = Path(__file__).parent
 def build():
     cards = json.loads((HERE / "cards.json").read_text(encoding="utf-8"))
     previous = (HERE / "review.md").read_text(encoding="utf-8") if (HERE / "review.md").exists() else ""
-    verdicts = dict(re.findall(r"^## (K-\d{4}).*?^- \*\*사람 판정\*\*: ?([^\n]*)$", previous, re.M | re.S))
-    reasons = dict(re.findall(r"^## (K-\d{4}).*?^- \*\*사람 판정 근거\*\*: ?([^\n]*)$", previous, re.M | re.S))
-    rows, blocks = [], ["# 배치 C 사람 검수표\n\n서브에이전트 검토·수정은 완료했다. 아래 사람 판정은 아직 미정이며 자동 승인하지 않는다.\n"]
+    decisions = {}
+    for block in re.split(r"(?=^## K-\d{4})", previous, flags=re.M):
+        card_id = re.match(r"## (K-\d{4})", block)
+        if card_id:
+            verdict = re.search(r"^- \*\*(?:사람 )?판정\*\*: ?([^\n]*)$", block, re.M)
+            reason = re.search(r"^- \*\*(?:사람 )?판정 근거\*\*: ?([^\n]*)$", block, re.M)
+            decisions[card_id[1]] = (verdict[1].strip() if verdict else "", reason[1].strip() if reason else "")
+    rows, blocks = [], ["# KB-20260930-C 검수표\n\nA 배치와 같은 항목 순서로 정리했다. 판정 칸에 `accepted` / `rejected` / `수정`을 기록하고 판정 근거를 남긴다. 사람 판정은 미정이며 이 문서를 작성하거나 재생성해도 카드 상태·등급은 자동 변경하지 않는다. 출처·계보·편입 게이트는 별도 검수 대상이다.\n"]
     for c in cards:
         sources = "; ".join(f"{s['source_id']} — {s.get('locator', '')}" for s in c["provenance"]["sources"])
         rows.append(f"| {c['card_id']} | {c['equipment']} | {c['tacit_type']} | {c['title']} | {sources} |")
         ge = c.get("generalization_evidence") or {}
         payload = c.get("type_payload") or {}
-        lines = [f"## {c['card_id']} · {c['equipment']} · {c['tacit_type']} — {c['title']}", "",
-                 f"- **부품**: {c['component']}", f"- **증상**: {c.get('symptom') or '-'}",
-                 f"- **노하우**: {c['know_how']}", f"- **근거 설명**: {c['rationale']}",
-                 f"- **안전 전제**: {c.get('safety_basis') or '-'}", f"- **출처**: {sources}",
-                 f"- **근거 사건**: {', '.join(ge.get('supporting_event_ids', [])) or '-'}",
-                 f"- **재가동 유형**: {payload.get('restart_type') or '-'}",
-                 f"- **프롬프트**: `{c['provenance']['prompt_version']}`",
-                 f"- **정책 연결**: `{c['provenance'].get('index_version', '-')}` · [카드별 보완 항목](policy_manifest.json)",
-                 f"- **독립 검토 근거**: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)"]
+        safety = " · ⚠ 안전" if c['safety_flag'] else ""
+        lines = [f"## {c['card_id']} · {c['equipment']} · {c['tacit_type']}{safety} — {c['title']}", "",
+                 f"- **부품**: {c['component']}"]
+        if c.get('symptom'):
+            lines.append(f"- **증상**: {c['symptom']}")
+        lines += [f"- **노하우**: {c['know_how']}", f"- **근거 설명**: {c['rationale']}"]
+        if c.get('safety_basis'):
+            lines.append(f"- **안전 근거**: {c['safety_basis']}")
         for cond in c["conditions"]:
-            lines.append(f"- **검색 조건**: `{cond['signal']} {cond['op']} {cond['value']}`")
-        lines += [f"- **사람 판정**: {verdicts.get(c['card_id'], '').strip()}",
-                  f"- **사람 판정 근거**: {reasons.get(c['card_id'], '').strip()}", ""]
+            unit = f" {cond['unit']}" if cond.get('unit') else ""
+            lines.append(f"- **조건**: `{cond['signal']} {cond['op']} {cond['value']}{unit}`")
+        notes = [f"근거 사건: {', '.join(ge.get('supporting_event_ids', [])) or '-'}",
+                 f"재가동 유형: {payload.get('restart_type') or '-'}",
+                 f"프롬프트: `{c['provenance']['prompt_version']}`",
+                 f"정책 연결: `{c['provenance'].get('index_version', '-')}` · [카드별 보완 항목](policy_manifest.json)",
+                 "독립 검토 근거: [1차 판정](review_round1.md) · [수정 후 재검토](review_round2.md) · [변경 전후](review_changes.json)"]
+        verdict, reason = decisions.get(c['card_id'], ("", ""))
+        lines += [f"- **출처**: {sources}", f"- **작성 노트**: {'; '.join(notes)}",
+                  f"- **판정**: {verdict}", f"- **판정 근거**: {reason}", ""]
         blocks.append("\n".join(line.rstrip() for line in lines))
     readme = """# KB-20260930-C — T2 10장 · T6 9장
 

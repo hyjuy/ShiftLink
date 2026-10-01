@@ -6,8 +6,6 @@
   "tacit_type": "T2",
   "equipment": "GR",
   "component": "기어박스·베어링",
-  "mes_equipment_id": "EQ-0004",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "진동 RMS > 2.8 mm_s(가상 정상 범위 0.5–2.8 mm_s)에서 베어링 온도 동반 여부에 따라 추가 확인을 나눈다",
   "symptom": "정상 운전과 비교해 진동이 증가했으며 베어링 온도 변화 확인이 필요하다.",
@@ -62,7 +60,9 @@
    "generalization_scope": "GR-01 검색 후보. 실제 정상 운전 대비 변화·소음 유형·베어링부 온도 확인이 필요하다. MES 온도 normal은 운전 지속 허가가 아니다. SEW 모델 적용성은 미확인이다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null
  },
  {
   "card_id": "K-1210",
@@ -71,8 +71,6 @@
   "tacit_type": "T2",
   "equipment": "GR",
   "component": "베어링·윤활유",
-  "mes_equipment_id": "EQ-0004",
-  "mes_component_code": null,
   "scenario": "S2",
   "title": "베어링 온도 > 62 degC(가상 정상 범위 30–62 degC)에서는 확인된 유면과 오일 이력에 따라 조치를 나눈다",
   "symptom": "MES gr_brg_temp > 62 degC(가상 정상 범위 30–62 degC)가 관측되어 실제 베어링부 온도와 해당 모델의 과열 기준 대조가 필요하며 윤활 상태 확인이 필요하다.",
@@ -127,6 +125,8 @@
    "generalization_scope": "GR-01 베어링부 온도 확인 후보. GR 전류→토크·과부하 추론은 하지 않는다. 대상 SEW 모델·설치 자세·오일 교체 지침 적합성 미확인이다. 기존 T1 온도 증상 카드와 달리 실제 확인된 유면/이력에 따른 조치 분기를 다룬다.",
    "confidence_basis": "0.0은 미평가 sentinel이다. 원문 모델과 가상 설비의 적용성 및 사람의 내용·안전 승인은 미완료이다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. KB 편입 보완 대기."
   },
-  "safety_review": null
+  "safety_review": null,
+  "mes_equipment_id": "EQ-0004",
+  "mes_component_code": null
  }
 ]

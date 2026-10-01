@@ -84,6 +84,15 @@
    "card_ids": [
     "K-1324"
    ]
+  },
+  "PDP-r5": {
+   "path": "docs/data/knowledge_cards/kb/20260930-D/prompts/PDP-r5.md",
+   "equipment": "PDP",
+   "round": 5,
+   "sha256": "28bf3db14f9673c60e61fc084aa8aeb0c56c44d9e7f2f9b05b4d0878077a3793",
+   "card_ids": [
+    "K-1325"
+   ]
   }
  },
  "dispatch": {

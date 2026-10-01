@@ -324,6 +324,40 @@ class InMemoryToolProvider:
         """Return canonical metadata, rejecting unresolved or unsupported equipment."""
         return [row for _, _, row in self._resolve_equipment(equipment_ids) if row is not None]
 
+    def _with_derived_states(self, resolved, observations):
+        """Add `<signal>_state` (low/normal/high) from the catalog's normal range, as MesCardAdapter does.
+
+        T2 cards test derived states (e.g. hpu_pressure_state == low); without this a raw reading such as
+        hpu_pressure 138 left them "unverified" outside the MES path (10/1 Jetson run). Existing keys win.
+        """
+        if not observations:
+            return observations
+        rows = [row for _, _, row in resolved if row]
+        for code in {code for _, code, row in resolved if row is None}:
+            type_ids = {t.get("equipment_type_id") for t in self.equipment_types if t.get("type_code") == code}
+            # ponytail: a type code uses its first unit's ranges (MesCardAdapter picks -01 the same way)
+            rows += sorted((r for r in self.equipment_db if r.get("equipment_type_id") in type_ids),
+                           key=lambda r: r.get("code", ""))[:1]
+        points = {mp["signal"]: mp for row in rows for mp in row.get("measurement_points", [])}
+        out = dict(observations)
+        for signal, raw in observations.items():
+            point, key = points.get(signal), f"{signal}_state"
+            if point is None or key in out:
+                continue
+            value, unit = (raw.get("value"), raw.get("unit")) if isinstance(raw, dict) else (raw, None)
+            if unit is not None and unit != point.get("unit"):
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                continue
+            lo, hi = point.get("normal_min"), point.get("normal_max")
+            if lo is not None and value < lo:
+                out[key] = "low"
+            elif hi is not None and value > hi:
+                out[key] = "high"
+            elif lo is not None or hi is not None:
+                out[key] = "normal"
+        return out
+
     def search_cards(
         self,
         *,
@@ -346,6 +380,7 @@ class InMemoryToolProvider:
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
         type_only = {code for _, code, row in resolved if row is None}
+        observations = self._with_derived_states(resolved, observations)
         evidence = self._evidence_tokens if handover else {}
 
         def candidates():
@@ -392,6 +427,7 @@ class InMemoryToolProvider:
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
         type_only = {code for _, code, row in resolved if row is None}
+        observations = self._with_derived_states(resolved, observations)
         candidate_cards = [
             c for c in self.cards
             if c.safety_flag and (include_handover or c.tacit_type != "T4")

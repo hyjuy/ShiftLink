@@ -86,6 +86,7 @@
 | `diff()` | `shiftlink/mes/configuration.py` | 구성 변경 분류(교체/추가/제거/신호/경로) | 유현준 |
 | `to_payload()` / `from_payload()` | `shiftlink/mes/configuration.py` | Configuration ↔ JSON dict | 유현준 |
 | `finalize()` | `shiftlink/mes/configuration.py` | 내용 기반 config_id(sha256) 채움 | 유현준 |
+| `kb_cards()` · `GET /api/kb/cards` | `shiftlink/mes/server.py` | PDA 화면용 검색 대상 카드(accepted/kb/L1)와 예시 인계 기록. kb 파일만 읽음 | 허재원 |
 | `build_messages()` | `shiftlink/edge/ollama.py` | 모드·질문·관측값·카드 → Ollama `/api/chat` messages (+카나리 제외 카드 ID) | 허재원 |
 | `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5). `mode="handover"`면 T4 `handover_method`도 포함 | 허재원 |
 | `main()` | `shiftlink/edge/__main__.py` | 픽스처 카드 + 실제 Ollama로 파이프라인 1건 실행하는 진입점 | 허재원 |

@@ -7,6 +7,8 @@ HERE = Path(__file__).parent
 REL = "docs/data/knowledge_cards/kb/20260930-D"
 MES_ID = {"CAU": "EQ-0003", "PDP": "EQ-0002"}
 SAFETY = "docs/sources/safety"
+KIFSE = "연영모·김승희, 저압용 MCCB 접속부 비정상 진단을 통한 화재위험 예측, Fire Science and Engineering 34(5), pp.42-49, 2020, DOI 10.7731/KIFSE.2073bb81"
+KOSHAM = "이병열, 배전반 및 분전반의 화재위험요소에 관한 연구, 한국방재학회논문집 19(7), pp.247-251, 2019, DOI 10.9798/KOSHAM.2019.19.7.247"
 SOURCES = {
     "CAU": ["원문: `docs/data/sources/CAU/compressed-air-ref-eng.pdf` — CEATI *Compressed Air Energy Efficiency Reference Guide* (118쪽)",
             "원문: `docs/data/sources/CAU/Manual-on-Energy-Efficiency.pdf` — UNEP/TERI *Energy Efficient Technologies and Best Practices in Steel Rolling Industries* (116쪽, 압축공기 절)",
@@ -54,12 +56,20 @@ SOURCES_R4 = {
             "중복 금지: K-1308(트립 후 확인 순서)·K-1309(충전부 작업 전 차단·잠금)·K-1319(CT 2차 개방 금지)와 겹치지 않게 한다", R4_NOTE, R4_OUT.format(eq="PDP")],
 }
 
+R5_OUT = R2_OUT.replace("-r2", "-r5").replace("2차", "5차").replace("1차 결과이므로", "1~4차 결과이므로")
+SOURCES_R5 = {
+    "PDP": [f"원문: `docs/data/sources/PDP/KIFSE-2073bb81.pdf` — {KIFSE}",
+            f"원문: `docs/data/sources/PDP/KOSHAM-2019-19-7-247.pdf` — {KOSHAM}",
+            "중복 금지: K-1306(트립 후 재투입 정상)·K-1315(변색·핫스폿)·K-1317(트립 후 점검 순서)와 겹치지 않게 한다. 두 논문은 냄새를 다루지 않으므로 냄새 징후를 쓰지 않는다",
+            "5차 슬롯 주제는 10/1 블라인드 BL-017 후속으로 정했다(평가셋에 대해 블라인드 아님). 작성: 메인 Claude Code 세션", R5_OUT.format(eq="PDP")],
+}
+
 plan = json.loads((HERE / "plan.json").read_text(encoding="utf-8"))
 tpl = (HERE / "prompt_template.md").read_text(encoding="utf-8")
 index = {"batch_id": plan["batch_id"], "seed": plan["seed"],
          "template_sha256": hashlib.sha256(tpl.encode("utf-8")).hexdigest(), "prompts": {}}
 RETRY = {"CAU": ["K-1305"]}
-jobs = [(eq, eq, 1, SOURCES[eq]) for eq in SOURCES] + [(f"{eq}-r2", eq, 2, SOURCES_R2[eq]) for eq in SOURCES_R2] + [(f"{eq}-r3", eq, 3, SOURCES_R3[eq]) for eq in SOURCES_R3] + [(f"{eq}-r4", eq, 4, SOURCES_R4[eq]) for eq in SOURCES_R4]
+jobs = [(eq, eq, 1, SOURCES[eq]) for eq in SOURCES] + [(f"{eq}-r2", eq, 2, SOURCES_R2[eq]) for eq in SOURCES_R2] + [(f"{eq}-r3", eq, 3, SOURCES_R3[eq]) for eq in SOURCES_R3] + [(f"{eq}-r4", eq, 4, SOURCES_R4[eq]) for eq in SOURCES_R4] + [(f"{eq}-r5", eq, 5, SOURCES_R5[eq]) for eq in SOURCES_R5]
 for key, eq, rnd, sources in jobs:
     slots = [s for s in plan["slots"] if s["equipment"] == eq and s.get("round", 1) == rnd]
     if rnd == 2:

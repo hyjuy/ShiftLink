@@ -87,6 +87,7 @@ class FixedPipeline:
         # No ranked card answers the question or memo -> "no knowledge" without a model call.
         # Applicable safety cards are still shown; they warn but do not answer (9/30 eval).
         # Handover too (10/1 T4 run: with no ranked card the model cited a safety card, abstain 0/4).
+        # Revisit the handover case once memo item extraction exists (D26-29 contract §4.4).
         if not tool_results["ranked_cards"]:
             output = build_response(routed.mode, routed.request, tool_results)
             output.cited_card_ids = []

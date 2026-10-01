@@ -54,6 +54,7 @@
 | `OllamaModel` | `shiftlink/edge/ollama.py` | 로컬 Ollama 어댑터 — 파이프라인이 부르는 단일 ModelCall (호출당 1회, 재시도 없음) | 허재원 |
 | ~~`ModelCallError`~~ | — | 2026-09-24 삭제. A 계약 §3에 따라 표준 예외(`ValueError`·`TimeoutError`·`ConnectionError`·`NotImplementedError`)로 대체 — `agent`가 `edge`를 import하지 않아도 되게 | 허재원 |
 | `EventSpec` | `shiftlink/data/scenario.py` | 합성 사건 명세. 작성자가 정하는 것만 담고 ID·split·카나리는 제외 | 허재원 |
+| `Stabilizer` | `shiftlink/vision/classify.py` | 웹캠 분류 결과를 연속 N프레임·신뢰도 기준으로 한 번만 확정 | 허재원 |
 
 > 01_고도화_초안 §7.2~7.4가 제안하는 신규 엔티티(약 25종: `ProductionLine`, `Relation`, `ActionCandidate` 등)는 **아직 미승인·미구현**이라 여기 안 올림. 실제로 클래스를 만들면 그때 등록.
 
@@ -95,6 +96,7 @@
 | `build_prompt()` | `shiftlink/data/narrative.py` | 정답지·타 페르소나 관측·sealed를 제외한 Stage A 프롬프트 조립 | 허재원 |
 | `shop_floor_names()` | `shiftlink/data/narrative.py` | 내부 ID → 현장 호칭(`EQ-0008` → `RT-03`) 매핑 | 허재원 |
 | `lint_card()` / `lint_cards()` | `shiftlink/data/card_lint.py` | 카드 작성 가이드 §2·§3·§5·§7 중 **스키마가 못 잡는** 유형 경계·안전 표시를 자문 수준으로 지적 | 허재원 |
+| `preprocess()` | `shiftlink/vision/classify.py` | 웹캠 프레임 → CNN 입력(224, ImageNet 정규화). `train.py` 검증 전처리와 같아야 함 | 허재원 |
 | `verdict()` | `eval/qa/report.py` | 채점 JSON 한 문항의 자동 판정 (hit/partial/abstain_ok/miss) | 최재영 |
 | `render_report()` | `eval/qa/report.py` | 채점 JSON + 문항 파일 → 마크다운 검수표. 틀린 문항이 앞 | 최재영 |
 
@@ -103,6 +105,8 @@
 2026-09-22: `search_cards(*, query, equipment_ids, k=5, observations=None)`로 확장. 일반 검색도 안전 검색과 같은 관측값·조건 평가를 사용한다.
 
 2026-09-30: `search_cards(*, query, equipment_ids, k=5, observations=None, handover=False)`. `handover=True`(파이프라인 인계 모드)일 때만 T4 카드의 근거 사건 문장(`kb_cards.json`의 `evidence_text`)을 낮은 가중치로 점수에 더한다.
+
+2026-10-01: 웹캠 분류 클래스 상수 `CLASSES` = `("HPU", "GR", "RT", "CV", "CAU", "PDP")`는 `shiftlink/vision/__init__.py`에 둔다(담당 허재원). 라즈베리파이에 pydantic을 두지 않으려고 `schemas.Equipment`를 import하지 않고 복제하며, 일치는 `tests/test_vision.py`가 검사한다.
 
 2026-09-24: `MODEL_CALL_ERRORS` = `(NotImplementedError, TimeoutError, ConnectionError, ValueError)` — `shiftlink/edge/ollama.py`의 어댑터가 올리는 오류 4종 묶음(담당 허재원). 호출자가 `except MODEL_CALL_ERRORS`로 한 번에 잡을 때만 쓰고, 개별 판단은 예외 타입으로 한다.
 

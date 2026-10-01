@@ -118,6 +118,14 @@ def test_completion_answer_is_backed_by_a_loaded_source_procedure():
     assert score_item(item, outcome(['K-1401']))['hit'] is True
 
 
+def test_completion_card_keeps_normal_record_handover_on_its_answer():
+    from shiftlink.rag.loader import load_card_provider
+    from eval.qa.route_score import route
+    item = next(x for x in json.loads((BASE / 'qa_dev_t4.json').read_text(encoding='utf-8')) if x['qid'] == 'H-004')
+    provider = load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider
+    assert route(provider, item, handover=True)[0] == 'K-1101'
+
+
 def test_report_exposes_adjudication_and_manual_fact_checks():
     item = dict(qid='H-016', eq_id='GR', question='소리와 온도 미확인',
                 primary_card_ids=['K-1104', 'K-1108'], acceptable_card_ids=[],

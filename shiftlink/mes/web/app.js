@@ -71,16 +71,16 @@
   const connectionState = (lastReceived, now, mode) => now - lastReceived > 10000 ? "데이터 수신 지연" : mode === "paused" ? "연결됨 · 일시정지" : "연결됨";
   function recoveryView(snapshot, interactive) {
     const plan = snapshot.recovery;
-    if (!plan) return '<p class="empty-state">감속기 과열 · 유압유 과열 · 감속기 누유 · 영향 코일 검사·보류 시나리오를 선택하면 필요한 조치와 복귀 조건을 볼 수 있습니다.</p>';
+    if (!plan) return '<p class="empty-state">시연 제어에서 시나리오를 선택하면 필요한 조치와 복귀 조건을 볼 수 있습니다.</p>';
     const done = plan.stage === "completed", next = plan.actions.findIndex(a => !a.completed);
     const steps = [{title: "이상 발생", done: true}, ...plan.actions.map((a, i) => ({title:a.title, done:a.completed, current:plan.stage === "actions" && i === next})),
       {title: "안정화 관찰", done, current:plan.stage === "stabilizing"}, {title: "정상 복귀", done, current:done}];
     const flow = steps.map((s, i) => `<li class="${s.done ? "done" : ""} ${s.current ? "current" : ""}" ${s.current ? 'aria-current="step"' : ''}><span>${s.done ? "✓" : i + 1}</span><b>${escape(s.title)}</b><small>${s.current ? "현재 단계" : s.done ? "완료" : "대기"}</small></li>`).join("");
     const action = plan.stage === "actions" ? plan.actions[next] : null;
-    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 복귀 진행을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · ${plan.remaining_ticks} tick 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : "다음 조치를 완료해야 복귀할 수 있습니다.";
+    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 복귀 진행을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · ${plan.remaining_ticks} tick 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
     const held = (snapshot.coils || []).filter(c => c.quality_status === "hold");
     const source = /^https:\/\//.test(plan.source_url || "") ? `<a href="${escape(plan.source_url)}" target="_blank" rel="noopener noreferrer">근거 매뉴얼 ↗</a>` : "";
-    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료 (모의)</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">복귀 진행 · 안정화 시작</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
+    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료 (모의)</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">복귀 진행 · 안정화 시작</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 생략 · 바로 복귀 진행</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
   }
   function componentView(snapshot, equipmentId) {
     const parts = (snapshot.components || []).filter(c => c.equipment_id === equipmentId);
@@ -299,9 +299,9 @@
   function freezeCoils() { document.querySelectorAll(".is-moving").forEach(node => node.classList.remove("is-moving")); document.querySelectorAll(".coil,.flow-coil").forEach((node) => { node.style.transition = "none"; }); }
   function updateControls() {
     document.querySelectorAll("#control-panel button, #control-panel select, #recovery-panel [data-action], #recovery-panel [data-command]").forEach((el) => { el.disabled = mode !== "live" || controlPending || stale; });
-    const stage = lastSnapshot?.recovery?.stage;
-    document.querySelectorAll('[data-command="recover"]').forEach(recover=>{ recover.disabled = mode !== "live" || controlPending || stale || lastSnapshot?.scenario_id === "normal" || (stage && stage !== "ready"); });
-    if (stage && stage !== "completed") $("#scenario").disabled = true;
+    const plan = lastSnapshot?.recovery, stage = plan?.stage, optional = plan?.required === false;
+    document.querySelectorAll('[data-command="recover"]').forEach(recover=>{ recover.disabled = mode !== "live" || controlPending || stale || lastSnapshot?.scenario_id === "normal" || (stage && stage !== "ready" && !(optional && stage === "actions")); });
+    if (stage === "stabilizing" || (stage && stage !== "completed" && !optional)) $("#scenario").disabled = true;
   }
   async function control(command, extra = {}) {
     if (mode !== "live" || controlPending || stale) return;

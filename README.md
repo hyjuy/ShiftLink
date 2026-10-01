@@ -13,3 +13,13 @@
 
 ## 브랜치 전략
 자세한 내용은 [`docs/collaboration/branching.md`](docs/collaboration/branching.md) 참고.
+
+## PR 올리기 전 확인
+
+CI는 `dev_route_acc`가 20/30 미만이거나 `sanity_route_acc`가 28/30 미만이면 실패한다.
+
+```
+python -m pytest -q
+python docs/data/knowledge_cards/kb/build_kb.py
+python eval/qa/route_score.py
+```

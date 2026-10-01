@@ -30,6 +30,14 @@ jobs:
       - name: pytest
         run: python -m pytest -q
 
+      - name: kb_cards.json
+        run: |
+          python docs/data/knowledge_cards/kb/build_kb.py
+          git diff --exit-code -- docs/data/knowledge_cards/kb/kb_cards.json || {
+            echo "::error::build_kb.py를 다시 실행하세요"
+            exit 1
+          }
+
       - name: route_score
         run: |
           python eval/qa/route_score.py | tee route_score.txt

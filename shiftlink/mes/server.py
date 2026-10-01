@@ -22,6 +22,18 @@ from .storage import MesStorage
 
 _CONTROL_BODY_LIMIT = 8192
 _CONFIG_BODY_LIMIT = 256 * 1024
+_ROOT = Path(__file__).resolve().parents[2]
+# kb split only: dev/sealed evaluation files are never opened here (C-099).
+_KB_CARDS = _ROOT / "docs" / "data" / "knowledge_cards" / "kb" / "kb_cards.json"
+_KB_HANDOVERS = _ROOT / "docs" / "data" / "scenarios" / "EV-0031_upstream_cause.json"
+
+
+def kb_cards() -> dict[str, object]:
+    """Searchable cards (C-102: accepted/kb/L1) and sample handovers for the PDA screen."""
+    cards = json.loads(_KB_CARDS.read_text(encoding="utf-8"))["cards"]
+    handovers = json.loads(_KB_HANDOVERS.read_text(encoding="utf-8")).get("handover_records", [])
+    return {"cards": [c for c in cards if (c.get("status"), c.get("split"), c.get("grade")) == ("accepted", "kb", "L1")],
+            "handovers": handovers, "is_synthetic": True}
 
 
 class ConflictError(ValueError):
@@ -252,6 +264,7 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/state": self._send(200, self.service.state()); return
             if parsed.path == "/api/catalog": self._send(200, {"data": self.service.catalog.data, "is_synthetic": True}); return
             if parsed.path == "/api/config": self._send(200, self.service.config()); return
+            if parsed.path == "/api/kb/cards": self._send(200, kb_cards()); return
             if parsed.path.startswith("/api/configs/"):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
@@ -263,8 +276,10 @@ class _Handler(BaseHTTPRequestHandler):
                 query = parse_qs(parsed.query); run_id = query.get("run_id", [self.service.engine.run.run_id])[0]; format_name = query.get("format", ["jsonl"])[0]
                 content_type = "text/csv; charset=utf-8" if format_name == "csv" else "application/x-ndjson; charset=utf-8"
                 self._send(200, self.service.export(run_id, format_name).encode(), content_type); return
-            if parsed.path == "/": self._send(200, (self.web_root / "index.html").read_bytes(), "text/html; charset=utf-8"); return
-            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "style.css"}:
+            if parsed.path in ("/", "/pda.html"):
+                page = "pda.html" if parsed.path == "/pda.html" else "index.html"
+                self._send(200, (self.web_root / page).read_bytes(), "text/html; charset=utf-8"); return
+            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "style.css", "pda.js"}:
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
                 self._send(200, (self.web_root / name).read_bytes(), f"{kind}; charset=utf-8"); return
             self._send(404, {"error": "not found", "is_synthetic": True})

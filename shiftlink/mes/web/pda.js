@@ -1,34 +1,25 @@
-/* ShiftLink PDA — 동작하는 프로토타입
+/* ShiftLink PDA — 동작하는 프로토타입 (모의 MES 서버가 /pda.html 로 서빙)
  * ─────────────────────────────────────────────────────────────────────
  * 설계: docs/planning/PDA_카메라_설비식별_고도화.md
+ * 작업계획: docs/planning/PDA_라즈베리파이_모니터_작업계획_20261001.md (C4)
  * 구상: docs/design/pda_ui/pda_ui_mockup.html
  *
  * 지키는 규범
- *   C-102  검색 대상 = status=accepted AND split=kb AND grade=L1
- *   C-099  sealed 분할은 열지 않는다 — 파일 자체를 읽지 않음
- *   D-39   인식은 마커 디코딩(QR)만. 신경망 없음
- *   D-41   확정되지 않았거나 카탈로그에 없는 설비로는 검색하지 않는다
+ *   C-102  검색 대상 = status=accepted AND split=kb AND grade=L1 (/api/kb/cards 가 거름)
+ *   C-099  sealed 분할은 열지 않는다 — 서버가 kb 파일만 읽음
+ *   D-41   확정되지 않았거나 구성에 없는 설비로는 검색하지 않는다
  *   D-42   원본 이미지는 단말 밖으로 나가지 않는다
  *   §5.3   QR 페이로드는 code(HPU-01). equipment_id(EQ-0001)가 아니다
  *   §9.2   QueryRequest.eq_id 에는 equipment_id 를 넣는다
  *   §6.1   신뢰도 대신 연속 프레임 일치 수(frame_votes)
+ *
+ * MES 정렬 (2026-10-01)
+ *   설비·신호·정상 범위 = /api/config (현재 run 의 구성). 기준정보 alarm_low/high 는 상태 경계로 쓰지 않는다.
+ *   관측값 = /api/state. MesCardAdapter 와 같은 규칙: quality=good·단위 일치·유한 숫자(bool 은 0/1),
+ *   시료는 60초 이내만. 원값과 <signal>_state(low/normal/high, 경계 포함 normal)를 조건 평가에 쓴다.
+ *   카드 = card.equipment 가 설비 유형이거나 COMMON, mes_equipment_id 가 있으면 그 설치만.
  */
 'use strict';
-
-// ── 정본 경로 (저장소 루트 기준) ────────────────────────────────────
-// dev(EV-0032)·sealed(EV-0033)는 읽지 않는다. 파일 단위 격리가 필터보다 확실하다.
-const DATA_ROOT = '../../../data/';
-/* main(#40)이 docs/data/ 를 재편했다. 새 경로를 먼저 시도하고 구 경로로 폴백한다
- * — 머지 전 트리와 머지 후 트리에서 모두 동작해야 하기 때문이다.
- * 머지가 끝나면 폴백(두 번째 항목)을 지운다. */
-const SOURCES = {
-  catalog: ['reference/00_plant_and_relations.json', '00_plant_and_relations.json'],
-  kb: [
-    ['knowledge_cards/01_kb_cards_shared.json', '01_kb_cards_shared.json'],
-    ['scenarios/EV-0031_upstream_cause.json', 'EV-0031_upstream_cause.json']
-  ]
-};
-const USED_PATHS = [];
 
 const QR_PREFIX = 'SHIFTLINK:EQ:';
 const VOTE_WINDOW = 3;
@@ -40,7 +31,6 @@ const RECENT_MAX = 3;
 
 const TYPE_COLOR = { HPU:'hpu', GR:'gr', RT:'rt', CV:'cv', PDP:'pdp', CAU:'cau' };
 const TYPE_BAND = { HPU:'빨강', GR:'파랑', RT:'노랑', CV:'초록', PDP:'보라', CAU:'하늘' };
-const SCOPE_RANK = { equipment:0, segment:1, line:2 };
 
 // ── 상태 ───────────────────────────────────────────────────────────
 const S = {
@@ -50,88 +40,70 @@ const S = {
   observations:[], recent:[], outbox:[], online:null, netNote:null,
   detector:null, stream:null, timer:null,
   votes:[], noneFrames:0, attempts:0, pending:null,
-  scanStartedAt:0, lastScanMs:null, localScanSeq:0,
+  scanStartedAt:0, lastScanMs:null, localScanSeq:0, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0
 };
 
 const $ = (id) => document.getElementById(id);
 const byType = (t) => TYPE_COLOR[t] ? 'var(--' + TYPE_COLOR[t] + ')' : 'var(--tx-3)';
 const findByCode = (code) => S.equipment.find((e) => e.code === code) || null;
+// retrieval.py 와 같은 규칙: 유형 일치 또는 COMMON, 설치 지정 카드는 그 설치에서만.
+const cardFits = (c, eq) => (c.equipment === eq.type || c.equipment === 'COMMON')
+  && (!c.mes_equipment_id || c.mes_equipment_id === eq.equipment_id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// ── 부팅: 정본 적재 ────────────────────────────────────────────────
-async function boot() {
-  try {
-    const cat = await fetchFirst(SOURCES.catalog);
-    S.groups = {};
-    (cat.equipment_groups || []).forEach((g) => { S.groups[g.equipment_group_id] = g; });
-    S.types = {};
-    (cat.equipment_types || []).forEach((t) => { S.types[t.equipment_type_id] = t; });
-    S.equipment = (cat.equipment || []).map((e) => ({
+// ── 부팅: MES 구성·카드 적재 ───────────────────────────────────────
+async function getJson(path) {
+  const res = await api(path);
+  if (!res.ok) throw new Error(path + ' — HTTP ' + res.status);
+  return res.json();
+}
+
+/* MES 구성의 설비·신호에 기준정보의 그룹명·위치 문구만 덧붙인다. */
+function equipmentFrom(config, catalog) {
+  const groups = {}, rows = {};
+  (catalog.equipment_groups || []).forEach((g) => { groups[g.equipment_group_id] = g; });
+  (catalog.equipment || []).forEach((e) => { rows[e.equipment_id] = e; });
+  return (config.equipment || []).filter((e) => e.active !== false).map((e) => {
+    const row = rows[e.equipment_id] || {};
+    return {
       equipment_id: e.equipment_id,
       code: e.code,
-      type: (S.types[e.equipment_type_id] || {}).type_code || '',
-      group: (S.groups[e.equipment_group_id] || {}).name || '',
-      where: e.location_text || '',
-      signals: (e.measurement_points || []).map((m) => ({
-        signal: m.signal, unit: m.unit,
-        min: m.normal_min, max: m.normal_max,
-        alarmLow: m.alarm_low, alarmHigh: m.alarm_high
+      type: String(e.code).split('-')[0],
+      group: (groups[row.equipment_group_id] || {}).name || e.name || '',
+      where: row.location_text || '',
+      signals: (e.signals || []).map((m) => ({
+        signal: m.signal, name: m.name || m.signal, unit: m.unit,
+        min: m.normal_min, max: m.normal_max, semantics: m.semantics || {}, zeroStopped: m.zero_when_stopped === true
       }))
-    }));
+    };
+  });
+}
 
-    const all = [];
-    for (const candidates of SOURCES.kb) {
-      const d = await fetchFirst(candidates);
-      (d.knowledge_cards || []).forEach((c) => all.push(c));
-      (d.handover_records || []).forEach((h) => S.handovers.push(h));
-    }
-    // C-102 — 읽은 파일이 kb 전용이지만 방어적으로 한 번 더 거른다.
-    S.cards = all.filter((c) =>
-      c.status === 'accepted' && c.split === 'kb' && c.grade === 'L1');
+async function boot() {
+  try {
+    const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
+    S.equipment = equipmentFrom(cfg.config, cat.data);
+    S.cards = kb.cards || [];
+    S.handovers = kb.handovers || [];
+    $('dData').textContent = '설비 ' + S.equipment.length + '대 · 카드 ' + S.cards.length + '장 · 인계 '
+      + S.handovers.length + '건 · 구성 ' + String(cfg.config.config_id || '').slice(0, 8);
 
-    const dropped = all.length - S.cards.length;
-    const legacy = USED_PATHS.filter((p) => p.indexOf('/') === -1).length;
-    $('dData').textContent = '설비 ' + S.equipment.length + '대 · 카드 ' + S.cards.length + '장'
-      + (dropped ? ' (비대상 ' + dropped + '장 제외)' : '') + ' · 인계 ' + S.handovers.length + '건'
-      + (legacy ? ' · 구 경로 ' + legacy + '개 (main 머지 전)' : ' · 신 경로');
-
-    if (!S.equipment.length || !S.cards.length) throw new Error('정본이 비어 있습니다');
+    if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
 
     renderManualList();
     renderSimOptions();
     show('home');
   } catch (err) {
-    $('bootMsg').textContent = '정본 데이터를 읽지 못했습니다.';
+    $('bootMsg').textContent = 'MES 서버에서 데이터를 읽지 못했습니다.';
     const box = document.createElement('div');
     box.className = 'alert bad';
-    box.innerHTML = '<p class="hd">데이터 로드 실패</p><p class="p"></p><code></code>'
-      + '<p class="p">저장소 <b>루트</b>에서 서버를 띄워야 <code>docs/data/</code> 에 닿습니다.<br>'
-      + '<code>python -m http.server 8791</code> → '
-      + '<code>http://localhost:8791/docs/design/pda_ui/prototype/pda.html</code></p>';
+    box.innerHTML = '<p class="hd">데이터 로드 실패</p><p class="p"></p>'
+      + '<p class="p">모의 MES 서버로 접속해야 합니다.<br>'
+      + '<code>python -m shiftlink.mes</code> → <code>http://127.0.0.1:8000/pda.html</code></p>';
     box.querySelector('.p').textContent = String(err && err.message || err);
-    box.querySelector('code').textContent = new URL(DATA_ROOT, location.href).href;
     $('bootErr').appendChild(box);
   }
-}
-
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error(url.split('/').pop() + ' — HTTP ' + res.status);
-  return res.json();
-}
-
-/* 후보 경로를 순서대로 시도한다. 전부 실패하면 첫 후보 기준으로 오류를 낸다. */
-async function fetchFirst(candidates) {
-  let firstErr = null;
-  for (const rel of candidates) {
-    try {
-      const data = await fetchJson(DATA_ROOT + rel);
-      USED_PATHS.push(rel);
-      return data;
-    } catch (err) { if (!firstErr) firstErr = err; }
-  }
-  throw firstErr || new Error(candidates[0] + ' — 읽을 수 없음');
 }
 
 // ── 화면 전환 ──────────────────────────────────────────────────────
@@ -191,6 +163,7 @@ function setContext(eq, source, extra) {
   S.observations = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   renderContext(); renderRecent(); renderObsSignals(); renderObsList();
+  loadMesObservations();
   $('dSource').textContent = source + (S.scanId ? ' · ' + S.scanId : '');
 }
 
@@ -338,33 +311,9 @@ function localScanId() {
   return 'SC-LOCAL-' + String(S.localScanSeq).padStart(4, '0');
 }
 
-async function confirmScan(hit, votes) {
-  const payload = {
-    equipment_id: hit.eq.equipment_id,   // 정본 키 — 서버·질의는 이 값
-    code: hit.eq.code,                   // 인쇄 라벨과 같은 표시값
-    method: 'qr',
-    marker_value: hit.marker,            // 디코딩 원문. 이미지는 보내지 않는다(D-42)
-    frame_votes: votes
-  };
-  let scanId = null;
-  try {
-    const res = await api('/api/equipment/scan', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload) });
-    if (res.status === 404) {
-      setScanState('failed', '서버가 이 설비를 모릅니다 — 확정 취소', 0);
-      haptic([30, 60, 30]);
-      setTimeout(() => { if (S.screen === 'scan') openManual(); }, 1200);
-      return;
-    }
-    if (res.ok) {
-      const body = await res.json().catch(() => ({}));
-      scanId = body.scan_id || null;
-    } else { scanId = localScanId(); S.outbox.push(payload); renderNet(); }
-  } catch (_) {
-    scanId = localScanId(); S.outbox.push(payload); renderNet();
-  }
-  setContext(hit.eq, 'camera_scan', { scanId: scanId, markerValue: hit.marker, frameVotes: votes });
+/* ponytail: 서버 스캔 기록 API(작업계획 C2)는 2단계에서 만든다. 지금은 단말 안에서 scan_id 만 붙인다. */
+function confirmScan(hit, votes) {
+  setContext(hit.eq, 'camera_scan', { scanId: localScanId(), markerValue: hit.marker, frameVotes: votes });
   setTimeout(() => { if (S.screen === 'scan') show('ctx'); }, 420);
 }
 
@@ -416,33 +365,132 @@ function renderObsSignals() {
   if (!S.eq) return;
   S.eq.signals.forEach((s) => {
     const o = document.createElement('option');
-    o.value = s.signal; o.textContent = s.signal + ' (' + s.unit + ')';
+    o.value = s.signal; o.textContent = s.name + ' · ' + s.signal + ' (' + s.unit + ')';
     sel.appendChild(o);
   });
   renderObsRange();
 }
 function renderObsRange() {
   const s = (S.eq && S.eq.signals.find((x) => x.signal === $('obsSignal').value)) || null;
-  $('obsRange').textContent = s
-    ? '정상 범위 ' + fmt(s.min) + '~' + fmt(s.max) + ' ' + s.unit
-      + (s.alarmHigh != null ? ' · 경보 ' + fmt(s.alarmHigh) + ' 이상' : '')
-      + (s.alarmLow != null ? ' · 경보 ' + fmt(s.alarmLow) + ' 이하' : '')
-    : '';
+  $('obsRange').textContent = s ? '정상 범위 ' + fmt(s.min) + '~' + fmt(s.max) + ' ' + s.unit + ' (MES 구성값)' : '';
 }
 const fmt = (v) => (v == null ? '—' : String(v));
+const num = (v) => String(Number(Number(v).toFixed(3)));
+const stamp = (v) => (v ? new Date(v).toLocaleTimeString('ko-KR', { hour12: false }) : '시각 없음');
+
+/* MesCardAdapter 와 같은 판정. 경계값은 normal. 범위가 없으면 상태 없음. */
+function stateOf(spec, value) {
+  if (!spec || (spec.min == null && spec.max == null)) return null;
+  if (spec.min != null && value < spec.min) return 'low';
+  if (spec.max != null && value > spec.max) return 'high';
+  return 'normal';
+}
+
+/* 현재 MES 관측 중 조건 평가에 쓸 수 있는 값만 고른다(MesCardAdapter 규칙). */
+function usableReadings(snap, eq) {
+  const specs = {};
+  eq.signals.forEach((x) => { specs[x.signal] = x; });
+  const frame = Date.parse(snap.simulated_at);
+  const kept = [], excluded = [];
+  (snap.measurements || []).forEach((m) => {
+    const spec = specs[m.signal];
+    if (m.equipment_id !== eq.equipment_id || !spec) return;
+    const v = m.value;
+    let ok = m.quality === 'good' && m.unit === spec.unit && typeof v === 'number' && Number.isFinite(v)
+      && (spec.unit !== 'bool' || v === 0 || v === 1);
+    if (ok && spec.semantics.acquisition === 'manual_sample') {
+      const age = (frame - Date.parse(m.observed_at)) / 1000;
+      ok = age >= 0 && age < 60;
+    }
+    if (ok) kept.push({ signal: m.signal, value: v, unit: spec.unit, source: 'mes', observed_at: m.observed_at });
+    else excluded.push(m.signal);
+  });
+  return { kept: kept, excluded: excluded };
+}
+
+/* 선택 설비의 현재 MES 관측으로 채운다. 직접 입력한 값은 덮어쓰지 않는다. */
+async function loadMesObservations() {
+  const eq = S.eq;
+  if (!eq) return;
+  let snap;
+  try { snap = await getJson('/api/state'); } catch (_) { S.mes = null; renderObsList(); renderMesStatus(); return; }
+  if (S.eq !== eq) return;
+  const r = usableReadings(snap, eq);
+  const manual = S.observations.filter((o) => o.source === 'manual');
+  S.observations = manual.concat(r.kept.filter((o) => !manual.some((x) => x.signal === o.signal)));
+  S.mesExcluded = r.excluded;
+  const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
+  S.mes = {
+    at: snap.simulated_at, operating: state.operating_state, fault: state.fault_level,
+    alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.code),
+    diagnoses: (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
+  };
+  renderObsList(); renderMesStatus();
+}
+
+/* 범위 이탈이면 방향과 경계 대비 차이를 만든다. MES 운영 화면과 같은 표기. */
+function obsView(o) {
+  const spec = S.eq.signals.find((x) => x.signal === o.signal);
+  // MES 운영 화면과 같이 정지 중 0 은 이탈로 강조하지 않는다. 카드 조건 판정(stateOf)은 어댑터 규칙 그대로.
+  if (spec && spec.zeroStopped && o.value === 0 && S.mes && S.mes.operating !== 'running') return { st: 'stopped', text: '' };
+  const st = stateOf(spec, o.value);
+  if (st !== 'low' && st !== 'high') return { st: st, text: '' };
+  const bound = st === 'low' ? spec.min : spec.max, diff = o.value - bound;
+  const pct = bound ? ' (' + (diff > 0 ? '+' : '') + Math.round(diff / Math.abs(bound) * 100) + '%)' : '';
+  return { st: st, text: (st === 'low' ? '▼ 하한 ' : '▲ 상한 ') + num(bound) + ' 대비 '
+    + (diff > 0 ? '+' : '') + num(diff) + ' ' + o.unit + pct };
+}
 
 function renderObsList() {
   const box = $('obsList'); box.innerHTML = '';
-  S.observations.forEach((o, i) => {
+  if (!S.eq) return;
+  const rows = S.observations.map((o) => ({ o: o, v: obsView(o) }));
+  const out = rows.filter((r) => r.v.text);
+  const head = document.createElement('p');
+  head.className = 'hint';
+  head.textContent = S.mes
+    ? 'MES 관측 ' + S.observations.filter((o) => o.source === 'mes').length + '개 · 범위 이탈 ' + out.length + '개'
+      + (S.mesExcluded.length ? ' · 품질·시각 미충족 제외 ' + S.mesExcluded.length + '개' : '') + ' · ' + stamp(S.mes.at)
+    : 'MES 관측을 읽지 못했습니다. 직접 추가한 값만 사용합니다.';
+  box.appendChild(head);
+  const mk = (r) => {
     const row = document.createElement('div');
-    row.className = 'obs';
-    row.innerHTML = '<span class="mono"></span><button class="x" type="button" aria-label="삭제">✕</button>';
-    row.querySelector('.mono').textContent = o.signal + ' = ' + o.value + ' ' + o.unit;
+    row.className = 'obs' + (r.v.text ? ' out' : '');
+    row.innerHTML = '<span class="txt"><span class="mono"></span><small></small></span>'
+      + '<button class="x" type="button" aria-label="삭제">✕</button>';
+    const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
+    row.querySelector('.mono').textContent = (spec.name || r.o.signal) + ' = ' + r.o.value + ' ' + r.o.unit;
+    row.querySelector('small').textContent = (r.v.text ? r.v.text + ' · ' : r.v.st === 'stopped' ? '정지 중 0 · 정상 · ' : '')
+      + (r.o.source === 'manual' ? '직접 입력' : 'MES') + ' · ' + r.o.signal;
     row.querySelector('.x').addEventListener('click', () => {
-      S.observations.splice(i, 1); renderObsList();
+      S.observations.splice(S.observations.indexOf(r.o), 1); renderObsList();
     });
-    box.appendChild(row);
-  });
+    return row;
+  };
+  // 범위 이탈을 먼저 보이고, 이탈이 있으면 나머지는 접는다.
+  out.forEach((r) => box.appendChild(mk(r)));
+  const rest = rows.filter((r) => !r.v.text);
+  if (!rest.length) return;
+  if (!out.length) { rest.forEach((r) => box.appendChild(mk(r))); return; }
+  const d = document.createElement('details');
+  d.innerHTML = '<summary class="hint">나머지 ' + rest.length + '개 보기 · 범위 내·정지 중 0·판정 불가</summary>';
+  rest.forEach((r) => d.appendChild(mk(r)));
+  box.appendChild(d);
+}
+
+const STATE_TXT = { running:'가동', stopped:'정지', waiting:'대기', normal:'정상', warning:'주의', critical:'자체 이상' };
+
+function renderMesStatus() {
+  const box = $('ctxMes');
+  if (!S.mes) { box.textContent = 'MES 상태를 읽지 못했습니다.'; box.classList.remove('bad'); return; }
+  const out = S.observations.filter((o) => obsView(o).text).length;
+  const parts = ['MES ' + (STATE_TXT[S.mes.operating] || S.mes.operating || '—') + ' · '
+    + (STATE_TXT[S.mes.fault] || S.mes.fault || '—')];
+  if (S.mes.alarms.length) parts.push('경보 ' + S.mes.alarms.join(', '));
+  parts.push('범위 이탈 ' + out + '개');
+  S.mes.diagnoses.forEach((d) => parts.push('증상 후보: ' + d.symptom + ' (확정 아님)'));
+  box.textContent = parts.join(' · ');
+  box.classList.toggle('bad', out > 0 || (!!S.mes.fault && S.mes.fault !== 'normal'));
 }
 
 // ── 증상 선택 ──────────────────────────────────────────────────────
@@ -453,7 +501,7 @@ function renderObsList() {
 function symptomsFor(eq) {
   const out = [];
   S.cards.forEach((c) => {
-    if ((c.equipment_ids || []).indexOf(eq.equipment_id) === -1) return;
+    if (!cardFits(c, eq)) return;
     const s = (c.symptom || '').trim();
     if (s && out.indexOf(s) === -1) out.push(s);
   });
@@ -508,25 +556,30 @@ function renderSymptoms() {
 // ── 조건 평가 ──────────────────────────────────────────────────────
 function cmp(op, a, b) {
   switch (op) {
-    case 'gte': return a >= b; case 'gt': return a > b;
-    case 'lte': return a <= b; case 'lt': return a < b;
-    case 'eq': return a === b;
-    case 'in': return Array.isArray(b) && b.indexOf(a) !== -1;
-    default: return false;
+    case '>=': return a >= b; case '>': return a > b;
+    case '<=': return a <= b; case '<': return a < b;
+    case '==': return a === b; case '!=': return a !== b;
+    default: return null;
   }
 }
-const OPTXT = { gte:'≥', gt:'>', lte:'≤', lt:'<', eq:'=' };
+const OPTXT = { '==':'=', '!=':'≠', '>':'>', '>=':'≥', '<':'<', '<=':'≤' };
+
+/* 원신호와 파생 <signal>_state 를 같은 규칙으로 찾는다. 단위가 다르면 미평가. */
+function observed(c) {
+  const direct = S.observations.find((o) => o.signal === c.signal);
+  if (direct) return c.unit && direct.unit !== c.unit ? null : direct.value;
+  if (!/_state$/.test(c.signal)) return null;
+  const base = S.observations.find((o) => o.signal === c.signal.slice(0, -6));
+  return base ? stateOf(S.eq.signals.find((x) => x.signal === base.signal), base.value) : null;
+}
 
 /* 관측값이 없으면 "일치"로 속이지 않고 미평가로 남긴다. */
 function evalCondition(c) {
-  const obs = S.observations.find((o) => o.signal === c.signal);
-  if (!obs) return { state:'unknown', text: c.signal + ' — 관측값 없음' };
-  const ok = cmp(c.op, obs.value, c.value);
-  const sym = OPTXT[c.op] || c.op;
-  return {
-    state: ok ? 'match' : 'miss',
-    text: c.signal + ' ' + obs.value + ' ' + sym + ' ' + c.value + ' · ' + (ok ? '일치' : '불일치')
-  };
+  const v = observed(c);
+  if (v == null) return { state:'unknown', text: c.signal + ' — 관측값 없음' };
+  const ok = cmp(c.op, v, c.value);
+  if (ok === null) return { state:'unknown', text: c.signal + ' — 연산자 ' + c.op };
+  return { state: ok ? 'match' : 'miss', text: c.signal + ' ' + v + ' ' + (OPTXT[c.op] || c.op) + ' ' + c.value + ' · ' + (ok ? '일치' : '불일치') };
 }
 
 // ── 검색과 순위 산정 ───────────────────────────────────────────────
@@ -544,32 +597,30 @@ function queryPayload() {
 }
 
 function rankCards(eq) {
-  const hits = S.cards.filter((c) => (c.equipment_ids || []).indexOf(eq.equipment_id) !== -1);
-  const safety = hits.filter((c) => c.safety_flag === true);
-  const rest = hits.filter((c) => c.safety_flag !== true);
+  const hits = S.cards.filter((c) => cardFits(c, eq));
+  // 질의 모드에서 T4 인계 카드는 고정 안전 공지로 올리지 않는다(retrieval.py include_handover).
+  const safety = hits.filter((c) => c.safety_flag === true && c.tacit_type !== 'T4');
+  const rest = hits.filter((c) => safety.indexOf(c) === -1);
 
   const scored = rest.map((c) => {
     const conds = (c.conditions || []).map(evalCondition);
-    const anyMiss = conds.some((x) => x.state === 'miss');
+    const hitExclusions = (c.exclusions || []).map(evalCondition).filter((x) => x.state === 'match');
+    const anyMiss = conds.some((x) => x.state === 'miss') || hitExclusions.length > 0;
     const anyMatch = conds.some((x) => x.state === 'match');
-    const direct = c.scope_level === 'equipment';
-    const scope = SCOPE_RANK[c.scope_level] != null ? SCOPE_RANK[c.scope_level] : 3;
+    const direct = c.equipment === eq.type;
     const reasons = [];
     if (anyMatch) reasons.push('조건 일치');
-    if (direct) reasons.push('설비 직접 지정');
+    reasons.push(c.mes_equipment_id ? eq.code + ' 지정 카드' : direct ? eq.type + ' 설비 카드' : '공통 카드');
     if (!anyMatch && !anyMiss && conds.length) reasons.push('조건 미평가');
-    if (scope >= 2) reasons.push('범위 넓음 (line)');
-    else if (scope === 1 && !direct) reasons.push('범위 중간 (segment)');
-    if (!reasons.length) reasons.push('설비 관련');
     return {
-      card: c, conds: conds, excluded: anyMiss,
+      card: c, conds: conds.concat(hitExclusions), excluded: anyMiss,
       why: reasons.join(' · '),
-      key: [anyMatch ? 0 : 1, direct ? 0 : 1, scope]
+      key: [anyMatch ? 0 : 1, direct ? 0 : 1]
     };
   });
 
   const applicable = scored.filter((x) => !x.excluded)
-    .sort((a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2]);
+    .sort((a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1]);
   const excluded = scored.filter((x) => x.excluded);
   return { safety: safety, actions: applicable, excluded: excluded, total: hits.length };
 }
@@ -942,6 +993,10 @@ function renderSimOptions() {
   sel.appendChild(unknown);
 }
 
+// Node 테스트는 DOM 없이 순수 함수만 쓴다.
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView }; }
+if (typeof document !== 'undefined') {
+
 // ── 배선 ───────────────────────────────────────────────────────────
 function on(id, fn) { const el = $(id); if (el) el.addEventListener('click', fn); }
 
@@ -957,7 +1012,8 @@ on('nocamManual', openManual);
 on('nocamRetry', startScan);
 on('ctxBack', () => show('home'));
 on('ctxEdit', startScan);
-on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('ask'); });
+on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('ask'); loadMesObservations(); });
+on('obsReload', loadMesObservations);
 on('askBack', () => show('ctx'));
 on('doSearch', runSearch);
 on('waitCancel', () => { S.waitAbort = true; show('ask'); });
@@ -986,7 +1042,10 @@ on('obsAdd', () => {
   const sel = $('obsSignal'), val = $('obsValue');
   if (!sel.value || val.value === '') return;
   const meta = S.eq.signals.find((x) => x.signal === sel.value) || { unit: '' };
-  S.observations.push({ signal: sel.value, unit: meta.unit, value: Number(val.value) });
+  const value = Number(val.value);
+  if (!Number.isFinite(value) || (meta.unit === 'bool' && value !== 0 && value !== 1)) return;
+  S.observations = S.observations.filter((o) => o.signal !== sel.value);
+  S.observations.push({ signal: sel.value, unit: meta.unit, value: value, source: 'manual' });
   val.value = ''; renderObsList();
 });
 
@@ -1004,3 +1063,4 @@ $('dDetector').textContent = ('BarcodeDetector' in window) ? '지원' : '미지�
 renderNet();
 probeServer();
 boot();
+}

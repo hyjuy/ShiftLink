@@ -1,12 +1,17 @@
-"""실시간 분류(라즈베리파이). 확정된 클래스명만 출력한다. Jetson 전송은 /api/equipment/scan 구현 후 붙인다.
+"""실시간 분류(라즈베리파이). 확정된 클래스명을 출력하고, --server가 있으면 Jetson에 POST한다.
 
     python -m shiftlink.vision.classify [--model data/vision/model] [--camera 0] [--min-conf 0.8] [--frames 5] [--headless]
+                                        [--server http://<jetson>:8000] [--device-id pi-01]
 """
 
 from __future__ import annotations
 
 import argparse
+import json
+import socket
 import time
+import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 
 from shiftlink.vision import MODEL_DIR
@@ -46,6 +51,20 @@ class Stabilizer:
         return current
 
 
+def post_scan(server: str, label: str, conf: float, device_id: str, timeout: float = 2.0) -> bool:
+    """POST /api/equipment/scan. 실패하면 False만 돌려준다: 버려도 되는 값이라 다음 확정 때 다시 보낸다."""
+    body = json.dumps({"class": label, "conf": round(conf, 4), "device_id": device_id,
+                       "ts": datetime.now(timezone.utc).isoformat()}).encode()
+    req = urllib.request.Request(server.rstrip("/") + "/api/equipment/scan", data=body,
+                                 headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status == 201
+    except OSError as error:  # URLError·HTTPError·timeout 모두 OSError
+        print(f"전송 실패 {label}: {error}", flush=True)
+        return False
+
+
 def preprocess(frame_bgr):
     """train.py의 val 전처리와 같다: RGB, 224x224, ImageNet 정규화, NCHW float32."""
     import cv2
@@ -67,6 +86,8 @@ def main() -> None:
     parser.add_argument("--min-conf", type=float, default=0.8)  # 현장 조명에 맞춰 조정
     parser.add_argument("--frames", type=int, default=5)
     parser.add_argument("--headless", action="store_true")
+    parser.add_argument("--server", help="Jetson MES 주소. 없으면 출력만 한다")
+    parser.add_argument("--device-id", default=socket.gethostname())
     args = parser.parse_args()
 
     labels = (args.model / "labels.txt").read_text(encoding="utf-8").split()
@@ -89,6 +110,8 @@ def main() -> None:
             confirmed = stab.update(labels[i], float(probs[i]))
             if confirmed:
                 print(f"확정 {confirmed} conf={probs[i]:.2f} {ms:.0f}ms", flush=True)
+                if args.server:
+                    post_scan(args.server, confirmed, float(probs[i]), args.device_id)
             if not args.headless:
                 cv2.putText(frame, f"{labels[i]} {probs[i]:.2f} {ms:.0f}ms", (10, 30),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)

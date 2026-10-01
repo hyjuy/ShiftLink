@@ -583,7 +583,8 @@ def test_unverified_procedure_keeps_warning_but_withholds_actions():
     assert result.output.safety_notices[0].card_id == card.card_id
     assert result.output.unverified_card_ids == [card.card_id]
     assert result.output.steps == []
-    assert result.output.review_queue
+    # 10/1: the top card is unverified, so the model is not called (no review-queue round trip).
+    assert result.output.no_knowledge and not result.output.review_queue
     assert result.output.answer == ""
     rendered = render_response(result.output)
     assert "조건 미확인" in rendered
@@ -977,3 +978,33 @@ def test_validate_response_no_lost_stop_conditions() -> None:
     resp = AgentResponse(mode="query")
     errors = validate_response(resp, tool_results)
     assert any("Lost stop_conditions" in e for e in errors)
+
+
+@pytest.mark.parametrize("value,expected", [(138, "verified"), (155, "inapplicable")])
+def test_raw_reading_derives_state_for_t2_condition(equipment_provider, value, expected):
+    """T2 조건 hpu_pressure_state == low는 원값 hpu_pressure만 와도 카탈로그 정상 범위(145~165)로 판정된다."""
+    card = make_card_t1("K-0009")
+    card.conditions = [Condition(signal="hpu_pressure_state", op="==", value="low")]
+    equipment_provider.cards.append(card)
+    for eq in ("HPU", "HPU-01"):
+        hits = {c["card_id"]: c["condition_status"] for c in equipment_provider.search_cards(
+            query="test", equipment_ids=[eq], observations={"hpu_pressure": {"value": value, "unit": "bar"}})}
+        assert hits.get("K-0009", "inapplicable") == expected
+    # 관측값이 없으면 지금처럼 미확인이다.
+    assert {c["card_id"]: c["condition_status"] for c in equipment_provider.search_cards(
+        query="test", equipment_ids=["HPU"])}["K-0009"] == "unverified"
+
+
+def test_unverified_top_card_skips_model_and_lists_it_to_check(equipment_provider):
+    """1위 카드 조건을 확인할 관측값이 없으면 모델 없이 '해당 지식 없음'과 확인 대상 카드로 끝낸다."""
+    card = make_card_t1("K-0009")
+    card.title = card.symptom = "압력 저하 유량 부족"
+    card.conditions = [Condition(signal="hpu_pressure_state", op="==", value="low")]
+    equipment_provider.cards.append(card)
+    calls = []
+    result = FixedPipeline(tools=equipment_provider, model=lambda **kw: calls.append(kw)).run(
+        dict(question="압력 저하 유량 부족", line_id="L1", eq_id="HPU"))
+    assert result.tool_results["ranked_cards"][0]["card_id"] == "K-0009"
+    assert calls == [] and result.output.no_knowledge is True
+    assert "K-0009" in result.output.unverified_card_ids
+

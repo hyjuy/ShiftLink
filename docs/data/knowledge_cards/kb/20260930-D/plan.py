@@ -72,6 +72,14 @@ for eq, rows in TABLE_R4.items():
 
 # Review 45e1090: K-1302 is a diagnostic procedure (T3); preserve dispatched prompt tables above.
 next(s for s in slots if s["card_id"] == "K-1302")["tacit_type"] = "T3"
+# Round 5 (2026-10-01): two Korean papers the user added (KIFSE 2020 MCCB 접속부, KOSHAM 2019 배전반 화재위험) —
+# topic chosen from blind BL-017 (탄 냄새) follow-up; the papers do not mention smell, so the card covers what they do say.
+TABLE_R5 = {"PDP": [("T1", "차단기 미동작 상태의 접속부 과열(직렬 아크)")]}
+for eq, rows in TABLE_R5.items():
+    for t, hint in rows:
+        slots.append({"slot": f"S{len(slots) + 1:02d}", "card_id": f"K-{next_id}", "equipment": eq,
+                      "tacit_type": t, "hint": hint, "round": 5})
+        next_id += 1
 
 out = {"batch_id": BATCH, "seed": SEED, "generator": "plan.py", "slots": slots}
 Path(__file__).with_name("plan.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

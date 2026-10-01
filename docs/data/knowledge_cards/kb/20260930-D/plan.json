@@ -204,6 +204,14 @@
    "tacit_type": "T3",
    "hint": "배전반 전원 투입 순서",
    "round": 4
+  },
+  {
+   "slot": "S26",
+   "card_id": "K-1325",
+   "equipment": "PDP",
+   "tacit_type": "T1",
+   "hint": "차단기 미동작 상태의 접속부 과열(직렬 아크)",
+   "round": 5
   }
  ]
 }

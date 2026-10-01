@@ -1,3 +1,5 @@
 * text=auto eol=lf
+docs/data/knowledge_cards/kb/kb_cards.json text eol=lf
+docs/data/knowledge_cards/kb/*/cards.json text eol=lf
 # Preserve reviewed draft bytes referenced by SHA-256 manifests.
 docs/data/knowledge_cards/drafts/20260924/** -text whitespace=cr-at-eol

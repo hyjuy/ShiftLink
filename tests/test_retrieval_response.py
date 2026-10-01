@@ -96,6 +96,19 @@ def test_direct_equipment_types_remain_supported(equipment_provider):
         "K-0001", "K-0002", "K-0004"}
 
 
+def test_type_code_request_includes_unit_bound_cards(equipment_provider):
+    """'GR'처럼 종류만 말하면 GR 설비 한 대에 묶인 카드도 나온다. 다른 GR 설비를 지정하면 빠진다."""
+    bound = make_card_t1("K-0007", equipment="GR", safety_flag=True)
+    bound.mes_equipment_id = "EQ-0004"  # GR-01
+    equipment_provider.cards.append(bound)
+    search = lambda eq: {c["card_id"] for c in equipment_provider.search_cards(query="test", equipment_ids=[eq])}
+    safety = lambda eq: {c["card_id"] for c in equipment_provider.search_safety_cards(equipment_ids=[eq])}
+    assert "K-0007" in search("GR") and "K-0007" in safety("GR")
+    assert "K-0007" in search("GR-01") and "K-0007" in safety("EQ-0004")
+    assert "K-0007" not in search("GR-02") and "K-0007" not in safety("GR-02")
+    assert "K-0007" not in search("HPU")
+
+
 def test_pdp_and_cau_cards_keep_their_type(equipment_provider):
     equipment_provider.cards.extend([
         make_card_t1("K-0005", equipment="PDP"),

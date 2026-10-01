@@ -120,6 +120,16 @@ def _evaluate_condition(cond: Condition, observations: dict[str, Any] | None) ->
         return None  # Comparison failed
 
 
+def _instance_matches(card: KnowledgeCard, canonical_ids: set[str], type_only: set[str]) -> bool:
+    """A card bound to one MES unit matches that unit, or any request naming only its type.
+
+    A type code ("CAU") resolves to no catalog row; the asker has not said which unit,
+    so cards bound to a unit of that type still apply (10/1: eval sets ask by type).
+    """
+    return (not card.mes_equipment_id or card.mes_equipment_id in canonical_ids
+            or card.equipment in type_only)
+
+
 def _condition_status(card: KnowledgeCard, observations: dict[str, Any] | None) -> str:
     """Reject definite mismatches; all checks must pass to be verified."""
     status = "verified"
@@ -331,13 +341,14 @@ class InMemoryToolProvider:
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
+        type_only = {code for _, code, row in resolved if row is None}
         evidence = self._evidence_tokens if handover else {}
 
         def candidates():
             for card in self.cards:
                 if card.equipment not in equipment_codes and card.equipment != "COMMON":
                     continue
-                if card.mes_equipment_id and card.mes_equipment_id not in canonical_ids:
+                if not _instance_matches(card, canonical_ids, type_only):
                     continue
                 status = _condition_status(card, observations)
                 if status != "inapplicable":
@@ -376,11 +387,12 @@ class InMemoryToolProvider:
         resolved = self._resolve_equipment(equipment_ids)
         equipment_codes = {code for _, code, _ in resolved}
         canonical_ids = {identifier for identifier, _, _ in resolved}
+        type_only = {code for _, code, row in resolved if row is None}
         candidate_cards = [
             c for c in self.cards
             if c.safety_flag and (include_handover or c.tacit_type != "T4")
             and (c.equipment in equipment_codes or c.equipment == "COMMON")
-            and (not c.mes_equipment_id or c.mes_equipment_id in canonical_ids)
+            and _instance_matches(c, canonical_ids, type_only)
         ]
 
         # Condition matching with observations

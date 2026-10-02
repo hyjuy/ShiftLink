@@ -1,0 +1,11 @@
+{
+  "evidence_kind": "Summary transcribed from SSH stdout; full original remains on Jetson",
+  "revision": "5e64420",
+  "source": "/tmp/shiftlink-h1h2-1003f02-hyj/app/jetson-acceptance.json",
+  "harness": {"suite": "dev", "categories_passed": 6, "categories_total": 6},
+  "smoke_exit": 0,
+  "query": {"answer": "K-1001", "cited_card_ids": ["K-1001"], "safety_notice_count": 4, "review_queue": false},
+  "model_call": {"model": "exaone3.5:2.4b-instruct-q4_K_M", "retry": false, "latency_s": 2.456, "load_duration_s": 0.004, "eval_count": 31},
+  "handover": {"handover_id": "HO-acceptance-5e64420", "status": "pending", "retry_duplicate": true, "created_at_unchanged": true, "outbox_rows": 1},
+  "scope": "Isolated real Jetson HTTP server and actual Ollama exaone. Recognition injected; physical PDA and explanation quality not validated. Existing MES untouched."
+}

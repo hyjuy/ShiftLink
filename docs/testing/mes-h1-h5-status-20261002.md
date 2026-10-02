@@ -37,4 +37,14 @@ node tests/mes_query_pda.cjs
 - PDA 질의 계약: **MES query PDA contract PASS**.
 - GitHub 확인: PR #178 병합 및 승인 기록, PR #156 병합, 최신 main의 `policy_gate.py` T6 분기.
 - 기존 Jetson 실호출·인계 재시작 증거 및 품질 한계: [MES API 검증](mes-query-handover-20261002.tdd.md).
-- 이번 PR은 상태 문서만 추가한다. 현장 채점, 모델 품질 개선, 정책 게이트 수정은 수행하지 않는다.
+- 이번 PR은 `feat/mes-query-handover-20261002`의 후속 통신 연동·검증 기록도 포함한다. `MesHTTPClient`, `scripts/check_mes_http.py`, Jetson `--api-only`, 명칭 등록, HTTP·PDA 프록시 통합 테스트 및 Jetson 분리 실행 증거를 함께 반영한다. 현장 채점, 모델 품질 개선, 정책 게이트 수정은 수행하지 않는다.
+
+후속 변경을 최신 main 기준 문서 브랜치에 병합한 뒤 재검증했다.
+
+```powershell
+python -m pytest tests/test_communication_http_client.py tests/test_communication_integration.py tests/test_mes_http.py tests/test_mes_query.py tests/test_mes_handover.py tests/test_mes_handover_http.py tests/test_pda_app.py -q
+node tests/mes_query_pda.cjs
+git diff --check
+```
+
+결과: **35 passed, 38 subtests passed**, **MES query PDA contract PASS**, diff 검사 통과. Python 의존성 경로는 기존 작업 공간의 `tmp/card-review-deps`와 `.test-deps`를 사용했다. 실제 LLM·물리 장치를 이번 재검증에서 실행하지 않았다.

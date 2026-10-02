@@ -132,6 +132,12 @@
 | `shiftlink-mes` | Jetson | `python -m shiftlink.mes --host 0.0.0.0 --port 8000` 자동 시작 (작업계획 E1) | 허재원 |
 | `shiftlink-vision` | 라즈베리파이 | `python -m shiftlink.vision.classify --headless --server ...` 자동 시작 (작업계획 D2) | 허재원 |
 
+## 데스크톱 자동 시작 (`deploy/pda_kiosk.sh`)
+
+| 이름 | 장비 | 뜻 | 담당자 |
+| --- | --- | --- | --- |
+| `pda-kiosk` | 라즈베리파이 | `~/.config/autostart/pda-kiosk.desktop` — Jetson MES가 응답하면 PDA 화면을 Chromium 키오스크로 연다 (작업계획 D3) | 허재원 |
+
 ## ID 접두어 규칙 `[기존 — 01_고도화_초안 §7.1]`
 
 새 엔티티에 ID를 붙일 때 이 규칙을 따른다: **`접두어-4자리`** (예: `EV-0031`, `K-0001`). 기존 형식을 절대 깨지 않는다.

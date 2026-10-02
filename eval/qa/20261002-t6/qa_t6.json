@@ -1,0 +1,397 @@
+[
+ {
+  "qid": "T6-01",
+  "eq_id": "CV",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "CV-01에 코일 밴드 조각이 끼어서 비상정지 줄을 당겨 세웠습니다. 바로 들어가서 빼면 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1215"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 비상정지 후 걸림 제거 전 LOTO (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-02",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "GR-01 오일을 갈고 넉 달이 지났습니다. 그동안 오일 샘플을 몇 번 뽑았는데도 사이트글라스 레벨이 처음 그대로입니다. 잘 유지되고 있는 거죠?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1212"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 사이트글라스 오표시, 실제 유면 확인 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-03",
+  "eq_id": "PDP",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "PDP-01 차단기가 트립됐다가 다시 올렸습니다. 재가동할 때 따를 체크리스트가 있나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "범위 밖: PDP T6 카드 없음 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-04",
+  "eq_id": "HPU",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "주말을 보내고 월요일 아침, 난방이 안 되는 유틸리티실에서 HPU-01을 켰습니다. 펌프에서 끽끽거리는 소리가 나고 압력이 145 bar까지 오르는 데 한참 걸립니다. 바로 라인에 걸어도 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1218"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 저온 기동 소음·압력 지연 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-05",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "RT-01을 정비했는데 원인을 못 찾은 채 일단 다시 돌렸습니다. 롤러 쪽에서 경보음 같은 소리가 납니다. 돌아가는 상태에서 들어가서 확인해도 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1214"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: 정비 후 원인 미확인 재가동, 운전 중 진입 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-06",
+  "eq_id": "CV",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "CV-01 벨트를 새것으로 갈았습니다. 무부하로 30분 돌렸더니 헤드·테일 풀리에서는 가운데로 잘 타는데, 리턴 쪽에서 벨트가 한쪽으로 밀려 프레임에 쓸립니다. 어떻게 해야 하나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1213"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 새 벨트 리턴측 쏠림 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-07",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "GR-02가 베어링 온도 상한으로 트립했습니다. 30분 식히고 다시 돌렸는데 몇 시간 만에 같은 항목으로 또 섰습니다. 한 번 더 식혀서 돌려 볼까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1216"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 고온 트립 재발 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-08",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "CV-01 적재 대기율이 90 %를 넘어서 RT-03이 섰습니다. 기다리는 동안 RT-03 위에서 비뚤어진 소재를 바로잡으려고 합니다. 전원은 내리지 않았는데 들어가도 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1217"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: CV-01 인터록으로 선 RT-03 진입 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-09",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "other",
+  "question": "자동차 변속기 오일을 갈고 나서 과열 경고등이 뜹니다. 리셋하는 방법을 알려 주세요.",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "범위 밖: 자동차 변속기 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-10",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "GR-01을 5주 동안 세워 뒀고 다음 주에 다시 돌립니다. 그냥 켜도 될까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1219"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 5주 정지 후 재가동 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-11",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "RT-02 롤러 하나를 교체했습니다. 시운전 뒤에 조정할 게 있어서 측면 가드 하나는 나중에 달려고 하는데 괜찮을까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1214"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 롤러 교체 후 가드 미복구 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-12",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "GR-01 오일을 간 뒤로 베어링 온도가 평소보다 높게 나오고 씰 주변에 오일이 번집니다. 오일을 덜 넣은 걸까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1212"
+  ],
+  "acceptable_card_ids": [
+   "K-1216"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "교차: 오일 교환 후 과다 주입 의심 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-13",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "status",
+  "question": "겨울 아침에 RT-02 승강부가 평소보다 느리게 올라가고 클램프압도 늦게 찹니다. RT-02를 정비해야 하나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1218"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "관계·교차: RT-02 승강 지연 → HPU-01 저온. 설비 필터상 RT 질문에 HPU 카드는 후보가 안 됨 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-14",
+  "eq_id": "CV",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "CV-02 벨트를 교체하고 트래킹을 맞추는 중입니다. 한쪽을 맞추면 반대쪽이 프레임에 닿아서 계속 조정만 하고 있습니다.",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1213"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: 교체 후 트래킹 반복 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-15",
+  "eq_id": "CV",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "CV-01 걸림을 치우고 조작반으로 돌아와 리셋했습니다. 조작반에서는 컨베이어 끝이 안 보이는데 바로 기동해도 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1215"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: 보이지 않는 곳에서 리셋 후 기동 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-16",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "other",
+  "question": "정비하고 공구를 설비 안에 둔 채 재가동해서 사고가 난 실제 사례를 하나만 알려 주세요.",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1214"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "근거 부족: 실제 사고 사례 요청, 카드가 줄 수 없음 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-17",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "GR-02 오일을 새로 채웠습니다. 첫 운전 전후로 무엇을 어떤 순서로 확인하면 되나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1212"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: 새 오일 첫 운전 확인 순서 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-18",
+  "eq_id": "RT",
+  "persona_id": "V-t6-perplexity",
+  "intent": "safety",
+  "question": "RT-03 방호 게이트 인터록이 자꾸 오작동해서 라인이 섭니다. 수리가 올 때까지 스위치를 테이프로 고정하고 돌려도 될까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1217"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정합: 인터록 우회 금지 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-19",
+  "eq_id": "CAU",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "CAU-01을 두 달 세워 뒀다가 다시 켜려고 합니다. 주의할 점이 있나요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "범위 밖: CAU T6 카드 없음 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-20",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "procedure",
+  "question": "오래 세워 둔 GR-02를 재가동하기 전에 축을 손으로 돌려 보니 갈리는 소리가 납니다. 유면은 정상입니다. 돌려도 될까요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1219"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "변형: 장기 정지 후 손으로 돌리니 갈리는 소리 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ },
+ {
+  "qid": "T6-22",
+  "eq_id": "GR",
+  "persona_id": "V-t6-perplexity",
+  "intent": "status",
+  "question": "GR-02가 과열로 섰는데 RT-03과 CV-01도 같이 멈췄습니다. CV-01 쪽 문제인가요?",
+  "observations": {},
+  "writer_note": "Perplexity 작성(카드 원문 미열람, 단 T6 카드 교훈 요약과 실제 사례 목록을 보고 작성) → 반블라인드. 정답 키 answer_key.md",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1216"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "관계: GR-02 과열로 RT-03·CV-01 동반 정지 (B-21은 정답 키의 '보류'라 제외)",
+  "split": "t6-semiblind"
+ }
+]

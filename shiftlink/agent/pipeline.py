@@ -30,6 +30,7 @@ class ToolProvider(Protocol):
 
 
 ModelCall = Callable[..., Any]
+MODEL_ERRORS = (ValueError, TimeoutError, ConnectionError, KeyError)
 OutputValidator = Callable[..., Any]
 
 
@@ -47,9 +48,15 @@ class FixedPipeline:
         model: ModelCall,
         tools: ToolProvider = tool_stubs,
         validator: OutputValidator | None = None,
+        judge: Callable[[str, dict[str, Any]], int] | None = None,
+        judge_min_score: int = 2,
     ) -> None:
         self.tools = tools
         self.model = model
+        # Abstain judge (query mode): scores whether the rank-1 card answers the question; below
+        # judge_min_score the pipeline answers "no knowledge". Defaults to the model's own judge when it has one.
+        self.judge = judge if judge is not None else getattr(model, "judge", None)
+        self.judge_min_score = judge_min_score
         self._default_validator = validator is None
         # Default validator: build response and validate invariants
         if validator is None:
@@ -92,7 +99,7 @@ class FixedPipeline:
         # it, and falling to the next card answered from an unrelated one (10/1 Jetson: 6/6 wrong). Show it
         # as a card to check instead of answering.
         top_unverified = bool(tool_results["ranked_cards"]) and             tool_results["ranked_cards"][0].get("condition_status") == "unverified"
-        if not tool_results["ranked_cards"] or top_unverified:
+        if not tool_results["ranked_cards"] or top_unverified or self._judged_off_topic(routed, tool_results):
             output = build_response(routed.mode, routed.request, tool_results)
             output.cited_card_ids = []
             output.no_knowledge = True
@@ -114,6 +121,18 @@ class FixedPipeline:
                 routed.mode, routed.request, tool_results, model_output, model_error
             )
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
+
+    def _judged_off_topic(self, routed: Any, tool_results: dict[str, Any]) -> bool:
+        """True when the judge scores the rank-1 card below the threshold (query mode only)."""
+        # ponytail: handover memos are not judged — the judge was only measured on query sets (10/2).
+        if self.judge is None or routed.mode != "query" or not tool_results["ranked_cards"]:
+            return False
+        try:
+            score = self.judge(routed.request.question, tool_results["ranked_cards"][0])
+        except MODEL_ERRORS:
+            return False  # judge unavailable: fall through to the normal model call and its own error handling
+        tool_results["judge_score"] = score
+        return score < self.judge_min_score
 
     def _call_model(self, **kwargs: Any) -> tuple[Any, str | None, bool]:
         try:

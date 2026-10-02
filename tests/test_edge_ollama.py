@@ -404,7 +404,21 @@ def test_symptom_match_ranks_first_and_leads_the_enum(monkeypatch):
     model = OllamaModel()
     model._post = lambda path, payload: (sent.append(payload), {"message": {"content": json.dumps(
         {"answer": "a", "cited_card_ids": ["K-1004"]})}})[1]
-    FixedPipeline(model=model, tools=provider).run(
+    FixedPipeline(model=model, tools=provider, judge=lambda q, c: 3).run(  # answer call only
         {"question": question, "line_id": "LN-0001", "eq_id": "HPU"})
     enum = sent[0]["format"]["properties"]["cited_card_ids"]["items"]["enum"]
     assert enum == ids[:MAX_CANDIDATES] and enum[0] == "K-1004"
+
+
+def test_judge_posts_score_schema_and_returns_int(monkeypatch):
+    from shiftlink.edge.ollama import JUDGE_PROMPT, OllamaModel
+    seen = {}
+    def fake_post(self, path, payload):
+        seen.update(payload)
+        return {"message": {"content": '{"score": 1}'}}
+    monkeypatch.setattr(OllamaModel, "_post", fake_post)
+    m = OllamaModel()
+    assert m.judge("유압유 보충하면 수당 나와요?", {"title": "필터 차압", "symptom": None, "know_how": "x" * 900}) == 1
+    assert seen["messages"][0]["content"] == JUDGE_PROMPT
+    assert seen["format"]["properties"]["score"]["enum"] == [0, 1, 2, 3]
+    assert len(seen["messages"][1]["content"]) < 700  # know_how is trimmed

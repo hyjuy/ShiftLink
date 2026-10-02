@@ -751,8 +751,26 @@
    "title": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1203-1",
+     "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps, 출구 압력 있음 분기",
+     "document_version": "Vickers GBB9003 (8/84)",
+     "text_sha256": "5bc77ca364f14858e161e622752ba06ed736dff08e231a20282d3c7864933e53",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "Vickers GBB9003 (8/84)",
    "reviewed_notes": [
@@ -760,7 +778,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1203-1",
@@ -772,7 +790,7 @@
      ],
      "text_sha256": "5bc77ca364f14858e161e622752ba06ed736dff08e231a20282d3c7864933e53",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -792,8 +810,94 @@
    "title": "1110_Roller_conveyor_EN_TNr_1131919_V1.0.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1207-1",
+     "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: Transport process cannot be started; Conveying goods are not being transported",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1208-2",
+     "locator": "PDF p.52 / 인쇄 p.52 / Troubleshooting: Motor circuit breaker is triggered due to excessive current consumption",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "text_sha256": "e320b24989881e7fbfb69806830623fc816705690f6ac1a4e0dbeda9fb3a37a7",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1208-3",
+     "locator": "PDF p.51 / 인쇄 p.51 / Troubleshooting: In case of a fault (전원 차단·우발 기동 방지·전기 담당 자격)",
+     "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
+     "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1214-4",
+     "locator": "PDF/인쇄 35~36쪽, Initial startup / Before every operation start",
+     "document_version": "Version 1.0 (06/2022)",
+     "text_sha256": "48a2d2faccb73f6095a54cffb6b9f94a5264e0fc79b007812ded5745f9ee8312",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1217-5",
+     "locator": "PDF/인쇄 36쪽, Before every operation start / Procedure in case of accident or fault",
+     "document_version": "Version 1.0 (06/2022)",
+     "text_sha256": "52a87d91a07d3ee9ca7c3531648b29d505121c644b4143a1f0f242fb0f7786ff",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "Interroll Roller Conveyor SH 1110 Version 1.0 (06/2022) en",
    "reviewed_notes": [
@@ -801,7 +905,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1207-1",
@@ -813,7 +917,7 @@
      ],
      "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1208-2",
@@ -825,7 +929,7 @@
      ],
      "text_sha256": "e320b24989881e7fbfb69806830623fc816705690f6ac1a4e0dbeda9fb3a37a7",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1208-3",
@@ -837,7 +941,7 @@
      ],
      "text_sha256": "56fe95c5134f748e84aeb6c4651f57a38a7584b67483ed1a265ac8b8b3f4683c",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1214-4",
@@ -850,7 +954,7 @@
      ],
      "text_sha256": "48a2d2faccb73f6095a54cffb6b9f94a5264e0fc79b007812ded5745f9ee8312",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1217-5",
@@ -862,7 +966,7 @@
      ],
      "text_sha256": "52a87d91a07d3ee9ca7c3531648b29d505121c644b4143a1f0f242fb0f7786ff",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -882,8 +986,128 @@
    "title": "26867443.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1209-1",
+     "locator": "PDF p.5 / Safety notes / Startup/operation",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "text_sha256": "1be0db0432b342f318dd9fb512245372712f633034bf7ce6690bcf5be2a8ec60",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1209-2",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1210-3",
+     "locator": "PDF p.45 / 인쇄 p.45 / §9.1 Gear unit malfunctions",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1210-4",
+     "locator": "PDF p.42 / 인쇄 p.42 / §8.3 Inspection and maintenance of the gear unit / Checking the oil level",
+     "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
+     "text_sha256": "e40843b7bf4ba07d7efae435414249646a557a249501c27e7a6563196892c7c1",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1212-5",
+     "locator": "PDF/인쇄 p.39~40 및 p.42~43 / §7.1 Startup 및 §8.3 Checking the oil level / Changing the oil",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "text_sha256": "83b0c42ed1a3c4f73335620cd9e43a3a1476ec988d297b16a614b9da21ed51eb",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1216-6",
+     "locator": "PDF/인쇄 5·45쪽, Safety notes 및 9.1 Operating temperature too high / Bearing point temperatures too high",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "text_sha256": "545793d9c99909659f0c62195fb033377763f9262f655c297284e07776b573cb",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1219-7",
+     "locator": "PDF/인쇄 39~40쪽, 7.1 Before startup 및 7.2 Taking out of operation",
+     "document_version": "ML..2 & ML..V2 Installation and Operating Instructions",
+     "text_sha256": "096601151396a53ddd27a535cd505fa903aade1e7f3eddcaa8b3689d9fcef317",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "SEW-EURODRIVE ML..2 & ML..V2 Series Installation and Operating Instructions",
    "reviewed_notes": [
@@ -891,7 +1115,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1209-1",
@@ -903,7 +1127,7 @@
      ],
      "text_sha256": "1be0db0432b342f318dd9fb512245372712f633034bf7ce6690bcf5be2a8ec60",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1209-2",
@@ -915,7 +1139,7 @@
      ],
      "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1210-3",
@@ -927,7 +1151,7 @@
      ],
      "text_sha256": "c546fa2a212b57dca0c45d2b54f1ac461f3ae7f538b0fc0cdc3581381e8ae052",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1210-4",
@@ -939,7 +1163,7 @@
      ],
      "text_sha256": "e40843b7bf4ba07d7efae435414249646a557a249501c27e7a6563196892c7c1",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1212-5",
@@ -954,7 +1178,7 @@
      ],
      "text_sha256": "83b0c42ed1a3c4f73335620cd9e43a3a1476ec988d297b16a614b9da21ed51eb",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1216-6",
@@ -967,7 +1191,7 @@
      ],
      "text_sha256": "545793d9c99909659f0c62195fb033377763f9262f655c297284e07776b573cb",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1219-7",
@@ -980,7 +1204,7 @@
      ],
      "text_sha256": "096601151396a53ddd27a535cd505fa903aade1e7f3eddcaa8b3689d9fcef317",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -1000,8 +1224,53 @@
    "title": "AR-0401",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0401-case-1",
+     "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "b6f6e1d7b540c9aab0aa60ab32513e4be034f6b32d5207c3e24b175571f5a717",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0401"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0401-case-2",
+     "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "b6f6e1d7b540c9aab0aa60ab32513e4be034f6b32d5207c3e24b175571f5a717",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0401"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1009,14 +1278,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0401"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0401",
@@ -1032,8 +1301,53 @@
    "title": "AR-0402",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0402-case-1",
+     "locator": "EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "1d8a392052b785744b79c8f5cf94a1a05b45561d9f03f3d9728ef9e5aa8a19ab",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0402"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0402-case-2",
+     "locator": "EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "1d8a392052b785744b79c8f5cf94a1a05b45561d9f03f3d9728ef9e5aa8a19ab",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0402"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1041,14 +1355,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0402"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0402",
@@ -1064,8 +1378,31 @@
    "title": "AR-0403",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0403-case-1",
+     "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "ae09c411a81e1b859193fde2544c7e488b50e24a1396e4f47bbb33a507e2a748",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0403"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1073,14 +1410,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0403"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0403",
@@ -1096,8 +1433,31 @@
    "title": "AR-0404",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0404-case-1",
+     "locator": "EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "40d047d1735159372a53489affb76d562d8542325959a27cb54f2c8b6318fce8",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0404"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1105,14 +1465,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0404"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0404",
@@ -1128,8 +1488,53 @@
    "title": "AR-0405",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0405-case-1",
+     "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "2dfc775ce7e5918dde183a8681d2b39afd4007674c3b6a3947d0b13ce7c5ffad",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0405"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0405-case-2",
+     "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "2dfc775ce7e5918dde183a8681d2b39afd4007674c3b6a3947d0b13ce7c5ffad",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0405"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1137,14 +1542,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "AR-0405"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0405",
@@ -1160,8 +1565,53 @@
    "title": "AR-0406",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0406-case-1",
+     "locator": "EV-0403 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "c21f505e4296ca2283b2f794aecea9b5c557bab0f61f3aa8966449d34275a681",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0406"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0406-case-2",
+     "locator": "EV-0403 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "c21f505e4296ca2283b2f794aecea9b5c557bab0f61f3aa8966449d34275a681",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0406"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1169,14 +1619,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "AR-0406"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0406",
@@ -1192,8 +1642,53 @@
    "title": "AR-0407",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0407-case-1",
+     "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "427fbb71f89f27b0bbe3245e55c0cdeca4afd8dff20eddcab96cab685dbc060c",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0407"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0407-case-2",
+     "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "427fbb71f89f27b0bbe3245e55c0cdeca4afd8dff20eddcab96cab685dbc060c",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0407"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1201,14 +1696,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "AR-0407"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0407",
@@ -1224,8 +1719,53 @@
    "title": "AR-0408",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0408-case-1",
+     "locator": "EV-0404 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "8624c2d0948db9df09d087be52a2454fa5fa70406b66593f37dac83023d8ab34",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0408"
+     ]
+    },
+    {
+     "scope_id": "SC-C-AR-0408-case-2",
+     "locator": "EV-0404 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "8624c2d0948db9df09d087be52a2454fa5fa70406b66593f37dac83023d8ab34",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "AR-0408"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1233,14 +1773,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "AR-0408"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0408",
@@ -1256,8 +1796,31 @@
    "title": "AR-0409",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0409-case-1",
+     "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "a04cba13195f723ef7f296ad87f17a2de60fe39606f2efbec647056f560649fa",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "AR-0409"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1265,14 +1828,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "AR-0409"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0409",
@@ -1288,8 +1851,31 @@
    "title": "AR-0410",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0410-case-1",
+     "locator": "EV-0405 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "84c952f778a732406c866fd2665d96ae22878937325258b17969e80d1815f578",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "AR-0410"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1297,14 +1883,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "AR-0410"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0410",
@@ -1320,8 +1906,31 @@
    "title": "AR-0411",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0411-case-1",
+     "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "f37c9c0ebcee99a8e9f143831ca58b87478373bf38b93d1702e45724406ec0a7",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "AR-0411"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1329,14 +1938,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "AR-0411"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0411",
@@ -1352,8 +1961,31 @@
    "title": "AR-0412",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0412-case-1",
+     "locator": "EV-0406 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "51aaef276766a7bdf9c8fbc4dc5d1c166f8ba0fd9b8c3e6cdcc9b633c11955a8",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "AR-0412"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1361,14 +1993,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "AR-0412"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0412",
@@ -1384,8 +2016,31 @@
    "title": "AR-0413",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0413-case-1",
+     "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "d2624fac8aaacf36742f384005c2b44150ac44bef4c1dd329aef18264d7dead3",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "AR-0413"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1393,14 +2048,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "AR-0413"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0413",
@@ -1416,8 +2071,31 @@
    "title": "AR-0414",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0414-case-1",
+     "locator": "EV-0407 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "b4ed5a86630a6d122102f9272151205c6256e2797c459263d06b324a517e1c82",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "AR-0414"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1425,14 +2103,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "AR-0414"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0414",
@@ -1448,8 +2126,31 @@
    "title": "AR-0415",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0415-case-1",
+     "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "00f3905e660f13bfaef1986d9ad183cdf0bad5d10030354374b38d215d003786",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "AR-0415"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1457,14 +2158,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "AR-0415"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0415",
@@ -1480,8 +2181,31 @@
    "title": "AR-0416",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0416-case-1",
+     "locator": "EV-0408 [maintenance_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "78c9b4e46e0fd2739c9a112f65272d167ab4f9a9e36166475f48172415e6b3bd",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "AR-0416"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1489,14 +2213,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "AR-0416"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0416",
@@ -1512,8 +2236,31 @@
    "title": "AR-0417",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0417-case-1",
+     "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "a8fb209306df68a846acd656119318826b5cf81659f3b0589c6e9112386c055e",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "AR-0417"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1521,14 +2268,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "AR-0417"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0417",
@@ -1544,8 +2291,31 @@
    "title": "AR-0418",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0418-case-1",
+     "locator": "EV-0409 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "9e2da09f2b68f1cfd08172ac5438fadcfad886f01038e903626dd1bb601d686a",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "AR-0418"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1553,14 +2323,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "AR-0418"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0418",
@@ -1576,8 +2346,31 @@
    "title": "AR-0419",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0419-case-1",
+     "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "1c5c96317cef4a36431a66ce56670c4d6fcfd2b2d2a128cffd923572abac8595",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "AR-0419"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1585,14 +2378,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "AR-0419"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0419",
@@ -1608,8 +2401,31 @@
    "title": "AR-0420",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0420-case-1",
+     "locator": "EV-0410 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "c0319020fbeed35436508f6b7642e56cbf86ce94dced29a78d502a62ea197a77",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "AR-0420"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1617,14 +2433,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "AR-0420"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0420",
@@ -1640,8 +2456,31 @@
    "title": "AR-0421",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0421-case-1",
+     "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "64d25bc3871eff040b3dd79c42ee6cd10684bed542e60709f1a62daef181f5ea",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "AR-0421"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1649,14 +2488,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "AR-0421"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0421",
@@ -1672,8 +2511,31 @@
    "title": "AR-0422",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0422-case-1",
+     "locator": "EV-0411 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "58bf10100893c1222de2113500a13edbb98ffe161eba66deef53b1c485386d63",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "AR-0422"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1681,14 +2543,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "AR-0422"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0422",
@@ -1704,8 +2566,31 @@
    "title": "AR-0423",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0423-case-1",
+     "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "e95a6eb1b87123556dee45fee83b1e233a195ef177e6a724923a1b1f46029635",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "AR-0423"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1713,14 +2598,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "AR-0423"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0423",
@@ -1736,8 +2621,31 @@
    "title": "AR-0424",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0424-case-1",
+     "locator": "EV-0412 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "adb423a9af27a151ae2b93335ef4d0a3efd4bf3c349cdfee934e14d34fa2fec7",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "AR-0424"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1745,14 +2653,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "AR-0424"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0424",
@@ -1768,8 +2676,31 @@
    "title": "AR-0425",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0425-case-1",
+     "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "6f2e5f6c5ec2fa6658e2e70ee6a3eda33803c84ee38bd277b8afa8513a98bae5",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "AR-0425"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1777,14 +2708,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "AR-0425"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0425",
@@ -1800,8 +2731,31 @@
    "title": "AR-0426",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0426-case-1",
+     "locator": "EV-0413 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "5d8b9634fc648b030ceb191d4095243bb7871f2bcce0e5e1933c70384e3b130a",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "AR-0426"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1809,14 +2763,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "AR-0426"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0426",
@@ -1832,8 +2786,31 @@
    "title": "AR-0427",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0427-case-1",
+     "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "31c27e2e5a7b7f45528198d20c9cebbc2d6c1065479acb9a63d24d21debc0b99",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "AR-0427"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1841,14 +2818,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "AR-0427"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0427",
@@ -1864,8 +2841,31 @@
    "title": "AR-0428",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0428-case-1",
+     "locator": "EV-0414 [abnormal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "1906fb44dc2d2ae0bb6c51780f31474520f7b4baef42e4855da2fe858d15523c",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "AR-0428"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1873,14 +2873,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "AR-0428"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0428",
@@ -1896,8 +2896,31 @@
    "title": "AR-0429",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0429-case-1",
+     "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "3720126fe305b3e4f183623bcd572855e42d912281aeb89ce6cc9f743325d708",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0429"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1905,14 +2928,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0429"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0429",
@@ -1928,8 +2951,31 @@
    "title": "AR-0430",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-AR-0430-case-1",
+     "locator": "EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+     "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
+     "text_sha256": "fea495cafd39e63555670bbf08ca0c42ba0ae754f82f5664d7e60a45ff8ddf05",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "AR-0430"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님",
    "reviewed_notes": [
@@ -1937,14 +2983,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "AR-0430"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_artifacts.json",
     "item_id": "AR-0430",
@@ -1960,8 +3006,43 @@
    "title": "Convey-All-TroubleshootingGuide.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1204-1",
+     "locator": "PDF p.1 / General Conveyor / Conveyor belt doesn't turn or is slipping",
+     "document_version": "April 28, 2017",
+     "text_sha256": "b746c804fd68bf48d8645e9a599d52db384136c7b7e4c1aade3526f998a8a9ae",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1205-2",
+     "locator": "PDF p.2 / General Conveyor / Low conveying capacity",
+     "document_version": "April 28, 2017",
+     "text_sha256": "170128c0f07f50960b7d005e63df2937ad6917c61f40689d5ffea5e68fa1d326",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "April 28, 2017",
    "reviewed_notes": [
@@ -1969,7 +3050,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1204-1",
@@ -1981,7 +3062,7 @@
      ],
      "text_sha256": "b746c804fd68bf48d8645e9a599d52db384136c7b7e4c1aade3526f998a8a9ae",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1205-2",
@@ -1993,7 +3074,7 @@
      ],
      "text_sha256": "170128c0f07f50960b7d005e63df2937ad6917c61f40689d5ffea5e68fa1d326",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -2013,8 +3094,53 @@
    "title": "EV-0401",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0401-case-1",
+     "locator": "restart_attempts: AT-4001",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "2df9c6ace384213d2240a20de23975224d5409124ca76a550011dadf191d877f",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "EV-0401"
+     ]
+    },
+    {
+     "scope_id": "SC-C-EV-0401-case-2",
+     "locator": "restart_attempts: AT-4002",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "2df9c6ace384213d2240a20de23975224d5409124ca76a550011dadf191d877f",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "EV-0401"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2022,14 +3148,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "EV-0401"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0401",
@@ -2045,8 +3171,31 @@
    "title": "EV-0402",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0402-case-1",
+     "locator": "restart_attempts: AT-4004",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "91ffca27cb19ad08afeba71fe1b7e9dd067107b3447f401c4d204f5caf43d116",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "EV-0402"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2054,14 +3203,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "EV-0402"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0402",
@@ -2077,8 +3226,53 @@
    "title": "EV-0403",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0403-case-1",
+     "locator": "restart_attempts: AT-4007",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "952301f51475344a7597d968f64eb46de77d37030c2deb2335c097752feea5cb",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "EV-0403"
+     ]
+    },
+    {
+     "scope_id": "SC-C-EV-0403-case-2",
+     "locator": "restart_attempts: AT-4008",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "952301f51475344a7597d968f64eb46de77d37030c2deb2335c097752feea5cb",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "EV-0403"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2086,14 +3280,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "EV-0403"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0403",
@@ -2109,8 +3303,53 @@
    "title": "EV-0404",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0404-case-1",
+     "locator": "restart_attempts: AT-4010",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "921650da02e22d158b338f798434dec38bd5d095bb929e9e939ebf9cafff667d",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "EV-0404"
+     ]
+    },
+    {
+     "scope_id": "SC-C-EV-0404-case-2",
+     "locator": "restart_attempts: AT-4011",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "921650da02e22d158b338f798434dec38bd5d095bb929e9e939ebf9cafff667d",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0403",
+     "reference_ids": [
+      "EV-0404"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2118,14 +3357,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0403",
    "reference_ids": [
     "EV-0404"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0404",
@@ -2141,8 +3380,31 @@
    "title": "EV-0405",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0405-case-1",
+     "locator": "restart_attempts: AT-4013",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "447903d7af416d0879d41bb46dc7c6a0d286d5936b4b771ab0c04825572059b0",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "EV-0405"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2150,14 +3412,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "EV-0405"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0405",
@@ -2173,8 +3435,31 @@
    "title": "EV-0406",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0406-case-1",
+     "locator": "restart_attempts: AT-4016",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "fda9edfa7024103653d0abf0110fce9b0b48bb79acb27eb77b680b76d2f3aecb",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0405",
+     "reference_ids": [
+      "EV-0406"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2182,14 +3467,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0405",
    "reference_ids": [
     "EV-0406"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0406",
@@ -2205,8 +3490,31 @@
    "title": "EV-0407",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0407-case-1",
+     "locator": "restart_attempts: AT-4019",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "6db11e8ab23360a5f5a987931370a02a48a15c1a6e45c022fee0629a1a737560",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "EV-0407"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2214,14 +3522,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "EV-0407"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0407",
@@ -2237,8 +3545,31 @@
    "title": "EV-0408",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0408-case-1",
+     "locator": "restart_attempts: AT-4022",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "4c69b6834a6200bb69194f2f90f89073619ee1ebee21184b8714d12fd2c033b0",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0407",
+     "reference_ids": [
+      "EV-0408"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2246,14 +3577,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0407",
    "reference_ids": [
     "EV-0408"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0408",
@@ -2269,8 +3600,31 @@
    "title": "EV-0409",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0409-case-1",
+     "locator": "restart_attempts: AT-4025",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "380f79d06e6cce00ab95846ec59922e4f756a1b58fc86df1a3023c98b5a31881",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "EV-0409"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2278,14 +3632,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "EV-0409"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0409",
@@ -2301,8 +3655,31 @@
    "title": "EV-0410",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0410-case-1",
+     "locator": "restart_attempts: AT-4028",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "2c2c8c1a47e88a5ad8d784f1ee297a421c44952cdd5717be941b58301932dd89",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0409",
+     "reference_ids": [
+      "EV-0410"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2310,14 +3687,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0409",
    "reference_ids": [
     "EV-0410"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0410",
@@ -2333,8 +3710,31 @@
    "title": "EV-0411",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0411-case-1",
+     "locator": "restart_attempts: AT-4031",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "78dada0a2621857dc4cec0689ecb555769b3e05c4984687d08c2afc1a30e7fa3",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "EV-0411"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2342,14 +3742,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "EV-0411"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0411",
@@ -2365,8 +3765,31 @@
    "title": "EV-0412",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0412-case-1",
+     "locator": "restart_attempts: AT-4034",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "6c4b1d5598d2a3ab4804d11f93ddbe2a115dbf6eed211bb0742c4ed4cd85b678",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0411",
+     "reference_ids": [
+      "EV-0412"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2374,14 +3797,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0411",
    "reference_ids": [
     "EV-0412"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0412",
@@ -2397,8 +3820,31 @@
    "title": "EV-0413",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0413-case-1",
+     "locator": "restart_attempts: AT-4037",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "105cbece36b9ea393a661169d77c26e846aabad5a38e6447ee65a831cf919a48",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "EV-0413"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2406,14 +3852,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "EV-0413"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0413",
@@ -2429,8 +3875,31 @@
    "title": "EV-0414",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0414-case-1",
+     "locator": "restart_attempts: AT-4040",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "8f2601efe79e18110e8d18e4540155a407410d4e8234e24a3ce5d46f5c2c0cc7",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0413",
+     "reference_ids": [
+      "EV-0414"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2438,14 +3907,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0413",
    "reference_ids": [
     "EV-0414"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0414",
@@ -2461,8 +3930,31 @@
    "title": "EV-0415",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "SC-C-EV-0415-case-1",
+     "locator": "restart_attempts: AT-4043",
+     "document_version": "합성 원장; true_cause 미사용",
+     "text_sha256": "394e470ae1ad4700757f7db2777874a6a85bd08bfb810f261f5aea9c638771e0",
+     "allowed_claims": [
+      "합성 기록에 적힌 관측·시도·다음 확인"
+     ],
+     "exclusions": [
+      "실제 현장 경험",
+      "고장 원인 확정",
+      "재가동 허가"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(합성 사례)",
+     "kind": "case",
+     "group_id": "KB-20260930-C:EV-0401",
+     "reference_ids": [
+      "EV-0415"
+     ]
+    }
+   ],
    "is_synthetic": true,
    "document_version": "합성 원장; true_cause 미사용",
    "reviewed_notes": [
@@ -2470,14 +3962,14 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [],
    "purpose": "합성 KB 관측 투영; 현장 경험 아님",
    "group_id": "KB-20260930-C:EV-0401",
    "reference_ids": [
     "EV-0415"
    ],
-   "lineage_review_status": "pending_review",
+   "lineage_review_status": "approved",
    "local_snapshot": {
     "path": "docs/data/knowledge_cards/kb/20260930-C/records/kb_events.json",
     "item_id": "EV-0415",
@@ -2493,8 +3985,43 @@
    "title": "HY29-0022-UK.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1211-1",
+     "locator": "PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+     "document_version": "Catalogue HY29-0022/UK",
+     "text_sha256": "164fafd8bca2900535a9608dfcbd8cb2dabcf9547ecbc0d24e56553e15e4ec21",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1218-2",
+     "locator": "PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+     "document_version": "Catalogue HY29-0022/UK",
+     "text_sha256": "fe060039db078a7cfc136ba7a2f2b594b7e806e69c0a1f7b29f0bf3b52df5f2f",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "Catalogue HY29-0022/UK",
    "reviewed_notes": [
@@ -2502,7 +4029,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1211-1",
@@ -2515,7 +4042,7 @@
      ],
      "text_sha256": "164fafd8bca2900535a9608dfcbd8cb2dabcf9547ecbc0d24e56553e15e4ec21",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1218-2",
@@ -2530,7 +4057,7 @@
      ],
      "text_sha256": "fe060039db078a7cfc136ba7a2f2b594b7e806e69c0a1f7b29f0bf3b52df5f2f",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -2550,8 +4077,43 @@
    "title": "MAN-C-012.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1201-1",
+     "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+     "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
+     "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1202-2",
+     "locator": "PDF p.6 / 인쇄 p.7 / §1.10 Oil filters control",
+     "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
+     "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "MAN-C-012-EN/0 Maintenance Handbook",
    "reviewed_notes": [
@@ -2559,7 +4121,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1201-1",
@@ -2571,7 +4133,7 @@
      ],
      "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1202-2",
@@ -2583,7 +4145,7 @@
      ],
      "text_sha256": "839774e071fb3a6f5e8734b5c19815b03e71b6bcc57877a2b39cc01d7233e1bd",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -2603,8 +4165,111 @@
    "title": "conveyor-manual-0323-en.pdf",
    "url": null,
    "url_role": null,
-   "review_status": "pending_review",
-   "approved_scope": [],
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "K-1204-1",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1205-2",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1206-3",
+     "locator": "PDF p.11 / 인쇄 p.7 / §3.2.2 Hazards - Mechanical Energy",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1206-4",
+     "locator": "PDF p.70 / 인쇄 p.66 / §10.3 Frequently Asked Questions (FAQ)",
+     "document_version": "MISUMI conveyor systems operating instructions 03/2023",
+     "text_sha256": "5f13bb0f2cb380885f7c91cc87d726a50c40db445b690e34fec85350b784f79f",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1213-5",
+     "locator": "PDF 62~63쪽 / 인쇄 58~59쪽, 8.3 및 8.5",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023",
+     "text_sha256": "9f6f78a74797c59dd2ba4f2811e8f901c7db262faba9edb30ab0ead4b38db356",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    },
+    {
+     "scope_id": "K-1215-6",
+     "locator": "PDF 69쪽 / 인쇄 65쪽, 10.1 Procedure in Case of Operational Malfunctions",
+     "document_version": "Conveyor Systems Operating Instructions 03/2023",
+     "text_sha256": "ff9c02499052772aeb88771d2d9eef05d58133aa6be09ac883c27893085e1d93",
+     "allowed_claims": [
+      "카드 rationale에 인용한 절의 절차·주의 내용"
+     ],
+     "exclusions": [
+      "가상 설비 PDP·CAU·HPU 등의 판정 기준값",
+      "원문에 없는 수치"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "배치 C 카드 근거(배경)",
+     "kind": "background"
+    }
+   ],
    "is_synthetic": false,
    "document_version": "MISUMI conveyor systems operating instructions 03/2023",
    "reviewed_notes": [
@@ -2612,7 +4277,7 @@
    ],
    "registered_at": "2026-09-30",
    "registered_by": "Codex; registration only",
-   "generation_gate": "No approved scope. Source/content/lineage approval must be recorded before generation or adoption.",
+   "generation_gate": "2026-10-02 프로젝트 수준 승인(최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)). 원문 이용 범위의 법적 검토는 하지 않았다.",
    "review_candidates": [
     {
      "scope_id": "K-1204-1",
@@ -2624,7 +4289,7 @@
      ],
      "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1205-2",
@@ -2636,7 +4301,7 @@
      ],
      "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1206-3",
@@ -2648,7 +4313,7 @@
      ],
      "text_sha256": "5375b6198712c899359adfad63762b9e73a5a3caca866f75d6f2011ab5fb4f73",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1206-4",
@@ -2660,7 +4325,7 @@
      ],
      "text_sha256": "5f13bb0f2cb380885f7c91cc87d726a50c40db445b690e34fec85350b784f79f",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1213-5",
@@ -2673,7 +4338,7 @@
      ],
      "text_sha256": "9f6f78a74797c59dd2ba4f2811e8f901c7db262faba9edb30ab0ead4b38db356",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     },
     {
      "scope_id": "K-1215-6",
@@ -2685,7 +4350,7 @@
      ],
      "text_sha256": "ff9c02499052772aeb88771d2d9eef05d58133aa6be09ac883c27893085e1d93",
      "extraction_method": "PyMuPDF page text joined by LF; excerpt hash is not PDF file hash",
-     "approval_status": "pending_review"
+     "approval_status": "approved"
     }
    ],
    "local_snapshot": {
@@ -2695,6 +4360,286 @@
    },
    "purpose": "배치 C 원문 출처 식별 및 사용 절 검토 대기",
    "identity_limitations": "기존 SD/M 문서와 동일 판본으로 병합하지 않음. 원문 URL·이용 범위 승인 미확정."
+  },
+  {
+   "source_id": "RC-T6-001",
+   "aliases": [],
+   "source_family": "RC-T6-001",
+   "title": "K-1216 실제 공개 사례 (GR)",
+   "url": "https://www.stle.org/images/pdf/STLE_ORG/BOK/OM_OA/Lubrication_Fundamentals/Evaluation%20of%20a%20Gearbox's%20High-Temperature%20Trip_tlt%20article_Feb04.pdf",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-001-case",
+     "locator": "STLE TLT 2004-02, DETAILED EVENT DESCRIPTION p.43–44",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1216 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-001",
+     "reference_ids": [
+      "RC-T6-001"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 맞음",
+   "case_summary": "가스터빈 발전기 감속 기어박스가 베어링 배유 고온으로 트립, 원인 확인 없이 재시험하자 7시간 만에 같은 트립 재발. 공급 오일 압력 과다로 케이스 범람·거품이 원인, 압력 조정 후 40시간 시험 정상",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-002",
+   "aliases": [],
+   "source_family": "RC-T6-002",
+   "title": "K-1213 실제 공개 사례 (CV)",
+   "url": "https://www.reddit.com/r/heavyequipment/comments/1ubbddz/conveyor_belt_off_center_in_the_middle/",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-002-case",
+     "locator": "본문·작성자 댓글",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1213 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-002",
+     "reference_ids": [
+      "RC-T6-002"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 맞음",
+   "case_summary": "이동식 스크리너 컨베이어에 새 벨트를 건 뒤 무부하 운전에서 리턴 측 벨트가 한쪽으로 밀려 프레임에 쓸림, 풀리 정렬 조정",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-003",
+   "aliases": [],
+   "source_family": "RC-T6-003",
+   "title": "K-1213 실제 공개 사례 (CV)",
+   "url": "https://www.practicalmachinist.com/forum/threads/how-do-you-track-flat-belts.152489/",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-003-case",
+     "locator": "첫 게시글",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1213 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-003",
+     "reference_ids": [
+      "RC-T6-003"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 맞음",
+   "case_summary": "약 6 m 컨베이어 벨트 교체 후 한쪽을 맞추면 반대쪽이 프레임에 닿는 트래킹 불량",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-004",
+   "aliases": [],
+   "source_family": "RC-T6-004",
+   "title": "K-1212 실제 공개 사례 (GR)",
+   "url": "https://www.machinerylubrication.com/Read/32777/oh-sht-a-lube-techs-lessons-learned",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-004-case",
+     "locator": "\"First OS! Lesson\" 섹션 (2024-09-16)",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1212 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-004",
+     "reference_ids": [
+      "RC-T6-004"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 부분(최초 주유)",
+   "case_summary": "새 기어박스 24대 주유 후 사이트글라스가 5개월간 정상으로 보였으나 실제 유량은 적정량의 약 절반(모세관 현상). 즉시 보충, 컬럼형 사이트글라스로 교체",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-005",
+   "aliases": [],
+   "source_family": "RC-T6-005",
+   "title": "K-1219 실제 공개 사례 (GR)",
+   "url": "https://www.youtube.com/watch?v=lYP5SU_SmNM",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-005-case",
+     "locator": "42:00–42:31 (Timken Power Systems 웨비나, 2022-08-18)",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1219 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-005",
+     "reference_ids": [
+      "RC-T6-005"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 부분(보존 조치 부재)",
+   "case_summary": "보존 조치 없이 장기 보관한 기어박스 기어 이빨에 부식 피팅, 운전 복귀 전 표면을 다듬음. 조기 고장 예상 언급",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-006",
+   "aliases": [],
+   "source_family": "RC-T6-006",
+   "title": "K-1215 실제 공개 사례 (CV)",
+   "url": "https://face.public-health.uiowa.edu/Reports/REPORT-020.html",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-006-case",
+     "locator": "Summary, Investigation",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1215 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-006",
+     "reference_ids": [
+      "RC-T6-006"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 부분(과부하 트립)",
+   "case_summary": "벨트 과부하 트립·유출물 청소 후 벨트 위 작업자를 볼 수 없는 위치에서 재가동, 슈트 청소 중이던 작업자가 끼여 사망",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
+  },
+  {
+   "source_id": "RC-T6-007",
+   "aliases": [],
+   "source_family": "RC-T6-007",
+   "title": "K-1215 실제 공개 사례 (CV)",
+   "url": "https://arlweb.msha.gov/FATALS/1996/FTL96M21.HTM",
+   "url_role": "public_case_report",
+   "review_status": "approved_for_draft",
+   "approved_scope": [
+    {
+     "scope_id": "RC-T6-007-case",
+     "locator": "DESCRIPTION OF ACCIDENT",
+     "document_version": "접근일 2026-10-02",
+     "text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+     "allowed_claims": [
+      "공개된 사건 경과(정지·재가동·결과)의 요약"
+     ],
+     "exclusions": [
+      "원문 전재",
+      "가상 설비와 같은 모델이라는 주장"
+     ],
+     "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+     "reviewed_at": "2026-10-02T15:00:00+09:00",
+     "use_scope": "K-1215 독립 반복 근거",
+     "kind": "case",
+     "group_id": "RC-T6-007",
+     "reference_ids": [
+      "RC-T6-007"
+     ]
+    }
+   ],
+   "is_synthetic": false,
+   "document_version": "접근일 2026-10-02",
+   "registered_at": "2026-10-02",
+   "registered_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+   "generation_gate": "근거 보강용. 카드 생성에 쓰지 않았고 원문은 저장하지 않는다(URL·위치·요약만).",
+   "purpose": "T6 독립 반복 근거 — 판정 부분(stall)",
+   "case_summary": "컨베이어 정지·유출물 제거·퓨즈 교체 후 컨베이어 위 작업자를 확인하지 않고 재가동, 작업자가 끼여 사망",
+   "identity_limitations": "웹 공개 사례. 영상·문서는 내려받지 않았다. text_sha256은 원문 해시가 아니라 미보관 표시(0)다."
   }
  ]
 }

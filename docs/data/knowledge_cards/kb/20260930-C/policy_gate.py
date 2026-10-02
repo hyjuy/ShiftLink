@@ -20,6 +20,10 @@ def adoption_issues(cards, here=HERE, root=ROOT):
     policy = json.loads((root / "splits/prototype_split.json").read_text(encoding="utf-8"))
     sources = {s["source_id"]: s for s in registry["sources"]}
     assignments = {g["group_id"]: g for g in policy["assignments"]}
+    # 10/2: T6 real public cases (registered, approved sources) count as extra independent groups;
+    # cards without one are a recorded project-level exception (explicit user request).
+    t6_path = here / "t6_independent_evidence-20261002.json"
+    t6 = json.loads(t6_path.read_text(encoding="utf-8")) if t6_path.exists() else {"cards": {}, "exceptions": {}}
     result = {}
     for card in cards:
         reasons = []
@@ -67,7 +71,10 @@ def adoption_issues(cards, here=HERE, root=ROOT):
                     reasons.append(f"lineage_assignment_unconfirmed:{gid}")
                 elif group["split"] != card["split"]:
                     reasons.append(f"card_split_differs_from_group:{gid}")
-            if card["tacit_type"] == "T6" and len(actual_groups - {None}) < 2:
+            real_cases = {gid for gid in t6["cards"].get(card["card_id"], {}).get("case_group_ids", [])
+                          if sources.get(gid, {}).get("review_status") == "approved_for_draft"}
+            if (card["tacit_type"] == "T6" and len((actual_groups - {None}) | real_cases) < 2
+                    and card["card_id"] not in t6["exceptions"]):
                 reasons.append("independent_repeat_evidence_insufficient")
         if reasons:
             result[card["card_id"]] = reasons

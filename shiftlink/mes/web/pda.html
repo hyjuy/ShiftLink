@@ -47,7 +47,8 @@
   .appbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-height:50px;
     padding:0 6px 0 14px;border-bottom:1px solid var(--edge)}
   .appbar h1{margin:0;font-size:16px;font-weight:700}
-  .appbar .ic{min-width:48px;min-height:48px;display:grid;place-items:center;font-size:18px;color:var(--tx-2)}
+  .appbar .ic{min-width:48px;min-height:48px;padding:0 10px;display:grid;place-items:center;font-size:15px;
+    font-weight:700;white-space:nowrap;color:var(--tx-2)}
   .appbar .sp{flex:1 1 auto}
 
   /* 세로 스크롤 허용 — 안전 띠는 sticky 고정 (A3 결정 2026-09-22) */
@@ -73,7 +74,7 @@
   #ctx .nm{font-size:12px;color:var(--tx-2)}
   #ctx .src{font-size:11px;font-weight:700;color:var(--ok)}
   #ctx .src.manual{color:var(--warn)}
-  #ctx .edit{min-width:56px;min-height:48px;border-radius:8px;border:1px solid var(--edge);
+  #ctx .edit{min-width:56px;min-height:48px;padding:0 12px;border-radius:8px;border:1px solid var(--edge);
     display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--tx-2);flex:0 0 auto}
 
   .btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:56px;padding:8px 14px;
@@ -100,7 +101,8 @@
 
   /* 뷰파인더 */
   .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
-  .reticle{position:relative;z-index:1;width:min(72vw,240px);height:min(54vw,180px);border-radius:8px;
+  /* 화면 높이에 맞춰 키운다 — 300px는 상태 띠·상단바·하단 버튼 높이 합 + 위아래 여백 */
+  .reticle{position:relative;z-index:1;width:min(80vw,calc((100vh - 300px) * 4 / 3));aspect-ratio:4/3;border-radius:8px;
     border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
   .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}
@@ -272,7 +274,7 @@
       <div><span class="id" id="ctxId">—</span> <span class="nm" id="ctxName"></span></div>
       <div class="src" id="ctxSrc"></div>
     </div>
-    <button class="edit" id="ctxEdit" type="button">수정</button>
+    <button class="edit" id="ctxEdit" type="button">설비 변경</button>
   </div>
 
   <!-- 부팅 -->
@@ -304,8 +306,8 @@
 
   <!-- 스캔 -->
   <section class="screen" id="s-scan">
-    <div class="appbar"><h1>스캔</h1><span class="sp"></span>
-      <button class="ic" id="scanClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="appbar"><button class="ic" id="scanClose" type="button" aria-label="이전">← 이전</button>
+      <h1>스캔</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane flush" style="display:flex;flex-direction:column">
       <div class="vf"><div class="reticle" id="reticle"></div></div>
       <div id="scanState"><span class="dot"></span><span id="scanText">Jetson 연결 확인 중…</span></div>
@@ -317,8 +319,8 @@
 
   <!-- 직접 선택 -->
   <section class="screen" id="s-manual">
-    <div class="appbar"><h1>직접 선택</h1><span class="sp"></span>
-      <button class="ic" id="manualClose" type="button" aria-label="닫기">✕</button></div>
+    <div class="appbar"><button class="ic" id="manualClose" type="button" aria-label="이전">← 이전</button>
+      <h1>직접 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <div class="alert">
         <p class="hd">설비 미확정</p>
@@ -332,8 +334,8 @@
 
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
-    <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1></div>
+    <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
       <p class="lbl">무엇을 하시겠습니까?</p>
@@ -347,8 +349,8 @@
 
   <!-- 질의 입력 -->
   <section class="screen" id="s-ask">
-    <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1></div>
+    <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="lbl">증상 — 이 설비에 등록된 증상</p>
       <div class="list" id="symptomList"></div>
@@ -390,23 +392,23 @@
 
   <!-- 결과 · 조치 순위 -->
   <section class="screen" id="s-result">
-    <div class="appbar"><button class="ic" id="resultBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">결과 · 조치 순위</h1></div>
+    <div class="appbar"><button class="ic" id="resultBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">결과 · 조치 순위</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="resultPane"></div>
     <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
   </section>
 
   <!-- 시도 기록 -->
   <section class="screen" id="s-tries">
-    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1></div>
+    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="triesPane"></div>
   </section>
 
   <!-- 지식 없음 -->
   <section class="screen" id="s-empty">
-    <div class="appbar"><button class="ic" id="emptyBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">결과</h1></div>
+    <div class="appbar"><button class="ic" id="emptyBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">결과</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="empty">
       <p class="big">해당 지식 없음</p>
       <p class="p">입력하신 증상·조건에 맞는<br>근거 있는 카드가 없습니다.</p>
@@ -424,15 +426,15 @@
 
   <!-- 인계 확인 -->
   <section class="screen" id="s-handover">
-    <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1></div>
+    <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="hoPane"></div>
   </section>
 
   <!-- 인계 작성 -->
   <section class="screen" id="s-hoNew">
-    <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="뒤로">←</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1></div>
+    <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="lbl">인계 — 5칸 모두 필수</p>
       <div class="t4">

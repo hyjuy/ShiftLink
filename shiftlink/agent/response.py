@@ -244,6 +244,10 @@ def render_response(resp: AgentResponse) -> str:
 
     if resp.no_knowledge:
         lines.append("해당 지식 없음: 현재 검색 결과에 적용 가능한 지식카드가 없어 답변을 보류합니다.")
+        # 10/2 BC-004 (배전반 스파크): a dangerous question can miss every card while the
+        # equipment's safety notices still apply, so point at them instead of a bare "모름".
+        if resp.safety_notices:
+            lines.append("이 설비의 안전 공지가 있습니다. 조치 전에 아래 안전 공지를 먼저 확인하세요.")
 
     # Safety notices (always first)
     if resp.safety_notices:

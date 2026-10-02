@@ -162,6 +162,7 @@ def test_empty_handover_skips_model_and_renders_no_knowledge():
     assert result.output.no_knowledge is True
     assert result.output.cited_card_ids == []
     assert "해당 지식 없음" in render_response(result.output)
+    assert "안전 공지를 먼저 확인" not in render_response(result.output)  # no notices, no pointer
 
 
 def test_safety_only_search_is_no_knowledge_but_keeps_safety_notice():
@@ -181,6 +182,7 @@ def test_safety_only_search_is_no_knowledge_but_keeps_safety_notice():
     assert result.output.safety_notices[0].card_id == "K-0001"
     rendered = render_response(result.output)
     assert "해당 지식 없음" in rendered and "K-0001" in rendered
+    assert "안전 공지를 먼저 확인" in rendered  # a missed dangerous question still points at safety
 
 
 def test_min_top_relevance_empties_weak_search():

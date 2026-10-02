@@ -209,4 +209,16 @@ class FixedPipeline:
             )
         # Checklist retrieval always follows the optional handover lookup.
         results["checklist"] = self.tools.get_checklist(equipment_ids=equipment_ids)
+        results["ask_text"] = query
+        results["observation_facts"] = (
+            self._observation_facts(equipment_ids, observations) if observations else []
+        )
         return results
+
+    def _observation_facts(self, equipment_ids, observations):
+        """Catalog judgments for the model. Search still receives the raw value dict."""
+        fn = getattr(self.tools, "observation_facts", None)
+        if not callable(fn):
+            return []
+        packed = {obs.signal: {"value": obs.value, "unit": obs.unit} for obs in observations}
+        return list(fn(equipment_ids=equipment_ids, observations=packed))

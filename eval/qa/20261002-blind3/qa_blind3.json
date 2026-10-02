@@ -1,0 +1,203 @@
+[
+ {
+  "qid": "B3-001",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "HPU 의 유온이 60도인데 어떻게 해야하죠?",
+  "observations": {
+   "hpu_oil_temp": {
+    "value": 60,
+    "unit": "degC"
+   }
+  },
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1002"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정상 35–58 degC 상한 초과 → 쿨러 출구 유온 확인 순서",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-002",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3",
+  "intent": "safety",
+  "question": "오늘 HPU를 정비 하려고 하는데 유압 정지를 어떻게 하죠?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1006"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "운전 중 정비 금지·정비 전 해당 계통 감압(K-1006)",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-003",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "HPU 필터 차압의 수치가 어느정도면 이상이 있은 거죠?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1201"
+  ],
+  "acceptable_card_ids": [
+   "K-1202"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "1.2 bar 초과(K-1201·K-1202)",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-004",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "HPU의 오일 유량 측정값이 어느정도가 정상 범위 인가요?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1203",
+   "K-1004"
+  ],
+  "acceptable_card_ids": [
+   "K-1211"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "38–46 L/min이 카드에 있음. 범위 전용 카드는 없음",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-005",
+  "eq_id": "PDP",
+  "persona_id": "V-blind3",
+  "intent": "procedure",
+  "question": "PDP에서 모선 전압을 확인하려고 하는데 어떤 것을 하께 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1307"
+  ],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "부하 전류·기동 기록을 함께 봄(K-1307)",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-006",
+  "eq_id": "CAU",
+  "persona_id": "V-blind3",
+  "intent": "other",
+  "question": "CAU의 공기 압축기는 어디어디에 설치되어 있나요?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "설치 위치는 설비 목록에만 있고 카드에 없음",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-007",
+  "eq_id": "GR",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "GR의 베어링 온도를 측정하려고 하는데 몇도 일 때 이상 온도인건가요",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1210",
+   "K-1025"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "62 degC 초과",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-008",
+  "eq_id": "RT",
+  "persona_id": "V-blind3",
+  "intent": "procedure",
+  "question": "RT를 정비할 때 클램프도 조정해야하나요? 한다면 어떻게?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "클램프 조정 절차 카드 없음",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-009",
+  "eq_id": "RT",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "롤러 테이블의 이송 속도는 어느정도가 적당한가요?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1207"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "20–120 m/min, 20 미만이면 미기동·미이송 구분",
+  "split": "blind3"
+ },
+ {
+  "qid": "B3-010",
+  "eq_id": "CV",
+  "persona_id": "V-blind3",
+  "intent": "status",
+  "question": "컨베이어의 벨트 장력은 몇에 맞춰야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 직접 작성(10/2), 카드 열람 없이 작성(본인 확인). 정답 연결: Claude(카드 본문 기준), 판정: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1204",
+   "K-1205",
+   "K-1213"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "380–460 kPa",
+  "split": "blind3"
+ }
+]

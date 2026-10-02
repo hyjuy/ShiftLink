@@ -1,0 +1,222 @@
+[
+ {
+  "qid": "BC-001",
+  "eq_id": "RT",
+  "persona_id": "V-blind-cjy",
+  "intent": "procedure",
+  "question": "리프트 코일을 제거했는데도 리프트가 주저앉았어. 어떻게 해야해?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1023"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1018",
+   "K-1019"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "올린 리프트가 내려앉을 때 하강 솔레노이드 코일을 떼어 다운 밸브 카트리지 판정(K-1023)",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-002",
+  "eq_id": "GR",
+  "persona_id": "V-blind-cjy",
+  "intent": "symptom",
+  "question": "감속기에서 기름이 새고있는데 어디서 새는지 모르겠어. 어디를 확인해야해?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1027"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "누유 위치별 확인(K-1027)",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-003",
+  "eq_id": "CV",
+  "persona_id": "V-blind-cjy",
+  "intent": "procedure",
+  "question": "벨트를 교체해야하는데 나 혼자 뿐이야. 뭐부터 해야해?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1014",
+   "K-1015"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "벨트 교체 절차·단독 작업 카드 없음. K-1015는 운전 중 고장 대응 순서라 교체 절차가 아님",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-004",
+  "eq_id": "PDP",
+  "persona_id": "V-blind-cjy",
+  "intent": "safety",
+  "question": "배전반에서 스파크가 튀고 있어. 어떻게 해야해?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1309"
+  ],
+  "acceptable_card_ids": [
+   "K-1325",
+   "K-1315"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "충전부에 손대지 않고 차단·잠금·검전 후에만(K-1309). 아크·접속부 과열 징후는 K-1325·K-1315",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-005",
+  "eq_id": "HPU",
+  "persona_id": "V-blind-cjy",
+  "intent": "status",
+  "question": "펌프 압력이 빨간색을 띄고 있어요. 어떻게 해야하죠?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1003"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "값·방향(높음/낮음)이 없고 계기 적색 구간 대응 카드 없음. K-1203은 압력 부족 경로",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-006",
+  "eq_id": "GR",
+  "persona_id": "V-blind-cjy",
+  "intent": "symptom",
+  "question": "기어박스에서 이상한 소리가 들려요. 갈리는 듯한 소리에요. 뭐가 문제죠?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1026"
+  ],
+  "acceptable_card_ids": [
+   "K-1028",
+   "K-1024"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "갈리는 소리는 베어링(K-1026)",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-007",
+  "eq_id": "HPU",
+  "persona_id": "V-blind-cjy",
+  "intent": "status",
+  "question": "펌프의 압력이 130 bar에 위치해있어. 무슨 조치를 해야하지?",
+  "observations": {
+   "hpu_pressure": {
+    "value": 130,
+    "unit": "bar"
+   }
+  },
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1203"
+  ],
+  "acceptable_card_ids": [
+   "K-1001"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "130 bar는 정상 범위 아래(low) → 릴리프 설정·유량 확인 경로(K-1203)",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-008",
+  "eq_id": "CV",
+  "persona_id": "V-blind-cjy",
+  "intent": "status",
+  "question": "벨트 장력이 너무 약한거 같은데? 벨트가 헛돌아.",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1204"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "장력 low에서 미끄럼(K-1204). 장력 값이 없어 조건 미확인으로 끝날 수 있음",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-009",
+  "eq_id": "CAU",
+  "persona_id": "V-blind-cjy",
+  "intent": "symptom",
+  "question": "CAU의 출력이 낮아지고 있어. 공압이 너무 낮은거 같은데?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1301"
+  ],
+  "acceptable_card_ids": [
+   "K-1303",
+   "K-1312"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "압축공기 압력 저하·공압 설비 출력 저하(K-1301)",
+  "split": "blind-cjy"
+ },
+ {
+  "qid": "BC-010",
+  "eq_id": "CAU",
+  "persona_id": "V-blind-cjy",
+  "intent": "symptom",
+  "question": "압축기 주변이 너무 뜨거워. 과열된거 같아. 어떡하지?",
+  "observations": {},
+  "writer_note": "최재영 단독 작성(10/2). 배치 C·D 검수 경험이 있어 완전한 블라인드는 아님. 정답 연결: Claude(검색 결과를 보기 전에 카드 목록만 보고 연결)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1311"
+  ],
+  "acceptable_card_ids": [
+   "K-1323"
+  ],
+  "safety_card_ids": [
+   "K-1314"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "과열·토출 고온 경보 원인 후보(K-1311). 운전 중 과열이라 정지 상황과 다소 다름 → hard",
+  "split": "blind-cjy"
+ }
+]

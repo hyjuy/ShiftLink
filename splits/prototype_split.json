@@ -113,12 +113,12 @@
       "pattern_name": "잔류물 미제거 상태의 재가동 시도가 인터록으로 차단되는 사건",
       "is_synthetic": true,
       "registered_at": "2026-09-24"
-    }
-  ],
-  "conflict_action": "quarantine_new_item_and_review_evaluation_contamination",
-  "pending_groups": [
+    },
     {
       "group_id": "KB-20260930-C:EV-0401",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0401",
         "EV-0402",
@@ -138,20 +138,18 @@
         "AR-0439",
         "AR-0440"
       ],
-      "original_splits": [
-        "dev",
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "kb",
-      "bucket": 6,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "kb",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0403",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0403",
         "EV-0404"
@@ -162,19 +160,18 @@
         "AR-0407",
         "AR-0408"
       ],
-      "original_splits": [
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "kb",
-      "bucket": 5,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "kb",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0405",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0405",
         "EV-0406",
@@ -188,20 +185,18 @@
         "AR-0433",
         "AR-0434"
       ],
-      "original_splits": [
-        "dev",
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "kb",
-      "bucket": 6,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "kb",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0407",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0407",
         "EV-0408"
@@ -212,19 +207,18 @@
         "AR-0415",
         "AR-0416"
       ],
-      "original_splits": [
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "sealed",
-      "bucket": 10,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "sealed",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0409",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0409",
         "EV-0410",
@@ -238,20 +232,18 @@
         "AR-0435",
         "AR-0436"
       ],
-      "original_splits": [
-        "dev",
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "kb",
-      "bucket": 2,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "kb",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0411",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0411",
         "EV-0412"
@@ -262,19 +254,18 @@
         "AR-0423",
         "AR-0424"
       ],
-      "original_splits": [
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "dev",
-      "bucket": 8,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "dev",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     },
     {
       "group_id": "KB-20260930-C:EV-0413",
+      "prototype_ids": [],
+      "split": "kb",
+      "basis": "batch_c_lineage_review",
       "event_ids": [
         "EV-0413",
         "EV-0414",
@@ -288,17 +279,14 @@
         "AR-0437",
         "AR-0438"
       ],
-      "original_splits": [
-        "dev",
-        "kb"
-      ],
-      "lineage_review_status": "pending_review",
-      "candidate_split": "kb",
-      "bucket": 3,
-      "assignment_active": false,
-      "is_synthetic": true,
-      "basis": "same equipment/restart generator template; compound-event overlap; normalized text copies",
-      "independent_evaluation_eligible": false
+      "lineage_review_status": "approved",
+      "hash_candidate_split": "kb",
+      "independent_evaluation_eligible": false,
+      "reviewed_by": "최재영 (프로젝트 수준 일괄 승인, 2026-10-02, Claude 정리)",
+      "reviewed_at": "2026-10-02T15:00:00+09:00",
+      "note": "카드 생성·검토에 이미 쓴 합성 자료라 해시 후보(sealed/dev)와 관계없이 kb로 확정한다. 독립 평가에 쓰지 않는다."
     }
-  ]
+  ],
+  "conflict_action": "quarantine_new_item_and_review_evaluation_contamination",
+  "pending_groups": []
 }

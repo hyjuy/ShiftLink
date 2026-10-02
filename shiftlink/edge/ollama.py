@@ -84,6 +84,8 @@ SYSTEM_PROMPT = (
     "   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n"
     "3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n"
     "   질문에 없는 측정값·시각·운전/정지 상태를 단정하지 않는다. 카드가 정한 순서와 금지한 조치를 바꾸지 않는다.\n"
+    "   질문이 수치(얼마·몇·최대·기준)를 묻는데 카드에 그 수치가 없으면 지어내지 말고 "
+    "'카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요'라고 답한다.\n"
     "4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n"
     "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
 )
@@ -104,6 +106,16 @@ HANDOVER_SYSTEM_PROMPT = (
     "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
 )
 SYSTEM_PROMPTS = {"query": SYSTEM_PROMPT, "handover": HANDOVER_SYSTEM_PROMPT}
+
+# 10/2 abstain judge (J3): exaone scores whether the rank-1 card answers the question. On held-out blind sets
+# (blind2·3·cjy·T6) score < 2 → "no knowledge" took correct abstains 7 → 17 and turned 6 wrong answers into
+# refusals, at the cost of 3 correct answers and ~0.7 s per query. Records: ShiftLink-records/experiments/emb1002.
+JUDGE_PROMPT = (
+    "너는 지식카드 검수자다. 작업자 질문과 지식카드 1장이 주어진다. 카드가 질문에 얼마나 답하는지 0~3으로 매긴다. "
+    "3: 질문이 묻는 것을 카드가 직접 다룸. 2: 같은 상황을 다루고 확인·조치에 도움이 됨. 1: 설비·단어만 비슷하고 상황이 다름. "
+    "0: 관련 없음(인사·일정·규격·다른 작업 등)."
+)
+JUDGE_MIN_SCORE = 2
 
 
 def retry_prompt(candidate_ids: list[str]) -> str:
@@ -179,6 +191,40 @@ def split_context(
     return candidates, references, dropped
 
 
+def _shown_number(value: Any) -> str:
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
+
+
+def observation_fact_block(facts: list[dict[str, Any]] | None) -> str:
+    """System range judgments. The model is told not to rewrite them."""
+    lines = []
+    for fact in facts or []:
+        state = fact.get("state")
+        if state not in ("low", "normal", "high"):
+            continue
+        lo, hi = fact.get("normal_min"), fact.get("normal_max")
+        if lo is not None and hi is not None:
+            span = f"{_shown_number(lo)}–{_shown_number(hi)}"
+        elif lo is not None:
+            span = f"{_shown_number(lo)} 이상"
+        elif hi is not None:
+            span = f"{_shown_number(hi)} 이하"
+        else:
+            span = ""
+        where = {"normal": "안", "low": "보다 낮음", "high": "보다 높음"}[state]
+        gap = " " if state == "normal" and span else ""
+        unit = fact.get("unit") or ""
+        unit_bit = f" {unit}" if unit else ""
+        lines.append(
+            f"{fact.get('signal')} {_shown_number(fact.get('value'))}{unit_bit} → 정상 범위 {span}{gap}{where}"
+        )
+    if not lines:
+        return ""
+    return "측정값 판정(시스템 계산, 바꾸지 말 것):\n" + "\n".join(lines)
+
+
 def build_messages(
     mode: str,
     request: Any,
@@ -201,6 +247,9 @@ def build_messages(
     parts = [f"모드: {mode}", f"{ask_label}: {ask}"]
     if observations:
         parts.append(f"관측값: {json.dumps(observations, ensure_ascii=False)}")
+    fact_block = observation_fact_block(tool_results.get("observation_facts"))
+    if fact_block:
+        parts.append(fact_block)
     # 후보 한 줄 색인: 긴 JSON보다 먼저 제목·증상으로 질문과 맞춰 보게 한다.
     index = "\n".join(
         f"{card.get('card_id')}: {card.get('title', '')} / {card.get('symptom') or '-'}"
@@ -276,6 +325,25 @@ class OllamaModel:
             "output": output,
         }
         return output
+
+    def judge(self, question: str, card: dict[str, Any]) -> int:
+        """0~3: how directly the rank-1 card answers the question (FixedPipeline abstains below JUDGE_MIN_SCORE)."""
+        body = (f"질문: {question}\n\n카드 제목: {card.get('title', '')}\n증상: {card.get('symptom') or '-'}\n"
+                f"내용: {(card.get('know_how') or '')[:600]}")
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "system", "content": JUDGE_PROMPT}, {"role": "user", "content": body}],
+            "stream": False,
+            "format": {"type": "object", "properties": {"score": {"type": "integer", "enum": [0, 1, 2, 3]}},
+                       "required": ["score"]},
+            "keep_alive": KEEP_ALIVE,
+            "options": {"temperature": 0, "num_ctx": self.num_ctx, "num_predict": 20},
+        }
+        started = time.monotonic()
+        body_out = self._post("/api/chat", payload)
+        score = int(json.loads(body_out["message"]["content"])["score"])
+        self.last_judge = {"score": score, "latency_s": round(time.monotonic() - started, 3)}
+        return score
 
     def _post(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
         req = urllib.request.Request(

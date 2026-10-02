@@ -1,0 +1,207 @@
+[
+ {
+  "qid": "NH-001",
+  "eq_id": "HPU",
+  "persona_id": "V-newhire",
+  "intent": "other",
+  "question": "릴리프 압력 맞추려는데, 이 펌프 최대 정격 압력이 얼마예요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1003"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1003은 정격 위로 두지 말라고만 하고 펌프 정격 수치가 없다. 정답: 수치 없음, 모델 지침 확인",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-002",
+  "eq_id": "RT",
+  "persona_id": "V-newhire",
+  "intent": "symptom",
+  "question": "리프트는 올라가는데 모터에서 웅웅 소리가 나요. 이럴 땐 어떻게 해야 해요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1018"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1022는 상승이 안 될 때의 카드. 올라가는 상황의 카드 없음(#155 메모)",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-003",
+  "eq_id": "GR",
+  "persona_id": "V-newhire",
+  "intent": "symptom",
+  "question": "감속기에서 이상한 소리가 한두 번 났는데 지금은 안 나요. 계속 반복된 건 아닌데, 이것도 확인해야 해요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1028"
+  ],
+  "acceptable_card_ids": [
+   "K-1024"
+  ],
+  "safety_card_ids": [
+   "K-1024"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "불규칙 이상음은 오일 속 이물 의심·오일 점검(K-1028). K-1026은 규칙적 이상음이라 정답 아님(#155 메모)",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-004",
+  "eq_id": "HPU",
+  "persona_id": "V-newhire",
+  "intent": "other",
+  "question": "조치 후 값이 정상으로 돌아왔는지 보라는데, 정상 범위가 얼마예요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "설비·신호가 없어 정할 수 없다. K-1102는 인계 방법 카드(#155 메모). 설비는 임의로 HPU",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-005",
+  "eq_id": "GR",
+  "persona_id": "V-newhire",
+  "intent": "procedure",
+  "question": "감속기 온도가 정지 전 75 degC에서 49 degC로 내려갔어요. 원인 확인하고 다시 돌린 뒤에도 지켜보라는데, 얼마나 오래 봐야 해요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1216"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1216에 관측 지속 시간이 없다. 정답: 시간 기준 없음",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-006",
+  "eq_id": "PDP",
+  "persona_id": "V-newhire",
+  "intent": "safety",
+  "question": "차단기가 트립됐는데 다시 넣기 전에 안전한지 확인하라고 하네요. 뭘 확인하고 누구한테 확인받아야 해요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1317"
+  ],
+  "acceptable_card_ids": [
+   "K-1306",
+   "K-1308"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1317: 트립 이력·부하·접속부 과열·주위 조건 확인, 재투입은 원인 제거 뒤 전기 담당이 판단",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-007",
+  "eq_id": "PDP",
+  "persona_id": "V-newhire",
+  "intent": "safety",
+  "question": "잔류전하를 빼고 단락 접지도 하라는데, 어떤 장비로 어떤 순서로 하는 거예요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1309"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1309가 순서(전원 확인→차단·단로기 개방→잠금·꼬리표→잔류전하 방전→검전기→단락 접지기구)와 장비 종류를 준다. 장비 사양은 없음",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-008",
+  "eq_id": "PDP",
+  "persona_id": "V-newhire",
+  "intent": "other",
+  "question": "버스 전압이 low라는 게 몇 볼트 아래라는 뜻이에요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310",
+   "K-1307"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "bus_voltage는 pct 단위, 카드에 볼트 기준 없음. K-1307은 10%를 경계값으로 쓰지 말라고 함",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-009",
+  "eq_id": "CAU",
+  "persona_id": "V-newhire",
+  "intent": "procedure",
+  "question": "압력을 완전히 빼라는데, 잔류 압력이 얼마 이하여야 다 빠졌다고 보면 돼요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1314",
+   "K-1320"
+  ],
+  "safety_card_ids": [
+   "K-1314"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1314·K-1320에 잔압 수치 기준 없음",
+  "split": "followup"
+ },
+ {
+  "qid": "NH-010",
+  "eq_id": "CAU",
+  "persona_id": "V-newhire",
+  "intent": "safety",
+  "question": "다른 공압 장치에서 쓰던 호스를 새로 설치하려는데, 최대 몇까지 압력을 써도 돼요?",
+  "observations": {},
+  "writer_note": "카드를 읽고 만든 신입 작업자 후속 질문(#155). 블라인드 아님. 정답 연결: Claude, 판정 근거는 카드 본문과 #155 검토 메모",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1321"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1321"
+  ],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "K-1321: 다른 장치에서 쓰던 호스는 처음 설치에 재사용하지 않는다. 0.2MPa는 분사기 기준이라 호스 허용압력이 아님(#155 메모)",
+  "split": "followup"
+ }
+]

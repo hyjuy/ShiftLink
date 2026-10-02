@@ -1,0 +1,594 @@
+[
+ {
+  "qid": "BN-001",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "압축공기 압력이 720 kPa인데 계속 운전해도 괜찮은가요?",
+  "observations": {
+   "air_pressure": {
+    "value": 720,
+    "unit": "kPa"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1305"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "K-1305의 가상 MES 정상 범위는 air_pressure 550–700 kPa이고, 720 kPa는 상한을 넘는다",
+   "압력 high만으로 원인을 확정하지 않고 압축기가 운전 중인지, 전류가 함께 높은지 확인한다",
+   "라인 압력이 압축기 최대 운전 압력을 넘지 않는지와 언로드 동작을 확인하고, 안전밸브 설정은 바꾸거나 막지 않는다"
+  ],
+  "difficulty": "medium",
+  "label_note": "정책 A: K-1305가 air_pressure 정상 범위(550–700 kPa)를 명시. 720 kPa는 상한 초과라 K-1305 확인 항목 적용. 전류 동반 여부는 질문에 없음(검증 단계 수정, 재라벨링 시 범위 누락) / 검수(10/2): 720 kPa는 상한 초과라 정답 유지",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-002",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "압축공기 압력이 610 kPa로 확인됐는데 확인 기준이 있나요?",
+  "observations": {
+   "air_pressure": {
+    "value": 610,
+    "unit": "kPa"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "610 kPa는 K-1305의 가상 MES 정상 범위(550–700 kPa) 안이다",
+   "이 범위는 가상 MES 기준이며 압축기 설정압·모터 정격이 아니다"
+  ],
+  "difficulty": "medium",
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: 정책 A: K-1305의 정상 범위(550–700 kPa) 안이라 '정상 범위, 계속 관찰'이 정답(검증 단계 수정, 재라벨링 시 범위 누락)",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-003",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "압축공기 설비 주변 진동과 냄새 변화가 있는데 어떻게 확인하면 될까요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1302"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T2: 진동·냄새 확인 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-004",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "압력 알람이 발생했는데 현재 압력 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1305"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "운전 중 압력과 전류가 함께 높으면, 언로드 동작과 운전 압력을 확인한다"
+  ],
+  "difficulty": "medium",
+  "label_note": "K-1305: 압력 상승과 전류 상승 동시 알람 진단 / 검수(10/2): 질문에 값이 없고 카드는 압력·전류 동시 조건이라 medium",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-005",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "에어 필터 교체 작업 후 재가동 전에 필터 규격 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1312"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 필터 규격 확인 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-006",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "압력 알람 초기화 작업 후 재가동 전에 확인할 상태가 있을까요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1322"
+  ],
+  "safety_card_ids": [
+   "K-1314",
+   "K-1320"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 알람 초기화 후 재가동 절차 카드 없음. K-1322는 정전 후 재기동",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-007",
+  "eq_id": "CAU",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "압축공기 설비 점검 작업 후 재가동 전에 확인할 사항이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1322"
+  ],
+  "safety_card_ids": [
+   "K-1314",
+   "K-1320"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "CAU T6: 점검 후 재가동 절차 카드 없음. K-1322는 정전 후 재기동에만 해당",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-008",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "배전반 전압이 98%인 상태에서 운전을 계속해도 되는지 확인이 필요한가요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 98,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 정상 전압 범위 기준 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-009",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "배전반 전압이 92%로 확인됐는데 점검 기준이 있나요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 92,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 정상 전압 범위 기준 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-010",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "전원 알람과 정상 전압 표시가 같이 있을 때 판단 방법이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1310"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1310은 voltage LOW 조건인데, 질문은 정상 표시 상태. 조건 불일치",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-011",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "배전반 열감과 팬 소리 변화가 있는데 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1315"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T2: 열감·팬소리 확인 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-012",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "차단기 교체 작업 후 전압 정상 상태에서 재가동 가능한가요?",
+  "observations": {
+   "bus_voltage": {
+    "value": 100,
+    "unit": "pct"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1324"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T6: 일반 재가동 절차 카드 없음. K-1324는 배전반 전원 투입 순서(T3)",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-013",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "전원 알람 초기화 작업 후 정상 표시 확인 시 재가동 판단 기준이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1324"
+  ],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "PDP T6: 알람 초기화 후 재가동 절차 카드 없음. K-1324는 전원 투입 순서",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-014",
+  "eq_id": "PDP",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "PDP 전원 점검 작업 후 인계 내용 기준으로 재가동 확인 방법이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1324"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1309"
+  ],
+  "key_facts": [
+   "배전반에 전원을 넣기 전에 모든 장치의 기계 동작을 점검하고 차단기·계전기를 손으로 조작해 걸림이 없는지, 뒤쪽에 이물이 없는지 본다"
+  ],
+  "difficulty": "medium",
+  "label_note": "K-1324: 전원 투입 순서를 인계 항목으로 적용 / 검수(10/2): 정답 유지. K-1324는 1차 블라인드(BL-019)를 보고 만든 카드라 점수가 부풀 수 있음을 보고서에 적는다",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-015",
+  "eq_id": "HPU",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "유압 필터 차압 0.8 bar와 유량 55 L_min 상태에서 확인 기준이 있나요?",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 0.8,
+    "unit": "bar"
+   },
+   "hpu_flow": {
+    "value": 55,
+    "unit": "L_min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "필터 차압 0.8 bar는 카드 기준(1.2 bar) 미만이므로 막힘 표시기 확인 대상 아님. 정상 범위 내"
+  ],
+  "difficulty": "medium",
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 질문값 < 카드 기준값. 정상 범위 결론 가능 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-016",
+  "eq_id": "HPU",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "필터 교체 작업 후 유압 필터 차압이 0.3 bar인 상태에서 재가동 가능한가요?",
+  "observations": {
+   "hpu_filter_dp": {
+    "value": 0.3,
+    "unit": "bar"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1211"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "필터 정비 후 재가동: 압력 회복해도 유량·기포·소음을 함께 확인한다"
+  ],
+  "difficulty": "easy",
+  "label_note": "K-1211: 정비 후 다중 신호 확인",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-017",
+  "eq_id": "CV",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "컨베이어 대기율 40%와 속도 12 m/min 상태에서 판단이 필요한가요?",
+  "observations": {
+   "cv_queue_len": {
+    "value": 40,
+    "unit": "pct"
+   },
+   "cv_speed": {
+    "value": 12,
+    "unit": "m_min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "속도 12 m/min은 카드 기준(10 m/min) 이상이고, 대기율 40%는 기준(70%) 미만이므로 카드 적용 범위 밖"
+  ],
+  "difficulty": "medium",
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 질문값이 K-1206의 두 조건 중 하나만 만족 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-018",
+  "eq_id": "CV",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "CV 벨트 센서 교체 작업 후 재가동 전에 알람 상태 확인이 필요한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1215",
+   "K-1213"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1215는 비상정지 후 절차이지 센서 교체 후 절차 아님",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-019",
+  "eq_id": "GR",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "감속기 전류 35 A와 진동 1.2 mm/s 상태에서 확인 기준이 있나요?",
+  "observations": {
+   "gr_current": {
+    "value": 35,
+    "unit": "A"
+   },
+   "gr_vib_rms": {
+    "value": 1.2,
+    "unit": "mm_s"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [
+   "진동 1.2 mm/s는 카드 기준(2.8 mm/s) 미만이므로 진동 기준상 문제 아님. 베어링 온도 기준 없음"
+  ],
+  "difficulty": "medium",
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 진동값 < 카드 기준 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-020",
+  "eq_id": "GR",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "진동 알람 초기화 작업 후 재가동 전에 확인할 사항이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1216은 과열 후 냉각 온도 관찰이지, 진동 알람 초기화 일반 절차 아님 / 검수(10/2): 답 없음 문항이라 함께 인정 카드 삭제",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-021",
+  "eq_id": "RT",
+  "persona_id": "V-blind2",
+  "intent": "status",
+  "slot": "T2",
+  "question": "롤러 클램프 압력 5 bar와 리프트 지연 1분 상태에서 판단 기준이 있나요?",
+  "observations": {
+   "rt_clamp_press": {
+    "value": 5,
+    "unit": "bar"
+   },
+   "rt_lift_delay": {
+    "value": 1,
+    "unit": "min"
+   }
+  },
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "1차 오류 수정: K-1208은 모터 전류 기준(rt_motor_current)이지 클램프 압력(rt_clamp_press) 아님 / 검수(10/2): 답 없음 문항이라 함께 인정 카드 삭제",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-022",
+  "eq_id": "RT",
+  "persona_id": "V-blind2",
+  "intent": "procedure",
+  "slot": "T6",
+  "question": "RT 롤러 센서 교체 작업 후 알람 상태 확인 시 재가동 가능한가요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1214"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [
+   "K-1018"
+  ],
+  "key_facts": [
+   "RT 정비 완료와 재가동 승인을 구분한다"
+  ],
+  "difficulty": "easy",
+  "label_note": "K-1214: 정비 완료 vs 재가동 승인 구분",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-023",
+  "eq_id": "GR",
+  "persona_id": "V-blind2",
+  "intent": "other",
+  "slot": "자유",
+  "question": "감속기 사용 이력과 부품 모델 번호 확인이 필요한데 무엇을 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1212"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "GR 자유: 부품 모델 추적 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-024",
+  "eq_id": "RT",
+  "persona_id": "V-blind2",
+  "intent": "other",
+  "slot": "자유",
+  "question": "RT 롤러 위치 알람 기록 확인 후 판단 기준이 있나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "hard",
+  "label_note": "RT 자유: 알람 기록 판단 기준 카드 없음",
+  "split": "blind2"
+ },
+ {
+  "qid": "BN-025",
+  "eq_id": "GR",
+  "persona_id": "V-blind2",
+  "intent": "other",
+  "slot": "자유",
+  "question": "감속기 베어링 온도 확인이 필요한 상황인데 무엇을 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "상황 후보: (AI명 미기재) / 선택·수정: 허재원 / 문장: ChatGPT 임시 채팅",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1025"
+  ],
+  "acceptable_card_ids": [
+   "K-1210"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [
+   "감속기 베어링부 온도 측정값이 정상 상한을 초과하면 오일 상태와 베어링을 확인한다"
+  ],
+  "difficulty": "medium",
+  "label_note": "K-1025: 베어링 온도 측정 절차",
+  "split": "blind2"
+ }
+]

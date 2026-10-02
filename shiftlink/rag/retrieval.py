@@ -231,6 +231,51 @@ def check_card_rules(card: KnowledgeCard) -> list[str]:
     return errors
 
 
+# Longer suffixes first so hpu_pressure is 압력, not a shorter stem.
+_SIGNAL_LABELS = (
+    ("vib_rms", "진동"),
+    ("pressure", "압력"),
+    ("press", "압력"),
+    ("temp", "온도"),
+    ("flow", "유량"),
+    ("current", "전류"),
+    ("voltage", "전압"),
+    ("oil_level", "유면"),
+    ("rpm", "회전속도"),
+    ("speed", "속도"),
+    ("delay", "지연"),
+    ("tension", "장력"),
+    ("trip", "트립"),
+    ("ratio", "비율"),
+    ("queue_len", "적재"),
+    ("leak", "누유"),
+    ("viscosity", "점도"),
+    ("water_content", "수분"),
+    ("level", "유면"),
+)
+
+
+def _signal_label(signal: str) -> str:
+    """Short Korean name used to tie a direction word to one reading."""
+    for suffix, label in _SIGNAL_LABELS:
+        if signal == suffix or signal.endswith("_" + suffix):
+            return label
+    return signal
+
+
+def _range_state(value, normal_min, normal_max):
+    """low / high / normal from a catalog range. Endpoints are normal. Non-numbers have no state."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    if normal_min is not None and value < normal_min:
+        return "low"
+    if normal_max is not None and value > normal_max:
+        return "high"
+    if normal_min is not None or normal_max is not None:
+        return "normal"
+    return None
+
+
 class InMemoryToolProvider:
     """In-memory knowledge card storage implementing ToolProvider protocol."""
 
@@ -324,6 +369,16 @@ class InMemoryToolProvider:
         """Return canonical metadata, rejecting unresolved or unsupported equipment."""
         return [row for _, _, row in self._resolve_equipment(equipment_ids) if row is not None]
 
+    def _catalog_points(self, resolved):
+        """Measurement points for the resolved units. A type code uses its first unit's ranges."""
+        rows = [row for _, _, row in resolved if row]
+        for code in {code for _, code, row in resolved if row is None}:
+            type_ids = {t.get("equipment_type_id") for t in self.equipment_types if t.get("type_code") == code}
+            # ponytail: a type code uses its first unit's ranges (MesCardAdapter picks -01 the same way)
+            rows += sorted((r for r in self.equipment_db if r.get("equipment_type_id") in type_ids),
+                           key=lambda r: r.get("code", ""))[:1]
+        return {mp["signal"]: mp for row in rows for mp in row.get("measurement_points", [])}
+
     def _with_derived_states(self, resolved, observations):
         """Add `<signal>_state` (low/normal/high) from the catalog's normal range, as MesCardAdapter does.
 
@@ -332,13 +387,7 @@ class InMemoryToolProvider:
         """
         if not observations:
             return observations
-        rows = [row for _, _, row in resolved if row]
-        for code in {code for _, code, row in resolved if row is None}:
-            type_ids = {t.get("equipment_type_id") for t in self.equipment_types if t.get("type_code") == code}
-            # ponytail: a type code uses its first unit's ranges (MesCardAdapter picks -01 the same way)
-            rows += sorted((r for r in self.equipment_db if r.get("equipment_type_id") in type_ids),
-                           key=lambda r: r.get("code", ""))[:1]
-        points = {mp["signal"]: mp for row in rows for mp in row.get("measurement_points", [])}
+        points = self._catalog_points(resolved)
         out = dict(observations)
         for signal, raw in observations.items():
             point, key = points.get(signal), f"{signal}_state"
@@ -347,16 +396,37 @@ class InMemoryToolProvider:
             value, unit = (raw.get("value"), raw.get("unit")) if isinstance(raw, dict) else (raw, None)
             if unit is not None and unit != point.get("unit"):
                 continue
-            if isinstance(value, bool) or not isinstance(value, (int, float)):
-                continue
-            lo, hi = point.get("normal_min"), point.get("normal_max")
-            if lo is not None and value < lo:
-                out[key] = "low"
-            elif hi is not None and value > hi:
-                out[key] = "high"
-            elif lo is not None or hi is not None:
-                out[key] = "normal"
+            state = _range_state(value, point.get("normal_min"), point.get("normal_max"))
+            if state:
+                out[key] = state
         return out
+
+    def observation_facts(self, *, equipment_ids: list[str], observations: dict[str, object]) -> list[dict[str, Any]]:
+        """One catalog judgment per reading. Same points and `_range_state` as `_with_derived_states`."""
+        if not observations:
+            return []
+        points = self._catalog_points(self._resolve_equipment(equipment_ids))
+        facts = []
+        for signal, raw in observations.items():
+            if not isinstance(signal, str) or signal.endswith("_state"):
+                continue
+            value, unit = (raw.get("value"), raw.get("unit")) if isinstance(raw, dict) else (raw, None)
+            point = points.get(signal)
+            lo = point.get("normal_min") if point else None
+            hi = point.get("normal_max") if point else None
+            state = None
+            if point is not None and (unit is None or unit == point.get("unit")):
+                state = _range_state(value, lo, hi)
+            facts.append({
+                "signal": signal,
+                "label": _signal_label(signal),
+                "value": value,
+                "unit": unit if unit is not None else (point.get("unit") if point else None),
+                "state": state,
+                "normal_min": lo,
+                "normal_max": hi,
+            })
+        return facts
 
     def search_cards(
         self,

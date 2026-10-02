@@ -13,14 +13,12 @@
    "라인 압력이 압축기 최대 운전 압력을 넘지 않는지와 언로드 동작을 확인하고, 안전밸브 설정은 바꾸거나 막지 않는다"
   ],
   "difficulty": "medium",
-  "label_note": "정책 A: K-1305가 air_pressure 정상 범위(550–700 kPa)를 명시. 720 kPa는 상한 초과라 K-1305 확인 항목 적용. 전류 동반 여부는 질문에 없음(검증 단계 수정, 재라벨링 시 범위 누락)"
+  "label_note": "정책 A: K-1305가 air_pressure 정상 범위(550–700 kPa)를 명시. 720 kPa는 상한 초과라 K-1305 확인 항목 적용. 전류 동반 여부는 질문에 없음(검증 단계 수정, 재라벨링 시 범위 누락) / 검수(10/2): 720 kPa는 상한 초과라 정답 유지"
  },
  {
   "qid": "BN-002",
-  "answerable": true,
-  "primary_card_ids": [
-   "K-1305"
-  ],
+  "answerable": false,
+  "primary_card_ids": [],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [
@@ -28,7 +26,7 @@
    "이 범위는 가상 MES 기준이며 압축기 설정압·모터 정격이 아니다"
   ],
   "difficulty": "medium",
-  "label_note": "정책 A: K-1305의 정상 범위(550–700 kPa) 안이라 '정상 범위, 계속 관찰'이 정답(검증 단계 수정, 재라벨링 시 범위 누락)"
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: 정책 A: K-1305의 정상 범위(550–700 kPa) 안이라 '정상 범위, 계속 관찰'이 정답(검증 단계 수정, 재라벨링 시 범위 누락)"
  },
  {
   "qid": "BN-003",
@@ -53,8 +51,8 @@
   "key_facts": [
    "운전 중 압력과 전류가 함께 높으면, 언로드 동작과 운전 압력을 확인한다"
   ],
-  "difficulty": "easy",
-  "label_note": "K-1305: 압력 상승과 전류 상승 동시 알람 진단"
+  "difficulty": "medium",
+  "label_note": "K-1305: 압력 상승과 전류 상승 동시 알람 진단 / 검수(10/2): 질문에 값이 없고 카드는 압력·전류 동시 조건이라 medium"
  },
  {
   "qid": "BN-005",
@@ -188,22 +186,19 @@
    "배전반에 전원을 넣기 전에 모든 장치의 기계 동작을 점검하고 차단기·계전기를 손으로 조작해 걸림이 없는지, 뒤쪽에 이물이 없는지 본다"
   ],
   "difficulty": "medium",
-  "label_note": "K-1324: 전원 투입 순서를 인계 항목으로 적용"
+  "label_note": "K-1324: 전원 투입 순서를 인계 항목으로 적용 / 검수(10/2): 정답 유지. K-1324는 1차 블라인드(BL-019)를 보고 만든 카드라 점수가 부풀 수 있음을 보고서에 적는다"
  },
  {
   "qid": "BN-015",
-  "answerable": true,
-  "primary_card_ids": [
-   "K-1201",
-   "K-1202"
-  ],
+  "answerable": false,
+  "primary_card_ids": [],
   "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [
    "필터 차압 0.8 bar는 카드 기준(1.2 bar) 미만이므로 막힘 표시기 확인 대상 아님. 정상 범위 내"
   ],
   "difficulty": "medium",
-  "label_note": "Policy A 적용: 질문값 < 카드 기준값. 정상 범위 결론 가능 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 질문값 < 카드 기준값. 정상 범위 결론 가능 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
  },
  {
   "qid": "BN-016",
@@ -221,19 +216,15 @@
  },
  {
   "qid": "BN-017",
-  "answerable": true,
-  "primary_card_ids": [
-   "K-1206"
-  ],
-  "acceptable_card_ids": [
-   "K-1204"
-  ],
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [
    "속도 12 m/min은 카드 기준(10 m/min) 이상이고, 대기율 40%는 기준(70%) 미만이므로 카드 적용 범위 밖"
   ],
   "difficulty": "medium",
-  "label_note": "Policy A 적용: 질문값이 K-1206의 두 조건 중 하나만 만족 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 질문값이 K-1206의 두 조건 중 하나만 만족 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
  },
  {
   "qid": "BN-018",
@@ -250,44 +241,35 @@
  },
  {
   "qid": "BN-019",
-  "answerable": true,
-  "primary_card_ids": [
-   "K-1209"
-  ],
-  "acceptable_card_ids": [
-   "K-1210"
-  ],
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [
    "진동 1.2 mm/s는 카드 기준(2.8 mm/s) 미만이므로 진동 기준상 문제 아님. 베어링 온도 기준 없음"
   ],
   "difficulty": "medium",
-  "label_note": "Policy A 적용: 진동값 < 카드 기준 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
+  "label_note": "검수(10/2): 값이 카드 조건 범위 밖(정상)이라 카드 조건 불충족 → 시스템은 그 카드를 후보에서 뺀다. 정답은 '해당 지식 없음' / 이전: Policy A 적용: 진동값 < 카드 기준 (검증 단계 수정: 정책 A에 따라 기준 카드를 primary로)"
  },
  {
   "qid": "BN-020",
   "answerable": false,
   "primary_card_ids": [],
-  "acceptable_card_ids": [
-   "K-1216",
-   "K-1212"
-  ],
+  "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "hard",
-  "label_note": "1차 오류 수정: K-1216은 과열 후 냉각 온도 관찰이지, 진동 알람 초기화 일반 절차 아님"
+  "label_note": "1차 오류 수정: K-1216은 과열 후 냉각 온도 관찰이지, 진동 알람 초기화 일반 절차 아님 / 검수(10/2): 답 없음 문항이라 함께 인정 카드 삭제"
  },
  {
   "qid": "BN-021",
   "answerable": false,
   "primary_card_ids": [],
-  "acceptable_card_ids": [
-   "K-1207"
-  ],
+  "acceptable_card_ids": [],
   "safety_card_ids": [],
   "key_facts": [],
   "difficulty": "hard",
-  "label_note": "1차 오류 수정: K-1208은 모터 전류 기준(rt_motor_current)이지 클램프 압력(rt_clamp_press) 아님"
+  "label_note": "1차 오류 수정: K-1208은 모터 전류 기준(rt_motor_current)이지 클램프 압력(rt_clamp_press) 아님 / 검수(10/2): 답 없음 문항이라 함께 인정 카드 삭제"
  },
  {
   "qid": "BN-022",

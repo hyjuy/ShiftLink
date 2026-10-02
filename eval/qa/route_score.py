@@ -8,6 +8,7 @@ Handover t4_route_acc: the same on eval/qa/20260930-T4/qa_dev_t4.json, dev only.
 Deferred items and gold sets requiring multiple cards are excluded from rank-1;
 their count is printed separately. Search itself is unchanged.
 Secondary sanity_route_acc: the same on sanity.json (card-derived 9/29 bench, answerable) + reserve.json (unanswerable).
+Report  blind2_route_acc: the same on eval/qa/20261001-blind2/qa_blind2.json (final blind set, report only, never tuned on).
 qa_test.json is never read here: it is for the final score only.
 """
 import argparse
@@ -62,9 +63,13 @@ def main():
     print(f"t4_route_acc: {h}/{sum(rank1_evaluable(x) for x in t4)}")
     print(f"t4_rank1_excluded: {' '.join(x['qid'] for x in t4 if not rank1_evaluable(x))}")
     print(f"sanity_route_acc: {s}/{sum(rank1_evaluable(x) for x in sanity)}")
+    blind2 = json.loads((QA.parent / "20261001-blind2/qa_blind2.json").read_text(encoding="utf-8"))
+    b2, b2_miss = score(provider, blind2)  # report only: never tune on it (README 오염 금지)
+    print(f"blind2_route_acc: {b2}/{sum(rank1_evaluable(x) for x in blind2)}")
     print(f"dev_misses: {' '.join(d_miss)}")
     print(f"t4_misses: {' '.join(h_miss)}")
     print(f"sanity_misses: {' '.join(s_miss)}")
+    print(f"blind2_misses: {' '.join(b2_miss)}")
 
 
 if __name__ == "__main__":

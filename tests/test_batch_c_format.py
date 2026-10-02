@@ -63,14 +63,24 @@ def test_c_promotion_matches_human_review_and_runtime_kb():
         assert merged[card["card_id"]] == card
 
 
+def _recorded_issues(cards):
+    """Policy issues the 10/1 L1 record accepted per card (the live gate is clear since 10/2)."""
+    record = json.loads((KB / "20260930-C/l1-promotion-20261001.json").read_text(encoding="utf-8"))
+    return {c["card_id"]: list(record["cards"][c["card_id"]]["pending_policy_issues"]) for c in cards}
+
+
 def test_c_promotion_does_not_clear_policy_issues_or_approve_changed_cards(monkeypatch):
     import copy
     spec = importlib.util.spec_from_file_location("c_policy_gate", KB / "20260930-C/policy_gate.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
-    pending = module.adoption_issues(cards)
-    assert len(pending) == 19
+    # 10/2: sources, lineage and T6 evidence/exceptions approved -> the gate itself is clear.
+    assert module.adoption_issues(cards) == {}
+    assert module.unapproved_adoption_issues(cards) == {}
+    # The L1 record still only covers the exact reviewed snapshots and its recorded issues.
+    pending = _recorded_issues(cards)
+    monkeypatch.setattr(module, "adoption_issues", lambda *args: copy.deepcopy(pending))
     assert module.unapproved_adoption_issues(cards) == {}
     changed = copy.deepcopy(cards)
     changed[0]["know_how"] += " changed"
@@ -85,7 +95,7 @@ def test_c_promotion_rejects_a_changed_checklist(tmp_path, monkeypatch):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
-    pending = module.adoption_issues(cards)
+    pending = _recorded_issues(cards)  # the gate is clear since 10/2; replay the recorded ones
     monkeypatch.setattr(module, "adoption_issues", lambda *args: pending.copy())
     record = json.loads((KB / "20260930-C/l1-promotion-20261001.json").read_text(encoding="utf-8"))
     record["review_file"] = "review.md"
@@ -102,7 +112,7 @@ def test_c_promotion_checks_only_its_own_review_block(tmp_path, monkeypatch, cha
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     cards = json.loads((KB / "20260930-C/cards.json").read_text(encoding="utf-8"))
-    pending = module.adoption_issues(cards)
+    pending = _recorded_issues(cards)  # the gate is clear since 10/2; replay the recorded ones
     monkeypatch.setattr(module, "adoption_issues", lambda *args: copy.deepcopy(pending))
     record = json.loads((KB / "20260930-C/l1-promotion-20261001.json").read_text(encoding="utf-8"))
     review = (KB / "human-review-checklist-20260930.md").read_text(encoding="utf-8")

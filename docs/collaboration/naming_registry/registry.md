@@ -90,6 +90,7 @@
 | `record_scan()` · `POST /api/equipment/scan` | `shiftlink/mes/server.py` | 웹캠 CNN 확정 결과 `{class, conf, device_id, ts}` → `scan_id`·`equipment_id`·`code` 붙여 메모리 기록(최근 50건). 여러 대인 형식은 equipment_id 최소 설비 | 허재원 |
 | `recent_scans()` · `GET /api/equipment/scan/recent?limit=` | `shiftlink/mes/server.py` | 최신 인식 결과부터 limit(1~50, 기본 5)개 | 허재원 |
 | `post_scan()` | `shiftlink/vision/classify.py` | 확정 클래스를 Jetson에 POST, 실패는 False만 반환. `--server`·`--device-id` 인자 | 허재원 |
+| `observation_facts()` | `shiftlink/rag/retrieval.py` | 관측값마다 카탈로그 정상범위 판정(low/normal/high). 검색 파생 상태와 같은 범위 | 최재영 |
 | `build_messages()` | `shiftlink/edge/ollama.py` | 모드·질문·관측값·카드 → Ollama `/api/chat` messages (+카나리 제외 카드 ID) | 허재원 |
 | `card_context()` | `shiftlink/edge/ollama.py` | 카드를 `MODEL_CARD_FIELDS`로 축약하고 카나리 카드 제거 (§4.4·§5). `mode="handover"`면 T4 `handover_method`도 포함 | 허재원 |
 | `main()` | `shiftlink/edge/__main__.py` | 픽스처 카드 + 실제 Ollama로 파이프라인 1건 실행하는 진입점 | 허재원 |

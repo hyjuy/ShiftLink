@@ -1042,3 +1042,19 @@ def test_abstain_judge_error_falls_through_and_handover_is_not_judged(equipment_
     FixedPipeline(tools=equipment_provider, model=lambda **kw: {"answer": "x", "cited_card_ids": []},
                   judge=lambda q, c: seen.append(q) or 0).run(dict(memo_text="펌프 소음 증가", shift="A", eq_ids=["HPU"]))
     assert seen == []
+
+
+@pytest.mark.parametrize("question,answered", [("필터 차압이 어느 정도면 이상이에요?", True), ("필터 차압 경보 떴어요", False)])
+def test_threshold_question_cites_unverified_top_card_as_reference(equipment_provider, question, answered):
+    """10/2 blind-3: asking for the threshold itself has no reading; the rank-1 card answers as a reference."""
+    card = make_card_t1("K-0012")
+    card.title = card.symptom = "필터 차압 경보 이상 기준"
+    card.conditions = [Condition(signal="hpu_filter_dp_state", op="==", value="high")]
+    equipment_provider.cards.append(card)
+    calls = []
+    model = lambda **kw: calls.append(kw) or {"answer": "카드의 차압 기준을 확인하세요.", "cited_card_ids": ["K-0012"]}  # noqa: E731
+    result = FixedPipeline(tools=equipment_provider, model=model, judge=lambda q, c: 3).run(
+        dict(question=question, line_id="L1", eq_id="HPU"))
+    assert bool(calls) is answered and result.output.no_knowledge is (not answered)
+    if answered:
+        assert result.output.cited_card_ids == ["K-0012"] and "K-0012" not in result.output.unverified_card_ids

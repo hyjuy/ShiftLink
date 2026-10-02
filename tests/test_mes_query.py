@@ -61,3 +61,27 @@ def test_invalid_query_rejected(service, body):
 def test_question_without_scan_requires_equipment(service):
     with pytest.raises(ValueError, match='scan'):
         query_service(service, {'question': 'x'}, pipeline=Pipeline())
+
+
+def test_query_http_returns_json_answer(service):
+    import threading
+    from http.server import ThreadingHTTPServer
+    from urllib.request import Request, urlopen
+    from shiftlink.mes.server import _Handler
+    service.query_pipeline = Pipeline()
+    service.record_scan({'class': 'GR', 'conf': .95, 'device_id': 'pi'})
+    handler = type('QueryHandler', (_Handler,), {'service': service, 'web_root': Path('shiftlink/mes/web')})
+    server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
+    worker = threading.Thread(target=server.serve_forever)
+    worker.start()
+    try:
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/query',
+                      json.dumps({'question': 'bearing'}).encode(), {'Content-Type': 'application/json'})
+        with urlopen(req, timeout=5) as response:
+            result = json.load(response)
+        assert result['answer'] == 'grounded answer'
+        assert result['cited_card_ids'] == ['K-1']
+    finally:
+        server.shutdown()
+        worker.join()
+        server.server_close()

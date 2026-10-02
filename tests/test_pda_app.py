@@ -51,7 +51,10 @@ def test_pages_local_and_api_proxied():
         status, body = fetch(pda_url + "/pda.html")
         assert status == 200 and b"/static/pda.js" in body
         assert fetch(pda_url + "/static/pda.js")[0] == 200
-        assert fetch(pda_url + "/static/app.js")[0] == 404  # 화면 파일만 준다
+        status, body = fetch(pda_url + "/")
+        assert status == 200 and b"/static/app.js" in body  # MES 대시보드
+        assert fetch(pda_url + "/static/style.css")[0] == 200
+        assert fetch(pda_url + "/static/../server.py")[0] == 404  # 화면 파일만 준다
 
         status, body = fetch(pda_url + "/api/state?x=1")
         assert status == 200 and json.loads(body)["path"] == "/api/state?x=1"

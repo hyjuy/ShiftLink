@@ -115,3 +115,16 @@ CREATE TABLE IF NOT EXISTS handover_item (
   PRIMARY KEY (handover_id, version, item_id),
   FOREIGN KEY (handover_id, version) REFERENCES handover_record (handover_id, version)
 );
+
+-- PDA 인계 원본 업로드 (10/2 추가, 시연용). Jetson SQLite handover_outbox -> shiftlink/mes/uploader.py.
+-- §4.11 예외: 시연 데이터가 전부 합성(is_synthetic)이라 메모 원문(payload.memo_text)을 올려 다음 조 화면이 읽는다.
+-- 실제 현장 데이터면 원문 대신 content_sha256만 올린다. 같은 ID + 같은 해시 = 중복 무시, 다른 해시 = 충돌 보류.
+CREATE TABLE IF NOT EXISTS handover_upload (
+  handover_id     VARCHAR(64)  NOT NULL PRIMARY KEY,  -- PDA 'HO-' + UUID
+  equipment_id    VARCHAR(32)  NULL,
+  created_at      DATETIME(3)  NOT NULL,              -- Jetson 로컬 저장 시각(UTC)
+  payload         JSON         NOT NULL,              -- /api/handover 본문 그대로
+  content_sha256  CHAR(64)     NOT NULL,
+  is_synthetic    BOOLEAN      NOT NULL DEFAULT TRUE,
+  uploaded_at     DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+);

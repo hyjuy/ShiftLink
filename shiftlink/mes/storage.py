@@ -117,6 +117,16 @@ class MesStorage:
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "payload": json.loads(row[2])} if row else None
 
+    def pending_handovers(self) -> list[tuple[str, str, str]]:
+        """(handover_id, created_at, payload) not yet uploaded, oldest first."""
+        return self.connection.execute(
+            "SELECT handover_id, created_at, payload FROM handover_outbox WHERE status = 'pending' ORDER BY created_at"
+        ).fetchall()
+
+    def mark_handover(self, handover_id: str, status: str) -> None:
+        with self.connection:
+            self.connection.execute("UPDATE handover_outbox SET status = ? WHERE handover_id = ?", (status, handover_id))
+
     def create_run(self, run: Run, *, commit: bool = True) -> None:
         try:
             with self.connection if commit else nullcontext():

@@ -49,10 +49,10 @@ def test_pages_local_and_api_proxied():
     pda, pda_url = serve(make_handler(jetson_url))
     try:
         status, body = fetch(pda_url + "/pda.html")
-        assert status == 200 and b"/static/pda.js" in body
+        assert status == 200 and b"/static/pda.js" in body and b'href="/"' in body
         assert fetch(pda_url + "/static/pda.js")[0] == 200
         status, body = fetch(pda_url + "/")
-        assert status == 200 and b"/static/app.js" in body  # MES 대시보드
+        assert status == 200 and b"/static/app.js" in body and b'href="/pda.html"' in body
         assert fetch(pda_url + "/static/style.css")[0] == 200
         assert fetch(pda_url + "/static/../server.py")[0] == 404  # 화면 파일만 준다
 

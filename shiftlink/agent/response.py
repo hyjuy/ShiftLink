@@ -144,8 +144,10 @@ def build_response(
             resp.safety_notices.append(notice)
 
         # Preserve warnings without presenting unchecked procedures as applicable.
-        if card.get("condition_status") == "unverified":
-            if card_id:
+        # "reference": cited only for a threshold the question asked about (pipeline._asks_criterion); its
+        # conditions were not checked either, so its procedure is not presented as applicable.
+        if card.get("condition_status") in ("unverified", "reference"):
+            if card_id and card.get("condition_status") == "unverified":
                 resp.unverified_card_ids.append(card_id)
             continue
 
@@ -535,7 +537,7 @@ def validate_response(
     expected_stop_conds = set()
     for card in all_cards:
         if (card.get("tacit_type") == "T3"
-                and (card.get("condition_status") != "unverified" or card.get("safety_flag"))
+                and (card.get("condition_status") not in ("unverified", "reference") or card.get("safety_flag"))
                 and (card.get("type_payload") or {}).get("steps")):
             for step in card["type_payload"]["steps"]:
                 for cond in step.get("stop_conditions", []):

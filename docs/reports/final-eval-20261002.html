@@ -8,19 +8,21 @@ h1{font-size:26px;margin:0 0 8px} h2{font-size:19px;margin:36px 0 10px;padding-b
 blockquote{margin:0 0 16px;padding:8px 14px;border-left:3px solid var(--acc);background:var(--head);color:var(--mut)} blockquote p{margin:2px 0}
 .tw{overflow-x:auto;margin:8px 0 14px} table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top} th{background:var(--head);white-space:nowrap}
+pre{background:var(--head);padding:12px;border-radius:6px;overflow-x:auto;line-height:1.35} pre code{background:none;padding:0;font-size:12.5px}
 code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1px 4px;border-radius:3px} strong{color:var(--acc)} li{margin:4px 0}
 </style></head><body><main>
 <h1>ShiftLink 최종 평가 보고서 (초안, 2026-10-02)</h1>
 <blockquote>
 <p>작성: 최재영·Claude · 측정: Jetson Orin Nano Super(jetson-06, 15 W), exaone3.5 2.4B q4_K_M, ollama 0.34.1
 코드 기준: main <code>d4ba7e6</code> (#152) · KB 86장 · 원자료: <code>ShiftLink-records/experiments/final1002/</code>
-<strong>블라인드 2차 결과는 전혜민 추가 질문(약 10개) 반영 후 측정해 5절에 채운다.</strong></p>
+블라인드 2차(BN 25문항) 최종 측정: 10/2, main <code>e33668f</code>(검색·카드는 <code>d4ba7e6</code>과 같음).</p>
 </blockquote>
 <h2>요약</h2>
 <ul>
 <li><strong>검색이 정답을 정하고, 모델은 그 카드를 설명한다.</strong> 후보 카드 5장을 주면 모델이 정답을 덜 골랐다(9/29 벤치 8/30, 검색 1위 27/30). 후보를 1장으로 줄인 뒤 모든 셋에서 인용 정답 = 검색 1위 정답이다.</li>
 <li><strong>Jetson에서 실시간으로 돈다.</strong> p50 4.1–4.7초, p95 4.6–5.8초, 측정 115문항 동안 멈춤·오류 0건. 9/30–10/1의 멈춤은 llama-server 프롬프트 캐시가 RAM을 다 쓰는 문제였고 <code>LLAMA_ARG_CACHE_RAM=0</code>으로 해결했다.</li>
-<li><strong>카드와 비슷한 질문에는 강하고, 현장 말투에는 약하다.</strong> 검색 1위 정답은 카드 문장에서 만든 sanity 20/20, 개발용 30문항 9/11, 처음 보는 블라인드 2차(검수 전 미리보기) 4/10 수준이다.</li>
+<li><strong>카드와 비슷한 질문에는 강하고, 현장 말투에는 약하다.</strong> 검색 1위 정답은 카드 문장에서 만든 sanity 20/20, 개발용 30문항 9/11, 처음 보는 블라인드 2차는 인용 정답 3/6, 답 없음 판정 6/19다.</li>
+<li><strong>가장 큰 위험은 답이 없어야 할 때 그럴듯하게 답하는 것이다.</strong> 블라인드 2차 답 없음 문항 19개 중 13개에 답했고, 그중 값의 높낮이를 뒤집거나(BN-019 정상 진동을 "초과") 카드에 없는 숫자를 지어낸(NH-005 "최소 24시간") 답이 있다.</li>
 <li><strong>답변 문장은 절반이 미충족이다.</strong> 답이 나온 70건 중 충족 29, 수정 필요 7, 미충족 34. 측정하지 않은 값을 관측된 것처럼 쓰거나 카드가 막는 조치를 권하는 경우가 대부분이다. 안전 공지는 모델이 아니라 카드에서 직접 만들어 모든 문항에서 빠짐없이 나갔다(safety_ok 1.0).</li>
 </ul>
 <h2>1. 시스템 구성 (측정 시점)</h2>
@@ -155,7 +157,12 @@ code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1p
 <tr>
 <td>블라인드 2차</td>
 <td>7/25</td>
-<td>10/2 검수 확정 정답 기준, 추가 질문 전</td>
+<td>10/2 검수 확정 정답 기준</td>
+</tr>
+<tr>
+<td>신입 후속 (NH)</td>
+<td>—</td>
+<td>블라인드 아님</td>
 </tr>
 </tbody>
 </table></div>
@@ -230,6 +237,24 @@ code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1p
 <td>4.5초</td>
 <td>4.6초</td>
 </tr>
+<tr>
+<td><strong>블라인드 2차</strong></td>
+<td><strong>3/6</strong></td>
+<td>4/6</td>
+<td>6/19</td>
+<td>0</td>
+<td>4.4초</td>
+<td>5.5초</td>
+</tr>
+<tr>
+<td>신입 후속 (NH)</td>
+<td>1/4</td>
+<td>1/4</td>
+<td>2/6</td>
+<td>0</td>
+<td>4.0초</td>
+<td>4.8초</td>
+</tr>
 </tbody>
 </table></div>
 <ul>
@@ -268,11 +293,66 @@ code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1p
 </tr>
 </tbody>
 </table></div>
-<h2>5. 블라인드 2차</h2>
-<p><em>추가 질문 정답 연결·판정 후 측정해 채운다.</em> 측정 전 기록:</p>
+<h2>5. 블라인드 2차 (최종)</h2>
+<p>작성자가 C·D 카드를 보지 않은 유일한 셋이다. 정답은 10/2 검수(최재영 판정, 전혜민 대행)로 확정했다: 값이 카드 조건 범위 밖(정상)인 질문은 검색이 그 카드를 후보에서 빼므로 답 없음. 측정 전까지 이 셋으로 카드·검색·프롬프트를 조정하지 않았다.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>지표</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>인용 정답</td>
+<td><strong>3/6</strong> (BN-016·022·025)</td>
+</tr>
+<tr>
+<td>검색 1위 정답</td>
+<td>4/6</td>
+</tr>
+<tr>
+<td>답 없음 판정</td>
+<td><strong>6/19</strong></td>
+</tr>
+<tr>
+<td>안전 공지 누락</td>
+<td>0 (safety_ok 1.0)</td>
+</tr>
+<tr>
+<td>p50 / p95</td>
+<td>4.4초 / 5.5초</td>
+</tr>
+</tbody>
+</table></div>
 <ul>
-<li>10/2 검수(최재영 판정, 전혜민 대행): 값이 카드 조건 범위 밖(정상)인 질문은 검색이 그 카드를 후보에서 빼므로 답 없음으로 확정. 답 있음 6/25.</li>
-<li>한계: 질문 문장은 ChatGPT가 썼다. BN-014 정답 K-1324는 1차 블라인드를 보고 만든 카드라 점수가 부풀 수 있다.</li>
+<li>BN-001: 검색 1위 K-1305가 맞지만 카드 조건의 압축기 전류값이 없어 "확인 대상 카드"로 끝났다. BN-004·BN-014: 검색이 카드를 찾지 못했다.</li>
+<li>답 없음 문항 13개에 답했다. 그중 BN-019는 정상 진동 1.2 mm/s(기준 2.8)를 "확인 기준 초과"라 쓰고 주 모터 정지를 권했고, BN-008은 정상 전압 98 %에 "운전 계속 권장 안 함"이라 했다.</li>
+<li>한계: 질문 문장은 ChatGPT가 썼다. 답 있음이 6문항뿐이라 비율이 크게 흔들린다. BN-014 정답 K-1324는 1차 블라인드를 보고 만든 카드다.</li>
+</ul>
+<h3>참고: 신입 후속 질문 (NH 10문항, 블라인드 아님)</h3>
+<h1>155 질문은 카드를 읽고 만든 후속 질문이라 블라인드가 아니다. "카드에 없는 수치를 물을 때 모른다고 하는가"를 본다.</h1>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>지표</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>인용 정답</td>
+<td>1/4</td>
+</tr>
+<tr>
+<td>답 없음 판정</td>
+<td>2/6</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>NH-005는 카드에 없는 "최소 24시간 이상 관찰"을 지어냈다. NH-001·NH-009는 "수치는 제조사 사양서 확인"으로 답했다.</li>
+<li>NH-007(잔류전하 방전·접지 순서)은 검색이 K-1309를 찾지 못해 해당 지식 없음이 됐다(#157 안내 문구가 필요한 경우).</li>
 </ul>
 <h2>6. 답변 문장 품질 (Cursor 채점, 루브릭 #140 4·6절)</h2>
 <div class="tw"><table>

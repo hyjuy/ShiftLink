@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import threading
@@ -86,11 +87,13 @@ def open_window(url: str, scale: float) -> int:
     # scale: PDA는 세로 휴대폰 폭 기준이라 2560x1600 모니터에서 2가 높이에 맞다.
     # 전용 프로필: 데스크톱 Chromium에 남은 창 크기를 물려받으면 화면보다 크게 떠서 아래가 잘린다.
     profile = Path.home() / "shiftlink" / "data" / "chromium"
+    # 리눅스 Chromium은 --lang 대신 LANGUAGE로 UI 언어를 정한다. 파이가 영어(en_GB)면 한국어 화면에 번역 팝업이 뜬다.
+    env = {**os.environ, "LANGUAGE": "ko"}
     return subprocess.call([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
         "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",
-    ])
+    ], env=env)
 
 
 def main() -> None:

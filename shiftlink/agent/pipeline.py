@@ -6,7 +6,13 @@ from typing import Any, Callable, Mapping, Protocol
 from shiftlink.agent import tools as tool_stubs
 from shiftlink.agent.canary import has_canary
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
-from shiftlink.agent.response import AgentResponse, build_response, validate_response
+from shiftlink.agent.response import (
+    GUARD_FALLBACK_ANSWER,
+    AgentResponse,
+    build_response,
+    guard_blocked,
+    validate_response,
+)
 
 
 class ToolProvider(Protocol):
@@ -113,7 +119,18 @@ class FixedPipeline:
             output = self._validate_output(
                 routed.mode, routed.request, tool_results, model_output, model_error
             )
+        self._fill_guard_fallback(output, model_output)
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
+
+    def _fill_guard_fallback(self, output: Any, model_output: Any) -> None:
+        """A guard-blocked answer is a sentence, not a blank. Schema failures stay blank."""
+        if getattr(output, "answer", None) or not guard_blocked(getattr(output, "validation_errors", [])):
+            return
+        output.answer = GUARD_FALLBACK_ANSWER
+        cited = model_output.get("cited_card_ids") if isinstance(model_output, dict) else None
+        if isinstance(cited, list):
+            output.cited_card_ids = [card_id for card_id in cited if isinstance(card_id, str)]
+        output.review_queue = False
 
     def _call_model(self, **kwargs: Any) -> tuple[Any, str | None, bool]:
         try:

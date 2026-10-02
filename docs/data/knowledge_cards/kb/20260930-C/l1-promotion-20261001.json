@@ -116,7 +116,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0401",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "f8a4777da3805f758e692b2f60f87938036abc623703cc6d5249041fa3380dc8",
+   "card_sha256": "9d5549a3ce0bb4c9f799dcad2a7ff086d9ce83dee9a2e468879c6ac1e0ec6027",
    "review_block_sha256": "4109b9aea0ff28c3d8aef49197360781e330b0ad8d6ecb982f6993e5ec99f1cb"
   },
   "K-1212": {
@@ -133,7 +133,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0403",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "2d4e7fe453a5c7839165d57814c2f2b3510cc4f144526595f3128f20643b9251",
+   "card_sha256": "48fefebffbce2206f16608f6be9b846b5e0a3da401caf4683a197fd7c148fba2",
    "review_block_sha256": "bd85e7464ed97a3d65188a2ccfacc8fa01811ac0803c31ef6e2143169c80c37c"
   },
   "K-1213": {
@@ -150,7 +150,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0405",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "b98e8fd61ffc91ec042c6fd7d48efb32f394881d7e60dedae5092b4d5b732be0",
+   "card_sha256": "72bdc1cf587a1624d0cd54101ffd576db38f51e1c5c494af72bc299c2559c840",
    "review_block_sha256": "e380334b3da09c7a1efc885cb40cdadc75f3cd3ef7714a7cab4df462e9b71a99"
   },
   "K-1214": {
@@ -167,7 +167,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0407",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "a4cf33c5fb6c969627d103d8dfd6670f9716c13e1dd91f18117a477c2cad6cd0",
+   "card_sha256": "f61b3dcabc5361afaca021d09da783fbd8ac07d9093de340f8d08e3940f771ce",
    "review_block_sha256": "9b849f29fb670d55bcd2134650136d861ee6580cfd99d3e970252b90ed6f64ab"
   },
   "K-1215": {
@@ -184,7 +184,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0409",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "9158f234d7898c0390592e33a204184c45f93b7d76c4bf07e25a0b4e5c009b9c",
+   "card_sha256": "f22abdcfec37b6fde85351435349cbf6613ac21b26232726f6ae4ca247e25d74",
    "review_block_sha256": "1ccae6dca93b11f113afcfd01d9803d563869d2c8ea7cb83386acb79bdf11c39"
   },
   "K-1216": {
@@ -201,7 +201,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0411",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "371cb6d13681001725aa0a2ff8ca786d910f16155b6993268bb68c65dbf1460b",
+   "card_sha256": "10ce6d2d320c3618fce6bc30746aa3529a3f8436e3b6395d5fa1bfa1cad9d5c3",
    "review_block_sha256": "62b348e9175fb68b934b2a927e2314bfa3f0c2ee2fc1c1f41f3c341393f827dc"
   },
   "K-1217": {
@@ -218,7 +218,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0413",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "aa0665f59949c992998c8d1507b0518c31b03c6688768aea0363558772ff8421",
+   "card_sha256": "f3ecdec264e769b8d2ceafeb0875db69d678aaddbe34fb6d15b473d6a5748a97",
    "review_block_sha256": "05f67e8baa17e15637f3221d913578f427fb2db6ddf23185257601bbd98e82d0"
   },
   "K-1218": {
@@ -235,7 +235,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0401",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "1a769f6b385e3c188b37ff94a99a2b46493975b335b06042f6ddfba9daa89e8d",
+   "card_sha256": "770e7e35c249f0c3ae8daa9a293e29a2cb6c853f950e01ca9a877fc3d445beb5",
    "review_block_sha256": "4d14943829810f4b051818875ff8f958e7bc20a5a7878bc92ca16d15adf9e927"
   },
   "K-1219": {
@@ -252,7 +252,7 @@
     "lineage_assignment_unconfirmed:KB-20260930-C:EV-0403",
     "independent_repeat_evidence_insufficient"
    ],
-   "card_sha256": "8b7b2339925f18fe08ae0745676b51a813cfeb5c7e358961c1a0d8d3c74b8944",
+   "card_sha256": "9da4e645f26654a8ea1eedd0aa3a7d1e2193f06a69a6569343ac39e60b88f321",
    "review_block_sha256": "46bdec64dde99c1a5a265bac089067bd6de68d1876cd2214e5f087e02f73d12c"
   }
  },
@@ -342,6 +342,95 @@
      "card_sha256": "3fe987241b3c3f946cea7f0259b1613237aeb3314b17106561e23bec52be760b",
      "previous_symptom": "운전 중 이송 능력이 떨어졌으며 cv_belt_tension은 380–460 kPa(가상 정상 범위)이다.",
      "symptom": "운전 중 이송 능력 저하, cv_belt_tension 380–460 kPa(가상 정상 범위)"
+    }
+   }
+  },
+  {
+   "date": "2026-10-02",
+   "authorization": "explicit_user_request",
+   "request": "T6 카드 증상을 재가동 계기 중심으로 다시 쓰기 — 평가 질문을 보지 않은 서브에이전트 초안, 검토 의견 반영, 최재영 승인",
+   "scope": "T6 9장 symptom만 반영(K-1211~1213 수정, K-1214~1219 신규). 기존 검수 판정·근거·조건·정책 승인 범위 유지. 설비 이름은 symptom에 넣지 않는다(설비 필터가 이미 처리, 10/2 측정에서 설비명이 답 없음 문항 오수용을 만듦).",
+   "cards": {
+    "K-1211": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "f8a4777da3805f758e692b2f60f87938036abc623703cc6d5249041fa3380dc8",
+     "card_sha256": "9d5549a3ce0bb4c9f799dcad2a7ff086d9ce83dee9a2e468879c6ac1e0ec6027",
+     "previous_symptom": "필터·오일 정비 후 재가동, 압력 회복·유량 부족, 기포·소음",
+     "symptom": "필터·오일 정비 후 재가동(다시 돌리기), 압력 회복에도 펌프 소음·기포 관찰, 유량 함께 확인"
+    },
+    "K-1212": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "2d4e7fe453a5c7839165d57814c2f2b3510cc4f144526595f3128f20643b9251",
+     "card_sha256": "48fefebffbce2206f16608f6be9b846b5e0a3da401caf4683a197fd7c148fba2",
+     "previous_symptom": "감속기 오일 교환 후 시험운전, 유면 확인 누락, 소음·진동·누유 관측",
+     "symptom": "오일 교환 후 유면 확인 누락, 재가동 전 주입량 기록과 실제 유면 대조, 시험운전 소음·진동·누유 관측"
+    },
+    "K-1213": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "b98e8fd61ffc91ec042c6fd7d48efb32f394881d7e60dedae5092b4d5b732be0",
+     "card_sha256": "72bdc1cf587a1624d0cd54101ffd576db38f51e1c5c494af72bc299c2559c840",
+     "previous_symptom": "벨트 정비 후 시험운전, 정상 장력·벨트 한쪽 쏠림",
+     "symptom": "벨트 정비 후 재가동 시험운전, 장력 정상 표시에도 벨트 한쪽 쏠림(편주) 확인"
+    },
+    "K-1214": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "a4cf33c5fb6c969627d103d8dfd6670f9716c13e1dd91f18117a477c2cad6cd0",
+     "card_sha256": "f61b3dcabc5361afaca021d09da783fbd8ac07d9093de340f8d08e3940f771ce",
+     "previous_symptom": null,
+     "symptom": "반송부 정비 후 재가동 전, 방호장치 미복구·도구·자재 잔류·걸림 확인, 정비 완료와 운전 복귀 승인 구분"
+    },
+    "K-1215": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "9158f234d7898c0390592e33a204184c45f93b7d76c4bf07e25a0b4e5c009b9c",
+     "card_sha256": "f22abdcfec37b6fde85351435349cbf6613ac21b26232726f6ae4ca247e25d74",
+     "previous_symptom": null,
+     "symptom": "끼임 비상정지 후 리셋·재가동, 정지 표시 해제와 별개로 걸림 제거·안전장치 확인, 기능시험 기록·재가동 승인 확인"
+    },
+    "K-1216": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "371cb6d13681001725aa0a2ff8ca786d910f16155b6993268bb68c65dbf1460b",
+     "card_sha256": "10ce6d2d320c3618fce6bc30746aa3529a3f8436e3b6395d5fa1bfa1cad9d5c3",
+     "previous_symptom": null,
+     "symptom": "과열 정지 후 식은 뒤 재가동, 온도 정상 복귀만으로 원인 해소 아님, 재가동 중 온도 재상승·진동·소음 변화 관측"
+    },
+    "K-1217": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "aa0665f59949c992998c8d1507b0518c31b03c6688768aea0363558772ff8421",
+     "card_sha256": "f3ecdec264e769b8d2ceafeb0875db69d678aaddbe34fb6d15b473d6a5748a97",
+     "previous_symptom": null,
+     "symptom": "반송부 인터록 정지 후 재가동, 해제 표시와 별개로 걸림 해소·안전장치·작업구역·재가동 승인 확인, 인터록 우회 금지"
+    },
+    "K-1218": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "1a769f6b385e3c188b37ff94a99a2b46493975b335b06042f6ddfba9daa89e8d",
+     "card_sha256": "770e7e35c249f0c3ae8daa9a293e29a2cb6c853f950e01ca9a877fc3d445beb5",
+     "previous_symptom": null,
+     "symptom": "정상정지 후 저온(냉간) 기동, 압력·유량 부족과 펌프 소음, 반복 기동 금지, 오일 점도 적합성·흡입 조건 확인"
+    },
+    "K-1219": {
+     "fields": [
+      "symptom"
+     ],
+     "previous_card_sha256": "8b7b2339925f18fe08ae0745676b51a813cfeb5c7e358961c1a0d8d3c74b8944",
+     "card_sha256": "9da4e645f26654a8ea1eedd0aa3a7d1e2193f06a69a6569343ac39e60b88f321",
+     "previous_symptom": null,
+     "symptom": "장기 정상정지 후 재가동(오래 세워 둔 뒤), 이전 정상 운전 기록과 별개로 현재 유면·윤활 준비 확인, 방호·감시장치 확인"
     }
    }
   }

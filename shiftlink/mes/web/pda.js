@@ -939,6 +939,7 @@ if (typeof document !== 'undefined') {
 // ── 배선 ───────────────────────────────────────────────────────────
 function on(id, fn) { const el = $(id); if (el) el.addEventListener('click', fn); }
 
+document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', () => show('home')));
 on('toScan', startScan);
 on('scanClose', () => show('home'));
 on('scanManual', openManual);

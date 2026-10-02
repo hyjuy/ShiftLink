@@ -75,6 +75,7 @@
 | `verify_tool_provider()` | `shiftlink/agent/tools.py` | 어댑터의 도구 6종·읽기 전용·범위 밖 도구 계약 검사 | 유현준 |
 | `check_tool_output()` | `shiftlink/agent/tools.py` | 도구 출력의 문서화된 필드 존재 검사 | 유현준 |
 | `build_response()` | `shiftlink/agent/response.py` | 도구 결과 → 응답 구조화 (v1.0) | 유현준 |
+| `GUARD_FALLBACK_ANSWER` · `guard_blocked()` | `shiftlink/agent/response.py` | 규제에 막힌 답을 빈 문자열 대신 수치 기준 확인 문장으로 바꿈 | 최재영 |
 | `render_response()` | `shiftlink/agent/response.py` | 응답 → 결정적 텍스트 렌더 (v1.0) | 유현준 |
 | `validate_response()` | `shiftlink/agent/response.py` | 응답 불변식 검증 (v1.0). `[code] message` 형식 반환 | 유현준 |
 | `is_model_retryable()` | `shiftlink/agent/response.py` | 검증 결함이 모델 재시도 대상인지 판정 (§4.3) | 유현준 |
@@ -148,6 +149,12 @@
 | --- | --- | --- | --- |
 | `shiftlink-mes` | Jetson | `python -m shiftlink.mes --host 0.0.0.0 --port 8000` 자동 시작 (작업계획 E1) | 허재원 |
 | `shiftlink-vision` | 라즈베리파이 | `python -m shiftlink.vision.classify --headless --server ...` 자동 시작 (작업계획 D2) | 허재원 |
+
+## 데스크톱 자동 시작 (`deploy/pda_kiosk.sh`)
+
+| 이름 | 장비 | 뜻 | 담당자 |
+| --- | --- | --- | --- |
+| `pda-kiosk` | 라즈베리파이 | `~/.config/autostart/pda-kiosk.desktop` — Jetson MES가 응답하면 PDA 화면을 Chromium 키오스크로 연다 (작업계획 D3) | 허재원 |
 
 ## ID 접두어 규칙 `[기존 — 01_고도화_초안 §7.1]`
 

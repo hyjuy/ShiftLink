@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from shiftlink.agent.pipeline import FixedPipeline
-from shiftlink.agent.response import validate_model_output
+from shiftlink.agent.response import GUARD_FALLBACK_ANSWER, render_response, validate_model_output
 from shiftlink.agent.router import QueryRequest
 from shiftlink.edge.ollama import SYSTEM_PROMPT, build_messages
 from shiftlink.rag.retrieval import InMemoryToolProvider
@@ -189,3 +189,27 @@ def test_direction_error_retries_once():
     assert calls[0]["tool_results"]["observation_facts"][0]["state"] == "normal"
     assert result.output.review_queue is False
     assert result.output.answer == "범위 안입니다."
+
+
+def test_guard_block_is_a_sentence_not_a_blank():
+    from tests.test_retrieval_response import make_card_t1
+    catalog = json.loads((Path(__file__).resolve().parents[1] /
+        "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
+    provider = InMemoryToolProvider(
+        cards=[make_card_t1("K-0003", equipment="GR")],
+        equipment_db=catalog["equipment"], equipment_types=catalog["equipment_types"],
+    )
+    calls = []
+
+    def model(**kwargs):
+        calls.append(kwargs.get("retry", False))
+        return {"answer": "최소 24시간 이상 관찰하세요.", "cited_card_ids": ["K-0003"]}
+
+    result = FixedPipeline(tools=provider, model=model).run({
+        "question": "얼마나 오래 봐야 해요?", "line_id": "L1", "eq_id": "GR",
+        "observations": [{"signal": "gr_vib_rms", "value": 1.2, "unit": "mm_s"}],
+    })
+    assert calls == [False, True]
+    assert result.output.answer == GUARD_FALLBACK_ANSWER
+    assert result.output.review_queue is False
+    assert GUARD_FALLBACK_ANSWER in render_response(result.output)

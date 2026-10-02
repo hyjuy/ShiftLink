@@ -31,7 +31,8 @@ class FakeOllama:
 def run_case(monkeypatch, case_id, fake, *, payload=None):
     monkeypatch.setattr("urllib.request.urlopen", fake)
     case = load_case(DEFAULT_FIXTURE, case_id)
-    pipeline = FixedPipeline(model=OllamaModel(), tools=build_provider(case))
+    # The abstain judge has its own tests; these count answer calls only.
+    pipeline = FixedPipeline(model=OllamaModel(), tools=build_provider(case), judge=lambda q, c: 3)
     return pipeline.run(payload or case["input"])
 
 

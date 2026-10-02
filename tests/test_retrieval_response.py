@@ -1010,3 +1010,35 @@ def test_unverified_top_card_skips_model_and_lists_it_to_check(equipment_provide
     assert calls == [] and result.output.no_knowledge is True
     assert "K-0009" in result.output.unverified_card_ids
 
+
+
+@pytest.mark.parametrize("score,answered", [(1, False), (2, True)])
+def test_abstain_judge_below_threshold_skips_model(equipment_provider, score, answered):
+    """10/2: the rank-1 card scored below 2 by the judge ends in "no knowledge" without a model call."""
+    card = make_card_t1("K-0010")
+    card.title = card.symptom = "펌프 소음 증가"
+    equipment_provider.cards.append(card)
+    calls, judged = [], []
+    model = lambda **kw: calls.append(kw) or {"answer": "펌프 소음을 확인합니다.", "cited_card_ids": ["K-0010"]}  # noqa: E731
+    judge = lambda q, c: judged.append((q, c["card_id"])) or score  # noqa: E731
+    result = FixedPipeline(tools=equipment_provider, model=model, judge=judge).run(
+        dict(question="펌프 소음 증가", line_id="L1", eq_id="HPU"))
+    assert judged == [("펌프 소음 증가", "K-0010")] and result.tool_results["judge_score"] == score
+    assert bool(calls) is answered and result.output.no_knowledge is (not answered)
+
+
+def test_abstain_judge_error_falls_through_and_handover_is_not_judged(equipment_provider):
+    card = make_card_t1("K-0011")
+    card.title = card.symptom = "펌프 소음 증가"
+    equipment_provider.cards.append(card)
+    def broken(q, c):
+        raise ConnectionError("judge down")
+    calls = []
+    model = lambda **kw: calls.append(kw) or {"answer": "펌프 소음을 확인합니다.", "cited_card_ids": ["K-0011"]}  # noqa: E731
+    FixedPipeline(tools=equipment_provider, model=model, judge=broken).run(
+        dict(question="펌프 소음 증가", line_id="L1", eq_id="HPU"))
+    assert len(calls) == 1  # judge failure does not silently abstain
+    seen = []
+    FixedPipeline(tools=equipment_provider, model=lambda **kw: {"answer": "x", "cited_card_ids": []},
+                  judge=lambda q, c: seen.append(q) or 0).run(dict(memo_text="펌프 소음 증가", shift="A", eq_ids=["HPU"]))
+    assert seen == []

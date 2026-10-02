@@ -107,6 +107,16 @@ HANDOVER_SYSTEM_PROMPT = (
 )
 SYSTEM_PROMPTS = {"query": SYSTEM_PROMPT, "handover": HANDOVER_SYSTEM_PROMPT}
 
+# 10/2 abstain judge (J3): exaone scores whether the rank-1 card answers the question. On held-out blind sets
+# (blind2·3·cjy·T6) score < 2 → "no knowledge" took correct abstains 7 → 17 and turned 6 wrong answers into
+# refusals, at the cost of 3 correct answers and ~0.7 s per query. Records: ShiftLink-records/experiments/emb1002.
+JUDGE_PROMPT = (
+    "너는 지식카드 검수자다. 작업자 질문과 지식카드 1장이 주어진다. 카드가 질문에 얼마나 답하는지 0~3으로 매긴다. "
+    "3: 질문이 묻는 것을 카드가 직접 다룸. 2: 같은 상황을 다루고 확인·조치에 도움이 됨. 1: 설비·단어만 비슷하고 상황이 다름. "
+    "0: 관련 없음(인사·일정·규격·다른 작업 등)."
+)
+JUDGE_MIN_SCORE = 2
+
 
 def retry_prompt(candidate_ids: list[str]) -> str:
     """재시도 안내. 예시 ID 대신 이번 호출의 실제 후보 ID를 보여준다."""
@@ -315,6 +325,25 @@ class OllamaModel:
             "output": output,
         }
         return output
+
+    def judge(self, question: str, card: dict[str, Any]) -> int:
+        """0~3: how directly the rank-1 card answers the question (FixedPipeline abstains below JUDGE_MIN_SCORE)."""
+        body = (f"질문: {question}\n\n카드 제목: {card.get('title', '')}\n증상: {card.get('symptom') or '-'}\n"
+                f"내용: {(card.get('know_how') or '')[:600]}")
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "system", "content": JUDGE_PROMPT}, {"role": "user", "content": body}],
+            "stream": False,
+            "format": {"type": "object", "properties": {"score": {"type": "integer", "enum": [0, 1, 2, 3]}},
+                       "required": ["score"]},
+            "keep_alive": KEEP_ALIVE,
+            "options": {"temperature": 0, "num_ctx": self.num_ctx, "num_predict": 20},
+        }
+        started = time.monotonic()
+        body_out = self._post("/api/chat", payload)
+        score = int(json.loads(body_out["message"]["content"])["score"])
+        self.last_judge = {"score": score, "latency_s": round(time.monotonic() - started, 3)}
+        return score
 
     def _post(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
         req = urllib.request.Request(

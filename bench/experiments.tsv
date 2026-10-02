@@ -28,3 +28,7 @@ date	experimenter	variable	setting	time_budget_min	n_runs	primary_metric	primary
 2026-10-01	claude	handover_evidence_weight×cand	exaone3.5:2.4b 인계 가중치0.5 후보5 (main)	3	20	handover_cite_hit	2/16	5.70	63.5	baseline	cite1 1/16, 검색top1 4 top5 11, 답없음 0/4, 모델 5번째 후보 13/16
 2026-10-01	claude	handover_evidence_weight×cand	exaone3.5:2.4b 인계 가중치0 후보5	3	20	handover_cite_hit	2/16	7.00		discard	검색top5 8. 가중치 0.5 유지
 2026-10-01	claude	handover_evidence_weight×cand	exaone3.5:2.4b 인계 가중치0.5 후보1	3	20	handover_cite_hit	4/16	5.38		keep	= 검색 1위. 인계도 후보 1장. docs/reports/model-selection-20261001.md 7절
+2026-10-02	claude	retrieval_ranker	E0 단어 겹침(기준선)	5	1	tune_route_sum	82/113			keep	dev 21·sanity 29·t4 10/18·blind1 20·newhire 2/10. 조정 셋 5개 합계
+2026-10-02	claude	retrieval_ranker	E2 KURE-v1 혼합 a=0.2 tau=0.60(최고)	5	1	tune_route_sum	70/113			discard	임베딩만 E1 최고 65, E3 71. 답 있음 1위 dev 9→5~7·sanity 22→17~21로 하락, 답 없음 판정도 분리 안 됨
+2026-10-02	claude	retrieval_ranker	E2 bge-m3 혼합 a=0.2 tau=0.60(최고)	5	1	tune_route_sum	74/113			discard	KURE보다 조금 낫지만 E0 미달. 블라인드 2차는 채택안이 없어 열지 않음
+2026-10-02	claude	retrieval_ranker	RRF 단어순위+bge-m3 k=5, 답없음 단어AND코사인0.55(최고)	5	1	tune_route_sum	83/113			discard	+1은 오차 범위: dev 1위 9→8·sanity 22→21 잃고 t4 7→8·신입 답없음 1→2 얻음. 모델 0.66GB 추가 대비 이득 없음. KURE RRF 최고 80

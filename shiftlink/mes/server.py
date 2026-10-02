@@ -19,10 +19,11 @@ from . import configuration
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
-from .storage import MesStorage
+from .storage import HandoverConflictError, MesStorage
 
 _CONTROL_BODY_LIMIT = 8192
 _CONFIG_BODY_LIMIT = 256 * 1024
+_ASSIST_BODY_LIMIT = 64 * 1024
 _SCAN_KEEP = 50
 _ROOT = Path(__file__).resolve().parents[2]
 # kb split only: dev/sealed evaluation files are never opened here (C-099).
@@ -71,6 +72,11 @@ class MesService:
         self._lock = threading.RLock()
         # ponytail: 메모리에만 둔다(재시작하면 사라짐). 인계가 아니라 버려도 되는 값이다(작업계획 D1).
         self._scans: deque[dict[str, object]] = deque(maxlen=_SCAN_KEEP)
+        self.query_pipeline = None
+
+    def query(self, body: dict[str, Any]) -> dict[str, object]:
+        from .query import query_service
+        return query_service(self, body, pipeline=self.query_pipeline)
 
     def record_scan(self, body: dict[str, Any]) -> dict[str, object]:
         """웹캠 CNN 확정 결과 {class, conf, device_id, ts} → 설비 기록 (작업계획 C2)."""
@@ -102,6 +108,10 @@ class MesService:
             raise ValueError(f"limit must be 1..{_SCAN_KEEP}")
         with self._lock:
             return {"scans": list(self._scans)[::-1][:limit], "is_synthetic": True}
+
+    def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
+        with self._lock:
+            return self.storage.save_handover(body)
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -326,6 +336,8 @@ class _Handler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         try:
             limit = _CONFIG_BODY_LIMIT if self.path.startswith("/api/config/") else _CONTROL_BODY_LIMIT
+            if self.path in ("/api/query", "/api/handover"):
+                limit = _ASSIST_BODY_LIMIT
             size = int(self.headers.get("Content-Length", "0"))
             if not 0 <= size <= limit:
                 raise ValueError("request too large")
@@ -334,8 +346,10 @@ class _Handler(BaseHTTPRequestHandler):
             if self.path == "/api/config/validate": self._send(200, self.service.validate_config(payload)); return
             if self.path == "/api/config/apply": self._send(200, self.service.apply_config(payload)); return
             if self.path == "/api/equipment/scan": self._send(201, self.service.record_scan(payload)); return
+            if self.path == "/api/handover": self._send(200, self.service.record_handover(payload)); return
+            if self.path == "/api/query": self._send(200, self.service.query(payload)); return
             self._send(404, {"error": "not found", "is_synthetic": True})
-        except ConflictError as error:
+        except (ConflictError, HandoverConflictError) as error:
             self._send(409, {"error": str(error), "is_synthetic": True})
         except ConfigValidationError as error:
             self._send(400, {"error": str(error), "errors": error.errors, "is_synthetic": True})

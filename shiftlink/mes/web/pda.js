@@ -132,9 +132,9 @@ function renderNet() {
   $('dOutbox').textContent = S.outbox.length + '건';
 }
 
-async function api(path, init) {
+async function api(path, init, timeoutMs = API_TIMEOUT_MS) {
   const ctrl = new AbortController();
-  const to = setTimeout(() => ctrl.abort(), API_TIMEOUT_MS);
+  const to = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(path, Object.assign({ signal: ctrl.signal, cache: 'no-store' }, init));
     S.online = res.ok;
@@ -150,7 +150,7 @@ async function probeServer() { try { await api('/api/state'); } catch (_) {} }
 
 // ── 컨텍스트 ───────────────────────────────────────────────────────
 function setContext(eq, source, extra) {
-  S.eq = eq; S.source = source;
+  S.eq = eq; S.source = source; S.queryResponse = null;
   S.scanId = (extra && extra.scanId) || null;
   S.observations = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
@@ -497,6 +497,23 @@ function queryPayload() {
   };
 }
 
+function queryApiPayload(question, state) {
+  return state.source === 'camera_scan'
+    ? {question: question, scan_id: state.scanId}
+    : {question: question, equipment_id: state.eq.equipment_id};
+}
+
+function responseCards(response, cards) {
+  const byId = (id) => cards.find((c) => c.card_id === id);
+  const item = (id, excluded) => ({card: byId(id), excluded: excluded, conds: [],
+    why: excluded ? 'MES 관측값으로 조건을 확인하지 못했습니다' : 'Jetson 답변 인용'});
+  const actions = (response.review_queue ? [] : response.cited_card_ids || []).map((id) => item(id, false)).filter((x) => x.card);
+  const excluded = (response.unverified_card_ids || []).map((id) => item(id, true)).filter((x) => x.card);
+  const safety = (response.safety_notices || []).map((notice) => Object.assign({}, byId(notice.card_id), notice,
+    {title: '안전 공지', know_how: (notice.stop_conditions || []).join(' · ')}));
+  return {actions: actions, excluded: excluded, safety: safety, total: actions.length + excluded.length + safety.length};
+}
+
 function rankCards(eq) {
   const hits = S.cards.filter((c) => cardFits(c, eq));
   // 질의 모드에서 T4 인계 카드는 고정 안전 공지로 올리지 않는다(retrieval.py include_handover).
@@ -619,6 +636,13 @@ function renderResult() {
   const pane = $('resultPane'); pane.innerHTML = '';
   const r = S.ranked;
   r.safety.forEach((c) => pane.appendChild(safetyEl(c, true)));
+  if (S.queryResponse) {
+    const answer = document.createElement('p');
+    answer.className = 'body';
+    answer.textContent = S.queryResponse.review_queue ? '답변을 보류했습니다. 담당자 검토가 필요합니다.'
+      : (S.queryResponse.answer || '해당 질문에 답할 등록 지식이 없습니다.');
+    pane.appendChild(answer);
+  }
 
   const triedIds = S.tries.map((t) => t.card_id);
   const remaining = r.actions.filter((x) => triedIds.indexOf(x.card.card_id) === -1);
@@ -775,41 +799,29 @@ function setStep(id, pct, state) {
 
 async function runSearch() {
   if (searchBlockedReason()) { renderAskBlock(); return; }
-  S.waitAbort = false; S.tries = []; S.attemptSeq = 0;
+  S.waitAbort = false; S.tries = []; S.attemptSeq = 0; S.queryResponse = null;
   show('wait');
   $('waitCards').innerHTML = ''; $('waitLbl').hidden = true;
-  setStep('st1', 0, 'run'); setStep('st2', 0, ''); setStep('st3', 0, '');
-
-  if (window.console) console.log('[pda] query', queryPayload());
-  const r = rankCards(S.eq);
-  S.ranked = r;
-
-  await sleep(700);
-  if (S.waitAbort) return;
-  setStep('st1', 100, 'done');
-
-  // 안전 카드는 생성을 기다릴 이유가 없다 — 검색되는 즉시 올린다.
-  if (r.safety.length) {
-    $('waitLbl').hidden = false;
-    r.safety.forEach((c) => $('waitCards').appendChild(safetyEl(c, false)));
+  setStep('st1', 0, 'run'); setStep('st2', 0, 'run'); setStep('st3', 0, 'run');
+  try {
+    const res = await api('/api/query', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(queryApiPayload(currentQuestion(), S))}, 125000);
+    const response = await res.json();
+    if (S.waitAbort) return;
+    if (!res.ok) throw new Error(response.error || 'HTTP ' + res.status);
+    S.queryResponse = response;
+    S.ranked = responseCards(response, S.cards);
+    ['st1', 'st2', 'st3'].forEach((id) => setStep(id, 100, 'done'));
+    if (S.ranked.safety.length) haptic([120]);
+    renderResult(); show('result');
+  } catch (err) {
+    if (S.waitAbort) return;
+    $('askBlockWhy').textContent = '질의 실패: ' + err.message;
+    $('askBlock').hidden = false;
+    show('ask');
   }
-
-  setStep('st2', 0, 'run');
-  for (let p = 0; p <= 100; p += 25) { await sleep(160); if (S.waitAbort) return; setStep('st2', p, 'run'); }
-  setStep('st2', 100, 'done');
-
-  // 실측 p95 21~34초 구간. 프로토타입에서는 3초로 축약한다.
-  setStep('st3', 0, 'run');
-  for (let p = 0; p <= 100; p += 10) { await sleep(300); if (S.waitAbort) return; setStep('st3', p, 'run'); }
-  setStep('st3', 100, 'done');
-  if (S.waitAbort) return;
-
-  if (!r.total) { show('empty'); return; }
-  if (r.safety.length) haptic([120]);
-  renderResult(); show('result');
 }
 
-// ── 인계 ───────────────────────────────────────────────────────────
 function openHandover() {
   const pane = $('hoPane'); pane.innerHTML = '';
   const mine = S.handovers.filter((h) =>
@@ -857,6 +869,27 @@ function openHandover() {
   show('handover');
 }
 
+const HANDOVER_PENDING_KEY = 'shiftlink.handover.pending';
+
+async function submitHandover(note, request = api, store = localStorage) {
+  const pending = JSON.parse(store.getItem(HANDOVER_PENDING_KEY) || 'null');
+  if (pending && (pending.memo_text !== note.memo_text ||
+      JSON.stringify(pending.required_context) !== JSON.stringify(note.required_context))) {
+    throw new Error('pending 인계가 남아 있습니다. 인계 화면을 다시 열어 기존 메모를 재전송하세요.');
+  }
+  // PDA may use the Jetson's plain HTTP LAN address (randomUUID needs a secure context).
+  const id = globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function'
+    ? globalThis.crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+  const payload = pending || Object.assign({}, note, {handover_id: 'HO-' + id});
+  store.setItem(HANDOVER_PENDING_KEY, JSON.stringify(payload));
+  const response = await request('/api/handover', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)});
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || '인계 저장 실패');
+  store.removeItem(HANDOVER_PENDING_KEY);
+  return result;
+}
+
 function openHandoverNew() {
   const ctx = S.tries.length
     ? '시도 ' + S.tries.length + '건 실패 (' + S.tries.map((t) => t.attempt_id).join(' · ') + ')'
@@ -865,12 +898,28 @@ function openHandoverNew() {
         ? S.observations.map((o) => o.signal + ' ' + o.value + ' ' + o.unit).join(', ')
         : '시도 기록 없음 — 직접 입력 필요');
   $('hoCtx').textContent = ctx;
+  $('hoSave').textContent = '저장';
+  try {
+    const pending = JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY) || 'null');
+    if (pending) {
+      $('hoSave').textContent = '대기 인계 재전송 · ' + pending.handover_id;
+      $('hoMemo').value = pending.memo_text;
+      ['hoRole','hoTiming','hoChannel','hoAck'].forEach((id, index) => {
+        $(id).value = pending.required_context[['recipient_role','timing','channel','acknowledgement'][index]];
+      });
+      $('hoCtx').textContent = pending.required_context.context;
+    }
+  } catch (err) {
+    $('hoWarn').hidden = false;
+    $('hoWarn').textContent = '인계 대기 기록을 읽지 못했습니다: ' + err.message;
+    $('hoSave').disabled = true; show('hoNew'); return;
+  }
   validateHandover();
   show('hoNew');
 }
 
 function validateHandover() {
-  const ok = ['hoRole', 'hoTiming', 'hoChannel', 'hoAck'].every((id) => $(id).value.trim());
+  const ok = ['hoMemo', 'hoRole', 'hoTiming', 'hoChannel', 'hoAck'].every((id) => $(id).value.trim());
   $('hoSave').disabled = !ok;
   $('hoWarn').hidden = ok;
 }
@@ -884,7 +933,7 @@ function renderSimOptions() {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -913,13 +962,24 @@ on('toHandoverHome', openHandover);
 on('hoBack', () => show(S.eq ? 'ctx' : 'home'));
 on('toHandoverNew', openHandoverNew);
 on('hoNewBack', () => show('ctx'));
-on('hoSave', () => {
-  haptic([120]);
+on('hoSave', async () => {
+  $('hoSave').disabled = true;
   $('hoWarn').hidden = false;
-  $('hoWarn').innerHTML = '<p class="p">저장됨 (프로토타입 — 서버 전송 없음). '
-    + 'REQUIRED_CONTEXT 에 시도 기록이 자동으로 들어갔습니다.</p>';
+  $('hoWarn').textContent = 'MES에 인계를 저장하고 있습니다…';
+  try {
+    const result = await submitHandover({memo_text:$('hoMemo').value.trim(),
+      equipment_id:S.eq ? S.eq.equipment_id : null,
+      required_context:{recipient_role:$('hoRole').value.trim(), timing:$('hoTiming').value.trim(),
+        channel:$('hoChannel').value.trim(), acknowledgement:$('hoAck').value.trim(), context:$('hoCtx').textContent},
+      attempts:S.tries, observations:S.observations});
+    haptic([120]);
+    $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id;
+  } catch (err) {
+    $('hoWarn').textContent = '저장 확인 실패 · ' + err.message + ' · 같은 메모로 다시 저장하면 재전송됩니다.';
+    $('hoSave').disabled = false;
+  }
 });
-['hoRole','hoTiming','hoChannel','hoAck'].forEach((id) => {
+['hoMemo','hoRole','hoTiming','hoChannel','hoAck'].forEach((id) => {
   $(id).addEventListener('input', validateHandover);
 });
 

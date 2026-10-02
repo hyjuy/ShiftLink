@@ -125,6 +125,23 @@
 | `MYSQL_DATABASE_URL` | Aiven MySQL 접속 문자열 | 유현준 |
 | ~~`GENERATION_API_KEY`~~ | 폐기(2026-09-30): 외부 API 생성을 하지 않기로 함 ([N-7](../../reports/N-7_생성API_비교.md)) | 최재영 |
 | `OLLAMA_HOST` | Ollama 서버 주소 | 최재영 |
+| `SHIFTLINK_QUERY_MODEL` | MES 질의 모델 태그(기본 `exaone3.5:2.4b-instruct-q4_K_M`) | 유현준 |
+
+## MES 질의·인계 HTTP 계약 (2026-10-02)
+
+| 이름 | 위치 | 뜻 | 담당자 |
+| --- | --- | --- | --- |
+| `query()` · `POST /api/query` | `shiftlink/mes/server.py` | 질문 + 최근 웹캠 설비 + 현재 MES 관측값 → FixedPipeline. 본문 `question`(1~4000자), 선택 `scan_id` 또는 `equipment_id`(직접 선택), `k`. 두 식별자는 동시 사용 불가. 생략하면 최신 인식 사용, 바뀐 scan_id는 거절 | 유현준 |
+| `query_service()` / `build_query_pipeline()` | `shiftlink/mes/query.py` | 허용 관측값 추출 및 accepted/kb 검색 + Ollama 모델 연결. 현재 서비스의 파이프라인 재사용 | 유현준 |
+| `answer` · `cited_card_ids` · `safety_notices` | `/api/query` 응답 | AgentResponse의 답변·인용 카드 ID·안전 공지(`card_id`, `safety_basis`, `stop_conditions`). `review_queue`, `no_knowledge`, `unverified_card_ids`도 기존 스키마 그대로 | 유현준 |
+| `scan` · `evidence` | `/api/query` 응답 | 사용한 인식 기록(직접 선택이면 null), MES 근거(`run_id`, `equipment_id`, `equipment_code`, `simulated_at`, `measurements`, `alarms`). 원인 정답·시나리오 ID 제외 | 유현준 |
+| `record_handover()` · `POST /api/handover` | `shiftlink/mes/server.py` | 본문 `handover_id`(1~64자), `memo_text`(1~4000자). ID 기준 SQLite outbox 저장. 동일 내용 재전송 200, 같은 ID 내용 변경 409 | 유현준 |
+| `save_handover()` / `get_handover()` | `shiftlink/mes/storage.py` | 원본 JSON 영속 저장·조회. `handover_outbox.handover_id`가 기본키 | 유현준 |
+| `status` · `duplicate` · `created_at` | `/api/handover` 응답 | 로컬 저장 상태 `pending`, 기존 동일 기록 여부, 최초 저장 시각. `handover_id`, `is_synthetic` 포함 | 유현준 |
+| `required_context` · `attempts` · `observations` · `equipment_id` | PDA 인계 본문 | 추가 보존 필드. required_context는 `recipient_role`, `timing`, `channel`, `acknowledgement`, `context`; 시도·관측값은 제출 원본 유지 | 유현준 |
+| `submitHandover()` · `queryApiPayload()` · `responseCards()` | `shiftlink/mes/web/pda.js` | PDA API 제출·검증 결과 표시. `shiftlink.handover.pending` localStorage 키로 미확인 인계 ID와 본문을 재전송까지 보존 | 유현준 |
+
+두 POST의 HTTP 본문 한도는 64 KiB. `HO-`는 기존 인계 ID 접두어이며 PDA UUID(HTTP LAN에서는 시간+난수)를 붙인다. 기존 정본 인계 ID는 변경하지 않는다. outbox는 로컬 저장이며 클라우드 업로드는 별도 작업이다.
 
 ## systemd 서비스 (`deploy/install_service.sh`)
 

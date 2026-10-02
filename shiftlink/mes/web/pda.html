@@ -436,7 +436,9 @@
     <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
-      <p class="lbl">인계 — 5칸 모두 필수</p>
+      <p class="lbl">인계 — 메모와 전달 정보 모두 필수</p>
+      <label for="hoMemo" class="lbl">인계 메모</label>
+      <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea>
       <div class="t4">
         <div class="fld"><div class="k">REQUIRED_CONTEXT</div><div class="v auto" id="hoCtx">—</div></div>
         <div class="fld"><div class="k">RECIPIENT_ROLE</div><input id="hoRole" value="야간조 정비 담당"></div>
@@ -444,7 +446,7 @@
         <div class="fld"><div class="k">CHANNEL</div><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
         <div class="fld"><div class="k">ACKNOWLEDGEMENT</div><input id="hoAck" class="req" placeholder="무엇으로 확인하는가"></div>
       </div>
-      <div class="alert" id="hoWarn"><p class="p">확인 방법이 비어 있으면 저장되지 않습니다.</p></div>
+      <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
       <div class="grow"></div>
       <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
     </div>

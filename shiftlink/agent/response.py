@@ -236,6 +236,20 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
     return errors
 
 
+# Shown when a guard blocks the model answer after the one retry. Not a review-queue blank.
+GUARD_FALLBACK_ANSWER = "카드에 수치 기준이 없습니다. 사양서·담당자에게 확인하세요"
+_GUARD_ERROR = (
+    "측정값이 모두 정상 범위인데",
+    "답이 높다고 말합니다.",
+    "답이 낮다고 말합니다.",
+    "카드·질문·측정값에 없는 수치:",
+)
+
+
+def guard_blocked(errors: list[str]) -> bool:
+    return bool(errors) and all(any(mark in error for mark in _GUARD_ERROR) for error in errors)
+
+
 _DIRECTION_WORD = re.compile("초과|넘|벗어|높게|낮게|미만")
 _LOW_OPPOSITE = re.compile("높|초과|넘")
 _HIGH_OPPOSITE = re.compile("낮|미만|못 미")

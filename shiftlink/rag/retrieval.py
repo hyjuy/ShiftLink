@@ -231,6 +231,38 @@ def check_card_rules(card: KnowledgeCard) -> list[str]:
     return errors
 
 
+# Longer suffixes first so hpu_pressure is 압력, not a shorter stem.
+_SIGNAL_LABELS = (
+    ("vib_rms", "진동"),
+    ("pressure", "압력"),
+    ("press", "압력"),
+    ("temp", "온도"),
+    ("flow", "유량"),
+    ("current", "전류"),
+    ("voltage", "전압"),
+    ("oil_level", "유면"),
+    ("rpm", "회전속도"),
+    ("speed", "속도"),
+    ("delay", "지연"),
+    ("tension", "장력"),
+    ("trip", "트립"),
+    ("ratio", "비율"),
+    ("queue_len", "적재"),
+    ("leak", "누유"),
+    ("viscosity", "점도"),
+    ("water_content", "수분"),
+    ("level", "유면"),
+)
+
+
+def _signal_label(signal: str) -> str:
+    """Short Korean name used to tie a direction word to one reading."""
+    for suffix, label in _SIGNAL_LABELS:
+        if signal == suffix or signal.endswith("_" + suffix):
+            return label
+    return signal
+
+
 def _range_state(value, normal_min, normal_max):
     """low / high / normal from a catalog range. Endpoints are normal. Non-numbers have no state."""
     if isinstance(value, bool) or not isinstance(value, (int, float)):
@@ -387,6 +419,7 @@ class InMemoryToolProvider:
                 state = _range_state(value, lo, hi)
             facts.append({
                 "signal": signal,
+                "label": _signal_label(signal),
                 "value": value,
                 "unit": unit if unit is not None else (point.get("unit") if point else None),
                 "state": state,

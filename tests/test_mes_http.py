@@ -69,6 +69,14 @@ class HttpTests(unittest.TestCase):
             self.get('/api/runs/missing/replay')
         self.assertEqual(caught.exception.code, 404)
 
+    def test_api_only_keeps_apis_and_disables_ui(self):
+        self.server.RequestHandlerClass.api_only = True
+        for path in ('/', '/pda.html', '/static/pda.js'):
+            with self.assertRaises(HTTPError) as caught:
+                self.get(path)
+            self.assertEqual(caught.exception.code, 404)
+        self.assertTrue(json.loads(self.get('/api/catalog'))['is_synthetic'])
+
     def test_recovery_actions_through_http_and_saved_replay(self):
         self.post({'command': 'start'})
         state = self.post({'command': 'scenario', 'scenario_id': 'gearbox_leak'})

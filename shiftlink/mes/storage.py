@@ -10,6 +10,7 @@ from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable
+from uuid import uuid4
 
 from .contracts import Alarm, EquipmentState, GroundTruth, Measurement, Run, RuntimeEvent, Snapshot
 
@@ -84,6 +85,9 @@ class MesStorage:
             CREATE TABLE IF NOT EXISTS handover_outbox (
                 handover_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS query_log (
+                query_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
         """)
         self.connection.commit()
 
@@ -126,6 +130,23 @@ class MesStorage:
     def mark_handover(self, handover_id: str, status: str) -> None:
         with self.connection:
             self.connection.execute("UPDATE handover_outbox SET status = ? WHERE handover_id = ?", (status, handover_id))
+
+    def save_query(self, record: dict[str, Any]) -> str:
+        """Log one /api/query answer for upload (C5). Returns the new query_id."""
+        query_id = "Q-" + uuid4().hex
+        with self.connection:
+            self.connection.execute("INSERT INTO query_log (query_id, created_at, payload) VALUES (?, ?, ?)",
+                                    (query_id, datetime.now().astimezone().isoformat(), _dump(record)))
+        return query_id
+
+    def pending_queries(self) -> list[tuple[str, str, str]]:
+        return self.connection.execute(
+            "SELECT query_id, created_at, payload FROM query_log WHERE status = 'pending' ORDER BY created_at"
+        ).fetchall()
+
+    def mark_query(self, query_id: str, status: str) -> None:
+        with self.connection:
+            self.connection.execute("UPDATE query_log SET status = ? WHERE query_id = ?", (status, query_id))
 
     def create_run(self, run: Run, *, commit: bool = True) -> None:
         try:

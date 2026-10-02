@@ -52,8 +52,12 @@ class HandoverHttpTests(unittest.TestCase):
                 with self.assertRaises(HTTPError) as caught:
                     self.post({**payload, 'memo_text': 'Changed note'})
                 self.assertEqual(caught.exception.code, 409)
+                caught.exception.close()
                 with self.assertRaises(HTTPError) as caught:
                     self.post({'handover_id': 'HO-invalid', 'memo_text': ''})
                 self.assertEqual(caught.exception.code, 400)
+                caught.exception.close()
+                long_note = {'handover_id': 'HO-long', 'memo_text': '점검' * 2000}
+                self.assertFalse(self.post(long_note)['duplicate'])
             finally:
                 self.stop_server()

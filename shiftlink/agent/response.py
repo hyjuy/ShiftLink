@@ -1,5 +1,6 @@
 """Agent response building and rendering (D-26~29 §4.3)."""
 
+import json
 import re
 from typing import Any
 from pydantic import BaseModel, Field, ConfigDict, computed_field
@@ -230,6 +231,56 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
             errors.append(f"이번 검색 결과에 없는 카드 ID 인용: {card_id}")
         elif available_cards[card_id].get("condition_status") == "unverified":
             errors.append(f"조건이 확인되지 않은 카드 ID 인용: {card_id}")
+    if isinstance(answer, str):
+        errors.extend(_answer_guard_errors(answer, cited_ids, tool_results))
+    return errors
+
+
+_DIRECTION_WORD = re.compile("초과|넘|벗어|높게|낮게|미만")
+_NUMBER = re.compile(r"\d+(?:\.\d+)?")
+_CARD_ID = re.compile(r"K-\d{4}")
+
+
+def _canon_number(token: str) -> str:
+    if "." not in token:
+        return token
+    whole, frac = token.split(".", 1)
+    frac = frac.rstrip("0")
+    return whole if not frac else f"{whole}.{frac}"
+
+
+def _number_tokens(text: str) -> set[str]:
+    return {_canon_number(token) for token in _NUMBER.findall(text)}
+
+
+def _allowed_numbers(cited_ids: list[str], tool_results: dict[str, Any]) -> set[str]:
+    parts = [str(tool_results.get("ask_text") or "")]
+    parts.append(json.dumps(tool_results.get("observation_facts") or [], ensure_ascii=False, default=str))
+    safety = [card for card in tool_results.get("safety_cards") or [] if isinstance(card, dict)]
+    wanted = set(cited_ids) | {card.get("card_id") for card in safety}
+    seen: set[str] = set()
+    for card in list(tool_results.get("cards") or []) + safety:
+        if not isinstance(card, dict):
+            continue
+        card_id = card.get("card_id")
+        if card_id not in wanted or card_id in seen:
+            continue
+        seen.add(card_id)
+        parts.append(json.dumps(card, ensure_ascii=False, default=str))
+    return _number_tokens("\n".join(parts))
+
+
+def _answer_guard_errors(answer: str, cited_ids: list[str], tool_results: dict[str, Any]) -> list[str]:
+    errors = []
+    facts = [fact for fact in tool_results.get("observation_facts") or [] if isinstance(fact, dict)]
+    states = [fact.get("state") for fact in facts if fact.get("state") in ("low", "normal", "high")]
+    # ponytail: all-normal only. A low/high reading plus the opposite word
+    # (130 bar called "높게") is not checked. Bind each word to its signal if that shows up.
+    if states and all(state == "normal" for state in states) and _DIRECTION_WORD.search(answer):
+        errors.append("측정값이 모두 정상 범위인데 답변이 벗어났다고 말합니다.")
+    missing = sorted(_number_tokens(_CARD_ID.sub(" ", answer)) - _allowed_numbers(cited_ids, tool_results))
+    if missing:
+        errors.append("카드·질문·측정값에 없는 수치: " + ", ".join(missing))
     return errors
 
 

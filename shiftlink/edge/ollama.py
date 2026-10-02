@@ -84,6 +84,8 @@ SYSTEM_PROMPT = (
     "   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n"
     "3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n"
     "   질문에 없는 측정값·시각·운전/정지 상태를 단정하지 않는다. 카드가 정한 순서와 금지한 조치를 바꾸지 않는다.\n"
+    "   질문이 수치(얼마·몇·최대·기준)를 묻는데 카드에 그 수치가 없으면 지어내지 말고 "
+    "'카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요'라고 답한다.\n"
     "4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n"
     "5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
 )
@@ -179,6 +181,40 @@ def split_context(
     return candidates, references, dropped
 
 
+def _shown_number(value: Any) -> str:
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
+
+
+def observation_fact_block(facts: list[dict[str, Any]] | None) -> str:
+    """System range judgments. The model is told not to rewrite them."""
+    lines = []
+    for fact in facts or []:
+        state = fact.get("state")
+        if state not in ("low", "normal", "high"):
+            continue
+        lo, hi = fact.get("normal_min"), fact.get("normal_max")
+        if lo is not None and hi is not None:
+            span = f"{_shown_number(lo)}–{_shown_number(hi)}"
+        elif lo is not None:
+            span = f"{_shown_number(lo)} 이상"
+        elif hi is not None:
+            span = f"{_shown_number(hi)} 이하"
+        else:
+            span = ""
+        where = {"normal": "안", "low": "보다 낮음", "high": "보다 높음"}[state]
+        gap = " " if state == "normal" and span else ""
+        unit = fact.get("unit") or ""
+        unit_bit = f" {unit}" if unit else ""
+        lines.append(
+            f"{fact.get('signal')} {_shown_number(fact.get('value'))}{unit_bit} → 정상 범위 {span}{gap}{where}"
+        )
+    if not lines:
+        return ""
+    return "측정값 판정(시스템 계산, 바꾸지 말 것):\n" + "\n".join(lines)
+
+
 def build_messages(
     mode: str,
     request: Any,
@@ -201,6 +237,9 @@ def build_messages(
     parts = [f"모드: {mode}", f"{ask_label}: {ask}"]
     if observations:
         parts.append(f"관측값: {json.dumps(observations, ensure_ascii=False)}")
+    fact_block = observation_fact_block(tool_results.get("observation_facts"))
+    if fact_block:
+        parts.append(fact_block)
     # 후보 한 줄 색인: 긴 JSON보다 먼저 제목·증상으로 질문과 맞춰 보게 한다.
     index = "\n".join(
         f"{card.get('card_id')}: {card.get('title', '')} / {card.get('symptom') or '-'}"

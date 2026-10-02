@@ -253,6 +253,21 @@ def _number_tokens(text: str) -> set[str]:
     return {_canon_number(token) for token in _NUMBER.findall(text)}
 
 
+# Provenance, source ids, hashes, and dates are not something the answer may quote.
+_CARD_NUMBER_FIELDS = (
+    "title", "symptom", "component", "know_how", "rationale", "safety_basis",
+    "conditions", "exclusions", "type_payload",
+)
+
+
+def _card_number_text(card: dict[str, Any]) -> str:
+    return "\n".join(
+        json.dumps(card[key], ensure_ascii=False, default=str)
+        for key in _CARD_NUMBER_FIELDS
+        if card.get(key) is not None
+    )
+
+
 def _allowed_numbers(cited_ids: list[str], tool_results: dict[str, Any]) -> set[str]:
     parts = [str(tool_results.get("ask_text") or "")]
     parts.append(json.dumps(tool_results.get("observation_facts") or [], ensure_ascii=False, default=str))
@@ -266,7 +281,7 @@ def _allowed_numbers(cited_ids: list[str], tool_results: dict[str, Any]) -> set[
         if card_id not in wanted or card_id in seen:
             continue
         seen.add(card_id)
-        parts.append(json.dumps(card, ensure_ascii=False, default=str))
+        parts.append(_card_number_text(card))
     return _number_tokens("\n".join(parts))
 
 

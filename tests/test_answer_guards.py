@@ -118,6 +118,35 @@ def test_invented_duration_fails_and_card_id_digits_do_not():
     assert ok == []
 
 
+def _kb_card(card_id: str) -> dict:
+    raw = json.loads((Path(__file__).resolve().parents[1] /
+        "docs/data/knowledge_cards/kb/kb_cards.json").read_text(encoding="utf-8"))
+    cards = raw["cards"] if isinstance(raw, dict) else raw
+    return next(card for card in cards if card["card_id"] == card_id)
+
+
+def test_k1216_provenance_does_not_ground_24_hours():
+    """NH-005: slot:S24 and SC-C-AR-0424 are not the number 24. 75 and 49 are in the card body."""
+    card = _kb_card("K-1216")
+    safety = _kb_card("K-1024")
+    tool_results = {
+        "ask_text": "원인 확인하고 다시 돌린 뒤에도 지켜보라는데, 얼마나 오래 봐야 해요?",
+        "cards": [card, safety],
+        "safety_cards": [safety],
+        "observation_facts": [],
+    }
+    rejected = validate_model_output({
+        "answer": "최소 24시간 이상 관찰하세요.",
+        "cited_card_ids": ["K-1216"],
+    }, tool_results)
+    assert any("24" in error for error in rejected)
+    accepted = validate_model_output({
+        "answer": "75 degC에서 49 degC로 내려가도 원인 확인을 생략하지 마세요.",
+        "cited_card_ids": ["K-1216"],
+    }, tool_results)
+    assert accepted == []
+
+
 def test_numeric_question_rule_is_in_the_query_prompt():
     assert "카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요" in SYSTEM_PROMPT
 

@@ -436,8 +436,8 @@ code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1p
 </tr>
 <tr>
 <td>인계 T4 검색</td>
-<td>H-012·H-017(K-1108) 점수 차 큼(이슈 #147)</td>
-<td>인계 의도·관측/추정 구분 반영</td>
+<td>증상 재작성·상황 분류기 모두 2.4b에서 일반화되지 않음. 인계 블라인드 1/10</td>
+<td>시연은 카드 추천이 아니라 메모 구조화·안전 카드·체크리스트</td>
 </tr>
 <tr>
 <td>평가셋</td>
@@ -457,4 +457,9 @@ code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1p
 <li>test 30은 읽지 않았다. 외부 API로 카드·답변을 생성하거나 채점하지 않았다.</li>
 <li>모든 Jetson 측정은 앞뒤로 연결을 확인했고, 끊기면 결과를 무효(.INVALID)로 남기게 했다.</li>
 </ul>
+<h2>9. 10/2 오후 — 판정기, 블라인드 3차, T6, 인계</h2>
+<p>코드·카드는 이 절의 실험으로 바꾸지 않았다. 블라인드 3차·T6·인계 블라인드는 확인용이며 조정에 쓰지 않았다.</p>
+<p>답 없음 판정기(#166, <code>judge1002</code>, git <code>2ccddd5</code>): exaone이 검색 1위 카드를 0~3점, 2점 미만이면 해당 지식 없음. 집계는 질의 셋 답 없음 40→54/67, 오답→거절 6건, 정답 손실 4건, p95 약 +1초.</p>
+<p>블라인드 3차 <code>blind3_1002</code>(c2124e4): 인용 2/8, 검색 1위 4/8, 답 없음 1/2. B3-009는 1위 K-1207, 판정기 1점. T6 <code>t6set1002</code>: 인용 2/17, 검색 1위 2/17, 답 없음 4/4.</p>
+<p>인계 상황 선택은 현 모델 한계다. 인계 블라인드 1/10. 증상 재작성 A안 HB 2/10·t4 8/18, B안 HB 1/10·t4 8/18. 현재 HB 1/10·t4 10/18. 둘 다 탈락. 상황 분류기는 t4 10→11/18, HB 1/10→1/10으로 기각. 2.4b로는 12개 상황 구분이 일반화되지 않는다. HB(#179, #181)는 증상 A/B와 분류기로 2회 사용되어 이제 dev다. 기록 <code>ShiftLink-records/experiments/hbcls1002/</code>.</p>
 </main></body></html>

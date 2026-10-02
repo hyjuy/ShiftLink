@@ -1,0 +1,304 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시연 파이프라인</title><style>
+:root{--bg:#fafaf8;--fg:#1d1d1b;--mut:#6b6b66;--line:#e2e1dc;--head:#f0efea;--acc:#2f5d8a}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#e9e8e3;--mut:#a3a29c;--line:#34332f;--head:#22211f;--acc:#8fb4dc}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 "Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;margin:0 0 8px} h2{font-size:19px;margin:36px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--acc)} h3{font-size:16px;margin:24px 0 8px}
+blockquote{margin:0 0 16px;padding:8px 14px;border-left:3px solid var(--acc);background:var(--head);color:var(--mut)} blockquote p{margin:2px 0}
+.tw{overflow-x:auto;margin:8px 0 14px} table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top} th{background:var(--head);white-space:nowrap}
+pre{background:var(--head);padding:12px;border-radius:6px;overflow-x:auto;line-height:1.35} pre code{background:none;padding:0;font-size:12.5px}
+code{font:13px ui-monospace,Consolas,monospace;background:var(--head);padding:1px 4px;border-radius:3px} strong{color:var(--acc)} li{margin:4px 0}
+</style></head><body><main>
+<h1>시연 파이프라인 (2026-10-02)</h1>
+<blockquote>
+<p>작성: 최재영·Claude · 상태: 초안, 팀 공유용
+근거: <a href="개발계획_경량_20260929.md"><code>개발계획_경량_20260929.md</code></a> 1절(A안 라즈베리파이 분리), <a href="PDA_라즈베리파이_모니터_작업계획_20261001.md"><code>PDA_라즈베리파이_모니터_작업계획_20261001.md</code></a>, <a href="경량계획_주간진척_루브릭_20261001.md"><code>경량계획_주간진척_루브릭_20261001.md</code></a>
+발표 목표: 카메라로 설비 인식 → Jetson LLM이 카드 근거로 답변 → 인계 로컬 저장 → 클라우드 DB 업로드를 한 번에 시연한다.</p>
+</blockquote>
+<h2>1. 장비와 역할</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>장비</th>
+<th>역할</th>
+<th>돌리는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>라즈베리파이 4 Model B (4 GB) + 모니터 + 키보드·마우스 + USB 웹캠</td>
+<td><strong>PDA 단말</strong></td>
+<td>Chromium 키오스크(PDA·MES 화면), 카메라 루프(CNN 6클래스 분류)</td>
+</tr>
+<tr>
+<td>Jetson Orin Nano Super (7.6 GB, 15 W, headless)</td>
+<td><strong>현장 엣지 서버</strong></td>
+<td>MES 서버 + 데이터 생성기, 검색·에이전트, ollama(exaone 2.4B), 로컬 SQLite</td>
+</tr>
+<tr>
+<td>Aiven MySQL</td>
+<td><strong>클라우드 DB</strong></td>
+<td>인계 기록, 질의 기록, 피드백 (오프라인이어도 현장은 동작)</td>
+</tr>
+<tr>
+<td>노트북 (선택)</td>
+<td>다음 조·관리자 화면, 비상 시 MES 대체 서버</td>
+<td>브라우저</td>
+</tr>
+</tbody>
+</table></div>
+<h2>2. MES와 데이터 생성기 위치 → Jetson</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>라즈베리파이 4 (4 GB)</th>
+<th>Jetson Orin Nano (7.6 GB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>이미 하는 일</td>
+<td>Chromium 키오스크(0.6~0.9 GB, CPU 많이 씀) + 웹캠 + CNN 연속 추론(CPU 1~2코어)</td>
+<td>exaone(GPU). 10/2 측정 중 여유 메모리 3.1~3.5 GB, CPU 여유</td>
+</tr>
+<tr>
+<td>MES 서버 + 생성기를 얹으면</td>
+<td>메모리는 되지만 CPU 4코어를 화면·CNN·생성기가 나눠 실시간 그래프와 인식이 함께 느려짐</td>
+<td>표준 라이브러리 HTTP 서버 + 생성기 + SQLite ≈ 0.1~0.2 GB, 여유 3 GB 안</td>
+</tr>
+<tr>
+<td>역할</td>
+<td>작업자가 쓰는 단말</td>
+<td>설비 데이터 + 지식 + LLM이 모인 엣지 서버</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>데이터 생성기는 MES 서버 안의 엔진(<code>shiftlink/mes/engine.py</code>)이므로 MES와 <strong>같은 프로세스</strong>로 돌린다.</li>
+<li>Jetson은 GUI 없이 운영한다(작업계획 A3). 메모리 0.5~1 GB를 더 확보한다.</li>
+<li><strong>비상 대안</strong>: 시연 중 Jetson 여유 메모리가 1 GB 아래면 노트북에서 <code>python -m shiftlink.mes --host 0.0.0.0</code>로 MES만 옮긴다. 화면 주소만 바꾸고 코드는 그대로다.</li>
+</ul>
+<h2>3. 전체 흐름</h2>
+<pre><code>┌─────────────── 라즈베리파이 4 (PDA 단말) ───────────────────┐
+│ [USB 웹캠] → 카메라 루프                                       │
+│              프레임 → CNN(MobileNetV3, ONNX) → {class, conf}   │
+│              신뢰도 기준 이상 + N프레임 같은 클래스면 확정        │
+│                         │ ① POST /api/equipment/scan          │
+│                         │   (클래스·신뢰도만, 이미지는 안 나감) │
+│ [모니터+키보드+마우스]   │                                     │
+│  Chromium 키오스크 ──────┼── ② MES 대시보드 · PDA 화면          │
+└─────────────────────────┼────────────────────────────────────┘
+                     LAN (HTTP)
+┌─────────────────────────▼──────────── Jetson (엣지 서버) ──────┐
+│ shiftlink.mes 서버 (:8000)                                      │
+│  ├ 데이터 생성기 → 설비 상태·센서값·알람 (SQLite 로컬)            │
+│  ├ /api/state · /api/events  → ② MES 화면 실시간 갱신(폴링)       │
+│  ├ /api/equipment/scan       → ① 최근 인식 설비 (#142·#145)      │
+│  ├ /api/query      (신규)                                        │
+│  │   ③ 받음: 질문(키보드) + 인식 설비 + 그 설비의 현재 센서값      │
+│  │   ④ FixedPipeline: 검색(KB 86장) → 안전 카드 → exaone(ollama)  │
+│  │   ⑤ 돌려줌: 안전 공지 · 답변 · 인용 카드 → PDA 화면             │
+│  └ /api/handover   (신규) → 로컬 SQLite outbox                    │
+│                                           │ ⑥ 연결되면 업로드      │
+└───────────────────────────────────────────┼──────────────────────┘
+                                            ▼
+                                 [Aiven MySQL (클라우드)]
+                                  인계 · 질의 기록 · 피드백
+                                            ▲
+                                 [노트북: 다음 조 인계 화면]
+</code></pre>
+<h3>한 번의 질의 순서</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>어디서</th>
+<th>무엇</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>라즈베리파이</td>
+<td>작업자가 설비(대체 객체) 앞에 선다. 웹캠 CNN이 <code>GR</code>을 확정해 <code>POST /api/equipment/scan</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>PDA 화면</td>
+<td>최근 인식 결과를 폴링해 그 설비 화면으로 바뀐다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PDA 화면 (MES)</td>
+<td>그 설비의 운전/정지/알람 상태와 실시간 센서값을 본다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PDA 화면</td>
+<td>키보드로 질문 입력 (예: "갈리는 소리가 나요") → <code>POST /api/query</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Jetson 서버</td>
+<td><strong>최근 인식 설비 + MES 현재 센서값을 자동으로 붙여</strong> FixedPipeline 호출</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Jetson</td>
+<td>검색 → 안전 카드 → exaone 답변 (p95 약 5초)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PDA 화면</td>
+<td>안전 공지 → 답변 → 근거 카드 순서로 표시</td>
+</tr>
+<tr>
+<td>8</td>
+<td>PDA 화면 → Jetson</td>
+<td>인계 메모 작성 → <code>POST /api/handover</code> → 로컬 저장 → 연결되면 Aiven 업로드</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>5단계가 핵심</strong>: 10/2 최종 측정에서 "1위 카드 조건 미확인으로 확인 대상 카드로 끝남"(Q-021·H-011·H-017)은 질문에 값이 없어서였다. 시연에서는 MES 생성기의 현재 값이 들어가므로 T2 카드 조건이 실제로 판정된다(예: 장력 low → K-1204).</li>
+<li>통신은 HTTP만 쓴다. 서버가 이미 <code>ThreadingHTTPServer</code>이므로 MQTT 브로커를 추가하지 않는다.</li>
+</ul>
+<h2>4. 클라우드 DB 활용 (Aiven, <code>db/aiven_schema.sql</code>에 표가 이미 있음)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>우선</th>
+<th>쓰임</th>
+<th>올리는 것</th>
+<th>시연 장면</th>
+<th>루브릭</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>인계 기록 보관 (<code>handover_record</code>·<code>handover_item</code>)</td>
+<td>인계 메모, 인용 카드, 설비, 작성 시각. 인계 ID로 <strong>같은 ID는 한 번만</strong> 저장</td>
+<td>랜선을 뽑고 인계 2건 작성 → 다시 꽂으면 자동 업로드, 클라우드에 정확히 2건</td>
+<td>G3·G4, W2-4, W3-3</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>교대 간 공유</td>
+<td>(1과 같음)</td>
+<td>노트북 = "다음 조 관리자 화면"이 클라우드 인계 목록을 읽음</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>질의·답변 기록 (<code>pipeline_run</code>·<code>eval_result</code>)</td>
+<td>질문, 설비, 인용 카드, 해당 지식 없음 여부, 응답 시간, 모델·KB 버전</td>
+<td>발표 자료의 p95·성공률을 클라우드 기록에서 집계</td>
+<td>W3-1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>현장 피드백 (<code>human_review</code>)</td>
+<td>답변마다 "도움됨 / 틀림"</td>
+<td>틀림이 쌓인 카드 = 다음 카드 개선 목록</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>설비 이벤트 요약</td>
+<td>알람·정지 이벤트만</td>
+<td>관리자 화면 "오늘 GR-01 정지 2회"</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>올리지 않는 것</strong>: 웹캠 이미지(파이 밖으로 안 나감), 원시 센서 스트림(양이 많고 현장 데이터), LLM 호출(현장 오프라인 원칙).</p>
+<p>시연 메시지: <strong>인터넷이 끊겨도 현장은 돌고, 연결되면 기록이 빠짐없이 올라간다.</strong></p>
+<h2>5. 새로 만들 것 (2주차 10/5~10/8)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>일</th>
+<th>담당</th>
+<th>크기</th>
+<th>루브릭</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>POST /api/query</code>: 최근 인식 설비·현재 센서값을 붙여 FixedPipeline 호출</td>
+<td>Claude</td>
+<td>반나절</td>
+<td>W2-1, G1, G2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PDA 화면의 가짜 검색(<code>runSearch</code>)을 <code>/api/query</code> 호출로 교체, 응답 렌더</td>
+<td>Cursor</td>
+<td>반나절</td>
+<td>W2-1</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>POST /api/handover</code> + 로컬 SQLite outbox + Aiven 업로더(재시도, 같은 ID 중복 방지)</td>
+<td>Claude</td>
+<td>하루</td>
+<td>W2-4, G3, G4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>노트북용 "다음 조" 인계 목록 화면(클라우드 읽기 전용)</td>
+<td>Cursor</td>
+<td>반나절</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>질의 기록 업로드(<code>pipeline_run</code>)</td>
+<td>Claude</td>
+<td>2시간</td>
+<td>W3-1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>라즈베리파이 카메라 루프·키오스크·systemd (작업계획 D1~D3)</td>
+<td>허재원</td>
+<td>진행 중</td>
+<td>W2-3</td>
+</tr>
+</tbody>
+</table></div>
+<p>새 엔드포인트·필드명은 같은 변경 안에서 <code>docs/collaboration/naming_registry/registry.md</code>에 등록한다.</p>
+<h2>6. 실패했을 때</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>상황</th>
+<th>화면 동작</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>웹캠이 설비를 못 알아봄</td>
+<td>수동 설비 선택(PDA에 이미 있음)</td>
+</tr>
+<tr>
+<td>Jetson LLM 응답 없음·시간 초과</td>
+<td>검색 결과와 안전 공지만 표시(모델 없이 카드에서 직접 생성되는 부분)</td>
+</tr>
+<tr>
+<td>해당 지식 없음</td>
+<td>"해당 지식 없음" + 그 설비의 안전 공지를 먼저 보라는 안내(10/2 변경)</td>
+</tr>
+<tr>
+<td>클라우드 끊김</td>
+<td>로컬 저장 후 대기, 복구되면 자동 업로드. 화면에 "업로드 대기 N건"</td>
+</tr>
+</tbody>
+</table></div>
+</main></body></html>

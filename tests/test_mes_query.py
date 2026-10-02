@@ -85,3 +85,32 @@ def test_query_http_returns_json_answer(service):
         server.shutdown()
         worker.join()
         server.server_close()
+
+
+def test_fixed_pipeline_retrieval_model_and_cache(service, monkeypatch):
+    from shiftlink.mes import query
+    calls = []
+    pipeline = query.build_query_pipeline()
+    def model(**kwargs):
+        calls.append(kwargs)
+        return {'answer': '등록된 설비 지식 확인',
+                'cited_card_ids': [kwargs['tool_results']['ranked_cards'][0]['card_id']]}
+    pipeline.model = model
+    builds = []
+    monkeypatch.setattr(query, 'build_query_pipeline', lambda: builds.append(True) or pipeline)
+    service.record_scan({'class': 'HPU', 'conf': .95, 'device_id': 'pi'})
+    question = next(c.title for c in pipeline.tools.cards if c.card_id == 'K-1001')
+    result = query_service(service, {'question': question})
+    query_service(service, {'question': question})
+    assert builds == [True]
+    assert calls and calls[0]['request'].observations
+    assert result['cited_card_ids']
+    assert result['safety_notices']
+    assert not result['review_queue']
+
+
+def test_scan_changed_rejected(service):
+    first = service.record_scan({'class': 'HPU', 'conf': .9, 'device_id': 'pi'})['scan']
+    service.record_scan({'class': 'GR', 'conf': .9, 'device_id': 'pi'})
+    with pytest.raises(ValueError, match='scan changed'):
+        query_service(service, {'question': 'q', 'scan_id': first['scan_id']}, pipeline=Pipeline())

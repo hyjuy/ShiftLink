@@ -48,6 +48,10 @@ def _event(payload: dict[str, Any]) -> RuntimeEvent:
     return RuntimeEvent(**{**payload, "occurred_at": _time(payload["occurred_at"])})
 
 
+class HandoverConflictError(ValueError):
+    """An existing handover ID cannot silently overwrite another note."""
+
+
 class MesStorage:
     """Small transactional store. Ground truth is deliberately private."""
 
@@ -77,8 +81,41 @@ class MesStorage:
                 change_id TEXT PRIMARY KEY, requested_at TEXT NOT NULL, applied_at TEXT,
                 base_config_id TEXT, new_config_id TEXT, reason TEXT, actor TEXT,
                 actor_self_reported INTEGER NOT NULL DEFAULT 1, status TEXT NOT NULL, detail TEXT, run_id TEXT);
+            CREATE TABLE IF NOT EXISTS handover_outbox (
+                handover_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
         """)
         self.connection.commit()
+
+    def save_handover(self, body: dict[str, Any]) -> dict[str, Any]:
+        """Commit the original note locally; retries never overwrite it."""
+        if not isinstance(body, dict):
+            raise ValueError("handover body must be an object")
+        handover_id, memo = body.get("handover_id"), body.get("memo_text")
+        if not isinstance(handover_id, str) or not handover_id.strip() or len(handover_id) > 64:
+            raise ValueError("handover_id must be a 1..64 char string")
+        if not isinstance(memo, str) or not memo.strip() or len(memo) > 4000:
+            raise ValueError("memo_text must be a 1..4000 char string")
+        encoded = _dump(body)
+        with self.connection:
+            inserted = self.connection.execute(
+                "INSERT OR IGNORE INTO handover_outbox (handover_id, created_at, payload) VALUES (?, ?, ?)",
+                (handover_id, datetime.now().astimezone().isoformat(), encoded),
+            ).rowcount
+            row = self.connection.execute(
+                "SELECT created_at, status, payload FROM handover_outbox WHERE handover_id = ?", (handover_id,)
+            ).fetchone()
+            if row[2] != encoded:
+                raise HandoverConflictError("handover_id already exists with different content")
+        return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
+                "duplicate": not bool(inserted), "is_synthetic": True}
+
+    def get_handover(self, handover_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute(
+            "SELECT created_at, status, payload FROM handover_outbox WHERE handover_id = ?", (handover_id,)
+        ).fetchone()
+        return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
+                "payload": json.loads(row[2])} if row else None
 
     def create_run(self, run: Run, *, commit: bool = True) -> None:
         try:

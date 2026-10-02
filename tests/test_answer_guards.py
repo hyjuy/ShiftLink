@@ -30,7 +30,7 @@ def test_vibration_in_range_is_injected_as_normal():
         observations={"gr_vib_rms": {"value": 1.2, "unit": "mm_s"}},
     )
     assert facts == [{
-        "signal": "gr_vib_rms", "value": 1.2, "unit": "mm_s",
+        "signal": "gr_vib_rms", "label": "진동", "value": 1.2, "unit": "mm_s",
         "state": "normal", "normal_min": 0.5, "normal_max": 2.8,
     }]
     request = QueryRequest(
@@ -56,6 +56,7 @@ def test_low_pressure_fact_says_below_range():
         observations={"hpu_pressure": {"value": 130, "unit": "bar"}},
     )
     assert facts[0]["state"] == "low"
+    assert facts[0]["label"] == "압력"
     request = QueryRequest(question="압력", line_id="L1", eq_id="HPU")
     card = {"card_id": "K-0001", "title": "압력", "condition_status": "verified"}
     messages, _ = build_messages("query", request, {
@@ -81,17 +82,28 @@ def test_all_normal_direction_words_fail_validation():
     }, tool_results)
     assert any("정상 범위" in error for error in errors)
 
-    # ponytail ceiling: a low reading called "높게" is not rejected in this version.
-    low = dict(tool_results)
-    low["observation_facts"] = [{
-        "signal": "hpu_pressure", "value": 130, "unit": "bar",
-        "state": "low", "normal_min": 145, "normal_max": 165,
-    }]
-    low_errors = validate_model_output({
-        "answer": "130 bar로 높게 측정되었습니다.",
-        "cited_card_ids": ["K-0003"],
-    }, low)
-    assert not any("정상 범위" in error for error in low_errors)
+
+def test_low_pressure_called_high_is_rejected():
+    """130 bar is low. '압력' and '높게' in one sentence fails. '낮습니다' without the label passes."""
+    tool_results = {
+        "ask_text": "압력이 얼마야",
+        "cards": [_card("K-0001")],
+        "safety_cards": [],
+        "observation_facts": [{
+            "signal": "hpu_pressure", "label": "압력", "value": 130, "unit": "bar",
+            "state": "low", "normal_min": 145, "normal_max": 165,
+        }],
+    }
+    rejected = validate_model_output({
+        "answer": "펌프 압력이 130 bar로 높게 측정되었습니다.",
+        "cited_card_ids": ["K-0001"],
+    }, tool_results)
+    assert any("압력" in error for error in rejected)
+    accepted = validate_model_output({
+        "answer": "130 bar로 정상 범위보다 낮습니다.",
+        "cited_card_ids": ["K-0001"],
+    }, tool_results)
+    assert accepted == []
 
 
 def test_invented_duration_fails_and_card_id_digits_do_not():
@@ -116,6 +128,35 @@ def test_invented_duration_fails_and_card_id_digits_do_not():
         "cited_card_ids": ["K-1216"],
     }, tool_results)
     assert ok == []
+
+
+def _kb_card(card_id: str) -> dict:
+    raw = json.loads((Path(__file__).resolve().parents[1] /
+        "docs/data/knowledge_cards/kb/kb_cards.json").read_text(encoding="utf-8"))
+    cards = raw["cards"] if isinstance(raw, dict) else raw
+    return next(card for card in cards if card["card_id"] == card_id)
+
+
+def test_k1216_provenance_does_not_ground_24_hours():
+    """NH-005: slot:S24 and SC-C-AR-0424 are not the number 24. 75 and 49 are in the card body."""
+    card = _kb_card("K-1216")
+    safety = _kb_card("K-1024")
+    tool_results = {
+        "ask_text": "원인 확인하고 다시 돌린 뒤에도 지켜보라는데, 얼마나 오래 봐야 해요?",
+        "cards": [card, safety],
+        "safety_cards": [safety],
+        "observation_facts": [],
+    }
+    rejected = validate_model_output({
+        "answer": "최소 24시간 이상 관찰하세요.",
+        "cited_card_ids": ["K-1216"],
+    }, tool_results)
+    assert any("24" in error for error in rejected)
+    accepted = validate_model_output({
+        "answer": "75 degC에서 49 degC로 내려가도 원인 확인을 생략하지 마세요.",
+        "cited_card_ids": ["K-1216"],
+    }, tool_results)
+    assert accepted == []
 
 
 def test_numeric_question_rule_is_in_the_query_prompt():

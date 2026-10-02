@@ -237,6 +237,8 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
 
 
 _DIRECTION_WORD = re.compile("초과|넘|벗어|높게|낮게|미만")
+_LOW_OPPOSITE = re.compile("높|초과|넘")
+_HIGH_OPPOSITE = re.compile("낮|미만|못 미")
 _NUMBER = re.compile(r"\d+(?:\.\d+)?")
 _CARD_ID = re.compile(r"K-\d{4}")
 
@@ -253,6 +255,21 @@ def _number_tokens(text: str) -> set[str]:
     return {_canon_number(token) for token in _NUMBER.findall(text)}
 
 
+# Provenance, source ids, hashes, and dates are not something the answer may quote.
+_CARD_NUMBER_FIELDS = (
+    "title", "symptom", "component", "know_how", "rationale", "safety_basis",
+    "conditions", "exclusions", "type_payload",
+)
+
+
+def _card_number_text(card: dict[str, Any]) -> str:
+    return "\n".join(
+        json.dumps(card[key], ensure_ascii=False, default=str)
+        for key in _CARD_NUMBER_FIELDS
+        if card.get(key) is not None
+    )
+
+
 def _allowed_numbers(cited_ids: list[str], tool_results: dict[str, Any]) -> set[str]:
     parts = [str(tool_results.get("ask_text") or "")]
     parts.append(json.dumps(tool_results.get("observation_facts") or [], ensure_ascii=False, default=str))
@@ -266,18 +283,39 @@ def _allowed_numbers(cited_ids: list[str], tool_results: dict[str, Any]) -> set[
         if card_id not in wanted or card_id in seen:
             continue
         seen.add(card_id)
-        parts.append(json.dumps(card, ensure_ascii=False, default=str))
+        parts.append(_card_number_text(card))
     return _number_tokens("\n".join(parts))
+
+
+def _sentences(answer: str) -> list[str]:
+    return [part for part in re.split(r"(?<=[\.!?。])\s+|\n+", answer) if part.strip()]
+
+
+def _opposite_direction_errors(answer: str, facts: list[dict[str, Any]]) -> list[str]:
+    # ponytail: a sentence that contains both the label and an opposite word.
+    # Negation ("높지 않다") and two signals in one sentence are not split.
+    # Upgrade: bind the word to the nearest label.
+    errors = []
+    for sentence in _sentences(answer):
+        for fact in facts:
+            label = fact.get("label") or ""
+            state = fact.get("state")
+            if not label or label not in sentence:
+                continue
+            if state == "low" and _LOW_OPPOSITE.search(sentence):
+                errors.append(f"{label}은 정상 범위보다 낮은데 답이 높다고 말합니다.")
+            elif state == "high" and _HIGH_OPPOSITE.search(sentence):
+                errors.append(f"{label}은 정상 범위보다 높은데 답이 낮다고 말합니다.")
+    return errors
 
 
 def _answer_guard_errors(answer: str, cited_ids: list[str], tool_results: dict[str, Any]) -> list[str]:
     errors = []
     facts = [fact for fact in tool_results.get("observation_facts") or [] if isinstance(fact, dict)]
     states = [fact.get("state") for fact in facts if fact.get("state") in ("low", "normal", "high")]
-    # ponytail: all-normal only. A low/high reading plus the opposite word
-    # (130 bar called "높게") is not checked. Bind each word to its signal if that shows up.
     if states and all(state == "normal" for state in states) and _DIRECTION_WORD.search(answer):
         errors.append("측정값이 모두 정상 범위인데 답변이 벗어났다고 말합니다.")
+    errors.extend(_opposite_direction_errors(answer, facts))
     missing = sorted(_number_tokens(_CARD_ID.sub(" ", answer)) - _allowed_numbers(cited_ids, tool_results))
     if missing:
         errors.append("카드·질문·측정값에 없는 수치: " + ", ".join(missing))

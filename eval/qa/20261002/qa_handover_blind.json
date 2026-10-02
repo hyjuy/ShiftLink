@@ -1,0 +1,207 @@
+[
+ {
+  "qid": "HB-001",
+  "eq_id": "HPU",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "전 교대에서 계속 지켜보던 내용은 제가 인계 기록 어디에서 확인하면 돼요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [
+   "K-1101"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "인계 기록을 어디서 보는지(시스템 위치)는 카드가 다루지 않음. K-1101은 기록 내용",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-002",
+  "eq_id": "HPU",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "제가 본 상태랑 앞 교대 기록이 조금 다른데, 인계할 때 둘 다 적어두면 돼요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101"
+  ],
+  "acceptable_card_ids": [
+   "K-1108",
+   "K-1105"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "현재 확인과 앞 조 기록이 다름 → 재확인 항목·결과를 나눠 적기(K-1101)",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-003",
+  "eq_id": "PDP",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "교대 중에 알림이 떴다가 사라졌는데, 다음 교대에도 얘기해둬야 해요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1108"
+  ],
+  "acceptable_card_ids": [
+   "K-1105",
+   "K-1104"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "알림이 떴다 사라짐, 원인 미확정 → 관측과 추정 구분해 넘기기",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-004",
+  "eq_id": "PDP",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "전달받은 내용 중 아직 확인이 안 된 건 기록에 어떻게 구분해서 남겨요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1108"
+  ],
+  "acceptable_card_ids": [
+   "K-1101",
+   "K-1111"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "확인 안 된 항목을 구분해 남기기(관측·추정·미확인)",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-005",
+  "eq_id": "CAU",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "전 교대에서 평소랑 달랐다고 했는데, 제가 이어서 확인한 내용은 어디에 덧붙여요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101"
+  ],
+  "acceptable_card_ids": [
+   "K-1105"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "앞 조 확인을 이어받아 결과를 덧붙이기",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-006",
+  "eq_id": "CAU",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "인계받은 뒤 별다른 변화가 없었어도, 교대 기록에 그 내용을 남겨야 해요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1101"
+  ],
+  "acceptable_card_ids": [
+   "K-1105"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정상 범위 안 결과도 기록(K-1101 required_context)",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-007",
+  "eq_id": "GR",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "가끔 들렸던 소리를 전달하려면, 언제 어떤 작업 중이었는지도 같이 적으면 돼요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1104"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "감각 관측(소리)의 성질·위치·시각",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-008",
+  "eq_id": "RT",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "교대 시간에 자재가 남아 있으면, 어디까지 처리됐는지 어떻게 전달해요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "생산 자재 처리 진행 인계는 설비 지식 카드 범위 밖",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-009",
+  "eq_id": "CV",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "중간에 멈춘 적은 있는데 이유를 못 들었어요. 다음 교대에는 뭐라고 전달하면 돼요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1108"
+  ],
+  "acceptable_card_ids": [
+   "K-1103"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "정지 이유를 모름 → 확인 못한 사실과 추정을 구분해 넘기기",
+  "split": "handover-blind"
+ },
+ {
+  "qid": "HB-010",
+  "eq_id": "CV",
+  "persona_id": "V-handover-blind",
+  "intent": "handover",
+  "question": "인계할 때 담당자가 잠깐 자리를 비웠으면, 전달한 내용은 어디에 남겨두면 돼요?",
+  "observations": {},
+  "writer_note": "카드 미열람 서브에이전트 작성(#179). 정답 연결: Claude(측정 전 확정), 검토: 최재영",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1401"
+  ],
+  "acceptable_card_ids": [
+   "K-1109"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "담당자 부재 시 완료 증거·책임자 회신·인수 문서",
+  "split": "handover-blind"
+ }
+]

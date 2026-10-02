@@ -32,3 +32,6 @@ date	experimenter	variable	setting	time_budget_min	n_runs	primary_metric	primary
 2026-10-02	claude	retrieval_ranker	E2 KURE-v1 혼합 a=0.2 tau=0.60(최고)	5	1	tune_route_sum	70/113			discard	임베딩만 E1 최고 65, E3 71. 답 있음 1위 dev 9→5~7·sanity 22→17~21로 하락, 답 없음 판정도 분리 안 됨
 2026-10-02	claude	retrieval_ranker	E2 bge-m3 혼합 a=0.2 tau=0.60(최고)	5	1	tune_route_sum	74/113			discard	KURE보다 조금 낫지만 E0 미달. 블라인드 2차는 채택안이 없어 열지 않음
 2026-10-02	claude	retrieval_ranker	RRF 단어순위+bge-m3 k=5, 답없음 단어AND코사인0.55(최고)	5	1	tune_route_sum	83/113			discard	+1은 오차 범위: dev 1위 9→8·sanity 22→21 잃고 t4 7→8·신입 답없음 1→2 얻음. 모델 0.66GB 추가 대비 이득 없음. KURE RRF 최고 80
+2026-10-02	claude	retrieval_tweak	X1 본문 어간 비교(앞 2/3글자, 가중 0.5)	5	1	tune_route_sum	77/113 (2글자), 82/113 (3글자)			discard	2글자는 흔한 어간이 겹쳐 dev 21→18. 3글자는 변화 없음
+2026-10-02	claude	retrieval_tweak	X2 인계 의도 단어 → T4 가산 +2~6	5	1	tune_route_sum	82/113			discard	효과 0. 실패 문항의 1위도 T4라 T4끼리 순서 불변(T4 카드 간 혼동이 원인)
+2026-10-02	claude	retrieval_tweak	X3 재가동 단서 → T6 가산 +4 (질의 모드만)	5	1	tune_route_sum	84/113			hold	+2(BL-007·BL-008)는 단서 목록을 만든 바로 그 문항. cjy 무변화. +6에서 답 없음 오수용 시작(Q-009·BL-009). 블라인드 2차 답 없음 T6 질문 7개에서 오수용 위험

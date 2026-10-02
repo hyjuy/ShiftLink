@@ -1,5 +1,6 @@
 """Fixed four-stage pipeline: route, retrieval, one model call, validation."""
 
+import re
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Protocol
 
@@ -33,6 +34,24 @@ class ToolProvider(Protocol):
     def propose_handover(self, **kwargs: object) -> list[dict[str, Any]]: ...
 
     def get_checklist(self, **kwargs: object) -> list[dict[str, Any]]: ...
+
+
+# Questions that ask for a threshold or range rather than reporting a reading (10/2 blind-3).
+# ponytail: keyword heuristic; "몇 바퀴" also matches but only matters when the top card is unverified.
+_CRITERION = re.compile(r"몇|얼마|기준|정상 ?범위|어느 ?정도|이상인|이상이|적당")
+
+
+def _asks_criterion(routed: Any) -> bool:
+    request = routed.request
+    return (routed.mode == "query" and not getattr(request, "observations", None)
+            and bool(_CRITERION.search(request.question)))
+
+
+def _mark_reference(tool_results: dict[str, Any], card_id: Any) -> None:
+    for key in ("ranked_cards", "cards", "safety_cards"):
+        for card in tool_results.get(key) or []:
+            if card.get("card_id") == card_id and card.get("condition_status") == "unverified":
+                card["condition_status"] = "reference"
 
 
 ModelCall = Callable[..., Any]
@@ -105,6 +124,11 @@ class FixedPipeline:
         # it, and falling to the next card answered from an unrelated one (10/1 Jetson: 6/6 wrong). Show it
         # as a card to check instead of answering.
         top_unverified = bool(tool_results["ranked_cards"]) and             tool_results["ranked_cards"][0].get("condition_status") == "unverified"
+        if top_unverified and _asks_criterion(routed):
+            # A question asking for the threshold itself ("몇이면 이상?") has no reading by design; the card
+            # answers it as a reference, not as a verified condition (10/2 blind-3 B3-003·B3-009).
+            _mark_reference(tool_results, tool_results["ranked_cards"][0].get("card_id"))
+            top_unverified = False
         if not tool_results["ranked_cards"] or top_unverified or self._judged_off_topic(routed, tool_results):
             output = build_response(routed.mode, routed.request, tool_results)
             output.cited_card_ids = []

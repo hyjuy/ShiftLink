@@ -1,9 +1,9 @@
-"""PDA 앱 실행. 로컬 서버가 화면 파일(shiftlink/mes/web)을 주고 /api/* 는 Jetson으로 넘긴다.
-화면은 Chromium 앱 창(주소창 없음, 전체 화면)으로 띄우고, 창을 닫으면 앱도 끝난다.
+"""파이 화면 서버 + Chromium 키오스크. 로컬 서버가 화면 파일(shiftlink/mes/web)을 주고 /api/* 는 Jetson으로 넘긴다.
+화면: /pda.html (PDA, 기본) · / (MES 대시보드). 키오스크 창을 닫으면 앱도 끝난다.
 
-    python -m shiftlink.pda [--jetson http://jetson-06.tail0a6af3.ts.net:8000] [--port 8080] [--scale 2] [--no-window]
+    python -m shiftlink.pda [--jetson http://jetson-06.tail0a6af3.ts.net:8000] [--port 8080] [--page pda.html] [--scale 2] [--no-window]
 
-화면 코드(pda.js)는 같은 주소의 /api/... 를 부르므로, 이 프록시 덕분에 화면 코드를 바꾸지 않는다.
+화면 코드는 같은 주소의 /api/... 를 부르므로, 이 프록시 덕분에 화면 코드를 바꾸지 않는다.
 """
 
 from __future__ import annotations
@@ -19,9 +19,11 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-# PyInstaller 실행파일이면 묶인 임시 폴더, 아니면 저장소의 shiftlink/mes/web
-WEB = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2])) / "shiftlink" / "mes" / "web"
-PAGES = {"/": "pda.html", "/pda.html": "pda.html", "/static/pda.js": "pda.js"}
+WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
+# Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
+PAGES = {"/": "index.html", "/pda.html": "pda.html", "/static/pda.js": "pda.js", "/static/app.js": "app.js",
+         "/static/operator.js": "operator.js", "/static/style.css": "style.css"}
+TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 
 def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
@@ -44,7 +46,7 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
             if self.headers.get("Content-Type"):
                 req.add_header("Content-Type", self.headers["Content-Type"])
             try:
-                with urllib.request.urlopen(req, timeout=60) as res:  # 질의(LLM)는 오래 걸릴 수 있다
+                with urllib.request.urlopen(req, timeout=180) as res:  # /api/query 는 Jetson LLM 답변이라 오래 걸릴 수 있다
                     self._send(res.status, res.read(), res.headers.get("Content-Type", "application/json"))
             except urllib.error.HTTPError as err:
                 self._send(err.code, err.read(), err.headers.get("Content-Type", "application/json"))
@@ -59,8 +61,7 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
             name = PAGES.get(path)
             if name is None:
                 self._send(404, b"not found", "text/plain; charset=utf-8"); return
-            kind = "text/html" if name.endswith(".html") else "text/javascript"
-            self._send(200, (web / name).read_bytes(), f"{kind}; charset=utf-8")
+            self._send(200, (web / name).read_bytes(), f"{TYPES[Path(name).suffix]}; charset=utf-8")
 
         def do_POST(self) -> None:  # noqa: N802
             if self.path.startswith("/api/"):
@@ -96,6 +97,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="shiftlink-pda")
     parser.add_argument("--jetson", default="http://jetson-06.tail0a6af3.ts.net:8000", help="Jetson MES API 주소")
     parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--page", default="pda.html", help="키오스크로 열 화면 (pda.html=PDA, 빈 값=MES 대시보드)")
     parser.add_argument("--scale", type=float, default=2.0, help="화면 배율 (모니터에 맞춰 조정)")
     parser.add_argument("--no-window", action="store_true", help="서버만 띄운다 (개발·점검용)")
     args = parser.parse_args()
@@ -103,7 +105,7 @@ def main() -> None:
 
     server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson))
     threading.Thread(target=server.serve_forever, daemon=True).start()
-    url = f"http://127.0.0.1:{args.port}/pda.html"
+    url = f"http://127.0.0.1:{args.port}/{args.page}"
     print(f"PDA: {url} → API: {jetson}", flush=True)
     if args.no_window:
         threading.Event().wait()

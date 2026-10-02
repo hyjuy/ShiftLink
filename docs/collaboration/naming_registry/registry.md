@@ -127,6 +127,20 @@
 | `OLLAMA_HOST` | Ollama 서버 주소 | 최재영 |
 | `SHIFTLINK_QUERY_MODEL` | MES 질의 모델 태그(기본 `exaone3.5:2.4b-instruct-q4_K_M`) | 유현준 |
 
+## 라즈베리파이 HTTP 클라이언트 (2026-10-02)
+
+| 이름 | 위치 | 역할 | 담당 |
+|---|---|---|---|
+| `MesHTTPClient` | `shiftlink/communication/http_client.py` | 기존 Jetson MES API를 호출하는 표준 라이브러리 클라이언트. 새 서버·프록시 없이 사용 | Codex |
+| `HTTPClientError` | `shiftlink/communication/http_client.py` | HTTP 오류 코드와 연결·응답 오류 구분. `status_code=None`은 HTTP 응답 코드가 없는 오류 | Codex |
+| `MesHTTPClient.send_scan()` | `shiftlink/communication/http_client.py` | 클래스·신뢰도·장치 ID·시각 전송. POST 자동 재시도 없음 | Codex |
+| `MesHTTPClient.get_recent_scans()` | `shiftlink/communication/http_client.py` | 최근 인식 기록 조회 | Codex |
+| `MesHTTPClient.get_state()` | `shiftlink/communication/http_client.py` | 현재 MES 상태·센서값 조회 | Codex |
+| `MesHTTPClient.get_events()` | `shiftlink/communication/http_client.py` | `after_sequence` 이후 이벤트 조회. 커서 관리는 호출자 담당 | Codex |
+| `MesHTTPClient.query()` | `shiftlink/communication/http_client.py` | 질문과 선택 설비 또는 scan_id 전송. 질의 전용 타임아웃 사용 | Codex |
+| `MesHTTPClient.save_handover()` | `shiftlink/communication/http_client.py` | 호출자가 지정한 handover_id와 메모 전송. 재전송 시 같은 ID 유지 | Codex |
+| `--api-only` · `serve(api_only=True)` | `shiftlink/mes/__main__.py`, `shiftlink/mes/server.py` | Jetson에서 API만 제공하고 PDA 정적 화면은 라즈베리파이의 기존 `shiftlink.pda`가 제공. 기본 실행은 기존 화면 제공 유지 | 유현준 |
+
 ## MES 질의·인계 HTTP 계약 (2026-10-02)
 
 | 이름 | 위치 | 뜻 | 담당자 |

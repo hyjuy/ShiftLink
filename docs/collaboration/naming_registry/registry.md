@@ -133,11 +133,15 @@
 | `shiftlink-mes` | Jetson | `python -m shiftlink.mes --host 0.0.0.0 --port 8000` 자동 시작 (작업계획 E1) | 허재원 |
 | `shiftlink-vision` | 라즈베리파이 | `python -m shiftlink.vision.classify --headless --server ...` 자동 시작 (작업계획 D2) | 허재원 |
 
-## 데스크톱 자동 시작 (`deploy/pda_kiosk.sh`)
+## PDA 앱 (`deploy/build_pda.sh`, `shiftlink/pda`)
+
+화면은 파이가 서빙하고 Jetson은 API만 맡는다 (2026-10-02).
 
 | 이름 | 장비 | 뜻 | 담당자 |
 | --- | --- | --- | --- |
-| `pda-kiosk` | 라즈베리파이 | `~/.config/autostart/pda-kiosk.desktop` — Jetson MES가 응답하면 PDA 화면을 Chromium 키오스크로 연다 (작업계획 D3) | 허재원 |
+| `shiftlink-pda` | 라즈베리파이 | 실행파일 `~/shiftlink/app/shiftlink-pda` — 화면 파일 내장 로컬 서버(127.0.0.1:8080), `/api/*` 는 Jetson으로 프록시, Chromium 앱 창 전체 화면 | 허재원 |
+| `shiftlink-pda.desktop` | 라즈베리파이 | `~/.config/autostart/` — 데스크톱 로그인 시 위 실행파일 자동 실행 (작업계획 D3) | 허재원 |
+| ~~`pda-kiosk`~~ | 라즈베리파이 | 폐기(2026-10-02): Jetson `/pda.html`을 여는 키오스크 스크립트. Jetson이 API만 서빙하게 되어 `shiftlink-pda`로 대체 | 허재원 |
 
 ## ID 접두어 규칙 `[기존 — 01_고도화_초안 §7.1]`
 

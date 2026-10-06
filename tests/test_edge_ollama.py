@@ -436,3 +436,17 @@ def test_judge_model_can_differ_from_answer_model(monkeypatch):
     OllamaModel(model="answer-m").judge("q", card)
     OllamaModel(model="answer-m", judge_model="arg-judge").judge("q", card)
     assert seen == ["answer-m", "arg-judge", "env-judge", "arg-judge"]
+
+
+def test_judge_context_can_be_smaller_than_the_answer_context(monkeypatch):
+    from shiftlink.edge.ollama import OllamaModel
+    seen = []
+    monkeypatch.setattr(OllamaModel, "_post", lambda self, path, payload: seen.append(payload["options"]["num_ctx"]) or {"message": {"content": '{"score": 3}'}})
+    card = {"title": "t", "symptom": None, "know_how": "x"}
+    monkeypatch.delenv("SHIFTLINK_JUDGE_NUM_CTX", raising=False)
+    OllamaModel().judge("q", card)                       # default: same as the answer context
+    OllamaModel(judge_num_ctx=1024).judge("q", card)     # argument
+    monkeypatch.setenv("SHIFTLINK_JUDGE_NUM_CTX", "2048")
+    OllamaModel().judge("q", card)                       # environment
+    OllamaModel(judge_num_ctx=1024).judge("q", card)     # argument beats the environment
+    assert seen == [4096, 1024, 2048, 1024]

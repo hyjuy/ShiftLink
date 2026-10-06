@@ -101,7 +101,9 @@ def run(items: list[dict], pipe: FixedPipeline, mode: str = "query", shift: str 
             o = res.output
             out = {"answer": o.answer, "cited": list(o.cited_card_ids), "safety": [n.card_id for n in o.safety_notices],
                    "ranked": [c["card_id"] for c in res.tool_results.get("ranked_cards", [])],
-                   "no_knowledge": o.no_knowledge, "review_queue": o.review_queue}
+                   "no_knowledge": o.no_knowledge, "review_queue": o.review_queue,
+                   "judge_score": res.tool_results.get("judge_score"),  # None when the judge did not run (handover, no card)
+                   "answer_mode": res.tool_results.get("answer_mode", "model")}
             if mode == "handover":
                 out["handover_method"] = o.handover_method.model_dump() if o.handover_method else None
         except Exception as e:  # keep scoring; a failure is a result
@@ -117,6 +119,22 @@ def run(items: list[dict], pipe: FixedPipeline, mode: str = "query", shift: str 
     return rows
 
 
+def run_config(args, model: OllamaModel, pipe: FixedPipeline) -> dict:
+    """What was actually run, so a final score can be tied to a frozen configuration (digests when Ollama answers)."""
+    digests = {}
+    try:
+        import urllib.request
+        with urllib.request.urlopen(args.host.rstrip("/") + "/api/tags", timeout=5) as resp:
+            digests = {m["name"]: m.get("digest", "")[:12] for m in json.load(resp).get("models", [])}
+    except Exception:  # noqa: BLE001 - the config block is informational; do not fail a run for it
+        pass
+    names = {model.model, model.judge_model}
+    return {"answer_mode": pipe.answer_mode, "answer_model": model.model, "judge_model": model.judge_model,
+            "num_ctx": model.num_ctx, "judge_num_ctx": getattr(model, "judge_num_ctx", None), "judge_min_score": pipe.judge_min_score,
+            "judge_strict": pipe.judge_strict, "compose_layers": sorted(pipe.compose_layers),
+            "model_digests": {n: digests.get(n) or digests.get(n + ":latest") for n in sorted(names)}}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("qa_file")
@@ -125,19 +143,29 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--mode", choices=["query", "handover"], default="query")
     ap.add_argument("--shift", choices=["A", "B", "C"], default="A", help="인계 모드 근무조")
+    ap.add_argument("--judge-strict", action="store_true",
+                    help="판정기가 실행되지 않은 문항을 오류로 기록하고 결과 파일에 .INVALID 표시(최종 채점은 반드시 사용)")
     args = ap.parse_args()
 
     items = json.loads(Path(args.qa_file).read_text(encoding="utf-8"))
     loaded = load_card_provider(KB)
     bind_tool_provider(loaded.provider)
-    pipe = FixedPipeline(model=OllamaModel(host=args.host, model=args.model), tools=loaded.provider)
+    model = OllamaModel(host=args.host, model=args.model)
+    pipe = FixedPipeline(model=model, tools=loaded.provider, judge_strict=args.judge_strict)
     rows = run(items, pipe, args.mode, args.shift)
     rev = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
     report = {"qa_file": args.qa_file, "mode": args.mode, "model": args.model, "git_rev": rev, "kb": str(KB.relative_to(ROOT)),
-              "summary": summarize(rows), "rows": rows}
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+              "config": run_config(args, model, pipe), "summary": summarize(rows), "rows": rows}
+    report["summary"]["judge_failures"] = sum(1 for r in rows if (r.get("error") or "").startswith("JudgeUnavailableError"))
+    invalid = args.judge_strict and report["summary"]["judge_failures"] > 0
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    if invalid:  # a judge that could not run makes the whole run unusable as a final score
+        out.with_name(out.name + ".INVALID").write_text("judge unavailable on some items; do not report this run\n", encoding="utf-8")
     print(json.dumps(report["summary"], ensure_ascii=False))
+    if invalid:
+        raise SystemExit("INVALID: 판정기가 실행되지 않은 문항이 있습니다 (.INVALID 파일을 남김)")
 
 
 if __name__ == "__main__":

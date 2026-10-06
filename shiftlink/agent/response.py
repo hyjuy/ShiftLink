@@ -204,6 +204,14 @@ def build_response(
     return resp
 
 
+def answer_is_card_ids_only(answer: Any) -> bool:
+    """Card IDs and surrounding punctuation do not constitute answer content."""
+    return isinstance(answer, str) and bool(re.fullmatch(
+        r"""[\s\[\](){}<>`'",;:./·-]*(?:K-\d{4}[\s\[\](){}<>`'",;:./·-]*)+""",
+        answer,
+    ))
+
+
 def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> list[str]:
     """Validate the adapter's strict answer and citation contract."""
     if not isinstance(model_output, dict):
@@ -215,6 +223,8 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
     errors = []
     if not isinstance(answer, str) or not answer.strip():
         errors.append("answer는 비어 있지 않은 문자열이어야 합니다.")
+    elif answer_is_card_ids_only(answer):
+        errors.append("answer 본문에는 카드 ID만 쓸 수 없습니다.")
     if not isinstance(cited_ids, list) or any(not isinstance(value, str) for value in cited_ids):
         errors.append("cited_card_ids는 문자열 목록이어야 합니다.")
         return errors

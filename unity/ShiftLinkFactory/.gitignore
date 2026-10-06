@@ -8,6 +8,3 @@
 *.csproj
 *.sln
 *.slnx
-
-/Assets/ReferenceMaterials/
-/Assets/ReferenceMaterials.meta

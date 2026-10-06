@@ -1,0 +1,166 @@
+{
+  "blender_version": "4.5.14 LTS",
+  "assets_checked": [
+    {
+      "model": "Connection_DriveShaft",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.5,
+        -0.054999999701976776,
+        0.14499998092651367,
+        0.5,
+        0.054999999701976776,
+        0.2550000250339508
+      ]
+    },
+    {
+      "model": "Connection_FlexibleCoupling",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.1600000113248825,
+        -0.11999999731779099,
+        0.030000006780028343,
+        0.1600000113248825,
+        0.11999999731779099,
+        0.27000001072883606
+      ]
+    },
+    {
+      "model": "Connection_BearingPedestal",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.15000000596046448,
+        -0.125,
+        0.0,
+        0.15000000596046448,
+        0.125,
+        0.3449999988079071
+      ]
+    },
+    {
+      "model": "Connection_ShaftGuard",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.32499998807907104,
+        -0.1925000101327896,
+        0.0,
+        0.32499998807907104,
+        0.1925000101327896,
+        0.35249999165534973
+      ]
+    },
+    {
+      "model": "Connection_HydraulicHose",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.550000011920929,
+        -0.04699999839067459,
+        0.0729999989271164,
+        0.550000011920929,
+        0.04699999839067459,
+        0.2540000081062317
+      ]
+    },
+    {
+      "model": "Connection_HydraulicManifold",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.32499998807907104,
+        -0.24000000953674316,
+        0.0,
+        0.32499998807907104,
+        0.11999999731779099,
+        0.25999999046325684
+      ]
+    },
+    {
+      "model": "Connection_AirPipeStraight",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.5,
+        -0.03500000014901161,
+        0.044999975711107254,
+        0.5,
+        0.03500000014901161,
+        0.11500001698732376
+      ]
+    },
+    {
+      "model": "Connection_AirPipeElbow",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.30000001192092896,
+        -0.03500000014901161,
+        0.024999987334012985,
+        0.03500000387430191,
+        0.30000001192092896,
+        0.0950000062584877
+      ]
+    },
+    {
+      "model": "Connection_AirPipeTee",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.30000001192092896,
+        -0.03500000014901161,
+        0.024999994784593582,
+        0.30000001192092896,
+        0.30000001192092896,
+        0.0949999988079071
+      ]
+    },
+    {
+      "model": "Connection_CableTray",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.5,
+        -0.19750000536441803,
+        0.0,
+        0.5,
+        0.19750000536441803,
+        0.1599999964237213
+      ]
+    },
+    {
+      "model": "Connection_PowerCable",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.550000011920929,
+        -0.04699999839067459,
+        0.0729999989271164,
+        0.550000011920929,
+        0.04699999839067459,
+        0.2540000081062317
+      ]
+    },
+    {
+      "model": "Connection_TransferBridge",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.30000001192092896,
+        -0.8500000238418579,
+        0.0,
+        0.30000001192092896,
+        0.8500000238418579,
+        0.3800000250339508
+      ]
+    },
+    {
+      "model": "Connection_ScrapChute",
+      "native_FBX_UV_materials_anchors": "passed",
+      "bounds_metres": [
+        -0.5,
+        -0.5799999833106995,
+        0.12000000476837158,
+        0.5,
+        0.5799999833106995,
+        0.4100000262260437
+      ]
+    }
+  ],
+  "equipment_instances": 10,
+  "catalog_relations": 16,
+  "scene_mapping": "passed",
+  "unity_import": "NOT VERIFIED",
+  "mechanical_design": "schematic only, NOT engineering verified"
+}

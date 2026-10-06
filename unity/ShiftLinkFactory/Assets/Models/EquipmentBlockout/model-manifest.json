@@ -1,0 +1,255 @@
+{
+  "stage": "blockout",
+  "blender_version": "4.5.14 LTS",
+  "units": "metres",
+  "models": [
+    {
+      "model": "Equipment_HPU",
+      "bounds_metres": [
+        -0.8999999761581421,
+        -0.6550000309944153,
+        0.0,
+        0.8999999761581421,
+        0.550000011920929,
+        1.959999918937683
+      ],
+      "triangles": 524,
+      "materials": 5,
+      "moving_pivots": [
+        "Equipment_HPU",
+        "Anchors_HPU",
+        "InputAnchor_HPU",
+        "LabelAnchor_HPU",
+        "OutputAnchor_HPU",
+        "SelectionAnchor_HPU",
+        "Body_HPU",
+        "MovingParts_HPU",
+        "Nameplate_HPU",
+        "StatusIndicator_HPU"
+      ],
+      "fbx": "Equipment_HPU.fbx"
+    },
+    {
+      "model": "Equipment_PDP",
+      "bounds_metres": [
+        -0.949999988079071,
+        -0.6550000309944153,
+        0.0,
+        0.949999988079071,
+        0.30000001192092896,
+        2.4099998474121094
+      ],
+      "triangles": 432,
+      "materials": 3,
+      "moving_pivots": [
+        "Equipment_PDP",
+        "Anchors_PDP",
+        "InputAnchor_PDP",
+        "LabelAnchor_PDP",
+        "OutputAnchor_PDP",
+        "SelectionAnchor_PDP",
+        "Body_PDP",
+        "MovingParts_PDP",
+        "Nameplate_PDP",
+        "StatusIndicator_PDP"
+      ],
+      "fbx": "Equipment_PDP.fbx"
+    },
+    {
+      "model": "Equipment_CAU",
+      "bounds_metres": [
+        -1.100000023841858,
+        -0.6550000309944153,
+        0.0,
+        1.2400000095367432,
+        0.44999998807907104,
+        1.959999918937683
+      ],
+      "triangles": 416,
+      "materials": 3,
+      "moving_pivots": [
+        "Equipment_CAU",
+        "Anchors_CAU",
+        "InputAnchor_CAU",
+        "LabelAnchor_CAU",
+        "OutputAnchor_CAU",
+        "SelectionAnchor_CAU",
+        "Body_CAU",
+        "MovingParts_CAU",
+        "Nameplate_CAU",
+        "StatusIndicator_CAU"
+      ],
+      "fbx": "Equipment_CAU.fbx"
+    },
+    {
+      "model": "Equipment_GR",
+      "bounds_metres": [
+        -1.149999976158142,
+        -0.6550000309944153,
+        0.0,
+        1.149999976158142,
+        0.550000011920929,
+        1.959999918937683
+      ],
+      "triangles": 524,
+      "materials": 5,
+      "moving_pivots": [
+        "Equipment_GR",
+        "Anchors_GR",
+        "InputAnchor_GR",
+        "LabelAnchor_GR",
+        "OutputAnchor_GR",
+        "SelectionAnchor_GR",
+        "Body_GR",
+        "MovingParts_GR",
+        "Nameplate_GR",
+        "StatusIndicator_GR"
+      ],
+      "fbx": "Equipment_GR.fbx"
+    },
+    {
+      "model": "Equipment_RT",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -0.8799999952316284,
+        0.0,
+        2.4000000953674316,
+        0.8799999952316284,
+        1.959999918937683
+      ],
+      "triangles": 2452,
+      "materials": 6,
+      "moving_pivots": [
+        "Equipment_RT",
+        "Anchors_RT",
+        "InputAnchor_RT",
+        "LabelAnchor_RT",
+        "OutputAnchor_RT",
+        "SelectionAnchor_RT",
+        "Body_RT",
+        "MovingParts_RT",
+        "RollerPivot_00",
+        "RollerPivot_01",
+        "RollerPivot_02",
+        "RollerPivot_03",
+        "RollerPivot_04",
+        "RollerPivot_05",
+        "RollerPivot_06",
+        "RollerPivot_07",
+        "RollerPivot_08",
+        "RollerPivot_09",
+        "RollerPivot_10",
+        "RollerPivot_11",
+        "Nameplate_RT",
+        "StatusIndicator_RT"
+      ],
+      "fbx": "Equipment_RT.fbx"
+    },
+    {
+      "model": "Equipment_CV",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -0.8799999952316284,
+        0.0,
+        2.4000000953674316,
+        0.8799999952316284,
+        1.959999918937683
+      ],
+      "triangles": 1456,
+      "materials": 7,
+      "moving_pivots": [
+        "Equipment_CV",
+        "Anchors_CV",
+        "InputAnchor_CV",
+        "LabelAnchor_CV",
+        "OutputAnchor_CV",
+        "SelectionAnchor_CV",
+        "Body_CV",
+        "MovingParts_CV",
+        "Nameplate_CV",
+        "StatusIndicator_CV"
+      ],
+      "fbx": "Equipment_CV.fbx"
+    },
+    {
+      "model": "Material_Coil",
+      "bounds_metres": [
+        -0.6000000238418579,
+        -0.4000000059604645,
+        0.0,
+        0.6000000238418579,
+        0.4000000059604645,
+        1.2000000476837158
+      ],
+      "triangles": 512,
+      "materials": 1,
+      "moving_pivots": [
+        "Material_Coil"
+      ],
+      "fbx": "Material_Coil.fbx"
+    }
+  ],
+  "mapping": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "model": "Equipment_HPU"
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "model": "Equipment_PDP"
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "model": "Equipment_CAU"
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "model": "Equipment_GR"
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "model": "Equipment_GR"
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "model": "Equipment_CV"
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "model": "Equipment_CV"
+    }
+  ],
+  "textures": [],
+  "unity_import": "not verified",
+  "assumptions": [
+    "All dimensions and layout synthetic",
+    "Coil handling and load support are conceptual; installed equipment capability unverified",
+    "RT generic model uses 12 rollers; RT-02 catalog 16 rollers needs an instance variant",
+    "CV-02 catalog scrap branch uses same CV base; branch variant deferred",
+    "CAU receiver tank and exposed motor are modeling proposals",
+    "No live MES animation or measured rotational speeds",
+    "No procedural textures; constant PBR colors to recreate in Built-in Standard shader"
+  ]
+}

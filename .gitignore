@@ -53,3 +53,7 @@ docs/data/sources/**/*.html
 
 # Aiven CA 등 인증서
 *.pem
+
+# Unity 3D 모델링 참고자료는 로컬 보관. 완성 모델·Prefab은 Assets/에서 관리한다.
+/unity/ShiftLinkFactory/Assets/ReferenceMaterials/
+/unity/ShiftLinkFactory/Assets/ReferenceMaterials.meta

@@ -1,0 +1,57 @@
+ShiftLink 연결 부속품 — Blender 4.5.14 LTS
+
+13종 개별 원본(.blend) 및 Unity용 FBX
+  DriveShaft: 구동축, RotationPivot 분리, Blender X 회전축.
+  FlexibleCoupling: 금속 허브와 탄성 인서트, 회전 그룹 분리.
+  BearingPedestal: 축 지지 베어링과 받침대.
+  ShaftGuard: 커플링/축 보호 커버.
+  HydraulicHose: 유압 호스와 양끝 피팅.
+  HydraulicManifold: 유압 분배 블록과 4개 분기 Anchor.
+  AirPipeStraight / AirPipeElbow / AirPipeTee: 공압 직관/엘보/티.
+  CableTray / PowerCable: 반복 트레이 모듈과 전력 케이블.
+  TransferBridge: 테이블 사이 0.6m 연결 롤러, 롤러 축 Blender Y.
+  ScrapChute: 불량 절단재용 슈트 기본형.
+
+파일 위치
+  Modeling/Connections: 개별 Blender 원본, 설명, validation.json.
+  Assets/Models/Connections: 개별 FBX, connection-manifest.json.
+  Previews: 부속품별 사선 이미지와 connected-line.png.
+  ShiftLink_ConnectedLine.blend: 장비 10개를 복제 배치한 연결 개념도.
+  장비 기본 원본은 기존 EquipmentTypes 폴더에 유지.
+
+조립 방법
+  각 부속품은 StartAnchor와 EndAnchor를 제공한다. 티/분배 블록에는 BranchAnchor도 있다.
+  이름에는 Blender 자동 접미사가 붙을 수 있어 manifest에 실제 이름과 좌표를 기록했다.
+  Unity에서 Anchor 위치와 연결 방향을 맞춰 배치한다. 호스/케이블은 경로별 형상 변형이 필요하다.
+  부속품 루트는 조립 기준 원점이다. 양 끝 포트가 루트 원점과 같다고 가정하지 않는다.
+  단위는 미터. FBX 내보내기는 forward=-Z, up=Y, 단위 스케일 적용.
+  축·커플링의 움직이는 피벗은 메시와 분리되어 있다.
+  공유 데이터로 복제한 장비 인스턴스의 ID는 EQ-0001~EQ-0010으로 명시했다.
+  Unity에서 인스턴스별 상태 재질을 별도로 구성해야 한다.
+  Collider, 선택 강조, MES/PDA 연결과 신호 처리는 Unity 구현 대상이다.
+  connection-manifest.json은 부속품/폴리곤/재질/Anchor와 REL별 양끝 좌표를 제공한다.
+
+기준정보 연결 대응
+  REL-0001~REL-0004: RT-01→RT-02→RT-03→CV-01, RT-03→CV-02 불량재 분기.
+  REL-0005~REL-0008: GR-01→RT-01/RT-02, GR-02→RT-03/CV-01 구동 연결.
+  REL-0009~REL-0012: HPU-01→RT-01/RT-02/RT-03/CV-01 유압 공급.
+  REL-0013~REL-0015: PDP-01→GR-01/GR-02/HPU-01 전력 공급.
+  REL-0016: CAU-01→CV-01 디버터 공압 공급.
+  REL-0017~REL-0020: 인터록/공통모드/공동발생 관계. 물리 배관으로 생성하지 않았다.
+
+가정 및 검수 한계
+  전체 치수, 배관·배선 경로, 접속 위치, 피팅 규격, 지지 구조는 합성 시연용 가정이다.
+  개별 부속품은 실제 제품이나 압력·하중·전압 등급을 나타내지 않는다.
+  연결 장면의 꺾인 구동축은 구동 관계 표시용이다. 직각 전달 기어/체인 기구 설계가 아니다.
+  축 경로의 모든 피팅과 보호 커버를 완전한 기계 조립체로 구성하지 않았다.
+  유압 공급과 함께 표시한 회수 호스는 모델링 가정이며 별도 MES 관계가 아니다.
+  분배 블록, 베어링, 보호 커버는 재사용 가능한 부속품이며 장면에서 모두 자동 배치하지 않았다.
+  스크랩 분기 경로는 개념 표시이며 별도 슈트 기본 에셋을 공정에 맞게 변형해야 한다.
+  스크랩 분기는 불량 절단재용이며 코일이 슈트를 통해 이동한다고 해석하지 않는다.
+  RT-02의 16롤러·승강형, CV-02 스크랩 전용 형상은 아직 기존 기본형 복제 상태다.
+  물리적 간섭, 동력 전달, 호스 곡률, 코일 운반 하중, 실제 제조공정 적합성은 미검증이다.
+  상수 색 재질만 사용하여 외부 텍스처/베이크 파일은 없다. Unity Built-in Standard에서 재구성한다.
+  Blender 원본 재개방/FBX 왕복 임포트, UV·재질·유효 면·양끝 Anchor를 검사한다.
+  장면의 장비 10개 ID와 물리 관계 16개를 기준정보와 대조한다. 결과는 validation.json에 기록한다.
+  Unity 6000.3.12f1의 실제 임포트, 축 방향, 1 unit=1m, 재질, Collider는 미검증이다.
+  참고자료와 제작 스크립트는 Git 제외, 결과 에셋과 전달 문서는 결과물 폴더에 저장한다.

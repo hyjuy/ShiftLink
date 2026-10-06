@@ -1,0 +1,111 @@
+{
+  "blender_version": "4.5.14 LTS",
+  "checks": [
+    {
+      "model": "Equipment_HPU",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -0.875,
+        -0.6550000309944153,
+        0.0,
+        1.0,
+        0.625,
+        1.959999918937683
+      ],
+      "mesh_count": 33
+    },
+    {
+      "model": "Equipment_PDP",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -0.9850000143051147,
+        -0.6550000309944153,
+        0.0,
+        0.9850000143051147,
+        0.4449999928474426,
+        2.4099998474121094
+      ],
+      "mesh_count": 58
+    },
+    {
+      "model": "Equipment_CAU",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -1.1150000095367432,
+        -0.6550000309944153,
+        0.0,
+        1.9300000667572021,
+        0.4749999940395355,
+        1.959999918937683
+      ],
+      "mesh_count": 36
+    },
+    {
+      "model": "Equipment_GR",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -1.149999976158142,
+        -0.6550000309944153,
+        0.0,
+        1.340000033378601,
+        0.550000011920929,
+        1.959999918937683
+      ],
+      "mesh_count": 28
+    },
+    {
+      "model": "Equipment_RT",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -0.9750000238418579,
+        0.0,
+        2.4260001182556152,
+        1.2400000095367432,
+        1.959999918937683
+      ],
+      "mesh_count": 86
+    },
+    {
+      "model": "Equipment_CV",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -1.0750000476837158,
+        0.0,
+        2.4000000953674316,
+        1.340000033378601,
+        1.959999918937683
+      ],
+      "mesh_count": 46
+    },
+    {
+      "model": "Material_Coil",
+      "native_and_fbx_roundtrip": "passed",
+      "UV_materials_normals_floor": "passed",
+      "bounds_metres": [
+        -0.6000000238418579,
+        -0.40380001068115234,
+        0.0,
+        0.6000000238418579,
+        0.40380001068115234,
+        1.2000000476837158
+      ],
+      "mesh_count": 13
+    }
+  ],
+  "unity_import": "NOT VERIFIED",
+  "unity_pending": [
+    "1 unit = 1 m",
+    "up and front direction",
+    "Built-in Standard material reconstruction",
+    "Collider and picking",
+    "MES/PDA integration and offline behavior"
+  ]
+}

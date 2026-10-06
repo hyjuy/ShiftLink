@@ -121,9 +121,6 @@ public static class FactoryChecks
             Capture(Path.Combine(dir, "fixture-factory.png"));
             factory.Disconnect("check disconnect");
             Check(factory.CoilCount == 0, "stale coils hidden");
-            // Store only the startup object; equipment and display are built from MES at runtime.
-            scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            new GameObject("ShiftLink Factory").AddComponent<FactoryDemo>();
             Directory.CreateDirectory("Assets/Scenes");
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/Factory.unity");
             EditorBuildSettings.scenes = new[] {new EditorBuildSettingsScene("Assets/Scenes/Factory.unity", true)};

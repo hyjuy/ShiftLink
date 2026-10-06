@@ -204,6 +204,7 @@ def build_response(
     return resp
 
 
+ANSWER_MAX_CHARS = 160
 ANSWER_EXAMPLE = "카드 내용을 근거로 질문에 답하는 한국어 요약 문장"
 _ID_ONLY_NOISE = re.compile(r"""[\s.,:;·()\[\]{}<>`'"\-/]|참조|참고|카드|확인""")
 
@@ -219,6 +220,9 @@ def answer_content_error(answer: Any) -> str | None:
         return "answer 본문이 카드 ID뿐이라 설명이 없습니다."
     if isinstance(answer, str) and answer.strip() == ANSWER_EXAMPLE:
         return "answer 본문이 출력 예시를 그대로 복사했습니다."
+    if (isinstance(answer, str) and len(answer) == ANSWER_MAX_CHARS
+            and not answer.rstrip().endswith((".", "!", "?"))):
+        return "answer 본문이 글자 상한에서 미완성 문장으로 끝났습니다."
     return None
 
 

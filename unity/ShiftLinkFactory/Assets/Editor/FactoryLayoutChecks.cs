@@ -28,6 +28,11 @@ public static class FactoryLayoutChecks
             var demo=new GameObject("Layout review").AddComponent<FactoryDemo>();
             demo.CreateEnvironment(); demo.Build(config); demo.Apply(state);
             var nodes=demo.transform.Find("MES equipment");
+            var building=demo.transform.Find("Factory building");
+            check(building!=null && building.Find("Exterior envelope")!=null,"factory walls and roof installed");
+            check(building!=null && building.GetComponentsInChildren<Light>(true).Count(l=>l.type==LightType.Spot && l.intensity>0)>=16,"interior and exterior working lights installed");
+            check(building!=null && building.Find("Personnel entry route")!=null,"personnel entrance connects walkway");
+            check(typeof(FactoryDemo).GetMethod("SetExteriorView")!=null,"exterior and interior view toggle available");
             check(demo.EquipmentCount==config.equipment.Length,"auxiliary rollers do not create MES equipment");
             var beds=nodes.Find("Auxiliary roller beds");
             check(beds!=null && beds.GetComponentsInChildren<Transform>().Count(t=>t.name.StartsWith("Auxiliary roller_") && t.childCount>0)>=30,"additional inlet outlet and transfer rollers");

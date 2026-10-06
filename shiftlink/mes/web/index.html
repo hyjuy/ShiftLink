@@ -10,7 +10,7 @@
   <a class="skip-link" href="#main-content">운전 화면으로 바로가기</a>
   <header class="app-header">
     <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><b class="brand-name">ShiftLink MES</b></div>
-    <h1 class="board-title">생산라인 모니터링</h1>
+    <h1 class="board-title">생산라인 대시보드</h1>
     <div class="header-side"><time id="board-clock" class="board-clock"></time><p id="connection-status" class="status-label" aria-live="polite">상태를 불러오는 중</p><a id="open-pda" href="/pda.html">PDA</a></div>
   </header>
   <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 가상 냉연 코일 이송 보조설비 · 합성 데이터. 원인·안전·정비 최종 판정은 사람이 수행합니다. 실제 MES·PLC 제어가 아닙니다.</p>
@@ -40,7 +40,6 @@
     <p id="control-message" aria-live="polite"></p>
     <section id="workspace-flow" class="workspace-panel" role="tabpanel" aria-labelledby="tab-flow" tabindex="0">
     <div class="board-row">
-    <section id="line-board" class="line-board" aria-label="코일 이송 라인 현황"></section>
     <section aria-label="라인 요약" class="summary-grid">
       <article><span>라인 내 코일</span><strong id="coil-count">—</strong><small>현재 이송 중인 소재</small></article>
       <article><span>누적 배출</span><strong id="throughput">—</strong><small>현재 실행 기준</small></article>
@@ -49,12 +48,11 @@
     </div>
 
       <section class="panel map-panel" aria-labelledby="map-heading">
-        <button id="diagram-open" type="button">관계도만 크게 보기 ↗</button>
         <div id="diagram-toolbar" hidden>
           <strong>모의 MES</strong><span id="diagram-state"></span><span id="diagram-connection" role="status"></span>
           <div class="diagram-actions"><button id="diagram-zoom" type="button" aria-pressed="false">확대</button><button id="diagram-clear" type="button">선택 해제</button><details id="diagram-legend"><summary>범례</summary><div id="diagram-legend-content"></div><p>소재 흐름은 항상 표시 · 설비를 선택하면 직접 관계 추가<br>구성상 연결은 고장 원인 확정이 아닙니다.</p></details><button id="diagram-back" type="button">기존 화면</button></div>
         </div>
-        <div class="panel-heading"><div><p class="eyebrow">LINE → EQUIPMENT → COMPONENT</p><h2 id="map-heading">설비 관계도</h2></div><span class="direction-note">입측 → 출측</span></div>
+        <div class="panel-heading"><div><p class="eyebrow">LINE → EQUIPMENT → COMPONENT</p><div class="map-title"><h2 id="map-heading">설비 관계도</h2><button id="diagram-open" type="button">전체 화면 ↗</button></div></div><span class="direction-note">입측 → 출측</span></div>
         <div class="operator-tools"><label for="experience-mode">화면 설명</label><select id="experience-mode"><option value="learn">흐름 배우기</option><option value="expert">빠른 점검</option></select><label for="relation-filter">선 강조</label><select id="relation-filter"><option value="related">선택 설비 연결</option><option value="affected">관측된 영향 대기</option><option value="material">소재 흐름</option><option value="drive">구동</option><option value="power_supply">전력 공급</option><option value="hydraulic_supply">유압 공급</option><option value="pneumatic_supply">공압 공급</option><option value="interlock">인터록</option><option value="co_occurrence">동시 발생</option></select><button id="clear-selection" type="button">선택 해제</button><label for="map-scale">도면 크기</label><select id="map-scale"><option value="fit">전체 한눈에 보기</option><option value="detail">확대 보기 · 가로 스크롤</option></select><span class="hint">소재선은 항상 표시 · 설비 선택 시 직접 관계 추가</span></div>
 
 
@@ -71,11 +69,12 @@
         <div id="relation-legend"></div>
         <p id="selected-connection" class="connection-caption" role="status">연결선을 선택하면 출발·도착 설비와 관계를 확인할 수 있습니다.</p>
         <p class="detail-jump"><button type="button" id="detail-jump" data-open-workspace="detail" title="부품·관측 근거·다음 확인을 봅니다">설비 상세·조치 보기 →</button></p>
-        <div class="map-legend" aria-label="상태 범례"><span>! 자체 이상</span><span>Ⅱ 제품 보류</span><span>◎ 코일</span></div>
+        <div class="map-legend" aria-label="상태 범례"><span>자체 이상</span><span>제품 보류</span><span>◎ 코일</span></div>
         <details class="utility-section"><summary>선택 설비의 직접 관계 <span>연결 목록 보기</span></summary><div id="utility-links">설비를 선택하면 직접 관계를 표시합니다.</div></details>
       </section>
     <div class="side-col">
     <section class="incident-band" aria-labelledby="incident-heading"><div class="panel-heading"><h2 id="incident-heading">지금 확인할 위치</h2><span class="hint">항목을 누르면 관련 설비·부품·근거로 이동</span></div><div id="incident-summary"></div></section>
+    <section id="line-board" class="line-board" aria-label="코일 이송 라인 현황"></section>
     <section class="panel util-panel" aria-labelledby="util-heading"><div class="panel-heading"><h2 id="util-heading">설비별 가동률</h2><span id="util-window" class="hint"></span></div><div id="util-bars"></div></section>
     </div>
     <section class="panel operations-panel" aria-labelledby="operations-heading"><div class="panel-heading"><div><p class="eyebrow">LIVE OPERATIONS</p><h2 id="operations-heading">실시간 운영 현황</h2></div><span id="operations-window" class="hint">집계 중</span></div><div class="operations-scroll"><table id="operations-table"><thead><tr><th>설비명</th><th>현재 상태</th><th>처리량 (코일)</th><th>가동률</th><th>대기 작업</th><th>사이클 타임</th><th>경고·오류</th></tr></thead><tbody id="operations-body"><tr><td colspan="7">운영 데이터를 불러오는 중</td></tr></tbody></table></div></section>

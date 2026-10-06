@@ -111,7 +111,7 @@
     const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 복귀 진행을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · ${plan.remaining_ticks} tick 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
     const held = (snapshot.coils || []).filter(c => c.quality_status === "hold");
     const source = /^https:\/\//.test(plan.source_url || "") ? `<a href="${escape(plan.source_url)}" target="_blank" rel="noopener noreferrer">근거 매뉴얼 ↗</a>` : "";
-    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료 (모의)</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">복귀 진행 · 안정화 시작</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 생략 · 바로 복귀 진행</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
+    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">복귀 진행 · 안정화 시작</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 생략 · 바로 복귀 진행</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
   }
   function componentView(snapshot, equipmentId) {
     const parts = (snapshot.components || []).filter(c => c.equipment_id === equipmentId);
@@ -162,7 +162,7 @@
     showWorkspace("flow");
     if (globalThis.location) {
       const url = new URL(globalThis.location.href);
-      if (enabled) url.searchParams.set("view", "diagram"); else url.searchParams.delete("view");
+      if (enabled) url.searchParams.delete("view"); else url.searchParams.set("view", "full");  // 기본은 관계도 화면
       globalThis.history.replaceState(null, "", url);
     }
     if (focus) $(enabled ? "#diagram-back" : "#diagram-open").focus();
@@ -606,7 +606,7 @@
     setText("#context-message","확인 맥락 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");
   };
   $("#config-panel").hidden=false;
-  if (globalThis.location?.search && new URLSearchParams(globalThis.location.search).get("view")==="diagram") setDiagramMode(true,false);
+  if (globalThis.location && new URLSearchParams(globalThis.location.search).get("view")!=="full") setDiagramMode(true,false);
   refresh();
   const tickClock = () => { const d = new Date(), p = (n) => String(n).padStart(2, "0"); setText("#board-clock", `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())}  ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`); };
   tickClock();

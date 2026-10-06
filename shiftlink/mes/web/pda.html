@@ -92,6 +92,8 @@
   .btn-row>*{flex:1 1 0}
   .outbox-note{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--warn)}
   .outbox-note.bad{color:var(--safety)}
+  button.outbox-note{min-height:48px;margin:0;padding:0 2px;flex:0 0 auto}
+  button.outbox-note::after{content:"  내용 보기 ›";font-weight:600;color:var(--tx-2)}
 
   .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--tx-2);text-transform:uppercase;margin:0;flex:0 0 auto}
   .lbl.hot{color:var(--scan)}
@@ -271,16 +273,6 @@
   .disclaimer{flex:0 0 auto;padding:10px 14px;font-size:11.5px;line-height:1.45;color:var(--tx-2);
     background:var(--surface);border-top:1px solid var(--edge);display:flex;gap:7px}
 
-  /* 진단 패널 — 프로토타입 전용 */
-  #diag{flex:0 0 auto;display:none;padding:10px 14px;background:#0E1319;border-top:1px solid var(--edge);
-    font-size:11.5px;color:var(--tx-2);gap:6px;flex-direction:column}
-  #diag.on{display:flex}
-  #diag .t{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--fail);text-transform:uppercase}
-  #diag dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
-  #diag dt{color:var(--tx-2)} #diag dd{margin:0}
-  #diag .sim{display:flex;gap:8px;margin-top:4px}
-  #diag .sim select{min-height:44px;font-size:13px;padding:8px}
-  #diag .sim .btn{width:auto;min-height:44px;font-size:13px;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -312,8 +304,7 @@
 
   <!-- 홈 -->
   <section class="screen" id="s-home">
-    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span>
-      <button class="ic" id="toDiag" type="button" aria-label="진단">⚙</button></div>
+    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span></div>
     <div class="pane">
       <div class="grow"></div>
       <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
@@ -321,7 +312,7 @@
       <div class="grow"></div>
       <p class="lbl">최근 설비</p>
       <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
-      <p class="outbox-note" id="homePending" hidden></p>
+      <button class="outbox-note" id="homePending" type="button" hidden></button>
       <p class="outbox-note bad" id="homeConflict" hidden></p>
       <div class="btn-row">
         <button class="btn sm" id="toManual" type="button">설비 목록</button>
@@ -455,9 +446,16 @@
   <section class="screen" id="s-handover">
     <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <p class="outbox-note" id="hoPending" hidden></p>
+    <button class="outbox-note" id="hoPending" type="button" hidden></button>
     <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
+  </section>
+
+  <!-- 업로드 대기 -->
+  <section class="screen" id="s-outbox">
+    <div class="appbar"><button class="ic" id="obBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane" id="obPane"></div>
   </section>
 
   <!-- 인계 작성 -->
@@ -481,22 +479,6 @@
     </div>
   </section>
 
-  <!-- 진단 -->
-  <div id="diag">
-    <span class="t">진단 · 프로토타입 전용</span>
-    <dl>
-      <dt>MES 데이터</dt><dd id="dData">—</dd>
-      <dt>서버</dt><dd id="dServer">—</dd>
-      <dt>최근 스캔</dt><dd id="dScan">—</dd>
-      <dt>eq_id_source</dt><dd id="dSource">—</dd>
-      <dt>outbox</dt><dd id="dOutbox">0건</dd>
-    </dl>
-    <div class="sim">
-      <select id="simValue" aria-label="인식 클래스 모의 입력"></select>
-      <button class="btn sm" id="simFeed" type="button">주입</button>
-    </div>
-    <p class="hint">파이 없이 인식 경로를 검증합니다. 스캔 화면에서 주입하면 서버에 인식 1건이 기록되고 화면이 받습니다.</p>
-  </div>
 
 </div>
 

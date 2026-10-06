@@ -313,7 +313,9 @@ class _Handler(BaseHTTPRequestHandler):
 
     def _send(self, status: int, body: object, content_type: str = "application/json; charset=utf-8") -> None:
         payload = body if isinstance(body, bytes) else json.dumps(body, ensure_ascii=False, default=_json).encode()
-        self.send_response(status); self.send_header("Content-Type", content_type); self.send_header("Content-Length", str(len(payload))); self.end_headers(); self.wfile.write(payload)
+        self.send_response(status); self.send_header("Content-Type", content_type); self.send_header("Content-Length", str(len(payload)))
+        # 화면 파일 갱신이 바로 보이게 (파이 프록시와 같음)
+        self.send_header("Cache-Control", "no-store"); self.end_headers(); self.wfile.write(payload)
 
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
@@ -327,6 +329,9 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
             if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
+            if parsed.path == "/api/outbox/pending":
+                rows = self.service.storage.pending_handovers()
+                self._send(200, {"handovers": [{**json.loads(p), "created_at": c} for _, c, p in rows], "is_synthetic": True}); return
             if parsed.path == "/api/equipment/scan/recent":
                 self._send(200, self.service.recent_scans(int(parse_qs(parsed.query).get("limit", ["5"])[0]))); return
             if parsed.path.startswith("/api/runs/") and parsed.path.endswith("/replay"):

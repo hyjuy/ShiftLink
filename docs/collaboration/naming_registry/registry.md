@@ -152,6 +152,8 @@
 | `record_handover()` · `POST /api/handover` | `shiftlink/mes/server.py` | 본문 `handover_id`(1~64자), `memo_text`(1~4000자). ID 기준 SQLite outbox 저장. 동일 내용 재전송 200, 같은 ID 내용 변경 409 | 유현준 |
 | `save_handover()` / `get_handover()` | `shiftlink/mes/storage.py` | 원본 JSON 영속 저장·조회. `handover_outbox.handover_id`가 기본키 | 유현준 |
 | `status` · `duplicate` · `created_at` | `/api/handover` 응답 | 로컬 저장 상태 `pending`, 기존 동일 기록 여부, 최초 저장 시각. `handover_id`, `is_synthetic` 포함 | 유현준 |
+| `GET /api/outbox/pending` · `handovers` | `shiftlink/mes/server.py` | 아직 업로드 안 된(pending) 인계 원본 목록, 오래된 순. 각 항목은 저장한 본문 + `created_at` | 허재원 |
+| `outboxItemView()` / `openOutbox()` · `#s-outbox` | `shiftlink/mes/web/pda.js` | PDA "업로드 대기 N건" 탭 시 대기 인계 내용 화면 | 허재원 |
 | `required_context` · `attempts` · `observations` · `equipment_id` | PDA 인계 본문 | 추가 보존 필드. required_context는 `recipient_role`, `timing`, `channel`, `acknowledgement`, `context`; 시도·관측값은 제출 원본 유지 | 유현준 |
 | `submitHandover()` · `queryApiPayload()` · `responseCards()` | `shiftlink/mes/web/pda.js` | PDA API 제출·검증 결과 표시. `shiftlink.handover.pending` localStorage 키로 미확인 인계 ID와 본문을 재전송까지 보존 | 유현준 |
 | `SYMPTOM_LABELS` · `symptomsFor()` | `shiftlink/mes/web/pda.js` | 증상 질의 선택지 표시 이름(카드 ID → [표시 이름, 묶음 `sym`/`pre`]). 화면에만 쓰고 질의에는 원문 `symptom`을 보냄. T4 카드는 선택지에서 제외. 근거 `docs/design/pda_ui/symptom_labels_20261006.md` | Claude |

@@ -158,6 +158,9 @@ class HttpTests(unittest.TestCase):
         body = json.loads(self.get('/api/outbox'))
         self.assertEqual(body['handover'], {'pending': 1, 'uploaded': 0, 'conflict': 1})
         self.assertEqual(body['query'], {'pending': 0, 'uploaded': 1, 'conflict': 0})
+        pending = json.loads(self.get('/api/outbox/pending'))['handovers']
+        self.assertEqual([(h['handover_id'], h['memo_text']) for h in pending], [('HO-1', 'a')])
+        self.assertIn('created_at', pending[0])
 
     def test_file_database_survives_service_restart(self):
         with tempfile.TemporaryDirectory() as directory:

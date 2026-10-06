@@ -33,7 +33,7 @@ const S = {
   eq:null, source:null, scanId:null,
   symptom:null,   // { text, other:boolean } — 선택된 증상
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
-  scanRun:0, scanStartedAt:0, lastScanMs:null, mes:null, mesExcluded:[],
+  scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0
 };
 
@@ -91,13 +91,10 @@ async function boot() {
     S.equipment = equipmentFrom(cfg.config, cat.data);
     S.cards = kb.cards || [];
     S.handovers = kb.handovers || [];
-    $('dData').textContent = '설비 ' + S.equipment.length + '대 · 카드 ' + S.cards.length + '장 · 인계 '
-      + S.handovers.length + '건 · 구성 ' + String(cfg.config.config_id || '').slice(0, 8);
 
     if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
 
     renderManualList();
-    renderSimOptions();
     show('home');
   } catch (err) {
     $('bootMsg').textContent = 'MES 서버에서 데이터를 읽지 못했습니다.';
@@ -138,9 +135,6 @@ function renderNet() {
   const q = $('netQueue');
   q.hidden = S.outbox.length === 0;
   q.textContent = '대기 ' + S.outbox.length + '건';
-  $('dServer').textContent = S.online === true ? '연결'
-    : S.online === false ? (S.netNote || '끊김') : '미확인';
-  $('dOutbox').textContent = S.outbox.length + '건';
 }
 
 async function api(path, init, timeoutMs = API_TIMEOUT_MS) {
@@ -167,7 +161,6 @@ function setContext(eq, source, extra) {
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   renderContext(); renderRecent(); renderObsSignals(); renderObsList();
   loadMesObservations();
-  $('dSource').textContent = source + (S.scanId ? ' · ' + S.scanId : '');
 }
 
 function renderContext() {
@@ -236,9 +229,6 @@ async function startScan() {
 }
 
 function lockScan(eq, scan) {
-  S.lastScanMs = Date.now() - S.scanStartedAt;
-  $('dScan').textContent = eq.code + ' · ' + scan.class + ' ' + Number(scan.conf).toFixed(2)
-    + ' · ' + scan.device_id + ' · 대기 ' + S.lastScanMs + 'ms';
   haptic([120]);
   setScanState('locked', eq.code + ' 확정');
   setContext(eq, 'camera_scan', { scanId: scan.scan_id });
@@ -1119,13 +1109,6 @@ function validateHandover() {
   $('hoWarn').hidden = ok;
 }
 
-// ── 진단 ───────────────────────────────────────────────────────────
-function renderSimOptions() {
-  const sel = $('simValue'); sel.innerHTML = '';
-  [...new Set(S.equipment.map((e) => e.type))].forEach((t) => {
-    const o = document.createElement('option'); o.value = o.textContent = t; sel.appendChild(o);
-  });
-}
 
 function outboxLabels(body) {
   const handover = (body && body.handover) || {};
@@ -1162,8 +1145,48 @@ async function refreshOutbox(request) {
   }
 }
 
+/* 업로드 대기 인계 1건 → 화면 문구. 원문 메모는 그대로 보여 준다. */
+function outboxItemView(h, equipment) {
+  const eq = (equipment || []).find((e) => e.equipment_id === h.equipment_id);
+  const ctx = h.required_context || {};
+  const when = new Date(h.created_at);
+  return {
+    kid: h.handover_id + ' · ' + (isNaN(when) ? '' : when.toLocaleString('ko-KR')),
+    memo: h.memo_text || '',
+    lines: [
+      '설비 ' + (eq ? eq.code : (h.equipment_id || '지정 안 함')),
+      ctx.recipient_role ? '받는 사람 ' + ctx.recipient_role : '',
+      ctx.timing ? '전달 시점 ' + ctx.timing : '',
+      '시도 ' + (h.attempts || []).length + '건 · 관찰 ' + (h.observations || []).length + '건',
+    ].filter(Boolean),
+  };
+}
+
+async function openOutbox() {
+  const back = S.screen;
+  $('obBack').onclick = () => show(back);
+  const pane = $('obPane');
+  pane.innerHTML = '<p class="hint">불러오는 중…</p>';
+  show('outbox');
+  let list;
+  try { list = (await getJson('/api/outbox/pending')).handovers || []; }
+  catch (_) { pane.innerHTML = '<p class="hint">MES에서 대기 목록을 불러오지 못했습니다.</p>'; return; }
+  pane.innerHTML = '<p class="hint">MES(Jetson)에 저장되어 있고, 클라우드로 아직 올라가지 않은 인계입니다. 지워지지 않습니다.</p>';
+  if (!list.length) pane.insertAdjacentHTML('beforeend', '<p class="hint">대기 중인 인계가 없습니다.</p>');
+  list.forEach((h) => {
+    const v = outboxItemView(h, S.equipment);
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.innerHTML = '<div class="kid"></div><p class="body" style="margin:0;color:var(--tx)"></p><div class="src"></div>';
+    d.querySelector('.kid').textContent = v.kid;
+    d.querySelector('.body').textContent = v.memo;
+    d.querySelector('.src').textContent = v.lines.join(' · ');
+    pane.appendChild(d);
+  });
+}
+
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, symptomsFor, alertOrder }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, outboxItemView, symptomsFor, alertOrder }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1189,6 +1212,8 @@ on('emptyBack', () => show('ctx'));
 on('emptyRetry', () => { renderSymptoms(); renderAskBlock(); show('ask'); });
 on('toHandover', openHandover);
 on('toHandoverHome', openHandover);
+on('homePending', openOutbox);
+on('hoPending', openOutbox);
 on('hoBack', () => show(S.eq ? 'ctx' : 'home'));
 on('toHandoverNew', openHandoverNew);
 on('hoNewBack', () => show('ctx'));
@@ -1226,12 +1251,6 @@ on('obsAdd', () => {
   val.value = ''; renderObsList();
 });
 
-on('toDiag', () => $('diag').classList.toggle('on'));
-// 파이 없이 C2→C3→화면 경로를 검증: 스캔 화면을 연 뒤 주입하면 파이가 보낸 것과 같게 처리된다.
-on('simFeed', () => {
-  api('/api/equipment/scan', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ class: $('simValue').value, conf: 1, device_id: 'pda-diag' }) }).catch(() => {});
-});
 
 // ── MES 실시간 감시 ────────────────────────────────────────────────
 /* ponytail: 3초 폴링. 푸시(SSE)는 파이 프록시와 MES 서버를 둘 다 고쳐야 해서 보류 — 지연이 문제면 그때. */

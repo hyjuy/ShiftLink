@@ -22,7 +22,7 @@ class FakeCloud:
             def execute(self, sql, args):
                 if sql.startswith("INSERT IGNORE"):
                     self.rowcount = int(args[0] not in cloud.rows)
-                    cloud.rows.setdefault(args[0], args[4])
+                    cloud.rows.setdefault(args[0], args[-1])
                 else:
                     self.row = (cloud.rows.get(args[0]),)
 
@@ -59,3 +59,10 @@ def test_lost_ack_is_uploaded_and_changed_content_is_held_as_conflict():
     cloud.rows["HO-test-2"] = "other-hash"; storage.mark_handover("HO-test-2", "pending")
     assert upload_pending(storage, cloud.connect) == {"uploaded": 1, "conflict": 1, "pending": 0}
     assert storage.get_handover("HO-test-2")["status"] == "conflict"
+
+
+def test_query_log_is_uploaded_with_latency():
+    storage, cloud = MesStorage(), FakeCloud()
+    query_id = storage.save_query({"question": "HPU 소리", "equipment_id": "HPU-01", "latency_ms": 2100, "no_knowledge": False})
+    assert upload_pending(storage, cloud.connect) == {"uploaded": 1, "conflict": 0, "pending": 0}
+    assert list(cloud.rows) == [query_id]

@@ -7,6 +7,7 @@ import csv
 from collections import deque
 from io import StringIO
 import threading
+import time
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -76,7 +77,15 @@ class MesService:
 
     def query(self, body: dict[str, Any]) -> dict[str, object]:
         from .query import query_service
-        return query_service(self, body, pipeline=self.query_pipeline)
+        started = time.perf_counter()
+        result = query_service(self, body, pipeline=self.query_pipeline)
+        self.storage.save_query({
+            "question": body.get("question"), "equipment_id": (result.get("evidence") or {}).get("equipment_id"),
+            "answer": result.get("answer"), "cited_card_ids": result.get("cited_card_ids"),
+            "no_knowledge": result.get("no_knowledge"), "review_queue": result.get("review_queue"),
+            "latency_ms": round((time.perf_counter() - started) * 1000),
+            "model": getattr(getattr(self.query_pipeline, "model", None), "model", None), "is_synthetic": True})
+        return result
 
     def record_scan(self, body: dict[str, Any]) -> dict[str, object]:
         """웹캠 CNN 확정 결과 {class, conf, device_id, ts} → 설비 기록 (작업계획 C2)."""
@@ -314,6 +323,7 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
+            if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
             if parsed.path == "/api/equipment/scan/recent":
                 self._send(200, self.service.recent_scans(int(parse_qs(parsed.query).get("limit", ["5"])[0]))); return
             if parsed.path.startswith("/api/runs/") and parsed.path.endswith("/replay"):

@@ -128,3 +128,18 @@ CREATE TABLE IF NOT EXISTS handover_upload (
   is_synthetic    BOOLEAN      NOT NULL DEFAULT TRUE,
   uploaded_at     DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
 );
+
+-- PDA 질의 기록 업로드 (10/2 추가, C5). Jetson SQLite query_log -> shiftlink/mes/uploader.py.
+-- 발표용 p95: SELECT latency_ms FROM (SELECT latency_ms, PERCENT_RANK() OVER (ORDER BY latency_ms) pr FROM query_upload) t WHERE pr >= 0.95 ORDER BY latency_ms LIMIT 1;
+-- pipeline_run은 데이터 생성 단계(P0~P6) 표라 질의에 맞지 않아 따로 둔다. 원문 포함은 handover_upload와 같은 §4.11 예외(합성).
+CREATE TABLE IF NOT EXISTS query_upload (
+  query_id        VARCHAR(64)  NOT NULL PRIMARY KEY,  -- 'Q-' + uuid4
+  equipment_id    VARCHAR(32)  NULL,
+  created_at      DATETIME(3)  NOT NULL,              -- 답 반환 시각(UTC)
+  latency_ms      INT          NULL,                  -- /api/query 전체(검색 + 판정 + 모델)
+  no_knowledge    BOOLEAN      NULL,
+  payload         JSON         NOT NULL,              -- 질문·답·인용 카드·모델
+  content_sha256  CHAR(64)     NOT NULL,
+  is_synthetic    BOOLEAN      NOT NULL DEFAULT TRUE,
+  uploaded_at     DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+);

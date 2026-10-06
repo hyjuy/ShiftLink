@@ -114,3 +114,12 @@ def test_scan_changed_rejected(service):
     service.record_scan({'class': 'GR', 'conf': .9, 'device_id': 'pi'})
     with pytest.raises(ValueError, match='scan changed'):
         query_service(service, {'question': 'q', 'scan_id': first['scan_id']}, pipeline=Pipeline())
+
+
+def test_service_query_logs_answer_for_upload(service):
+    service.query_pipeline = Pipeline()
+    service.query({'question': 'bearing', 'equipment_id': 'EQ-0004'})
+    [(_, _, payload)] = service.storage.pending_queries()
+    logged = json.loads(payload)
+    assert logged['question'] == 'bearing' and logged['cited_card_ids'] == ['K-1']
+    assert logged['equipment_id'] == 'EQ-0004' and logged['latency_ms'] >= 0

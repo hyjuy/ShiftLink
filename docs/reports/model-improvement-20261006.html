@@ -13,7 +13,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 @media (max-width:640px){main{padding:16px 12px 56px}h1{font-size:20px}th,td{padding:7px 8px}}
 </style></head><body><main><h1>ShiftLink 모델 개선 종합 보고서 (2026-09-29 ~ 10-06)</h1>
 <blockquote>
-<p>작성: Claude · 상태: <strong>초안(진행 중 항목 표시 포함)</strong> · 코드 기준: main <code>b3b7e53</code> · 원자료: <code>ShiftLink-records/experiments/</code> (저장소 밖) · 측정 장비: Jetson Orin Nano Super(jetson-06, 15 W), exaone3.5 2.4B q4_K_M, Ollama 0.34.1
+<p>작성: Claude · 상태: <strong>완료(10/6 저녁 기준, 사용자 실행 대기 항목 표시)</strong> · 코드 기준: main <code>b3b7e53</code> · 원자료: <code>ShiftLink-records/experiments/</code> (저장소 밖) · 측정 장비: Jetson Orin Nano Super(jetson-06, 15 W), exaone3.5 2.4B q4_K_M, Ollama 0.34.1
 이 보고서의 수치는 원자료(JSON·CSV·로그)에서 다시 계산해 대조했다. 대조하지 못한 것은 "미확인"으로 적었다. 실패한 시도와 한계를 성공한 것과 같은 비중으로 적었다.
 기존 보고서: <a href="final-eval-20261002.md">최종 평가 보고서(10/2)</a>, <a href="model-selection-20261001.md">모델 선택(10/1)</a>, <a href="jetson-ollama-memory-20261001.md">Jetson 메모리(10/1)</a>. 이 문서는 그 이후를 포함해 "무엇을 시도했고 어떻게 풀었는지"를 한곳에 모은 것이다.</p>
 </blockquote>
@@ -113,12 +113,12 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <td>판정기를 쓸 수 없을 때</td>
 <td>503 "잠시 후 다시 시도"</td>
 <td>판정 없이 카드를 보여 주지 않음</td>
-<td>#209 머지. <strong>Jetson 앱 반영·실서버 확인은 진행 중</strong></td>
+<td>#209 머지. <strong>Jetson 앱 반영·실서버 확인 완료</strong>(임시 서버에서 503 확인)</td>
 </tr>
 <tr>
 <td>MES 실행 방식</td>
 <td><code>run_http.sh</code>(nohup) 사용 중</td>
-<td>systemd 전환(재부팅 자동 시작) 시험은 진행 중</td>
+<td>systemd 전환(재부팅 자동 시작)은 <code>sudo</code> 비밀번호가 필요해 <strong>사용자 실행 대기</strong>(스크립트 복사·드라이런 완료)</td>
 <td>7.8</td>
 </tr>
 <tr>
@@ -544,7 +544,46 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </table></div>
 <p>SFT 판정기가 위험한 문항을 막아서 SFT 답변의 약점이 가려진다. 충족은 SFT 답변 쪽이 3개 많다.</p>
 <p><strong>hybrid 가드 v2</strong>(사전 등록 <code>sft1006/PREREG_sft_hybrid.md</code>, 새 문항 도착 전에 규칙 고정): 합산 26문항(블라인드 20 + 새 문항 6)에서 E1 충족 14·수정 7·미충족 5, SFT+가드 17·5·4. 규칙 (A) 새 문항 비열등, (B) 합산 미충족 ≤·충족 +2 이상·금지 조치 0건을 <strong>충족</strong>해 채택 기준을 넘었다. <strong>근거가 얇다</strong>: 새 문항 6개에서는 E1과 문항마다 같은 등급(변별 없음)이고, 개선은 가드를 설계할 때 본 블라인드 20문항에서 나왔다.</p>
-<p><strong>hybrid 운영 측정</strong>(Jetson, MES 실행 중, 시연 질의 18건, <code>hybrid1006/measure_hybrid.json</code>·<code>tegra_hybrid.txt</code>): 처음 2건 53.5·73.2초(모델 두 개 적재), 이후 16건 p50 4.5초·p95 5.4초(판정 0.48초 + 답 3.95초). 두 모델은 계속 상주했다. <strong>RAM 사용 최대 6,491/7,620 MB(여유 최저 약 1.1 GB), 스왑 최대 1,165 MB.</strong> 그래서 기본은 E1 + SFT 판정기(모델 1개)다. 메모리 최적화 시험은 <strong>진행 중 — 결과 추가 예정</strong>.</p>
+<p><strong>hybrid 운영 측정</strong>(Jetson, MES 실행 중, 시연 질의 18건, <code>hybrid1006/measure_hybrid.json</code>·<code>tegra_hybrid.txt</code>): 처음 2건 53.5·73.2초(모델 두 개 적재), 이후 16건 p50 4.5초·p95 5.4초(판정 0.48초 + 답 3.95초). 두 모델은 계속 상주했다. <strong>RAM 사용 최대 6,491/7,620 MB(여유 최저 약 1.1 GB), 스왑 최대 1,165 MB.</strong> 그래서 기본은 E1 + SFT 판정기(모델 1개)다. 메모리 최적화로 판정기 문맥 한도만 줄여 봤다(답변 모델은 4096 유지).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>변형</th>
+<th>RAM 사용 최대</th>
+<th>스왑 최대</th>
+<th>warm p50/p95</th>
+<th>답 일치(4096 대비)</th>
+<th>판정 통과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>판정 4096(기준)</td>
+<td>6,491 MB</td>
+<td>1,165 MB</td>
+<td>4.5/5.4초</td>
+<td>—</td>
+<td>18/18</td>
+</tr>
+<tr>
+<td>판정 2048</td>
+<td>6,431 MB</td>
+<td>1,085 MB</td>
+<td>4.4/5.3초</td>
+<td>17/18</td>
+<td>18/18</td>
+</tr>
+<tr>
+<td>판정 1024</td>
+<td>6,362 MB</td>
+<td>1,084 MB</td>
+<td>4.4/5.3초</td>
+<td>17/18</td>
+<td>18/18</td>
+</tr>
+</tbody>
+</table></div>
+<p>절감은 −60/−129 MB로 작다. 메모리는 두 llama-server 약 4.4GB, 데스크톱 세션 약 0.7GB, VS Code 원격 서버 약 0.6GB, 기타 약 1.6GB로 쓰인다(RSS 합은 공유 메모리 중복이라 근사). 큰 레버는 데스크톱 끄기(약 0.7GB), VS Code 원격 닫기(약 0.6GB), 모델 하나로 통합(약 1.9GB, 재학습·재평가 필요)이며 모두 <strong>추정이고 미적용</strong>이다. 앞의 둘이면 여유가 약 2.4GB로 늘 것으로 본다. 2048 변형 시작 때 SSH가 끊겨 모델 내리기가 실패해 시작 상태가 같지 않았다(최대치 비교에는 영향이 작음).</p>
 <h3>3.9 인계(T4) 실험 (10/2)</h3>
 <ul>
 <li>인계 블라인드(HB, 10문항) 검색 1위 정답은 1/10, t4는 10/18.</li>
@@ -647,7 +686,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <td>판정 모델이 없거나 Ollama가 꺼지면 카드가 판정 없이 나감(fail-open)</td>
 <td>판정 예외를 삼키고 계속 진행</td>
 <td>시연 서버는 strict: 503 "잠시 후 다시 시도", 시작 시 모델 확인 경고(#209)</td>
-<td><code>tests/test_judge_unavailable.py</code>. <strong>Jetson 앱 반영은 진행 중</strong></td>
+<td><code>tests/test_judge_unavailable.py</code>. Jetson 반영·실서버 확인 완료</td>
 </tr>
 <tr>
 <td>10/6</td>
@@ -885,7 +924,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <tr>
 <td>hybrid 메모리</td>
 <td>두 모델 상주 시 RAM 사용 6.5/7.6GB, 스왑 1.2GB, 처음 호출 53~73초</td>
-<td>기본으로 쓰지 않음. 시험 진행 중</td>
+<td>기본으로 쓰지 않음. 판정 문맥 축소 효과는 작음(−60~−129MB), 데스크톱·VS Code 정리 후 재시험 권장</td>
 </tr>
 <tr>
 <td>판정 모델 적재 시간</td>
@@ -894,8 +933,8 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </tr>
 <tr>
 <td>판정 불가 시 동작</td>
-<td>코드는 503 처리(#209)했지만 <strong>Jetson 앱 반영·실서버 확인은 아직</strong></td>
-<td>진행 중</td>
+<td>코드는 503 처리(#209)했지만 Jetson 앱 반영·실서버 확인 완료</td>
+<td>해결</td>
 </tr>
 <tr>
 <td>Jetson 앱이 git이 아닌 복사본</td>
@@ -904,8 +943,8 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </tr>
 <tr>
 <td>MES 실행 방식</td>
-<td>nohup은 재부팅하면 꺼지고 업로더도 안 돎. systemd는 실제 시험을 아직 못 함</td>
-<td>진행 중</td>
+<td>nohup은 재부팅하면 꺼지고 업로더도 안 돎. systemd는 <code>sudo</code> 비밀번호가 필요해 사용자 실행 대기</td>
+<td>대기</td>
 </tr>
 <tr>
 <td>인계 모드</td>
@@ -957,27 +996,27 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </table></div>
 <h3>7.2 사전 점검 체크리스트 (10/13, 입회)</h3>
 <ul>
-<li><input type="checkbox" disabled> Jetson: <code>ollama list</code>에 <code>exaone-sft-judge</code>, <code>exaone3.5:2.4b-instruct-q4_K_M</code>가 있고 ID가 위와 같은가</li>
-<li><input type="checkbox" disabled> <code>sha256sum ~/sft/judge/exaone-sft-judge-Q4_K_M.gguf</code>가 위 해시와 같은가</li>
-<li><input type="checkbox" disabled> <code>nvpmodel -q</code>가 15 W인가, <code>free -m</code>의 여유가 3 GB 이상인가(다른 상주 모델이 없는가)</li>
-<li><input type="checkbox" disabled> 판정 모델을 미리 올렸는가(질문 한 번 또는 <code>OllamaModel(...).judge(...)</code> 호출, 처음 23~46초)</li>
-<li><input type="checkbox" disabled> 코드 동결 커밋을 기록하고 <code>git status</code>가 깨끗한가</li>
-<li><input type="checkbox" disabled> <code>eval/results</code>에 쓸 위치가 있고 같은 이름의 결과 파일이 없는가</li>
-<li><input type="checkbox" disabled> <code>ShiftLink-records/experiments/sft1006/FINAL_DONE.*</code> 같은 잠금과 별개로, test 30용 잠금 파일(<code>FINAL_DONE.test30.txt</code>)을 만들어 1회 실행을 기록하는가</li>
+<li>[ ] Jetson: <code>ollama list</code>에 <code>exaone-sft-judge</code>, <code>exaone3.5:2.4b-instruct-q4_K_M</code>가 있고 ID가 위와 같은가</li>
+<li>[ ] <code>sha256sum ~/sft/judge/exaone-sft-judge-Q4_K_M.gguf</code>가 위 해시와 같은가</li>
+<li>[ ] <code>nvpmodel -q</code>가 15 W인가, <code>free -m</code>의 여유가 3 GB 이상인가(다른 상주 모델이 없는가)</li>
+<li>[ ] 판정 모델을 미리 올렸는가(질문 한 번 또는 <code>OllamaModel(...).judge(...)</code> 호출, 처음 23~46초)</li>
+<li>[ ] 코드 동결 커밋을 기록하고 <code>git status</code>가 깨끗한가</li>
+<li>[ ] <code>eval/results</code>에 쓸 위치가 있고 같은 이름의 결과 파일이 없는가</li>
+<li>[ ] <code>ShiftLink-records/experiments/sft1006/FINAL_DONE.*</code> 같은 잠금과 별개로, test 30용 잠금 파일(<code>FINAL_DONE.test30.txt</code>)을 만들어 1회 실행을 기록하는가</li>
 </ul>
 <h3>7.3 실행 방법 (코드로 확인한 내용)</h3>
 <p><code>eval/qa/score.py</code>는 <code>FixedPipeline(model=OllamaModel(host, model), tools=...)</code>를 기본 인자로 만든다. 그래서:
 - <code>answer_mode</code>는 환경변수 <code>SHIFTLINK_ANSWER_MODE</code>를 읽는다(기본 <code>model</code>). <strong>extract를 명시하지 않으면 모델이 답을 쓴다.</strong>
 - 판정기는 <code>OllamaModel.judge</code>이고, 판정 모델 이름은 <code>SHIFTLINK_JUDGE_MODEL</code>을 읽는다(없으면 <code>--model</code>).
 - <strong>판정기는 strict가 아니다</strong>: 판정이 실패하면 조용히 지나가고 판정 없이 답이 나간다. 또 결과 행에 판정 점수·<code>answer_mode</code>·모델 이름이 기록되지 않아 <strong>사후에 판정이 돌았는지 확인할 수 없다.</strong></p>
-<p>따라서 채점 전에 <code>score.py</code>에 다음 작은 변경이 필요하다(코드 동결 전에 PR, <strong>아직 하지 않음</strong>):
-1. <code>judge_strict=True</code>로 파이프라인을 만들어, 판정 실패가 <code>error</code> 행으로 기록되게 한다(점수 계산에서 성공한 거절로 세지 않는 규칙은 이미 있다).
-2. 각 행에 <code>judge_score</code>, <code>answer_mode</code>를, 보고 머리말에 사용한 환경변수와 모델 이름·Git 해시를 기록한다.</p>
+<p>채점 전 <code>score.py</code> 변경은 <strong>구현했다</strong>(브랜치 <code>feat/score-final-prep</code>, 커밋 5a697e0, <strong>PR 대기</strong>·테스트 3개 추가). 이 PR이 머지돼야 아래 명령의 <code>--judge-strict</code>와 구성 기록이 동작한다:
+1. <code>--judge-strict</code>: 파이프라인을 strict로 만들어, 판정 실패가 <code>error</code> 행으로 기록되게 한다(점수 계산에서 성공한 거절로 세지 않는 규칙은 이미 있다).
+2. 각 행에 <code>judge_score</code>, <code>answer_mode</code>를, 결과 파일 <code>config</code>에 사용한 환경변수와 모델 이름·Git 해시를 기록한다.</p>
 <p>명령(PowerShell, 저장소 루트, 터널 11435 연결 상태):</p>
 <pre><code class="language-powershell">$env:SHIFTLINK_ANSWER_MODE = &quot;extract&quot;
 $env:SHIFTLINK_JUDGE_MODEL = &quot;exaone-sft-judge&quot;
 python eval/qa/score.py eval/qa/20260929/qa_test.json --host http://127.0.0.1:11435 `
-  --model exaone3.5:2.4b-instruct-q4_K_M --out eval/results/qa_test_final.json
+  --model exaone3.5:2.4b-instruct-q4_K_M --judge-strict --out eval/results/qa_test_final.json
 </code></pre>
 <p>(Git Bash에서는 <code>SHIFTLINK_ANSWER_MODE=extract SHIFTLINK_JUDGE_MODEL=exaone-sft-judge python eval/qa/score.py ...</code>.) 인계 모드(<code>--mode handover</code>)는 이번 채점 범위가 아니다. <code>eval/qa/20260929/README.md</code>상 <code>qa_test.json</code>은 30건이고, T4(인계) 평가용 10문항은 초안 상태(<code>eval/qa/20260930-T4/qa_test_t4.draft.json</code>)라 포함되지 않는다. test 30의 답 있음·없음 구성은 파일을 열지 않았으므로 <strong>미확인</strong>이다.</p>
 <h3>7.4 1회 사용 규칙</h3>
@@ -1048,6 +1087,10 @@ python eval/qa/score.py eval/qa/20260929/qa_test.json --host http://127.0.0.1:11
 <td>다른 상주 모델을 내리고(<code>ollama stop</code>) MES·업로더 상태 확인 후 재시도</td>
 </tr>
 <tr>
+<td>판정 실패가 하나라도 있음</td>
+<td><code>--judge-strict</code>가 <code>.INVALID</code> 파일을 남기고 종료 → 복구 후 재실행(잠금 파일 <code>FINAL_DONE.test30.txt</code>은 유효 실행 뒤에만 만든다)</td>
+</tr>
+<tr>
 <td>터널 끊김</td>
 <td>각 실행 앞뒤로 연결 확인, 끊긴 실행은 무효(<code>.INVALID</code>)</td>
 </tr>
@@ -1057,33 +1100,45 @@ python eval/qa/score.py eval/qa/20260929/qa_test.json --host http://127.0.0.1:11
 </tr>
 </tbody>
 </table></div>
-<h3>7.8 진행 중 — 결과 추가 예정</h3>
+<h3>7.8 마감 상태(10/6 저녁)</h3>
 <div class="tw"><table>
 <thead>
 <tr>
 <th>항목</th>
 <th>상태</th>
-<th>추가할 내용</th>
+<th>내용</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>#209(판정 못 쓸 때 503) Jetson 앱 반영</td>
-<td>진행 중</td>
-<td>파일 3개 복사, 판정 모델 이름을 틀리게 해서 PDA 안내 문구 확인</td>
+<td>#209(판정 못 쓸 때 503) Jetson 반영</td>
+<td><strong>완료</strong></td>
+<td>파일 7개 백업 후 반영, <code>py_compile</code> 통과, MES 재시작. 판정 모델 이름을 틀리게 한 임시 서버(8011)에서 시작 경고 <code>(missing)</code>, 질의 HTTP 503 + 안내 문구, 원인 로그 확인 후 정리. 실서버 질의: 답 있는 질문은 E1 답(K-1001, 1.7초), 답 없는 질문은 "해당 지식 없음"</td>
 </tr>
 <tr>
-<td>hybrid 메모리 최적화 시험</td>
-<td>진행 중</td>
-<td>판정기 문맥 한도 축소(판정 프롬프트는 327~409토큰이라 4096이 필요 없음) 후 RAM·스왑·지연, 답변 모델은 4096 유지</td>
+<td>hybrid 메모리 시험</td>
+<td><strong>완료(효과 작음)</strong></td>
+<td>3.8의 표. hybrid 라이브 적용은 여유 1.1~1.3GB로 빠듯해 <strong>사용자 결정 대기</strong></td>
 </tr>
 <tr>
-<td>systemd 전환(<code>deploy/install_service.sh</code>, 업로더)</td>
-<td>진행 중</td>
-<td>재부팅 자동 시작·장애 분리·끊김 복구(7단계 검증) 결과, 실패 시 <code>run_http.sh</code>로 복귀</td>
+<td>systemd 전환</td>
+<td><strong>사용자 실행 대기</strong></td>
+<td><code>sudo</code> 비밀번호 필요. 스크립트 복사·드라이런 완료. 명령: <code>ssh -t jetson@&lt;주소&gt; 'cd ~/shiftlink/app &amp;&amp; pkill -f "[p]ython3 -m shiftlink.mes"; sleep 2; DB=/home/jetson/shiftlink/data/mock-mes.sqlite3 bash deploy/install_service.sh mes'</code> (hybrid는 <code>ANSWER_MODE=hybrid</code>, 판정기 문맥은 <code>JUDGE_NUM_CTX=2048</code>). 실행 뒤 서비스 상태·환경변수·질의·503·장애 분리를 확인하고 재부팅 시험은 허락 후. 업로더는 Aiven 접속 파일을 사용자가 <code>/etc/shiftlink/aiven.env</code>에 넣어야 시작</td>
+</tr>
+<tr>
+<td>최종 채점 준비</td>
+<td><strong>코드 준비 완료, PR 대기</strong></td>
+<td>7.3. <code>feat/score-final-prep</code>, <code>feat/judge-num-ctx</code>, 이 보고서 브랜치 모두 로컬 커밋(미푸시)</td>
 </tr>
 </tbody>
 </table></div>
+<h3>7.9 최종 채점 전 체크리스트</h3>
+<ol>
+<li><code>feat/score-final-prep</code>(·필요 시 <code>feat/judge-num-ctx</code>)를 PR로 머지하고 Jetson 앱 파일도 같은 코드로 맞춘다.</li>
+<li>Jetson에서 MES·Ollama 상태, 판정 모델 등록(<code>ollama list</code>), 답변 구성(<code>extract</code>/<code>hybrid</code>) 확정. hybrid면 두 모델 예열.</li>
+<li><code>qa_test.json</code>은 채점 명령 외에는 열지 않는다. 10/14 1회, 구성은 위 7.3 명령 그대로.</li>
+<li>실행 뒤 <code>config</code>·<code>judge_score</code>로 판정 실행 여부 확인, 유효하면 <code>FINAL_DONE.test30.txt</code> 기록, 결과는 고치지 않고 보고한다.</li>
+</ol>
 <h2>8. 부록: PR·원자료 위치</h2>
 <div class="tw"><table>
 <thead>

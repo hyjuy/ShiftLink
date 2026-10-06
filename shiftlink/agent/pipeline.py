@@ -62,6 +62,10 @@ MODEL_ERRORS = (ValueError, TimeoutError, ConnectionError, KeyError)
 OutputValidator = Callable[..., Any]
 
 
+class JudgeUnavailableError(RuntimeError):
+    """The abstain judge could not run (model missing, Ollama down, timeout) and the pipeline is strict about it."""
+
+
 @dataclass(frozen=True)
 class PipelineResult:
     mode: Mode
@@ -80,6 +84,7 @@ class FixedPipeline:
         judge_min_score: int = 2,
         compose_layers: Iterable[str] | None = None,
         answer_mode: str | None = None,
+        judge_strict: bool = False,
     ) -> None:
         self.tools = tools
         self.model = model
@@ -87,6 +92,9 @@ class FixedPipeline:
         # judge_min_score the pipeline answers "no knowledge". Defaults to the model's own judge when it has one.
         self.judge = judge if judge is not None else getattr(model, "judge", None)
         self.judge_min_score = judge_min_score
+        # Strict: a judge that cannot run raises JudgeUnavailableError instead of letting the card through unjudged
+        # (the demo server sets it; evaluation scripts keep the old fall-through).
+        self.judge_strict = judge_strict
         # Answer composition layers (compose.py). None reads SHIFTLINK_COMPOSE; default is off until a layer is adopted.
         self.compose_layers = frozenset(layers_from_env() if compose_layers is None else compose_layers)
         # "extract": query-mode answers are built from the rank-1 card (compose E1, adopted 10/6) and the model is not
@@ -203,7 +211,9 @@ class FixedPipeline:
             return False
         try:
             score = self.judge(routed.request.question, tool_results["ranked_cards"][0])
-        except MODEL_ERRORS:
+        except MODEL_ERRORS as exc:
+            if self.judge_strict:
+                raise JudgeUnavailableError(f"{type(exc).__name__}: {str(exc)[:120]}") from exc
             return False  # judge unavailable: fall through to the normal model call and its own error handling
         tool_results["judge_score"] = score
         return score < self.judge_min_score

@@ -174,6 +174,7 @@
 | `answer_mode` · `SHIFTLINK_ANSWER_MODE` | `shiftlink/agent/pipeline.py`, `shiftlink/mes/query.py` | `model`(기본, 모델이 답을 씀) · `extract`(질의 모드, 모델 호출 없이 1위 카드에서 E1 답을 만듦, 판정기·검증기·안전 공지는 그대로). 시연 경로 `build_query_pipeline()`은 `extract`가 기본. 인계 모드는 항상 모델. 채택 근거 `docs/experiments/answer-extractive-prereg-20261006.md` | Claude |
 | `SHIFTLINK_JUDGE_MODEL` · `OllamaModel(judge_model=…)` | `shiftlink/edge/ollama.py` | 답 없음 판정기가 쓰는 Ollama 모델 이름. 인자 > 환경변수 > 답변 모델 순. E1 추출 모드에서는 답변 모델을 부르지 않아 판정 모델 하나만 Jetson에 올리면 된다 | Claude |
 | `answer_mode="hybrid"` · compose 층 `H` · `hybrid_needs_e1()` | `shiftlink/agent/pipeline.py`, `compose.py` | 질의 모드에서 (SFT) 모델이 답을 쓰고, 인용 카드가 보류·금지를 담는데 답이 재기동·충전·개방을 권하면(문장 안에 부정 표현이 없을 때) E1 답으로 대체. 모델 결과가 비었거나 막히면 E1. 규칙은 10/6 사전 등록으로 고정(sft1006 `PREREG_sft_hybrid.md`). 기본은 꺼짐(`extract`가 기본) | Claude |
+| `JudgeUnavailableError` · `FixedPipeline(judge_strict=…)` · `judge_model_status()` | `shiftlink/agent/pipeline.py`, `shiftlink/mes/query.py` | 판정기가 실행되지 않으면(모델 없음·Ollama 중단·시간 초과) strict 파이프라인이 예외를 던지고 서버는 `/api/query`에 503 `{error, retry:true}`로 답한다(시연 서버는 strict, 평가 스크립트 기본은 이전처럼 건너뜀). 서버 시작 시 판정 모델이 Ollama에 있는지 확인해 `ok·missing·unreachable`을 경고 로그로 남긴다 | Claude |
 
 두 POST의 HTTP 본문 한도는 64 KiB. `HO-`는 기존 인계 ID 접두어이며 PDA UUID(HTTP LAN에서는 시간+난수)를 붙인다. 기존 정본 인계 ID는 변경하지 않는다. outbox는 로컬 저장이며 클라우드 업로드는 별도 작업이다.
 

@@ -1,6 +1,8 @@
 """Connect a camera selection and observable MES readings to the fixed pipeline."""
 
+import json
 import os
+import urllib.request
 from dataclasses import asdict
 from pathlib import Path
 from types import SimpleNamespace
@@ -21,7 +23,20 @@ def build_query_pipeline():
                           host=os.environ.get('OLLAMA_HOST', DEFAULT_HOST), timeout_s=DEFAULT_TIMEOUT_S),
         tools=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider,
         answer_mode=os.environ.get('SHIFTLINK_ANSWER_MODE', 'extract'),  # E1 adopted 10/6; 'model' restores the model answer
+        judge_strict=True,  # no judge, no answer: the server replies 503 "try again" instead of showing a card unjudged
     )
+
+
+def judge_model_status(host=None, name=None, timeout=3.0):
+    """'ok' | 'missing' | 'unreachable': is the judge model registered in Ollama? Used for a startup warning."""
+    host = (host or os.environ.get('OLLAMA_HOST', DEFAULT_HOST)).rstrip('/')
+    name = name or os.environ.get('SHIFTLINK_JUDGE_MODEL') or os.environ.get('SHIFTLINK_QUERY_MODEL', 'exaone3.5:2.4b-instruct-q4_K_M')
+    try:
+        with urllib.request.urlopen(f'{host}/api/tags', timeout=timeout) as response:
+            names = {m.get('name', '') for m in json.load(response).get('models', [])}
+    except Exception:  # noqa: BLE001 - any failure means we cannot confirm the model
+        return 'unreachable'
+    return 'ok' if name in names or f'{name}:latest' in names else 'missing'
 
 
 def query_service(service, body, *, pipeline=None):

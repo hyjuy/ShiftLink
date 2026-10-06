@@ -85,3 +85,54 @@ def test_summary_rates_and_latency():
     assert (s["answerable"], s["unanswerable"]) == (2, 1)
     assert s["citation_hit"] == 0.5 and s["abstain_ok"] == 0.0 and s["review_queue"] == 1
     assert s["cold_s"] == 30.0 and s["p50_s"] == 5.0 and s["p95_s"] == 7.0  # warm excludes the first row
+
+
+# --- 10/6 final-scoring preparation: judge score/answer mode recorded, strict judge failures are errors, config + .INVALID ---
+ITEM = {"qid": "X-1", "eq_id": "HPU-01", "question": "펌프 소음이 커요", "observations": {}, "answerable": True,
+        "primary_card_ids": ["K-1004"], "acceptable_card_ids": [], "safety_card_ids": []}
+
+
+def pipeline(judge, strict=False, **kw):
+    provider = load_card_provider(KB).provider
+
+    def model(**_):
+        return {"answer": "흡입관 이음부부터 확인하세요.", "cited_card_ids": ["K-1004"]}
+
+    return FixedPipeline(model=model, tools=provider, judge=judge, judge_strict=strict, **kw)
+
+
+def test_rows_record_judge_score_and_answer_mode():
+    [row] = run([ITEM], pipeline(lambda q, c: 3, answer_mode="extract"))
+    assert row["judge_score"] == 3 and row["answer_mode"] == "extract" and row["error"] is None
+
+
+def test_strict_judge_failure_is_recorded_as_an_error_not_an_abstain():
+    def broken(q, c):
+        raise ConnectionError("HTTP 404 model not found")
+
+    [row] = run([{**ITEM, "answerable": False, "primary_card_ids": []}], pipeline(broken, strict=True))
+    assert row["error"].startswith("JudgeUnavailableError")
+    assert not row["score"]["abstain_ok"]  # a crash must not look like a correct abstain
+    [loose] = run([ITEM], pipeline(broken, strict=False))
+    assert loose["error"] is None  # evaluation scripts keep the old fall-through unless --judge-strict
+
+
+def test_main_writes_config_and_marks_a_judge_failure_invalid(tmp_path, monkeypatch):
+    import sys
+    from eval.qa import score
+
+    qa = tmp_path / "qa.json"
+    qa.write_text(json.dumps([ITEM]), encoding="utf-8")
+    monkeypatch.setattr(score.OllamaModel, "judge", lambda self, q, c: (_ for _ in ()).throw(ConnectionError("down")))
+    monkeypatch.setattr(score.OllamaModel, "_post", lambda self, *a, **k: (_ for _ in ()).throw(ConnectionError("down")))
+    out_path = tmp_path / "out.json"
+    monkeypatch.setattr(sys, "argv", ["score", str(qa), "--host", "http://127.0.0.1:9", "--model", "m", "--out", str(out_path), "--judge-strict"])
+    try:
+        score.main()
+    except SystemExit as exit_:
+        assert "INVALID" in str(exit_)
+    report = json.loads(out_path.read_text(encoding="utf-8"))
+    assert report["summary"]["judge_failures"] == 1
+    assert report["config"]["judge_strict"] is True and report["config"]["answer_model"] == "m"
+    assert set(report["config"]) >= {"answer_mode", "judge_model", "num_ctx", "judge_num_ctx", "model_digests", "compose_layers"}
+    assert (tmp_path / "out.json.INVALID").exists()

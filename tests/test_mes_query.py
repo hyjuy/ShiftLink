@@ -89,6 +89,7 @@ def test_query_http_returns_json_answer(service):
 
 def test_fixed_pipeline_retrieval_model_and_cache(service, monkeypatch):
     from shiftlink.mes import query
+    monkeypatch.setenv('SHIFTLINK_ANSWER_MODE', 'model')  # this test covers the model-answer path; extract is the demo default
     calls = []
     pipeline = query.build_query_pipeline()
     def model(**kwargs):
@@ -107,6 +108,20 @@ def test_fixed_pipeline_retrieval_model_and_cache(service, monkeypatch):
     assert result['cited_card_ids']
     assert result['safety_notices']
     assert not result['review_queue']
+
+
+def test_demo_default_answers_from_the_card_without_calling_the_model(service, monkeypatch):
+    from shiftlink.mes import query
+    monkeypatch.delenv('SHIFTLINK_ANSWER_MODE', raising=False)
+    pipeline = query.build_query_pipeline()
+    def model(**kwargs):
+        raise AssertionError('extract mode must not call the model')
+    pipeline.model, pipeline.judge = model, lambda question, card: 3
+    service.record_scan({'class': 'HPU', 'conf': .95, 'device_id': 'pi'})
+    question = next(c.title for c in pipeline.tools.cards if c.card_id == 'K-1001')
+    result = query_service(service, {'question': question}, pipeline=pipeline)
+    assert result['cited_card_ids'] and not result['review_queue'] and not result['no_knowledge']
+    assert result['safety_notices'] and result['answer'].endswith('참조)')
 
 
 def test_scan_changed_rejected(service):

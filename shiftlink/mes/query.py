@@ -20,6 +20,7 @@ def build_query_pipeline():
         model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', 'exaone3.5:2.4b-instruct-q4_K_M'),
                           host=os.environ.get('OLLAMA_HOST', DEFAULT_HOST), timeout_s=DEFAULT_TIMEOUT_S),
         tools=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider,
+        answer_mode=os.environ.get('SHIFTLINK_ANSWER_MODE', 'extract'),  # E1 adopted 10/6; 'model' restores the model answer
     )
 
 

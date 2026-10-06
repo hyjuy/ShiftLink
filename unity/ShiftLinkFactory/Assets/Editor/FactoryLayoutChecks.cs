@@ -41,8 +41,33 @@ public static class FactoryLayoutChecks
             check(nodes.Find("CAU access stairs")!=null && nodes.Find("CAU platform rail")!=null,"CAU stairs and rails");
             check(nodes.GetComponentsInChildren<Transform>().Any(t=>t.name=="Connection_ScrapChute"),"scrap branch chute rendered");
             check(nodes.Find("Pedestrian aisle")!=null && nodes.Find("Maintenance aisle")!=null && nodes.Find("Incoming staging")!=null && nodes.Find("Outgoing staging")!=null && nodes.Find("Scrap collection bin")!=null,"logistics and maintenance areas");
+            if(nodes.Find("Scrap collection bin")!=null && nodes.Find("Pedestrian aisle")!=null) {
+                var bin=BoundsOf(nodes.Find("Scrap collection bin")); var aisle=BoundsOf(nodes.Find("Pedestrian aisle"));
+                check(bin.max.z<aisle.min.z || bin.min.z>aisle.max.z,"scrap collection outside pedestrian aisle");
+            }
             var cables=nodes.GetComponentsInChildren<LineRenderer>().Where(l=>l.name.StartsWith("Power cable")).ToArray();
             check(cables.Length==3 && cables.All(l=>l.GetPosition(1).y>=2.8f),"power routed overhead");
+            foreach(var line in nodes.GetComponentsInChildren<LineRenderer>().Where(l=>l.name.StartsWith("Power cable") || l.name.StartsWith("Hydraulic supply") || l.name.StartsWith("Assumed hydraulic return") || l.name=="CAU air riser")) {
+                string type=line.name.StartsWith("Power") ? "power_supply" : line.name=="CAU air riser" ? "pneumatic_supply" : "hydraulic_supply";
+                var relation=config.relations.First(r=>r.relation_type==type && (line.name=="CAU air riser" || line.name.EndsWith(r.to_id)));
+                foreach(var spec in specs.Where(e=>e.equipment_id!=relation.from_id && e.equipment_id!=relation.to_id)) {
+                    var bounds=BoundsOf(nodes.Find(spec.equipment_id)); bool clear=true;
+                    for(int i=1;i<line.positionCount;i++) {
+                        var a=line.GetPosition(i-1); var delta=line.GetPosition(i)-a; float hit;
+                        if(bounds.Contains(a) || (bounds.IntersectRay(new Ray(a,delta.normalized),out hit) && hit<=delta.magnitude)) clear=false;
+                    }
+                    check(clear,line.name+" clears "+spec.code);
+                }
+            }
+            foreach(string area in new[]{"Pedestrian aisle","Maintenance aisle","Aisle connection","Stair approach","Stair entrance"}) {
+                var aisle=nodes.Find(area);
+                if(aisle==null) { check(false,area+" exists"); continue; }
+                var a=BoundsOf(aisle);
+                foreach(var spec in specs) {
+                    var b=BoundsOf(nodes.Find(spec.equipment_id));
+                    check(a.max.x<=b.min.x || a.min.x>=b.max.x || a.max.z<=b.min.z || a.min.z>=b.max.z,area+" clears "+spec.code);
+                }
+            }
             var coil=demo.transform.Find("MES coils").GetChild(0);
             var reading=state.coils.First(c=>c.coil_id==coil.name);
             var speed=state.measurements.First(m=>m.equipment_id==reading.equipment_id && m.signal=="rt_speed");

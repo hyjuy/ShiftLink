@@ -156,14 +156,14 @@ public class FactoryDemo : MonoBehaviour
             Model(e, root.transform);
             lamps[e.equipment_id] = root.GetComponentsInChildren<Renderer>().First(r=>r.name.StartsWith("StatusLens_"));
             var text = new GameObject("Equipment code").AddComponent<TextMesh>();
-            text.transform.SetParent(root.transform); text.transform.localPosition = new Vector3(0,4,0);
+            text.transform.SetParent(root.transform); text.transform.localPosition = new Vector3(0,EquipmentLabelHeight(root.transform),0);
             text.text = e.code; text.anchor = TextAnchor.MiddleCenter; text.alignment = TextAlignment.Center;
             text.fontSize = 48; text.characterSize = .12f; text.color = Color.white; text.transform.rotation = viewCamera.transform.rotation;
             root.SetActive(e.active);
         }
         rig=equipmentRoot.gameObject.AddComponent<FactoryRig>();
         rig.Build(next,equipment);
-        target = new Vector3(-4,2,2);
+        target = new Vector3(0,2,3);
         distance = Mathf.Max(36, next.route.Length*6);
         selectedId = null; lastScanId = null; UpdateCamera();
         FactoryMonitor.RefreshFor(this,config,null,false);
@@ -171,6 +171,10 @@ public class FactoryDemo : MonoBehaviour
     void Model(EquipmentSpec e, Transform root)
     {
         FactoryRig.InstantiateEquipment(e,root);
+    }
+    static float EquipmentLabelHeight(Transform root)
+    {
+        return root.GetComponentsInChildren<Renderer>().Max(r=>r.bounds.max.y)-root.position.y+.45f;
     }
     public void Apply(MesSnapshot next)
     {
@@ -317,7 +321,7 @@ public class FactoryDemo : MonoBehaviour
             if(readings.TryGetValue(coilEquipment[pair.Key],out state) && state.operating_state=="running" && state.fault_level!="critical" && snapshot.line_mode=="running") {
                 Queue<Vector3> path;
                 var destination=coilWaypoints.TryGetValue(pair.Key,out path) && path.Count>0 ? path.Peek() : coilTargets[pair.Key];
-                pair.Value.position=Vector3.MoveTowards(pair.Value.position,destination,10*seconds);
+                pair.Value.position=Vector3.MoveTowards(pair.Value.position,destination,FactoryRig.TransportSpeed(snapshot,coilEquipment[pair.Key])*seconds);
                 if(path!=null && path.Count>0 && Vector3.Distance(pair.Value.position,destination)<.001f) path.Dequeue();
             }
         }

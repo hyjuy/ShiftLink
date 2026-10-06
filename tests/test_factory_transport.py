@@ -30,7 +30,8 @@ class FactoryTransportTests(unittest.TestCase):
     def test_pause_preserves_position(self):
         engine=self.engine(30)
         engine.pause()
-        self.assertEqual(engine.tick().coils,engine.snapshot.coils)
+        before=engine.snapshot.coils
+        self.assertEqual(engine.tick().coils,before)
 
 
 if __name__=="__main__":

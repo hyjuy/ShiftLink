@@ -154,6 +154,12 @@
 | `status` · `duplicate` · `created_at` | `/api/handover` 응답 | 로컬 저장 상태 `pending`, 기존 동일 기록 여부, 최초 저장 시각. `handover_id`, `is_synthetic` 포함 | 유현준 |
 | `required_context` · `attempts` · `observations` · `equipment_id` | PDA 인계 본문 | 추가 보존 필드. required_context는 `recipient_role`, `timing`, `channel`, `acknowledgement`, `context`; 시도·관측값은 제출 원본 유지 | 유현준 |
 | `submitHandover()` · `queryApiPayload()` · `responseCards()` | `shiftlink/mes/web/pda.js` | PDA API 제출·검증 결과 표시. `shiftlink.handover.pending` localStorage 키로 미확인 인계 ID와 본문을 재전송까지 보존 | 유현준 |
+| `SYMPTOM_LABELS` · `symptomsFor()` | `shiftlink/mes/web/pda.js` | 증상 질의 선택지 표시 이름(카드 ID → [표시 이름, 묶음 `sym`/`pre`]). 화면에만 쓰고 질의에는 원문 `symptom`을 보냄. T4 카드는 선택지에서 제외. 근거 `docs/design/pda_ui/symptom_labels_20261006.md` | Claude |
+| `watchMes()` · `faultsFrom()` · `relevance()` · `#alert` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA가 `/api/state`를 3초마다 읽어 설비별 고장 상황(경보·MES 증상 후보·범위 이탈)을 상단 `#alert` 띠(설비당 한 줄 `.alrow`, `ALERT_ROWS`=3줄까지)로 알리고, 범위 이탈 신호·카드 조건으로 증상 선택지 순서를 매김(`SIGNAL_WORDS`·`DIR_WORDS` 낱말 표). 원인 확정 아님 | Claude |
+| `SIGNAL_NAMES` | `shiftlink/mes/scenarios/priority.py` | 기준정보 측정점에 이름이 없는 신호(gr_vib_rms 등)의 화면 이름. `expand()`가 이름이 신호 ID와 같을 때만 채우고, 저장된 구성의 센서 이상 시나리오 제목도 같은 이름으로 바꿈 | Claude |
+| `Alarm.label` · `MesEngine.ALARM_LABELS` | `shiftlink/mes/contracts.py`, `shiftlink/mes/engine.py` | 경보 코드의 화면용 한글 이름(예: `AL-SENSOR-ANOMALY` → 센서값 범위 이탈). 스냅샷 `active_alarms[].label`로 MES 대시보드·PDA가 함께 씀. 예전 기록에는 없어 화면은 `code`로 대신함 | Claude |
+| `operationMetrics()` · `#operations-window` | `shiftlink/mes/web/app.js`, `index.html` | 운영 표의 가동률(가동·정상 스냅샷 비율)·처리량(설비를 떠난 코일 수)·사이클 타임(머문 시간 평균)을 최근 스냅샷 180개로 계산. 코일 경로(`route`) 밖 설비는 처리량·사이클 타임 없음(지원 설비) | Claude |
+| `#control-panel` 제어 바 · `#run-toggle` · `#scenario-lock` | `shiftlink/mes/web/index.html`, `app.js` | 시연 제어를 서랍 대신 탭 아래 한 줄 고정 바로. 시작·일시정지·재개를 `#run-toggle` 하나로, 시나리오는 원인 설비별 묶음, 잠김 사유를 미리 표시. 구성 관리는 이력·분석 탭으로 이동 | Claude |
 
 | `handover_upload` | `db/aiven_schema.sql` (Aiven) | PDA 인계 본문 원본 업로드 표. `handover_id`(64자) 기본키, `payload` JSON, `content_sha256`. 합성 데이터라 원문 포함(§4.11 예외, 실데이터면 해시만) | Claude |
 | `upload_pending()` · `python -m shiftlink.mes.uploader` | `shiftlink/mes/uploader.py` | outbox `pending` → Aiven. 같은 ID·같은 해시 `uploaded`, 다른 해시 `conflict`(로컬 보류), 끊기면 `pending` 유지 후 재시도(`--interval`, 기본 30초) | Claude |

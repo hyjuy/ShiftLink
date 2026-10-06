@@ -47,7 +47,7 @@ class MesLayoutTests(unittest.TestCase):
 
     def test_workspace_tabs_keep_controls_inside_the_flow_workspace(self):
         self.assertNotIn("tab-setup", self.dom.ids)
-        self.assertIn("control-drawer", self.dom.ids)
+        self.assertIn("control-panel", self.dom.ids)
         self.assertIn("operations-table", self.dom.ids)
         for key in ("flow", "detail", "history"):
             tab = self.dom.ids[f"tab-{key}"][1]

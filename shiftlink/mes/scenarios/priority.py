@@ -112,6 +112,17 @@ ADDITIONAL_SIGNALS = {
     ),
 }
 
+# 기준정보(00_plant_and_relations.json) 측정점에 이름이 없어 신호 ID가 화면에 그대로 나오던 것.
+# 이름이 ID와 같을 때만 채운다 — 구성에서 직접 바꾼 이름은 그대로 둔다.
+SIGNAL_NAMES = {
+    "hpu_pressure": "유압 공급 압력", "hpu_oil_temp": "유압유 온도", "hpu_filter_dp": "필터 차압",
+    "hpu_flow": "유압 유량", "bus_voltage": "버스 전압", "air_pressure": "압축공기 압력",
+    "gr_vib_rms": "감속기 진동 RMS", "gr_brg_temp": "감속기 베어링 온도", "gr_current": "감속기 구동 전류",
+    "rt_speed": "롤러 반송 속도", "rt_clamp_press": "클램프 압력", "rt_lift_delay": "승강 응답 지연",
+    "rt_motor_current": "롤러 모터 전류", "cv_speed": "컨베이어 속도", "cv_belt_tension": "벨트 장력",
+    "cv_queue_len": "적재 대기율",
+}
+
 STOPPED_ZERO_SIGNALS = frozenset({
     "hpu_flow", "hpu_pump_current", "hpu_cooler_oil_flow", "hpu_filter_dp",
     "compressor_separator_dp", "air_flow", "compressor_current",
@@ -170,11 +181,18 @@ def expand(config):
                             else signal for signal in signals)
         signals = tuple(replace(signal, semantics=definition(signal.signal))
                         if not signal.semantics else signal for signal in signals)
+        signals = tuple(replace(signal, name=SIGNAL_NAMES[signal.signal])
+                        if signal.name == signal.signal and signal.signal in SIGNAL_NAMES else signal
+                        for signal in signals)
         equipment.append(replace(eq, signals=signals))
     scenarios = config.scenarios
     if config.source == 'catalog' and config.version_label == 'baseline':
         # Stored baselines predate the label cleanup; new runs show the plain titles.
         scenarios = tuple(replace(s, title=s.title.removesuffix(' (가상)')) for s in scenarios)
+    # 저장된 구성의 센서 이상 시나리오 제목도 신호 ID 대신 이름으로("GR-02 · gr_vib_rms 이상").
+    raw_titles = {f"{eq.code} · {sig.signal} 이상": f"{eq.code} · {sig.name} 이상"
+                  for eq in equipment for sig in eq.signals if sig.name != sig.signal}
+    scenarios = tuple(replace(s, title=raw_titles[s.title]) if s.title in raw_titles else s for s in scenarios)
     scenarios = scenarios + additions
     existing = {s.scenario_id for s in scenarios}
     sensors = tuple(s for s in sensor_anomalies(equipment) if s.scenario_id not in existing)

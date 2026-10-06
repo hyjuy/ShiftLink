@@ -347,6 +347,8 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(404, {"error": "not found", "is_synthetic": True})
         except KeyError as error: self._send(404, {"error": str(error), "is_synthetic": True})
         except ValueError as error: self._send(400, {"error": str(error), "is_synthetic": True})
+        except Exception as error:  # noqa: BLE001 — 응답 없이 끊지 않는다
+            self._send(500, {"error": f"MES 서버 오류: {type(error).__name__}: {error}", "is_synthetic": True})
 
     def do_POST(self) -> None:  # noqa: N802
         try:
@@ -370,6 +372,8 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(400, {"error": str(error), "errors": error.errors, "is_synthetic": True})
         except (ValueError, KeyError, json.JSONDecodeError) as error:
             self._send(400, {"error": str(error), "is_synthetic": True})
+        except Exception as error:  # noqa: BLE001 — 모델 서버 연결 실패·의존성 누락 등도 JSON 으로 알린다
+            self._send(500, {"error": f"MES 서버 오류: {type(error).__name__}: {error}", "is_synthetic": True})
 
 
 def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False) -> None:

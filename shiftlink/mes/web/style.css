@@ -286,7 +286,7 @@ main { gap: 8px; margin-top: 8px; }
 @media (prefers-reduced-motion: reduce) { .machine-illustration *, .is-moving .machine-illustration * { animation: none !important; }.flow-coil { transition: none !important; } }
 @media (max-width: 1450px) { .work-area { grid-template-columns: minmax(0,1fr); }.detail-column { grid-template-columns: minmax(0,1fr) minmax(280px,.7fr); }.diagnostic-panel { grid-row: span 2; } }
 @media (max-width: 720px) { .detail-column { grid-template-columns: minmax(0,1fr); }.diagnostic-panel { grid-row: auto; } }
-#diagram-open { margin-bottom: 8px; }
+.map-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 #diagram-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #5f666c; }
 #diagram-toolbar[hidden] { display: none; }
 #diagram-connection.warning { color: #f2c67b; }
@@ -296,7 +296,7 @@ main { gap: 8px; margin-top: 8px; }
 #diagram-legend summary { cursor: pointer; padding: 8px; }
 #diagram-legend[open] { position: absolute; z-index: 5; right: 12px; top: 8px; width: min(440px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 12px; background: #232528; border: 1px solid #90969d; border-radius: 8px; }
 .diagram-only { max-width: none; margin: 0; padding: 0; }
-.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement), .diagram-only #workspace-flow > :not(.map-panel), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
+.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement):not(#control-panel):not(#control-message), .diagram-only #workspace-flow > :not(.map-panel):not(.side-col), .diagram-only .side-col > :not(#line-board), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
 .diagram-only main, .diagram-only #workspace-flow { margin: 0; padding: 0; max-width: none; }
 .diagram-only .map-panel { height: 100dvh; display: grid; grid-template-rows: auto minmax(0,1fr) auto; padding: 0; margin: 0; border: 0; border-radius: 0; }
 .diagram-only .map-scroll { min-height: 0; overflow: auto; }
@@ -446,3 +446,32 @@ button.primary-button { background: #3f8a2c; border-color: #6cc04a; color: #fff;
 .board-body dd { font-size: 15px; }
 .board-state { padding: 4px 0 0; font-size: 17px; }
 @media (max-width: 1100px) { .board-row { grid-template-columns: minmax(0, 1fr); } .board-row .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* ── 관계도 화면(기본): 왼쪽 관계도, 오른쪽 열에 시연 제어 바와 라인 설비 4대 카드 ── */
+.diagram-only main { display: grid; grid-template-columns: minmax(0, 1fr) 400px; grid-template-rows: auto auto minmax(0, 1fr); column-gap: 12px; height: 100dvh; }
+.diagram-only #workspace-flow, .diagram-only #workspace-flow > .side-col { display: contents; }
+.diagram-only .map-panel { grid-column: 1; grid-row: 1 / -1; height: 100dvh; }
+.diagram-only #control-panel { grid-column: 2; grid-row: 1; position: static; margin: 8px 12px 8px 0; padding: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.diagram-only #control-panel > .run-state, .diagram-only #control-panel > #run-toggle, .diagram-only #control-panel > .ctl-group,
+.diagram-only #control-panel > small { grid-column: 1 / -1; }
+.diagram-only #control-panel > .run-state { font-size: 15px; }
+.diagram-only #control-panel > #run-toggle { min-height: 48px; font-size: 16px; font-weight: 700; }
+.diagram-only #control-panel .ctl-group { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); align-items: center; gap: 6px 8px; }
+.diagram-only #control-panel .ctl-group label { margin: 0; }
+.diagram-only #control-panel .ctl-scenario #scenario-equipment, .diagram-only #control-panel .ctl-scenario #scenario { grid-column: 2; width: 100%; max-width: none; }
+.diagram-only #control-panel .ctl-scenario label { grid-row: 1 / span 2; align-self: start; padding-top: 10px; }
+.diagram-only #control-message { grid-column: 2; grid-row: 2; margin: 0 12px 8px 0; }
+.diagram-only #line-board { grid-column: 2; grid-row: 3; grid-template-columns: minmax(0, 1fr); align-content: start; grid-auto-rows: max-content; gap: 10px; margin: 0 12px 12px 0; overflow-y: auto; }
+
+/* ── 기본(상세) 화면: 라인 설비 카드는 오른쪽 열(지금 확인할 위치 ↔ 설비별 가동률 사이), 요약 3칸만 위에 ── */
+.side-col .line-board { grid-template-columns: minmax(0, 1fr); gap: 10px; margin: 0; }
+.board-row { grid-template-columns: minmax(0, 1fr); }
+.board-row .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* 설비 관계도와 오른쪽 열의 아래 끝을 맞춘다: 짧은 쪽이 늘어나고, 오른쪽은 설비별 가동률 칸이 남는 높이를 채운다 */
+#workspace-flow > .map-panel, #workspace-flow > .side-col { align-self: stretch; }
+.side-col > .util-panel { flex: 1 1 auto; }
+body:not(.diagram-only) #workspace-flow > .map-panel { display: flex; flex-direction: column; }
+body:not(.diagram-only) #workspace-flow > .map-panel > .map-scroll { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+body:not(.diagram-only) #workspace-flow > .map-panel .line-map { flex: 1 1 auto; min-height: 0; }
+body:not(.diagram-only) #workspace-flow > .map-panel .line-map:not(.map-expanded) .flow-map { width: 100%; height: 100%; max-width: none; max-height: none; }

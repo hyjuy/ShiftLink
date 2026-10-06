@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { queryApiPayload, responseCards, outboxLabels, refreshOutbox } = require('../shiftlink/mes/web/pda.js');
+const { queryApiPayload, responseCards, outboxLabels, refreshOutbox, outboxItemView } = require('../shiftlink/mes/web/pda.js');
 assert.deepEqual(queryApiPayload('q', {source:'camera_scan', scanId:'SC-1', eq:{equipment_id:'EQ-1'}}),
   {question:'q', scan_id:'SC-1'});
 assert.deepEqual(queryApiPayload('q', {source:'manual_selection', eq:{equipment_id:'EQ-2'}}),
@@ -15,6 +15,13 @@ assert.deepEqual(outboxLabels({handover:{pending:2, uploaded:1, conflict:0}}),
 assert.deepEqual(outboxLabels({handover:{pending:0, uploaded:0, conflict:1}}),
   {pending:'', conflict:'확인 필요 1건'});
 assert.deepEqual(outboxLabels(null), {pending:'', conflict:''});
+const item = outboxItemView({handover_id:'HO-1', created_at:'2026-10-06T15:00:00+09:00', memo_text:'유압 점검 필요',
+  equipment_id:'EQ-1', required_context:{recipient_role:'정비', timing:''}, attempts:[{}], observations:[]},
+  [{equipment_id:'EQ-1', code:'HPU-01'}]);
+assert.equal(item.memo, '유압 점검 필요');
+assert.ok(item.kid.startsWith('HO-1 · '));
+assert.deepEqual(item.lines, ['설비 HPU-01', '받는 사람 정비', '시도 1건 · 관찰 0건']);
+assert.equal(outboxItemView({handover_id:'HO-2', created_at:'x', memo_text:'m'}, []).lines[0], '설비 지정 안 함');
 refreshOutbox(async () => { throw new Error('down'); }).then((labels) => {
   assert.deepEqual(labels, {pending:'', conflict:''});
   console.log('MES query PDA contract PASS');

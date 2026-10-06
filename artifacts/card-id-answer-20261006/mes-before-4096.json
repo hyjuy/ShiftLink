@@ -1,0 +1,67 @@
+{
+  "payload": {
+    "model": "exaone3.5:2.4b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "system",
+        "content": "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n규칙:\n1. answer는 항상 한국어 두세 문장, 160자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n2. cited_card_ids에는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n   질문의 증상과 카드의 증상·제목이 가장 일치하는 카드를 먼저 인용하라.\n   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 후보를 인용한다.\n   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n   질문에 없는 측정값·시각·운전/정지 상태를 단정하지 않는다. 카드가 정한 순서와 금지한 조치를 바꾸지 않는다.\n   질문이 수치(얼마·몇·최대·기준)를 묻는데 카드에 그 수치가 없으면 지어내지 말고 '카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요'라고 답한다.\n4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
+      },
+      {
+        "role": "user",
+        "content": "모드: query\n\n입력: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\n\n관측값: [{\"signal\": \"hpu_pressure\", \"value\": 154.816, \"unit\": \"bar\"}, {\"signal\": \"hpu_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_oil_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_filter_dp\", \"value\": 0.0, \"unit\": \"bar\"}, {\"signal\": \"hpu_filter_dp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_pump_outlet_pressure\", \"value\": 155.103, \"unit\": \"bar\"}, {\"signal\": \"hpu_pump_outlet_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"fluid_viscosity\", \"value\": 62.169, \"unit\": \"cSt\"}, {\"signal\": \"fluid_viscosity_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_level\", \"value\": 84.876, \"unit\": \"pct\"}, {\"signal\": \"hpu_oil_level_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_pump_current\", \"value\": 0.0, \"unit\": \"A\"}, {\"signal\": \"hpu_pump_current_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_in_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_out_temp\", \"value\": 40.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_in_temp\", \"value\": 22.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_out_temp\", \"value\": 27.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_cooler_oil_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_accumulator_gas_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_gas_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_accumulator_fluid_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_fluid_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_return_submergence\", \"value\": 147.093, \"unit\": \"mm\"}, {\"signal\": \"hpu_return_submergence_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_suction_head\", \"value\": 150.846, \"unit\": \"mm\"}, {\"signal\": \"hpu_suction_head_state\", \"value\": \"normal\", \"unit\": null}]\n\n측정값 판정(시스템 계산, 바꾸지 말 것):\nhpu_pressure 154.816 bar → 정상 범위 145–165 안\nhpu_oil_temp 45.712 degC → 정상 범위 35–58 안\nhpu_filter_dp 0 bar → 정상 범위 0–1.2 안\nhpu_flow 0 L_min → 정상 범위 38–46보다 낮음\n\n답변 후보 색인:\nK-1001: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기 / 펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\n\n답변 후보 카드:\n[\n {\n  \"card_id\": \"K-1001\",\n  \"tacit_type\": \"T3\",\n  \"equipment\": \"HPU\",\n  \"component\": \"주 베인펌프\",\n  \"title\": \"기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\",\n  \"symptom\": \"펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\",\n  \"know_how\": \"1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다.\",\n  \"rationale\": \"Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다. 검토 보완: 원문 Algo A.1의 무압 분기에 한정한다. 회전 확인은 접촉 없는 관찰로 구분하고 재조립·구동 변경은 해당 모델의 작업 권한과 정지·격리 절차를 확인한 담당자에게 넘긴다. 이 제한은 카드 검토에서 추가한 적용 조건이다. hpu_pressure<145를 원문의 압력 없음으로 대체하지 않는다.\",\n  \"safety_flag\": false,\n  \"condition_status\": \"verified\"\n }\n]\n\n안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\nK-1003: 용적형 펌프 과압 보호 없이 운전 금지·릴리프 설정을 펌프 최대 정격 위로 두지 않기\nK-1006: 유압 파워 유닛 운전 중 정비 금지·정비 전 해당 계통 감압\nK-1218: HPU 유온 < 35 degC 기동은 유온만으로 복귀를 정하지 않고 오일 적합성·흡입 조건을 확인한다"
+      }
+    ],
+    "stream": false,
+    "format": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "cited_card_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "K-1001"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "answer",
+        "cited_card_ids"
+      ],
+      "additionalProperties": false
+    },
+    "keep_alive": -1,
+    "options": {
+      "temperature": 0,
+      "num_ctx": 4096,
+      "num_predict": 256,
+      "num_gpu": 0
+    }
+  },
+  "body": {
+    "model": "exaone3.5:2.4b-instruct-q4_K_M",
+    "created_at": "2026-10-06T01:20:05.430064Z",
+    "message": {
+      "role": "assistant",
+      "content": "{\"answer\": \"펌프 출구 압력이 없는 경우, 우선 펌프의 축 회전 상태를 확인하고 무부하 상태인지 검사해야 합니다. 다음으로 펌프의 동작 여부와 구동 회전 방향을 관찰하며, 프라이밍 상태를 점검합니다. 만약 릴리프 밸브를 통해 유량이 흐르는지 확인하고, 그렇지 않다면 펌프 자체의 문제를 의심하여 점검\", \"cited_card_ids\": [\"K-1001\"]}"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 77434291900,
+    "load_duration": 9107677700,
+    "prompt_eval_count": 2111,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 43065434000,
+    "eval_count": 97,
+    "eval_duration": 25178552000
+  }
+}

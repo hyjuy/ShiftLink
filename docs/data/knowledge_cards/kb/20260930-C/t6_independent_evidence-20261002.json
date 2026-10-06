@@ -36,19 +36,23 @@
  "exceptions": {
   "K-1211": {
    "reason": "산업용 HPU 필터·오일 교체 후 사례 미확보",
-   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보"
+   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보",
+   "card_sha256": "9d5549a3ce0bb4c9f799dcad2a7ff086d9ce83dee9a2e468879c6ac1e0ec6027"
   },
   "K-1218": {
    "reason": "저온 기동 사례가 소형 리프트·차량 유압뿐(부분 약함)",
-   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보"
+   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보",
+   "card_sha256": "770e7e35c249f0c3ae8daa9a293e29a2cb6c853f950e01ca9a877fc3d445beb5"
   },
   "K-1214": {
    "reason": "교훈은 맞으나 설비가 벨트 컨베이어(AJAS 2017)",
-   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보"
+   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보",
+   "card_sha256": "f61b3dcabc5361afaca021d09da783fbd8ac07d9093de340f8d08e3940f771ce"
   },
   "K-1217": {
    "reason": "인터록 우회 사고는 있으나 정지 후 재기동 장면 없음",
-   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보"
+   "basis": "단일 합성 계보 + 매뉴얼 재가동 절. 실제 사례 미확보",
+   "card_sha256": "f3ecdec264e769b8d2ceafeb0875db69d678aaddbe34fb6d15b473d6a5748a97"
   }
  },
  "candidates_file": "Desktop/knewdeal_team/T6 재가동 카드 실제 사례 후보.md (로컬, 최재영 수집)"

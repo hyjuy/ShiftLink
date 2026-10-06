@@ -1,0 +1,2873 @@
+{
+  "host": "jetson-06",
+  "model": "exaone3.5:2.4b-instruct-q4_K_M",
+  "num_ctx": 4096,
+  "scope": "Isolated MES HTTP server with production tick loop + actual Ollama; camera/PDA injected, other demo apps not started",
+  "mem_available_min_mib": 2598.21484375,
+  "mes_rss_max_mib": 37.25390625,
+  "memory_samples": [
+    {
+      "at_s": 6112.236321014,
+      "total_mib": 7619.87109375,
+      "available_mib": 2599.39453125,
+      "mes_rss_mib": 36.6171875
+    },
+    {
+      "at_s": 6112.43732135,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.64453125,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6112.638081872,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.64453125,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6112.839197665,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.70703125,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6113.040335923,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.4609375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6113.241176383,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6113.441926953,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6113.642998682,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6113.84384039,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6114.044361452,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6114.245268537,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6114.44607578,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6114.64672446,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6114.847520983,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6115.048338755,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6115.249101677,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6115.450076028,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6115.650685411,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6115.851566832,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6116.052491581,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6116.253343082,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6116.454085332,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6116.6549288,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6116.855780396,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6117.056581559,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6117.257195966,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6117.458061515,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6117.65887679,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6117.859765443,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6118.060373162,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6118.261280152,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6118.462128708,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6118.663156596,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 36.90625
+    },
+    {
+      "at_s": 6118.864201732,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6119.065086544,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6119.26598899,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.21484375,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6119.467001677,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6119.667720151,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6119.868574915,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6120.069413487,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6120.270142297,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6120.470991525,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6120.67179528,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6120.872831136,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6121.07357841,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6121.274290867,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6121.474907323,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6121.675761703,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.22265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6121.87683084,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6122.077550401,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6122.278382029,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6122.479195864,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2265625,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6122.679965763,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6122.880862064,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6123.081663515,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6123.282400901,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6123.483225041,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6123.68404726,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6123.884948201,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6124.085740244,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6124.286554144,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6124.487461165,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6124.68832329,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6124.888880896,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2421875,
+      "mes_rss_mib": 37.1875
+    },
+    {
+      "at_s": 6125.089694955,
+      "total_mib": 7619.87109375,
+      "available_mib": 2598.2265625,
+      "mes_rss_mib": 37.25390625
+    }
+  ],
+  "tegrastats_ram": [
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    },
+    {
+      "used_mb": 4864,
+      "total_mb": 7620
+    }
+  ],
+  "queries": [
+    {
+      "question": "기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기",
+      "http_latency_s": 6.494321015000423,
+      "response": {
+        "mode": "query",
+        "safety_notices": [
+          {
+            "card_id": "K-1003",
+            "safety_basis": "HY13-PMDSPS1M-M1/US §3.7.2 DANGER: 용적형 펌프에 과압 보호를 제공하지 않으면 펌프·구동기 고장 또는 펌프·배관 파열이 생길 수 있다. 같은 절: 릴리프 밸브를 펌프 최대 정격 압력(100% 바이패스 시 압력 누적 포함)보다 높게 설정하지 말 것, 릴리프 리턴 라인을 펌프 흡입 라인에 배관하지 말 것(루프로 펌프 과열).",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1006",
+            "safety_basis": "MAN-C-012-EN/0 §1 WARNING: 정비는 자격 있는 인원만 수행, 정비 전 항상 해당 계통을 감압(Always depressurize the relevant part of the system), 설비 작동 중 정비 금지(Do not perform maintenance with the equipment functioning) — 침투한 오염물·액체로 HPU 안전 기능이 더는 보장되지 않는다.",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1211",
+            "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1218",
+            "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+            "stop_conditions": []
+          }
+        ],
+        "steps": [
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "펌프 출구 압력계에서 압력이 읽히는지 확인한다.",
+            "expected_result": "압력이 없으면(NO) ST-02로 진행한다.",
+            "stop_conditions": [
+              "압력이 읽히면(YES) 이 카드 범위가 아니다. Algo A.1 우측 분기(정상 계통압 여부 확인)로 넘어간다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "펌프 축이 회전하는지 확인한다.",
+            "expected_result": "회전하면(YES) ST-03으로 진행한다.",
+            "stop_conditions": [
+              "축이 돌지 않으면(NO) 펌프 구동부를 점검한다(Check drive to pump)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-03",
+            "order": 3,
+            "action": "계통이 무부하(off-loaded) 상태인지 확인한다.",
+            "expected_result": "무부하가 아니면(NO) ST-04로 진행한다.",
+            "stop_conditions": [
+              "무부하이면(YES) 계통에 부하를 건다(Load system)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-04",
+            "order": 4,
+            "action": "액추에이터 동작이 일어나고 있는지 확인한다.",
+            "expected_result": "동작이 없으면(NO) ST-05로 진행한다.",
+            "stop_conditions": [
+              "동작이 있으면(YES) 동작이 멈춘 상태에서 압력을 확인한다(Check pressure when motion has stopped)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-05",
+            "order": 5,
+            "action": "구동 회전 방향이 맞는지 확인한다.",
+            "expected_result": "맞으면(YES) ST-06으로 진행한다.",
+            "stop_conditions": [
+              "틀리면(NO) 회전 방향을 바로잡는다(Correct rotation)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-06",
+            "order": 6,
+            "action": "펌프가 회전 방향에 맞게 조립되었는지 확인한다.",
+            "expected_result": "맞으면(YES) ST-07로 진행한다.",
+            "stop_conditions": [
+              "아니면(NO) 펌프를 올바르게 재조립한다(Reassemble pump correctly)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-07",
+            "order": 7,
+            "action": "펌프가 프라이밍되었는지 확인한다.",
+            "expected_result": "프라이밍되어 있으면(YES) ST-08로 진행한다.",
+            "stop_conditions": [
+              "아니면(NO) 펌프를 프라이밍한다(Prime pump)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-08",
+            "order": 8,
+            "action": "릴리프 밸브 탱크 라인으로 유량이 흐르는지 확인한다.",
+            "expected_result": "흐르면(YES) 릴리프 밸브를 점검하고, 흐르지 않으면(NO) 펌프를 점검한다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "제조사 지침에 따라 축압기 가스측에 시험 게이지를 설치한다.",
+            "expected_result": "가스측 압력을 읽을 수 있게 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "유체 배출 후 가스측 압력을 프로젝트 프리차지 범위 130–140 bar(양끝 포함)와 비교한다. 목표는 135 bar이며 추가 신호 hpu_accumulator_gas_pressure의 시연 범위로 지정했다.",
+            "expected_result": "130–140 bar이면(YES) ST-03으로 진행한다.",
+            "stop_conditions": [
+              "130 bar 미만 또는 140 bar 초과이면(NO) 원문의 질소 충전 분기로 기록한다. 프로젝트 목표 135 bar를 실제 충전 지시로 사용하지 않고 모델 지침·작업 승인을 확인한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-03",
+            "order": 3,
+            "action": "펌프를 정지하고 축압기를 배출한다.",
+            "expected_result": "축압기가 배출된 상태가 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-04",
+            "order": 4,
+            "action": "유체 라인에 압력계를 설치한다.",
+            "expected_result": "유체측 압력을 읽을 수 있게 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-05",
+            "order": 5,
+            "action": "시연용 축압기의 유체측 충전 목표를 계통압 155 bar로 지정한다. 실제 충전은 해당 모델 지침과 작업 승인을 따른다.",
+            "expected_result": "축압기가 계통 압력으로 충전된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-06",
+            "order": 6,
+            "action": "유체측 압력을 프로젝트 범위 145–165 bar와 비교한다. hpu_pressure 정상 범위에 맞춘 값이며 실제 축압기 압력계와 MES 신호의 동일성을 가정하지 않는다.",
+            "expected_result": "145–165 bar(양끝 포함)이면(YES) 목록의 다음 장치를 점검한다. 범위 밖이면(NO) ST-07로 진행한다.",
+            "stop_conditions": [
+              "유체측 압력 측정값이 145–165 bar(양끝 포함)이면(YES) 목록의 다음 장치를 점검한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-07",
+            "order": 7,
+            "action": "압력 스위치 설정을 프로젝트 기준 155 bar와 비교한다.",
+            "expected_result": "설정이 155 bar이면(YES) ST-08로 진행한다.",
+            "stop_conditions": [
+              "155 bar와 다르면(NO) 원문의 스위치 재조정 분기로 기록한다. 실제 재조정에는 모델 지침·작업 승인이 필요하다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-08",
+            "order": 8,
+            "action": "릴리프 밸브 또는 보상기 설정을 프로젝트 기준 165 bar와 비교한다.",
+            "expected_result": "설정이 165 bar이면(YES) 제조사 지침에 따라 축압기를 점검한다.",
+            "stop_conditions": [
+              "165 bar와 다르면(NO) 원문의 재조정 분기로 기록한다. 실제 재조정에는 모델 지침·작업 승인이 필요하다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "냉각기 출구 포트의 오일 온도 측정값을 기록하고 MES 연계 기준 상한 58 degC와 비교한다. 프로젝트 적용 기준이며 해당 위치의 측정값·단위·품질을 확인한다.",
+            "expected_result": "측정값이 프로젝트 설정 상한 58 degC를 초과하면(YES) ST-03으로 진행한다. 58 degC 이하이면(NO) ST-02로 진행한다. 측정값이 없거나 측정 위치·단위·품질이 확인되지 않으면 판정과 분기를 보류한다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "오일 입구·출구 온도 사이에 차이가 있는지 확인한다.",
+            "expected_result": "차이가 있으면(YES) 냉각기는 작동 중이다. 목록의 다음 장치를 점검한다.",
+            "stop_conditions": [
+              "차이가 없으면(NO) 오일이 작동 온도에 도달한 뒤 다시 확인한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-03",
+            "order": 3,
+            "action": "냉각수 공급이 켜져 있는지 확인한다.",
+            "expected_result": "켜져 있으면(YES) ST-04로 진행한다.",
+            "stop_conditions": [
+              "꺼져 있으면(NO) 냉각수 밸브를 연다(Open water valve)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-04",
+            "order": 4,
+            "action": "써모스탯이 조정되어 있는지 확인한다.",
+            "expected_result": "조정되어 있으면(YES) ST-05로 진행한다.",
+            "stop_conditions": [
+              "아니면(NO) 써모스탯을 재조정한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-05",
+            "order": 5,
+            "action": "냉각수 입구·출구 온도를 측정하고 출구 온도 − 입구 온도를 계산한다.",
+            "expected_result": "출구 온도 − 입구 온도 > 0이면(YES) ST-06으로 진행한다.",
+            "stop_conditions": [
+              "출구 온도 − 입구 온도 ≤ 0이면(NO) 냉각기를 점검한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-06",
+            "order": 6,
+            "action": "냉각수 입구 온도 측정값을 프로젝트 설정 상한 30 degC와 비교한다. 프로젝트 적용 기준이며 해당 위치의 측정값·단위·품질을 확인한다.",
+            "expected_result": "측정값이 프로젝트 설정 상한 30 degC 이하이면(NO) ST-07로 진행한다. 측정값이 없거나 측정 위치·단위·품질이 확인되지 않으면 판정과 분기를 보류한다.",
+            "stop_conditions": [
+              "측정값이 프로젝트 설정 상한 30 degC를 초과하면(YES) 냉각수 공급을 점검한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1002",
+            "step_id": "ST-07",
+            "order": 7,
+            "action": "냉각기를 통과하는 오일 유량 측정값을 프로젝트 설정 유량 범위 38–46 L_min과 비교한다. 38–46 L_min은 hpu_flow 정상 범위에 맞춘 프로젝트 적용 기준이다.",
+            "expected_result": "유량 측정값이 38–46 L_min 안(양끝 포함)이면(YES) 냉각기를 점검한다. 38 L_min 미만 또는 46 L_min 초과이면(NO) 계통의 손실을 확인한다. 통과 유량 측정값·단위·품질이 확인되지 않으면 판정과 분기를 보류한다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          }
+        ],
+        "handover_methods": [],
+        "restart_failures": [
+          {
+            "attempt_id": "AT-4001",
+            "restart_type": "maintenance_restart",
+            "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+            "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4004",
+            "restart_type": "maintenance_restart",
+            "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+            "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4002",
+            "restart_type": "normal_stop_restart",
+            "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+            "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4043",
+            "restart_type": "normal_stop_restart",
+            "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+            "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          }
+        ],
+        "cited_card_ids": [
+          "K-1001"
+        ],
+        "answer": "펌프 출구 압력이 없는 경우, 우선 펌프의 축 회전 상태와 무부하 여부를 확인하고, 동작이 정상적으로 이루어지는지 관찰해야 합니다. 다음으로 회전 방향과 조립 상태를 점검하며, 프라이밍 과정을 거쳐 릴리프 밸브를 통해 유량이 흐르는지 확인합니다.",
+        "validation_errors": [],
+        "unverified_card_ids": [],
+        "card_metadata": {
+          "K-1003": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S03"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "HY13-PMDSPS1M_US.pdf",
+                  "locator": "PDF p.15 / 인쇄 p.11 / §3.7.2 Relief Valve, DANGER",
+                  "document_version": "Parker Three Screw Pump Series Manual, Catalog HY13-PMDSPS1M-M1/US"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Parker HY13 §3.7.2의 용적형 펌프 과압 보호 규정에 한정한다. 펌프별 최대 정격 압력은 해당 모델 자료로 확인해야 한다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1006": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S06"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "MAN-C-012.pdf",
+                  "locator": "PDF p.4 / 인쇄 p.5 / §1 Maintenance, WARNING",
+                  "document_version": "ATOS Maintenance Handbook MAN-C-012-EN/0"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "ATOS MAN-C-012 §1 정비 일반 경고에 한정한다. 운전 중 허용되는 관찰 항목의 범위는 원문에 없다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1211": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260930-C:seed=20260930",
+                "slot:S11"
+              ],
+              "persona_id": "codex-t6-author",
+              "event_ids": [
+                "EV-0401",
+                "EV-0402"
+              ],
+              "generator": "Codex GPT-6; synthetic-record extraction",
+              "generated_at": "2026-09-30T16:00:00+09:00",
+              "sources": [
+                {
+                  "source_id": "SC-C-AR-0401",
+                  "locator": "AR-0401 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0402",
+                  "locator": "AR-0402 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0401",
+                  "locator": "EV-0401 | restart_attempts: AT-4001",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "SC-C-AR-0403",
+                  "locator": "AR-0403 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0404",
+                  "locator": "AR-0404 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0402",
+                  "locator": "EV-0402 | restart_attempts: AT-4004",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "M-C-005",
+                  "locator": "HY29-0022-UK.pdf | PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+                  "document_version": "Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+              "model_version": "GPT-6",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+              "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d",
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [
+                "EV-0401",
+                "EV-0402"
+              ],
+              "contradicting_event_ids": [],
+              "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+              "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+            },
+            "safety_review": null
+          },
+          "K-1218": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260930-C:seed=20260930",
+                "slot:S18"
+              ],
+              "persona_id": "codex-t6-author",
+              "event_ids": [
+                "EV-0401",
+                "EV-0415"
+              ],
+              "generator": "Codex GPT-6; synthetic-record extraction",
+              "generated_at": "2026-09-30T16:00:00+09:00",
+              "sources": [
+                {
+                  "source_id": "SC-C-AR-0401",
+                  "locator": "AR-0401 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0402",
+                  "locator": "AR-0402 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0401",
+                  "locator": "EV-0401 | restart_attempts: AT-4002",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "SC-C-AR-0429",
+                  "locator": "AR-0429 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0430",
+                  "locator": "AR-0430 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0415",
+                  "locator": "EV-0415 | restart_attempts: AT-4043",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "M-C-005",
+                  "locator": "HY29-0022-UK.pdf | PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+                  "document_version": "Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+              "model_version": "GPT-6",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+              "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d",
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [
+                "EV-0401",
+                "EV-0415"
+              ],
+              "contradicting_event_ids": [],
+              "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+              "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+            },
+            "safety_review": null
+          },
+          "K-1001": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S01"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                  "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps",
+                  "document_version": "Vickers General Product Support GBB9003 (8/84)"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Vickers Algo A.1 흐름도의 '출구 압력 없음' 분기에 한정한다. 대상 HPU 펌프 모델 적합성은 미확인이다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1005": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S05"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                  "locator": "PDF p.28 / 인쇄 p.28 / Algo J.1 System test for accumulators",
+                  "document_version": "Vickers General Product Support GBB9003 (8/84)"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Vickers Algo J.1에 한정한다. 대상 HPU 축압기의 프리차지 기준값과 가스측 작업 절차는 해당 제조사 지침으로 확인해야 한다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1002": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S02"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                  "locator": "PDF p.29 / 인쇄 p.29 / Algo J.2 System test for coolers",
+                  "document_version": "Vickers General Product Support GBB9003 (8/84)"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "수냉식 냉각기에 대한 Vickers Algo J.2에 한정한다. 대상 HPU 오일 쿨러의 냉각 방식과 정상 온도 범위는 미확인이다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1004": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S04"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "HY29-0022-UK.pdf",
+                  "locator": "PDF p.24~27 / 인쇄 p.25~28 / §2.4 2) Air contamination - a) Aeration, b) Consequences of aeration",
+                  "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+                },
+                {
+                  "source_id": "HY29-0022-UK.pdf",
+                  "locator": "PDF p.36 / 인쇄 p.37 / §6 Consequences of water contamination",
+                  "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Denison 베인펌프 가이드의 에어레이션 설명에 한정한다. 대상 HPU 주 베인펌프 모델 적합성은 미확인이다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          }
+        },
+        "review_queue": false,
+        "no_knowledge": false,
+        "handover_method": null,
+        "scan": {
+          "scan_id": "SC-7d8c41b5b7f0",
+          "class": "HPU",
+          "conf": 0.95,
+          "device_id": "live-measurement",
+          "ts": null,
+          "equipment_id": "EQ-0001",
+          "code": "HPU-01",
+          "received_at": "2026-10-06T02:54:17.391403+00:00"
+        },
+        "evidence": {
+          "run_id": "77271a9b59234c05819790087aa2cf93",
+          "equipment_id": "EQ-0001",
+          "equipment_code": "HPU-01",
+          "simulated_at": "2026-10-06T02:54:17.340226+00:00",
+          "measurements": [
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pressure",
+              "value": 154.816,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "공급 매니폴드",
+                "reference": "bar; 체크밸브 뒤 잔압 보유 구간",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_oil_temp",
+              "value": 45.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 탱크",
+                "reference": "degC; 탱크 벌크 유온",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_filter_dp",
+              "value": 0.0,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "동일 펌프 순환회로 필터 전후",
+                "reference": "bar; 순환 정지 시 차압 0",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_flow",
+              "value": 0.0,
+              "unit": "L_min",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 순환회로",
+                "reference": "L_min; 냉각기와 같은 직렬 순환회로",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pump_outlet_pressure",
+              "value": 155.103,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "펌프 출구, 체크밸브 앞",
+                "reference": "bar; 매니폴드 및 축압기 잔압 구간과 구분",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "fluid_viscosity",
+              "value": 62.169,
+              "unit": "cSt",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "작동유 시료",
+                "reference": "cSt; 40 degC로 조건화한 동점도 시료의 시연값",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_oil_level",
+              "value": 84.876,
+              "unit": "pct",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 탱크",
+                "reference": "pct; 표시 유면계의 0–100 교정 구간",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pump_current",
+              "value": 0.0,
+              "unit": "A",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "펌프 모터 공급선",
+                "reference": "A; 운전 중 전류, 정지 시 0",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_in_temp",
+              "value": 45.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 입구",
+                "reference": "degC; 탱크 유온을 입구 유온으로 사용하는 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_out_temp",
+              "value": 40.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 출구",
+                "reference": "degC; 정상 순환 시 입구보다 5 degC 낮은 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_water_in_temp",
+              "value": 22.598,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 냉각수 입구",
+                "reference": "degC; 입출구는 동일 프레임에서 비교",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_water_out_temp",
+              "value": 27.598,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 냉각수 출구",
+                "reference": "degC; 정상 순환 시 입구보다 5 degC 높은 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_flow",
+              "value": 0.0,
+              "unit": "L_min",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 통과회로",
+                "reference": "L_min; 별도 순환펌프 없이 hpu_flow와 동일",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_accumulator_gas_pressure",
+              "value": 154.777,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "축압기 가스측",
+                "reference": "bar; 운전 중 유체압과 같은 정적 평형, 배출 모드 프리차지 130–140",
+                "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_accumulator_fluid_pressure",
+              "value": 154.777,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "축압기 유체측",
+                "reference": "bar; 매니폴드 잔압 구간, 프리차지 모드에서 0",
+                "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_return_submergence",
+              "value": 147.093,
+              "unit": "mm",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "탱크 리턴 관 출구와 유면",
+                "reference": "mm; 위치별 치수 시료, 관경 20 mm 시연 가정",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_suction_head",
+              "value": 150.846,
+              "unit": "mm",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "탱크 유면과 흡입 위치",
+                "reference": "mm; 위치별 높이차 시료, 압력 센서값과 구분",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            }
+          ],
+          "alarms": []
+        },
+        "is_synthetic": true
+      },
+      "raw_answers": [
+        {
+          "answer": "펌프 출구 압력이 없는 경우, 우선 펌프의 축 회전 상태와 무부하 여부를 확인하고, 동작이 정상적으로 이루어지는지 관찰해야 합니다. 다음으로 회전 방향과 조립 상태를 점검하며, 프라이밍 과정을 거쳐 릴리프 밸브를 통해 유량이 흐르는지 확인합니다. 각 단계에서 이상이 발견되면 해당 조치를",
+          "chars": 160,
+          "at_char_limit": true,
+          "ends_with_sentence_punctuation": false,
+          "done_reason": "stop",
+          "eval_count": 96
+        }
+      ]
+    },
+    {
+      "question": "기어·베인 펌프 출구 압력이 없을 때 확인 순서와 각 단계의 이유를 자세히 설명해줘",
+      "http_latency_s": 6.318477286999951,
+      "response": {
+        "mode": "query",
+        "safety_notices": [
+          {
+            "card_id": "K-1003",
+            "safety_basis": "HY13-PMDSPS1M-M1/US §3.7.2 DANGER: 용적형 펌프에 과압 보호를 제공하지 않으면 펌프·구동기 고장 또는 펌프·배관 파열이 생길 수 있다. 같은 절: 릴리프 밸브를 펌프 최대 정격 압력(100% 바이패스 시 압력 누적 포함)보다 높게 설정하지 말 것, 릴리프 리턴 라인을 펌프 흡입 라인에 배관하지 말 것(루프로 펌프 과열).",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1006",
+            "safety_basis": "MAN-C-012-EN/0 §1 WARNING: 정비는 자격 있는 인원만 수행, 정비 전 항상 해당 계통을 감압(Always depressurize the relevant part of the system), 설비 작동 중 정비 금지(Do not perform maintenance with the equipment functioning) — 침투한 오염물·액체로 HPU 안전 기능이 더는 보장되지 않는다.",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1211",
+            "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+            "stop_conditions": []
+          },
+          {
+            "card_id": "K-1218",
+            "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+            "stop_conditions": []
+          }
+        ],
+        "steps": [
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "펌프 출구 압력계에서 압력이 읽히는지 확인한다.",
+            "expected_result": "압력이 없으면(NO) ST-02로 진행한다.",
+            "stop_conditions": [
+              "압력이 읽히면(YES) 이 카드 범위가 아니다. Algo A.1 우측 분기(정상 계통압 여부 확인)로 넘어간다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "펌프 축이 회전하는지 확인한다.",
+            "expected_result": "회전하면(YES) ST-03으로 진행한다.",
+            "stop_conditions": [
+              "축이 돌지 않으면(NO) 펌프 구동부를 점검한다(Check drive to pump)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-03",
+            "order": 3,
+            "action": "계통이 무부하(off-loaded) 상태인지 확인한다.",
+            "expected_result": "무부하가 아니면(NO) ST-04로 진행한다.",
+            "stop_conditions": [
+              "무부하이면(YES) 계통에 부하를 건다(Load system)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-04",
+            "order": 4,
+            "action": "액추에이터 동작이 일어나고 있는지 확인한다.",
+            "expected_result": "동작이 없으면(NO) ST-05로 진행한다.",
+            "stop_conditions": [
+              "동작이 있으면(YES) 동작이 멈춘 상태에서 압력을 확인한다(Check pressure when motion has stopped)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-05",
+            "order": 5,
+            "action": "구동 회전 방향이 맞는지 확인한다.",
+            "expected_result": "맞으면(YES) ST-06으로 진행한다.",
+            "stop_conditions": [
+              "틀리면(NO) 회전 방향을 바로잡는다(Correct rotation)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-06",
+            "order": 6,
+            "action": "펌프가 회전 방향에 맞게 조립되었는지 확인한다.",
+            "expected_result": "맞으면(YES) ST-07로 진행한다.",
+            "stop_conditions": [
+              "아니면(NO) 펌프를 올바르게 재조립한다(Reassemble pump correctly)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-07",
+            "order": 7,
+            "action": "펌프가 프라이밍되었는지 확인한다.",
+            "expected_result": "프라이밍되어 있으면(YES) ST-08로 진행한다.",
+            "stop_conditions": [
+              "아니면(NO) 펌프를 프라이밍한다(Prime pump)."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1001",
+            "step_id": "ST-08",
+            "order": 8,
+            "action": "릴리프 밸브 탱크 라인으로 유량이 흐르는지 확인한다.",
+            "expected_result": "흐르면(YES) 릴리프 밸브를 점검하고, 흐르지 않으면(NO) 펌프를 점검한다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-01",
+            "order": 1,
+            "action": "제조사 지침에 따라 축압기 가스측에 시험 게이지를 설치한다.",
+            "expected_result": "가스측 압력을 읽을 수 있게 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-02",
+            "order": 2,
+            "action": "유체 배출 후 가스측 압력을 프로젝트 프리차지 범위 130–140 bar(양끝 포함)와 비교한다. 목표는 135 bar이며 추가 신호 hpu_accumulator_gas_pressure의 시연 범위로 지정했다.",
+            "expected_result": "130–140 bar이면(YES) ST-03으로 진행한다.",
+            "stop_conditions": [
+              "130 bar 미만 또는 140 bar 초과이면(NO) 원문의 질소 충전 분기로 기록한다. 프로젝트 목표 135 bar를 실제 충전 지시로 사용하지 않고 모델 지침·작업 승인을 확인한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-03",
+            "order": 3,
+            "action": "펌프를 정지하고 축압기를 배출한다.",
+            "expected_result": "축압기가 배출된 상태가 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-04",
+            "order": 4,
+            "action": "유체 라인에 압력계를 설치한다.",
+            "expected_result": "유체측 압력을 읽을 수 있게 된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-05",
+            "order": 5,
+            "action": "시연용 축압기의 유체측 충전 목표를 계통압 155 bar로 지정한다. 실제 충전은 해당 모델 지침과 작업 승인을 따른다.",
+            "expected_result": "축압기가 계통 압력으로 충전된다.",
+            "stop_conditions": [],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-06",
+            "order": 6,
+            "action": "유체측 압력을 프로젝트 범위 145–165 bar와 비교한다. hpu_pressure 정상 범위에 맞춘 값이며 실제 축압기 압력계와 MES 신호의 동일성을 가정하지 않는다.",
+            "expected_result": "145–165 bar(양끝 포함)이면(YES) 목록의 다음 장치를 점검한다. 범위 밖이면(NO) ST-07로 진행한다.",
+            "stop_conditions": [
+              "유체측 압력 측정값이 145–165 bar(양끝 포함)이면(YES) 목록의 다음 장치를 점검한다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-07",
+            "order": 7,
+            "action": "압력 스위치 설정을 프로젝트 기준 155 bar와 비교한다.",
+            "expected_result": "설정이 155 bar이면(YES) ST-08로 진행한다.",
+            "stop_conditions": [
+              "155 bar와 다르면(NO) 원문의 스위치 재조정 분기로 기록한다. 실제 재조정에는 모델 지침·작업 승인이 필요하다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          },
+          {
+            "card_id": "K-1005",
+            "step_id": "ST-08",
+            "order": 8,
+            "action": "릴리프 밸브 또는 보상기 설정을 프로젝트 기준 165 bar와 비교한다.",
+            "expected_result": "설정이 165 bar이면(YES) 제조사 지침에 따라 축압기를 점검한다.",
+            "stop_conditions": [
+              "165 bar와 다르면(NO) 원문의 재조정 분기로 기록한다. 실제 재조정에는 모델 지침·작업 승인이 필요하다."
+            ],
+            "verification_step": null,
+            "rollback_action": null,
+            "escalation_target": null,
+            "escalation_channel": null
+          }
+        ],
+        "handover_methods": [],
+        "restart_failures": [
+          {
+            "attempt_id": "AT-4001",
+            "restart_type": "maintenance_restart",
+            "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+            "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4004",
+            "restart_type": "maintenance_restart",
+            "action": "허용된 시험기동을 시작했으나 소음과 기포가 보여 정지",
+            "observed_result": "압력은 152 bar였으나 탱크 관찰창에서 기포가 보이고 펌프 쪽 소음이 계속됨. 유량 34 L_min.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당이 현장 작업표준으로 충유·공기 제거 완료 여부를 확인하기 전 부하 복귀 보류"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4002",
+            "restart_type": "normal_stop_restart",
+            "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+            "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          },
+          {
+            "attempt_id": "AT-4043",
+            "restart_type": "normal_stop_restart",
+            "action": "야간 정상정지 뒤 승인된 시험기동을 했으나 유량 부족과 소음으로 정지",
+            "observed_result": "hpu_oil_temp 28 degC, hpu_pressure 133 bar, hpu_flow 32 L_min. 허용된 관찰 위치에서 펌프 소음 확인.",
+            "failure_reason": null,
+            "evidence_gap": "not_recorded",
+            "next_observations": [
+              "정비 담당에게 오일 종류·점도 적합성과 흡입 조건 확인 요청, 승인된 현장 저온기동 절차 조회"
+            ],
+            "required_data": [
+              "정지 원인 확인 기록",
+              "인터록 작동 조건 해소 확인",
+              "지정 승인자의 승인·작업 제한 기록"
+            ],
+            "data_collection_role": "현장 작업표준이 지정한 운전·정비 담당자"
+          }
+        ],
+        "cited_card_ids": [
+          "K-1001"
+        ],
+        "answer": "기어·베인 펌프의 출구 압력이 없을 때는 우선 펌프 출구 압력의 존재 여부를 확인하고, 축의 회전 상태를 관찰합니다. 무부하 상태인지 확인한 후 펌프의 동작 여부를 점검합니다.",
+        "validation_errors": [],
+        "unverified_card_ids": [],
+        "card_metadata": {
+          "K-1003": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S03"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "HY13-PMDSPS1M_US.pdf",
+                  "locator": "PDF p.15 / 인쇄 p.11 / §3.7.2 Relief Valve, DANGER",
+                  "document_version": "Parker Three Screw Pump Series Manual, Catalog HY13-PMDSPS1M-M1/US"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Parker HY13 §3.7.2의 용적형 펌프 과압 보호 규정에 한정한다. 펌프별 최대 정격 압력은 해당 모델 자료로 확인해야 한다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1006": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S06"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "MAN-C-012.pdf",
+                  "locator": "PDF p.4 / 인쇄 p.5 / §1 Maintenance, WARNING",
+                  "document_version": "ATOS Maintenance Handbook MAN-C-012-EN/0"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "ATOS MAN-C-012 §1 정비 일반 경고에 한정한다. 운전 중 허용되는 관찰 항목의 범위는 원문에 없다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1211": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260930-C:seed=20260930",
+                "slot:S11"
+              ],
+              "persona_id": "codex-t6-author",
+              "event_ids": [
+                "EV-0401",
+                "EV-0402"
+              ],
+              "generator": "Codex GPT-6; synthetic-record extraction",
+              "generated_at": "2026-09-30T16:00:00+09:00",
+              "sources": [
+                {
+                  "source_id": "SC-C-AR-0401",
+                  "locator": "AR-0401 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0402",
+                  "locator": "AR-0402 | EV-0401 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0401",
+                  "locator": "EV-0401 | restart_attempts: AT-4001",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "SC-C-AR-0403",
+                  "locator": "AR-0403 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0404",
+                  "locator": "AR-0404 | EV-0402 [maintenance_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0402",
+                  "locator": "EV-0402 | restart_attempts: AT-4004",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "M-C-005",
+                  "locator": "HY29-0022-UK.pdf | PDF 6·24쪽 / 인쇄 7·25쪽, 1.4 및 2.4.1",
+                  "document_version": "Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+              "model_version": "GPT-6",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+              "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d",
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [
+                "EV-0401",
+                "EV-0402"
+              ],
+              "contradicting_event_ids": [],
+              "generalization_scope": "EQ-0001의 maintenance_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+              "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+            },
+            "safety_review": null
+          },
+          "K-1218": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260930-C:seed=20260930",
+                "slot:S18"
+              ],
+              "persona_id": "codex-t6-author",
+              "event_ids": [
+                "EV-0401",
+                "EV-0415"
+              ],
+              "generator": "Codex GPT-6; synthetic-record extraction",
+              "generated_at": "2026-09-30T16:00:00+09:00",
+              "sources": [
+                {
+                  "source_id": "SC-C-AR-0401",
+                  "locator": "AR-0401 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0402",
+                  "locator": "AR-0402 | EV-0401 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0401",
+                  "locator": "EV-0401 | restart_attempts: AT-4002",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "SC-C-AR-0429",
+                  "locator": "AR-0429 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-AR-0430",
+                  "locator": "AR-0430 | EV-0415 [normal_stop_restart] 관측·보류 시도·다음 확인",
+                  "document_version": "합성 기록 KB-20260930-C; 실제 현장경험 아님"
+                },
+                {
+                  "source_id": "SC-C-EV-0415",
+                  "locator": "EV-0415 | restart_attempts: AT-4043",
+                  "document_version": "합성 원장; true_cause 미사용"
+                },
+                {
+                  "source_id": "M-C-005",
+                  "locator": "HY29-0022-UK.pdf | PDF 6·37~38·49쪽 / 인쇄 7·38~39·50쪽, 1.4 및 viscosity failures / no flow no pressure",
+                  "document_version": "Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "KB 관측 투영 records/kb_events.json + records/kb_artifacts.json에서 반복 패턴 추출; true_cause·true_actions·cards_expected/dev/eval 미사용",
+              "model_version": "GPT-6",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260930-C/prompts/stage-b-cards.md@sha256:c2c7d293c36c6e511012f71064b58532aafe15742886e144302dd8e525800d2c",
+              "index_version": "docs/data/knowledge_cards/kb/20260930-C/policy_manifest.json@sha256:29afb0ecb89456db9291e8c32bf240ef43467c6cbc852342f43c7bf98b20d37d",
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [
+                "EV-0401",
+                "EV-0415"
+              ],
+              "contradicting_event_ids": [],
+              "generalization_scope": "EQ-0001의 normal_stop_restart 합성 시나리오에서의 준비 확인·관측 요령. 실제 현장 검수 전 운전 절차로 채택하지 않음. 독립 현장 반복을 입증하지 않은 합성 템플릿 범위에 한정한다.",
+              "confidence_basis": "서로 다른 KB 사건 ID 2건에서 해당 재가동 유형의 기록을 대조했다. 일부 관측·시도 문구는 동일 합성 템플릿의 복제이므로 독립 현장 반복이나 통계적 검증 근거가 아니다. 실제 현장경험·유효성 검증 없음; 사람 판정은 지정 검수표의 accepted 기록 참조; 실패 원인 진단은 미기록. 독립 검토자가 KB 관측 투영과 PDF 실제 페이지로 내용 일치를 확인했다. 출처 기준 ID 등록만 완료했으며 approved_scope는 미승인이다. 검수표 accepted 판정과 2026-10-01 사용자 요청으로 L1 편입. 출처 승인·계보·독립 반복 근거 보류는 승격 기록에 유지한다. 근거 사건은 1개 합성 계보 후보(KB-20260930-C:EV-0401)에 속한다. 서로 다른 사건 ID를 독립 경험 반복으로 계산하지 않는다."
+            },
+            "safety_review": null
+          },
+          "K-1001": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S01"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                  "locator": "PDF p.17 / 인쇄 p.17 / Algo A.1 System test for gear and vane pumps",
+                  "document_version": "Vickers General Product Support GBB9003 (8/84)"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930); 카드별 지적 수정·원문 범위 검토(other-card-review-20261001)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Vickers Algo A.1 흐름도의 '출구 압력 없음' 분기에 한정한다. 대상 HPU 펌프 모델 적합성은 미확인이다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1004": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S04"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "HY29-0022-UK.pdf",
+                  "locator": "PDF p.24~27 / 인쇄 p.25~28 / §2.4 2) Air contamination - a) Aeration, b) Consequences of aeration",
+                  "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+                },
+                {
+                  "source_id": "HY29-0022-UK.pdf",
+                  "locator": "PDF p.36 / 인쇄 p.37 / §6 Consequences of water contamination",
+                  "document_version": "Parker Denison Vane Troubleshooting Guide, Catalogue HY29-0022/UK"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Denison 베인펌프 가이드의 에어레이션 설명에 한정한다. 대상 HPU 주 베인펌프 모델 적합성은 미확인이다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          },
+          "K-1005": {
+            "provenance": {
+              "seed_ids": [
+                "KB-20260929-A:seed=20260929",
+                "slot:S05"
+              ],
+              "persona_id": "claude-card-author",
+              "event_ids": [],
+              "generator": "Claude Code subagent (general-purpose), batch KB-20260929-A",
+              "generated_at": "2026-09-29T10:24:33+09:00",
+              "sources": [
+                {
+                  "source_id": "100980172-Logical-Troubleshooting-in-Hydraulic-Systems.pdf",
+                  "locator": "PDF p.28 / 인쇄 p.28 / Algo J.1 System test for accumulators",
+                  "document_version": "Vickers General Product Support GBB9003 (8/84)"
+                }
+              ],
+              "extraction_method": "pdftotext 원문 대조 + source-card-review-20260925 후보표 참고, AI 요약; 사람 검수 수정 요청 반영(review-fix-20260930)",
+              "model_version": "claude-opus-5-5",
+              "prompt_version": "docs/data/knowledge_cards/kb/20260929-A/prompts/HPU.md@sha256:189597764cf4bc717213ab3b27be966a39923120b942265cd66871cb0b98481d",
+              "index_version": null,
+              "schema_version": "1.1"
+            },
+            "generalization_evidence": {
+              "supporting_event_ids": [],
+              "contradicting_event_ids": [],
+              "generalization_scope": "Vickers Algo J.1에 한정한다. 대상 HPU 축압기의 프리차지 기준값과 가스측 작업 절차는 해당 제조사 지침으로 확인해야 한다.",
+              "confidence_basis": "0.0은 미평가 sentinel이며 확률이나 정확도 점수가 아니다. 출처 승인(source_registry 미등록)·사람의 내용 및 안전 검토·현장 HPU 모델 적용성 평가는 미완료다."
+            },
+            "safety_review": null
+          }
+        },
+        "review_queue": false,
+        "no_knowledge": false,
+        "handover_method": null,
+        "scan": {
+          "scan_id": "SC-7d8c41b5b7f0",
+          "class": "HPU",
+          "conf": 0.95,
+          "device_id": "live-measurement",
+          "ts": null,
+          "equipment_id": "EQ-0001",
+          "code": "HPU-01",
+          "received_at": "2026-10-06T02:54:17.391403+00:00"
+        },
+        "evidence": {
+          "run_id": "77271a9b59234c05819790087aa2cf93",
+          "equipment_id": "EQ-0001",
+          "equipment_code": "HPU-01",
+          "simulated_at": "2026-10-06T02:54:17.340226+00:00",
+          "measurements": [
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pressure",
+              "value": 154.816,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "공급 매니폴드",
+                "reference": "bar; 체크밸브 뒤 잔압 보유 구간",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_oil_temp",
+              "value": 45.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 탱크",
+                "reference": "degC; 탱크 벌크 유온",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_filter_dp",
+              "value": 0.0,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "동일 펌프 순환회로 필터 전후",
+                "reference": "bar; 순환 정지 시 차압 0",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_flow",
+              "value": 0.0,
+              "unit": "L_min",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 순환회로",
+                "reference": "L_min; 냉각기와 같은 직렬 순환회로",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pump_outlet_pressure",
+              "value": 155.103,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "펌프 출구, 체크밸브 앞",
+                "reference": "bar; 매니폴드 및 축압기 잔압 구간과 구분",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "fluid_viscosity",
+              "value": 62.169,
+              "unit": "cSt",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "작동유 시료",
+                "reference": "cSt; 40 degC로 조건화한 동점도 시료의 시연값",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_oil_level",
+              "value": 84.876,
+              "unit": "pct",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "유압유 탱크",
+                "reference": "pct; 표시 유면계의 0–100 교정 구간",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_pump_current",
+              "value": 0.0,
+              "unit": "A",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "펌프 모터 공급선",
+                "reference": "A; 운전 중 전류, 정지 시 0",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_in_temp",
+              "value": 45.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 입구",
+                "reference": "degC; 탱크 유온을 입구 유온으로 사용하는 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_out_temp",
+              "value": 40.712,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 출구",
+                "reference": "degC; 정상 순환 시 입구보다 5 degC 낮은 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_water_in_temp",
+              "value": 22.598,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 냉각수 입구",
+                "reference": "degC; 입출구는 동일 프레임에서 비교",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_water_out_temp",
+              "value": 27.598,
+              "unit": "degC",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 냉각수 출구",
+                "reference": "degC; 정상 순환 시 입구보다 5 degC 높은 시연",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_cooler_oil_flow",
+              "value": 0.0,
+              "unit": "L_min",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "냉각기 오일 통과회로",
+                "reference": "L_min; 별도 순환펌프 없이 hpu_flow와 동일",
+                "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_accumulator_gas_pressure",
+              "value": 154.777,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "축압기 가스측",
+                "reference": "bar; 운전 중 유체압과 같은 정적 평형, 배출 모드 프리차지 130–140",
+                "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_accumulator_fluid_pressure",
+              "value": 154.777,
+              "unit": "bar",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "continuous",
+                "location": "축압기 유체측",
+                "reference": "bar; 매니폴드 잔압 구간, 프리차지 모드에서 0",
+                "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_return_submergence",
+              "value": 147.093,
+              "unit": "mm",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "탱크 리턴 관 출구와 유면",
+                "reference": "mm; 위치별 치수 시료, 관경 20 mm 시연 가정",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            },
+            {
+              "equipment_id": "EQ-0001",
+              "signal": "hpu_suction_head",
+              "value": 150.846,
+              "unit": "mm",
+              "quality": "good",
+              "observed_at": "2026-10-06T02:54:17.340226+00:00",
+              "used_for_conditions": true,
+              "semantics": {
+                "acquisition": "manual_sample",
+                "location": "탱크 유면과 흡입 위치",
+                "reference": "mm; 위치별 높이차 시료, 압력 센서값과 구분",
+                "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+                "model": "synthetic_semantics_v1"
+              }
+            }
+          ],
+          "alarms": []
+        },
+        "is_synthetic": true
+      },
+      "raw_answers": [
+        {
+          "answer": "기어·베인 펌프의 출구 압력이 없을 때는 우선 펌프 출구 압력의 존재 여부를 확인하고, 축의 회전 상태를 관찰합니다. 무부하 상태인지 확인한 후 펌프의 동작 여부를 점검합니다. 회전 방향이 올바르게 설정되었는지와 프라이밍 상태를 차례로 확인하며, 릴리프 밸브를 통해 무부하 상태에서 유량",
+          "chars": 160,
+          "at_char_limit": true,
+          "ends_with_sentence_punctuation": false,
+          "done_reason": "stop",
+          "eval_count": 101
+        }
+      ]
+    }
+  ],
+  "model_calls": [
+    {
+      "payload": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "messages": [
+          {
+            "role": "system",
+            "content": "너는 지식카드 검수자다. 작업자 질문과 지식카드 1장이 주어진다. 카드가 질문에 얼마나 답하는지 0~3으로 매긴다. 3: 질문이 묻는 것을 카드가 직접 다룸. 2: 같은 상황을 다루고 확인·조치에 도움이 됨. 1: 설비·단어만 비슷하고 상황이 다름. 0: 관련 없음(인사·일정·규격·다른 작업 등)."
+          },
+          {
+            "role": "user",
+            "content": "질문: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\n\n카드 제목: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\n증상: 펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\n내용: 1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다."
+          }
+        ],
+        "stream": false,
+        "format": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "required": [
+            "score"
+          ]
+        },
+        "keep_alive": -1,
+        "options": {
+          "temperature": 0,
+          "num_ctx": 4096,
+          "num_predict": 20
+        }
+      },
+      "body": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "created_at": "2026-10-06T02:54:18.148308763Z",
+        "message": {
+          "role": "assistant",
+          "content": "{\"score\": 3}"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 740571733,
+        "load_duration": 2517587,
+        "prompt_eval_count": 327,
+        "prompt_eval_cached_count": 7,
+        "prompt_eval_duration": 414441000,
+        "eval_count": 7,
+        "eval_duration": 316113000
+      }
+    },
+    {
+      "payload": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "messages": [
+          {
+            "role": "system",
+            "content": "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n규칙:\n1. answer는 한국어 한두 문장, 120자 이내로 요약한다(최대 160자). 문장은 마침표로 완전히 끝낸다. 빈 문자열이나 공백만 두지 않는다.\n2. cited_card_ids에는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n   질문의 증상과 카드의 증상·제목이 가장 일치하는 카드를 먼저 인용하라.\n   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 후보를 인용한다.\n   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n   질문에 없는 측정값·시각·운전/정지 상태를 단정하지 않는다. 카드가 정한 순서와 금지한 조치를 바꾸지 않는다.\n   질문이 수치(얼마·몇·최대·기준)를 묻는데 카드에 그 수치가 없으면 지어내지 말고 '카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요'라고 답한다.\n4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
+          },
+          {
+            "role": "user",
+            "content": "모드: query\n\n입력: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\n\n관측값: [{\"signal\": \"hpu_pressure\", \"value\": 154.816, \"unit\": \"bar\"}, {\"signal\": \"hpu_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_oil_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_filter_dp\", \"value\": 0.0, \"unit\": \"bar\"}, {\"signal\": \"hpu_filter_dp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_pump_outlet_pressure\", \"value\": 155.103, \"unit\": \"bar\"}, {\"signal\": \"hpu_pump_outlet_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"fluid_viscosity\", \"value\": 62.169, \"unit\": \"cSt\"}, {\"signal\": \"fluid_viscosity_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_level\", \"value\": 84.876, \"unit\": \"pct\"}, {\"signal\": \"hpu_oil_level_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_pump_current\", \"value\": 0.0, \"unit\": \"A\"}, {\"signal\": \"hpu_pump_current_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_in_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_out_temp\", \"value\": 40.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_in_temp\", \"value\": 22.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_out_temp\", \"value\": 27.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_cooler_oil_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_accumulator_gas_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_gas_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_accumulator_fluid_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_fluid_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_return_submergence\", \"value\": 147.093, \"unit\": \"mm\"}, {\"signal\": \"hpu_return_submergence_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_suction_head\", \"value\": 150.846, \"unit\": \"mm\"}, {\"signal\": \"hpu_suction_head_state\", \"value\": \"normal\", \"unit\": null}]\n\n측정값 판정(시스템 계산, 바꾸지 말 것):\nhpu_pressure 154.816 bar → 정상 범위 145–165 안\nhpu_oil_temp 45.712 degC → 정상 범위 35–58 안\nhpu_filter_dp 0 bar → 정상 범위 0–1.2 안\nhpu_flow 0 L_min → 정상 범위 38–46보다 낮음\n\n답변 후보 색인:\nK-1001: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기 / 펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\n\n답변 후보 카드:\n[\n {\n  \"card_id\": \"K-1001\",\n  \"tacit_type\": \"T3\",\n  \"equipment\": \"HPU\",\n  \"component\": \"주 베인펌프\",\n  \"title\": \"기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\",\n  \"symptom\": \"펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\",\n  \"know_how\": \"1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다.\",\n  \"rationale\": \"Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다. 검토 보완: 원문 Algo A.1의 무압 분기에 한정한다. 회전 확인은 접촉 없는 관찰로 구분하고 재조립·구동 변경은 해당 모델의 작업 권한과 정지·격리 절차를 확인한 담당자에게 넘긴다. 이 제한은 카드 검토에서 추가한 적용 조건이다. hpu_pressure<145를 원문의 압력 없음으로 대체하지 않는다.\",\n  \"safety_flag\": false,\n  \"condition_status\": \"verified\"\n }\n]\n\n안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\nK-1003: 용적형 펌프 과압 보호 없이 운전 금지·릴리프 설정을 펌프 최대 정격 위로 두지 않기\nK-1006: 유압 파워 유닛 운전 중 정비 금지·정비 전 해당 계통 감압\nK-1218: HPU 유온 < 35 degC 기동은 유온만으로 복귀를 정하지 않고 오일 적합성·흡입 조건을 확인한다\n\n출력 형식(예시 문구는 복사하지 않는다):\n{\"answer\": \"카드 내용을 근거로 질문에 답하는 한국어 요약 문장\", \"cited_card_ids\": [\"K-1001\"]}\nanswer에는 질문에 답하는 설명을 쓰고, 카드 ID는 cited_card_ids에만 넣는다."
+          }
+        ],
+        "stream": false,
+        "format": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "cited_card_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "K-1001"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 3,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "answer",
+            "cited_card_ids"
+          ],
+          "additionalProperties": false
+        },
+        "keep_alive": -1,
+        "options": {
+          "temperature": 0,
+          "num_ctx": 4096,
+          "num_predict": 256
+        }
+      },
+      "body": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "created_at": "2026-10-06T02:54:23.869430918Z",
+        "message": {
+          "role": "assistant",
+          "content": "{\"answer\": \"펌프 출구 압력이 없는 경우, 우선 펌프의 축 회전 상태와 무부하 여부를 확인하고, 동작이 정상적으로 이루어지는지 관찰해야 합니다. 다음으로 회전 방향과 조립 상태를 점검하며, 프라이밍 과정을 거쳐 릴리프 밸브를 통해 유량이 흐르는지 확인합니다. 각 단계에서 이상이 발견되면 해당 조치를\",\"cited_card_ids\": [\"K-1001\"]}"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 5713866519,
+        "load_duration": 3221409,
+        "prompt_eval_count": 2204,
+        "prompt_eval_cached_count": 7,
+        "prompt_eval_duration": 2205123000,
+        "eval_count": 96,
+        "eval_duration": 3463143000
+      }
+    },
+    {
+      "payload": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "messages": [
+          {
+            "role": "system",
+            "content": "너는 지식카드 검수자다. 작업자 질문과 지식카드 1장이 주어진다. 카드가 질문에 얼마나 답하는지 0~3으로 매긴다. 3: 질문이 묻는 것을 카드가 직접 다룸. 2: 같은 상황을 다루고 확인·조치에 도움이 됨. 1: 설비·단어만 비슷하고 상황이 다름. 0: 관련 없음(인사·일정·규격·다른 작업 등)."
+          },
+          {
+            "role": "user",
+            "content": "질문: 기어·베인 펌프 출구 압력이 없을 때 확인 순서와 각 단계의 이유를 자세히 설명해줘\n\n카드 제목: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\n증상: 펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\n내용: 1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다."
+          }
+        ],
+        "stream": false,
+        "format": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "required": [
+            "score"
+          ]
+        },
+        "keep_alive": -1,
+        "options": {
+          "temperature": 0,
+          "num_ctx": 4096,
+          "num_predict": 20
+        }
+      },
+      "body": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "created_at": "2026-10-06T02:54:24.505567028Z",
+        "message": {
+          "role": "assistant",
+          "content": "{\"score\": 2}"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 609472305,
+        "load_duration": 2401840,
+        "prompt_eval_count": 329,
+        "prompt_eval_cached_count": 7,
+        "prompt_eval_duration": 335326000,
+        "eval_count": 7,
+        "eval_duration": 264486000
+      }
+    },
+    {
+      "payload": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "messages": [
+          {
+            "role": "system",
+            "content": "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n규칙:\n1. answer는 한국어 한두 문장, 120자 이내로 요약한다(최대 160자). 문장은 마침표로 완전히 끝낸다. 빈 문자열이나 공백만 두지 않는다.\n2. cited_card_ids에는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n   질문의 증상과 카드의 증상·제목이 가장 일치하는 카드를 먼저 인용하라.\n   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 후보를 인용한다.\n   안전 참고 카드는 시스템이 따로 보여주므로 인용하지 않는다.\n3. 카드에 없는 내용은 절대 만들어내지 않는다. 카드 문구를 벗어난 추정·수치를 덧붙이지 않는다.\n   질문에 없는 측정값·시각·운전/정지 상태를 단정하지 않는다. 카드가 정한 순서와 금지한 조치를 바꾸지 않는다.\n   질문이 수치(얼마·몇·최대·기준)를 묻는데 카드에 그 수치가 없으면 지어내지 말고 '카드에 수치 기준이 없습니다. 설비 사양서나 담당자에게 확인하세요'라고 답한다.\n4. 안전·단계·인계 방법 블록은 시스템이 카드에서 직접 만든다. 너는 요약 answer와 인용만 낸다.\n5. JSON 객체 하나만 출력한다. 설명·코드펜스를 붙이지 않는다."
+          },
+          {
+            "role": "user",
+            "content": "모드: query\n\n입력: 기어·베인 펌프 출구 압력이 없을 때 확인 순서와 각 단계의 이유를 자세히 설명해줘\n\n관측값: [{\"signal\": \"hpu_pressure\", \"value\": 154.816, \"unit\": \"bar\"}, {\"signal\": \"hpu_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_oil_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_filter_dp\", \"value\": 0.0, \"unit\": \"bar\"}, {\"signal\": \"hpu_filter_dp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_pump_outlet_pressure\", \"value\": 155.103, \"unit\": \"bar\"}, {\"signal\": \"hpu_pump_outlet_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"fluid_viscosity\", \"value\": 62.169, \"unit\": \"cSt\"}, {\"signal\": \"fluid_viscosity_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_oil_level\", \"value\": 84.876, \"unit\": \"pct\"}, {\"signal\": \"hpu_oil_level_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_pump_current\", \"value\": 0.0, \"unit\": \"A\"}, {\"signal\": \"hpu_pump_current_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_in_temp\", \"value\": 45.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_out_temp\", \"value\": 40.712, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_oil_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_in_temp\", \"value\": 22.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_in_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_water_out_temp\", \"value\": 27.598, \"unit\": \"degC\"}, {\"signal\": \"hpu_cooler_water_out_temp_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_cooler_oil_flow\", \"value\": 0.0, \"unit\": \"L_min\"}, {\"signal\": \"hpu_cooler_oil_flow_state\", \"value\": \"low\", \"unit\": null}, {\"signal\": \"hpu_accumulator_gas_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_gas_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_accumulator_fluid_pressure\", \"value\": 154.777, \"unit\": \"bar\"}, {\"signal\": \"hpu_accumulator_fluid_pressure_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_return_submergence\", \"value\": 147.093, \"unit\": \"mm\"}, {\"signal\": \"hpu_return_submergence_state\", \"value\": \"normal\", \"unit\": null}, {\"signal\": \"hpu_suction_head\", \"value\": 150.846, \"unit\": \"mm\"}, {\"signal\": \"hpu_suction_head_state\", \"value\": \"normal\", \"unit\": null}]\n\n측정값 판정(시스템 계산, 바꾸지 말 것):\nhpu_pressure 154.816 bar → 정상 범위 145–165 안\nhpu_oil_temp 45.712 degC → 정상 범위 35–58 안\nhpu_filter_dp 0 bar → 정상 범위 0–1.2 안\nhpu_flow 0 L_min → 정상 범위 38–46보다 낮음\n\n답변 후보 색인:\nK-1001: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기 / 펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\n\n답변 후보 카드:\n[\n {\n  \"card_id\": \"K-1001\",\n  \"tacit_type\": \"T3\",\n  \"equipment\": \"HPU\",\n  \"component\": \"주 베인펌프\",\n  \"title\": \"기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\",\n  \"symptom\": \"펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.\",\n  \"know_how\": \"1) 펌프 출구 압력 유무를 확인한다. 2) 축이 도는지 본다. 3) 계통이 무부하인지 본다. 4) 동작이 일어나는지 본다. 5) 구동 회전 방향, 6) 회전 방향에 맞는 조립, 7) 프라이밍 여부를 차례로 확인한다. 8) 릴리프 밸브 탱크 라인으로 유량이 흐르면 릴리프 밸브를, 흐르지 않으면 펌프를 점검한다. 각 단계에서 이상이 나오면 해당 조치를 하고 순서를 멈춘다. 회전 확인은 접촉 없이 관찰하고, 재조립·구동 변경은 모델별 정지·격리와 작업 권한 확인 전 보류한다.\",\n  \"rationale\": \"Vickers 흐름도 Algo A.1(기어·베인 펌프 계통 시험)은 출구 압력이 없을 때 축 회전→무부하→동작→회전 방향→조립→프라이밍→릴리프 탱크 라인 유량 순으로 YES/NO 분기와 분기별 조치를 명시한다. 제조사 권고 진단 절차이며 실제 수행 기록이 아니다. 압력이 있는 경우(우측 분기)는 이 카드에 넣지 않았다. 검토 보완: 원문 Algo A.1의 무압 분기에 한정한다. 회전 확인은 접촉 없는 관찰로 구분하고 재조립·구동 변경은 해당 모델의 작업 권한과 정지·격리 절차를 확인한 담당자에게 넘긴다. 이 제한은 카드 검토에서 추가한 적용 조건이다. hpu_pressure<145를 원문의 압력 없음으로 대체하지 않는다.\",\n  \"safety_flag\": false,\n  \"condition_status\": \"verified\"\n }\n]\n\n안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\nK-1003: 용적형 펌프 과압 보호 없이 운전 금지·릴리프 설정을 펌프 최대 정격 위로 두지 않기\nK-1006: 유압 파워 유닛 운전 중 정비 금지·정비 전 해당 계통 감압\n\n출력 형식(예시 문구는 복사하지 않는다):\n{\"answer\": \"카드 내용을 근거로 질문에 답하는 한국어 요약 문장\", \"cited_card_ids\": [\"K-1001\"]}\nanswer에는 질문에 답하는 설명을 쓰고, 카드 ID는 cited_card_ids에만 넣는다."
+          }
+        ],
+        "stream": false,
+        "format": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "cited_card_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "K-1001"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 3,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "answer",
+            "cited_card_ids"
+          ],
+          "additionalProperties": false
+        },
+        "keep_alive": -1,
+        "options": {
+          "temperature": 0,
+          "num_ctx": 4096,
+          "num_predict": 256
+        }
+      },
+      "body": {
+        "model": "exaone3.5:2.4b-instruct-q4_K_M",
+        "created_at": "2026-10-06T02:54:30.190120634Z",
+        "message": {
+          "role": "assistant",
+          "content": "{\"answer\": \"기어·베인 펌프의 출구 압력이 없을 때는 우선 펌프 출구 압력의 존재 여부를 확인하고, 축의 회전 상태를 관찰합니다. 무부하 상태인지 확인한 후 펌프의 동작 여부를 점검합니다. 회전 방향이 올바르게 설정되었는지와 프라이밍 상태를 차례로 확인하며, 릴리프 밸브를 통해 무부하 상태에서 유량\",\"cited_card_ids\": [\"K-1001\"]}"
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 5678877010,
+        "load_duration": 3644106,
+        "prompt_eval_count": 2166,
+        "prompt_eval_cached_count": 7,
+        "prompt_eval_duration": 1996424000,
+        "eval_count": 101,
+        "eval_duration": 3635034000
+      }
+    }
+  ]
+}

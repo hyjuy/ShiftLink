@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import socket
 import time
 import urllib.error
@@ -22,7 +23,7 @@ import urllib.request
 from typing import Any
 
 from shiftlink.agent.canary import CANARY_PREFIXES, has_canary
-from shiftlink.agent.response import answer_is_card_ids_only
+from shiftlink.agent.response import ANSWER_EXAMPLE, ANSWER_MAX_CHARS, answer_content_error
 
 DEFAULT_MODEL = "qwen2.5:3b-instruct-q4_K_M"  # models.lock plan-B
 DEFAULT_HOST = "http://localhost:11434"
@@ -34,7 +35,6 @@ NUM_CTX = 4096
 # 출력 토큰 상한. answer(ANSWER_MAX_CHARS자)+인용 JSON이 들어가고, 끝없이 이어지는 생성을 끊는다.
 # 9/29 측정: 상한 없을 때 평균 243토큰 → 생성이 지연의 대부분(입력 처리는 1~2s).
 NUM_PREDICT = 256
-ANSWER_MAX_CHARS = 160
 # 모델 상주, 재로딩 방지. 반드시 정수 -1 — 문자열 "-1"은 Ollama가 duration 파싱에 실패해 400을 낸다.
 KEEP_ALIVE = -1
 # 모델에 넘기는 답변 후보 수(질의·인계 공통). 10/1 Jetson 실측: 후보 5장을 주면 모델 1순위 인용 정답이
@@ -79,7 +79,8 @@ OUTPUT_SCHEMA = {
 SYSTEM_PROMPT = (
     "너는 제조 현장 교대 인계 보조다. 아래 지식 카드에 적힌 내용만으로 답한다.\n"
     "규칙:\n"
-    f"1. answer는 항상 한국어 두세 문장, {ANSWER_MAX_CHARS}자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
+    f"1. answer는 한국어 한두 문장, 120자 이내로 요약한다(최대 {ANSWER_MAX_CHARS}자). "
+    "문장은 마침표로 완전히 끝낸다. 빈 문자열이나 공백만 두지 않는다.\n"
     "2. cited_card_ids에는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n"
     "   질문의 증상과 카드의 증상·제목이 가장 일치하는 카드를 먼저 인용하라.\n"
     "   후보에 없는 ID를 지어내지 않고, 같은 ID를 두 번 넣지 않는다. 질문과 덜 맞아도 가장 가까운 후보를 인용한다.\n"
@@ -96,7 +97,8 @@ HANDOVER_SYSTEM_PROMPT = (
     "너는 제조 현장 교대 인계 보조다. 입력은 넘기는 사람이 쓴 인계 메모다. "
     "아래 지식 카드의 인계 방법에 맞춰 다음 근무자에게 넘길 요지를 정리한다.\n"
     "규칙:\n"
-    f"1. answer는 항상 한국어 두세 문장, {ANSWER_MAX_CHARS}자 이내로 채운다. 빈 문자열이나 공백만 두지 않는다.\n"
+    f"1. answer는 한국어 한두 문장, 120자 이내로 요약한다(최대 {ANSWER_MAX_CHARS}자). "
+    "문장은 마침표로 완전히 끝낸다. 빈 문자열이나 공백만 두지 않는다.\n"
     "   메모에 적힌 사실 중 카드의 '인계할 정보'(required_context)에 해당하는 것을 담는다.\n"
     "   카드가 요구하는데 메모에 없는 항목은 '확인 필요'로 적는다.\n"
     "2. cited_card_ids에는 메모 상황에 가장 맞는 답변 후보 카드의 card_id를 최소 한 개 넣는다.\n"
@@ -122,10 +124,11 @@ JUDGE_MIN_SCORE = 2
 
 def retry_prompt(candidate_ids: list[str]) -> str:
     """재시도 안내. 예시 ID 대신 이번 호출의 실제 후보 ID를 보여준다."""
-    example = json.dumps({"answer": "카드 내용을 근거로 질문에 답하는 한국어 요약 문장", "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False)
+    example = json.dumps({"answer": ANSWER_EXAMPLE, "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False)
     return (
         "\n\n[재시도] 직전 출력이 검증에 실패했다. "
-        "answer에는 카드 ID 대신 질문에 답하는 한국어 설명을 써라. "
+        "answer에는 카드 ID 대신 질문에 답하는 한국어 설명을 120자 이내로 써라. "
+        "한두 문장을 마침표로 완전히 끝내고 미완성 문장을 내지 마라. "
         f"{example} 형태의 JSON 객체 하나만 출력하고(예시 문구는 복사하지 않는다), "
         f"cited_card_ids에는 답변 후보 ID({', '.join(candidate_ids)}) 중에서만 넣어라."
     )
@@ -265,7 +268,7 @@ def build_messages(
         titles = "\n".join(f"{card.get('card_id')}: {card.get('title', '')}" for card in references)
         parts.append(f"안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\n{titles}")
     example = json.dumps(
-        {"answer": "카드 내용을 근거로 질문에 답하는 한국어 요약 문장",
+        {"answer": ANSWER_EXAMPLE,
          "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False,
     )
     parts.append(
@@ -408,8 +411,14 @@ def _parse_output(body: dict[str, Any]) -> dict[str, Any]:
     # 공백뿐인 answer도 형식 오류다 (계약 §5, A의 validate_model_output과 같은 기준).
     if not isinstance(answer, str) or not answer.strip():
         raise ValueError(f"answer가 비어 있지 않은 문자열이 아님: {parsed!r}")
-    if answer_is_card_ids_only(answer):
-        raise ValueError("answer 본문에는 카드 ID만 쓸 수 없습니다.")
+    # The grammar closes strings at maxLength even in mid-sentence. Retain only
+    # already generated complete sentences; a decimal point is not a boundary.
+    if len(answer) == ANSWER_MAX_CHARS and not answer.rstrip().endswith((".", "!", "?")):
+        boundaries = list(re.finditer(r"(?<!\d)[.!?](?=\s|$)", answer))
+        if boundaries:
+            answer = answer[:boundaries[-1].end()].rstrip()
+    if error := answer_content_error(answer):
+        raise ValueError(error)
     if not isinstance(cited, list) or not all(isinstance(item, str) for item in cited):
         raise ValueError(f"cited_card_ids가 문자열 배열이 아님: {parsed!r}")
     # Ollama 문법은 uniqueItems를 강제하지 못한다. 중복만으로 재시도하지 않게 순서를 지켜 한 번씩 남긴다

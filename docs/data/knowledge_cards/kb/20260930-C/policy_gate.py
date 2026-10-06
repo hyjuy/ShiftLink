@@ -3,11 +3,28 @@ import json
 import hashlib
 import re
 from pathlib import Path
+from datetime import date
 
 from shiftlink.data.generation import ApprovedScope
 
 HERE = Path(__file__).parent
 ROOT = HERE.parents[4]
+
+
+def _approved_exception(card, record):
+    """Existing human authorization covers only the exact reviewed card."""
+    entry = record.get("exceptions", {}).get(card["card_id"])
+    if not isinstance(entry, dict):
+        return False
+    try:
+        date.fromisoformat(record.get("date", ""))
+    except (ValueError, TypeError):
+        return False
+    return (record.get("authorization") == "explicit_user_request"
+            and all(isinstance(value, str) and value.strip() for value in
+                    (record.get("reviewed_by"), record.get("request"), entry.get("reason"), entry.get("basis")))
+            and entry.get("card_sha256") == hashlib.sha256(
+                json.dumps(card, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest())
 
 
 def adoption_issues(cards, here=HERE, root=ROOT):
@@ -21,7 +38,7 @@ def adoption_issues(cards, here=HERE, root=ROOT):
     sources = {s["source_id"]: s for s in registry["sources"]}
     assignments = {g["group_id"]: g for g in policy["assignments"]}
     # 10/2: T6 real public cases (registered, approved sources) count as extra independent groups;
-    # cards without one are a recorded project-level exception (explicit user request).
+    # Exceptions require the existing human authorization and exact reviewed card hash.
     t6_path = here / "t6_independent_evidence-20261002.json"
     t6 = json.loads(t6_path.read_text(encoding="utf-8")) if t6_path.exists() else {"cards": {}, "exceptions": {}}
     result = {}
@@ -71,11 +88,24 @@ def adoption_issues(cards, here=HERE, root=ROOT):
                     reasons.append(f"lineage_assignment_unconfirmed:{gid}")
                 elif group["split"] != card["split"]:
                     reasons.append(f"card_split_differs_from_group:{gid}")
-            real_cases = {gid for gid in t6["cards"].get(card["card_id"], {}).get("case_group_ids", [])
-                          if sources.get(gid, {}).get("review_status") == "approved_for_draft"}
-            if (card["tacit_type"] == "T6" and len((actual_groups - {None}) | real_cases) < 2
-                    and card["card_id"] not in t6["exceptions"]):
-                reasons.append("independent_repeat_evidence_insufficient")
+            if card["tacit_type"] == "T6":
+                real_groups = set()
+                for source_id in t6["cards"].get(card["card_id"], {}).get("case_group_ids", []):
+                    source = sources.get(source_id, {})
+                    if source.get("is_synthetic") is not False or source.get("review_status") != "approved_for_draft":
+                        continue
+                    for raw in source.get("approved_scope", []):
+                        try:
+                            scope = ApprovedScope.model_validate(raw)
+                        except ValueError:
+                            continue
+                        if (scope.kind == "case" and scope.group_id
+                                and scope.document_version == source.get("document_version")
+                                and card["card_id"] in re.findall(r"K-\d{4}", scope.use_scope)):
+                            real_groups.add(scope.group_id)
+                if len((actual_groups - {None}) | real_groups) < 2 and not _approved_exception(card, t6):
+                    reasons.extend(["independent_repeat_evidence_insufficient",
+                                    "t6_evidence_approval_missing_or_stale"])
         if reasons:
             result[card["card_id"]] = reasons
     return result

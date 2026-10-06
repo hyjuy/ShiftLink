@@ -3,6 +3,7 @@
 #
 #   Jetson (E1):       deploy/install_service.sh mes
 #                      DB=/경로/mock-mes.sqlite3 deploy/install_service.sh mes
+#                      (질의 설정: ANSWER_MODE=extract|model, JUDGE_MODEL=판정 모델 이름. 기본 extract · exaone-sft-judge)
 # 업로더는 별도 서비스: deploy/install_uploader.sh로 먼저 등록한다. MES와 같은 DB= 경로를 지정한다.
 #   라즈베리파이 (D2): deploy/install_service.sh vision http://<jetson>:8000 [모델 폴더, 기본 data/vision/model]
 #
@@ -25,6 +26,10 @@ case "${1:-}" in
     AFTER="network-online.target ollama.service"
     DB="${DB:-$REPO/mes_data/mock-mes.sqlite3}"
     WANTS="$WANTS shiftlink-uploader.service"
+    # 질의는 E1 추출 답(모델 호출 없음) + SFT 판정기(10/6 채택). 판정 모델은 Ollama에 등록돼 있어야 한다:
+    # docs/guides/sft-judge-model.md. 바꾸려면 JUDGE_MODEL=…·ANSWER_MODE=model 로 실행한다.
+    EXTRA="Environment=SHIFTLINK_ANSWER_MODE=${ANSWER_MODE:-extract}
+Environment=SHIFTLINK_JUDGE_MODEL=${JUDGE_MODEL:-exaone-sft-judge}"
     EXEC="\"$PY\" -m shiftlink.mes --host 0.0.0.0 --port 8000 --db \"$DB\""
     ;;
   vision)

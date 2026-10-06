@@ -23,8 +23,10 @@ class MesWebTests(unittest.TestCase):
 
     def test_flow_and_demo_controls_share_one_operator_workspace(self) -> None:
         html = (WEB / "index.html").read_text(encoding="utf-8")
-        self.assertIn('id="control-panel-toggle"', html)
-        self.assertIn('id="control-drawer"', html)
+        # 시연 제어는 서랍이 아니라 탭 아래 한 줄 바로 늘 보인다
+        self.assertIn('id="control-panel"', html)
+        self.assertIn('id="run-toggle"', html)
+        self.assertNotIn('id="control-drawer"', html)
         self.assertIn('id="operations-table"', html)
         self.assertNotIn('id="tab-setup"', html)
 
@@ -51,7 +53,7 @@ class MesWebTests(unittest.TestCase):
     def test_javascript_history_and_connection_behavior(self) -> None:
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
-const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows} = require('./shiftlink/mes/web/app.js');
+const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics} = require('./shiftlink/mes/web/app.js');
 assert.equal(equipmentKind({profile_id:'hpu', code:'CUSTOM-01'}), 'hpu');
 assert.equal(equipmentKind({profile_id:'custom', code:'HPU-01'}), 'generic', 'unknown profile must not invent equipment internals');
 assert.equal(equipmentKind({code:'RT-01'}), 'rt');
@@ -83,8 +85,19 @@ assert.equal(connectionState(1000, 12000, 'running'), '데이터 수신 지연')
 assert.equal(connectionState(1000, 2000, 'paused'), '연결됨 · 일시정지');
 assert.equal(stateClass({fault_level:'warning',operating_state:'running'}), 'warning');
 assert.equal(stateClass({fault_level:'normal',operating_state:'waiting'}), 'waiting');
-const rows = operationRows({equipment:[{equipment_id:'EQ-1', operating_state:'waiting', fault_level:'normal'}], coils:[{equipment_id:'EQ-1'}], active_alarms:[{equipment_id:'EQ-1', severity:'warning'}], measurements:[{equipment_id:'EQ-1', signal:'cycle_time', value:12, unit:'s'}]}, {equipment:[{equipment_id:'EQ-1', code:'RT-01', name:'Roller', dwell_seconds:10}]}, 5);
-assert.deepEqual(rows[0], {equipment_id:'EQ-1', name:'RT-01', status:'waiting', faultLevel:'normal', throughput:0, utilization:0, queue:1, cycleTime:'12 s', alerts:1, changed:true});
+const rows = operationRows({equipment:[{equipment_id:'EQ-1', operating_state:'waiting', fault_level:'normal'}], coils:[{equipment_id:'EQ-1'}], active_alarms:[{equipment_id:'EQ-1', severity:'warning', code:'AL-X', label:'경보 이름'}], measurements:[{equipment_id:'EQ-1', signal:'cycle_time', value:12, unit:'s'}]}, {equipment:[{equipment_id:'EQ-1', code:'RT-01', name:'Roller', dwell_seconds:10}], route:['EQ-1']});
+assert.deepEqual(rows[0], {equipment_id:'EQ-1', name:'RT-01', status:'waiting', faultLevel:'normal', onRoute:true, throughput:null, utilization:null, queue:1, cycleTime:'12 s', alerts:1, alarmLabel:'경보 이름', changed:true});
+// 계산 지표: 20 스냅샷(1초 간격) 중 RT 가 15번 가동, 코일 C1 은 5초 머물고 다음 설비로, C0 은 창 시작부터 있다가 떠남
+const snaps = Array.from({length:20}, (_, i) => ({simulated_at:new Date(Date.UTC(2026,0,1,0,0,i)).toISOString(),
+  equipment:[{equipment_id:'RT', operating_state: i < 15 ? 'running' : 'stopped', fault_level:'normal'}],
+  coils:[...(i < 3 ? [{coil_id:'C0', equipment_id:'RT'}] : []), ...(i >= 5 && i < 10 ? [{coil_id:'C1', equipment_id:'RT'}] : i >= 10 ? [{coil_id:'C1', equipment_id:'CV'}] : [])]}));
+const m = operationMetrics(snaps);
+assert.equal(m.RT.utilization, 75);
+assert.equal(m.RT.throughput, 2);
+assert.equal(m.RT.cycle, 5, 'C0 은 들어온 시각을 몰라 머문 시간에서 뺀다');
+assert.equal(m.CV.throughput, 0, '창 끝까지 머문 코일은 처리량이 아니다');
+assert.equal(operationMetrics(snaps.map(x => ({...x, equipment:[...x.equipment, {equipment_id:'GR', operating_state:'stopped', fault_level:'critical'}]}))).GR.utilization, 0, '내내 멈춘 설비는 0%');
+assert.deepEqual(operationMetrics(snaps.slice(0, 5)), {}, '표본이 적으면 계산하지 않는다');
 acceptEvents(h, {run_id:'new',events:[{run_id:'new', sequence:2, event_type:'coil_exited'}]});
 acceptEvents(h, {run_id:'new',events:[{run_id:'new', sequence:2, event_type:'coil_exited'}]});
 assert.equal(h.completed, 1, 'boundary replay does not inflate throughput');

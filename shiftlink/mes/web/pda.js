@@ -26,14 +26,13 @@ const API_TIMEOUT_MS = 8000;
 const RECENT_MAX = 3;
 
 const TYPE_COLOR = { HPU:'hpu', GR:'gr', RT:'rt', CV:'cv', PDP:'pdp', CAU:'cau' };
-const TYPE_BAND = { HPU:'빨강', GR:'파랑', RT:'노랑', CV:'초록', PDP:'보라', CAU:'하늘' };
 
 // ── 상태 ───────────────────────────────────────────────────────────
 const S = {
   screen:'boot', equipment:[], cards:[], handovers:[], groups:{}, types:{},
   eq:null, source:null, scanId:null,
   symptom:null,   // { text, other:boolean } — 선택된 증상
-  observations:[], recent:[], outbox:[], online:null, netNote:null,
+  observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, lastScanMs:null, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0
 };
@@ -45,6 +44,18 @@ const findByCode = (code) => S.equipment.find((e) => e.code === code) || null;
 const cardFits = (c, eq) => (c.equipment === eq.type || c.equipment === 'COMMON')
   && (!c.mes_equipment_id || c.mes_equipment_id === eq.equipment_id);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// 화면용 단위 표기(데이터의 unit 값은 그대로 둔다). MES 대시보드 operator.js 의 unitText 와 같은 표.
+const UNIT_TEXT = { m_min: 'm/min', L_min: 'L/min', mm_s: 'mm/s', degC: '℃', pct: '%', bool: '', min: '분' };
+const unitText = (u) => (u in UNIT_TEXT ? UNIT_TEXT[u] : String(u || '').replace(/_/g, '/'));
+/* 신호 ID 대신 MES 구성의 한글 이름. 파생 <signal>_state 는 "이름 상태". */
+function signalName(sig) {
+  const base = String(sig).replace(/_state$/, '');
+  const spec = S.eq && S.eq.signals.find((x) => x.signal === base);
+  const name = spec ? String(spec.name || base).split(' (')[0] : base;
+  return base !== sig ? name + ' 상태' : name;
+}
+const obsText = (o) => signalName(o.signal) + ' ' + o.value + (unitText(o.unit) ? ' ' + unitText(o.unit) : '');
+
 
 // ── 부팅: MES 구성·카드 적재 ───────────────────────────────────────
 async function getJson(path) {
@@ -161,7 +172,7 @@ async function probeServer() { try { await api('/api/state'); } catch (_) {} }
 function setContext(eq, source, extra) {
   S.eq = eq; S.source = source; S.queryResponse = null;
   S.scanId = (extra && extra.scanId) || null;
-  S.observations = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
+  S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   renderContext(); renderRecent(); renderObsSignals(); renderObsList();
   loadMesObservations();
@@ -256,11 +267,10 @@ function renderManualList() {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'row';
     b.innerHTML = '<i class="rail"></i><span class="txt"><span class="id"></span><br>'
-      + '<span class="nm"></span></span><span class="mk"></span>';
+      + '<span class="nm"></span></span>';
     b.querySelector('.rail').style.background = byType(eq.type);
     b.querySelector('.id').textContent = eq.code;
     b.querySelector('.nm').textContent = eq.group + ' · ' + eq.where;
-    b.querySelector('.mk').textContent = TYPE_BAND[eq.type] || '';
     b.addEventListener('click', () => {
       setContext(eq, 'manual_selection', {}); haptic(30); show('ctx');
     });
@@ -275,14 +285,14 @@ function renderObsSignals() {
   if (!S.eq) return;
   S.eq.signals.forEach((s) => {
     const o = document.createElement('option');
-    o.value = s.signal; o.textContent = s.name + ' · ' + s.signal + ' (' + s.unit + ')';
+    o.value = s.signal; o.textContent = String(s.name).split(' (')[0] + (unitText(s.unit) ? ' (' + unitText(s.unit) + ')' : '');
     sel.appendChild(o);
   });
   renderObsRange();
 }
 function renderObsRange() {
   const s = (S.eq && S.eq.signals.find((x) => x.signal === $('obsSignal').value)) || null;
-  $('obsRange').textContent = s ? '정상 범위 ' + fmt(s.min) + '~' + fmt(s.max) + ' ' + s.unit + ' (MES 구성값)' : '';
+  $('obsRange').textContent = s ? '정상 범위 ' + fmt(s.min) + '~' + fmt(s.max) + ' ' + unitText(s.unit) + ' (MES 구성값)' : '';
 }
 const fmt = (v) => (v == null ? '—' : String(v));
 const num = (v) => String(Number(Number(v).toFixed(3)));
@@ -319,23 +329,29 @@ function usableReadings(snap, eq) {
 }
 
 /* 선택 설비의 현재 MES 관측으로 채운다. 직접 입력한 값은 덮어쓰지 않는다. */
-async function loadMesObservations() {
+async function loadMesObservations(given) {
   const eq = S.eq;
   if (!eq) return;
-  let snap;
-  try { snap = await getJson('/api/state'); } catch (_) { S.mes = null; renderObsList(); renderMesStatus(); return; }
+  let snap = given;
+  if (!snap) {
+    try { snap = await getJson('/api/state'); } catch (_) { S.mes = null; renderObsList(); renderMesStatus(); return; }
+  }
   if (S.eq !== eq) return;
   const r = usableReadings(snap, eq);
   const manual = S.observations.filter((o) => o.source === 'manual');
-  S.observations = manual.concat(r.kept.filter((o) => !manual.some((x) => x.signal === o.signal)));
+  // 실시간 갱신이 작업자가 ✕로 뺀 MES 값을 되살리지 않게 한다.
+  S.observations = manual.concat(r.kept.filter((o) => !manual.some((x) => x.signal === o.signal)
+    && !S.obsRemoved.includes(o.signal)));
   S.mesExcluded = r.excluded;
   const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
   S.mes = {
     at: snap.simulated_at, operating: state.operating_state, fault: state.fault_level,
-    alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.code),
+    alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.label || a.code),
     diagnoses: (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
   };
   renderObsList(); renderMesStatus();
+  // 증상 순서는 관측에 따라 바뀐다. 순서가 달라졌을 때만 다시 그린다(목록 깜박임 방지).
+  if (S.screen === 'ask' && symKey(symptomsFor(eq)) !== S.symKey) renderSymptoms();
 }
 
 /* 범위 이탈이면 방향과 경계 대비 차이를 만든다. MES 운영 화면과 같은 표기. */
@@ -348,7 +364,7 @@ function obsView(o) {
   const bound = st === 'low' ? spec.min : spec.max, diff = o.value - bound;
   const pct = bound ? ' (' + (diff > 0 ? '+' : '') + Math.round(diff / Math.abs(bound) * 100) + '%)' : '';
   return { st: st, text: (st === 'low' ? '▼ 하한 ' : '▲ 상한 ') + num(bound) + ' 대비 '
-    + (diff > 0 ? '+' : '') + num(diff) + ' ' + o.unit + pct };
+    + (diff > 0 ? '+' : '') + num(diff) + ' ' + unitText(o.unit) + pct };
 }
 
 function renderObsList() {
@@ -369,11 +385,13 @@ function renderObsList() {
     row.innerHTML = '<span class="txt"><span class="mono"></span><small></small></span>'
       + '<button class="x" type="button" aria-label="삭제">✕</button>';
     const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
-    row.querySelector('.mono').textContent = (spec.name || r.o.signal) + ' = ' + r.o.value + ' ' + r.o.unit;
+    row.querySelector('.mono').textContent = signalName(r.o.signal) + ' = ' + r.o.value + (unitText(r.o.unit) ? ' ' + unitText(r.o.unit) : '');
     row.querySelector('small').textContent = (r.v.text ? r.v.text + ' · ' : r.v.st === 'stopped' ? '정지 중 0 · 정상 · ' : '')
-      + (r.o.source === 'manual' ? '직접 입력' : 'MES') + ' · ' + r.o.signal;
+      + (r.o.source === 'manual' ? '직접 입력' : 'MES');
     row.querySelector('.x').addEventListener('click', () => {
-      S.observations.splice(S.observations.indexOf(r.o), 1); renderObsList();
+      S.observations.splice(S.observations.indexOf(r.o), 1);
+      if (r.o.source === 'mes') S.obsRemoved.push(r.o.signal);
+      renderObsList();
     });
     return row;
   };
@@ -408,14 +426,164 @@ function renderMesStatus() {
  * 「기타」를 목록 항목과 같은 크기·같은 자리에 두는 이유 — 목록에서만 고를 수
  * 있으면 항상 무언가 찾히고 「해당 지식 없음」이 영영 나오지 않는다. 그 화면은
  * 이 시스템에서 실패가 아니라 기능이므로 도달 경로를 좁히면 안 된다. */
+/* 화면 표시 이름. 질의에는 원문 symptom 을 그대로 보낸다 — 짧은 이름은 단어 겹침 검색에서
+ * 0건이 나올 수 있다(10/6 시험). 'sym' 증상 · 'pre' 작업 전 확인. 없는 카드는 원문을 보인다.
+ * 근거·검토: docs/design/pda_ui/symptom_labels_20261006.md */
+const SYMPTOM_LABELS = {
+  // HPU
+  'K-1001': ['펌프 출구 압력 표시 없음', 'sym'],
+  'K-1002': ['냉각기 출구 유온 58℃ 초과', 'sym'],
+  'K-1004': ['소음 + 유량·압력 저하 + 거품', 'sym'],
+  'K-1005': ['축압기 기능 저하 의심', 'sym'],
+  'K-1008': ['작동유 우유빛 변색·젤라틴 덩어리', 'sym'],
+  // CV
+  'K-1010': ['벨트 편주 · 아이들러 중앙 이탈', 'sym'],
+  'K-1011': ['아이들러 회전 80% 미만 + 마찰음', 'sym'],
+  'K-1012': ['벨트 교체 후 편주', 'sym'],
+  'K-1013': ['벨트 특정 구간만 편주', 'sym'],
+  'K-1015': ['운전 중 오작동·고장 발생', 'sym'],
+  'K-1016': ['벨트 커버 점·줄무늬 부풂', 'sym'],
+  // RT
+  'K-1017': ['롤러 이상 소음(마찰음·휘파람음)', 'sym'],
+  'K-1020': ['리프트 상승 정지 + 밸브 고음', 'sym'],
+  'K-1021': ['리프트 하강 불가', 'sym'],
+  'K-1022': ['상승 불가 · 모터 소음/퓨즈 단선', 'sym'],
+  'K-1023': ['정지 중 리프트 자연 하강', 'sym'],
+  // GR
+  'K-1025': ['베어링부 온도 62℃ 초과', 'sym'],
+  'K-1026': ['감속기 규칙적 이상음', 'sym'],
+  'K-1027': ['감속기 누유', 'sym'],
+  'K-1028': ['감속기 불규칙 이상음', 'sym'],
+  'K-1030': ['장착부 주변 이상음', 'sym'],
+  // HPU
+  'K-1201': ['차압 1.2 bar 초과 · 막힘 표시', 'sym'],
+  'K-1202': ['차압 1.2 bar 초과 · 교체 판단', 'sym'],
+  'K-1203': ['출구 압력 정상 · 압력/유량 부족', 'sym'],
+  // CV
+  'K-1204': ['운전 중 벨트 미끄럼·정지', 'sym'],
+  'K-1205': ['장력 정상 범위 · 이송량 저하', 'sym'],
+  'K-1206': ['벨트 저속 · 이송물 적체', 'sym'],
+  // RT
+  'K-1207': ['반송 지시 중 물품 미이동', 'sym'],
+  'K-1208': ['모터 전류 16 A 초과', 'sym'],
+  // GR
+  'K-1209': ['감속기 진동 상승', 'sym'],
+  'K-1210': ['MES 베어링 62℃ 초과 · 실측 대조', 'sym'],
+  // HPU
+  'K-1211': ['정비 후 재가동 · 펌프 소음·기포', 'sym'],
+  // GR
+  'K-1212': ['오일 교환 후 유면 확인 누락', 'pre'],
+  // CV
+  'K-1213': ['정비 후 시험운전 · 벨트 편주', 'sym'],
+  // RT
+  'K-1214': ['반송부 정비 후 재가동 전', 'pre'],
+  // CV
+  'K-1215': ['끼임 비상정지 후 재가동 전', 'pre'],
+  // GR
+  'K-1216': ['과열 정지 후 재가동 전', 'pre'],
+  // RT
+  'K-1217': ['인터록 정지 후 재가동 전', 'pre'],
+  // HPU
+  'K-1218': ['냉간 기동 · 압력/유량 부족·소음', 'sym'],
+  // GR
+  'K-1219': ['장기 정지 후 재가동 전', 'pre'],
+  // CAU
+  'K-1301': ['공기 압력 저하 · 공구 출력 저하', 'sym'],
+  'K-1302': ['배관·이음부 누설음', 'sym'],
+  'K-1303': ['계통 압력 저하 · 누설 의심', 'sym'],
+  'K-1305': ['압력 상승 + 압축기 전류 상승', 'sym'],
+  // PDP
+  'K-1306': ['차단기 트립 → 재투입 후 정상', 'sym'],
+  'K-1307': ['모터 기동 시 버스 전압 순간 강하', 'sym'],
+  'K-1308': ['차단기 트립으로 설비 정지', 'sym'],
+  'K-1309': ['트립 표시 · 충전부 작업 전', 'pre'],
+  'K-1310': ['전압 저하 + 차단기 트립 동시', 'sym'],
+  // CAU
+  'K-1311': ['부하 운전 중 압축기 정지', 'sym'],
+  'K-1312': ['공급량 부족 · 토출량 저하', 'sym'],
+  'K-1313': ['압축기 정기 정비 시점', 'pre'],
+  // PDP
+  'K-1315': ['차단기·도체 변색, 핫스팟', 'sym'],
+  'K-1316': ['장기 미조작 차단기 동작 지연', 'sym'],
+  'K-1317': ['배선차단기 트립 · 원인 미확인', 'sym'],
+  'K-1318': ['배선차단기 정기 시험', 'pre'],
+  'K-1319': ['계전기 점검 · CT 배선 분리 전', 'pre'],
+  // CAU
+  'K-1322': ['정전 후 압축기 기동 불가', 'sym'],
+  'K-1323': ['타사 오일 · 토출 고온·소비 증가', 'sym'],
+  // PDP
+  'K-1324': ['정전 복구 후 차단기 투입 순서', 'pre'],
+  'K-1325': ['트립 없이 단자 발열·볼트 풀림', 'sym'],
+};
+
+/* 현재 MES 상황(범위 이탈 신호)과 카드의 관련도로 선택지 순서를 정한다.
+ * ponytail: 신호명 → 한글 낱말 표와 단어 포함 여부만 보는 단순 점수. 카드 문장에 그 낱말이 없으면
+ * 못 올린다 — 순서 정확도가 문제가 되면 Jetson 검색 순위(/api/query 와 같은 검색)로 바꾼다. */
+const SIGNAL_WORDS = [
+  [/pressure|press/, ['압력']], [/temp/, ['온도', '유온', '과열', '발열']], [/_dp$/, ['차압']],
+  [/flow/, ['유량', '공급량', '토출량']], [/current/, ['전류', '과부하']], [/vib/, ['진동']],
+  [/speed|rpm/, ['속도', '저속', '회전']], [/tension/, ['장력', '미끄럼']], [/queue/, ['적체']],
+  [/voltage/, ['전압']], [/trip/, ['트립']], [/oil_level/, ['유면']], [/oil_leak/, ['누유', '샌다']],
+  [/lift/, ['승강', '리프트']], [/idler/, ['아이들러']], [/viscosity/, ['점도', '냉간', '저온']]
+];
+const DIR_WORDS = { low: ['저하', '부족', '낮', '없', '강하', '불가', '저속'],
+  high: ['상승', '초과', '높', '고온', '과열', '증가', '적체', '트립'] };
+
+/* 범위를 벗어난 관측 신호. 정지 중 0 은 이탈로 보지 않는다(obsView 와 같은 규칙). */
+function situation() {
+  if (!S.eq) return [];
+  return S.observations.map((o) => ({ o: o, st: obsView(o).st })).filter((r) => r.st === 'low' || r.st === 'high')
+    .map((r) => {
+      const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
+      return { signal: r.o.signal, name: String(spec.name || r.o.signal).split(' (')[0], dir: r.st };
+    });
+}
+
+function relevance(c, sit) {
+  const text = c.symptom || '';   // 제목은 결론 문장이라 엇방향 낱말이 섞인다(냉간 기동 카드의 '유온')
+  let score = 0;
+  const why = [];
+  sit.forEach((s) => {
+    const words = [].concat(...SIGNAL_WORDS.filter(([re]) => re.test(s.signal)).map(([, w]) => w));
+    if (!text.includes(s.signal) && !words.some((w) => text.includes(w))) return;
+    score += 2;
+    if (DIR_WORDS[s.dir].some((w) => text.includes(w))) score += 1;
+    why.push(s.name + (s.dir === 'low' ? ' ▼' : ' ▲'));
+  });
+  (c.conditions || []).forEach((cond) => {
+    const base = S.observations.find((o) => o.signal === cond.signal.replace(/_state$/, ''));
+    if (base && obsView(base).st === 'stopped') return;   // 정지 중 0 — 미평가로 둔다
+    const r = evalCondition(cond);
+    // '정상일 때' 조건은 이상 상황의 근거가 아니다 — 일치해도 올리지 않고, 어긋나면 내린다.
+    if (r.state === 'match' && cond.value !== 'normal') { score += 3; why.push('카드 조건 일치'); }
+    if (r.state === 'miss') score -= 3;
+  });
+  return { score: score, why: why };
+}
+
+// 순서·점수와 이상 신호가 같으면 다시 그리지 않는다(목록 깜박임 방지).
+/* 고장 알림 순서: 선택 설비 → 심각도(0 경보·자체 이상, 1 경보·주의, 2 범위 이탈만) → 먼저 난 경보 → MES 등록 순서(입력 순서). */
+function alertOrder(faults, selected) {
+  return faults.map((f, i) => Object.assign({ i: i }, f)).sort((a, b) =>
+    (b.eq === selected) - (a.eq === selected) || a.level - b.level
+    || (a.at && b.at ? a.at.localeCompare(b.at) : (b.at ? 1 : 0) - (a.at ? 1 : 0)) || a.i - b.i);
+}
+
+const symKey = (items) => items.map((i) => i.text + i.score).join('|')
+  + '#' + situation().map((x) => x.signal + x.dir).join('|');
+
 function symptomsFor(eq) {
   const out = [];
+  const sit = situation();
   S.cards.forEach((c) => {
-    if (!cardFits(c, eq)) return;
-    const s = (c.symptom || '').trim();
-    if (s && out.indexOf(s) === -1) out.push(s);
+    // T4 인계 카드는 증상 질의 검색에서 빠진다(retrieval.py, 10/1 회의) — 선택지에도 두지 않는다.
+    if (!cardFits(c, eq) || c.tacit_type === 'T4') return;
+    const text = (c.symptom || '').trim();
+    if (!text || out.some((o) => o.text === text)) return;
+    const [label, group] = SYMPTOM_LABELS[c.card_id] || [text, 'sym'];
+    out.push(Object.assign({ text, label, group, safety: c.tacit_type === 'T5' }, relevance(c, sit)));
   });
-  return out;
+  return out.sort((a, b) => b.score - a.score);   // 안정 정렬: 같은 점수는 카드 순서 유지
 }
 
 /* 선택된 증상 문자열. 계약(QueryRequest.question)은 그대로 문자열 하나다. */
@@ -433,6 +601,7 @@ function renderSymptoms() {
   if (!other) $('question').value = '';
   if (!S.eq) return;
   const items = symptomsFor(S.eq);
+  S.symKey = symKey(items);
 
   if (!items.length) {
     const p = document.createElement('p');
@@ -441,12 +610,14 @@ function renderSymptoms() {
     list.appendChild(p);
   }
 
-  const mk = (text, other) => {
+  const mk = (item, other) => {
+    const text = other ? '' : item.text;
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'row sym' + (other ? ' other' : '');
-    b.innerHTML = '<span class="mark">○</span><span class="txt"></span>';
-    b.querySelector('.txt').textContent = text;
+    b.innerHTML = '<span class="mark">○</span><span class="txt"><span class="lb"></span><span class="why"></span><span class="orig"></span></span>';
+    b.querySelector('.lb').textContent = other ? '기타 — 직접 입력' : (item.safety ? '⚠ ' : '') + item.label;
+    if (!other && item.score > 0) b.querySelector('.why').textContent = 'MES ' + item.why.join(' · ');
     b.addEventListener('click', () => {
       S.symptom = { text: other ? '' : text, other: !!other };
       renderSymptoms();
@@ -455,12 +626,35 @@ function renderSymptoms() {
       renderAskBlock();
     });
     const sel = !!S.symptom && (other ? S.symptom.other : (!S.symptom.other && S.symptom.text === text));
-    if (sel) { b.classList.add('sel'); b.querySelector('.mark').textContent = '●'; }
+    if (sel) {
+      b.classList.add('sel'); b.querySelector('.mark').textContent = '●';
+      if (!other && item.label !== item.text) b.querySelector('.orig').textContent = item.text;   // 무엇을 보내는지 확인
+    }
     list.appendChild(b);
   };
+  const head = (t) => { const p = document.createElement('p'); p.className = 'grp'; p.textContent = t; list.appendChild(p); };
 
-  items.forEach((s) => mk(s, false));
-  mk('기타 — 직접 입력', true);      // 목록과 같은 크기·같은 자리
+  const related = items.filter((i) => i.score > 0);
+  if (related.length) { head('현재 MES 상황과 관련 · 높은 순'); related.forEach((i) => mk(i, false)); }
+  const sit = situation();
+  if (sit.length && !related.length) {
+    // 이상은 감지됐지만 그 신호를 다루는 증상 카드가 없다 — 순서가 그대로인 이유를 알린다.
+    const box = document.createElement('button');
+    box.type = 'button';
+    box.className = 'alert nm';
+    box.innerHTML = '<p class="hd">맞는 증상 카드 없음</p><p class="p"></p>';
+    box.addEventListener('click', () => list.querySelector('.row.sym.other').click());
+    box.querySelector('.p').textContent = sit.map((x) => x.name + ' ' + (x.dir === 'low' ? '낮음' : '높음')).join(' · ')
+      + ' · 눌러서 「기타」에 직접 입력';
+    list.appendChild(box);
+  }
+  [['sym', '이상 증상'], ['pre', '작업 전 확인']].forEach(([g, title]) => {
+    const group = items.filter((i) => i.group === g && i.score <= 0);
+    if (!group.length) return;
+    head(title);
+    group.forEach((i) => mk(i, false));
+  });
+  mk(null, true);      // 목록과 같은 크기·같은 자리
 }
 
 // ── 조건 평가 ──────────────────────────────────────────────────────
@@ -473,6 +667,7 @@ function cmp(op, a, b) {
   }
 }
 const OPTXT = { '==':'=', '!=':'≠', '>':'>', '>=':'≥', '<':'<', '<=':'≤' };
+const stateWord = (v) => ({ low: '낮음', high: '높음', normal: '정상' }[v] || v);
 
 /* 원신호와 파생 <signal>_state 를 같은 규칙으로 찾는다. 단위가 다르면 미평가. */
 function observed(c) {
@@ -486,10 +681,10 @@ function observed(c) {
 /* 관측값이 없으면 "일치"로 속이지 않고 미평가로 남긴다. */
 function evalCondition(c) {
   const v = observed(c);
-  if (v == null) return { state:'unknown', text: c.signal + ' — 관측값 없음' };
+  if (v == null) return { state:'unknown', text: signalName(c.signal) + ' — 관측값 없음' };
   const ok = cmp(c.op, v, c.value);
   if (ok === null) return { state:'unknown', text: c.signal + ' — 연산자 ' + c.op };
-  return { state: ok ? 'match' : 'miss', text: c.signal + ' ' + v + ' ' + (OPTXT[c.op] || c.op) + ' ' + c.value + ' · ' + (ok ? '일치' : '불일치') };
+  return { state: ok ? 'match' : 'miss', text: signalName(c.signal) + ' ' + stateWord(v) + ' ' + (OPTXT[c.op] || c.op) + ' ' + stateWord(c.value) + ' · ' + (ok ? '일치' : '불일치') };
 }
 
 // ── 검색과 순위 산정 ───────────────────────────────────────────────
@@ -698,7 +893,7 @@ function recordTry(card) {
   S.attemptSeq += 1;
   const id = 'AT-' + String(S.attemptSeq).padStart(4, '0');
   const observed = S.observations.length
-    ? S.observations.map((o) => o.signal + ' ' + o.value + ' ' + o.unit).join(', ')
+    ? S.observations.map(obsText).join(', ')
     : '관측값 미입력';
   S.tries.push({
     attempt_id: id, card_id: card.card_id, action: card.title,
@@ -902,9 +1097,9 @@ async function submitHandover(note, request = api, store = localStorage) {
 function openHandoverNew() {
   const ctx = S.tries.length
     ? '시도 ' + S.tries.length + '건 실패 (' + S.tries.map((t) => t.attempt_id).join(' · ') + ')'
-      + (S.observations.length ? ' · ' + S.observations.map((o) => o.signal + ' ' + o.value).join(', ') : '')
+      + (S.observations.length ? ' · ' + S.observations.map(obsText).join(', ') : '')
     : (S.observations.length
-        ? S.observations.map((o) => o.signal + ' ' + o.value + ' ' + o.unit).join(', ')
+        ? S.observations.map(obsText).join(', ')
         : '시도 기록 없음 — 직접 입력 필요');
   $('hoCtx').textContent = ctx;
   $('hoSave').textContent = '저장';
@@ -977,7 +1172,7 @@ async function refreshOutbox(request) {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, equipmentFromLink }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, equipmentFromLink, symptomsFor, alertOrder }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1047,6 +1242,79 @@ on('simFeed', () => {
     body: JSON.stringify({ class: $('simValue').value, conf: 1, device_id: 'pda-diag' }) }).catch(() => {});
 });
 
+// ── MES 실시간 감시 ────────────────────────────────────────────────
+/* ponytail: 3초 폴링. 푸시(SSE)는 파이 프록시와 MES 서버를 둘 다 고쳐야 해서 보류 — 지연이 문제면 그때. */
+const WATCH_MS = 3000;
+const ALERT_ROWS = 3;
+
+/* 설비별 고장 상황: 경보 · MES 증상 후보 · 범위 이탈 · 자체 이상. 원인은 확정하지 않는다. */
+function faultsFrom(snap) {
+  return S.equipment.map((eq) => {
+    const items = [];
+    (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).forEach((a) => items.push('경보 ' + (a.label || a.code)));
+    (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
+      .forEach((d) => items.push(d.symptom + '(확정 아님)'));
+    const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
+    usableReadings(snap, eq).kept.forEach((o) => {
+      const spec = eq.signals.find((x) => x.signal === o.signal);
+      if (spec && spec.zeroStopped && o.value === 0 && state.operating_state !== 'running') return;
+      const st = stateOf(spec, o.value);
+      if (st === 'low' || st === 'high') items.push(String(spec.name).split(' (')[0] + (st === 'low' ? ' ▼' : ' ▲'));
+    });
+    if (!items.length && state.fault_level && state.fault_level !== 'normal') items.push(STATE_TXT[state.fault_level] || state.fault_level);
+    const alarms = (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id);
+    const level = alarms.some((a) => a.severity === 'critical') || state.fault_level === 'critical' ? 0
+      : alarms.length || (state.fault_level && state.fault_level !== 'normal') ? 1 : 2;
+    return { eq: eq, items: items, level: level, at: alarms.map((a) => a.raised_at).sort()[0] || '' };
+  }).filter((f) => f.items.length);
+}
+
+function renderAlert(faults) {
+  const el = $('alert');
+  const key = faults.map((f) => f.eq.code + f.items.join()).join('|');
+  // 내용이 같으면 다시 그리지 않는다 — 누르는 도중 다시 그리면 클릭이 사라진다.
+  S.faults = faults;
+  const view = key + '@' + (S.eq ? S.eq.code : '');   // 선택 설비를 먼저 보이므로 설비가 바뀌면 다시 그린다
+  if (view === S.alertView) return;
+  if (key && key !== S.alertKey) haptic([80, 60, 80]);
+  S.alertKey = key; S.alertView = view;
+  el.hidden = !faults.length;
+  el.innerHTML = '';
+  // 선택 설비를 맨 위에. ponytail: 3줄까지만 보이고 나머지는 대수만 — 동시 고장이 흔해지면 목록 화면으로.
+  const sorted = alertOrder(faults, S.eq);
+  sorted.slice(0, ALERT_ROWS).forEach((f) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'alrow';
+    b.innerHTML = '<span class="t"></span><span class="go">증상 질의 →</span>';
+    b.querySelector('.t').textContent = '⚠ ' + f.eq.code + ' 고장 상황 · ' + f.items.join(' · ');
+    // 그 설비의 증상 질의로 바로 간다 — 상황에 맞는 증상이 위에 올라와 있다.
+    b.addEventListener('click', () => {
+      if (S.eq !== f.eq) setContext(f.eq, 'manual_selection', {});
+      $('toAsk').click();
+      renderAlert(S.faults);   // 고른 설비를 띠 맨 위로
+    });
+    el.appendChild(b);
+  });
+  if (sorted.length > ALERT_ROWS) {
+    const more = document.createElement('p');
+    more.className = 'almore';
+    more.textContent = '외 ' + (sorted.length - ALERT_ROWS) + '대 고장 — ' + sorted.slice(ALERT_ROWS).map((f) => f.eq.code).join(', ');
+    el.appendChild(more);
+  }
+}
+
+async function watchMes() {
+  if (S.equipment.length) {
+    try {
+      const snap = await getJson('/api/state');
+      renderAlert(faultsFrom(snap));
+      if (S.eq) await loadMesObservations(snap);
+    } catch (err) { console.warn('MES 감시 실패', err); }   // 연결 표시는 api() 가 맡는다
+  }
+  setTimeout(watchMes, WATCH_MS);
+}
+
 // ── 기동 ───────────────────────────────────────────────────────────
 renderNet();
 window.paintOutbox = paintOutbox;
@@ -1054,5 +1322,5 @@ async function pollOutbox() { paintOutbox(await refreshOutbox()); }
 probeServer();
 pollOutbox();
 setInterval(pollOutbox, 30000);
-boot();
+boot().then(watchMes);
 }

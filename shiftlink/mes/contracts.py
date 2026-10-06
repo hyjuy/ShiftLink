@@ -148,6 +148,7 @@ class Alarm:
     raised_at: datetime
     acknowledged_at: datetime | None = None
     cleared_at: datetime | None = None
+    label: str = ""   # 화면용 한글 이름. 예전 기록에는 없다 — 화면은 code 로 대신한다
 
 
 @dataclass(frozen=True)

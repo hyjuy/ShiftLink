@@ -1,5 +1,6 @@
 """파이 PDA 앱: 화면은 로컬에서 주고 /api/* 는 Jetson으로 넘긴다."""
 
+import http.client
 import json
 import threading
 import urllib.error
@@ -51,9 +52,10 @@ def test_pages_local_and_api_proxied():
         status, body = fetch(pda_url + "/pda.html")
         assert status == 200 and b"/static/pda.js" in body and b'href="/"' in body
         assert fetch(pda_url + "/static/pda.js")[0] == 200
-        status, body = fetch(pda_url + "/")
-        assert status == 200 and b"/static/app.js" in body and b'href="/pda.html"' in body
-        assert fetch(pda_url + "/static/style.css")[0] == 200
+        conn = http.client.HTTPConnection(pda_url.split("//")[1]); conn.request("GET", "/")
+        res = conn.getresponse()  # 대시보드는 파이에 두지 않고 Jetson 화면으로 보낸다
+        assert res.status == 302 and res.getheader("Location") == jetson_url + "/"
+        conn.close()
         assert fetch(pda_url + "/static/../server.py")[0] == 404  # 화면 파일만 준다
 
         status, body = fetch(pda_url + "/api/state?x=1")

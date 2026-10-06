@@ -1,0 +1,277 @@
+{
+  "stage": "detail",
+  "blender_version": "4.5.14 LTS",
+  "units": "metres",
+  "models": [
+    {
+      "model": "Equipment_HPU",
+      "bounds_metres": [
+        -0.875,
+        -0.6550000309944153,
+        0.0,
+        1.0,
+        0.625,
+        1.959999918937683
+      ],
+      "triangles": 3268,
+      "materials": 8,
+      "moving_pivots": [
+        "Equipment_HPU",
+        "Anchors_HPU",
+        "InputAnchor_HPU",
+        "LabelAnchor_HPU",
+        "OutputAnchor_HPU",
+        "SelectionAnchor_HPU",
+        "Body_HPU",
+        "Motor",
+        "MovingParts_HPU",
+        "Nameplate_HPU",
+        "StatusIndicator_HPU"
+      ],
+      "fbx": "Equipment_HPU.fbx"
+    },
+    {
+      "model": "Equipment_PDP",
+      "bounds_metres": [
+        -0.9850000143051147,
+        -0.6550000309944153,
+        0.0,
+        0.9850000143051147,
+        0.4449999928474426,
+        2.4099998474121094
+      ],
+      "triangles": 5876,
+      "materials": 4,
+      "moving_pivots": [
+        "Equipment_PDP",
+        "Anchors_PDP",
+        "InputAnchor_PDP",
+        "LabelAnchor_PDP",
+        "OutputAnchor_PDP",
+        "SelectionAnchor_PDP",
+        "Body_PDP",
+        "MovingParts_PDP",
+        "DoorHinge",
+        "DoorHinge.001",
+        "DoorHinge.002",
+        "DoorHinge.003",
+        "DoorHinge.004",
+        "DoorHinge.005",
+        "DoorHinge.006",
+        "DoorHinge.007",
+        "DoorHinge.008",
+        "Nameplate_PDP",
+        "StatusIndicator_PDP"
+      ],
+      "fbx": "Equipment_PDP.fbx"
+    },
+    {
+      "model": "Equipment_CAU",
+      "bounds_metres": [
+        -1.1150000095367432,
+        -0.6550000309944153,
+        0.0,
+        1.9300000667572021,
+        0.4749999940395355,
+        1.959999918937683
+      ],
+      "triangles": 3624,
+      "materials": 8,
+      "moving_pivots": [
+        "Equipment_CAU",
+        "Anchors_CAU",
+        "InputAnchor_CAU",
+        "LabelAnchor_CAU",
+        "OutputAnchor_CAU",
+        "SelectionAnchor_CAU",
+        "Body_CAU",
+        "Motor.001",
+        "MovingParts_CAU",
+        "Nameplate_CAU",
+        "StatusIndicator_CAU"
+      ],
+      "fbx": "Equipment_CAU.fbx"
+    },
+    {
+      "model": "Equipment_GR",
+      "bounds_metres": [
+        -1.149999976158142,
+        -0.6550000309944153,
+        0.0,
+        1.340000033378601,
+        0.550000011920929,
+        1.959999918937683
+      ],
+      "triangles": 2560,
+      "materials": 7,
+      "moving_pivots": [
+        "Equipment_GR",
+        "Anchors_GR",
+        "InputAnchor_GR",
+        "LabelAnchor_GR",
+        "OutputAnchor_GR",
+        "SelectionAnchor_GR",
+        "Body_GR",
+        "Motor.002",
+        "MovingParts_GR",
+        "InputShaftPivot",
+        "OutputShaft",
+        "Nameplate_GR",
+        "StatusIndicator_GR"
+      ],
+      "fbx": "Equipment_GR.fbx"
+    },
+    {
+      "model": "Equipment_RT",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -0.9750000238418579,
+        0.0,
+        2.4260001182556152,
+        1.2400000095367432,
+        1.959999918937683
+      ],
+      "triangles": 7876,
+      "materials": 8,
+      "moving_pivots": [
+        "Equipment_RT",
+        "Anchors_RT",
+        "InputAnchor_RT",
+        "LabelAnchor_RT",
+        "OutputAnchor_RT",
+        "SelectionAnchor_RT",
+        "Body_RT",
+        "MovingParts_RT",
+        "ClampSlide",
+        "RollerAssembly",
+        "Roller_01",
+        "Roller_02",
+        "Roller_03",
+        "Roller_04",
+        "Roller_05",
+        "Roller_06",
+        "Roller_07",
+        "Roller_08",
+        "Roller_09",
+        "Roller_10",
+        "Roller_11",
+        "Roller_12",
+        "Nameplate_RT",
+        "StatusIndicator_RT"
+      ],
+      "fbx": "Equipment_RT.fbx"
+    },
+    {
+      "model": "Equipment_CV",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -1.0750000476837158,
+        0.0,
+        2.4000000953674316,
+        1.340000033378601,
+        1.959999918937683
+      ],
+      "triangles": 4060,
+      "materials": 9,
+      "moving_pivots": [
+        "Equipment_CV",
+        "Anchors_CV",
+        "InputAnchor_CV",
+        "LabelAnchor_CV",
+        "OutputAnchor_CV",
+        "SelectionAnchor_CV",
+        "Body_CV",
+        "Motor.003",
+        "MovingParts_CV",
+        "BeltSurface",
+        "DiverterArm",
+        "HeadDrum",
+        "TailDrum",
+        "TensionerSlide",
+        "Nameplate_CV",
+        "StatusIndicator_CV"
+      ],
+      "fbx": "Equipment_CV.fbx"
+    },
+    {
+      "model": "Material_Coil",
+      "bounds_metres": [
+        -0.6000000238418579,
+        -0.40380001068115234,
+        0.0,
+        0.6000000238418579,
+        0.40380001068115234,
+        1.2000000476837158
+      ],
+      "triangles": 12800,
+      "materials": 2,
+      "moving_pivots": [
+        "Material_Coil"
+      ],
+      "fbx": "Material_Coil.fbx"
+    }
+  ],
+  "mapping": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "model": "Equipment_HPU"
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "model": "Equipment_PDP"
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "model": "Equipment_CAU"
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "model": "Equipment_GR"
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "model": "Equipment_GR"
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "model": "Equipment_RT"
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "model": "Equipment_CV"
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "model": "Equipment_CV"
+    }
+  ],
+  "textures": [],
+  "unity_import": "not verified",
+  "assumptions": [
+    "All dimensions and layout synthetic",
+    "Coil handling and load support are conceptual; installed equipment capability unverified",
+    "RT generic model uses 12 rollers; RT-02 catalog 16 rollers needs an instance variant",
+    "CV-02 catalog scrap branch uses same CV base; branch variant deferred",
+    "CAU receiver tank and exposed motor are modeling proposals",
+    "No live MES animation or measured rotational speeds",
+    "No procedural textures; constant PBR colors to recreate in Built-in Standard shader"
+  ]
+}

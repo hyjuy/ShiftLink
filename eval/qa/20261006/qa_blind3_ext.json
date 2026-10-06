@@ -1,0 +1,195 @@
+[
+ {
+  "qid": "B3-011",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "HPU를 켰는데 평소에 못 듣던 윙윙 소리가 나요. 뭘 먼저 확인하면 될까요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1004"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "소음만 있고 유량·압력·거품 단서는 없음(카드 조건 일부 미확인). 핵심 신호(소음 증가)는 K-1004와 일치",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-012",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "HPU 밑에 기름이 고여 있는 게 보여요. 이럴 때 어떻게 대응해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "HPU 누유 카드 없음(누유 카드는 GR K-1027뿐). 가장 가까운 K-1006은 정비 금지·감압으로 직접 답이 아님",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-013",
+  "eq_id": "HPU",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "작업 중에 HPU가 갑자기 멈췄어요. 다시 켜기 전에 뭘 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "비정상 정지 후 재가동 카드 없음. K-1211(필터·오일 정비 후)·K-1218(저온 기동)은 조건이 질문에 없음",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-014",
+  "eq_id": "GR",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "GR 쪽에서 운전 중에 덜컹거리는 소리가 나요. 뭘 먼저 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1028"
+  ],
+  "acceptable_card_ids": [
+   "K-1026",
+   "K-1030"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "덜컹=불규칙 이상음 쪽으로 읽어 K-1028. 규칙적 두드림(K-1026)·장착부(K-1030)도 허용",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-015",
+  "eq_id": "GR",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "GR 외부에 기름이 흘러내린 자국이 보여요. 이럴 때 어떻게 대응하면 될까요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1027"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "누유 위치별 확인(K-1027)",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-016",
+  "eq_id": "GR",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "점검하려고 GR을 멈춰 둔 상태예요. 다시 돌리기 전에 뭘 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "후보 K-1219는 30일 장기 정상정지 조건이라 질문(정지 기간 불명)과 완전 일치하지 않음",
+  "split": "blind3ext",
+  "evaluation_status": "deferred",
+  "defer_reason": "K-1219는 30일 장기 정상정지 조건이라 정지 기간이 없는 질문과 일치 여부가 불명확"
+ },
+ {
+  "qid": "B3-017",
+  "eq_id": "CV",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "컨베이어가 돌아갈 때 긁히는 소리가 나요. 뭘 먼저 확인하면 될까요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": false,
+  "primary_card_ids": [],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "후보 K-1011은 고음 끽끽 소리와 롤 회전 저하가 핵심 신호라 '긁히는 소리'와 일치 불명확",
+  "split": "blind3ext",
+  "evaluation_status": "deferred",
+  "defer_reason": "K-1011의 핵심 신호(롤 회전 저하·고음 끽끽)와 긁히는 소리의 일치가 불명확"
+ },
+ {
+  "qid": "B3-018",
+  "eq_id": "CV",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "컨베이어 벨트가 한쪽으로 치우쳐서 움직여요. 이럴 때 어떻게 대응해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1010"
+  ],
+  "acceptable_card_ids": [
+   "K-1012"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "벨트 사행: 상류 아이들러 정렬(K-1010). 직접구동 소형은 K-1012",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-019",
+  "eq_id": "CV",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "컨베이어 위에 물건이 쌓이면서 흐름이 막혔어요. 이럴 때 어떻게 대응하면 될까요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1206"
+  ],
+  "acceptable_card_ids": [],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "이송물 적체: 실제 막힘과 느린 벨트 구분(K-1206). 수치 미제공",
+  "split": "blind3ext"
+ },
+ {
+  "qid": "B3-020",
+  "eq_id": "CV",
+  "persona_id": "V-blind3ext",
+  "intent": "status",
+  "question": "비상정지 버튼을 눌러서 컨베이어가 멈춰 있는 상태예요. 다시 가동하기 전에 뭘 확인해야 하나요?",
+  "observations": {},
+  "writer_note": "전혜민 작성(10/6, 카드 미열람 서브에이전트 작성·검토). 정답 연결: Claude(카드 본문 기준, 시험 전 확정, 시스템 결과 미열람)",
+  "answerable": true,
+  "primary_card_ids": [
+   "K-1215"
+  ],
+  "acceptable_card_ids": [
+   "K-1015"
+  ],
+  "safety_card_ids": [],
+  "key_facts": [],
+  "difficulty": "medium",
+  "label_note": "비상정지 후 재가동 보류·걸림 제거·기능시험(K-1215). 끼임 언급은 없으나 비상정지 후 복귀 핵심이 일치",
+  "split": "blind3ext"
+ }
+]

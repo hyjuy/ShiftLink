@@ -74,8 +74,6 @@
   #ctx .nm{font-size:12px;color:var(--tx-2)}
   #ctx .src{font-size:11px;font-weight:700;color:var(--ok)}
   #ctx .src.manual{color:var(--warn)}
-  #ctx .edit{min-width:56px;min-height:48px;padding:0 12px;border-radius:8px;border:1px solid var(--edge);
-    display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--tx-2);flex:0 0 auto}
 
   .btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:56px;padding:8px 14px;
     border-radius:10px;font-size:16px;font-weight:700;background:var(--surface-2);color:var(--tx);
@@ -85,9 +83,9 @@
   .btn.primary{background:#F3F6F9;color:#0A0D11;border-color:#F3F6F9}
   .btn.ghost{background:transparent}
   .btn[disabled]{opacity:.4}
-  .btn.big{min-height:136px;flex-direction:column;gap:6px;font-size:21px;background:var(--scan);
+  .btn.big{min-height:76px;gap:10px;font-size:20px;background:var(--scan);
     color:#04202B;border-color:var(--scan)}
-  .btn.big .ico{font-size:36px;line-height:1}
+  .btn.big .ico{font-size:26px;line-height:1}
   .btn-row{display:flex;gap:8px;flex:0 0 auto}
   .btn-row>*{flex:1 1 0}
   .outbox-note{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--warn)}
@@ -132,7 +130,7 @@
   /* 증상 선택 — 「기타」도 같은 크기·같은 자리에 둔다. 목록이 전부가 아님을 구조로 알린다. */
   .row.sym{font-size:15px;line-height:1.4}
   .row.sym.sel{border-color:var(--scan);background:#0F2A33}
-  .row.sym .mark{width:22px;flex:0 0 auto;color:var(--tx-3);font-weight:700;text-align:center}
+  .row.sym .mark{width:22px;flex:0 0 auto;color:var(--tx-2);font-weight:700;text-align:center}
   .row.sym.sel .mark{color:var(--scan)}
   .row.sym.other{border-style:dashed}
   .row.sym .lb{display:block}
@@ -144,8 +142,8 @@
   #otherWrap[hidden]{display:none !important}
   .alert.nm{width:100%;text-align:left;font:inherit;cursor:pointer;flex:0 0 auto}
   .grp{margin:6px 0 0;font-size:13px;font-weight:800;color:var(--tx-2);flex:0 0 auto}
-  /* MES 고장 상황 알림 — 탭하면 그 설비로 */
-  #alert{flex:0 0 auto;display:flex;flex-direction:column;background:var(--safety-bg);border-bottom:2px solid var(--safety-edge)}
+  /* MES 고장 상황 알림 — 표시 전용. 탭하면 확인 화면(s-alertGo)으로만 간다(B3·A4). 행 간격 8px(A1). */
+  #alert{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;background:var(--safety-bg);border-bottom:2px solid var(--safety-edge)}
   #alert[hidden]{display:none}
   #alert .alrow{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 14px;text-align:left;font-size:14px;
     font-weight:700;line-height:1.4;color:#FFD7D4;background:none;border:0}
@@ -158,11 +156,17 @@
   /* 안전 관문 — 스크롤해도 상단 고정 */
   .safety{border:2px solid var(--safety-edge);background:var(--safety-bg);border-radius:10px;padding:12px;
     display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
-  .safety.pin{position:sticky;top:0;z-index:5}
+  /* 고정은 관문 띠 하나만. 카드는 내부 스크롤 없이 일반 흐름으로 모두 펼쳐 어느 카드의 근거도
+     잘리거나 덮이지 않게 한다(B2). display:contents라 띠가 pane 직계로 놓여 pane 스크롤 내내 고정된다. */
+  .safety-stack,#askSafety{display:contents}
+  .safety-bar{position:sticky;top:0;z-index:5;flex:0 0 auto;margin:0 -14px;padding:10px 14px;
+    background:var(--safety-bg);color:#FFF0EF;font-size:14px;font-weight:800;border-block:3px solid var(--safety)}
+  .safety .body:empty{display:none}
+  .safety .stop{margin:0;font-size:13.5px;font-weight:700;color:#FFF0EF}
   .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFD7D4}
   .safety .hd .dot{width:9px;height:9px;border-radius:50%;background:var(--safety);flex:0 0 auto}
-  .safety .pinbadge{margin-left:auto;font-size:9px;font-weight:700;padding:3px 7px;border-radius:3px;
-    background:#1C6F88;color:#BFEBF7;letter-spacing:.05em}
+  .safety .pinbadge{margin-left:auto;font-size:12px;font-weight:800;padding:3px 8px;border-radius:3px;
+    background:#F3F6F9;color:#0A0D11;letter-spacing:.05em}
   .safety .kid{font-size:11px;font-weight:700;color:#FFB3AE;letter-spacing:.06em}
   .safety .ttl{font-size:16px;font-weight:800;line-height:1.35;color:#FFF0EF}
   .safety .body{font-size:13.5px;color:#FFE2E0;line-height:1.6}
@@ -172,7 +176,9 @@
   .card{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
     display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
   .card.top{border-color:#1C6F88}
-  .card.out{opacity:.62;border-style:dashed}
+  /* 흐리게 하지 않는다(A2) — 점선 테두리와 왼쪽 막대로 구분. 불일치는 주황, 미평가는 회색. */
+  .card.out{border-style:dashed;box-shadow:inset 4px 0 0 var(--tx-2)}
+  .card.out.miss{border-color:var(--fail);box-shadow:inset 4px 0 0 var(--fail)}
   .card.done{opacity:.5}
   .card .kid{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--tx-2)}
   .card .ttl{font-size:15px;font-weight:700;line-height:1.35}
@@ -192,18 +198,28 @@
   .pills{display:flex;flex-wrap:wrap;gap:6px}
   .pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--surface-2);
     border:1px solid var(--edge);color:var(--tx-2)}
-  .pill.match{color:var(--ok);border-color:#1E6B39}
-  .pill.miss{color:var(--fail);border-color:#7A4218}
+  .pill.match{color:#6EE69A;border-color:#1E6B39}
+  .pill.miss{color:#FFB48A;border-color:#7A4218}
   .pill.unknown{color:var(--tx-2)}
   .steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;
     font-size:13.5px;color:var(--tx-2)}
   .steps li{display:flex;gap:7px}
   .steps .st{color:var(--scan);font-weight:700;flex:0 0 auto}
+  .steps .tx{display:flex;flex-direction:column;gap:2px}
+  .steps .act{color:var(--tx)}
+  .steps .nx{font-size:12.5px}
+  .steps .stop{font-size:12.5px;font-weight:700;color:var(--fail)}
+  .steps .esc{font-size:12.5px;font-weight:700;color:var(--warn)}
+  .tf{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--fail);padding:4px 0 4px 9px;
+    font-size:12.5px;color:var(--tx-2)}
+  .tf .hd{font-size:11px;font-weight:700;color:var(--fail);letter-spacing:.03em}
+  .tf .act{font-size:13.5px;color:var(--tx)}
+  .tf .stop{font-weight:700;color:var(--warn)}
 
   .steps-prog{display:flex;flex-direction:column;gap:9px;flex:0 0 auto}
   .pstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx-2)}
   .pstep .n{width:19px;flex:0 0 auto;font-weight:700;color:var(--tx-2)}
-  .pstep .t{width:62px;flex:0 0 auto}
+  .pstep .t{width:120px;flex:0 0 auto}
   .pstep .bar{flex:1 1 auto;height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden}
   .pstep .bar i{display:block;height:100%;width:0;border-radius:4px;background:var(--scan);transition:width .3s linear}
   .pstep .mk{width:18px;flex:0 0 auto;text-align:center;font-weight:700}
@@ -242,12 +258,12 @@
     border:1px solid var(--edge);border-radius:8px;padding:10px;background:var(--surface);flex:0 0 auto}
   .obs .x{margin-left:auto;min-width:48px;min-height:48px;display:grid;place-items:center;color:var(--tx-2)}
   .obs .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .obs small{font-size:11.5px;color:var(--tx-3)}
+  .obs small{font-size:11.5px;color:var(--tx-2)}
   .obs.out{border-color:var(--fail);background:#2A140C;box-shadow:inset 4px 0 0 var(--fail)}
   .obs.out .mono{color:#FFD0B8;font-weight:700}
   .obs.out small{color:#FFB48A;font-weight:700}
   #obsList details{display:flex;flex-direction:column;gap:6px}
-  #obsList summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+  #obsList summary{min-height:48px;display:flex;align-items:center;cursor:pointer}
   .mesline{font-size:13px;line-height:1.5;color:var(--tx-2);border:1px solid var(--edge);border-radius:10px;
     padding:10px 12px;background:var(--surface)}
   .mesline.bad{border-color:var(--fail);color:#FFD0B8;background:#2A140C}
@@ -290,7 +306,6 @@
       <div><span class="id" id="ctxId">—</span> <span class="nm" id="ctxName"></span></div>
       <div class="src" id="ctxSrc"></div>
     </div>
-    <button class="edit" id="ctxEdit" type="button">설비 변경</button>
   </div>
 
   <!-- 부팅 -->
@@ -356,12 +371,30 @@
       <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
+      <p class="hint" id="ctxFoot"></p>
+      <div class="grow"></div>
+      <!-- 주 행동은 엄지가 닿는 하단에 모은다(A4) -->
       <p class="lbl">무엇을 하시겠습니까?</p>
       <button class="btn" id="toAsk" type="button">증상 질의</button>
       <button class="btn" id="toHandover" type="button">인계 확인</button>
       <button class="btn" id="toHandoverNew" type="button">인계 작성</button>
+      <button class="btn sm ghost" id="ctxEdit" type="button">설비 변경 (다시 스캔)</button>
+    </div>
+  </section>
+
+  <!-- 고장 알림 → 설비 변경 확인. 탭한 순간의 equipment_id로 고정한다(B3) -->
+  <section class="screen" id="s-alertGo">
+    <div class="appbar"><button class="ic" id="alertGoBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">설비 변경 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane">
+      <p class="lbl">MES 고장 알림 설비</p>
+      <p class="mono" id="alertGoCode" style="margin:0;font-size:40px;font-weight:800;line-height:1.1"></p>
+      <p class="hint" id="alertGoName"></p>
+      <p class="mesline bad" id="alertGoItems"></p>
       <div class="grow"></div>
-      <p class="hint" id="ctxFoot"></p>
+      <p class="hint" id="alertGoNow"></p>
+      <button class="btn primary" id="alertGoOk" type="button">이 설비로 변경 · 증상 질의</button>
+      <button class="btn sm ghost" id="alertGoCancel" type="button">취소</button>
     </div>
   </section>
 
@@ -370,6 +403,7 @@
     <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
+      <div id="askSafety"></div>
       <p class="lbl">증상 선택 — 이 설비에 등록된 카드</p>
       <div class="list" id="symptomList"></div>
       <div id="otherWrap" hidden style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto">
@@ -397,11 +431,11 @@
     <div class="appbar"><h1 style="font-size:14px;color:var(--tx-2)">검색 중</h1></div>
     <div class="pane">
       <div class="steps-prog">
-        <div class="pstep" id="st1"><span class="n">①</span><span class="t">카드 검색</span><span class="bar"><i></i></span><span class="mk">·</span></div>
-        <div class="pstep" id="st2"><span class="n">②</span><span class="t">순위 산정</span><span class="bar"><i></i></span><span class="mk">·</span></div>
-        <div class="pstep" id="st3"><span class="n">③</span><span class="t">답변 생성</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+        <div class="pstep" id="st1"><span class="n">①</span><span class="t">안전 카드 표시</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+        <div class="pstep" id="st2"><span class="n">②</span><span class="t">응답 대기</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+        <div class="pstep" id="st3"><span class="n">③</span><span class="t">결과 정리</span><span class="bar"><i></i></span><span class="mk">·</span></div>
       </div>
-      <p class="lbl" id="waitLbl" hidden>먼저 찾은 안전 카드</p>
+      <p class="lbl" id="waitLbl" hidden>이 설비에 적용되는 안전 카드 — 응답 전 확인</p>
       <div id="waitCards" style="display:flex;flex-direction:column;gap:10px"></div>
       <div class="grow"></div>
       <button class="btn sm ghost" id="waitCancel" type="button">취소</button>

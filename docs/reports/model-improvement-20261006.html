@@ -105,9 +105,9 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </tr>
 <tr>
 <td>hybrid(SFT 답변 + 가드)</td>
-<td><strong>선택 모드, 기본 꺼짐</strong></td>
+<td><strong>시연 서버 운영 모드(10/6 사용자 결정), 코드 기본값은 꺼짐</strong></td>
 <td>SFT 모델이 쓰고, 카드가 보류·금지를 담는데 재기동·충전·개방을 권하면 E1로 대체</td>
-<td>사전 등록 규칙은 충족, 운영 비용(메모리·시간)과 얇은 근거로 기본 아님. #208 머지</td>
+<td>사전 등록 규칙은 충족하나 근거가 얇고 운영 비용(메모리·시간)이 있다. 사용자가 시연 서버에 hybrid 유지를 결정했다(데스크톱 끈 상태, 3.8). 최종 채점 구성은 7.1</td>
 </tr>
 <tr>
 <td>판정기를 쓸 수 없을 때</td>
@@ -117,8 +117,8 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </tr>
 <tr>
 <td>MES 실행 방식</td>
-<td><code>run_http.sh</code>(nohup) 사용 중</td>
-<td>systemd 전환(재부팅 자동 시작)은 <code>sudo</code> 비밀번호가 필요해 <strong>사용자 실행 대기</strong>(스크립트 복사·드라이런 완료)</td>
+<td><strong>systemd 서비스 <code>shiftlink-mes</code></strong>(enabled)</td>
+<td>장애 시 약 5초 안에 자동 재시작 확인. 재부팅 시험·업로더는 미실시</td>
 <td>7.8</td>
 </tr>
 <tr>
@@ -584,6 +584,49 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 </tbody>
 </table></div>
 <p>절감은 −60/−129 MB로 작다. 메모리는 두 llama-server 약 4.4GB, 데스크톱 세션 약 0.7GB, VS Code 원격 서버 약 0.6GB, 기타 약 1.6GB로 쓰인다(RSS 합은 공유 메모리 중복이라 근사). 큰 레버는 데스크톱 끄기(약 0.7GB), VS Code 원격 닫기(약 0.6GB), 모델 하나로 통합(약 1.9GB, 재학습·재평가 필요)이며 모두 <strong>추정이고 미적용</strong>이다. 앞의 둘이면 여유가 약 2.4GB로 늘 것으로 본다. 2048 변형 시작 때 SSH가 끊겨 모델 내리기가 실패해 시작 상태가 같지 않았다(최대치 비교에는 영향이 작음).</p>
+<p><strong>데스크톱 끄기 + hybrid 재측정</strong>(<code>hybrid1006/run_nodesk.sh</code>, <code>measure_nodesk.json</code>·<code>tegra_nodesk.txt</code>, 판정 문맥 4096, MES는 systemd 서비스, 같은 18건·같은 스크립트):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>데스크톱 켬</th>
+<th>데스크톱 끔</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM 사용 최대</td>
+<td>6,491MB</td>
+<td><strong>6,074MB</strong>(−417MB)</td>
+</tr>
+<tr>
+<td>스왑 최대</td>
+<td>1,165MB</td>
+<td><strong>536MB</strong>(−629MB, 시작 전 기존 535MB가 남아 증가분은 거의 없음)</td>
+</tr>
+<tr>
+<td>처음 호출 2건</td>
+<td>53.5·73.2초</td>
+<td>51.0·5.1초(첫 호출이 두 모델을 함께 적재)</td>
+</tr>
+<tr>
+<td>이후 16건 p50 / p95</td>
+<td>4.46 / 5.39초</td>
+<td>4.39 / 5.35초</td>
+</tr>
+<tr>
+<td>답 일치</td>
+<td>—</td>
+<td>17/18 동일</td>
+</tr>
+<tr>
+<td>판정 통과</td>
+<td>18/18</td>
+<td>18/18</td>
+</tr>
+</tbody>
+</table></div>
+<p>측정 후 두 모델이 상주하고 가용 메모리는 약 1.3GB다(이전 최저 약 1.1GB). 지연은 데스크톱과 무관하다. E1(모델 1개)은 응답 0.4~1.2초라 속도는 E1이 훨씬 낫고, hybrid는 자연스러운 답의 대가로 약 4.4초와 메모리를 쓴다. <strong>사용자는 이 결과를 보고 hybrid 유지를 결정했다.</strong> 주의: 근거는 18건이고 처음 호출 지연(50초대)은 시연 직전 예열로 피해야 한다.</p>
 <h3>3.9 인계(T4) 실험 (10/2)</h3>
 <ul>
 <li>인계 블라인드(HB, 10문항) 검색 1위 정답은 1/10, t4는 10/18.</li>
@@ -872,7 +915,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <td>10/6</td>
 <td>Jetson 시연 MES가 <code>run_http.sh</code>(환경변수 없음)로 떠서 SFT 판정기가 적용되지 않았음</td>
 <td>스크립트에 환경변수 두 줄 추가(백업 <code>run_http.sh.bak-20261006</code>), MES 재시작</td>
-<td>실행 방식 정리는 systemd 전환 시험과 함께(7.8)</td>
+<td>systemd 전환으로 해결(7.8). 첫 설치는 Jetson 쪽 스크립트가 옛 버전이라 <code>SHIFTLINK_QUERY_MODEL</code>이 빠지고 이미 떠 있던 프로세스가 재시작되지 않아 hybrid가 반쪽만 적용됐다 → 새 스크립트 복사 후 재설치·재시작으로 해결(#215 머지 전까지 Jetson 복사본을 직접 맞춰야 함)</td>
 </tr>
 </tbody>
 </table></div>
@@ -924,7 +967,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <tr>
 <td>hybrid 메모리</td>
 <td>두 모델 상주 시 RAM 사용 6.5/7.6GB, 스왑 1.2GB, 처음 호출 53~73초</td>
-<td>기본으로 쓰지 않음. 판정 문맥 축소 효과는 작음(−60~−129MB), 데스크톱·VS Code 정리 후 재시험 권장</td>
+<td>데스크톱을 끄면 RAM 최대 −417MB·스왑 증가 없음(3.8). 그래도 여유 약 1.3GB라 시연 중 다른 작업은 피한다</td>
 </tr>
 <tr>
 <td>판정 모델 적재 시간</td>
@@ -981,7 +1024,7 @@ a{color:var(--acc)}ul,ol{padding-left:22px}li{margin:3px 0}li input{margin-right
 <td><code>exaone3.5:2.4b-instruct-q4_K_M</code> (Ollama ID <code>13644fc3d28e</code>)</td>
 </tr>
 <tr>
-<td>(선택 모드, 이번 채점에는 쓰지 않음)</td>
+<td>(선택 모드, 이번 채점에는 쓰지 않음. 시연 서버는 hybrid로 운영 중이므로 채점 전에 구성을 extract로 맞춘다)</td>
 <td>hybrid: <code>SHIFTLINK_ANSWER_MODE=hybrid SHIFTLINK_QUERY_MODEL=exaone-sft-answer</code> — ID <code>bd82c5ceaa36</code>, SHA-256 <code>793f1aeeffadf95114d23af4b0689b3b0e731a87b2531cd6a7779949981c5eec</code></td>
 </tr>
 <tr>
@@ -1117,13 +1160,13 @@ python eval/qa/score.py eval/qa/20260929/qa_test.json --host http://127.0.0.1:11
 </tr>
 <tr>
 <td>hybrid 메모리 시험</td>
-<td><strong>완료(효과 작음)</strong></td>
-<td>3.8의 표. hybrid 라이브 적용은 여유 1.1~1.3GB로 빠듯해 <strong>사용자 결정 대기</strong></td>
+<td><strong>완료, hybrid 유지 결정</strong></td>
+<td>판정 문맥 축소는 효과 작음, 데스크톱 끄기는 RAM 최대 −417MB(3.8). 사용자가 hybrid 유지를 결정했고 Jetson은 hybrid·데스크톱 끔으로 운영 중</td>
 </tr>
 <tr>
 <td>systemd 전환</td>
-<td><strong>사용자 실행 대기</strong></td>
-<td><code>sudo</code> 비밀번호 필요. 스크립트 복사·드라이런 완료. 명령: <code>ssh -t jetson@&lt;주소&gt; 'cd ~/shiftlink/app &amp;&amp; pkill -f "[p]ython3 -m shiftlink.mes"; sleep 2; DB=/home/jetson/shiftlink/data/mock-mes.sqlite3 bash deploy/install_service.sh mes'</code> (hybrid는 <code>ANSWER_MODE=hybrid</code>, 판정기 문맥은 <code>JUDGE_NUM_CTX=2048</code>). 실행 뒤 서비스 상태·환경변수·질의·503·장애 분리를 확인하고 재부팅 시험은 허락 후. 업로더는 Aiven 접속 파일을 사용자가 <code>/etc/shiftlink/aiven.env</code>에 넣어야 시작</td>
+<td><strong>완료</strong>(업로더·재부팅 시험 제외)</td>
+<td>서비스 active·enabled, 환경변수 확인, 질의 정상(답 있음 E1 0.36초, 답 없음 0.01초), <code>kill -9</code> 후 약 5초 안에 자동 재시작. 시험 질의가 남긴 <code>query_log</code> 4건 삭제(타인 1건 유지). 업로더는 <code>/etc/shiftlink/aiven.env</code>를 사용자가 넣어야 시작, 재부팅 시험은 허락 후</td>
 </tr>
 <tr>
 <td>최종 채점 준비</td>

@@ -54,6 +54,24 @@ def test_mes_requests_ollama_without_coupling_uploader_lifecycle(units):
 def test_spaced_paths_and_shared_default_db(units):
     repo, env_file, generated = units
     for unit in generated.values():
-        assert f'WorkingDirectory="{repo}"' in unit.splitlines()
+        assert f'WorkingDirectory={repo}' in unit.splitlines()
         assert f'--db "{repo}/mes_data/mock-mes.sqlite3"' in unit
     assert f'EnvironmentFile="{env_file}"' in generated["uploader"].splitlines()
+
+
+def test_generated_units_pass_systemd_verify(units, tmp_path):
+    _, _, generated = units
+    paths = []
+    for name, unit in generated.items():
+        path = tmp_path / f"shiftlink-{name}.service"
+        path.write_text(unit, encoding="utf-8")
+        paths.append("/mnt/" + path.drive[0].lower() + path.as_posix()[2:] if os.name == "nt" else str(path))
+    prefix = ["wsl.exe", "bash", "-lc"] if os.name == "nt" else ["bash", "-lc"]
+    available = subprocess.run(prefix + ["command -v systemd-analyze"], capture_output=True, timeout=30)
+    if available.returncode:
+        pytest.skip("systemd-analyze is unavailable")
+    result = subprocess.run(
+        prefix + ["systemd-analyze verify --man=no " + " ".join(map(shlex.quote, paths))],
+        capture_output=True, text=True, encoding="utf-8", timeout=30,
+    )
+    assert result.returncode == 0, result.stderr

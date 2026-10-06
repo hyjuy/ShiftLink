@@ -162,6 +162,8 @@
 | `query_upload` | `db/aiven_schema.sql` (Aiven) | `/api/query` 기록 업로드 표. `query_id`(`Q-`+uuid4), `latency_ms`, `no_knowledge`, `payload`(질문·답·인용 카드·모델). 원문 포함 §4.11 예외(합성) | Claude |
 | `query_log` · `save_query()` / `pending_queries()` / `mark_query()` | `shiftlink/mes/storage.py` | `MesService.query()`가 답을 돌려줄 때마다 로컬에 한 줄 기록. 업로더가 `query_upload`로 올림 | Claude |
 
+| `outbox_counts()` · `GET /api/outbox` | `shiftlink/mes/storage.py` · `server.py` | 업로드 상태별 건수 `{handover, query}` × `{pending, uploaded, conflict}` + `is_synthetic`. PDA '업로드 대기 N건' 표시용(읽기 전용) | Claude |
+
 두 POST의 HTTP 본문 한도는 64 KiB. `HO-`는 기존 인계 ID 접두어이며 PDA UUID(HTTP LAN에서는 시간+난수)를 붙인다. 기존 정본 인계 ID는 변경하지 않는다. outbox는 로컬 저장이며 클라우드 업로드는 별도 작업이다.
 
 ## systemd 서비스 (`deploy/install_service.sh`)

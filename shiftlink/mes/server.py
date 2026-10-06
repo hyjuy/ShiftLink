@@ -323,6 +323,7 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
+            if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
             if parsed.path == "/api/equipment/scan/recent":
                 self._send(200, self.service.recent_scans(int(parse_qs(parsed.query).get("limit", ["5"])[0]))); return
             if parsed.path.startswith("/api/runs/") and parsed.path.endswith("/replay"):

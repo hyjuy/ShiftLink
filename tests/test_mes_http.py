@@ -145,6 +145,20 @@ class HttpTests(unittest.TestCase):
             self.post_json('/api/config/apply', {'base_config_id': config['config_id'], 'draft': config})
         self.assertEqual(caught.exception.code, 409)
 
+    def test_outbox_counts_pending_and_conflict(self):
+        empty = {'pending': 0, 'uploaded': 0, 'conflict': 0}
+        self.assertEqual(json.loads(self.get('/api/outbox')),
+                         {'handover': empty, 'query': empty, 'is_synthetic': True})
+        storage = self.service.storage
+        storage.save_handover({'handover_id': 'HO-1', 'memo_text': 'a'})
+        storage.save_handover({'handover_id': 'HO-2', 'memo_text': 'b'})
+        storage.mark_handover('HO-2', 'conflict')
+        query_id = storage.save_query({'question': 'q'})
+        storage.mark_query(query_id, 'uploaded')
+        body = json.loads(self.get('/api/outbox'))
+        self.assertEqual(body['handover'], {'pending': 1, 'uploaded': 0, 'conflict': 1})
+        self.assertEqual(body['query'], {'pending': 0, 'uploaded': 1, 'conflict': 0})
+
     def test_file_database_survives_service_restart(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / 'mes.sqlite3'

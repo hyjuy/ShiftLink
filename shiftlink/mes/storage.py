@@ -148,6 +148,15 @@ class MesStorage:
         with self.connection:
             self.connection.execute("UPDATE query_log SET status = ? WHERE query_id = ?", (status, query_id))
 
+    def outbox_counts(self) -> dict[str, dict[str, int]]:
+        """Rows per upload status for the PDA 'upload pending N' badge."""
+        out = {}
+        for key, table in (("handover", "handover_outbox"), ("query", "query_log")):
+            counts = {"pending": 0, "uploaded": 0, "conflict": 0}
+            counts.update(self.connection.execute(f"SELECT status, COUNT(*) FROM {table} GROUP BY status").fetchall())
+            out[key] = counts
+        return out
+
     def create_run(self, run: Run, *, commit: bool = True) -> None:
         try:
             with self.connection if commit else nullcontext():

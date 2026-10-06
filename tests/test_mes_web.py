@@ -53,7 +53,9 @@ class MesWebTests(unittest.TestCase):
     def test_javascript_history_and_connection_behavior(self) -> None:
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
-const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics} = require('./shiftlink/mes/web/app.js');
+const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics, metricWindow, eventText} = require('./shiftlink/mes/web/app.js');
+assert.match(metricWindow({line_mode:'paused'}, []), /데이터 부족.*운전 재개 후 집계/);
+assert.equal(eventText({event_type:'alarm_raised',equipment_id:'x'}, {equipment:[{equipment_id:'x',code:'GR-01'}]}), '알람 발생 · GR-01');
 assert.equal(equipmentKind({profile_id:'hpu', code:'CUSTOM-01'}), 'hpu');
 assert.equal(equipmentKind({profile_id:'custom', code:'HPU-01'}), 'generic', 'unknown profile must not invent equipment internals');
 assert.equal(equipmentKind({code:'RT-01'}), 'rt');

@@ -121,7 +121,9 @@ body { max-width: 1800px; }
 .flow-node.selected .node-body { stroke: #abc9e3; stroke-width: 4; }
 .flow-node:focus-visible .node-body { stroke: #ffffff; stroke-width: 5; }
 .flow-node:hover .node-body { fill: #303136; }
-.edge-hit { fill: none; stroke: transparent; stroke-width: 18; }
+.edge-hit { fill: none; stroke: transparent; stroke-width: 10; pointer-events: stroke; }
+.edge-halo { fill: none; pointer-events: none; }
+.edge-line { pointer-events: none; }
 .edge-line { fill: none; stroke: #aaafb4; stroke-width: 2; }
 .related .edge-line { stroke: #b5b9bd; stroke-dasharray: 6 4; }
 .affected .edge-line { stroke: #ffbd70; stroke-width: 4; }
@@ -296,7 +298,7 @@ main { gap: 8px; margin-top: 8px; }
 #diagram-legend summary { cursor: pointer; padding: 8px; }
 #diagram-legend[open] { position: absolute; z-index: 5; right: 12px; top: 8px; width: min(440px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 12px; background: #232528; border: 1px solid #90969d; border-radius: 8px; }
 .diagram-only { max-width: none; margin: 0; padding: 0; }
-.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement):not(#control-panel):not(#control-message), .diagram-only #workspace-flow > :not(.map-panel):not(.side-col), .diagram-only .side-col > :not(#line-board), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
+.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement):not(#simulation-controls):not(#control-message), .diagram-only #workspace-flow > :not(.map-panel):not(.side-col), .diagram-only .side-col > :not(#line-board), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
 .diagram-only main, .diagram-only #workspace-flow { margin: 0; padding: 0; max-width: none; }
 .diagram-only .map-panel { height: 100dvh; display: grid; grid-template-rows: auto minmax(0,1fr) auto; padding: 0; margin: 0; border: 0; border-radius: 0; }
 .diagram-only .map-scroll { min-height: 0; overflow: auto; }
@@ -365,7 +367,7 @@ main { gap: 8px; margin-top: 8px; }
 .board-body { display: flex; align-items: center; gap: 14px; }
 .board-gauge { width: 96px; height: 96px; flex: 0 0 auto; }
 .gauge-track { fill: none; stroke: #5d6770; stroke-width: 9; }
-.gauge-value { fill: none; stroke: #f5e400; stroke-width: 9; stroke-linecap: butt; }
+.gauge-value { fill: none; stroke: #aebcc7; stroke-width: 9; stroke-linecap: butt; }
 .board-card.fault .gauge-value { stroke: #e5484d; }
 .gauge-label { fill: #c7ccd1; font-size: 10px; text-anchor: middle; }
 .gauge-number { fill: #a7f04f; font-size: 15px; font-weight: 800; text-anchor: middle; }
@@ -474,4 +476,31 @@ button.primary-button { background: #3f8a2c; border-color: #6cc04a; color: #fff;
 body:not(.diagram-only) #workspace-flow > .map-panel { display: flex; flex-direction: column; }
 body:not(.diagram-only) #workspace-flow > .map-panel > .map-scroll { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
 body:not(.diagram-only) #workspace-flow > .map-panel .line-map { flex: 1 1 auto; min-height: 0; }
-body:not(.diagram-only) #workspace-flow > .map-panel .line-map:not(.map-expanded) .flow-map { width: 100%; height: 100%; max-width: none; max-height: none; }
+body:not(.diagram-only) #workspace-flow > .map-panel .line-map:not(.map-expanded) .flow-map { width: 100%; height: auto; min-width: 0; max-width: none; max-height: none; }
+
+/* 이상 요약과 측정 정보에 우선순위를 둔다. */
+.simulation-controls { padding: 10px 14px; margin: 8px 0; border: 1px solid #44474e; border-radius: 10px; background: #26272b; }
+.simulation-controls > summary { font-weight: 700; }
+.simulation-controls > summary .hint { margin-left: 12px; font-weight: 400; }
+.simulation-controls .control-bar { position: static; margin: 10px 0 0; box-shadow: none; }
+.diagram-only #simulation-controls { grid-column: 2; grid-row: 1; margin: 8px 12px 8px 0; align-self: start; }
+.diagram-only #control-panel { margin: 8px 0 0; }
+.clock-group { display: flex; flex-direction: column; align-items: flex-end; }
+.board-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+.board-row .incident-band { margin: 0; }
+.board-row .incident-band .panel-heading { flex-wrap: wrap; }
+.board-row .summary-grid { align-content: center; }
+.board-row .summary-grid article { flex-direction: column; align-items: flex-start; padding: 12px; }
+.board-row .summary-grid small { display: block; }
+.map-help { margin: 8px 0; }
+.equipment-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.signal-context summary { font-size: 12px; color: #b9bdc3; font-weight: 400; }
+.signal-context p { font-weight: 400; font-size: 12px; }
+button.util-row { width: 100%; border: 0; padding: 8px 0; background: transparent; text-align: left; box-shadow: none; }
+.operations-panel .panel-heading { flex-wrap: wrap; }
+.operations-panel th button { background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+.board-card.run .board-state, .board-card.run .board-body dd { color: #d3dfd0; }
+.board-card.wait .gauge-value { stroke: #efc78b; }
+.gauge-number { fill: #d5dde3; }
+.summary-grid article:not(.alarm-summary) strong { color: #e3e8ec; }
+@media (max-width: 900px) { .board-row { grid-template-columns: minmax(0, 1fr); } .board-row .incident-band { grid-row: 1; } .header-side { flex-wrap: wrap; } }

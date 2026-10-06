@@ -63,3 +63,23 @@ def test_id_noise_check_preserves_actual_instructions(answer):
         {"answer": answer, "cited_card_ids": ["K-1001"]},
         {"cards": [{"card_id": "K-1001"}]},
     ) == []
+
+LIVE_PARTIAL_ANSWER = "기어·베인 펌프의 출구 압력이 없을 때는 우선 펌프 출구 압력의 존재 여부를 확인하고, 축의 회전 상태를 관찰합니다. 무부하 상태인지 확인한 후 펌프의 동작 여부를 점검합니다. 그 다음 구동 회전 방향이 올바르게 설정되었는지 확인하고, 필요하다면 조립 상태를 재확인합니다. 프라이밍 과정"
+
+def test_adapter_rejects_live_answer_cut_at_char_limit():
+    assert len(LIVE_PARTIAL_ANSWER) == 160
+    with pytest.raises(ValueError):
+        _parse_output({"message": {"content": json.dumps(
+            {"answer": LIVE_PARTIAL_ANSWER, "cited_card_ids": ["K-1001"]})}})
+
+def test_pipeline_retries_live_partial_answer_into_complete_sentences():
+    calls = []
+    def model(**kwargs):
+        calls.append(kwargs.get("retry", False))
+        return {"answer": LIVE_PARTIAL_ANSWER if len(calls) == 1 else "정지 후 점검하세요.",
+                "cited_card_ids": ["K-0001"]}
+    result = FixedPipeline(model=model, tools=RecordingTools()).run(
+        {"question": "압력 저하 원인은?", "line_id": "L1", "eq_id": "HPU-01"})
+    assert calls == [False, True]
+    assert result.output.answer == "정지 후 점검하세요."
+    assert not result.output.review_queue

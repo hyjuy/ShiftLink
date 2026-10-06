@@ -11,6 +11,7 @@ from test_router_pipeline import RecordingTools
 @pytest.mark.parametrize("answer", [
     "K-1001", " K-1001 ", "[K-1001]", "K-1001, K-1002",
     "`K-1001`", "K-9999", "K-1001\nK-1002",
+    "K-1001 참조", "카드 K-1001", "참고: K-1001", "K-1001 확인",
 ])
 def test_id_only_answer_is_rejected_by_shared_validator(answer):
     errors = validate_model_output(
@@ -25,13 +26,14 @@ def test_prose_with_inline_card_id_is_allowed():
         {"cards": [{"card_id": "K-1001"}]},
     ) == []
 
+@pytest.mark.parametrize("invalid_answer", ["K-0001", "K-0001 확인", "카드 내용을 근거로 질문에 답하는 한국어 요약 문장"])
 @pytest.mark.parametrize("adapter", [False, True])
 @pytest.mark.parametrize("recover", [False, True])
-def test_pipeline_retries_id_only_then_recovers_or_holds(adapter, recover):
+def test_pipeline_retries_id_only_then_recovers_or_holds(adapter, recover, invalid_answer):
     calls = []
     def model(**kwargs):
         calls.append(kwargs.get("retry", False))
-        output = {"answer": "정지 후 점검하세요." if recover and len(calls) == 2 else "K-0001",
+        output = {"answer": "정지 후 점검하세요." if recover and len(calls) == 2 else invalid_answer,
                   "cited_card_ids": ["K-0001"]}
         return _parse_output({"message": {"content": json.dumps(output)}}) if adapter else output
 
@@ -42,3 +44,22 @@ def test_pipeline_retries_id_only_then_recovers_or_holds(adapter, recover):
     assert result.output.review_queue is (not recover)
     assert result.output.answer == ("정지 후 점검하세요." if recover else "")
     assert not result.output.no_knowledge
+
+@pytest.mark.parametrize("answer", [
+    "K-1001 참조", "카드 K-1001", "참고: K-1001", "K-1001 확인",
+    "카드 내용을 근거로 질문에 답하는 한국어 요약 문장",
+])
+def test_adapter_rejects_id_noise_and_copied_example(answer):
+    with pytest.raises(ValueError):
+        _parse_output({"message": {"content": json.dumps(
+            {"answer": answer, "cited_card_ids": ["K-1001"]})}})
+
+@pytest.mark.parametrize("answer", [
+    "K-1001에 따라 펌프 압력을 확인하세요.",
+    "압력계 작동부터 확인합니다 (K-1001 참조).", "필터 확인 (K-1001)",
+])
+def test_id_noise_check_preserves_actual_instructions(answer):
+    assert validate_model_output(
+        {"answer": answer, "cited_card_ids": ["K-1001"]},
+        {"cards": [{"card_id": "K-1001"}]},
+    ) == []

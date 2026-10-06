@@ -1,5 +1,5 @@
 """파이 화면 서버 + Chromium 키오스크. 로컬 서버가 화면 파일(shiftlink/mes/web)을 주고 /api/* 는 Jetson으로 넘긴다.
-화면: /pda.html (PDA, 기본) · / (MES 대시보드). 키오스크 창을 닫으면 앱도 끝난다.
+화면: /pda.html (PDA, 기본) · / → Jetson MES 대시보드로 이동. 키오스크 창을 닫으면 앱도 끝난다.
 
     python -m shiftlink.pda [--jetson http://jetson-06.tail0a6af3.ts.net:8000] [--port 8080] [--page pda.html] [--scale 2] [--no-window]
 
@@ -22,8 +22,7 @@ from pathlib import Path
 
 WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
-PAGES = {"/": "index.html", "/index.html": "index.html", "/pda.html": "pda.html", "/static/pda.js": "pda.js", "/static/app.js": "app.js",
-         "/static/operator.js": "operator.js", "/static/style.css": "style.css"}
+PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 
@@ -59,6 +58,9 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
             path = self.path.split("?", 1)[0]
             if path.startswith("/api/"):
                 self._proxy(); return
+            if path in ("/", "/index.html"):  # MES 대시보드는 파이에 두지 않는다 — Jetson 최신 화면으로 보낸다
+                self.send_response(302); self.send_header("Location", jetson + "/"); self.send_header("Content-Length", "0")
+                self.end_headers(); return
             name = PAGES.get(path)
             if name is None:
                 self._send(404, b"not found", "text/plain; charset=utf-8"); return

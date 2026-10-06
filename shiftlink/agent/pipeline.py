@@ -1,5 +1,6 @@
 """Fixed four-stage pipeline: route, retrieval, one model call, validation."""
 
+import os
 import re
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Protocol
@@ -78,6 +79,7 @@ class FixedPipeline:
         judge: Callable[[str, dict[str, Any]], int] | None = None,
         judge_min_score: int = 2,
         compose_layers: Iterable[str] | None = None,
+        answer_mode: str | None = None,
     ) -> None:
         self.tools = tools
         self.model = model
@@ -87,6 +89,11 @@ class FixedPipeline:
         self.judge_min_score = judge_min_score
         # Answer composition layers (compose.py). None reads SHIFTLINK_COMPOSE; default is off until a layer is adopted.
         self.compose_layers = frozenset(layers_from_env() if compose_layers is None else compose_layers)
+        # "extract": query-mode answers are built from the rank-1 card (compose E1, adopted 10/6) and the model is not
+        # called; the model's only job is then the abstain judge. None reads SHIFTLINK_ANSWER_MODE; default "model".
+        self.answer_mode = answer_mode or os.environ.get("SHIFTLINK_ANSWER_MODE") or "model"
+        if self.answer_mode not in ("model", "extract"):
+            raise ValueError(f"answer_mode must be 'model' or 'extract', got {self.answer_mode!r}")
         self._default_validator = validator is None
         # Default validator: build response and validate invariants
         if validator is None:
@@ -156,8 +163,9 @@ class FixedPipeline:
                 routed.mode, routed.request, tool_results, model_output, model_error
             )
         self._fill_guard_fallback(output, model_output)
-        if self.compose_layers and routed.mode == "query" and getattr(output, "answer", None):
-            output.answer = compose_answer(output.answer, output.cited_card_ids, tool_results, self.compose_layers,
+        layers = self.compose_layers | {"E1"} if self.answer_mode == "extract" and routed.mode == "query" else self.compose_layers
+        if layers and routed.mode == "query" and getattr(output, "answer", None):
+            output.answer = compose_answer(output.answer, output.cited_card_ids, tool_results, layers,
                                            getattr(output, "validation_errors", []))
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
 
@@ -184,6 +192,12 @@ class FixedPipeline:
         return score < self.judge_min_score
 
     def _call_model(self, **kwargs: Any) -> tuple[Any, str | None, bool]:
+        if self.answer_mode == "extract" and kwargs.get("mode") == "query":
+            # No model call. The placeholder only carries the rank-1 citation through the normal validator;
+            # run() then replaces its text with the E1 answer.
+            tool_results = kwargs["tool_results"]
+            tool_results["answer_mode"] = "extract"
+            return {"answer": "카드 근거 답변", "cited_card_ids": [tool_results["ranked_cards"][0]["card_id"]]}, None, False
         try:
             output = self.model(**kwargs)
             if isinstance(output, dict) and (error := answer_content_error(output.get("answer"))):

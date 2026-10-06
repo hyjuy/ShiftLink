@@ -157,6 +157,7 @@
 
 | `handover_upload` | `db/aiven_schema.sql` (Aiven) | PDA 인계 본문 원본 업로드 표. `handover_id`(64자) 기본키, `payload` JSON, `content_sha256`. 합성 데이터라 원문 포함(§4.11 예외, 실데이터면 해시만) | Claude |
 | `upload_pending()` · `python -m shiftlink.mes.uploader` | `shiftlink/mes/uploader.py` | outbox `pending` → Aiven. 같은 ID·같은 해시 `uploaded`, 다른 해시 `conflict`(로컬 보류), 끊기면 `pending` 유지 후 재시도(`--interval`, 기본 30초) | Claude |
+| `list_uploads()` · `python -m shiftlink.mes.handover_board` | `shiftlink/mes/handover_board.py` | Aiven `handover_upload` SELECT만. 노트북 다음 조 목록. 접속 실패는 오프라인 배지 | 최재영 |
 | `pending_handovers()` / `mark_handover()` | `shiftlink/mes/storage.py` | 업로드 대기 인계 조회, `handover_outbox.status` 변경(`pending`·`uploaded`·`conflict`) | Claude |
 
 두 POST의 HTTP 본문 한도는 64 KiB. `HO-`는 기존 인계 ID 접두어이며 PDA UUID(HTTP LAN에서는 시간+난수)를 붙인다. 기존 정본 인계 ID는 변경하지 않는다. outbox는 로컬 저장이며 클라우드 업로드는 별도 작업이다.

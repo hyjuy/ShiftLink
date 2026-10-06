@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import socket
 import time
 import urllib.error
@@ -410,6 +411,12 @@ def _parse_output(body: dict[str, Any]) -> dict[str, Any]:
     # 공백뿐인 answer도 형식 오류다 (계약 §5, A의 validate_model_output과 같은 기준).
     if not isinstance(answer, str) or not answer.strip():
         raise ValueError(f"answer가 비어 있지 않은 문자열이 아님: {parsed!r}")
+    # The grammar closes strings at maxLength even in mid-sentence. Retain only
+    # already generated complete sentences; a decimal point is not a boundary.
+    if len(answer) == ANSWER_MAX_CHARS and not answer.rstrip().endswith((".", "!", "?")):
+        boundaries = list(re.finditer(r"(?<!\d)[.!?](?=\s|$)", answer))
+        if boundaries:
+            answer = answer[:boundaries[-1].end()].rstrip()
     if error := answer_content_error(answer):
         raise ValueError(error)
     if not isinstance(cited, list) or not all(isinstance(item, str) for item in cited):

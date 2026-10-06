@@ -17,11 +17,11 @@ from shiftlink.agent.response import (
 )
 from shiftlink.rag.retrieval import _SIGNAL_LABELS
 
-LAYERS = ("L1", "L2", "L3")
+LAYERS = ("L1", "L2", "L3", "L3C")  # L3C: L3 from the cited card only (no extra safety card); a measured variant of L3
 _STATES = ("low", "normal", "high")
 _DIRECTION = re.compile("초과|넘|벗어|미만|높|낮")
 # Criteria and hedges are not assertions about a reading ("38 미만이면 …", "그럴 수 있다").
-_HEDGE = re.compile(r"이면|라면|하면|으면|경우|때|인지|거나|수 있|가능성|여부")
+_HEDGE = re.compile(r"면(?=[\s,.]|$)|경우|때|인지|는지|은지|거나|수 있|가능성|여부")
 _PROHIBIT = re.compile(r"않는다|않는|않도록|말 것|말고|금지|하지 않|안 된다|해서는 안")
 _SOURCE_MARK = re.compile(r"\.pdf|PDF p|§|인쇄 p|/US|CAUTION|DANGER|WARNING", re.I)
 _HANGUL = re.compile("[가-힣]")
@@ -94,8 +94,9 @@ def l2_filter(answer: str, cited: list[dict[str, Any]], tool_results: dict[str, 
             kept.append(sentence)
     if len(kept) == len(sentences):
         return answer
-    if kept:
-        return " ".join(kept)
+    rest = " ".join(kept)
+    if len(_HANGUL.findall(_CARD_ID.sub(" ", rest))) >= 10:  # a fragment like "(K-1025 참조)" is an empty summary
+        return rest
     base = _first_sentence(cited[0].get("know_how") or "") if cited else ""
     return f"{NO_MEASURE_ANSWER} 카드 기준: {base}" if base else NO_MEASURE_ANSWER
 
@@ -115,10 +116,12 @@ def _card_prohibitions(card: dict[str, Any]) -> list[str]:
     return out
 
 
-def l3_line(answer: str, cited: list[dict[str, Any]], tool_results: dict[str, Any]) -> str:
+def l3_line(answer: str, cited: list[dict[str, Any]], tool_results: dict[str, Any], with_extra: bool = True) -> str:
     sentences, ids = [], []
     extra = [c for c in tool_results.get("ranked_cards") or []
              if c.get("safety_flag") and c.get("condition_status") == "verified" and c not in cited][:1]
+    if not with_extra:
+        extra = []
     for card in cited + extra:
         for text in _card_prohibitions(card):
             if len(sentences) < 2 and text not in sentences and text not in answer:
@@ -135,6 +138,6 @@ def compose_answer(answer: str, cited_ids: list[str], tool_results: dict[str, An
     if answer == GUARD_FALLBACK_ANSWER and any("답이" in e or "정상 범위인데" in e for e in errors):
         summary = DIRECTION_FALLBACK_ANSWER  # the stock sentence blames a missing number; this block was a direction error
     head = l1_lines(cited, tool_results) if "L1" in layers else []
-    if "L3" in layers and (line := l3_line(summary, cited, tool_results)):
+    if layers & {"L3", "L3C"} and (line := l3_line(summary, cited, tool_results, with_extra="L3" in layers)):
         head.append(line)
     return "\n".join([*head, summary])

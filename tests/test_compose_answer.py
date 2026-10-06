@@ -67,6 +67,16 @@ def test_l2_keeps_criteria_hedges_and_card_ids():
     assert run(answer, [T1], layers=("L2",)) == answer
 
 
+def test_l2_keeps_conditional_and_check_instruction_sentences():
+    answer = "온도와 소음이 정상 범위를 벗어나면 주 모터를 끈다. 온도가 58°C를 초과하는지 확인하세요."
+    assert run(answer, [T1], layers=("L2",)) == answer
+
+
+def test_l2_a_leftover_fragment_counts_as_an_empty_summary():
+    out = run("베어링 온도가 62°C를 초과하고 있습니다. (K-1004 참조)", [T1], layers=("L2",))
+    assert out == f"{NO_MEASURE_ANSWER} 카드 기준: 에어레이션 징후를 먼저 본다."
+
+
 def test_l2_with_readings_only_drops_signals_nobody_measured():
     answer = "압력이 낮습니다. 온도가 높습니다. 흡입관을 점검하세요."
     out = run(answer, [T1], facts=[PRESSURE_LOW], layers=("L2",))
@@ -98,6 +108,11 @@ def test_l3_takes_a_second_sentence_from_the_first_stop_condition():
 def test_l3_does_not_repeat_a_sentence_the_answer_already_has():
     answer = "정비 전 스위치를 OFF에 자물쇠로 잠갔다."
     assert "자물쇠" not in run(answer, [T3], layers=("L3",)).splitlines()[0]
+
+
+def test_l3c_uses_the_cited_card_only():
+    other = {**T1, "card_id": "K-1211", "safety_flag": True, "safety_basis": "배관을 열기 전에 감압한다."}
+    assert compose_answer("점검하세요.", ["K-1004"], tr(T1, other), ("L3C",)) == "점검하세요."
 
 
 def test_l3_has_nothing_for_a_card_without_structured_prohibitions():
@@ -133,8 +148,8 @@ def test_number_block_keeps_the_stock_fallback():
 
 # ---- 스위치 ----
 def test_layers_from_env(monkeypatch):
-    monkeypatch.setenv("SHIFTLINK_COMPOSE", "l1, L3,bogus")
-    assert layers_from_env() == {"L1", "L3"}
+    monkeypatch.setenv("SHIFTLINK_COMPOSE", "l1, L3,l3c,bogus")
+    assert layers_from_env() == {"L1", "L3", "L3C"}
     monkeypatch.delenv("SHIFTLINK_COMPOSE")
     assert layers_from_env() == frozenset()
 

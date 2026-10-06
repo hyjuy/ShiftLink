@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import re
 import socket
 import time
@@ -295,8 +296,11 @@ class OllamaModel:
         host: str = DEFAULT_HOST,
         timeout_s: float = DEFAULT_TIMEOUT_S,
         num_ctx: int = NUM_CTX,
+        judge_model: str | None = None,
     ) -> None:
         self.model = model
+        # Abstain judge model: argument > SHIFTLINK_JUDGE_MODEL > the answer model (10/6: SFT judge can run alone in extract mode).
+        self.judge_model = judge_model or os.environ.get("SHIFTLINK_JUDGE_MODEL") or model
         self.host = host.rstrip("/")
         self.timeout_s = timeout_s
         self.num_ctx = num_ctx
@@ -345,7 +349,7 @@ class OllamaModel:
         body = (f"질문: {question}\n\n카드 제목: {card.get('title', '')}\n증상: {card.get('symptom') or '-'}\n"
                 f"내용: {(card.get('know_how') or '')[:600]}")
         payload = {
-            "model": self.model,
+            "model": self.judge_model,
             "messages": [{"role": "system", "content": JUDGE_PROMPT}, {"role": "user", "content": body}],
             "stream": False,
             "format": {"type": "object", "properties": {"score": {"type": "integer", "enum": [0, 1, 2, 3]}},

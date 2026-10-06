@@ -1,0 +1,77 @@
+ShiftLink 장비 에셋 전달 — Blender 4.5.14 LTS
+
+저장 구성
+  Modeling/Blockout: 6종 기본 형상과 코일, 초기 배치 및 정면/측면/사선 미리보기.
+  Modeling/EquipmentTypes: 6종 세부 모델과 코일의 개별 .blend 원본.
+  ShiftLink_detail.blend: 전체 배치 검토용 원본. 실제 공장 배치도가 아님.
+  Previews: overview.png와 각 모델의 front/side/oblique.png.
+  Assets/Models/EquipmentTypes: 7개 FBX와 model-manifest.json.
+  validation.json: Blender 원본 재개방 및 FBX 왕복 임포트 검사 결과.
+
+MES 대응
+  Equipment_HPU: EQ-0001 / HPU-01
+  Equipment_PDP: EQ-0002 / PDP-01
+  Equipment_CAU: EQ-0003 / CAU-01
+  Equipment_GR: EQ-0004 / GR-01, EQ-0005 / GR-02
+  Equipment_RT: EQ-0006 / RT-01, EQ-0007 / RT-02, EQ-0008 / RT-03
+  Equipment_CV: EQ-0009 / CV-01, EQ-0010 / CV-02
+  Material_Coil: 장비와 별도 소재 에셋. MES 이동 위치는 Unity에서 제어.
+  인스턴스 ID는 위 표 또는 model-manifest.json으로 명시적으로 연결한다.
+  FBX 사용자 속성을 자동 ID 연결로 간주하지 않는다.
+
+계층 및 피벗
+  Equipment_TYPE > Body_TYPE, MovingParts_TYPE, StatusIndicator_TYPE,
+                   Nameplate_TYPE, Anchors_TYPE.
+  Anchor 이름에 유형 접미사가 붙는다. LabelAnchor, SelectionAnchor,
+  InputAnchor, OutputAnchor는 Empty이며 장비 메시와 별도다.
+  루트는 바닥 중심 (0,0,0), 모델 단위는 미터다. Blender 위쪽은 +Z.
+  FBX 내보내기 설정은 forward=-Z, up=Y, unit scale 적용.
+  장비 정면은 Blender -Y. Unity 정면/위쪽 변환은 미검증이다.
+  RT 롤러 Empty 중심은 (해당 X,0,1.08), 축은 Blender Y.
+  CV HeadDrum/TailDrum 회전축은 Blender Y, BeltSurface는 별도 메시 그룹.
+  GR OutputShaft/InputShaftPivot의 회전축은 Blender X.
+  PDP DoorHinge는 각 도어 왼쪽 경첩이며 Blender Z축으로 개방한다.
+  RT ClampSlide, CV TensionerSlide/DiverterArm은 향후 시연용 분리 그룹이다.
+  기구적 링크나 물리 구속 조건은 구현하지 않았다.
+  RT/CV 입출력 Anchor는 X=-2.4/+2.4, Z=1.22.
+  유틸리티 장비의 입출력 Anchor는 연결 표시용 제안 위치이며 실배관 위치가 아니다.
+
+재질 및 텍스처
+  외장 도장 blue/white, 축 steel/silver, 벨트 belt, 표시부 black/green 사용.
+  상태등은 MES_Status_TYPE 전용 재질이며 장비 외장 재질과 공유하지 않는다.
+  렌더의 녹색은 초기 시각적 예시이며 실제 MES 가동 상태가 아니다.
+  Unity Built-in Standard에서 색상, Metallic, Smoothness를 재구성한다.
+  Blender Roughness와 Unity Smoothness는 반대 방향의 값이다.
+  green=가동, orange=대기/경고, red=심각한 고장, gray=정지/연결 실패.
+  상태 재질 복제, 장비 ID·코드 표시, 연결 실패 시 코일 숨김은 Unity 구현 대상이다.
+  절차적 텍스처를 사용하지 않았으므로 베이크 및 외부 텍스처 파일은 없다.
+  모든 메시에는 UV가 있다. 반복 형상은 Blender 메시 데이터를 공유한다.
+  FBX 임포트 후 Unity의 메시/재질 공유 여부는 별도로 확인해야 한다.
+  폴리곤 수와 재질 수는 model-manifest.json의 모델별 항목에 기록했다.
+
+형상·치수 가정 및 제한
+  전 모델은 합성 기준정보에 따른 시연용 형상이다. 실제 제조사 제품·실측치가 아니다.
+  코일은 외경 1.2m, 내경 0.44m, 폭 0.8m인 가정이다. 적재 하중은 미검증이다.
+  RT/CV는 약 4.8m 길이 공통 기본형이다. 코일 운반 적합성과 지지 구조는 미검증이다.
+  RT 기본형은 12롤러다. RT-02의 기준정보상 16롤러·승강형은 인스턴스 변형이 필요하다.
+  CV-02 불량재 분기 역시 공통 CV를 바탕으로 별도 변형이 필요하다.
+  코일 이송 예시는 실제 공정의 코일/절단재 운반 가능성을 입증하지 않는다.
+  CAU 저장 탱크 및 노출 모터, 상태등 지지대는 모델링 제안이다.
+  HPU 탱크/펌프·PDP 캐비닛·GR 하우징·RT 롤러·CV 벨트 식별 구조를 표현했다.
+  압연 본체, 절단기, 언코일러는 추가하지 않았다. 유틸리티 2층은 재현하지 않았다.
+  MES에 없는 회전수·압력·동작 값을 측정값으로 표현하지 않았다.
+
+검수 범위
+  Blender 원본 재개방, 단일 장비 포함, 루트 원점, 바닥 높이, 유효 노멀/면,
+  UV·재질 존재, 상태등 전용 재질, 연결 Anchor, RT 회전 피벗, PDP 경첩 개수,
+  FBX 재임포트 시 메시 개수와 바운딩박스 크기 일치 검사 통과.
+  바운딩박스 허용 오차는 2mm. 실측 정확도의 의미가 아니다.
+  정면·측면·사선 이미지와 전체 배치 이미지 저장 완료.
+  Unity 6000.3.12f1에서의 실제 임포트와 1 unit=1m, 위쪽·정면 방향,
+  Standard 재질, Collider/선택 강조, PDA 및 MES 연결은 아직 미검증이다.
+  Collider는 Unity에서 단순 Box/Capsule 조합으로 구성할 수 있도록 한다.
+  현재는 재사용 에셋 초안이며 공정별 변형과 Unity 연결까지 완료된 결과물이 아니다.
+
+Git
+  참고자료 및 임시 제작 스크립트는 Assets/ReferenceMaterials 아래 Git 제외.
+  Blender/FBX/미리보기/전달 설명과 검수 결과는 결과물 폴더에 저장했다.

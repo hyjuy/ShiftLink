@@ -1,7 +1,7 @@
 # ShiftLink 3D 공장 · MES · PDA 시연
 
 프로젝트 경로: `D:/obsd/Projects/ShiftLink/unity/ShiftLinkFactory`.
-Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 추가 에셋 없이 기본 도형으로 장비를 구성한다.
+Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 장비 프리팹과 FactoryRig로 공장 장비와 이송 구간을 구성한다.
 
 ## 실행
 
@@ -27,7 +27,7 @@ python -B scripts/run_unity_demo.py --mes-port 8010 --pda-port 8081
 Pi의 기존 PDA 앱도 해당 MES를 대상으로 실행한다. 각 장치의 `127.0.0.1`은 그 장치 자신이다.
 
 ```powershell
-python -B scripts/run_unity_demo.py --mes-url http://JETSON_IP:8000
+python -B scripts/run_unity_demo.py --mes-url http://jetson-06:8000
 ```
 
 기존 MES를 지정하면 실행 스크립트는 해당 MES의 공정 상태를 변경하지 않는다.
@@ -77,3 +77,17 @@ python -B scripts/check_unity_live.py
 
 실행 중 MES/PDA 주소는 화면에서 확인할 수 있다. 주소 변경은 실행 스크립트의 `--mes-url`, `--pda-url` 또는 Play Mode 시작 전 Inspector에서 설정한다.
 현재 기본 장면은 `Assets/Scenes/Factory.unity`다. 렌더링 결과는 `Checks/live-factory.png`에서 확인한다.
+
+## 공장 현황 디스플레이
+
+공장 왼쪽 대형 화면에서 주경로·분기, 코일 수, 장비별 가동·대기·경고 상태와 MES 연결 상태를 확인한다.
+우측 상단 **현황 디스플레이 확대** 버튼으로 같은 정보를 크게 볼 수 있다. 연결이 끊기면 이전 실시간 수치를 숨긴다.
+
+검증 메서드: `FactoryMonitorChecks.Run`. 결과는 `Checks/monitor-check-result.txt`, 화면은 `Checks/monitor-front.png`에 저장한다.
+
+## Jetson 실제 MES 연결
+
+현재 확인한 MES 주소는 `http://jetson-06:8000`(Tailscale IP: `100.115.59.4`)이다.
+실제 연결에는 `--mes-url http://jetson-06:8000`을 지정한다. 인자 없는 실행은 로컬 시연 서버를 시작한다.
+`FactoryChecks.OpenDemo`는 Unity의 HTTP 허용을 개발 환경으로 설정한다.
+Jetson 연결 검증 메서드는 `FactoryJetsonChecks.Run`이며, 서버에 제어·인식 데이터를 전송하지 않고 상태 갱신만 확인한다.

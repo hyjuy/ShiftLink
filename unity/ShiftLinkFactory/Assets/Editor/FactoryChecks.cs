@@ -13,6 +13,8 @@ public static class FactoryChecks
     }
     public static void OpenDemo()
     {
+        PlayerSettings.insecureHttpOption=InsecureHttpOption.DevelopmentOnly;
+        AssetDatabase.SaveAssets();
         if (!File.Exists("Assets/Scenes/Factory.unity")) {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             new GameObject("ShiftLink Factory").AddComponent<FactoryDemo>().CreateEnvironment();
@@ -20,6 +22,7 @@ public static class FactoryChecks
             EditorSceneManager.SaveScene(scene, "Assets/Scenes/Factory.unity");
             EditorBuildSettings.scenes = new[] {new EditorBuildSettingsScene("Assets/Scenes/Factory.unity", true)};
         } else EditorSceneManager.OpenScene("Assets/Scenes/Factory.unity");
+        if(!Application.isBatchMode) EditorApplication.ExecuteMenuItem("Window/General/Game");
         EditorApplication.EnterPlaymode();
     }
     public static void PlayCheck()

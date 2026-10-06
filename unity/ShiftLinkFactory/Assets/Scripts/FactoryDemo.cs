@@ -86,6 +86,7 @@ public class FactoryDemo : MonoBehaviour
     readonly Dictionary<string,Transform> coilObjects=new Dictionary<string,Transform>();
     readonly Dictionary<string,Vector3> coilTargets=new Dictionary<string,Vector3>();
     readonly Dictionary<string,string> coilEquipment=new Dictionary<string,string>();
+    readonly Dictionary<string,Queue<Vector3>> coilWaypoints=new Dictionary<string,Queue<Vector3>>();
     public int EquipmentCount { get { return equipment.Count; } }
     public int CoilCount { get { return coilRoot == null ? 0 : coilRoot.childCount; } }
     public string SelectedId { get { return selectedId; } }
@@ -131,6 +132,7 @@ public class FactoryDemo : MonoBehaviour
             Shape(PrimitiveType.Cube, "Floor grid", transform, new Vector3(x,-.02f,0),
                 new Vector3(.025f,.01f,30), new Color(.17f,.22f,.28f));
         UpdateCamera();
+        FactoryMonitor.RefreshFor(this,null,null,false);
     }
     public void Build(FactoryConfig next)
     {
@@ -161,9 +163,10 @@ public class FactoryDemo : MonoBehaviour
         }
         rig=equipmentRoot.gameObject.AddComponent<FactoryRig>();
         rig.Build(next,equipment);
-        target = new Vector3(0,1,2);
-        distance = Mathf.Max(25, next.route.Length*6);
+        target = new Vector3(-4,2,2);
+        distance = Mathf.Max(36, next.route.Length*6);
         selectedId = null; lastScanId = null; UpdateCamera();
+        FactoryMonitor.RefreshFor(this,config,null,false);
     }
     void Model(EquipmentSpec e, Transform root)
     {
@@ -184,22 +187,28 @@ public class FactoryDemo : MonoBehaviour
             keep.Add(c.coil_id);
             var destination=rig.MaterialPosition(c.equipment_id,c.position);
             Transform coil;
+            Vector3? previousPosition=null;
+            string previousEquipment;
+            if(coilEquipment.TryGetValue(c.coil_id,out previousEquipment) && previousEquipment!=c.equipment_id)
+                coilWaypoints[c.coil_id]=new Queue<Vector3>(rig.TransferWaypoints(previousEquipment,c.equipment_id));
             bool scrap=config.equipment.First(e=>e.equipment_id==c.equipment_id).code=="CV-02";
             if(coilObjects.TryGetValue(c.coil_id,out coil) && (coil.Find("Rejected cut sheet")!=null)!=scrap) {
+                previousPosition=coil.position;
                 coil.SetParent(null); Remove(coil.gameObject); coilObjects.Remove(c.coil_id);
             }
             if(!coilObjects.TryGetValue(c.coil_id,out coil)) {
                 coil=FactoryRig.CreateLoad(c.coil_id,coilRoot,scrap);
-                coil.position=destination; coilObjects[c.coil_id]=coil;
+                coil.position=previousPosition??destination; coilObjects[c.coil_id]=coil;
             }
             coilTargets[c.coil_id]=destination; coilEquipment[c.coil_id]=c.equipment_id;
         }
         foreach(var id in coilObjects.Keys.Where(id=>!keep.Contains(id)).ToArray()) {
             var stale=coilObjects[id]; stale.SetParent(null); Remove(stale.gameObject);
-            coilObjects.Remove(id); coilTargets.Remove(id); coilEquipment.Remove(id);
+            coilObjects.Remove(id); coilTargets.Remove(id); coilEquipment.Remove(id); coilWaypoints.Remove(id);
         }
         online=true; lastSuccess=Time.realtimeSinceStartup;
         status=next.line_mode+" | "+next.scenario_id+" | tick "+next.sequence;
+        FactoryMonitor.RefreshFor(this,config,next,true);
     }
     public void ApplyScans(ScanEnvelope scans)
     {
@@ -216,10 +225,11 @@ public class FactoryDemo : MonoBehaviour
         online=false; snapshot=null; readings.Clear(); status=reason;
         foreach(var lamp in lamps.Values) lamp.sharedMaterial=MaterialFor(FactoryRules.Grey);
         ClearCoils();
+        FactoryMonitor.RefreshFor(this,config,null,false);
     }
     void ClearCoils()
     {
-        coilObjects.Clear(); coilTargets.Clear(); coilEquipment.Clear();
+        coilObjects.Clear(); coilTargets.Clear(); coilEquipment.Clear(); coilWaypoints.Clear();
         if(coilRoot==null) return;
         for(int i=coilRoot.childCount-1;i>=0;i--) {
             var child=coilRoot.GetChild(i); child.SetParent(null); Remove(child.gameObject);
@@ -286,7 +296,7 @@ public class FactoryDemo : MonoBehaviour
         distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = new Rect(18,18,Mathf.Min(700,Screen.width-36),200).Contains(guiPointer) ||
+        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),200).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
             RaycastHit hit;
@@ -304,8 +314,12 @@ public class FactoryDemo : MonoBehaviour
         rig.Advance(snapshot,seconds);
         foreach(var pair in coilObjects) {
             EquipmentReading state;
-            if(readings.TryGetValue(coilEquipment[pair.Key],out state) && state.operating_state=="running" && state.fault_level!="critical" && snapshot.line_mode=="running")
-                pair.Value.position=Vector3.MoveTowards(pair.Value.position,coilTargets[pair.Key],10*seconds);
+            if(readings.TryGetValue(coilEquipment[pair.Key],out state) && state.operating_state=="running" && state.fault_level!="critical" && snapshot.line_mode=="running") {
+                Queue<Vector3> path;
+                var destination=coilWaypoints.TryGetValue(pair.Key,out path) && path.Count>0 ? path.Peek() : coilTargets[pair.Key];
+                pair.Value.position=Vector3.MoveTowards(pair.Value.position,destination,10*seconds);
+                if(path!=null && path.Count>0 && Vector3.Distance(pair.Value.position,destination)<.001f) path.Dequeue();
+            }
         }
     }
     void UpdateCamera()

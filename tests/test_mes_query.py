@@ -97,6 +97,7 @@ def test_fixed_pipeline_retrieval_model_and_cache(service, monkeypatch):
         return {'answer': '등록된 설비 지식 확인',
                 'cited_card_ids': [kwargs['tool_results']['ranked_cards'][0]['card_id']]}
     pipeline.model = model
+    pipeline.judge = lambda question, card: 3  # no real Ollama here; a judge that cannot run is a 503 since the demo pipeline is strict
     builds = []
     monkeypatch.setattr(query, 'build_query_pipeline', lambda: builds.append(True) or pipeline)
     service.record_scan({'class': 'HPU', 'conf': .95, 'device_id': 'pi'})

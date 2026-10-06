@@ -38,8 +38,24 @@ public static class FactoryLayoutChecks
                 var footprint=BoundsOf(area);
                 check(Mathf.Min(footprint.size.x,footprint.size.z)>=1.49f,name+" minimum 1.5m width");
                 var headspace=new Bounds(new Vector3(footprint.center.x,1.1f,footprint.center.z),new Vector3(footprint.size.x,2.2f,footprint.size.z));
-                foreach(var obstacle in nodes.GetComponentsInChildren<MeshRenderer>().Where(r=>r.GetComponent<TextMesh>()==null && r.bounds.max.y>.05f && r.bounds.min.y<2.2f))
-                    check(!headspace.Intersects(obstacle.bounds),name+" headroom clears "+obstacle.name);
+                var blocked=nodes.GetComponentsInChildren<MeshRenderer>().Where(r=>r.GetComponent<TextMesh>()==null && r.bounds.max.y>.05f && r.bounds.min.y<2.2f && headspace.Intersects(r.bounds)).Select(r=>r.name).Distinct().ToArray();
+                check(blocked.Length==0,name+" clear 2.2m headroom "+string.Join(",",blocked));
+                foreach(var line in nodes.GetComponentsInChildren<LineRenderer>().Where(l=>l.name.StartsWith("Power cable") || l.name.StartsWith("Hydraulic") || l.name.StartsWith("Assumed hydraulic") || l.name=="CAU air riser")) {
+                    bool clear=true;
+                    for(int i=1;i<line.positionCount;i++) {
+                        var a=line.GetPosition(i-1); var delta=line.GetPosition(i)-a; float hit;
+                        if(headspace.Contains(a) || (headspace.IntersectRay(new Ray(a,delta.normalized),out hit) && hit<=delta.magnitude)) clear=false;
+                    }
+                    check(clear,name+" headroom clears "+line.name);
+                }
+            }
+            if(beds!=null) {
+                var aux=beds.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("Auxiliary roller_") && t.childCount>0);
+                var auxiliaryRotation=aux.rotation; demo.AdvanceVisuals(.1f);
+                check(Quaternion.Angle(auxiliaryRotation,aux.rotation)>.01f,"auxiliary rollers follow MES running speed");
+                state.line_mode="paused"; demo.Apply(state); auxiliaryRotation=aux.rotation; demo.AdvanceVisuals(.1f);
+                check(Quaternion.Angle(auxiliaryRotation,aux.rotation)<.001f,"auxiliary rollers stop on pause");
+                state.line_mode="running"; demo.Apply(state);
             }
             foreach(string id in new[]{"EQ-0001","EQ-0002","EQ-0003","EQ-0004","EQ-0005"}) {
                 var model=nodes.Find(id).Find("Equipment_"+config.equipment.First(e=>e.equipment_id==id).profile_id.ToUpperInvariant()).Find("Model");

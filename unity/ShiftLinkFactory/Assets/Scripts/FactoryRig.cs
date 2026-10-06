@@ -12,6 +12,7 @@ public class FactoryRig : MonoBehaviour
     readonly Dictionary<string,List<Transform>> beltMarkers=new Dictionary<string,List<Transform>>();
     readonly List<Material> owned=new List<Material>();
     readonly Dictionary<Color,Material> colors=new Dictionary<Color,Material>();
+    Transform auxiliaryBeds;
     Material Solid(Color color)
     {
         Material mat;
@@ -118,27 +119,31 @@ public class FactoryRig : MonoBehaviour
             Rail("CAU platform rail",p+new Vector3(-2.4f,1,-1.4f),p+new Vector3(2.4f,1,-1.4f));
             Rail("CAU back rail",p+new Vector3(-2.4f,1,1.4f),p+new Vector3(2.4f,1,1.4f));
             Rail("CAU left rail",p+new Vector3(-2.4f,1,-1.4f),p+new Vector3(-2.4f,1,1.4f));
-            Block("CAU stair landing",p+new Vector3(3,-.15f,0),new Vector3(1.2f,.3f,1.2f),FactoryRules.Grey);
+            Block("CAU stair landing",p+new Vector3(3.4f,-.15f,0),new Vector3(3.2f,.3f,1.5f),FactoryRules.Grey);
             var stairs=new GameObject("CAU access stairs").transform; stairs.SetParent(transform);
             for(int i=0;i<16;i++) {
-                var step=Block("Stair tread",p+new Vector3(3,(i+1)*.2f-p.y-.1f,-4+(i+.5f)*.25f),new Vector3(1.2f,.2f,.25f),FactoryRules.Grey);
+                var step=Block("Stair tread",p+new Vector3(4.4f,(i+1)*.2f-p.y-.1f,4-(i+.5f)*.25f),new Vector3(1.5f,.2f,.25f),FactoryRules.Grey);
                 step.transform.SetParent(stairs);
             }
-            foreach(float x in new[]{2.4f,3.6f})
-                Rail("Stair handrail",p+new Vector3(x,1-p.y,-4),p+new Vector3(x,1,0));
+            foreach(float x in new[]{3.65f,5.15f})
+                Rail("Stair handrail",p+new Vector3(x,1-p.y,4),p+new Vector3(x,1,0));
         }
         float left=-(next.route.Length-1)*2.7f-2.4f, right=-left;
-        Block("Pedestrian aisle",new Vector3(0,-.035f,-9.5f),new Vector3(right-left+11,.012f,1.5f),new Color(.12f,.4f,.3f));
-        Block("Maintenance aisle",new Vector3((left-4.8f+5.3f)*.5f,-.035f,5.6f),new Vector3(5.3f-left+4.8f,.012f,1.5f),new Color(.12f,.4f,.3f));
-        Block("Aisle connection",new Vector3(left-4.8f,-.035f,-1.95f),new Vector3(1.5f,.012f,16.6f),new Color(.12f,.4f,.3f));
-        Block("Stair approach",new Vector3(4.8f,-.035f,4.675f),new Vector3(.7f,.012f,1.85f),new Color(.12f,.4f,.3f));
-        Block("Stair entrance",new Vector3(5.4f,-.035f,3.75f),new Vector3(1.9f,.012f,.5f),new Color(.12f,.4f,.3f));
+        Block("Pedestrian aisle",new Vector3(0,-.035f,-9.5f),new Vector3(right-left+15,.012f,1.5f),new Color(.12f,.4f,.3f));
+        Block("Maintenance aisle",new Vector3((left-6.3f+9.65f)*.5f,-.035f,5.6f),new Vector3(9.65f-left+6.3f,.012f,1.5f),new Color(.12f,.4f,.3f));
+        Block("Aisle connection",new Vector3(left-6.3f,-.035f,-1.95f),new Vector3(1.5f,.012f,16.6f),new Color(.12f,.4f,.3f));
+        Block("Stair approach",new Vector3(9.2f,-.035f,9.175f),new Vector3(1.5f,.012f,8.65f),new Color(.12f,.4f,.3f));
+        Block("Stair entrance",new Vector3(8.3f,-.035f,12.85f),new Vector3(3.3f,.012f,1.5f),new Color(.12f,.4f,.3f));
         Block("Incoming staging",new Vector3(left-2,-.025f,0),new Vector3(3,.012f,3),FactoryRules.Amber);
         Block("Outgoing staging",new Vector3(right+2,-.025f,0),new Vector3(3,.012f,3),FactoryRules.Amber);
-        // Synthetic transfer tables reserve the loading/unloading interface; no crane cycle is inferred.
-        foreach(float x in new[]{left-1.2f,right+1.2f}) {
-            Block("Transfer table",new Vector3(x,1.05f,0),new Vector3(2.4f,.25f,1.6f),FactoryRules.Grey);
-            foreach(float z in new[]{-.6f,.6f}) Block("Transfer table leg",new Vector3(x,.5f,z),new Vector3(.15f,1,.15f),FactoryRules.Grey);
+        if(next.route.Length>0) {
+            string first=next.route[0],last=next.route[next.route.Length-1];
+            if(equipment[first].activeSelf && equipment[last].activeSelf) {
+                var inlet=Anchor(first,"InputAnchor_").position;
+                var outlet=Anchor(last,"OutputAnchor_").position;
+                RollerBed("Inlet roller bed",inlet-Vector3.right*4.8f,inlet,first);
+                RollerBed("Outlet roller bed",outlet,outlet+Vector3.right*4.8f,last);
+            }
         }
         if(next.equipment.Any(e=>e.code=="CV-02" && e.active)) {
             var p=EquipmentPosition(next,"CV-02")+new Vector3(0,0,-3.4f);
@@ -151,9 +156,38 @@ public class FactoryRig : MonoBehaviour
     {
         return equipment[next.equipment.First(e=>e.code==code).equipment_id].transform.position;
     }
+    void RollerBed(string name,Vector3 start,Vector3 end,string speedId)
+    {
+        var source=equipment.Values.Where(e=>e.activeSelf).SelectMany(e=>e.GetComponentsInChildren<Transform>()).FirstOrDefault(t=>t.name=="Roller_01" && t.childCount>0);
+        if(source==null) return;
+        var bed=new GameObject(name).transform; bed.SetParent(auxiliaryBeds);
+        float length=Vector3.Distance(start,end);
+        int count=Mathf.Max(2,Mathf.CeilToInt(length/.4f));
+        var bearings=source.parent.GetComponentsInChildren<Transform>().Where(t=>t.name.StartsWith("BearingBlock")).GroupBy(t=>Mathf.Sign(t.position.z)).Select(g=>g.First()).ToArray();
+        for(int i=0;i<count;i++) {
+            var top=Vector3.Lerp(start,end,(i+.5f)/count);
+            var roller=Instantiate(source.gameObject,bed).transform; roller.name="Auxiliary roller_"+(i+1).ToString("00");
+            roller.position=top-Vector3.up*.12f; roller.rotation=source.rotation; roller.localScale=source.lossyScale;
+            rotating.Add(Tuple.Create(speedId,roller,Vector3.forward,.12f));
+            foreach(var template in bearings) {
+                var bearing=Instantiate(template.gameObject,bed).transform;
+                bearing.position=new Vector3(top.x,template.position.y,template.position.z); bearing.rotation=template.rotation; bearing.localScale=template.lossyScale;
+            }
+        }
+        foreach(float z in new[]{-.85f,.85f}) {
+            var frame=Block("Roller bed frame",(start+end)*.5f+new Vector3(0,-.4f,z),new Vector3(length,.18f,.12f),new Color(.12f,.3f,.42f)); frame.transform.SetParent(bed);
+            int supports=Mathf.Max(2,Mathf.CeilToInt(length/1.6f));
+            for(int i=0;i<supports;i++) {
+                var point=Vector3.Lerp(start,end,(i+.5f)/supports);
+                var leg=Block("Roller bed leg",new Vector3(point.x,.4f,z),new Vector3(.12f,.8f,.12f),FactoryRules.Grey); leg.transform.SetParent(bed);
+                var foot=Block("Roller bed foot",new Vector3(point.x,.04f,z),new Vector3(.26f,.08f,.26f),FactoryRules.Grey); foot.transform.SetParent(bed);
+            }
+        }
+    }
     public void Build(FactoryConfig next,Dictionary<string,GameObject> nodes)
     {
         config=next; equipment=nodes;
+        auxiliaryBeds=new GameObject("Auxiliary roller beds").transform; auxiliaryBeds.SetParent(transform);
         foreach(var spec in next.equipment) {
             var node=nodes[spec.equipment_id];
             foreach(var t in node.GetComponentsInChildren<Transform>()) {
@@ -185,7 +219,7 @@ public class FactoryRig : MonoBehaviour
                     var chute=Asset("Connection_ScrapChute",transform); chute.transform.position=(start+end)*.5f-Vector3.up*.2f;
                     chute.transform.rotation=Quaternion.FromToRotation(Vector3.right,(end-start).normalized); chute.transform.localScale=new Vector3((end-start).magnitude,1,1);
                 } else {
-                    var bridge=Asset("Connection_TransferBridge",transform); bridge.transform.position=(start+end)*.5f-Vector3.up*.38f;
+                    RollerBed("Transfer roller bed "+rel.from_id+" to "+rel.to_id,start,end,rel.from_id);
                 }
             } else if(rel.relation_type=="drive") {
                 var output=nodes[rel.from_id].GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("OutputShaft") && t.childCount>0);
@@ -213,7 +247,7 @@ public class FactoryRig : MonoBehaviour
                 Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,2.8f,6.7f),new Vector3(end.x,2.8f,6.7f),new Vector3(end.x,2.8f,1.7f),end},new Color(.1f,.6f,.7f));
                 Pipe("Assumed hydraulic return "+rel.to_id,new[]{end+Vector3.forward*.1f,new Vector3(end.x,2.8f,1.8f),new Vector3(end.x,2.8f,6.8f),new Vector3(start.x,2.8f,6.8f),start+Vector3.forward*.1f},FactoryRules.Grey);
             } else if(rel.relation_type=="power_supply") {
-                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(0,.91f,.4f),new Vector3(a.x,3.1f,7),new Vector3(b.x,3.1f,7),b+new Vector3(-.68f,.91f,.6f)},Color.black);
+                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(0,.91f,.4f),new Vector3(a.x,4,7),new Vector3(b.x,4,7),b+new Vector3(-.68f,4,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
             } else if(rel.relation_type=="pneumatic_supply") {
                 Pipe("CAU air riser",new[]{a+new Vector3(-1.6f,1.8f,0),new Vector3(a.x-1.6f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,1.7f),b+new Vector3(.7f,.45f,1.06f)},new Color(.2f,.5f,.9f));
             }
@@ -221,8 +255,8 @@ public class FactoryRig : MonoBehaviour
         var powered=relations.Where(r=>r.relation_type=="power_supply" && nodes.ContainsKey(r.to_id)).Select(r=>nodes[r.to_id].transform.position.x).ToArray();
         if(powered.Length>0) {
             float left=Mathf.Min(powered.Min(),-2), right=Mathf.Max(powered.Max(),-2);
-            for(float x=left;x<right+.5f;x+=1) { var tray=Asset("Connection_CableTray",transform); tray.transform.position=new Vector3(x,3.02f,7); }
-            foreach(float x in new[]{left,right}) Block("Cable tray support",new Vector3(x,1.5f,7),new Vector3(.1f,3,.1f),FactoryRules.Grey);
+            for(float x=left;x<right+.5f;x+=1) { var tray=Asset("Connection_CableTray",transform); tray.transform.position=new Vector3(x,3.92f,7); }
+            foreach(float x in new[]{left,right}) Block("Cable tray support",new Vector3(x,2,7),new Vector3(.1f,4,.1f),FactoryRules.Grey);
         }
     }
     public Vector3 MaterialPosition(string id,float position)

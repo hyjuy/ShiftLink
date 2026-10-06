@@ -20,6 +20,8 @@ from . import configuration
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
+from shiftlink.agent.pipeline import JudgeUnavailableError
+
 from .storage import HandoverConflictError, MesStorage
 
 _CONTROL_BODY_LIMIT = 8192
@@ -370,6 +372,10 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(409, {"error": str(error), "is_synthetic": True})
         except ConfigValidationError as error:
             self._send(400, {"error": str(error), "errors": error.errors, "is_synthetic": True})
+        except JudgeUnavailableError as error:
+            # The abstain judge could not run. Never show a card unjudged: tell the PDA to wait and try again.
+            print(f"[판정 모델 사용 불가] {error}", flush=True)
+            self._send(503, {"error": "판정 모델을 쓸 수 없습니다. 잠시 후 다시 시도해 주세요.", "retry": True, "is_synthetic": True})
         except (ValueError, KeyError, json.JSONDecodeError) as error:
             self._send(400, {"error": str(error), "is_synthetic": True})
         except Exception as error:  # noqa: BLE001 — 모델 서버 연결 실패·의존성 누락 등도 JSON 으로 알린다
@@ -386,6 +392,9 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     stopped = threading.Event()
     worker = threading.Thread(target=_run_ticks, args=(service, stopped), daemon=True); worker.start()
     print(f"Synthetic MES: http://{host}:{port} | database: {database}", flush=True)
+    from .query import judge_model_status
+    if (status := judge_model_status()) != "ok":  # warn only: Ollama may still be starting; queries answer 503 until it is ready
+        print(f"[경고] 판정 모델을 확인하지 못했습니다({status}). 질의는 준비될 때까지 503(잠시 후 다시 시도)으로 응답합니다.", flush=True)
     try: server.serve_forever()
     finally:
         stopped.set()

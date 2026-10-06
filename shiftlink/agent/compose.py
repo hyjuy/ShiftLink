@@ -6,10 +6,13 @@ The model keeps a short summary; code writes the facts. Post-processing only, so
     L3  put the cited card's own prohibition / stop sentences first
     E1  extractive: the answer is the cited card's own words (no model text)      } 10/6 pre-registration:
     E2  filter: keep only model sentences grounded in the cited card, else E1      } docs/experiments/answer-extractive-prereg-20261006.md
+    H   hybrid: keep the (SFT) model answer, but fall back to E1 when the cited card holds/prohibits something and the
+        answer recommends restarting/charging/opening without a negation (10/6, docs/experiments/ and sft1006 PREREG_sft_hybrid)
 E1/E2 replace the L layers (E1 wins over E2).
 Layers are switched per pipeline (`compose_layers`) or by env SHIFTLINK_COMPOSE="L1,L2,L3". Default: none.
 """
 
+import json
 import os
 import re
 from typing import Any, Iterable
@@ -20,7 +23,13 @@ from shiftlink.agent.response import (
 )
 from shiftlink.rag.retrieval import _SIGNAL_LABELS
 
-LAYERS = ("L1", "L2", "L3", "L3C", "E1", "E2")  # L3C: L3 from the cited card only (no extra safety card); a measured variant of L3
+LAYERS = ("L1", "L2", "L3", "L3C", "E1", "E2", "H")  # L3C: L3 from the cited card only (no extra safety card); a measured variant of L3
+# Hybrid guard (fixed 10/6 before the new questions arrived; sft1006/scripts/hybrid_guard.py, sha256 d026e8fc86f9bf27). Do not tune on results.
+_HOLD = re.compile(r"보류|금지|하지 않|하지 말|전까지|승인|잠금|차단|격리|정지 (?:후|상태)|재투입")
+_ACT = re.compile(r"돌려|돌리|기동|재기동|재가동|가동|충전|열어|열고|열면|개방|켜|켠|투입|운전(?:을|해)")
+_NEG = re.compile(r"지 ?마|하지 ?않|금지|안 ?됩|말고|보류|않도록|못")
+_SPLIT = re.compile(r"(?<=[.!?。])\s+|\n+")
+_HOLD_FIELDS = ("know_how", "rationale", "safety_basis", "conditions", "exclusions", "type_payload")
 _STATES = ("low", "normal", "high")
 _DIRECTION = re.compile("초과|넘|벗어|미만|높|낮")
 # Criteria and hedges are not assertions about a reading ("38 미만이면 …", "그럴 수 있다").
@@ -186,12 +195,23 @@ def e2_answer(answer: str, cited: list[dict[str, Any]], cited_ids: list[str], to
     return NL.join([*l1_lines(cited, tool_results), body])
 
 
+def hybrid_needs_e1(answer: str, card: dict[str, Any]) -> bool:
+    """True when the card holds/prohibits something and a sentence of the answer recommends restart/charge/open/operate
+    without a negation in that sentence. Then the model answer is replaced by E1 (the worst case is E1)."""
+    text = "\n".join(json.dumps(card[k], ensure_ascii=False, default=str) for k in _HOLD_FIELDS if card.get(k) is not None)
+    if not _HOLD.search(text):
+        return False
+    return any(s.strip() and _ACT.search(s) and not _NEG.search(s) for s in _SPLIT.split(answer))
+
+
 def compose_answer(answer: str, cited_ids: list[str], tool_results: dict[str, Any], layers: Iterable[str],
                    errors: Iterable[str] = ()) -> str:
     layers = set(layers)
     cited = _cited_cards(cited_ids, tool_results)
     if layers & {"E1", "E2"} and cited:
         return e1_answer(cited, tool_results) if "E1" in layers else e2_answer(answer, cited, cited_ids, tool_results)
+    if "H" in layers and cited and (answer == GUARD_FALLBACK_ANSWER or hybrid_needs_e1(answer, cited[0])):
+        return e1_answer(cited, tool_results)
     summary = l2_filter(answer, cited, tool_results) if "L2" in layers else answer
     if answer == GUARD_FALLBACK_ANSWER and any("답이" in e or "정상 범위인데" in e for e in errors):
         summary = DIRECTION_FALLBACK_ANSWER  # the stock sentence blames a missing number; this block was a direction error

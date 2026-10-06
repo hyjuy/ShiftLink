@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterable, Mapping, Protocol
 
 from shiftlink.agent import tools as tool_stubs
 from shiftlink.agent.canary import has_canary
-from shiftlink.agent.compose import compose_answer, layers_from_env
+from shiftlink.agent.compose import compose_answer, e1_answer, layers_from_env
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
 from shiftlink.agent.response import (
     GUARD_FALLBACK_ANSWER,
@@ -62,6 +62,10 @@ MODEL_ERRORS = (ValueError, TimeoutError, ConnectionError, KeyError)
 OutputValidator = Callable[..., Any]
 
 
+class JudgeUnavailableError(RuntimeError):
+    """The abstain judge could not run (model missing, Ollama down, timeout) and the pipeline is strict about it."""
+
+
 @dataclass(frozen=True)
 class PipelineResult:
     mode: Mode
@@ -80,6 +84,7 @@ class FixedPipeline:
         judge_min_score: int = 2,
         compose_layers: Iterable[str] | None = None,
         answer_mode: str | None = None,
+        judge_strict: bool = False,
     ) -> None:
         self.tools = tools
         self.model = model
@@ -87,13 +92,18 @@ class FixedPipeline:
         # judge_min_score the pipeline answers "no knowledge". Defaults to the model's own judge when it has one.
         self.judge = judge if judge is not None else getattr(model, "judge", None)
         self.judge_min_score = judge_min_score
+        # Strict: a judge that cannot run raises JudgeUnavailableError instead of letting the card through unjudged
+        # (the demo server sets it; evaluation scripts keep the old fall-through).
+        self.judge_strict = judge_strict
         # Answer composition layers (compose.py). None reads SHIFTLINK_COMPOSE; default is off until a layer is adopted.
         self.compose_layers = frozenset(layers_from_env() if compose_layers is None else compose_layers)
         # "extract": query-mode answers are built from the rank-1 card (compose E1, adopted 10/6) and the model is not
         # called; the model's only job is then the abstain judge. None reads SHIFTLINK_ANSWER_MODE; default "model".
         self.answer_mode = answer_mode or os.environ.get("SHIFTLINK_ANSWER_MODE") or "model"
-        if self.answer_mode not in ("model", "extract"):
-            raise ValueError(f"answer_mode must be 'model' or 'extract', got {self.answer_mode!r}")
+        # "hybrid": the (SFT) model writes the answer; compose layer H falls back to E1 when the guard fires, and a
+        # blocked/blank model result also ends as the E1 answer. Adopted 10/6 by the pre-registered rule; off by default.
+        if self.answer_mode not in ("model", "extract", "hybrid"):
+            raise ValueError(f"answer_mode must be 'model', 'extract' or 'hybrid', got {self.answer_mode!r}")
         self._default_validator = validator is None
         # Default validator: build response and validate invariants
         if validator is None:
@@ -163,11 +173,26 @@ class FixedPipeline:
                 routed.mode, routed.request, tool_results, model_output, model_error
             )
         self._fill_guard_fallback(output, model_output)
+        if self.answer_mode == "hybrid" and routed.mode == "query":
+            tool_results["answer_mode"] = "hybrid"
+            self._hybrid_fallback(output, tool_results)
         layers = self.compose_layers | {"E1"} if self.answer_mode == "extract" and routed.mode == "query" else self.compose_layers
+        if self.answer_mode == "hybrid" and routed.mode == "query":
+            layers = layers | {"H"}
         if layers and routed.mode == "query" and getattr(output, "answer", None):
             output.answer = compose_answer(output.answer, output.cited_card_ids, tool_results, layers,
                                            getattr(output, "validation_errors", []))
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
+
+    def _hybrid_fallback(self, output: Any, tool_results: dict[str, Any]) -> None:
+        """A blank / review-queue model result in hybrid mode ends as the E1 answer of the rank-1 card (as in the replay)."""
+        ranked = tool_results.get("ranked_cards") or []
+        if not ranked or (getattr(output, "answer", None) and not getattr(output, "review_queue", False)):
+            return
+        output.cited_card_ids = [ranked[0]["card_id"]]
+        output.answer = e1_answer([ranked[0]], tool_results)
+        output.review_queue = False
+        tool_results["hybrid_fallback"] = "model result blocked or blank"
 
     def _fill_guard_fallback(self, output: Any, model_output: Any) -> None:
         """A guard-blocked answer is a sentence, not a blank. Schema failures stay blank."""
@@ -186,7 +211,9 @@ class FixedPipeline:
             return False
         try:
             score = self.judge(routed.request.question, tool_results["ranked_cards"][0])
-        except MODEL_ERRORS:
+        except MODEL_ERRORS as exc:
+            if self.judge_strict:
+                raise JudgeUnavailableError(f"{type(exc).__name__}: {str(exc)[:120]}") from exc
             return False  # judge unavailable: fall through to the normal model call and its own error handling
         tool_results["judge_score"] = score
         return score < self.judge_min_score

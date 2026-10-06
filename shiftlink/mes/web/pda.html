@@ -90,6 +90,8 @@
   .btn.big .ico{font-size:36px;line-height:1}
   .btn-row{display:flex;gap:8px;flex:0 0 auto}
   .btn-row>*{flex:1 1 0}
+  .outbox-note{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--warn)}
+  .outbox-note.bad{color:var(--safety)}
 
   .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--tx-2);text-transform:uppercase;margin:0;flex:0 0 auto}
   .lbl.hot{color:var(--scan)}
@@ -298,6 +300,8 @@
       <div class="grow"></div>
       <p class="lbl">최근 설비</p>
       <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
+      <p class="outbox-note" id="homePending" hidden></p>
+      <p class="outbox-note bad" id="homeConflict" hidden></p>
       <div class="btn-row">
         <button class="btn sm" id="toManual" type="button">설비 목록</button>
         <button class="btn sm" id="toHandoverHome" type="button">인계 확인</button>
@@ -430,6 +434,8 @@
   <section class="screen" id="s-handover">
     <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <p class="outbox-note" id="hoPending" hidden></p>
+    <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
   </section>
 

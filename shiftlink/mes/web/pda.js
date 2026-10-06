@@ -932,8 +932,43 @@ function renderSimOptions() {
   });
 }
 
+function outboxLabels(body) {
+  const handover = (body && body.handover) || {};
+  const pending = Number(handover.pending) || 0;
+  const conflict = Number(handover.conflict) || 0;
+  return {
+    pending: pending > 0 ? '업로드 대기 ' + pending + '건' : '',
+    conflict: conflict > 0 ? '확인 필요 ' + conflict + '건' : '',
+  };
+}
+
+function paintOutbox(labels) {
+  if (typeof document === 'undefined') return;
+  [['homePending', 'hoPending', labels.pending], ['homeConflict', 'hoConflict', labels.conflict]]
+    .forEach(([a, b, text]) => {
+      [a, b].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = text;
+        el.hidden = !text;
+      });
+    });
+}
+
+async function refreshOutbox(request) {
+  const ask = request || (typeof fetch === 'function' ? fetch : null);
+  if (!ask) return outboxLabels(null);
+  try {
+    const res = await ask('/api/outbox', {cache: 'no-store'});
+    if (!res || !res.ok) return outboxLabels(null);
+    return outboxLabels(await res.json());
+  } catch (_) {
+    return outboxLabels(null);
+  }
+}
+
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1005,6 +1040,10 @@ on('simFeed', () => {
 
 // ── 기동 ───────────────────────────────────────────────────────────
 renderNet();
+window.paintOutbox = paintOutbox;
+async function pollOutbox() { paintOutbox(await refreshOutbox()); }
 probeServer();
+pollOutbox();
+setInterval(pollOutbox, 30000);
 boot();
 }

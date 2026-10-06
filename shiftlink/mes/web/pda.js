@@ -74,6 +74,13 @@ function equipmentFrom(config, catalog) {
   });
 }
 
+function equipmentFromLink(search, equipment) {
+  const params = new URLSearchParams(search);
+  const ids = params.getAll('equipment_id');
+  if (ids.length !== 1) return null;
+  return equipment.find((eq) => eq.equipment_id === ids[0]) || null;
+}
+
 async function boot() {
   try {
     const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
@@ -87,7 +94,9 @@ async function boot() {
 
     renderManualList();
     renderSimOptions();
-    show('home');
+    const linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
+    if (linkedEquipment) { setContext(linkedEquipment, 'manual_selection'); show('ctx'); }
+    else show('home');
   } catch (err) {
     $('bootMsg').textContent = 'MES 서버에서 데이터를 읽지 못했습니다.';
     const box = document.createElement('div');
@@ -968,7 +977,7 @@ async function refreshOutbox(request) {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, equipmentFromLink }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────

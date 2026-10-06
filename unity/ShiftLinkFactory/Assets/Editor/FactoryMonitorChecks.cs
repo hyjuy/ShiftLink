@@ -28,6 +28,11 @@ public static class FactoryMonitorChecks
             state.equipment[0].operating_state="waiting"; state.equipment[0].fault_level="warning";
             factory.Apply(state);
             Check(text.text.Contains("일시정지") && text.text.Contains("대기 / 경고"),"display must follow pause and warning updates");
+            FactoryChecks.Capture(Path.Combine(dir,"monitor-factory.png"));
+            var camera=Camera.main; var cameraPosition=camera.transform.position; var cameraRotation=camera.transform.rotation;
+            camera.transform.position=display.position-display.forward*14; camera.transform.rotation=display.rotation;
+            FactoryChecks.Capture(Path.Combine(dir,"monitor-front.png"));
+            camera.transform.SetPositionAndRotation(cameraPosition,cameraRotation);
             factory.Disconnect("monitor test");
             Check(text.text.Contains("연결 끊김") && !text.text.Contains("코일 "+state.coils.Length),"offline display must hide stale live values");
             File.WriteAllText(Path.Combine(dir,"monitor-check-result.txt"),"PASS: world display, route, branch, equipment, coil count, pause, warning, disconnect");

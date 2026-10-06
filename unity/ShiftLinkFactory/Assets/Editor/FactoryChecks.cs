@@ -42,6 +42,8 @@ public static class FactoryChecks
                 int first = SessionState.GetInt("ShiftLink.FirstSequence", -1);
                 if (first < 0) { SessionState.SetInt("ShiftLink.FirstSequence", factory.CurrentSequence); return; }
                 if (factory.CurrentSequence <= first) return;
+                var monitor=factory.GetComponent<FactoryMonitor>();
+                Check(monitor!=null && monitor.Content.Contains("MES 연결됨") && monitor.Content.Contains("갱신 "+factory.CurrentSequence), "live monitor must reflect accepted MES sequence");
                 Capture(Path.Combine(Application.dataPath, "../Checks/live-factory.png"));
                 File.WriteAllText(Path.Combine(Application.dataPath, "../Checks/play-check-result.txt"),
                     "PASS: Unity Play Mode received live MES state, advancing MES sequence, coils and PDA recognition; run=" + factory.CurrentRunId);
@@ -54,7 +56,7 @@ public static class FactoryChecks
             SessionState.SetBool("ShiftLink.PlayCheck", false); Debug.LogException(error); EditorApplication.Exit(1);
         }
     }
-    static void Capture(string path)
+    public static void Capture(string path)
     {
         var camera = Camera.main;
         var render = new RenderTexture(1600, 900, 24);

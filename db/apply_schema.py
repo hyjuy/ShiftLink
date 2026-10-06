@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def env() -> dict[str, str]:
     values = {}
-    for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
+    dotenv = ROOT / ".env"  # optional: a systemd EnvironmentFile (MYSQL_*) works without it
+    for line in (dotenv.read_text(encoding="utf-8").splitlines() if dotenv.exists() else []):
         if "=" in line and not line.lstrip().startswith("#"):
             key, value = line.split("=", 1)
             values[key.strip()] = value.strip()

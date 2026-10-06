@@ -7,6 +7,15 @@
   const stateClass = (item) => item.fault_level === "warning" ? "warning" : item.fault_level && item.fault_level !== "normal" ? "fault" : item.operating_state === "waiting" ? "waiting" : item.operating_state === "stopped" ? "stopped" : "normal";
   const statusText = (item) => [label(item.operating_state), label(item.fault_level), item.wait_reason && label(item.wait_reason)].filter(Boolean).join(" · ");
   const clock = (value) => value ? new Date(value).toLocaleString("ko-KR", { hour12: false }) : "—";
+  const eventLabels = {started:"운전 시작",paused:"일시정지",scenario_selected:"시나리오 선택",alarm_raised:"알람 발생",alarm_cleared:"알람 해제",recovery_started:"복구 시작",recovery_action_completed:"조치 기록",recovered:"복구 완료",coil_entered:"코일 투입",coil_exited:"코일 배출",coil_held:"코일 보류",coil_released:"코일 보류 해제"};
+  function eventText(event, config) {
+    const equipment = config?.equipment?.find(e=>e.equipment_id===event.equipment_id);
+    return [eventLabels[event.event_type] || event.event_type, equipment?.code || event.equipment_id].filter(Boolean).join(" · ");
+  }
+  function metricWindow(snapshot, snapshots) {
+    const metrics = operationMetrics(snapshots);
+    return metrics.samples ? `최근 모의 운전 ${metrics.windowMinutes}분 · 측정 ${metrics.samples}회` : `데이터 부족 (${snapshots.length}/${METRIC_MIN_SNAPSHOTS}회)${snapshot.line_mode === "paused" ? " · 운전 재개 후 집계" : " · 측정 기록이 쌓이면 집계"}`;
+  }
   const processRoles = {
     rt: ["롤러 이송대", "여러 롤러가 코일을 받쳐 다음 장비로 옮깁니다."],
     cv: ["컨베이어", "벨트 위의 코일을 출측으로 운반합니다."],
@@ -104,14 +113,14 @@
     const plan = snapshot.recovery;
     if (!plan) return '<p class="empty-state">시연 제어에서 시나리오를 선택하면 필요한 조치와 복귀 조건을 볼 수 있습니다.</p>';
     const done = plan.stage === "completed", next = plan.actions.findIndex(a => !a.completed);
-    const steps = [{title: "이상 발생", done: true}, ...plan.actions.map((a, i) => ({title:a.title, done:a.completed, current:plan.stage === "actions" && i === next})),
-      {title: "안정화 관찰", done, current:plan.stage === "stabilizing"}, {title: "정상 복귀", done, current:done}];
-    const flow = steps.map((s, i) => `<li class="${s.done ? "done" : ""} ${s.current ? "current" : ""}" ${s.current ? 'aria-current="step"' : ''}><span>${s.done ? "✓" : i + 1}</span><b>${escape(s.title)}</b><small>${s.current ? "현재 단계" : s.done ? "완료" : "대기"}</small></li>`).join("");
+    const steps = [{title: "이상 발생", done: true}, ...plan.actions.map((a, i) => ({title:a.title, done:a.completed, unrecorded:!a.completed && ["stabilizing","completed"].includes(plan.stage), current:plan.stage === "actions" && i === next})),
+      {title: "안정화 관찰", done, current:plan.stage === "stabilizing"}, {title: "정상 복귀", done}];
+    const flow = steps.map((s, i) => `<li class="${s.done ? "done" : ""} ${s.current ? "current" : ""}" ${s.current ? 'aria-current="step"' : ''}><span>${s.done ? "✓" : i + 1}</span><b>${escape(s.title)}</b><small>${s.current ? "현재 단계" : s.done ? "완료" : s.unrecorded ? "조치 기록 없음" : "대기"}</small></li>`).join("");
     const action = plan.stage === "actions" ? plan.actions[next] : null;
-    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 복귀 진행을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · ${plan.remaining_ticks} tick 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
+    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 모의 복구 시작을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · 모의 관찰 ${plan.remaining_ticks}회 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
     const held = (snapshot.coils || []).filter(c => c.quality_status === "hold");
     const source = /^https:\/\//.test(plan.source_url || "") ? `<a href="${escape(plan.source_url)}" target="_blank" rel="noopener noreferrer">근거 매뉴얼 ↗</a>` : "";
-    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">복귀 진행 · 안정화 시작</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 생략 · 바로 복귀 진행</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
+    return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">모의 복구 시작 · 안정화 관찰</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 기록 없이 모의 복구 시작</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
   }
   function componentView(snapshot, equipmentId) {
     const parts = (snapshot.components || []).filter(c => c.equipment_id === equipmentId);
@@ -121,7 +130,7 @@
       return `<article class="component-card ${value < 40 ? "degraded" : ""}"><div><b>${escape(c.name)}</b><strong>${value.toFixed(1)}% · ${state}</strong></div><meter min="0" max="100" low="40" high="70" optimum="100" value="${value}" aria-label="${escape(c.name)} 모의 건전도">${value.toFixed(1)}%</meter><small>누적 운전 ${(c.operating_seconds / 3600).toFixed(3)} h · 정비 ${Number(c.maintenance_count)}회${c.last_maintenance_at ? ` · 최근 ${escape(clock(c.last_maintenance_at))}` : ""}</small></article>`;
     }).join("")}</div>`;
   }
-  if (typeof module !== "undefined") module.exports = { createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics, recoveryView, componentView };
+  if (typeof module !== "undefined") module.exports = { createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics, metricWindow, eventText, recoveryView, componentView };
   if (typeof document === "undefined") return;
   const operator = globalThis.MesOperator;
   const $ = (selector) => document.querySelector(selector);
@@ -170,8 +179,6 @@
   function showWorkspace(key, focus = false) {
     const target = document.querySelector(`#tab-${key}`);
     if (!target?.dataset?.workspace) return;
-    const incident = lastSnapshot?.recovery?.equipment_id || lastSnapshot?.active_alarms?.[0]?.equipment_id;
-    if (key === "detail" && !selectedId && incident) { selectedId = incident; renderSnapshot(lastSnapshot, currentConfig()); }
     document.querySelectorAll('[role="tab"][data-workspace]').forEach(tab => {
       const selected = tab.dataset.workspace === key;
       tab.setAttribute("aria-selected", String(selected)); tab.tabIndex = selected ? 0 : -1;
@@ -192,7 +199,7 @@
     if (id===selectedId && !relation && !move) { clearSelection(); return; }
     selectedId=id; selectedPartId=null; selectedRelation=relation; renderSnapshot(lastSnapshot,currentConfig());
     if (move) { showWorkspace("detail"); $("#equipment-detail").focus(); $("#equipment-detail").scrollIntoView({block:"start"}); }
-    setText("#operator-announcement", `${name(id,currentConfig())} 선택. 상세 영역에서 부품과 관측 근거를 확인하세요.`);
+    setText("#operator-announcement", `${name(id,currentConfig())} 선택. ${move ? "설비 상세에서 측정 정보와 조치를 확인하세요." : "상세 보기 버튼을 누르면 측정 정보와 조치로 이동합니다."}`);
   }
   function clearSelection() {
     selectedId=null; selectedPartId=null; selectedRelation="";
@@ -203,7 +210,7 @@
     const model=operator.buildOperatorModel(snapshot,config,selectedId,selectedPartId);
     const relation=model.links.find(l=>operator.relationKey(l)===selectedRelation);
     $("#selected-connection").classList.toggle("has-relation", Boolean(relation));
-    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "관측된 영향 대기" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
+    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "영향으로 대기 중인 설비" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
     setText("#process-story",processMessage(snapshot,config));
     setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
     setView("#relation-legend",operator.legendView($("#experience-mode").value));
@@ -219,18 +226,19 @@
       node.querySelector("title").textContent=`${coil.coil_id} · 위치 ${Math.round(Number(coil.position)*100)}%${coil.quality_status==="hold"?" · 제품 보류":""}`;
     });
     setView("#incident-summary",operator.incidentView(model));
-    setView("#part-locator",operator.partView(model));
-    setView("#selection-evidence",operator.evidenceView(model,selectedRelation));
-    setView("#utility-links",model.links.filter(l=>l.relation_type!=="material_flow" && [l.from_id,l.to_id].includes(selectedId)).map(l=>`<p><button type="button" data-equipment="${escape(l.from_id)}">${escape(l.from.code || l.from_id)}</button> ${l.directionSymbol} <button type="button" data-equipment="${escape(l.to_id)}">${escape(l.to.code || l.to_id)}</button> · ${escape(l.label)}</p>`).join("") || "설비를 선택하면 직접 관계를 표시합니다.");
+    setView("#part-locator",model.selected ? operator.partView(model) : "");
+    $("#part-evidence-note").hidden = !model.selectedPart;
+    setView("#selection-evidence",model.selected ? operator.evidenceView(model,selectedRelation) : "");
+    setView("#utility-links",model.links.filter(l=>l.relation_type!=="material_flow" && [l.from_id,l.to_id].includes(selectedId)).map(l=>`<p><button type="button" data-equipment="${escape(l.from_id)}">${escape(l.from.code || l.from_id)}</button> ${l.directionSymbol} <button type="button" data-equipment="${escape(l.to_id)}">${escape(l.to.code || l.to_id)}</button> · ${escape(l.label)} <button type="button" data-equipment="${escape(selectedId)}" data-relation="${escape(operator.relationKey(l))}" aria-label="${escape(l.from.code || l.from_id)} ${l.directionSymbol} ${escape(l.to.code || l.to_id)} · ${escape(l.label)} 연결 선택">연결 선택</button></p>`).join("") || "설비를 선택하면 직접 관계를 표시합니다.");
     const signature=JSON.stringify([snapshot.run_id,model.faults.map(n=>n.equipment_id),model.held.map(c=>c.coil_id),snapshot.recovery?.stage]);
-    if (signature!==incidentSignature) { incidentSignature=signature; setText("#operator-announcement",`상태 변경. 자체 이상·주의 ${model.faults.length}대, 보류 코일 ${model.held.length}개. 지금 확인할 위치에서 상세를 선택하세요.`); }
+    if (signature!==incidentSignature) { incidentSignature=signature; setText("#operator-announcement",`상태 변경. 자체 이상·주의 ${model.faults.length}대, 보류 코일 ${model.held.length}개. 우선 확인 항목에서 상세를 선택하세요.`); }
   }
   function renderDetail(snapshot, config) {
     const equipment = snapshot.equipment?.find((item) => item.equipment_id === selectedId);
     const measurements = (snapshot.measurements || []).filter((item) => item.equipment_id === selectedId);
     const configEq = config?.equipment?.find((e) => e.equipment_id === selectedId);
     if (!equipment) {
-      setView("#equipment-detail","<h2>설비 상세</h2><p>설비를 선택하세요.</p>");
+      setView("#equipment-detail",`<h2>설비 상세</h2><p>확인할 설비를 선택하세요.</p><div class="equipment-choices">${(config?.equipment || []).map(e=>`<button type="button" data-equipment="${escape(e.equipment_id)}">${escape(e.code)} · ${escape(roleFor(e)[0])}</button>`).join("")}</div>`);
       $("#signal-select").innerHTML=""; $("#signal-select").dataset.signals="";
       $("#sensor-trends").innerHTML=""; setText("#trend-description","설비를 선택하면 추이를 표시합니다.");
       return;
@@ -266,11 +274,10 @@
     $("#sensor-trends").innerHTML = coordinates ? `<svg viewBox="0 0 420 150" role="img" aria-label="${escape(description)}"><title>${escape(description)}</title><path d="M35 15 V125 H410" fill="none" stroke="currentColor" opacity=".4"/><polyline points="${coordinates}" fill="none" stroke="#5b95c8" stroke-width="3"/><text x="3" y="20" fill="currentColor" font-size="10">${max}</text><text x="3" y="123" fill="currentColor" font-size="10">${min}</text></svg>` : `<p class="empty-state">추이 데이터 없음</p>`;
     setText("#trend-description", description);
   }
-  function renderFeed(selector, items, format) { $(selector).innerHTML = items.length ? items.map((item) => `<li class="${item.severity === "critical" ? "fault" : ""}">${escape(format(item))}</li>`).join("") : "<li>없음</li>"; }
   // 현황판: 코일 이송 라인 설비마다 상태 막대 · 가동률 게이지 · 처리량·사이클·대기 · 큰 상태 글씨
   function gauge(pct) {
     const r = 34, c = 2 * Math.PI * r, on = pct == null ? 0 : Math.max(0, Math.min(100, pct)) / 100 * c;
-    return `<svg class="board-gauge" viewBox="0 0 84 84" aria-hidden="true"><circle class="gauge-track" cx="42" cy="42" r="${r}"/><circle class="gauge-value" cx="42" cy="42" r="${r}" stroke-dasharray="${on} ${c}" transform="rotate(-90 42 42)"/><text x="42" y="38" class="gauge-label">가동률</text><text x="42" y="56" class="gauge-number">${pct == null ? "집계 중" : `${pct}%`}</text></svg>`;
+    return `<svg class="board-gauge" viewBox="0 0 84 84" aria-hidden="true"><circle class="gauge-track" cx="42" cy="42" r="${r}"/><circle class="gauge-value" cx="42" cy="42" r="${r}" stroke-dasharray="${on} ${c}" transform="rotate(-90 42 42)"/><text x="42" y="38" class="gauge-label">가동률</text><text x="42" y="56" class="gauge-number">${pct == null ? "자료 부족" : `${pct}%`}</text></svg>`;
   }
   function renderLineBoard(snapshot, config, snapshots) {
     const rows = operationRows(snapshot, config, snapshots).filter(r => r.onRoute);
@@ -280,25 +287,23 @@
       const eq = config?.equipment?.find(e => e.equipment_id === r.equipment_id);
       const kind = r.faultLevel !== "normal" ? "fault" : r.status === "running" ? "run" : r.status === "waiting" ? "wait" : "stop";
       const state = { fault: label(r.faultLevel) === "고장" ? "정지 · 고장" : `이상 · ${label(r.faultLevel)}`, run: "가동중", wait: "대기", stop: label(r.status) }[kind];
-      return `<button type="button" class="board-card ${kind}" data-equipment="${escape(r.equipment_id)}"><span class="board-head"><b>${escape(r.name)}</b><small>${escape(roleFor(eq)[0])}</small></span><i class="board-bar" aria-hidden="true"></i><span class="board-body">${gauge(r.utilization)}<dl><dt>처리량</dt><dd>${r.throughput ?? "—"}<small> 코일</small></dd><dt>사이클</dt><dd>${r.cycleTime ? escape(r.cycleTime) : "—"}</dd><dt>대기</dt><dd>${r.queue}</dd></dl></span><span class="board-state">${escape(state)}</span></button>`;
+      return `<button type="button" class="board-card ${kind}" data-equipment="${escape(r.equipment_id)}"><span class="board-head"><b>${escape(r.name)}</b><small>${escape(roleFor(eq)[0])}</small></span><i class="board-bar" aria-hidden="true"></i><span class="board-body">${gauge(r.utilization)}<dl><dt>처리량</dt><dd>${r.throughput ?? "—"}<small> 코일</small></dd><dt>평균 이송 시간</dt><dd>${r.cycleTime ? escape(r.cycleTime) : "—"}</dd><dt>설비 내 코일</dt><dd>${r.queue}</dd></dl></span><span class="board-state">${escape(state)} · 상세 보기 →</span></button>`;
     }).join(""));
   }
-  // 설비별 가동률 막대: 설비 종류마다 색 하나(참고 화면의 라인별 색 막대), 고장은 빨강
-  const KIND_COLOR = { RT: "#f5c400", CV: "#18c1c4", GR: "#ff8a65", HPU: "#6cc04a", PDP: "#a970ff", CAU: "#4f8cff" };
+  // 상태 색만 사용해 주의·이상과 설비 종류 색을 혼동하지 않게 한다.
   function renderUtilBars(snapshot, config, snapshots) {
     const rows = operationRows(snapshot, config, snapshots);
     setView("#util-bars", rows.map(r => {
-      const kind = String(r.name).split("-")[0], pct = r.utilization;
-      return `<div class="util-row ${r.faultLevel !== "normal" ? "fault" : ""}"><span class="util-name"><i style="background:${KIND_COLOR[kind] || "#9aa3ab"}"></i>${escape(r.name)}</span><span class="util-track"><span class="util-fill" style="width:${pct ?? 0}%;background:${r.faultLevel !== "normal" ? "#e5484d" : KIND_COLOR[kind] || "#9aa3ab"}"></span></span><b class="util-pct">${pct == null ? "—" : `${pct}%`}</b></div>`;
+      const pct = r.utilization, color = r.faultLevel === "warning" ? "#efc78b" : r.faultLevel !== "normal" ? "#ff8f86" : "#aebcc7";
+      return `<button type="button" data-equipment="${escape(r.equipment_id)}" class="util-row ${r.faultLevel !== "normal" ? "fault" : ""}" aria-label="${escape(r.name)} · ${escape(label(r.status))} · 가동률 ${pct == null ? "데이터 부족" : `${pct}%`} · 상세 보기"><span class="util-name"><i style="background:${color}"></i>${escape(r.name)}</span><span class="util-track"><span class="util-fill" style="width:${pct ?? 0}%;background:${color}"></span></span><b class="util-pct">${pct == null ? "—" : `${pct}%`}</b></button>`;
     }).join(""));
-    const m = operationMetrics(snapshots);
-    setText("#util-window", m.samples ? `최근 ${m.windowMinutes}분` : "집계 중");
+    setText("#util-window", metricWindow(snapshot, snapshots));
   }
   function renderOperations(snapshot, config, snapshots) {
-    const rows = operationRows(snapshot, config, snapshots), metrics = operationMetrics(snapshots);
-    setText("#operations-window", metrics.samples ? `최근 ${metrics.windowMinutes}분 · 스냅샷 ${metrics.samples}개로 계산` : `집계 중 · 스냅샷 ${snapshots.length}/${METRIC_MIN_SNAPSHOTS}`);
-    const pending = '<span class="muted">집계 중</span>', support = '<span class="muted" title="코일이 지나가지 않는 설비라 집계하지 않습니다">-</span>';
-    setView("#operations-body", rows.map(row => `<tr class="${row.changed ? stateClass({operating_state:row.status, fault_level:row.faultLevel !== "normal" ? row.faultLevel : row.alerts ? "warning" : "normal"}) : ""}"><th scope="row">${escape(row.name)}</th><td>${escape(label(row.status))}${row.faultLevel !== "normal" ? ` · ${escape(label(row.faultLevel))}` : ""}</td><td>${!row.onRoute ? support : row.throughput ?? pending}</td><td>${row.utilization == null ? pending : `${row.utilization}%`}</td><td>${row.queue}</td><td>${!row.onRoute ? support : row.cycleTime ? escape(row.cycleTime) : pending}</td><td>${row.alerts ? `⚠ ${escape(row.alarmLabel)}` : "—"}</td></tr>`).join("") || '<tr><td colspan="7">설비 데이터 없음</td></tr>');
+    const rows = operationRows(snapshot, config, snapshots).filter(row=>$("#operations-filter").value !== "attention" || row.changed);
+    setText("#operations-window", metricWindow(snapshot, snapshots));
+    const pending = '<span class="muted">데이터 부족</span>', support = '<span class="muted" title="코일이 지나가지 않는 설비라 집계하지 않습니다">해당 없음</span>';
+    setView("#operations-body", rows.map(row => `<tr class="${row.changed ? stateClass({operating_state:row.status, fault_level:row.faultLevel !== "normal" ? row.faultLevel : row.alerts ? "warning" : "normal"}) : ""}"><th scope="row"><button type="button" data-equipment="${escape(row.equipment_id)}">${escape(row.name)}</button></th><td>${escape(label(row.status))}${row.faultLevel !== "normal" ? ` · ${escape(label(row.faultLevel))}` : ""}</td><td>${!row.onRoute ? support : row.throughput ?? pending}</td><td>${row.utilization == null ? pending : `${row.utilization}%`}</td><td>${row.queue}</td><td>${!row.onRoute ? support : row.cycleTime ? escape(row.cycleTime) : pending}</td><td>${row.alerts ? `<button type="button" data-equipment="${escape(row.equipment_id)}">⚠ ${escape(row.alarmLabel)}</button>` : "없음"}</td></tr>`).join("") || '<tr><td colspan="7">표시할 설비 없음</td></tr>');
   }
   // 시나리오 100여 개를 원인 설비별로 나눠 두 단계(설비 → 시나리오)로 고른다. 설비가 정해지지 않은 것은 "주요 고장".
   let pickedScenarioGroup = null;   // 작업자가 설비 목록에서 고른 묶음. 시나리오를 적용하면 비운다
@@ -334,6 +339,7 @@
     setText("#diagram-state", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)}`);
     setText("#workspace-context", `${mode === "live" ? "실시간" : "기록 재생"} · ${label(snapshot.line_mode)} · 활성 알람 ${(snapshot.active_alarms || []).length} · 선택 ${selectedId?name(selectedId, config):"없음"}`);
     setText("#alarm-count", (snapshot.active_alarms || []).length); setText("#observed-at", clock(snapshot.simulated_at));
+    setText("#data-clock", `${mode === "live" ? "모의 운전 시각" : "기록 시각"}: ${clock(snapshot.simulated_at)}`);
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
     const completed = mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length;
     setText("#throughput", completed);
@@ -347,8 +353,9 @@
     renderEquipment(snapshot, config); renderDetail(snapshot, config);
     const recovery = snapshot.recovery;
     const selectedRelated = !recovery || recovery.equipment_id === selectedId || operator.buildOperatorModel(snapshot, config, selectedId).links.some(l=>l.affected && l.to_id===selectedId);
-    const contextNote = recovery && recovery.equipment_id !== selectedId ? `<p class="recovery-owner">${selectedRelated ? "선택 설비의 대기를 해소할 공급·구동 설비 조치" : "현재 선택과 별개인 진행 중 사건"}: <button type="button" data-equipment="${escape(recovery.equipment_id)}">${escape(name(recovery.equipment_id, config))}</button></p>` : "";
-    setView("#recovery-content", contextNote + recoveryView(snapshot, mode === "live" && !stale));
+    const contextNote = recovery && recovery.equipment_id !== selectedId ? `<p class="recovery-owner">${recovery.stage === "completed" ? "최근 복구 이력" : selectedRelated ? "선택 설비의 대기를 해소할 공급·구동 설비 조치" : "다른 설비의 진행 중인 이상·복구"}: <button type="button" data-equipment="${escape(recovery.equipment_id)}">${escape(name(recovery.equipment_id, config))}</button></p>` : "";
+    const recoveryHtml = contextNote + recoveryView(snapshot, mode === "live" && !stale);
+    setView("#recovery-content", !selectedId ? '<p>설비를 선택하면 관련 조치와 복구 이력을 표시합니다.</p>' : recovery?.stage === "completed" ? `<details><summary>최근 복구 이력 · ${escape(recovery.title)} · 완료</summary>${recoveryHtml}</details>` : recoveryHtml);
     setText("#component-equipment", name(selectedId, config));
     setView("#component-content", componentView(snapshot, selectedId));
     // 부품 기록이 없으면 위 부품 위치도가 이미 "기록 없음"을 말한다 — 같은 말을 두 번 하지 않는다
@@ -356,7 +363,7 @@
     updateControls();
     setView("#alarm-list", (snapshot.active_alarms || []).map(a=>`<li class="${a.severity === "critical" ? "fault" : "warning"}"><button type="button" data-equipment="${escape(a.equipment_id)}">${escape(label(a.severity))} · ${escape(name(a.equipment_id, config))} · ${escape(a.label || a.code)}</button><small>${escape(a.code)}</small><small>발생 ${escape(clock(a.raised_at))}</small></li>`).join("") || '<li>활성 알람 없음</li>');
     const events = mode === "live" ? history.events : replay.events.filter((e) => e.sequence <= snapshot.sequence);
-    renderFeed("#event-list", events.slice(-25).reverse(), (e) => `${clock(e.occurred_at)} · ${e.event_type} · ${e.observation}`);
+    setView("#event-list", events.slice(-25).reverse().map(e=>`<li><b>${escape(eventText(e, config))}</b><small>${escape(clock(e.occurred_at))}</small>${e.observation ? `<details><summary>원문 기록</summary><p>${escape(e.observation)}</p></details>` : ""}</li>`).join("") || '<li>이벤트 없음</li>');
     for (const format of ["jsonl", "csv"]) { const link = $(`#export-${format}`); link.href = `/api/export?run_id=${encodeURIComponent(snapshot.run_id)}&format=${format}`; link.download = `${snapshot.run_id}.${format}`; }
   }
   async function refresh() {
@@ -403,6 +410,8 @@
       toggle.classList?.toggle("primary-button", halted);
     }
     if (state?.dataset) { state.textContent = lineMode ? `● ${label(lineMode)}` : "—"; state.dataset.mode = lineMode || ""; }
+    setText("#control-status", mode !== "live" ? "기록 조회 중 · 시뮬레이션 제어 잠금" : stale ? "데이터 연결 확인 후 제어 가능" : `현재 ${label(lineMode)} · 모의 운전 전용`);
+    setText("#recover-hint", mode !== "live" ? "기록 조회 중에는 복구할 수 없습니다." : stale ? "데이터 연결 확인이 필요합니다." : stage === "completed" ? "복구가 완료되었습니다." : !plan ? "복구할 이상이 없습니다." : stage === "stabilizing" ? "안정화 관찰 중입니다." : stage !== "ready" && !optional ? "필수 조치 기록 후 복구할 수 있습니다." : "모의 복구를 시작할 수 있습니다.");
     document.querySelectorAll('#control-panel [data-command="recover"]').forEach(b => b.classList?.toggle("attention", !b.disabled));
   }
   async function control(command, extra = {}) {
@@ -414,7 +423,7 @@
   }
   async function loadRuns() {
     const payload = await request("/api/runs"), select = $("#replay-run"), previous = select.value;
-    select.innerHTML = (payload.runs || []).map((run) => `<option value="${escape(run.run_id)}">${escape(clock(run.started_at))} · ${escape(run.run_id.slice(0, 10))}</option>`).join("");
+    select.innerHTML = (payload.runs || []).slice().sort((a,b)=>Date.parse(b.started_at)-Date.parse(a.started_at)).map((run) => `<option value="${escape(run.run_id)}">${escape(clock(run.started_at))} · ${escape(run.run_id.slice(0, 10))}</option>`).join("");
     if ([...select.options].some((o) => o.value === previous)) select.value = previous;
     if (!select.options.length) setText("#replay-position", "저장된 실행이 없습니다.");
   }
@@ -435,17 +444,20 @@
         }
       }
       $("#replay-sequence").max = String(Math.max(0, replay.snapshots.length - 1)); renderReplay();
+      setView("#replay-event", '<option value="">이벤트 시점으로 이동</option>' + replay.events.filter(e=>["alarm_raised","recovery_started","recovered","alarm_cleared"].includes(e.event_type)).map(e=>`<option value="${e.sequence}">${escape(clock(e.occurred_at))} · ${escape(eventText(e,replayConfig.config))}</option>`).join(""));
     } catch (error) { if (epoch === requestEpoch) setConnection(`재생 조회 실패 · ${error.message}`, "fault"); }
   }
   function renderReplay() {
     $("#replay-play").textContent = replay.playing ? "재생 일시정지" : "기록 재생";
     $("#replay-sequence").value = String(replay.index); $("#replay-play").disabled = !replay.snapshots.length;
     if (!replay.snapshots.length) { clearDisplay("저장된 스냅샷이 없습니다."); setText("#replay-position", "저장된 스냅샷이 없습니다."); setConnection("재생할 기록 없음", "warning"); return; }
-    renderSnapshot(replay.snapshots[replay.index], replayConfig.config); setText("#replay-position", `${replay.index + 1} / ${replay.snapshots.length} · 순번 ${lastSnapshot.sequence}`);
+    renderSnapshot(replay.snapshots[replay.index], replayConfig.config); setText("#replay-position", `${clock(lastSnapshot.simulated_at)} · ${replay.index + 1} / ${replay.snapshots.length} · 순번 ${lastSnapshot.sequence}`);
     setConnection(replay.playing ? "기록 재생 중 · 실시간 제어 분리" : "기록 재생 일시정지 · 실시간 제어 분리");
   }
   function clearDisplay(message) {
     setText("#workspace-context", message);
+    setText("#data-clock", message);
+    setView("#replay-event", '<option value="">이벤트 시점으로 이동</option>');
     setText("#selected-connection", "연결 정보 불러오는 중");
     lastSnapshot = null; $("#line-map").replaceChildren();
     for (const id of ["line-map", "equipment-detail", "incident-summary", "part-locator", "selection-evidence", "recovery-content", "component-content", "alarm-list"]) { delete $(`#${id}`).dataset.html; setText(`#${id}`, message); }
@@ -453,6 +465,7 @@
     setText("#process-story", message);
     for (const id of ["line-mode", "sequence", "alarm-count", "observed-at", "run-id", "coil-count", "throughput"]) setText(`#${id}`, "—");
     for (const id of ["equipment-detail", "sensor-trends", "alarm-list", "event-list"]) setText(`#${id}`, message);
+    for (const id of ["line-board", "util-bars", "operations-body", "utility-links"]) { delete $(`#${id}`).dataset.html; $(`#${id}`).replaceChildren(); }
     setText("#recovery-content", message); delete $("#recovery-content").dataset.view; setText("#component-content", message);
     for (const format of ["jsonl", "csv"]) $(`#export-${format}`).removeAttribute("href");
     setText("#mode-badge", mode === "live" ? "실시간 · 합성 데이터" : "기록 재생 · 합성 데이터");
@@ -531,6 +544,13 @@
   $("#replay-refresh").onclick = async () => { try { await loadRuns(); await loadReplay(); } catch (error) { setConnection(error.message, "fault"); } };
   $("#replay-play").onclick = () => { if (replay.index >= replay.snapshots.length - 1) replay.index = 0; replay.playing = !replay.playing; renderReplay(); };
   $("#replay-sequence").oninput = (event) => { replay.index = Number(event.target.value); replay.playing = false; renderReplay(); };
+  $("#replay-event").onchange = event => {
+    if (!event.target.value) return;
+    const index = replay.snapshots.findIndex(s=>s.sequence >= Number(event.target.value));
+    if (index < 0) return;
+    replay.index = index; replay.playing = false; renderReplay();
+  };
+  $("#operations-filter").onchange = () => renderSnapshot(lastSnapshot, currentConfig());
   $("#signal-select").onchange = () => renderTrend(mode === "live" ? liveConfig.config : replayConfig.config);
   $("#animate-machines").onchange = () => renderSnapshot(lastSnapshot, mode === "live" ? liveConfig.config : replayConfig.config);
   $("#config-validate").onclick = async () => {
@@ -556,6 +576,7 @@
     if (button.dataset.command === "reset") {
       if (!resetArmed) {
         button.classList.add("attention");   // 주황 테두리 = 한 번 더 누르면 실행
+        setText("#control-message", "새 시뮬레이션을 시작하려면 3초 안에 한 번 더 누르세요. 현재 실행은 이력에 보존됩니다.");
         resetArmed = setTimeout(() => disarmReset(button), 3000);
         return;
       }
@@ -569,7 +590,7 @@
   document.addEventListener("click", event => {
     const tab=event.target.closest("[data-workspace]"); if (tab) showWorkspace(tab.dataset.workspace);
     const jump=event.target.closest("[data-open-workspace]"); if (jump) { showWorkspace(jump.dataset.openWorkspace, true); if (jump.dataset.openWorkspace==="detail") $("#equipment-detail").focus(); }
-    const eq=event.target.closest("[data-equipment]"); if (eq) selectEquipment(eq.dataset.equipment,eq.dataset.relation || "",Boolean(eq.closest("#incident-summary,#equipment-results,#alarm-list")));
+    const eq=event.target.closest("[data-equipment]"); if (eq) selectEquipment(eq.dataset.equipment,eq.dataset.relation || "",Boolean(eq.closest("#incident-summary,#equipment-results,#alarm-list,#line-board,#operations-body,#util-bars,#equipment-detail")));
     const part=event.target.closest("[data-part]"); if (part) { selectedPartId=part.dataset.part; renderSnapshot(lastSnapshot,currentConfig()); }
     const action=event.target.closest("#recovery-content [data-action]"); if (action && !action.disabled) control("recovery_action",{action_id:action.dataset.action});
     const command=event.target.closest("#recovery-content [data-command]"); if (command && !command.disabled) control(command.dataset.command);
@@ -603,7 +624,7 @@
     const draft=operator.contextDraft(operator.buildOperatorModel(lastSnapshot,currentConfig(),selectedId,selectedPartId),mode,mode==="live"&&stale);
     const url=URL.createObjectURL(new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}));
     const link=document.createElement("a"); link.href=url; link.download=`shiftlink-context-${lastSnapshot.sequence}.json`; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
-    setText("#context-message","확인 맥락 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");
+    setText("#context-message","설비 확인 보고서 초안을 내려받았습니다. 미확인 항목은 인계 전 확인하세요.");
   };
   $("#config-panel").hidden=false;
   if (globalThis.location && new URLSearchParams(globalThis.location.search).get("view")!=="full") setDiagramMode(true,false);

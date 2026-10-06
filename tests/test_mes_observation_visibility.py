@@ -92,9 +92,9 @@ def test_recovery_view_offers_skip_only_for_optional_plans():
 const assert = require('node:assert/strict');
 const {recoveryView} = require('./shiftlink/mes/web/app.js');
 const plan=required=>({title:'t',stage:'actions',required,actions:[{action_id:'inspect',title:'확인',detail:'d',completed:false}]});
-assert.match(recoveryView({recovery:plan(false),coils:[]},true),/조치 생략 · 바로 복귀 진행/);
+assert.match(recoveryView({recovery:plan(false),coils:[]},true),/data-command="recover">조치 기록 없이 모의 복구 시작/);
 assert.match(recoveryView({recovery:plan(false),coils:[]},true),/data-action="inspect"/);
-assert.doesNotMatch(recoveryView({recovery:plan(true),coils:[]},true),/조치 생략/);
+assert.doesNotMatch(recoveryView({recovery:plan(true),coils:[]},true),/data-command="recover"/);
 '''], stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8')
     assert result.returncode == 0, result.stdout + result.stderr
 

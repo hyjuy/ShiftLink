@@ -160,6 +160,7 @@
 | `Alarm.label` · `MesEngine.ALARM_LABELS` | `shiftlink/mes/contracts.py`, `shiftlink/mes/engine.py` | 경보 코드의 화면용 한글 이름(예: `AL-SENSOR-ANOMALY` → 센서값 범위 이탈). 스냅샷 `active_alarms[].label`로 MES 대시보드·PDA가 함께 씀. 예전 기록에는 없어 화면은 `code`로 대신함 | Claude |
 | `operationMetrics()` · `#operations-window` | `shiftlink/mes/web/app.js`, `index.html` | 운영 표의 가동률(가동·정상 스냅샷 비율)·처리량(설비를 떠난 코일 수)·사이클 타임(머문 시간 평균)을 최근 스냅샷 180개로 계산. 코일 경로(`route`) 밖 설비는 처리량·사이클 타임 없음(지원 설비) | Claude |
 | `#control-panel` 제어 바 · `#run-toggle` · `#scenario-lock` | `shiftlink/mes/web/index.html`, `app.js` | 시연 제어를 서랍 대신 탭 아래 한 줄 고정 바로. 시작·일시정지·재개를 `#run-toggle` 하나로, 시나리오는 원인 설비별 묶음, 잠김 사유를 미리 표시. 구성 관리는 이력·분석 탭으로 이동 | Claude |
+| `renderLineBoard()` · `#line-board` · `renderUtilBars()` · `#util-bars` · `#board-clock` · `#board-notice` | `shiftlink/mes/web/app.js`, `index.html` | 생산 현황판 디자인: 코일 이송 라인 설비 카드(상태 막대·가동률 게이지·처리량·사이클·대기), 설비별 가동률 막대, 헤더 시계, 하단 안전 공지 띠(고정 문구). 경보는 `#incident-summary`(지금 확인할 위치)에서만 | Claude |
 
 | `handover_upload` | `db/aiven_schema.sql` (Aiven) | PDA 인계 본문 원본 업로드 표. `handover_id`(64자) 기본키, `payload` JSON, `content_sha256`. 합성 데이터라 원문 포함(§4.11 예외, 실데이터면 해시만) | Claude |
 | `upload_pending()` · `python -m shiftlink.mes.uploader` | `shiftlink/mes/uploader.py` | outbox `pending` → Aiven. 같은 ID·같은 해시 `uploaded`, 다른 해시 `conflict`(로컬 보류), 끊기면 `pending` 유지 후 재시도(`--interval`, 기본 30초) | Claude |

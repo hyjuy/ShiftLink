@@ -267,10 +267,37 @@
     setText("#trend-description", description);
   }
   function renderFeed(selector, items, format) { $(selector).innerHTML = items.length ? items.map((item) => `<li class="${item.severity === "critical" ? "fault" : ""}">${escape(format(item))}</li>`).join("") : "<li>없음</li>"; }
+  // 현황판: 코일 이송 라인 설비마다 상태 막대 · 가동률 게이지 · 처리량·사이클·대기 · 큰 상태 글씨
+  function gauge(pct) {
+    const r = 34, c = 2 * Math.PI * r, on = pct == null ? 0 : Math.max(0, Math.min(100, pct)) / 100 * c;
+    return `<svg class="board-gauge" viewBox="0 0 84 84" aria-hidden="true"><circle class="gauge-track" cx="42" cy="42" r="${r}"/><circle class="gauge-value" cx="42" cy="42" r="${r}" stroke-dasharray="${on} ${c}" transform="rotate(-90 42 42)"/><text x="42" y="38" class="gauge-label">가동률</text><text x="42" y="56" class="gauge-number">${pct == null ? "집계 중" : `${pct}%`}</text></svg>`;
+  }
+  function renderLineBoard(snapshot, config, snapshots) {
+    const rows = operationRows(snapshot, config, snapshots).filter(r => r.onRoute);
+    const order = config?.route || [];
+    rows.sort((a, b) => order.indexOf(a.equipment_id) - order.indexOf(b.equipment_id));
+    setView("#line-board", rows.map(r => {
+      const eq = config?.equipment?.find(e => e.equipment_id === r.equipment_id);
+      const kind = r.faultLevel !== "normal" ? "fault" : r.status === "running" ? "run" : r.status === "waiting" ? "wait" : "stop";
+      const state = { fault: label(r.faultLevel) === "고장" ? "정지 · 고장" : `이상 · ${label(r.faultLevel)}`, run: "가동중", wait: "대기", stop: label(r.status) }[kind];
+      return `<button type="button" class="board-card ${kind}" data-equipment="${escape(r.equipment_id)}"><span class="board-head"><b>${escape(r.name)}</b><small>${escape(roleFor(eq)[0])}</small></span><i class="board-bar" aria-hidden="true"></i><span class="board-body">${gauge(r.utilization)}<dl><dt>처리량</dt><dd>${r.throughput ?? "—"}<small> 코일</small></dd><dt>사이클</dt><dd>${r.cycleTime ? escape(r.cycleTime) : "—"}</dd><dt>대기</dt><dd>${r.queue}</dd></dl></span><span class="board-state">${escape(state)}</span></button>`;
+    }).join(""));
+  }
+  // 설비별 가동률 막대: 설비 종류마다 색 하나(참고 화면의 라인별 색 막대), 고장은 빨강
+  const KIND_COLOR = { RT: "#f5c400", CV: "#18c1c4", GR: "#ff8a65", HPU: "#6cc04a", PDP: "#a970ff", CAU: "#4f8cff" };
+  function renderUtilBars(snapshot, config, snapshots) {
+    const rows = operationRows(snapshot, config, snapshots);
+    setView("#util-bars", rows.map(r => {
+      const kind = String(r.name).split("-")[0], pct = r.utilization;
+      return `<div class="util-row ${r.faultLevel !== "normal" ? "fault" : ""}"><span class="util-name"><i style="background:${KIND_COLOR[kind] || "#9aa3ab"}"></i>${escape(r.name)}</span><span class="util-track"><span class="util-fill" style="width:${pct ?? 0}%;background:${r.faultLevel !== "normal" ? "#e5484d" : KIND_COLOR[kind] || "#9aa3ab"}"></span></span><b class="util-pct">${pct == null ? "—" : `${pct}%`}</b></div>`;
+    }).join(""));
+    const m = operationMetrics(snapshots);
+    setText("#util-window", m.samples ? `최근 ${m.windowMinutes}분` : "집계 중");
+  }
   function renderOperations(snapshot, config, snapshots) {
     const rows = operationRows(snapshot, config, snapshots), metrics = operationMetrics(snapshots);
     setText("#operations-window", metrics.samples ? `최근 ${metrics.windowMinutes}분 · 스냅샷 ${metrics.samples}개로 계산` : `집계 중 · 스냅샷 ${snapshots.length}/${METRIC_MIN_SNAPSHOTS}`);
-    const pending = '<span class="muted">집계 중</span>', support = '<span class="muted">집계 대상 아님</span>';
+    const pending = '<span class="muted">집계 중</span>', support = '<span class="muted" title="코일이 지나가지 않는 설비라 집계하지 않습니다">-</span>';
     setView("#operations-body", rows.map(row => `<tr class="${row.changed ? stateClass({operating_state:row.status, fault_level:row.faultLevel !== "normal" ? row.faultLevel : row.alerts ? "warning" : "normal"}) : ""}"><th scope="row">${escape(row.name)}</th><td>${escape(label(row.status))}${row.faultLevel !== "normal" ? ` · ${escape(label(row.faultLevel))}` : ""}</td><td>${!row.onRoute ? support : row.throughput ?? pending}</td><td>${row.utilization == null ? pending : `${row.utilization}%`}</td><td>${row.queue}</td><td>${!row.onRoute ? support : row.cycleTime ? escape(row.cycleTime) : pending}</td><td>${row.alerts ? `⚠ ${escape(row.alarmLabel)}` : "—"}</td></tr>`).join("") || '<tr><td colspan="7">설비 데이터 없음</td></tr>');
   }
   // 시나리오 100여 개를 원인 설비별로 나눠 두 단계(설비 → 시나리오)로 고른다. 설비가 정해지지 않은 것은 "주요 고장".
@@ -310,7 +337,8 @@
     setText("#run-id", snapshot.run_id); setText("#coil-count", (snapshot.coils || []).length);
     const completed = mode === "live" ? history.completed : replay.events.filter((e) => e.sequence <= snapshot.sequence && e.event_type === "coil_exited").length;
     setText("#throughput", completed);
-    renderOperations(snapshot, config, mode === "live" ? history.snapshots : replay.snapshots.slice(Math.max(0, replay.index - 179), replay.index + 1));
+    const windowSnapshots = mode === "live" ? history.snapshots : replay.snapshots.slice(Math.max(0, replay.index - 179), replay.index + 1);
+    renderOperations(snapshot, config, windowSnapshots); renderLineBoard(snapshot, config, windowSnapshots); renderUtilBars(snapshot, config, windowSnapshots);
     const configBadge = !config || replay.configPreserved === false ? "기록 재생 · 당시 구성 미보존" : "기록 재생 · 당시 구성";
     setText("#mode-badge", mode === "live" ? "실시간 · 합성 데이터" : configBadge);
     if (mode === "live") renderScenarioPicker(config, snapshot.scenario_id);
@@ -580,7 +608,10 @@
   $("#config-panel").hidden=false;
   if (globalThis.location?.search && new URLSearchParams(globalThis.location.search).get("view")==="diagram") setDiagramMode(true,false);
   refresh();
+  const tickClock = () => { const d = new Date(), p = (n) => String(n).padStart(2, "0"); setText("#board-clock", `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())}  ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`); };
+  tickClock();
   setInterval(() => {
+    tickClock();
     if (mode === "live") { if (lastReceived && Date.now() - lastReceived > 10000) { stale=true; setConnection("데이터 수신 지연 · 마지막 관측 표시 · 시연 조치 잠금", "warning"); freezeCoils(); updateControls(); } refresh(); }
     else if (replay.playing) { replay.index = Math.min(replay.index + 1, replay.snapshots.length - 1); if (replay.index === replay.snapshots.length - 1) replay.playing = false; renderReplay(); }
   }, 1000);

@@ -2,10 +2,11 @@
 
 import re
 from dataclasses import dataclass
-from typing import Any, Callable, Mapping, Protocol
+from typing import Any, Callable, Iterable, Mapping, Protocol
 
 from shiftlink.agent import tools as tool_stubs
 from shiftlink.agent.canary import has_canary
+from shiftlink.agent.compose import compose_answer, layers_from_env
 from shiftlink.agent.router import HandoverRequest, Mode, QueryRequest, route_request
 from shiftlink.agent.response import (
     GUARD_FALLBACK_ANSWER,
@@ -75,6 +76,7 @@ class FixedPipeline:
         validator: OutputValidator | None = None,
         judge: Callable[[str, dict[str, Any]], int] | None = None,
         judge_min_score: int = 2,
+        compose_layers: Iterable[str] | None = None,
     ) -> None:
         self.tools = tools
         self.model = model
@@ -82,6 +84,8 @@ class FixedPipeline:
         # judge_min_score the pipeline answers "no knowledge". Defaults to the model's own judge when it has one.
         self.judge = judge if judge is not None else getattr(model, "judge", None)
         self.judge_min_score = judge_min_score
+        # Answer composition layers (compose.py). None reads SHIFTLINK_COMPOSE; default is off until a layer is adopted.
+        self.compose_layers = frozenset(layers_from_env() if compose_layers is None else compose_layers)
         self._default_validator = validator is None
         # Default validator: build response and validate invariants
         if validator is None:
@@ -151,6 +155,9 @@ class FixedPipeline:
                 routed.mode, routed.request, tool_results, model_output, model_error
             )
         self._fill_guard_fallback(output, model_output)
+        if self.compose_layers and routed.mode == "query" and getattr(output, "answer", None):
+            output.answer = compose_answer(output.answer, output.cited_card_ids, tool_results, self.compose_layers,
+                                           getattr(output, "validation_errors", []))
         return PipelineResult(mode=routed.mode, tool_results=tool_results, output=output)
 
     def _fill_guard_fallback(self, output: Any, model_output: Any) -> None:

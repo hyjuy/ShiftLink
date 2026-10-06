@@ -240,6 +240,12 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
 
 # Shown when a guard blocks the model answer after the one retry. Not a review-queue blank.
 GUARD_FALLBACK_ANSWER = "카드에 수치 기준이 없습니다. 사양서·담당자에게 확인하세요"
+# Answer composition (compose.py) wording. The fallback above says "no numeric criterion"; that is only
+# true for the number guard, so a direction-guard block gets its own sentence when composition is on.
+DIRECTION_FALLBACK_ANSWER = "측정값과 답변의 방향이 맞지 않아 답변을 표시하지 않습니다. 측정 사실과 카드 지침을 확인하세요"
+NO_READING_NOTE = "입력된 측정값이 없습니다. 카드의 기준값은 참고이며 현재 상태를 뜻하지 않습니다."
+REFERENCE_NOTE = "기준값 질문이라 현재 측정값과 비교하지 않았습니다."
+NO_MEASURE_ANSWER = "측정값이 없어 판단할 수 없습니다."
 _GUARD_ERROR = (
     "측정값이 모두 정상 범위인데",
     "답이 높다고 말합니다.",

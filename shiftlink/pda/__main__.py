@@ -22,7 +22,7 @@ from pathlib import Path
 
 WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
-PAGES = {"/": "index.html", "/pda.html": "pda.html", "/static/pda.js": "pda.js", "/static/app.js": "app.js",
+PAGES = {"/": "index.html", "/index.html": "index.html", "/pda.html": "pda.html", "/static/pda.js": "pda.js", "/static/app.js": "app.js",
          "/static/operator.js": "operator.js", "/static/style.css": "style.css"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 

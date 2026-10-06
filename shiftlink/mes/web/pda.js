@@ -40,6 +40,8 @@ const S = {
 const $ = (id) => document.getElementById(id);
 const byType = (t) => TYPE_COLOR[t] ? 'var(--' + TYPE_COLOR[t] + ')' : 'var(--tx-3)';
 const findByCode = (code) => S.equipment.find((e) => e.code === code) || null;
+// 스캔 결과의 code가 현재 구성에 있을 때만 그 설비. 없으면 null(대체 확정 금지, D-41).
+const scanTarget = (scan, equipment) => (scan && scan.code && equipment.find((e) => e.code === scan.code)) || null;
 // retrieval.py 와 같은 규칙: 유형 일치 또는 COMMON, 설치 지정 카드는 그 설치에서만.
 const cardFits = (c, eq) => (c.equipment === eq.type || c.equipment === 'COMMON')
   && (!c.mes_equipment_id || c.mes_equipment_id === eq.equipment_id);
@@ -124,11 +126,12 @@ function show(name) {
   document.querySelectorAll('.screen').forEach((el) => {
     el.classList.toggle('on', el.id === 's-' + name);
   });
-  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot';
+  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot' || name === 'alertGo';
   $('ctx').classList.toggle('on', !!S.eq && !hideCtx);
   $('net').hidden = (name === 'boot');
   const pane = document.querySelector('#s-' + name + ' .pane');
   if (pane) pane.scrollTop = 0;
+  if (name === 'ask') renderAskSafety();
 }
 
 function haptic(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (_) {} } }
@@ -170,6 +173,12 @@ function setContext(eq, source, extra) {
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   renderContext(); renderRecent(); renderObsSignals(); renderObsList();
   loadMesObservations();
+}
+
+/* 확정 설비 해제. 이전 설비의 관측·응답·시도도 함께 버린다. */
+function releaseContext(state) {
+  Object.assign(state, {eq: null, source: null, scanId: null, queryResponse: null, ranked: null,
+    observations: [], obsRemoved: [], tries: [], attemptSeq: 0, symptom: null});
 }
 
 function renderContext() {
@@ -229,9 +238,14 @@ async function startScan() {
     if (S.scanRun !== run) return;
     if (!scan || (base && scan.scan_id === base.scan_id)) continue;
     base = scan;
-    // D-41: 현재 구성에 있는 설비만. 서버가 고른 code가 구성에 없으면 같은 유형의 첫 설비.
-    const eq = findByCode(scan.code) || S.equipment.find((e) => e.type === scan.class);
-    if (!eq) { setScanState('candidate', scan.class + ' — 현재 구성에 없는 설비, 무시'); continue; }
+    // D-41: 현재 구성에 있는 code만 확정한다. 같은 유형의 다른 설비로 바꿔 끼우지 않는다 —
+    // 질의는 scan_id로 나가므로 화면의 설비와 서버가 푸는 설비가 갈라진다.
+    const eq = scanTarget(scan, S.equipment);
+    if (!eq) {
+      // 화면이 「설비 미확정」이면 상태도 미확정이어야 한다 — 「← 이전」으로 직전 설비 검색에 돌아가지 않게(B3).
+      releaseContext(S); renderContext();
+      setScanState('failed', (scan.code || scan.class || '알 수 없는 설비') + ' — 현재 구성에 없는 설비 code · 검색 불가'); continue;
+    }
     return lockScan(eq, scan);
   }
   if (S.scanRun === run) failScan(run, '인식 안 됨 — 직접 선택');
@@ -244,7 +258,10 @@ function lockScan(eq, scan) {
   setTimeout(() => { if (S.screen === 'scan') show('ctx'); }, 420);
 }
 
+/* 시간 초과·Jetson 연결 실패. 직접 선택 화면은 「설비 미확정」이므로 상태도 해제한다 —
+ * 「← 이전」으로 직전 설비 검색에 돌아가지 않게(B3, 구성 외 code 경로와 같은 처리). */
 function failScan(run, text) {
+  releaseContext(S); renderContext();
   haptic([30, 60, 30]);
   setScanState('failed', text);
   setTimeout(() => { if (S.screen === 'scan' && S.scanRun === run) openManual(); }, 900);
@@ -427,83 +444,29 @@ const SYMPTOM_LABELS = {
   'K-1005': ['축압기 기능 저하 의심', 'sym'],
   'K-1008': ['작동유 우유빛 변색·젤라틴 덩어리', 'sym'],
   // CV
-  'K-1010': ['벨트 편주 · 아이들러 중앙 이탈', 'sym'],
   'K-1011': ['아이들러 회전 80% 미만 + 마찰음', 'sym'],
-  'K-1012': ['벨트 교체 후 편주', 'sym'],
   'K-1013': ['벨트 특정 구간만 편주', 'sym'],
-  'K-1015': ['운전 중 오작동·고장 발생', 'sym'],
   'K-1016': ['벨트 커버 점·줄무늬 부풂', 'sym'],
-  // RT
-  'K-1017': ['롤러 이상 소음(마찰음·휘파람음)', 'sym'],
-  'K-1020': ['리프트 상승 정지 + 밸브 고음', 'sym'],
-  'K-1021': ['리프트 하강 불가', 'sym'],
-  'K-1022': ['상승 불가 · 모터 소음/퓨즈 단선', 'sym'],
-  'K-1023': ['정지 중 리프트 자연 하강', 'sym'],
   // GR
-  'K-1025': ['베어링부 온도 62℃ 초과', 'sym'],
   'K-1026': ['감속기 규칙적 이상음', 'sym'],
   'K-1027': ['감속기 누유', 'sym'],
-  'K-1028': ['감속기 불규칙 이상음', 'sym'],
   'K-1030': ['장착부 주변 이상음', 'sym'],
   // HPU
   'K-1201': ['차압 1.2 bar 초과 · 막힘 표시', 'sym'],
   'K-1202': ['차압 1.2 bar 초과 · 교체 판단', 'sym'],
   'K-1203': ['출구 압력 정상 · 압력/유량 부족', 'sym'],
-  // CV
-  'K-1204': ['운전 중 벨트 미끄럼·정지', 'sym'],
-  'K-1205': ['장력 정상 범위 · 이송량 저하', 'sym'],
-  'K-1206': ['벨트 저속 · 이송물 적체', 'sym'],
-  // RT
-  'K-1207': ['반송 지시 중 물품 미이동', 'sym'],
-  'K-1208': ['모터 전류 16 A 초과', 'sym'],
-  // GR
-  'K-1209': ['감속기 진동 상승', 'sym'],
-  'K-1210': ['MES 베어링 62℃ 초과 · 실측 대조', 'sym'],
-  // HPU
-  'K-1211': ['정비 후 재가동 · 펌프 소음·기포', 'sym'],
-  // GR
-  'K-1212': ['오일 교환 후 유면 확인 누락', 'pre'],
-  // CV
-  'K-1213': ['정비 후 시험운전 · 벨트 편주', 'sym'],
-  // RT
-  'K-1214': ['반송부 정비 후 재가동 전', 'pre'],
-  // CV
-  'K-1215': ['끼임 비상정지 후 재가동 전', 'pre'],
-  // GR
-  'K-1216': ['과열 정지 후 재가동 전', 'pre'],
-  // RT
-  'K-1217': ['인터록 정지 후 재가동 전', 'pre'],
-  // HPU
-  'K-1218': ['냉간 기동 · 압력/유량 부족·소음', 'sym'],
-  // GR
-  'K-1219': ['장기 정지 후 재가동 전', 'pre'],
   // CAU
   'K-1301': ['공기 압력 저하 · 공구 출력 저하', 'sym'],
-  'K-1302': ['배관·이음부 누설음', 'sym'],
   'K-1303': ['계통 압력 저하 · 누설 의심', 'sym'],
-  'K-1305': ['압력 상승 + 압축기 전류 상승', 'sym'],
   // PDP
-  'K-1306': ['차단기 트립 → 재투입 후 정상', 'sym'],
   'K-1307': ['모터 기동 시 버스 전압 순간 강하', 'sym'],
-  'K-1308': ['차단기 트립으로 설비 정지', 'sym'],
-  'K-1309': ['트립 표시 · 충전부 작업 전', 'pre'],
-  'K-1310': ['전압 저하 + 차단기 트립 동시', 'sym'],
   // CAU
   'K-1311': ['부하 운전 중 압축기 정지', 'sym'],
-  'K-1312': ['공급량 부족 · 토출량 저하', 'sym'],
-  'K-1313': ['압축기 정기 정비 시점', 'pre'],
-  // PDP
-  'K-1315': ['차단기·도체 변색, 핫스팟', 'sym'],
-  'K-1316': ['장기 미조작 차단기 동작 지연', 'sym'],
-  'K-1317': ['배선차단기 트립 · 원인 미확인', 'sym'],
-  'K-1318': ['배선차단기 정기 시험', 'pre'],
-  'K-1319': ['계전기 점검 · CT 배선 분리 전', 'pre'],
   // CAU
   'K-1322': ['정전 후 압축기 기동 불가', 'sym'],
   'K-1323': ['타사 오일 · 토출 고온·소비 증가', 'sym'],
   // PDP
   'K-1324': ['정전 복구 후 차단기 투입 순서', 'pre'],
-  'K-1325': ['트립 없이 단자 발열·볼트 풀림', 'sym'],
 };
 
 /* 현재 MES 상황(범위 이탈 신호)과 카드의 관련도로 선택지 순서를 정한다.
@@ -567,11 +530,13 @@ function symptomsFor(eq) {
   const sit = situation();
   S.cards.forEach((c) => {
     // T4 인계 카드는 증상 질의 검색에서 빠진다(retrieval.py, 10/1 회의) — 선택지에도 두지 않는다.
-    if (!cardFits(c, eq) || c.tacit_type === 'T4') return;
+    // safety_flag 카드는 유형(T5·T6·T2…)과 무관하게 고르는 항목이 아니다 — 질의·대기·결과 화면의
+    // 안전 관문(rankCards().safety)으로만 보인다(B4, D-26). T5는 모두 safety_flag=true라 따로 보지 않는다.
+    if (!cardFits(c, eq) || c.tacit_type === 'T4' || c.safety_flag === true) return;
     const text = (c.symptom || '').trim();
     if (!text || out.some((o) => o.text === text)) return;
     const [label, group] = SYMPTOM_LABELS[c.card_id] || [text, 'sym'];
-    out.push(Object.assign({ text, label, group, safety: c.tacit_type === 'T5' }, relevance(c, sit)));
+    out.push(Object.assign({ text, label, group }, relevance(c, sit)));
   });
   return out.sort((a, b) => b.score - a.score);   // 안정 정렬: 같은 점수는 카드 순서 유지
 }
@@ -606,7 +571,7 @@ function renderSymptoms() {
     b.type = 'button';
     b.className = 'row sym' + (other ? ' other' : '');
     b.innerHTML = '<span class="mark">○</span><span class="txt"><span class="lb"></span><span class="why"></span><span class="orig"></span></span>';
-    b.querySelector('.lb').textContent = other ? '기타 — 직접 입력' : (item.safety ? '⚠ ' : '') + item.label;
+    b.querySelector('.lb').textContent = other ? '기타 — 직접 입력' : item.label;
     if (!other && item.score > 0) b.querySelector('.why').textContent = 'MES ' + item.why.join(' · ');
     b.addEventListener('click', () => {
       S.symptom = { text: other ? '' : text, other: !!other };
@@ -697,14 +662,45 @@ function queryApiPayload(question, state) {
     : {question: question, equipment_id: state.eq.equipment_id};
 }
 
-function responseCards(response, cards) {
+/* local = rankCards(eq). 서버 인용 카드에 로컬 조건 판정(일치·불일치·미평가 pill과 이유)을 card_id로 붙인다(C1·C2).
+ * 로컬 판정이 없는 카드는 이유를 지어내지 않는다. 서버 unverified 는 미평가이지 불일치가 아니다.
+ * 로컬에서 실제 불일치로 판정된 인용 카드만 불일치로 내린다 — 숨기지 않고 제외 목록에 남긴다. */
+/* eq를 넘기면 공지·인용 안전 카드를 cardFits로 현재 설비와 대조한다. 맞지 않으면 지침 대신 불일치 경고만 남긴다(B1). */
+function responseCards(response, cards, local, eq) {
   const byId = (id) => cards.find((c) => c.card_id === id);
-  const item = (id, excluded) => ({card: byId(id), excluded: excluded, conds: [],
-    why: excluded ? 'MES 관측값으로 조건을 확인하지 못했습니다' : 'Jetson 답변 인용'});
-  const actions = (response.review_queue ? [] : response.cited_card_ids || []).map((id) => item(id, false)).filter((x) => x.card);
-  const excluded = (response.unverified_card_ids || []).map((id) => item(id, true)).filter((x) => x.card);
-  const safety = (response.safety_notices || []).map((notice) => Object.assign({}, byId(notice.card_id), notice,
-    {title: '안전 공지', know_how: (notice.stop_conditions || []).join(' · ')}));
+  const mismatch = (c) => !!eq && !cardFits(c, eq);
+  // 다른 설비의 안전 공지는 버리지 않되 본문·멈춤 조건은 싣지 않는다 — 엉뚱한 설비 지침이 실행되지 않게.
+  const wrongEq = (id) => ({card_id: id, mismatch: true, eqCode: eq.code, stop_conditions: []});
+  const judged = local ? local.actions.concat(local.excluded) : [];
+  const item = (id, unverified) => {
+    const j = judged.find((x) => x.card.card_id === id);
+    const miss = !!(j && j.excluded);
+    return {card: byId(id), excluded: unverified || miss, miss: miss, conds: j ? j.conds : [],
+      why: miss ? '조건 불일치 — 이 카드는 지금 쓰면 안 된다'
+        : unverified ? '미평가 — MES 관측으로 조건을 확인하지 못함'
+        : 'Jetson 인용 · ' + (j ? j.why : '로컬 조건 판정 없음')};
+  };
+  // 카드 원본 title·know_how·safety_basis는 그대로 두고 공지의 stop_conditions만 덧붙인다.
+  // 로컬 카드가 없으면 card_id만 남기고 missing 표시(undefined 출력 방지).
+  const notices = response.safety_notices || [];
+  const safety = notices.map((notice) => {
+    const c = byId(notice.card_id);
+    if (c && mismatch(c)) return wrongEq(c.card_id);
+    return c ? Object.assign({}, c, {safety_basis: c.safety_basis || notice.safety_basis, stop_conditions: notice.stop_conditions || []})
+      : {card_id: notice.card_id, missing: true, safety_basis: notice.safety_basis, stop_conditions: notice.stop_conditions || []};
+  });
+  // 안전 카드는 조치·제외 선택지로 내지 않는다. 공지에 없던 safety_flag 카드도 관문으로 옮긴다(B4).
+  const isSafety = (x) => x.card.safety_flag === true || notices.some((n) => n.card_id === x.card.card_id);
+  const split = (list) => list.filter((x) => x.card).filter((x) => {
+    if (!isSafety(x)) return true;
+    if (!safety.some((s) => s.card_id === x.card.card_id)) {
+      safety.push(mismatch(x.card) ? wrongEq(x.card.card_id) : Object.assign({}, x.card, {stop_conditions: []}));
+    }
+    return false;
+  });
+  const cited = split((response.review_queue ? [] : response.cited_card_ids || []).map((id) => item(id, false)));
+  const actions = cited.filter((x) => !x.excluded);
+  const excluded = cited.filter((x) => x.excluded).concat(split((response.unverified_card_ids || []).map((id) => item(id, true))));
   return {actions: actions, excluded: excluded, safety: safety, total: actions.length + excluded.length + safety.length};
 }
 
@@ -741,17 +737,54 @@ function rankCards(eq) {
 function safetyEl(c, pin) {
   const d = document.createElement('div');
   d.className = 'safety' + (pin ? ' pin' : '');
-  d.innerHTML = '<div class="hd"><span class="dot"></span><span>안전 · 조치 전 필수</span>'
-    + (pin ? '<span class="pinbadge">고정</span>' : '') + '</div>'
+  d.innerHTML = '<div class="hd"><span class="dot"></span><span>안전 · 조치 전 필수</span></div>'
     + '<div class="kid"></div><div class="ttl"></div><p class="body" style="margin:0"></p>'
     + '<p class="basis" style="margin:0"></p>'
     + (pin ? '<div class="gate">아래 조치는 이 조건을 지킨 상태에서만 수행한다</div>' : '');
-  d.querySelector('.kid').textContent = c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade;
-  d.querySelector('.ttl').textContent = c.title;
-  d.querySelector('.body').textContent = c.know_how;
+  if (c.mismatch) {
+    d.querySelector('.kid').textContent = c.card_id + ' · 설비 불일치';
+    d.querySelector('.ttl').textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
+    d.querySelector('.basis').textContent = '지침 숨김 — 다른 설비의 안전 지침이므로 표시하지 않습니다. 담당자 확인';
+    const gate = d.querySelector('.gate'); if (gate) gate.remove();
+    return d;
+  }
+  d.querySelector('.kid').textContent = c.missing ? c.card_id + ' · 로컬 카드 없음 · 설비 대조 불가' : c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade;
+  d.querySelector('.ttl').textContent = c.missing ? '로컬 카드 없음 — 카드 원문을 확인할 수 없어 현재 설비와 대조하지 못했습니다' : c.title;
+  d.querySelector('.body').textContent = c.missing ? '' : c.know_how;
   d.querySelector('.basis').textContent = '근거 — ' + (c.safety_basis || '근거 미기재');
+  // 서버 공지의 멈춤 조건은 카드 본문을 덮지 않고 따로 붙인다.
+  (c.stop_conditions || []).forEach((t) => {
+    const p = document.createElement('p');
+    p.className = 'stop'; p.textContent = '멈춤 · ' + t;
+    d.querySelector('.basis').before(p);
+  });
   return d;
 }
+
+/* 안전 관문. 화면 상단에 고정하는 것은 얇은 관문 띠 하나뿐이고 카드는 일반 흐름으로 모두 펼친다 —
+ * 내부 스크롤 상자나 카드별 sticky는 둘째 카드부터 근거를 가린다(B2). 띠는 pane 직계로 붙어야
+ * pane 전체 스크롤 동안 고정되므로 상자는 display:contents(pda.html .safety-stack). */
+function safetyStack(cards) {
+  const box = document.createElement('div');
+  box.className = 'safety-stack';
+  const bar = document.createElement('div');
+  bar.className = 'safety-bar';
+  bar.textContent = '안전 카드 ' + cards.length + '건 · 아래 안전 조건을 지킨 상태에서만 조치';
+  box.appendChild(bar);
+  cards.forEach((c) => box.appendChild(safetyEl(c, true)));
+  return box;
+}
+
+/* 질의 화면 안전 관문(B1). 처음 진입·질의 실패·취소·다시 질의 모두 show('ask')를 거치므로 거기서 그린다. */
+function renderAskSafety() {
+  const box = $('askSafety'); box.innerHTML = '';
+  if (!S.eq) return;
+  const safety = rankCards(S.eq).safety;
+  if (safety.length) box.appendChild(safetyStack(safety));
+}
+
+const RESTART_TEXT = {normal_stop_restart: '정상 정지 후 재가동', abnormal_stop_restart: '비정상 정지 후 재가동',
+  maintenance_restart: '정비 후 재가동'};
 
 function actionEl(item, rank, tried) {
   const c = item.card;
@@ -773,8 +806,8 @@ function actionEl(item, rank, tried) {
   ttl.className = 'ttl'; ttl.textContent = c.title; d.appendChild(ttl);
 
   const why = document.createElement('div');
-  why.className = 'why' + (item.excluded ? ' no' : (rank === 1 ? '' : ' dim'));
-  why.textContent = item.excluded ? '조건 불일치 — 이 카드는 지금 쓰면 안 된다' : item.why;
+  why.className = 'why' + (item.miss ? ' no' : item.excluded || rank !== 1 ? ' dim' : '');
+  why.textContent = item.why;
   d.appendChild(why);
 
   if (item.conds.length) {
@@ -788,16 +821,25 @@ function actionEl(item, rank, tried) {
     d.appendChild(meta);
   }
 
-  // T3 는 저장된 ①②③ 순서를 그대로 유지한다(D-28).
-  const parts = String(c.know_how).split(/(?=[①②③④⑤⑥⑦⑧⑨])/).filter((x) => x.trim());
-  if (c.tacit_type === 'T3' && parts.length > 1) {
+  // T3 는 카드의 구조화 단계(type_payload.steps)를 order 순서 그대로 보인다(D-28). 단계마다 다음 진행·멈춤·문의처를 함께 둔다.
+  const steps = ((c.type_payload || {}).steps || []).slice().sort((a, b) => a.order - b.order);
+  if (c.tacit_type === 'T3' && steps.length) {
     const ol = document.createElement('ol'); ol.className = 'steps';
-    parts.forEach((p) => {
-      const t = p.trim();
+    steps.forEach((s) => {
       const li = document.createElement('li');
-      li.innerHTML = '<span class="st"></span><span class="tx"></span>';
-      li.querySelector('.st').textContent = t.slice(0, 1);
-      li.querySelector('.tx').textContent = t.slice(1).trim();
+      li.innerHTML = '<span class="st"></span><span class="tx"><span class="act"></span></span>';
+      li.querySelector('.st').textContent = s.order + '.';
+      li.querySelector('.act').textContent = s.action;
+      const tx = li.querySelector('.tx');
+      const line = (cls, label, text) => {
+        if (!text) return;
+        const e = document.createElement('span'); e.className = cls; e.textContent = label + text; tx.appendChild(e);
+      };
+      line('nx', '→ ', s.expected_result);
+      (s.stop_conditions || []).forEach((t) => line('stop', '멈춤 · ', t));
+      line('nx', '확인 · ', s.verification_step);
+      line('nx', '되돌림 · ', s.rollback_action);
+      line('esc', '문의 · ', s.escalation_target);
       ol.appendChild(li);
     });
     d.appendChild(ol);
@@ -806,6 +848,28 @@ function actionEl(item, rank, tried) {
     b.className = 'body'; b.style.margin = '0'; b.textContent = c.know_how;
     d.appendChild(b);
   }
+
+  // T6 는 앞서 해봤지만 안 된 재가동 시도를 남긴다 — 같은 시도를 되풀이하지 않게 결과와 다음 확인을 함께 보인다.
+  // 같은 시도를 되풀이한 기록(내용 같고 attempt_id만 다름)은 한 번만 보이고 횟수를 붙인다.
+  const tries = [];
+  ((c.type_payload || {}).tried_and_failed || []).forEach((a) => {
+    const same = tries.find((x) => x.a.action === a.action && x.a.observed_result === a.observed_result);
+    if (same) same.n += 1; else tries.push({a: a, n: 1});
+  });
+  tries.forEach(({a, n}) => {
+    const t = document.createElement('div'); t.className = 'tf';
+    const row = (cls, text) => {
+      if (!text) return;
+      const e = document.createElement('span'); e.className = cls; e.textContent = text; t.appendChild(e);
+    };
+    row('hd', '이전 시도 · ' + (RESTART_TEXT[a.restart_type] || '재가동') + (n > 1 ? ' ' + n + '회' : '') + ' — 안 됨');
+    row('act', a.action);
+    row('nx', '결과 · ' + (a.observed_result || '기록 없음'));
+    if (a.failure_reason) row('nx', '원인 · ' + a.failure_reason);
+    (a.next_observations || []).forEach((x) => row('stop', '다음 확인 · ' + x));
+    if ((a.required_data || []).length) row('nx', '재가동 전 필요 · ' + a.required_data.join(' · '));
+    d.appendChild(t);
+  });
 
   if (c.expected_result) {
     const e = document.createElement('div');
@@ -818,7 +882,7 @@ function actionEl(item, rank, tried) {
 
   if (!item.excluded && !tried) {
     const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn sm';
+    btn.type = 'button'; btn.className = 'btn';   // 주 행동 56px(A1)
     btn.textContent = '이 조치 시도';
     btn.addEventListener('click', () => recordTry(c));
     d.appendChild(btn);
@@ -829,7 +893,7 @@ function actionEl(item, rank, tried) {
 function renderResult() {
   const pane = $('resultPane'); pane.innerHTML = '';
   const r = S.ranked;
-  r.safety.forEach((c) => pane.appendChild(safetyEl(c, true)));
+  if (r.safety.length) pane.appendChild(safetyStack(r.safety));
   if (S.queryResponse) {
     const answer = document.createElement('p');
     answer.className = 'body';
@@ -843,7 +907,7 @@ function renderResult() {
 
   const lbl = document.createElement('p');
   lbl.className = 'lbl hot';
-  lbl.textContent = '조치 — 관련도 순 ' + remaining.length + '건 (검색 대상 카드 기준)';
+  lbl.textContent = '조치 — Jetson 인용 순 ' + remaining.length + '건 (검색 대상 카드 기준)';
   pane.appendChild(lbl);
 
   if (!remaining.length) {
@@ -862,10 +926,10 @@ function renderResult() {
   if (r.excluded.length) {
     const l2 = document.createElement('p');
     l2.className = 'lbl';
-    l2.textContent = '적용 안 됨 ' + r.excluded.length + '건 — 이유와 함께 남김';
+    l2.textContent = '조건 불일치·미평가 ' + r.excluded.length + '건 — 이유와 함께 남김';
     pane.appendChild(l2);
     r.excluded.forEach((x) => {
-      const el = actionEl(x, null); el.classList.add('out'); pane.appendChild(el);
+      const el = actionEl(x, null); el.classList.add('out'); if (x.miss) el.classList.add('miss'); pane.appendChild(el);
     });
   }
 
@@ -897,7 +961,7 @@ function recordTry(card) {
 function renderTries() {
   const pane = $('triesPane'); pane.innerHTML = '';
   const r = S.ranked;
-  if (r && r.safety.length) pane.appendChild(safetyEl(r.safety[0], true));
+  if (r && r.safety.length) pane.appendChild(safetyStack(r.safety));
 
   const lbl = document.createElement('p');
   lbl.className = 'lbl';
@@ -991,25 +1055,62 @@ function setStep(id, pct, state) {
   el.querySelector('.mk').textContent = state === 'done' ? '✓' : state === 'run' ? '⟳' : '·';
 }
 
+/* 응답을 버려야 하는가 — 취소했거나, 질의를 보낸 뒤 설비가 바뀌었으면 이전 설비의 응답(안전 공지 포함)을 그리지 않는다. */
+/* 고장 알림 확인 화면의 대상. 탭한 순간의 equipment_id로만 찾는다 — 띠가 다시 그려져도 바뀌지 않는다(B3). */
+const alertTarget = (id, equipment) => equipment.find((e) => e.equipment_id === id) || null;
+
+const staleResponse = (sentEqId, state) => !!state.waitAbort || !state.eq || state.eq.equipment_id !== sentEqId;
+
+const QUERY_TIMEOUT_MS = 125000;
+
+/* 대기 중에 로컬 kb 안전 카드를 먼저 보인다(E1). 판정은 rankCards 와 같다. */
+function renderWaitSafety(eq) {
+  const box = $('waitCards'); box.innerHTML = '';
+  $('waitLbl').hidden = false;
+  const safety = rankCards(eq).safety;
+  if (!safety.length) {
+    const p = document.createElement('p');
+    p.className = 'hint'; p.textContent = '이 설비 유형의 안전 카드 없음';
+    box.appendChild(p);
+  }
+  safety.forEach((c) => box.appendChild(safetyEl(c, false)));
+}
+
 async function runSearch() {
   if (searchBlockedReason()) { renderAskBlock(); return; }
   S.waitAbort = false; S.tries = []; S.attemptSeq = 0; S.queryResponse = null;
+  const sentEqId = S.eq.equipment_id;
   show('wait');
-  $('waitCards').innerHTML = ''; $('waitLbl').hidden = true;
-  setStep('st1', 0, 'run'); setStep('st2', 0, 'run'); setStep('st3', 0, 'run');
+  // 단계는 실제로 구분되는 사건만: ① 로컬 안전 카드 표시 → ② Jetson 응답 대기(경과초) → ③ 응답 정리.
+  setStep('st1', 0, 'run'); setStep('st2', 0, ''); setStep('st3', 0, '');
+  $('st2').querySelector('.t').textContent = '응답 대기';
+  renderWaitSafety(S.eq);
+  setStep('st1', 100, 'done');
+  const started = Date.now();
+  const tick = () => {
+    const ms = Date.now() - started;
+    setStep('st2', Math.min(100, ms / QUERY_TIMEOUT_MS * 100), 'run');
+    $('st2').querySelector('.t').textContent = '응답 대기 ' + Math.floor(ms / 1000) + '초';
+  };
+  tick();
+  const timer = setInterval(tick, 1000);
   try {
     const res = await api('/api/query', {method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(queryApiPayload(currentQuestion(), S))}, 125000);
+      body: JSON.stringify(queryApiPayload(currentQuestion(), S))}, QUERY_TIMEOUT_MS);
+    clearInterval(timer);
+    if (staleResponse(sentEqId, S)) return;
+    setStep('st2', 100, 'done'); setStep('st3', 0, 'run');
     const response = await res.json();
-    if (S.waitAbort) return;
+    if (staleResponse(sentEqId, S)) return;
     if (!res.ok) throw new Error(response.error || 'HTTP ' + res.status);
     S.queryResponse = response;
-    S.ranked = responseCards(response, S.cards);
-    ['st1', 'st2', 'st3'].forEach((id) => setStep(id, 100, 'done'));
+    S.ranked = responseCards(response, S.cards, rankCards(S.eq), S.eq);
+    setStep('st3', 100, 'done');
     if (S.ranked.safety.length) haptic([120]);
     renderResult(); show('result');
   } catch (err) {
-    if (S.waitAbort) return;
+    clearInterval(timer);
+    if (staleResponse(sentEqId, S)) return;
     $('askBlockWhy').textContent = '질의 실패: ' + err.message;
     $('askBlock').hidden = false;
     show('ask');
@@ -1195,7 +1296,7 @@ async function openOutbox() {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder }; }
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1305,14 +1406,11 @@ function renderAlert(faults) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'alrow';
-    b.innerHTML = '<span class="t"></span><span class="go">증상 질의 →</span>';
+    b.innerHTML = '<span class="t"></span><span class="go">확인 ›</span>';
     b.querySelector('.t').textContent = '⚠ ' + f.eq.code + ' 고장 상황 · ' + f.items.join(' · ');
-    // 그 설비의 증상 질의로 바로 간다 — 상황에 맞는 증상이 위에 올라와 있다.
-    b.addEventListener('click', () => {
-      if (S.eq !== f.eq) setContext(f.eq, 'manual_selection', {});
-      $('toAsk').click();
-      renderAlert(S.faults);   // 고른 설비를 띠 맨 위로
-    });
+    // 설비를 바로 바꾸지 않는다 — 확인 화면에서 code를 크게 보이고 하단 버튼으로만 확정한다(B3·A4).
+    const pick = { equipment_id: f.eq.equipment_id, items: f.items.slice() };
+    b.addEventListener('click', () => openAlertGo(pick));
     el.appendChild(b);
   });
   if (sorted.length > ALERT_ROWS) {
@@ -1322,6 +1420,32 @@ function renderAlert(faults) {
     el.appendChild(more);
   }
 }
+
+function openAlertGo(pick) {
+  const eq = alertTarget(pick.equipment_id, S.equipment);
+  if (!eq) return;
+  S.alertPick = pick.equipment_id;
+  // 스캔·대기 화면은 돌아가도 이어지지 않으므로 작업 선택(또는 홈)으로 돌린다.
+  S.alertBack = ['scan', 'wait', 'boot', 'alertGo'].includes(S.screen) ? (S.eq ? 'ctx' : 'home') : S.screen;
+  $('alertGoCode').textContent = eq.code;
+  $('alertGoName').textContent = eq.group + (eq.where ? ' · ' + eq.where : '');
+  $('alertGoItems').textContent = pick.items.join(' · ');
+  $('alertGoNow').textContent = S.eq === eq ? '지금 선택된 설비입니다.'
+    : (S.eq ? '지금 설비 ' + S.eq.code + ' → ' + eq.code + '(으)로 바뀝니다.' : eq.code + '(으)로 설비를 확정합니다.');
+  show('alertGo');
+}
+on('alertGoOk', () => {
+  const eq = alertTarget(S.alertPick, S.equipment);
+  S.alertPick = null;
+  if (!eq) { show(S.eq ? 'ctx' : 'home'); return; }
+  if (S.eq !== eq) setContext(eq, 'manual_selection', {});
+  haptic(30);
+  $('toAsk').click();
+  renderAlert(S.faults);   // 고른 설비를 띠 맨 위로
+});
+const alertGoLeave = () => { S.alertPick = null; show(S.alertBack || (S.eq ? 'ctx' : 'home')); };
+on('alertGoCancel', alertGoLeave);
+on('alertGoBack', alertGoLeave);
 
 async function watchMes() {
   if (S.equipment.length) {

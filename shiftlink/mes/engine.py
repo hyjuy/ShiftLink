@@ -452,6 +452,14 @@ class MesEngine:
             self._symptom_frames.append(snapshot)
         return snapshot
 
+    # 경보 코드의 화면 이름. 없는 코드는 코드 그대로 보인다.
+    ALARM_LABELS = {
+        "AL-SENSOR-ANOMALY": "센서값 범위 이탈", "AL-HYD-HOT": "유압유 과열", "AL-HYD-LOW": "유압 공급 저하",
+        "AL-GR-HOT": "감속기 과열", "AL-GR-LEAK": "감속기 누유", "AL-AIR-LOW": "공압 공급 저하",
+        "AL-PDP-TRIP": "배전반 차단기 트립", "AL-DRV-VIB": "구동부 진동 이상", "AL-DSB-QUE": "출측 코일 정체",
+        "AL-SYMPTOM": "증상 패턴 감지",
+    }
+
     def _update_alarms(self, state_map: dict[str, tuple[str, str, str | None]], at) -> tuple[Alarm, ...]:
         fault_ids = {equipment_id for equipment_id, (_, level, _) in state_map.items() if level != "normal"}
         for equipment_id in fault_ids:
@@ -462,7 +470,8 @@ class MesEngine:
                 self._event("alarm_cleared", equipment_id, previous.code)
                 del self._active_alarms[equipment_id]
             if equipment_id not in self._active_alarms:
-                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, state_map[equipment_id][1], at)
+                self._active_alarms[equipment_id] = Alarm(f"AL-{equipment_id}", code, equipment_id, state_map[equipment_id][1], at,
+                                                          label=self.ALARM_LABELS.get(code, code))
                 self._event("alarm_raised", equipment_id, code)
         for equipment_id in tuple(self._active_alarms):
             if equipment_id not in fault_ids:

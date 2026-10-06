@@ -38,14 +38,15 @@ assert.deepEqual(configured.filter(l=>l.relation_type==='interlock').map(l=>[l.f
  ['EQ-0009','EQ-0008'],['EQ-0010','EQ-0008']]);
 const simultaneous=flowView(buildOperatorModel(examples.normal,config,'EQ-0007')).match(/<g class="flow-edge [^>]*data-type="co_occurrence"[\s\S]*?<\/g>/)[0];
 assert.match(simultaneous,/RT-02 ↔ RT-03/);assert.doesNotMatch(simultaneous,/marker-end/);
-// All filters are emphasis controls: visibility is material + direct selection only.
+// Visibility: material + direct selection; with nothing selected, also every line of the picked relation type (or observed impact).
 for (const selected of [null, ...config.equipment.map(e=>e.equipment_id)]) {
  for (const filter of ['related','affected','material','all','power_supply']) {
   const model=buildOperatorModel(examples.hydraulic_fault,config,selected);
   assert.equal(model.selected?.equipment_id ?? null,selected,'no implicit selection');
   const html=flowView(model,'learn',filter);
   const actual=[...html.matchAll(/data-relation="([^"]+)"/g)].map(m=>m[1]).sort();
-  const expected=model.links.filter(l=>l.relation_type==='material_flow'||[l.from_id,l.to_id].includes(selected)).map(l=>`${l.from_id}|${l.to_id}|${l.relation_type}`).sort();
+  const picked=l=>!selected && (filter==='affected'?l.affected:!['related','material'].includes(filter) && l.relation_type===filter);
+  const expected=model.links.filter(l=>l.relation_type==='material_flow'||[l.from_id,l.to_id].includes(selected)||picked(l)).map(l=>`${l.from_id}|${l.to_id}|${l.relation_type}`).sort();
   assert.deepEqual(actual,expected,`${selected}/${filter}: exact configured visibility`);
   const map=require('./shiftlink/mes/web/operator.js').layout(model);
   assert.ok(map.height<=750,'baseline overview must fit a compact three-row map');

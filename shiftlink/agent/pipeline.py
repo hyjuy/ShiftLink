@@ -12,7 +12,7 @@ from shiftlink.agent.response import (
     GUARD_FALLBACK_ANSWER,
     AgentResponse,
     build_response,
-    answer_is_card_ids_only,
+    answer_content_error,
     guard_blocked,
     validate_response,
 )
@@ -186,8 +186,8 @@ class FixedPipeline:
     def _call_model(self, **kwargs: Any) -> tuple[Any, str | None, bool]:
         try:
             output = self.model(**kwargs)
-            if isinstance(output, dict) and answer_is_card_ids_only(output.get("answer")):
-                raise ValueError("answer 본문에는 카드 ID만 쓸 수 없습니다.")
+            if isinstance(output, dict) and (error := answer_content_error(output.get("answer"))):
+                raise ValueError(error)
             return output, None, False
         except ValueError:
             return None, "모델 출력 형식 오류", True

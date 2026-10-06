@@ -204,12 +204,22 @@ def build_response(
     return resp
 
 
+ANSWER_EXAMPLE = "카드 내용을 근거로 질문에 답하는 한국어 요약 문장"
+_ID_ONLY_NOISE = re.compile(r"""[\s.,:;·()\[\]{}<>`'"\-/]|참조|참고|카드|확인""")
+
+
 def answer_is_card_ids_only(answer: Any) -> bool:
-    """Card IDs and surrounding punctuation do not constitute answer content."""
-    return isinstance(answer, str) and bool(re.fullmatch(
-        r"""[\s\[\](){}<>`'",;:./·-]*(?:K-\d{4}[\s\[\](){}<>`'",;:./·-]*)+""",
-        answer,
-    ))
+    """An ID plus reference/check filler still contains no explanation."""
+    return (isinstance(answer, str) and bool(_CARD_ID.search(answer))
+            and len(_ID_ONLY_NOISE.sub("", _CARD_ID.sub("", answer))) < 2)
+
+
+def answer_content_error(answer: Any) -> str | None:
+    if answer_is_card_ids_only(answer):
+        return "answer 본문이 카드 ID뿐이라 설명이 없습니다."
+    if isinstance(answer, str) and answer.strip() == ANSWER_EXAMPLE:
+        return "answer 본문이 출력 예시를 그대로 복사했습니다."
+    return None
 
 
 def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> list[str]:
@@ -223,8 +233,8 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
     errors = []
     if not isinstance(answer, str) or not answer.strip():
         errors.append("answer는 비어 있지 않은 문자열이어야 합니다.")
-    elif answer_is_card_ids_only(answer):
-        errors.append("answer 본문에는 카드 ID만 쓸 수 없습니다.")
+    elif error := answer_content_error(answer):
+        errors.append(error)
     if not isinstance(cited_ids, list) or any(not isinstance(value, str) for value in cited_ids):
         errors.append("cited_card_ids는 문자열 목록이어야 합니다.")
         return errors
@@ -244,15 +254,9 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
         elif available_cards[card_id].get("condition_status") == "unverified":
             errors.append(f"조건이 확인되지 않은 카드 ID 인용: {card_id}")
     if isinstance(answer, str):
-        # 답이 카드 ID뿐이면 "비어 있지 않음"은 통과하지만 설명이 없다(10/6 시연 경로: 프롬프트가 잘려 'K-1001'만 나옴).
-        if len(_ID_ONLY_NOISE.sub("", _CARD_ID.sub("", answer))) < 2:
-            errors.append("답변이 카드 ID뿐이라 설명이 없습니다.")
         errors.extend(_answer_guard_errors(answer, cited_ids, tool_results))
     return errors
 
-
-# 카드 ID를 빼고 공백·구두점·"참조/참고/카드"도 뺀 뒤 2글자 미만이 남으면 설명이 없는 답이다.
-_ID_ONLY_NOISE = re.compile(r"[\s.,:;·()\[\]\-]|참조|참고|카드")
 
 # Shown when a guard blocks the model answer after the one retry. Not a review-queue blank.
 GUARD_FALLBACK_ANSWER = "카드에 수치 기준이 없습니다. 사양서·담당자에게 확인하세요"

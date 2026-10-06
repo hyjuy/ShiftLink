@@ -100,6 +100,7 @@ class MesStorageTests(unittest.TestCase):
             self.assertEqual(uploader.recv(), (1, 1))
             self.assertTrue(uploader.poll(10))
             self.assertEqual(uploader.recv(), "marking")
+            self.assertFalse(uploader.poll(0.1), "upload marker bypassed the active writer")
             writer.send("release")
             for channel in channels:
                 self.assertTrue(channel.poll(10), "concurrent write timed out")
@@ -129,6 +130,10 @@ class MesStorageTests(unittest.TestCase):
         self.assertEqual(reopened.get_configuration("concurrent"), {"written": True})
         self.assertEqual(reopened.outbox_counts()["handover"], {"pending": 1, "uploaded": 1, "conflict": 0})
         self.assertEqual(reopened.outbox_counts()["query"], {"pending": 1, "uploaded": 1, "conflict": 0})
+        self.assertEqual(reopened.connection.execute(
+            "SELECT status, payload FROM query_log WHERE query_id = ?", (query_id,)
+        ).fetchone(), ("uploaded", '{"answer": "original"}'))
+        self.assertEqual(reopened.pending_queries()[0][2], '{"answer": "retained"}')
 
     def test_tick_is_atomic_replayable_and_duplicate_is_rejected(self) -> None:
         store = MesStorage(Path(self.temp.name) / "mes.sqlite")

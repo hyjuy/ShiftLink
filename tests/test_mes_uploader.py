@@ -1,10 +1,12 @@
 import json
 import sqlite3
+import sys
+from types import ModuleType
 
 import pytest
 
 from shiftlink.mes.storage import MesStorage
-from shiftlink.mes.uploader import upload_pending
+from shiftlink.mes.uploader import main, upload_pending
 
 
 class FakeCloud:
@@ -134,3 +136,23 @@ def test_pending_read_lock_is_reported_and_next_cycle_retries(monkeypatch, read)
     assert cloud.rows == {}
     monkeypatch.setattr(storage, read, original)
     assert upload_pending(storage, cloud.connect) == {"uploaded": 1, "conflict": 0, "pending": 0}
+
+
+def test_once_prints_safe_json_and_keeps_pending_on_disk(tmp_path, monkeypatch, capsys):
+    db = tmp_path / "mes.sqlite3"
+    storage = MesStorage(db)
+    storage.save_handover(_note(1))
+
+    def fail():
+        raise RuntimeError(1045, "mysql://user:secret@host/db")
+
+    schema = ModuleType("db.apply_schema")
+    schema.connect = fail
+    monkeypatch.setitem(sys.modules, "db.apply_schema", schema)
+    monkeypatch.setattr(sys, "argv", ["uploader", "--db", str(db), "--once"])
+    main()
+    output = capsys.readouterr().out
+    assert json.loads(output) == {"uploaded": 0, "conflict": 0, "pending": 1,
+                                 "error": {"class": "RuntimeError", "code": 1045}}
+    assert "secret" not in output
+    assert MesStorage(db).get_handover("HO-test-1")["status"] == "pending"

@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sqlite3
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -24,15 +25,33 @@ def _specs(storage: MesStorage):
     ]
 
 
-def upload_pending(storage: MesStorage, connect) -> dict[str, int]:
-    """One cycle. `connect()` returns a DB-API connection (autocommit). Network errors end the cycle quietly."""
+def _error(exc: Exception) -> dict[str, str | int]:
+    """Safe diagnostic metadata only: exception messages may contain credentials."""
+    error: dict[str, str | int] = {"class": type(exc).__name__}
+    if exc.args and type(exc.args[0]) is int:
+        error["code"] = exc.args[0]
+    return error
+
+
+def upload_pending(storage: MesStorage, connect) -> dict[str, int | None | dict[str, str | int]]:
+    """One cycle; failures retry next cycle. `pending` is None if its initial read fails.
+
+    `connect()` returns a DB-API connection (autocommit). `error` contains safe
+    exception metadata, never messages or connection strings.
+    """
     specs = _specs(storage)
-    counts = {"uploaded": 0, "conflict": 0, "pending": sum(len(rows()) for rows, *_ in specs)}
+    counts: dict[str, int | None | dict[str, str | int]] = {"uploaded": 0, "conflict": 0, "pending": None}
+    try:
+        counts["pending"] = sum(len(rows()) for rows, *_ in specs)
+    except sqlite3.Error as exc:
+        counts["error"] = _error(exc)
+        return counts
     if not counts["pending"]:
         return counts
     try:
         conn = connect()
-    except Exception:  # noqa: BLE001 - any connect failure means "offline, retry later"
+    except Exception as exc:  # noqa: BLE001 - any connect failure retries later
+        counts["error"] = _error(exc)
         return counts
     try:
         with conn.cursor() as cur:
@@ -53,8 +72,8 @@ def upload_pending(storage: MesStorage, connect) -> dict[str, int]:
                     mark(row_id, status)
                     counts[status] += 1
                     counts["pending"] -= 1
-    except Exception:  # noqa: BLE001 - dropped mid-cycle: rows not yet marked stay pending
-        pass
+    except Exception as exc:  # noqa: BLE001 - rows not yet marked stay pending
+        counts["error"] = _error(exc)
     finally:
         try:
             conn.close()

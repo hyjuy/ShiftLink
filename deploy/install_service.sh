@@ -25,7 +25,7 @@ case "${1:-}" in
     DESC="ShiftLink 모의 MES 서버 (Jetson, 파이·PDA 화면이 접속)"
     AFTER="network-online.target ollama.service"
     DB="${DB:-$REPO/mes_data/mock-mes.sqlite3}"
-    WANTS="$WANTS shiftlink-uploader.service"
+    WANTS="$WANTS shiftlink-uploader.service ollama.service"
     # 질의는 E1 추출 답(모델 호출 없음) + SFT 판정기(10/6 채택). 판정 모델은 Ollama에 등록돼 있어야 한다:
     # docs/guides/sft-judge-model.md. 바꾸려면 JUDGE_MODEL=…·ANSWER_MODE=model 로 실행한다.
     EXTRA="Environment=SHIFTLINK_ANSWER_MODE=${ANSWER_MODE:-extract}

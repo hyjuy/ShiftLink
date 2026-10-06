@@ -19,7 +19,7 @@ NAME=shiftlink-uploader
 
 if [ -n "${ENV_FILE:-}" ]; then
   [ -r "$ENV_FILE" ] || [ -n "${DRY_RUN:-}" ] || { echo "ENV_FILE을 읽을 수 없음: $ENV_FILE" >&2; exit 1; }
-  ENVLINE="EnvironmentFile=$ENV_FILE"
+  ENVLINE="EnvironmentFile=\"$ENV_FILE\""
 else
   [ -f "$REPO/.env" ] || [ -n "${DRY_RUN:-}" ] || { echo "접속 정보 없음: $REPO/.env (또는 ENV_FILE=...)" >&2; exit 1; }
   ENVLINE=""

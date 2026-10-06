@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import multiprocessing
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -17,6 +18,32 @@ from shiftlink.mes.storage import MesStorage
 
 
 UTC = timezone.utc
+
+
+def _concurrent_store(path, role, channel, query_id):
+    store = MesStorage(path)
+    try:
+        channel.send("ready")
+        channel.recv()
+        if role == "writer":
+            store.connection.execute("BEGIN EXCLUSIVE")
+            store.save_configuration("concurrent", '{"written": true}', commit=False)
+            channel.send("locked")
+            channel.recv()
+            store.connection.commit()
+            store.save_handover({"handover_id": "new-note", "memo_text": "retained"})
+            store.save_query({"answer": "retained"})
+        else:
+            channel.send((len(store.pending_handovers()), len(store.pending_queries())))
+            channel.send("marking")
+            store.mark_handover("old-note", "uploaded")
+            store.mark_query(query_id, "uploaded")
+        channel.send("done")
+    except Exception as error:
+        channel.send((type(error).__name__, str(error)))
+    finally:
+        store.close()
+        channel.close()
 
 
 class MesStorageTests(unittest.TestCase):
@@ -43,6 +70,70 @@ class MesStorageTests(unittest.TestCase):
         self.assertEqual(catalog.equipment["EQ-0001"]["code"], "HPU-01")
         self.assertEqual(catalog.measurement_point("EQ-0001", "hpu_pressure")["unit"], "bar")
         self.assertEqual(catalog.relations[0]["relation_id"], "REL-0001")
+
+    def test_separate_processes_read_pending_and_preserve_concurrent_writes(self) -> None:
+        path = Path(self.temp.name) / "shared.sqlite"
+        store = MesStorage(path)
+        store.save_handover({"handover_id": "old-note", "memo_text": "original"})
+        query_id = store.save_query({"answer": "original"})
+        self.assertEqual(store.connection.execute("PRAGMA busy_timeout").fetchone()[0], 5000)
+        store.close()
+
+        context = multiprocessing.get_context("spawn")
+        processes, channels = [], []
+        try:
+            for role in ("writer", "uploader"):
+                parent, child = context.Pipe()
+                process = context.Process(target=_concurrent_store, args=(path, role, child, query_id))
+                process.start()
+                child.close()
+                processes.append(process)
+                channels.append(parent)
+                self.assertTrue(parent.poll(10), "store initialization timed out")
+                self.assertEqual(parent.recv(), "ready")
+            writer, uploader = channels
+            writer.send("write")
+            self.assertTrue(writer.poll(10))
+            self.assertEqual(writer.recv(), "locked")
+            uploader.send("upload")
+            self.assertTrue(uploader.poll(10), "pending read blocked by writer")
+            self.assertEqual(uploader.recv(), (1, 1))
+            self.assertTrue(uploader.poll(10))
+            self.assertEqual(uploader.recv(), "marking")
+            self.assertFalse(uploader.poll(0.1), "upload marker bypassed the active writer")
+            writer.send("release")
+            for channel in channels:
+                self.assertTrue(channel.poll(10), "concurrent write timed out")
+                self.assertEqual(channel.recv(), "done")
+            for process in processes:
+                process.join(10)
+                self.assertEqual(process.exitcode, 0)
+        finally:
+            if channels:
+                try:
+                    channels[0].send("release")
+                except (BrokenPipeError, OSError):
+                    pass
+            for process in processes:
+                process.join(3)
+                if process.is_alive():
+                    process.terminate()
+                    process.join(3)
+            for channel in channels:
+                channel.close()
+
+        reopened = MesStorage(path)
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.get_handover("old-note")["status"], "uploaded")
+        self.assertEqual(reopened.get_handover("old-note")["payload"]["memo_text"], "original")
+        self.assertEqual(reopened.get_handover("new-note")["payload"]["memo_text"], "retained")
+        self.assertEqual(reopened.get_configuration("concurrent"), {"written": True})
+        self.assertEqual(reopened.outbox_counts()["handover"], {"pending": 1, "uploaded": 1, "conflict": 0})
+        self.assertEqual(reopened.outbox_counts()["query"], {"pending": 1, "uploaded": 1, "conflict": 0})
+        self.assertEqual(reopened.connection.execute(
+            "SELECT status, payload FROM query_log WHERE query_id = ?", (query_id,)
+        ).fetchone(), ("uploaded", '{"answer": "original"}'))
+        self.assertEqual(reopened.pending_queries()[0][2], '{"answer": "retained"}')
 
     def test_tick_is_atomic_replayable_and_duplicate_is_rejected(self) -> None:
         store = MesStorage(Path(self.temp.name) / "mes.sqlite")

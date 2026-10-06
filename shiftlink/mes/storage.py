@@ -58,6 +58,8 @@ class MesStorage:
 
     def __init__(self, path: str | Path = ":memory:") -> None:
         self.connection = sqlite3.connect(str(path), check_same_thread=False)
+        self.connection.execute("PRAGMA journal_mode = WAL")
+        self.connection.execute("PRAGMA busy_timeout = 5000")
         self.connection.execute("PRAGMA foreign_keys = ON")
         self._create_schema()
 

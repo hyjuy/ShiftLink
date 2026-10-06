@@ -28,6 +28,19 @@ public static class FactoryLayoutChecks
             var demo=new GameObject("Layout review").AddComponent<FactoryDemo>();
             demo.CreateEnvironment(); demo.Build(config); demo.Apply(state);
             var nodes=demo.transform.Find("MES equipment");
+            check(demo.EquipmentCount==config.equipment.Length,"auxiliary rollers do not create MES equipment");
+            var beds=nodes.Find("Auxiliary roller beds");
+            check(beds!=null && beds.GetComponentsInChildren<Transform>().Count(t=>t.name.StartsWith("Auxiliary roller_") && t.childCount>0)>=30,"additional inlet outlet and transfer rollers");
+            var pedestrianAreas=new[]{"Pedestrian aisle","Maintenance aisle","Aisle connection","Stair approach","Stair entrance"};
+            foreach(var name in pedestrianAreas) {
+                var area=nodes.Find(name);
+                if(area==null) { check(false,name+" provided"); continue; }
+                var footprint=BoundsOf(area);
+                check(Mathf.Min(footprint.size.x,footprint.size.z)>=1.49f,name+" minimum 1.5m width");
+                var headspace=new Bounds(new Vector3(footprint.center.x,1.1f,footprint.center.z),new Vector3(footprint.size.x,2.2f,footprint.size.z));
+                foreach(var obstacle in nodes.GetComponentsInChildren<MeshRenderer>().Where(r=>r.GetComponent<TextMesh>()==null && r.bounds.max.y>.05f && r.bounds.min.y<2.2f))
+                    check(!headspace.Intersects(obstacle.bounds),name+" headroom clears "+obstacle.name);
+            }
             foreach(string id in new[]{"EQ-0001","EQ-0002","EQ-0003","EQ-0004","EQ-0005"}) {
                 var model=nodes.Find(id).Find("Equipment_"+config.equipment.First(e=>e.equipment_id==id).profile_id.ToUpperInvariant()).Find("Model");
                 check(Mathf.Abs(model.localScale.x-1)<.001f,"native metres "+id);

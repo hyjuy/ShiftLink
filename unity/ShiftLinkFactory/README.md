@@ -7,6 +7,14 @@
 프로젝트 경로: `D:/obsd/Projects/ShiftLink/unity/ShiftLinkFactory`.
 Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 장비 프리팹과 FactoryRig로 공장 장비와 이송 구간을 구성한다.
 
+## 확장 공정과 반출·적재
+
+MES 공정 뒤에 가상 풀림·교정·슬리팅·재권취·검사·포장 라인을 연결하고 32×34m 생산동, 원자재 야드·크레인, 코일 보관대 24칸과 출하 트럭 8칸을 추가했다. 내부 보기에서 전체 공정을 확인한다.
+
+화면 오른쪽 아래에서 `Send next finished coils to truck`을 선택하면 새 반출 코일을 트럭으로 보내며, 기본 목적지는 보관장이다. `Load stored coils`로 보관 코일을 트럭에 싣고, `Dispatch loaded truck`으로 출하한다. 만재 시 보관 또는 대기로 전환한다.
+
+후단 설비와 재고는 Unity 세션의 가상 시연이다. MES 설비·재고를 등록하거나 실제 출하 지시를 보내지 않는다. 연결 해제·새 운전·구성 변경 때 가상 재고를 초기화한다. 검증과 제한 사항은 `docs/testing/unity-factory-logistics-20261006.tdd.md`에 기록했다.
+
 ## 실행
 
 Unity Editor 설치 경로는 `D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe`다.

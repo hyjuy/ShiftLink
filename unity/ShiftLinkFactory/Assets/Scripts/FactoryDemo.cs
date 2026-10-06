@@ -86,6 +86,7 @@ public class FactoryDemo : MonoBehaviour
     Vector3 target;
     Camera viewCamera;
     FactoryRig rig;
+    FactoryLogistics logistics;
     readonly Dictionary<string,Transform> coilObjects=new Dictionary<string,Transform>();
     readonly Dictionary<string,Vector3> coilTargets=new Dictionary<string,Vector3>();
     readonly Dictionary<string,string> coilEquipment=new Dictionary<string,string>();
@@ -139,6 +140,8 @@ public class FactoryDemo : MonoBehaviour
             Shape(PrimitiveType.Cube, "Floor grid", transform, new Vector3(x,-.02f,0),
                 new Vector3(.025f,.01f,33), new Color(.32f,.36f,.4f));
         InstallBuilding();
+        logistics=GetComponent<FactoryLogistics>()??gameObject.AddComponent<FactoryLogistics>();
+        logistics.Build();
         UpdateCamera();
         FactoryMonitor.RefreshFor(this,null,null,false);
         SetExteriorView(exteriorView);
@@ -219,10 +222,11 @@ public class FactoryDemo : MonoBehaviour
     {
         exteriorView=exterior;
         if(exteriorEnvelope!=null) exteriorEnvelope.gameObject.SetActive(exterior);
+        if(logistics!=null) logistics.SetExterior(exterior);
         var display=transform.Find("Factory status display"); if(display!=null) display.gameObject.SetActive(!exterior);
         if(equipmentRoot!=null) foreach(var label in equipmentRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(!exterior);
-        target=exterior ? new Vector3(0,3,0) : new Vector3(0,2,3);
-        distance=exterior ? 62 : 50; pitch=exterior ? 32 : 48; yaw=-20;
+        target=exterior ? new Vector3(7,3,0) : new Vector3(8,2,3);
+        distance=exterior ? 105 : 94; pitch=exterior ? 38 : 52; yaw=-20;
         UpdateCamera();
     }
     public void Build(FactoryConfig next)
@@ -298,7 +302,9 @@ public class FactoryDemo : MonoBehaviour
             coilTargets[c.coil_id]=destination; coilEquipment[c.coil_id]=c.equipment_id;
         }
         foreach(var id in coilObjects.Keys.Where(id=>!keep.Contains(id)).ToArray()) {
-            var stale=coilObjects[id]; stale.SetParent(null); Remove(stale.gameObject);
+            var stale=coilObjects[id];
+            if(next.line_mode=="running" && config.route.Length>0 && coilEquipment[id]==config.route[config.route.Length-1] && logistics!=null) logistics.Accept(stale);
+            else { stale.SetParent(null); Remove(stale.gameObject); }
             coilObjects.Remove(id); coilTargets.Remove(id); coilEquipment.Remove(id); coilWaypoints.Remove(id);
         }
         online=true; lastSuccess=Time.realtimeSinceStartup;
@@ -324,6 +330,7 @@ public class FactoryDemo : MonoBehaviour
     }
     void ClearCoils()
     {
+        if(logistics!=null) logistics.ResetLoads();
         coilObjects.Clear(); coilTargets.Clear(); coilEquipment.Clear(); coilWaypoints.Clear();
         if(coilRoot==null) return;
         for(int i=coilRoot.childCount-1;i>=0;i--) {
@@ -392,6 +399,7 @@ public class FactoryDemo : MonoBehaviour
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
         bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),230).Contains(guiPointer) ||
+            new Rect(Screen.width-460,Screen.height-150,442,132).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
             RaycastHit hit;
@@ -407,6 +415,7 @@ public class FactoryDemo : MonoBehaviour
     {
         if(!online || rig==null || seconds<=0 || float.IsNaN(seconds) || float.IsInfinity(seconds)) return;
         rig.Advance(snapshot,seconds);
+        if(logistics!=null) logistics.Advance(seconds,snapshot.line_mode=="running" && readings.Values.All(e=>e.fault_level!="critical"));
         foreach(var pair in coilObjects) {
             EquipmentReading state;
             if(readings.TryGetValue(coilEquipment[pair.Key],out state) && state.operating_state=="running" && state.fault_level!="critical" && snapshot.line_mode=="running") {
@@ -440,6 +449,18 @@ public class FactoryDemo : MonoBehaviour
         if(GUILayout.Button(exteriorView ? "View factory interior" : "View factory exterior")) SetExteriorView(!exteriorView);
         if (GUILayout.Button("Open MES dashboard / fault scenarios")) Application.OpenURL(mesUrl.TrimEnd('/')+"/");
         GUILayout.EndArea();
+        if(logistics!=null) {
+            GUILayout.BeginArea(new Rect(Screen.width-460,Screen.height-150,442,132),GUI.skin.box);
+            GUILayout.Label(logistics.Summary);
+            GUI.enabled=online;
+            logistics.SendToTruck=GUILayout.Toggle(logistics.SendToTruck,"Send next finished coils to truck (otherwise warehouse)");
+            GUILayout.BeginHorizontal();
+            if(GUILayout.Button("Load stored coils")) logistics.DispatchStored();
+            if(GUILayout.Button("Dispatch loaded truck")) logistics.DepartTruck();
+            GUILayout.EndHorizontal(); GUI.enabled=true;
+            GUILayout.Label("Virtual finishing speed 2 m/s / session inventory");
+            GUILayout.EndArea();
+        }
         if(!string.IsNullOrEmpty(selectedId) && equipment.ContainsKey(selectedId)) {
             GUILayout.BeginArea(new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125),GUI.skin.box);
             GUILayout.Label("Selected: "+selectedId+" | Latest PDA scan: "+(lastScanId ?? "none"));

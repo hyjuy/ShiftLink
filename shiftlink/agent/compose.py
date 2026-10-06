@@ -4,6 +4,9 @@ The model keeps a short summary; code writes the facts. Post-processing only, so
     L1  measurement fact lines from observation_facts
     L2  drop summary sentences that assert a direction/state about a reading nobody measured
     L3  put the cited card's own prohibition / stop sentences first
+    E1  extractive: the answer is the cited card's own words (no model text)      } 10/6 pre-registration:
+    E2  filter: keep only model sentences grounded in the cited card, else E1      } docs/experiments/answer-extractive-prereg-20261006.md
+E1/E2 replace the L layers (E1 wins over E2).
 Layers are switched per pipeline (`compose_layers`) or by env SHIFTLINK_COMPOSE="L1,L2,L3". Default: none.
 """
 
@@ -13,11 +16,11 @@ from typing import Any, Iterable
 
 from shiftlink.agent.response import (
     DIRECTION_FALLBACK_ANSWER, GUARD_FALLBACK_ANSWER, NO_MEASURE_ANSWER, NO_READING_NOTE, REFERENCE_NOTE,
-    _CARD_ID, _sentences,
+    _CARD_ID, _answer_guard_errors, _sentences,
 )
 from shiftlink.rag.retrieval import _SIGNAL_LABELS
 
-LAYERS = ("L1", "L2", "L3", "L3C")  # L3C: L3 from the cited card only (no extra safety card); a measured variant of L3
+LAYERS = ("L1", "L2", "L3", "L3C", "E1", "E2")  # L3C: L3 from the cited card only (no extra safety card); a measured variant of L3
 _STATES = ("low", "normal", "high")
 _DIRECTION = re.compile("초과|넘|벗어|미만|높|낮")
 # Criteria and hedges are not assertions about a reading ("38 미만이면 …", "그럴 수 있다").
@@ -26,6 +29,8 @@ _PROHIBIT = re.compile(r"않는다|않는|않도록|말 것|말고|금지|하지
 _SOURCE_MARK = re.compile(r"\.pdf|PDF p|§|인쇄 p|/US|CAUTION|DANGER|WARNING", re.I)
 _HANGUL = re.compile("[가-힣]")
 _NUMBER = re.compile(r"\d")
+_TOKEN = re.compile(r"[가-힣A-Za-z0-9]{2,}")
+NL = "\n"
 
 
 def layers_from_env() -> frozenset[str]:
@@ -130,10 +135,63 @@ def l3_line(answer: str, cited: list[dict[str, Any]], tool_results: dict[str, An
     return f"먼저: {' '.join(sentences)} ({', '.join(dict.fromkeys(ids))})" if sentences else ""
 
 
+def _grounds(card: dict[str, Any]) -> str:
+    return " ".join(str(card.get(k) or "") for k in ("title", "symptom", "know_how", "rationale"))
+
+
+def _overlap(token: str, text: str) -> bool:
+    return token in text or (len(token) >= 3 and token[:-1] in text)  # one trailing particle character allowed
+
+
+def _stop_texts(cited: list[dict[str, Any]]) -> list[str]:
+    out: list[str] = []
+    for card in cited:
+        steps = (card.get("type_payload") or {}).get("steps") or []
+        for text in [*(card.get("stop_conditions") or []), *(t for s in steps for t in s.get("stop_conditions") or [])]:
+            if text not in out:
+                out.append(text)
+    return out
+
+
+def e1_answer(cited: list[dict[str, Any]], tool_results: dict[str, Any]) -> str:
+    lines = l1_lines(cited, tool_results)
+    sentences = _sentences(cited[0].get("know_how") or "")[:2]
+    if sentences:
+        text = " ".join(sentences)
+        lines.append(text if len(text) <= 220 else sentences[0])
+    stops = _stop_texts(cited)[:2]
+    if not stops:  # safety card without a stop condition: its own prohibition sentence
+        stops = next(([p[0]] for c in cited if c.get("safety_flag") and (p := _card_prohibitions(c))), [])
+    if stops:
+        lines.append("정지 조건: " + " ".join(stops))
+    lines.append(f"({', '.join(c['card_id'] for c in cited)} 참조)")
+    return NL.join(lines)
+
+
+def e2_answer(answer: str, cited: list[dict[str, Any]], cited_ids: list[str], tool_results: dict[str, Any]) -> str:
+    grounds = " ".join(_grounds(c) for c in cited)
+    kept = []
+    for sentence in _sentences(answer):
+        tokens = _TOKEN.findall(_CARD_ID.sub(" ", sentence))
+        if not tokens or sum(_overlap(t, grounds) for t in tokens) / len(tokens) < 0.5:
+            continue
+        if _answer_guard_errors(sentence, cited_ids, tool_results) or l2_filter(sentence, cited, tool_results) != sentence:
+            continue
+        kept.append(sentence)
+    if not kept:
+        return e1_answer(cited, tool_results)
+    body = " ".join(kept)
+    if not _CARD_ID.search(body):
+        body += f" ({', '.join(c['card_id'] for c in cited)} 참조)"
+    return NL.join([*l1_lines(cited, tool_results), body])
+
+
 def compose_answer(answer: str, cited_ids: list[str], tool_results: dict[str, Any], layers: Iterable[str],
                    errors: Iterable[str] = ()) -> str:
     layers = set(layers)
     cited = _cited_cards(cited_ids, tool_results)
+    if layers & {"E1", "E2"} and cited:
+        return e1_answer(cited, tool_results) if "E1" in layers else e2_answer(answer, cited, cited_ids, tool_results)
     summary = l2_filter(answer, cited, tool_results) if "L2" in layers else answer
     if answer == GUARD_FALLBACK_ANSWER and any("답이" in e or "정상 범위인데" in e for e in errors):
         summary = DIRECTION_FALLBACK_ANSWER  # the stock sentence blames a missing number; this block was a direction error

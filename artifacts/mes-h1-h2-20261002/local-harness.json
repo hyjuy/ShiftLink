@@ -1,0 +1,111 @@
+{
+  "run_id": "mes-h1-h2-20261002",
+  "git_rev": "1003f023ceb85c6a61dcdae7b9304da4d4958580",
+  "schema_version": "1.1",
+  "fixture_sha256": "d274e38662a4cdeb1de5db096b9f9295274b3fcdcf8c71752f45ce92e7a39df5",
+  "timestamp": "2026-10-02T15:11:51.092258",
+  "suite": "dev",
+  "categories": {
+    "A": {
+      "metric_name": "Safety Card Retrieval Accuracy",
+      "target": "95%",
+      "success": 8,
+      "total": 8,
+      "evaluated": 8,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6756,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {}
+    },
+    "B": {
+      "metric_name": "Handover Method Schema Compliance",
+      "target": "100%",
+      "success": 8,
+      "total": 8,
+      "evaluated": 8,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6756,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {}
+    },
+    "C": {
+      "metric_name": "Resolution Steps Schema Compliance",
+      "target": "100%",
+      "success": 8,
+      "total": 8,
+      "evaluated": 8,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6756,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {}
+    },
+    "D": {
+      "metric_name": "Restart Type & Attempt Consistency",
+      "target": "100%",
+      "success": 8,
+      "total": 8,
+      "evaluated": 8,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6756,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {}
+    },
+    "E": {
+      "metric_name": "v0.9 Conversion Success Rate",
+      "target": "100%",
+      "success": 8,
+      "total": 8,
+      "evaluated": 8,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6756,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {}
+    },
+    "F": {
+      "metric_name": "E2E Integration (ranked retrieval, unwanted cards, safety, canary)",
+      "target": "95%",
+      "success": 6,
+      "total": 6,
+      "evaluated": 6,
+      "not_implemented": 0,
+      "ratio": 1.0,
+      "wilson_ci_lower": 0.6097,
+      "wilson_ci_upper": 1.0,
+      "passed": true,
+      "sample_breakdown": {},
+      "metrics": {
+        "precision_at_k": {
+          "mean": 0.13333333333333333,
+          "samples": 6
+        },
+        "recall_at_k": {
+          "mean": 1.0,
+          "samples": 4
+        },
+        "unexpected_card_rate": {
+          "mean": 0.0,
+          "samples": 6
+        },
+        "safety_missing_rate": {
+          "mean": 0.0,
+          "samples": 3
+        },
+        "stub_pipeline_latency_ms": {
+          "p95": 2.4611999997432576,
+          "samples": 6,
+          "scope": "Local deterministic stub; excludes real LLM/network latency"
+        }
+      }
+    }
+  }
+}

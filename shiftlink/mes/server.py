@@ -324,9 +324,13 @@ class _Handler(BaseHTTPRequestHandler):
                 content_type = "text/csv; charset=utf-8" if format_name == "csv" else "application/x-ndjson; charset=utf-8"
                 self._send(200, self.service.export(run_id, format_name).encode(), content_type); return
             if parsed.path in ("/", "/pda.html"):
+                if getattr(self, "api_only", False):
+                    self._send(404, {"error": "not found", "is_synthetic": True}); return
                 page = "pda.html" if parsed.path == "/pda.html" else "index.html"
                 self._send(200, (self.web_root / page).read_bytes(), "text/html; charset=utf-8"); return
             if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "style.css", "pda.js"}:
+                if getattr(self, "api_only", False):
+                    self._send(404, {"error": "not found", "is_synthetic": True}); return
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
                 self._send(200, (self.web_root / name).read_bytes(), f"{kind}; charset=utf-8"); return
             self._send(404, {"error": "not found", "is_synthetic": True})
@@ -357,12 +361,12 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(400, {"error": str(error), "is_synthetic": True})
 
 
-def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None) -> None:
+def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False) -> None:
     root = Path(__file__).resolve().parents[2]
     database = db_path or root / "mes_data" / "mock-mes.sqlite3"
     database.parent.mkdir(parents=True, exist_ok=True)
     service = MesService(catalog_path or root / "docs" / "data" / "reference" / "00_plant_and_relations.json", MesStorage(database))
-    handler = type("MesHandler", (_Handler,), {"service": service, "web_root": Path(__file__).with_name("web")})
+    handler = type("MesHandler", (_Handler,), {"service": service, "web_root": Path(__file__).with_name("web"), "api_only": api_only})
     server = ThreadingHTTPServer((host, port), handler)
     stopped = threading.Event()
     worker = threading.Thread(target=_run_ticks, args=(service, stopped), daemon=True); worker.start()

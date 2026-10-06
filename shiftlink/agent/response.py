@@ -234,9 +234,15 @@ def validate_model_output(model_output: Any, tool_results: dict[str, Any]) -> li
         elif available_cards[card_id].get("condition_status") == "unverified":
             errors.append(f"조건이 확인되지 않은 카드 ID 인용: {card_id}")
     if isinstance(answer, str):
+        # 답이 카드 ID뿐이면 "비어 있지 않음"은 통과하지만 설명이 없다(10/6 시연 경로: 프롬프트가 잘려 'K-1001'만 나옴).
+        if len(_ID_ONLY_NOISE.sub("", _CARD_ID.sub("", answer))) < 2:
+            errors.append("답변이 카드 ID뿐이라 설명이 없습니다.")
         errors.extend(_answer_guard_errors(answer, cited_ids, tool_results))
     return errors
 
+
+# 카드 ID를 빼고 공백·구두점·"참조/참고/카드"도 뺀 뒤 2글자 미만이 남으면 설명이 없는 답이다.
+_ID_ONLY_NOISE = re.compile(r"[\s.,:;·()\[\]\-]|참조|참고|카드")
 
 # Shown when a guard blocks the model answer after the one retry. Not a review-queue blank.
 GUARD_FALLBACK_ANSWER = "카드에 수치 기준이 없습니다. 사양서·담당자에게 확인하세요"

@@ -297,6 +297,7 @@ class OllamaModel:
         timeout_s: float = DEFAULT_TIMEOUT_S,
         num_ctx: int = NUM_CTX,
         judge_model: str | None = None,
+        judge_num_ctx: int | None = None,
     ) -> None:
         self.model = model
         # Abstain judge model: argument > SHIFTLINK_JUDGE_MODEL > the answer model (10/6: SFT judge can run alone in extract mode).
@@ -304,6 +305,9 @@ class OllamaModel:
         self.host = host.rstrip("/")
         self.timeout_s = timeout_s
         self.num_ctx = num_ctx
+        # The judge prompt is short (about 330-410 tokens measured 10/6), so it can use a smaller context than the answer
+        # model, which needs 4096 for the demo path (34 readings). Argument > SHIFTLINK_JUDGE_NUM_CTX > num_ctx.
+        self.judge_num_ctx = judge_num_ctx or int(os.environ.get("SHIFTLINK_JUDGE_NUM_CTX") or 0) or num_ctx
         self.last_call: dict[str, Any] = {}
 
     def __call__(
@@ -355,7 +359,7 @@ class OllamaModel:
             "format": {"type": "object", "properties": {"score": {"type": "integer", "enum": [0, 1, 2, 3]}},
                        "required": ["score"]},
             "keep_alive": KEEP_ALIVE,
-            "options": {"temperature": 0, "num_ctx": self.num_ctx, "num_predict": 20},
+            "options": {"temperature": 0, "num_ctx": self.judge_num_ctx, "num_predict": 20},
         }
         started = time.monotonic()
         body_out = self._post("/api/chat", payload)

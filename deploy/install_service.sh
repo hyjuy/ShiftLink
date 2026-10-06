@@ -30,6 +30,16 @@ case "${1:-}" in
     # docs/guides/sft-judge-model.md. 바꾸려면 JUDGE_MODEL=…·ANSWER_MODE=model 로 실행한다.
     EXTRA="Environment=SHIFTLINK_ANSWER_MODE=${ANSWER_MODE:-extract}
 Environment=SHIFTLINK_JUDGE_MODEL=${JUDGE_MODEL:-exaone-sft-judge}"
+    # hybrid(SFT 답변 모델 + 가드)는 답변 모델도 올린다: ANSWER_MODE=hybrid (답변 모델 기본 exaone-sft-answer, QUERY_MODEL=…로 변경)
+    if [ "${ANSWER_MODE:-extract}" = "hybrid" ]; then
+      EXTRA="$EXTRA
+Environment=SHIFTLINK_QUERY_MODEL=${QUERY_MODEL:-exaone-sft-answer}"
+    fi
+    # 판정 프롬프트는 400토큰 안팎이라 판정기만 문맥을 줄여 메모리를 아낄 수 있다: JUDGE_NUM_CTX=2048 (답변 모델은 4096 유지)
+    if [ -n "${JUDGE_NUM_CTX:-}" ]; then
+      EXTRA="$EXTRA
+Environment=SHIFTLINK_JUDGE_NUM_CTX=$JUDGE_NUM_CTX"
+    fi
     EXEC="\"$PY\" -m shiftlink.mes --host 0.0.0.0 --port 8000 --db \"$DB\""
     ;;
   vision)

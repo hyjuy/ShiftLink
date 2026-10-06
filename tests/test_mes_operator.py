@@ -105,7 +105,7 @@ assert.equal(m.faults.length,0); assert.equal(m.held.length,3);
 assert.match(incidentView(m),/보류/);
 const broken = JSON.parse(JSON.stringify(examples.gearbox_overheat));
 broken.measurements = broken.measurements.filter(m=>m.signal!=='gr_brg_temp');
-assert.match(evidenceView(buildOperatorModel(broken,config,id('GR-01'))),/관측 없음/);
+assert.match(evidenceView(buildOperatorModel(broken,config,id('GR-01'))),/측정값 없음/);
 const unknown = buildOperatorModel(examples.gearbox_overheat,null,id('GR-01'));
 assert.equal(unknown.links.length,0); assert.match(flowView(unknown,'learn','related'),/구성 미보존/);
 // A normal-band crossing is evidence to check, not a new authoritative fault.

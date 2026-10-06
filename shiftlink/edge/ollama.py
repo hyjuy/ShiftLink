@@ -22,6 +22,7 @@ import urllib.request
 from typing import Any
 
 from shiftlink.agent.canary import CANARY_PREFIXES, has_canary
+from shiftlink.agent.response import answer_is_card_ids_only
 
 DEFAULT_MODEL = "qwen2.5:3b-instruct-q4_K_M"  # models.lock plan-B
 DEFAULT_HOST = "http://localhost:11434"
@@ -120,10 +121,11 @@ JUDGE_MIN_SCORE = 2
 
 def retry_prompt(candidate_ids: list[str]) -> str:
     """재시도 안내. 예시 ID 대신 이번 호출의 실제 후보 ID를 보여준다."""
-    example = json.dumps({"answer": "...", "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False)
+    example = json.dumps({"answer": "카드 내용을 근거로 질문에 답하는 한국어 요약 문장", "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False)
     return (
         "\n\n[재시도] 직전 출력이 검증에 실패했다. "
-        f"{example} 형태의 JSON 객체 하나만 출력하고, "
+        "answer에는 카드 ID 대신 질문에 답하는 한국어 설명을 써라. "
+        f"{example} 형태의 JSON 객체 하나만 출력하고(예시 문구는 복사하지 않는다), "
         f"cited_card_ids에는 답변 후보 ID({', '.join(candidate_ids)}) 중에서만 넣어라."
     )
 
@@ -261,6 +263,14 @@ def build_messages(
         # 제목만 준다. 본문을 주면 모델이 질문 대신 안전 카드를 요약했다(9/29 exaone 측정).
         titles = "\n".join(f"{card.get('card_id')}: {card.get('title', '')}" for card in references)
         parts.append(f"안전 참고 카드(시스템이 따로 보여준다. 인용하지 않는다):\n{titles}")
+    example = json.dumps(
+        {"answer": "카드 내용을 근거로 질문에 답하는 한국어 요약 문장",
+         "cited_card_ids": candidate_ids[:1]}, ensure_ascii=False,
+    )
+    parts.append(
+        "출력 형식(예시 문구는 복사하지 않는다):\n" + example
+        + "\nanswer에는 질문에 답하는 설명을 쓰고, 카드 ID는 cited_card_ids에만 넣는다."
+    )
     user = "\n\n".join(parts)
     if retry:
         user += retry_prompt(candidate_ids)
@@ -397,6 +407,8 @@ def _parse_output(body: dict[str, Any]) -> dict[str, Any]:
     # 공백뿐인 answer도 형식 오류다 (계약 §5, A의 validate_model_output과 같은 기준).
     if not isinstance(answer, str) or not answer.strip():
         raise ValueError(f"answer가 비어 있지 않은 문자열이 아님: {parsed!r}")
+    if answer_is_card_ids_only(answer):
+        raise ValueError("answer 본문에는 카드 ID만 쓸 수 없습니다.")
     if not isinstance(cited, list) or not all(isinstance(item, str) for item in cited):
         raise ValueError(f"cited_card_ids가 문자열 배열이 아님: {parsed!r}")
     # Ollama 문법은 uniqueItems를 강제하지 못한다. 중복만으로 재시도하지 않게 순서를 지켜 한 번씩 남긴다

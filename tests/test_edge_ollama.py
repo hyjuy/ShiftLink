@@ -422,3 +422,17 @@ def test_judge_posts_score_schema_and_returns_int(monkeypatch):
     assert seen["messages"][0]["content"] == JUDGE_PROMPT
     assert seen["format"]["properties"]["score"]["enum"] == [0, 1, 2, 3]
     assert len(seen["messages"][1]["content"]) < 700  # know_how is trimmed
+
+
+def test_judge_model_can_differ_from_answer_model(monkeypatch):
+    from shiftlink.edge.ollama import OllamaModel
+    seen = []
+    monkeypatch.setattr(OllamaModel, "_post", lambda self, path, payload: seen.append(payload["model"]) or {"message": {"content": '{"score": 3}'}})
+    card = {"title": "t", "symptom": None, "know_how": "x"}
+    monkeypatch.delenv("SHIFTLINK_JUDGE_MODEL", raising=False)
+    OllamaModel(model="answer-m").judge("q", card)
+    OllamaModel(model="answer-m", judge_model="arg-judge").judge("q", card)
+    monkeypatch.setenv("SHIFTLINK_JUDGE_MODEL", "env-judge")
+    OllamaModel(model="answer-m").judge("q", card)
+    OllamaModel(model="answer-m", judge_model="arg-judge").judge("q", card)
+    assert seen == ["answer-m", "arg-judge", "env-judge", "arg-judge"]

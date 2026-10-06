@@ -1,5 +1,9 @@
 # ShiftLink 3D 공장 · MES · PDA 시연
 
+공장 외벽·지붕·철골과 천장 LED 12개, 외부 LED 4개를 설치했다.
+시작 화면에서 **View factory interior**로 내부를 확인하고 **View factory exterior**로 외관 보기로 돌아간다.
+배치·보행 공간·외관·조명 검증은 `docs/testing/unity-factory-layout-20261006.tdd.md`에 기록했다.
+
 프로젝트 경로: `D:/obsd/Projects/ShiftLink/unity/ShiftLinkFactory`.
 Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 장비 프리팹과 FactoryRig로 공장 장비와 이송 구간을 구성한다.
 

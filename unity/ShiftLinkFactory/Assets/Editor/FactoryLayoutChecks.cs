@@ -33,6 +33,31 @@ public static class FactoryLayoutChecks
             check(building!=null && building.GetComponentsInChildren<Light>(true).Count(l=>l.type==LightType.Spot && l.intensity>0)>=16,"interior and exterior working lights installed");
             check(building!=null && building.Find("Personnel entry route")!=null,"personnel entrance connects walkway");
             check(typeof(FactoryDemo).GetMethod("SetExteriorView")!=null,"exterior and interior view toggle available");
+            if(building!=null) {
+                demo.SetExteriorView(true);
+                check(building.Find("Exterior envelope").gameObject.activeSelf,"exterior walls and roof visible");
+                check(nodes.GetComponentsInChildren<TextMesh>().Length==0,"equipment labels hidden behind exterior envelope");
+                check(building.GetComponentsInChildren<Transform>(true).Count(t=>t.name=="Gable end")==2,"gable ends close roof sides");
+                FactoryChecks.Capture(Path.Combine(dir,"factory-exterior.png"));
+                var sun=UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None).First(l=>l.type==LightType.Directional); var sunIntensity=sun.intensity; var ambient=RenderSettings.ambientLight;
+                sun.intensity=0; RenderSettings.ambientLight=new Color(.035f,.045f,.06f);
+                FactoryChecks.Capture(Path.Combine(dir,"factory-exterior-lighting.png"));
+                sun.intensity=sunIntensity; RenderSettings.ambientLight=ambient;
+                demo.SetExteriorView(false);
+                check(!building.Find("Exterior envelope").gameObject.activeSelf && building.Find("Factory lighting").gameObject.activeSelf,"interior cutaway retains lighting");
+                check(nodes.GetComponentsInChildren<TextMesh>().Length==config.equipment.Length,"interior equipment labels restored");
+                var entry=BoundsOf(building.Find("Personnel entry route"));
+                check(entry.size.x>=1.49f,"personnel entry route minimum 1.5m width");
+                var entranceSpace=new Bounds(new Vector3(-16.8f,1.1f,-17),new Vector3(1.5f,2.2f,.6f));
+                foreach(var renderer in building.Find("Exterior envelope").GetComponentsInChildren<MeshRenderer>(true).Where(r=>r.GetComponent<TextMesh>()==null))
+                    check(!entranceSpace.Intersects(renderer.bounds),"personnel entrance clears "+renderer.name);
+                foreach(var area in new[]{"Pedestrian aisle","Maintenance aisle","Aisle connection","Stair approach","Stair entrance"}) {
+                    var footprint=BoundsOf(nodes.Find(area));
+                    var space=new Bounds(new Vector3(footprint.center.x,1.1f,footprint.center.z),new Vector3(footprint.size.x,2.2f,footprint.size.z));
+                    foreach(var renderer in building.GetComponentsInChildren<MeshRenderer>(true).Where(r=>r.GetComponent<TextMesh>()==null && r.bounds.max.y>.05f && r.bounds.min.y<2.2f))
+                        check(!space.Intersects(renderer.bounds),area+" clears building "+renderer.name);
+                }
+            }
             check(demo.EquipmentCount==config.equipment.Length,"auxiliary rollers do not create MES equipment");
             var beds=nodes.Find("Auxiliary roller beds");
             check(beds!=null && beds.GetComponentsInChildren<Transform>().Count(t=>t.name.StartsWith("Auxiliary roller_") && t.childCount>0)>=30,"additional inlet outlet and transfer rollers");

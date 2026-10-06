@@ -79,6 +79,9 @@ public class FactoryDemo : MonoBehaviour
     readonly Dictionary<string, EquipmentReading> readings = new Dictionary<string, EquipmentReading>();
     string selectedId, lastScanId, status = "Connecting to MES...";
     bool online, controlBusy, environmentCreated;
+    bool exteriorView=true;
+    Transform exteriorEnvelope;
+    readonly List<Mesh> buildingMeshes=new List<Mesh>();
     float lastSuccess, yaw = -20, pitch = 48, distance = 44;
     Vector3 target;
     Camera viewCamera;
@@ -125,14 +128,102 @@ public class FactoryDemo : MonoBehaviour
             light.type = LightType.Directional; light.intensity = 1.3f;
             light.transform.rotation = Quaternion.Euler(50, -30, 0);
         }
-        RenderSettings.ambientLight = new Color(.52f, .58f, .68f);
+        RenderSettings.ambientMode=UnityEngine.Rendering.AmbientMode.Flat;
+        RenderSettings.ambientLight = new Color(.32f, .36f, .42f);
+        QualitySettings.pixelLightCount=8;
+        Shape(PrimitiveType.Cube, "Factory apron", transform, new Vector3(0,-.42f,0),
+            new Vector3(58,.3f,46), new Color(.24f,.27f,.3f));
         Shape(PrimitiveType.Cube, "Factory floor", transform, new Vector3(0,-.22f,0),
-            new Vector3(90,.35f,32), new Color(.09f,.13f,.18f));
-        for (int x = -40; x <= 40; x += 4)
+            new Vector3(44,.35f,34), new Color(.24f,.29f,.34f));
+        for (int x = -20; x <= 20; x += 4)
             Shape(PrimitiveType.Cube, "Floor grid", transform, new Vector3(x,-.02f,0),
-                new Vector3(.025f,.01f,30), new Color(.17f,.22f,.28f));
+                new Vector3(.025f,.01f,33), new Color(.32f,.36f,.4f));
+        InstallBuilding();
         UpdateCamera();
         FactoryMonitor.RefreshFor(this,null,null,false);
+        SetExteriorView(exteriorView);
+    }
+    void InstallBuilding()
+    {
+        var building=new GameObject("Factory building").transform; building.SetParent(transform,false);
+        exteriorEnvelope=new GameObject("Exterior envelope").transform; exteriorEnvelope.SetParent(building,false);
+        Color wall=new Color(.64f,.69f,.72f), steel=new Color(.24f,.32f,.4f), roof=new Color(.15f,.23f,.3f);
+        // 44 x 34m synthetic hall: eaves 8m, ridge 10m. Openings remain usable in exterior view.
+        foreach(var panel in new[]{new Vector3(-19.95f,4,-17),new Vector3(-9.35f,4,-17),new Vector3(12.5f,4,-17)}) {
+            float width=panel.x<-18 ? 4.1f : panel.x<0 ? 12.7f : 19;
+            Shape(PrimitiveType.Cube,"Front wall",exteriorEnvelope,panel,new Vector3(width,8,.25f),wall);
+        }
+        Shape(PrimitiveType.Cube,"Loading door lintel",exteriorEnvelope,new Vector3(0,6.5f,-17),new Vector3(6,3,.25f),wall);
+        Shape(PrimitiveType.Cube,"Personnel door lintel",exteriorEnvelope,new Vector3(-16.8f,5.2f,-17),new Vector3(2.2f,5.6f,.25f),wall);
+        Shape(PrimitiveType.Cube,"Rear wall",exteriorEnvelope,new Vector3(0,4,17),new Vector3(44,8,.25f),wall);
+        foreach(float x in new[]{-22f,22f}) {
+            foreach(float z in new[]{-10f,10f}) Shape(PrimitiveType.Cube,"Side wall",exteriorEnvelope,new Vector3(x,4,z),new Vector3(.25f,8,14),wall);
+            Shape(PrimitiveType.Cube,"Side loading door lintel",exteriorEnvelope,new Vector3(x,6.5f,0),new Vector3(.25f,3,6),wall);
+        }
+        foreach(float x in new[]{-21.6f,21.6f}) foreach(float z in new[]{-15.5f,-7.5f,-3.3f,3.3f,8.5f,15.5f})
+            Shape(PrimitiveType.Cube,"Steel column",building,new Vector3(x,4,z),new Vector3(.3f,8,.3f),steel);
+        float slope=Mathf.Atan2(2,17)*Mathf.Rad2Deg;
+        foreach(float z in new[]{-8.5f,8.5f}) {
+            var skin=Shape(PrimitiveType.Cube,"Pitched roof",exteriorEnvelope,new Vector3(0,9,z),new Vector3(44.8f,.2f,17.6f),roof);
+            skin.transform.localRotation=Quaternion.Euler(z<0 ? -slope : slope,0,0);
+            for(float x=-21;x<=21;x+=7) {
+                var beam=Shape(PrimitiveType.Cube,"Roof rafter",exteriorEnvelope,new Vector3(x,8.75f,z),new Vector3(.18f,.25f,17.2f),steel);
+                beam.transform.localRotation=skin.transform.localRotation;
+            }
+            for(float x=-22;x<=22;x+=2) {
+                var rib=Shape(PrimitiveType.Cube,"Roof seam",exteriorEnvelope,new Vector3(x,9.13f,z),new Vector3(.055f,.08f,17.6f),steel);
+                rib.transform.localRotation=skin.transform.localRotation;
+            }
+        }
+        foreach(float z in new[]{-16.8f,0,16.8f}) Shape(PrimitiveType.Cube,"Roof purlin",exteriorEnvelope,new Vector3(0,z==0 ? 9.6f : 7.7f,z),new Vector3(43.6f,.18f,.18f),steel);
+        foreach(float x in new[]{-22f,22f}) {
+            var gable=new GameObject("Gable end"); gable.transform.SetParent(exteriorEnvelope,false); gable.transform.localPosition=Vector3.right*x;
+            var mesh=new Mesh(); mesh.vertices=new[]{new Vector3(0,8,-17),new Vector3(0,8,17),new Vector3(0,10,0)};
+            mesh.triangles=x<0 ? new[]{0,1,2} : new[]{0,2,1}; mesh.RecalculateNormals(); mesh.RecalculateBounds(); buildingMeshes.Add(mesh);
+            gable.AddComponent<MeshFilter>().sharedMesh=mesh; gable.AddComponent<MeshRenderer>().sharedMaterial=MaterialFor(wall);
+        }
+        foreach(float z in new[]{-17.4f,17.4f}) {
+            Shape(PrimitiveType.Cube,"Roof gutter",exteriorEnvelope,new Vector3(0,7.9f,z),new Vector3(44.6f,.18f,.2f),steel);
+            foreach(float x in new[]{-22.3f,22.3f}) Shape(PrimitiveType.Cylinder,"Rainwater downpipe",exteriorEnvelope,new Vector3(x,3.95f,z),new Vector3(.13f,3.95f,.13f),steel);
+        }
+        foreach(float x in new[]{-18f,-12f,-6f,6f,12f,18f}) {
+            Shape(PrimitiveType.Cube,"Window frame",exteriorEnvelope,new Vector3(x,5.9f,-17.16f),new Vector3(3.2f,1.6f,.12f),steel);
+            Shape(PrimitiveType.Cube,"Window glazing",exteriorEnvelope,new Vector3(x,5.9f,-17.24f),new Vector3(2.95f,1.35f,.04f),new Color(.18f,.37f,.48f));
+        }
+        foreach(float x in new[]{-3.1f,3.1f}) Shape(PrimitiveType.Cube,"Loading door jamb",exteriorEnvelope,new Vector3(x,2.5f,-17.2f),new Vector3(.15f,5,.18f),steel);
+        Shape(PrimitiveType.Cube,"Entry canopy",exteriorEnvelope,new Vector3(-16.8f,2.7f,-17.7f),new Vector3(2.6f,.15f,1.6f),steel);
+        Shape(PrimitiveType.Cube,"Personnel entry route",building,new Vector3(-16.8f,-.035f,-13.25f),new Vector3(1.5f,.012f,7.5f),new Color(.12f,.4f,.3f));
+        var sign=new GameObject("Factory facade sign").AddComponent<TextMesh>(); sign.transform.SetParent(exteriorEnvelope,false);
+        sign.transform.localPosition=new Vector3(0,7.1f,-17.3f); sign.text="SHIFTLINK FACTORY"; sign.anchor=TextAnchor.MiddleCenter; sign.fontSize=64; sign.characterSize=.2f; sign.color=Color.white;
+        var fixtures=new GameObject("Factory lighting").transform; fixtures.SetParent(building,false);
+        foreach(float x in new[]{-15f,-5f,5f,15f}) foreach(float z in new[]{-9f,0,9f})
+            InstallLight(fixtures,new Vector3(x,7.1f,z),false);
+        foreach(float x in new[]{-18f,-8f,8f,18f}) InstallLight(fixtures,new Vector3(x,5.4f,-17.6f),true);
+    }
+    void InstallLight(Transform parent,Vector3 position,bool outside)
+    {
+        if(!outside) {
+            float ceiling=10-2*Mathf.Abs(position.z)/17, length=ceiling-position.y-.2f;
+            Shape(PrimitiveType.Cylinder,"Light suspension",parent,position+Vector3.up*(.2f+length*.5f),new Vector3(.025f,length*.5f,.025f),FactoryRules.Grey);
+        }
+        Shape(PrimitiveType.Cube,"LED fixture housing",parent,position+Vector3.up*.15f,new Vector3(1.4f,.15f,.45f),new Color(.2f,.24f,.28f));
+        var diffuser=Shape(PrimitiveType.Cube,"LED diffuser",parent,position+Vector3.up*.055f,new Vector3(1.25f,.04f,.32f),new Color(.9f,.95f,1));
+        var emission=MaterialFor(new Color(.9f,.95f,1)); emission.EnableKeyword("_EMISSION"); emission.SetColor("_EmissionColor",new Color(.8f,.9f,1)*1.5f);
+        diffuser.GetComponent<Renderer>().sharedMaterial=emission;
+        var light=new GameObject(outside ? "Exterior LED light" : "Interior LED light").AddComponent<Light>(); light.transform.SetParent(parent,false); light.transform.localPosition=position;
+        light.type=LightType.Spot; light.color=new Color(.88f,.94f,1); light.intensity=outside ? 1.5f : 2; light.range=outside ? 12 : 16; light.spotAngle=outside ? 100 : 110;
+        light.transform.localRotation=Quaternion.Euler(outside ? 55 : 90,180,0);
+        light.renderMode=LightRenderMode.ForcePixel; light.shadows=LightShadows.None;
+    }
+    public void SetExteriorView(bool exterior)
+    {
+        exteriorView=exterior;
+        if(exteriorEnvelope!=null) exteriorEnvelope.gameObject.SetActive(exterior);
+        var display=transform.Find("Factory status display"); if(display!=null) display.gameObject.SetActive(!exterior);
+        if(equipmentRoot!=null) foreach(var label in equipmentRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(!exterior);
+        target=exterior ? new Vector3(0,3,0) : new Vector3(0,2,3);
+        distance=exterior ? 62 : 50; pitch=exterior ? 32 : 48; yaw=-20;
+        UpdateCamera();
     }
     public void Build(FactoryConfig next)
     {
@@ -165,7 +256,7 @@ public class FactoryDemo : MonoBehaviour
         rig.Build(next,equipment);
         target = new Vector3(0,2,3);
         distance = Mathf.Max(36, next.route.Length*6);
-        selectedId = null; lastScanId = null; UpdateCamera();
+        selectedId = null; lastScanId = null; SetExteriorView(exteriorView);
         FactoryMonitor.RefreshFor(this,config,null,false);
     }
     void Model(EquipmentSpec e, Transform root)
@@ -300,7 +391,7 @@ public class FactoryDemo : MonoBehaviour
         distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),200).Contains(guiPointer) ||
+        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),230).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
             RaycastHit hit;
@@ -335,7 +426,7 @@ public class FactoryDemo : MonoBehaviour
     void OnGUI()
     {
         GUI.backgroundColor=new Color(.07f,.12f,.19f,.96f);
-        GUILayout.BeginArea(new Rect(18,18,Mathf.Min(700,Screen.width-36),200),GUI.skin.box);
+        GUILayout.BeginArea(new Rect(18,18,Mathf.Min(700,Screen.width-36),230),GUI.skin.box);
         GUILayout.Label("SHIFTLINK / FACTORY + MES + PDA");
         GUI.color=online ? FactoryRules.Green : FactoryRules.Amber; GUILayout.Label(status); GUI.color=Color.white;
         GUILayout.BeginHorizontal(); GUILayout.Label("MES",GUILayout.Width(40)); GUILayout.Label(mesUrl); GUILayout.EndHorizontal();
@@ -346,6 +437,7 @@ public class FactoryDemo : MonoBehaviour
         if(GUILayout.Button("Resume")) StartCoroutine(Control("resume"));
         GUI.enabled=true; GUILayout.EndHorizontal();
         GUILayout.Label("Right drag: orbit | Wheel: zoom | Click equipment: select");
+        if(GUILayout.Button(exteriorView ? "View factory interior" : "View factory exterior")) SetExteriorView(!exteriorView);
         if (GUILayout.Button("Open MES dashboard / fault scenarios")) Application.OpenURL(mesUrl.TrimEnd('/')+"/");
         GUILayout.EndArea();
         if(!string.IsNullOrEmpty(selectedId) && equipment.ContainsKey(selectedId)) {
@@ -374,5 +466,5 @@ public class FactoryDemo : MonoBehaviour
         shape.GetComponent<Renderer>().sharedMaterial=MaterialFor(color); return shape;
     }
     static void Remove(UnityEngine.Object obj) { if(Application.isPlaying) Destroy(obj); else DestroyImmediate(obj); }
-    void OnDestroy() { foreach(var mat in materials.Values) Remove(mat); }
+    void OnDestroy() { foreach(var mat in materials.Values) Remove(mat); foreach(var mesh in buildingMeshes) Remove(mesh); }
 }

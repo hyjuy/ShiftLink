@@ -59,3 +59,21 @@ Unity 로그·결과·렌더는 Git 제외 폴더 `unity/ShiftLinkFactory/Checks
 - Unity C# 커버리지 비율, 인체·보행 시뮬레이션, NavMesh와 실제 현장 기준 적합성은 측정하지 않았다. 이 검증은 가상 공장의 형상·여유 공간 검사다.
 
 ![보행 공간과 보조 롤러를 추가한 공장](assets/unity-walkway-rollers-20261006.png)
+
+## 공장 외관 및 조명 설치
+
+공장 외벽·박공지붕·끝벽·철골 기둥·지붕 이음매·빗물받이·다운파이프·창문·간판·외부 포장 구역을 구성했다. 시연용 건물 치수는 44×34m, 처마 높이 8m, 용마루 높이 10m이다. 전면 하역 출입구와 양측 하역 출입구는 폭 6m, 높이 5m로 열려 있다. 보행자 출입구는 폭 2.2m, 높이 2.4m이며 기존 보행로에 폭 1.5m 진입로를 연결했다.
+
+천장 LED 12개와 전면 외부 LED 4개를 실제 Unity Spot Light로 설치했다. 천장등에는 하우징·발광 디퓨저·매달림 지지대를 추가했다. 최대 픽셀 조명 수를 8로 설정했다. 시연 성능을 위해 개별 LED의 실시간 그림자는 사용하지 않는다. 밝기는 시각화 값이며 조도(lux) 계산이나 실제 등기구 설계 검증은 수행하지 않았다.
+
+시작 화면은 외관 보기다. `View factory interior` 버튼으로 외벽·지붕·지붕 구조를 숨겨 내부 설비·통로·조명을 확인하며, `View factory exterior`로 복귀한다. 외관 보기에서는 설비 이름과 내부 현황판을 숨기고 내부 보기에서 복원한다. MES의 등록 설비·상태·이송 제어는 유지했다.
+
+- RED 체크포인트: `af981da`. 외관·조명·보행자 진입로·보기 전환 부재를 재현했다.
+- `FactoryLayoutChecks.Run`: **518개 조건 PASS, FAIL 0**. 외관/내부 전환, 등 16개, 끝벽, 설비 이름 복원, 출입구 및 기존 보행 통로와 건물 형상 간 간섭을 검사했다.
+- 실제 Unity 렌더로 외관·내부·태양광을 끈 LED 조명 화면을 확인했다. 검사 장면의 태양광·환경광은 촬영 후 복원한다.
+- 로그: `Checks/building-red.log`, `Checks/building-green.log`. Unity C# 커버리지 비율과 건축 구조·실제 조도·피난 기준 적합성은 측정하지 않았다.
+- `scripts/check_unity_live.py`: Unity exit 0, MES sequence 12, PDA 선택 EQ-0004. 외관·조명을 설치한 런타임에서도 임시 MES/PDA HTTP 서비스의 상태·소재·인식 결과를 정상 수신했다.
+
+![공장 외관](assets/unity-factory-exterior-20261006.png)
+![공장 내부와 천장 조명](assets/unity-factory-interior-lighting-20261006.png)
+![태양광 없이 외부 LED를 켠 화면](assets/unity-factory-exterior-lighting-20261006.png)

@@ -2,6 +2,8 @@
 # 부팅 시 자동 시작 systemd 서비스 등록 (작업계획 E1·D2). 저장소 안에서, 서비스를 돌릴 계정으로 실행한다.
 #
 #   Jetson (E1):       deploy/install_service.sh mes
+#                      DB=/경로/mock-mes.sqlite3 deploy/install_service.sh mes
+# 업로더는 별도 서비스: deploy/install_uploader.sh로 먼저 등록한다. MES와 같은 DB= 경로를 지정한다.
 #   라즈베리파이 (D2): deploy/install_service.sh vision http://<jetson>:8000 [모델 폴더, 기본 data/vision/model]
 #
 # 계정·저장소 경로·python(.venv/bin/python, 없으면 python3)은 실행한 장비에서 찾는다. PY=... 로 바꿀 수 있다.
@@ -14,13 +16,16 @@ PY="${PY:-$REPO/.venv/bin/python}"
 [ -x "$PY" ] || PY="$(command -v python3)"
 RUN_AS="${SUDO_USER:-$(id -un)}"
 EXTRA=""
+WANTS="network-online.target"
 
 case "${1:-}" in
   mes)
     NAME=shiftlink-mes
     DESC="ShiftLink 모의 MES 서버 (Jetson, 파이·PDA 화면이 접속)"
     AFTER="network-online.target ollama.service"
-    EXEC="$PY -m shiftlink.mes --host 0.0.0.0 --port 8000"
+    DB="${DB:-$REPO/mes_data/mock-mes.sqlite3}"
+    WANTS="$WANTS shiftlink-uploader.service"
+    EXEC="\"$PY\" -m shiftlink.mes --host 0.0.0.0 --port 8000 --db \"$DB\""
     ;;
   vision)
     SERVER="${2:?Jetson 주소가 필요합니다: $0 vision http://<jetson>:8000}"
@@ -43,7 +48,7 @@ esac
 UNIT="[Unit]
 Description=$DESC
 After=$AFTER
-Wants=network-online.target
+Wants=$WANTS
 
 [Service]
 User=$RUN_AS

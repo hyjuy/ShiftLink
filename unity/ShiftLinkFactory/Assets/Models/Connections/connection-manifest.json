@@ -1,0 +1,664 @@
+{
+  "blender_version": "4.5.14 LTS",
+  "units": "metres",
+  "assets": [
+    {
+      "model": "Connection_DriveShaft",
+      "fbx": "Connection_DriveShaft.fbx",
+      "triangles": 92,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "EndAnchor",
+          "local_position": [
+            0.5,
+            0.0,
+            0.20000000298023224
+          ]
+        },
+        {
+          "name": "StartAnchor",
+          "local_position": [
+            -0.5,
+            0.0,
+            0.20000000298023224
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_FlexibleCoupling",
+      "fbx": "Connection_FlexibleCoupling.fbx",
+      "triangles": 276,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "EndAnchor.001",
+          "local_position": [
+            0.1599999964237213,
+            0.0,
+            0.15000000596046448
+          ]
+        },
+        {
+          "name": "StartAnchor.001",
+          "local_position": [
+            -0.1599999964237213,
+            0.0,
+            0.15000000596046448
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_BearingPedestal",
+      "fbx": "Connection_BearingPedestal.fbx",
+      "triangles": 308,
+      "materials": 3,
+      "anchors": [
+        {
+          "name": "EndAnchor.002",
+          "local_position": [
+            0.07999999821186066,
+            0.0,
+            0.23000000417232513
+          ]
+        },
+        {
+          "name": "StartAnchor.002",
+          "local_position": [
+            -0.07999999821186066,
+            0.0,
+            0.23000000417232513
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_ShaftGuard",
+      "fbx": "Connection_ShaftGuard.fbx",
+      "triangles": 324,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "EndAnchor.003",
+          "local_position": [
+            0.32499998807907104,
+            0.0,
+            0.17000000178813934
+          ]
+        },
+        {
+          "name": "StartAnchor.003",
+          "local_position": [
+            -0.32499998807907104,
+            0.0,
+            0.17000000178813934
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_HydraulicHose",
+      "fbx": "Connection_HydraulicHose.fbx",
+      "triangles": 152,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "EndAnchor.004",
+          "local_position": [
+            0.550000011920929,
+            0.0,
+            0.11999999731779099
+          ]
+        },
+        {
+          "name": "StartAnchor.004",
+          "local_position": [
+            -0.550000011920929,
+            0.0,
+            0.11999999731779099
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_HydraulicManifold",
+      "fbx": "Connection_HydraulicManifold.fbx",
+      "triangles": 284,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "BranchAnchor_1",
+          "local_position": [
+            -0.23999999463558197,
+            -0.23999999463558197,
+            0.12999999523162842
+          ]
+        },
+        {
+          "name": "BranchAnchor_2",
+          "local_position": [
+            -0.07999999821186066,
+            -0.23999999463558197,
+            0.12999999523162842
+          ]
+        },
+        {
+          "name": "BranchAnchor_3",
+          "local_position": [
+            0.07999999821186066,
+            -0.23999999463558197,
+            0.12999999523162842
+          ]
+        },
+        {
+          "name": "BranchAnchor_4",
+          "local_position": [
+            0.23999999463558197,
+            -0.23999999463558197,
+            0.12999999523162842
+          ]
+        },
+        {
+          "name": "EndAnchor.005",
+          "local_position": [
+            0.4000000059604645,
+            0.0,
+            0.12999999523162842
+          ]
+        },
+        {
+          "name": "StartAnchor.005",
+          "local_position": [
+            -0.4000000059604645,
+            0.0,
+            0.12999999523162842
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_AirPipeStraight",
+      "fbx": "Connection_AirPipeStraight.fbx",
+      "triangles": 92,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "EndAnchor.006",
+          "local_position": [
+            0.5,
+            0.0,
+            0.07999999821186066
+          ]
+        },
+        {
+          "name": "StartAnchor.006",
+          "local_position": [
+            -0.5,
+            0.0,
+            0.07999999821186066
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_AirPipeElbow",
+      "fbx": "Connection_AirPipeElbow.fbx",
+      "triangles": 160,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "EndAnchor.007",
+          "local_position": [
+            0.0,
+            0.30000001192092896,
+            0.05999999865889549
+          ]
+        },
+        {
+          "name": "StartAnchor.007",
+          "local_position": [
+            -0.30000001192092896,
+            0.0,
+            0.05999999865889549
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_AirPipeTee",
+      "fbx": "Connection_AirPipeTee.fbx",
+      "triangles": 32,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "BranchAnchor",
+          "local_position": [
+            0.0,
+            0.30000001192092896,
+            0.05999999865889549
+          ]
+        },
+        {
+          "name": "EndAnchor.008",
+          "local_position": [
+            0.30000001192092896,
+            0.0,
+            0.05999999865889549
+          ]
+        },
+        {
+          "name": "StartAnchor.008",
+          "local_position": [
+            -0.30000001192092896,
+            0.0,
+            0.05999999865889549
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_CableTray",
+      "fbx": "Connection_CableTray.fbx",
+      "triangles": 756,
+      "materials": 1,
+      "anchors": [
+        {
+          "name": "EndAnchor.009",
+          "local_position": [
+            0.5,
+            0.0,
+            0.07999999821186066
+          ]
+        },
+        {
+          "name": "StartAnchor.009",
+          "local_position": [
+            -0.5,
+            0.0,
+            0.07999999821186066
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_PowerCable",
+      "fbx": "Connection_PowerCable.fbx",
+      "triangles": 152,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "EndAnchor.010",
+          "local_position": [
+            0.550000011920929,
+            0.0,
+            0.11999999731779099
+          ]
+        },
+        {
+          "name": "StartAnchor.010",
+          "local_position": [
+            -0.550000011920929,
+            0.0,
+            0.11999999731779099
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_TransferBridge",
+      "fbx": "Connection_TransferBridge.fbx",
+      "triangles": 492,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "EndAnchor.011",
+          "local_position": [
+            0.30000001192092896,
+            0.0,
+            0.3799999952316284
+          ]
+        },
+        {
+          "name": "StartAnchor.011",
+          "local_position": [
+            -0.30000001192092896,
+            0.0,
+            0.3799999952316284
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Connection_ScrapChute",
+      "fbx": "Connection_ScrapChute.fbx",
+      "triangles": 324,
+      "materials": 2,
+      "anchors": [
+        {
+          "name": "EndAnchor.012",
+          "local_position": [
+            0.5,
+            0.0,
+            0.20000000298023224
+          ]
+        },
+        {
+          "name": "StartAnchor.012",
+          "local_position": [
+            -0.5,
+            0.0,
+            0.20000000298023224
+          ]
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "relation_id": "REL-0001",
+      "type": "material_flow",
+      "from": "RT-01",
+      "to": "RT-02",
+      "asset": "Connection_TransferBridge",
+      "start_world_metres": [
+        -5.700000286102295,
+        0.0,
+        1.2000000476837158
+      ],
+      "end_world_metres": [
+        -5.100000381469727,
+        0.0,
+        1.2000000476837158
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0002",
+      "type": "material_flow",
+      "from": "RT-02",
+      "to": "RT-03",
+      "asset": "Connection_TransferBridge",
+      "start_world_metres": [
+        -0.2999999523162842,
+        0.0,
+        1.2000000476837158
+      ],
+      "end_world_metres": [
+        0.2999999523162842,
+        0.0,
+        1.2000000476837158
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0003",
+      "type": "material_flow",
+      "from": "RT-03",
+      "to": "CV-01",
+      "asset": "Connection_TransferBridge",
+      "start_world_metres": [
+        5.100000381469727,
+        0.0,
+        1.2000000476837158
+      ],
+      "end_world_metres": [
+        5.700000286102295,
+        0.0,
+        1.2000000476837158
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0004",
+      "type": "material_flow",
+      "from": "RT-03",
+      "to": "CV-02",
+      "asset": "Connection_ScrapChute",
+      "start_world_metres": [
+        5.100000381469727,
+        0.0,
+        1.2000000476837158
+      ],
+      "end_world_metres": [
+        5.400000095367432,
+        -1.5999999046325684,
+        1.2000000476837158
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0005",
+      "type": "drive",
+      "from": "GR-01",
+      "to": "RT-01",
+      "asset": "Connection_DriveShaft + FlexibleCoupling; elbow drive schematic only",
+      "start_world_metres": [
+        -4.059999942779541,
+        3.299999952316284,
+        0.6700000166893005
+      ],
+      "end_world_metres": [
+        -10.280000686645508,
+        1.2400000095367432,
+        1.0800000429153442
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0006",
+      "type": "drive",
+      "from": "GR-01",
+      "to": "RT-02",
+      "asset": "Connection_DriveShaft + FlexibleCoupling; elbow drive schematic only",
+      "start_world_metres": [
+        -4.059999942779541,
+        3.299999952316284,
+        0.6700000166893005
+      ],
+      "end_world_metres": [
+        -4.880000114440918,
+        1.2400000095367432,
+        1.0800000429153442
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0007",
+      "type": "drive",
+      "from": "GR-02",
+      "to": "RT-03",
+      "asset": "Connection_DriveShaft + FlexibleCoupling; elbow drive schematic only",
+      "start_world_metres": [
+        6.740000247955322,
+        3.299999952316284,
+        0.6700000166893005
+      ],
+      "end_world_metres": [
+        0.5199999809265137,
+        1.2400000095367432,
+        1.0800000429153442
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0008",
+      "type": "drive",
+      "from": "GR-02",
+      "to": "CV-01",
+      "asset": "Connection_DriveShaft + FlexibleCoupling; elbow drive schematic only",
+      "start_world_metres": [
+        6.740000247955322,
+        3.299999952316284,
+        0.6700000166893005
+      ],
+      "end_world_metres": [
+        10.260000228881836,
+        1.0,
+        0.9900000095367432
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0009",
+      "type": "hydraulic_supply",
+      "from": "HPU-01",
+      "to": "RT-01",
+      "asset": "Connection_HydraulicHose; supply and assumed return",
+      "start_world_metres": [
+        -5.0,
+        5.800000190734863,
+        0.6000000238418579
+      ],
+      "end_world_metres": [
+        -5.700000286102295,
+        0.9399999976158142,
+        1.5499999523162842
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0010",
+      "type": "hydraulic_supply",
+      "from": "HPU-01",
+      "to": "RT-02",
+      "asset": "Connection_HydraulicHose; supply and assumed return",
+      "start_world_metres": [
+        -5.0,
+        5.800000190734863,
+        0.6000000238418579
+      ],
+      "end_world_metres": [
+        -0.2999999523162842,
+        0.9399999976158142,
+        1.5499999523162842
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0011",
+      "type": "hydraulic_supply",
+      "from": "HPU-01",
+      "to": "RT-03",
+      "asset": "Connection_HydraulicHose; supply and assumed return",
+      "start_world_metres": [
+        -5.0,
+        5.800000190734863,
+        0.6000000238418579
+      ],
+      "end_world_metres": [
+        5.100000381469727,
+        0.9399999976158142,
+        1.5499999523162842
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0012",
+      "type": "hydraulic_supply",
+      "from": "HPU-01",
+      "to": "CV-01",
+      "asset": "Connection_HydraulicHose; supply and assumed return",
+      "start_world_metres": [
+        -5.0,
+        5.800000190734863,
+        0.6000000238418579
+      ],
+      "end_world_metres": [
+        6.300000190734863,
+        -1.0,
+        0.800000011920929
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0013",
+      "type": "power_supply",
+      "from": "PDP-01",
+      "to": "GR-01",
+      "asset": "Connection_PowerCable + CableTray",
+      "start_world_metres": [
+        -2.0,
+        6.400000095367432,
+        0.15000000596046448
+      ],
+      "end_world_metres": [
+        -6.079999923706055,
+        3.299999952316284,
+        0.9100000262260437
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0014",
+      "type": "power_supply",
+      "from": "PDP-01",
+      "to": "GR-02",
+      "asset": "Connection_PowerCable + CableTray",
+      "start_world_metres": [
+        -2.0,
+        6.400000095367432,
+        0.15000000596046448
+      ],
+      "end_world_metres": [
+        4.720000267028809,
+        3.299999952316284,
+        0.9100000262260437
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0015",
+      "type": "power_supply",
+      "from": "PDP-01",
+      "to": "HPU-01",
+      "asset": "Connection_PowerCable + CableTray",
+      "start_world_metres": [
+        -2.0,
+        6.400000095367432,
+        0.15000000596046448
+      ],
+      "end_world_metres": [
+        -6.050000190734863,
+        6.0,
+        1.4199999570846558
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    },
+    {
+      "relation_id": "REL-0016",
+      "type": "pneumatic_supply",
+      "from": "CAU-01",
+      "to": "CV-01",
+      "asset": "Connection_AirPipeStraight/Elbow/Tee",
+      "start_world_metres": [
+        3.5999999046325684,
+        6.0,
+        1.7999999523162842
+      ],
+      "end_world_metres": [
+        8.800000190734863,
+        1.059999942779541,
+        0.44999998807907104
+      ],
+      "geometry_status": "schematic, synthetic routing"
+    }
+  ],
+  "excluded_physical_links": [
+    "REL-0017",
+    "REL-0018",
+    "REL-0019",
+    "REL-0020"
+  ],
+  "assumptions": [
+    "All connector dimensions, routing and mounting points are visualization proposals",
+    "Drive elbows are schematic; real right-angle gearbox/chain transmission is not designed",
+    "Hydraulic return routing is assumed, not a separate MES relation",
+    "Scrap branch conveys rejected cut material; it does not imply a coil turns through the chute",
+    "No physical routing inferred from interlock, common_mode or co_occurrence",
+    "RT-02/CV-02 instance geometry remains the existing base prototype",
+    "Unity import and operational MES/PDA integration not verified"
+  ],
+  "textures": []
+}

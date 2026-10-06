@@ -1,0 +1,11 @@
+const assert = require('node:assert/strict');
+const { equipmentFromLink } = require('../shiftlink/mes/web/pda.js');
+const equipment = [{equipment_id:'EQ-0004', active:true}, {equipment_id:'EQ-0005', active:true}];
+assert.equal(equipmentFromLink('?equipment_id=EQ-0004', equipment), equipment[0]);
+assert.equal(equipmentFromLink('?equipment_id=EQ-0005&source=unity', equipment), equipment[1]);
+assert.equal(equipmentFromLink('', equipment), null);
+assert.equal(equipmentFromLink('?equipment_id=unknown', equipment), null);
+assert.equal(equipmentFromLink('?equipment_id=EQ-0004&equipment_id=EQ-0005', equipment), null);
+assert.equal(equipmentFromLink('?equipment_id=%3Cscript%3E', equipment), null);
+assert.equal(equipmentFromLink('?equipment_id=EQ-0004', []), null);
+console.log('Unity -> PDA equipment link PASS');

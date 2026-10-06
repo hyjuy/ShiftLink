@@ -1,0 +1,13 @@
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/UserSettings/
+/Builds/
+/Checks/
+*.csproj
+*.sln
+*.slnx
+
+/Assets/ReferenceMaterials/
+/Assets/ReferenceMaterials.meta

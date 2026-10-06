@@ -26,7 +26,7 @@ else
 fi
 
 UNIT="[Unit]
-Description=ShiftLink 인계 outbox → Aiven 업로더 (Jetson)
+Description=ShiftLink 인계 및 질의 outbox → Aiven 업로더 (Jetson)
 After=network-online.target shiftlink-mes.service
 Wants=network-online.target
 
@@ -35,7 +35,7 @@ User=$RUN_AS
 WorkingDirectory=$REPO
 Environment=PYTHONUNBUFFERED=1
 $ENVLINE
-ExecStart=$PY -m shiftlink.mes.uploader --db $DB --interval $INTERVAL
+ExecStart=\"$PY\" -m shiftlink.mes.uploader --db \"$DB\" --interval $INTERVAL
 Restart=always
 RestartSec=5
 

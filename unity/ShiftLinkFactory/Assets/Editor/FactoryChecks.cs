@@ -24,6 +24,7 @@ public static class FactoryChecks
     }
     public static void PlayCheck()
     {
+        SessionState.SetInt("ShiftLink.FirstSequence", -1);
         SessionState.SetBool("ShiftLink.PlayCheck", true);
         SessionState.SetFloat("ShiftLink.PlayStart", (float)EditorApplication.timeSinceStartup);
         EditorApplication.update += CheckPlay;
@@ -33,18 +34,22 @@ public static class FactoryChecks
     {
         if (!SessionState.GetBool("ShiftLink.PlayCheck", false)) return;
         try {
+            if (EditorApplication.timeSinceStartup - SessionState.GetFloat("ShiftLink.PlayStart", 0) > 60)
+                throw new Exception("Live MES/PDA Unity check timed out");
             var factory = UnityEngine.Object.FindFirstObjectByType<FactoryDemo>();
             if (Application.isPlaying && factory != null && factory.Connected &&
                 factory.EquipmentCount == 10 && factory.CoilCount > 0 && factory.SelectedId != null) {
+                int first = SessionState.GetInt("ShiftLink.FirstSequence", -1);
+                if (first < 0) { SessionState.SetInt("ShiftLink.FirstSequence", factory.CurrentSequence); return; }
+                if (factory.CurrentSequence <= first) return;
                 Capture(Path.Combine(Application.dataPath, "../Checks/live-factory.png"));
                 File.WriteAllText(Path.Combine(Application.dataPath, "../Checks/play-check-result.txt"),
-                    "PASS: Unity Play Mode received live MES state, moving coils and PDA recognition; run=" + factory.CurrentRunId);
+                    "PASS: Unity Play Mode received live MES state, advancing MES sequence, coils and PDA recognition; run=" + factory.CurrentRunId);
                 SessionState.SetBool("ShiftLink.PlayCheck", false);
                 Debug.Log("SHIFTLINK LIVE PLAY CHECK PASS");
                 EditorApplication.Exit(0);
             }
-            if (EditorApplication.timeSinceStartup - SessionState.GetFloat("ShiftLink.PlayStart", 0) > 60)
-                throw new Exception("Live MES/PDA Unity check timed out");
+
         } catch (Exception error) {
             SessionState.SetBool("ShiftLink.PlayCheck", false); Debug.LogException(error); EditorApplication.Exit(1);
         }

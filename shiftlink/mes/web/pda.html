@@ -28,7 +28,7 @@
     --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html,body{height:100%;overflow:hidden}
   body{
     margin:0;background:var(--bg);color:var(--tx);
     font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
@@ -43,6 +43,8 @@
   #app{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
   .screen{flex:1 1 auto;display:none;flex-direction:column;min-height:0}
   .screen.on{display:flex}
+  /* 꺼진 화면(얼굴 640×480 포함)이 문서 높이를 밀어 홈 제목이 내려가지 않게 한다 */
+  .screen:not(.on){display:none !important;position:absolute;width:0;height:0;overflow:hidden;margin:0;padding:0}
 
   .appbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-height:50px;
     padding:0 6px 0 14px;border-bottom:1px solid var(--edge)}
@@ -125,8 +127,12 @@
   .hangul .row{display:flex;gap:4px}
   .hangul button{flex:1 1 0;min-height:48px;border-radius:8px;border:1px solid var(--edge);
     background:var(--surface-2);font-size:18px;font-weight:700}
-  #s-face .vf{flex:0 0 auto;width:640px;height:480px;max-width:100%;margin:12px auto}
-  #faceVideo{position:static;width:640px;height:480px;max-width:100%;object-fit:contain;background:#000}
+  #s-face .vf{flex:1 1 auto;min-height:0;width:auto;height:auto;margin:0;display:grid;place-items:center}
+  #faceVideo{position:static;width:min(640px,100%);height:min(480px,100%);max-width:100%;max-height:100%;object-fit:contain;background:#000}
+  #toast{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:30;max-width:90vw;
+    padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--ok);
+    font-size:18px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  #toast[hidden]{display:none}
   #faceState.ok{color:var(--ok)} #faceState.ok .dot{background:var(--ok)}
   #faceState.failed{color:var(--fail)} #faceState.failed .dot{background:var(--fail)}
 
@@ -363,9 +369,9 @@
 
   <!-- 홈 -->
   <section class="screen" id="s-home">
-    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span></div>
+    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span>
+      <button class="ic" id="pdaExit" type="button">종료</button></div>
     <div class="pane">
-      <div class="grow"></div>
       <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
       <p class="hint">상자에 붙은 코드를 비추면 설비가 확정됩니다.</p>
       <div class="grow"></div>
@@ -561,5 +567,6 @@
 </div>
 
 <script src="/static/pda.js"></script>
+<div id="toast" hidden></div>
 </body>
 </html>

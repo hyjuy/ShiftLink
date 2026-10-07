@@ -28,7 +28,18 @@ PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 
-def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
+_window_proc: subprocess.Popen | None = None
+
+
+def stop_kiosk() -> None:
+    """키오스크 창을 닫고 이 프로세스를 끝낸다."""
+    proc = _window_proc
+    if proc is not None and proc.poll() is None:
+        proc.terminate()
+    os._exit(0)
+
+
+def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
             return
@@ -92,8 +103,14 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
             else:
                 self._send(200, json.dumps(result).encode(), "application/json; charset=utf-8")
 
+        def _exit(self) -> None:
+            self._send(200, b'{"ok":true}', "application/json")
+            threading.Thread(target=on_exit or stop_kiosk, daemon=True).start()
+
         def do_POST(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
+            if path == "/api/pda/exit":
+                self._exit(); return
             if path == "/api/face/frame":
                 self._face_frame(); return
             if self.path.startswith("/api/"):
@@ -114,6 +131,7 @@ def wait_for(url: str) -> None:
 
 
 def open_window(url: str, scale: float) -> int:
+    global _window_proc
     # labwc에서는 --kiosk만으로 일반 창이 떠서 --app·--start-fullscreen을 같이 준다.
     # scale: PDA는 세로 휴대폰 폭 기준이라 2560x1600 모니터에서 2가 높이에 맞다.
     # 전용 프로필: 데스크톱 Chromium에 남은 창 크기를 물려받으면 화면보다 크게 떠서 아래가 잘린다.
@@ -122,12 +140,13 @@ def open_window(url: str, scale: float) -> int:
     env = {**os.environ, "LANGUAGE": "ko"}
     if shutil.which("ibus-daemon"):
         env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
-    return subprocess.call([
+    _window_proc = subprocess.Popen([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
         "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
         "--use-fake-ui-for-media-stream",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",
     ], env=env)
+    return _window_proc.wait()
 
 
 def main() -> None:

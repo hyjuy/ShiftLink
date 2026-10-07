@@ -147,6 +147,8 @@ function show(name) {
   $('net').hidden = (name === 'boot');
   const pane = document.querySelector('#s-' + name + ' .pane');
   if (pane) pane.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   if (name === 'ask') renderAskSafety();
 }
 
@@ -1449,7 +1451,19 @@ function submitLogin() {
   startFaceCamera();
 }
 
+let toastTimer = 0;
+
+function showToast(text) {
+  const el = $('toast');
+  if (!el) return;
+  el.hidden = false;
+  el.textContent = text;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
+}
+
 function enterWork() {
+  if (S.operator && S.operator.name) showToast(S.operator.name + '님 로그인 되었습니다');
   if (S.linkedEquipment) {
     setContext(S.linkedEquipment, 'unity_link');
     show('ctx');
@@ -1556,6 +1570,7 @@ async function startFaceCamera() {
 on('loginGo', submitLogin);
 on('faceBack', () => show('login'));
 on('faceRetry', () => { startFaceCamera(); });
+on('pdaExit', () => { fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
 document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', () => show('home')));
 on('toScan', startScan);
 on('scanClose', () => show('home'));

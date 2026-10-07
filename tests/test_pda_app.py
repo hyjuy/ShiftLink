@@ -92,6 +92,23 @@ def test_face_frame_is_local_and_rejects_unknown_id():
         pda.shutdown(); jetson.shutdown()
 
 
+def test_pda_exit_stays_local():
+    called = []
+    jetson, jetson_url = serve(FakeJetson)
+    pda, pda_url = serve(make_handler(jetson_url, on_exit=lambda: called.append(1)))
+    try:
+        status, body = fetch(pda_url + "/api/pda/exit", b"{}")
+        assert status == 200 and json.loads(body)["ok"] is True
+        for _ in range(20):
+            if called:
+                break
+            threading.Event().wait(0.05)
+        assert called == [1]
+        assert fetch(pda_url + "/api/state")[0] == 200
+    finally:
+        pda.shutdown(); jetson.shutdown()
+
+
 def test_jetson_down_is_502():
     pda, pda_url = serve(make_handler("http://127.0.0.1:9"))
     try:

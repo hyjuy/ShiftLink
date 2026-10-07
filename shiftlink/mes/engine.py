@@ -82,6 +82,8 @@ class MesEngine:
             raise ValueError("현재 시나리오의 조치·복귀를 완료하거나 새 실행을 시작하세요.")
         if scenario_id not in self._scenario_by_id:
             raise ValueError(f"unknown scenario: {scenario_id}")
+        if scenario_id == "scrap_discharge" and not any(self._scrap_branch(eq.equipment_id) for eq in self.config.equipment):
+            raise ValueError("scrap_discharge requires an active RT-03→CV-02 material_flow branch")
         spec = self._scenario_by_id[scenario_id]
         if scenario_id != "normal":
             cause_eq = self._cause_equipment_id(spec)
@@ -89,7 +91,7 @@ class MesEngine:
                 raise ValueError(f"cannot apply {scenario_id} (requires {spec.cause_capability} capability) to this configuration")
         self._scenario = scenario_id
         self._recovery_ticks = 0
-        self._recovery_spec = None if scenario_id == "normal" else self._recovery_plan(spec)
+        self._recovery_spec = None if scenario_id in ("normal", "scrap_discharge") else self._recovery_plan(spec)
         self._completed_actions = []
         if spec.product_hold:
             for coil in self._coils:
@@ -255,6 +257,15 @@ class MesEngine:
         eq = self._equipment_by_id.get(equipment_id)
         return eq.dwell_seconds if eq else 10.0
 
+    def _scrap_branch(self, equipment_id: str):
+        source = self._equipment_by_id.get(equipment_id)
+        if not source or not source.active or source.code != "RT-03":
+            return None
+        return next((branch for branch in self.config.branches
+                     if branch.relation_type == "material_flow" and branch.from_id == equipment_id
+                     and (target := self._equipment_by_id.get(branch.to_id)) is not None
+                     and target.active and target.code == "CV-02"), None)
+
     def _move_coils(self) -> None:
         states, _ = self._states()
         occupied = {coil["equipment_id"]: 0 for coil in self._coils}
@@ -279,6 +290,18 @@ class MesEngine:
 
             if coil["position"] < 1:
                 continue
+
+            branch = self._scrap_branch(current)
+            if branch and (self._scenario == "scrap_discharge" or coil.get("quality_status") == "rejected"):
+                if coil.get("quality_status") != "rejected":
+                    coil["quality_status"] = "rejected"
+                    self._event("coil_rejected", current, f"{coil['coil_id']} synthetic scrap_discharge rejection; no measured defect type")
+                target = self._equipment_by_id[branch.to_id]
+                if states[branch.to_id][0] == "running" and occupied.get(branch.to_id, 0) < target.coil_capacity:
+                    occupied[current] -= 1
+                    occupied[branch.to_id] = occupied.get(branch.to_id, 0) + 1
+                    coil.update(equipment_id=branch.to_id, segment_id=target.segment_id, position=0.0)
+                continue  # A rejected load cannot fall through to the finished-product route.
 
             # Try to move to next equipment in route
             route_index = self.config.route.index(current) if current in self.config.route else -1
@@ -314,6 +337,8 @@ class MesEngine:
         if self._recovery_ticks:
             return {key: ("waiting", "normal", "recovery") for key in states}, "recovering"
         if self._scenario == "normal":
+            return states, "running"
+        if self._scenario == "scrap_discharge":
             return states, "running"
 
         spec = self._scenario_by_id.get(self._scenario)

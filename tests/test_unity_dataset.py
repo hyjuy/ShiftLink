@@ -103,6 +103,24 @@ class UnityDatasetTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('WARNING: empty split', result.stdout)
 
+    def test_planned_splits_are_preserved(self):
+        for i, split in enumerate(('train', 'val', 'test')):
+            self.capture(split, color=i, scene_id=split, session_id=split, dataset_split=split)
+        rows = export_dataset(self.source, self.out)
+        self.assertEqual({r['capture_id']: r['split'] for r in rows}, {s: s for s in ('train', 'val', 'test')})
+
+    def test_explicit_split_cannot_leak_shared_sessions_scenes_or_images(self):
+        self.capture('train', dataset_split='train')
+        self.capture('test', color=1, dataset_split='test')
+        with self.assertRaisesRegex(ValueError, 'conflicting'):
+            export_dataset(self.source, self.out)
+        self.assertFalse(self.out.exists())
+
+    def test_unknown_explicit_split_rejected(self):
+        self.capture(dataset_split='evaluation')
+        with self.assertRaisesRegex(ValueError, 'dataset_split'):
+            export_dataset(self.source, self.out)
+
     def test_recursive_object_pose_and_all_six_classes(self):
         names = ('HPU', 'GR', 'RT', 'CV', 'CAU', 'PDP')
         objects = [dict(class_id=i, equipment_type=name, equipment_id=f'EQ-{i}', bbox_xyxy=[0, 0, 100, 50])

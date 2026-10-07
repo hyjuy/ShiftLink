@@ -5,14 +5,16 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[Serializable] public class EquipmentSpec { public string equipment_id, code, name, profile_id; public bool active; }
+[Serializable] public class SignalSemantics { public string acquisition; }
+[Serializable] public class SignalSpec { public string signal,name,unit; public float normal_min,normal_max; public bool zero_when_stopped; public SignalSemantics semantics; }
+[Serializable] public class EquipmentSpec { public string equipment_id, code, name, profile_id; public bool active; public SignalSpec[] signals; }
 [Serializable] public class BranchSpec { public string from_id, to_id; }
 [Serializable] public class RelationSpec { public string from_id,to_id,relation_type; }
-[Serializable] public class MeasurementReading { public string equipment_id,signal,unit,quality; public float value; }
+[Serializable] public class MeasurementReading { public string equipment_id,signal,unit,quality,observed_at; public float value; }
 [Serializable] public class FactoryConfig { public string config_id, line_id; public EquipmentSpec[] equipment; public string[] route; public BranchSpec[] branches; public RelationSpec[] relations; }
 [Serializable] public class ConfigEnvelope { public FactoryConfig config; }
 [Serializable] public class EquipmentReading { public string equipment_id, operating_state, fault_level; }
-[Serializable] public class CoilReading { public string coil_id, equipment_id; public float position; }
+[Serializable] public class CoilReading { public string coil_id, equipment_id,quality_status; public float position; }
 [Serializable] public class MesSnapshot { public string config_id, run_id, line_mode, scenario_id; public int sequence; public EquipmentReading[] equipment; public CoilReading[] coils; public MeasurementReading[] measurements; }
 [Serializable] public class ScanReading { public string scan_id, equipment_id, device_id; public float conf; }
 [Serializable] public class ScanEnvelope { public ScanReading[] scans; }
@@ -92,9 +94,17 @@ public class FactoryDemo : MonoBehaviour
     readonly Dictionary<string,Transform> coilObjects=new Dictionary<string,Transform>();
     readonly Dictionary<string,Vector3> coilTargets=new Dictionary<string,Vector3>();
     readonly Dictionary<string,string> coilEquipment=new Dictionary<string,string>();
-    readonly Dictionary<string,Queue<Vector3>> coilWaypoints=new Dictionary<string,Queue<Vector3>>();
+    class LineWaypoint { public Vector3 position; public string from,to; }
+    class ScrapExit { public Transform load; public string equipmentId; public Queue<Vector3> path; public Queue<LineWaypoint> transfer; public float fallSpeed; }
+    readonly Dictionary<string,Queue<LineWaypoint>> coilWaypoints=new Dictionary<string,Queue<LineWaypoint>>();
+    readonly Dictionary<string,ScrapExit> scrapExits=new Dictionary<string,ScrapExit>();
+    readonly Dictionary<string,int> scrapSlots=new Dictionary<string,int>();
+    Transform scrapRoot;
+    int scrapCount;
     public int EquipmentCount { get { return equipment.Count; } }
     public int CoilCount { get { return coilRoot == null ? 0 : coilRoot.childCount; } }
+    public int ScrapCount { get { return scrapCount; } }
+    public int DischargingScrapCount { get { return scrapExits.Count; } }
     public string SelectedId { get { return selectedId; } }
     public bool Connected { get { return online; } }
     public string CurrentRunId { get { return snapshot == null ? null : snapshot.run_id; } }
@@ -242,9 +252,11 @@ public class FactoryDemo : MonoBehaviour
         ClearCoils();
         if (equipmentRoot != null) Remove(equipmentRoot.gameObject);
         if (coilRoot != null) Remove(coilRoot.gameObject);
+        if (scrapRoot != null) Remove(scrapRoot.gameObject);
         equipment.Clear(); lamps.Clear(); positions.Clear(); readings.Clear();
         equipmentRoot = new GameObject("MES equipment").transform; equipmentRoot.SetParent(transform);
         coilRoot = new GameObject("MES coils").transform; coilRoot.SetParent(transform);
+        scrapRoot = new GameObject("MES scrap discharge").transform; scrapRoot.SetParent(transform);
         config = next;
         var route = new List<string>(next.route);
         int auxiliary = 0;
@@ -286,6 +298,7 @@ public class FactoryDemo : MonoBehaviour
         if(snapshot!=null && snapshot.run_id==next.run_id && next.sequence<snapshot.sequence) return;
         if(snapshot!=null && snapshot.run_id!=next.run_id) ClearCoils();
         snapshot=next; readings.Clear();
+        rig.ApplySensors(next);
         foreach (var e in next.equipment) {
             readings[e.equipment_id]=e;
             lamps[e.equipment_id].sharedMaterial=MaterialFor(FactoryRules.StateColor(e.operating_state,e.fault_level));
@@ -297,22 +310,38 @@ public class FactoryDemo : MonoBehaviour
             Transform coil;
             Vector3? previousPosition=null;
             string previousEquipment;
-            if(coilEquipment.TryGetValue(c.coil_id,out previousEquipment) && previousEquipment!=c.equipment_id)
-                coilWaypoints[c.coil_id]=new Queue<Vector3>(rig.TransferWaypoints(previousEquipment,c.equipment_id));
-            bool scrap=config.equipment.First(e=>e.equipment_id==c.equipment_id).code=="CV-02";
+            if(coilEquipment.TryGetValue(c.coil_id,out previousEquipment) && previousEquipment!=c.equipment_id) {
+                Queue<LineWaypoint> path;
+                if(!coilWaypoints.TryGetValue(c.coil_id,out path)) coilWaypoints[c.coil_id]=path=new Queue<LineWaypoint>();
+                foreach(var point in rig.TransferWaypoints(previousEquipment,c.equipment_id)) path.Enqueue(new LineWaypoint {position=point,from=previousEquipment,to=c.equipment_id});
+            }
+            bool scrap=IsScrapEquipment(c.equipment_id);
             if(coilObjects.TryGetValue(c.coil_id,out coil) && (coil.Find("Rejected cut sheet")!=null)!=scrap) {
                 previousPosition=coil.position;
                 coil.SetParent(null); Remove(coil.gameObject); coilObjects.Remove(c.coil_id);
             }
             if(!coilObjects.TryGetValue(c.coil_id,out coil)) {
-                coil=FactoryRig.CreateLoad(c.coil_id,coilRoot,scrap);
+                ScrapExit oldExit;
+                if(scrapExits.TryGetValue(c.coil_id,out oldExit)) { oldExit.load.SetParent(null); Remove(oldExit.load.gameObject); scrapExits.Remove(c.coil_id); }
+                coil=rig.CreateLineLoad(c.coil_id,coilRoot,scrap);
                 coil.position=previousPosition??destination; coilObjects[c.coil_id]=coil;
             }
+            coil.rotation=equipment[c.equipment_id].transform.rotation;
             coilTargets[c.coil_id]=destination; coilEquipment[c.coil_id]=c.equipment_id;
         }
         foreach(var id in coilObjects.Keys.Where(id=>!keep.Contains(id)).ToArray()) {
             var stale=coilObjects[id];
-            if(next.line_mode=="running" && config.route.Length>0 && coilEquipment[id]==config.route[config.route.Length-1] && logistics!=null) logistics.Accept(stale);
+            if(IsScrapEquipment(coilEquipment[id])) {
+                string exitEquipment=coilEquipment[id]; var path=rig.ScrapDischargeWaypoints(exitEquipment);
+                int slot; scrapSlots.TryGetValue(exitEquipment,out slot); scrapSlots[exitEquipment]=slot+1;
+                // Keep at most 20 visible layers; ScrapCount remains the cumulative MES discharge count.
+                path[path.Length-1]+=Vector3.up*((slot%20)*.025f);
+                stale.SetParent(scrapRoot,true);
+                // MES placement on its configured scrap branch is authoritative; no defect diagnosis or cutting is inferred here.
+                Queue<LineWaypoint> transfer; coilWaypoints.TryGetValue(id,out transfer);
+                scrapExits[id]=new ScrapExit {load=stale,equipmentId=exitEquipment,path=new Queue<Vector3>(path),transfer=transfer};
+            }
+            else if(next.line_mode=="running" && config.route.Length>0 && coilEquipment[id]==config.route[config.route.Length-1] && logistics!=null) logistics.Accept(stale);
             else { stale.SetParent(null); Remove(stale.gameObject); }
             coilObjects.Remove(id); coilTargets.Remove(id); coilEquipment.Remove(id); coilWaypoints.Remove(id);
         }
@@ -334,6 +363,7 @@ public class FactoryDemo : MonoBehaviour
     public void Disconnect(string reason)
     {
         online=false; snapshot=null; readings.Clear(); status=reason;
+        if(rig!=null) rig.ApplySensors(null);
         foreach(var lamp in lamps.Values) lamp.sharedMaterial=MaterialFor(FactoryRules.Grey);
         ClearCoils();
         FactoryMonitor.RefreshFor(this,config,null,false);
@@ -342,6 +372,8 @@ public class FactoryDemo : MonoBehaviour
     void ClearCoils()
     {
         if(logistics!=null) logistics.ResetLoads();
+        scrapExits.Clear(); scrapSlots.Clear(); scrapCount=0;
+        if(scrapRoot!=null) for(int i=scrapRoot.childCount-1;i>=0;i--) { var child=scrapRoot.GetChild(i); child.SetParent(null); Remove(child.gameObject); }
         coilObjects.Clear(); coilTargets.Clear(); coilEquipment.Clear(); coilWaypoints.Clear();
         if(coilRoot==null) return;
         for(int i=coilRoot.childCount-1;i>=0;i--) {
@@ -410,7 +442,7 @@ public class FactoryDemo : MonoBehaviour
         distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
+        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || (GetComponentInChildren<FactorySensorMotion>()?.ContainsPointer(guiPointer)==true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
             new Rect(Screen.width-460,Screen.height-150,442,132).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
@@ -431,12 +463,58 @@ public class FactoryDemo : MonoBehaviour
         foreach(var pair in coilObjects) {
             EquipmentReading state;
             if(readings.TryGetValue(coilEquipment[pair.Key],out state) && state.operating_state=="running" && state.fault_level!="critical" && snapshot.line_mode=="running") {
-                Queue<Vector3> path;
-                var destination=coilWaypoints.TryGetValue(pair.Key,out path) && path.Count>0 ? path.Peek() : coilTargets[pair.Key];
-                pair.Value.position=Vector3.MoveTowards(pair.Value.position,destination,FactoryRig.TransportSpeed(snapshot,coilEquipment[pair.Key])*seconds);
-                if(path!=null && path.Count>0 && Vector3.Distance(pair.Value.position,destination)<.001f) path.Dequeue();
+                if((snapshot.coils??new CoilReading[0]).Any(c=>c.coil_id==pair.Key && c.quality_status=="hold")) continue;
+                Queue<LineWaypoint> path; coilWaypoints.TryGetValue(pair.Key,out path);
+                AdvanceLineLoad(pair.Value,coilEquipment[pair.Key],path,coilTargets[pair.Key],seconds);
             }
         }
+        foreach(var pair in scrapExits.ToArray()) {
+            var exit=pair.Value; float speed;
+            if(snapshot.line_mode!="running" || !CanTransport(exit.equipmentId,out speed)) continue;
+            float remaining=seconds;
+            while(exit.path.Count>1 && remaining>0) {
+                var target=exit.path.Peek();
+                remaining=AdvanceLineLoad(exit.load,exit.equipmentId,exit.transfer,target,remaining);
+                if(Vector3.Distance(exit.load.position,target)>.001f) break;
+                exit.path.Dequeue();
+            }
+            if(exit.path.Count!=1 || remaining<=0) continue;
+            // The sheet/chute representation and gravity drop illustrate MES scrap discharge; no cutting operation is simulated.
+            var landing=exit.path.Peek(); var before=exit.load.position;
+            float drop=exit.fallSpeed*remaining+.5f*9.81f*remaining*remaining; exit.fallSpeed+=9.81f*remaining;
+            float height=Mathf.Max(0,before.y-landing.y);
+            exit.load.position=height<=drop ? landing : Vector3.Lerp(before,landing,drop/height);
+            if(Vector3.Distance(exit.load.position,landing)<.001f) {
+                foreach(var old in scrapRoot.Cast<Transform>().Where(t=>t!=exit.load && !scrapExits.Values.Any(active=>active.load==t) && Vector3.Distance(t.position,landing)<.001f).ToArray()) { old.SetParent(null); Remove(old.gameObject); }
+                scrapCount++; scrapExits.Remove(pair.Key);
+            }
+        }
+    }
+    bool IsScrapEquipment(string id)
+    {
+        return config.equipment.Any(e=>e.equipment_id==id && e.code=="CV-02") && (config.branches??new BranchSpec[0]).Any(b=>b.to_id==id);
+    }
+    bool CanTransport(string id,out float speed)
+    {
+        speed=FactoryRig.TransportSpeed(snapshot,id); EquipmentReading state;
+        return speed>0 && readings.TryGetValue(id,out state) && state.operating_state=="running" && state.fault_level!="critical";
+    }
+    float AdvanceLineLoad(Transform load,string owner,Queue<LineWaypoint> path,Vector3 target,float seconds)
+    {
+        float ownerSpeed;
+        if(!CanTransport(owner,out ownerSpeed)) return seconds;
+        while(seconds>0) {
+            var point=path!=null && path.Count>0 ? path.Peek() : null;
+            var destination=point==null ? target : point.position;
+            float speed=ownerSpeed;
+            if(point!=null) { float sourceSpeed,arrivalSpeed; if(!CanTransport(point.from,out sourceSpeed) || !CanTransport(point.to,out arrivalSpeed)) return seconds; speed=Mathf.Min(speed,Mathf.Min(sourceSpeed,arrivalSpeed)); }
+            float distance=Vector3.Distance(load.position,destination);
+            if(distance>speed*seconds) { load.position=Vector3.MoveTowards(load.position,destination,speed*seconds); return 0; }
+            load.position=destination; seconds-=distance/speed;
+            if(point==null) return seconds;
+            path.Dequeue();
+        }
+        return 0;
     }
     void UpdateCamera()
     {
@@ -480,6 +558,7 @@ public class FactoryDemo : MonoBehaviour
             GUILayout.BeginArea(new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125),GUI.skin.box);
             GUILayout.Label("Selected: "+selectedId+" | Latest PDA scan: "+(lastScanId ?? "none"));
             EquipmentReading reading; if(readings.TryGetValue(selectedId,out reading)) GUILayout.Label(reading.operating_state+" / "+reading.fault_level);
+            if(IsScrapEquipment(selectedId)) GUILayout.Label("스크랩 배출 중 "+DischargingScrapCount+"개 / 누적 "+ScrapCount+"개 · 적치 형상은 최대 20층 시연입니다. 판재는 실제 절단을 재현하지 않습니다.",new GUIStyle(GUI.skin.label) {wordWrap=true});
             if(GUILayout.Button("Open this equipment on PDA"))
                 Application.OpenURL(pdaUrl.TrimEnd('/')+"/pda.html?equipment_id="+UnityWebRequest.EscapeURL(selectedId)+"&source=unity");
             GUILayout.EndArea();

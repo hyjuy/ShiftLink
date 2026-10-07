@@ -23,8 +23,10 @@ public static class FactoryAssetBuilder
             if(!path.Contains("EquipmentTypes/") && !path.Contains("Connections/")) continue;
             string destination="Assets/Resources/Factory/"+name+".prefab";
             var existing=AssetDatabase.LoadAssetAtPath<GameObject>(destination);
-            bool utility=name=="Equipment_HPU" || name=="Equipment_PDP" || name=="Equipment_CAU" || name=="Equipment_GR";
-            if(existing!=null && (!utility || Mathf.Abs(existing.transform.Find("Model").localScale.x-1)<.001f) &&
+            if(name.StartsWith("Connection_") && existing!=null) continue;
+            string signature=AssetDatabase.GetAssetDependencyHash(path)+":"+AssetDatabase.GetAssetDependencyHash("Assets/Editor/FactoryAssetBuilder.cs");
+            var prefabImporter=AssetImporter.GetAtPath(destination);
+            if(existing!=null && prefabImporter!=null && prefabImporter.userData==signature &&
                 (name!="Equipment_RT" || File.Exists("Assets/Resources/Factory/Equipment_RT02.prefab"))) continue;
             var source=AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if(source==null) throw new Exception("FBX not imported: "+path);
@@ -38,7 +40,7 @@ public static class FactoryAssetBuilder
             if(input!=null && output!=null) {
                 float span=Mathf.Abs(output.position.x-input.position.x);
                 if(span<.001f) throw new Exception("Unexpected FBX transport axes: "+path);
-                if(name=="Equipment_RT" || name=="Equipment_CV") model.transform.localScale*=4.8f/span;
+                if(name=="Equipment_RT" || name=="Equipment_CV" || name=="Equipment_CV02") model.transform.localScale*=4.8f/span;
                 if(output.position.x<input.position.x) model.transform.localRotation=Quaternion.Euler(0,180,0)*model.transform.localRotation;
             }
             PrefabUtility.SaveAsPrefabAsset(wrapper,destination);
@@ -48,8 +50,9 @@ public static class FactoryAssetBuilder
                 platform.name="LiftPlatform";
                 var rollers=platform.GetComponentsInChildren<Transform>().Where(t=>t.name.StartsWith("Roller_") && t.childCount>0).ToArray();
                 var prototype=UnityEngine.Object.Instantiate(rollers[0].gameObject); prototype.SetActive(false);
-                var bearings=platform.GetComponentsInChildren<Transform>().Where(t=>t.name.StartsWith("BearingBlock")).ToArray();
-                var bearingTemplates=bearings.GroupBy(t=>Mathf.Sign(t.localPosition.z)).Select(g=>UnityEngine.Object.Instantiate(g.First().gameObject)).ToArray();
+                var bearings=platform.GetComponentsInChildren<Transform>().Where(t=>t.name.StartsWith("BearingBlock") || t.name.StartsWith("BearingCover") || t.name.StartsWith("BearingGreaseNipple")).ToArray();
+                // FBX children retain Blender local axes: Y is lateral, Z is height.
+                var bearingTemplates=bearings.GroupBy(t=>t.name.Split('.')[0]+":"+Mathf.Sign(t.localPosition.y)).Select(g=>UnityEngine.Object.Instantiate(g.First().gameObject)).ToArray();
                 foreach(var template in bearingTemplates) template.SetActive(false);
                 foreach(var bearing in bearings) UnityEngine.Object.DestroyImmediate(bearing.gameObject);
                 foreach(var roller in rollers) UnityEngine.Object.DestroyImmediate(roller.gameObject);
@@ -65,6 +68,8 @@ public static class FactoryAssetBuilder
                 PrefabUtility.SaveAsPrefabAsset(wrapper,"Assets/Resources/Factory/Equipment_RT02.prefab");
             }
             UnityEngine.Object.DestroyImmediate(wrapper);
+            prefabImporter=AssetImporter.GetAtPath(destination);
+            if(prefabImporter!=null) { prefabImporter.userData=signature; prefabImporter.SaveAndReimport(); }
         }
         AssetDatabase.SaveAssets();
     }

@@ -65,6 +65,7 @@ def validate(metadata, image):
         require(isinstance(metadata.get(key), str) and metadata[key].strip(), f'missing {key}')
     require(re.fullmatch(r'[A-Za-z0-9_-]+', metadata['capture_id']) is not None, 'unsafe capture_id')
     require(type(metadata.get('seed')) is int, 'seed must be integer')
+    require(metadata.get('dataset_split') in (None, '', 'train', 'val', 'test'), 'invalid dataset_split')
     width, height = png_dimensions(image)
     require(type(metadata.get('image_width')) is int and type(metadata.get('image_height')) is int
             and (metadata['image_width'], metadata['image_height']) == (width, height), 'PNG dimensions mismatch')
@@ -134,11 +135,18 @@ def export_dataset(captures, out):
     for i, record in enumerate(records):
         members.setdefault(root(i), []).append(record['metadata']['capture_id'])
     groups = {i: hashlib.sha256(json.dumps(sorted(names)).encode()).hexdigest() for i, names in members.items()}
+    planned = {}
+    for i, record in enumerate(records):
+        split = record['metadata'].get('dataset_split')
+        if split:
+            group_id = root(i)
+            require(group_id not in planned or planned[group_id] == split, 'conflicting dataset_split in shared scene/session/image group')
+            planned[group_id] = split
     rows = []
     for i, record in enumerate(records):
         group = groups[root(i)]
         bucket = int(group, 16) % 100
-        split = 'train' if bucket < 70 else 'val' if bucket < 85 else 'test'
+        split = planned.get(root(i), 'train' if bucket < 70 else 'val' if bucket < 85 else 'test')
         capture_id = record['metadata']['capture_id']
         rows.append(dict(schema_version=1, capture_id=capture_id, image=f'images/{split}/{capture_id}.png',
                          label=f'labels/{split}/{capture_id}.txt', sha256=record['sha256'], group=group, split=split,

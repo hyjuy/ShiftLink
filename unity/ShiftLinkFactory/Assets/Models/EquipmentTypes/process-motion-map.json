@@ -1,0 +1,1072 @@
+{
+  "is_synthetic": true,
+  "config_id": "e113fdda8d789ed6af2ed62064d31fa954f9c6d142f80dcb929eb98c2baf9d45",
+  "persona_source": "seeds/personas_v0.1.yaml",
+  "persona_rule": "Event/sensor facts are shared; personas only change observation focus and wording, never physics or approvals",
+  "operating_mode_override": {
+    "hpu_accumulator_precharge": {
+      "gas_pressure_bar": [
+        130,
+        140
+      ],
+      "fluid_pressure_bar": 0,
+      "manifold_pressure_bar": 0
+    }
+  },
+  "scenario_count": 105,
+  "sensor_count": 69,
+  "assumptions": [
+    "Exterior references and process adaptations; not exact OEM CAD or installed product certification",
+    "Existing MES material IDs and coil/scrap transport preserved",
+    "Lift/clamp/diverter displacements are demo cycles, not measured position telemetry",
+    "V-11 sensory-first, V-12 measurement-first, V-13 maintenance-record-first; no invented maintenance or restart approval"
+  ],
+  "equipment": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "reference_product": "Bosch Rexroth ABPAC",
+      "source_url": "https://www.boschrexroth.com/en/de/connected-hydraulics/products/abpac/",
+      "channels": [
+        {
+          "signal": "hpu_pressure",
+          "unit": "bar",
+          "normal_band": [
+            145.0,
+            165.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "pressure gauge pointer",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_pressure"
+        },
+        {
+          "signal": "hpu_oil_temp",
+          "unit": "degC",
+          "normal_band": [
+            35.0,
+            58.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_oil_temp"
+        },
+        {
+          "signal": "hpu_filter_dp",
+          "unit": "bar",
+          "normal_band": [
+            0.0,
+            1.2
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_filter_dp"
+        },
+        {
+          "signal": "hpu_flow",
+          "unit": "L_min",
+          "normal_band": [
+            38.0,
+            46.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_flow"
+        },
+        {
+          "signal": "hpu_pump_outlet_pressure",
+          "unit": "bar",
+          "normal_band": [
+            145,
+            165
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_pump_outlet_pressure"
+        },
+        {
+          "signal": "fluid_viscosity",
+          "unit": "cSt",
+          "normal_band": [
+            20,
+            100
+          ],
+          "acquisition": "manual_sample",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_fluid_viscosity"
+        },
+        {
+          "signal": "hpu_oil_level",
+          "unit": "pct",
+          "normal_band": [
+            70,
+            100
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "oil sight glass level",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_oil_level"
+        },
+        {
+          "signal": "hpu_pump_current",
+          "unit": "A",
+          "normal_band": [
+            15,
+            25
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_pump_current"
+        },
+        {
+          "signal": "hpu_cooler_oil_in_temp",
+          "unit": "degC",
+          "normal_band": [
+            35,
+            58
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_in_temp"
+        },
+        {
+          "signal": "hpu_cooler_oil_out_temp",
+          "unit": "degC",
+          "normal_band": [
+            35,
+            58
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_out_temp"
+        },
+        {
+          "signal": "hpu_cooler_water_in_temp",
+          "unit": "degC",
+          "normal_band": [
+            15,
+            30
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_water_in_temp"
+        },
+        {
+          "signal": "hpu_cooler_water_out_temp",
+          "unit": "degC",
+          "normal_band": [
+            20,
+            40
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_water_out_temp"
+        },
+        {
+          "signal": "hpu_cooler_oil_flow",
+          "unit": "L_min",
+          "normal_band": [
+            38,
+            46
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_flow"
+        },
+        {
+          "signal": "hpu_accumulator_gas_pressure",
+          "unit": "bar",
+          "normal_band": [
+            145,
+            165
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_accumulator_gas_pressure"
+        },
+        {
+          "signal": "hpu_accumulator_fluid_pressure",
+          "unit": "bar",
+          "normal_band": [
+            145,
+            165
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_accumulator_fluid_pressure"
+        },
+        {
+          "signal": "hpu_return_submergence",
+          "unit": "mm",
+          "normal_band": [
+            100,
+            200
+          ],
+          "acquisition": "manual_sample",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_return_submergence"
+        },
+        {
+          "signal": "hpu_suction_head",
+          "unit": "mm",
+          "normal_band": [
+            100,
+            200
+          ],
+          "acquisition": "manual_sample",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0001_hpu_suction_head"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "reference_product": "ABB MNS exterior",
+      "source_url": "https://new.abb.com/medium-voltage/switchgear/3d-ecatalogue/low-voltage/mns-front",
+      "channels": [
+        {
+          "signal": "bus_voltage",
+          "unit": "pct",
+          "normal_band": [
+            97.0,
+            103.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_bus_voltage"
+        },
+        {
+          "signal": "breaker_pole_l1_temp",
+          "unit": "degC",
+          "normal_band": [
+            30,
+            45
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l1_temp"
+        },
+        {
+          "signal": "breaker_pole_l2_temp",
+          "unit": "degC",
+          "normal_band": [
+            30,
+            45
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l2_temp"
+        },
+        {
+          "signal": "breaker_pole_l3_temp",
+          "unit": "degC",
+          "normal_band": [
+            30,
+            45
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l3_temp"
+        },
+        {
+          "signal": "bus_current",
+          "unit": "A",
+          "normal_band": [
+            20,
+            40
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_bus_current"
+        },
+        {
+          "signal": "breaker_trip",
+          "unit": "bool",
+          "normal_band": [
+            0,
+            0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "external breaker handle indication",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0002_breaker_trip"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "reference_product": "Atlas Copco GA enclosed screw compressor",
+      "source_url": "https://www.atlascopco.com/en-us/compressors/products/air-compressor/rotary-screw-compressor/ga-plus-screw-compressor",
+      "channels": [
+        {
+          "signal": "air_pressure",
+          "unit": "kPa",
+          "normal_band": [
+            550.0,
+            700.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "pressure gauge pointer",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_air_pressure"
+        },
+        {
+          "signal": "compressor_discharge_temp",
+          "unit": "degC",
+          "normal_band": [
+            70,
+            90
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_compressor_discharge_temp"
+        },
+        {
+          "signal": "compressor_separator_dp",
+          "unit": "bar",
+          "normal_band": [
+            0,
+            0.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_compressor_separator_dp"
+        },
+        {
+          "signal": "air_nozzle_pressure",
+          "unit": "MPa",
+          "normal_band": [
+            0.1,
+            0.2
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_air_nozzle_pressure"
+        },
+        {
+          "signal": "air_flow",
+          "unit": "L_min",
+          "normal_band": [
+            100,
+            150
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_air_flow"
+        },
+        {
+          "signal": "compressor_current",
+          "unit": "A",
+          "normal_band": [
+            8,
+            16
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0003_compressor_current"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "reference_product": "SEW X series industrial gearbox",
+      "source_url": "https://www.sew-eurodrive.de/en/generation-xe/",
+      "channels": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.5,
+            2.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded housing vibration",
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_vib_rms"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_band": [
+            30.0,
+            62.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_brg_temp"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_band": [
+            18.0,
+            30.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_current"
+        },
+        {
+          "signal": "gr_oil_water_content",
+          "unit": "ppm",
+          "normal_band": [
+            0,
+            300
+          ],
+          "acquisition": "manual_sample",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_water_content"
+        },
+        {
+          "signal": "gr_oil_level",
+          "unit": "pct",
+          "normal_band": [
+            70,
+            100
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_level"
+        },
+        {
+          "signal": "gr_surface_temp",
+          "unit": "degC",
+          "normal_band": [
+            20,
+            40
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_surface_temp"
+        },
+        {
+          "signal": "gr_rpm",
+          "unit": "rpm",
+          "normal_band": [
+            900,
+            1100
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "designated input drive shaft rotation; no output gear-ratio inference",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_rpm"
+        },
+        {
+          "signal": "gr_oil_leak",
+          "unit": "bool",
+          "normal_band": [
+            0,
+            0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "pulsing leak marker; location not inferred from sensor",
+          "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_leak"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "reference_product": "SEW X series industrial gearbox",
+      "source_url": "https://www.sew-eurodrive.de/en/generation-xe/",
+      "channels": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.5,
+            2.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded housing vibration",
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_vib_rms"
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_band": [
+            30.0,
+            62.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_brg_temp"
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_band": [
+            18.0,
+            30.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_current"
+        },
+        {
+          "signal": "gr_oil_water_content",
+          "unit": "ppm",
+          "normal_band": [
+            0,
+            300
+          ],
+          "acquisition": "manual_sample",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_water_content"
+        },
+        {
+          "signal": "gr_oil_level",
+          "unit": "pct",
+          "normal_band": [
+            70,
+            100
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_level"
+        },
+        {
+          "signal": "gr_surface_temp",
+          "unit": "degC",
+          "normal_band": [
+            20,
+            40
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_surface_temp"
+        },
+        {
+          "signal": "gr_rpm",
+          "unit": "rpm",
+          "normal_band": [
+            900,
+            1100
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-13",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "designated input drive shaft rotation; no output gear-ratio inference",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_rpm"
+        },
+        {
+          "signal": "gr_oil_leak",
+          "unit": "bool",
+          "normal_band": [
+            0,
+            0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-11",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "pulsing leak marker; location not inferred from sensor",
+          "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_leak"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "reference_product": "Butech Bliss Coil & Sheet Runout Conveyors",
+      "source_url": "https://butechbliss.com/equipment/material-handling-equipment/coil-sheet-runout-conveyors/",
+      "channels": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_band": [
+            20.0,
+            120.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "roller surface-speed rotation",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0006_rt_speed"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_band": [
+            95.0,
+            115.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "loaded clamp demo cycle only with normal pressure",
+          "scenario_id": "sensor_anomaly_EQ-0006_rt_clamp_press"
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_band": [
+            8,
+            16
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0006_rt_motor_current"
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.8,
+            1.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded bearing cover vibration",
+          "scenario_id": "sensor_anomaly_EQ-0006_rt_vib_rms"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "reference_product": "Butech Bliss Coil & Sheet Runout Conveyors",
+      "source_url": "https://butechbliss.com/equipment/material-handling-equipment/coil-sheet-runout-conveyors/",
+      "channels": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_band": [
+            20.0,
+            120.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "roller surface-speed rotation",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0007_rt_speed"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_band": [
+            95.0,
+            115.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "loaded clamp demo cycle only with normal pressure",
+          "scenario_id": "sensor_anomaly_EQ-0007_rt_clamp_press"
+        },
+        {
+          "signal": "rt_lift_delay",
+          "unit": "min",
+          "normal_band": [
+            0.0,
+            0.05
+          ],
+          "acquisition": "event",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "loaded lift demo cycle timing; stroke not measured",
+          "scenario_id": "sensor_anomaly_EQ-0007_rt_lift_delay"
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_band": [
+            8,
+            16
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0007_rt_motor_current"
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.8,
+            1.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded bearing cover vibration",
+          "scenario_id": "sensor_anomaly_EQ-0007_rt_vib_rms"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "reference_product": "Butech Bliss Coil & Sheet Runout Conveyors",
+      "source_url": "https://butechbliss.com/equipment/material-handling-equipment/coil-sheet-runout-conveyors/",
+      "channels": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_band": [
+            20.0,
+            120.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "roller surface-speed rotation",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0008_rt_speed"
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_band": [
+            95.0,
+            115.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "loaded clamp demo cycle only with normal pressure",
+          "scenario_id": "sensor_anomaly_EQ-0008_rt_clamp_press"
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_band": [
+            8.0,
+            16.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0008_rt_motor_current"
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.8,
+            1.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded bearing cover vibration",
+          "scenario_id": "sensor_anomaly_EQ-0008_rt_vib_rms"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "reference_product": "Mayfran flat-top / Miven Mayfran hinged steel belt",
+      "source_url": "https://www.mayfran.com/products/material-and-scrap-handling-recycling/",
+      "channels": [
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_band": [
+            10.0,
+            60.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "belt travel / steel slat travel",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_speed"
+        },
+        {
+          "signal": "cv_belt_tension",
+          "unit": "kPa",
+          "normal_band": [
+            380.0,
+            460.0
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "tensioner demo travel; pressure not converted to force",
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_belt_tension"
+        },
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_band": [
+            0.0,
+            70.0
+          ],
+          "acquisition": "derived",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_queue_len"
+        },
+        {
+          "signal": "cv_idler_speed_ratio",
+          "unit": "pct",
+          "normal_band": [
+            80,
+            100
+          ],
+          "acquisition": "derived",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_idler_speed_ratio"
+        },
+        {
+          "signal": "cv_motor_current",
+          "unit": "A",
+          "normal_band": [
+            10,
+            20
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_motor_current"
+        },
+        {
+          "signal": "cv_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.8,
+            1.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded drum bearing cover vibration",
+          "scenario_id": "sensor_anomaly_EQ-0009_cv_vib_rms"
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "reference_product": "Mayfran flat-top / Miven Mayfran hinged steel belt",
+      "source_url": "https://www.mayfran.com/products/material-and-scrap-handling-recycling/",
+      "channels": [
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_band": [
+            0.0,
+            70.0
+          ],
+          "acquisition": "derived",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0010_cv_queue_len"
+        },
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_band": [
+            8,
+            12
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": "belt travel / steel slat travel",
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0010_cv_speed"
+        },
+        {
+          "signal": "cv_idler_speed_ratio",
+          "unit": "pct",
+          "normal_band": [
+            80,
+            100
+          ],
+          "acquisition": "derived",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0010_cv_idler_speed_ratio"
+        },
+        {
+          "signal": "cv_motor_current",
+          "unit": "A",
+          "normal_band": [
+            10,
+            20
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": null,
+          "scenario_id": "sensor_anomaly_EQ-0010_cv_motor_current"
+        },
+        {
+          "signal": "cv_vib_rms",
+          "unit": "mm_s",
+          "normal_band": [
+            0.8,
+            1.8
+          ],
+          "acquisition": "continuous",
+          "persona_id": "V-12",
+          "sensor_visual": "normal steady green / out-of-band amber pulse / unavailable grey",
+          "physical_motion": null,
+          "illustrative_motion": "bounded drum bearing cover vibration",
+          "scenario_id": "sensor_anomaly_EQ-0010_cv_vib_rms"
+        }
+      ]
+    }
+  ]
+}

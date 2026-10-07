@@ -179,6 +179,8 @@
   function showWorkspace(key, focus = false) {
     const target = document.querySelector(`#tab-${key}`);
     if (!target?.dataset?.workspace) return;
+    // 관계도 전용 모드는 설비 흐름만 보여 준다. 상세·이력을 열면 전체 화면으로 나간다(그대로 두면 빈 화면).
+    if (key !== "flow" && document.body?.classList.contains("diagram-only")) setDiagramMode(false, false);
     document.querySelectorAll('[role="tab"][data-workspace]').forEach(tab => {
       const selected = tab.dataset.workspace === key;
       tab.setAttribute("aria-selected", String(selected)); tab.tabIndex = selected ? 0 : -1;

@@ -2,7 +2,9 @@
 
     python -m shiftlink.face fetch                         # 모델 내려받기(해시 확인)
     python -m shiftlink.face enroll --id E-001 [--shots 8]  # 등록: 화면을 보며 고개를 조금씩 돌린다
-    python -m shiftlink.face verify --id E-001 [--threshold 0.363] [--log attempts.csv --who 팀원A]
+    python -m shiftlink.face verify --id E-001 [--threshold 0.363] [--log <저장소 밖 경로>/attempts.csv --who 팀원A]
+        (시도 기록은 저장소 밖에 둔다: 익명 라벨이어도 날짜·시각·점수가 모이면 누가 시도했는지 추정된다.
+         예: ../ShiftLink-records/experiments/face_login/attempts.csv)
     python -m shiftlink.face delete --id E-001             # 삭제(동의 철회)
     python -m shiftlink.face bench [--frames 50]           # 한 프레임 지연 p50/p95, 메모리
 """

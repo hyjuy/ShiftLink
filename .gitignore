@@ -57,3 +57,13 @@ docs/data/sources/**/*.html
 # Unity 3D 모델링 참고자료는 로컬 보관. 완성 모델·Prefab은 Assets/에서 관리한다.
 /unity/ShiftLinkFactory/Assets/ReferenceMaterials/
 /unity/ShiftLinkFactory/Assets/ReferenceMaterials.meta
+
+# Face login: model weights, TensorRT engines, templates never go to the repo (see third_party_licenses/, shiftlink/face/models.py)
+*.onnx
+*.engine
+*.trt
+*.plan
+*.pth
+*.npz
+# face verify attempt logs (python -m shiftlink.face verify --log): keep outside the repo, this is a second guard
+attempts*.csv

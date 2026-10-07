@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # 라즈베리파이 PDA 화면 설치 (MES 대시보드는 Jetson이 서빙, 파이의 / 는 Jetson으로 이동). 저장소 안에서, 파이에서 실행한다.
 # 화면은 파이가 서빙하고 Jetson은 API만 맡는다.
-# 얼굴 점수는 OpenCV가 있는 ~/shiftlink/venv-face 로 띄운다. 설비 분류(install_service.sh vision)의 .venv와 합치지 않는다.
-# 분류가 웹캠을 잡고, 로그인 키오스크도 웹캠을 쓴다.
+# 얼굴 점수는 OpenCV가 있는 ~/shiftlink/venv-face 로 띄운다. 설비 분류(.venv, classify --listen)와 의존성을 따로 관리한다.
+# 웹캠은 로그인 키오스크만 쓴다(설비 분류는 Unity 사진을 HTTP로 받는다, 10/7).
 #
 #   deploy/install_pda.sh [Jetson 주소, 기본 http://jetson-06.tail0a6af3.ts.net:8000]
 #   PY=/다른/python deploy/install_pda.sh
@@ -24,6 +24,10 @@ if [ ! -x "$PY" ] || ! "$PY" -c "import cv2" >/dev/null 2>&1; then
   exit 1
 fi
 
+if [ "$REPO" = "$APP" ]; then  # 앱 폴더 안에서 실행하면 아래 rm -rf가 복사 원본까지 지운다
+  echo "저장소 사본(앱 폴더가 아닌 곳)에서 실행하세요: $REPO" >&2
+  exit 1
+fi
 mkdir -p "$APP/shiftlink/mes" "$HOME/shiftlink/logs" "$HOME/.config/autostart"
 rm -rf "$APP/shiftlink/pda" "$APP/shiftlink/face" "$APP/shiftlink/mes/web"
 cp -r "$REPO/shiftlink/pda" "$APP/shiftlink/pda"

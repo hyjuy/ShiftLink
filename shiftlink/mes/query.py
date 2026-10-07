@@ -2,13 +2,14 @@
 
 import json
 import os
+import time
 import urllib.request
 from dataclasses import asdict
 from pathlib import Path
 from types import SimpleNamespace
 
 from shiftlink.agent.pipeline import FixedPipeline
-from shiftlink.edge.ollama import DEFAULT_HOST, DEFAULT_TIMEOUT_S, OllamaModel
+from shiftlink.edge.ollama import DEFAULT_HOST, DEFAULT_TIMEOUT_S, KEEP_ALIVE, OllamaModel
 from shiftlink.rag.loader import load_card_provider
 from shiftlink.rag.retrieval import InMemoryToolProvider
 
@@ -30,6 +31,29 @@ def build_query_pipeline():
         answer_mode=os.environ.get('SHIFTLINK_ANSWER_MODE', ANSWER_MODE),  # 'extract' = E1 only (no answer model)
         judge_strict=True,  # no judge, no answer: the server replies 503 "try again" instead of showing a card unjudged
     )
+
+
+def warm_models(pipeline, *, attempts=30, wait_s=10.0, sleep=time.sleep):
+    """Load the judge (and, unless extract, the answer model) into Ollama so the first PDA query does not wait ~50 s.
+
+    Same num_ctx as the real calls, or Ollama reloads on the first query. Retries while Ollama is still starting after boot.
+    Returns the names that loaded.
+    """
+    model = pipeline.model
+    targets = [(model.judge_model, model.judge_num_ctx)]
+    if pipeline.answer_mode != 'extract' and model.model != model.judge_model:
+        targets.append((model.model, model.num_ctx))
+    loaded = []
+    for name, num_ctx in targets:
+        for _ in range(attempts):
+            try:
+                model._post('/api/generate', {'model': name, 'keep_alive': KEEP_ALIVE, 'options': {'num_ctx': num_ctx}})
+            except Exception:  # noqa: BLE001 - Ollama not up yet or model missing: try again later
+                sleep(wait_s)
+                continue
+            loaded.append(name)
+            break
+    return loaded
 
 
 def judge_model_status(host=None, name=None, timeout=3.0):

@@ -13,7 +13,7 @@ from shiftlink.face import MODEL_DIR  # noqa: E402
 from shiftlink.face.engine import FaceEngine, cosine  # noqa: E402
 from shiftlink.face.models import MANIFEST, fetch_models, sha256  # noqa: E402
 from shiftlink.face.store import FaceStore  # noqa: E402
-from shiftlink.face.verify import decide, frame_score  # noqa: E402
+from shiftlink.face.verify import append_attempt, decide, frame_score  # noqa: E402
 
 
 def unit(*values: float) -> np.ndarray:
@@ -84,6 +84,20 @@ def test_other_person_is_rejected_even_if_all_frames_agree() -> None:
     template = np.stack([unit(1, 0, 0, 0), unit(0.9, 0.1, 0, 0)])
     stranger = unit(0, 0, 1, 0)
     assert decide([stranger] * 5, template, threshold=0.363, min_pass=3).passed is False
+
+
+def test_attempt_log_has_scores_only(tmp_path: Path) -> None:
+    template = np.stack([unit(1, 0, 0, 0)])
+    log = tmp_path / "logs" / "attempts.csv"
+    append_attempt(log, "E-001", "본인", 0.363, decide([unit(1, 0.1, 0, 0)] * 3, template))
+    append_attempt(log, "E-001", "팀원A", 0.363, decide([unit(0, 0, 1, 0), None], template))
+    append_attempt(log, "E-001", "팀원B", 0.363, decide([None], template))
+    rows = [line.split(",") for line in log.read_text(encoding="utf-8").splitlines()]
+    assert rows[0] == ["time", "employee_id", "who", "threshold", "best_score", "frames_seen", "frames_passed", "passed"]
+    assert [r[2] for r in rows[1:]] == ["본인", "팀원A", "팀원B"]
+    assert [r[7] for r in rows[1:]] == ["1", "0", "0"]
+    assert rows[3][4] == ""  # 얼굴이 안 잡힌 시도는 점수 칸이 비어 있다
+    assert not any("embedding" in cell.lower() for row in rows for cell in row)  # 점수 외 데이터 없음
 
 
 def test_store_roundtrip_overwrite_delete(tmp_path: Path) -> None:

@@ -1,7 +1,10 @@
 """1:1 검증 판정. 여러 프레임 중 충분히 많은 프레임이 임계값을 넘어야 통과한다(한 프레임 우연 통과 방지)."""
 from __future__ import annotations
 
+import csv
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 
@@ -15,6 +18,19 @@ class Verdict:
     best_score: float | None  # 얼굴이 잡힌 프레임 중 최고 유사도. 얼굴이 하나도 없으면 None
     frames_seen: int          # 얼굴이 잡힌 프레임 수
     frames_passed: int
+
+
+def append_attempt(path: Path, employee_id: str, who: str, threshold: float, verdict: Verdict) -> None:
+    """사칭·본인 시도 기록. 점수와 통과 여부만 남기고 이미지·임베딩은 쓰지 않는다. who는 '본인' 또는 시도한 사람의 익명 라벨."""
+    new = not path.exists()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        if new:
+            writer.writerow(["time", "employee_id", "who", "threshold", "best_score", "frames_seen", "frames_passed", "passed"])
+        writer.writerow([datetime.now().astimezone().isoformat(timespec="seconds"), employee_id, who, threshold,
+                         "" if verdict.best_score is None else round(verdict.best_score, 4),
+                         verdict.frames_seen, verdict.frames_passed, int(verdict.passed)])
 
 
 def frame_score(embedding: np.ndarray, template: np.ndarray) -> float:

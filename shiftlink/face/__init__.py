@@ -14,5 +14,5 @@ TEMPLATE_DIR = FACE_DIR / "templates"
 
 # 임베딩 모델이 바뀌면 기존 등록은 쓸 수 없다. employee.face_model_version에도 이 값을 쓴다.
 MODEL_VERSION = "sface-2021dec"
-# OpenCV 문서의 SFace 코사인 기본값. 우리 데이터로 튜닝한 값이 아니다(사전 등록 6절: dev에서 정한다).
+# OpenCV가 SFace 예제에서 쓰는 코사인 권장 기본값. 현장 튜닝 전이다(사전 등록 6절: dev와 사칭 시도 점수로 판단).
 DEFAULT_THRESHOLD = 0.363

@@ -2,7 +2,7 @@
 
     python -m shiftlink.face fetch                         # 모델 내려받기(해시 확인)
     python -m shiftlink.face enroll --id E-001 [--shots 8]  # 등록: 화면을 보며 고개를 조금씩 돌린다
-    python -m shiftlink.face verify --id E-001 [--threshold 0.363]
+    python -m shiftlink.face verify --id E-001 [--threshold 0.363] [--log attempts.csv --who 팀원A]
     python -m shiftlink.face delete --id E-001             # 삭제(동의 철회)
     python -m shiftlink.face bench [--frames 50]           # 한 프레임 지연 p50/p95, 메모리
 """
@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import statistics
 import time
+from pathlib import Path
 
 import numpy as np
 
@@ -18,7 +19,7 @@ from . import DEFAULT_THRESHOLD
 from .engine import FaceEngine
 from .models import fetch_models
 from .store import FaceStore
-from .verify import decide
+from .verify import append_attempt, decide
 
 
 def _open(camera: int):
@@ -59,6 +60,8 @@ def main(argv: list[str] | None = None) -> int:
     verify.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
     verify.add_argument("--frames", type=int, default=5)
     verify.add_argument("--min-pass", type=int, default=3)
+    verify.add_argument("--log", type=Path, help="시도 기록 CSV(점수·통과 여부만, 이미지·임베딩 없음)")
+    verify.add_argument("--who", default="본인", help="시도한 사람 라벨. 사칭 시험에는 익명 라벨(예: 팀원A)")
     delete = sub.add_parser("delete")
     delete.add_argument("--id", required=True)
     bench = sub.add_parser("bench")
@@ -98,6 +101,8 @@ def main(argv: list[str] | None = None) -> int:
                 print("등록 없음 또는 모델 버전 불일치: 다시 등록하세요")
                 return 2
             verdict = decide(_grab(cap, engine, args.frames, 0.2), template, args.threshold, args.min_pass)
+            if args.log:
+                append_attempt(args.log, args.id, args.who, args.threshold, verdict)
             print(f"{'통과' if verdict.passed else '실패'} 최고 유사도={verdict.best_score} "
                   f"얼굴 프레임={verdict.frames_seen} 통과 프레임={verdict.frames_passed} (임계값 {args.threshold})")
             return 0 if verdict.passed else 1

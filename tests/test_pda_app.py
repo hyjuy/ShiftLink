@@ -171,3 +171,10 @@ def test_restart_page_relaunches_the_kiosk_app():
     finally:
         pda.shutdown(); jetson.shutdown()
     assert called == [1]
+
+
+def test_face_camera_state_is_visible_to_screen_switching():
+    """pda.js 의 faceRun 은 최상위에 있어야 show()→stopFaceCamera()가 오류 없이 돈다(10/7 키오스크 멈춤)."""
+    import subprocess
+    result = subprocess.run(["node", "tests/pda_face_camera.cjs"], capture_output=True, text=True, encoding="utf-8")
+    assert result.returncode == 0, result.stderr

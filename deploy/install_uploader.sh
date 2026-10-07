@@ -19,7 +19,8 @@ NAME=shiftlink-uploader
 
 if [ -n "${ENV_FILE:-}" ]; then
   [ -r "$ENV_FILE" ] || [ -n "${DRY_RUN:-}" ] || { echo "ENV_FILE을 읽을 수 없음: $ENV_FILE" >&2; exit 1; }
-  ENVLINE="EnvironmentFile=\"$ENV_FILE\""
+  # 따옴표로 감싸지 않는다: systemd 249(Jetson)는 따옴표 경로를 "절대 경로 아님"으로 무시한다. 값 전체가 경로라 공백도 그대로 된다.
+  ENVLINE="EnvironmentFile=$ENV_FILE"
 else
   [ -f "$REPO/.env" ] || [ -n "${DRY_RUN:-}" ] || { echo "접속 정보 없음: $REPO/.env (또는 ENV_FILE=...)" >&2; exit 1; }
   ENVLINE=""

@@ -1,6 +1,7 @@
 """PC 전이학습: 사전학습 MobileNetV3-Small → 6클래스 → ONNX + labels.txt.
 
     python -m shiftlink.vision.train [--data data/vision/raw] [--out data/vision/model] [--epochs 10]
+    python -m shiftlink.vision.train --data data/vision/unity-cls/train --val-data data/vision/unity-cls/val  # Unity (unity_cls.py)
 
 입력 전처리(224x224 리사이즈, ImageNet 정규화)는 classify.preprocess()와 같아야 한다.
 """
@@ -30,6 +31,7 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--val-ratio", type=float, default=0.2)
+    parser.add_argument("--val-data", type=Path, help="검증 폴더를 따로 줄 때(Unity split). 없으면 --data를 무작위로 나눈다")
     args = parser.parse_args()
 
     base = [transforms.Resize((SIZE, SIZE))]
@@ -40,12 +42,20 @@ def main() -> None:
     val_all = datasets.ImageFolder(args.data, transform=val_tf)
     labels = train_all.classes  # 폴더 이름 알파벳순 = 모델 출력 순서
 
-    # ponytail: 무작위 분할이라 연속 촬영한 비슷한 사진이 양쪽에 섞여 검증 정확도가 높게 나온다.
-    # 발표용 수치는 다른 날·다른 조명으로 따로 찍은 사진으로 다시 잰다.
-    order = torch.randperm(len(train_all), generator=torch.Generator().manual_seed(0)).tolist()
-    n_val = max(1, int(len(order) * args.val_ratio))
-    train_dl = DataLoader(Subset(train_all, order[n_val:]), batch_size=32, shuffle=True)
-    val_dl = DataLoader(Subset(val_all, order[:n_val]), batch_size=64)
+    if args.val_data:
+        val_set = datasets.ImageFolder(args.val_data, transform=val_tf)
+        if val_set.classes != labels:  # 클래스 폴더가 다르면 출력 번호가 어긋난다
+            raise SystemExit(f"검증 클래스 {val_set.classes} != 학습 클래스 {labels}")
+        train_set = train_all
+    else:
+        # ponytail: 무작위 분할이라 연속 촬영한 비슷한 사진이 양쪽에 섞여 검증 정확도가 높게 나온다.
+        # 발표용 수치는 다른 날·다른 조명으로 따로 찍은 사진으로 다시 잰다.
+        order = torch.randperm(len(train_all), generator=torch.Generator().manual_seed(0)).tolist()
+        n_val = max(1, int(len(order) * args.val_ratio))
+        train_set, val_set = Subset(train_all, order[n_val:]), Subset(val_all, order[:n_val])
+    n_val = len(val_set)
+    train_dl = DataLoader(train_set, batch_size=32, shuffle=True)
+    val_dl = DataLoader(val_set, batch_size=64)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = models.mobilenet_v3_small(weights=models.MobileNet_V3_Small_Weights.DEFAULT)
@@ -76,7 +86,8 @@ def main() -> None:
     model.to("cpu").eval()
     args.out.mkdir(parents=True, exist_ok=True)
     torch.onnx.export(model, torch.zeros(1, 3, SIZE, SIZE), str(args.out / "model.onnx"),
-                      input_names=["input"], output_names=["logits"], opset_version=17)
+                      input_names=["input"], output_names=["logits"], opset_version=17,
+                      dynamo=False)  # 기존 TorchScript 내보내기: 파이의 ONNX Runtime과 opset 17 그대로 맞춘다
     (args.out / "labels.txt").write_text("\n".join(labels) + "\n", encoding="utf-8")
     print(f"best val_acc={best_acc:.3f} -> {args.out / 'model.onnx'}, labels={labels}")
 

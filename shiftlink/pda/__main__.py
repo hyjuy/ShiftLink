@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import threading
@@ -21,12 +22,29 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
+_MAX_FACE_JPEG = 1_500_000
+
+
+def _face_bypass() -> bool:
+    """모델이 없을 때 시연만. 서버는 127.0.0.1에만 열린다. 기본은 꺼져 있다."""
+    return os.environ.get("SHIFTLINK_FACE_BYPASS") == "1"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
 PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 
-def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
+_window_proc: subprocess.Popen | None = None
+
+
+def stop_kiosk() -> None:
+    """키오스크 창을 닫고 이 프로세스를 끝낸다."""
+    proc = _window_proc
+    if proc is not None and proc.poll() is None:
+        proc.terminate()
+    os._exit(0)
+
+
+def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
             return
@@ -55,8 +73,15 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
                 msg = json.dumps({"error": f"Jetson 연결 실패: {err}"}, ensure_ascii=False).encode()
                 self._send(502, msg, "application/json; charset=utf-8")
 
+        def _face_config(self) -> None:
+            from shiftlink.face import DEFAULT_THRESHOLD, FACE_FRAMES, FACE_NEED
+            body = {"threshold": DEFAULT_THRESHOLD, "need": FACE_NEED, "frames": FACE_FRAMES, "bypass": _face_bypass()}
+            self._send(200, json.dumps(body).encode(), "application/json; charset=utf-8")
+
         def do_GET(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
+            if path == "/api/face/config":
+                self._face_config(); return
             if path.startswith("/api/"):
                 self._proxy(); return
             if path in ("/", "/index.html"):  # MES 대시보드는 파이에 두지 않는다 — Jetson 최신 화면으로 보낸다
@@ -67,7 +92,42 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
                 self._send(404, b"not found", "text/plain; charset=utf-8"); return
             self._send(200, (web / name).read_bytes(), f"{TYPES[Path(name).suffix]}; charset=utf-8")
 
+        def _face_frame(self) -> None:
+            """브라우저가 잡고 있는 카메라 프레임을 이 기기에서만 점수 낸다. Jetson으로 넘기지 않고 저장하지도 않는다."""
+            length = int(self.headers.get("Content-Length") or 0)
+            if length <= 0 or length > _MAX_FACE_JPEG:
+                msg = json.dumps({"error": "이미지 크기가 맞지 않습니다"}, ensure_ascii=False).encode()
+                self._send(400, msg, "application/json; charset=utf-8")
+                return
+            jpeg = self.rfile.read(length)
+            employee_id = self.headers.get("X-Employee-Id", "")
+            try:
+                from shiftlink.face.verify import score_login_jpeg
+                result = score_login_jpeg(jpeg, employee_id)
+            except LookupError as err:
+                msg = json.dumps({"error": str(err)}, ensure_ascii=False).encode()
+                self._send(404, msg, "application/json; charset=utf-8")
+            except ValueError as err:
+                msg = json.dumps({"error": str(err)}, ensure_ascii=False).encode()
+                self._send(400, msg, "application/json; charset=utf-8")
+            except Exception as err:
+                # 이미지는 로그에 남기지 않는다. 종류만 찍어 503 원인을 pda.log에서 본다.
+                print(f"face frame {type(err).__name__}", file=sys.stderr, flush=True)
+                msg = json.dumps({"error": "얼굴 모델을 열 수 없습니다", "bypass": _face_bypass()}, ensure_ascii=False).encode()
+                self._send(503, msg, "application/json; charset=utf-8")
+            else:
+                self._send(200, json.dumps(result).encode(), "application/json; charset=utf-8")
+
+        def _exit(self) -> None:
+            self._send(200, b'{"ok":true}', "application/json")
+            threading.Thread(target=on_exit or stop_kiosk, daemon=True).start()
+
         def do_POST(self) -> None:  # noqa: N802
+            path = self.path.split("?", 1)[0]
+            if path == "/api/pda/exit":
+                self._exit(); return
+            if path == "/api/face/frame":
+                self._face_frame(); return
             if self.path.startswith("/api/"):
                 self._proxy()
             else:
@@ -86,17 +146,23 @@ def wait_for(url: str) -> None:
 
 
 def open_window(url: str, scale: float) -> int:
+    global _window_proc
     # labwc에서는 --kiosk만으로 일반 창이 떠서 --app·--start-fullscreen을 같이 준다.
     # scale: PDA는 세로 휴대폰 폭 기준이라 2560x1600 모니터에서 2가 높이에 맞다.
     # 전용 프로필: 데스크톱 Chromium에 남은 창 크기를 물려받으면 화면보다 크게 떠서 아래가 잘린다.
     profile = Path.home() / "shiftlink" / "data" / "chromium"
     # 리눅스 Chromium은 --lang 대신 LANGUAGE로 UI 언어를 정한다. 파이가 영어(en_GB)면 한국어 화면에 번역 팝업이 뜬다.
     env = {**os.environ, "LANGUAGE": "ko"}
-    return subprocess.call([
+    if shutil.which("ibus-daemon"):
+        env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
+    _window_proc = subprocess.Popen([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
-        "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
+        "--lang=ko", "--disable-features=Translate",         "--kiosk", "--start-fullscreen",
+        # 카메라 권한 창을 띄우지 않는다. 이 창은 127.0.0.1 페이지만 연다.
+        "--use-fake-ui-for-media-stream",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",
     ], env=env)
+    return _window_proc.wait()
 
 
 def main() -> None:

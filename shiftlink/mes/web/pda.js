@@ -34,7 +34,8 @@ const S = {
   symptom:null,   // { text, other:boolean } — 선택된 증상
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
-  waitAbort:false, ranked:null, tries:[], attemptSeq:0
+  waitAbort:false, ranked:null, tries:[], attemptSeq:0,
+  operator:null, linkedEquipment:null
 };
 
 const $ = (id) => document.getElementById(id);
@@ -105,9 +106,8 @@ async function boot() {
     if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
 
     renderManualList();
-    const linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
-    if (linkedEquipment) { setContext(linkedEquipment, 'unity_link'); show('ctx'); }
-    else show('home');
+    S.linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
+    show('login');
   } catch (err) {
     $('bootMsg').textContent = 'MES 연결을 기다리고 있습니다. 3초 후 다시 시도합니다.';
     const box = document.createElement('div');
@@ -121,17 +121,35 @@ async function boot() {
 }
 
 // ── 화면 전환 ──────────────────────────────────────────────────────
+let faceStream = null;
+
+function stopFaceCamera() {
+  faceRun += 1;
+  if (faceStream) {
+    faceStream.getTracks().forEach((track) => track.stop());
+    faceStream = null;
+  }
+  if (typeof document !== 'undefined') {
+    const video = document.getElementById('faceVideo');
+    if (video) video.srcObject = null;
+  }
+}
+
 function show(name) {
   if (S.screen === 'scan' && name !== 'scan') S.scanRun += 1;  // 폴링 중단
+  if (S.screen === 'face' && name !== 'face') stopFaceCamera();
   S.screen = name;
   document.querySelectorAll('.screen').forEach((el) => {
     el.classList.toggle('on', el.id === 's-' + name);
   });
-  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot' || name === 'alertGo';
+  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot' || name === 'alertGo'
+    || name === 'login' || name === 'face';
   $('ctx').classList.toggle('on', !!S.eq && !hideCtx);
   $('net').hidden = (name === 'boot');
   const pane = document.querySelector('#s-' + name + ' .pane');
   if (pane) pane.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   if (name === 'ask') renderAskSafety();
 }
 
@@ -1341,13 +1359,278 @@ async function openOutbox() {
   });
 }
 
+const HANGUL_CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+const HANGUL_JUNG = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+const HANGUL_JONG = 'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ';
+const HANGUL_JUNG_COMB = { 'ㅗㅏ':'ㅘ', 'ㅗㅐ':'ㅙ', 'ㅗㅣ':'ㅚ', 'ㅜㅓ':'ㅝ', 'ㅜㅔ':'ㅞ', 'ㅜㅣ':'ㅟ', 'ㅡㅣ':'ㅢ' };
+const HANGUL_JONG_COMB = { 'ㄱㅅ':'ㄳ', 'ㄴㅈ':'ㄵ', 'ㄴㅎ':'ㄶ', 'ㄹㄱ':'ㄺ', 'ㄹㅁ':'ㄻ', 'ㄹㅂ':'ㄼ', 'ㄹㅅ':'ㄽ', 'ㄹㅌ':'ㄾ', 'ㄹㅍ':'ㄿ', 'ㄹㅎ':'ㅀ', 'ㅂㅅ':'ㅄ' };
+const HANGUL_JONG_SPLIT = { 'ㄳ':['ㄱ','ㅅ'], 'ㄵ':['ㄴ','ㅈ'], 'ㄶ':['ㄴ','ㅎ'], 'ㄺ':['ㄹ','ㄱ'], 'ㄻ':['ㄹ','ㅁ'], 'ㄼ':['ㄹ','ㅂ'], 'ㄽ':['ㄹ','ㅅ'], 'ㄾ':['ㄹ','ㅌ'], 'ㄿ':['ㄹ','ㅍ'], 'ㅀ':['ㄹ','ㅎ'], 'ㅄ':['ㅂ','ㅅ'] };
+
+function emptyHangul() { return { done: '', cho: -1, jung: -1, jong: 0 }; }
+
+function hangulSyllable(st) {
+  if (st.cho < 0) return '';
+  if (st.jung < 0) return HANGUL_CHO[st.cho];
+  return String.fromCharCode(0xAC00 + (st.cho * 21 + st.jung) * 28 + st.jong);
+}
+
+function hangulText(st) { return st.done + hangulSyllable(st); }
+
+function hangulPress(st, key) {
+  st = { done: st.done, cho: st.cho, jung: st.jung, jong: st.jong };
+  if (key === '⌫') {
+    if (st.jong > 0) {
+      const split = HANGUL_JONG_SPLIT[HANGUL_JONG[st.jong - 1]];
+      st.jong = split ? HANGUL_JONG.indexOf(split[0]) + 1 : 0;
+      return st;
+    }
+    if (st.jung >= 0) { st.jung = -1; return st; }
+    if (st.cho >= 0) { st.cho = -1; return st; }
+    st.done = Array.from(st.done).slice(0, -1).join('');
+    return st;
+  }
+  const cho = HANGUL_CHO.indexOf(key);
+  const jung = HANGUL_JUNG.indexOf(key);
+  if (st.cho < 0) {
+    if (cho >= 0) st.cho = cho;
+    else st.done += key;
+    return st;
+  }
+  if (st.jung < 0) {
+    if (jung >= 0) st.jung = jung;
+    else {
+      st.done += hangulSyllable(st);
+      st.cho = cho;
+      st.jung = -1;
+      st.jong = 0;
+      if (cho < 0) st.done += key;
+    }
+    return st;
+  }
+  if (jung >= 0 && st.jong === 0) {
+    const comb = HANGUL_JUNG_COMB[HANGUL_JUNG[st.jung] + key];
+    if (comb) { st.jung = HANGUL_JUNG.indexOf(comb); return st; }
+  }
+  if (cho >= 0 && st.jong === 0 && HANGUL_JONG.includes(key)) {
+    st.jong = HANGUL_JONG.indexOf(key) + 1;
+    return st;
+  }
+  if (cho >= 0 && st.jong > 0) {
+    const comb = HANGUL_JONG_COMB[HANGUL_JONG[st.jong - 1] + key];
+    if (comb) { st.jong = HANGUL_JONG.indexOf(comb) + 1; return st; }
+    st.done += hangulSyllable(st);
+    st.cho = cho; st.jung = -1; st.jong = 0;
+    return st;
+  }
+  if (jung >= 0 && st.jong > 0) {
+    const tail = HANGUL_JONG[st.jong - 1];
+    const split = HANGUL_JONG_SPLIT[tail];
+    const move = split ? split[1] : tail;
+    st.jong = split ? HANGUL_JONG.indexOf(split[0]) + 1 : 0;
+    st.done += hangulSyllable(st);
+    st.cho = HANGUL_CHO.indexOf(move);
+    st.jung = jung;
+    st.jong = 0;
+    return st;
+  }
+  st.done += hangulSyllable(st);
+  return hangulPress({ done: st.done, cho: -1, jung: -1, jong: 0 }, key);
+}
+
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan }; }
+// 임계값·통과 장수는 서버 /api/face/config 와 프레임 응답이 준다. 여기 숫자는 두지 않는다.
+function faceVerdict(scores, threshold, need, max) {
+  const passed = scores.filter((score) => score >= threshold).length;
+  if (passed >= need) return 'pass';
+  if (scores.length >= max) return 'fail';
+  return 'wait';
+}
+
+if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
 function on(id, fn) { const el = $(id); if (el) el.addEventListener('click', fn); }
 
+let loginHangul = emptyHangul();
+
+function mountLoginHangul() {
+  const box = $('loginHangul');
+  if (!box || box.childElementCount) return;
+  const rows = ['ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔ', 'ㅁㄴㅇㄹㅎㅗㅓㅏㅣ', 'ㅋㅌㅊㅍㅠㅜㅡ', '⌫'];
+  rows.forEach((chars) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    Array.from(chars).forEach((ch) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = ch;
+      btn.addEventListener('click', () => {
+        loginHangul = hangulPress(loginHangul, ch);
+        $('loginName').value = hangulText(loginHangul);
+      });
+      row.appendChild(btn);
+    });
+    box.appendChild(row);
+  });
+}
+
+function loginError(text) {
+  const el = $('loginErr');
+  el.hidden = !text;
+  el.textContent = text || '';
+}
+
+function submitLogin() {
+  const name = $('loginName').value.trim();
+  const id = $('loginId').value.trim();
+  if (!name || !id) {
+    loginError('이름과 사번을 모두 입력하세요.');
+    return;
+  }
+  loginError('');
+  S.operator = { name: name, id: id };
+  show('face');
+  startFaceCamera();
+}
+
+let toastTimer = 0;
+
+function showToast(text) {
+  const el = $('toast');
+  if (!el) return;
+  el.hidden = false;
+  el.textContent = text;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
+}
+
+function enterWork() {
+  if (S.operator && S.operator.name) showToast(S.operator.name + '님 로그인 되었습니다');
+  if (S.linkedEquipment) {
+    setContext(S.linkedEquipment, 'unity_link');
+    show('ctx');
+  } else {
+    show('home');
+  }
+}
+
+/* 프레임은 이 기기(/api/face/frame)에서만 점수 낸다. 저장하거나 Jetson으로 보내지 않는다(D-42). */
+function setFaceStatus(kind, text) {
+  const el = $('faceState');
+  el.classList.toggle('ok', kind === 'pass');
+  el.classList.toggle('failed', kind === 'fail');
+  $('faceText').textContent = text;
+}
+
+function wait(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+
+async function loadFaceRule() {
+  const res = await fetch('/api/face/config');
+  if (!res.ok) throw new Error('face config');
+  return res.json();
+}
+
+async function watchFace(run) {
+  let rule;
+  try {
+    rule = await loadFaceRule();
+  } catch (err) {
+    setFaceStatus('fail', '얼굴 확인 설정을 읽지 못했습니다');
+    $('faceRetry').hidden = false;
+    return;
+  }
+  $('faceBypass').hidden = !rule.bypass;
+  const video = $('faceVideo');
+  const canvas = document.createElement('canvas');
+  canvas.width = 640;
+  canvas.height = 480;
+  const ctx = canvas.getContext('2d');
+  const scores = [];
+  setFaceStatus('', '얼굴을 확인하는 중…');
+  $('faceRetry').hidden = true;
+  while (run === faceRun && S.screen === 'face') {
+    if (video.readyState < 2) { await wait(200); continue; }
+    ctx.drawImage(video, 0, 0, 640, 480);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+    if (!blob || run !== faceRun) return;
+    let data;
+    try {
+      const res = await fetch('/api/face/frame', {
+        method: 'POST',
+        headers: { 'Content-Type': 'image/jpeg', 'X-Employee-Id': S.operator.id },
+        body: blob,
+      });
+      data = await res.json();
+      if (!res.ok) {
+        setFaceStatus('fail', data.error || '얼굴 확인에 실패했습니다');
+        $('faceRetry').hidden = false;
+        if (data.bypass) $('faceBypass').hidden = false;
+        return;
+      }
+    } catch (err) {
+      setFaceStatus('fail', '얼굴 확인에 실패했습니다');
+      $('faceRetry').hidden = false;
+      return;
+    }
+    if (!data.face) {
+      setFaceStatus('', '얼굴이 안 보입니다');
+    } else {
+      scores.push(data.score);
+      const passed = scores.filter((score) => score >= data.threshold).length;
+      const verdict = faceVerdict(scores, data.threshold, data.need, data.frames);
+      if (verdict === 'pass') {
+        setFaceStatus('pass', '통과');
+        await wait(800);
+        if (run === faceRun && S.screen === 'face') enterWork();
+        return;
+      }
+      if (verdict === 'fail') {
+        setFaceStatus('fail', '거절');
+        $('faceRetry').hidden = false;
+        return;
+      }
+      setFaceStatus('', '확인 중 ' + passed + '/' + data.need);
+    }
+    await wait(350);
+  }
+}
+
+let faceRun = 0;
+
+async function startFaceCamera() {
+  stopFaceCamera();
+  const run = faceRun;
+  const video = $('faceVideo');
+  $('faceWho').textContent = S.operator.name + ' · ' + S.operator.id;
+  $('faceRetry').hidden = true;
+  setFaceStatus('', '카메라를 여는 중…');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setFaceStatus('fail', '이 브라우저에서 카메라를 열 수 없습니다.');
+    return;
+  }
+  try {
+    faceStream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+      audio: false,
+    });
+    if (S.screen !== 'face' || run !== faceRun) { stopFaceCamera(); return; }
+    video.srcObject = faceStream;
+    await video.play();
+    watchFace(run);
+  } catch (err) {
+    setFaceStatus('fail', '카메라를 열 수 없습니다. 다른 프로그램이 카메라를 쓰고 있으면 닫아 주세요.');
+  }
+}
+
+['loginName', 'loginId'].forEach((id) => {
+  $(id).addEventListener('keydown', (ev) => { if (ev.key === 'Enter') submitLogin(); });
+});
+on('loginGo', submitLogin);
+on('faceBack', () => show('login'));
+on('faceRetry', () => { startFaceCamera(); });
+on('faceBypass', enterWork);
+on('pdaExit', () => { fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
 document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', () => show('home')));
 on('toScan', startScan);
 on('scanClose', () => show('home'));
@@ -1506,6 +1789,7 @@ async function watchMes() {
 
 // ── 기동 ───────────────────────────────────────────────────────────
 renderNet();
+mountLoginHangul();
 window.paintOutbox = paintOutbox;
 async function pollOutbox() { paintOutbox(await refreshOutbox()); }
 probeServer();

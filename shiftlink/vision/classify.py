@@ -2,6 +2,9 @@
 
     python -m shiftlink.vision.classify [--model data/vision/model] [--camera 0] [--min-conf 0.8] [--frames 5] [--headless]
                                         [--server http://<jetson>:8000] [--device-id pi-01]
+    python -m shiftlink.vision.classify --listen 8090 --server http://<jetson>:8000   # Unity 사진 수신 모드(카메라 없음)
+
+수신 모드: POST /classify 본문 = PNG/JPEG 바이트(Unity PDA 사진 한 장). min_conf 이상이면 Jetson에 클래스명을 보낸다.
 """
 
 from __future__ import annotations
@@ -75,6 +78,54 @@ def preprocess(frame_bgr):
     return rgb.transpose(2, 0, 1)[None]
 
 
+def classify_bytes(session, labels: list[str], data: bytes) -> tuple[str, float, float]:
+    """사진 한 장(PNG/JPEG 바이트) → (클래스, 확률, 추론 ms). 디코딩 실패는 ValueError."""
+    import cv2
+    import numpy as np
+
+    frame = cv2.imdecode(np.frombuffer(data, dtype=np.uint8), cv2.IMREAD_COLOR)
+    if frame is None:
+        raise ValueError("이미지를 읽을 수 없음")
+    t0 = time.perf_counter()
+    logits = session.run(None, {"input": preprocess(frame)})[0][0]
+    probs = np.exp(logits - logits.max())
+    probs /= probs.sum()
+    i = int(probs.argmax())
+    return labels[i], float(probs[i]), (time.perf_counter() - t0) * 1000
+
+
+def make_handler(session, labels: list[str], min_conf: float, server: str | None, device_id: str):
+    """수신 모드 HTTP 핸들러. 사진 한 장은 그 자체로 확정이라 Stabilizer를 쓰지 않는다."""
+    from http.server import BaseHTTPRequestHandler
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_POST(self) -> None:  # noqa: N802
+            size = int(self.headers.get("Content-Length", "0"))
+            if self.path != "/classify" or not 0 < size <= 20_000_000:
+                return self._send(404 if self.path != "/classify" else 400, {"error": "POST /classify with image bytes"})
+            try:
+                label, conf, ms = classify_bytes(session, labels, self.rfile.read(size))
+            except ValueError as error:
+                return self._send(400, {"error": str(error)})
+            confirmed = conf >= min_conf
+            sent = bool(confirmed and server and post_scan(server, label, conf, device_id))
+            print(f"{'확정' if confirmed else '보류'} {label} conf={conf:.2f} {ms:.0f}ms sent={sent}", flush=True)
+            self._send(200, {"class": label, "conf": round(conf, 4), "ms": round(ms, 1), "confirmed": confirmed, "sent": sent})
+
+        def _send(self, status: int, body: dict) -> None:
+            raw = json.dumps(body, ensure_ascii=False).encode()
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(raw)))
+            self.end_headers()
+            self.wfile.write(raw)
+
+        def log_message(self, *args) -> None:  # 결과 줄만 남긴다
+            pass
+
+    return Handler
+
+
 def main() -> None:
     import cv2
     import numpy as np
@@ -88,10 +139,18 @@ def main() -> None:
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--server", help="Jetson MES 주소. 없으면 출력만 한다")
     parser.add_argument("--device-id", default=socket.gethostname())
+    parser.add_argument("--listen", type=int, help="카메라 대신 이 포트로 사진을 받는다(Unity 사진 수신 모드)")
     args = parser.parse_args()
 
     labels = (args.model / "labels.txt").read_text(encoding="utf-8").split()
     session = ort.InferenceSession(str(args.model / "model.onnx"), providers=["CPUExecutionProvider"])
+    if args.listen:
+        from http.server import ThreadingHTTPServer
+
+        handler = make_handler(session, labels, args.min_conf, args.server, args.device_id)
+        print(f"사진 수신: http://0.0.0.0:{args.listen}/classify  모델 {args.model}  Jetson {args.server or '(보내지 않음)'}", flush=True)
+        ThreadingHTTPServer(("0.0.0.0", args.listen), handler).serve_forever()
+        return
     stab = Stabilizer(args.min_conf, args.frames)
     cap = cv2.VideoCapture(args.camera)
     if not cap.isOpened():

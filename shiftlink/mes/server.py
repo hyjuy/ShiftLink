@@ -39,9 +39,22 @@ _KB_HANDOVERS = _ROOT / "docs" / "data" / "scenarios" / "EV-0031_upstream_cause.
 def kb_cards() -> dict[str, object]:
     """Searchable cards (C-102: accepted/kb/L1) and sample handovers for the PDA screen."""
     cards = json.loads(_KB_CARDS.read_text(encoding="utf-8"))["cards"]
-    handovers = json.loads(_KB_HANDOVERS.read_text(encoding="utf-8")).get("handover_records", [])
+    scenario = json.loads(_KB_HANDOVERS.read_text(encoding="utf-8"))
+    handovers = scenario.get("handover_records", [])
+    basis_ids = {basis for h in handovers for item in h.get("open_items", []) for basis in item.get("basis_ids", [])}
+    basis_records = {}
+    for collection, key in (("action_candidates", "action_candidate_id"), ("actions_executed", "action_executed_id"),
+                            ("outcomes", "outcome_id"), ("knowledge_cards", "card_id")):
+        for row in scenario.get(collection, []):
+            if row.get(key) not in basis_ids:
+                continue
+            if collection == "knowledge_cards" and (row.get("status"), row.get("split"), row.get("grade")) != ("accepted", "kb", "L1"):
+                continue
+            basis_records[row[key]] = {field: row[field] for field in
+                (key, "title", "detail", "executed_at", "recorded_at", "immediate_result", "observation_window_h", "post_measurements",
+                 "know_how", "rationale", "safety_basis") if field in row}
     return {"cards": [c for c in cards if (c.get("status"), c.get("split"), c.get("grade")) == ("accepted", "kb", "L1")],
-            "handovers": handovers, "is_synthetic": True}
+            "handovers": handovers, "basis_records": basis_records, "is_synthetic": True}
 
 
 class ConflictError(ValueError):

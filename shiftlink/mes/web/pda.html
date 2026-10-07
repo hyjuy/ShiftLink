@@ -15,7 +15,7 @@
   설비·신호·정상 범위는 /api/config, 관측은 /api/state, 카드는 /api/kb/cards 에서 읽는다.
   값을 복사해 두지 않으므로 MES 구성과 어긋날 수 없다.
 
-  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 캡처·업로드 경로가 없다.
+  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 얼굴 프레임은 이 기기에서만 점수 내고 저장하지 않는다.
 
   실행:  python -m shiftlink.mes  →  http://127.0.0.1:8000/pda.html
 -->
@@ -28,7 +28,7 @@
     --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html,body{height:100%;overflow:hidden}
   body{
     margin:0;background:var(--bg);color:var(--tx);
     font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
@@ -43,6 +43,8 @@
   #app{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
   .screen{flex:1 1 auto;display:none;flex-direction:column;min-height:0}
   .screen.on{display:flex}
+  /* 꺼진 화면(얼굴 640×480 포함)이 문서 높이를 밀어 홈 제목이 내려가지 않게 한다 */
+  .screen:not(.on){display:none !important;position:absolute;width:0;height:0;overflow:hidden;margin:0;padding:0}
 
   .appbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-height:50px;
     padding:0 6px 0 14px;border-bottom:1px solid var(--edge)}
@@ -110,14 +112,29 @@
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
   .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}
   .reticle.failed{border-style:solid;border-color:var(--fail);box-shadow:0 0 0 6px rgba(255,138,61,.13)}
-  #scanState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
+  #scanState, #faceState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
     font-weight:600;background:var(--surface);border-top:1px solid var(--edge);min-height:50px}
-  #scanState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
+  #scanState .dot, #faceState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
   #scanState.candidate{color:var(--warn)} #scanState.candidate .dot{background:var(--warn)}
   #scanState.locked{color:var(--ok)} #scanState.locked .dot{background:var(--ok)}
   #scanState.failed{color:var(--fail)} #scanState.failed .dot{background:var(--fail)}
   .scanfoot{flex:0 0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
     border-top:1px solid var(--edge)}
+  .field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700;color:var(--tx-2)}
+  .field input{min-height:56px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);
+    background:var(--surface);color:var(--tx);font:inherit;font-size:18px;font-weight:600}
+  .hangul{display:flex;flex-direction:column;gap:6px}
+  .hangul .row{display:flex;gap:4px}
+  .hangul button{flex:1 1 0;min-height:48px;border-radius:8px;border:1px solid var(--edge);
+    background:var(--surface-2);font-size:18px;font-weight:700}
+  #s-face .vf{flex:1 1 auto;min-height:0;width:auto;height:auto;margin:0;display:grid;place-items:center}
+  #faceVideo{position:static;width:min(640px,100%);height:min(480px,100%);max-width:100%;max-height:100%;object-fit:contain;background:#000}
+  #toast{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:30;max-width:90vw;
+    padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--ok);
+    font-size:18px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  #toast[hidden]{display:none}
+  #faceState.ok{color:var(--ok)} #faceState.ok .dot{background:var(--ok)}
+  #faceState.failed{color:var(--fail)} #faceState.failed .dot{background:var(--fail)}
 
   .list{display:flex;flex-direction:column;gap:8px}
   .row{display:flex;align-items:center;gap:11px;width:100%;min-height:56px;padding:8px 12px;
@@ -317,11 +334,45 @@
       <div class="grow"></div></div>
   </section>
 
+  <!-- 로그인. 부팅 다음 첫 화면. -->
+  <section class="screen" id="s-login">
+    <div class="appbar"><h1>로그인</h1></div>
+    <div class="pane">
+      <p class="hint">이름은 화면에만 나옵니다. 얼굴 확인은 사번으로 합니다.</p>
+      <label class="field">이름
+        <input id="loginName" type="text" lang="ko" autocomplete="name" enterkeyhint="next">
+      </label>
+      <div id="loginHangul" class="hangul"></div>
+      <p class="hint">이름은 화면 자판으로 넣습니다. 사번은 키보드로 넣습니다.</p>
+      <label class="field">사번
+        <input id="loginId" class="mono" type="text" autocomplete="off" enterkeyhint="go" spellcheck="false">
+      </label>
+      <p class="hint" id="loginErr" hidden></p>
+      <div class="grow"></div>
+      <button class="btn primary" id="loginGo" type="button">로그인</button>
+    </div>
+  </section>
+
+  <!-- 얼굴 인증. 프레임은 이 기기 서버에서만 점수 내고, 저장하거나 Jetson으로 보내지 않는다(D-42). -->
+  <section class="screen" id="s-face">
+    <div class="appbar"><button class="ic" id="faceBack" type="button" aria-label="이전">← 이전</button>
+      <h1>얼굴 인증</h1><span class="sp"></span></div>
+    <div class="pane flush" style="display:flex;flex-direction:column">
+      <div class="vf"><video id="faceVideo" width="640" height="480" autoplay muted playsinline></video></div>
+      <div id="faceState"><span class="dot"></span><span id="faceText">카메라를 여는 중…</span></div>
+      <div class="scanfoot">
+        <p class="hint" id="faceWho"></p>
+        <button class="btn" id="faceRetry" type="button" hidden>다시 시도</button>
+        <button class="btn" id="faceBypass" type="button" hidden>얼굴 확인 건너뛰기</button>
+      </div>
+    </div>
+  </section>
+
   <!-- 홈 -->
   <section class="screen" id="s-home">
-    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span></div>
+    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span>
+      <button class="ic" id="pdaExit" type="button">종료</button></div>
     <div class="pane">
-      <div class="grow"></div>
       <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
       <p class="hint">상자에 붙은 코드를 비추면 설비가 확정됩니다.</p>
       <div class="grow"></div>
@@ -520,5 +571,6 @@
 </div>
 
 <script src="/static/pda.js"></script>
+<div id="toast" hidden></div>
 </body>
 </html>

@@ -77,6 +77,20 @@ def test_query_log_is_uploaded_with_latency():
     assert list(cloud.rows) == [query_id]
 
 
+
+def test_rows_written_during_a_cycle_wait_for_the_next_one():
+    """10/7 Jetson: a query logged mid-upload made the cycle report pending -1."""
+    storage, cloud = MesStorage(), FakeCloud()
+    storage.save_query({"question": "first"})
+
+    def connect_while_a_query_arrives():
+        storage.save_query({"question": "arrived during upload"})
+        return cloud.connect()
+
+    assert upload_pending(storage, connect_while_a_query_arrives) == {"uploaded": 1, "conflict": 0, "pending": 0}
+    assert upload_pending(storage, cloud.connect) == {"uploaded": 1, "conflict": 0, "pending": 0}
+    assert len(cloud.rows) == 2
+
 @pytest.mark.parametrize("exc, expected", [
     (OSError("mysql://user:secret@host/db"), {"class": "OSError"}),
     (RuntimeError(1045, "password=secret; CA=/private/ca.pem"), {"class": "RuntimeError", "code": 1045}),

@@ -17,7 +17,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import DEFAULT_THRESHOLD
+from . import DEFAULT_THRESHOLD, FACE_FRAMES, FACE_NEED
 from .engine import FaceEngine
 from .models import fetch_models
 from .store import FaceStore
@@ -79,8 +79,8 @@ def main(argv: list[str] | None = None) -> int:
     verify = sub.add_parser("verify")
     verify.add_argument("--id", required=True)
     verify.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
-    verify.add_argument("--frames", type=int, default=5)
-    verify.add_argument("--min-pass", type=int, default=3)
+    verify.add_argument("--frames", type=int, default=FACE_FRAMES)
+    verify.add_argument("--min-pass", type=int, default=FACE_NEED)
     verify.add_argument("--log", type=Path, help="시도 기록 CSV(점수·통과 여부만, 이미지·임베딩 없음)")
     verify.add_argument("--who", default="본인", help="시도한 사람 라벨. 사칭 시험에는 익명 라벨(예: 팀원A)")
     delete = sub.add_parser("delete")

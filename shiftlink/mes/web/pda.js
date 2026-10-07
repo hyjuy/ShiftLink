@@ -1392,10 +1392,7 @@ function hangulPress(st, key) {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-const FACE_THRESHOLD = 0.363;
-const FACE_NEED = 3;
-const FACE_MAX = 5;
-
+// 임계값·통과 장수는 서버 /api/face/config 와 프레임 응답이 준다. 여기 숫자는 두지 않는다.
 function faceVerdict(scores, threshold, need, max) {
   const passed = scores.filter((score) => score >= threshold).length;
   if (passed >= need) return 'pass';
@@ -1482,7 +1479,22 @@ function setFaceStatus(kind, text) {
 
 function wait(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
+async function loadFaceRule() {
+  const res = await fetch('/api/face/config');
+  if (!res.ok) throw new Error('face config');
+  return res.json();
+}
+
 async function watchFace(run) {
+  let rule;
+  try {
+    rule = await loadFaceRule();
+  } catch (err) {
+    setFaceStatus('fail', '얼굴 확인 설정을 읽지 못했습니다');
+    $('faceRetry').hidden = false;
+    return;
+  }
+  $('faceBypass').hidden = !rule.bypass;
   const video = $('faceVideo');
   const canvas = document.createElement('canvas');
   canvas.width = 640;
@@ -1507,6 +1519,7 @@ async function watchFace(run) {
       if (!res.ok) {
         setFaceStatus('fail', data.error || '얼굴 확인에 실패했습니다');
         $('faceRetry').hidden = false;
+        if (data.bypass) $('faceBypass').hidden = false;
         return;
       }
     } catch (err) {
@@ -1519,7 +1532,7 @@ async function watchFace(run) {
     } else {
       scores.push(data.score);
       const passed = scores.filter((score) => score >= data.threshold).length;
-      const verdict = faceVerdict(scores, data.threshold, FACE_NEED, FACE_MAX);
+      const verdict = faceVerdict(scores, data.threshold, data.need, data.frames);
       if (verdict === 'pass') {
         setFaceStatus('pass', '통과');
         await wait(800);
@@ -1531,7 +1544,7 @@ async function watchFace(run) {
         $('faceRetry').hidden = false;
         return;
       }
-      setFaceStatus('', '확인 중 ' + passed + '/' + FACE_NEED);
+      setFaceStatus('', '확인 중 ' + passed + '/' + data.need);
     }
     await wait(350);
   }
@@ -1570,6 +1583,7 @@ async function startFaceCamera() {
 on('loginGo', submitLogin);
 on('faceBack', () => show('login'));
 on('faceRetry', () => { startFaceCamera(); });
+on('faceBypass', enterWork);
 on('pdaExit', () => { fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
 document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', () => show('home')));
 on('toScan', startScan);

@@ -2,6 +2,7 @@
 
 import http.client
 import json
+import os
 import threading
 import urllib.error
 import urllib.request
@@ -68,6 +69,29 @@ def test_pages_local_and_api_proxied():
         assert status == 201 and got["got"] == {"class": "HPU"} and got["ct"] == "application/json"
     finally:
         pda.shutdown(); jetson.shutdown()
+
+
+def test_face_config_is_local(monkeypatch):
+    jetson, jetson_url = serve(FakeJetson)
+    pda, pda_url = serve(make_handler(jetson_url))
+    try:
+        monkeypatch.delenv("SHIFTLINK_FACE_BYPASS", raising=False)
+        status, body = fetch(pda_url + "/api/face/config")
+        got = json.loads(body)
+        assert status == 200 and got == {"threshold": 0.363, "need": 3, "frames": 5, "bypass": False}
+        monkeypatch.setenv("SHIFTLINK_FACE_BYPASS", "1")
+        status, body = fetch(pda_url + "/api/face/config")
+        assert status == 200 and json.loads(body)["bypass"] is True
+        assert fetch(pda_url + "/api/state")[0] == 200
+    finally:
+        pda.shutdown(); jetson.shutdown()
+
+
+def test_no_face_weights_in_git():
+    import subprocess
+    tracked = subprocess.check_output(["git", "ls-files"], text=True, cwd=os.path.dirname(__file__) + "/..")
+    bad = [line for line in tracked.splitlines() if line.endswith((".onnx", ".npz", ".engine"))]
+    assert bad == []
 
 
 def test_face_frame_is_local_and_rejects_unknown_id():

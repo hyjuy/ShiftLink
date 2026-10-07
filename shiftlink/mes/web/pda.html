@@ -338,7 +338,7 @@
   <section class="screen" id="s-login">
     <div class="appbar"><h1>로그인</h1></div>
     <div class="pane">
-      <p class="hint">이름과 사번을 입력하면 얼굴 인증 화면으로 넘어갑니다.</p>
+      <p class="hint">이름은 화면에만 나옵니다. 얼굴 확인은 사번으로 합니다.</p>
       <label class="field">이름
         <input id="loginName" type="text" lang="ko" autocomplete="name" enterkeyhint="next">
       </label>
@@ -363,6 +363,7 @@
       <div class="scanfoot">
         <p class="hint" id="faceWho"></p>
         <button class="btn" id="faceRetry" type="button" hidden>다시 시도</button>
+        <button class="btn" id="faceBypass" type="button" hidden>얼굴 확인 건너뛰기</button>
       </div>
     </div>
   </section>

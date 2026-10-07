@@ -23,6 +23,11 @@ from pathlib import Path
 
 WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
 _MAX_FACE_JPEG = 1_500_000
+
+
+def _face_bypass() -> bool:
+    """모델이 없을 때 시연만. 서버는 127.0.0.1에만 열린다. 기본은 꺼져 있다."""
+    return os.environ.get("SHIFTLINK_FACE_BYPASS") == "1"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
 PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
@@ -67,8 +72,15 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPReq
                 msg = json.dumps({"error": f"Jetson 연결 실패: {err}"}, ensure_ascii=False).encode()
                 self._send(502, msg, "application/json; charset=utf-8")
 
+        def _face_config(self) -> None:
+            from shiftlink.face import DEFAULT_THRESHOLD, FACE_FRAMES, FACE_NEED
+            body = {"threshold": DEFAULT_THRESHOLD, "need": FACE_NEED, "frames": FACE_FRAMES, "bypass": _face_bypass()}
+            self._send(200, json.dumps(body).encode(), "application/json; charset=utf-8")
+
         def do_GET(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
+            if path == "/api/face/config":
+                self._face_config(); return
             if path.startswith("/api/"):
                 self._proxy(); return
             if path in ("/", "/index.html"):  # MES 대시보드는 파이에 두지 않는다 — Jetson 최신 화면으로 보낸다
@@ -97,8 +109,10 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPReq
             except ValueError as err:
                 msg = json.dumps({"error": str(err)}, ensure_ascii=False).encode()
                 self._send(400, msg, "application/json; charset=utf-8")
-            except Exception:
-                msg = json.dumps({"error": "얼굴 모델을 열 수 없습니다"}, ensure_ascii=False).encode()
+            except Exception as err:
+                # 이미지는 로그에 남기지 않는다. 종류만 찍어 503 원인을 pda.log에서 본다.
+                print(f"face frame {type(err).__name__}", file=sys.stderr, flush=True)
+                msg = json.dumps({"error": "얼굴 모델을 열 수 없습니다", "bypass": _face_bypass()}, ensure_ascii=False).encode()
                 self._send(503, msg, "application/json; charset=utf-8")
             else:
                 self._send(200, json.dumps(result).encode(), "application/json; charset=utf-8")
@@ -142,7 +156,8 @@ def open_window(url: str, scale: float) -> int:
         env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
     _window_proc = subprocess.Popen([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
-        "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
+        "--lang=ko", "--disable-features=Translate",         "--kiosk", "--start-fullscreen",
+        # 카메라 권한 창을 띄우지 않는다. 이 창은 127.0.0.1 페이지만 연다.
         "--use-fake-ui-for-media-stream",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",
     ], env=env)

@@ -16,3 +16,6 @@ TEMPLATE_DIR = FACE_DIR / "templates"
 MODEL_VERSION = "sface-2021dec"
 # OpenCV가 SFace 예제에서 쓰는 코사인 권장 기본값. 현장 튜닝 전이다(사전 등록 6절: dev와 사칭 시도 점수로 판단).
 DEFAULT_THRESHOLD = 0.363
+# 키오스크와 CLI가 같은 통과 기준을 쓴다. 얼굴이 잡힌 프레임 FACE_FRAMES장 중 FACE_NEED장 이상이 임계값을 넘으면 통과.
+FACE_NEED = 3
+FACE_FRAMES = 5

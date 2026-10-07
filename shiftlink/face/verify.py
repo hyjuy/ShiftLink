@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import DEFAULT_THRESHOLD
+from . import DEFAULT_THRESHOLD, FACE_FRAMES, FACE_NEED
 from .engine import cosine
 
 
@@ -53,7 +53,6 @@ _engine_lock = threading.Lock()
 def score_login_jpeg(jpeg: bytes, employee_id: str) -> dict[str, object]:
     """한 프레임 JPEG의 유사도. 이미지는 저장하지 않고 점수만 돌려준다. 등록이 없으면 LookupError, 사번이 틀리면 ValueError."""
     global _engine
-    from . import DEFAULT_THRESHOLD
     from .store import FaceStore
 
     store = FaceStore()
@@ -71,13 +70,14 @@ def score_login_jpeg(jpeg: bytes, employee_id: str) -> dict[str, object]:
         if _engine is None:
             _engine = FaceEngine.load()
         embedding = _engine.embed(frame)
+    rule = {"threshold": DEFAULT_THRESHOLD, "need": FACE_NEED, "frames": FACE_FRAMES}
     if embedding is None:
-        return {"face": False, "score": None, "threshold": DEFAULT_THRESHOLD}
-    return {"face": True, "score": round(frame_score(embedding, template), 4), "threshold": DEFAULT_THRESHOLD}
+        return {"face": False, "score": None, **rule}
+    return {"face": True, "score": round(frame_score(embedding, template), 4), **rule}
 
 
 def decide(embeddings: list[np.ndarray | None], template: np.ndarray, threshold: float = DEFAULT_THRESHOLD,
-           min_pass: int = 3) -> Verdict:
+           min_pass: int = FACE_NEED) -> Verdict:
     """embeddings: 프레임마다 `FaceEngine.embed` 결과(얼굴 없으면 None). 통과 프레임이 min_pass 이상이면 통과."""
     scores = [frame_score(e, template) for e in embeddings if e is not None]
     passed_scores = [score for score in scores if score >= threshold]

@@ -104,7 +104,8 @@ public static class FactoryChecks
             Check(!FactoryRules.Matches(config, badState), "duplicate coil IDs must be rejected");
 
             Check(scans.scans.Length == 1, "PDA recognition transported");
-            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            // Validation uses an unsaved scene; publishing Factory.unity is a separate authoring action.
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var factory = new GameObject("ShiftLink Factory").AddComponent<FactoryDemo>();
             factory.CreateEnvironment();
             factory.Build(config);
@@ -121,11 +122,8 @@ public static class FactoryChecks
             Capture(Path.Combine(dir, "fixture-factory.png"));
             factory.Disconnect("check disconnect");
             Check(factory.CoilCount == 0, "stale coils hidden");
-            Directory.CreateDirectory("Assets/Scenes");
-            EditorSceneManager.SaveScene(scene, "Assets/Scenes/Factory.unity");
-            EditorBuildSettings.scenes = new[] {new EditorBuildSettingsScene("Assets/Scenes/Factory.unity", true)};
-            AssetDatabase.SaveAssets();
-            File.WriteAllText(Path.Combine(dir, "unity-check-result.txt"), "PASS: config, colors, equipment, coils, PDA scan, disconnect, scene");
+            File.WriteAllText(Path.Combine(dir, "unity-check-result.txt"),
+                "PASS: config, colors, equipment, coils, PDA scan, disconnect, scene; run=" + state.run_id + "; sequence=" + state.sequence);
             Debug.Log("SHIFTLink FACTORY CHECKS PASS");
             EditorApplication.Exit(0);
         } catch (Exception error) { Debug.LogException(error); EditorApplication.Exit(1); }

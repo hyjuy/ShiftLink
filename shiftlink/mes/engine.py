@@ -6,6 +6,7 @@ from datetime import timedelta
 from collections import deque
 from dataclasses import replace
 from random import Random
+from math import isfinite
 from typing import Any
 
 from .contracts import (
@@ -265,8 +266,16 @@ class MesEngine:
             if states[current][0] != "running" or coil.get("quality_status") == "hold":
                 continue
 
-            travel_time = self._travel_time(current)
-            coil["position"] = min(1.0, round(coil["position"] + self.run.tick_seconds / travel_time, 6))
+            equipment = self._equipment_by_id[current]
+            speed_signal = next((s for s in equipment.signals
+                                 if s.signal in ("rt_speed", "cv_speed") and s.unit == "m_min"), None)
+            if speed_signal is not None:
+                speed = self._measurement_value(equipment, speed_signal)
+                # The Unity demo's transport anchors are 4.8 synthetic metres apart.
+                progress = max(0.0, speed) / 60 / 4.8 if isfinite(speed) else 0.0
+            else:
+                progress = 1 / self._travel_time(current)
+            coil["position"] = min(1.0, round(coil["position"] + self.run.tick_seconds * progress, 6))
 
             if coil["position"] < 1:
                 continue

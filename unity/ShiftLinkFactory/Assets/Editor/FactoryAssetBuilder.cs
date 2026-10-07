@@ -22,7 +22,10 @@ public static class FactoryAssetBuilder
             if(!(name.StartsWith("Equipment_") || name.StartsWith("Connection_") || name=="Material_Coil")) continue;
             if(!path.Contains("EquipmentTypes/") && !path.Contains("Connections/")) continue;
             string destination="Assets/Resources/Factory/"+name+".prefab";
-            if(File.Exists(destination) && name!="Equipment_RT") continue;
+            var existing=AssetDatabase.LoadAssetAtPath<GameObject>(destination);
+            bool utility=name=="Equipment_HPU" || name=="Equipment_PDP" || name=="Equipment_CAU" || name=="Equipment_GR";
+            if(existing!=null && (!utility || Mathf.Abs(existing.transform.Find("Model").localScale.x-1)<.001f) &&
+                (name!="Equipment_RT" || File.Exists("Assets/Resources/Factory/Equipment_RT02.prefab"))) continue;
             var source=AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if(source==null) throw new Exception("FBX not imported: "+path);
             var wrapper=new GameObject(name);
@@ -35,7 +38,7 @@ public static class FactoryAssetBuilder
             if(input!=null && output!=null) {
                 float span=Mathf.Abs(output.position.x-input.position.x);
                 if(span<.001f) throw new Exception("Unexpected FBX transport axes: "+path);
-                model.transform.localScale*=4.8f/span;
+                if(name=="Equipment_RT" || name=="Equipment_CV") model.transform.localScale*=4.8f/span;
                 if(output.position.x<input.position.x) model.transform.localRotation=Quaternion.Euler(0,180,0)*model.transform.localRotation;
             }
             PrefabUtility.SaveAsPrefabAsset(wrapper,destination);

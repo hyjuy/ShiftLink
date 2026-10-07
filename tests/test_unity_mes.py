@@ -1,44 +1,8 @@
 """Unity/PDA/MES contract verified against actual localhost HTTP handlers."""
 import json
-import threading
 import unittest
-from contextlib import contextmanager
-from http.server import ThreadingHTTPServer
-from pathlib import Path
-from urllib.request import ProxyHandler, Request, build_opener
 
-from shiftlink.mes.server import MesService, _Handler
-from shiftlink.pda.__main__ import make_handler
-
-ROOT = Path(__file__).resolve().parents[1]
-OPENER = build_opener(ProxyHandler({}))
-
-@contextmanager
-def demo_servers():
-    service = MesService(ROOT / "docs/data/reference/00_plant_and_relations.json")
-    mes_handler = type("UnityMesHandler", (_Handler,), {
-        "service": service, "web_root": ROOT / "shiftlink/mes/web",
-    })
-    mes = ThreadingHTTPServer(("127.0.0.1", 0), mes_handler)
-    origin = f"http://127.0.0.1:{mes.server_port}"
-    pda = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(origin))
-    threads = [threading.Thread(target=server.serve_forever) for server in (mes, pda)]
-    for worker in threads:
-        worker.start()
-    try:
-        yield service, origin, f"http://127.0.0.1:{pda.server_port}"
-    finally:
-        for server, worker in zip((mes, pda), threads):
-            server.shutdown()
-            worker.join()
-            server.server_close()
-        service.storage.close()
-
-def request(origin, path, payload=None):
-    data = None if payload is None else json.dumps(payload).encode()
-    with OPENER.open(Request(origin + path, data=data,
-                            headers={"Content-Type": "application/json"}), timeout=5) as response:
-        return json.load(response)
+from shiftlink.unity_demo import ROOT, OPENER, demo_servers, request
 
 class UnityMesContract(unittest.TestCase):
     def test_pda_control_and_recognition_reach_same_mes_as_unity(self):

@@ -1,7 +1,72 @@
 # ShiftLink 3D 공장 · MES · PDA 시연
 
+공장 외벽·지붕·철골과 천장 LED 12개, 외부 LED 4개를 설치했다.
+시작 화면에서 **View factory interior**로 내부를 확인하고 **View factory exterior**로 외관 보기로 돌아간다.
+배치·보행 공간·외관·조명 검증은 `docs/testing/unity-factory-layout-20261006.tdd.md`에 기록했다.
+
 프로젝트 경로: `D:/obsd/Projects/ShiftLink/unity/ShiftLinkFactory`.
 Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 장비 프리팹과 FactoryRig로 공장 장비와 이송 구간을 구성한다.
+
+## 직원 이동 · PDA 촬영 (2026-10-07)
+
+공장 화면의 `Walk as employee / PDA camera [F]` 또는 F로 직원 모드에 들어간다.
+기본 직원 모형은 작업복·안전모·손에 든 PDA로 구성했다.
+
+| 조작 | 동작 |
+|---|---|
+| WASD / 마우스 | 이동 / 시점 조정 |
+| V | 직원 1인칭·3인칭 전환 |
+| P | PDA 열기·닫기 |
+| Space / Enter | PDA 카메라 화면에서 촬영 |
+| 사진 저장 / 다시 촬영 | PNG·촬영정보 저장 / 미리보기 교체 |
+| 사진 보관함 | 디스크에 저장된 사진 다시 열기 |
+| F | PDA가 닫힌 상태에서 공장 관찰 화면으로 복귀 |
+
+PDA를 열면 이동·시점 조작을 멈춘다. 카메라 미리보기는 실제 PDA 렌즈의 시점이다.
+직원 모드에서는 공장 외벽·지붕을 유지하고 관찰 화면의 내부 보기에서는 외관을 숨긴다.
+물리 벽은 두 보기 모두 유지한다.
+
+사진은 기본적으로 `Application.persistentDataPath/ShiftLinkCaptures`에 PNG·JSON 쌍으로 저장한다.
+Unity Inspector의 `FactoryCapture.outputDirectory`로 저장 위치를 지정할 수 있다.
+저장 성공 메시지에는 실제 경로를 표시한다. 기본 해상도는 1280×720이다.
+촬영 ID는 UUID이며 이미지·정보 모두 저장된 뒤에만 성공을 표시한다.
+저장 실패 시 사진을 유지하고 다시 저장할 수 있다. 사진 원본에는 HUD·설명용 설비 코드·직원/PDA 모형을 넣지 않는다.
+
+JSON에는 카메라 위치·회전·FOV, 촬영 세션·공장 preset·seed, MES 구성/운전/sequence,
+객체별 종류·설비 ID·보이는 영역의 정답 상자를 기록한다.
+상자는 동일 프레임의 객체 ID 마스크에서 생성하며 좌표는 좌상단 기준 `xmin,ymin,xmax,ymax`이고 최대 경계는 exclusive다.
+클래스 순서는 `HPU`, `GR`, `RT`, `CV`, `CAU`, `PDP`로 고정한다.
+
+이번 신규 인식 경로는 **YOLO 하나**를 대상으로 한다. 아직 학습된 모델과 사진 추론은 연결하지 않았다.
+정답 설비 ID는 학습·평가용 정보이며 모델 예측으로 표시하지 않는다.
+
+촬영 데이터의 YOLO 변환:
+
+```powershell
+python -B -m shiftlink.vision.unity_dataset --captures CAPTURES_PATH --out NEW_DATASET_PATH
+```
+
+출력은 `images/{train,val,test}`, `labels/{train,val,test}`, `data.yaml`, `manifest.jsonl`이다.
+새 출력 폴더를 지정해야 한다. 원본 폴더 안에 출력하거나 기존 데이터셋을 덮어쓰지 않는다.
+동일 scene·session·이미지 해시를 공유하는 사진은 같은 그룹에 넣는다.
+현재 기본 `sceneId=factory-default`만 촬영하면 한 split만 생길 수 있으므로 독립적인 실제 배치·환경 preset을 먼저 준비해야 한다.
+검증·테스트 세트를 만들기 위해 같은 배치의 ID만 바꾸면 안 된다.
+
+로컬 기본 Python의 의존성이 맞지 않으면 기존 설치된 Python 3.13의 격리 환경으로 시연할 수 있다:
+
+```powershell
+uv run --python 3.13 --with pydantic==2.9.2 python -B scripts/run_unity_demo.py --editor D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe
+```
+
+검증과 남은 범위는 [직원/PDA 촬영 검증 기록](../../docs/testing/unity-worker-capture-20261007.tdd.md)에 기록했다.
+
+## 확장 공정과 반출·적재
+
+MES 공정 뒤에 가상 풀림·교정·슬리팅·재권취·검사·포장 라인을 연결하고 32×34m 생산동, 원자재 야드·크레인, 코일 보관대 24칸과 출하 트럭 8칸을 추가했다. 내부 보기에서 전체 공정을 확인한다.
+
+화면 오른쪽 아래에서 `Send next finished coils to truck`을 선택하면 새 반출 코일을 트럭으로 보내며, 기본 목적지는 보관장이다. `Load stored coils`로 보관 코일을 트럭에 싣고, `Dispatch loaded truck`으로 출하한다. 만재 시 보관 또는 대기로 전환한다.
+
+후단 설비와 재고는 Unity 세션의 가상 시연이다. MES 설비·재고를 등록하거나 실제 출하 지시를 보내지 않는다. 연결 해제·새 운전·구성 변경 때 가상 재고를 초기화한다. 검증과 제한 사항은 `docs/testing/unity-factory-logistics-20261006.tdd.md`에 기록했다.
 
 ## 실행
 

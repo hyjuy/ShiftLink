@@ -40,6 +40,7 @@ def test_each_installed_sensor_anomaly_reaches_search_and_recovers(eq, signal):
     engine.tick()
     provider = InMemoryToolProvider([], equipment_db=CATALOG["equipment"], equipment_types=CATALOG["equipment_types"])
     adapter = MesCardAdapter(Observer(engine), CONFIG, provider)
+    baseline = {(m.equipment_id, m.signal): m.value for m in engine.snapshot.measurements}
     engine.set_scenario(scenario_id)
     result = adapter.search(engine.run.run_id, eq.equipment_id, "sensor anomaly")
     observations = {o.signal: {"value": o.value, "unit": o.unit} for o in result["request"].observations}
@@ -54,7 +55,12 @@ def test_each_installed_sensor_anomaly_reaches_search_and_recovers(eq, signal):
     for m in engine.snapshot.measurements:
         if m.equipment_id != eq.equipment_id and m.signal == signal.signal:
             sibling = next(s for e in CONFIG.equipment if e.equipment_id == m.equipment_id for s in e.signals if s.signal == m.signal)
-            assert sibling.normal_min <= m.value <= sibling.normal_max
+            if signal.signal == 'cv_queue_len':
+                # Speed-based travel can fill CV-01 before injection. A full healthy
+                # conveyor is not a sibling injection; its measured occupancy stays intact.
+                assert m.value == baseline[(m.equipment_id, m.signal)]
+            else:
+                assert sibling.normal_min <= m.value <= sibling.normal_max
     engine.recover()
     engine.tick(2)
     recovered = next(m for m in engine.snapshot.measurements if m.equipment_id == eq.equipment_id and m.signal == signal.signal)

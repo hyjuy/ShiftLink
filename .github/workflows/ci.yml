@@ -27,6 +27,9 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # 비전·얼굴 테스트용(importorskip 대상). requirements-vision.txt와 같은 버전, torch는 테스트에 필요 없어 뺀다.
+      - run: pip install opencv-python-headless==4.10.0.84 numpy==2.1.3 onnxruntime==1.20.1
+
       - name: pytest
         run: python -m pytest -q
 

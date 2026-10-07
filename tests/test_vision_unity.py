@@ -6,9 +6,11 @@ import urllib.request
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 
-import cv2
-import numpy as np
 import pytest
+
+# CI(requirements.txt)에는 cv2·numpy가 없다. requirements-vision.txt 환경에서 돈다(tests/test_face.py와 같은 방식).
+cv2 = pytest.importorskip("cv2")
+np = pytest.importorskip("numpy")
 
 from scripts.send_unity_captures import ready
 from shiftlink.vision import classify

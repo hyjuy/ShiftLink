@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # 라즈베리파이 PDA 화면 설치 (MES 대시보드는 Jetson이 서빙, 파이의 / 는 Jetson으로 이동). 저장소 안에서, 파이에서 실행한다.
 # 화면은 파이가 서빙하고 Jetson은 API만 맡는다.
-# 얼굴 점수는 OpenCV가 있는 ~/shiftlink/venv-face 로 띄운다. 설비 분류(install_service.sh vision)의 .venv와 합치지 않는다.
-# 분류가 웹캠을 잡고, 로그인 키오스크도 웹캠을 쓴다.
+# 얼굴 점수는 OpenCV가 있는 ~/shiftlink/venv-face 로 띄운다. 설비 분류(install_service.sh)의 .venv와 합치지 않는다.
+# 이유는 얼굴(OpenCV·YuNet/SFace)과 설비 분류 의존성을 따로 관리하기 위해서다. 웹캠은 로그인만 쓴다.
 #
 #   deploy/install_pda.sh [Jetson 주소, 기본 http://jetson-06.tail0a6af3.ts.net:8000]
 #   PY=/다른/python deploy/install_pda.sh
@@ -20,7 +20,7 @@ APP="$HOME/shiftlink/app"
 PY="${PY:-$HOME/shiftlink/venv-face/bin/python}"
 
 if [ ! -x "$PY" ] || ! "$PY" -c "import cv2" >/dev/null 2>&1; then
-  echo "얼굴용 Python이 없습니다: $PY (cv2 필요). 설비 분류 .venv와 따로 둡니다." >&2
+  echo "얼굴용 Python이 없습니다: $PY (cv2 필요). 설비 분류 .venv와 의존성을 따로 둡니다." >&2
   exit 1
 fi
 

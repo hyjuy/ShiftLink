@@ -133,6 +133,28 @@ def test_pda_exit_stays_local():
         pda.shutdown(); jetson.shutdown()
 
 
+def test_proxy_timeout_is_short_except_query(monkeypatch):
+    seen = []
+    real = urllib.request.urlopen
+
+    def wrapped(req, timeout=None):
+        seen.append((req.full_url, timeout))
+        return real(req, timeout=timeout)
+
+    monkeypatch.setattr("shiftlink.pda.__main__.urllib.request.urlopen", wrapped)
+    jetson, jetson_url = serve(FakeJetson)
+    pda, pda_url = serve(make_handler(jetson_url))
+    try:
+        assert fetch(pda_url + "/api/state")[0] == 200
+        assert fetch(pda_url + "/api/query", b"{}")[0] == 201
+        from urllib.parse import urlparse
+        by_path = {urlparse(url).path: timeout for url, timeout in seen}
+        assert by_path["/api/state"] == 8
+        assert by_path["/api/query"] == 180
+    finally:
+        pda.shutdown(); jetson.shutdown()
+
+
 def test_jetson_down_is_502():
     pda, pda_url = serve(make_handler("http://127.0.0.1:9"))
     try:

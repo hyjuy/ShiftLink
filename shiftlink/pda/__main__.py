@@ -64,7 +64,9 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPReq
             if self.headers.get("Content-Type"):
                 req.add_header("Content-Type", self.headers["Content-Type"])
             try:
-                with urllib.request.urlopen(req, timeout=180) as res:  # /api/query 는 Jetson LLM 답변이라 오래 걸릴 수 있다
+                # 질의만 Jetson LLM이라 180초. 상태·스캔 등은 8초면 끊는다(키오스크가 멈추지 않게).
+                wait = 180 if self.path.split("?", 1)[0] == "/api/query" else 8
+                with urllib.request.urlopen(req, timeout=wait) as res:
                     self._send(res.status, res.read(), res.headers.get("Content-Type", "application/json"))
             except urllib.error.HTTPError as err:
                 self._send(err.code, err.read(), err.headers.get("Content-Type", "application/json"))
@@ -156,7 +158,7 @@ def open_window(url: str, scale: float) -> int:
         env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
     _window_proc = subprocess.Popen([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
-        "--lang=ko", "--disable-features=Translate",         "--kiosk", "--start-fullscreen",
+        "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
         # 카메라 권한 창을 띄우지 않는다. 이 창은 127.0.0.1 페이지만 연다.
         "--use-fake-ui-for-media-stream",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",

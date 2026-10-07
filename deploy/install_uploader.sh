@@ -50,6 +50,7 @@ fi
 
 printf '%s\n' "$UNIT" | sudo tee "/etc/systemd/system/$NAME.service" >/dev/null
 sudo systemctl daemon-reload
-sudo systemctl enable --now "$NAME"
+sudo systemctl enable "$NAME"
+sudo systemctl restart "$NAME"  # enable --now does not restart a running service, so a changed unit would not apply
 systemctl --no-pager --lines=5 status "$NAME" || true
 echo "로그: journalctl -u $NAME -f"

@@ -30,6 +30,13 @@ def test_server_serves_pda_and_only_searchable_cards():
     assert body['is_synthetic'] and body['cards']
     assert {(c['status'], c['split'], c['grade']) for c in body['cards']} == {('accepted', 'kb', 'L1')}
     assert isinstance(body['handovers'], list)
+    assert body['basis_records']['AX-0102']['detail']
+    assert body['basis_records']['OC-0101']['post_measurements']
+    assert body['basis_records']['AC-0101']['title']
+    ids = {basis for h in body['handovers'] for item in h['open_items'] for basis in item['basis_ids']}
+    assert set(body['basis_records']) <= ids
+    assert 'eval_items' not in body
+
 
 
 def test_pda_uses_live_mes_observations_and_derived_states():

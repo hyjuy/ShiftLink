@@ -29,7 +29,7 @@ const TYPE_COLOR = { HPU:'hpu', GR:'gr', RT:'rt', CV:'cv', PDP:'pdp', CAU:'cau' 
 
 // ── 상태 ───────────────────────────────────────────────────────────
 const S = {
-  screen:'boot', equipment:[], cards:[], handovers:[], groups:{}, types:{},
+  screen:'boot', equipment:[], cards:[], handovers:[], basisRecords:{}, groups:{}, types:{},
   eq:null, source:null, scanId:null,
   symptom:null,   // { text, other:boolean } — 선택된 증상
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
@@ -66,6 +66,23 @@ async function getJson(path) {
   return res.json();
 }
 
+/* Unity FactoryRig.Layout과 같은 좌표. 구성의 route 순서로 주 이송로 위치를 계산한다. */
+function unityLocation(eq, config, auxiliary) {
+  const route = config.route || [];
+  const index = route.indexOf(eq.equipment_id), count = route.length;
+  let x, y = 0, z, area;
+  if (index >= 0) {
+    x = (index - (count - 1) * .5) * 5.4; z = 0;
+    area = '주 이송로 ' + (index + 1) + '번째';
+  } else {
+    const positions = {'GR-01':[-(count-1)*2.7-3.8,0,3], 'GR-02':[(count-3)*2.7-3.8,0,3],
+      'HPU-01':[-6,0,8], 'PDP-01':[-2,0,8], 'CAU-01':[3,3.2,8], 'CV-02':[(count-3)*2.7+1.7,0,-4]};
+    [x,y,z] = positions[eq.code] || [auxiliary*3,0,9];
+    area = String(eq.code || '').startsWith('GR-') ? '이송로 구동부' : eq.code === 'CV-02' ? '분기 이송로' : '보조 설비 구역';
+  }
+  return 'Unity 가상 공장 · ' + area + ' (X ' + Number(x.toFixed(1)) + ', Y ' + y + ', Z ' + z + ')';
+}
+
 /* MES 구성의 설비·신호에 기준정보의 그룹명·위치 문구만 덧붙인다. */
 function equipmentFrom(config, catalog) {
   const groups = {}, rows = {};
@@ -78,7 +95,7 @@ function equipmentFrom(config, catalog) {
       code: e.code,
       type: String(e.code).split('-')[0],
       group: (groups[row.equipment_group_id] || {}).name || e.name || '',
-      where: row.location_text || '',
+      where: unityLocation(e, config, config.equipment.indexOf(e)),
       signals: (e.signals || []).map((m) => ({
         signal: m.signal, name: m.name || m.signal, unit: m.unit,
         min: m.normal_min, max: m.normal_max, semantics: m.semantics || {}, zeroStopped: m.zero_when_stopped === true
@@ -100,6 +117,7 @@ async function boot() {
     S.equipment = equipmentFrom(cfg.config, cat.data);
     S.cards = kb.cards || [];
     S.handovers = kb.handovers || [];
+    S.basisRecords = kb.basis_records || {};
 
     if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
 
@@ -186,10 +204,6 @@ function renderContext() {
   $('ctxRail').style.background = byType(S.eq.type);
   $('ctxId').textContent = S.eq.code;
   $('ctxName').textContent = S.eq.group;
-  const camera = S.source === 'camera_scan';
-  const src = $('ctxSrc');
-  src.classList.toggle('manual', !camera);
-  src.textContent = (camera ? '✓ 카메라 확정' : '· 직접 선택') + (S.scanId ? ' · ' + S.scanId : '');
   $('ctxFoot').textContent = S.eq.equipment_id + ' · ' + S.eq.where;
 }
 
@@ -736,11 +750,11 @@ function rankCards(eq) {
 // ── 렌더 ───────────────────────────────────────────────────────────
 function safetyEl(c, pin) {
   const d = document.createElement('div');
-  d.className = 'safety' + (pin ? ' pin' : '');
-  d.innerHTML = '<div class="hd"><span class="dot"></span><span>안전 · 조치 전 필수</span></div>'
+  d.className = 'safety' + (pin ? ' pin' : '') + (c.mismatch || c.missing ? ' invalid' : '');
+  d.innerHTML = '<div class="hd"><span class="dot"></span><span>⚠ 작업 전 안전 확인</span></div>'
     + '<div class="kid"></div><div class="ttl"></div><p class="body" style="margin:0"></p>'
     + '<p class="basis" style="margin:0"></p>'
-    + (pin ? '<div class="gate">아래 조치는 이 조건을 지킨 상태에서만 수행한다</div>' : '');
+    + (pin ? '<div class="gate">안전 조건을 확인하고 준수한 뒤 작업하세요.</div>' : '');
   if (c.mismatch) {
     d.querySelector('.kid').textContent = c.card_id + ' · 설비 불일치';
     d.querySelector('.ttl').textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
@@ -769,7 +783,7 @@ function safetyStack(cards) {
   box.className = 'safety-stack';
   const bar = document.createElement('div');
   bar.className = 'safety-bar';
-  bar.textContent = '안전 카드 ' + cards.length + '건 · 아래 안전 조건을 지킨 상태에서만 조치';
+  bar.textContent = '⚠ 작업 전 확인할 안전 수칙 ' + cards.length + '건';
   box.appendChild(bar);
   cards.forEach((c) => box.appendChild(safetyEl(c, true)));
   return box;
@@ -928,6 +942,9 @@ function renderResult() {
     l2.className = 'lbl';
     l2.textContent = '조건 불일치·미평가 ' + r.excluded.length + '건 — 이유와 함께 남김';
     pane.appendChild(l2);
+    const legend = document.createElement('p'); legend.className = 'hint';
+    legend.textContent = '인계 기록에 등록된 상태입니다. MES 수치가 정상으로 돌아와도 자동으로 완료 처리하지 않습니다.';
+    pane.appendChild(legend);
     r.excluded.forEach((x) => {
       const el = actionEl(x, null); el.classList.add('out'); if (x.miss) el.classList.add('miss'); pane.appendChild(el);
     });
@@ -1117,6 +1134,41 @@ async function runSearch() {
   }
 }
 
+const HANDOVER_STATUS = {
+  open: ['조치 필요', '아직 완료되지 않아 다음 교대에서 처리해야 하는 항목입니다.'],
+  in_progress: ['진행 중', '조치를 시작했으며 완료 확인이 남아 있는 항목입니다.'],
+  needs_recheck: ['재확인 필요', '이전 조치나 확인 결과를 다시 검토해야 하는 항목입니다. 완료로 처리하지 않습니다.'],
+  done: ['완료', '완료로 기록된 항목입니다.'],
+  closed: ['종료', '종료로 기록된 항목입니다.'],
+  withdrawn: ['철회', '처리 대상에서 철회된 항목입니다.'],
+};
+function handoverStatus(status) {
+  return HANDOVER_STATUS[status] || ['상태 확인 필요', '등록된 상태를 담당자에게 확인해 주세요.'];
+}
+
+function appendBasisDetails(parent, ids) {
+  if (!ids.length) {
+    const p = document.createElement('p'); p.className = 'hint'; p.textContent = '등록된 근거가 없습니다.';
+    parent.appendChild(p); return;
+  }
+  ids.forEach((id) => {
+    const record = S.cards.find((c) => c.card_id === id) || S.basisRecords[id];
+    const detail = document.createElement('details'); detail.className = 'basis-detail';
+    const summary = document.createElement('summary');
+    summary.textContent = '근거 보기 · ' + id + (record && record.title ? ' · ' + record.title : '');
+    detail.appendChild(summary);
+    const p = document.createElement('p'); p.className = 'body';
+    if (!record) p.textContent = '이 근거의 원문을 찾을 수 없습니다. 담당자에게 확인해 주세요.';
+    else if (record.card_id) p.textContent = [record.know_how, record.rationale, record.safety_basis].filter(Boolean).join('\n\n');
+    else if (record.detail) p.textContent = [record.detail, record.executed_at].filter(Boolean).join('\n');
+    else p.textContent = ['결과: ' + ({improved:'개선됨', unchanged:'변화 없음', worsened:'악화됨'}[record.immediate_result] || record.immediate_result || '미기재'),
+      '기록 시각: ' + (record.recorded_at || '미기재'),
+      '관찰 기간: ' + (record.observation_window_h == null ? '미기재' : record.observation_window_h + '시간'),
+      ...(record.post_measurements || []).map((m) => signalName(m.signal) + ' ' + m.value + ' ' + unitText(m.unit))].join('\n');
+    detail.appendChild(p); parent.appendChild(detail);
+  });
+}
+
 function openHandover() {
   const pane = $('hoPane'); pane.innerHTML = '';
   const mine = S.handovers.filter((h) =>
@@ -1141,10 +1193,13 @@ function openHandover() {
     memo.querySelector('.body').textContent = h.memo_text;
     pane.appendChild(memo);
 
-    const open = (h.open_items || []).filter((it) => it.status !== 'closed');
+    const open = (h.open_items || []).filter((it) => !['closed', 'done', 'withdrawn'].includes(it.status));
     const l2 = document.createElement('p');
-    l2.className = 'lbl'; l2.textContent = '미종료 ' + open.length + '건';
+    l2.className = 'lbl'; l2.textContent = '처리 또는 재확인이 필요한 항목 ' + open.length + '건';
     pane.appendChild(l2);
+    const legend = document.createElement('p'); legend.className = 'hint';
+    legend.textContent = '인계 기록에 등록된 상태입니다. MES 수치가 정상으로 돌아와도 자동으로 완료 처리하지 않습니다.';
+    pane.appendChild(legend);
 
     open.forEach((it) => {
       const d = document.createElement('div');
@@ -1153,11 +1208,15 @@ function openHandover() {
         + '<span class="pill du"></span></div>'
         + '<p class="body" style="margin:0"></p><div class="src"></div>';
       const st = d.querySelector('.st');
-      st.textContent = it.status;
+      const status = handoverStatus(it.status);
+      st.textContent = status[0];
+      const explanation = document.createElement('p');
+      explanation.className = 'hint'; explanation.textContent = status[1];
+      d.querySelector('.pills').after(explanation);
       if (it.status !== 'open') st.className = 'pill unknown st';
       d.querySelector('.du').textContent = it.due_shift + '조 마감';
       d.querySelector('.body').textContent = it.text;
-      d.querySelector('.src').textContent = '근거 ' + (it.basis_ids || []).join(' · ');
+      appendBasisDetails(d.querySelector('.src'), it.basis_ids || []);
       pane.appendChild(d);
     });
   });
@@ -1192,17 +1251,21 @@ function openHandoverNew() {
     : (S.observations.length
         ? S.observations.map(obsText).join(', ')
         : '시도 기록 없음 — 직접 입력 필요');
-  $('hoCtx').textContent = ctx;
+  $('hoCtx').value = ctx;
+  $('hoLoadMes').disabled = false;
+  $('hoMesStatus').textContent = '현재 측정값과 최근 이벤트를 작업 상황에 추가합니다.';
   $('hoSave').textContent = '저장';
   try {
     const pending = JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY) || 'null');
     if (pending) {
+      $('hoLoadMes').disabled = true;
+      $('hoMesStatus').textContent = '전송 확인이 안 된 인계입니다. 기존 내용으로 재전송해 주세요.';
       $('hoSave').textContent = '대기 인계 재전송 · ' + pending.handover_id;
       $('hoMemo').value = pending.memo_text;
       ['hoRole','hoTiming','hoChannel','hoAck'].forEach((id, index) => {
         $(id).value = pending.required_context[['recipient_role','timing','channel','acknowledgement'][index]];
       });
-      $('hoCtx').textContent = pending.required_context.context;
+      $('hoCtx').value = pending.required_context.context;
     }
   } catch (err) {
     $('hoWarn').hidden = false;
@@ -1213,8 +1276,35 @@ function openHandoverNew() {
   show('hoNew');
 }
 
+function mesHandoverContext(snap, events, eq) {
+  const readings = usableReadings(snap, eq).kept;
+  const recent = (events || []).filter((e) => e.equipment_id === eq.equipment_id).slice(-5);
+  return ['MES 기록 · ' + eq.code + ' · ' + snap.simulated_at,
+    ...readings.map((m) => (eq.signals.find((spec) => spec.signal === m.signal).name || m.signal) + ': ' + m.value + ' ' + unitText(m.unit) + ' · 측정 ' + m.observed_at),
+    ...recent.map((e) => e.occurred_at + ' · ' + e.observation)].join('\n');
+}
+
+async function importHandoverMes() {
+  const eq = S.eq;
+  if (!eq) { $('hoMesStatus').textContent = '설비를 먼저 선택해 주세요.'; return; }
+  const button = $('hoLoadMes'); button.disabled = true;
+  $('hoMesStatus').textContent = 'MES 기록을 불러오는 중…';
+  try {
+    const [snap, log] = await Promise.all([getJson('/api/state'), getJson('/api/events')]);
+    if (S.eq !== eq || S.screen !== 'hoNew') return;
+    const text = mesHandoverContext(snap, log.events, eq);
+    const input = $('hoCtx');
+    const combined = [input.value.trim(), text].filter(Boolean).join('\n\n');
+    if (combined.length > input.maxLength) throw new Error('입력 가능한 글자 수를 초과합니다. 기존 내용을 줄인 뒤 다시 불러와 주세요.');
+    input.value = combined;
+    $('hoMesStatus').textContent = 'MES 기록을 추가했습니다. 필요한 내용을 수정해 주세요.';
+    validateHandover();
+  } catch (err) { $('hoMesStatus').textContent = 'MES 기록을 불러오지 못했습니다. ' + err.message; }
+  finally { button.disabled = false; }
+}
+
 function validateHandover() {
-  const ok = ['hoMemo', 'hoRole', 'hoTiming', 'hoChannel', 'hoAck'].every((id) => $(id).value.trim());
+  const ok = ['hoMemo', 'hoCtx', 'hoRole', 'hoTiming', 'hoChannel', 'hoAck'].every((id) => $(id).value.trim());
   $('hoSave').disabled = !ok;
   $('hoWarn').hidden = ok;
 }
@@ -1296,7 +1386,7 @@ async function openOutbox() {
 }
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
-if (typeof module !== 'undefined') { module.exports = { S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan }; }
+if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1327,6 +1417,7 @@ on('hoPending', openOutbox);
 on('hoBack', () => show(S.eq ? 'ctx' : 'home'));
 on('toHandoverNew', openHandoverNew);
 on('hoNewBack', () => show('ctx'));
+on('hoLoadMes', importHandoverMes);
 on('hoSave', async () => {
   $('hoSave').disabled = true;
   $('hoWarn').hidden = false;
@@ -1335,7 +1426,7 @@ on('hoSave', async () => {
     const result = await submitHandover({memo_text:$('hoMemo').value.trim(),
       equipment_id:S.eq ? S.eq.equipment_id : null,
       required_context:{recipient_role:$('hoRole').value.trim(), timing:$('hoTiming').value.trim(),
-        channel:$('hoChannel').value.trim(), acknowledgement:$('hoAck').value.trim(), context:$('hoCtx').textContent},
+        channel:$('hoChannel').value.trim(), acknowledgement:$('hoAck').value.trim(), context:$('hoCtx').value.trim()},
       attempts:S.tries, observations:S.observations});
     haptic([120]);
     $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id;
@@ -1344,7 +1435,7 @@ on('hoSave', async () => {
     $('hoSave').disabled = false;
   }
 });
-['hoMemo','hoRole','hoTiming','hoChannel','hoAck'].forEach((id) => {
+['hoMemo','hoCtx','hoRole','hoTiming','hoChannel','hoAck'].forEach((id) => {
   $(id).addEventListener('input', validateHandover);
 });
 

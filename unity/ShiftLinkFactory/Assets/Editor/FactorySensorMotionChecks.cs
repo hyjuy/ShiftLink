@@ -303,6 +303,7 @@ public static class FactorySensorMotionChecks
         Check(Mathf.Abs(sheet.position.x-bin.center.x)<=bin.extents.x && Mathf.Abs(sheet.position.z-bin.center.z)<=bin.extents.z && sheet.position.y<1,
             "Completed scrap is inside the actual collection bin footprint below conveyor height");
         Capture(nodes.Find("EQ-0010"),Path.Combine(dir,"scrap-collected-CV02.png"));
+        frame=JsonUtility.FromJson<MesSnapshot>(JsonUtility.ToJson(frame));
         frame.run_id="scrap-discharge-reset"; demo.Apply(frame);
         Check(demo.DischargingScrapCount==0 && demo.ScrapCount==0 && discharge.childCount==0,"New MES run clears pending and collected scrap");
         frame.coils=new[]{new CoilReading {coil_id="Offline pending scrap",equipment_id="EQ-0010",position=.7f}}; demo.Apply(frame);

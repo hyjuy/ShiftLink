@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -44,7 +45,14 @@ def stop_kiosk() -> None:
     os._exit(0)
 
 
-def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPRequestHandler]:
+def restart_kiosk() -> None:
+    """같은 인자로 PDA 앱을 2초 뒤 다시 띄우고(포트가 빈 뒤) 지금 창과 프로세스를 끝낸다. 파이(sh) 전용."""
+    cmd = " ".join(shlex.quote(a) for a in [sys.executable, "-m", "shiftlink.pda", *sys.argv[1:]])
+    subprocess.Popen(["sh", "-c", f"sleep 2; exec {cmd}"], cwd=os.getcwd(), start_new_session=True, stdin=subprocess.DEVNULL)
+    stop_kiosk()
+
+
+def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
             return
@@ -84,8 +92,14 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None) -> type[BaseHTTPReq
                 self._face_config(); return
             if path.startswith("/api/"):
                 self._proxy(); return
+            if path == "/pda/restart":
+                # ponytail: GET으로 재시작한다. 대시보드(Jetson 주소)에서 링크 이동으로 부르려면 GET이어야 한다(다른 출처의
+                # fetch는 브라우저가 127.0.0.1로 보내지 않을 수 있다). 서버는 127.0.0.1에만 열려 키오스크에서만 부를 수 있다.
+                page = "<!doctype html><meta charset=utf-8><body style='background:#0b0d10;color:#e8eaed;font:20px sans-serif;padding:40px'>PDA를 다시 시작합니다…"
+                self._send(200, page.encode(), "text/html; charset=utf-8")
+                threading.Thread(target=on_restart or restart_kiosk, daemon=True).start(); return
             if path in ("/", "/index.html"):  # MES 대시보드는 파이에 두지 않는다 — Jetson 최신 화면으로 보낸다
-                self.send_response(302); self.send_header("Location", jetson + "/"); self.send_header("Content-Length", "0")
+                self.send_response(302); self.send_header("Location", jetson + "/?from=pda")  # 대시보드가 키오스크용 돌아가기·재시작 버튼을 띄운다; self.send_header("Content-Length", "0")
                 self.end_headers(); return
             name = PAGES.get(path)
             if name is None:

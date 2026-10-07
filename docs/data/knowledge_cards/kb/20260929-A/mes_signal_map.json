@@ -795,6 +795,7 @@
       "hpu_high_viscosity",
       "hpu_no_outlet_pressure",
       "pdp_trip",
+      "scrap_discharge",
       "sensor_anomaly_EQ-0001_fluid_viscosity",
       "sensor_anomaly_EQ-0001_hpu_filter_dp",
       "sensor_anomaly_EQ-0001_hpu_flow",

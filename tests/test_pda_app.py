@@ -6,6 +6,7 @@ import os
 import threading
 import urllib.error
 import urllib.request
+from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from shiftlink.pda.__main__ import make_handler
@@ -138,5 +139,23 @@ def test_jetson_down_is_502():
     try:
         status, body = fetch(pda_url + "/api/state")
         assert status == 502 and "Jetson" in json.loads(body)["error"]
+    finally:
+        pda.shutdown()
+
+
+def test_sensor_timeout_is_short_but_query_keeps_llm_budget():
+    pda, pda_url = serve(make_handler("http://jetson:8000"))
+    try:
+        real_open = urllib.request.urlopen
+        with patch("shiftlink.pda.__main__.urllib.request.urlopen", side_effect=TimeoutError) as upstream:
+            for path, expected in [("/api/state", 8), ("/api/query?x=1", 180)]:
+                req = urllib.request.Request(pda_url + path, data=b"{}" if "query" in path else None)
+                try:
+                    real_open(req, timeout=5)
+                except urllib.error.HTTPError as err:
+                    assert err.code == 502
+                else:
+                    raise AssertionError("timeout must become HTTP 502")
+                assert upstream.call_args.kwargs["timeout"] == expected
     finally:
         pda.shutdown()

@@ -16,6 +16,7 @@ using UnityEngine;
 [Serializable] public class FactoryCaptureMetadata {
     public int schema_version = 1, seed, image_width, image_height, sequence;
     public string capture_id, session_id, scene_id, captured_at, config_id, run_id;
+    public string dataset_split, target_equipment_id;
     public string bbox_convention = "top-left xyxy exclusive", annotation_source = "visible-instance-mask";
     public FactoryCameraPose camera_pose;
     public FactoryCaptureObject[] objects;

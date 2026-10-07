@@ -10,9 +10,12 @@ public class FactoryRig : MonoBehaviour
     FactoryConfig config;
     readonly List<Tuple<string,Transform,Vector3,float>> rotating=new List<Tuple<string,Transform,Vector3,float>>();
     readonly Dictionary<string,List<Transform>> beltMarkers=new Dictionary<string,List<Transform>>();
+    readonly List<Tuple<string,Transform>> utilityFans=new List<Tuple<string,Transform>>();
     readonly List<Material> owned=new List<Material>();
     readonly Dictionary<Color,Material> colors=new Dictionary<Color,Material>();
     Transform auxiliaryBeds;
+    FactorySensorMotion sensorMotion;
+    Mesh lineSaddleMesh;
     Material Solid(Color color)
     {
         Material mat;
@@ -41,7 +44,7 @@ public class FactoryRig : MonoBehaviour
     public static void InstantiateEquipment(EquipmentSpec spec,Transform parent)
     {
         string typ=(spec.profile_id??"pdp").ToUpperInvariant();
-        var model=Asset(spec.code=="RT-02" ? "Equipment_RT02" : "Equipment_"+typ,parent);
+        var model=Asset(spec.code=="RT-02" ? "Equipment_RT02" : spec.code=="CV-02" ? "Equipment_CV02" : "Equipment_"+typ,parent);
         if(typ=="GR") {
             var output=model.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("OutputShaft") && t.childCount>0);
             if(output.position.x<parent.position.x) model.transform.localRotation=Quaternion.Euler(0,180,0)*model.transform.localRotation;
@@ -146,10 +149,14 @@ public class FactoryRig : MonoBehaviour
             }
         }
         if(next.equipment.Any(e=>e.code=="CV-02" && e.active)) {
-            var p=EquipmentPosition(next,"CV-02")+new Vector3(0,0,-3.4f);
-            Block("Scrap collection bin",p+Vector3.up*.2f,new Vector3(2,.15f,1.6f),FactoryRules.Grey);
-            foreach(float x in new[]{-1f,1f}) Block("Scrap bin wall",p+new Vector3(x,.6f,0),new Vector3(.08f,.8f,1.6f),FactoryRules.Amber);
-            Block("Scrap bin rear",p+new Vector3(0,.6f,-.8f),new Vector3(2,.8f,.08f),FactoryRules.Amber);
+            string id=next.equipment.First(e=>e.code=="CV-02").equipment_id;
+            var p=ScrapBinCenter(id);
+            var rotation=Quaternion.LookRotation(TransportDirection(id),Vector3.up);
+            var floor=Block("Scrap collection bin",p+Vector3.up*.2f,new Vector3(2,.15f,1.6f),FactoryRules.Grey); floor.transform.rotation=rotation;
+            foreach(float x in new[]{-1f,1f}) {
+                var wall=Block("Scrap bin wall",p+rotation*new Vector3(x,.6f,0),new Vector3(.08f,.8f,1.6f),FactoryRules.Amber); wall.transform.rotation=rotation;
+            }
+            var rear=Block("Scrap bin rear",p+rotation*new Vector3(0,.6f,.8f),new Vector3(2,.8f,.08f),FactoryRules.Amber); rear.transform.rotation=rotation;
         }
     }
     Vector3 EquipmentPosition(FactoryConfig next,string code)
@@ -167,7 +174,8 @@ public class FactoryRig : MonoBehaviour
         for(int i=0;i<count;i++) {
             var top=Vector3.Lerp(start,end,(i+.5f)/count);
             var roller=Instantiate(source.gameObject,bed).transform; roller.name="Auxiliary roller_"+(i+1).ToString("00");
-            roller.position=top-Vector3.up*.12f; roller.rotation=source.rotation; roller.localScale=source.lossyScale;
+            // Route anchors are .02 m above the 1.20 m roller contact plane.
+            roller.position=top-Vector3.up*.14f; roller.rotation=source.rotation; roller.localScale=source.lossyScale;
             rotating.Add(Tuple.Create(speedId,roller,Vector3.forward,.12f));
             foreach(var template in bearings) {
                 var bearing=Instantiate(template.gameObject,bed).transform;
@@ -184,12 +192,90 @@ public class FactoryRig : MonoBehaviour
             }
         }
     }
+    Transform Detail(Transform parent,string name,Vector3 pos,Vector3 size,Color color,PrimitiveType type=PrimitiveType.Cube)
+    {
+        var obj=GameObject.CreatePrimitive(type); obj.name=name; obj.transform.SetParent(parent,false);
+        obj.transform.localPosition=pos; obj.transform.localScale=size;
+        obj.GetComponent<Renderer>().sharedMaterial=Solid(color);
+        DestroyImmediate(obj.GetComponent<Collider>()); return obj.transform;
+    }
+    void Fan(string id,Transform node,string name,Vector3 pos,Vector3 normal,float radius)
+    {
+        var fan=new GameObject(name).transform; fan.SetParent(node,false); fan.localPosition=pos;
+        fan.localRotation=Quaternion.FromToRotation(Vector3.forward,normal);
+        var hub=Detail(fan,"Fan hub",Vector3.zero,new Vector3(.09f,.02f,.09f),FactoryRules.Grey,PrimitiveType.Cylinder);
+        hub.localRotation=Quaternion.Euler(90,0,0);
+        for(int i=0;i<5;i++) {
+            float angle=i*72*Mathf.Deg2Rad;
+            var blade=Detail(fan,"Fan blade",new Vector3(Mathf.Cos(angle),Mathf.Sin(angle),0)*radius*.55f,
+                new Vector3(radius*.85f,radius*.26f,.025f),i==0 ? FactoryRules.Amber : new Color(.65f,.69f,.72f));
+            blade.localRotation=Quaternion.Euler(0,0,i*72+18);
+        }
+        var guard=new GameObject(name+" guard").transform; guard.SetParent(node,false);
+        guard.localPosition=pos; guard.localRotation=fan.localRotation;
+        for(int i=0;i<20;i++) {
+            float angle=i*18*Mathf.Deg2Rad;
+            var rim=Detail(guard,"Fan guard rim",new Vector3(Mathf.Cos(angle)*radius,Mathf.Sin(angle)*radius,.06f),
+                new Vector3(radius*.32f,.014f,.014f),FactoryRules.Grey);
+            rim.localRotation=Quaternion.Euler(0,0,i*18+90);
+        }
+        for(int i=-2;i<=2;i++) {
+            float offset=i*radius*.3f, span=2*Mathf.Sqrt(radius*radius-offset*offset);
+            Detail(guard,"Fan grille",new Vector3(0,offset,.065f),new Vector3(span,.012f,.012f),FactoryRules.Grey);
+        }
+        // No RPM telemetry exists: slow illustrative rotation avoids frame-rate aliasing.
+        utilityFans.Add(Tuple.Create(id,fan));
+    }
+    void EquipmentDetails(EquipmentSpec spec,Transform node)
+    {
+        var steel=new Color(.55f,.6f,.64f);
+        foreach(var pivot in node.GetComponentsInChildren<Transform>().Where(t=>t.childCount>0 &&
+            (t.name.StartsWith("Roller_") || t.name.StartsWith("HeadDrum") || t.name.StartsWith("TailDrum") || t.name.StartsWith("OutputShaft"))).ToArray()) {
+            bool shaft=pivot.name.StartsWith("OutputShaft"), roller=pivot.name.StartsWith("Roller_");
+            float radius=shaft ? .105f : roller ? .12f : .175f;
+            var stripe=Detail(node,roller ? "Roller rotation stripe" : "Shaft rotation stripe",node.InverseTransformPoint(pivot.position)+Vector3.up*(radius+.003f),
+                shaft ? new Vector3(.45f,.008f,.025f) : new Vector3(.025f,.008f,roller ? 1.43f : 1.46f),FactoryRules.Amber);
+            stripe.SetParent(pivot,true);
+            for(int i=0;i<6;i++) {
+                float angle=i*60*Mathf.Deg2Rad;
+                Vector3 offset=shaft ? new Vector3(.09f,Mathf.Sin(angle)*.155f,Mathf.Cos(angle)*.155f) :
+                    new Vector3(Mathf.Cos(angle)*radius*.65f,Mathf.Sin(angle)*radius*.65f,-.735f);
+                var bolt=Detail(node,"Rotating end bolt",node.InverseTransformPoint(pivot.position)+offset,new Vector3(.025f,.025f,.025f),steel);
+                bolt.SetParent(pivot,true);
+            }
+        }
+        if(spec.profile_id=="hpu") {
+            Fan(spec.equipment_id,node,"Pump motor cooling fan",new Vector3(-.32f,1.88f,0),Vector3.up,.22f);
+            for(int i=0;i<4;i++) Detail(node,"Reservoir lid bolt",new Vector3(i<2 ? -.77f : .77f,1.065f,i%2==0 ? -.46f : .46f),new Vector3(.045f,.028f,.045f),steel);
+            Detail(node,"Oil cooler radiator",new Vector3(.12f,.65f,.62f),new Vector3(.85f,.6f,.12f),FactoryRules.Grey);
+            for(int i=0;i<9;i++) Detail(node,"Oil cooler fin",new Vector3(-.24f+i*.09f,.65f,.7f),new Vector3(.025f,.54f,.05f),steel);
+        }
+        if(spec.profile_id=="cau") Fan(spec.equipment_id,node,"Compressor cooling fan",new Vector3(-.34f,1.9f,.42f),Vector3.forward,.23f);
+        if(spec.code=="RT-02") foreach(float x in new[]{-1.5f,1.5f}) {
+            Detail(node,"Lift cylinder barrel",new Vector3(x,.38f,0),new Vector3(.19f,.22f,.19f),new Color(.12f,.3f,.42f),PrimitiveType.Cylinder);
+            Detail(node,"Lift cylinder rod",new Vector3(x,.66f,0),new Vector3(.08f,.16f,.08f),steel,PrimitiveType.Cylinder);
+            foreach(float z in new[]{-.45f,.45f}) Detail(node,"Lift guide",new Vector3(x,.46f,z),new Vector3(.09f,.72f,.09f),steel);
+        }
+        if(spec.code=="CV-02" && node.GetComponentsInChildren<Transform>().All(t=>!t.name.StartsWith("SteelBelt"))) {
+            foreach(float z in new[]{-.81f,.81f}) {
+                Detail(node,"Scrap conveyor side wall",new Vector3(0,1.34f,z),new Vector3(4.8f,.32f,.07f),new Color(.12f,.3f,.42f));
+                Detail(node,"Scrap conveyor edge rail",new Vector3(0,1.51f,z),new Vector3(4.8f,.045f,.09f),FactoryRules.Amber);
+            }
+            var chute=Detail(node,"Scrap discharge lip",new Vector3(2.58f,1.04f,0),new Vector3(.6f,.04f,1.5f),steel); chute.localRotation=Quaternion.Euler(0,0,-20);
+        }
+        if(spec.profile_id=="pdp") foreach(float x in new[]{-.95f,-.29f,.37f}) foreach(float y in new[]{.4f,.74f,1.01f,1.35f,1.61f,1.95f})
+            Detail(node,"Cabinet door hinge",new Vector3(x,y,-.33f),new Vector3(.035f,.065f,.04f),steel);
+    }
     public void Build(FactoryConfig next,Dictionary<string,GameObject> nodes)
     {
         config=next; equipment=nodes;
         auxiliaryBeds=new GameObject("Auxiliary roller beds").transform; auxiliaryBeds.SetParent(transform);
         foreach(var spec in next.equipment) {
             var node=nodes[spec.equipment_id];
+            EquipmentDetails(spec,node.transform);
+            // Open the viewing side panels; retain the steel skeleton and material edge guides.
+            if(spec.code=="CV-02") foreach(var renderer in node.GetComponentsInChildren<Renderer>())
+                if(renderer.name.StartsWith("ScrapSideWall") || renderer.name=="Scrap conveyor side wall") renderer.enabled=false;
             foreach(var t in node.GetComponentsInChildren<Transform>()) {
                 if(t.name.StartsWith("Roller_") && t.childCount>0) rotating.Add(Tuple.Create(spec.equipment_id,t,node.transform.TransformDirection(Vector3.forward),.12f));
                 if(t.name.StartsWith("HeadDrum") || t.name.StartsWith("TailDrum")) {
@@ -197,7 +283,7 @@ public class FactoryRig : MonoBehaviour
                 }
                 if(t.name.StartsWith("OutputShaft") && t.childCount>0) rotating.Add(Tuple.Create(spec.equipment_id,t,Vector3.right,.12f));
             }
-            if(spec.profile_id=="cv") {
+            if(spec.profile_id=="cv" && spec.code!="CV-02") {
                 var markers=new List<Transform>(); beltMarkers[spec.equipment_id]=markers;
                 bool scrap=spec.code=="CV-02"; int count=scrap ? 24 : 12;
                 for(int i=0;i<count;i++) {
@@ -206,18 +292,24 @@ public class FactoryRig : MonoBehaviour
                 }
             }
         }
+        sensorMotion=gameObject.AddComponent<FactorySensorMotion>();
+        sensorMotion.Build(next,nodes);
         AccessAndLogistics(next);
         var relations=(next.relations??new RelationSpec[0]).Concat((next.branches??new BranchSpec[0]).Select(br=>new RelationSpec {from_id=br.from_id,to_id=br.to_id,relation_type="material_flow"}));
+        var drivePorts=new HashSet<string>();
         foreach(var rel in relations.GroupBy(r=>r.relation_type+":"+r.from_id+":"+r.to_id).Select(g=>g.First())) {
             if(!nodes.ContainsKey(rel.from_id) || !nodes.ContainsKey(rel.to_id)) continue;
             if(!nodes[rel.from_id].activeSelf || !nodes[rel.to_id].activeSelf) continue;
             Vector3 a=nodes[rel.from_id].transform.position,b=nodes[rel.to_id].transform.position;
+            int utilityLane=relations.Where(r=>r.from_id==rel.from_id && r.relation_type==rel.relation_type).Select(r=>r.to_id).Distinct().OrderBy(id=>id).ToList().IndexOf(rel.to_id);
             if(rel.relation_type=="material_flow") {
                 bool branch=Array.IndexOf(next.route,rel.to_id)<0;
                 var start=Anchor(rel.from_id,branch ? "ScrapOutputAnchor_" : "OutputAnchor_").position; var end=Anchor(rel.to_id,"InputAnchor_").position;
                 if(nodes[rel.to_id].transform.localRotation!=Quaternion.identity) {
                     var chute=Asset("Connection_ScrapChute",transform); chute.transform.position=(start+end)*.5f-Vector3.up*.2f;
                     chute.transform.rotation=Quaternion.FromToRotation(Vector3.right,(end-start).normalized); chute.transform.localScale=new Vector3((end-start).magnitude,1,1);
+                    foreach(var renderer in chute.GetComponentsInChildren<Renderer>())
+                        if(renderer.name.Split('.')[0]=="Side") renderer.enabled=false;
                 } else {
                     RollerBed("Transfer roller bed "+rel.from_id+" to "+rel.to_id,start,end,rel.from_id);
                 }
@@ -236,20 +328,30 @@ public class FactoryRig : MonoBehaviour
                 Block("Assumed right-angle distributor",junction,new Vector3(.3f,.3f,.3f),FactoryRules.Grey);
                 var side=new Vector3(end.x,start.y,end.z);
                 GuardedShaft(junction,side,rel.from_id);
-                var coupling=Asset("Connection_FlexibleCoupling",transform); coupling.transform.position=start-Vector3.up*.15f;
-                rotating.Add(Tuple.Create(rel.from_id,coupling.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("RotationPivot")),Vector3.right,.12f));
-                var guard=Asset("Connection_ShaftGuard",transform); guard.transform.position=start-Vector3.up*.17f;
+                // Both driven targets share this one gearbox output port.
+                if(drivePorts.Add(rel.from_id)) {
+                    var coupling=Asset("Connection_FlexibleCoupling",transform); coupling.transform.position=start-Vector3.up*.15f;
+                    rotating.Add(Tuple.Create(rel.from_id,coupling.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("RotationPivot")),Vector3.right,.12f));
+                    var guard=Asset("Connection_ShaftGuard",transform); guard.transform.position=start-Vector3.up*.17f;
+                }
                 var bearing=Asset("Connection_BearingPedestal",transform); bearing.transform.position=(start+junction)*.5f-Vector3.up*.23f;
                 Block("Guarded chain drive",(side+end)*.5f,new Vector3(.3f,Mathf.Max(.2f,Mathf.Abs(end.y-side.y)),.2f),FactoryRules.Amber);
             } else if(rel.relation_type=="hydraulic_supply") {
-                var start=a+new Vector3(1,.6f,0); var end=b+new Vector3(1.2f,1.6f,.94f);
+                var start=a+new Vector3(1,.6f,-utilityLane*.18f); var end=b+new Vector3(1.2f,1.6f,.94f);
                 if(next.equipment.First(e=>e.equipment_id==rel.to_id).profile_id=="cv") end=b+new Vector3(-1.8f,.8f,-1);
-                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,2.8f,6.7f),new Vector3(end.x,2.8f,6.7f),new Vector3(end.x,2.8f,1.7f),end},new Color(.1f,.6f,.7f));
-                Pipe("Assumed hydraulic return "+rel.to_id,new[]{end+Vector3.forward*.1f,new Vector3(end.x,2.8f,1.8f),new Vector3(end.x,2.8f,6.8f),new Vector3(start.x,2.8f,6.8f),start+Vector3.forward*.1f},FactoryRules.Grey);
+                float supplyHeight=2.8f-utilityLane*.18f,returnHeight=supplyHeight+.08f;
+                var returnStart=start+new Vector3(.12f,0,.1f); var returnEnd=end+new Vector3(.12f,0,.1f);
+                // Orthogonal risers keep adjacent circuits and each supply/return pair apart.
+                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,supplyHeight,start.z),new Vector3(start.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,end.z),end},new Color(.1f,.6f,.7f));
+                Pipe("Assumed hydraulic return "+rel.to_id,new[]{returnEnd,new Vector3(returnEnd.x,returnHeight,returnEnd.z),new Vector3(returnEnd.x,returnHeight,6.8f),new Vector3(returnStart.x,returnHeight,6.8f),new Vector3(returnStart.x,returnHeight,returnStart.z),returnStart},FactoryRules.Grey);
             } else if(rel.relation_type=="power_supply") {
-                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(0,.91f,.4f),new Vector3(a.x,4,7),new Vector3(b.x,4,7),b+new Vector3(-.68f,4,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
+                float offset=(utilityLane-1)*.12f;
+                float cableHeight=4+utilityLane*.08f;
+                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(offset,.91f,.4f),new Vector3(a.x+offset,cableHeight,7+offset),new Vector3(b.x,cableHeight,7+offset),b+new Vector3(-.68f,cableHeight,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
             } else if(rel.relation_type=="pneumatic_supply") {
-                Pipe("CAU air riser",new[]{a+new Vector3(-1.6f,1.8f,0),new Vector3(a.x-1.6f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,1.7f),b+new Vector3(.7f,.45f,1.06f)},new Color(.2f,.5f,.9f));
+                var port=nodes[rel.from_id].GetComponentsInChildren<Transform>().FirstOrDefault(t=>t.name.StartsWith("AirSupplyAnchor"));
+                var start=port==null ? a+new Vector3(-1.6f,1.8f,0) : port.position;
+                Pipe("CAU air riser",new[]{start,new Vector3(start.x,5.8f,start.z),new Vector3(start.x,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,1.7f),b+new Vector3(.7f,.45f,1.06f)},new Color(.2f,.5f,.9f));
             }
         }
         var powered=relations.Where(r=>r.relation_type=="power_supply" && nodes.ContainsKey(r.to_id)).Select(r=>nodes[r.to_id].transform.position.x).ToArray();
@@ -270,7 +372,54 @@ public class FactoryRig : MonoBehaviour
         if(!branch && !(config.relations??new RelationSpec[0]).Any(r=>r.relation_type=="material_flow" && r.from_id==from && r.to_id==to)) return new Vector3[0];
         return new[]{Anchor(from,branch ? "ScrapOutputAnchor_" : "OutputAnchor_").position+Vector3.up*.02f,Anchor(to,"InputAnchor_").position+Vector3.up*.02f};
     }
-    public static Transform CreateLoad(string id,Transform parent,bool scrap)
+    Vector3 TransportDirection(string id)
+    {
+        var direction=Anchor(id,"OutputAnchor_").position-Anchor(id,"InputAnchor_").position;
+        direction.y=0; return direction.normalized;
+    }
+    Vector3 ScrapBinCenter(string id)
+    {
+        var center=Anchor(id,"OutputAnchor_").position+TransportDirection(id);
+        center.y=equipment[id].transform.position.y; return center;
+    }
+    public Vector3[] ScrapDischargeWaypoints(string id)
+    {
+        if(!config.equipment.Any(e=>e.equipment_id==id && e.code=="CV-02" && e.active)) return new Vector3[0];
+        var output=Anchor(id,"OutputAnchor_").position+Vector3.up*.02f;
+        return new[]{output,output+TransportDirection(id)*.65f,ScrapBinCenter(id)+Vector3.up*.295f};
+    }
+    public Transform CreateLineLoad(string id,Transform parent,bool scrap)
+    {
+        var load=CreateLoad(id,parent,scrap,false);
+        if(scrap) return load;
+        var steel=new Color(.26f,.31f,.35f);
+        // AMOVA-style roller-table pallet: synthetic dimensions, unchanged coil offset/clearance.
+        // Load root 1.24 m + runner bottom -.04 m rests on the existing 1.20 m roller tops.
+        foreach(float z in new[]{-.35f,.35f})
+            Detail(load,"Line pallet runner",new Vector3(0,.01f,z),new Vector3(1.35f,.10f,.12f),steel);
+        foreach(float x in new[]{-.40f,.40f})
+            Detail(load,"Line pallet crossmember",new Vector3(x,.01f,0),new Vector3(.12f,.10f,.90f),steel);
+        if(lineSaddleMesh==null) {
+            // The sloping top is tangent to radius .60 about (0,.74); no pad enters the coil.
+            float angle=35*Mathf.Deg2Rad;
+            var contact=new Vector3(.60f*Mathf.Sin(angle),.74f-.60f*Mathf.Cos(angle),0);
+            var tangent=new Vector3(Mathf.Cos(angle),Mathf.Sin(angle),0);
+            var inner=contact-tangent*.21f; var outer=contact+tangent*.21f;
+            var points=new[]{new Vector3(inner.x,.06f,-.43f),new Vector3(outer.x,.06f,-.43f),new Vector3(outer.x,outer.y,-.43f),new Vector3(inner.x,inner.y,-.43f),
+                new Vector3(inner.x,.06f,.43f),new Vector3(outer.x,.06f,.43f),new Vector3(outer.x,outer.y,.43f),new Vector3(inner.x,inner.y,.43f)};
+            lineSaddleMesh=new Mesh {name="Line V saddle tangent mesh",vertices=points,
+                triangles=new[]{0,2,1,0,3,2,4,5,6,4,6,7,0,1,5,0,5,4,3,7,6,3,6,2,0,4,7,0,7,3,1,2,6,1,6,5}};
+            lineSaddleMesh.RecalculateNormals(); lineSaddleMesh.RecalculateBounds();
+        }
+        foreach(float side in new[]{-1f,1f}) {
+            var saddle=new GameObject("Line V saddle"); saddle.transform.SetParent(load,false);
+            saddle.transform.localRotation=Quaternion.Euler(0,side<0 ? 180 : 0,0);
+            saddle.AddComponent<MeshFilter>().sharedMesh=lineSaddleMesh;
+            saddle.AddComponent<MeshRenderer>().sharedMaterial=Solid(steel);
+        }
+        return load;
+    }
+    public static Transform CreateLoad(string id,Transform parent,bool scrap,bool withSaddle=true)
     {
         var load=new GameObject(id); load.transform.SetParent(parent);
         if(scrap) {
@@ -278,7 +427,7 @@ public class FactoryRig : MonoBehaviour
         } else {
             var coil=Asset("Material_Coil",load.transform); coil.transform.localPosition=Vector3.up*.14f;
             // A synthetic saddle carries the coil; it does not free-roll through clamps.
-            foreach(float side in new[]{-.27f,.27f}) {
+            if(withSaddle) foreach(float side in new[]{-.27f,.27f}) {
                 var saddle=GameObject.CreatePrimitive(PrimitiveType.Cube); saddle.name="Assumed transport saddle"; saddle.transform.SetParent(load.transform); saddle.transform.localPosition=new Vector3(side,.09f,0); saddle.transform.localScale=new Vector3(.65f,.12f,.9f); saddle.transform.localRotation=Quaternion.Euler(0,0,side<0 ? -20 : 20);
             }
         }
@@ -291,8 +440,14 @@ public class FactoryRig : MonoBehaviour
     }
     public void Advance(MesSnapshot snapshot,float dt)
     {
-        if(snapshot.line_mode!="running") return;
+        if(snapshot==null || snapshot.line_mode!="running" || dt<=0 || float.IsNaN(dt) || float.IsInfinity(dt)) return;
+        if(sensorMotion!=null) sensorMotion.Advance(snapshot,dt);
         var readings=snapshot.equipment.ToDictionary(e=>e.equipment_id);
+        foreach(var fan in utilityFans) {
+            EquipmentReading state;
+            if(readings.TryGetValue(fan.Item1,out state) && state.operating_state=="running" && state.fault_level!="critical")
+                fan.Item2.Rotate(Vector3.forward,360*dt,Space.Self);
+        }
         var speeds=new Dictionary<string,float>();
         foreach(var m in snapshot.measurements??new MeasurementReading[0])
             if((m.signal=="rt_speed" || m.signal=="cv_speed") && m.unit=="m_min" && m.quality=="good" && !float.IsNaN(m.value) && !float.IsInfinity(m.value)) speeds[m.equipment_id]=Mathf.Max(0,m.value)/60;
@@ -311,5 +466,10 @@ public class FactoryRig : MonoBehaviour
             foreach(var marker in pair.Value) { var p=marker.localPosition; p.x=Mathf.Repeat(p.x+2.4f+speed*dt,4.8f)-2.4f; marker.localPosition=p; }
         }
     }
-    void OnDestroy() { foreach(var mat in owned) { if(Application.isPlaying) Destroy(mat); else DestroyImmediate(mat); } }
+    public void ApplySensors(MesSnapshot snapshot) { if(sensorMotion!=null) sensorMotion.Apply(snapshot); }
+    void OnDestroy()
+    {
+        foreach(var mat in owned) { if(Application.isPlaying) Destroy(mat); else DestroyImmediate(mat); }
+        if(lineSaddleMesh!=null) { if(Application.isPlaying) Destroy(lineSaddleMesh); else DestroyImmediate(lineSaddleMesh); }
+    }
 }

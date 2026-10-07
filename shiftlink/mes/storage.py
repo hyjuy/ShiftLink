@@ -78,6 +78,10 @@ class MesStorage:
                 FOREIGN KEY (run_id, sequence) REFERENCES snapshots(run_id, sequence));
             CREATE TABLE IF NOT EXISTS ground_truth (
                 run_id TEXT PRIMARY KEY, payload TEXT NOT NULL, FOREIGN KEY (run_id) REFERENCES runs(run_id));
+            CREATE TABLE IF NOT EXISTS simulation_labels (
+                run_id TEXT NOT NULL, sequence INTEGER NOT NULL, payload TEXT NOT NULL,
+                PRIMARY KEY (run_id, sequence),
+                FOREIGN KEY (run_id, sequence) REFERENCES snapshots(run_id, sequence));
             CREATE TABLE IF NOT EXISTS configurations (
                 config_id TEXT PRIMARY KEY, created_at TEXT NOT NULL, payload TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS config_changes (
@@ -176,10 +180,12 @@ class MesStorage:
     def list_runs(self) -> list[Run]:
         return [run for run_id, in self.connection.execute("SELECT run_id FROM runs ORDER BY started_at") if (run := self.get_run(run_id))]
 
-    def save_tick(self, snapshot: Snapshot, events: Iterable[RuntimeEvent] = ()) -> None:
+    def save_tick(self, snapshot: Snapshot, events: Iterable[RuntimeEvent] = (), *, simulation_labels: dict[str, Any] | None = None) -> None:
         events = tuple(events)
         if any(event.run_id != snapshot.run_id or event.sequence != snapshot.sequence for event in events):
             raise ValueError("events must belong to the snapshot tick")
+        if simulation_labels is not None and (simulation_labels.get('run_id'), simulation_labels.get('sequence')) != snapshot.key:
+            raise ValueError('simulation labels must belong to the snapshot tick')
         try:
             with self.connection:
                 self.connection.execute("INSERT INTO snapshots VALUES (?, ?, ?, ?)", (snapshot.run_id, snapshot.sequence, snapshot.simulated_at.isoformat(), _dump(snapshot)))
@@ -187,6 +193,9 @@ class MesStorage:
                     "INSERT INTO runtime_events VALUES (?, ?, ?, ?, ?)",
                     [(event.run_id, event.sequence, index, event.occurred_at.isoformat(), _dump(event)) for index, event in enumerate(events)],
                 )
+                if simulation_labels is not None:
+                    self.connection.execute('INSERT INTO simulation_labels VALUES (?, ?, ?)',
+                        (snapshot.run_id, snapshot.sequence, _dump(simulation_labels)))
         except sqlite3.IntegrityError as error:
             raise ValueError(f"duplicate or unknown tick: {snapshot.key}") from error
 

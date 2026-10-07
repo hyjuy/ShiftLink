@@ -8,6 +8,8 @@ PARKER = "https://www.parker.com/content/dam/Parker-com/Literature/PMDE/Service_
 SAP = "https://learning.sap.com/courses/configuring-sap-digital-manufacturing-for-execution-basic-data-and-configuration/controlling-production-buyoff-hold-release-"
 
 PRIORITY_SCENARIOS = (
+    ScenarioSpec("scrap_discharge", "transport", "", "", "",
+        title="시연 불량 판정 · RT-03→CV-02 스크랩 배출", stop_on_fault=False),
     ScenarioSpec("hpu_accumulator_precharge", "hydraulic_supply", "", "", "",
         (SignalEffect("hydraulic_supply", "hpu_accumulator_gas_pressure", 135),
          SignalEffect("hydraulic_supply", "hpu_accumulator_fluid_pressure", 0),
@@ -164,6 +166,11 @@ def expand(config):
     existing = {s.scenario_id for s in config.scenarios}
     available = {cap for eq in config.equipment if eq.active for cap in eq.capabilities}
     additions = tuple(s for s in PRIORITY_SCENARIOS if s.scenario_id not in existing and s.cause_capability in available)
+    scrap_branch = next((branch for branch in config.branches
+                         if branch.relation_type == "material_flow"
+                         and any(eq.equipment_id == branch.from_id and eq.code == "RT-03" and eq.active for eq in config.equipment)
+                         and any(eq.equipment_id == branch.to_id and eq.code == "CV-02" and eq.active for eq in config.equipment)), None)
+    additions = tuple(s for s in additions if s.scenario_id != "scrap_discharge" or scrap_branch is not None)
     equipment = []
     for eq in config.equipment:
         existing = {signal.signal for signal in eq.signals}

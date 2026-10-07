@@ -78,12 +78,15 @@ def _json(value: object) -> object:
 class MesService:
     """Owns the single engine instance; HTTP reads never advance it."""
 
-    def __init__(self, catalog_path: Path, storage: MesStorage | None = None, seed: int = 0) -> None:
+    def __init__(self, catalog_path: Path, storage: MesStorage | None = None, seed: int = 0, *, random_faults: bool = False, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
+        self.random_faults = random_faults
+        self.run_nonce = run_nonce
+        self.fault_hazard = fault_hazard
         self.catalog = Catalog.load(catalog_path)
         self.storage = storage or MesStorage()
         self.active_config: Configuration = self._restore_active_config()
         self.storage.save_configuration(self.active_config.config_id, json.dumps(configuration.to_payload(self.active_config), sort_keys=True, ensure_ascii=False))
-        self.engine = MesEngine(Run.create(seed=seed, config_id=self.active_config.config_id), self.active_config)
+        self.engine = self._new_engine(Run.create(seed=seed, config_id=self.active_config.config_id), self.active_config)
         self.storage.create_run(self.engine.run)
         self.speed = 1.0
         self._saved_sequences: set[tuple[str, int]] = set()
@@ -92,15 +95,25 @@ class MesService:
         self._scans: deque[dict[str, object]] = deque(maxlen=_SCAN_KEEP)
         self.query_pipeline = None
 
+    def _new_engine(self, run: Run, config: Configuration) -> MesEngine:
+        if self.random_faults:
+            from .random_factory import RandomFactoryEngine
+            return RandomFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id, hazard=self.fault_hazard)
+        return MesEngine(run, config)
+
     def query(self, body: dict[str, Any]) -> dict[str, object]:
         from .query import query_service
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
+        try:
+            rendered_response = render_response(AgentResponse.model_validate(result))
+        except Exception:  # Log formatting must not prevent returning the generated answer.
+            rendered_response = None
         self.storage.save_query({
             "question": body.get("question"), "equipment_id": (result.get("evidence") or {}).get("equipment_id"),
             "answer": result.get("answer"), "cited_card_ids": result.get("cited_card_ids"),
             "safety_notices": result.get("safety_notices", []),
-            "rendered_response": render_response(AgentResponse.model_validate(result)),
+            "rendered_response": rendered_response,
             "no_knowledge": result.get("no_knowledge"), "review_queue": result.get("review_queue"),
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
@@ -213,7 +226,7 @@ class MesService:
             old_config_id = self.active_config.config_id
             try:
                 new_run = Run.create(seed=previous_run.seed, config_id=draft.config_id)
-                new_engine = MesEngine(new_run, draft)
+                new_engine = self._new_engine(new_run, draft)
                 self.storage.apply_configuration(draft.config_id,
                     json.dumps(configuration.to_payload(draft), sort_keys=True, ensure_ascii=False), new_run, {
                     **base, "applied_at": utc_now().isoformat(),
@@ -273,7 +286,12 @@ class MesService:
         if snapshot.key in self._saved_sequences:
             return
         events = [event for event in self.engine.events if event.sequence == snapshot.sequence]
-        self.storage.save_tick(snapshot, events)
+        if self.random_faults:
+            labels = next((record for record in reversed(self.engine.truth) if (record['run_id'], record['sequence']) == snapshot.key), None)
+            self.storage.save_tick(snapshot, events, simulation_labels=labels)
+            self.engine.truth.clear()
+        else:
+            self.storage.save_tick(snapshot, events)
         self._saved_sequences.add(snapshot.key)
 
     def tick(self) -> None:
@@ -404,11 +422,12 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(500, {"error": f"MES 서버 오류: {type(error).__name__}: {error}", "is_synthetic": True})
 
 
-def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False) -> None:
+def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False, random_faults: bool = False, seed: int = 0, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
     root = Path(__file__).resolve().parents[2]
     database = db_path or root / "mes_data" / "mock-mes.sqlite3"
     database.parent.mkdir(parents=True, exist_ok=True)
-    service = MesService(catalog_path or root / "docs" / "data" / "reference" / "00_plant_and_relations.json", MesStorage(database))
+    service = MesService(catalog_path or root / "docs" / "data" / "reference" / "00_plant_and_relations.json", MesStorage(database), seed,
+                         random_faults=random_faults, run_nonce=run_nonce, fault_hazard=fault_hazard)
     handler = type("MesHandler", (_Handler,), {"service": service, "web_root": Path(__file__).with_name("web"), "api_only": api_only})
     server = ThreadingHTTPServer((host, port), handler)
     stopped = threading.Event()

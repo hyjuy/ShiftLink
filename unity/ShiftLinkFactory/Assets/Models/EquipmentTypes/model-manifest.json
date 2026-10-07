@@ -1,19 +1,20 @@
 {
-  "stage": "detail",
-  "blender_version": "4.5.14 LTS",
+  "stage": "process-adapted detail",
+  "blender_version": "5.2.2 LTS",
   "units": "metres",
   "models": [
     {
       "model": "Equipment_HPU",
+      "reference_product": "Bosch Rexroth ABPAC stationary hydraulic power unit",
       "bounds_metres": [
-        -0.875,
+        -0.9424999952316284,
         -0.6550000309944153,
         0.0,
-        1.0,
+        1.0449999570846558,
         0.625,
-        1.959999918937683
+        2.242500066757202
       ],
-      "triangles": 3268,
+      "triangles": 9404,
       "materials": 8,
       "moving_pivots": [
         "Equipment_HPU",
@@ -32,16 +33,17 @@
     },
     {
       "model": "Equipment_PDP",
+      "reference_product": "ABB MNS low-voltage switchgear exterior",
       "bounds_metres": [
-        -0.9850000143051147,
+        -1.0075000524520874,
         -0.6550000309944153,
         0.0,
-        0.9850000143051147,
+        0.9884999990463257,
         0.4449999928474426,
         2.4099998474121094
       ],
-      "triangles": 5876,
-      "materials": 4,
+      "triangles": 13504,
+      "materials": 6,
       "moving_pivots": [
         "Equipment_PDP",
         "Anchors_PDP",
@@ -67,25 +69,26 @@
     },
     {
       "model": "Equipment_CAU",
+      "reference_product": "Atlas Copco GA enclosed screw compressor package",
       "bounds_metres": [
-        -1.1150000095367432,
+        -1.1439999341964722,
         -0.6550000309944153,
         0.0,
-        1.9300000667572021,
+        1.284999966621399,
         0.4749999940395355,
-        1.959999918937683
+        2.109999895095825
       ],
-      "triangles": 3624,
-      "materials": 8,
+      "triangles": 7236,
+      "materials": 11,
       "moving_pivots": [
         "Equipment_CAU",
         "Anchors_CAU",
+        "AirSupplyAnchor",
         "InputAnchor_CAU",
         "LabelAnchor_CAU",
         "OutputAnchor_CAU",
         "SelectionAnchor_CAU",
         "Body_CAU",
-        "Motor.001",
         "MovingParts_CAU",
         "Nameplate_CAU",
         "StatusIndicator_CAU"
@@ -94,16 +97,17 @@
     },
     {
       "model": "Equipment_GR",
+      "reference_product": "SEW X series industrial gearbox, process-adapted shared drive",
       "bounds_metres": [
         -1.149999976158142,
         -0.6550000309944153,
         0.0,
-        1.340000033378601,
+        1.3650000095367432,
         0.550000011920929,
         1.959999918937683
       ],
-      "triangles": 2560,
-      "materials": 7,
+      "triangles": 7212,
+      "materials": 8,
       "moving_pivots": [
         "Equipment_GR",
         "Anchors_GR",
@@ -112,7 +116,7 @@
         "OutputAnchor_GR",
         "SelectionAnchor_GR",
         "Body_GR",
-        "Motor.002",
+        "Motor.001",
         "MovingParts_GR",
         "InputShaftPivot",
         "OutputShaft",
@@ -123,15 +127,16 @@
     },
     {
       "model": "Equipment_RT",
+      "reference_product": "Butech Bliss Coil & Sheet Runout Conveyor, process-adapted roller table",
       "bounds_metres": [
         -2.4000000953674316,
-        -0.9750000238418579,
+        -1.0232599973678589,
         0.0,
         2.4260001182556152,
         1.2400000095367432,
-        1.959999918937683
+        3.2254998683929443
       ],
-      "triangles": 7876,
+      "triangles": 13492,
       "materials": 8,
       "moving_pivots": [
         "Equipment_RT",
@@ -163,15 +168,16 @@
     },
     {
       "model": "Equipment_CV",
+      "reference_product": "Mayfran flat-top steel belt family, process-adapted hydraulic tension and pneumatic diverter",
       "bounds_metres": [
         -2.4000000953674316,
-        -1.0750000476837158,
+        -1.1150000095367432,
         0.0,
         2.4000000953674316,
-        1.340000033378601,
+        1.125,
         1.959999918937683
       ],
-      "triangles": 4060,
+      "triangles": 5932,
       "materials": 9,
       "moving_pivots": [
         "Equipment_CV",
@@ -181,7 +187,6 @@
         "OutputAnchor_CV",
         "SelectionAnchor_CV",
         "Body_CV",
-        "Motor.003",
         "MovingParts_CV",
         "BeltSurface",
         "DiverterArm",
@@ -194,7 +199,38 @@
       "fbx": "Equipment_CV.fbx"
     },
     {
+      "model": "Equipment_CV02",
+      "reference_product": "Miven Mayfran hinged steel belt scrap conveyor",
+      "bounds_metres": [
+        -2.4000000953674316,
+        -0.9825599789619446,
+        0.0,
+        2.9371373653411865,
+        0.9825599789619446,
+        1.959999918937683
+      ],
+      "triangles": 10352,
+      "materials": 7,
+      "moving_pivots": [
+        "Equipment_CV02",
+        "Anchors_CV02",
+        "InputAnchor_CV02",
+        "LabelAnchor_CV02",
+        "OutputAnchor_CV02",
+        "SelectionAnchor_CV02",
+        "Body_CV02",
+        "SteelBelt",
+        "MovingParts_CV02",
+        "HeadDrum.001",
+        "TailDrum.001",
+        "Nameplate_CV02",
+        "StatusIndicator_CV02"
+      ],
+      "fbx": "Equipment_CV02.fbx"
+    },
+    {
       "model": "Material_Coil",
+      "reference_product": "existing synthetic transport coil",
       "bounds_metres": [
         -0.6000000238418579,
         -0.40380001068115234,
@@ -260,18 +296,28 @@
     {
       "equipment_id": "EQ-0010",
       "code": "CV-02",
-      "model": "Equipment_CV"
+      "model": "Equipment_CV02"
     }
   ],
   "textures": [],
-  "unity_import": "not verified",
+  "unity_import": "verified in Unity 6000.3.12f1",
   "assumptions": [
-    "All dimensions and layout synthetic",
-    "Coil handling and load support are conceptual; installed equipment capability unverified",
-    "RT generic model uses 12 rollers; RT-02 catalog 16 rollers needs an instance variant",
-    "CV-02 catalog scrap branch uses same CV base; branch variant deferred",
-    "CAU receiver tank and exposed motor are modeling proposals",
-    "No live MES animation or measured rotational speeds",
-    "No procedural textures; constant PBR colors to recreate in Built-in Standard shader"
-  ]
+    "Manufacturer product families are exterior references, not exact installed models or certified engineering selections",
+    "Dimensions adapted to existing 4.8 m transport spans and MES anchors; no mixing ML-series dimension tables with X-series exterior",
+    "Coil handling and load support remain conceptual; existing MES transport semantics retained",
+    "RT-02 uses existing 16-roller Unity variant",
+    "CV-01 shared GR-02 drive retained without an extra local motor",
+    "CV-02 has a dedicated hinged steel belt model; motion uses installed MES cv_speed, without inferring a motor relationship",
+    "CAU enclosed package without inferred external motor or receiver",
+    "Lift, clamp, diverter and hydraulic tension geometry are project-specific adaptations",
+    "No procedural textures; constant PBR colors for Built-in Standard shader"
+  ],
+  "validation": {
+    "native_fbx_roundtrip": "7 equipment assets passed",
+    "mes_scenarios": 104,
+    "sensor_channels": 69,
+    "sensor_state_checks": 7176,
+    "legacy_motion_regression": "passed",
+    "notes": "FactorySensorMotionChecks.Run and FactoryMotionChecks.Run passed; RT-01/02/03 actual coil clearance at five transport positions and full clamp downstroke >= 0.10 m"
+  }
 }

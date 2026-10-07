@@ -1,5 +1,88 @@
 # ShiftLink 3D 공장 · MES · PDA 시연
 
+## 공정별 상세 모델·센서 모션 (2026-10-07)
+
+기존 6종·10대 장비의 외형을 공정용 참고제품군에 맞춰 제작했다. HPU는 Bosch ABPAC,
+GR은 SEW X 계열, RT는 Butech Bliss 코일·판재 런아웃, CV는 Mayfran 강재 벨트,
+PDP는 ABB MNS, CAU는 밀폐형 Atlas Copco GA 외형을 참고했다.
+CV-02는 별도 힌지 강재 벨트 모델이며 RT-02는 롤러 16개와 양쪽 베어링 덮개를 갖는다.
+제조사 사진을 바탕으로 한 공정 맞춤 모델이다. 설치 모델의 정확한 CAD나 정격 검증 결과는 아니다.
+4.8 m 이송 구간·기존 접속점에 맞춘 치수, 클램프·승강·텐셔너·디버터 형상은 제작 가정이다.
+MES의 장비 ID·공급/공유 구동 관계·코일/스크랩 데이터 의미를 유지한다.
+
+실물감을 높이기 위해 유압장치의 탱크 상판·플랜지·굽은 배관과 피팅,
+감속기의 모터 받침·팬 그릴·주물 리브, 이송장치의 절곡 프레임·베어링 체결부·장력 조절나사·슈트 측판을 보완했다.
+배전반에는 얇은 문 패널·이음·체결부, 공압장치에는 서비스 패널·흡기 루버·배기 플랜지를 추가했다.
+도장면·가공 금속·고무는 금속성과 거칠기를 달리하며, 압력계에는 눈금을 넣었다.
+베어링 체결부는 커버를 따라 움직이고 배전반 문 부품은 해당 힌지에 묶인다.
+RT-01·RT-02·RT-03의 상부 가로빔·클램프는 코일과 받침을 포함한 상단 2.58 m를 기준으로 높였다.
+클램프 턱 중심은 2.795 m이며, 시연 최대 하강 0.06 m에서도 코일 위에 0.10 m 간격이 남는다.
+기둥 하단·롤러 이송면·입출력 앵커는 유지하고 상부 실린더와 배관은 가로빔 높이에 맞췄다.
+Unity 검사는 실제 코일 자산을 RT 세 대의 경로 다섯 지점에 배치해 정지 위치와 최대 하강 위치의 간격을 확인한다.
+
+라인 내부 코일은 두 개의 러너·가로보·V 받침을 갖춘 팔레트째 이동한다.
+[SMS/AMOVA 팔레트 이송 설명](https://www.sms-group.com/en-cz/plants/logistics-systems)의
+롤러 테이블 위 고정 코일 운반 방식을 참고했으며, 치수는 기존 시연 코일에 맞췄다.
+[Meccaniche NT 실제 컨베이어 사진](https://www.meccanichent.com/impianti-per-il-trasporto-bobine.php)도
+롤러와 이송 통로 구조 비교에 사용했다. 사진 속 제품 자세는 현재 시연 코일과 다르다.
+출발·도착 장비의 운전 상태와 유효한 속도 계측을 확인해 이송하며, 정지·품질 보류 시 멈춘다.
+CV-02와 분기 슈트의 시야를 가리는 측판은 시연 화면에서 제거했다.
+불량 배출은 CV-02 끝단 이송→슈트→수거함 낙하·적치로 표시한다.
+MES 시나리오 목록에서 `시연 불량 판정 · RT-03→CV-02 스크랩 배출`(`scrap_discharge`)을 선택하면
+RT-03 끝단에서 합성 불량 판정을 기록하고 구성된 CV-02 분기로 보낸다.
+CV-02가 정지하거나 가득 차면 기다리며, 품질 보류 제품은 그대로 보류한다.
+판재는 스크랩 흐름을 보여 주는 시연 형상이며, 실제 코일 절단 공정은 모델링하지 않았다.
+창고·트럭 이송은 이번 변경 범위에 포함하지 않는다.
+
+`Assets/Models/EquipmentTypes/process-motion-map.json`에 장비별 참고제품 URL,
+센서 69개, 정상 범위, 관측 페르소나, 실제 계측 기반 모션과 시연 모션을 기록했다.
+Unity에서는 장비 선택 시 센서 값·상태와 합성 관찰 문구를 보여 준다.
+센서 표시등은 정상 녹색, 범위 이탈 시 주황색 맥동, 확인 불가 회색이다.
+촬영 데이터에서 이 설명용 표시등은 제외한다.
+
+- 계측 기반: 롤러/벨트 속도, GR 지정 구동축 RPM, 압력계 바늘, 유면계, 차단기 트립 표시.
+- 시연 표현: 과진동 변위·누유 표시, 소재가 있는 클램프/승강 주기, 장력 조절기 변위, 공압 디버터 주기.
+- 페르소나: `seeds/personas_v0.1.yaml`의 V-11 한 조장(공급·구동 우선), V-12 오 기사(이송·계측 대조), V-13 윤 주임(정비 기록 대조).
+  계측 사실과 물리 모션은 페르소나에 따라 바꾸지 않는다. 없는 감각 관측·정비 이력·승인 기록을 생성하지 않는다.
+- 정상 범위는 실제 MES 구성에서 읽는다. 축압기 프리차지는 별도 측정 모드(가스 130–140 bar, 유체·매니폴드 0 bar)로 구분한다.
+  단위 불일치·불량 품질·NaN·무한대·음수·미수신 계측은 모션 근거로 사용하지 않는다.
+  일시정지·정지·대기·중대 고장에서는 해당 기계 모션을 멈추고, 통신 단절 시 계측 표현을 초기화한다.
+
+후속 보완은 모션 상태 전환 → 계측·페르소나 표시 → 벨트 부품 동반 이동 → Unity 통합 검증 순서로 적용했다.
+강재 벨트의 슬랫·힌지 핀·클리트는 현재 속도와 프레임 간격으로 이동량을 누적하며,
+각 시연 주기는 해당 장비가 가동한 시간만 사용한다.
+디버터는 공압 공급원과 대상 컨베이어가 모두 가동 중이어야 움직인다.
+클램프·승강부는 가동 중 소재가 없으면 시연 원점으로 돌아간다. 이는 실물 위치 측정이나 복귀 명령이 아니다.
+진동 저값은 표시등으로 구분하고 과진동 흔들림은 상한 초과에서만 표현한다.
+관찰 요약은 정지 영값과 가동 정상 범위를 구분하고, 이상값과 함께 미확인 계측도 남긴다.
+계측 목록에는 MES의 연속 계측·시료·완료 이벤트·산출값 구분과 관측 시각을 표시한다.
+관측 시각이 없으면 미확인으로 남기며, 시료·완료 이벤트를 현재의 연속 계측으로 단정하지 않는다.
+
+편집 파일과 정면·측면·사선 미리보기는 `Modeling/EquipmentTypes/`에 있다.
+이번 제작 도구는 로컬 Blender 5.2.2 LTS다. 이전 공동 작업 기준 4.5.15에서의 `.blend` 호환성은 확인하지 않았다.
+FBX는 Unity 6000.3.12f1에 가져와 검사했다.
+
+재생성 순서(프로젝트 루트):
+
+```powershell
+& 'D:/obsd/Tools/Blender/blender.exe' --background --python-exit-code 1 --python scripts/build_process_equipment.py
+& 'D:/obsd/Tools/Blender/blender.exe' --background --python-exit-code 1 --python scripts/export_process_native.py
+& 'D:/obsd/Tools/Blender/blender.exe' --background --python-exit-code 1 --python scripts/check_process_equipment.py
+python -B -c "from tests.test_unity_mes import write_fixtures; write_fixtures()"
+python -B scripts/write_sensor_motion_fixtures.py
+& 'D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe' -batchmode -force-d3d11 -projectPath unity/ShiftLinkFactory -executeMethod FactorySensorMotionChecks.Run -logFile tmp/process-sensor-unity-full.log
+```
+
+Python 검사 입력 생성에는 기존 프로젝트 의존성이 필요하다.
+모델 검사에서 7개 장비의 UV·재질·법선·FBX 왕복을 확인했고,
+Unity 검사에서 실제 MES 104개 시나리오·69개 센서의 7,176개 상태 비교,
+RPM·강재 벨트·진동·클램프/승강 방향·유면계·경계값·품질/단위 오류·정지/단절을 확인했다.
+후속 검사에는 벨트 속도 변경·개별 장비 대기/고장 후 재개·부품 동반 이동,
+디버터 대상 장비 정지·승강 주기·소재 없는 시연 원점 복귀·저진동,
+정지 영값/미확인 관찰 요약·계측 방식·관측 시각 보존 및 누락도 포함한다.
+검사 결과는 `Checks/sensor-motion-result.txt`, 모델 결과는 `Modeling/EquipmentTypes/process-validation.json`이다.
+장비별 정상/이상 비교 화면은 `Checks/process-{normal,abnormal}-EQ-*.png`에 저장한다.
+
 공장 외벽·지붕·철골과 천장 LED 12개, 외부 LED 4개를 설치했다.
 시작 화면에서 **View factory interior**로 내부를 확인하고 **View factory exterior**로 외관 보기로 돌아간다.
 배치·보행 공간·외관·조명 검증은 `docs/testing/unity-factory-layout-20261006.tdd.md`에 기록했다.

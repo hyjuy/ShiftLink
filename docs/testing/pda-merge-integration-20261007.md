@@ -18,4 +18,13 @@ Preserve login and face verification, retry an offline MES boot, retain a Unity 
 link through login, restore handover context/evidence, and keep current sensor readings
 separate from fixed query-time evidence. Existing sensor checks must remain intact.
 
-Validation results will be recorded after the fix. No real camera or device deployment is implied.
+## PDA GREEN and remaining integration RED
+
+- `node --check shiftlink/mes/web/pda.js` and all eight `tests/*.cjs` scripts pass.
+- Focused Python PDA, random MES, scrap, and dataset checks: 37 passed.
+- Full Python suite: 931 passed, 1 skipped, 1 failed. The remaining failure is
+  `MesSignalMapRuntimeTests.test_scenario_measurements_and_alarms_match_map`:
+  the new `scrap_discharge` scenario is missing from the unlinked scenario inventory.
+- Route score: dev 21/30 and sanity 29/30 meet CI floors (21 and 28).
+
+No real camera or device deployment is implied.

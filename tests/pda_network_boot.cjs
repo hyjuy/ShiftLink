@@ -18,7 +18,9 @@ vm.runInContext(`getJson = async () => { throw new Error('offline'); };`, contex
     : path === '/api/catalog' ? {data:{}} : {cards:[{}]};
     renderManualList = () => {}; show = name => { S.screen = name; };`, context);
   await timers[0].fn();
-  assert.equal(vm.runInContext('S.screen', context), 'home');
+  assert.equal(vm.runInContext('S.screen', context), 'login');
+  assert.equal(vm.runInContext('S.eq', context), null, 'boot must not bypass login');
+  assert.equal(vm.runInContext('S.equipment.length', context), 1, 'retry must load MES equipment');
   assert.equal(errors.innerHTML, '');
   console.log('PDA offline boot recovery PASS');
 })().catch(err => {console.error(err); process.exitCode = 1;});

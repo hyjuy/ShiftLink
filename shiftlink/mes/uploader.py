@@ -39,10 +39,11 @@ def upload_pending(storage: MesStorage, connect) -> dict[str, int | None | dict[
     `connect()` returns a DB-API connection (autocommit). `error` contains safe
     exception metadata, never messages or connection strings.
     """
-    specs = _specs(storage)
     counts: dict[str, int | None | dict[str, str | int]] = {"uploaded": 0, "conflict": 0, "pending": None}
     try:
-        counts["pending"] = sum(len(rows()) for rows, *_ in specs)
+        # Read pending rows once: rows written during this cycle wait for the next one, so `pending` never goes negative.
+        batches = [(rows(), *rest) for rows, *rest in _specs(storage)]
+        counts["pending"] = sum(len(rows) for rows, *_ in batches)
     except sqlite3.Error as exc:
         counts["error"] = _error(exc)
         return counts
@@ -55,10 +56,10 @@ def upload_pending(storage: MesStorage, connect) -> dict[str, int | None | dict[
         return counts
     try:
         with conn.cursor() as cur:
-            for rows, mark, table, key, extra in specs:
+            for rows, mark, table, key, extra in batches:
                 cols = ", ".join((key, *extra, "created_at", "payload", "content_sha256", "is_synthetic"))
                 insert = f"INSERT IGNORE INTO {table} ({cols}) VALUES ({', '.join(['%s'] * (len(extra) + 4))}, TRUE)"
-                for row_id, created_at, payload in rows():
+                for row_id, created_at, payload in rows:
                     digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
                     utc = datetime.fromisoformat(created_at).astimezone(timezone.utc).replace(tzinfo=None)
                     body = json.loads(payload)

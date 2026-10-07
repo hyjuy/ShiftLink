@@ -140,6 +140,8 @@ async function boot() {
 
 // ── 화면 전환 ──────────────────────────────────────────────────────
 let faceStream = null;
+// 블록 밖(최상위)에 둔다: stopFaceCamera·show가 최상위 함수라 브라우저 블록 안 선언은 보이지 않는다(10/7 ReferenceError).
+let faceRun = 0;
 
 function stopFaceCamera() {
   faceRun += 1;
@@ -1536,7 +1538,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict }; }
+if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1685,8 +1687,6 @@ async function watchFace(run) {
     await wait(350);
   }
 }
-
-let faceRun = 0;
 
 async function startFaceCamera() {
   stopFaceCamera();

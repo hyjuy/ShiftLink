@@ -5,6 +5,7 @@
 ## 클래스 (Pydantic 모델 등)
 
 | 이름 | 위치 | 뜻 | 담당자 |
+|  ·  ·  | , ,  | 키오스크가 잡은 카메라 JPEG를 이 기기에서만 점수(사번 헤더 ). 이미지는 저장·전달하지 않음. 화면은 통과 3프레임이면 업무 화면으로 넘어가고, 5프레임 미달이면 거절 | 최재영 |
 | --- | --- | --- | --- |
 | `Condition` | `shiftlink/agent/schemas.py` | 카드 적용 조건 | 유현준 |
 | `Provenance` | `shiftlink/agent/schemas.py` | 출처·근거 | 유현준 |
@@ -174,6 +175,7 @@
 | `FaceEngine` · `cosine()` | `shiftlink/face/engine.py` | 얼굴 검출(YuNet) → 정렬 → 임베딩(SFace). `embed(frame)`은 가장 큰 얼굴의 L2 정규화 128차원, 없으면 None. cv2 객체를 주입받아 모델 없이 테스트 | 최재영 |
 | `FaceStore` | `shiftlink/face/store.py` | 사번당 `<employee_id>.npz`(임베딩+`model_version`)만 저장, 권한 600, 원본 이미지 저장 없음. 모델 버전이 다르면 `load`가 None(재등록). 기본 경로 `~/shiftlink/data/face/templates` | 최재영 |
 | `decide()` · `Verdict` · `frame_score()` | `shiftlink/face/verify.py` | 1:1 판정: 프레임별 등록 임베딩 중 최고 코사인, 통과 프레임이 `min_pass` 이상이면 통과 | 최재영 |
+| `score_login_jpeg()` · `POST /api/face/frame` · `faceVerdict()` | `shiftlink/face/verify.py`, `shiftlink/pda/__main__.py`, `shiftlink/mes/web/pda.js` | 키오스크가 잡은 카메라 JPEG를 이 기기에서만 점수(사번 헤더 `X-Employee-Id`). 이미지는 저장·전달하지 않음. 화면은 통과 3프레임이면 업무 화면으로 넘어가고, 5프레임 미달이면 거절 | 최재영 |
 | `MANIFEST` · `fetch_models()` | `shiftlink/face/models.py` | OpenCV Zoo 고정 커밋의 YuNet 2023mar·SFace 2021dec URL과 sha256. 받은 뒤 해시가 다르면 삭제하고 실패. 가중치는 커밋하지 않음 | 최재영 |
 | `SHIFTLINK_FACE_DIR` · `MODEL_VERSION` · `DEFAULT_THRESHOLD` · `python -m shiftlink.face` (`fetch`·`enroll`·`verify`·`delete`·`bench`) | `shiftlink/face/__init__.py`, `__main__.py` | 얼굴 데이터 폴더(기본 `~/shiftlink/data/face`), 등록 모델 식별자(`sface-2021dec`, `employee.face_model_version`과 같은 값), OpenCV 문서 기본 임계값 0.363(튜닝 전), 웹캠 점검·등록·삭제·지연 측정 CLI | 최재영 |
 

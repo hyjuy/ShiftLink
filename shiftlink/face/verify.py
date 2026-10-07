@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import threading
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -43,6 +44,36 @@ def append_attempt(path: Path, employee_id: str, who: str, threshold: float, ver
 def frame_score(embedding: np.ndarray, template: np.ndarray) -> float:
     """등록 임베딩 여러 장 중 가장 비슷한 것과의 코사인."""
     return max(cosine(embedding, row) for row in template)
+
+
+_engine = None
+_engine_lock = threading.Lock()
+
+
+def score_login_jpeg(jpeg: bytes, employee_id: str) -> dict[str, object]:
+    """한 프레임 JPEG의 유사도. 이미지는 저장하지 않고 점수만 돌려준다. 등록이 없으면 LookupError, 사번이 틀리면 ValueError."""
+    global _engine
+    from . import DEFAULT_THRESHOLD
+    from .store import FaceStore
+
+    store = FaceStore()
+    store._path(employee_id)  # 사번 형식 검사. 틀리면 모델·파일을 열기 전에 거절한다
+    template = store.load(employee_id)
+    if template is None:
+        raise LookupError("등록된 얼굴이 없습니다")
+    import cv2
+    from .engine import FaceEngine
+
+    frame = cv2.imdecode(np.frombuffer(jpeg, dtype=np.uint8), cv2.IMREAD_COLOR)
+    if frame is None:
+        raise ValueError("이미지를 읽지 못했습니다")
+    with _engine_lock:
+        if _engine is None:
+            _engine = FaceEngine.load()
+        embedding = _engine.embed(frame)
+    if embedding is None:
+        return {"face": False, "score": None, "threshold": DEFAULT_THRESHOLD}
+    return {"face": True, "score": round(frame_score(embedding, template), 4), "threshold": DEFAULT_THRESHOLD}
 
 
 def decide(embeddings: list[np.ndarray | None], template: np.ndarray, threshold: float = DEFAULT_THRESHOLD,

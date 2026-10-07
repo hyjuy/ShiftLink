@@ -15,7 +15,7 @@
   설비·신호·정상 범위는 /api/config, 관측은 /api/state, 카드는 /api/kb/cards 에서 읽는다.
   값을 복사해 두지 않으므로 MES 구성과 어긋날 수 없다.
 
-  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 캡처·업로드 경로가 없다.
+  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 얼굴 프레임은 이 기기에서만 점수 내고 저장하지 않는다.
 
   실행:  python -m shiftlink.mes  →  http://127.0.0.1:8000/pda.html
 -->
@@ -24,7 +24,6 @@
     --bg:#0A0D11; --surface:#161B22; --surface-2:#1E252E; --edge:#2B333D;
     --tx:#F3F6F9; --tx-2:#AEB9C4; --tx-3:#7C8792;
     --safety:#F0453C; --safety-bg:#3A0F0D; --safety-edge:#8E241E;
-    --notice:#FFB020; --notice-bg:#2A210F; --notice-edge:#806322;
     --ok:#31C25E; --warn:#FFB020; --fail:#FF8A3D; --scan:#38C6F2;
     --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
   }
@@ -111,14 +110,25 @@
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
   .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}
   .reticle.failed{border-style:solid;border-color:var(--fail);box-shadow:0 0 0 6px rgba(255,138,61,.13)}
-  #scanState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
+  #scanState, #faceState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
     font-weight:600;background:var(--surface);border-top:1px solid var(--edge);min-height:50px}
-  #scanState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
+  #scanState .dot, #faceState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
   #scanState.candidate{color:var(--warn)} #scanState.candidate .dot{background:var(--warn)}
   #scanState.locked{color:var(--ok)} #scanState.locked .dot{background:var(--ok)}
   #scanState.failed{color:var(--fail)} #scanState.failed .dot{background:var(--fail)}
   .scanfoot{flex:0 0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
     border-top:1px solid var(--edge)}
+  .field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700;color:var(--tx-2)}
+  .field input{min-height:56px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);
+    background:var(--surface);color:var(--tx);font:inherit;font-size:18px;font-weight:600}
+  .hangul{display:flex;flex-direction:column;gap:6px}
+  .hangul .row{display:flex;gap:4px}
+  .hangul button{flex:1 1 0;min-height:48px;border-radius:8px;border:1px solid var(--edge);
+    background:var(--surface-2);font-size:18px;font-weight:700}
+  #s-face .vf{flex:0 0 auto;width:640px;height:480px;max-width:100%;margin:12px auto}
+  #faceVideo{position:static;width:640px;height:480px;max-width:100%;object-fit:contain;background:#000}
+  #faceState.ok{color:var(--ok)} #faceState.ok .dot{background:var(--ok)}
+  #faceState.failed{color:var(--fail)} #faceState.failed .dot{background:var(--fail)}
 
   .list{display:flex;flex-direction:column;gap:8px}
   .row{display:flex;align-items:center;gap:11px;width:100%;min-height:56px;padding:8px 12px;
@@ -155,25 +165,24 @@
   #alert .almore{margin:0;padding:6px 14px 8px;font-size:13px;color:#FFC9C5}
 
   /* 안전 관문 — 스크롤해도 상단 고정 */
-  .safety{border:2px solid var(--notice-edge);background:var(--notice-bg);border-radius:10px;padding:12px;
+  .safety{border:2px solid var(--safety-edge);background:var(--safety-bg);border-radius:10px;padding:12px;
     display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
   /* 고정은 관문 띠 하나만. 카드는 내부 스크롤 없이 일반 흐름으로 모두 펼쳐 어느 카드의 근거도
      잘리거나 덮이지 않게 한다(B2). display:contents라 띠가 pane 직계로 놓여 pane 스크롤 내내 고정된다. */
   .safety-stack,#askSafety{display:contents}
   .safety-bar{position:sticky;top:0;z-index:5;flex:0 0 auto;margin:0 -14px;padding:10px 14px;
-    background:var(--notice-bg);color:#FFF3D6;font-size:14px;font-weight:800;border-block:3px solid var(--notice)}
-  .safety.invalid{border-color:var(--safety-edge);background:var(--safety-bg)}
+    background:var(--safety-bg);color:#FFF0EF;font-size:14px;font-weight:800;border-block:3px solid var(--safety)}
   .safety .body:empty{display:none}
-  .safety .stop{margin:0;font-size:13.5px;font-weight:700;color:#FFF3D6}
-  .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFE0A3}
-  .safety .hd .dot{width:9px;height:9px;border-radius:50%;background:var(--notice);flex:0 0 auto}
+  .safety .stop{margin:0;font-size:13.5px;font-weight:700;color:#FFF0EF}
+  .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFD7D4}
+  .safety .hd .dot{width:9px;height:9px;border-radius:50%;background:var(--safety);flex:0 0 auto}
   .safety .pinbadge{margin-left:auto;font-size:12px;font-weight:800;padding:3px 8px;border-radius:3px;
     background:#F3F6F9;color:#0A0D11;letter-spacing:.05em}
-  .safety .kid{font-size:11px;font-weight:700;color:#FFD284;letter-spacing:.06em}
-  .safety .ttl{font-size:16px;font-weight:800;line-height:1.35;color:#FFF3D6}
-  .safety .body{font-size:13.5px;color:#F0DFC0;line-height:1.6}
-  .safety .basis{font-size:11.5px;color:#D5C39E;border-top:1px solid var(--notice-edge);padding-top:7px}
-  .safety .gate{font-size:11.5px;font-weight:700;color:#FFE0A3}
+  .safety .kid{font-size:11px;font-weight:700;color:#FFB3AE;letter-spacing:.06em}
+  .safety .ttl{font-size:16px;font-weight:800;line-height:1.35;color:#FFF0EF}
+  .safety .body{font-size:13.5px;color:#FFE2E0;line-height:1.6}
+  .safety .basis{font-size:11.5px;color:#FFC9C5;border-top:1px solid var(--safety-edge);padding-top:7px}
+  .safety .gate{font-size:11.5px;font-weight:700;color:#FFD7D4}
 
   .card{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
     display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
@@ -239,8 +248,6 @@
   .try .fld .k{width:52px;flex:0 0 auto;color:var(--tx-2);font-size:11px;font-weight:700}
   .try .fld .v{color:var(--tx-2);flex:1 1 auto}
 
-  .basis-detail summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--scan)}
-  .basis-detail p{white-space:pre-wrap;overflow-wrap:anywhere}
   .t4{display:flex;flex-direction:column;gap:9px}
   .t4 .fld{display:flex;flex-direction:column;gap:4px}
   .t4 .k{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--tx-2)}
@@ -308,6 +315,7 @@
     <i class="rail" id="ctxRail"></i>
     <div class="txt">
       <div><span class="id" id="ctxId">—</span> <span class="nm" id="ctxName"></span></div>
+      <div class="src" id="ctxSrc"></div>
     </div>
   </div>
 
@@ -320,15 +328,48 @@
       <div class="grow"></div></div>
   </section>
 
+  <!-- 로그인. 부팅 다음 첫 화면. -->
+  <section class="screen" id="s-login">
+    <div class="appbar"><h1>로그인</h1></div>
+    <div class="pane">
+      <p class="hint">이름과 사번을 입력하면 얼굴 인증 화면으로 넘어갑니다.</p>
+      <label class="field">이름
+        <input id="loginName" type="text" lang="ko" autocomplete="name" enterkeyhint="next">
+      </label>
+      <div id="loginHangul" class="hangul"></div>
+      <p class="hint">이름은 화면 자판으로 넣습니다. 사번은 키보드로 넣습니다.</p>
+      <label class="field">사번
+        <input id="loginId" class="mono" type="text" autocomplete="off" enterkeyhint="go" spellcheck="false">
+      </label>
+      <p class="hint" id="loginErr" hidden></p>
+      <div class="grow"></div>
+      <button class="btn primary" id="loginGo" type="button">로그인</button>
+    </div>
+  </section>
+
+  <!-- 얼굴 인증. 프레임은 이 기기 서버에서만 점수 내고, 저장하거나 Jetson으로 보내지 않는다(D-42). -->
+  <section class="screen" id="s-face">
+    <div class="appbar"><button class="ic" id="faceBack" type="button" aria-label="이전">← 이전</button>
+      <h1>얼굴 인증</h1><span class="sp"></span></div>
+    <div class="pane flush" style="display:flex;flex-direction:column">
+      <div class="vf"><video id="faceVideo" width="640" height="480" autoplay muted playsinline></video></div>
+      <div id="faceState"><span class="dot"></span><span id="faceText">카메라를 여는 중…</span></div>
+      <div class="scanfoot">
+        <p class="hint" id="faceWho"></p>
+        <button class="btn" id="faceRetry" type="button" hidden>다시 시도</button>
+      </div>
+    </div>
+  </section>
+
   <!-- 홈 -->
   <section class="screen" id="s-home">
     <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span></div>
     <div class="pane">
       <div class="grow"></div>
       <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
-      <p class="hint">설비를 스캔하면 인식된 설비가 자동으로 선택됩니다.</p>
+      <p class="hint">상자에 붙은 코드를 비추면 설비가 확정됩니다.</p>
       <div class="grow"></div>
-      <p class="lbl">최근 선택한 설비</p>
+      <p class="lbl">최근 설비</p>
       <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
       <button class="outbox-note" id="homePending" type="button" hidden></button>
       <p class="outbox-note bad" id="homeConflict" hidden></p>
@@ -362,8 +403,9 @@
         <p class="hd">설비 미확정</p>
         <p class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다. 아래에서 설비를 선택하세요.</p>
       </div>
+      <p class="hint">상자의 색 띠와 이름표를 보고 고르세요.</p>
       <div class="list" id="manualList"></div>
-      <button class="btn sm ghost" id="manualToScan" type="button">설비 스캔으로 돌아가기</button>
+      <button class="btn sm ghost" id="manualToScan" type="button">카메라로 돌아가기</button>
     </div>
   </section>
 
@@ -415,7 +457,7 @@
       <p class="lbl">관측값 — MES 현재값을 자동으로 채웁니다</p>
       <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
       <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
-      <p class="hint">MES에서 가져오지 못한 측정값은 직접 입력해 주세요. 같은 항목을 입력하면 질의에는 직접 입력한 값이 사용됩니다.</p>
+      <p class="hint">MES에 없는 값은 아래에서 직접 추가합니다. 같은 신호는 직접 입력값이 우선합니다.</p>
       <div class="obsrow">
         <select id="obsSignal" aria-label="신호"></select>
         <input type="number" id="obsValue" step="any" inputmode="decimal" placeholder="값" aria-label="값">
@@ -503,13 +545,11 @@
       <label for="hoMemo" class="lbl">인계 메모</label>
       <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea>
       <div class="t4">
-        <div class="fld"><label class="k" for="hoCtx">작업 상황 및 측정 기록</label><textarea id="hoCtx" maxlength="12000" placeholder="측정값과 조치 내용을 입력해 주세요"></textarea></div>
-        <button class="btn sm" id="hoLoadMes" type="button">MES 기록 불러오기</button>
-        <p class="hint" id="hoMesStatus" role="status">선택한 설비의 현재 측정값과 최근 이벤트를 불러와 추가할 수 있습니다.</p>
-        <div class="fld"><label class="k" for="hoRole">받는 사람</label><input id="hoRole" value="야간조 정비 담당"></div>
-        <div class="fld"><label class="k" for="hoTiming">전달 시점</label><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
-        <div class="fld"><label class="k" for="hoChannel">전달 방법</label><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
-        <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
+        <div class="fld"><div class="k">REQUIRED_CONTEXT</div><div class="v auto" id="hoCtx">—</div></div>
+        <div class="fld"><div class="k">RECIPIENT_ROLE</div><input id="hoRole" value="야간조 정비 담당"></div>
+        <div class="fld"><div class="k">TIMING</div><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
+        <div class="fld"><div class="k">CHANNEL</div><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
+        <div class="fld"><div class="k">ACKNOWLEDGEMENT</div><input id="hoAck" class="req" placeholder="무엇으로 확인하는가"></div>
       </div>
       <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
       <div class="grow"></div>

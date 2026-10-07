@@ -51,6 +51,7 @@ def test_pages_local_and_api_proxied():
     try:
         status, body = fetch(pda_url + "/pda.html")
         assert status == 200 and b"/static/pda.js" in body and b'href="/"' in body
+        assert b'id="loginName"' in body and b'id="loginId"' in body and b'id="faceVideo"' in body
         assert fetch(pda_url + "/static/pda.js")[0] == 200
         conn = http.client.HTTPConnection(pda_url.split("//")[1]); conn.request("GET", "/")
         res = conn.getresponse()  # 대시보드는 파이에 두지 않고 Jetson 화면으로 보낸다
@@ -65,6 +66,28 @@ def test_pages_local_and_api_proxied():
         status, body = fetch(pda_url + "/api/equipment/scan", json.dumps({"class": "HPU"}).encode())
         got = json.loads(body)
         assert status == 201 and got["got"] == {"class": "HPU"} and got["ct"] == "application/json"
+    finally:
+        pda.shutdown(); jetson.shutdown()
+
+
+def test_face_frame_is_local_and_rejects_unknown_id():
+    jetson, jetson_url = serve(FakeJetson)
+    pda, pda_url = serve(make_handler(jetson_url))
+    try:
+        status, body = fetch(pda_url + "/api/face/frame", b"")
+        assert status == 400 and "이미지" in json.loads(body)["error"]
+        req = urllib.request.Request(
+            pda_url + "/api/face/frame", data=b"not-a-jpeg",
+            headers={"Content-Type": "image/jpeg", "X-Employee-Id": "NO-SUCH"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=5) as res:
+                status, body = res.status, res.read()
+        except urllib.error.HTTPError as err:
+            status, body = err.code, err.read()
+        assert status == 404 and "등록" in json.loads(body)["error"]
+        status, _ = fetch(pda_url + "/api/state")
+        assert status == 200  # 얼굴 경로는 Jetson 프록시를 타지 않는다
     finally:
         pda.shutdown(); jetson.shutdown()
 

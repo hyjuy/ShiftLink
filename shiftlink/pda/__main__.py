@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import threading
@@ -21,6 +22,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 WEB = Path(__file__).resolve().parents[1] / "mes" / "web"
+_MAX_FACE_JPEG = 1_500_000
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
 PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
@@ -66,7 +68,34 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
                 self._send(404, b"not found", "text/plain; charset=utf-8"); return
             self._send(200, (web / name).read_bytes(), f"{TYPES[Path(name).suffix]}; charset=utf-8")
 
+        def _face_frame(self) -> None:
+            """브라우저가 잡고 있는 카메라 프레임을 이 기기에서만 점수 낸다. Jetson으로 넘기지 않고 저장하지도 않는다."""
+            length = int(self.headers.get("Content-Length") or 0)
+            if length <= 0 or length > _MAX_FACE_JPEG:
+                msg = json.dumps({"error": "이미지 크기가 맞지 않습니다"}, ensure_ascii=False).encode()
+                self._send(400, msg, "application/json; charset=utf-8")
+                return
+            jpeg = self.rfile.read(length)
+            employee_id = self.headers.get("X-Employee-Id", "")
+            try:
+                from shiftlink.face.verify import score_login_jpeg
+                result = score_login_jpeg(jpeg, employee_id)
+            except LookupError as err:
+                msg = json.dumps({"error": str(err)}, ensure_ascii=False).encode()
+                self._send(404, msg, "application/json; charset=utf-8")
+            except ValueError as err:
+                msg = json.dumps({"error": str(err)}, ensure_ascii=False).encode()
+                self._send(400, msg, "application/json; charset=utf-8")
+            except Exception:
+                msg = json.dumps({"error": "얼굴 모델을 열 수 없습니다"}, ensure_ascii=False).encode()
+                self._send(503, msg, "application/json; charset=utf-8")
+            else:
+                self._send(200, json.dumps(result).encode(), "application/json; charset=utf-8")
+
         def do_POST(self) -> None:  # noqa: N802
+            path = self.path.split("?", 1)[0]
+            if path == "/api/face/frame":
+                self._face_frame(); return
             if self.path.startswith("/api/"):
                 self._proxy()
             else:
@@ -91,9 +120,12 @@ def open_window(url: str, scale: float) -> int:
     profile = Path.home() / "shiftlink" / "data" / "chromium"
     # 리눅스 Chromium은 --lang 대신 LANGUAGE로 UI 언어를 정한다. 파이가 영어(en_GB)면 한국어 화면에 번역 팝업이 뜬다.
     env = {**os.environ, "LANGUAGE": "ko"}
+    if shutil.which("ibus-daemon"):
+        env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
     return subprocess.call([
         "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
         "--lang=ko", "--disable-features=Translate", "--kiosk", "--start-fullscreen",
+        "--use-fake-ui-for-media-stream",
         "--noerrdialogs", "--no-first-run", "--password-store=basic", f"--app={url}",
     ], env=env)
 

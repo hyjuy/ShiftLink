@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-07T01:30:10.979052+00:00",
+  "origin": "http://jetson-06:8000",
+  "request": {
+    "question": "기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기",
+    "equipment_id": "EQ-0001"
+  },
+  "status": 200,
+  "latency_s": 4.629651199999898,
+  "verification_scope": "Actual Jetson HTTP response; rendered locally with production render_response; physical PDA screen not inspected",
+  "answer": "축 회전, 무부하, 동작, 회전 방향, 조립, 프라이밍 순으로 확인하세요. 압력이 없으면 우측 분기로 넘어가지 않습니다.",
+  "cited_card_ids": [
+    "K-1001"
+  ],
+  "safety_notices": [
+    {
+      "card_id": "K-1003",
+      "safety_basis": "HY13-PMDSPS1M-M1/US §3.7.2 DANGER: 용적형 펌프에 과압 보호를 제공하지 않으면 펌프·구동기 고장 또는 펌프·배관 파열이 생길 수 있다. 같은 절: 릴리프 밸브를 펌프 최대 정격 압력(100% 바이패스 시 압력 누적 포함)보다 높게 설정하지 말 것, 릴리프 리턴 라인을 펌프 흡입 라인에 배관하지 말 것(루프로 펌프 과열).",
+      "stop_conditions": []
+    },
+    {
+      "card_id": "K-1006",
+      "safety_basis": "MAN-C-012-EN/0 §1 WARNING: 정비는 자격 있는 인원만 수행, 정비 전 항상 해당 계통을 감압(Always depressurize the relevant part of the system), 설비 작동 중 정비 금지(Do not perform maintenance with the equipment functioning) — 침투한 오염물·액체로 HPU 안전 기능이 더는 보장되지 않는다.",
+      "stop_conditions": []
+    },
+    {
+      "card_id": "K-1211",
+      "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+      "stop_conditions": []
+    },
+    {
+      "card_id": "K-1218",
+      "safety_basis": "정지 원인 확인·인터록 작동 조건 해소·지정 승인자의 승인과 작업 제한 해제 확인이 선행된다. 정비는 정지·에너지 차단·잠금 후 권한 있는 담당자가 현장 작업표준으로 수행한다. 안전장치·인터록 우회 금지. 시험운전은 승인 범위에서만 수행하고 이상 시 정지한다. 해당 설치 모델과 원문 모델 동일성 미확인으로 구체 운전 설정·해제 절차는 현장 확인 대상.",
+      "stop_conditions": []
+    }
+  ],
+  "review_queue": false,
+  "no_knowledge": false
+}

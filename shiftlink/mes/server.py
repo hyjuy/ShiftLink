@@ -21,6 +21,7 @@ from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
 from shiftlink.agent.pipeline import JudgeUnavailableError
+from shiftlink.agent.response import AgentResponse, render_response
 
 from .storage import HandoverConflictError, MesStorage
 
@@ -84,6 +85,8 @@ class MesService:
         self.storage.save_query({
             "question": body.get("question"), "equipment_id": (result.get("evidence") or {}).get("equipment_id"),
             "answer": result.get("answer"), "cited_card_ids": result.get("cited_card_ids"),
+            "safety_notices": result.get("safety_notices", []),
+            "rendered_response": render_response(AgentResponse.model_validate(result)),
             "no_knowledge": result.get("no_knowledge"), "review_queue": result.get("review_queue"),
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),

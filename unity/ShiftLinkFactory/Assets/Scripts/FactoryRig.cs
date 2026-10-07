@@ -208,10 +208,12 @@ public class FactoryRig : MonoBehaviour
         }
         AccessAndLogistics(next);
         var relations=(next.relations??new RelationSpec[0]).Concat((next.branches??new BranchSpec[0]).Select(br=>new RelationSpec {from_id=br.from_id,to_id=br.to_id,relation_type="material_flow"}));
+        var drivePorts=new HashSet<string>();
         foreach(var rel in relations.GroupBy(r=>r.relation_type+":"+r.from_id+":"+r.to_id).Select(g=>g.First())) {
             if(!nodes.ContainsKey(rel.from_id) || !nodes.ContainsKey(rel.to_id)) continue;
             if(!nodes[rel.from_id].activeSelf || !nodes[rel.to_id].activeSelf) continue;
             Vector3 a=nodes[rel.from_id].transform.position,b=nodes[rel.to_id].transform.position;
+            int utilityLane=relations.Where(r=>r.from_id==rel.from_id && r.relation_type==rel.relation_type).Select(r=>r.to_id).Distinct().OrderBy(id=>id).ToList().IndexOf(rel.to_id);
             if(rel.relation_type=="material_flow") {
                 bool branch=Array.IndexOf(next.route,rel.to_id)<0;
                 var start=Anchor(rel.from_id,branch ? "ScrapOutputAnchor_" : "OutputAnchor_").position; var end=Anchor(rel.to_id,"InputAnchor_").position;
@@ -236,18 +238,23 @@ public class FactoryRig : MonoBehaviour
                 Block("Assumed right-angle distributor",junction,new Vector3(.3f,.3f,.3f),FactoryRules.Grey);
                 var side=new Vector3(end.x,start.y,end.z);
                 GuardedShaft(junction,side,rel.from_id);
-                var coupling=Asset("Connection_FlexibleCoupling",transform); coupling.transform.position=start-Vector3.up*.15f;
-                rotating.Add(Tuple.Create(rel.from_id,coupling.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("RotationPivot")),Vector3.right,.12f));
-                var guard=Asset("Connection_ShaftGuard",transform); guard.transform.position=start-Vector3.up*.17f;
+                // Both driven targets share this one gearbox output port.
+                if(drivePorts.Add(rel.from_id)) {
+                    var coupling=Asset("Connection_FlexibleCoupling",transform); coupling.transform.position=start-Vector3.up*.15f;
+                    rotating.Add(Tuple.Create(rel.from_id,coupling.GetComponentsInChildren<Transform>().First(t=>t.name.StartsWith("RotationPivot")),Vector3.right,.12f));
+                    var guard=Asset("Connection_ShaftGuard",transform); guard.transform.position=start-Vector3.up*.17f;
+                }
                 var bearing=Asset("Connection_BearingPedestal",transform); bearing.transform.position=(start+junction)*.5f-Vector3.up*.23f;
                 Block("Guarded chain drive",(side+end)*.5f,new Vector3(.3f,Mathf.Max(.2f,Mathf.Abs(end.y-side.y)),.2f),FactoryRules.Amber);
             } else if(rel.relation_type=="hydraulic_supply") {
-                var start=a+new Vector3(1,.6f,0); var end=b+new Vector3(1.2f,1.6f,.94f);
+                var start=a+new Vector3(1,.6f,utilityLane*.18f); var end=b+new Vector3(1.2f,1.6f,.94f);
                 if(next.equipment.First(e=>e.equipment_id==rel.to_id).profile_id=="cv") end=b+new Vector3(-1.8f,.8f,-1);
-                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,2.8f,6.7f),new Vector3(end.x,2.8f,6.7f),new Vector3(end.x,2.8f,1.7f),end},new Color(.1f,.6f,.7f));
-                Pipe("Assumed hydraulic return "+rel.to_id,new[]{end+Vector3.forward*.1f,new Vector3(end.x,2.8f,1.8f),new Vector3(end.x,2.8f,6.8f),new Vector3(start.x,2.8f,6.8f),start+Vector3.forward*.1f},FactoryRules.Grey);
+                float supplyHeight=2.8f+utilityLane*.18f,returnHeight=supplyHeight+.08f;
+                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,1.7f),end},new Color(.1f,.6f,.7f));
+                Pipe("Assumed hydraulic return "+rel.to_id,new[]{end+Vector3.forward*.1f,new Vector3(end.x,returnHeight,1.8f),new Vector3(end.x,returnHeight,6.8f),new Vector3(start.x,returnHeight,6.8f),start+Vector3.forward*.1f},FactoryRules.Grey);
             } else if(rel.relation_type=="power_supply") {
-                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(0,.91f,.4f),new Vector3(a.x,4,7),new Vector3(b.x,4,7),b+new Vector3(-.68f,4,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
+                float offset=(utilityLane-1)*.12f;
+                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(offset,.91f,.4f),new Vector3(a.x+offset,4,7+offset),new Vector3(b.x,4,7+offset),b+new Vector3(-.68f,4,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
             } else if(rel.relation_type=="pneumatic_supply") {
                 Pipe("CAU air riser",new[]{a+new Vector3(-1.6f,1.8f,0),new Vector3(a.x-1.6f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,1.7f),b+new Vector3(.7f,.45f,1.06f)},new Color(.2f,.5f,.9f));
             }

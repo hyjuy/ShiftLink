@@ -9,7 +9,7 @@ import unittest
 import zlib
 from pathlib import Path
 
-from shiftlink.vision.unity_dataset import export_dataset
+from shiftlink.vision.unity_dataset import export_dataset, png_dimensions
 
 
 def png(width=100, height=50, color=0):
@@ -101,6 +101,48 @@ class UnityDatasetTests(unittest.TestCase):
         result = subprocess.run([sys.executable, '-B', '-m', 'shiftlink.vision.unity_dataset', '--captures', str(self.source),
                                  '--out', str(self.out)], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('WARNING: empty split', result.stdout)
+
+    def test_recursive_object_pose_and_all_six_classes(self):
+        names = ('HPU', 'GR', 'RT', 'CV', 'CAU', 'PDP')
+        objects = [dict(class_id=i, equipment_type=name, equipment_id=f'EQ-{i}', bbox_xyxy=[0, 0, 100, 50])
+                   for i, name in enumerate(names)]
+        self.capture(objects=objects, camera_pose=dict(position=dict(x=1, y=2, z=3), rotation=dict(x=0, y=0, z=0, w=1)))
+        nested = self.source / 'nested'
+        nested.mkdir()
+        for path in list(self.source.glob('one.*')):
+            path.rename(nested / path.name)
+        rows = export_dataset(self.source, self.out)
+        self.assertEqual((self.out / rows[0]['label']).read_text(), ''.join(f'{i} 0.5 0.5 1 1\n' for i in range(6)))
+
+    def test_missing_fields_unknown_class_mapping_and_invalid_json(self):
+        original = self.capture()
+        for key in original:
+            metadata = original.copy()
+            del metadata[key]
+            with self.subTest(key=key):
+                (self.source / 'one.json').write_text(json.dumps(metadata))
+                with self.assertRaises(ValueError):
+                    export_dataset(self.source, self.out)
+        for update in (dict(capture_id='../escape'), dict(camera_pose={'x': float('inf')}), dict(objects=[{}]),
+                       dict(objects=[original['objects'][0] | dict(equipment_type='GR')])):
+            (self.source / 'one.json').write_text(json.dumps(original | update))
+            with self.assertRaises(ValueError):
+                export_dataset(self.source, self.out)
+        (self.source / 'one.json').write_text('{broken')
+        with self.assertRaises(ValueError):
+            export_dataset(self.source, self.out)
+
+    def test_png_corruption_and_nested_output_rejected(self):
+        good = png()
+        corrupt_crc = bytearray(good)
+        corrupt_crc[29] ^= 1
+        for image in (bytes(corrupt_crc), good[:-5], good + b'extra'):
+            with self.assertRaises(ValueError):
+                png_dimensions(image)
+        self.capture()
+        with self.assertRaises(ValueError):
+            export_dataset(self.source, self.source / 'export')
 
 
 if __name__ == '__main__':

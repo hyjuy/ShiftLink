@@ -33,6 +33,7 @@ public class FactoryCapture : MonoBehaviour
     public string LastSavedPath { get; private set; }
     public string Status { get; private set; } = "Ready to photograph";
     public bool PreviewSaved { get; private set; }
+    public RenderTexture LivePreview { get; private set; }
     public readonly List<string> Gallery = new List<string>();
     Camera cameraSource;
     FactoryConfig config;
@@ -47,6 +48,7 @@ public class FactoryCapture : MonoBehaviour
         configId = next == null ? null : next.config_id;
         equipment = nodes == null ? new Dictionary<string, GameObject>() : new Dictionary<string, GameObject>(nodes);
         if (string.IsNullOrEmpty(sessionId)) sessionId = Guid.NewGuid().ToString("N");
+        RefreshGallery();
     }
     public void SetContext(string currentConfigId, string currentRunId, int currentSequence)
     { configId = currentConfigId; runId = currentRunId; sequence = currentSequence; }
@@ -68,8 +70,48 @@ public class FactoryCapture : MonoBehaviour
         cameraSource.Render();
         RenderTexture.active = target;
         var texture = new Texture2D(width, height, TextureFormat.RGB24, false, linear);
-        texture.ReadPixels(new Rect(0, 0, width, height), 0, 0); texture.Apply();
-        return texture;
+        try { texture.ReadPixels(new Rect(0, 0, width, height), 0, 0); texture.Apply(); return texture; }
+        catch { Remove(texture); throw; }
+    }
+
+    public bool RenderLivePreview()
+    {
+        if (cameraSource == null || width < 1 || height < 1 || width > 8192 || height > 8192) return false;
+        var hidden = FindObjectsByType<Renderer>(FindObjectsSortMode.None).Where(r => r.enabled && Excluded(r)).ToArray();
+        var targetBefore = cameraSource.targetTexture; float aspectBefore = cameraSource.aspect;
+        bool hdrBefore = cameraSource.allowHDR, msaaBefore = cameraSource.allowMSAA;
+        var activeBefore = RenderTexture.active;
+        try {
+            if (LivePreview == null || LivePreview.width != width || LivePreview.height != height) {
+                Remove(LivePreview); LivePreview = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+                LivePreview.antiAliasing = 1; LivePreview.Create();
+            }
+            foreach (var renderer in hidden) renderer.enabled = false;
+            cameraSource.aspect = (float)width / height; cameraSource.allowHDR = false; cameraSource.allowMSAA = false;
+            cameraSource.targetTexture = LivePreview; cameraSource.Render(); return true;
+        } catch (Exception error) { Status = "Camera preview failed: " + error.Message; return false; }
+        finally {
+            foreach (var renderer in hidden) if (renderer != null) renderer.enabled = true;
+            cameraSource.targetTexture = targetBefore; cameraSource.aspect = aspectBefore;
+            cameraSource.allowHDR = hdrBefore; cameraSource.allowMSAA = msaaBefore; RenderTexture.active = activeBefore;
+        }
+    }
+
+    string OutputPath()
+    { return string.IsNullOrWhiteSpace(outputDirectory) ? Path.Combine(Application.persistentDataPath, "ShiftLinkCaptures") : Path.GetFullPath(outputDirectory); }
+    public void RefreshGallery()
+    {
+        try {
+            string directory = OutputPath(); Gallery.Clear();
+            if (!Directory.Exists(directory)) return;
+            foreach (var json in Directory.GetFiles(directory, "*.json").OrderByDescending(File.GetLastWriteTimeUtc)) {
+                try {
+                    string png = Path.ChangeExtension(json, ".png");
+                    var metadata = JsonUtility.FromJson<FactoryCaptureMetadata>(File.ReadAllText(json));
+                    if (metadata != null && metadata.capture_id == Path.GetFileNameWithoutExtension(json) && File.Exists(png) && new FileInfo(png).Length > 8) Gallery.Add(png);
+                } catch (Exception) { /* Ignore incomplete or unreadable pairs; opening validates the image. */ }
+            }
+        } catch (Exception error) { Status = "Gallery unavailable: " + error.Message; }
     }
 
     public bool Capture()
@@ -162,13 +204,12 @@ public class FactoryCapture : MonoBehaviour
         string png = null, json = null, pngTemp = null, jsonTemp = null;
         bool movedPng = false;
         try {
-            string directory = string.IsNullOrWhiteSpace(outputDirectory) ? Path.Combine(Application.persistentDataPath, "ShiftLinkCaptures") : Path.GetFullPath(outputDirectory);
+            string directory = OutputPath();
             Directory.CreateDirectory(directory);
             png = Path.Combine(directory, PreviewMetadata.capture_id + ".png"); json = Path.ChangeExtension(png, ".json");
             if (File.Exists(png) || File.Exists(json)) {
                 if (!File.Exists(png) || !File.Exists(json)) throw new IOException("Incomplete capture exists; choose another output directory.");
-                var existing = JsonUtility.FromJson<FactoryCaptureMetadata>(File.ReadAllText(json));
-                if (existing == null || existing.capture_id != PreviewMetadata.capture_id || new FileInfo(png).Length < 8) throw new IOException("Capture ID collision.");
+                if (!File.ReadAllBytes(png).SequenceEqual(Preview.EncodeToPNG()) || File.ReadAllText(json) != JsonUtility.ToJson(PreviewMetadata, true)) throw new IOException("Capture ID collision or stored photo changed.");
             } else {
                 pngTemp = png + ".tmp"; jsonTemp = json + ".tmp";
                 File.WriteAllBytes(pngTemp, Preview.EncodeToPNG());
@@ -180,11 +221,12 @@ public class FactoryCapture : MonoBehaviour
             Status = "Photo saved: " + png; return true;
         } catch (Exception error) {
             if (movedPng && png != null) TryDelete(png);
+            PreviewSaved = false;
             Status = "Save failed. Photo kept for retry: " + error.Message; Debug.LogWarning(Status); return false;
         } finally { TryDelete(pngTemp); TryDelete(jsonTemp); }
     }
     static void TryDelete(string path)
     { if (path == null) return; try { if (File.Exists(path)) File.Delete(path); } catch (IOException) { } catch (UnauthorizedAccessException) { } }
     public void Retake() { Remove(Preview); Preview = null; PreviewMetadata = null; PreviewSaved = false; Status = "Ready to photograph"; }
-    void OnDestroy() { Remove(Preview); }
+    void OnDestroy() { Remove(Preview); Remove(LivePreview); }
 }

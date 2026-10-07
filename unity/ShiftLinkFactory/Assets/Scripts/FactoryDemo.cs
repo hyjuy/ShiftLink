@@ -227,10 +227,11 @@ public class FactoryDemo : MonoBehaviour
     public void SetExteriorView(bool exterior)
     {
         exteriorView=exterior;
-        if(exteriorEnvelope!=null) exteriorEnvelope.gameObject.SetActive(exterior);
-        if(logistics!=null) logistics.SetExterior(exterior);
-        var display=transform.Find("Factory status display"); if(display!=null) display.gameObject.SetActive(!exterior);
-        if(equipmentRoot!=null) foreach(var label in equipmentRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(!exterior);
+        bool enclosed=exterior || (worker!=null && worker.IsWorkerMode);
+        if(exteriorEnvelope!=null) exteriorEnvelope.gameObject.SetActive(enclosed);
+        if(logistics!=null) logistics.SetExterior(enclosed);
+        var display=transform.Find("Factory status display"); if(display!=null) display.gameObject.SetActive(!enclosed);
+        if(equipmentRoot!=null) foreach(var label in equipmentRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(!enclosed);
         target=exterior ? new Vector3(7,3,0) : new Vector3(8,2,3);
         distance=exterior ? 105 : 94; pitch=exterior ? 38 : 52; yaw=-20;
         UpdateCamera();

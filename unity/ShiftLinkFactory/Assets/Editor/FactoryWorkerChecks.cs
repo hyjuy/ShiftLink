@@ -8,9 +8,19 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 // Uses reflection so the missing feature produces a runnable RED before implementation.
+[InitializeOnLoad]
 public static class FactoryWorkerChecks
 {
     static int assertions;
+    static FactoryDemo playFactory;
+    static Component playWorker, playCapture;
+    static int playFrames;
+    static string playDir;
+    static bool screenshotRequested;
+    static FactoryWorkerChecks()
+    {
+        if (SessionState.GetBool("ShiftLink.WorkerPlayCheck", false)) EditorApplication.update += CheckPlay;
+    }
     static void Check(bool value, string label)
     {
         assertions++;
@@ -44,12 +54,14 @@ public static class FactoryWorkerChecks
             var worker = demo.GetComponent(workerType);
             var capture = demo.GetComponent(captureType);
             Check(worker != null && capture != null, "factory initializes employee and capture components");
-            Check(Shader.Find("Unlit/Color") != null, "instance mask shader available");
+            Check(Resources.Load<Shader>("FactoryInstanceMask") != null, "instance mask shader available");
             var observation = Camera.main;
             Vector3 previousPosition = observation.transform.position;
             Quaternion previousRotation = observation.transform.rotation;
             Call(worker, "EnterWorker");
             Check((bool)Get(worker, "IsWorkerMode"), "employee mode can be entered");
+            Check(demo.transform.Find("Factory building/Exterior envelope").gameObject.activeInHierarchy,
+                "employee camera sees enclosed factory walls and roof");
             var root = (Transform)Get(worker, "WorkerRoot");
             Check(root.GetComponent<CharacterController>() != null, "employee has a CharacterController");
             Check(root.GetComponentsInChildren<Renderer>(true).Length >= 6, "employee body and PDA are visible models");
@@ -57,16 +69,24 @@ public static class FactoryWorkerChecks
             Physics.SyncTransforms();
             Call(worker, "Step", .25f, new Vector2(0, 1), Vector2.zero);
             Check(Vector3.Distance(before, root.position) > .1f, "employee moves through shared movement path");
+            var controller = root.GetComponent<CharacterController>();
+            controller.enabled = false; root.position = new Vector3(0, .05f, 16); controller.enabled = true;
+            Physics.SyncTransforms();
+            for (int step = 0; step < 4; step++) Call(worker, "Step", .25f, new Vector2(0, 1), Vector2.zero);
+            Check(root.position.z < 16.7f, "employee cannot walk through rear wall");
             demo.SetExteriorView(false);
             Physics.SyncTransforms();
             Check(Physics.Raycast(new Vector3(0, 1, 16), Vector3.forward, 2), "interior view retains physical rear wall");
             Call(worker, "ExitWorker");
             Check(!(bool)Get(worker, "IsWorkerMode") && observation.enabled, "observation camera restored on exit");
+            Physics.SyncTransforms();
+            Check(Physics.Raycast(new Vector3(0, 1, 16), Vector3.forward, 2), "cutaway overview retains independent building collisions");
             // Capture actual imported factory geometry, excluding explanatory overlays.
             var node = demo.transform.Find("MES equipment").GetChild(0);
             var pda = (Camera)Get(worker, "PdaCamera");
             pda.transform.position = node.position + new Vector3(0, 2, -6);
             pda.transform.LookAt(node.position + Vector3.up);
+            demo.SetExteriorView(true);
             Set(capture, "width", 640); Set(capture, "height", 360);
             string output = Path.Combine(dir, "worker-captures-" + Guid.NewGuid().ToString("N"));
             Set(capture, "outputDirectory", output);
@@ -77,7 +97,17 @@ public static class FactoryWorkerChecks
             Check(File.Exists(saved) && File.Exists(Path.ChangeExtension(saved, ".json")), "saved pair exists on disk");
             Check((bool)Call(capture, "Save") && Directory.GetFiles(output, "*.png", SearchOption.AllDirectories).Length == 1,
                 "repeated save does not duplicate the capture");
+            var savedBytes = File.ReadAllBytes(saved);
+            File.WriteAllBytes(saved, new byte[16]);
+            Check(!(bool)Call(capture, "Save") && !(bool)Get(capture, "PreviewSaved"), "corrupt existing photo is not accepted as a successful save");
+            File.WriteAllBytes(saved, savedBytes);
+            Check((bool)Call(capture, "Save"), "restored saved photo validates successfully");
+            ((System.Collections.IList)Get(capture, "Gallery")).Clear(); Call(capture, "RefreshGallery");
+            Check(((System.Collections.IList)Get(capture, "Gallery")).Count == 1, "gallery reloads completed disk captures");
             File.Copy(saved, Path.Combine(dir, "worker-pda-capture.png"), true);
+            observation.transform.position = root.position + new Vector3(2, 1.8f, -3);
+            observation.transform.LookAt(root.position + Vector3.up);
+            FactoryChecks.Capture(Path.Combine(dir, "worker-character.png"));
             // A separate, controlled scene tests occlusion and top-left pixel coordinates.
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var host = new GameObject("Capture geometry check");
@@ -95,6 +125,8 @@ public static class FactoryWorkerChecks
             var nodes = new Dictionary<string, GameObject> { { "near", front }, { "far", back } };
             Set(capture, "width", 320); Set(capture, "height", 240); Set(capture, "outputDirectory", output);
             Call(capture, "Configure", camera, miniConfig, nodes, 0);
+            Check((bool)Call(capture, "RenderLivePreview") && ((RenderTexture)Get(capture, "LivePreview")).width == 320,
+                "PDA live preview renders using configured photo dimensions");
             var originalMaterial = front.GetComponent<Renderer>().sharedMaterial;
             Check((bool)Call(capture, "Capture"), "controlled scene capture succeeds");
             var metadata = Get(capture, "PreviewMetadata");
@@ -121,9 +153,60 @@ public static class FactoryWorkerChecks
             Check((bool)Call(capture, "Save"), "empty scene can be saved");
             File.WriteAllText(Path.Combine(dir, "worker-check-result.txt"), "PASS: " + assertions + " employee/camera/save/occlusion assertions; captures=" + output);
             Debug.Log("SHIFTLINK WORKER CAPTURE CHECK PASS");
-            EditorApplication.Exit(0);
+            SessionState.SetBool("ShiftLink.WorkerPlayCheck", true);
+            SessionState.SetFloat("ShiftLink.WorkerPlayStart", (float)EditorApplication.timeSinceStartup);
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            EditorApplication.update += CheckPlay;
+            EditorApplication.EnterPlaymode();
         } catch (Exception error) {
             File.WriteAllText(Path.Combine(dir, "worker-check-result.txt"), "FAIL: " + error);
+            Debug.LogException(error); EditorApplication.Exit(1);
+        }
+    }
+    static void CheckPlay()
+    {
+        if (!SessionState.GetBool("ShiftLink.WorkerPlayCheck", false)) return;
+        try {
+            if (EditorApplication.timeSinceStartup - SessionState.GetFloat("ShiftLink.WorkerPlayStart", 0) > 90)
+                throw new Exception("Employee Play Mode check timed out");
+            if (!Application.isPlaying) return;
+            if (playFactory == null) {
+                playDir = Path.GetFullPath(Path.Combine(Application.dataPath, "../Checks"));
+                var config = JsonUtility.FromJson<ConfigEnvelope>(File.ReadAllText(Path.Combine(playDir, "config.json"))).config;
+                playFactory = new GameObject("Employee Play Mode check").AddComponent<FactoryDemo>();
+                playFactory.enabled = false; // Fixture-only check; no network or MES control.
+                playFactory.CreateEnvironment(); playFactory.Build(config);
+                playWorker = playFactory.GetComponent(typeof(FactoryDemo).Assembly.GetType("FactoryWorker"));
+                playCapture = playFactory.GetComponent(typeof(FactoryDemo).Assembly.GetType("FactoryCapture"));
+                Set(playCapture, "outputDirectory", Path.Combine(playDir, "worker-play-captures"));
+                Set(playCapture, "width", 640); Set(playCapture, "height", 360);
+                Call(playWorker, "EnterWorker");
+                return;
+            }
+            if (++playFrames < 5) return;
+            if (!screenshotRequested) {
+                var workerRoot = (Transform)Get(playWorker, "WorkerRoot");
+                Vector3 before = workerRoot.position;
+                Call(playWorker, "TogglePda");
+                Call(playWorker, "Step", .5f, Vector2.up, Vector2.one);
+                Check(Vector3.Distance(before, workerRoot.position) < .0001f, "PDA freezes employee movement in Play Mode");
+                Check((bool)Call(playCapture, "RenderLivePreview"), "PDA preview renders in Play Mode");
+                var timer = System.Diagnostics.Stopwatch.StartNew();
+                Check((bool)Call(playCapture, "Capture") && (bool)Call(playCapture, "Save"), "PDA capture/save works in actual Play Mode");
+                timer.Stop();
+                File.WriteAllText(Path.Combine(playDir, "worker-play-timing.json"), "{\"capture_save_ms\":" + timer.ElapsedMilliseconds + ",\"width\":640,\"height\":360,\"samples\":1}");
+                ScreenCapture.CaptureScreenshot(Path.Combine(playDir, "worker-pda-ui.png"));
+                screenshotRequested = true;
+                return;
+            }
+            if (playFrames < 12) return;
+            ((Behaviour)playWorker).enabled = false;
+            Check(!(bool)Get(playWorker, "IsWorkerMode") && Camera.main.enabled, "disabling employee component restores observation mode");
+            File.WriteAllText(Path.Combine(playDir, "worker-play-check-result.txt"), "PASS: actual Play Mode employee/PDA input isolation/live preview/capture/save/disable restoration");
+            SessionState.SetBool("ShiftLink.WorkerPlayCheck", false);
+            Debug.Log("SHIFTLINK WORKER PLAY CHECK PASS"); EditorApplication.Exit(0);
+        } catch (Exception error) {
+            SessionState.SetBool("ShiftLink.WorkerPlayCheck", false);
             Debug.LogException(error); EditorApplication.Exit(1);
         }
     }

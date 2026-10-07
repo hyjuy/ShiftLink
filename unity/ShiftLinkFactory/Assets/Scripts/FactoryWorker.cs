@@ -15,15 +15,18 @@ public class FactoryWorker : MonoBehaviour
     Camera observation, employeeView;
     FactoryDemo demo;
     FactoryCapture capture;
-    Transform body, leftLeg, rightLeg, pda;
+    Transform body, leftLeg, rightLeg, pda, rightArm;
     float yaw, pitch, verticalSpeed, walkCycle;
     bool galleryOpen;
     Texture2D galleryImage;
     string galleryPath;
+    Font uiFont;
+    string galleryStatus = "";
     CursorLockMode previousLock;
     bool previousCursor;
     readonly List<Material> materials = new List<Material>();
     Rect panel;
+    Vector2 galleryScroll;
 
     static void Remove(UnityEngine.Object value)
     { if (value == null) return; if (Application.isPlaying) Destroy(value); else DestroyImmediate(value); }
@@ -39,6 +42,7 @@ public class FactoryWorker : MonoBehaviour
     {
         if (WorkerRoot != null) return;
         demo = factory; observation = observationCamera;
+        uiFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Arial" }, 18);
         capture = GetComponent<FactoryCapture>() ?? gameObject.AddComponent<FactoryCapture>();
         WorkerRoot = new GameObject("Factory employee").transform; WorkerRoot.SetParent(transform, false);
         WorkerRoot.position = new Vector3(-16.8f, .05f, -12);
@@ -60,7 +64,7 @@ public class FactoryWorker : MonoBehaviour
         }
         Shape("Left sleeve", PrimitiveType.Cube, body, new Vector3(-.32f, 1.08f, 0), new Vector3(.16f, .53f, .2f), uniform);
         Shape("Left hand", PrimitiveType.Sphere, body, new Vector3(-.32f, .78f, 0), new Vector3(.15f, .17f, .14f), skin);
-        var rightArm = new GameObject("PDA arm").transform; rightArm.SetParent(body, false); rightArm.localPosition = new Vector3(.31f, 1.26f, 0);
+        rightArm = new GameObject("PDA arm").transform; rightArm.SetParent(body, false); rightArm.localPosition = new Vector3(.31f, 1.26f, 0);
         Shape("Right sleeve", PrimitiveType.Cube, rightArm, new Vector3(0, -.19f, .12f), new Vector3(.17f, .18f, .4f), uniform);
         Shape("Right hand", PrimitiveType.Sphere, rightArm, new Vector3(0, -.19f, .35f), new Vector3(.15f, .15f, .15f), skin);
         pda = Shape("Handheld PDA", PrimitiveType.Cube, rightArm, new Vector3(0, -.13f, .42f), new Vector3(.16f, .24f, .025f), dark);
@@ -84,9 +88,11 @@ public class FactoryWorker : MonoBehaviour
     public void ExitWorker()
     {
         if (!IsWorkerMode) return;
-        IsWorkerMode = false; PdaRaised = false; employeeView.enabled = false;
-        foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = true;
+        IsWorkerMode = false; PdaRaised = false;
+        if (employeeView != null) employeeView.enabled = false;
+        if (body != null) foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = true;
         if (observation != null) observation.enabled = true;
+        if (demo != null) demo.SetExteriorView(false);
         Cursor.lockState = previousLock; Cursor.visible = previousCursor;
     }
     public void Step(float seconds, Vector2 movement, Vector2 look)
@@ -106,18 +112,20 @@ public class FactoryWorker : MonoBehaviour
     void UpdateCameras()
     {
         if (employeeView == null) return;
-        PdaCamera.transform.localPosition = new Vector3(0, 1.58f, .12f);
+        rightArm.localPosition = new Vector3(.31f, PdaRaised ? 1.69f : 1.26f, 0);
+        // The rear lens faces away from the employee, opposite the visible PDA screen.
+        PdaCamera.transform.position = pda.TransformPoint(new Vector3(0, 0, .6f));
         PdaCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         employeeView.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         employeeView.transform.localPosition = ThirdPerson ? new Vector3(0, 1.6f, 0) + Quaternion.Euler(pitch, 0, 0) * new Vector3(0, .4f, -3) : new Vector3(0, 1.58f, .12f);
-        foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = !IsWorkerMode || ThirdPerson;
+        foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = !IsWorkerMode || (ThirdPerson && !PdaRaised);
     }
     void UpdateCursor()
     { Cursor.lockState = PdaRaised ? CursorLockMode.None : CursorLockMode.Locked; Cursor.visible = PdaRaised; }
     public void TogglePda()
     {
         if (!IsWorkerMode) return;
-        PdaRaised = !PdaRaised; galleryOpen = false; UpdateCursor();
+        PdaRaised = !PdaRaised; galleryOpen = false; UpdateCameras(); UpdateCursor();
     }
     void Update()
     {
@@ -125,19 +133,21 @@ public class FactoryWorker : MonoBehaviour
         if (!PdaRaised && Input.GetKeyDown(KeyCode.F)) { if (IsWorkerMode) ExitWorker(); else EnterWorker(); }
         if (!IsWorkerMode) return;
         if (Input.GetKeyDown(KeyCode.P) || (PdaRaised && Input.GetKeyDown(KeyCode.Escape))) TogglePda();
-        if (PdaRaised) return;
+        if (PdaRaised) { if (!galleryOpen && !capture.HasPreview) capture.RenderLivePreview(); return; }
         if (Input.GetKeyDown(KeyCode.V)) { ThirdPerson = !ThirdPerson; UpdateCameras(); }
         Step(Time.deltaTime, new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")));
     }
     void OpenGalleryImage(string path)
     {
+        Texture2D image = null;
         try {
-            var image = new Texture2D(2, 2);
-            if (!image.LoadImage(System.IO.File.ReadAllBytes(path))) { Remove(image); throw new System.IO.IOException("Image unavailable"); }
-            Remove(galleryImage); galleryImage = image; galleryPath = path;
-        } catch (Exception error) { Debug.LogWarning("Cannot open saved photo: " + error.Message); }
+            image = new Texture2D(2, 2);
+            if (!image.LoadImage(System.IO.File.ReadAllBytes(path))) throw new System.IO.IOException("Image unavailable");
+            Remove(galleryImage); galleryImage = image; image = null; galleryPath = path; galleryStatus = "";
+        } catch (Exception error) { galleryStatus = "사진 열기 실패: " + error.Message; Debug.LogWarning(galleryStatus); }
+        finally { Remove(image); }
     }
-    void DrawPhoto(Texture2D image)
+    void DrawPhoto(Texture image)
     {
         float imageHeight = Mathf.Min(260, Mathf.Max(90, Screen.height - 340));
         Rect rect = GUILayoutUtility.GetRect(250, imageHeight, GUILayout.ExpandWidth(true));
@@ -145,11 +155,15 @@ public class FactoryWorker : MonoBehaviour
     }
     void OnGUI()
     {
+        var previousFont = GUI.skin.font;
+        GUI.skin.font = uiFont;
+        try { DrawGui(); }
+        finally { GUI.skin.font = previousFont; }
+    }
+    void DrawGui()
+    {
         if (WorkerRoot == null) return;
-        if (!IsWorkerMode) {
-            if (GUI.Button(new Rect(18, 255, 235, 32), "Enter employee mode [F]")) EnterWorker();
-            return;
-        }
+        if (!IsWorkerMode) return;
         if (!PdaRaised) {
             GUI.Box(new Rect(18, 18, 490, 72), "EMPLOYEE / WASD move / Mouse look\nP PDA / V first-person or third-person / F overview");
             GUI.Label(new Rect(Screen.width / 2 - 5, Screen.height / 2 - 12, 20, 24), "+");
@@ -161,35 +175,42 @@ public class FactoryWorker : MonoBehaviour
         panel = new Rect(Mathf.Max(12, (Screen.width - 580) / 2), 35, Mathf.Min(580, Screen.width - 24), Mathf.Max(350, Screen.height - 70));
         GUILayout.BeginArea(panel, GUI.skin.box);
         GUILayout.Label("PDA / " + (galleryOpen ? "Gallery" : capture.HasPreview ? "Photo preview" : "Camera"));
-        GUILayout.Label("Equipment recognition is not connected yet.");
+        GUILayout.Label("장비 인식은 아직 연결되지 않았습니다.");
         if (galleryOpen) {
+            GUILayout.Label(string.IsNullOrEmpty(galleryStatus) ? capture.Status : galleryStatus);
             if (capture.Gallery.Count == 0) GUILayout.Label("No saved photos yet.");
             if (galleryImage != null) DrawPhoto(galleryImage);
             if (!string.IsNullOrEmpty(galleryPath)) GUILayout.Label(System.IO.Path.GetFileName(galleryPath));
+            galleryScroll = GUILayout.BeginScrollView(galleryScroll, GUILayout.Height(100));
             foreach (var path in capture.Gallery) if (GUILayout.Button(System.IO.Path.GetFileName(path))) OpenGalleryImage(path);
-            if (GUILayout.Button("Back")) galleryOpen = false;
+            GUILayout.EndScrollView();
+            if (GUILayout.Button("돌아가기")) galleryOpen = false;
         } else if (capture.HasPreview) {
             DrawPhoto(capture.Preview);
             GUILayout.Label(capture.Status);
             GUILayout.BeginHorizontal();
             GUI.enabled = !capture.PreviewSaved;
-            if (GUILayout.Button("Save photo")) capture.Save();
+            if (GUILayout.Button("사진 저장")) capture.Save();
             GUI.enabled = true;
-            if (GUILayout.Button("Retake")) capture.Retake();
+            if (GUILayout.Button("다시 촬영")) capture.Retake();
             GUILayout.EndHorizontal();
         } else {
-            GUILayout.Label("Aim with the employee view before opening the PDA.\nSpace / Enter takes a photo. P closes the PDA to adjust your view.");
-            if (GUILayout.Button("Take photo [Space / Enter]", GUILayout.Height(42))) capture.Capture();
+            if (capture.LivePreview != null) DrawPhoto(capture.LivePreview);
+            GUILayout.Label("P로 PDA를 닫고 시점을 조정하세요. Space / Enter로 촬영합니다.");
+            if (GUILayout.Button("촬영 [Space / Enter]", GUILayout.Height(42))) capture.Capture();
             GUILayout.Label(capture.Status);
         }
         GUILayout.Space(8);
-        if (!galleryOpen && GUILayout.Button("Gallery (" + capture.Gallery.Count + ")")) galleryOpen = true;
-        if (GUILayout.Button("Close PDA [P / Esc]")) TogglePda();
+        if (!galleryOpen && GUILayout.Button("사진 보관함 (" + capture.Gallery.Count + ")")) { capture.RefreshGallery(); galleryOpen = true; }
+        if (GUILayout.Button("PDA 닫기 [P / Esc]")) TogglePda();
         GUILayout.EndArea();
     }
+    void OnDisable() { ExitWorker(); }
     void OnDestroy()
     {
-        if (IsWorkerMode) { Cursor.lockState = previousLock; Cursor.visible = previousCursor; }
+        ExitWorker();
         Remove(galleryImage); foreach (var material in materials) Remove(material);
+        Remove(uiFont);
+        if (WorkerRoot != null) Remove(WorkerRoot.gameObject);
     }
 }

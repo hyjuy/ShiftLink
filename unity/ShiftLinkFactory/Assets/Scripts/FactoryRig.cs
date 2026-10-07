@@ -247,14 +247,17 @@ public class FactoryRig : MonoBehaviour
                 var bearing=Asset("Connection_BearingPedestal",transform); bearing.transform.position=(start+junction)*.5f-Vector3.up*.23f;
                 Block("Guarded chain drive",(side+end)*.5f,new Vector3(.3f,Mathf.Max(.2f,Mathf.Abs(end.y-side.y)),.2f),FactoryRules.Amber);
             } else if(rel.relation_type=="hydraulic_supply") {
-                var start=a+new Vector3(1,.6f,utilityLane*.18f); var end=b+new Vector3(1.2f,1.6f,.94f);
+                var start=a+new Vector3(1,.6f,-utilityLane*.18f); var end=b+new Vector3(1.2f,1.6f,.94f);
                 if(next.equipment.First(e=>e.equipment_id==rel.to_id).profile_id=="cv") end=b+new Vector3(-1.8f,.8f,-1);
-                float supplyHeight=2.8f+utilityLane*.18f,returnHeight=supplyHeight+.08f;
-                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,1.7f),end},new Color(.1f,.6f,.7f));
-                Pipe("Assumed hydraulic return "+rel.to_id,new[]{end+Vector3.forward*.1f,new Vector3(end.x,returnHeight,1.8f),new Vector3(end.x,returnHeight,6.8f),new Vector3(start.x,returnHeight,6.8f),start+Vector3.forward*.1f},FactoryRules.Grey);
+                float supplyHeight=2.8f-utilityLane*.18f,returnHeight=supplyHeight+.08f;
+                var returnStart=start+new Vector3(.12f,0,.1f); var returnEnd=end+new Vector3(.12f,0,.1f);
+                // Orthogonal risers keep adjacent circuits and each supply/return pair apart.
+                Pipe("Hydraulic supply "+rel.to_id,new[]{start,new Vector3(start.x,supplyHeight,start.z),new Vector3(start.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,6.7f),new Vector3(end.x,supplyHeight,end.z),end},new Color(.1f,.6f,.7f));
+                Pipe("Assumed hydraulic return "+rel.to_id,new[]{returnEnd,new Vector3(returnEnd.x,returnHeight,returnEnd.z),new Vector3(returnEnd.x,returnHeight,6.8f),new Vector3(returnStart.x,returnHeight,6.8f),new Vector3(returnStart.x,returnHeight,returnStart.z),returnStart},FactoryRules.Grey);
             } else if(rel.relation_type=="power_supply") {
                 float offset=(utilityLane-1)*.12f;
-                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(offset,.91f,.4f),new Vector3(a.x+offset,4,7+offset),new Vector3(b.x,4,7+offset),b+new Vector3(-.68f,4,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
+                float cableHeight=4+utilityLane*.08f;
+                Pipe("Power cable "+rel.to_id,new[]{a+new Vector3(offset,.91f,.4f),new Vector3(a.x+offset,cableHeight,7+offset),new Vector3(b.x,cableHeight,7+offset),b+new Vector3(-.68f,cableHeight,1.3f),b+new Vector3(-.68f,.91f,.6f)},Color.black);
             } else if(rel.relation_type=="pneumatic_supply") {
                 Pipe("CAU air riser",new[]{a+new Vector3(-1.6f,1.8f,0),new Vector3(a.x-1.6f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,7.4f),new Vector3(b.x+.7f,5.8f,1.7f),b+new Vector3(.7f,.45f,1.06f)},new Color(.2f,.5f,.9f));
             }

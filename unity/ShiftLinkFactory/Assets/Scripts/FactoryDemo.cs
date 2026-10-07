@@ -87,6 +87,8 @@ public class FactoryDemo : MonoBehaviour
     Camera viewCamera;
     FactoryRig rig;
     FactoryLogistics logistics;
+    FactoryWorker worker;
+    FactoryCapture capture;
     readonly Dictionary<string,Transform> coilObjects=new Dictionary<string,Transform>();
     readonly Dictionary<string,Vector3> coilTargets=new Dictionary<string,Vector3>();
     readonly Dictionary<string,string> coilEquipment=new Dictionary<string,string>();
@@ -145,6 +147,10 @@ public class FactoryDemo : MonoBehaviour
         UpdateCamera();
         FactoryMonitor.RefreshFor(this,null,null,false);
         SetExteriorView(exteriorView);
+        FactoryWalkGeometry.Prepare(transform);
+        capture=GetComponent<FactoryCapture>()??gameObject.AddComponent<FactoryCapture>();
+        worker=GetComponent<FactoryWorker>()??gameObject.AddComponent<FactoryWorker>();
+        worker.Initialize(this,viewCamera);
     }
     void InstallBuilding()
     {
@@ -262,6 +268,8 @@ public class FactoryDemo : MonoBehaviour
         distance = Mathf.Max(36, next.route.Length*6);
         selectedId = null; lastScanId = null; SetExteriorView(exteriorView);
         FactoryMonitor.RefreshFor(this,config,null,false);
+        capture.Configure(worker.PdaCamera,config,equipment,0);
+        capture.SetContext(config.config_id,null,-1);
     }
     void Model(EquipmentSpec e, Transform root)
     {
@@ -310,6 +318,7 @@ public class FactoryDemo : MonoBehaviour
         online=true; lastSuccess=Time.realtimeSinceStartup;
         status=next.line_mode+" | "+next.scenario_id+" | tick "+next.sequence;
         FactoryMonitor.RefreshFor(this,config,next,true);
+        if(capture!=null) capture.SetContext(next.config_id,next.run_id,next.sequence);
     }
     public void ApplyScans(ScanEnvelope scans)
     {
@@ -327,6 +336,7 @@ public class FactoryDemo : MonoBehaviour
         foreach(var lamp in lamps.Values) lamp.sharedMaterial=MaterialFor(FactoryRules.Grey);
         ClearCoils();
         FactoryMonitor.RefreshFor(this,config,null,false);
+        if(capture!=null) capture.SetContext(config==null ? null : config.config_id,null,-1);
     }
     void ClearCoils()
     {
@@ -393,12 +403,13 @@ public class FactoryDemo : MonoBehaviour
     {
         if(online && Time.realtimeSinceStartup-lastSuccess>8) Disconnect("MES updates timed out");
         AdvanceVisuals(Time.deltaTime);
+        if(worker!=null && worker.IsWorkerMode) return;
         if(viewCamera==null) return;
         if(Input.GetMouseButton(1)) { yaw+=Input.GetAxis("Mouse X")*3; pitch=Mathf.Clamp(pitch-Input.GetAxis("Mouse Y")*2,20,80); }
         distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),230).Contains(guiPointer) ||
+        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
             new Rect(Screen.width-460,Screen.height-150,442,132).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
@@ -428,14 +439,16 @@ public class FactoryDemo : MonoBehaviour
     }
     void UpdateCamera()
     {
+        if(worker!=null && worker.IsWorkerMode) return;
         if(viewCamera==null) return;
         viewCamera.transform.position=target+Quaternion.Euler(pitch,yaw,0)*new Vector3(0,0,-distance);
         viewCamera.transform.LookAt(target);
     }
     void OnGUI()
     {
+        if(worker!=null && worker.IsWorkerMode) return;
         GUI.backgroundColor=new Color(.07f,.12f,.19f,.96f);
-        GUILayout.BeginArea(new Rect(18,18,Mathf.Min(700,Screen.width-36),230),GUI.skin.box);
+        GUILayout.BeginArea(new Rect(18,18,Mathf.Min(700,Screen.width-36),270),GUI.skin.box);
         GUILayout.Label("SHIFTLINK / FACTORY + MES + PDA");
         GUI.color=online ? FactoryRules.Green : FactoryRules.Amber; GUILayout.Label(status); GUI.color=Color.white;
         GUILayout.BeginHorizontal(); GUILayout.Label("MES",GUILayout.Width(40)); GUILayout.Label(mesUrl); GUILayout.EndHorizontal();
@@ -447,6 +460,7 @@ public class FactoryDemo : MonoBehaviour
         GUI.enabled=true; GUILayout.EndHorizontal();
         GUILayout.Label("Right drag: orbit | Wheel: zoom | Click equipment: select");
         if(GUILayout.Button(exteriorView ? "View factory interior" : "View factory exterior")) SetExteriorView(!exteriorView);
+        if(worker!=null && GUILayout.Button("Walk as employee / PDA camera [F]")) worker.EnterWorker();
         if (GUILayout.Button("Open MES dashboard / fault scenarios")) Application.OpenURL(mesUrl.TrimEnd('/')+"/");
         GUILayout.EndArea();
         if(logistics!=null) {

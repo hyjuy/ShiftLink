@@ -90,6 +90,7 @@ public class FactoryMonitor : MonoBehaviour
     public bool ContainsPointer(Vector2 pointer) { return ButtonRect.Contains(pointer) || (expanded && ExpandedRect.Contains(pointer)); }
     void OnGUI()
     {
+        if(GetComponent<FactoryWorker>()?.IsWorkerMode==true) return;
         var button=new GUIStyle(GUI.skin.button) {font=font,fontSize=17};
         if(GUI.Button(ButtonRect,expanded ? "현황 디스플레이 닫기" : "현황 디스플레이 확대",button)) expanded=!expanded;
         if(!expanded) return;

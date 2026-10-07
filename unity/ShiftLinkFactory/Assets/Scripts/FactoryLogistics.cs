@@ -68,13 +68,13 @@ public class FactoryLogistics : MonoBehaviour
         for(int i=0;i<stations.Length;i++) {
             var station=new GameObject(stations[i]).transform; station.SetParent(campus,false);
             foreach(float z in new[]{-1.5f,1.5f}) Shape("Machine pedestal",new Vector3(xs[i],1,z),new Vector3(1.7f,2,.4f),blue,parent:station);
-            Shape("Machine crosshead",new Vector3(xs[i],2.6f,0),new Vector3(1.7f,.35f,3.4f),blue,parent:station);
+            Shape("Machine crosshead",new Vector3(xs[i],i==0 || i==3 ? 2.7f : 2.6f,0),new Vector3(1.7f,.35f,3.4f),blue,parent:station);
             Shape("Safety enclosure",new Vector3(xs[i],1.8f,-1.8f),new Vector3(1.6f,.08f,.08f),yellow,parent:station);
             Shape("Control cabinet",new Vector3(xs[i]-.7f,.9f,-2.4f),new Vector3(.5f,1.8f,.6f),grey,parent:station);
             Shape("HMI screen",new Vector3(xs[i]-.7f,1.3f,-2.72f),new Vector3(.35f,.3f,.03f),new Color(.1f,.65f,.8f),parent:station);
             Label(stations[i]+" / VIRTUAL",new Vector3(xs[i],3.2f,0));
             if(i==0 || i==3) {
-                var mandrel=Shape("Winding mandrel",new Vector3(xs[i],1.65f,0),new Vector3(.4f,1.4f,.4f),grey,PrimitiveType.Cylinder,station);
+                var mandrel=Shape("Winding mandrel",new Vector3(xs[i],1.85f,0),new Vector3(.4f,1.4f,.4f),grey,PrimitiveType.Cylinder,station);
                 mandrel.transform.localRotation=Quaternion.Euler(90,0,0); rollers.Add(mandrel.transform);
                 var reel=FactoryRig.CreateLoad("Station reel",station,false,false);
                 // The imported coil origin is below its bore; mount the actual mesh centre on the shaft.

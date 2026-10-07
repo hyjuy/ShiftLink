@@ -56,6 +56,12 @@ public static class FactoryCoilAlignmentChecks
                 if(upperGap<.01f || lowerGap<.01f) failures.Add(name+" mounted coil must clear the crosshead and transport rollers by at least 1cm");
                 Camera.main.transform.position=mandrel.position+new Vector3(3,2,-5); Camera.main.transform.LookAt(mandrel.position);
                 FactoryChecks.Capture(Path.Combine(dir,"coil-alignment-"+name+".png"));
+                // A diagnostic cutaway exposes the bore behind the front support column.
+                var front=station.GetComponentsInChildren<Renderer>().Where(r=>r.name=="Machine pedestal").OrderBy(r=>r.bounds.center.z).First();
+                front.enabled=false;
+                Camera.main.transform.position=mandrel.position+new Vector3(1,.4f,-4); Camera.main.transform.LookAt(mandrel.position);
+                FactoryChecks.Capture(Path.Combine(dir,"coil-alignment-cutaway-"+name+".png"));
+                front.enabled=true;
             }
             File.WriteAllText(Path.Combine(dir,"coil-alignment-result.txt"),string.Join("\n",measurements.Concat(failures))+(failures.Count==0 ? "\nPASS" : "\nFAIL"));
             foreach(var failure in failures) Debug.LogError(failure);

@@ -11,6 +11,7 @@ Automatic items only (see docs/collaboration/eval-qa-set-assignment-20260930.md)
 key facts and fabrication are graded by a person from the saved answers.
 """
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -154,7 +155,11 @@ def main():
     pipe = FixedPipeline(model=model, tools=loaded.provider, judge_strict=args.judge_strict)
     rows = run(items, pipe, args.mode, args.shift)
     rev = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
-    report = {"qa_file": args.qa_file, "mode": args.mode, "model": args.model, "git_rev": rev, "kb": str(KB.relative_to(ROOT)),
+    # A final score must be reproducible: uncommitted code/KB changes are not covered by git_rev, and the hash ties the run to one qa file.
+    dirty = bool(subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, capture_output=True, text=True).stdout.strip())
+    qa_sha = hashlib.sha256(Path(args.qa_file).read_bytes()).hexdigest()[:16]
+    report = {"qa_file": args.qa_file, "qa_sha256": qa_sha, "mode": args.mode, "model": args.model, "git_rev": rev, "git_dirty": dirty,
+              "kb": str(KB.relative_to(ROOT)),
               "config": run_config(args, model, pipe), "summary": summarize(rows), "rows": rows}
     report["summary"]["judge_failures"] = sum(1 for r in rows if (r.get("error") or "").startswith("JudgeUnavailableError"))
     invalid = args.judge_strict and report["summary"]["judge_failures"] > 0

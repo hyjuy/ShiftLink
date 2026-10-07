@@ -76,7 +76,9 @@ public class FactoryLogistics : MonoBehaviour
             if(i==0 || i==3) {
                 var mandrel=Shape("Winding mandrel",new Vector3(xs[i],1.65f,0),new Vector3(.4f,1.4f,.4f),grey,PrimitiveType.Cylinder,station);
                 mandrel.transform.localRotation=Quaternion.Euler(90,0,0); rollers.Add(mandrel.transform);
-                var reel=FactoryRig.CreateLoad("Station reel",station,false); reel.position=new Vector3(xs[i],1.24f,0);
+                var reel=FactoryRig.CreateLoad("Station reel",station,false,false);
+                // The imported coil origin is below its bore; mount the actual mesh centre on the shaft.
+                reel.position+=mandrel.transform.position-reel.GetComponentsInChildren<Renderer>().Single(r=>r.name=="WoundSheet").bounds.center;
             }
             if(i==2) for(float z=-.65f;z<=.65f;z+=.26f) {
                 var knife=Shape("Slitter knife",new Vector3(xs[i],1.6f,z),new Vector3(.7f,.025f,.7f),grey,PrimitiveType.Cylinder,station);

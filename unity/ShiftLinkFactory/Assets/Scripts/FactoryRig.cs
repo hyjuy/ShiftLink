@@ -280,7 +280,7 @@ public class FactoryRig : MonoBehaviour
         if(!branch && !(config.relations??new RelationSpec[0]).Any(r=>r.relation_type=="material_flow" && r.from_id==from && r.to_id==to)) return new Vector3[0];
         return new[]{Anchor(from,branch ? "ScrapOutputAnchor_" : "OutputAnchor_").position+Vector3.up*.02f,Anchor(to,"InputAnchor_").position+Vector3.up*.02f};
     }
-    public static Transform CreateLoad(string id,Transform parent,bool scrap)
+    public static Transform CreateLoad(string id,Transform parent,bool scrap,bool withSaddle=true)
     {
         var load=new GameObject(id); load.transform.SetParent(parent);
         if(scrap) {
@@ -288,7 +288,7 @@ public class FactoryRig : MonoBehaviour
         } else {
             var coil=Asset("Material_Coil",load.transform); coil.transform.localPosition=Vector3.up*.14f;
             // A synthetic saddle carries the coil; it does not free-roll through clamps.
-            foreach(float side in new[]{-.27f,.27f}) {
+            if(withSaddle) foreach(float side in new[]{-.27f,.27f}) {
                 var saddle=GameObject.CreatePrimitive(PrimitiveType.Cube); saddle.name="Assumed transport saddle"; saddle.transform.SetParent(load.transform); saddle.transform.localPosition=new Vector3(side,.09f,0); saddle.transform.localScale=new Vector3(.65f,.12f,.9f); saddle.transform.localRotation=Quaternion.Euler(0,0,side<0 ? -20 : 20);
             }
         }

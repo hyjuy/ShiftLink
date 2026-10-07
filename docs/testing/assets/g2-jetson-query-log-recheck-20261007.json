@@ -1,0 +1,16 @@
+{
+  "query_id": "Q-c995a56bfebc4c658e46858097719144",
+  "query_log_status": "uploaded",
+  "payload_unchanged": true,
+  "warmup_lines": [
+    "[\uc608\uc5f4] \ubaa8\ub378 \uc801\uc7ac: ['exaone-sft-judge', 'exaone-sft-answer']"
+  ],
+  "service_states": [
+    "active",
+    "active"
+  ],
+  "deployed_sha256": {
+    "server.py": "b94323154e89b013cd0998960ebe8b651df92d89e779a27ad7bc13f2de0fba7b",
+    "query.py": "1ebaa12469a672019a0acd79f741a1c4345506e48bf9c1c88a87bf85231dd030"
+  }
+}

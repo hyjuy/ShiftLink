@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-07T11:37:58.103063+09:00",
+  "host": "jetson-06",
+  "source": "Jetson SQLite query_log",
+  "http_status": 200,
+  "latency_s": 5.3370769910000035,
+  "request": {
+    "question": "기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기",
+    "equipment_id": "EQ-0001"
+  },
+  "query_id": "Q-c995a56bfebc4c658e46858097719144",
+  "created_at": "2026-10-07T11:37:58.093966+09:00",
+  "upload_status_at_check": "pending",
+  "deployed_sha256": {
+    "server.py": "b94323154e89b013cd0998960ebe8b651df92d89e779a27ad7bc13f2de0fba7b",
+    "query.py": "1ebaa12469a672019a0acd79f741a1c4345506e48bf9c1c88a87bf85231dd030"
+  },
+  "backup": "/home/jetson/shiftlink/backups/query-log-20261007-113750",
+  "g2_log_path": "PASS",
+  "answer_mode": "hybrid",
+  "safety_card_ids": [
+    "K-1003",
+    "K-1006",
+    "K-1211",
+    "K-1218"
+  ],
+  "cited_card_ids": [
+    "K-1001"
+  ],
+  "rendered_response_chars": 11468
+}

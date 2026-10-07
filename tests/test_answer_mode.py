@@ -65,9 +65,11 @@ def test_env_selects_mode_and_rejects_unknown_values(monkeypatch):
         FixedPipeline(model=Model(), tools=Tools())
 
 
-def test_demo_query_pipeline_defaults_to_extract(monkeypatch):
+def test_demo_query_pipeline_defaults_to_hybrid_with_sft_models(monkeypatch):
     from shiftlink.mes.query import build_query_pipeline
-    monkeypatch.delenv("SHIFTLINK_ANSWER_MODE", raising=False)
-    assert build_query_pipeline().answer_mode == "extract"
+    for name in ("SHIFTLINK_ANSWER_MODE", "SHIFTLINK_QUERY_MODEL", "SHIFTLINK_JUDGE_MODEL"):
+        monkeypatch.delenv(name, raising=False)
+    pipe = build_query_pipeline()
+    assert (pipe.answer_mode, pipe.model.model, pipe.model.judge_model) == ("hybrid", "exaone-sft-answer", "exaone-sft-judge")
     monkeypatch.setenv("SHIFTLINK_ANSWER_MODE", "model")
     assert build_query_pipeline().answer_mode == "model"

@@ -55,9 +55,9 @@ journalctl -u shiftlink-mes -f
 - **판정 모델을 쓸 수 없으면(Ollama가 꺼졌거나 모델이 등록되지 않았거나 시간이 초과되면) 질의는 답하지 않고 503으로 끝난다.** PDA에는 "질의 실패: 판정 모델을 쓸 수 없습니다. 잠시 후 다시 시도해 주세요."가 뜬다. 판정 없이 카드 내용을 보여 주지 않는다. 서버가 켜질 때 모델을 확인해서 없으면 로그에 `[경고] 판정 모델을 확인하지 못했습니다(missing|unreachable)`를 남긴다(Ollama가 늦게 떠도 서버는 시작한다). 원인은 `journalctl -u shiftlink-mes`(또는 `mes-runtime.log`)의 `[판정 모델 사용 불가]` 줄에서 본다.
 - 판정기는 처음 한 번 모델을 올리느라 20초 넘게 걸린다. 시연 전에 질문 하나를 먼저 보내 두면 된다.
 
-## hybrid 모드 (SFT 답변 모델 + 가드, 선택 사항)
+## hybrid 모드 (SFT 답변 모델 + 가드, 시연 기본)
 
-기본은 E1이다. 문장이 더 자연스러운 SFT 답변을 쓰려면 모델 두 개(판정기·답변)를 올려야 한다. 사전 등록 규칙은 충족했지만(PREREG_sft_hybrid, 합산 충족 14→17·미충족 5→4) 운영 비용이 커서 **켜기 전에 아래를 확인한다.**
+**10/7부터 시연 서버의 기본이다**(`shiftlink/mes/query.py`, `deploy/install_service.sh`). 모델 두 개(판정기·답변)를 올린다. 사전 등록 규칙 충족(PREREG_sft_hybrid, 합산 충족 14→17·미충족 5→4). 운영 조건은 아래를 지킨다.
 
 ```bash
 SHIFTLINK_ANSWER_MODE=hybrid SHIFTLINK_QUERY_MODEL=exaone-sft-answer SHIFTLINK_JUDGE_MODEL=exaone-sft-judge
@@ -66,5 +66,6 @@ SHIFTLINK_ANSWER_MODE=hybrid SHIFTLINK_QUERY_MODEL=exaone-sft-answer SHIFTLINK_J
 - 동작: SFT 답변 모델이 쓰고, 인용 카드가 보류·금지를 담는데 답이 재기동·충전·개방을 권하면 E1 답으로 대체. 모델 결과가 비거나 막혀도 E1
 - Jetson 측정(10/6, MES 실행 중, 시연 질의 18건): 처음 2건은 모델 두 개 적재로 53·73초, 이후 16건은 p50 4.5초·p95 5.4초(판정 0.48초 + 답 3.95초). 두 모델은 계속 올라와 있었다(되풀이 적재 없음)
 - **메모리가 빠듯하다.** RAM 사용 최대 6.5/7.6GB(여유 최저 약 1.1GB), 스왑 최대 1.2GB. 모델을 내리면 1.9GB로 돌아온다. E1 + SFT 판정기(모델 1개)보다 위험하다
+- 10/7 재측정(Jetson MES HTTP 18건, 데스크톱·VNC 끔): 가용 메모리 최소 2,060MB, swap 0, p50 4.4초·p95 5.6초, 첫 호출 52초(`ShiftLink-records/experiments/mes1007/RESULT.md`). 데스크톱이 켜져 있거나 세 번째 모델을 올리면 두 번째 모델 로드가 메모리 부족으로 실패해 질의마다 모델이 교체된다(질의당 25~54초)
 - 시연 직전에 질문 하나를 보내 두 모델을 먼저 올려 둔다(처음 호출 1분 안팎)
 - 되돌리기: `SHIFTLINK_ANSWER_MODE=extract` (또는 `deploy/install_service.sh mes`를 `ANSWER_MODE=extract`로 다시 실행)

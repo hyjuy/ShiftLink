@@ -26,12 +26,12 @@ case "${1:-}" in
     AFTER="network-online.target ollama.service"
     DB="${DB:-$REPO/mes_data/mock-mes.sqlite3}"
     WANTS="$WANTS shiftlink-uploader.service ollama.service"
-    # 질의는 E1 추출 답(모델 호출 없음) + SFT 판정기(10/6 채택). 판정 모델은 Ollama에 등록돼 있어야 한다:
-    # docs/guides/sft-judge-model.md. 바꾸려면 JUDGE_MODEL=…·ANSWER_MODE=model 로 실행한다.
-    EXTRA="Environment=SHIFTLINK_ANSWER_MODE=${ANSWER_MODE:-extract}
+    # 질의는 hybrid(SFT 답변 모델 + 가드 v2, 가드에 걸리면 E1) + SFT 판정기(10/7 확정). 두 모델 모두 Ollama에 등록돼 있어야 한다:
+    # docs/guides/sft-judge-model.md. 답변 모델 없이 E1만 쓰려면 ANSWER_MODE=extract 로 실행한다.
+    EXTRA="Environment=SHIFTLINK_ANSWER_MODE=${ANSWER_MODE:-hybrid}
 Environment=SHIFTLINK_JUDGE_MODEL=${JUDGE_MODEL:-exaone-sft-judge}"
-    # hybrid(SFT 답변 모델 + 가드)는 답변 모델도 올린다: ANSWER_MODE=hybrid (답변 모델 기본 exaone-sft-answer, QUERY_MODEL=…로 변경)
-    if [ "${ANSWER_MODE:-extract}" = "hybrid" ]; then
+    # hybrid는 답변 모델도 올린다(기본 exaone-sft-answer, QUERY_MODEL=…로 변경)
+    if [ "${ANSWER_MODE:-hybrid}" = "hybrid" ]; then
       EXTRA="$EXTRA
 Environment=SHIFTLINK_QUERY_MODEL=${QUERY_MODEL:-exaone-sft-answer}"
     fi

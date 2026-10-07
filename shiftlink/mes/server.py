@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import csv
 from collections import deque
 from io import StringIO
@@ -397,9 +398,12 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     stopped = threading.Event()
     worker = threading.Thread(target=_run_ticks, args=(service, stopped), daemon=True); worker.start()
     print(f"Synthetic MES: http://{host}:{port} | database: {database}", flush=True)
-    from .query import judge_model_status
+    from .query import build_query_pipeline, judge_model_status, warm_models
     if (status := judge_model_status()) != "ok":  # warn only: Ollama may still be starting; queries answer 503 until it is ready
         print(f"[경고] 판정 모델을 확인하지 못했습니다({status}). 질의는 준비될 때까지 503(잠시 후 다시 시도)으로 응답합니다.", flush=True)
+    if os.environ.get("SHIFTLINK_WARMUP", "1") != "0":  # load the models now so the first PDA query does not wait ~50 s
+        service.query_pipeline = build_query_pipeline()
+        threading.Thread(target=lambda: print(f"[예열] 모델 적재: {warm_models(service.query_pipeline)}", flush=True), daemon=True).start()
     try: server.serve_forever()
     finally:
         stopped.set()

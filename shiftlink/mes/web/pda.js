@@ -1536,7 +1536,29 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict }; }
+function faultsFrom(snap) {
+  return S.equipment.map((eq) => {
+    const items = [];
+    (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).forEach((a) => items.push('경보 ' + (a.label || a.code)));
+    (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
+      .forEach((d) => items.push(d.symptom + '(확정 아님)'));
+    const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
+    usableReadings(snap, eq).kept.forEach((o) => {
+      const spec = eq.signals.find((x) => x.signal === o.signal);
+      if (spec && spec.zeroStopped && o.value === 0 && state.operating_state !== 'running') return;
+      const st = stateOf(spec, o.value);
+      if (st === 'low' || st === 'high') items.push(String(spec.name).split(' (')[0] + (st === 'low' ? ' ▼' : ' ▲'));
+    });
+    if (!items.length && state.fault_level && state.fault_level !== 'normal') items.push(STATE_TXT[state.fault_level] || state.fault_level);
+    const alarms = (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id);
+    const level = alarms.some((a) => a.severity === 'critical') || state.fault_level === 'critical' ? 0
+      : alarms.length || (state.fault_level && state.fault_level !== 'normal') ? 1 : 2;
+    return { eq: eq, items: items, level: level, at: alarms.map((a) => a.raised_at).sort()[0] || '' };
+  }).filter((f) => f.items.length);
+}
+
+
+if (typeof module !== 'undefined') { module.exports = { faultsFrom, unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -1788,26 +1810,6 @@ const WATCH_MS = 3000;
 const ALERT_ROWS = 3;
 
 /* 설비별 고장 상황: 경보 · MES 증상 후보 · 범위 이탈 · 자체 이상. 원인은 확정하지 않는다. */
-function faultsFrom(snap) {
-  return S.equipment.map((eq) => {
-    const items = [];
-    (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).forEach((a) => items.push('경보 ' + (a.label || a.code)));
-    (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
-      .forEach((d) => items.push(d.symptom + '(확정 아님)'));
-    const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
-    usableReadings(snap, eq).kept.forEach((o) => {
-      const spec = eq.signals.find((x) => x.signal === o.signal);
-      if (spec && spec.zeroStopped && o.value === 0 && state.operating_state !== 'running') return;
-      const st = stateOf(spec, o.value);
-      if (st === 'low' || st === 'high') items.push(String(spec.name).split(' (')[0] + (st === 'low' ? ' ▼' : ' ▲'));
-    });
-    if (!items.length && state.fault_level && state.fault_level !== 'normal') items.push(STATE_TXT[state.fault_level] || state.fault_level);
-    const alarms = (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id);
-    const level = alarms.some((a) => a.severity === 'critical') || state.fault_level === 'critical' ? 0
-      : alarms.length || (state.fault_level && state.fault_level !== 'normal') ? 1 : 2;
-    return { eq: eq, items: items, level: level, at: alarms.map((a) => a.raised_at).sort()[0] || '' };
-  }).filter((f) => f.items.length);
-}
 
 function renderAlert(faults) {
   const el = $('alert');

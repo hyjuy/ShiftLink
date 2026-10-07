@@ -95,6 +95,7 @@ function equipmentFromLink(search, equipment) {
 }
 
 async function boot() {
+  $('bootErr').innerHTML = '';
   try {
     const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
     S.equipment = equipmentFrom(cfg.config, cat.data);
@@ -108,14 +109,14 @@ async function boot() {
     if (linkedEquipment) { setContext(linkedEquipment, 'unity_link'); show('ctx'); }
     else show('home');
   } catch (err) {
-    $('bootMsg').textContent = 'MES 서버에서 데이터를 읽지 못했습니다.';
+    $('bootMsg').textContent = 'MES 연결을 기다리고 있습니다. 3초 후 다시 시도합니다.';
     const box = document.createElement('div');
     box.className = 'alert bad';
     box.innerHTML = '<p class="hd">데이터 로드 실패</p><p class="p"></p>'
-      + '<p class="p">모의 MES 서버로 접속해야 합니다.<br>'
-      + '<code>python -m shiftlink.mes</code> → <code>http://127.0.0.1:8000/pda.html</code></p>';
+      + '<p class="p">MES 연결이 복구되면 자동으로 시작합니다.</p>';
     box.querySelector('.p').textContent = String(err && err.message || err);
     $('bootErr').appendChild(box);
+    setTimeout(boot, 3000);
   }
 }
 

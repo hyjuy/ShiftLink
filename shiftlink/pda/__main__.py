@@ -46,7 +46,8 @@ def make_handler(jetson: str, web: Path = WEB) -> type[BaseHTTPRequestHandler]:
             if self.headers.get("Content-Type"):
                 req.add_header("Content-Type", self.headers["Content-Type"])
             try:
-                with urllib.request.urlopen(req, timeout=180) as res:  # /api/query 는 Jetson LLM 답변이라 오래 걸릴 수 있다
+                timeout = 180 if self.path.split("?", 1)[0] == "/api/query" else 8
+                with urllib.request.urlopen(req, timeout=timeout) as res:
                     self._send(res.status, res.read(), res.headers.get("Content-Type", "application/json"))
             except urllib.error.HTTPError as err:
                 self._send(err.code, err.read(), err.headers.get("Content-Type", "application/json"))

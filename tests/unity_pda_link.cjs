@@ -15,6 +15,7 @@ const vm = require('node:vm');
 const fs = require('node:fs');
 const context = vm.createContext({ URLSearchParams, window: {location: {search: '?equipment_id=EQ-0004'}} });
 vm.runInContext(fs.readFileSync(require.resolve('../shiftlink/mes/web/pda.js'), 'utf8'), context);
+context.document = {getElementById: () => ({innerHTML:''})};
 vm.runInContext(`
   getJson = async (path) => path === '/api/config' ? {config:{equipment:[{equipment_id:'EQ-0004'}]}}
     : path === '/api/catalog' ? {data:{}} : {cards:[{}]};

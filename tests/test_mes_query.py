@@ -139,3 +139,21 @@ def test_service_query_logs_answer_for_upload(service):
     logged = json.loads(payload)
     assert logged['question'] == 'bearing' and logged['cited_card_ids'] == ['K-1']
     assert logged['equipment_id'] == 'EQ-0004' and logged['latency_ms'] >= 0
+    assert logged['safety_notices'] == [{'card_id': 'K-S', 'safety_basis': 'stop first', 'stop_conditions': []}]
+    text = logged['rendered_response']
+    assert text.index('## 안전 공지') < text.index('## 답변') < text.index('## 참고 카드')
+    assert text.index('카드: K-S') < text.index('grounded answer')
+    assert 'K-1' in text
+
+
+@pytest.mark.parametrize('review_queue,no_knowledge', [(True, False), (False, True)])
+def test_query_log_keeps_safety_when_answer_is_withheld(service, review_queue, no_knowledge):
+    response = AgentResponse(mode='query', answer='withheld answer', review_queue=review_queue,
+        no_knowledge=no_knowledge, safety_notices=[{'card_id': 'K-S', 'safety_basis': 'stop first'}])
+    service.query_pipeline = SimpleNamespace(run=lambda payload: SimpleNamespace(output=response))
+    service.query({'question': 'bearing', 'equipment_id': 'EQ-0004'})
+    [(_, _, payload)] = service.storage.pending_queries()
+    logged = json.loads(payload)
+    assert logged['safety_notices'][0]['card_id'] == 'K-S'
+    assert '카드: K-S' in logged['rendered_response']
+    assert 'withheld answer' not in logged['rendered_response']

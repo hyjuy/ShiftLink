@@ -75,9 +75,12 @@ def test_decide_requires_min_passing_frames() -> None:
     same, other = unit(1, 0.1, 0, 0), unit(0, 1, 0, 0)
     ok = decide([same, same, same, other, None], template, threshold=0.9, min_pass=3)
     assert (ok.passed, ok.frames_seen, ok.frames_passed) == (True, 4, 3)
+    assert ok.min_score == pytest.approx(frame_score(other, template))
+    assert ok.min_passed_score == pytest.approx(frame_score(same, template))
+    assert ok.min_score < ok.min_passed_score <= ok.best_score
     assert decide([same, same, other, other, None], template, threshold=0.9, min_pass=3).passed is False
     nothing = decide([None, None], template)
-    assert (nothing.passed, nothing.best_score, nothing.frames_seen) == (False, None, 0)
+    assert (nothing.passed, nothing.best_score, nothing.min_score, nothing.min_passed_score, nothing.frames_seen) == (False, None, None, None, 0)
 
 
 def test_other_person_is_rejected_even_if_all_frames_agree() -> None:
@@ -93,9 +96,10 @@ def test_attempt_log_has_scores_only(tmp_path: Path) -> None:
     append_attempt(log, "E-001", "팀원A", 0.363, decide([unit(0, 0, 1, 0), None], template))
     append_attempt(log, "E-001", "팀원B", 0.363, decide([None], template))
     rows = [line.split(",") for line in log.read_text(encoding="utf-8").splitlines()]
-    assert rows[0] == ["time", "employee_id", "who", "threshold", "best_score", "frames_seen", "frames_passed", "passed"]
+    assert rows[0] == ["time", "employee_id", "who", "threshold", "best_score", "min_score",
+                       "min_passed_score", "frames_seen", "frames_passed", "passed"]
     assert [r[2] for r in rows[1:]] == ["본인", "팀원A", "팀원B"]
-    assert [r[7] for r in rows[1:]] == ["1", "0", "0"]
+    assert [r[9] for r in rows[1:]] == ["1", "0", "0"]
     assert rows[3][4] == ""  # 얼굴이 안 잡힌 시도는 점수 칸이 비어 있다
     assert not any("embedding" in cell.lower() for row in rows for cell in row)  # 점수 외 데이터 없음
 

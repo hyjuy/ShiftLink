@@ -1,8 +1,8 @@
 """얼굴 로그인 점검·등록 도구 (웹캠 사용). 이미지는 저장하지 않는다.
 
     python -m shiftlink.face fetch                         # 모델 내려받기(해시 확인)
-    python -m shiftlink.face enroll --id E-001 [--shots 8]  # 등록: 화면을 보며 고개를 조금씩 돌린다
-    python -m shiftlink.face verify --id E-001 [--threshold 0.363] [--log <저장소 밖 경로>/attempts.csv --who 팀원A]
+    python -m shiftlink.face enroll --id E-001 [--shots 8] [--headless]  # 등록. 미리보기는 화면만, 파일 저장 없음
+    python -m shiftlink.face verify --id E-001 [--threshold 0.363] [--headless] [--log <저장소 밖>/attempts.csv --who 팀원A]
         (시도 기록은 저장소 밖에 둔다: 익명 라벨이어도 날짜·시각·점수가 모이면 누가 시도했는지 추정된다.
          예: ../ShiftLink-records/experiments/face_login/attempts.csv)
     python -m shiftlink.face delete --id E-001             # 삭제(동의 철회)
@@ -32,12 +32,30 @@ def _open(camera: int):
     return cap
 
 
-def _grab(cap, engine: FaceEngine, count: int, gap: float) -> list[np.ndarray | None]:
-    out = []
-    for _ in range(count):
+def _grab(cap, engine: FaceEngine, count: int, gap: float, title: str, headless: bool) -> list[np.ndarray | None]:
+    """얼굴이 잡힌 프레임만 count장 모은다. 미리보기는 화면에만 그리고 파일로 저장하지 않는다. q는 중단."""
+    import cv2
+    out: list[np.ndarray | None] = []
+    missed = 0
+    while len(out) < count and missed < count * 12:
         ok, frame = cap.read()
-        out.append(engine.embed(frame) if ok else None)
-        time.sleep(gap)
+        embedding = engine.embed(frame) if ok else None
+        if ok and not headless:
+            text = f"얼굴 {len(out)}/{count}" if embedding is None else f"잡힘 {len(out) + 1}/{count}"
+            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.imshow(title, frame)
+            if cv2.waitKey(1) & 0xFF == ord("q"):
+                break
+        if embedding is None:
+            missed += 1
+            continue
+        out.append(embedding)
+        if headless:
+            time.sleep(gap)
+        else:
+            cv2.waitKey(int(gap * 1000))
+    if not headless:
+        cv2.destroyAllWindows()
     return out
 
 
@@ -52,6 +70,7 @@ def _rss_mb() -> float | None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--camera", type=int, default=0)
+    parser.add_argument("--headless", action="store_true", help="미리보기 창을 띄우지 않는다(파이 키오스크)")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("fetch")
     enroll = sub.add_parser("enroll")
@@ -83,15 +102,9 @@ def main(argv: list[str] | None = None) -> int:
     cap = _open(args.camera)
     try:
         if args.command == "enroll":
-            print(f"등록 시작: {args.id}. 카메라를 보고 고개를 조금씩 돌려 주세요.")
-            shots: list[np.ndarray] = []
-            for _ in range(args.shots * 6):  # 얼굴이 안 잡히는 프레임은 건너뛰고 최대 6배까지 시도
-                embedding = _grab(cap, engine, 1, 0.5)[0]
-                if embedding is not None:
-                    shots.append(embedding)
-                    print(f"  {len(shots)}/{args.shots}")
-                if len(shots) == args.shots:
-                    break
+            print(f"등록 시작: {args.id}. 'face' 창을 보고 고개를 조금씩 돌려 주세요. q는 중단.", flush=True)
+            shots = [e for e in _grab(cap, engine, args.shots, 0.5, "face enroll (q quit)", args.headless) if e is not None]
+            print(f"  잡은 얼굴 {len(shots)}/{args.shots}", flush=True)
             if len(shots) < args.shots:
                 print(f"얼굴을 {args.shots}번 잡지 못함({len(shots)}번). 등록하지 않음")
                 return 1
@@ -102,7 +115,7 @@ def main(argv: list[str] | None = None) -> int:
             if template is None:
                 print("등록 없음 또는 모델 버전 불일치: 다시 등록하세요")
                 return 2
-            verdict = decide(_grab(cap, engine, args.frames, 0.2), template, args.threshold, args.min_pass)
+            verdict = decide(_grab(cap, engine, args.frames, 0.2, "face verify (q quit)", args.headless), template, args.threshold, args.min_pass)
             if args.log:
                 append_attempt(args.log, args.id, args.who, args.threshold, verdict)
             print(f"{'통과' if verdict.passed else '실패'} 최고 유사도={verdict.best_score} "

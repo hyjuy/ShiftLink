@@ -56,7 +56,8 @@ def test_spaced_paths_and_shared_default_db(units):
     for unit in generated.values():
         assert f'WorkingDirectory={repo}' in unit.splitlines()
         assert f'--db "{repo}/mes_data/mock-mes.sqlite3"' in unit
-    assert f'EnvironmentFile="{env_file}"' in generated["uploader"].splitlines()
+    # unquoted: systemd 249 ignores a quoted EnvironmentFile ("path is not absolute"), 10/7 Jetson
+    assert f'EnvironmentFile={env_file}' in generated["uploader"].splitlines()
 
 
 def test_generated_units_pass_systemd_verify(units, tmp_path):

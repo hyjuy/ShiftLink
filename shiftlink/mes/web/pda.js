@@ -1536,6 +1536,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
+/* 경보·복합 증상·계측 이탈을 모은다. 적재 점유율만으로 고장을 판정하지 않는다. */
 function faultsFrom(snap) {
   return S.equipment.map((eq) => {
     const items = [];
@@ -1545,6 +1546,9 @@ function faultsFrom(snap) {
     const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
     usableReadings(snap, eq).kept.forEach((o) => {
       const spec = eq.signals.find((x) => x.signal === o.signal);
+      // cv_queue_len은 현재 코일수/수용량이다. 정상 이송 중에도 100%가 된다.
+      // 실제 정체 경보·복합 증상·속도/전류 이상은 위아래 경로에서 계속 표시한다.
+      if (o.signal === 'cv_queue_len') return;
       if (spec && spec.zeroStopped && o.value === 0 && state.operating_state !== 'running') return;
       const st = stateOf(spec, o.value);
       if (st === 'low' || st === 'high') items.push(String(spec.name).split(' (')[0] + (st === 'low' ? ' ▼' : ' ▲'));
@@ -1808,8 +1812,6 @@ on('obsAdd', () => {
 /* ponytail: 3초 폴링. 푸시(SSE)는 파이 프록시와 MES 서버를 둘 다 고쳐야 해서 보류 — 지연이 문제면 그때. */
 const WATCH_MS = 3000;
 const ALERT_ROWS = 3;
-
-/* 설비별 고장 상황: 경보 · MES 증상 후보 · 범위 이탈 · 자체 이상. 원인은 확정하지 않는다. */
 
 function renderAlert(faults) {
   const el = $('alert');

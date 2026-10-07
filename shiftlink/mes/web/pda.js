@@ -105,7 +105,7 @@ async function boot() {
 
     renderManualList();
     const linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
-    if (linkedEquipment) { setContext(linkedEquipment, 'manual_selection'); show('ctx'); }
+    if (linkedEquipment) { setContext(linkedEquipment, 'unity_link'); show('ctx'); }
     else show('home');
   } catch (err) {
     $('bootMsg').textContent = 'MES 서버에서 데이터를 읽지 못했습니다.';

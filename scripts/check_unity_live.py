@@ -9,16 +9,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tests.test_unity_mes import demo_servers, request
+from shiftlink.unity_demo import demo_servers, request, unity_arguments, unity_environment
 from shiftlink.mes.server import _run_ticks
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--editor", type=Path,
-                        default=Path("D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe"))
+    unity_arguments(parser)
     args = parser.parse_args()
-    if not args.editor.is_file():
-        parser.error("Unity Editor executable is missing")
+    if args.editor is None or not args.editor.is_file():
+        parser.error("Set --editor or UNITY_EDITOR to a Unity Editor executable")
     checks = ROOT / "unity/ShiftLinkFactory/Checks"
     checks.mkdir(parents=True, exist_ok=True)
     with demo_servers() as (service, mes, pda):
@@ -29,8 +28,8 @@ def main():
         ticks = threading.Thread(target=_run_ticks, args=(service, stopped), daemon=True)
         ticks.start()
         try:
-            env = {**os.environ, "TEMP": "D:/obsd/Unity/Temp", "TMP": "D:/obsd/Unity/Temp",
-                   "UPM_CACHE_ROOT": "D:/obsd/Unity/Cache/upm"}
+            env = unity_environment(args)
+            (checks / "play-check-result.txt").unlink(missing_ok=True)
             result = subprocess.run([
                 str(args.editor), "-batchmode", "-force-d3d11",
                 "-projectPath", str(ROOT / "unity/ShiftLinkFactory"),

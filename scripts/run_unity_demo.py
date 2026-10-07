@@ -1,4 +1,4 @@
-"""Start a dedicated local MES/PDA demo and open Unity on the SSD."""
+"""Start a dedicated local MES/PDA demo and open Unity."""
 import argparse
 import json
 import os
@@ -10,8 +10,10 @@ from pathlib import Path
 from urllib.request import ProxyHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from shiftlink.unity_demo import unity_arguments, unity_environment
+
 PROJECT = ROOT / "unity/ShiftLinkFactory"
-DEFAULT_EDITOR = Path("D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe")
 
 def free_port(port):
     with socket.socket() as sock:
@@ -19,14 +21,14 @@ def free_port(port):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--editor", type=Path, default=DEFAULT_EDITOR)
+    unity_arguments(parser)
     parser.add_argument("--mes-url", help="Use an existing MES; no local services or data changes")
     parser.add_argument("--pda-url", help="PDA page origin; default local proxy or MES origin")
     parser.add_argument("--mes-port", type=int, default=8000)
     parser.add_argument("--pda-port", type=int, default=8080)
     args = parser.parse_args()
-    if not args.editor.is_file():
-        parser.error(f"Unity Editor not installed: {args.editor}")
+    if args.editor is None or not args.editor.is_file():
+        parser.error("Set --editor or UNITY_EDITOR to a Unity Editor executable")
 
     children = []
     opener = build_opener(ProxyHandler({}))
@@ -66,7 +68,8 @@ def main():
         print(f"MES: {mes}\nPDA: {pda}/pda.html\nUnity: {PROJECT}", flush=True)
         editor = subprocess.Popen([str(args.editor), "-projectPath", str(PROJECT),
                                    "-executeMethod", "FactoryChecks.OpenDemo",
-                                   "--mes-url", mes, "--pda-url", pda], cwd=ROOT)
+                                   "--mes-url", mes, "--pda-url", pda], cwd=ROOT,
+                                  env=unity_environment(args))
         editor.wait()
         return editor.returncode
     finally:

@@ -4,11 +4,13 @@ import io
 import os
 import tempfile
 import unittest
+import argparse
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from scripts import check_unity_live
+from scripts import check_unity_live, run_unity_demo
+from shiftlink.unity_demo import unity_arguments, unity_environment
 
 
 class UnityLiveCheck(unittest.TestCase):
@@ -57,3 +59,40 @@ class UnityLiveCheck(unittest.TestCase):
         self.assertEqual(captured["env"]["TEMP"], "custom-temp")
         self.assertEqual(captured["env"]["TMP"], "custom-temp")
         self.assertEqual(captured["env"]["UPM_CACHE_ROOT"], "custom-cache")
+
+    def test_environment_defaults_and_cli_precedence(self):
+        parser = argparse.ArgumentParser()
+        with patch.dict(os.environ, {"UNITY_EDITOR": "env-editor", "UNITY_TEMP_DIR": "env-temp",
+                                     "UPM_CACHE_ROOT": "env-cache"}, clear=True):
+            unity_arguments(parser)
+            args = parser.parse_args([])
+            self.assertEqual(args.editor, Path("env-editor"))
+            self.assertEqual(unity_environment(args)["TEMP"], "env-temp")
+            self.assertEqual(unity_environment(args)["UPM_CACHE_ROOT"], "env-cache")
+            args = parser.parse_args(["--editor", "cli-editor", "--temp-dir", "cli-temp", "--upm-cache", "cli-cache"])
+            self.assertEqual(args.editor, Path("cli-editor"))
+            self.assertEqual(unity_environment(args)["TEMP"], "cli-temp")
+            self.assertEqual(unity_environment(args)["UPM_CACHE_ROOT"], "cli-cache")
+
+    def test_missing_editor_reports_configuration_error(self):
+        with patch.dict(os.environ, {}, clear=True), patch("sys.argv", ["check_unity_live"]), \
+             contextlib.redirect_stderr(io.StringIO()) as errors:
+            with self.assertRaises(SystemExit) as result:
+                check_unity_live.main()
+        self.assertEqual(result.exception.code, 2)
+        self.assertIn("--editor or UNITY_EDITOR", errors.getvalue())
+
+    def test_demo_launcher_uses_shared_environment(self):
+        with tempfile.TemporaryDirectory() as folder:
+            editor = Path(folder) / "Unity.exe"
+            editor.touch()
+            with patch.dict(os.environ, {"UNITY_EDITOR": str(editor), "TEMP": folder,
+                                         "TMP": folder, "UPM_CACHE_ROOT": "existing-cache"}, clear=True), \
+                 patch("sys.argv", ["run_unity_demo", "--mes-url", "http://example.test:8000"]), \
+                 patch.object(run_unity_demo.subprocess, "Popen") as launch, \
+                 contextlib.redirect_stdout(io.StringIO()):
+                launch.return_value.returncode = 0
+                self.assertEqual(run_unity_demo.main(), 0)
+                self.assertEqual(launch.call_args.kwargs["env"]["TEMP"], folder)
+                self.assertEqual(launch.call_args.kwargs["env"]["UPM_CACHE_ROOT"], "existing-cache")
+                self.assertEqual(launch.call_args.args[0][0], str(editor))

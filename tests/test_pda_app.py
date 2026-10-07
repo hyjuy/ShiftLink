@@ -57,7 +57,7 @@ def test_pages_local_and_api_proxied():
         assert fetch(pda_url + "/static/pda.js")[0] == 200
         conn = http.client.HTTPConnection(pda_url.split("//")[1]); conn.request("GET", "/")
         res = conn.getresponse()  # 대시보드는 파이에 두지 않고 Jetson 화면으로 보낸다
-        assert res.status == 302 and res.getheader("Location") == jetson_url + "/"
+        assert res.status == 302 and res.getheader("Location") == jetson_url + "/?from=pda"
         conn.close()
         assert fetch(pda_url + "/static/../server.py")[0] == 404  # 화면 파일만 준다
 
@@ -159,3 +159,15 @@ def test_sensor_timeout_is_short_but_query_keeps_llm_budget():
                 assert upstream.call_args.kwargs["timeout"] == expected
     finally:
         pda.shutdown()
+
+
+def test_restart_page_relaunches_the_kiosk_app():
+    jetson, jetson_url = serve(FakeJetson)
+    called = []
+    pda, pda_url = serve(make_handler(jetson_url, on_restart=lambda: called.append(1)))
+    try:
+        status, body = fetch(pda_url + "/pda/restart")
+        assert status == 200 and "다시 시작".encode() in body
+    finally:
+        pda.shutdown(); jetson.shutdown()
+    assert called == [1]

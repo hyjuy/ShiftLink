@@ -298,7 +298,7 @@ main { gap: 8px; margin-top: 8px; }
 #diagram-legend summary { cursor: pointer; padding: 8px; }
 #diagram-legend[open] { position: absolute; z-index: 5; right: 12px; top: 8px; width: min(440px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 12px; background: #232528; border: 1px solid #90969d; border-radius: 8px; }
 .diagram-only { max-width: none; margin: 0; padding: 0; }
-.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement):not(#simulation-controls):not(#control-message), .diagram-only #workspace-flow > :not(.map-panel):not(.side-col), .diagram-only .side-col > :not(#line-board), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
+.diagram-only > :not(main):not(.skip-link), .diagram-only main > :not(#workspace-flow):not(#operator-announcement):not(#simulation-controls):not(#control-message):not(#kiosk-bar), .diagram-only #workspace-flow > :not(.map-panel):not(.side-col), .diagram-only .side-col > :not(#line-board), .diagram-only .map-panel > :not(#diagram-toolbar):not(.map-scroll):not(#selected-connection) { display: none; }
 .diagram-only main, .diagram-only #workspace-flow { margin: 0; padding: 0; max-width: none; }
 .diagram-only .map-panel { height: 100dvh; display: grid; grid-template-rows: auto minmax(0,1fr) auto; padding: 0; margin: 0; border: 0; border-radius: 0; }
 .diagram-only .map-scroll { min-height: 0; overflow: auto; }
@@ -504,3 +504,4 @@ button.util-row { width: 100%; border: 0; padding: 8px 0; background: transparen
 .gauge-number { fill: #d5dde3; }
 .summary-grid article:not(.alarm-summary) strong { color: #e3e8ec; }
 @media (max-width: 900px) { .board-row { grid-template-columns: minmax(0, 1fr); } .board-row .incident-band { grid-row: 1; } .header-side { flex-wrap: wrap; } }
+.kiosk-bar { display: flex; justify-content: flex-end; gap: 8px; }.kiosk-bar[hidden] { display: none; }.kiosk-bar a { padding: 10px 16px; border: 1px solid #5b6168; border-radius: 6px; background: #25272b; color: #e8eaed; text-decoration: none; font-size: 14px; }

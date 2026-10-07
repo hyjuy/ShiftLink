@@ -171,15 +171,16 @@ function setContext(eq, source, extra) {
   S.eq = eq; S.source = source; S.queryResponse = null;
   S.scanId = (extra && extra.scanId) || null;
   S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.symptom = null;
+  S.mes = null; S.mesExcluded = [];
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
-  renderContext(); renderRecent(); renderObsSignals(); renderObsList();
+  renderContext(); renderRecent(); renderObsSignals(); renderObsList(); renderMesStatus();
   loadMesObservations();
 }
 
 /* 확정 설비 해제. 이전 설비의 관측·응답·시도도 함께 버린다. */
 function releaseContext(state) {
   Object.assign(state, {eq: null, source: null, scanId: null, queryResponse: null, ranked: null,
-    observations: [], obsRemoved: [], tries: [], attemptSeq: 0, symptom: null});
+    observations: [], obsRemoved: [], mes: null, mesExcluded: [], tries: [], attemptSeq: 0, symptom: null});
 }
 
 function renderContext() {
@@ -342,7 +343,7 @@ async function loadMesObservations(given) {
   if (!eq) return;
   let snap = given;
   if (!snap) {
-    try { snap = await getJson('/api/state'); } catch (_) { S.mes = null; renderObsList(); renderMesStatus(); return; }
+    try { snap = await getJson('/api/state'); } catch (_) { if (S.eq === eq) clearMesObservations(); return; }
   }
   if (S.eq !== eq) return;
   const r = usableReadings(snap, eq);
@@ -353,6 +354,7 @@ async function loadMesObservations(given) {
   S.mesExcluded = r.excluded;
   const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
   S.mes = {
+    readings: r.kept,
     at: snap.simulated_at, operating: state.operating_state, fault: state.fault_level,
     alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.label || a.code),
     diagnoses: (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
@@ -360,6 +362,35 @@ async function loadMesObservations(given) {
   renderObsList(); renderMesStatus();
   // 증상 순서는 관측에 따라 바뀐다. 순서가 달라졌을 때만 다시 그린다(목록 깜박임 방지).
   if (S.screen === 'ask' && symKey(symptomsFor(eq)) !== S.symKey) renderSymptoms();
+}
+
+function clearMesObservations() {
+  S.mes = null;
+  S.observations = S.observations.filter((o) => o.source === 'manual');
+  S.mesExcluded = [];
+  renderObsList(); renderMesStatus();
+  if (S.screen === 'ask') renderSymptoms();
+}
+
+function readingDetail(o, spec) {
+  return '정상 범위 ' + fmt(spec.min) + '~' + fmt(spec.max) + ' ' + unitText(spec.unit)
+    + (o.observed_at ? ' · 측정 ' + stamp(o.observed_at) : '');
+}
+
+/* 현재 센서와 답변의 고정 근거를 같은 표기로 표시한다. 질의 입력의 수동 덮어쓰기는 별도로 유지한다. */
+function renderSensorReadings(box, readings, operating) {
+  readings.forEach((o) => {
+    const spec = S.eq.signals.find((s) => s.signal === o.signal);
+    if (!spec) return;
+    const row = document.createElement('div');
+    const stopped = spec.zeroStopped && o.value === 0 && operating && operating !== 'running';
+    const status = stopped ? 'stopped' : stateOf(spec, o.value);
+    row.className = 'obs' + (status === 'low' || status === 'high' ? ' out' : '');
+    row.innerHTML = '<span class="txt"><span class="mono"></span><small></small></span>';
+    row.querySelector('.mono').textContent = obsText(o);
+    row.querySelector('small').textContent = readingDetail(o, spec) + ' · ' + (stopped ? '정지 중 0' : stateWord(status) || '범위 미설정');
+    box.appendChild(row);
+  });
 }
 
 /* 범위 이탈이면 방향과 경계 대비 차이를 만든다. MES 운영 화면과 같은 표기. */
@@ -395,7 +426,7 @@ function renderObsList() {
     const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
     row.querySelector('.mono').textContent = signalName(r.o.signal) + ' = ' + r.o.value + (unitText(r.o.unit) ? ' ' + unitText(r.o.unit) : '');
     row.querySelector('small').textContent = (r.v.text ? r.v.text + ' · ' : r.v.st === 'stopped' ? '정지 중 0 · 정상 · ' : '')
-      + (r.o.source === 'manual' ? '직접 입력' : 'MES');
+      + (r.o.source === 'manual' ? '직접 입력' : 'MES') + ' · ' + readingDetail(r.o, spec);
     row.querySelector('.x').addEventListener('click', () => {
       S.observations.splice(S.observations.indexOf(r.o), 1);
       if (r.o.source === 'mes') S.obsRemoved.push(r.o.signal);
@@ -418,6 +449,11 @@ const STATE_TXT = { running:'가동', stopped:'정지', waiting:'대기', normal
 
 function renderMesStatus() {
   const box = $('ctxMes');
+  const sensors = $('ctxSensors'); sensors.innerHTML = '';
+  if (S.mes) {
+    renderSensorReadings(sensors, S.mes.readings || [], S.mes.operating);
+    if (!(S.mes.readings || []).length) sensors.textContent = '사용 가능한 센서값이 없습니다.';
+  } else sensors.textContent = 'MES 연결을 확인해 주세요. 현재 센서값을 읽지 못했습니다.';
   if (!S.mes) { box.textContent = 'MES 상태를 읽지 못했습니다.'; box.classList.remove('bad'); return; }
   const out = S.observations.filter((o) => obsView(o).text).length;
   const parts = ['MES ' + (STATE_TXT[S.mes.operating] || S.mes.operating || '—') + ' · '
@@ -626,17 +662,17 @@ const OPTXT = { '==':'=', '!=':'≠', '>':'>', '>=':'≥', '<':'<', '<=':'≤' }
 const stateWord = (v) => ({ low: '낮음', high: '높음', normal: '정상' }[v] || v);
 
 /* 원신호와 파생 <signal>_state 를 같은 규칙으로 찾는다. 단위가 다르면 미평가. */
-function observed(c) {
-  const direct = S.observations.find((o) => o.signal === c.signal);
+function observed(c, observations = S.observations) {
+  const direct = observations.find((o) => o.signal === c.signal);
   if (direct) return c.unit && direct.unit !== c.unit ? null : direct.value;
   if (!/_state$/.test(c.signal)) return null;
-  const base = S.observations.find((o) => o.signal === c.signal.slice(0, -6));
+  const base = observations.find((o) => o.signal === c.signal.slice(0, -6));
   return base ? stateOf(S.eq.signals.find((x) => x.signal === base.signal), base.value) : null;
 }
 
 /* 관측값이 없으면 "일치"로 속이지 않고 미평가로 남긴다. */
-function evalCondition(c) {
-  const v = observed(c);
+function evalCondition(c, observations = S.observations) {
+  const v = observed(c, observations);
   if (v == null) return { state:'unknown', text: signalName(c.signal) + ' — 관측값 없음' };
   const ok = cmp(c.op, v, c.value);
   if (ok === null) return { state:'unknown', text: c.signal + ' — 연산자 ' + c.op };
@@ -705,15 +741,15 @@ function responseCards(response, cards, local, eq) {
   return {actions: actions, excluded: excluded, safety: safety, total: actions.length + excluded.length + safety.length};
 }
 
-function rankCards(eq) {
+function rankCards(eq, observations = S.observations) {
   const hits = S.cards.filter((c) => cardFits(c, eq));
   // 질의 모드에서 T4 인계 카드는 고정 안전 공지로 올리지 않는다(retrieval.py include_handover).
   const safety = hits.filter((c) => c.safety_flag === true && c.tacit_type !== 'T4');
   const rest = hits.filter((c) => safety.indexOf(c) === -1);
 
   const scored = rest.map((c) => {
-    const conds = (c.conditions || []).map(evalCondition);
-    const hitExclusions = (c.exclusions || []).map(evalCondition).filter((x) => x.state === 'match');
+    const conds = (c.conditions || []).map((c) => evalCondition(c, observations));
+    const hitExclusions = (c.exclusions || []).map((c) => evalCondition(c, observations)).filter((x) => x.state === 'match');
     const anyMiss = conds.some((x) => x.state === 'miss') || hitExclusions.length > 0;
     const anyMatch = conds.some((x) => x.state === 'match');
     const direct = c.equipment === eq.type;
@@ -896,6 +932,13 @@ function renderResult() {
   const r = S.ranked;
   if (r.safety.length) pane.appendChild(safetyStack(r.safety));
   if (S.queryResponse) {
+    const evidence = S.queryResponse.evidence;
+    if (evidence && evidence.equipment_id === S.eq.equipment_id) {
+      const label = document.createElement('p'); label.className = 'lbl';
+      label.textContent = '질의 당시 MES 센서값 · ' + stamp(evidence.simulated_at) + ' · 고정된 답변 근거';
+      pane.appendChild(label);
+      renderSensorReadings(pane, (evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id));
+    }
     const answer = document.createElement('p');
     answer.className = 'body';
     answer.textContent = S.queryResponse.review_queue ? '답변을 보류했습니다. 담당자 검토가 필요합니다.'
@@ -1105,7 +1148,9 @@ async function runSearch() {
     if (staleResponse(sentEqId, S)) return;
     if (!res.ok) throw new Error(response.error || 'HTTP ' + res.status);
     S.queryResponse = response;
-    S.ranked = responseCards(response, S.cards, rankCards(S.eq), S.eq);
+    const readings = response.evidence && response.evidence.equipment_id === sentEqId
+      ? (response.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === sentEqId) : [];
+    S.ranked = responseCards(response, S.cards, rankCards(S.eq, readings), S.eq);
     setStep('st3', 100, 'done');
     if (S.ranked.safety.length) haptic([120]);
     renderResult(); show('result');
@@ -1313,7 +1358,7 @@ on('manualToScan', startScan);
 on('ctxBack', () => show('home'));
 on('ctxEdit', startScan);
 on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('ask'); loadMesObservations(); });
-on('obsReload', loadMesObservations);
+on('obsReload', () => loadMesObservations());
 on('askBack', () => show('ctx'));
 on('doSearch', runSearch);
 on('waitCancel', () => { S.waitAbort = true; show('ask'); });
@@ -1454,7 +1499,7 @@ async function watchMes() {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
       if (S.eq) await loadMesObservations(snap);
-    } catch (err) { console.warn('MES 감시 실패', err); }   // 연결 표시는 api() 가 맡는다
+    } catch (err) { if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
   }
   setTimeout(watchMes, WATCH_MS);
 }

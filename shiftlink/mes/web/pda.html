@@ -371,6 +371,8 @@
       <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
+      <p class="lbl">현재 MES 센서값 · 3초마다 갱신</p>
+      <div id="ctxSensors" style="display:flex;flex-direction:column;gap:6px"></div>
       <p class="hint" id="ctxFoot"></p>
       <div class="grow"></div>
       <!-- 주 행동은 엄지가 닿는 하단에 모은다(A4) -->
@@ -410,7 +412,8 @@
         <textarea id="question" placeholder="증상을 직접 적어 주세요" autocomplete="off"></textarea>
         <p class="hint">목록에 없는 증상입니다. 등록된 카드가 없으면 「해당 지식 없음」이 나옵니다 — 추측으로 답하지 않습니다.</p>
       </div>
-      <p class="lbl">관측값 — MES 현재값을 자동으로 채웁니다</p>
+      <p class="lbl">현재 관측값 · MES 실시간 갱신</p>
+      <p class="hint">증상 선택 후에도 갱신됩니다. 답변에는 MES가 질의를 접수한 당시의 값을 기록합니다.</p>
       <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
       <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
       <p class="hint">MES에 없는 값은 아래에서 직접 추가합니다. 같은 신호는 직접 입력값이 우선합니다.</p>

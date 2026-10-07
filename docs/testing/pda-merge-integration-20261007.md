@@ -28,3 +28,25 @@ separate from fixed query-time evidence. Existing sensor checks must remain inta
 - Route score: dev 21/30 and sanity 29/30 meet CI floors (21 and 28).
 
 No real camera or device deployment is implied.
+
+## Scenario inventory GREEN
+
+Added `scrap_discharge` to the JSON and Markdown unlinked scenario inventory; it
+is a synthetic rejection/transport demonstration, not a measured diagnostic condition.
+`python -m pytest -q tests/test_mes_signal_map_runtime.py tests/test_mes_scrap_discharge.py`
+passes all 9 checks without relaxing the inventory equality assertion.
+
+`build_kb.py` regenerates the same 86 cards with no tracked output difference.
+`git diff --check origin/main HEAD` passes.
+
+## Validation limits
+
+The isolated Unity smoke attempt could not complete because its licensing client
+connection repeatedly failed; the helper editor was stopped. Browser UI automation
+is unavailable in this session, so visual layout and physical camera/face recognition
+were not revalidated. Node DOM/VM contracts and local Python HTTP integration tests
+cover the PDA behavior. No end-to-end browser coverage percentage is claimed.
+
+Three Unity files changed separately after the initial checkpoint and remain local:
+`FactorySensorMotionChecks.cs`, `Equipment_CV02.prefab.meta`, and the Unity README.
+Those later edits and `.worktrees/` are excluded from this PR.

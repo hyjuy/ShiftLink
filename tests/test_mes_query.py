@@ -146,6 +146,26 @@ def test_service_query_logs_answer_for_upload(service):
     assert 'K-1' in text
 
 
+@pytest.mark.parametrize('failure_point', ['render_response', 'AgentResponse.model_validate'])
+def test_log_render_failure_returns_answer_and_preserves_safety(service, monkeypatch, failure_point):
+    from shiftlink.mes import server
+    service.query_pipeline = Pipeline()
+    def fail(*args, **kwargs):
+        raise RuntimeError('log rendering failed')
+    if failure_point == 'render_response':
+        monkeypatch.setattr(server, 'render_response', fail)
+    else:
+        monkeypatch.setattr(server.AgentResponse, 'model_validate', fail)
+    result = service.query({'question': 'bearing', 'equipment_id': 'EQ-0004'})
+    assert result['answer'] == 'grounded answer'
+    [(_, _, payload)] = service.storage.pending_queries()
+    logged = json.loads(payload)
+    assert logged['rendered_response'] is None
+    assert logged['answer'] == result['answer']
+    assert logged['safety_notices'] == result['safety_notices']
+    assert logged['cited_card_ids'] == result['cited_card_ids']
+
+
 @pytest.mark.parametrize('review_queue,no_knowledge', [(True, False), (False, True)])
 def test_query_log_keeps_safety_when_answer_is_withheld(service, review_queue, no_knowledge):
     response = AgentResponse(mode='query', answer='withheld answer', review_queue=review_queue,

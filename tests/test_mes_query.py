@@ -111,9 +111,9 @@ def test_fixed_pipeline_retrieval_model_and_cache(service, monkeypatch):
     assert not result['review_queue']
 
 
-def test_demo_default_answers_from_the_card_without_calling_the_model(service, monkeypatch):
+def test_demo_extract_mode_answers_from_the_card_without_calling_the_model(service, monkeypatch):
     from shiftlink.mes import query
-    monkeypatch.delenv('SHIFTLINK_ANSWER_MODE', raising=False)
+    monkeypatch.setenv('SHIFTLINK_ANSWER_MODE', 'extract')  # demo default is hybrid since 10/7; extract stays selectable
     pipeline = query.build_query_pipeline()
     def model(**kwargs):
         raise AssertionError('extract mode must not call the model')

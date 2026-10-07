@@ -15,14 +15,19 @@ from shiftlink.rag.retrieval import InMemoryToolProvider
 from .card_adapter import MesCardAdapter
 
 ROOT = Path(__file__).resolve().parents[2]
+# Demo server defaults (hybrid confirmed 10/7): SFT answer model + guard v2 (E1 on a guard hit) and the SFT judge.
+ANSWER_MODE = 'hybrid'
+ANSWER_MODEL = 'exaone-sft-answer'
+JUDGE_MODEL = 'exaone-sft-judge'
 
 
 def build_query_pipeline():
     return FixedPipeline(
-        model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', 'exaone3.5:2.4b-instruct-q4_K_M'),
+        model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', ANSWER_MODEL),
+                          judge_model=os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL),
                           host=os.environ.get('OLLAMA_HOST', DEFAULT_HOST), timeout_s=DEFAULT_TIMEOUT_S),
         tools=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider,
-        answer_mode=os.environ.get('SHIFTLINK_ANSWER_MODE', 'extract'),  # E1 adopted 10/6; 'model' restores the model answer
+        answer_mode=os.environ.get('SHIFTLINK_ANSWER_MODE', ANSWER_MODE),  # 'extract' = E1 only (no answer model)
         judge_strict=True,  # no judge, no answer: the server replies 503 "try again" instead of showing a card unjudged
     )
 
@@ -30,7 +35,7 @@ def build_query_pipeline():
 def judge_model_status(host=None, name=None, timeout=3.0):
     """'ok' | 'missing' | 'unreachable': is the judge model registered in Ollama? Used for a startup warning."""
     host = (host or os.environ.get('OLLAMA_HOST', DEFAULT_HOST)).rstrip('/')
-    name = name or os.environ.get('SHIFTLINK_JUDGE_MODEL') or os.environ.get('SHIFTLINK_QUERY_MODEL', 'exaone3.5:2.4b-instruct-q4_K_M')
+    name = name or os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL)
     try:
         with urllib.request.urlopen(f'{host}/api/tags', timeout=timeout) as response:
             names = {m.get('name', '') for m in json.load(response).get('models', [])}

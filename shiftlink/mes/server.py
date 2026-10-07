@@ -83,11 +83,15 @@ class MesService:
         from .query import query_service
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
+        try:
+            rendered_response = render_response(AgentResponse.model_validate(result))
+        except Exception:  # Log formatting must not prevent returning the generated answer.
+            rendered_response = None
         self.storage.save_query({
             "question": body.get("question"), "equipment_id": (result.get("evidence") or {}).get("equipment_id"),
             "answer": result.get("answer"), "cited_card_ids": result.get("cited_card_ids"),
             "safety_notices": result.get("safety_notices", []),
-            "rendered_response": render_response(AgentResponse.model_validate(result)),
+            "rendered_response": rendered_response,
             "no_knowledge": result.get("no_knowledge"), "review_queue": result.get("review_queue"),
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),

@@ -48,6 +48,12 @@ public static class FactoryCoilAlignmentChecks
                 if(error>.001f) failures.Add(name+" coil bore and support shaft centres differ by "+error.ToString("F6")+"m");
                 if(reel.GetComponentsInChildren<Transform>().Any(t=>t.name=="Assumed transport saddle"))
                     failures.Add(name+" mounted coil must not carry a moving transport saddle");
+                var crosshead=station.Find("Machine crosshead").GetComponent<Renderer>().bounds;
+                float upperGap=crosshead.min.y-body.bounds.max.y;
+                float rollerTop=campus.GetComponentsInChildren<Renderer>().Where(r=>r.name=="Finishing roller" && Mathf.Abs(r.bounds.center.x-body.bounds.center.x)<body.bounds.extents.x+.12f).Max(r=>r.bounds.max.y);
+                float lowerGap=body.bounds.min.y-rollerTop;
+                measurements.Add(name+": upper clearance="+upperGap.ToString("F6")+"; lower clearance="+lowerGap.ToString("F6"));
+                if(upperGap<.01f || lowerGap<.01f) failures.Add(name+" mounted coil must clear the crosshead and transport rollers by at least 1cm");
                 Camera.main.transform.position=mandrel.position+new Vector3(3,2,-5); Camera.main.transform.LookAt(mandrel.position);
                 FactoryChecks.Capture(Path.Combine(dir,"coil-alignment-"+name+".png"));
             }

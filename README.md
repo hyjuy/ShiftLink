@@ -17,6 +17,10 @@
 
 블라인드 2차 `eval/qa/20261001-blind2/qa_blind2.json`은 답 있음 6/25이다. `python eval/qa/route_score.py`의 `blind2_route_acc`는 이 셋의 보고 전용이라, 점수를 보고 검색을 맞추지 않는다.
 
+## 시연 실행
+
+장비 3대(Jetson·라즈베리파이 PDA·Unity PC)를 켜고 확인하고 끄는 순서, 장비 주소·모델·명령: [`docs/guides/run-demo.md`](docs/guides/run-demo.md).
+
 ## 브랜치 전략
 자세한 내용은 [`docs/collaboration/branching.md`](docs/collaboration/branching.md) 참고.
 

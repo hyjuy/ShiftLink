@@ -4,7 +4,8 @@
 # 얼굴 점수는 OpenCV가 있는 ~/shiftlink/venv-face 로 띄운다. 설비 분류(.venv, classify --listen)와 의존성을 따로 관리한다.
 # 웹캠은 로그인 키오스크만 쓴다(설비 분류는 Unity 사진을 HTTP로 받는다, 10/7).
 #
-#   deploy/install_pda.sh [Jetson 주소, 기본 http://jetson-06.tail0a6af3.ts.net:8000]
+#   deploy/install_pda.sh [Jetson 주소, 기본 http://jetson-06.tail0a6af3.ts.net:8000] [Unity 카메라, 예 http://127.0.0.1:8090]
+#   SHIFTLINK_CNN=~/shiftlink/models/cnn deploy/install_pda.sh …   # 스캔 화면 「촬영」 → 설비 분류(venv에 onnxruntime 필요)
 #   PY=/다른/python deploy/install_pda.sh
 #   모델이 없어 시연만 통과시키려면: SHIFTLINK_FACE_BYPASS=1 deploy/install_pda.sh
 #   (서버는 127.0.0.1만 연다. 기본은 우회 끔)
@@ -20,6 +21,9 @@ JETSON="${1:-http://jetson-06.tail0a6af3.ts.net:8000}"
 UNITY="${2:-${SHIFTLINK_UNITY_CAMERA:-}}"
 UNITY_ARG=""
 if [ -n "$UNITY" ]; then UNITY_ARG=" --unity $UNITY"; fi
+CNN="${SHIFTLINK_CNN:-}"
+CNN_ARG=""
+if [ -n "$CNN" ]; then CNN_ARG=" --cnn $CNN --save-shots $HOME/shiftlink/data/scan-shots"; fi
 APP="$HOME/shiftlink/app"
 PY="${PY:-$HOME/shiftlink/venv-face/bin/python}"
 
@@ -28,14 +32,20 @@ if [ ! -x "$PY" ] || ! "$PY" -c "import cv2" >/dev/null 2>&1; then
   exit 1
 fi
 
+if [ -n "$CNN" ] && { [ ! -f "$CNN/model.onnx" ] || ! "$PY" -c "import onnxruntime" >/dev/null 2>&1; }; then
+  echo "설비 분류: $CNN/model.onnx 와 $PY 의 onnxruntime(pip install onnxruntime==1.20.1)이 필요합니다." >&2
+  exit 1
+fi
+
 if [ "$REPO" = "$APP" ]; then  # 앱 폴더 안에서 실행하면 아래 rm -rf가 복사 원본까지 지운다
   echo "저장소 사본(앱 폴더가 아닌 곳)에서 실행하세요: $REPO" >&2
   exit 1
 fi
 mkdir -p "$APP/shiftlink/mes" "$HOME/shiftlink/logs" "$HOME/.config/autostart"
-rm -rf "$APP/shiftlink/pda" "$APP/shiftlink/face" "$APP/shiftlink/mes/web"
+rm -rf "$APP/shiftlink/pda" "$APP/shiftlink/face" "$APP/shiftlink/vision" "$APP/shiftlink/mes/web"
 cp -r "$REPO/shiftlink/pda" "$APP/shiftlink/pda"
 cp -r "$REPO/shiftlink/face" "$APP/shiftlink/face"
+cp -r "$REPO/shiftlink/vision" "$APP/shiftlink/vision"  # --cnn 「촬영」 분류(classify.ShotClassifier)
 mkdir -p "$APP/shiftlink/mes/web"
 cp "$REPO/shiftlink/mes/web/pda.html" "$REPO/shiftlink/mes/web/pda.js" "$APP/shiftlink/mes/web/"
 touch "$APP/shiftlink/__init__.py"
@@ -84,6 +94,6 @@ cat > "$HOME/.config/autostart/shiftlink-pda.desktop" <<EOF
 Type=Application
 Name=ShiftLink PDA
 # 모델이 없을 때만 시연 우회: 위의 Exec 앞에 SHIFTLINK_FACE_BYPASS=1 을 넣고 다시 로그인한다. 기본은 끄다.
-Exec=sh -c 'cd $APP && exec ${BYPASS}$PY -m shiftlink.pda --jetson $JETSON$UNITY_ARG >> $HOME/shiftlink/logs/pda.log 2>&1'
+Exec=sh -c 'cd $APP && exec ${BYPASS}$PY -m shiftlink.pda --jetson $JETSON$UNITY_ARG$CNN_ARG >> $HOME/shiftlink/logs/pda.log 2>&1'
 EOF
 echo "설치: $APP ($PY -m shiftlink.pda) → API $JETSON"

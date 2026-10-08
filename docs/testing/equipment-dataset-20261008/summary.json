@@ -1,0 +1,614 @@
+{
+  "candidate_images": 9600,
+  "retained_images": 8951,
+  "excluded_images": 649,
+  "splits": {
+    "test": 880,
+    "train": 7178,
+    "val": 893
+  },
+  "cnn_counts": {
+    "test": {
+      "CAU": 87,
+      "CV": 176,
+      "GR": 149,
+      "HPU": 96,
+      "PDP": 91,
+      "RT": 281
+    },
+    "train": {
+      "CAU": 723,
+      "CV": 1311,
+      "GR": 1466,
+      "HPU": 768,
+      "PDP": 723,
+      "RT": 2187
+    },
+    "val": {
+      "CAU": 90,
+      "CV": 174,
+      "GR": 190,
+      "HPU": 96,
+      "PDP": 91,
+      "RT": 252
+    }
+  },
+  "equipment": {
+    "EQ-0003": {
+      "test": 87,
+      "train": 723,
+      "val": 90
+    },
+    "EQ-0009": {
+      "test": 85,
+      "train": 669,
+      "val": 90
+    },
+    "EQ-0010": {
+      "test": 91,
+      "train": 642,
+      "val": 84
+    },
+    "EQ-0004": {
+      "test": 92,
+      "train": 762,
+      "val": 96
+    },
+    "EQ-0005": {
+      "test": 57,
+      "train": 704,
+      "val": 94
+    },
+    "EQ-0001": {
+      "test": 96,
+      "train": 768,
+      "val": 96
+    },
+    "EQ-0002": {
+      "test": 91,
+      "train": 723,
+      "val": 91
+    },
+    "EQ-0006": {
+      "test": 95,
+      "train": 755,
+      "val": 95
+    },
+    "EQ-0007": {
+      "test": 95,
+      "train": 685,
+      "val": 96
+    },
+    "EQ-0008": {
+      "test": 91,
+      "train": 747,
+      "val": 61
+    }
+  },
+  "directions": {
+    "EQ-0003": {
+      "test": {
+        "11": 52,
+        "10": 9,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 49,
+        "1": 69,
+        "2": 81,
+        "3": 71,
+        "4": 74,
+        "5": 71,
+        "7": 82,
+        "6": 65,
+        "8": 69,
+        "9": 53,
+        "10": 24,
+        "11": 15
+      },
+      "val": {
+        "10": 41,
+        "9": 25,
+        "0": 1,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 3,
+        "7": 3,
+        "8": 3
+      }
+    },
+    "EQ-0009": {
+      "test": {
+        "11": 43,
+        "10": 13,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 61,
+        "1": 79,
+        "2": 68,
+        "3": 72,
+        "4": 66,
+        "5": 56,
+        "7": 64,
+        "6": 28,
+        "8": 77,
+        "9": 51,
+        "10": 24,
+        "11": 23
+      },
+      "val": {
+        "10": 42,
+        "9": 22,
+        "0": 2,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0010": {
+      "test": {
+        "10": 12,
+        "11": 49,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "1": 83,
+        "0": 72,
+        "2": 30,
+        "3": 28,
+        "4": 78,
+        "5": 72,
+        "6": 72,
+        "7": 63,
+        "8": 53,
+        "9": 43,
+        "10": 24,
+        "11": 24
+      },
+      "val": {
+        "9": 12,
+        "10": 43,
+        "0": 3,
+        "1": 3,
+        "2": 2,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0004": {
+      "test": {
+        "11": 57,
+        "10": 5,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 69,
+        "1": 73,
+        "2": 74,
+        "3": 78,
+        "4": 71,
+        "5": 74,
+        "6": 76,
+        "7": 76,
+        "8": 59,
+        "9": 65,
+        "10": 24,
+        "11": 23
+      },
+      "val": {
+        "10": 47,
+        "9": 19,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0005": {
+      "test": {
+        "11": 24,
+        "10": 4,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 2,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 29,
+        "1": 68,
+        "2": 82,
+        "3": 71,
+        "4": 71,
+        "5": 63,
+        "6": 73,
+        "7": 89,
+        "8": 39,
+        "9": 75,
+        "10": 24,
+        "11": 20
+      },
+      "val": {
+        "9": 12,
+        "10": 54,
+        "0": 1,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0001": {
+      "test": {
+        "11": 52,
+        "10": 14,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 75,
+        "1": 69,
+        "2": 77,
+        "3": 77,
+        "4": 67,
+        "5": 79,
+        "6": 78,
+        "7": 61,
+        "8": 78,
+        "9": 59,
+        "10": 24,
+        "11": 24
+      },
+      "val": {
+        "10": 31,
+        "9": 35,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0002": {
+      "test": {
+        "11": 52,
+        "10": 14,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "5": 1,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 70,
+        "1": 60,
+        "2": 90,
+        "3": 92,
+        "4": 35,
+        "5": 57,
+        "7": 75,
+        "6": 64,
+        "8": 81,
+        "9": 51,
+        "10": 24,
+        "11": 24
+      },
+      "val": {
+        "10": 37,
+        "9": 29,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 1,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0006": {
+      "test": {
+        "11": 57,
+        "10": 9,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 73,
+        "1": 63,
+        "2": 88,
+        "3": 89,
+        "4": 51,
+        "5": 69,
+        "6": 68,
+        "7": 76,
+        "8": 82,
+        "9": 48,
+        "10": 24,
+        "11": 24
+      },
+      "val": {
+        "9": 25,
+        "10": 41,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 2,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0007": {
+      "test": {
+        "11": 53,
+        "10": 13,
+        "0": 3,
+        "1": 2,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "0": 70,
+        "1": 32,
+        "2": 37,
+        "3": 86,
+        "4": 64,
+        "5": 73,
+        "7": 78,
+        "6": 72,
+        "8": 69,
+        "9": 56,
+        "10": 24,
+        "11": 24
+      },
+      "val": {
+        "10": 42,
+        "9": 24,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "11": 3
+      }
+    },
+    "EQ-0008": {
+      "test": {
+        "10": 15,
+        "11": 46,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3
+      },
+      "train": {
+        "1": 65,
+        "0": 70,
+        "2": 90,
+        "3": 81,
+        "4": 56,
+        "5": 72,
+        "6": 73,
+        "7": 76,
+        "8": 80,
+        "9": 42,
+        "10": 18,
+        "11": 24
+      },
+      "val": {
+        "10": 28,
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3,
+        "11": 3
+      }
+    }
+  },
+  "lighting": {
+    "bright": {
+      "test": 177,
+      "train": 1442,
+      "val": 172
+    },
+    "warm": {
+      "test": 179,
+      "train": 1442,
+      "val": 179
+    },
+    "cool": {
+      "test": 175,
+      "train": 1432,
+      "val": 182
+    },
+    "dim": {
+      "test": 178,
+      "train": 1436,
+      "val": 177
+    },
+    "normal": {
+      "test": 171,
+      "train": 1426,
+      "val": 183
+    }
+  },
+  "shot_kinds": {
+    "whole": 6092,
+    "detail": 2859
+  },
+  "exclusion_reasons": {
+    "small_target": 285,
+    "review: Visually reviewed entire CAU Fan guard rim sectors 0/11: rear housing/edge visible without distinctive circular fan face.": 39,
+    "review: CAU close-up dominated by generic bolted flat service plate; vent/fan/control context absent or too limited.": 10,
+    "dominant_other_class": 352,
+    "review: CV-01 target small and occluded; foreground equipment dominates (other/target bbox 9.36).": 1,
+    "review: CV-01 sector 6 visually reviewed: foreground coil, RT rollers or wide transfer plate dominate; intended belt conveyor is distant or largely occluded.": 27,
+    "review: CV-02 distant target is obscured by foreground RT rollers and columns (other/target bbox 27.93).": 1,
+    "review: CV-02 intended target distant behind foreground rollers or wide plain plate; characteristic slat/bearing context too limited.": 6,
+    "review: GR-02 characteristic drive is distant; foreground conveyor dominates.": 1,
+    "review: GR-02 characteristic drive is small and obscured by foreground transfer frame.": 1,
+    "review: Visually reviewed entire PDP CabinetSidePanel sectors 4/5: plain sheet metal or cabinet edge, no distinctive distribution-panel features.": 48,
+    "low_contrast": 2,
+    "review: PDP side-panel close-up: plain plate dominates and front distribution-panel context is negligible.": 5,
+    "review: RT-02 intended target distant behind foreground RT columns and rollers.": 1,
+    "review: RT-03 intended target distant; foreground RT and coil dominate.": 1,
+    "review: RT-03 BearingCover.012 visually reviewed: large foreground plain transfer cover blocks most rollers/bearing details; target-specific context too limited.": 5
+  },
+  "criteria": {
+    "whole_target_area_min": 0.08,
+    "detail_target_area_min": 0.12,
+    "other_class_area_max_ratio": 1.2,
+    "near_black_luma_and_std_max_255": 8,
+    "target_luma_std_min_255": 8
+  },
+  "reviewer_exclusions": "artifacts/equipment-dataset-20261008-extra/review-exclusions.json",
+  "candidate_source": "artifacts/equipment-dataset-20261008-combined",
+  "limitation": "heuristic quality filter plus sampled visual review; model accuracy not measured",
+  "reviewer_keeps": [
+    {
+      "capture_id": "EQ-0003_extra_0207",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0003_extra_0042",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0003_extra_0105",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0003_extra_0124",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0003_extra_0250",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0003_extra_0255",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    },
+    {
+      "capture_id": "EQ-0006_0544",
+      "reason": "Independent visual review: characteristic fan/louver/control or roller structure remains identifiable."
+    }
+  ]
+}

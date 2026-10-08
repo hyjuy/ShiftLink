@@ -12,8 +12,13 @@ RIG = ROOT / "unity/ShiftLinkFactory/Assets/Scripts/FactoryRig.cs"
 
 
 def csharp_layout():
-    """FactoryRig.Layout 본문의 Vector3 식을 파이썬 식으로 꺼낸다(f 접미사만 뗀다)."""
-    body = RIG.read_text(encoding="utf-8").split("public static Vector3 Layout(", 1)[1].split("\n    }", 1)[0]
+    """기본 간격의 FactoryRig.BaseLayout 좌표식을 꺼낸다(f 접미사만 뗀다)."""
+    source = RIG.read_text(encoding="utf-8")
+    assert "public static float LayoutSpacing = 1;" in source
+    layout = source.split("public static Vector3 Layout(", 1)[1].split("\n    }", 1)[0]
+    assert "var position=BaseLayout(code,index,count,auxiliary);" in layout
+    assert "return new Vector3(position.x*LayoutSpacing,position.y,position.z*LayoutSpacing);" in layout
+    body = source.split("static Vector3 BaseLayout(", 1)[1].split("\n    }", 1)[0]
     vec = lambda s: [re.sub(r"(\d)f\b", r"\1", a) for a in s.split(",")]
     main = vec(re.search(r"if\(index>=0\) return new Vector3\((.+?)\);", body).group(1))
     cases = {c: vec(v) for c, v in re.findall(r'case "([\w-]+)": return new Vector3\((.+?)\);', body)}

@@ -268,6 +268,8 @@ function stopUnityCamera() {
   }
 }
 
+const unityCameraHint = () => $('scanShoot').hidden ? 'Unity 가상 카메라 · 실시간 영상' : 'Unity 가상 카메라 · 설비를 화면 가운데 담고 「촬영」';
+
 async function streamUnityCamera(run) {
   stopUnityCamera();
   const ctrl = new AbortController(); unityCameraAbort = ctrl;
@@ -280,7 +282,7 @@ async function streamUnityCamera(run) {
   image.onload = () => {
     if (S.scanRun !== run || ctrl.signal.aborted) return;
     image.hidden = false;
-    setScanState('', 'Unity 가상 카메라 · 실시간 영상');
+    setScanState('', unityCameraHint());
   };
   image.onerror = () => { failed = true; image.hidden = true; };
   open();
@@ -290,9 +292,9 @@ async function streamUnityCamera(run) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const camera = await res.json();
       if (S.scanRun !== run || ctrl.signal.aborted) return;
-      if (camera.stream_live) {
+      if (camera.stream_live && image.hidden) {  // 매번 쓰면 촬영 결과·확정 문구를 덮는다
         image.hidden = false;
-        setScanState('', 'Unity 가상 카메라 · 실시간 영상');
+        setScanState('', unityCameraHint());
       }
       if (failed || (!camera.stream_live && Date.now() - openedAt > 3500)) throw new Error('Camera disconnected');
     } catch (err) {
@@ -317,6 +319,7 @@ async function startScan() {
     const res = await fetch('/api/unity/config', {cache:'no-store', signal:AbortSignal.timeout(2000)});
     const camera = res.ok ? await res.json() : null;
     if (S.scanRun !== run) return;
+    $('scanShoot').hidden = !(camera && camera.enabled && camera.shoot);
     if (camera && camera.enabled) {
       setScanState('', 'Unity 가상 카메라 연결 중…');
       return streamUnityCamera(run);
@@ -346,6 +349,34 @@ async function startScan() {
     return lockScan(eq, scan);
   }
   if (S.scanRun === run) failScan(run, '인식 안 됨 — 직접 선택');
+}
+
+/* Unity 모드 「촬영」: 파이 PDA 서버(--cnn)가 그 순간 프레임 한 장을 분류해 min_conf 이상이면 Jetson에 올린다.
+ * 화면은 웹캠 경로와 같이 Jetson의 새 scan_id로 설비를 확정한다(질의가 scan_id로 나가므로). */
+async function shootScan() {
+  const run = S.scanRun, btn = $('scanShoot');
+  btn.disabled = true; setScanState('candidate', '분류 중…');
+  try {
+    const base = await latestScan();
+    const r = await (await fetch('/api/unity/capture', {method:'POST', cache:'no-store', signal:AbortSignal.timeout(5000)})).json();
+    if (S.scanRun !== run) return;
+    const what = r.class + ' ' + Number(r.conf).toFixed(2);
+    if (r.error) return setScanState('failed', r.error + ' — 다시 촬영');
+    if (!r.confirmed) return setScanState('failed', '확신도 낮음(' + what + ') — 설비를 가까이 담아 다시 촬영');
+    if (!r.sent) return setScanState('failed', what + ' — Jetson 전송 실패 · 다시 촬영');
+    setScanState('candidate', what + ' — Jetson 확인 중…');
+    for (let i = 0; i < 10; i++) {
+      await sleep(SCAN_POLL_MS);
+      if (S.scanRun !== run) return;
+      const scan = await latestScan();
+      if (!scan || (base && scan.scan_id === base.scan_id)) continue;
+      const eq = scanTarget(scan, S.equipment);
+      return eq ? lockScan(eq, scan) : setScanState('failed', (scan.code || scan.class) + ' — 현재 구성에 없는 설비 code · 검색 불가');
+    }
+    setScanState('failed', what + ' — Jetson 기록 확인 안 됨 · 다시 촬영');
+  } catch (_) {
+    if (S.scanRun === run) setScanState('failed', '촬영 실패 — 다시 촬영');
+  } finally { btn.disabled = false; }
 }
 
 function lockScan(eq, scan) {
@@ -1838,6 +1869,7 @@ document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', ()
 on('toScan', startScan);
 on('scanClose', () => show('home'));
 on('scanManual', openManual);
+on('scanShoot', shootScan);
 on('toManual', openManual);
 on('manualClose', () => show(S.eq ? 'ctx' : 'home'));
 on('manualToScan', startScan);

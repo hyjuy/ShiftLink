@@ -94,6 +94,33 @@ def classify_bytes(session, labels: list[str], data: bytes) -> tuple[str, float,
     return labels[i], float(probs[i]), (time.perf_counter() - t0) * 1000
 
 
+class ShotClassifier:
+    """PDA 스캔 화면 「촬영」 한 장 → 클래스. min_conf 이상이면 Jetson에 보낸다(수신 모드와 같은 판정).
+
+    실시간 프레임을 계속 분류하면 입구처럼 여러 설비가 보이는 장면도 확정된다(10/8 입구 RT → CAU 0.90).
+    작업자가 설비를 화면에 담고 누른 한 장만 쓴다. save_dir가 있으면 그 사진을 남긴다(G1 증거·오분류 확인).
+    """
+
+    def __init__(self, model: Path, server: str, device_id: str, min_conf: float = 0.8,
+                 save_dir: Path | None = None, session=None) -> None:
+        self.labels = (model / "labels.txt").read_text(encoding="utf-8").split()
+        if session is None:
+            import onnxruntime as ort
+
+            session = ort.InferenceSession(str(model / "model.onnx"), providers=["CPUExecutionProvider"])
+        self.session, self.server, self.device_id, self.min_conf, self.save_dir = session, server, device_id, min_conf, save_dir
+
+    def __call__(self, image: bytes) -> dict:
+        label, conf, ms = classify_bytes(self.session, self.labels, image)
+        confirmed = conf >= self.min_conf
+        sent = bool(confirmed and post_scan(self.server, label, conf, self.device_id))
+        if self.save_dir:
+            self.save_dir.mkdir(parents=True, exist_ok=True)
+            (self.save_dir / f"{datetime.now():%Y%m%d_%H%M%S}_{label}_{conf:.2f}.jpg").write_bytes(image)
+        print(f"촬영 {'확정' if confirmed else '보류'} {label} conf={conf:.2f} {ms:.0f}ms sent={sent}", flush=True)
+        return {"class": label, "conf": round(conf, 4), "ms": round(ms, 1), "confirmed": confirmed, "sent": sent}
+
+
 def make_handler(session, labels: list[str], min_conf: float, server: str | None, device_id: str):
     """수신 모드 HTTP 핸들러. 사진 한 장은 그 자체로 확정이라 Stabilizer를 쓰지 않는다."""
     from http.server import BaseHTTPRequestHandler

@@ -135,7 +135,7 @@
   #toast{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:30;max-width:90vw;
     padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--ok);
     font-size:18px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-  #toast[hidden]{display:none}
+  #toast[hidden], #scanShoot[hidden]{display:none}
   #faceState.ok{color:var(--ok)} #faceState.ok .dot{background:var(--ok)}
   #faceState.failed{color:var(--fail)} #faceState.failed .dot{background:var(--fail)}
 
@@ -409,6 +409,7 @@
       <div class="vf"><img id="unityCamera" alt="Unity 가상 공장의 PDA 카메라 영상" hidden><div class="reticle" id="reticle"></div></div>
       <div id="scanState"><span class="dot"></span><span id="scanText">Jetson 연결 확인 중…</span></div>
       <div class="scanfoot">
+        <button class="btn big" id="scanShoot" type="button" hidden><span class="ico">◉</span>촬영</button>
         <button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>
       </div>
     </div>

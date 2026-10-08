@@ -52,7 +52,8 @@ def restart_kiosk() -> None:
     stop_kiosk()
 
 
-def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *, unity: str | None = None) -> type[BaseHTTPRequestHandler]:
+def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *, unity: str | None = None,
+                 shoot=None) -> type[BaseHTTPRequestHandler]:
     stream_seen_at = 0.0
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
@@ -87,19 +88,29 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *,
             body = {"threshold": DEFAULT_THRESHOLD, "need": FACE_NEED, "frames": FACE_FRAMES, "bypass": _face_bypass()}
             self._send(200, json.dumps(body).encode(), "application/json; charset=utf-8")
 
-        def _unity_frame(self) -> None:
-            if not unity:
+        def _unity_jpeg(self) -> bytes:
+            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+            with opener.open(unity.rstrip("/") + "/frame.jpg", timeout=2) as res:
+                image = res.read(_MAX_FACE_JPEG + 1)
+                if res.headers.get_content_type() != "image/jpeg" or len(image) > _MAX_FACE_JPEG or not image.startswith(b'\xff\xd8'):
+                    raise ValueError("Unity camera did not return a JPEG frame")
+                return image
+
+        def _unity_frame(self, classify: bool = False) -> None:
+            if not unity or (classify and not shoot):
                 self._send(503, b'{"error":"Unity camera is not configured"}', "application/json")
                 return
             try:
-                opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-                with opener.open(unity.rstrip("/") + "/frame.jpg", timeout=2) as res:
-                    image = res.read(_MAX_FACE_JPEG + 1)
-                    if res.headers.get_content_type() != "image/jpeg" or len(image) > _MAX_FACE_JPEG or not image.startswith(b'\xff\xd8'):
-                        raise ValueError("Unity camera did not return a JPEG frame")
-                    self._send(200, image, "image/jpeg")
+                image = self._unity_jpeg()
             except (OSError, ValueError) as err:
                 self._send(502, json.dumps({"error": f"Unity 카메라 연결 실패: {err}"}, ensure_ascii=False).encode(), "application/json; charset=utf-8")
+                return
+            if not classify:
+                self._send(200, image, "image/jpeg"); return
+            try:  # 「촬영」: 지금 프레임 한 장을 분류해 확정이면 Jetson에 보낸다. 화면은 Jetson 인식 기록으로 설비를 고른다
+                self._send(200, json.dumps(shoot(image), ensure_ascii=False).encode(), "application/json; charset=utf-8")
+            except Exception as err:  # 모델 오류로 PDA 서버를 멈추지 않는다
+                self._send(500, json.dumps({"error": f"분류 실패: {type(err).__name__}"}, ensure_ascii=False).encode(), "application/json; charset=utf-8")
 
         def _unity_stream(self) -> None:
             nonlocal stream_seen_at
@@ -132,7 +143,8 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *,
         def do_GET(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
             if path == "/api/unity/config":
-                self._send(200, json.dumps({"enabled": bool(unity), "stream_live": time.monotonic() - stream_seen_at < 2}).encode(), "application/json"); return
+                self._send(200, json.dumps({"enabled": bool(unity), "stream_live": time.monotonic() - stream_seen_at < 2,
+                                            "shoot": bool(unity and shoot)}).encode(), "application/json"); return
             if path == "/api/unity/stream":
                 self._unity_stream(); return
             if path == "/api/unity/frame":
@@ -191,6 +203,8 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *,
                 self._exit(); return
             if path == "/api/face/frame":
                 self._face_frame(); return
+            if path == "/api/unity/capture":
+                self._unity_frame(classify=True); return
             if self.path.startswith("/api/"):
                 self._proxy()
             else:
@@ -236,6 +250,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="shiftlink-pda")
     parser.add_argument("--jetson", default="http://jetson-06.tail0a6af3.ts.net:8000", help="Jetson MES API 주소")
     parser.add_argument("--unity", default=os.environ.get("SHIFTLINK_UNITY_CAMERA"), help="Unity 가상 카메라 서버 주소 (예: http://127.0.0.1:8090, SSH 터널)")
+    parser.add_argument("--cnn", type=Path, default=os.environ.get("SHIFTLINK_CNN"),
+                        help="설비 분류 모델 폴더(model.onnx·labels.txt). 있으면 스캔 화면에 「촬영」이 생기고 그 한 장을 분류해 Jetson에 보낸다")
+    parser.add_argument("--save-shots", type=Path, help="촬영한 사진을 남길 폴더")
+    parser.add_argument("--min-conf", type=float, default=0.8, help="10/8 검증셋으로 정함(cnn1008)")
+    parser.add_argument("--device-id", default="pi-01")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--page", default="pda.html", help="키오스크로 열 화면 (pda.html=PDA, 빈 값=MES 대시보드)")
     parser.add_argument("--scale", type=float, default=2.0, help="화면 배율 (모니터에 맞춰 조정)")
@@ -243,7 +262,12 @@ def main() -> None:
     args = parser.parse_args()
     jetson = args.jetson.rstrip("/")
 
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson, unity=args.unity))
+    shoot = None
+    if args.unity and args.cnn:
+        from shiftlink.vision.classify import ShotClassifier
+        shoot = ShotClassifier(args.cnn, jetson, args.device_id, args.min_conf, args.save_shots)
+        print(f"스캔 촬영 분류: {args.cnn} min_conf={args.min_conf} → {jetson} ({args.device_id})", flush=True)
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson, unity=args.unity, shoot=shoot))
     threading.Thread(target=server.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{args.port}/{args.page}"
     print(f"PDA: {url} → API: {jetson}", flush=True)

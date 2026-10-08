@@ -31,6 +31,10 @@ class EquipmentPackageTests(unittest.TestCase):
             (cnn/'excluded.jsonl').write_text(json.dumps({'capture_id':'excluded','reasons':['featureless']})+'\n')
             archives=package(cnn,captures,out)
             self.assertEqual([row['images'] for row in archives],[2])
+            expected_digest=hashlib.sha256((out/archives[0]['file']).read_bytes()).hexdigest()
+            self.assertEqual(archives[0]['sha256'],expected_digest)
+            self.assertEqual(json.loads((out/'packages.json').read_text()),archives)
+            self.assertEqual((out/'SHA256SUMS').read_text(),f"{expected_digest}  {archives[0]['file']}\n")
             with zipfile.ZipFile(out/archives[0]['file']) as archive:
                 self.assertEqual(archive.read('train/CAU/CAU.png'),b'CAU')
                 self.assertEqual(archive.read('test/CV/CV.png'),b'CV')

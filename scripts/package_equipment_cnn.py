@@ -31,7 +31,10 @@ def package(cnn,captures,out):
             assert hashlib.sha256(archive.read(row['image'])).hexdigest()==row['sha256']
             assert json.loads(archive.read(f"metadata/{row['capture_id']}.json"))['capture_id']==row['capture_id']
     with path.open('rb') as stream:
-        digest=hashlib.file_digest(stream,'sha256').hexdigest()
+        hasher=hashlib.sha256()
+        for chunk in iter(lambda: stream.read(1024*1024),b''):
+            hasher.update(chunk)
+        digest=hasher.hexdigest()
     archives=[dict(file=path.name,images=len(rows),bytes=path.stat().st_size,sha256=digest)]
     (out/'packages.json').write_text(json.dumps(archives,indent=2),encoding='utf-8')
     (out/'SHA256SUMS').write_text(''.join(f"{row['sha256']}  {row['file']}\n" for row in archives),encoding='utf-8')

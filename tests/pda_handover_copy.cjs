@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const {unityLocation, handoverStatus, mesHandoverContext, appendMesContext} = require('../shiftlink/mes/web/pda.js');
+const {unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary} = require('../shiftlink/mes/web/pda.js');
 const config = {route:['EQ-6','EQ-7','EQ-8','EQ-9']};
 assert.match(unityLocation({equipment_id:'EQ-6',code:'RT-01'}, config, 5), /주 이송로 1번째.*X -8.1, Y 0, Z 0/);
 assert.match(unityLocation({equipment_id:'EQ-4',code:'GR-01'}, config, 3), /X -11.9, Y 0, Z 3/);
@@ -28,4 +28,16 @@ const later = mesHandoverContext({...snap, simulated_at:'2026-10-07T10:05:00+09:
 const second = appendMesContext(first, later);
 assert.equal(second.match(/기록 7/g).length, 1);
 assert.match(second, /10:05:00.*\n10:04 · 새 기록$/);
+// 대시보드 요약: 후속 대기는 고장 사유로 기다리는 설비만, 인계는 끝나지 않은 항목만 센다
+const dash = dashSummary({line_mode:'running', simulated_at:'2026-10-08T13:42:05+09:00',
+  equipment:[{equipment_id:'EQ-6',operating_state:'waiting',wait_reason:'hydraulic_supply_low'},
+             {equipment_id:'EQ-7',operating_state:'waiting',wait_reason:'material_shortage'}],
+  coils:[{quality_status:'hold'},{}]},
+  [{equipment_id:'EQ-6',code:'RT-01'},{equipment_id:'EQ-7',code:'RT-02'}],
+  [{open_items:[{status:'open'},{status:'needs_recheck'},{status:'done'}]}],
+  [{eq:{equipment_id:'EQ-1',code:'HPU-01'},items:['경보 출구 압력 저하']}]);
+assert.match(dash.line, /^운전 중 · 모의 \d\d:\d\d$/);   // 표시 시각은 기기 시간대 기준
+assert.deepEqual(dash.waiting, ['RT-01']);
+assert.equal(dash.held, 1); assert.equal(dash.openItems, 2);
+assert.deepEqual(dash.faults, [{equipment_id:'EQ-1',code:'HPU-01',items:['경보 출구 압력 저하']}]);
 console.log('PDA handover copy and MES import PASS');

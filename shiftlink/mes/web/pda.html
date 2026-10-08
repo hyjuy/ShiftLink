@@ -53,6 +53,48 @@
   .appbar .ic{min-width:48px;min-height:48px;padding:0 10px;display:grid;place-items:center;font-size:15px;
     font-weight:700;white-space:nowrap;color:var(--tx-2)}
   .appbar .sp{flex:1 1 auto}
+  .appbar .mes-link{min-width:44px;min-height:32px;padding:0 8px;border:1px solid var(--edge);border-radius:6px;
+    font-size:12px;text-decoration:none}
+  .appbar .ctx-change{border:1px solid var(--scan);border-radius:8px;color:var(--scan);min-height:44px}
+  .pane.ctx-pane{display:grid;grid-template-columns:minmax(260px,2fr) 3fr;gap:14px;overflow:hidden}
+  .ctx-actions{display:flex;flex-direction:column;gap:10px;min-height:0}
+  .ctx-sensors{display:flex;flex-direction:column;gap:8px;min-height:0;overflow-y:auto}
+  .act{flex:1 1 0;min-height:76px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;
+    padding:10px 16px;border:1px solid var(--edge);border-radius:10px;background:var(--surface-2);color:var(--tx);text-align:left}
+  .act b{font-size:18px}
+  .act small{font-size:13px;font-weight:600;color:var(--tx-2)}
+  .act small:empty{display:none}
+  .act.main{flex-grow:1.4;background:var(--scan);border-color:var(--scan);color:#04202B}
+  .act.main small{color:#04202B;opacity:.8}
+  .act.warn{border-color:var(--notice-edge)} .act.warn small{color:var(--warn)}
+  /* 세로·좁은 화면: 작업 버튼을 먼저, 센서값은 그 아래 */
+  @media (max-width:760px){ .pane.ctx-pane{grid-template-columns:1fr;overflow-y:auto} .ctx-sensors{overflow:visible} .act{flex:0 0 auto} }
+  .home-grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .home-main{height:100%;flex-direction:column;font-size:28px}
+  .home-main .ico{font-size:44px}
+  .home-main small{font-size:15px;font-weight:700;opacity:.85}
+  .home-tiles{display:grid;grid-template-rows:repeat(3,minmax(76px,1fr));gap:12px}
+  .home-tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;padding:10px 18px;
+    border:1px solid var(--edge);border-radius:10px;background:var(--surface-2);color:var(--tx);text-align:left}
+  .home-tile b{font-size:19px}
+  .home-tile small{font-size:14px;font-weight:600;color:var(--tx-2)}
+  .home-tile small:empty{display:none}
+  .home-tile.warn{border-color:var(--notice-edge)} .home-tile.warn small{color:var(--warn)}
+  .home-foot{flex:0 0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .home-foot .sp{flex:1 1 auto}
+  .home-foot .outbox-note{margin:0}
+  .dash-line{margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dash-line::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--tx-3)}
+  .dash-line.run::before{background:var(--ok)} .dash-line.warn::before{background:var(--warn)}
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .dash-tile{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
+    display:flex;flex-direction:column;gap:6px;min-height:110px}
+  .dash-tile.bad{border-color:var(--safety-edge)} .dash-tile.warn{border-color:var(--notice-edge)}
+  .dash-tile .n{font-size:28px;font-weight:800;line-height:1}
+  .dash-tile .t{font-size:12px;font-weight:700;color:var(--tx-2)}
+  .dash-tile .d{font-size:13px;color:var(--tx-2);margin:0}
+  .dash-tile button{min-height:44px;text-align:left;padding:0 10px;border:1px solid var(--edge);border-radius:8px;
+    background:var(--surface-2);color:var(--tx);font-size:14px;font-weight:600}
 
   /* 세로 스크롤 허용 — 안전 띠는 sticky 고정 (A3 결정 2026-09-22) */
   .pane{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
@@ -383,20 +425,27 @@
 
   <!-- 홈 -->
   <section class="screen" id="s-home">
-    <div class="appbar"><h1>ShiftLink</h1><span class="sp"></span>
+    <div class="appbar"><h1>ShiftLink</h1>
+      <!-- 개발용: 전체 MES 대시보드(Jetson). 개발이 끝나면 이 줄만 지운다 -->
+      <a class="ic mes-link" href="/" title="MES 대시보드 (개발용)">MES</a><span class="sp"></span>
       <button class="ic" id="pdaExit" type="button">종료</button></div>
     <div class="pane">
-      <button class="btn big" id="toScan" type="button"><span class="ico">◎</span>설비 스캔</button>
-      <p class="hint">설비를 스캔하면 인식된 설비가 자동으로 선택됩니다.</p>
-      <div class="grow"></div>
-      <p class="lbl">최근 선택한 설비</p>
-      <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
-      <button class="outbox-note" id="homePending" type="button" hidden></button>
-      <p class="outbox-note bad" id="homeConflict" hidden></p>
-      <div class="btn-row">
-        <button class="btn sm" id="toManual" type="button">설비 목록</button>
-        <button class="btn sm" id="toHandoverHome" type="button">인계 확인</button>
-        <a class="btn sm" href="/">대시보드</a>
+      <!-- 핵심인 인계 확인을 크게, 나머지는 누르기 전에 상황이 보이도록 한 줄 상태를 단 타일 -->
+      <div class="home-grid">
+        <button class="btn big home-main" id="toHandoverHome" type="button"><span class="ico">⇄</span>인계 확인
+          <small id="homeHoNote">이전 교대가 남긴 조치·재확인 항목을 확인합니다.</small></button>
+        <div class="home-tiles">
+          <button class="home-tile" id="toScan" type="button"><b>◎ 설비 스캔</b><small>스캔하면 설비가 자동 선택</small></button>
+          <button class="home-tile" id="toManual" type="button"><b>☰ 설비 목록</b><small id="homeEqNote"></small></button>
+          <button class="home-tile" id="toDash" type="button"><b>▦ 대시보드</b><small id="homeDashNote"></small></button>
+        </div>
+      </div>
+      <div class="home-foot">
+        <p class="lbl">최근 선택한 설비</p>
+        <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
+        <span class="sp"></span>
+        <button class="outbox-note" id="homePending" type="button" hidden></button>
+        <p class="outbox-note bad" id="homeConflict" hidden></p>
       </div>
     </div>
   </section>
@@ -432,19 +481,24 @@
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
     <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane">
-      <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
-      <p class="lbl">현재 MES 센서값 · 3초마다 갱신</p>
-      <div id="ctxSensors" style="display:flex;flex-direction:column;gap:6px"></div>
-      <p class="hint" id="ctxFoot"></p>
-      <div class="grow"></div>
-      <!-- 주 행동은 엄지가 닿는 하단에 모은다(A4) -->
-      <p class="lbl">무엇을 하시겠습니까?</p>
-      <button class="btn" id="toAsk" type="button">증상 질의</button>
-      <button class="btn" id="toHandover" type="button">인계 확인</button>
-      <button class="btn" id="toHandoverNew" type="button">인계 작성</button>
-      <button class="btn sm ghost" id="ctxEdit" type="button">설비 변경 (다시 스캔)</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span>
+      <!-- 잘못 잡힌 설비를 바로 바꿀 수 있게 상단에 둔다 -->
+      <button class="ic ctx-change" id="ctxEdit" type="button">◎ 설비 변경</button>
+      <button class="ic home" type="button">⌂ 홈</button></div>
+    <!-- 작업 버튼은 센서 수와 상관없이 항상 보이게 왼쪽 칸에 고정, 센서값은 오른쪽 칸에서 스크롤 -->
+    <div class="pane ctx-pane">
+      <div class="ctx-actions">
+        <p class="lbl">무엇을 하시겠습니까?</p>
+        <button class="act main" id="toAsk" type="button"><b>증상 질의</b><small>증상을 고르면 근거 카드로 답합니다</small></button>
+        <button class="act" id="toHandover" type="button"><b>⇄ 인계 확인</b><small id="ctxHoNote"></small></button>
+        <button class="act" id="toHandoverNew" type="button"><b>✎ 인계 작성</b><small>이 설비의 조치·측정을 다음 교대에 남깁니다</small></button>
+      </div>
+      <div class="ctx-sensors">
+        <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
+        <p class="lbl">현재 MES 센서값 · 3초마다 갱신</p>
+        <div id="ctxSensors" style="display:flex;flex-direction:column;gap:6px"></div>
+        <p class="hint" id="ctxFoot"></p>
+      </div>
     </div>
   </section>
 
@@ -512,6 +566,21 @@
     <button class="outbox-note" id="hoPending" type="button" hidden></button>
     <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
+  </section>
+
+  <!-- 대시보드: 작업자용 라인 요약 -->
+  <section class="screen" id="s-dash">
+    <div class="appbar"><h1>대시보드</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane">
+      <p class="dash-line" id="dashLine">MES 상태를 불러오는 중…</p>
+      <div class="dash-grid">
+        <div class="dash-tile" id="dashFaults"></div>
+        <div class="dash-tile" id="dashWaiting"></div>
+        <div class="dash-tile" id="dashHeld"></div>
+        <div class="dash-tile" id="dashHandover"></div>
+      </div>
+      <p class="hint">가동률·처리량 같은 운영 지표는 상단 MES 버튼의 전체 대시보드에서 확인합니다.</p>
+    </div>
   </section>
 
   <!-- 업로드 대기 -->

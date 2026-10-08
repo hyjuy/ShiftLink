@@ -230,6 +230,11 @@ function renderContext() {
   $('ctxId').textContent = S.eq.code;
   $('ctxName').textContent = S.eq.group;
   $('ctxFoot').textContent = S.eq.equipment_id + ' · ' + S.eq.where;
+  // 이 설비가 적힌 미완료 인계 항목 수 — 인계 확인 화면(openHandover)과 같은 기준
+  const open = S.handovers.flatMap((h) => h.open_items || [])
+    .filter((it) => String(it.text).includes(S.eq.code) && !['closed', 'done', 'withdrawn'].includes(it.status)).length;
+  $('ctxHoNote').textContent = open ? '이 설비 처리·재확인 필요 ' + open + '건' : '이 설비의 남은 인계 항목 없음';
+  $('toHandover').classList.toggle('warn', open > 0);
 }
 
 function renderRecent() {
@@ -1504,6 +1509,24 @@ function validateHandover() {
 }
 
 
+/* 대시보드 요약(작업자용). 이미 3초마다 읽는 /api/state와 인계 기록만 쓴다. faults는 faultsFrom() 결과. */
+const LINE_MODE_TXT = { running:'운전 중', paused:'일시정지', stopped:'정지', fault:'고장 발생', recovering:'복구 관찰', quality_hold:'제품 검사·보류' };
+// ponytail: 후속 대기는 wait_reason으로 가린다 — 소재 부족·계획 정지·복구 관찰은 고장 때문이 아니다. 새 사유가 생기면 이 목록에.
+const PLAIN_WAIT = ['material_shortage', 'planned_stop', 'recovery'];
+function dashSummary(snap, equipment, handovers, faults) {
+  const code = (id) => (equipment.find((e) => e.equipment_id === id) || {}).code || id;
+  const waiting = (snap.equipment || []).filter((e) => e.operating_state === 'waiting' && e.wait_reason && !PLAIN_WAIT.includes(e.wait_reason));
+  const openItems = (handovers || []).flatMap((h) => h.open_items || []).filter((it) => !['closed', 'done', 'withdrawn'].includes(it.status));
+  return {
+    mode: snap.line_mode,
+    line: (LINE_MODE_TXT[snap.line_mode] || snap.line_mode || '상태 확인 중') + (snap.simulated_at ? ' · 모의 ' + new Date(snap.simulated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : ''),
+    faults: (faults || []).map((f) => ({ equipment_id: f.eq.equipment_id, code: f.eq.code, items: f.items })),
+    waiting: waiting.map((e) => code(e.equipment_id)),
+    held: (snap.coils || []).filter((c) => c.quality_status === 'hold').length,
+    openItems: openItems.length,
+  };
+}
+
 function outboxLabels(body) {
   const handover = (body && body.handover) || {};
   const pending = Number(handover.pending) || 0;
@@ -1516,6 +1539,7 @@ function outboxLabels(body) {
 
 function paintOutbox(labels) {
   if (typeof document === 'undefined') return;
+  S.outboxLabels = labels;
   [['homePending', 'hoPending', labels.pending], ['homeConflict', 'hoConflict', labels.conflict]]
     .forEach(([a, b, text]) => {
       [a, b].forEach((id) => {
@@ -1666,7 +1690,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo }; }
+if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -2014,11 +2038,50 @@ const alertGoLeave = () => { S.alertPick = null; show(S.alertBack || (S.eq ? 'ct
 on('alertGoCancel', alertGoLeave);
 on('alertGoBack', alertGoLeave);
 
+function renderDash() {
+  if (!S.snap) return;
+  const d = dashSummary(S.snap, S.equipment, S.handovers, S.faults);
+  // 홈 타일의 한 줄 상태
+  $('homeEqNote').textContent = S.equipment.length + '대';
+  $('homeHoNote').textContent = (d.openItems ? '처리·재확인 필요 ' + d.openItems + '건' : '남은 인계 항목 없음')
+    + (S.outboxLabels && S.outboxLabels.pending ? ' · ' + S.outboxLabels.pending : '');
+  $('homeDashNote').textContent = d.faults.length || d.waiting.length
+    ? ['⚠ 이상 ' + d.faults.length, d.waiting.length ? '후속 대기 ' + d.waiting.length : ''].filter(Boolean).join(' · ') : '라인 ' + d.line;
+  $('toDash').classList.toggle('warn', d.faults.length > 0);
+  if (S.screen !== 'dash') return;
+  const line = $('dashLine');
+  line.textContent = '라인 ' + d.line;
+  line.className = 'dash-line ' + (d.faults.length || d.mode === 'quality_hold' ? 'warn' : d.mode === 'running' ? 'run' : '');
+  const tile = (id, cls, n, title, desc) => {
+    const el = $(id); el.className = 'dash-tile ' + cls; el.innerHTML = '<span class="n"></span><span class="t"></span><p class="d"></p>';
+    el.querySelector('.n').textContent = n; el.querySelector('.t').textContent = title; el.querySelector('.d').textContent = desc;
+    return el;
+  };
+  const faults = tile('dashFaults', d.faults.length ? 'bad' : '', d.faults.length, '확인 필요 설비', d.faults.length ? '' : '고장·주의 설비 없음');
+  d.faults.slice(0, ALERT_ROWS).forEach((f) => {   // 상단 고장 알림과 같은 확인 화면으로 — 설비를 바로 바꾸지 않는다
+    const b = document.createElement('button'); b.type = 'button';
+    b.textContent = f.code + ' · ' + f.items[0] + ' ›';
+    b.addEventListener('click', () => openAlertGo({ equipment_id: f.equipment_id, items: f.items.slice() }));
+    faults.appendChild(b);
+  });
+  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '후속 대기 설비', d.waiting.length ? d.waiting.join(', ') + ' · 자체 고장 아님' : '없음');
+  tile('dashHeld', d.held ? 'warn' : '', d.held, '제품 보류 코일', d.held ? '검사·해제 전까지 이송 중지' : '없음');
+  const ho = tile('dashHandover', d.openItems ? 'warn' : '', d.openItems, '인계 미완료 항목', (S.outboxLabels && S.outboxLabels.pending) || '업로드 대기 없음');
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = '인계 확인 ›';
+  b.addEventListener('click', openHandover); ho.appendChild(b);
+  if (S.outboxLabels && S.outboxLabels.pending) {
+    const o = document.createElement('button'); o.type = 'button'; o.textContent = '업로드 대기 보기 ›';
+    o.addEventListener('click', openOutbox); ho.appendChild(o);
+  }
+}
+on('toDash', () => { show('dash'); renderDash(); });
+
 async function watchMes() {
   if (S.equipment.length) {
     try {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
+      S.snap = snap; renderDash();
       if (S.eq) await loadMesObservations(snap);
     } catch (err) { if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
   }

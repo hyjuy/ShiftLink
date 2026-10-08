@@ -67,7 +67,7 @@ def test_each_installed_sensor_anomaly_reaches_search_and_recovers(eq, signal):
     if signal.signal == 'cv_queue_len':
         # A healthy moving coil can occupy every slot; recovery clears injection,
         # not the actual material represented by this occupancy measurement.
-        count = sum(c['equipment_id'] == eq.equipment_id for c in engine.snapshot.coils)
+        count = sum(c['equipment_id'] == eq.equipment_id and c['position'] >= 1 for c in engine.snapshot.coils)
         assert recovered.value == min(100, round(100 * count / eq.coil_capacity, 3))
     else:
         assert signal.normal_min <= recovered.value <= signal.normal_max

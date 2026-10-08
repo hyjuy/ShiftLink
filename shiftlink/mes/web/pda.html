@@ -107,8 +107,9 @@
 
   /* 뷰파인더 */
   .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
-  /* 화면 높이에 맞춰 키운다 — 300px는 상태 띠·상단바·하단 버튼 높이 합 + 위아래 여백 */
-  .reticle{position:relative;z-index:1;width:min(80vw,calc((100vh - 300px) * 4 / 3));aspect-ratio:4/3;border-radius:8px;
+  /* 남은 촬영 영역에 맞춰 키운다. 고장 띠·설비 띠가 위에 붙어도 잘리지 않게 화면 높이(100vh)가 아니라 영역 크기를 기준으로 한다. */
+  #s-scan .vf{container-type:size}
+  .reticle{position:relative;z-index:1;width:min(80cqw,calc(86cqh * 4 / 3));aspect-ratio:4/3;border-radius:8px;
     border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
   .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}

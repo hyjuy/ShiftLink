@@ -46,8 +46,22 @@ def test_queue_occupancy_tracks_material_instead_of_independent_noise():
             values = readings(snapshot, eq.equipment_id)
             if 'cv_queue_len' not in values:
                 continue
-            count = sum(c['equipment_id'] == eq.equipment_id for c in snapshot.coils)
+            # 끝까지 와서 넘어가지 못한 코일만 대기다. 이송 중 코일은 세지 않는다.
+            count = sum(c['equipment_id'] == eq.equipment_id and c['position'] >= 1 for c in snapshot.coils)
             assert values['cv_queue_len'].value == min(100, round(100 * count / eq.coil_capacity, 3))
+
+
+def test_normal_transport_does_not_raise_queue_above_band():
+    # 용량 1인 CV-01에 코일이 지나가기만 해도 100%가 되어 PDA에 'CV-01 고장 상황'이 뜨던 회귀.
+    config = from_catalog(CATALOG)
+    engine = MesEngine(Run.create(seed=3, config_id=config.config_id), config)
+    engine.start()
+    for _ in range(120):
+        snapshot = engine.tick()
+        for eq in config.equipment:
+            spec = next((s for s in eq.signals if s.signal == 'cv_queue_len'), None)
+            if spec is not None:
+                assert readings(snapshot, eq.equipment_id)['cv_queue_len'].value <= spec.normal_max
 
 
 @pytest.mark.parametrize('eq_id,signal', [

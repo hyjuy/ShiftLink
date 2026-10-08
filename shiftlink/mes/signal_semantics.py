@@ -48,7 +48,7 @@ DEFINITIONS = {
     'rt_vib_rms': ('롤러 베어링 하우징', 'mm_s; 진동 속도 RMS 시연 채널'),
     'cv_speed': ('컨베이어 벨트 접선 속도', 'm_min; 정지 시 0'),
     'cv_belt_tension': ('벨트 장력 조절기 유압회로', 'kPa; 장력 대용 압력 계측, 힘으로 환산하지 않음'),
-    'cv_queue_len': ('컨베이어 코일 수용 슬롯', 'pct; 현재 코일수/coil_capacity×100, 최대 100'),
+    'cv_queue_len': ('컨베이어 코일 수용 슬롯', 'pct; 끝에 도착해 넘기지 못한 코일수/coil_capacity×100, 최대 100'),
     'cv_idler_speed_ratio': ('컨베이어 아이들러 회전 계측부', 'pct; 동일 프레임 벨트 속도에 맞춘 정상 회전=100, 정상 시연 비율 90'),
     'cv_motor_current': ('컨베이어 모터 공급선', 'A; 운전 중 전류, 정지 시 0'),
     'cv_vib_rms': ('컨베이어 구동 베어링 하우징', 'mm_s; 진동 속도 RMS 시연 채널'),

@@ -429,7 +429,8 @@ class MesEngine:
                 if value is not None:
                     return round(value + offset, 3)
             if signal_spec.signal == 'cv_queue_len':
-                count = sum(coil['equipment_id'] == equipment.equipment_id for coil in self._coils)
+                # 이송 중 코일은 대기가 아니다 — 끝까지 와서 넘어가지 못한 코일만 센다.
+                count = sum(coil['equipment_id'] == equipment.equipment_id and coil['position'] >= 1 for coil in self._coils)
                 return round(min(100, 100 * count / equipment.coil_capacity), 3)
             if signal_spec.semantics.get('acquisition') == 'event':
                 return 0.0  # No lift command/completion pair exists in this transport model.

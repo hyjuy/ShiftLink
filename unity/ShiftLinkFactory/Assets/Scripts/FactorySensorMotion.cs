@@ -156,7 +156,7 @@ public class FactorySensorMotion : MonoBehaviour
         foreach(var c in channels) {
             c.reading=(snapshot?.measurements??new MeasurementReading[0]).FirstOrDefault(m=>m.equipment_id==c.equipment.equipment_id && m.signal==c.spec.signal);
             var eq=(snapshot?.equipment??new EquipmentReading[0]).FirstOrDefault(e=>e.equipment_id==c.equipment.equipment_id);
-            bool running=snapshot!=null && snapshot.line_mode=="running" && eq!=null && eq.operating_state=="running";
+            bool running=FactoryRules.AllowsEquipmentMotion(snapshot) && eq!=null && eq.operating_state=="running";
             c.state=snapshot==null || eq==null ? "unavailable" : State(c.reading,c.spec,running,snapshot.scenario_id);
             c.indicator.GetComponent<Renderer>().sharedMaterial=c.state=="normal" ? green : c.state=="low" || c.state=="high" ? amber : grey;
             c.indicator.localScale=Vector3.one*.06f;
@@ -166,7 +166,7 @@ public class FactorySensorMotion : MonoBehaviour
             if(snapshot==null || c==null || c.state=="unavailable") { Reset(p); continue; }
             // With no position telemetry, an unloaded clamp/lift returns to the demo cycle's rest pose.
             var owner=(snapshot.equipment??new EquipmentReading[0]).FirstOrDefault(e=>e.equipment_id==p.ownerId);
-            if((p.kind=="clamp" || p.kind=="lift") && snapshot.line_mode=="running" && owner!=null && owner.operating_state=="running" && owner.fault_level!="critical" && !(snapshot.coils??new CoilReading[0]).Any(coil=>coil.equipment_id==p.ownerId)) { Reset(p); continue; }
+            if((p.kind=="clamp" || p.kind=="lift") && FactoryRules.AllowsEquipmentMotion(snapshot) && owner!=null && owner.operating_state=="running" && owner.fault_level!="critical" && !(snapshot.coils??new CoilReading[0]).Any(coil=>coil.equipment_id==p.ownerId)) { Reset(p); continue; }
             float value=c.reading.value;
             if(p.kind=="gauge") p.transform.localRotation=p.rotation*Quaternion.Euler(0,Mathf.Lerp(-110,110,Mathf.Clamp01(value/Mathf.Max(c.spec.normal_max*1.3f,.001f))),0);
             if(p.kind=="level") {
@@ -186,7 +186,7 @@ public class FactorySensorMotion : MonoBehaviour
     }
     public void Advance(MesSnapshot snapshot,float dt)
     {
-        if(snapshot==null || snapshot.line_mode!="running" || dt<=0 || float.IsNaN(dt) || float.IsInfinity(dt)) return;
+        if(!FactoryRules.AllowsEquipmentMotion(snapshot) || dt<=0 || float.IsNaN(dt) || float.IsInfinity(dt)) return;
         elapsed+=dt;
         foreach(var c in channels.Where(c=>c.state=="low" || c.state=="high"))
             c.indicator.localScale=Vector3.one*(.06f+.025f*(.5f+.5f*Mathf.Sin(elapsed*4)));

@@ -14,8 +14,10 @@
   }
   function metricWindow(snapshot, snapshots) {
     const metrics = operationMetrics(snapshots);
-    return metrics.samples ? `최근 모의 운전 ${metrics.windowMinutes}분 · 측정 ${metrics.samples}회` : `데이터 부족 (${snapshots.length}/${METRIC_MIN_SNAPSHOTS}회)${snapshot.line_mode === "paused" ? " · 운전 재개 후 집계" : " · 측정 기록이 쌓이면 집계"}`;
+    return metrics.samples ? `최근 모의 운전 ${metrics.windowMinutes}분 · 측정 ${metrics.samples}회` : `${pendingText(snapshot)} (${snapshots.length}/${METRIC_MIN_SNAPSHOTS}회)${{paused: " · 운전 재개 후 집계", stopped: " · 운전 시작 후 집계"}[snapshot.line_mode] || " · 측정 기록이 쌓이면 집계"}`;
   }
+  // 지표를 아직 계산할 수 없을 때의 짧은 말. 멈춰 있으면 기록이 늘지 않으므로 '부족'이 아니라 운전 상태를 말한다.
+  const pendingText = (snapshot) => ({paused: "일시정지", stopped: "운전 정지"})[snapshot?.line_mode] || "집계 중";
   const processRoles = {
     rt: ["롤러 이송대", "여러 롤러가 코일을 받쳐 다음 장비로 옮깁니다."],
     cv: ["컨베이어", "벨트 위의 코일을 출측으로 운반합니다."],
@@ -108,7 +110,7 @@
     history.events = history.events.slice(-100);
     return true;
   }
-  const connectionState = (lastReceived, now, mode) => now - lastReceived > 10000 ? "데이터 수신 지연" : mode === "paused" ? "연결됨 · 일시정지" : "연결됨";
+  const connectionState = (lastReceived, now, mode) => now - lastReceived > 10000 ? "데이터 수신 지연" : mode === "paused" ? "실시간 수신 중 · 운전 일시정지" : "실시간 수신 중";
   function recoveryView(snapshot, interactive) {
     const plan = snapshot.recovery;
     if (!plan) return '<p class="empty-state">시연 제어에서 시나리오를 선택하면 필요한 조치와 복귀 조건을 볼 수 있습니다.</p>';
@@ -140,7 +142,7 @@
   let history = createHistory(), requestEpoch = 0, loading = false, controlPending = false, applyPending = false;
   let liveConfig = createConfigCache(), replayConfig = createConfigCache();
   let replay = { snapshots: [], events: [], index: 0, playing: false, configId: null, configPreserved: true };
-  function setConnection(message, kind = "") { setText("#connection-status", message); $("#connection-status").className = `status-label ${kind}`; setText("#diagram-connection",message); $("#diagram-connection").className = kind; }
+  function setConnection(message, kind = "") { setText("#connection-status", message); $("#connection-status").className = `conn-status ${kind || (mode === "live" ? "" : "pending")}`; setText("#diagram-connection",message); $("#diagram-connection").className = kind; }
   async function request(url, options = {}) {
     const response = await fetch(url, { ...options, signal: AbortSignal.timeout(7000) });
     if (!response.ok) { const error = await response.json().catch(() => ({})); throw new Error(error.error || `요청 실패 (${response.status})`); }
@@ -212,12 +214,12 @@
     const model=operator.buildOperatorModel(snapshot,config,selectedId,selectedPartId);
     const relation=model.links.find(l=>operator.relationKey(l)===selectedRelation);
     $("#selected-connection").classList.toggle("has-relation", Boolean(relation));
-    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "영향으로 대기 중인 설비" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
+    setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "후속 대기 설비" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
     setText("#process-story",processMessage(snapshot,config));
-    setView("#line-map",operator.flowView(model,$("#experience-mode").value,$("#relation-filter").value,selectedRelation));
-    setView("#relation-legend",operator.legendView($("#experience-mode").value));
+    setView("#line-map",operator.flowView(model,"learn",$("#relation-filter").value,selectedRelation));
+    setView("#relation-legend",operator.legendView("learn"));
     setView("#diagram-legend-content",operator.legendView("expert"));
-    const playing=$("#animate-machines").checked && (mode==="live" ? !stale : replay.playing);
+    const playing=mode==="live" ? !stale : replay.playing;
     $("#line-map").querySelectorAll(".flow-node").forEach(n=>n.classList.toggle("is-moving",machineMoving(snapshot,model.lookup(n.dataset.equipment),playing)));
     $("#line-map").querySelectorAll(".flow-coil").forEach(node=>{
       const coil=(snapshot.coils || []).find(c=>c.coil_id===node.dataset.coil);
@@ -233,7 +235,7 @@
     setView("#selection-evidence",model.selected ? operator.evidenceView(model,selectedRelation) : "");
     setView("#utility-links",model.links.filter(l=>l.relation_type!=="material_flow" && [l.from_id,l.to_id].includes(selectedId)).map(l=>`<p><button type="button" data-equipment="${escape(l.from_id)}">${escape(l.from.code || l.from_id)}</button> ${l.directionSymbol} <button type="button" data-equipment="${escape(l.to_id)}">${escape(l.to.code || l.to_id)}</button> · ${escape(l.label)} <button type="button" data-equipment="${escape(selectedId)}" data-relation="${escape(operator.relationKey(l))}" aria-label="${escape(l.from.code || l.from_id)} ${l.directionSymbol} ${escape(l.to.code || l.to_id)} · ${escape(l.label)} 연결 선택">연결 선택</button></p>`).join("") || "설비를 선택하면 직접 관계를 표시합니다.");
     const signature=JSON.stringify([snapshot.run_id,model.faults.map(n=>n.equipment_id),model.held.map(c=>c.coil_id),snapshot.recovery?.stage]);
-    if (signature!==incidentSignature) { incidentSignature=signature; setText("#operator-announcement",`상태 변경. 자체 이상·주의 ${model.faults.length}대, 보류 코일 ${model.held.length}개. 우선 확인 항목에서 상세를 선택하세요.`); }
+    if (signature!==incidentSignature) { incidentSignature=signature; setText("#operator-announcement",`상태 변경. 자체 이상·주의 ${model.faults.length}대, 보류 코일 ${model.held.length}개. 우선 확인 항목에서 설비 상세 확인 필요.`); }
   }
   function renderDetail(snapshot, config) {
     const equipment = snapshot.equipment?.find((item) => item.equipment_id === selectedId);
@@ -248,7 +250,7 @@
     const configInfo = config ? `<p class="config-ref">구성 <small>${config.version_label || config.config_id?.slice(0, 8)}</small></p>` : "";
     const assetInfo = configEq?.asset_id ? `<p>자산 ID: ${escape(configEq.asset_id)}</p>` : "";
     const profileInfo = configEq?.profile_id ? `<p>프로필: ${escape(configEq.profile_id)}</p>` : "";
-    setView("#equipment-detail", `<p class="eyebrow">SELECTED EQUIPMENT</p><h2>${escape(configEq?.code || selectedId)} · ${escape(roleFor(configEq)[0])}</h2><p class="selected-state">${escape(statusText(equipment))}</p><details><summary>설비 식별 정보</summary><p>${escape(name(selectedId, config))} · ${escape(selectedId)}</p>${assetInfo}${profileInfo}${configInfo}</details>`);
+    setView("#equipment-detail", `<h2>${escape(configEq?.code || selectedId)} · ${escape(roleFor(configEq)[0])}</h2><p class="selected-state">${escape(statusText(equipment))}</p><details><summary>설비 식별 정보</summary><p>${escape(name(selectedId, config))} · ${escape(selectedId)}</p>${assetInfo}${profileInfo}${configInfo}</details>`);
     const select = $("#signal-select"), signature = (configEq?.signals || []).map((s) => s.signal).join("|");
     if (select.dataset.signals !== signature) {
       select.innerHTML = (configEq?.signals || []).map((s) => `<option value="${escape(s.signal)}">${escape(s.name || s.signal)}${operator.unitText(s.unit) ? ` (${escape(operator.unitText(s.unit))})` : ""}</option>`).join("");
@@ -277,9 +279,9 @@
     setText("#trend-description", description);
   }
   // 현황판: 코일 이송 라인 설비마다 상태 막대 · 가동률 게이지 · 처리량·사이클·대기 · 큰 상태 글씨
-  function gauge(pct) {
+  function gauge(pct, empty) {
     const r = 34, c = 2 * Math.PI * r, on = pct == null ? 0 : Math.max(0, Math.min(100, pct)) / 100 * c;
-    return `<svg class="board-gauge" viewBox="0 0 84 84" aria-hidden="true"><circle class="gauge-track" cx="42" cy="42" r="${r}"/><circle class="gauge-value" cx="42" cy="42" r="${r}" stroke-dasharray="${on} ${c}" transform="rotate(-90 42 42)"/><text x="42" y="38" class="gauge-label">가동률</text><text x="42" y="56" class="gauge-number">${pct == null ? "자료 부족" : `${pct}%`}</text></svg>`;
+    return `<svg class="board-gauge" viewBox="0 0 84 84" aria-hidden="true"><circle class="gauge-track" cx="42" cy="42" r="${r}"/><circle class="gauge-value" cx="42" cy="42" r="${r}" stroke-dasharray="${on} ${c}" transform="rotate(-90 42 42)"/><text x="42" y="38" class="gauge-label">가동률</text><text x="42" y="56" class="gauge-number">${pct == null ? escape(empty) : `${pct}%`}</text></svg>`;
   }
   function renderLineBoard(snapshot, config, snapshots) {
     const rows = operationRows(snapshot, config, snapshots).filter(r => r.onRoute);
@@ -289,7 +291,7 @@
       const eq = config?.equipment?.find(e => e.equipment_id === r.equipment_id);
       const kind = r.faultLevel !== "normal" ? "fault" : r.status === "running" ? "run" : r.status === "waiting" ? "wait" : "stop";
       const state = { fault: label(r.faultLevel) === "고장" ? "정지 · 고장" : `이상 · ${label(r.faultLevel)}`, run: "가동중", wait: "대기", stop: label(r.status) }[kind];
-      return `<button type="button" class="board-card ${kind}" data-equipment="${escape(r.equipment_id)}"><span class="board-head"><b>${escape(r.name)}</b><small>${escape(roleFor(eq)[0])}</small></span><i class="board-bar" aria-hidden="true"></i><span class="board-body">${gauge(r.utilization)}<dl><dt>처리량</dt><dd>${r.throughput ?? "—"}<small> 코일</small></dd><dt>평균 이송 시간</dt><dd>${r.cycleTime ? escape(r.cycleTime) : "—"}</dd><dt>설비 내 코일</dt><dd>${r.queue}</dd></dl></span><span class="board-state">${escape(state)} · 상세 보기 →</span></button>`;
+      return `<button type="button" class="board-card ${kind}" data-equipment="${escape(r.equipment_id)}"><span class="board-head"><b>${escape(r.name)}</b><small>${escape(roleFor(eq)[0])}</small></span><i class="board-bar" aria-hidden="true"></i><span class="board-body">${gauge(r.utilization, pendingText(snapshot))}<dl><dt>처리량</dt><dd>${r.throughput ?? "—"}<small> 코일</small></dd><dt>평균 이송 시간</dt><dd>${r.cycleTime ? escape(r.cycleTime) : "—"}</dd><dt>설비 내 코일</dt><dd>${r.queue}</dd></dl></span><span class="board-state">${escape(state)} · 상세 보기 →</span></button>`;
     }).join(""));
   }
   // 상태 색만 사용해 주의·이상과 설비 종류 색을 혼동하지 않게 한다.
@@ -297,14 +299,14 @@
     const rows = operationRows(snapshot, config, snapshots);
     setView("#util-bars", rows.map(r => {
       const pct = r.utilization, color = r.faultLevel === "warning" ? "#efc78b" : r.faultLevel !== "normal" ? "#ff8f86" : "#aebcc7";
-      return `<button type="button" data-equipment="${escape(r.equipment_id)}" class="util-row ${r.faultLevel !== "normal" ? "fault" : ""}" aria-label="${escape(r.name)} · ${escape(label(r.status))} · 가동률 ${pct == null ? "데이터 부족" : `${pct}%`} · 상세 보기"><span class="util-name"><i style="background:${color}"></i>${escape(r.name)}</span><span class="util-track"><span class="util-fill" style="width:${pct ?? 0}%;background:${color}"></span></span><b class="util-pct">${pct == null ? "—" : `${pct}%`}</b></button>`;
+      return `<button type="button" data-equipment="${escape(r.equipment_id)}" class="util-row ${r.faultLevel !== "normal" ? "fault" : ""}" aria-label="${escape(r.name)} · ${escape(label(r.status))} · 가동률 ${pct == null ? pendingText(snapshot) : `${pct}%`} · 상세 보기"><span class="util-name"><i style="background:${color}"></i>${escape(r.name)}</span><span class="util-track"><span class="util-fill" style="width:${pct ?? 0}%;background:${color}"></span></span><b class="util-pct">${pct == null ? "—" : `${pct}%`}</b></button>`;
     }).join(""));
     setText("#util-window", metricWindow(snapshot, snapshots));
   }
   function renderOperations(snapshot, config, snapshots) {
     const rows = operationRows(snapshot, config, snapshots).filter(row=>$("#operations-filter").value !== "attention" || row.changed);
     setText("#operations-window", metricWindow(snapshot, snapshots));
-    const pending = '<span class="muted">데이터 부족</span>', support = '<span class="muted" title="코일이 지나가지 않는 설비라 집계하지 않습니다">해당 없음</span>';
+    const pending = `<span class="muted">${pendingText(snapshot)}</span>`, support = '<span class="muted" title="코일이 지나가지 않는 설비라 집계하지 않습니다">해당 없음</span>';
     setView("#operations-body", rows.map(row => `<tr class="${row.changed ? stateClass({operating_state:row.status, fault_level:row.faultLevel !== "normal" ? row.faultLevel : row.alerts ? "warning" : "normal"}) : ""}"><th scope="row"><button type="button" data-equipment="${escape(row.equipment_id)}">${escape(row.name)}</button></th><td>${escape(label(row.status))}${row.faultLevel !== "normal" ? ` · ${escape(label(row.faultLevel))}` : ""}</td><td>${!row.onRoute ? support : row.throughput ?? pending}</td><td>${row.utilization == null ? pending : `${row.utilization}%`}</td><td>${row.queue}</td><td>${!row.onRoute ? support : row.cycleTime ? escape(row.cycleTime) : pending}</td><td>${row.alerts ? `<button type="button" data-equipment="${escape(row.equipment_id)}">⚠ ${escape(row.alarmLabel)}</button>` : "없음"}</td></tr>`).join("") || '<tr><td colspan="7">표시할 설비 없음</td></tr>');
   }
   // 시나리오 100여 개를 원인 설비별로 나눠 두 단계(설비 → 시나리오)로 고른다. 설비가 정해지지 않은 것은 "주요 고장".
@@ -382,6 +384,12 @@
       if (epoch !== requestEpoch || mode !== "live") return;
       const previous = history.snapshots.at(-1);
       if (!previous || previous.run_id !== snapshot.run_id || previous.sequence !== snapshot.sequence || snapshot.line_mode === "paused") lastAdvance = Date.now();
+      // 화면을 새로 열었거나 실행이 바뀌면 서버에 저장된 최근 기록으로 지표 창을 먼저 채운다(10회 모일 때까지 '집계 중' 방지)
+      if (history.runId !== snapshot.run_id && snapshot.sequence > 0) {
+        const saved = await request(`/api/runs/${encodeURIComponent(snapshot.run_id)}/replay?sequence=${snapshot.sequence - 180}`).catch(() => null);
+        if (epoch !== requestEpoch || mode !== "live") return;
+        for (const s of saved?.snapshots || []) if (s.sequence < snapshot.sequence) acceptSnapshot(history, s);
+      }
       acceptSnapshot(history, snapshot);
       const payload = await request(`/api/events?after_sequence=${Math.max(-1, history.cursor - 1)}`);
       if (epoch !== requestEpoch || mode !== "live") return;
@@ -554,7 +562,6 @@
   };
   $("#operations-filter").onchange = () => renderSnapshot(lastSnapshot, currentConfig());
   $("#signal-select").onchange = () => renderTrend(mode === "live" ? liveConfig.config : replayConfig.config);
-  $("#animate-machines").onchange = () => renderSnapshot(lastSnapshot, mode === "live" ? liveConfig.config : replayConfig.config);
   $("#config-validate").onclick = async () => {
     const fileInput = $("#config-file");
     if (!fileInput.files.length) { setText("#config-message", "파일을 선택하세요."); return; }
@@ -601,21 +608,10 @@
   $("#workspace-flow").addEventListener("keydown",event=>{ if(event.key==="Escape") { event.preventDefault(); if ($("#diagram-legend").open) $("#diagram-legend").open=false; else clearSelection(); } });
   $("#clear-selection").onclick=clearSelection;
   $("#workspace-tabs").addEventListener("keydown", workspaceKeydown);
-  $("#experience-mode").onchange=()=>{ document.body.dataset.experience=$("#experience-mode").value; $(".learning-guide").open=$("#experience-mode").value==="learn"; renderSnapshot(lastSnapshot,currentConfig()); };
   $("#relation-filter").onchange=()=>renderSnapshot(lastSnapshot,currentConfig());
-  $("#map-scale").onchange=event=>{
-    const expanded=event.target.value==="detail";
-    $(".map-scroll").classList.toggle("map-expanded",expanded);
-    $("#diagram-zoom").textContent=expanded?"전체 맞춤":"확대";
-    $("#diagram-zoom").setAttribute("aria-pressed",String(expanded));
-  };
   $("#diagram-open").onclick=()=>setDiagramMode(true);
   $("#diagram-back").onclick=()=>setDiagramMode(false);
   $("#diagram-clear").onclick=clearSelection;
-  $("#diagram-zoom").onclick=()=>{
-    $("#map-scale").value=$("#map-scale").value==="detail"?"fit":"detail";
-    $("#map-scale").onchange({target:$("#map-scale")});
-  };
   $("#equipment-search").oninput=event=>{
     const query=event.target.value.trim().toLowerCase();
     const matches=(currentConfig()?.equipment || []).filter(e=>[e.code,e.name,e.equipment_id,roleFor(e)[0]].join(" ").toLowerCase().includes(query));

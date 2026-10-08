@@ -54,7 +54,9 @@ class MesWebTests(unittest.TestCase):
         result = subprocess.run(["node", "-e", r'''
 const assert = require('node:assert/strict');
 const {createHistory, acceptSnapshot, acceptEvents, connectionState, stateClass, equipmentKind, machineMoving, processMessage, operationRows, operationMetrics, metricWindow, eventText} = require('./shiftlink/mes/web/app.js');
-assert.match(metricWindow({line_mode:'paused'}, []), /데이터 부족.*운전 재개 후 집계/);
+assert.match(metricWindow({line_mode:'paused'}, []), /일시정지.*운전 재개 후 집계/);
+assert.match(metricWindow({line_mode:'stopped'}, []), /운전 정지.*운전 시작 후 집계/);
+assert.match(metricWindow({line_mode:'running'}, []), /집계 중 \(0\/10회\)/);
 assert.equal(eventText({event_type:'alarm_raised',equipment_id:'x'}, {equipment:[{equipment_id:'x',code:'GR-01'}]}), '알람 발생 · GR-01');
 assert.equal(equipmentKind({profile_id:'hpu', code:'CUSTOM-01'}), 'hpu');
 assert.equal(equipmentKind({profile_id:'custom', code:'HPU-01'}), 'generic', 'unknown profile must not invent equipment internals');
@@ -82,9 +84,9 @@ assert.equal(acceptEvents(h, {run_id:'old', events}), false, 'in-flight prior-ru
 assert.equal(h.events.length, 0);
 acceptEvents(h, {run_id:'new', events:[{run_id:'new',sequence:1,event_type:'started'}]});
 assert.equal(h.cursor, 1);
-assert.equal(connectionState(1000, 2000, 'running'), '연결됨');
+assert.equal(connectionState(1000, 2000, 'running'), '실시간 수신 중');
 assert.equal(connectionState(1000, 12000, 'running'), '데이터 수신 지연');
-assert.equal(connectionState(1000, 2000, 'paused'), '연결됨 · 일시정지');
+assert.equal(connectionState(1000, 2000, 'paused'), '실시간 수신 중 · 운전 일시정지');
 assert.equal(stateClass({fault_level:'warning',operating_state:'running'}), 'warning');
 assert.equal(stateClass({fault_level:'normal',operating_state:'waiting'}), 'waiting');
 const rows = operationRows({equipment:[{equipment_id:'EQ-1', operating_state:'waiting', fault_level:'normal'}], coils:[{equipment_id:'EQ-1'}], active_alarms:[{equipment_id:'EQ-1', severity:'warning', code:'AL-X', label:'경보 이름'}], measurements:[{equipment_id:'EQ-1', signal:'cycle_time', value:12, unit:'s'}]}, {equipment:[{equipment_id:'EQ-1', code:'RT-01', name:'Roller', dwell_seconds:10}], route:['EQ-1']});
@@ -135,7 +137,7 @@ vm.runInNewContext(fs.readFileSync('./shiftlink/mes/web/app.js', 'utf8'), {
     def test_dashboard_style_is_responsive_and_has_non_color_status_cues(self) -> None:
         css = (WEB / "style.css").read_text(encoding="utf-8")
         self.assertIn("@media", css)
-        self.assertIn(".status-label", css)
+        self.assertIn(".conn-status", css)
         self.assertIn(".equipment", css)
 
 

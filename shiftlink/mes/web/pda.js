@@ -1379,6 +1379,15 @@ function mesHandoverContext(snap, events, eq) {
     ...recent.map((e) => e.occurred_at + ' · ' + e.observation)].join('\n');
 }
 
+/* 다시 불러와도 이미 입력에 있는 줄(측정값·이벤트)은 붙이지 않는다. 새 줄이 없으면 null. */
+function appendMesContext(current, text) {
+  const have = new Set(current.split('\n').map((line) => line.trim()));
+  const [head, ...lines] = text.split('\n');
+  const fresh = lines.filter((line) => !have.has(line.trim()));
+  if (!fresh.length) return null;
+  return [current.trim(), [head, ...fresh].join('\n')].filter(Boolean).join('\n\n');
+}
+
 async function importHandoverMes() {
   const eq = S.eq;
   if (!eq) { $('hoMesStatus').textContent = '설비를 먼저 선택해 주세요.'; return; }
@@ -1389,7 +1398,8 @@ async function importHandoverMes() {
     if (S.eq !== eq || S.screen !== 'hoNew') return;
     const text = mesHandoverContext(snap, log.events, eq);
     const input = $('hoCtx');
-    const combined = [input.value.trim(), text].filter(Boolean).join('\n\n');
+    const combined = appendMesContext(input.value, text);
+    if (combined === null) { $('hoMesStatus').textContent = '새로 추가할 MES 기록이 없습니다. 이미 넣은 측정값·이벤트는 다시 붙이지 않습니다.'; return; }
     if (combined.length > input.maxLength) throw new Error('입력 가능한 글자 수를 초과합니다. 기존 내용을 줄인 뒤 다시 불러와 주세요.');
     input.value = combined;
     $('hoMesStatus').textContent = 'MES 기록을 추가했습니다. 필요한 내용을 수정해 주세요.';
@@ -1567,7 +1577,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo }; }
+if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────

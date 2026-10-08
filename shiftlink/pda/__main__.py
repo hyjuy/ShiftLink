@@ -167,10 +167,14 @@ def open_window(url: str, scale: float) -> int:
     profile = Path.home() / "shiftlink" / "data" / "chromium"
     # 리눅스 Chromium은 --lang 대신 LANGUAGE로 UI 언어를 정한다. 파이가 영어(en_GB)면 한국어 화면에 번역 팝업이 뜬다.
     env = {**os.environ, "LANGUAGE": "ko"}
-    if shutil.which("ibus-daemon"):
-        env.update(GTK_IM_MODULE="ibus", QT_IM_MODULE="ibus", XMODIFIERS="@im=ibus")
+    ime = []
+    if shutil.which("fcitx5"):
+        # 키오스크는 en_GB라 물리 키보드로 한글을 못 친다. labwc(Wayland)에는 fcitx5가 붙고, Chromium은 아래 두 옵션이
+        # 있어야 입력기와 연결된다(10/8 파이 확인). 이미 떠 있으면 -d가 그냥 끝난다. 한/영 키는 install_pda.sh 설정.
+        subprocess.run(["fcitx5", "-d"], env=env, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        ime = ["--enable-wayland-ime", "--wayland-text-input-version=3"]
     _window_proc = subprocess.Popen([
-        "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", f"--force-device-scale-factor={scale}",
+        "chromium", f"--user-data-dir={profile}", "--ozone-platform=wayland", *ime, f"--force-device-scale-factor={scale}",
         "--lang=ko", "--disable-features=Translate",         "--kiosk", "--start-fullscreen",
         # 카메라 권한 창을 띄우지 않는다. 이 창은 127.0.0.1 페이지만 연다.
         "--use-fake-ui-for-media-stream",

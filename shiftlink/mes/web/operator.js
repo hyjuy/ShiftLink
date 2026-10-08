@@ -159,12 +159,12 @@
       const material=l.relation_type==="material_flow", cls=material?"material":"related";
       const emphasized=filter==="affected"?l.affected:filter==="material"?material:filter==="related"?[l.from_id,l.to_id].includes(activeId):l.relation_type===filter;
       const d=routePoints(a,b,l.relation_type,onRoof(l)?roofLane++:a.y===b.y && Math.abs(a.x-b.x)===300 && !["interlock","co_occurrence"].includes(l.relation_type)?0:lane++,port(a,l),port(b,l)).map(([x,y],index)=>`${index?"L":"M"}${x} ${y}`).join(" ");
-      const description=`${title(a)} ${l.directionSymbol} ${title(b)} · ${l.label} · ${l.affected?"영향으로 대기 중인 설비":"구성상 관계 · 원인 확정 아님"}`;
+      const description=`${title(a)} ${l.directionSymbol} ${title(b)} · ${l.label} · ${l.affected?"후속 대기 설비":"구성상 관계 · 원인 확정 아님"}`;
       return `<g class="flow-edge ${cls} ${l.affected?"affected":""} ${emphasized?"emphasized":dimOthers?"dimmed":""} ${selectedRelation===relationKey(l)?"selected":""}" data-type="${esc(l.relation_type)}" role="button" tabindex="0" data-equipment="${esc(activeId || l.from_id)}" data-relation="${esc(relationKey(l))}" aria-pressed="${selectedRelation===relationKey(l)}" aria-label="${esc(description)}"><title>${esc(description)}</title><path class="edge-hit" d="${d}"/><path class="edge-halo" d="${d}"/><path class="edge-line" d="${d}" ${l.relation_type==="co_occurrence"?'':`marker-end="url(#arrow-${cls})"`}/></g>`;
     }).join("");
     const nodes=map.nodes.map(n=>{
       const fault=n.fault_level!=="normal", held=n.coils.some(c=>c.quality_status==="hold"), waiting=n.operating_state==="waiting";
-      const waitLabel=model.links.some(l=>l.affected && l.to_id===n.equipment_id)?"영향 대기":({recovery:"복구 관찰",material_shortage:"소재 대기",planned_stop:"계획 대기"}[n.wait_reason] || "일반 대기");
+      const waitLabel=model.links.some(l=>l.affected && l.to_id===n.equipment_id)?"후속 대기":({recovery:"복구 관찰",material_shortage:"소재 대기",planned_stop:"계획 대기"}[n.wait_reason] || "일반 대기");
       const state=fault?(n.fault_level==="warning"?"주의 관측":"자체 이상"):held?"제품 보류":waiting?waitLabel:states[n.operating_state] || n.operating_state;
       const cls=fault?"fault":held?"held":waiting?"waiting":"normal";
       const group=n.group==="route"?`${model.config.route.indexOf(n.equipment_id)+1} · 소재 본선`:n.group==="branch"?"물류 분기 · 시연 제외":"구동·공급";
@@ -178,17 +178,17 @@
   }
 
   function legendView(experience="learn") {
-    return `<div class="relation-legend" aria-label="관계선 범례">${["material_flow","drive","power_supply","hydraulic_supply","pneumatic_supply","interlock","co_occurrence"].map(t=>`<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge" data-type="${t}"><path class="edge-line" d="M2 9H50"/>${t==="co_occurrence"?'': '<path class="legend-arrow" d="M49 3L61 9L49 15Z"/>'}</g></svg>${esc(types[t])}</span>`).join("")}<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge affected" data-type="hydraulic_supply"><path class="edge-line" d="M2 9H60"/></g></svg>관측된 영향: 유형 유지 + 굵은 선</span></div>${experience==="learn"?'<details class="learn-note"><summary>관계선 읽는 법</summary><p>소재 화살표는 분기를 포함해 항상 표시합니다. 설비를 선택하면 직접 관계만 추가됩니다. 동시 발생은 방향·인과를 뜻하지 않는 무방향 선입니다. 교차점의 틈은 연결 접점이 아닙니다. 같은 설비를 다시 누르거나 Escape로 해제합니다.</p></details>':""}`;
+    return `<div class="relation-legend" aria-label="관계선 범례">${["material_flow","drive","power_supply","hydraulic_supply","pneumatic_supply","interlock","co_occurrence"].map(t=>`<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge" data-type="${t}"><path class="edge-line" d="M2 9H50"/>${t==="co_occurrence"?'': '<path class="legend-arrow" d="M49 3L61 9L49 15Z"/>'}</g></svg>${esc(types[t])}</span>`).join("")}<span><svg viewBox="0 0 64 18" aria-hidden="true"><g class="flow-edge affected" data-type="hydraulic_supply"><path class="edge-line" d="M2 9H60"/></g></svg>후속 대기 연결: 같은 선 종류 + 굵은 선</span></div>${experience==="learn"?'<details class="learn-note"><summary>관계선 읽는 법</summary><p>소재 화살표는 분기를 포함해 항상 표시합니다. 설비를 선택하면 직접 관계만 추가됩니다. 동시 발생은 방향·인과를 뜻하지 않는 무방향 선입니다. 교차점의 틈은 연결 접점이 아닙니다. 같은 설비를 다시 누르거나 Escape로 해제합니다.</p></details>':""}`;
   }
 
   function incidentView(model) {
     const items=model.faults.map(n=>{
       const part=n.equipment_id===model.cause?.equipment_id && model.spec?.component_id;
       const affected=model.links.filter(l=>l.affected && l.from_id===n.equipment_id).map(l=>title(l.to));
-      return `<button type="button" data-equipment="${esc(n.equipment_id)}" class="incident-item fault"><span class="incident-kind">${n.fault_level==="warning"?"주의":"자체 이상"}</span><b>${esc(title(n))} · ${esc(n.role[0])}</b><span>${part?`${esc(partNames[part] || part)} · 시연 가정`:"문제 부품 미확정 · 근거 확인"}</span><small>영향 대기 ${affected.length}대${affected.length?` · ${esc(affected.join(", "))}`:""}</small></button>`;
+      return `<button type="button" data-equipment="${esc(n.equipment_id)}" class="incident-item fault"><span class="incident-kind">${n.fault_level==="warning"?"주의":"자체 이상"}</span><b>${esc(title(n))} · ${esc(n.role[0])}</b><span>${part?`의심 부품 ${esc(partNames[part] || part)} · 시연 가정`:"원인 부품 미확정 · 상세에서 근거 확인"}</span><small>후속 대기 설비 ${affected.length}대${affected.length?` · ${esc(affected.join(", "))}`:""}</small></button>`;
     });
-    if (model.held.length) items.push(`<button type="button" class="incident-item held" data-equipment="${esc(model.held[0].equipment_id)}"><span class="incident-kind">제품 검사·보류</span><b>영향 코일 ${model.held.length}개</b><span>설비 고장과 별개 · 해제 전 이송 차단</span><small>${model.held.map(c=>esc(c.coil_id)).join(" · ")}</small></button>`);
-    return items.join("") || `<p class="no-incident">${model.snapshot.recovery?.stage==="stabilizing"?"복구 관찰 중 · 아직 정상 복귀 전입니다.":"현재 자체 이상·제품 보류 없음"} <span>서버 관측 기준 · 운전 상태와 측정값을 함께 확인하세요.</span></p>`;
+    if (model.held.length) items.push(`<button type="button" class="incident-item held" data-equipment="${esc(model.held[0].equipment_id)}"><span class="incident-kind">제품 검사·보류</span><b>영향 코일 ${model.held.length}개</b><span>설비 고장과 별개 · 검사·해제 전까지 이송 중지</span><small>${model.held.map(c=>esc(c.coil_id)).join(" · ")}</small></button>`);
+    return items.join("") || `<p class="no-incident">${model.snapshot.recovery?.stage==="stabilizing"?"복구 조치 후 관찰 중 · 정상 복귀 전":"확인할 이상·보류 항목 없음"} <span>MES 최신 상태 기준 · 이상 발생 시 여기에 표시</span></p>`;
   }
 
   function evidenceView(model, selectedRelation="") {
@@ -197,7 +197,7 @@
     const incoming=model.links.filter(l=>l.to_id===eq.equipment_id && l.affected);
     const related=model.links.filter(l=>l.from_id===eq.equipment_id || l.to_id===eq.equipment_id);
     const relation=model.links.find(l=>relationKey(l)===selectedRelation);
-    const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"영향으로 대기 중인 설비":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
+    const relationNote=relation?`<p class="selected-relation"><b>선택 연결: ${esc(title(relation.from))} ${relation.directionSymbol} ${esc(title(relation.to))}</b><br>${esc(relation.label)} · ${relation.affected?"후속 대기 설비":"구성상 연결 · 영향 또는 원인 확정 아님"}</p>`:"";
     const num=v=>String(Number(Number(v).toFixed(3)));
     // Distance past the violated bound, so the size of a deviation reads at a glance.
     const deviation=s=>{
@@ -237,7 +237,7 @@
     const restTable=folded?`<details class="signal-rest"><summary>나머지 ${rest.length}개 보기 · 범위 내·정지 중 0·기록 없음</summary><div class="evidence-scroll"><table class="evidence-table">${head}<tbody>${rest.map(row).join("")}</tbody></table></div></details>`:"";
     const diagnoses=(model.snapshot.symptom_diagnostics || []).filter(d=>d.equipment_id===eq.equipment_id).map(d=>
       `<section class="symptom-candidate"><h4>증상별 원인 후보 · ${esc(d.symptom)}</h4><p>${esc(d.status==="candidate"?"3회 연속 관측":d.status==="unverified"?"근거 미확인":"추가 관측 대기")} · 확정 진단 아님</p><ul>${(d.candidates || []).map(c=>`<li>${esc(c)}</li>`).join("")}</ul><p>추가 확인: ${(d.checks || []).map(esc).join(" · ")}</p><small>${esc(d.limitation)}</small></section>`).join("");
-    return `${relationNote}${diagnoses}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 대기합니다. 이 설비의 자체 고장을 뜻하지 않습니다.</p>`:""}${summary}<div class="evidence-scroll"><table class="evidence-table"><caption>선택 설비 전체 측정 정보</caption>${head}<tbody>${measurements || '<tr><td colspan="3">측정 항목 정의 없음</td></tr>'}</tbody></table></div>${restTable}<details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>영향 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
+    return `${relationNote}${diagnoses}<p class="location-path">라인 ${esc(model.snapshot.line_id)} / ${esc(eq.segment_id || "구간 미등록")} / <b>${esc(title(eq))}</b>${model.selectedPart?` / ${esc(model.selectedPart.name)}`:""}</p><p>${esc(eq.role[1])}</p>${incoming.length?`<p class="impact-explanation">${incoming.map(l=>`${esc(title(l.from))}의 ${esc(l.label)}`).join(", ")} 영향으로 후속 대기 중 · 이 설비의 자체 고장 아님</p>`:""}${summary}<div class="evidence-scroll"><table class="evidence-table"><caption>선택 설비 전체 측정 정보</caption>${head}<tbody>${measurements || '<tr><td colspan="3">측정 항목 정의 없음</td></tr>'}</tbody></table></div>${restTable}<details class="related-detail"><summary>연결 근거 ${related.length}개 · 구성상 관계는 원인 확정이 아닙니다</summary><ul>${related.map(l=>`<li>${l.affected?"<b>후속 대기</b> · ":""}<button type="button" data-equipment="${esc(l.from_id)}">${esc(title(l.from))}</button> ${l.directionSymbol} <button type="button" data-equipment="${esc(l.to_id)}">${esc(title(l.to))}</button> · ${esc(l.label)}</li>`).join("") || "<li>연결 정보 없음</li>"}</ul></details>`;
   }
 
   function partView(model) {

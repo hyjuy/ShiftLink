@@ -504,3 +504,20 @@ button.util-row { width: 100%; border: 0; padding: 8px 0; background: transparen
 .summary-grid article:not(.alarm-summary) strong { color: #e3e8ec; }
 @media (max-width: 900px) { .board-row { grid-template-columns: minmax(0, 1fr); } .board-row .incident-band { grid-row: 1; } .header-side { flex-wrap: wrap; } }
 .kiosk-bar { display: flex; justify-content: flex-end; gap: 8px; }.kiosk-bar[hidden] { display: none; }.kiosk-bar a { padding: 10px 16px; border: 1px solid #5b6168; border-radius: 6px; background: #25272b; color: #e8eaed; text-decoration: none; font-size: 14px; }
+/* 관계도 전체 화면: 시뮬레이션 제어를 관계도 위에 가로로 둔다. 관계도는 폭에 맞춰지면 위아래가 비므로 그 자리를 쓰고,
+   오른쪽 칸은 키오스크 버튼과 설비 카드만 남긴다. map-panel을 풀어(contents) 도구 막대 → 제어 → 관계도 순으로 세운다 */
+.diagram-only main { grid-template-rows: auto auto auto minmax(0, 1fr) auto; }
+.diagram-only #workspace-flow > .map-panel { display: contents; }
+.diagram-only #diagram-toolbar { grid-column: 1; grid-row: 1; }
+.diagram-only #simulation-controls { grid-column: 1; grid-row: 2; margin: 8px 12px 0; align-self: auto; }
+.diagram-only #control-message { grid-column: 1; grid-row: 3; margin: 6px 12px 0; }
+.diagram-only .map-scroll { grid-column: 1; grid-row: 4; }
+.diagram-only #selected-connection { grid-column: 1; grid-row: 5; }
+.diagram-only #kiosk-bar { grid-column: 2; grid-row: 1; margin: 8px 12px 0 0; }
+.diagram-only #line-board { grid-column: 2; grid-row: 2 / -1; margin-top: 8px; }
+.diagram-only #control-panel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0; }
+.diagram-only #control-panel > #run-toggle { min-height: 40px; font-size: 15px; }
+.diagram-only #control-panel .ctl-group { display: inline-flex; align-items: center; gap: 6px; }
+.diagram-only #control-panel .ctl-scenario label { grid-row: auto; align-self: center; padding-top: 0; }
+.diagram-only #control-panel .ctl-scenario #scenario-equipment { width: auto; }
+.diagram-only #control-panel .ctl-scenario #scenario { width: auto; max-width: 380px; }

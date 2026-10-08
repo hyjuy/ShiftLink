@@ -55,10 +55,10 @@
 
       <section class="panel map-panel" aria-labelledby="map-heading">
         <div id="diagram-toolbar" hidden>
-          <strong>모의 MES</strong><span id="diagram-state"></span><span id="diagram-connection" role="status"></span>
+          <strong>Line Overview · 모의 MES</strong><span id="diagram-state"></span><span id="diagram-connection" role="status"></span>
           <div class="diagram-actions"><button id="diagram-clear" type="button">선택 해제</button><details id="diagram-legend"><summary>범례</summary><div id="diagram-legend-content"></div><p>소재 흐름은 항상 표시 · 설비를 선택하면 직접 관계 추가<br>구성상 연결은 고장 원인 확정이 아닙니다.</p></details><button id="diagram-back" type="button">대시보드로 돌아가기</button></div>
         </div>
-        <div class="panel-heading"><div><div class="map-title"><h2 id="map-heading">설비 관계도</h2><button id="diagram-open" type="button">전체 화면 ↗</button></div></div><span class="direction-note">입측 → 출측</span></div>
+        <div class="panel-heading"><div><div class="map-title"><h2 id="map-heading">설비 관계도</h2><button id="diagram-open" type="button">Line Overview ↗</button></div></div><span class="direction-note">입측 → 출측</span></div>
         <div class="equipment-finder"><label for="equipment-search">설비 찾기</label><input id="equipment-search" type="search" placeholder="예: GR-01, 감속기" aria-controls="equipment-results" autocomplete="off"><div id="equipment-results"></div></div>
         <div class="operator-tools"><label for="relation-filter">연결선 강조</label><select id="relation-filter"><option value="related">선택 설비 연결</option><option value="affected">후속 대기 설비</option><option value="material">소재 흐름</option><option value="drive">구동</option><option value="power_supply">전력 공급</option><option value="hydraulic_supply">유압 공급</option><option value="pneumatic_supply">공압 공급</option><option value="interlock">인터록</option><option value="co_occurrence">동시 발생</option></select><button id="clear-selection" type="button">선택 해제</button><span class="hint">소재선은 항상 표시 · 설비 선택 시 직접 관계 추가</span></div>
 
@@ -88,7 +88,7 @@
     <p id="board-notice" class="board-notice">작업 전 장비의 안전장치를 점검하세요 · 이상을 발견하면 설비를 멈추고 담당자에게 알리세요</p>
     </section>
     <section id="workspace-detail" class="workspace-panel" role="tabpanel" aria-labelledby="tab-detail" tabindex="0" hidden>
-    <div class="workspace-heading"><h2>선택 설비 · 근거와 다음 조치</h2><button type="button" data-open-workspace="flow">← 설비 흐름으로</button></div>
+    <div class="workspace-heading"><h2>선택 설비 · 근거와 다음 조치</h2><button type="button" data-open-workspace="flow">← 통합 운영</button></div>
 <div class="detail-workspace">        <aside class="panel diagnostic-panel" aria-label="선택 설비의 근거와 확인 순서"><div id="equipment-detail" tabindex="-1"><h2>설비 상세</h2><p class="hint">맵에서 설비를 선택하세요.</p></div><div id="part-locator"></div><p id="part-evidence-note" class="hint" hidden>부품 선택은 모의 부품 상태를 표시합니다. 아래 측정 정보는 선택 설비 전체 기준입니다.</p><section class="component-inline" id="component-panel" aria-labelledby="component-heading"><h2 id="component-heading">부품 상태 <small id="component-equipment"></small></h2><div id="component-content"></div><details><summary>건전도 계산 가정</summary><p class="hint">실제 잔여수명 예측이 아닙니다. 운전 1초당 0.001%p 감소, 이상 부품은 25~35%, 정비 후 해당 부품만 95%로 설정됩니다.</p></details></section><div id="selection-evidence"></div>
           <section id="recovery-panel" aria-labelledby="recovery-heading"><div class="panel-heading"><div><h2 id="recovery-heading">다음 확인 · 정상 복귀 조건</h2></div></div><div id="recovery-content"></div><p class="hint">조치 완료는 시연 기록입니다 · 실제 점검 성공을 판정하지 않습니다.</p></section>
           <div class="handover-tools"><button type="button" id="download-context">설비 확인 보고서 다운로드</button><span class="hint">관측·가정·미확인·다음 조치를 구분한 인계용 초안</span></div><p id="context-message" role="status"></p>

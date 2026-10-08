@@ -112,6 +112,8 @@ function equipmentFromLink(search, equipment) {
   return equipment.find((eq) => eq.equipment_id === ids[0]) || null;
 }
 
+let afterBoot = () => show('login');   // 문서 블록이 로그인 기억(sessionStorage)으로 바꾼다
+
 async function boot() {
   $('bootErr').innerHTML = '';
   try {
@@ -125,7 +127,7 @@ async function boot() {
 
     renderManualList();
     S.linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
-    show('login');
+    afterBoot();
   } catch (err) {
     $('bootMsg').textContent = 'MES 연결을 기다리고 있습니다. 3초 후 다시 시도합니다.';
     const box = document.createElement('div');
@@ -1624,7 +1626,23 @@ function showToast(text) {
   toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
 }
 
+// 대시보드(Jetson 주소)에 갔다 돌아오면 pda.html을 새로 연다. 같은 탭 동안만 로그인을 기억한다 —
+// 종료·재시작으로 키오스크 창이 새로 뜨면 sessionStorage가 비어 다시 로그인한다. 얼굴 데이터는 두지 않는다.
+const OPERATOR_KEY = 'shiftlink.operator';
+function savedOperator() {
+  try {
+    const o = JSON.parse(sessionStorage.getItem(OPERATOR_KEY) || 'null');
+    return o && o.name && o.id ? o : null;
+  } catch (_) { return null; }
+}
+
+afterBoot = () => {
+  const saved = savedOperator();
+  if (saved) { S.operator = saved; enterWork(); } else show('login');
+};
+
 function enterWork() {
+  try { sessionStorage.setItem(OPERATOR_KEY, JSON.stringify(S.operator)); } catch (_) { /* 저장 못 하면 돌아올 때 다시 로그인 */ }
   if (S.operator && S.operator.name) showToast(S.operator.name + '님 로그인 되었습니다');
   if (S.linkedEquipment) {
     setContext(S.linkedEquipment, 'unity_link');
@@ -1747,7 +1765,7 @@ on('loginGo', submitLogin);
 on('faceBack', () => show('login'));
 on('faceRetry', () => { startFaceCamera(); });
 on('faceBypass', enterWork);
-on('pdaExit', () => { fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
+on('pdaExit', () => { try { sessionStorage.removeItem(OPERATOR_KEY); } catch (_) {} fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
 document.querySelectorAll('.home').forEach((b) => b.addEventListener('click', () => show('home')));
 on('toScan', startScan);
 on('scanClose', () => show('home'));

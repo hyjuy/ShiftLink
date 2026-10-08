@@ -15,6 +15,7 @@ public class FactoryWorker : MonoBehaviour
     Camera observation, employeeView;
     FactoryDemo demo;
     FactoryCapture capture;
+    FactoryCameraStream cameraStream;
     Transform body, leftLeg, rightLeg, pda, rightArm;
     float yaw, pitch, verticalSpeed, walkCycle;
     bool galleryOpen;
@@ -75,6 +76,8 @@ public class FactoryWorker : MonoBehaviour
         PdaCamera.nearClipPlane = .05f; PdaCamera.farClipPlane = 300; PdaCamera.fieldOfView = 60; PdaCamera.enabled = false;
         capture.excludedRoots = new[] { WorkerRoot };
         UpdateCameras();
+        cameraStream=GetComponent<FactoryCameraStream>()??gameObject.AddComponent<FactoryCameraStream>();
+        cameraStream.Initialize(this,capture);
     }
     public void EnterWorker()
     {
@@ -133,7 +136,7 @@ public class FactoryWorker : MonoBehaviour
         if (!PdaRaised && Input.GetKeyDown(KeyCode.F)) { if (IsWorkerMode) ExitWorker(); else EnterWorker(); }
         if (!IsWorkerMode) return;
         if (Input.GetKeyDown(KeyCode.P) || (PdaRaised && Input.GetKeyDown(KeyCode.Escape))) TogglePda();
-        if (PdaRaised) { if (!galleryOpen && !capture.HasPreview) capture.RenderLivePreview(); return; }
+        if (PdaRaised) { if (!galleryOpen && !capture.HasPreview && cameraStream?.Streaming!=true) capture.RenderLivePreview(); return; }
         if (Input.GetKeyDown(KeyCode.V)) { ThirdPerson = !ThirdPerson; UpdateCameras(); }
         Step(Time.deltaTime, new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")));
     }

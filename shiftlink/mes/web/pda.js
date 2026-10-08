@@ -158,7 +158,7 @@ function stopFaceCamera() {
 }
 
 function show(name) {
-  if (S.screen === 'scan' && name !== 'scan') S.scanRun += 1;  // 폴링 중단
+  if (S.screen === 'scan' && name !== 'scan') { S.scanRun += 1; stopUnityCamera(); }
   if (S.screen === 'face' && name !== 'face') stopFaceCamera();
   S.screen = name;
   document.querySelectorAll('.screen').forEach((el) => {
@@ -258,12 +258,70 @@ async function latestScan() {
   return (await getJson('/api/equipment/scan/recent?limit=1')).scans[0] || null;
 }
 
+let unityCameraAbort = null;
+function stopUnityCamera() {
+  if (unityCameraAbort) unityCameraAbort.abort();
+  unityCameraAbort = null;
+  if (typeof document !== 'undefined') {
+    const image = $('unityCamera');
+    if (image) { image.onload = null; image.onerror = null; image.hidden = true; image.removeAttribute('src'); }
+  }
+}
+
+async function streamUnityCamera(run) {
+  stopUnityCamera();
+  const ctrl = new AbortController(); unityCameraAbort = ctrl;
+  const image = $('unityCamera');
+  let failed = false, openedAt = 0;
+  const open = () => {
+    failed = false; openedAt = Date.now();
+    image.src = '/api/unity/stream?run=' + run + '&t=' + openedAt;
+  };
+  image.onload = () => {
+    if (S.scanRun !== run || ctrl.signal.aborted) return;
+    image.hidden = false;
+    setScanState('', 'Unity 가상 카메라 · 실시간 영상');
+  };
+  image.onerror = () => { failed = true; image.hidden = true; };
+  open();
+  while (S.scanRun === run && S.screen === 'scan') {
+    try {
+      const res = await fetch('/api/unity/config', {cache:'no-store', signal:AbortSignal.any([ctrl.signal, AbortSignal.timeout(2500)])});
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const camera = await res.json();
+      if (S.scanRun !== run || ctrl.signal.aborted) return;
+      if (camera.stream_live) {
+        image.hidden = false;
+        setScanState('', 'Unity 가상 카메라 · 실시간 영상');
+      }
+      if (failed || (!camera.stream_live && Date.now() - openedAt > 3500)) throw new Error('Camera disconnected');
+    } catch (err) {
+      if (ctrl.signal.aborted || S.scanRun !== run) return;
+      image.hidden = true; image.removeAttribute('src');
+      setScanState('failed', 'Unity 카메라 연결 대기 · 자동 재연결 중');
+      await sleep(1000);
+      if (S.scanRun !== run || ctrl.signal.aborted) return;
+      open();
+    }
+    await sleep(1000);
+  }
+}
+
 /* 라즈베리파이가 확정해 Jetson에 올린 인식 결과를 폴링한다. 시작 시점의 최신 scan_id 보다 새 것만 받는다
  * (파이·Jetson 시계를 비교하지 않으려고). 파이는 같은 객체를 한 번만 보내므로 이미 놓여 있던 상자는
  * 치웠다가 다시 놓아야 잡힌다. */
 async function startScan() {
   const run = ++S.scanRun;
   show('scan'); setScanState('', 'Jetson 연결 확인 중…');
+  try {
+    const res = await fetch('/api/unity/config', {cache:'no-store', signal:AbortSignal.timeout(2000)});
+    const camera = res.ok ? await res.json() : null;
+    if (S.scanRun !== run) return;
+    if (camera && camera.enabled) {
+      setScanState('', 'Unity 가상 카메라 연결 중…');
+      return streamUnityCamera(run);
+    }
+  } catch (_) { if (S.scanRun !== run) return; }
   let base;
   try { base = await latestScan(); } catch (_) { return failScan(run, 'Jetson에 연결할 수 없음 — 직접 선택'); }
   if (S.scanRun !== run) return;

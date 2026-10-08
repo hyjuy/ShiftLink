@@ -447,7 +447,7 @@ public class FactoryRig : MonoBehaviour
     }
     public void Advance(MesSnapshot snapshot,float dt)
     {
-        if(snapshot==null || snapshot.line_mode!="running" || dt<=0 || float.IsNaN(dt) || float.IsInfinity(dt)) return;
+        if(!FactoryRules.AllowsEquipmentMotion(snapshot) || dt<=0 || float.IsNaN(dt) || float.IsInfinity(dt)) return;
         if(sensorMotion!=null) sensorMotion.Advance(snapshot,dt);
         var readings=snapshot.equipment.ToDictionary(e=>e.equipment_id);
         foreach(var fan in utilityFans) {

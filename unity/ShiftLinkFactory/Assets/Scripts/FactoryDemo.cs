@@ -11,11 +11,13 @@ using UnityEngine.Networking;
 [Serializable] public class BranchSpec { public string from_id, to_id; }
 [Serializable] public class RelationSpec { public string from_id,to_id,relation_type; }
 [Serializable] public class MeasurementReading { public string equipment_id,signal,unit,quality,observed_at; public float value; }
-[Serializable] public class FactoryConfig { public string config_id, line_id; public EquipmentSpec[] equipment; public string[] route; public BranchSpec[] branches; public RelationSpec[] relations; }
+[Serializable] public class ScenarioSpec { public string scenario_id, title; }
+[Serializable] public class AlarmReading { public string alarm_id,code,equipment_id,severity,label,cleared_at; }
+[Serializable] public class FactoryConfig { public string config_id, line_id; public EquipmentSpec[] equipment; public string[] route; public BranchSpec[] branches; public RelationSpec[] relations; public ScenarioSpec[] scenarios; }
 [Serializable] public class ConfigEnvelope { public FactoryConfig config; }
 [Serializable] public class EquipmentReading { public string equipment_id, operating_state, fault_level; }
 [Serializable] public class CoilReading { public string coil_id, equipment_id,quality_status; public float position; }
-[Serializable] public class MesSnapshot { public string config_id, run_id, line_mode, scenario_id; public int sequence; public EquipmentReading[] equipment; public CoilReading[] coils; public MeasurementReading[] measurements; }
+[Serializable] public class MesSnapshot { public string config_id, run_id, line_mode, scenario_id; public int sequence; public EquipmentReading[] equipment; public CoilReading[] coils; public MeasurementReading[] measurements; public AlarmReading[] active_alarms; }
 [Serializable] public class ScanReading { public string scan_id, equipment_id, device_id; public float conf; }
 [Serializable] public class ScanEnvelope { public ScanReading[] scans; }
 [Serializable] public class EquipmentSelection { public string equipment_id, config_id; }
@@ -49,6 +51,10 @@ public static class FactoryRules
                 if (branch == null || !ids.Contains(branch.from_id) || !ids.Contains(branch.to_id) || branch.from_id == branch.to_id) return false;
         return true;
     }
+    public static bool AllowsEquipmentMotion(MesSnapshot snapshot)
+    {
+        return snapshot!=null && (snapshot.line_mode=="running" || snapshot.line_mode=="fault");
+    }
     public static bool Matches(FactoryConfig config, MesSnapshot snapshot)
     {
         if (!Valid(config) || snapshot == null || snapshot.config_id != config.config_id ||
@@ -81,7 +87,7 @@ public class FactoryDemo : MonoBehaviour
     readonly Dictionary<Color, Material> materials = new Dictionary<Color, Material>();
     readonly Dictionary<string, EquipmentReading> readings = new Dictionary<string, EquipmentReading>();
     string selectedId, lastScanId, status = "Connecting to MES...";
-    bool online, controlBusy, environmentCreated;
+    bool online, controlBusy, environmentCreated, defaultLayout;
     bool exteriorView=true;
     Transform exteriorEnvelope;
     readonly List<Mesh> buildingMeshes=new List<Mesh>();
@@ -92,6 +98,7 @@ public class FactoryDemo : MonoBehaviour
     FactoryLogistics logistics;
     FactoryWorker worker;
     FactoryCapture capture;
+    FactoryFaults faults;
     readonly Dictionary<string,Transform> coilObjects=new Dictionary<string,Transform>();
     readonly Dictionary<string,Vector3> coilTargets=new Dictionary<string,Vector3>();
     readonly Dictionary<string,string> coilEquipment=new Dictionary<string,string>();
@@ -119,11 +126,21 @@ public class FactoryDemo : MonoBehaviour
             if (args[i] == "--mes-url") mesUrl = args[++i];
             else if (args[i] == "--pda-url") pdaUrl = args[++i];
         }
-        mesUrl = mesUrl.TrimEnd('/'); pdaUrl = pdaUrl.TrimEnd('/');
+        mesUrl = mesUrl.Trim().TrimEnd('/'); pdaUrl = pdaUrl.Trim().TrimEnd('/');
         CreateEnvironment();
+        LoadDefaultFactory();
         // The saved editor scene is a preview; live state is required before showing coils.
         Disconnect("Connecting to MES...");
         StartCoroutine(Poll());
+    }
+    public void LoadDefaultFactory()
+    {
+        var asset=Resources.Load<TextAsset>("Factory/DefaultFactoryConfig");
+        if(asset==null) throw new InvalidOperationException("Missing default factory configuration");
+        Build(JsonUtility.FromJson<ConfigEnvelope>(asset.text).config);
+        defaultLayout=true;
+        SetExteriorView(false);
+        Disconnect("기본 설비 표시 / MES 연결 대기 · 센서 미수신");
     }
     public void CreateEnvironment()
     {
@@ -135,6 +152,7 @@ public class FactoryDemo : MonoBehaviour
             viewCamera.tag = "MainCamera";
         }
         viewCamera.clearFlags = CameraClearFlags.SolidColor;
+        if(FindFirstObjectByType<AudioListener>()==null) viewCamera.gameObject.AddComponent<AudioListener>();
         viewCamera.backgroundColor = new Color(.045f, .065f, .10f);
         viewCamera.farClipPlane = 300;
         if (FindFirstObjectByType<Light>() == null) {
@@ -162,6 +180,7 @@ public class FactoryDemo : MonoBehaviour
         capture=GetComponent<FactoryCapture>()??gameObject.AddComponent<FactoryCapture>();
         worker=GetComponent<FactoryWorker>()??gameObject.AddComponent<FactoryWorker>();
         worker.Initialize(this,viewCamera);
+        faults=GetComponent<FactoryFaults>()??gameObject.AddComponent<FactoryFaults>();
     }
     void InstallBuilding()
     {
@@ -252,6 +271,7 @@ public class FactoryDemo : MonoBehaviour
     public void Build(FactoryConfig next)
     {
         if (!FactoryRules.Valid(next)) throw new ArgumentException("Invalid MES configuration");
+        faults?.Clear();
         ClearCoils();
         if (equipmentRoot != null) Remove(equipmentRoot.gameObject);
         if (coilRoot != null) Remove(coilRoot.gameObject);
@@ -261,6 +281,7 @@ public class FactoryDemo : MonoBehaviour
         coilRoot = new GameObject("MES coils").transform; coilRoot.SetParent(transform);
         scrapRoot = new GameObject("MES scrap discharge").transform; scrapRoot.SetParent(transform);
         config = next;
+        defaultLayout=false;
         var route = new List<string>(next.route);
         int auxiliary = 0;
         foreach (var e in next.equipment) {
@@ -280,6 +301,8 @@ public class FactoryDemo : MonoBehaviour
         }
         rig=equipmentRoot.gameObject.AddComponent<FactoryRig>();
         rig.Build(next,equipment);
+        faults?.Initialize(next,equipment);
+        rig.ApplySensors(null);
         target = new Vector3(0,2,3);
         distance = Mathf.Max(36, next.route.Length*6);
         selectedId = null; lastScanId = null; SetExteriorView(exteriorView);
@@ -349,6 +372,7 @@ public class FactoryDemo : MonoBehaviour
             coilObjects.Remove(id); coilTargets.Remove(id); coilEquipment.Remove(id); coilWaypoints.Remove(id);
         }
         online=true; lastSuccess=Time.realtimeSinceStartup;
+        faults?.Apply(next);
         status=next.line_mode+" | "+next.scenario_id+" | tick "+next.sequence;
         FactoryMonitor.RefreshFor(this,config,next,true);
         if(capture!=null) capture.SetContext(next.config_id,next.run_id,next.sequence);
@@ -366,6 +390,7 @@ public class FactoryDemo : MonoBehaviour
     public void Disconnect(string reason)
     {
         online=false; snapshot=null; readings.Clear(); status=reason;
+        faults?.SetOnline(false);
         if(rig!=null) rig.ApplySensors(null);
         foreach(var lamp in lamps.Values) lamp.sharedMaterial=MaterialFor(FactoryRules.Grey);
         ClearCoils();
@@ -403,7 +428,7 @@ public class FactoryDemo : MonoBehaviour
             yield return Get("/api/state",value=>body=value);
             var state=body==null ? null : Parse<MesSnapshot>(body);
             if(state!=null) {
-                if(config==null || state.config_id!=config.config_id) {
+                if(defaultLayout || config==null || state.config_id!=config.config_id) {
                     Disconnect("Loading MES configuration...");
                     body=null; yield return Get("/api/config",value=>body=value);
                     var envelope=body==null ? null : Parse<ConfigEnvelope>(body);
@@ -468,7 +493,7 @@ public class FactoryDemo : MonoBehaviour
         distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
         UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || (GetComponentInChildren<FactorySensorMotion>()?.ContainsPointer(guiPointer)==true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
+        bool overPanel = (faults?.ContainsPointer(guiPointer)==true) || (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || (GetComponentInChildren<FactorySensorMotion>()?.ContainsPointer(guiPointer)==true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
             new Rect(Screen.width-460,Screen.height-150,442,132).Contains(guiPointer) ||
             (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
         if(Input.GetMouseButtonDown(0) && !overPanel) {
@@ -485,6 +510,7 @@ public class FactoryDemo : MonoBehaviour
     {
         if(!online || rig==null || seconds<=0 || float.IsNaN(seconds) || float.IsInfinity(seconds)) return;
         rig.Advance(snapshot,seconds);
+        faults?.Advance(seconds);
         if(logistics!=null) logistics.Advance(seconds,snapshot.line_mode=="running" && readings.Values.All(e=>e.fault_level!="critical"));
         foreach(var pair in coilObjects) {
             EquipmentReading state;

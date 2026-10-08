@@ -33,6 +33,10 @@ public class FactoryMonitor : MonoBehaviour
                 result.AppendLine("분기: "+code(branch.from_id)+" → "+code(branch.to_id));
         }
         if(live) {
+            string title=(config.scenarios??new ScenarioSpec[0]).FirstOrDefault(s=>s.scenario_id==state.scenario_id)?.title;
+            result.AppendLine("시나리오: "+(string.IsNullOrEmpty(title) ? state.scenario_id : title)+" ["+state.scenario_id+"]");
+            foreach(var alarm in state.active_alarms??new AlarmReading[0])
+                if(string.IsNullOrEmpty(alarm.cleared_at)) result.AppendLine("알림: "+(string.IsNullOrEmpty(alarm.label) ? alarm.code : alarm.label));
             result.AppendLine("코일 "+state.coils.Length+" | 경고 "+state.equipment.Count(e=>e.fault_level=="warning")+
                 " | 심각 "+state.equipment.Count(e=>e.fault_level=="critical"));
         } else result.AppendLine("코일 -- | 경고 -- | 심각 --");

@@ -1,0 +1,1786 @@
+{
+  "config": {
+    "config_id": "3713bf5f3e0f9ef808ff264ea1fa12dee6ded2b97ac4b549816c275c7f568900",
+    "line_id": "LN-0001",
+    "equipment": [
+      {
+        "equipment_id": "EQ-0001",
+        "code": "HPU-01",
+        "name": "HPU-01",
+        "profile_id": "hpu",
+        "active": true,
+        "signals": [
+          {
+            "signal": "hpu_pressure",
+            "name": "유압 공급 압력",
+            "unit": "bar",
+            "normal_min": 145.0,
+            "normal_max": 165.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "공급 매니폴드",
+              "reference": "bar; 체크밸브 뒤 잔압 보유 구간",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_oil_temp",
+            "name": "유압유 온도",
+            "unit": "degC",
+            "normal_min": 35.0,
+            "normal_max": 58.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "유압유 탱크",
+              "reference": "degC; 탱크 벌크 유온",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_filter_dp",
+            "name": "필터 차압",
+            "unit": "bar",
+            "normal_min": 0.0,
+            "normal_max": 1.2,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "동일 펌프 순환회로 필터 전후",
+              "reference": "bar; 순환 정지 시 차압 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_flow",
+            "name": "유압 유량",
+            "unit": "L_min",
+            "normal_min": 38.0,
+            "normal_max": 46.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "유압유 순환회로",
+              "reference": "L_min; 냉각기와 같은 직렬 순환회로",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_pump_outlet_pressure",
+            "name": "펌프 출구 압력",
+            "unit": "bar",
+            "normal_min": 145,
+            "normal_max": 165,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "펌프 출구, 체크밸브 앞",
+              "reference": "bar; 매니폴드 및 축압기 잔압 구간과 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "fluid_viscosity",
+            "name": "작동유 동점도",
+            "unit": "cSt",
+            "normal_min": 20,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "manual_sample",
+              "location": "작동유 시료",
+              "reference": "cSt; 40 degC로 조건화한 동점도 시료의 시연값",
+              "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_oil_level",
+            "name": "유압유 탱크 유면",
+            "unit": "pct",
+            "normal_min": 70,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "유압유 탱크",
+              "reference": "pct; 표시 유면계의 0–100 교정 구간",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_pump_current",
+            "name": "유압 펌프 전류",
+            "unit": "A",
+            "normal_min": 15,
+            "normal_max": 25,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "펌프 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_cooler_oil_in_temp",
+            "name": "냉각기 오일 입구 온도",
+            "unit": "degC",
+            "normal_min": 35,
+            "normal_max": 58,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "냉각기 오일 입구",
+              "reference": "degC; 탱크 유온을 입구 유온으로 사용하는 시연",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_cooler_oil_out_temp",
+            "name": "냉각기 오일 출구 온도",
+            "unit": "degC",
+            "normal_min": 35,
+            "normal_max": 58,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "냉각기 오일 출구",
+              "reference": "degC; 정상 순환 시 입구보다 5 degC 낮은 시연",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_cooler_water_in_temp",
+            "name": "냉각수 입구 온도",
+            "unit": "degC",
+            "normal_min": 15,
+            "normal_max": 30,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "냉각기 냉각수 입구",
+              "reference": "degC; 입출구는 동일 프레임에서 비교",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_cooler_water_out_temp",
+            "name": "냉각수 출구 온도",
+            "unit": "degC",
+            "normal_min": 20,
+            "normal_max": 40,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "냉각기 냉각수 출구",
+              "reference": "degC; 정상 순환 시 입구보다 5 degC 높은 시연",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_cooler_oil_flow",
+            "name": "냉각기 통과 오일 유량",
+            "unit": "L_min",
+            "normal_min": 38,
+            "normal_max": 46,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "냉각기 오일 통과회로",
+              "reference": "L_min; 별도 순환펌프 없이 hpu_flow와 동일",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_accumulator_gas_pressure",
+            "name": "축압기 가스측 운전 압력",
+            "unit": "bar",
+            "normal_min": 145,
+            "normal_max": 165,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "축압기 가스측",
+              "reference": "bar; 운전 중 유체압과 같은 정적 평형, 배출 모드 프리차지 130–140",
+              "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_accumulator_fluid_pressure",
+            "name": "축압기 유체측 압력",
+            "unit": "bar",
+            "normal_min": 145,
+            "normal_max": 165,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "축압기 유체측",
+              "reference": "bar; 매니폴드 잔압 구간, 프리차지 모드에서 0",
+              "applicability": "운전 압력과 hpu_accumulator_precharge의 유체 배출 후 프리차지 측정을 구분",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_return_submergence",
+            "name": "리턴 라인 유면 아래 잠김 깊이",
+            "unit": "mm",
+            "normal_min": 100,
+            "normal_max": 200,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "manual_sample",
+              "location": "탱크 리턴 관 출구와 유면",
+              "reference": "mm; 위치별 치수 시료, 관경 20 mm 시연 가정",
+              "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "hpu_suction_head",
+            "name": "유면과 흡입 위치 높이차",
+            "unit": "mm",
+            "normal_min": 100,
+            "normal_max": 200,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "manual_sample",
+              "location": "탱크 유면과 흡입 위치",
+              "reference": "mm; 위치별 높이차 시료, 압력 센서값과 구분",
+              "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0002",
+        "code": "PDP-01",
+        "name": "PDP-01",
+        "profile_id": "pdp",
+        "active": true,
+        "signals": [
+          {
+            "signal": "bus_voltage",
+            "name": "버스 전압",
+            "unit": "pct",
+            "normal_min": 97.0,
+            "normal_max": 103.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 전원측 버스",
+              "reference": "pct; 가상 선간 RMS 기준전압 400 V를 100 pct로 정의",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "breaker_pole_l1_temp",
+            "name": "차단기 L1극 표면 온도",
+            "unit": "degC",
+            "normal_min": 30,
+            "normal_max": 45,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 L1극 외부 표면",
+              "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "breaker_pole_l2_temp",
+            "name": "차단기 L2극 표면 온도",
+            "unit": "degC",
+            "normal_min": 30,
+            "normal_max": 45,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 L2극 외부 표면",
+              "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "breaker_pole_l3_temp",
+            "name": "차단기 L3극 표면 온도",
+            "unit": "degC",
+            "normal_min": 30,
+            "normal_max": 45,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 L3극 외부 표면",
+              "reference": "degC; 동일 부하·동일 프레임의 세 극 표면 비교",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "bus_current",
+            "name": "배전반 전류",
+            "unit": "A",
+            "normal_min": 20,
+            "normal_max": 40,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 부하측 전류 계측",
+              "reference": "A; 전원측 버스 전압과 측정 위치 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "breaker_trip",
+            "name": "차단기 트립 (0 정상 / 1 트립)",
+            "unit": "bool",
+            "normal_min": 0,
+            "normal_max": 0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "차단기 트립 상태 접점",
+              "reference": "0 정상/1 트립; 단락 원인·무전압 확인과 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0003",
+        "code": "CAU-01",
+        "name": "CAU-01",
+        "profile_id": "cau",
+        "active": true,
+        "signals": [
+          {
+            "signal": "air_pressure",
+            "name": "압축공기 압력",
+            "unit": "kPa",
+            "normal_min": 550.0,
+            "normal_max": 700.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "공압 공급 헤더",
+              "reference": "kPa; 분사기 레귤레이터 앞 공급 압력",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "compressor_discharge_temp",
+            "name": "압축기 토출 온도",
+            "unit": "degC",
+            "normal_min": 70,
+            "normal_max": 90,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "압축기 토출부",
+              "reference": "degC; 벌크 토출 온도",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "compressor_separator_dp",
+            "name": "유분리기 차압",
+            "unit": "bar",
+            "normal_min": 0,
+            "normal_max": 0.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "압축기 유분리기 전후",
+              "reference": "bar; 운전 중 차압, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "air_nozzle_pressure",
+            "name": "공기분사기 유출 압력",
+            "unit": "MPa",
+            "normal_min": 0.1,
+            "normal_max": 0.2,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "레귤레이터 뒤 분사기 유출부",
+              "reference": "MPa; 공급 헤더 kPa와 위치·단위 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "air_flow",
+            "name": "압축공기 유량",
+            "unit": "L_min",
+            "normal_min": 100,
+            "normal_max": 150,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "압축공기 공급 회로",
+              "reference": "L_min; 운전 중 유량, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "compressor_current",
+            "name": "압축기 전류",
+            "unit": "A",
+            "normal_min": 8,
+            "normal_max": 16,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "압축기 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0004",
+        "code": "GR-01",
+        "name": "GR-01",
+        "profile_id": "gr",
+        "active": true,
+        "signals": [
+          {
+            "signal": "gr_vib_rms",
+            "name": "감속기 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.5,
+            "normal_max": 2.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_brg_temp",
+            "name": "감속기 베어링 온도",
+            "unit": "degC",
+            "normal_min": 30.0,
+            "normal_max": 62.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 베어링 온도 계측부",
+              "reference": "degC; 외함 표면 온도와 별도 위치",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_current",
+            "name": "감속기 구동 전류",
+            "unit": "A",
+            "normal_min": 18.0,
+            "normal_max": 30.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 구동 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_water_content",
+            "name": "감속기 오일 수분 함량",
+            "unit": "ppm",
+            "normal_min": 0,
+            "normal_max": 300,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "manual_sample",
+              "location": "감속기 윤활유 시료",
+              "reference": "ppm; 윤활유 시료의 수분 함량",
+              "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_level",
+            "name": "감속기 오일 레벨",
+            "unit": "pct",
+            "normal_min": 70,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 유면계",
+              "reference": "pct; 표시 유면계의 0–100 교정 구간",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_surface_temp",
+            "name": "감속기 표면 온도",
+            "unit": "degC",
+            "normal_min": 20,
+            "normal_max": 40,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 외함 표면",
+              "reference": "degC; 베어링 온도와 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_rpm",
+            "name": "감속기 회전속도",
+            "unit": "rpm",
+            "normal_min": 900,
+            "normal_max": 1100,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 구동축",
+              "reference": "rpm; 출력축 환산 없이 지정 구동축 속도",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_leak",
+            "name": "누유 감지 (0 없음 / 1 감지)",
+            "unit": "bool",
+            "normal_min": 0,
+            "normal_max": 0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 누유 검지부",
+              "reference": "0 없음/1 감지; 위치별 육안 확인과 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0005",
+        "code": "GR-02",
+        "name": "GR-02",
+        "profile_id": "gr",
+        "active": true,
+        "signals": [
+          {
+            "signal": "gr_vib_rms",
+            "name": "감속기 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.5,
+            "normal_max": 2.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_brg_temp",
+            "name": "감속기 베어링 온도",
+            "unit": "degC",
+            "normal_min": 30.0,
+            "normal_max": 62.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 베어링 온도 계측부",
+              "reference": "degC; 외함 표면 온도와 별도 위치",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_current",
+            "name": "감속기 구동 전류",
+            "unit": "A",
+            "normal_min": 18.0,
+            "normal_max": 30.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 구동 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_water_content",
+            "name": "감속기 오일 수분 함량",
+            "unit": "ppm",
+            "normal_min": 0,
+            "normal_max": 300,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "manual_sample",
+              "location": "감속기 윤활유 시료",
+              "reference": "ppm; 윤활유 시료의 수분 함량",
+              "applicability": "시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_level",
+            "name": "감속기 오일 레벨",
+            "unit": "pct",
+            "normal_min": 70,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 유면계",
+              "reference": "pct; 표시 유면계의 0–100 교정 구간",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_surface_temp",
+            "name": "감속기 표면 온도",
+            "unit": "degC",
+            "normal_min": 20,
+            "normal_max": 40,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 외함 표면",
+              "reference": "degC; 베어링 온도와 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_rpm",
+            "name": "감속기 회전속도",
+            "unit": "rpm",
+            "normal_min": 900,
+            "normal_max": 1100,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 구동축",
+              "reference": "rpm; 출력축 환산 없이 지정 구동축 속도",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "gr_oil_leak",
+            "name": "누유 감지 (0 없음 / 1 감지)",
+            "unit": "bool",
+            "normal_min": 0,
+            "normal_max": 0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "감속기 누유 검지부",
+              "reference": "0 없음/1 감지; 위치별 육안 확인과 구분",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0006",
+        "code": "RT-01",
+        "name": "RT-01",
+        "profile_id": "rt",
+        "active": true,
+        "signals": [
+          {
+            "signal": "rt_speed",
+            "name": "롤러 반송 속도",
+            "unit": "m_min",
+            "normal_min": 20.0,
+            "normal_max": 120.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 이송 접선 속도",
+              "reference": "m_min; 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_clamp_press",
+            "name": "클램프 압력",
+            "unit": "bar",
+            "normal_min": 95.0,
+            "normal_max": 115.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 클램프 유압회로",
+              "reference": "bar; 잔압 보유 구간, 클램프 힘 환산 없음",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_motor_current",
+            "name": "롤러 모터 전류",
+            "unit": "A",
+            "normal_min": 8,
+            "normal_max": 16,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_vib_rms",
+            "name": "롤러 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.8,
+            "normal_max": 1.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0007",
+        "code": "RT-02",
+        "name": "RT-02",
+        "profile_id": "rt",
+        "active": true,
+        "signals": [
+          {
+            "signal": "rt_speed",
+            "name": "롤러 반송 속도",
+            "unit": "m_min",
+            "normal_min": 20.0,
+            "normal_max": 120.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 이송 접선 속도",
+              "reference": "m_min; 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_clamp_press",
+            "name": "클램프 압력",
+            "unit": "bar",
+            "normal_min": 95.0,
+            "normal_max": 115.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 클램프 유압회로",
+              "reference": "bar; 잔압 보유 구간, 클램프 힘 환산 없음",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_lift_delay",
+            "name": "승강 응답 지연",
+            "unit": "min",
+            "normal_min": 0.0,
+            "normal_max": 0.05,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "event",
+              "location": "리프트 상승 명령과 완료 이벤트",
+              "reference": "min; 완료시각−명령시각, 이벤트 없으면 unavailable",
+              "applicability": "리프트 완료 이벤트에서만 사용",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_motor_current",
+            "name": "롤러 모터 전류",
+            "unit": "A",
+            "normal_min": 8,
+            "normal_max": 16,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_vib_rms",
+            "name": "롤러 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.8,
+            "normal_max": 1.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0008",
+        "code": "RT-03",
+        "name": "RT-03",
+        "profile_id": "rt",
+        "active": true,
+        "signals": [
+          {
+            "signal": "rt_speed",
+            "name": "롤러 반송 속도",
+            "unit": "m_min",
+            "normal_min": 20.0,
+            "normal_max": 120.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 이송 접선 속도",
+              "reference": "m_min; 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_clamp_press",
+            "name": "클램프 압력",
+            "unit": "bar",
+            "normal_min": 95.0,
+            "normal_max": 115.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 클램프 유압회로",
+              "reference": "bar; 잔압 보유 구간, 클램프 힘 환산 없음",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_motor_current",
+            "name": "롤러 모터 전류",
+            "unit": "A",
+            "normal_min": 8.0,
+            "normal_max": 16.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "rt_vib_rms",
+            "name": "롤러 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.8,
+            "normal_max": 1.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "롤러 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0009",
+        "code": "CV-01",
+        "name": "CV-01",
+        "profile_id": "cv",
+        "active": true,
+        "signals": [
+          {
+            "signal": "cv_speed",
+            "name": "컨베이어 속도",
+            "unit": "m_min",
+            "normal_min": 10.0,
+            "normal_max": 60.0,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 벨트 접선 속도",
+              "reference": "m_min; 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_belt_tension",
+            "name": "벨트 장력",
+            "unit": "kPa",
+            "normal_min": 380.0,
+            "normal_max": 460.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "벨트 장력 조절기 유압회로",
+              "reference": "kPa; 장력 대용 압력 계측, 힘으로 환산하지 않음",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_queue_len",
+            "name": "적재 대기율",
+            "unit": "pct",
+            "normal_min": 0.0,
+            "normal_max": 70.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "derived",
+              "location": "컨베이어 코일 수용 슬롯",
+              "reference": "pct; 끝에 도착해 넘기지 못한 코일수/coil_capacity×100, 최대 100",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_idler_speed_ratio",
+            "name": "동일 조건 정상 대비 아이들러 회전 비율",
+            "unit": "pct",
+            "normal_min": 80,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "derived",
+              "location": "컨베이어 아이들러 회전 계측부",
+              "reference": "pct; 동일 프레임 벨트 속도에 맞춘 정상 회전=100, 정상 시연 비율 90",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_motor_current",
+            "name": "컨베이어 모터 전류",
+            "unit": "A",
+            "normal_min": 10,
+            "normal_max": 20,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_vib_rms",
+            "name": "컨베이어 구동부 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.8,
+            "normal_max": 1.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 구동 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      },
+      {
+        "equipment_id": "EQ-0010",
+        "code": "CV-02",
+        "name": "CV-02",
+        "profile_id": "cv",
+        "active": true,
+        "signals": [
+          {
+            "signal": "cv_queue_len",
+            "name": "적재 대기율",
+            "unit": "pct",
+            "normal_min": 0.0,
+            "normal_max": 70.0,
+            "required": true,
+            "zero_when_stopped": false,
+            "semantics": {
+              "acquisition": "derived",
+              "location": "컨베이어 코일 수용 슬롯",
+              "reference": "pct; 끝에 도착해 넘기지 못한 코일수/coil_capacity×100, 최대 100",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_speed",
+            "name": "컨베이어 속도",
+            "unit": "m_min",
+            "normal_min": 8,
+            "normal_max": 12,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 벨트 접선 속도",
+              "reference": "m_min; 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_idler_speed_ratio",
+            "name": "동일 조건 정상 대비 아이들러 회전 비율",
+            "unit": "pct",
+            "normal_min": 80,
+            "normal_max": 100,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "derived",
+              "location": "컨베이어 아이들러 회전 계측부",
+              "reference": "pct; 동일 프레임 벨트 속도에 맞춘 정상 회전=100, 정상 시연 비율 90",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_motor_current",
+            "name": "컨베이어 모터 전류",
+            "unit": "A",
+            "normal_min": 10,
+            "normal_max": 20,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 모터 공급선",
+              "reference": "A; 운전 중 전류, 정지 시 0",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          },
+          {
+            "signal": "cv_vib_rms",
+            "name": "컨베이어 구동부 진동 RMS",
+            "unit": "mm_s",
+            "normal_min": 0.8,
+            "normal_max": 1.8,
+            "required": true,
+            "zero_when_stopped": true,
+            "semantics": {
+              "acquisition": "continuous",
+              "location": "컨베이어 구동 베어링 하우징",
+              "reference": "mm_s; 진동 속도 RMS 시연 채널",
+              "applicability": "해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석",
+              "model": "synthetic_semantics_v1"
+            }
+          }
+        ]
+      }
+    ],
+    "route": [
+      "EQ-0006",
+      "EQ-0007",
+      "EQ-0008",
+      "EQ-0009"
+    ],
+    "branches": [
+      {
+        "relation_type": "material_flow",
+        "from_id": "EQ-0008",
+        "to_id": "EQ-0010",
+        "lag_seconds": 10,
+        "capacity_value": 20.0,
+        "capacity_unit": "m_min"
+      }
+    ],
+    "relations": [
+      {
+        "relation_type": "material_flow",
+        "from_id": "EQ-0006",
+        "to_id": "EQ-0007",
+        "lag_seconds": 12,
+        "capacity_value": 120.0,
+        "capacity_unit": "m_min"
+      },
+      {
+        "relation_type": "material_flow",
+        "from_id": "EQ-0007",
+        "to_id": "EQ-0008",
+        "lag_seconds": 15,
+        "capacity_value": 120.0,
+        "capacity_unit": "m_min"
+      },
+      {
+        "relation_type": "material_flow",
+        "from_id": "EQ-0008",
+        "to_id": "EQ-0009",
+        "lag_seconds": 10,
+        "capacity_value": 60.0,
+        "capacity_unit": "m_min"
+      },
+      {
+        "relation_type": "drive",
+        "from_id": "EQ-0004",
+        "to_id": "EQ-0006",
+        "lag_seconds": 1,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "drive",
+        "from_id": "EQ-0004",
+        "to_id": "EQ-0007",
+        "lag_seconds": 1,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "drive",
+        "from_id": "EQ-0005",
+        "to_id": "EQ-0008",
+        "lag_seconds": 1,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "drive",
+        "from_id": "EQ-0005",
+        "to_id": "EQ-0009",
+        "lag_seconds": 2,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "hydraulic_supply",
+        "from_id": "EQ-0001",
+        "to_id": "EQ-0006",
+        "lag_seconds": 4,
+        "capacity_value": 12.0,
+        "capacity_unit": "L_min"
+      },
+      {
+        "relation_type": "hydraulic_supply",
+        "from_id": "EQ-0001",
+        "to_id": "EQ-0007",
+        "lag_seconds": 5,
+        "capacity_value": 14.0,
+        "capacity_unit": "L_min"
+      },
+      {
+        "relation_type": "hydraulic_supply",
+        "from_id": "EQ-0001",
+        "to_id": "EQ-0008",
+        "lag_seconds": 6,
+        "capacity_value": 12.0,
+        "capacity_unit": "L_min"
+      },
+      {
+        "relation_type": "hydraulic_supply",
+        "from_id": "EQ-0001",
+        "to_id": "EQ-0009",
+        "lag_seconds": 8,
+        "capacity_value": 6.0,
+        "capacity_unit": "L_min"
+      },
+      {
+        "relation_type": "power_supply",
+        "from_id": "EQ-0002",
+        "to_id": "EQ-0004",
+        "lag_seconds": 0,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "power_supply",
+        "from_id": "EQ-0002",
+        "to_id": "EQ-0005",
+        "lag_seconds": 0,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "power_supply",
+        "from_id": "EQ-0002",
+        "to_id": "EQ-0001",
+        "lag_seconds": 0,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "pneumatic_supply",
+        "from_id": "EQ-0003",
+        "to_id": "EQ-0009",
+        "lag_seconds": 3,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "interlock",
+        "from_id": "EQ-0009",
+        "to_id": "EQ-0008",
+        "lag_seconds": 2,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "co_occurrence",
+        "from_id": "EQ-0007",
+        "to_id": "EQ-0008",
+        "lag_seconds": null,
+        "capacity_value": null,
+        "capacity_unit": null
+      },
+      {
+        "relation_type": "interlock",
+        "from_id": "EQ-0010",
+        "to_id": "EQ-0008",
+        "lag_seconds": 2,
+        "capacity_value": null,
+        "capacity_unit": null
+      }
+    ],
+    "scenarios": [
+      {
+        "scenario_id": "drive_fault",
+        "title": ""
+      },
+      {
+        "scenario_id": "hydraulic_fault",
+        "title": ""
+      },
+      {
+        "scenario_id": "downstream_block",
+        "title": ""
+      },
+      {
+        "scenario_id": "scrap_discharge",
+        "title": "시연 불량 판정 · RT-03→CV-02 스크랩 배출"
+      },
+      {
+        "scenario_id": "hpu_accumulator_precharge",
+        "title": "축압기 유체 배출 후 프리차지 측정"
+      },
+      {
+        "scenario_id": "air_nozzle_overpressure",
+        "title": "공기분사기 유출 압력 초과"
+      },
+      {
+        "scenario_id": "hpu_no_outlet_pressure",
+        "title": "펌프 출구 무압 관측"
+      },
+      {
+        "scenario_id": "hpu_high_viscosity",
+        "title": "작동유 점도 2000 cSt 초과"
+      },
+      {
+        "scenario_id": "cau_supply_fault",
+        "title": "압축공기 공급 이상"
+      },
+      {
+        "scenario_id": "pdp_trip",
+        "title": "배전반 트립"
+      },
+      {
+        "scenario_id": "gearbox_overheat",
+        "title": "감속기 과열"
+      },
+      {
+        "scenario_id": "hydraulic_overheat",
+        "title": "유압유 과열"
+      },
+      {
+        "scenario_id": "gearbox_leak",
+        "title": "감속기 누유"
+      },
+      {
+        "scenario_id": "coil_quality_hold",
+        "title": "영향 코일 검사·보류"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_pressure",
+        "title": "HPU-01 · 유압 공급 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_oil_temp",
+        "title": "HPU-01 · 유압유 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_filter_dp",
+        "title": "HPU-01 · 필터 차압 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_flow",
+        "title": "HPU-01 · 유압 유량 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_pump_outlet_pressure",
+        "title": "HPU-01 · 펌프 출구 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_fluid_viscosity",
+        "title": "HPU-01 · 작동유 동점도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_oil_level",
+        "title": "HPU-01 · 유압유 탱크 유면 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_pump_current",
+        "title": "HPU-01 · 유압 펌프 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_in_temp",
+        "title": "HPU-01 · 냉각기 오일 입구 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_out_temp",
+        "title": "HPU-01 · 냉각기 오일 출구 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_water_in_temp",
+        "title": "HPU-01 · 냉각수 입구 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_water_out_temp",
+        "title": "HPU-01 · 냉각수 출구 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_cooler_oil_flow",
+        "title": "HPU-01 · 냉각기 통과 오일 유량 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_accumulator_gas_pressure",
+        "title": "HPU-01 · 축압기 가스측 운전 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_accumulator_fluid_pressure",
+        "title": "HPU-01 · 축압기 유체측 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_return_submergence",
+        "title": "HPU-01 · 리턴 라인 유면 아래 잠김 깊이 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0001_hpu_suction_head",
+        "title": "HPU-01 · 유면과 흡입 위치 높이차 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_bus_voltage",
+        "title": "PDP-01 · 버스 전압 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l1_temp",
+        "title": "PDP-01 · 차단기 L1극 표면 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l2_temp",
+        "title": "PDP-01 · 차단기 L2극 표면 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_breaker_pole_l3_temp",
+        "title": "PDP-01 · 차단기 L3극 표면 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_bus_current",
+        "title": "PDP-01 · 배전반 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0002_breaker_trip",
+        "title": "PDP-01 · 차단기 트립 (0 정상 / 1 트립) 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_air_pressure",
+        "title": "CAU-01 · 압축공기 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_compressor_discharge_temp",
+        "title": "CAU-01 · 압축기 토출 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_compressor_separator_dp",
+        "title": "CAU-01 · 유분리기 차압 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_air_nozzle_pressure",
+        "title": "CAU-01 · 공기분사기 유출 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_air_flow",
+        "title": "CAU-01 · 압축공기 유량 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0003_compressor_current",
+        "title": "CAU-01 · 압축기 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_vib_rms",
+        "title": "GR-01 · 감속기 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_brg_temp",
+        "title": "GR-01 · 감속기 베어링 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_current",
+        "title": "GR-01 · 감속기 구동 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_water_content",
+        "title": "GR-01 · 감속기 오일 수분 함량 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_level",
+        "title": "GR-01 · 감속기 오일 레벨 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_surface_temp",
+        "title": "GR-01 · 감속기 표면 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_rpm",
+        "title": "GR-01 · 감속기 회전속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0004_gr_oil_leak",
+        "title": "GR-01 · 누유 감지 (0 없음 / 1 감지) 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_vib_rms",
+        "title": "GR-02 · 감속기 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_brg_temp",
+        "title": "GR-02 · 감속기 베어링 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_current",
+        "title": "GR-02 · 감속기 구동 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_water_content",
+        "title": "GR-02 · 감속기 오일 수분 함량 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_level",
+        "title": "GR-02 · 감속기 오일 레벨 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_surface_temp",
+        "title": "GR-02 · 감속기 표면 온도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_rpm",
+        "title": "GR-02 · 감속기 회전속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0005_gr_oil_leak",
+        "title": "GR-02 · 누유 감지 (0 없음 / 1 감지) 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0006_rt_speed",
+        "title": "RT-01 · 롤러 반송 속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0006_rt_clamp_press",
+        "title": "RT-01 · 클램프 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0006_rt_motor_current",
+        "title": "RT-01 · 롤러 모터 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0006_rt_vib_rms",
+        "title": "RT-01 · 롤러 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0007_rt_speed",
+        "title": "RT-02 · 롤러 반송 속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0007_rt_clamp_press",
+        "title": "RT-02 · 클램프 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0007_rt_lift_delay",
+        "title": "RT-02 · 승강 응답 지연 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0007_rt_motor_current",
+        "title": "RT-02 · 롤러 모터 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0007_rt_vib_rms",
+        "title": "RT-02 · 롤러 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0008_rt_speed",
+        "title": "RT-03 · 롤러 반송 속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0008_rt_clamp_press",
+        "title": "RT-03 · 클램프 압력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0008_rt_motor_current",
+        "title": "RT-03 · 롤러 모터 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0008_rt_vib_rms",
+        "title": "RT-03 · 롤러 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_speed",
+        "title": "CV-01 · 컨베이어 속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_belt_tension",
+        "title": "CV-01 · 벨트 장력 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_queue_len",
+        "title": "CV-01 · 적재 대기율 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_idler_speed_ratio",
+        "title": "CV-01 · 동일 조건 정상 대비 아이들러 회전 비율 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_motor_current",
+        "title": "CV-01 · 컨베이어 모터 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0009_cv_vib_rms",
+        "title": "CV-01 · 컨베이어 구동부 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0010_cv_queue_len",
+        "title": "CV-02 · 적재 대기율 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0010_cv_speed",
+        "title": "CV-02 · 컨베이어 속도 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0010_cv_idler_speed_ratio",
+        "title": "CV-02 · 동일 조건 정상 대비 아이들러 회전 비율 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0010_cv_motor_current",
+        "title": "CV-02 · 컨베이어 모터 전류 이상"
+      },
+      {
+        "scenario_id": "sensor_anomaly_EQ-0010_cv_vib_rms",
+        "title": "CV-02 · 컨베이어 구동부 진동 RMS 이상"
+      },
+      {
+        "scenario_id": "symptom_EQ-0001_hpu_delivery",
+        "title": "HPU-01 · 유압 압력·유량 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0001_hpu_restriction",
+        "title": "HPU-01 · 유압 공급 저하와 차압 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0001_hpu_heat",
+        "title": "HPU-01 · 유압유 온도 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0002_pdp_voltage",
+        "title": "PDP-01 · 버스 전압 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0002_pdp_current",
+        "title": "PDP-01 · 버스 전류 상승, 트립 전 관측"
+      },
+      {
+        "scenario_id": "symptom_EQ-0002_pdp_trip",
+        "title": "PDP-01 · 차단기 트립 후 전류 소실"
+      },
+      {
+        "scenario_id": "symptom_EQ-0003_cau_supply",
+        "title": "CAU-01 · 공압 압력·유량 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0003_cau_flow_demand",
+        "title": "CAU-01 · 공압 압력 저하와 공급 유량 증가"
+      },
+      {
+        "scenario_id": "symptom_EQ-0004_gr_lubrication",
+        "title": "GR-01 · 감속기 진동·온도 상승과 유면 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0004_gr_load",
+        "title": "GR-01 · 감속기 회전속도 저하와 전류 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0005_gr_lubrication",
+        "title": "GR-02 · 감속기 진동·온도 상승과 유면 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0005_gr_load",
+        "title": "GR-02 · 감속기 회전속도 저하와 전류 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0006_rt_resistance",
+        "title": "RT-01 · 롤러 이송 속도 저하와 전류·진동 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0006_rt_clamp",
+        "title": "RT-01 · 클램프 압력 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0007_rt_resistance",
+        "title": "RT-02 · 롤러 이송 속도 저하와 전류·진동 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0007_rt_clamp",
+        "title": "RT-02 · 클램프 압력 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0007_rt_lift",
+        "title": "RT-02 · 승강 지연과 압력 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0008_rt_resistance",
+        "title": "RT-03 · 롤러 이송 속도 저하와 전류·진동 상승"
+      },
+      {
+        "scenario_id": "symptom_EQ-0008_rt_clamp",
+        "title": "RT-03 · 클램프 압력 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0009_cv_slip",
+        "title": "CV-01 · 컨베이어 속도·장력 저하"
+      },
+      {
+        "scenario_id": "symptom_EQ-0009_cv_resistance",
+        "title": "CV-01 · 컨베이어 속도 저하·전류 상승·정체"
+      },
+      {
+        "scenario_id": "symptom_EQ-0010_cv_resistance",
+        "title": "CV-02 · 컨베이어 속도 저하·전류 상승·정체"
+      }
+    ]
+  }
+}

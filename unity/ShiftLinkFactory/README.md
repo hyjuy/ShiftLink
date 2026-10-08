@@ -238,6 +238,19 @@ python -B scripts/check_unity_live.py
 
 ## Jetson 실제 MES 연결
 
+Unity에서 설비를 클릭하면 `POST /api/equipment/select`로 선택을 전달한다.
+라즈베리파이 PDA는 기존 `/api/state` 조회(3초 주기)의 `unity_selection`을 받아 해당 설비 화면을 연다.
+로그인·얼굴 확인 중에는 선택을 보관하고 로그인 후 적용한다. 수동 선택은 카메라 인식 기록을 만들지 않는다.
+설비가 바뀌면 이전 설비의 관측·답변 컨텍스트를 초기화한다. MES 실행이나 구성이 바뀐 선택은 적용하지 않는다.
+선택은 메모리에만 보관하며 MES 재시작 시 사라진다. 현재 단일 PDA를 대상으로 한다.
+
+```powershell
+python -B scripts/run_unity_demo.py --editor D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe --mes-url http://jetson-06:8000
+```
+
+실제 선택 전송 검증은 `FactorySelectionChecks.Run`으로 수행한다. 이 검증은 MES에
+`EQ-0004`, `EQ-0005`를 선택하고 마지막 선택이 전달되는지 확인하며 공정 제어는 하지 않는다.
+
 현재 확인한 MES 주소는 `http://jetson-06:8000`(Tailscale IP: `100.115.59.4`)이다.
 실제 연결에는 `--mes-url http://jetson-06:8000`을 지정한다. 인자 없는 실행은 로컬 시연 서버를 시작한다.
 `FactoryChecks.OpenDemo`는 Unity의 HTTP 허용을 개발 환경으로 설정한다.

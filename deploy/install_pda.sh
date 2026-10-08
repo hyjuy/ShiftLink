@@ -17,6 +17,9 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 JETSON="${1:-http://jetson-06.tail0a6af3.ts.net:8000}"
+UNITY="${2:-${SHIFTLINK_UNITY_CAMERA:-}}"
+UNITY_ARG=""
+if [ -n "$UNITY" ]; then UNITY_ARG=" --unity $UNITY"; fi
 APP="$HOME/shiftlink/app"
 PY="${PY:-$HOME/shiftlink/venv-face/bin/python}"
 
@@ -81,6 +84,6 @@ cat > "$HOME/.config/autostart/shiftlink-pda.desktop" <<EOF
 Type=Application
 Name=ShiftLink PDA
 # 모델이 없을 때만 시연 우회: 위의 Exec 앞에 SHIFTLINK_FACE_BYPASS=1 을 넣고 다시 로그인한다. 기본은 끄다.
-Exec=sh -c 'cd $APP && exec ${BYPASS}$PY -m shiftlink.pda --jetson $JETSON >> $HOME/shiftlink/logs/pda.log 2>&1'
+Exec=sh -c 'cd $APP && exec ${BYPASS}$PY -m shiftlink.pda --jetson $JETSON$UNITY_ARG >> $HOME/shiftlink/logs/pda.log 2>&1'
 EOF
 echo "설치: $APP ($PY -m shiftlink.pda) → API $JETSON"

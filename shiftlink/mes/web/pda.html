@@ -109,6 +109,7 @@
   .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
   /* 남은 촬영 영역에 맞춰 키운다. 고장 띠·설비 띠가 위에 붙어도 잘리지 않게 화면 높이(100vh)가 아니라 영역 크기를 기준으로 한다. */
   #s-scan .vf{container-type:size}
+  #unityCamera{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
   .reticle{position:relative;z-index:1;width:min(80cqw,calc(86cqh * 4 / 3));aspect-ratio:4/3;border-radius:8px;
     border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
   .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
@@ -405,7 +406,7 @@
     <div class="appbar"><button class="ic" id="scanClose" type="button" aria-label="이전">← 이전</button>
       <h1>스캔</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane flush" style="display:flex;flex-direction:column">
-      <div class="vf"><div class="reticle" id="reticle"></div></div>
+      <div class="vf"><img id="unityCamera" alt="Unity 가상 공장의 PDA 카메라 영상" hidden><div class="reticle" id="reticle"></div></div>
       <div id="scanState"><span class="dot"></span><span id="scanText">Jetson 연결 확인 중…</span></div>
       <div class="scanfoot">
         <button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>

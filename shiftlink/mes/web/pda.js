@@ -1759,6 +1759,7 @@ on('hoSave', async () => {
       attempts:S.tries, observations:S.observations});
     haptic([120]);
     $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id;
+    pollOutbox();   // 저장 즉시 '업로드 대기' 반영 — 다음 주기까지 기다리지 않는다
   } catch (err) {
     $('hoWarn').textContent = '저장 확인 실패 · ' + err.message + ' · 같은 메모로 다시 저장하면 재전송됩니다.';
     $('hoSave').disabled = false;
@@ -1885,6 +1886,6 @@ window.paintOutbox = paintOutbox;
 async function pollOutbox() { paintOutbox(await refreshOutbox()); }
 probeServer();
 pollOutbox();
-setInterval(pollOutbox, 30000);
+setInterval(pollOutbox, WATCH_MS);   // COUNT 두 번이라 가볍다. 30초면 업로드 후 감소가 최대 60초 늦었다
 boot().then(watchMes);
 }

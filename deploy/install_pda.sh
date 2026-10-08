@@ -11,6 +11,7 @@
 #
 # 결과: ~/shiftlink/app/shiftlink/{pda,face,mes/web/pda.*}
 #       ~/.config/autostart/shiftlink-pda.desktop
+#       ~/.config/fcitx5/{profile,config}  한글 입력(없을 때만 만든다)
 # 해제: 그 desktop 파일을 지운다. 로그: ~/shiftlink/logs/pda.log
 set -euo pipefail
 
@@ -39,6 +40,40 @@ touch "$APP/shiftlink/__init__.py"
 BYPASS=""
 if [ "${SHIFTLINK_FACE_BYPASS:-}" = "1" ]; then
   BYPASS="SHIFTLINK_FACE_BYPASS=1 "
+fi
+
+# 물리 키보드 한글 입력: fcitx5 + fcitx5-hangul(apt는 sudo라 사람이 실행). 없으면 PDA는 뜨지만 한글을 칠 수 없다.
+if ! command -v fcitx5 >/dev/null 2>&1; then
+  echo "한글 입력기 없음: sudo apt install -y fcitx5 fcitx5-hangul 뒤 이 스크립트를 다시 실행하세요." >&2
+fi
+FC="$HOME/.config/fcitx5"
+if [ ! -e "$FC/profile" ]; then  # 이미 있는 설정은 덮지 않는다
+  LAYOUT="$(. /etc/default/keyboard 2>/dev/null; echo "${XKBLAYOUT:-us}")"; LAYOUT="${LAYOUT%%,*}"
+  mkdir -p "$FC"
+  cat > "$FC/profile" <<EOF
+[Groups/0]
+Name=Default
+Default Layout=$LAYOUT
+DefaultIM=keyboard-$LAYOUT
+
+[Groups/0/Items/0]
+Name=keyboard-$LAYOUT
+Layout=
+
+[Groups/0/Items/1]
+Name=hangul
+Layout=
+
+[GroupOrder]
+0=Default
+EOF
+  # 한/영 전환: Ctrl+Space, Shift+Space, 한/영 키
+  cat > "$FC/config" <<EOF
+[Hotkey/TriggerKeys]
+0=Control+space
+1=Hangul
+2=Shift+space
+EOF
 fi
 
 cat > "$HOME/.config/autostart/shiftlink-pda.desktop" <<EOF

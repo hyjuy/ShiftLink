@@ -94,6 +94,54 @@ def classify_bytes(session, labels: list[str], data: bytes) -> tuple[str, float,
     return labels[i], float(probs[i]), (time.perf_counter() - t0) * 1000
 
 
+class FrameScanner:
+    """PDA 스캔 화면이 받아 가는 Unity 프레임(파이 PDA 서버 /api/unity/frame)을 분류해, 같은 클래스가 frames번 연속
+    min_conf 이상이면 Jetson에 한 번 보낸다. 분류 중에 온 프레임은 건너뛴다(화면 영상을 늦추지 않으려고).
+
+    프레임이 gap_s 넘게 끊기면(스캔 화면을 나갔다) 처음부터 센다 — 같은 설비 앞에서 스캔을 다시 열어도 다시 보낸다.
+    """
+
+    def __init__(self, model: Path, server: str, device_id: str, min_conf: float = 0.8, frames: int = 3,
+                 gap_s: float = 2.0, session=None) -> None:
+        import threading
+
+        self.labels = (model / "labels.txt").read_text(encoding="utf-8").split()
+        if session is None:
+            import onnxruntime as ort
+
+            session = ort.InferenceSession(str(model / "model.onnx"), providers=["CPUExecutionProvider"])
+        self.session, self.server, self.device_id = session, server, device_id
+        self.min_conf, self.frames, self.gap_s = min_conf, frames, gap_s
+        self.stab = Stabilizer(min_conf, frames)
+        self._busy = threading.Lock()
+        self._last = 0.0
+
+    def offer(self, image: bytes) -> bool:
+        """프레임 하나를 넘긴다. 분류를 시작했으면 True."""
+        import threading
+
+        if not self._busy.acquire(blocking=False):
+            return False
+        now = time.monotonic()
+        if now - self._last > self.gap_s:
+            self.stab = Stabilizer(self.min_conf, self.frames)
+        self._last = now
+        threading.Thread(target=self._run, args=(image,), daemon=True).start()
+        return True
+
+    def _run(self, image: bytes) -> None:
+        try:
+            label, conf, ms = classify_bytes(self.session, self.labels, image)
+            hit = self.stab.update(label, conf)
+            if hit:
+                sent = post_scan(self.server, hit, conf, self.device_id)
+                print(f"스캔 확정 {hit} conf={conf:.2f} {ms:.0f}ms sent={sent}", flush=True)
+        except Exception as error:  # 한 프레임 실패로 PDA 서버를 멈추지 않는다
+            print(f"스캔 분류 실패 {type(error).__name__}: {error}", flush=True)
+        finally:
+            self._busy.release()
+
+
 def make_handler(session, labels: list[str], min_conf: float, server: str | None, device_id: str):
     """수신 모드 HTTP 핸들러. 사진 한 장은 그 자체로 확정이라 Stabilizer를 쓰지 않는다."""
     from http.server import BaseHTTPRequestHandler

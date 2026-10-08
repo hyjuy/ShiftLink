@@ -35,7 +35,7 @@ const S = {
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0,
-  operator:null, linkedEquipment:null
+  operator:null, linkedEquipment:null, configId:null, lastUnitySelection:null
 };
 
 const $ = (id) => document.getElementById(id);
@@ -112,6 +112,21 @@ function equipmentFromLink(search, equipment) {
   return equipment.find((eq) => eq.equipment_id === ids[0]) || null;
 }
 
+function syncUnitySelection(snap) {
+  const selection = snap.unity_selection;
+  if (!selection || !selection.selection_id || selection.selection_id === S.lastUnitySelection
+    || selection.config_id !== S.configId || selection.config_id !== snap.config_id
+    || selection.run_id !== snap.run_id) return;
+  const eq = S.equipment.find((e) => e.equipment_id === selection.equipment_id);
+  if (!eq) return;
+  S.lastUnitySelection = selection.selection_id;
+  S.linkedEquipment = eq;
+  // Keep the requested equipment pending until the worker completes login.
+  if (!S.operator || ['boot', 'login', 'face'].includes(S.screen)) return;
+  setContext(eq, 'unity_link', {});
+  show('ctx');
+}
+
 let afterBoot = () => show('login');   // 문서 블록이 로그인 기억(sessionStorage)으로 바꾼다
 
 async function boot() {
@@ -119,6 +134,7 @@ async function boot() {
   try {
     const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
     S.equipment = equipmentFrom(cfg.config, cat.data);
+    S.configId = cfg.config.config_id;
     S.cards = kb.cards || [];
     S.handovers = kb.handovers || [];
     S.basisRecords = kb.basis_records || {};
@@ -158,7 +174,7 @@ function stopFaceCamera() {
 }
 
 function show(name) {
-  if (S.screen === 'scan' && name !== 'scan') S.scanRun += 1;  // 폴링 중단
+  if (S.screen === 'scan' && name !== 'scan') { S.scanRun += 1; stopUnityCamera(); }
   if (S.screen === 'face' && name !== 'face') stopFaceCamera();
   S.screen = name;
   document.querySelectorAll('.screen').forEach((el) => {
@@ -258,18 +274,69 @@ async function latestScan() {
   return (await getJson('/api/equipment/scan/recent?limit=1')).scans[0] || null;
 }
 
+let unityCameraAbort = null, unityCameraUrl = null;
+function stopUnityCamera() {
+  if (unityCameraAbort) unityCameraAbort.abort();
+  unityCameraAbort = null;
+  if (unityCameraUrl) URL.revokeObjectURL(unityCameraUrl);
+  unityCameraUrl = null;
+  if (typeof document !== 'undefined') {
+    const image = $('unityCamera');
+    if (image) { image.hidden = true; image.removeAttribute('src'); }
+  }
+}
+
+async function streamUnityCamera(run) {
+  stopUnityCamera();
+  const ctrl = new AbortController(); unityCameraAbort = ctrl;
+  const image = $('unityCamera');
+  while (S.scanRun === run && S.screen === 'scan') {
+    let nextUrl = null;
+    try {
+      const res = await fetch('/api/unity/frame', {cache:'no-store', signal:AbortSignal.any([ctrl.signal, AbortSignal.timeout(3000)])});
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const blob = await res.blob();
+      if (S.scanRun !== run || ctrl.signal.aborted) return;
+      nextUrl = URL.createObjectURL(blob);
+      image.src = nextUrl; await image.decode();
+      if (S.scanRun !== run || ctrl.signal.aborted) { URL.revokeObjectURL(nextUrl); return; }
+      if (unityCameraUrl) URL.revokeObjectURL(unityCameraUrl);
+      unityCameraUrl = nextUrl; nextUrl = null;
+      if (image.hidden) setScanState('', 'Unity 가상 카메라 · 설비를 화면에 담으면 자동 인식');  // 매 프레임 쓰면 확정·오류 문구를 덮는다
+      image.hidden = false;
+      await sleep(100);
+    } catch (err) {
+      if (nextUrl) URL.revokeObjectURL(nextUrl);
+      if (ctrl.signal.aborted || S.scanRun !== run) return;
+      image.hidden = true;
+      setScanState('failed', 'Unity 카메라 연결 대기 · 자동 재연결 중');
+      await sleep(1000);
+    }
+  }
+}
+
 /* 라즈베리파이가 확정해 Jetson에 올린 인식 결과를 폴링한다. 시작 시점의 최신 scan_id 보다 새 것만 받는다
  * (파이·Jetson 시계를 비교하지 않으려고). 파이는 같은 객체를 한 번만 보내므로 이미 놓여 있던 상자는
  * 치웠다가 다시 놓아야 잡힌다. */
 async function startScan() {
   const run = ++S.scanRun;
   show('scan'); setScanState('', 'Jetson 연결 확인 중…');
+  let unity = false;
+  try {
+    const res = await fetch('/api/unity/config', {cache:'no-store', signal:AbortSignal.timeout(2000)});
+    const camera = res.ok ? await res.json() : null;
+    if (S.scanRun !== run) return;
+    unity = !!(camera && camera.enabled);
+  } catch (_) { if (S.scanRun !== run) return; }
   let base;
   try { base = await latestScan(); } catch (_) { return failScan(run, 'Jetson에 연결할 수 없음 — 직접 선택'); }
   if (S.scanRun !== run) return;
   S.scanStartedAt = Date.now();
-  setScanState('', '웹캠 앞에 상자를 놓으세요');
-  while (Date.now() - S.scanStartedAt < SCAN_TIMEOUT_MS) {
+  // Unity 모드: 파이 PDA 서버가 이 화면이 받아 가는 프레임을 CNN으로 분류해 Jetson에 올린다. 아래 폴링은 웹캠과 같다.
+  // 작업자가 설비 앞까지 걸어가야 하므로 시간 제한을 두지 않는다(「직접 선택」·「← 이전」으로 나간다).
+  if (unity) { setScanState('', 'Unity 가상 카메라 연결 중…'); streamUnityCamera(run); }
+  else setScanState('', '웹캠 앞에 상자를 놓으세요');
+  while (unity || Date.now() - S.scanStartedAt < SCAN_TIMEOUT_MS) {
     await sleep(SCAN_POLL_MS);
     if (S.scanRun !== run) return;
     let scan = null;
@@ -1928,6 +1995,7 @@ async function watchMes() {
   if (S.equipment.length) {
     try {
       const snap = await getJson('/api/state');
+      syncUnitySelection(snap);
       renderAlert(faultsFrom(snap));
       if (S.eq) await loadMesObservations(snap);
     } catch (err) { if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }

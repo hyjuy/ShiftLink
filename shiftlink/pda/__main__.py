@@ -52,7 +52,8 @@ def restart_kiosk() -> None:
     stop_kiosk()
 
 
-def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None) -> type[BaseHTTPRequestHandler]:
+def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *, unity: str | None = None,
+                 scanner=None) -> type[BaseHTTPRequestHandler]:
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
             return
@@ -86,8 +87,28 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None) ->
             body = {"threshold": DEFAULT_THRESHOLD, "need": FACE_NEED, "frames": FACE_FRAMES, "bypass": _face_bypass()}
             self._send(200, json.dumps(body).encode(), "application/json; charset=utf-8")
 
+        def _unity_frame(self) -> None:
+            if not unity:
+                self._send(503, b'{"error":"Unity camera is not configured"}', "application/json")
+                return
+            try:
+                opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+                with opener.open(unity.rstrip("/") + "/frame.jpg", timeout=2) as res:
+                    image = res.read(_MAX_FACE_JPEG + 1)
+                    if res.headers.get_content_type() != "image/jpeg" or len(image) > _MAX_FACE_JPEG or not image.startswith(b'\xff\xd8'):
+                        raise ValueError("Unity camera did not return a JPEG frame")
+                    self._send(200, image, "image/jpeg")
+                    if scanner:  # 스캔 화면만 이 프레임을 받아 간다 → 그 화면에 보이는 것만 분류한다
+                        scanner.offer(image)
+            except (OSError, ValueError) as err:
+                self._send(502, json.dumps({"error": f"Unity 카메라 연결 실패: {err}"}, ensure_ascii=False).encode(), "application/json; charset=utf-8")
+
         def do_GET(self) -> None:  # noqa: N802
             path = self.path.split("?", 1)[0]
+            if path == "/api/unity/config":
+                self._send(200, json.dumps({"enabled": bool(unity)}).encode(), "application/json"); return
+            if path == "/api/unity/frame":
+                self._unity_frame(); return
             if path == "/api/face/config":
                 self._face_config(); return
             if path.startswith("/api/"):
@@ -186,6 +207,11 @@ def open_window(url: str, scale: float) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(prog="shiftlink-pda")
     parser.add_argument("--jetson", default="http://jetson-06.tail0a6af3.ts.net:8000", help="Jetson MES API 주소")
+    parser.add_argument("--unity", default=os.environ.get("SHIFTLINK_UNITY_CAMERA"), help="Unity 가상 카메라 서버 주소 (예: http://127.0.0.1:8090, SSH 터널)")
+    parser.add_argument("--cnn", type=Path, default=os.environ.get("SHIFTLINK_CNN"),
+                        help="설비 분류 모델 폴더(model.onnx·labels.txt). 있으면 스캔 화면의 Unity 프레임을 분류해 Jetson에 보낸다")
+    parser.add_argument("--min-conf", type=float, default=0.8, help="10/8 검증셋으로 정함(cnn1008)")
+    parser.add_argument("--device-id", default="pi-01")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--page", default="pda.html", help="키오스크로 열 화면 (pda.html=PDA, 빈 값=MES 대시보드)")
     parser.add_argument("--scale", type=float, default=2.0, help="화면 배율 (모니터에 맞춰 조정)")
@@ -193,7 +219,12 @@ def main() -> None:
     args = parser.parse_args()
     jetson = args.jetson.rstrip("/")
 
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson))
+    scanner = None
+    if args.unity and args.cnn:
+        from shiftlink.vision.classify import FrameScanner
+        scanner = FrameScanner(args.cnn, jetson, args.device_id, args.min_conf)
+        print(f"스캔 분류: {args.cnn} min_conf={args.min_conf} → {jetson} ({args.device_id})", flush=True)
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson, unity=args.unity, scanner=scanner))
     threading.Thread(target=server.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{args.port}/{args.page}"
     print(f"PDA: {url} → API: {jetson}", flush=True)

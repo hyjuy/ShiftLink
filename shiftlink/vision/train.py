@@ -32,7 +32,10 @@ def main() -> None:
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--val-ratio", type=float, default=0.2)
     parser.add_argument("--val-data", type=Path, help="검증 폴더를 따로 줄 때(Unity split). 없으면 --data를 무작위로 나눈다")
+    parser.add_argument("--workers", type=int, default=0, help="사진 읽기 프로세스 수(GPU 서버에서 vCPU 수만큼). 0=한 줄로 읽기")
+    parser.add_argument("--seed", type=int, default=0, help="섞기·초기화 시드(다시 돌려도 같은 순서)")
     args = parser.parse_args()
+    torch.manual_seed(args.seed)
 
     base = [transforms.Resize((SIZE, SIZE))]
     norm = [transforms.ToTensor(), transforms.Normalize(MEAN, STD)]
@@ -54,8 +57,10 @@ def main() -> None:
         n_val = max(1, int(len(order) * args.val_ratio))
         train_set, val_set = Subset(train_all, order[n_val:]), Subset(val_all, order[:n_val])
     n_val = len(val_set)
-    train_dl = DataLoader(train_set, batch_size=32, shuffle=True)
-    val_dl = DataLoader(val_set, batch_size=64)
+    # 9,600장이면 PNG 읽기·늘리기가 GPU보다 느리다(10/8). 읽기만 병렬로 하고 학습 방식은 같다.
+    loader = {"num_workers": args.workers, "persistent_workers": args.workers > 0}
+    train_dl = DataLoader(train_set, batch_size=32, shuffle=True, **loader)
+    val_dl = DataLoader(val_set, batch_size=64, **loader)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = models.mobilenet_v3_small(weights=models.MobileNet_V3_Small_Weights.DEFAULT)
@@ -89,7 +94,7 @@ def main() -> None:
                       input_names=["input"], output_names=["logits"], opset_version=17,
                       dynamo=False)  # 기존 TorchScript 내보내기: 파이의 ONNX Runtime과 opset 17 그대로 맞춘다
     (args.out / "labels.txt").write_text("\n".join(labels) + "\n", encoding="utf-8")
-    print(f"best val_acc={best_acc:.3f} -> {args.out / 'model.onnx'}, labels={labels}")
+    print(f"best val_acc={best_acc:.3f} (seed {args.seed}, device {device}) -> {args.out / 'model.onnx'}, labels={labels}")
 
 
 if __name__ == "__main__":

@@ -19,6 +19,8 @@ python -m shiftlink.vision.unity_cls --dataset data/vision/unity-yolo --out data
 
 ## 2. 학습·양자화·평가 (PC, torch 필요)
 
+GPU 서버(vast.ai 등)에서는 1·2절 전체를 한 번에: `bash scripts/train_unity_cnn.sh <촬영 zip 또는 구글 드라이브 링크>` → `~/cnn/result.tgz`(모델 3종·평가 json·장수·학습 로그). 사진 읽기는 `--workers`(스크립트는 vCPU 수, 최대 8)로 병렬화한다.
+
 ```powershell
 python -m shiftlink.vision.train --data data/vision/unity-cls/train --val-data data/vision/unity-cls/val --out data/vision/model --epochs 15
 python -m shiftlink.vision.quantize --model data/vision/model --calib data/vision/unity-cls/train            # → data/vision/model-int8

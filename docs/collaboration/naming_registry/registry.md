@@ -222,3 +222,5 @@
 새 엔티티 종류가 생기면(예: 관계·매뉴얼 등, 전부 미승인) 접두어를 여기 먼저 등록하고 코드에 쓴다.
 | `scanTarget()` · `releaseContext()` · `failScan()` · `staleResponse()` · `alertTarget()` · `#s-alertGo` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA 설비 확정 안전 경로. 구성에 있는 code만 확정(같은 유형 대체 없음), 스캔 실패·구성 외 code 시 확정 해제, 질의 시점 설비와 다른 응답 버림, 고장 알림 행은 equipment_id 고정 후 확인 화면 `#s-alertGo`를 거쳐 변경 | Claude |
 | `safetyStack()` · `renderWaitSafety()` · `renderAskSafety()` · `#waitCards` · `#askSafety` · `responseCards(response, cards, local, eq)` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA 안전 관문. 대기·질의·결과·시도 화면에 로컬 안전 카드(safety_basis 펼침)를 표시, 서버 안전 공지는 `cardFits`로 현재 설비와 대조해 불일치면 본문 대신 "설비 불일치" 경고. `local`은 `rankCards()` 결과로 조치 이유·조건 3상태를 붙임 | Claude |
+| `appendMesContext()` | `shiftlink/mes/web/pda.js` | 인계 작성의 'MES 기록 불러오기'를 다시 눌러도 입력에 이미 있는 측정값·이벤트 줄은 붙이지 않음. 새 줄이 없으면 `null` | Claude |
+| `pendingText()` · `.conn-status` | `shiftlink/mes/web/app.js`, `index.html`, `style.css` | 지표를 아직 못 낼 때 운전 상태별 말(운전 정지·일시정지·집계 중). 화면을 열면 `/api/runs/{id}/replay`로 최근 스냅샷을 먼저 채워 가동률을 바로 표시. 헤더 상태는 버튼 모양 대신 시계 아래 점+문구(실시간 수신 중) | Claude |

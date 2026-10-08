@@ -113,7 +113,7 @@ const normal = JSON.parse(JSON.stringify(examples.normal));
 normal.measurements.find(x=>x.equipment_id===id('GR-01') && x.signal==='gr_brg_temp').value=100;
 assert.equal(buildOperatorModel(normal,config,id('GR-01')).faults.length,0);
 assert.match(flowView(buildOperatorModel(examples.stabilizing,config,id('RT-01'))),/복구 관찰/);
-assert.doesNotMatch(flowView(buildOperatorModel(examples.stabilizing,config,id('RT-01'))),/>↳ 영향 대기</);
+assert.doesNotMatch(flowView(buildOperatorModel(examples.stabilizing,config,id('RT-01'))),/>↳ 후속 대기</);
 assert.equal(buildOperatorModel(examples.completed,config,id('RT-01')).faults.length,0);
 assert.equal(buildOperatorModel(examples.hydraulic_overheat,config,id('HPU-01')).problemPart,'cooling');
 const noBand=JSON.parse(JSON.stringify(config));
@@ -154,7 +154,7 @@ console.log('Topology, isolation, part assumption, evidence, and graph checks pa
         from tests.test_mes_ui_layout import Elements
         html = Path("shiftlink/mes/web/index.html").read_text(encoding="utf-8")
         dom = Elements(html)
-        for identifier in ("experience-mode", "equipment-search", "relation-filter", "map-scale"):
+        for identifier in ("equipment-search", "relation-filter"):
             self.assertIn(identifier, dom.labels)
         self.assertIn("incident-summary", dom.ids)
         self.assertIn("part-locator", dom.ids)

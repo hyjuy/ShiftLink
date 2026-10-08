@@ -34,6 +34,17 @@ python -m shiftlink.vision.evaluate --model data/vision/model/model.onnx --data 
 
 ## 3. 파이
 
+**PDA 스캔 화면 (10/8 기본)**: 스캔 화면에 Unity 실시간 영상과 「촬영」 버튼이 나온다. 누르면 PDA 서버가 그 순간 프레임 한 장을 분류해 0.8 이상이면 Jetson에 보내고, 스캔 화면은 그 기록으로 설비를 고른다(시간 제한 없음). 실시간 프레임을 계속 분류하면 입구처럼 여러 설비가 보이는 장면도 확정돼서(입구 RT → CAU 0.90) 촬영 한 장만 쓴다.
+
+```bash
+python -m shiftlink.pda --cnn ~/shiftlink/models/cnn --unity http://127.0.0.1:8090 --jetson http://<jetson>:8000 --save-shots ~/shiftlink/data/scan-shots   # --min-conf 0.8 --device-id pi-01
+```
+
+- 모델: FP32(10/8 시험셋 0.994, INT8 두 종은 0.14·0.11로 쓰지 않음). `venv-face`에 `onnxruntime==1.20.1`이 있어야 한다.
+- `--min-conf 0.8`은 검증셋 893장에서 정했다: 맞는 891장 중 889장 통과, 틀린 2장(0.51·0.76)은 모두 막힘.
+
+**사진 한 장 수신 모드** (Unity 저장 사진·W3-1 측정용):
+
 ```bash
 python -m shiftlink.vision.classify --model ~/shiftlink/models/cnn --listen 8090 --server http://<jetson>:8000 --device-id pi-01
 PYTHONPATH=. python bench/pi_classify_timing.py --model ~/shiftlink/models/cnn   # 1프레임 시간(W3-2), 모델별로

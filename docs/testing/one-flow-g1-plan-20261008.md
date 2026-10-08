@@ -1,11 +1,14 @@
 # 한 흐름 시험 계획 (G1 · W2-1) — 2026-10-08
 
+> 10/8 15:50 갱신: 입력을 **실물 PDA 스캔 화면의 Unity 실시간 영상에서 「촬영」 한 장**으로 바꿨다(#258 영상, #260 촬영). Unity 저장 사진을 `send_unity_captures.py`로 보내는 처음 방식은 쓰지 않는다. 실시간 프레임 자동 분류도 입구 장면을 CAU로 확정해(RT가 보임) 쓰지 않는다. **결과: HPU-01 1사이클 통과** — 아래 6절.
+
 **무엇을 보는가**: Unity 가상 공장에서 작업자가 PDA로 설비를 찍으면, 그 사진이 파이 CNN에서 클래스명이 되고, Jetson이 그 설비로 기록한 뒤, 실물 PDA에서 그 설비 기준 답이 나오는가. 사람이 설비를 고르지 않고 끝까지 간 **1건 이상의 기록**이 목표다.
 
 ```
-[Unity PDA 촬영 PNG+JSON] → send_unity_captures.py → [파이 classify --listen] → POST /api/equipment/scan → [Jetson MES]
-                                                                                                         ↓
-                                     [실물 PDA 스캔 화면이 그 설비를 자동 선택] → 증상 질의 → /api/query(scan_id) → 답 화면
+[Unity 작업자 시점 /stream.mjpg] → 파이 PDA 서버 → 실물 PDA 스캔 화면(실시간 영상)
+   「촬영」 → POST /api/unity/capture → Unity /frame.jpg 1장 → 파이 CNN(FP32, 0.8) → POST /api/equipment/scan → [Jetson MES]
+                                                                                                              ↓
+                          [스캔 화면이 새 scan_id로 그 설비를 자동 선택] → 증상 질의 → /api/query(scan_id) → 답 화면
 ```
 
 루브릭: W2-1 "클래스명이 `eq_id`로 바뀌어 Jetson 답변 화면까지 간 1건의 기록", G1 "W2-1과 같은 종류의 증거, 화면이 Jetson 답". 수동 선택(직접 선택)은 세지 않는다.
@@ -16,20 +19,20 @@
 |---|---|---|
 | 실제 Unity 이미지로 학습한 FP32 모델이 파이 `~/shiftlink/models/cnn`에 있다 | `labels.txt` 6클래스, 시험셋 클래스별 정확도 기록 있음(G5) | Claude |
 | 확신도 기준 `--min-conf`를 **검증셋**으로 정했다(시험 중 바꾸지 않음) | 결정 값과 근거를 결과에 적음 | Claude |
-| 파이 수신 서버 실행: `classify --model ~/shiftlink/models/cnn --listen 8090 --server http://<jetson>:8000 --device-id pi-01 --min-conf <값>` | 로그 첫 줄 `사진 수신: …` | Claude |
+| 파이 PDA 실행: `python -m shiftlink.pda --cnn ~/shiftlink/models/cnn --save-shots ~/shiftlink/data/scan-shots --unity http://127.0.0.1:8090 --jetson http://<jetson>:8000` (min_conf 0.8, device pi-01) | 로그 `스캔 촬영 분류: …`, `/api/unity/config`의 `shoot: true` | Claude |
 | 다른 장치가 인식을 보내지 않는다 | `/api/equipment/scan/recent`의 최근 기록이 `pi-01`뿐(10/8 오전 `pi-01-c3` 기록 출처 미확인) | Claude |
 | Jetson `shiftlink-mes` active, 예열 끝, 데스크톱 꺼짐 | `preflight.sh`의 Jetson 항목 또는 `systemctl is-active` | Claude |
 | 실물 PDA 로그인, **대시보드에 다녀오지 않은 상태** | 대시보드 왕복 뒤 카메라가 안 열리는 문제(10/8) 회피 | 재영 |
-| Unity PC에서 감시 실행: `python scripts/send_unity_captures.py --dir <Unity 촬영 폴더> --pi http://<파이>:8090` | `감시: … (기존 N장 건너뜀)` 출력 | 현준 |
+| Unity 카메라 스트림이 파이 8090 터널로 보인다(`docs/guides/unity-pda-camera-stream.md`) | PDA 스캔 화면에 실시간 영상 | 현준 |
 
 ## 1. 절차 (설비 1개당 약 3분, HPU → GR → CV)
 
 | 단계 | 누가 | 하는 일 | 기록 |
 |---|---|---|---|
-| 1 | 재영 | PDA 홈 → **설비 스캔** 화면을 띄워 둔다(인식 대기) | 화면 사진 |
-| 2 | 현준 | Unity에서 작업자를 목표 설비 앞으로 옮겨 PDA로 **촬영·저장** | Unity 화면 사진, 저장 파일 이름 |
-| 3 | 자동 | 감시 스크립트가 사진을 파이로 보냄 | 감시 출력 한 줄: `파일: 클래스 conf ms 확정 Jetson전송` |
-| 4 | 자동 | 파이가 확정 → Jetson에 인식 기록 | 파이 로그 `확정 … sent=True`, Jetson `scan_id`·`class`·`conf`·`equipment_id` |
+| 1 | 재영 | PDA 홈 → **설비 스캔** → Unity 실시간 영상이 보인다 | 화면 사진 |
+| 2 | 현준 | Unity에서 작업자를 목표 설비 앞으로 옮겨 설비를 화면 가운데 담는다 | — |
+| 3 | 재영 | **◉ 촬영** | 파이 `scan-shots/<시각>_<클래스>_<확신도>.jpg` |
+| 4 | 자동 | 파이가 0.8 이상이면 Jetson에 인식 기록 | 파이 로그 `촬영 확정 … sent=True`, Jetson `scan_id`·`class`·`conf`·`equipment_id` |
 | 5 | 재영 | PDA 스캔 화면이 그 설비를 **스스로** 고르는지 본다 → 작업 선택 → 증상 질의 | PDA 화면 사진(설비 이름·코드) |
 | 6 | 재영 | 그 설비의 시연 질문(`docs/planning/시연_질문_9개_20261006.md`) 1개를 보낸다 | 질문 문장 |
 | 7 | 자동 | Jetson 답 | PDA 답 화면 사진(안전 카드 → 답 → 근거 카드 ID), Jetson `query_log`의 `query_id`·`equipment_id`·`cited_card_ids`·시각 |
@@ -50,7 +53,7 @@
 
 | 상황 | 할 일 |
 |---|---|
-| 보류(확신도가 기준 미만) | 같은 설비를 다른 각도로 한 번 더 찍는다. 기준값은 바꾸지 않는다. 보류 횟수를 적는다 |
+| 보류(확신도가 기준 미만, 화면 「확신도 낮음」) | 설비를 가까이·가운데 담아 다시 촬영한다. 기준값은 바꾸지 않는다. 보류 횟수를 적는다 |
 | 오분류 | 실패로 적고 다음 설비로 넘어간다. 이 시험에서 모델·기준을 고치지 않는다 |
 | PDA가 설비를 안 고름 | Jetson 인식 기록이 있는지 먼저 본다. 있으면 PDA 문제, 없으면 파이·전송 문제로 나눠 적는다 |
 | 질의 실패(503 등) | 30초 뒤 같은 질문을 한 번 다시 보낸다. 다시 실패하면 실패로 적는다 |
@@ -67,3 +70,24 @@
 - CNN 정확도(G5·W3-2): 시험셋 클래스별 정확도로 따로 낸다.
 - 실제 카메라 사진: 입력은 Unity 렌더 사진이다. 발표에는 "Unity 이미지 기준"이라고 적는다.
 - 지연 p95(W3-1): 20건 측정에서 낸다.
+
+## 6. 결과 (10/8 15:42, HPU-01 1사이클, 유현준·최재영·Claude)
+
+**판정: 통과** → W2-1 2점, G1 2점(Unity 영상 기준). 팀이 15:3x에 여러 설비로 미리 해 봤으므로 GR·CV 정식 사이클은 생략했다.
+
+| 시각 | 기록 | 값 |
+|---|---|---|
+| 15:42:06 | 파이 촬영 | `촬영 확정 HPU conf=0.98 82ms sent=True`, 사진 `20261008_154206_HPU_0.98.jpg` |
+| 15:42:06 | Jetson scan | `SC-33f7519a03cf` HPU 0.9753 → `EQ-0001` `HPU-01`, device pi-01 |
+| — | PDA | 「분류 중…」 → HPU-01 자동 선택 → 작업 선택 → 증상 질의 |
+| 15:42:52 | 질의 1 | 자유 입력 "유압이 비정상적인 값이 뜨는데 어떻게 해결해야 돼?" → EQ-0001, 해당 지식 없음, 안전 공지 4장 |
+| 15:43:16 | 질의 2 | 증상 칩(작동유 우유빛·젤라틴·녹, 시연 질문 HPU 2번과 같은 증상) → EQ-0001, **근거 K-1008**, 안전 카드 K-1218 블록이 답 위, 4.95초 |
+
+| 통과 조건 | 결과 |
+|---|---|
+| 1. Unity = 파이 = Jetson = PDA 설비 | ✅ HPU = HPU 0.98 = EQ-0001 = HPU-01 |
+| 2. 사람이 설비를 고르지 않음 | ✅ 촬영 → 자동 선택 |
+| 3. 근거 카드 ID, 안전 카드가 답 앞 | ✅ 질의 2 |
+| 4. 기록이 같은 설비·시각 순서 | ✅ 촬영 → scan → 질의 1(46초) → 질의 2(70초), 사이에 다른 scan 없음. 질의 2는 1절의 "1분 이내"를 10초 넘김 — `query_log`에 scan_id가 없어 시각·설비로 이었다 |
+
+화면 사진·촬영 사진·로그 원본은 저장소 밖 `ShiftLink-records/experiments/g1_1008/`.

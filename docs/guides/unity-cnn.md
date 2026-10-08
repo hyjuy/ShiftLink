@@ -8,14 +8,14 @@
 
 ## 1. 데이터 (유현준)
 
-클래스당 약 100장. 같은 장면만 찍으면 val·test가 비므로 위치·각도·조명을 바꾼 여러 세션으로 찍는다.
+최신 모델로 장비별 600장을 촬영한 뒤 전경 60장·특징 근접 300장을 추가했다. 후보 9,600장 중 8,951장(학습 7,178·검증 893·평가 880)을 유지한다. 최종 폴더는 `artifacts/equipment-dataset-20261008-combined/cnn-curated/{train,val,test}`이며, [Drive](https://drive.google.com/drive/folders/1CxBqCGu8sweYRiwg3DbIQAxNqONbPhBm?usp=drive_link)는 공유 대상 폴더다. 전체 ZIP은 로컬에서 검증 완료했지만 연결 도구의 파일당 512MiB 제한으로 업로드 대기 중이다. 웹에서 ZIP을 올린 뒤 내려받아 동일한 구조로 사용할 수 있다. 제외 원본과 복사본은 삭제했다. [촬영·선별 기준](../testing/equipment-recognition-dataset.md)을 따른다.
 
 ```powershell
 python -m shiftlink.vision.unity_dataset --captures <촬영 폴더> --out data/vision/unity-yolo   # 누수 없는 train/val/test 분할
-python -m shiftlink.vision.unity_cls --dataset data/vision/unity-yolo --out data/vision/unity-cls  # 분류용 폴더
+python -m shiftlink.vision.unity_cls --dataset data/vision/unity-yolo --captures <촬영 폴더> --out data/vision/unity-cls  # 촬영 대상 라벨의 분류 폴더
 ```
 
-`unity_cls`는 사진 전체를 쓰고 라벨은 가장 큰 설비 상자의 클래스로 정한다. 설비가 없거나 상자가 사진의 2% 미만이면 빼고 개수를 출력한다.
+`unity_cls --captures`는 사진 전체를 쓰고 JSON의 `target_equipment_id`를 정답으로 삼는다. 타깃 메타데이터가 누락되면 내보내기를 거부한다. `--captures`가 없는 기존 변환에 한해 가장 큰 설비 상자의 클래스를 쓰며, 상자가 사진의 2% 미만이면 제외한다.
 
 ## 2. 학습·양자화·평가 (PC, torch 필요)
 

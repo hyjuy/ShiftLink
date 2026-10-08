@@ -56,7 +56,8 @@ class HumanCaptureTests(unittest.TestCase):
             check(self.root)
 
     def test_accepts_person_standing_on_real_elevated_platform(self):
-        self.photo(camera_pose={'position': [0, 4.7, 3]}, standing_floor_y=3.2)
+        self.photo(camera_pose={'position': [0, 4.7, 3]}, standing_floor_y=3.2,
+                   direction_sector=3, azimuth_degrees=90)
         self.assertEqual(check(self.root, 1), {'EQ-0001': 1})
 
     def test_rejects_invalid_recorded_light_brightness(self):

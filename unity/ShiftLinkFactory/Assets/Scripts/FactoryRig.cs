@@ -22,7 +22,13 @@ public class FactoryRig : MonoBehaviour
         if(!colors.TryGetValue(color,out mat)) { mat=new Material(Shader.Find("Standard")); mat.color=color; owned.Add(mat); colors[color]=mat; }
         return mat;
     }
+    public static float LayoutSpacing = 1;
     public static Vector3 Layout(string code,int index,int count,int auxiliary)
+    {
+        var position=BaseLayout(code,index,count,auxiliary);
+        return new Vector3(position.x*LayoutSpacing,position.y,position.z*LayoutSpacing);
+    }
+    static Vector3 BaseLayout(string code,int index,int count,int auxiliary)
     {
         if(index>=0) return new Vector3((index-(count-1)*.5f)*5.4f,0,0);
         switch(code) {
@@ -116,19 +122,20 @@ public class FactoryRig : MonoBehaviour
     {
         if(next.equipment.Any(e=>e.code=="CAU-01" && e.active)) {
             var p=EquipmentPosition(next,"CAU-01");
-            Block("CAU utility platform",p-Vector3.up*.15f,new Vector3(4.8f,.3f,2.8f),FactoryRules.Grey);
+            float deck=LayoutSpacing>1 ? 2.5f : 1;
+            Block("CAU utility platform",p-Vector3.up*.15f,new Vector3(4.8f*deck,.3f,2.8f*deck),FactoryRules.Grey);
             foreach(float x in new[]{-2.1f,2.1f}) foreach(float z in new[]{-1.1f,1.1f})
-                Block("Platform support",p+new Vector3(x,-1.75f,z),new Vector3(.15f,2.9f,.15f),FactoryRules.Grey);
-            Rail("CAU platform rail",p+new Vector3(-2.4f,1,-1.4f),p+new Vector3(2.4f,1,-1.4f));
-            Rail("CAU back rail",p+new Vector3(-2.4f,1,1.4f),p+new Vector3(2.4f,1,1.4f));
-            Rail("CAU left rail",p+new Vector3(-2.4f,1,-1.4f),p+new Vector3(-2.4f,1,1.4f));
-            Block("CAU stair landing",p+new Vector3(3.4f,-.15f,0),new Vector3(3.2f,.3f,1.5f),FactoryRules.Grey);
+                Block("Platform support",p+new Vector3(x*deck,-1.75f,z*deck),new Vector3(.15f,2.9f,.15f),FactoryRules.Grey);
+            Rail("CAU platform rail",p+new Vector3(-2.4f*deck,1,-1.4f*deck),p+new Vector3(2.4f*deck,1,-1.4f*deck));
+            Rail("CAU back rail",p+new Vector3(-2.4f*deck,1,1.4f*deck),p+new Vector3(2.4f*deck,1,1.4f*deck));
+            Rail("CAU left rail",p+new Vector3(-2.4f*deck,1,-1.4f*deck),p+new Vector3(-2.4f*deck,1,1.4f*deck));
+            Block("CAU stair landing",p+new Vector3(3.4f*deck,-.15f,0),new Vector3(3.2f*deck,.3f,1.5f),FactoryRules.Grey);
             var stairs=new GameObject("CAU access stairs").transform; stairs.SetParent(transform);
             for(int i=0;i<16;i++) {
-                var step=Block("Stair tread",p+new Vector3(4.4f,(i+1)*.2f-p.y-.1f,4-(i+.5f)*.25f),new Vector3(1.5f,.2f,.25f),FactoryRules.Grey);
+                var step=Block("Stair tread",p+new Vector3(4.4f*deck,(i+1)*.2f-p.y-.1f,4-(i+.5f)*.25f),new Vector3(1.5f,.2f,.25f),FactoryRules.Grey);
                 step.transform.SetParent(stairs);
             }
-            foreach(float x in new[]{3.65f,5.15f})
+            foreach(float x in new[]{4.4f*deck-.75f,4.4f*deck+.75f})
                 Rail("Stair handrail",p+new Vector3(x,1-p.y,4),p+new Vector3(x,1,0));
         }
         float left=-(next.route.Length-1)*2.7f-2.4f, right=-left;

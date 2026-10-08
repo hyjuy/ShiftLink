@@ -1,0 +1,11 @@
+{
+  "retained_images": 8951,
+  "excluded_originals_deleted": 649,
+  "retained_sha256_verified": 8951,
+  "all_ten_equipment_twelve_directions": true,
+  "splits": {
+    "test": 880,
+    "train": 7178,
+    "val": 893
+  }
+}

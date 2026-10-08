@@ -1,0 +1,8 @@
+{
+  "status": "upload_pending",
+  "folder_url": "https://drive.google.com/drive/folders/1CxBqCGu8sweYRiwg3DbIQAxNqONbPhBm?usp=drive_link",
+  "zip_bytes": 2604665998,
+  "connector_upload_limit_bytes": 536870912,
+  "reason": "Google Drive connector rejected the single ZIP because it exceeds its 512 MiB upload limit. Browser control failed to initialize (os error 3).",
+  "local_archive": "artifacts/equipment-dataset-20261008-packages/equipment-cnn-20261008.zip"
+}

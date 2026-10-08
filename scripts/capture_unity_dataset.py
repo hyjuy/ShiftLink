@@ -1,6 +1,7 @@
-"""Capture balanced equipment views in an isolated Unity project, then export YOLO."""
+"""Capture handheld equipment views, validate boxes, and export CNN classification folders."""
 import argparse
 import collections
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -11,13 +12,15 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from shiftlink.vision.unity_dataset import export_dataset
+from shiftlink.vision.unity_cls import convert as export_cnn
+from check_human_captures import check as check_human_captures
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--editor', required=True, type=Path)
     parser.add_argument('--out', required=True, type=Path)
-    parser.add_argument('--per-equipment', type=int, default=600)
+    parser.add_argument('--per-equipment', type=int, default=360)
     parser.add_argument('--smoke', action='store_true')
     parser.add_argument('--equipment-codes', help='Comma-separated installed equipment codes; default all 10')
     args = parser.parse_args()
@@ -44,14 +47,15 @@ def main():
     result_path.unlink(missing_ok=True)
     command = [str(args.editor), '-batchmode', '-force-d3d11', '-projectPath', str(project),
                '-executeMethod', 'FactoryDatasetCapture.Run', '-logFile', str(run / 'unity-capture.log'),
-               '--capture-output', str(captures), '--photos-per-equipment', str(1 if args.smoke else args.per_equipment)]
+               '--capture-output', str(captures), '--photos-per-equipment', str(24 if args.smoke else args.per_equipment)]
     if args.equipment_codes:
         command.extend(['--equipment-codes', args.equipment_codes])
-    print('Starting ' + ('10-photo smoke check' if args.smoke else 'full capture'), flush=True)
+    print('Starting ' + ('direction/detail smoke check' if args.smoke else 'additional capture'), flush=True)
     result = subprocess.run(command, cwd=ROOT, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
     if result.returncode or not result_path.exists():
         raise RuntimeError(f'Unity capture failed ({result.returncode}); see {run / "unity-capture.log"}')
     print(result_path.read_text(), flush=True)
+    check_human_captures(captures, 24 if args.smoke else args.per_equipment)
     dataset = run / 'dataset'
     rows = export_dataset(captures, dataset)
     targets = collections.defaultdict(collections.Counter)
@@ -66,13 +70,23 @@ def main():
         if row['sha256'] in hashes:
             raise RuntimeError('Duplicate rendered image: ' + row['capture_id'])
         hashes.add(row['sha256'])
-    expected = {'train': 1} if args.smoke else {'train': args.per_equipment * 8 // 10, 'val': args.per_equipment // 10, 'test': args.per_equipment // 10}
+    expected = {'train': 24} if args.smoke else {'train': args.per_equipment * 8 // 10, 'val': args.per_equipment // 10, 'test': args.per_equipment // 10}
     expected_targets = len(args.equipment_codes.split(',')) if args.equipment_codes else 10
     assert len(targets) == expected_targets and all(dict(counts) == expected for counts in targets.values()), dict(targets)
+    cnn = run / 'cnn'
+    cnn_counts = export_cnn(dataset, cnn, captures=captures)
     summary = dict(images=len(rows), resolution=[1280, 720], equipment=dict(targets),
                    splits=dict(collections.Counter(row['split'] for row in rows)), annotated_objects=dict(objects),
                    unique_images=len(hashes), source='Unity synthetic factory',
-                   split_policy='held-out azimuth sectors; shared scene/session/hash cannot cross splits',
+                   viewpoint='handheld-first-person', camera_height_m=[1.2, 1.8],
+                   layout_spacing=1.5, factory_floor_m=[66, 51],
+                   lighting_profiles=['dim', 'normal', 'bright', 'warm', 'cool'],
+                   cnn_dataset=cnn.as_posix(), cnn_counts=cnn_counts, cnn_label_policy='target_equipment_id from original metadata; whole photograph',
+                   source_asset_sha256={path.relative_to(project).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                                        for directory in ('Models', 'Resources/Factory')
+                                        for path in sorted((project / 'Assets' / directory).rglob('*'))
+                                        if path.suffix in ('.fbx', '.prefab')},
+                   split_policy='all 12 directions in each split; prefer disjoint angular subranges, recorded fallback within sector for blocked poses; scene/session/hash groups cannot cross splits',
                    limitation='same synthetic assets; real-camera generalization has not been measured')
     (run / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(summary, ensure_ascii=False, indent=2), flush=True)

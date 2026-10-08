@@ -11,10 +11,15 @@ class EquipmentPhotoQualityTests(unittest.TestCase):
 
     def test_keeps_identifiable_target_in_dim_but_readable_photo(self):
         self.assertEqual(quality_reasons(self.photo(),35,20),[])
+        self.assertEqual(quality_reasons(self.photo(),10,20),[])
+
+    def test_explicit_visual_review_preserves_identifiable_boundary_photo(self):
+        self.assertEqual(quality_reasons(self.photo(),20,7.84,visual_keep=True),[])
+        self.assertEqual(quality_reasons(self.photo([547,212,796,505]),80,30,visual_keep=True),[])
 
     def test_excludes_small_dark_and_flat_photos(self):
         self.assertIn('small_target',quality_reasons(self.photo([500,250,650,400]),80,30))
-        self.assertIn('too_dark',quality_reasons(self.photo(),10,20))
+        self.assertIn('too_dark',quality_reasons(self.photo(),3,3))
         self.assertIn('low_contrast',quality_reasons(self.photo(),70,3))
 
     def test_excludes_dominant_unrelated_equipment(self):

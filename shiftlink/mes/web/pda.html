@@ -146,21 +146,43 @@
   .row .id{font-size:15px;font-weight:700}
   .row .nm{font-size:11.5px;color:var(--tx-2)}
   .row .mk{font-size:11px;color:var(--tx-2);flex:0 0 auto;text-align:right}
-  /* 증상 선택 — 「기타」도 같은 크기·같은 자리에 둔다. 목록이 전부가 아님을 구조로 알린다. */
-  .row.sym{font-size:15px;line-height:1.4}
-  .row.sym.sel{border-color:var(--scan);background:#0F2A33}
-  .row.sym .mark{width:22px;flex:0 0 auto;color:var(--tx-2);font-weight:700;text-align:center}
-  .row.sym.sel .mark{color:var(--scan)}
-  .row.sym.other{border-style:dashed}
-  .row.sym .lb{display:block}
-  .row.sym .orig{display:block;font-size:12px;line-height:1.35;color:var(--tx-2);margin-top:2px}
-  .row.sym .orig:empty{display:none}
-  .row.sym .why{display:block;font-size:12px;font-weight:700;color:var(--warn);margin-top:2px}
-  .row.sym .why:empty{display:none}
-  /* 인라인 display:flex 가 hidden 을 덮어써서 「기타」를 안 골라도 입력칸이 보이던 문제 */
-  #otherWrap[hidden]{display:none !important}
-  .alert.nm{width:100%;text-align:left;font:inherit;cursor:pointer;flex:0 0 auto}
-  .grp{margin:6px 0 0;font-size:13px;font-weight:800;color:var(--tx-2);flex:0 0 auto}
+  /* 증상 질의 대화 — 위 MES 한 줄, 가운데 말풍선, 아래 추천 질문 칩과 입력칸(10/8 최재영 요청) */
+  .chatmes{flex:0 0 auto;margin:0;padding:8px 14px;font-size:13px;line-height:1.45;color:var(--tx-2);
+    background:var(--surface);border-bottom:1px solid var(--edge)}
+  .chatmes.bad{color:#FFD0B8;background:#2A140C;border-color:var(--fail)}
+  .chatlog{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
+  .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요. 등록된 근거가 없으면 「해당 지식 없음」이라고 답합니다.";
+    font-size:13px;color:var(--tx-2);line-height:1.5}
+  .msg{max-width:92%;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  .msg.me{align-self:flex-end;background:#0F2A33;border:1px solid #1C6F88}
+  .msg.me .q{font-size:15px;font-weight:700;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  .msg.me .orig{font-size:12px;color:var(--tx-2);margin:0}
+  .msg.bot{align-self:stretch;max-width:none;background:var(--surface);border:1px solid var(--edge)}
+  .msg.bot .ans{font-size:15px;line-height:1.6;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  .msg.bot.none{border-color:var(--scan)}
+  .msg.bot.none .ans{font-weight:800}
+  .msg.bot.err{border-color:var(--fail)}
+  .msg .meta{font-size:11.5px;color:var(--tx-2);margin:0}
+  .msg.wait .ans{color:var(--tx-2)}
+  .msg.wait .ans::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4) infinite}
+  @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+  .msg .basis-detail{border-top:1px solid var(--edge)}
+  .msg .basis-detail[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
+  .chatfoot{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:10px 14px;border-top:1px solid var(--edge);background:var(--bg)}
+  /* 추천 질문 — 한 줄 가로 스크롤. 누르면 바로 보낸다. */
+  .sugg{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .sugg:empty{display:none}
+  .sugg button{flex:0 0 auto;max-width:78vw;min-height:48px;padding:6px 14px;border-radius:999px;border:1px solid var(--edge);
+    background:var(--surface);font-size:14px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sugg button.hot{border-color:var(--warn);color:#FFD98A}
+  .sugg button[disabled]{opacity:.4}
+  .chatin{display:flex;gap:8px;align-items:flex-end}
+  .chatin textarea{flex:1 1 auto;min-height:56px;max-height:120px;resize:none}
+  .chatin .btn{width:auto;flex:0 0 auto;min-width:88px}
+  /* 접힘 상자 — 관측값 입력, 평소의 안전 수칙 */
+  .fold{flex:0 0 auto;border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:0 12px}
+  .fold > summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-size:14px;font-weight:700;color:var(--tx-2)}
+  .fold[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
   /* MES 고장 상황 알림 — 표시 전용. 탭하면 확인 화면(s-alertGo)으로만 간다(B3·A4). 행 간격 8px(A1). */
   #alert{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;background:var(--safety-bg);border-bottom:2px solid var(--safety-edge)}
   #alert[hidden]{display:none}
@@ -177,7 +199,12 @@
     display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
   /* 고정은 관문 띠 하나만. 카드는 내부 스크롤 없이 일반 흐름으로 모두 펼쳐 어느 카드의 근거도
      잘리거나 덮이지 않게 한다(B2). display:contents라 띠가 pane 직계로 놓여 pane 스크롤 내내 고정된다. */
-  .safety-stack,#askSafety{display:contents}
+  .safety-stack{display:contents}
+  /* 대화 화면 위의 안전 수칙. 평소에는 회색 한 줄로 접고, MES 이상·정지이거나 안전 카드 조건이 맞으면 관문 색으로 펼친다. */
+  .safety-fold.hot{border:2px solid var(--notice);background:var(--notice-bg)}
+  .safety-fold.hot > summary{color:#FFF3D6;font-weight:800}
+  .msg .safety-head{margin:0;font-size:13px;font-weight:800;color:#FFF3D6;background:var(--notice-bg);
+    border-left:3px solid var(--notice);padding:6px 10px;border-radius:4px}
   .safety-bar{position:sticky;top:0;z-index:5;flex:0 0 auto;margin:0 -14px;padding:10px 14px;
     background:var(--notice-bg);color:#FFF3D6;font-size:14px;font-weight:800;border-block:3px solid var(--notice)}
   .safety.invalid{border-color:var(--safety-edge);background:var(--safety-bg)}
@@ -236,16 +263,6 @@
   .tf .act{font-size:13.5px;color:var(--tx)}
   .tf .stop{font-weight:700;color:var(--warn)}
 
-  .steps-prog{display:flex;flex-direction:column;gap:9px;flex:0 0 auto}
-  .pstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx-2)}
-  .pstep .n{width:19px;flex:0 0 auto;font-weight:700;color:var(--tx-2)}
-  .pstep .t{width:120px;flex:0 0 auto}
-  .pstep .bar{flex:1 1 auto;height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden}
-  .pstep .bar i{display:block;height:100%;width:0;border-radius:4px;background:var(--scan);transition:width .3s linear}
-  .pstep .mk{width:18px;flex:0 0 auto;text-align:center;font-weight:700}
-  .pstep.done{color:var(--tx)} .pstep.done .bar i{background:var(--ok)} .pstep.done .mk{color:var(--ok)}
-  .pstep.run .mk{color:var(--scan)}
-
   .try{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
     display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
   .try.noeff{border-color:#7A4218}
@@ -298,15 +315,6 @@
   .alert.bad{border-color:var(--safety-edge);background:var(--safety-bg)}
   .alert.bad .hd{color:#FFD7D4} .alert.bad .p{color:#FFC9C5}
   .alert.bad code{background:#511713;color:#FFE2E0}
-
-  .empty{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:14px;text-align:center;padding:20px 22px}
-  .empty .big{font-size:22px;font-weight:800;margin:0}
-  .empty .p{font-size:14px;color:var(--tx-2);line-height:1.6;margin:0}
-  .empty .rule{font-size:13px;font-weight:700;color:var(--scan);border:1px solid rgba(56,198,242,.45);
-    border-radius:8px;padding:9px 13px}
-  .empty ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;
-    font-size:13.5px;color:var(--tx-2);text-align:left}
 
   .disclaimer{flex:0 0 auto;padding:10px 14px;font-size:11.5px;line-height:1.45;color:var(--tx-2);
     background:var(--surface);border-top:1px solid var(--edge);display:flex;gap:7px}
@@ -454,56 +462,37 @@
     </div>
   </section>
 
-  <!-- 질의 입력 -->
-  <section class="screen" id="s-ask">
+  <!-- 증상 질의 · 대화. 메시지 하나 = /api/query 하나. 이전 대화는 모델에 넘기지 않는다(10/14 채점과 같은 한 질문 구조). -->
+  <section class="screen" id="s-chat">
     <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane">
+    <p class="chatmes" id="chatMes" role="status">MES 상태 확인 중…</p>
+    <div class="pane" id="chatPane">
       <div id="askSafety"></div>
-      <p class="lbl">증상 선택 — 이 설비에 등록된 카드</p>
-      <div class="list" id="symptomList"></div>
-      <div id="otherWrap" hidden style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto">
-        <textarea id="question" placeholder="증상을 직접 적어 주세요" autocomplete="off"></textarea>
-        <p class="hint">목록에 없는 증상입니다. 등록된 카드가 없으면 「해당 지식 없음」이 나옵니다 — 추측으로 답하지 않습니다.</p>
-      </div>
-      <p class="lbl">현재 관측값 · MES 실시간 갱신</p>
-      <p class="hint">증상 선택 후에도 갱신됩니다. 답변에는 MES가 질의를 접수한 당시의 값을 기록합니다.</p>
-      <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
-      <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
-      <p class="hint">MES에서 가져오지 못한 측정값은 직접 입력해 주세요. 같은 항목을 입력하면 질의에는 직접 입력한 값이 사용됩니다.</p>
-      <div class="obsrow">
-        <select id="obsSignal" aria-label="신호"></select>
-        <input type="number" id="obsValue" step="any" inputmode="decimal" placeholder="값" aria-label="값">
-        <button class="btn sm" id="obsAdd" type="button">추가</button>
-      </div>
-      <p class="hint" id="obsRange"></p>
-      <div class="grow"></div>
-      <div class="alert" id="askBlock" hidden><p class="p" id="askBlockWhy"></p></div>
-      <button class="btn primary" id="doSearch" type="button">검색</button>
+      <details class="fold" id="obsFold">
+        <summary id="obsSummary">관측값 · 직접 입력</summary>
+        <p class="hint">답변에는 MES가 질의를 접수한 당시의 값을 기록합니다.</p>
+        <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
+        <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
+        <p class="hint">MES에서 가져오지 못한 측정값은 직접 입력해 주세요. 같은 항목을 입력하면 직접 입력한 값이 화면 판정에 사용됩니다.</p>
+        <div class="obsrow">
+          <select id="obsSignal" aria-label="신호"></select>
+          <input type="number" id="obsValue" step="any" inputmode="decimal" placeholder="값" aria-label="값">
+          <button class="btn sm" id="obsAdd" type="button">추가</button>
+        </div>
+        <p class="hint" id="obsRange"></p>
+      </details>
+      <div class="chatlog" id="chatLog" aria-live="polite"></div>
+      <button class="btn sm" id="chatHandover" type="button" hidden>이 대화로 인계 작성</button>
     </div>
-  </section>
-
-  <!-- 대기 -->
-  <section class="screen" id="s-wait">
-    <div class="appbar"><h1 style="font-size:14px;color:var(--tx-2)">검색 중</h1></div>
-    <div class="pane">
-      <div class="steps-prog">
-        <div class="pstep" id="st1"><span class="n">①</span><span class="t">안전 카드 표시</span><span class="bar"><i></i></span><span class="mk">·</span></div>
-        <div class="pstep" id="st2"><span class="n">②</span><span class="t">응답 대기</span><span class="bar"><i></i></span><span class="mk">·</span></div>
-        <div class="pstep" id="st3"><span class="n">③</span><span class="t">결과 정리</span><span class="bar"><i></i></span><span class="mk">·</span></div>
+    <div class="chatfoot">
+      <p class="hint" id="symptomNote" hidden></p>
+      <div class="sugg" id="symptomList"></div>
+      <div class="chatin">
+        <textarea id="question" rows="1" placeholder="증상이나 질문을 적어 주세요" autocomplete="off" enterkeyhint="send"></textarea>
+        <button class="btn primary" id="doSearch" type="button" disabled>보내기</button>
       </div>
-      <p class="lbl" id="waitLbl" hidden>이 설비에 적용되는 안전 카드 — 응답 전 확인</p>
-      <div id="waitCards" style="display:flex;flex-direction:column;gap:10px"></div>
-      <div class="grow"></div>
-      <button class="btn sm ghost" id="waitCancel" type="button">취소</button>
     </div>
-  </section>
-
-  <!-- 결과 · 조치 순위 -->
-  <section class="screen" id="s-result">
-    <div class="appbar"><button class="ic" id="resultBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">결과 · 조치 순위</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane" id="resultPane"></div>
     <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
   </section>
 
@@ -512,25 +501,6 @@
     <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="triesPane"></div>
-  </section>
-
-  <!-- 지식 없음 -->
-  <section class="screen" id="s-empty">
-    <div class="appbar"><button class="ic" id="emptyBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">결과</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="empty">
-      <p class="big">해당 지식 없음</p>
-      <p class="p">입력하신 증상·조건에 맞는<br>근거 있는 카드가 없습니다.</p>
-      <p class="rule">추측으로 답하지 않습니다</p>
-      <ul>
-        <li>· 증상을 더 구체적으로 적어 보세요</li>
-        <li>· 관측값을 추가하세요</li>
-        <li>· 숙련자에게 문의하세요</li>
-      </ul>
-    </div>
-    <div class="pane" style="flex:0 0 auto;overflow:visible">
-      <button class="btn primary" id="emptyRetry" type="button">다시 질의</button>
-    </div>
   </section>
 
   <!-- 인계 확인 -->

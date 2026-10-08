@@ -40,10 +40,10 @@ context.snapshot = snapshot;
   assert.equal(vm.runInContext('S.observations.length',context),1,'manual overrides and removals still apply to query inputs');
   vm.runInContext(`S.queryResponse = {answer:'확인', evidence:{equipment_id:'EQ-0001',simulated_at:'2026-10-07T06:00:00Z',
     measurements:[{equipment_id:'EQ-0001',signal:'hpu_pressure',value:120,unit:'bar',observed_at:'2026-10-07T06:00:00Z',used_for_conditions:true}]}};
-    S.ranked = {safety:[],actions:[],excluded:[]}; renderResult();`,context);
-  assert.match(nodes.resultPane.text(),/질의 당시/);
-  assert.match(nodes.resultPane.text(),/120 bar/);
-  assert.doesNotMatch(nodes.resultPane.text(),/154\.845/);
+    S.ranked = {safety:[],actions:[],excluded:[]}; answer = answerBody({response:S.queryResponse, ranked:S.ranked});`,context);
+  assert.match(context.answer.text(),/질의 당시/);
+  assert.match(context.answer.text(),/120 bar/);
+  assert.doesNotMatch(context.answer.text(),/154\.845/);
   vm.runInContext(`S.eq.type='HPU'; S.cards=[{card_id:'K',equipment:'HPU',conditions:[{signal:'hpu_pressure',op:'<',value:145}]}];
     S.observations=[{signal:'hpu_pressure',value:155,unit:'bar',source:'manual'}];`,context);
   assert.equal(vm.runInContext('rankCards(S.eq).excluded.length',context),1);

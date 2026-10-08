@@ -18,6 +18,7 @@ using UnityEngine.Networking;
 [Serializable] public class MesSnapshot { public string config_id, run_id, line_mode, scenario_id; public int sequence; public EquipmentReading[] equipment; public CoilReading[] coils; public MeasurementReading[] measurements; }
 [Serializable] public class ScanReading { public string scan_id, equipment_id, device_id; public float conf; }
 [Serializable] public class ScanEnvelope { public ScanReading[] scans; }
+[Serializable] public class EquipmentSelection { public string equipment_id, config_id; }
 
 public static class FactoryRules
 {
@@ -175,7 +176,8 @@ public class FactoryDemo : MonoBehaviour
         Shape(PrimitiveType.Cube,"Loading door lintel",exteriorEnvelope,new Vector3(0,6.5f,-17),new Vector3(6,3,.25f),wall);
         Shape(PrimitiveType.Cube,"Personnel door lintel",exteriorEnvelope,new Vector3(-16.8f,5.2f,-17),new Vector3(2.2f,5.6f,.25f),wall);
         Shape(PrimitiveType.Cube,"Rear wall",exteriorEnvelope,new Vector3(0,4,17),new Vector3(44,8,.25f),wall);
-        foreach(float x in new[]{-22f,22f}) {
+        // The finishing hall shares the east side; keep this connection open.
+        foreach(float x in new[]{-22f}) {
             foreach(float z in new[]{-10f,10f}) Shape(PrimitiveType.Cube,"Side wall",exteriorEnvelope,new Vector3(x,4,z),new Vector3(.25f,8,14),wall);
             Shape(PrimitiveType.Cube,"Side loading door lintel",exteriorEnvelope,new Vector3(x,6.5f,0),new Vector3(.25f,3,6),wall);
         }
@@ -195,7 +197,8 @@ public class FactoryDemo : MonoBehaviour
             }
         }
         foreach(float z in new[]{-16.8f,0,16.8f}) Shape(PrimitiveType.Cube,"Roof purlin",exteriorEnvelope,new Vector3(0,z==0 ? 9.6f : 7.7f,z),new Vector3(43.6f,.18f,.18f),steel);
-        foreach(float x in new[]{-22f,22f}) {
+        // The finishing hall shares the east side; keep this connection open.
+        foreach(float x in new[]{-22f}) {
             var gable=new GameObject("Gable end"); gable.transform.SetParent(exteriorEnvelope,false); gable.transform.localPosition=Vector3.right*x;
             var mesh=new Mesh(); mesh.vertices=new[]{new Vector3(0,8,-17),new Vector3(0,8,17),new Vector3(0,10,0)};
             mesh.triangles=x<0 ? new[]{0,1,2} : new[]{0,2,1}; mesh.RecalculateNormals(); mesh.RecalculateBounds(); buildingMeshes.Add(mesh);
@@ -432,6 +435,29 @@ public class FactoryDemo : MonoBehaviour
         }
         controlBusy=false;
     }
+    bool selectionBusy;
+    string pendingSelectionId;
+    public void SelectEquipment(string id)
+    {
+        if(!online || config==null || !equipment.ContainsKey(id) || !equipment[id].activeSelf) return;
+        selectedId=id; pendingSelectionId=id;
+        if(!selectionBusy) StartCoroutine(SendSelection());
+    }
+    IEnumerator SendSelection()
+    {
+        selectionBusy=true;
+        while(pendingSelectionId!=null && online) {
+            string id=pendingSelectionId; pendingSelectionId=null;
+            string json=JsonUtility.ToJson(new EquipmentSelection {equipment_id=id, config_id=config.config_id});
+            using(var req=new UnityWebRequest(mesUrl+"/api/equipment/select","POST")) {
+                req.uploadHandler=new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(json));
+                req.downloadHandler=new DownloadHandlerBuffer(); req.SetRequestHeader("Content-Type","application/json");
+                req.timeout=5; yield return req.SendWebRequest();
+                if(req.result!=UnityWebRequest.Result.Success) status="PDA selection failed (HTTP "+req.responseCode+")";
+            }
+        }
+        pendingSelectionId=null; selectionBusy=false;
+    }
     void Update()
     {
         if(online && Time.realtimeSinceStartup-lastSuccess>8) Disconnect("MES updates timed out");
@@ -449,7 +475,7 @@ public class FactoryDemo : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(viewCamera.ScreenPointToRay(Input.mousePosition),out hit)) {
                 var node=hit.transform;
-                while(node!=null) { if(equipment.ContainsKey(node.name)) { selectedId=node.name; break; } node=node.parent; }
+                while(node!=null) { if(equipment.ContainsKey(node.name)) { SelectEquipment(node.name); break; } node=node.parent; }
             }
         }
         if(equipmentRoot!=null) foreach(var label in equipmentRoot.GetComponentsInChildren<TextMesh>())

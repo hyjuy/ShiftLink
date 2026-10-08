@@ -37,7 +37,7 @@ public static class FactoryLayoutChecks
                 demo.SetExteriorView(true);
                 check(building.Find("Exterior envelope").gameObject.activeSelf,"exterior walls and roof visible");
                 check(nodes.GetComponentsInChildren<TextMesh>().Length==0,"equipment labels hidden behind exterior envelope");
-                check(building.GetComponentsInChildren<Transform>(true).Count(t=>t.name=="Gable end")==2,"gable ends close roof sides");
+                check(building.GetComponentsInChildren<Transform>(true).Count(t=>t.name=="Gable end")==1,"west gable closes exterior roof side");
                 FactoryChecks.Capture(Path.Combine(dir,"factory-exterior.png"));
                 var sun=UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None).First(l=>l.type==LightType.Directional); var sunIntensity=sun.intensity; var ambient=RenderSettings.ambientLight;
                 sun.intensity=0; RenderSettings.ambientLight=new Color(.035f,.045f,.06f);

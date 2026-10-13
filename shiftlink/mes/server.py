@@ -57,6 +57,15 @@ def kb_cards() -> dict[str, object]:
             "handovers": handovers, "basis_records": basis_records, "is_synthetic": True}
 
 
+# 시뮬레이터 연동: PDA 조치 기록의 MES 단계 칩·재가동 칩이 모의 MES 조치를 함께 수행한다(시연에서 MES 화면을 오가지 않게).
+# 실제 MES·설비에 붙일 때는 SHIFTLINK_SIM_LINK=0 으로 끈다.
+SIM_LINK = os.environ.get("SHIFTLINK_SIM_LINK", "1") != "0"
+
+
+class ResolutionSessionNotFound(LookupError):
+    """없는 조치 기록 세션 → 404."""
+
+
 class ConflictError(ValueError):
     """Concurrent or stale configuration apply attempt."""
 
@@ -157,13 +166,15 @@ class MesService:
             # 해결 기록은 인계 저장 전에 검사하고 초안 반영까지 계산한다. 인계와 초안은 한 트랜잭션으로 남는다.
             if not (isinstance(body, dict) and body.get("resolution") is not None):
                 return self.storage.save_handover(body)
+            if isinstance(body["resolution"], dict) and body["resolution"].get("session_id"):
+                return self._record_session_handover(body)
             prepared = field_draft.prepare(self._server_evidence(body["resolution"]), self.active_config,
                                            body.get("equipment_id"))
             snap = asdict(self.engine.snapshot)
             field_draft.check_with_mes(
                 prepared, snap["measurements"],
                 [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
-                str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
+                str(snap["simulated_at"]), self.engine.run.run_id, self._events_for_check())
             self.storage._check_handover(body)
             known = self.storage.has_draft_record(body["handover_id"])
             op, reply = (None, {"created": False, "reason": "already_exists"}) if known else \
@@ -172,6 +183,16 @@ class MesService:
             if op is not None and not applied:
                 reply = {"created": False, "reason": "already_exists"}
             return {**saved, "draft": {**reply, "mes_recovered": prepared["mes_check"]["recovered"]}}
+
+    def _events_for_check(self) -> list[dict[str, Any]]:
+        """해결 확인용 이벤트: 기록된 이벤트 + 다음 틱에 기록될 대기 이벤트(pending).
+
+        재가동 직후의 경보 해제는 다음 틱(1초)에 기록되므로, 그 사이 마무리를 눌러도 확인되게 대기분도 본다.
+        대기 이벤트는 아직 일어나기 전이 아니라 '지금' 일어난 것이라 질의·조치 시작보다 뒤로 본다."""
+        events = [asdict(e) for e in self.engine.events]
+        run_id = self.engine.run.run_id
+        return events + [{"run_id": run_id, "event_type": t, "equipment_id": eq, "pending": True}
+                         for t, eq, _ in getattr(self.engine, "_pending_events", [])]
 
     def _server_evidence(self, resolution: object) -> object:
         """PDA가 돌려보낸 질의 근거를 서버가 질의 때 보관한 값으로 바꾼다. 없으면 근거 없음으로 둔다(값을 믿지 않는다)."""
@@ -185,6 +206,8 @@ class MesService:
 
     def _plan_resolution(self, handover_id: str, prepared: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, object]]:
         """저장하지 않고 계산만 한다: 가장 많이 겹치는 검수 대기 초안에 붙이거나 새 초안을 만든다. 예외면 아무것도 남지 않는다."""
+        # MES 복구 단계 제목(시나리오별 + 일반 계획)은 누구나 하는 조치라 묶음 비교에서 뺀다.
+        prepared["generic_actions"] = {a.title for spec in self.active_config.scenarios for a in spec.recovery_actions}             | {"이상 신호 위치 확인", "원인 조치 기록", "정상 범위 회복 확인"}
         scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
                   if row["status"] == "pending_review"]
         score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))
@@ -197,10 +220,190 @@ class MesService:
             return None, {"created": False, "reason": "attempt_only"}
         return {"kind": "new", "draft": draft}, {"created": draft["status"] == "pending_review", "reason": draft["status"]}
 
-    def card_drafts(self) -> dict[str, object]:
-        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""
+    # ── 조치 기록 세션: 조치 시작 → 조치마다 완료 → 마무리 → 인계와 함께 저장 ─────────────
+    # 센서값은 모두 서버가 그 순간 기록한다(PDA가 보낸 값은 쓰지 않는다). 세션은 저장되면 saved로 닫힌다.
+
+    def _eq_snapshot(self, equipment_id: str) -> dict[str, Any]:
+        snap = asdict(self.engine.snapshot)
+        at = snap["simulated_at"]
+        return {"run_id": snap["run_id"], "equipment_id": equipment_id,
+                "simulated_at": at.isoformat() if isinstance(at, datetime) else str(at),
+                "measurements": [m for m in snap["measurements"] if m.get("equipment_id") == equipment_id],
+                "alarms": [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == equipment_id],
+                "support_scenario": snap.get("support_scenario"), "scenario_id": snap.get("scenario_id"),
+                "components": [c for c in snap.get("components") or [] if c.get("equipment_id") == equipment_id],
+                "recovery": snap.get("recovery")}
+
+    def _open_session(self, session_id: object) -> dict[str, Any]:
+        session = self.storage.get_resolution_session(session_id)
+        if session is None:
+            raise ResolutionSessionNotFound(f"unknown resolution session: {session_id}")
+        if session["status"] != "open":
+            raise ConflictError("resolution session is already saved")
+        return session
+
+    def _session_view(self, eq: Any, evidence: dict[str, Any]) -> dict[str, Any]:
+        return {"simulated_at": evidence.get("simulated_at"), "out_of_range": field_draft.out_of_range(eq, evidence),
+                "alarms": evidence.get("alarms") or []}
+
+    def resolution_start(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
-            return {"drafts": self.storage.list_card_drafts(), "is_synthetic": True}
+            if not isinstance(body, dict):
+                raise ValueError("body must be an object")
+            eq = field_draft._equipment(self.active_config, body.get("equipment_id"))
+            question = field_draft._text(body.get("question"), 4000, "question", required=False)
+            snap = self._eq_snapshot(eq.equipment_id)
+            sent = body.get("evidence") if isinstance(body.get("evidence"), dict) else {}
+            stored = self.storage.get_query_evidence(sent.get("run_id"), sent.get("simulated_at"), eq.equipment_id) if sent else None
+            if stored is not None and stored.get("equipment_id") == eq.equipment_id:
+                before = {**stored, "source": "query_evidence"}
+            else:
+                before = {key: snap[key] for key in ("run_id", "equipment_id", "simulated_at", "measurements", "alarms")}
+                before["source"] = "snapshot"
+            before["support_scenario"] = snap["support_scenario"]
+            watched = [item["signal"] for item in field_draft.out_of_range(eq, before)]
+            data = {"question": question, "run_id": before["run_id"], "before": before, "watched": watched,
+                    "steps": [], "after": None, "verdict": None}
+            session_id = self.storage.create_resolution_session(eq.equipment_id, data)
+            recovery = snap["recovery"] if (snap["recovery"] or {}).get("equipment_id") == eq.equipment_id else None
+            spec = next((s for s in self.active_config.scenarios if s.scenario_id == snap["scenario_id"]), None)
+            suggested = spec.component_id if spec and recovery else ""
+            drafts = [row for row in self.storage.list_card_drafts() if row["card"].get("mes_equipment_id") == eq.equipment_id]
+            field_actions = list(dict.fromkeys(s["action"] for row in drafts for s in row["card"]["type_payload"]["steps"]))[:5]
+            causes = list(dict.fromkeys(line.removeprefix("원인: ") for row in drafts
+                                        for line in (row["card"].get("know_how") or "").splitlines()
+                                        if line.startswith("원인: ")))[:5]
+            return {"session_id": session_id, "before": self._session_view(eq, before),
+                    "components": [{"component_id": c["component_id"], "name": c["name"],
+                                    "suggested": c["component_id"] == suggested} for c in snap["components"]],
+                    "action_suggestions": [{"text": a["title"], "source": "mes_recovery", "action_id": a["action_id"]}
+                                           for a in (recovery or {}).get("actions") or []]
+                                          + ([{"text": field_draft.RESTART_ACTION, "source": "mes_restart"}] if recovery and SIM_LINK else [])
+                                          + [{"text": a, "source": "field_record"} for a in field_actions],
+                    "cause_suggestions": [*causes, field_draft.CAUSE_UNKNOWN] if field_draft.CAUSE_UNKNOWN not in causes else causes,
+                    "is_synthetic": True}
+
+    def resolution_step(self, session_id: str, body: dict[str, Any]) -> dict[str, object]:
+        with self._lock:
+            session = self._open_session(session_id)
+            data = session["data"]
+            if not isinstance(body, dict):
+                raise ValueError("body must be an object")
+            action = field_draft._text(body.get("action"), 500, "action")
+            if len(data["steps"]) >= 20:
+                raise ValueError("a session holds up to 20 steps")
+            risky = any(word in action for word in field_draft.SAFETY_WORDS)
+            lockout = body.get("lockout") if risky else None
+            if risky and lockout not in field_draft.LOCKOUT_ANSWERS:
+                raise ValueError("lockout_required")
+            eq = field_draft._equipment(self.active_config, session["equipment_id"])
+            linked = self._sim_link(eq.equipment_id, action) if SIM_LINK else None
+            snap = self._eq_snapshot(eq.equipment_id)
+            previous = data["steps"][-1]["measurements"] if data["steps"] else data["before"]["measurements"]
+            step = {"order": len(data["steps"]) + 1, "action": action, "lockout": lockout,
+                    "simulated_at": snap["simulated_at"], "measurements": snap["measurements"],
+                    "result_text": field_draft.delta_text(eq, data["watched"], previous, snap["measurements"]),
+                    "mes_linked": linked}
+            data["steps"].append(step)
+            data["after"] = data["verdict"] = None  # 조치를 더 하면 마무리를 다시 한다
+            self.storage.update_resolution_session(session_id, data)
+            return {"order": step["order"], "result_text": step["result_text"], "simulated_at": step["simulated_at"],
+                    "mes_linked": linked, "is_synthetic": True}
+
+    def _sim_link(self, equipment_id: str, action: str) -> str | None:
+        """시뮬레이터 연동(SIM_LINK): PDA에서 MES 복구 단계 칩을 완료하면 MES에도 그 조치를 수행하고,
+        재가동 칩이면 라인 복구를 시작한다. 실제 설비라면 센서가 스스로 바뀌므로 이 연결이 필요 없다(끄면 기록만 한다).
+        직접 적은 조치는 설비를 바꾸지 않는다. 순서가 틀리면 MES가 거절하고 단계도 남지 않는다."""
+        recovery = asdict(self.engine.snapshot).get("recovery") or {}
+        if recovery.get("equipment_id") != equipment_id:
+            return None
+        if action == field_draft.RESTART_ACTION:
+            self.control({"command": "recover"})
+            return "recover"
+        match = next((a for a in recovery.get("actions") or [] if a["title"] == action), None)
+        if match is None or match["completed"]:
+            return None
+        self.control({"command": "recovery_action", "action_id": match["action_id"]})
+        return "recovery_action:" + match["action_id"]
+
+    def _finish_session(self, eq: Any, data: dict[str, Any]) -> dict[str, Any]:
+        """그 순간 MES로 판정한다. 기준은 기존 해결 확인과 같다(질의·조치 시작 뒤 같은 실행의 복구 기록 필수)."""
+        snap = self._eq_snapshot(eq.equipment_id)
+        prepared = {"resolution": {"evidence": data["before"]}, "eq": eq,
+                    "states": field_draft._states(eq, data["before"])}
+        check = field_draft.check_with_mes(prepared, snap["measurements"], snap["alarms"], snap["simulated_at"],
+                                           self.engine.run.run_id, self._events_for_check())
+        after = {key: snap[key] for key in ("run_id", "equipment_id", "simulated_at", "measurements", "alarms")}
+        data["after"] = after
+        data["verdict"] = {**field_draft.verdict_of(check, len(data["steps"])), "check": check}
+        return data["verdict"]
+
+    def resolution_finish(self, session_id: str) -> dict[str, object]:
+        with self._lock:
+            session = self._open_session(session_id)
+            eq = field_draft._equipment(self.active_config, session["equipment_id"])
+            verdict = self._finish_session(eq, session["data"])
+            self.storage.update_resolution_session(session_id, session["data"])
+            return {"verdict": verdict["verdict"], "text": verdict["text"], "suggested_result": verdict["suggested_result"],
+                    "after": self._session_view(eq, session["data"]["after"]), "is_synthetic": True}
+
+    def resolution_get(self, session_id: str) -> dict[str, object]:
+        with self._lock:
+            session = self.storage.get_resolution_session(session_id)
+            if session is None:
+                raise ResolutionSessionNotFound(f"unknown resolution session: {session_id}")
+            return {**session, "is_synthetic": True}
+
+    def _record_session_handover(self, body: dict[str, Any]) -> dict[str, object]:
+        """세션에 쌓인 조치·센서 기록 + 작업자 입력(본 것·원인·부품·결과)으로 해결 기록을 만들어 기존 경로로 저장한다."""
+        self.storage._check_handover(body)
+        if self.storage.get_handover(body["handover_id"]) is not None:  # 재전송: 같은 본문이면 그대로, 다르면 409
+            saved, _ = self.storage.save_handover_with_draft(body, None)
+            return {**saved, "draft": {"created": False, "reason": "already_exists"}}
+        res = body["resolution"]
+        session = self._open_session(res["session_id"])
+        if session["equipment_id"] != body.get("equipment_id"):
+            raise ValueError("resolution session belongs to another equipment")
+        eq = field_draft._equipment(self.active_config, session["equipment_id"])
+        data = session["data"]
+        if res.get("result") not in field_draft.RESULTS:
+            raise ValueError("result must be resolved, temporary or failed")
+        if res["result"] != "failed" and not data["steps"]:
+            raise ValueError("complete at least one action before saving")
+        cause = field_draft._text(res.get("cause"), 200, "cause")
+        components = {c["component_id"]: c["name"] for c in self._eq_snapshot(eq.equipment_id)["components"]}
+        if res.get("component_id") not in components:
+            raise ValueError("component_id must be one of the equipment components")
+        if data["verdict"] is None:
+            self._finish_session(eq, data)
+        scenario = data["before"].get("support_scenario")
+        raw = {"question": data["question"], "symptom": res.get("symptom"), "result": res["result"],
+               "actions": [{"action": s["action"], "result": s["result_text"]} for s in data["steps"]],
+               "verification": data["verdict"]["text"], "evidence": data["before"], "cause": cause,
+               "component_id": res["component_id"], "component_name": components[res["component_id"]],
+               "scenario": scenario if scenario in field_draft.SCENARIOS else None,
+               "lockout_answers": [{"action": s["action"], "lockout": s["lockout"]} for s in data["steps"] if s["lockout"]]}
+        prepared = field_draft.prepare(raw, self.active_config, eq.equipment_id)
+        prepared["mes_check"] = data["verdict"]["check"]  # 마무리 때의 판정을 쓴다
+        op, reply = self._plan_resolution(body["handover_id"], prepared)
+        saved, _ = self.storage.save_handover_with_draft(body, op, session=(res["session_id"], data))
+        return {**saved, "draft": {**reply, "mes_recovered": data["verdict"]["check"]["recovered"],
+                                   "mes_verdict": data["verdict"]["verdict"]}}
+
+    def card_drafts(self) -> dict[str, object]:
+        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다.
+
+        각 초안에 겹칠 수 있는 기존 카드(similar_kb_cards)를 붙인다. 카드 묶음은 처음 한 번만 읽는다.
+        """
+        with self._lock:
+            if getattr(self, "_kb_provider", None) is None:
+                from shiftlink.rag.loader import load_card_provider
+                from .query import ROOT
+                self._kb_provider = load_card_provider(ROOT / "docs/data/knowledge_cards/kb/kb_cards.json").provider
+            drafts = self.storage.list_card_drafts()
+            for row in drafts:
+                row["similar_kb_cards"] = field_draft.similar_kb_cards(row["card"], self._kb_provider)
+            return {"drafts": drafts, "is_synthetic": True}
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -411,6 +614,8 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
             if parsed.path == "/api/card-drafts": self._send(200, self.service.card_drafts()); return
+            if parsed.path.startswith("/api/resolution/"):
+                self._send(200, self.service.resolution_get(parsed.path.split("/")[3])); return
             if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
             if parsed.path == "/api/outbox/pending":
                 rows = self.service.storage.pending_handovers()
@@ -435,7 +640,7 @@ class _Handler(BaseHTTPRequestHandler):
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
                 self._send(200, (self.web_root / name).read_bytes(), f"{kind}; charset=utf-8"); return
             self._send(404, {"error": "not found", "is_synthetic": True})
-        except KeyError as error: self._send(404, {"error": str(error), "is_synthetic": True})
+        except (KeyError, ResolutionSessionNotFound) as error: self._send(404, {"error": str(error), "is_synthetic": True})
         except ValueError as error: self._send(400, {"error": str(error), "is_synthetic": True})
         except Exception as error:  # noqa: BLE001 — 응답 없이 끊지 않는다
             self._send(500, {"error": f"MES 서버 오류: {type(error).__name__}: {error}", "is_synthetic": True})
@@ -455,7 +660,15 @@ class _Handler(BaseHTTPRequestHandler):
             if self.path == "/api/equipment/scan": self._send(201, self.service.record_scan(payload)); return
             if self.path == "/api/handover": self._send(200, self.service.record_handover(payload)); return
             if self.path == "/api/query": self._send(200, self.service.query(payload)); return
+            if self.path == "/api/resolution/start": self._send(200, self.service.resolution_start(payload)); return
+            parts = self.path.split("/")
+            if len(parts) == 5 and parts[1:3] == ["api", "resolution"] and parts[4] == "step":
+                self._send(200, self.service.resolution_step(parts[3], payload)); return
+            if len(parts) == 5 and parts[1:3] == ["api", "resolution"] and parts[4] == "finish":
+                self._send(200, self.service.resolution_finish(parts[3])); return
             self._send(404, {"error": "not found", "is_synthetic": True})
+        except ResolutionSessionNotFound as error:
+            self._send(404, {"error": str(error), "is_synthetic": True})
         except (ConflictError, HandoverConflictError) as error:
             self._send(409, {"error": str(error), "is_synthetic": True})
         except ConfigValidationError as error:

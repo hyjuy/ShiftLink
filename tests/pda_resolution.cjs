@@ -1,37 +1,54 @@
 const assert = require('node:assert/strict');
-const {evidenceSummary, resolutionError, resolutionPayload, draftNotice} = require('../shiftlink/mes/web/pda.js');
-const form = {symptom:'작동유 온도 경보', actions:[{action:'냉각기 팬 필터 청소', result:' 팬 풍량 회복 '}, {action:'', result:''}], result:'resolved', verification:'온도 정상'};
-// 저장 전 검사: 서버와 같은 규칙(증상 필수, 조치 1개 이상, 해결이면 근거 필수)
-assert.equal(resolutionError(form), '');
-assert.equal(resolutionError({...form, symptom:'  '}), '현장에서 본 것을 적어 주세요.');
-assert.equal(resolutionError({...form, actions:[{action:'', result:''}, {action:'  ', result:'x'}]}), '한 일을 한 가지 이상 적어 주세요.');
-assert.equal(resolutionError({...form, verification:''}), '해결됐다고 본 근거를 적어 주세요.');
-assert.equal(resolutionError({...form, result:'temporary', verification:''}), '');
-assert.equal(resolutionError({...form, result:'failed', actions:[], verification:''}), '');
-// 보내는 내용: 빈 조치는 빼고, 조치별 결과는 다듬어 함께 보내고, 질의 원문과 그 질의의 MES 근거를 그대로 붙인다
-const evidence = {equipment_id:'EQ-0001', simulated_at:'2026-10-13T08:59:00+09:00',
-  measurements:[{signal:'hpu_oil_temp', value:66.5, unit:'degC', used_for_conditions:true},
-                {signal:'hpu_flow', value:1, unit:'lpm', used_for_conditions:false}]};
-const turn = {question:'작동유 온도가 높아요', response:{evidence}};
-const payload = resolutionPayload(form, turn);
-assert.deepEqual(payload.actions, [{action:'냉각기 팬 필터 청소', result:'팬 풍량 회복'}]);
-assert.equal(payload.question, '작동유 온도가 높아요');
-assert.equal(payload.result, 'resolved');
-assert.equal(payload.evidence, evidence);
-assert.equal(resolutionPayload(form, {question:'q', response:{}}).evidence, null);
-// 근거 한 줄: 조건에 쓴 측정값만 보인다
-assert.match(evidenceSummary(evidence), /^MES 근거\(질의 시점 .+\): hpu_oil_temp 66\.5 /);
-assert.doesNotMatch(evidenceSummary(evidence), /hpu_flow/);
-assert.match(evidenceSummary(null), /MES 근거 없음/);
+const {riskyAction, mesSummary, resolveError, sessionPayload, draftNotice} = require('../shiftlink/mes/web/pda.js');
+
+// 위험 조치: 서버 SAFETY_WORDS와 같은 말이면 잠금 응답을 받는다
+assert.equal(riskyAction('팬 차단기 트립 원인 확인 후 재투입'), true);
+assert.equal(riskyAction('재가동 후 유온 추이 확인'), true);
+assert.equal(riskyAction('쿨러 핀 에어 블로우 청소'), false);
+assert.equal(riskyAction(undefined), false);
+
+// MES 요약 한 줄: 첫 이상 신호 + 외 N + 경보
+const before = {simulated_at: '2026-10-13T08:59:00+00:00', alarms: ['AL-HYD-HOT'],
+  out_of_range: [{signal: 'hpu_oil_temp', name: '유압유 온도', value: 78, state: 'high'},
+                 {signal: 'hpu_cooler_oil_in_temp', name: '냉각기 오일 입구 온도', value: 78, state: 'high'}]};
+assert.match(mesSummary('조치 전', before), /^조치 전 MES 자동 기록 · .+ · 유압유 온도 78 ▲ 외 1 · 경보 AL-HYD-HOT$/);
+assert.match(mesSummary('조치 후', {simulated_at: null, out_of_range: [], alarms: []}), /이상 신호 없음 · 경보 없음$/);
+assert.match(mesSummary('조치 전', null), /기록하고 있습니다/);
+
+// 저장 전 검사: 본 것·부품·조치(효과 없음 제외)·원인·결과
+const r = {sessionId: 'RS-1', symptom: '쿨러 팬이 멈춰 있음', componentId: 'cooling', steps: [{order: 1}],
+  cause: '팬 차단기 트립', causeCustom: '', result: 'resolved'};
+assert.equal(resolveError(r), '');
+assert.match(resolveError({...r, sessionId: null}), /시작하지 못했습니다/);
+assert.match(resolveError({...r, symptom: ' '}), /현장에서 본 것/);
+assert.match(resolveError({...r, componentId: ''}), /부품/);
+assert.match(resolveError({...r, steps: []}), /조치를 하나 이상/);
+assert.equal(resolveError({...r, steps: [], result: 'failed'}), '');
+assert.match(resolveError({...r, cause: '', causeCustom: ' '}), /원인 모름/);
+assert.equal(resolveError({...r, cause: '', causeCustom: '쿨러 팬 모터 소손'}), '');
+
+// 보내는 내용: 조치·센서값은 서버가 세션에서 채우므로 작업자 입력만
+assert.deepEqual(sessionPayload({...r, symptom: ' 쿨러 팬이 멈춰 있음 '}),
+  {session_id: 'RS-1', symptom: '쿨러 팬이 멈춰 있음', cause: '팬 차단기 트립', component_id: 'cooling', result: 'resolved'});
+assert.equal(sessionPayload({...r, causeCustom: ' 쿨러 팬 모터 소손 '}).cause, '쿨러 팬 모터 소손');
+
 // 인계 응답의 draft → 확인 문구 (카드 내용은 응답에 없다)
-assert.match(draftNotice({created:true, reason:'pending_review'}), /검수를 기다립니다 — 검수 전에는 검색에 나오지 않습니다$/);
-assert.match(draftNotice({created:false, reason:'attempt_only'}), /카드 초안은 만들지 않습니다/);
-assert.match(draftNotice({created:false, reason:'already_exists'}), /이미 카드 초안이 만들어져/);
-assert.match(draftNotice({created:false, reason:'supporting'}), /근거로 더했습니다/);
-assert.match(draftNotice({created:false, reason:'contradicting'}), /효과 없었던 기록/);
+assert.match(draftNotice({created: true, reason: 'pending_review', mes_verdict: 'recovered'}), /관리자 검수를 기다립니다.* · MES 정상 복귀 확인$/);
+assert.match(draftNotice({created: false, reason: 'supporting', mes_verdict: 'unconfirmed'}), /확인 불가\(복구 기록 없음\)/);
+assert.match(draftNotice({created: false, reason: 'contradicting', mes_verdict: 'not_yet'}), /MES는 아직 이상/);
+assert.match(draftNotice({created: false, reason: 'supporting', mes_recovered: true}), /MES 정상 복귀 확인$/);  // 예전 응답
+assert.match(draftNotice({created: false, reason: 'already_exists'}), /이미 카드 초안이/);
 assert.equal(draftNotice(undefined), '');
-console.log('PDA resolution record PASS');
-// MES 확인 결과가 문구 끝에 붙는다
-assert.match(draftNotice({created:true, reason:'pending_review', mes_recovered:true}), /MES 정상 복귀 확인$/);
-assert.match(draftNotice({created:false, reason:'supporting', mes_recovered:false}), /MES는 아직 이상 — 해결로 세지 않습니다$/);
-console.log('PDA resolution MES notice PASS');
+console.log('PDA resolution session PASS');
+
+// 한 일 칩: 끝낸 MES 단계는 숨기고, 재가동은 MES 단계를 다 끝낸 뒤에만 누를 수 있다
+const {actionChips} = require('../shiftlink/mes/web/pda.js');
+const actions = [{text: '유면·냉각·밸브 점검', source: 'mes_recovery'}, {text: '냉각 성능 복구', source: 'mes_recovery'},
+  {text: '재가동 (라인 복구 시작)', source: 'mes_restart'}, {text: '팬 차단기 올림', source: 'field_record'}];
+let chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}]});
+assert.deepEqual(chips.map((c) => c.text), ['냉각 성능 복구', '재가동 (라인 복구 시작)', '팬 차단기 올림']);
+assert.equal(chips.find((c) => c.text.startsWith('재가동')).disabled, true);
+assert.equal(chips[0].tag, 'MES 단계');
+chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}, {action: '냉각 성능 복구'}, {action: '팬 차단기 올림'}]});
+assert.deepEqual(chips.map((c) => [c.text, c.disabled]), [['재가동 (라인 복구 시작)', false], ['팬 차단기 올림', false]]);
+console.log('PDA action chips PASS');

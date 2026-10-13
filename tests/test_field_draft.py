@@ -455,5 +455,275 @@ class FieldDraftHttpTests(unittest.TestCase):
                 service.storage.close()
 
 
+class ResolutionSessionTests(unittest.TestCase):
+    """조치 기록 세션: 조치 시작 → 조치마다 완료(센서값 자동) → 마무리(MES 판정) → 인계와 함께 저장."""
+
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.service = MesService(CATALOG, MesStorage(Path(self.directory.name) / 'mes.sqlite3'))
+        self.service.control({'command': 'start'})
+        self.service.engine.tick(30)
+
+    def tearDown(self):
+        self.service.storage.close()
+        self.directory.cleanup()
+
+    def overheat(self):
+        self.service.control({'command': 'scenario', 'scenario_id': 'hydraulic_overheat'})
+        self.service.engine.tick(5)
+
+    def mes(self, *actions, restart=False):
+        for action in actions:
+            self.service.control({'command': 'recovery_action', 'action_id': action})
+        if restart:
+            self.service.control({'command': 'recover'})
+        self.service.engine.tick(3)
+
+    def start(self, with_query=True):
+        body = {'equipment_id': 'EQ-0001', 'question': '작동유 온도가 너무 높아요'}
+        if with_query:
+            body['evidence'] = self.service.query({'question': '작동유 온도가 너무 높아요', 'equipment_id': 'EQ-0001'})['evidence']
+        return self.service.resolution_start(body)
+
+    def save(self, session_id, handover_id='HO-RS-1', **extra):
+        res = {'session_id': session_id, 'symptom': '쿨러 팬이 멈춰 있고 차단기가 트립돼 있음', 'cause': '팬 차단기 트립',
+               'component_id': 'cooling', 'result': 'resolved', **extra}
+        return self.service.record_handover({'handover_id': handover_id, 'memo_text': '조치 기록', 'equipment_id': 'EQ-0001',
+                                             'resolution': res})
+
+    def full_fix(self, cause_actions=('팬 차단기 트립 원인 확인 후 재투입', '팬 회전 방향과 소리 확인')):
+        self.overheat()
+        sid = self.start()['session_id']
+        self.service.resolution_step(sid, {'action': cause_actions[0], 'lockout': '예'})
+        self.mes('inspect', 'repair', 'verify', restart=True)
+        self.service.resolution_step(sid, {'action': cause_actions[1], 'lockout': '해당 없음'})
+        self.service.resolution_finish(sid)
+        return sid
+
+    def test_start_uses_query_evidence_and_suggests_from_mes(self):
+        self.overheat()
+        out = self.start()
+        session = self.service.resolution_get(out['session_id'])
+        self.assertEqual(session['data']['before']['source'], 'query_evidence')
+        self.assertIn(('hpu_oil_temp', 'high'), {(o['signal'], o['state']) for o in out['before']['out_of_range']})
+        self.assertIn({'component_id': 'cooling', 'name': '냉각 계통', 'suggested': True}, out['components'])
+        self.assertEqual([a['text'] for a in out['action_suggestions'] if a['source'] == 'mes_recovery'],
+                         ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
+        self.assertEqual(out['cause_suggestions'], ['원인 모름'])
+
+    def test_start_without_query_falls_back_to_snapshot(self):
+        self.overheat()
+        out = self.start(with_query=False)
+        self.assertEqual(self.service.resolution_get(out['session_id'])['data']['before']['source'], 'snapshot')
+
+    def test_risky_step_needs_lockout_answer(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        with self.assertRaisesRegex(ValueError, 'lockout_required'):
+            self.service.resolution_step(sid, {'action': '팬 차단기 재투입'})
+        self.assertEqual(self.service.resolution_step(sid, {'action': '팬 차단기 재투입', 'lockout': '예'})['order'], 1)
+        step = self.service.resolution_step(sid, {'action': '쿨러 핀 청소', 'lockout': '예'})
+        self.assertIsNone(self.service.resolution_get(sid)['data']['steps'][1]['lockout'])  # 위험하지 않으면 무시
+        self.assertEqual(step['result_text'], '센서값 변화 없음')
+
+    def test_step_result_is_sensor_change_measured_by_server(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        self.mes('inspect', 'repair', 'verify')
+        step = self.service.resolution_step(sid, {'action': '냉각 성능 복구'})
+        self.assertRegex(step['result_text'], r'^유압유 온도 78→\d')
+
+    def test_finish_needs_real_recovery(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        self.service.resolution_step(sid, {'action': '쿨러 핀 청소'})
+        early = self.service.resolution_finish(sid)
+        self.assertEqual((early['verdict'], early['suggested_result']), ('not_yet', 'failed'))
+        self.mes('inspect', 'repair', 'verify')
+        self.assertEqual(self.service.resolution_finish(sid)['suggested_result'], 'temporary')  # 경보·라인 복구 전
+        self.mes(restart=True)
+        done = self.service.resolution_finish(sid)
+        self.assertEqual((done['verdict'], done['text'], done['suggested_result']), ('recovered', 'MES 정상 복귀 확인', 'resolved'))
+
+    def test_finish_after_new_simulation_is_unconfirmed(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        self.service.resolution_step(sid, {'action': '쿨러 핀 청소'})
+        self.service.control({'command': 'reset'})
+        self.service.control({'command': 'start'})
+        self.service.engine.tick(30)
+        out = self.service.resolution_finish(sid)
+        self.assertEqual(out['verdict'], 'unconfirmed')
+        self.assertIn('질의 뒤 시뮬레이션이 새로 시작됨', out['text'])
+
+    def test_saved_session_becomes_card_draft_with_cause_component_and_lockouts(self):
+        sid = self.full_fix()
+        out = self.save(sid)
+        self.assertEqual(out['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': True,
+                                        'mes_verdict': 'recovered'})
+        [row] = self.service.card_drafts()['drafts']
+        card, flags = row['card'], row['review_flags']
+        KnowledgeCard.model_validate(card)
+        self.assertEqual((card['component'], card['mes_component_code']), ('냉각 계통', 'cooling'))
+        self.assertIn(card['scenario'], ('S1', 'S2', 'S3'))
+        self.assertTrue(card['know_how'].startswith('원인: 팬 차단기 트립\n'))
+        self.assertIn('원인: 팬 차단기 트립', card['title'])
+        steps = card['type_payload']['steps']
+        self.assertEqual(steps[0]['expected_result'], '센서값 변화 없음')
+        self.assertRegex(steps[1]['expected_result'], r'^유압유 온도 78→')
+        self.assertEqual(flags['lockout_answers'][0], {'action': '팬 차단기 트립 원인 확인 후 재투입', 'lockout': '예'})
+        self.assertFalse(card['safety_flag'])
+        self.assertNotIn('safety_basis', card)
+        self.assertEqual(self.service.resolution_get(sid)['status'], 'saved')
+        operator = flags['completeness']['operator']
+        self.assertNotIn('부품 확인', operator)  # 작업자가 골랐다
+        self.assertNotIn('시나리오 확인', operator)  # MES support_scenario에서 받았다
+
+    def test_sensor_noise_is_not_a_step_result(self):
+        eq = next(e for e in hpu_config().equipment if e.equipment_id == 'EQ-0001')
+        m = lambda v: [{'equipment_id': 'EQ-0001', 'signal': 'hpu_oil_temp', 'value': v}]  # noqa: E731
+        from shiftlink.mes.field_draft import delta_text
+        self.assertEqual(delta_text(eq, ['hpu_oil_temp'], m(45.7), m(45.8)), '센서값 변화 없음')
+        self.assertEqual(delta_text(eq, ['hpu_oil_temp'], m(78), m(45.66)), '유압유 온도 78→45.7')
+
+    def test_same_cause_in_other_words_joins_one_draft(self):
+        self.save(self.full_fix(), 'HO-RS-1')
+        self.service.control({'command': 'reset'})
+        self.service.control({'command': 'start'})
+        self.service.engine.tick(30)
+        sid = self.full_fix(('팬 차단기 올림', '팬 회전 확인'))
+        out = self.save(sid, 'HO-RS-2', symptom='쿨러 쪽이 조용하고 팬이 안 돎')
+        self.assertEqual(out['draft']['reason'], 'supporting')
+        self.assertEqual(len(self.service.card_drafts()['drafts']), 1)
+
+    def test_different_cause_is_not_joined_by_shared_mes_step(self):
+        # 10/13 상황지 검증: 핀 막힘이 MES 공통 단계 '유온·공급 정상 확인' 때문에 팬 정지 초안에 묶였다.
+        def record(handover_id, first, cause, result='resolved', fix=True):
+            self.service.control({'command': 'reset'}); self.service.control({'command': 'start'}); self.service.engine.tick(30)
+            self.overheat()
+            sid = self.start()['session_id']
+            self.service.resolution_step(sid, {'action': first, 'lockout': '예'})
+            if fix:
+                self.mes('inspect', 'repair', 'verify', restart=True)
+                self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
+            return self.save(sid, handover_id, cause=cause, result=result)
+        record('HO-C1', '팬 차단기 트립 원인 확인 후 재투입', '팬 차단기 트립')
+        self.assertEqual(record('HO-C2', '쿨러 핀 에어 블로우로 먼지 제거', '쿨러 핀 막힘')['draft']['reason'], 'pending_review')
+        # 원인 모름 + 같은 조치(효과 없음)는 조치로 비교해 핀 막힘 초안의 반대 근거
+        out = record('HO-C3', '쿨러 핀 에어 블로우로 먼지 제거', '원인 모름', result='failed', fix=False)
+        self.assertEqual(out['draft']['reason'], 'contradicting')
+        self.assertEqual(len(self.service.card_drafts()['drafts']), 2)
+
+    def test_pda_alone_drives_simulated_repair(self):
+        # 시연: MES 화면을 오가지 않고 PDA의 MES 단계 칩 3개 + 재가동 칩으로 복구까지 끝낸다.
+        self.overheat()
+        out = self.start()
+        sid = out['session_id']
+        chips = [a for a in out['action_suggestions'] if a['source'] in ('mes_recovery', 'mes_restart')]
+        self.assertEqual([c['text'] for c in chips],
+                         ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인', '재가동 (라인 복구 시작)'])
+        free = self.service.resolution_step(sid, {'action': '팬 차단기 트립 원인 확인 후 재투입', 'lockout': '예'})
+        self.assertIsNone(free['mes_linked'])  # 직접 적은 조치는 설비를 바꾸지 않는다
+        with self.assertRaises(ValueError):  # 순서가 틀리면 MES가 거절하고 단계도 남지 않는다
+            self.service.resolution_step(sid, {'action': '냉각 성능 복구'})
+        self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 1)
+        for title in ('유면·냉각·밸브 점검', '냉각 성능 복구'):
+            self.assertTrue(self.service.resolution_step(sid, {'action': title})['mes_linked'].startswith('recovery_action:'))
+        done = self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
+        self.assertRegex(done['result_text'], r'^유압유 온도 78→')
+        self.assertEqual(self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '해당 없음'})['mes_linked'], 'recover')
+        fin = self.service.resolution_finish(sid)
+        self.assertEqual((fin['verdict'], fin['suggested_result']), ('recovered', 'resolved'))
+
+    def test_restart_before_mes_steps_is_refused(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        with self.assertRaises(ValueError):
+            self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '예'})
+
+    def test_sim_link_can_be_turned_off(self):
+        from shiftlink.mes import server as server_module
+        self.overheat()
+        sid = self.start()['session_id']
+        old, server_module.SIM_LINK = server_module.SIM_LINK, False
+        try:
+            self.assertIsNone(self.service.resolution_step(sid, {'action': '유면·냉각·밸브 점검'})['mes_linked'])
+        finally:
+            server_module.SIM_LINK = old
+        recovery = self.service.resolution_get(sid)  # MES 조치는 그대로(완료 안 됨)
+        from dataclasses import asdict
+        self.assertFalse(asdict(self.service.engine.snapshot)['recovery']['actions'][0]['completed'])
+
+    def test_handover_session_and_draft_are_atomic(self):
+        sid = self.full_fix()
+        def exhausted(*_):
+            raise ValueError('field draft card id range is exhausted')
+        self.service.storage.next_card_id = exhausted
+        with self.assertRaises(ValueError):
+            self.save(sid)
+        self.assertIsNone(self.service.storage.get_handover('HO-RS-1'))
+        self.assertEqual(self.service.resolution_get(sid)['status'], 'open')
+        self.assertEqual(self.service.card_drafts()['drafts'], [])
+
+    def test_retry_conflict_and_wrong_equipment(self):
+        sid = self.full_fix()
+        self.save(sid)
+        self.assertEqual(self.save(sid)['draft'], {'created': False, 'reason': 'already_exists'})
+        with self.assertRaises(HandoverConflictError):
+            self.save(sid, symptom='다른 내용')
+        with self.assertRaises(ValueError):  # 저장된 세션에는 조치를 더할 수 없다(409)
+            self.service.resolution_step(sid, {'action': '쿨러 핀 청소'})
+        sid2 = self.full_fix()
+        with self.assertRaises(ValueError):
+            self.service.record_handover({'handover_id': 'HO-RS-9', 'memo_text': 'm', 'equipment_id': 'EQ-0002',
+                                          'resolution': {'session_id': sid2, 'symptom': '본 것', 'cause': '원인 모름',
+                                                         'component_id': 'cooling', 'result': 'resolved'}})
+
+    def test_input_checks(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        with self.assertRaises(ValueError):  # 조치 없이 해결 저장
+            self.save(sid)
+        self.service.resolution_step(sid, {'action': '쿨러 핀 청소'})
+        with self.assertRaises(ValueError):
+            self.save(sid, cause=' ')
+        with self.assertRaises(ValueError):
+            self.save(sid, component_id='nope')
+        with self.assertRaises(LookupError):
+            self.service.resolution_step('RS-missing', {'action': 'x'})
+
+
+class ResolutionSessionHttpTests(unittest.TestCase):
+    def test_http_routes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            service = MesService(CATALOG, MesStorage(Path(directory) / 'mes.sqlite3'))
+            handler = type('SessionHandler', (_Handler,), {'service': service})
+            server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
+            worker = threading.Thread(target=server.serve_forever)
+            worker.start()
+            base = f'http://127.0.0.1:{server.server_port}'
+
+            def post(path, body):
+                with urlopen(Request(base + path, json.dumps(body).encode(), {'Content-Type': 'application/json'}), timeout=5) as res:
+                    return json.load(res)
+            try:
+                sid = post('/api/resolution/start', {'equipment_id': 'EQ-0001'})['session_id']
+                self.assertEqual(post(f'/api/resolution/{sid}/step', {'action': '쿨러 핀 청소'})['order'], 1)
+                self.assertIn('verdict', post(f'/api/resolution/{sid}/finish', {}))
+                with urlopen(f'{base}/api/resolution/{sid}', timeout=5) as res:
+                    self.assertEqual(json.load(res)['status'], 'open')
+                for path, code in ((f'/api/resolution/{sid}/step', 400), ('/api/resolution/RS-x/finish', 404)):
+                    body = {'action': '팬 차단기 재투입'} if code == 400 else {}
+                    with self.assertRaises(HTTPError) as caught:
+                        post(path, body)
+                    self.assertEqual(caught.exception.code, code)
+                    caught.exception.close()
+            finally:
+                server.shutdown()
+                worker.join()
+                server.server_close()
+                service.storage.close()
+
+
 if __name__ == '__main__':
     unittest.main()

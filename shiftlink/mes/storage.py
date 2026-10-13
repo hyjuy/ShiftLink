@@ -102,6 +102,9 @@ class MesStorage:
             CREATE TABLE IF NOT EXISTS query_evidence (
                 run_id TEXT NOT NULL, simulated_at TEXT NOT NULL, equipment_id TEXT NOT NULL,
                 evidence TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (run_id, simulated_at, equipment_id));
+            CREATE TABLE IF NOT EXISTS resolution_sessions (
+                session_id TEXT PRIMARY KEY, created_at TEXT NOT NULL, equipment_id TEXT NOT NULL,
+                status TEXT NOT NULL, data TEXT NOT NULL);
         """)
         self.connection.commit()
 
@@ -136,14 +139,20 @@ class MesStorage:
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "duplicate": not bool(inserted), "is_synthetic": True}
 
-    def save_handover_with_draft(self, body: dict[str, Any], op: dict[str, Any] | None) -> tuple[dict[str, Any], bool]:
-        """인계와 초안 반영을 한 트랜잭션으로. op: None | {"kind": "new"|"merge", "draft", "draft_id"?, "relation"?}.
+    def save_handover_with_draft(self, body: dict[str, Any], op: dict[str, Any] | None,
+                                 session: tuple[str, dict[str, Any]] | None = None) -> tuple[dict[str, Any], bool]:
+        """인계와 초안 반영(과 조치 기록 세션 저장 완료)을 한 트랜잭션으로.
 
-        둘 중 하나가 실패하면 둘 다 남지 않는다. 이미 초안에 반영된 인계(재전송)면 op를 건너뛰고 False.
+        op: None | {"kind": "new"|"merge", "draft", "draft_id"?, "relation"?}. session: (session_id, 최종 data).
+        하나가 실패하면 아무것도 남지 않는다. 이미 초안에 반영된 인계(재전송)면 op를 건너뛰고 False.
         """
         self._check_handover(body)
         now = datetime.now().astimezone().isoformat()
         with self.connection:
+            if session is not None and not self.connection.execute(
+                    "UPDATE resolution_sessions SET status = 'saved', data = ? WHERE session_id = ? AND status = 'open'",
+                    (_dump(session[1]), session[0])).rowcount:
+                raise HandoverConflictError("resolution session is already saved")
             saved = self._insert_handover(body)
             if op is None or self.has_draft_record(body["handover_id"]):
                 return saved, False
@@ -160,6 +169,26 @@ class MesStorage:
                 self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, ?, ?)",
                                         (body["handover_id"], op["draft_id"], op["relation"], now))
         return saved, True
+
+    def create_resolution_session(self, equipment_id: str, data: dict[str, Any]) -> str:
+        """조치 기록 세션(조치 시작 → 조치 완료 → 마무리). 인계와 함께 저장되면 saved가 된다."""
+        session_id = "RS-" + uuid4().hex
+        with self.connection:
+            self.connection.execute("INSERT INTO resolution_sessions VALUES (?, ?, ?, 'open', ?)",
+                                    (session_id, datetime.now().astimezone().isoformat(), equipment_id, _dump(data)))
+        return session_id
+
+    def get_resolution_session(self, session_id: object) -> dict[str, Any] | None:
+        row = self.connection.execute(
+            "SELECT equipment_id, status, data FROM resolution_sessions WHERE session_id = ?", (str(session_id),)).fetchone()
+        return {"session_id": session_id, "equipment_id": row[0], "status": row[1], "data": json.loads(row[2])} if row else None
+
+    def update_resolution_session(self, session_id: str, data: dict[str, Any]) -> bool:
+        """열린 세션만 고친다. False면 이미 저장된 세션이다."""
+        with self.connection:
+            return bool(self.connection.execute(
+                "UPDATE resolution_sessions SET data = ? WHERE session_id = ? AND status = 'open'",
+                (_dump(data), session_id)).rowcount)
 
     def save_query_evidence(self, evidence: dict[str, Any] | None) -> None:
         """질의 때 서버가 쓴 MES 근거를 보관한다. 해결 기록은 PDA가 보낸 값 대신 이것으로 판정한다(업로드 대상 아님)."""

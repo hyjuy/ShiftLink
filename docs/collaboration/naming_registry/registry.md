@@ -157,6 +157,8 @@
 | `outboxItemView()` / `openOutbox()` · `#s-outbox` | `shiftlink/mes/web/pda.js` | PDA "업로드 대기 N건" 탭 시 대기 인계 내용 화면 | 허재원 |
 | `required_context` · `attempts` · `observations` · `equipment_id` | PDA 인계 본문 | 추가 보존 필드. required_context는 `recipient_role`, `timing`, `channel`, `acknowledgement`, `context`; 시도·관측값은 제출 원본 유지 | 유현준 |
 | `submitHandover()` · `queryApiPayload()` · `responseCards()` | `shiftlink/mes/web/pda.js` | PDA API 제출·검증 결과 표시. `shiftlink.handover.pending` localStorage 키로 미확인 인계 ID와 본문을 재전송까지 보존 | 유현준 |
+| `renderHomeHandovers()` · `hoCheckEl()` · `#homeHoList` | `shiftlink/mes/web/pda.js`, `pda.html` | 홈 화면 처리·재확인 인계 항목 리스트와 항목별 「확인함」 체크. 체크는 `shiftlink.hoCheck.<handover_id>.<item_id>` localStorage 키(값: 체크 시각 ISO)에만 남고 서버 인계 상태는 바꾸지 않음. `item_id`가 없으면 `id`, 그것도 없으면 `i<인덱스>-<문구 해시>` | Claude |
+| `normalFold()` · `S.foldOpen` | `shiftlink/mes/web/pda.js` | 센서 목록에서 범위 이탈·판정 불가는 항상 보이고 정상·정지 중 0은 「정상 N개 보기」로 접음. 펼침 상태는 목록 키(`ctx`, `obs`, `ev<turn.id>`)별로 3초 갱신 뒤에도 유지 | Claude |
 | `SYMPTOM_LABELS` · `symptomsFor()` | `shiftlink/mes/web/pda.js` | 증상 질의 선택지 표시 이름(카드 ID → [표시 이름, 묶음 `sym`/`pre`]). 화면에만 쓰고 질의에는 원문 `symptom`을 보냄. T4 카드는 선택지에서 제외. 근거 `docs/design/pda_ui/symptom_labels_20261006.md` | Claude |
 | `watchMes()` · `faultsFrom()` · `relevance()` · `#alert` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA가 `/api/state`를 3초마다 읽어 설비별 고장 상황(경보·MES 증상 후보·범위 이탈)을 상단 `#alert` 띠(설비당 한 줄 `.alrow`, `ALERT_ROWS`=3줄까지)로 알리고, 범위 이탈 신호·카드 조건으로 증상 선택지 순서를 매김(`SIGNAL_WORDS`·`DIR_WORDS` 낱말 표). 원인 확정 아님 | Claude |
 | `SIGNAL_NAMES` | `shiftlink/mes/scenarios/priority.py` | 기준정보 측정점에 이름이 없는 신호(gr_vib_rms 등)의 화면 이름. `expand()`가 이름이 신호 ID와 같을 때만 채우고, 저장된 구성의 센서 이상 시나리오 제목도 같은 이름으로 바꿈 | Claude |

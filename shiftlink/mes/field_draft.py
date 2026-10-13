@@ -24,6 +24,10 @@ GENERATOR = "field-resolution-v1"
 ID_RANGE = (7000, 7999)
 RESULTS = ("resolved", "temporary", "failed")
 RESULT_LABELS = {"resolved": "해결", "temporary": "임시조치", "failed": "효과 없음"}
+# 조치 기록(세션)에서 받는 값. 원인 모름은 빈칸이 아니라 '모른다'는 기록이다.
+CAUSE_UNKNOWN = "원인 모름"
+LOCKOUT_ANSWERS = ("예", "아니오", "해당 없음")
+SCENARIOS = ("S1", "S2", "S3")
 PLACEHOLDER = "현장 기록에 결과 없음 — 검수 보완"
 # 안전 표현은 판단하지 않고 검수 대상으로만 표시한다. 근거(safety_basis)는 만들지 않는다.
 SAFETY_WORDS = ("재기동", "재가동", "재투입", "차단기", "개방", "커버", "충전", "바이패스", "분해", "전원 투입", "인터록", "잠금", "격리")
@@ -73,9 +77,21 @@ def check_resolution(resolution: object) -> dict[str, Any]:
     evidence = resolution.get("evidence")
     if evidence is not None and not isinstance(evidence, dict):
         raise ValueError("evidence must be an object or null")
+    scenario = resolution.get("scenario")
+    if scenario is not None and scenario not in SCENARIOS:
+        raise ValueError("scenario must be S1, S2 or S3")
+    lockouts = resolution.get("lockout_answers") or []
+    if not isinstance(lockouts, list) or not all(
+            isinstance(x, dict) and x.get("lockout") in LOCKOUT_ANSWERS for x in lockouts):
+        raise ValueError("lockout_answers must be a list of {action, lockout}")
     return {
         "question": _text(resolution.get("question"), 4000, "question", required=False),
         "symptom": _text(resolution.get("symptom"), 1000, "symptom"),
+        "cause": _text(resolution.get("cause"), 200, "cause", required=False),
+        "component_id": _text(resolution.get("component_id"), 64, "component_id", required=False),
+        "component_name": _text(resolution.get("component_name"), 100, "component_name", required=False),
+        "scenario": scenario,
+        "lockout_answers": lockouts,
         "actions": actions,
         "result": result,
         "verification": _text(resolution.get("verification"), 1000, "verification",
@@ -117,6 +133,47 @@ def _states(eq: EquipmentConfig, evidence: dict[str, Any] | None) -> list[tuple[
         elif spec.normal_max is not None and value > spec.normal_max:
             found.setdefault(spec.signal, (spec, "high"))
     return list(found.values())
+
+
+def out_of_range(eq: EquipmentConfig, evidence: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """조치 전·후 화면용: 정상 범위 밖 신호와 지금 값."""
+    values = {m.get("signal"): m.get("value") for m in (evidence or {}).get("measurements") or []}
+    return [{"signal": spec.signal, "name": spec.name, "value": values.get(spec.signal), "state": state}
+            for spec, state in _states(eq, evidence)]
+
+
+def delta_text(eq: EquipmentConfig, watched: list[str], before: list[dict[str, Any]], now: list[dict[str, Any]]) -> str:
+    """조치 하나의 자동 결과: 지켜보는 신호의 값 변화 '유압유 온도 78→70'. 변화가 없으면 '센서값 변화 없음'."""
+    names = {spec.signal: spec.name for spec in eq.signals}
+    old = {m.get("signal"): m.get("value") for m in before}
+    new = {m.get("signal"): m.get("value") for m in now}
+    changed = [f"{names.get(sig, sig)} {_num(old.get(sig))}→{_num(new.get(sig))}" for sig in watched
+               if sig in old and sig in new and _num(old[sig]) != _num(new[sig])]
+    return ", ".join(changed) or "센서값 변화 없음"
+
+
+def _num(value: object) -> object:
+    return round(value, 1) if isinstance(value, float) else value
+
+
+def verdict_of(check: dict[str, Any], step_count: int) -> dict[str, str]:
+    """마무리 판정: recovered / not_yet / unconfirmed + 작업자에게 보일 문장 + 미리 골라 둘 결과."""
+    signals = check["signals"]
+    normal = bool(signals) and all(s["back_to_normal"] for s in signals)
+    if check["recovered"]:
+        return {"verdict": "recovered", "text": "MES 정상 복귀 확인", "suggested_result": "resolved"}
+    if not signals:
+        return {"verdict": "unconfirmed", "text": "조치 전 이상 신호가 없어 MES로 확인할 수 없음",
+                "suggested_result": "temporary"}
+    if normal and check["active_alarms"]:
+        return {"verdict": "not_yet", "text": "센서는 정상이나 경보·라인 복구 전 — 재가동 후 마무리하면 해결로 확인됩니다",
+                "suggested_result": "temporary"}
+    if normal and check.get("recovery_unconfirmed"):
+        return {"verdict": "unconfirmed", "text": "확인 불가 — " + check["recovery_unconfirmed"],
+                "suggested_result": "temporary"}
+    still = next(s for s in signals if not s["back_to_normal"])
+    return {"verdict": "not_yet", "text": f"아직 이상 ({still['name']} {_num(still['now'])})",
+            "suggested_result": "failed" if step_count else "temporary"}
 
 
 def prepare(raw: object, config: Configuration, equipment_id: object) -> dict[str, Any]:
@@ -208,7 +265,7 @@ def _conditions(states: list[tuple[Any, str]]) -> list[dict[str, Any]]:
 
 # 어느 조치에나 붙는 말. 이것만 겹쳐서 다른 조치로 묶이거나 다른 단계 결과가 들어가지 않게 뺀다.
 # 재가동·완료는 MES 복귀 절차라 거의 모든 기록에 들어간다. 후·전 같은 한 글자 말도 뺀다('팬'·'핀'은 남긴다).
-GENERIC_STEMS = {"확인", "재확", "점검", "상태", "조치", "작업", "실시", "재가", "완료", "후", "전", "및", "등"}
+GENERIC_STEMS = {"확인", "재확", "점검", "상태", "조치", "작업", "실시", "재가", "완료", "후", "전", "및", "등", "원인", "모름"}
 
 
 def _stems(text: str) -> set[str]:
@@ -264,6 +321,7 @@ def _record_line(handover_id: str, prepared: dict[str, Any]) -> str:
     resolution = prepared["resolution"]
     verification = resolution["verification"]
     return (f"현장 작업자 기록({handover_id}): 결과 {RESULT_LABELS[resolution['result']]}. "
+            + (f"원인: {resolution['cause']}. " if resolution.get("cause") else "")
             + (f"해결로 본 근거: {verification}" if verification else "해결 근거 기록 없음 — 검수 보완")
             + ". " + _mes_line(prepared.get("mes_check")))
 
@@ -329,15 +387,20 @@ def draft_from(prepared: dict[str, Any], handover_id: str, card_id: str, now: da
     if states:
         spec, state = states[0]
         head += f" {spec.name} {'높음' if state == 'high' else '낮음'}" + (f" 외 {len(states) - 1}" if len(states) > 1 else "")
+    cause = resolution["cause"]
+    known_cause = cause if cause and cause != CAUSE_UNKNOWN else ""
     temporary = resolution["result"] == "temporary"
     steps = [{"step_id": f"ST-{i:02d}", "order": i, "action": action, "expected_result": result or PLACEHOLDER}
              for i, (action, result) in enumerate(zip(actions, _step_results(resolution)), start=1)]
     card: dict[str, Any] = {
         "card_id": card_id, "version": "1", "grade": "L0", "status": "draft",
-        "tacit_type": "T3", "equipment": eq.code.split("-")[0], "component": eq.name,
-        "mes_equipment_id": eq.equipment_id, "scenario": "S1",
-        "title": ("[임시조치] " if temporary else "") + f"{head} — {actions[0][:60]}",
-        "symptom": resolution["symptom"] + _mes_symptom(states), "know_how": "\n".join(actions),
+        "tacit_type": "T3", "equipment": eq.code.split("-")[0],
+        "component": resolution["component_name"] or eq.name,
+        "mes_equipment_id": eq.equipment_id, "scenario": resolution["scenario"] or "S1",
+        "title": ("[임시조치] " if temporary else "")
+                 + (f"{head} — 원인: {known_cause}" if known_cause else f"{head} — {actions[0]}")[:80],
+        "symptom": resolution["symptom"] + _mes_symptom(states),
+        "know_how": "\n".join(([f"원인: {known_cause}"] if known_cause else []) + actions),
         "rationale": _record_line(handover_id, prepared),
         "conditions": _conditions(states),
         "safety_flag": False, "confidence": 0.0,
@@ -348,9 +411,15 @@ def draft_from(prepared: dict[str, Any], handover_id: str, card_id: str, now: da
         "split": "dev",
         "type_payload": {"steps": steps},
     }
-    flags: dict[str, Any] = {
-        "records": [_record(handover_id, "origin", prepared)],
-        "scenario_default": "S1 고정. 현장 기록에서 시나리오를 알 수 없어 검수에서 정한다."}
+    if resolution["component_id"]:
+        card["mes_component_code"] = resolution["component_id"]
+    flags: dict[str, Any] = {"records": [_record(handover_id, "origin", prepared)]}
+    if not resolution["scenario"]:
+        flags["scenario_default"] = "S1 고정. 현장 기록에서 시나리오를 알 수 없어 검수에서 정한다."
+    if resolution["lockout_answers"]:
+        flags["lockout_answers"] = resolution["lockout_answers"]
+    if cause == CAUSE_UNKNOWN:
+        flags["cause_unknown"] = True
     if temporary:
         flags["temporary"] = True
     if thin := _thin(resolution):
@@ -381,8 +450,11 @@ def match_score(card: dict[str, Any], prepared: dict[str, Any]) -> float:
     if not _keys(card["conditions"]) & _keys(_conditions(prepared["states"])):
         return 0.0
     # 조치 전체로 비교한다. 단계 하나씩 비교하면 '온도 재확인' 같은 공통 단계 때문에 다른 원인이 묶인다.
-    score = _overlap(" ".join(s["action"] for s in card["type_payload"]["steps"]),
-                     " ".join(a["action"] for a in prepared["resolution"]["actions"]))
+    # 원인도 함께 비교한다: 같은 원인이면 조치 표현이 달라도 묶인다(카드는 know_how 첫 줄에 원인이 있다).
+    resolution = prepared["resolution"]
+    cause = resolution.get("cause") if resolution.get("cause") != CAUSE_UNKNOWN else ""
+    score = _overlap(" ".join([card.get("know_how") or "", *(s["action"] for s in card["type_payload"]["steps"])]),
+                     " ".join([cause or "", *(a["action"] for a in resolution["actions"])]))
     return score if score >= OVERLAP_MIN else 0.0
 
 
@@ -418,4 +490,6 @@ def merge(row: dict[str, Any], prepared: dict[str, Any], handover_id: str) -> tu
     card["rationale"] += "\n" + ("반대 근거 — " if relation == "contradicting" else "") + _record_line(handover_id, prepared)
     card["provenance"]["sources"].append({"source_id": handover_id, "locator": "handover"})
     flags["records"] = [*flags.get("records", []), _record(handover_id, relation, prepared)]
+    if resolution.get("lockout_answers"):
+        flags["lockout_answers"] = [*flags.get("lockout_answers", []), *resolution["lockout_answers"]]
     return _finish(card, flags), relation

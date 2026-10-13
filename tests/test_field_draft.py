@@ -165,15 +165,18 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.service.storage.close()
         self.directory.cleanup()
 
-    def handover(self, handover_id, **extra):
+    def handover(self, handover_id, register=True, **extra):
         # 실행 정보가 없는 근거(hot_evidence)는 실제 흐름처럼 '과열 중 질의 → MES 조치·복구' 뒤 저장한 것으로 만든다.
+        # register: 그 근거를 서버가 질의 때 보관한 것으로 등록한다(실서버에서는 /api/query가 한다).
         res = extra.get('resolution')
         if res and res.get('evidence') and 'run_id' not in res['evidence']:
             self.fault()
             asked = self.evidence_now()
             self.recover()
-            extra['resolution'] = {**res, 'evidence': {**res['evidence'], 'run_id': asked['run_id'],
-                                                       'simulated_at': asked['simulated_at']}}
+            extra['resolution'] = res = {**res, 'evidence': {**res['evidence'], 'run_id': asked['run_id'],
+                                                             'simulated_at': asked['simulated_at']}}
+        if register and res and res.get('evidence'):
+            self.service.storage.save_query_evidence(res['evidence'])
         return {'handover_id': handover_id, 'memo_text': '작동유 온도 경보 처리', 'equipment_id': 'EQ-0001',
                 'required_context': {}, 'attempts': [], 'observations': [], **extra}
 
@@ -379,6 +382,47 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.assertEqual(row['card']['type_payload']['steps'][0]['expected_result'], PLACEHOLDER)
         self.assertEqual(row['review_flags']['completeness']['resolved_records'], 1)
         self.assertIn('해결 표기와 MES 불일치 HO-421', row['review_flags']['completeness']['operator'])
+
+    def test_evidence_not_from_a_server_query_is_not_trusted(self):
+        # 같은 실행에 이전 복구 기록이 있어도, 서버가 질의 때 보관한 근거가 아니면 MES 확인으로 세지 않는다(10/13 재현).
+        self.fault()
+        self.recover()
+        forged = {**self.evidence_now(), 'simulated_at': '2000-01-01T00:00:00+00:00'}
+        for m in forged['measurements']:
+            if m['signal'] == 'hpu_oil_temp':
+                m['value'] = 80.0
+        out = self.service.record_handover(self.handover('HO-500', register=False, resolution=resolution(evidence=forged)))
+        self.assertFalse(out['draft']['mes_recovered'])
+        row = self.draft()[0]
+        self.assertEqual(row['card']['conditions'], [])  # 보낸 측정값으로 조건을 만들지 않는다
+        self.assertIn('확인 불가 — 서버 질의 기록에 없는 근거', row['card']['rationale'])
+
+    def test_real_query_evidence_is_kept_by_the_server(self):
+        self.fault()
+        asked = self.service.query({'question': '작동유 온도가 너무 높아요', 'equipment_id': 'EQ-0001'})
+        self.assertTrue(asked['no_knowledge'])
+        self.recover()
+        out = self.service.record_handover(self.handover('HO-510', register=False, resolution=resolution(
+            evidence=asked['evidence'])))
+        self.assertTrue(out['draft']['mes_recovered'])
+        self.assertIn('hpu_oil_temp_state', {c['signal'] for c in self.draft()[0]['card']['conditions']})
+
+    def test_naive_query_time_does_not_crash(self):
+        self.fault()
+        asked = self.evidence_now()
+        asked['simulated_at'] = asked['simulated_at'].replace('+00:00', '')
+        self.recover()
+        out = self.service.record_handover(self.handover('HO-520', resolution=resolution(evidence=asked)))
+        self.assertTrue(out['draft']['mes_recovered'])
+
+    def test_handover_and_draft_are_saved_together_or_not_at_all(self):
+        def exhausted(*_):
+            raise ValueError('field draft card id range is exhausted')
+        self.service.storage.next_card_id = exhausted
+        with self.assertRaises(ValueError):
+            self.service.record_handover(self.handover('HO-530', resolution=resolution()))
+        self.assertIsNone(self.service.storage.get_handover('HO-530'))
+        self.assertEqual(self.count(), 0)
 
 
 class FieldDraftHttpTests(unittest.TestCase):

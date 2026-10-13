@@ -92,3 +92,23 @@ def test_extractive_never_adds_numbers_outside_card_and_facts():
 def test_e1_ignores_the_model_answer_entirely():
     assert run("A 답", [T1], ("E1",)) == run("전혀 다른 B 답", [T1], ("E1",))
     assert e1_answer([T1], tr(T1)) == run("x", [T1], ("E1",))
+
+
+FIELD = {"card_id": "K-7000", "title": "HPU-01 유압유 온도 높음 — 팬 차단기 재투입", "tacit_type": "T3",
+         "condition_status": "verified", "provenance": {"generator": "field-resolution-v1"},
+         "know_how": "팬 차단기 트립 원인 확인 후 재투입\n팬 회전 방향과 소리 확인\n재가동 후 유온 추이 확인",
+         "type_payload": {"steps": [
+             {"order": 1, "action": "팬 차단기 트립 원인 확인 후 재투입", "expected_result": "팬 다시 돎"},
+             {"order": 2, "action": "팬 회전 방향과 소리 확인", "expected_result": "현장 기록에 결과 없음 — 검수 보완"},
+             {"order": 3, "action": "재가동 후 유온 추이 확인", "expected_result": "유온 정상, 경보 해제"}]}}
+
+
+def test_e1_field_card_shows_every_step_with_its_result():
+    # 10/13 시험 승격: know_how 앞 두 문장만 써서 3번째 조치가 빠졌다. 현장 카드는 단계를 그대로 쓴다.
+    lines = run("x", [FIELD], ("E1",)).splitlines()
+    assert lines[1:4] == ["1. 팬 차단기 트립 원인 확인 후 재투입 → 팬 다시 돎",
+                          "2. 팬 회전 방향과 소리 확인",  # 빈 결과(검수 보완)는 보이지 않는다
+                          "3. 재가동 후 유온 추이 확인 → 유온 정상, 경보 해제"]
+    assert lines[-1] == "(K-7000 참조)"
+    # 문서에서 만든 T3 카드는 그대로 앞 두 문장
+    assert run("x", [T3], ("E1",)).splitlines()[1] == "정렬부터 본다."

@@ -162,9 +162,28 @@ def _stop_texts(cited: list[dict[str, Any]]) -> list[str]:
     return out
 
 
+# 현장 해결 기록에서 만든 카드(shiftlink/mes/field_draft.py). know_how가 조치를 줄바꿈으로 이은 목록이라
+# 앞 두 문장만 쓰면 단계가 잘린다(10/13 시험 승격 실측) → 단계와 그 결과를 그대로 쓴다.
+FIELD_GENERATOR_PREFIX = "field-resolution"
+FIELD_STEP_BLANK = "현장 기록에 결과 없음"
+
+
+def _field_steps(card: dict[str, Any]) -> list[str]:
+    if not str((card.get("provenance") or {}).get("generator") or "").startswith(FIELD_GENERATOR_PREFIX):
+        return []
+    lines = []
+    for step in (card.get("type_payload") or {}).get("steps") or []:
+        result = step.get("expected_result") or ""
+        lines.append(f"{step.get('order')}. {step.get('action')}"
+                     + (f" → {result}" if result and not result.startswith(FIELD_STEP_BLANK) else ""))
+    return lines
+
+
 def e1_answer(cited: list[dict[str, Any]], tool_results: dict[str, Any]) -> str:
     lines = l1_lines(cited, tool_results)
-    sentences = _sentences(cited[0].get("know_how") or "")[:2]
+    steps = _field_steps(cited[0])
+    sentences = [] if steps else _sentences(cited[0].get("know_how") or "")[:2]
+    lines.extend(steps)
     if sentences:
         text = " ".join(sentences)
         lines.append(text if len(text) <= 220 else sentences[0])

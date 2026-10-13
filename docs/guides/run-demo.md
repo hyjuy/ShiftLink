@@ -58,6 +58,8 @@ SHIFTLINK_CNN=$HOME/shiftlink/models/cnn deploy/install_pda.sh http://jetson-06.
 
 autostart에 `--unity http://127.0.0.1:8090 --cnn … --save-shots …`가 들어간다. 얼굴: `cd ~/shiftlink/app && ~/shiftlink/venv-face/bin/python -m shiftlink.face fetch`, 작업자마다 `… -m shiftlink.face enroll --id E-001`(이미지는 저장하지 않는다).
 
+Pi PDA의 직접 접속 주소는 `http://raspberrypi:8080/pda.html`이다. Pi에서 한 번 `sudo tailscale serve --bg --tcp=8080 tcp://127.0.0.1:8080`을 실행하면 재부팅 후에도 이 주소를 사용할 수 있다. PDA 앱은 기존 루프백 설정을 유지한다.
+
 ## 3. 켜는 순서 (시연 당일)
 
 1. **Jetson 전원** → 부팅 약 2분 뒤 확인(4절). 시작할 때 두 모델을 예열하므로 첫 질의 전 약 1분 기다린다.
@@ -67,7 +69,7 @@ autostart에 `--unity http://127.0.0.1:8090 --cnn … --save-shots …`가 들�
    # 창 1: 파이로 카메라 역터널 (비밀번호는 프롬프트에만 입력)
    ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 -R 127.0.0.1:8090:127.0.0.1:8090 pi@raspberrypi
    # 창 2: Unity 공장 씬 + 플레이 모드
-   python -B scripts/run_unity_demo.py --editor <Unity.exe 경로> --mes-url http://jetson-06:8000
+   python -B scripts/run_unity_demo.py --editor <Unity.exe 경로> --mes-url http://jetson-06:8000 --pda-url http://raspberrypi:8080
    ```
    조작 키·자세한 설명은 `docs/guides/unity-pda-camera-stream.md`.
 4. **PDA**: 로그인(얼굴 확인) → **설비 스캔** → Unity 영상이 보이면 작업자를 설비 앞으로 옮겨 화면 가운데 담고 **◉ 촬영** → 설비 자동 선택 → 증상 질의. 시연 질문은 `docs/planning/시연_질문_9개_20261006.md`.

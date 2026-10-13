@@ -94,6 +94,9 @@ class MesStorage:
             CREATE TABLE IF NOT EXISTS query_log (
                 query_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS card_drafts (
+                draft_id TEXT PRIMARY KEY, handover_id TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL,
+                status TEXT NOT NULL, card TEXT NOT NULL, review_flags TEXT NOT NULL);
         """)
         self.connection.commit()
 
@@ -119,6 +122,31 @@ class MesStorage:
                 raise HandoverConflictError("handover_id already exists with different content")
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "duplicate": not bool(inserted), "is_synthetic": True}
+
+    def next_card_id(self, first: int, last: int) -> str:
+        """Next unused K-#### in the field range; drafts are never retrieved, so only this table is checked."""
+        row = self.connection.execute("SELECT MAX(draft_id) FROM card_drafts WHERE draft_id BETWEEN ? AND ?",
+                                      (f"K-{first:04d}", f"K-{last:04d}")).fetchone()
+        number = int(row[0][2:]) + 1 if row[0] else first
+        if number > last:
+            raise ValueError("field draft card id range is exhausted")
+        return f"K-{number:04d}"
+
+    def save_card_draft(self, draft: dict[str, Any]) -> bool:
+        """Pending-review store, one draft per handover. False when that handover already has one."""
+        with self.connection:
+            if self.connection.execute("SELECT 1 FROM card_drafts WHERE handover_id = ?", (draft["handover_id"],)).fetchone():
+                return False
+            self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)", (
+                draft["card"]["card_id"], draft["handover_id"], datetime.now().astimezone().isoformat(),
+                draft["status"], _dump(draft["card"]), _dump(draft["review_flags"])))
+        return True
+
+    def list_card_drafts(self) -> list[dict[str, Any]]:
+        rows = self.connection.execute(
+            "SELECT draft_id, handover_id, created_at, status, card, review_flags FROM card_drafts ORDER BY draft_id")
+        return [{"draft_id": d, "handover_id": h, "created_at": c, "status": s,
+                 "card": json.loads(card), "review_flags": json.loads(flags)} for d, h, c, s, card, flags in rows]
 
     def get_handover(self, handover_id: str) -> dict[str, Any] | None:
         row = self.connection.execute(

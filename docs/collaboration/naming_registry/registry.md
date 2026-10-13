@@ -227,3 +227,14 @@
 | `appendMesContext()` | `shiftlink/mes/web/pda.js` | 인계 작성의 'MES 기록 불러오기'를 다시 눌러도 입력에 이미 있는 측정값·이벤트 줄은 붙이지 않음. 새 줄이 없으면 `null` | Claude |
 | `pendingText()` · `.conn-status` | `shiftlink/mes/web/app.js`, `index.html`, `style.css` | 지표를 아직 못 낼 때 운전 상태별 말(운전 정지·일시정지·집계 중). 화면을 열면 `/api/runs/{id}/replay`로 최근 스냅샷을 먼저 채워 가동률을 바로 표시. 헤더 상태는 버튼 모양 대신 시계 아래 점+문구(실시간 수신 중) | Claude |
 | `dashSummary()` · `renderDash()` · `#s-dash` · `.mes-link` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA 홈의 '대시보드'는 작업자용 요약 화면(라인 상태·확인 필요 설비·후속 대기·제품 보류·인계 미완료/업로드 대기). `/api/state`를 새로 읽지 않고 감시 폴링 값을 씀. 전체 MES 대시보드는 홈 머리줄 `MES` 버튼(개발용, 완료 시 삭제) | Claude |
+
+## 현장 해결 기록 → 카드 초안 (2026-10-13)
+
+| 이름 | 위치 | 뜻 | 담당자 |
+| --- | --- | --- | --- |
+| `resolution` | `POST /api/handover` 본문(PDA) | 질의가 '해당 지식 없음'일 때 작업자가 해결하고 남긴 기록. `question`·`symptom`·`actions`(순서 있는 문자열 목록)·`result`(`resolved`·`temporary`·`failed`)·`verification`·`evidence`(질의의 MES 근거). 없으면 기존 인계와 같다 | Claude |
+| `check_resolution()` · `build_draft()` · `GENERATOR`(`field-resolution-v1`) · `ID_RANGE`(K-7000~K-7999) | `shiftlink/mes/field_draft.py` | 해결 기록을 검사하고 규칙 기반으로 `KnowledgeCard` 초안(status=draft, grade=L0, split=dev, confidence=0.0)을 만든다. LLM 없음. 상태 조건은 활성 구성의 정상 범위로 서버가 다시 계산한다. `failed`는 초안을 만들지 않는다 | Claude |
+| `card_drafts` · `save_card_draft()` · `list_card_drafts()` · `next_card_id()` | `shiftlink/mes/storage.py` | 검수 대기 초안 저장소. `draft_id`(=card_id, K-7000~) 기본키, `handover_id` 유일. `status`는 `pending_review`·`invalid`, `review_flags`에 안전 표현·자리표시자·lint·검증 오류를 담는다. 검색(kb_cards.json·질의 파이프라인)에는 나가지 않는다 | Claude |
+| `GET /api/card-drafts` · `card_drafts()` | `shiftlink/mes/server.py` | 검수 대기 초안 목록(읽기 전용). 승인·반려 API는 아직 없다. PDA는 호출하지 않는다 | Claude |
+| `draft` · `created` · `reason` | `/api/handover` 응답 | 해결 기록이 있을 때만 붙는다. `reason`: `pending_review`·`invalid`·`attempt_only`·`already_exists`. 카드 내용은 싣지 않는다 | Claude |
+| `resolutionError()` · `resolutionPayload()` · `draftNotice()` · `evidenceSummary()` · `openResolve()` · `#s-resolve` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA '해결하면 기록 남기기' 화면. 저장은 인계 흐름(`submitHandover`, localStorage 대기 인계)을 그대로 쓰고, 저장 후 확인 문구만 보인다 | Claude |

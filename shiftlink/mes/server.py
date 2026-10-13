@@ -17,7 +17,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
-from . import configuration
+from . import configuration, field_draft
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
@@ -153,7 +153,25 @@ class MesService:
 
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
-            return self.storage.save_handover(body)
+            # 해결 기록은 인계 저장 전에 검사한다. 잘못되면 인계도 남지 않는다.
+            draft = None
+            if isinstance(body, dict) and body.get("resolution") is not None:
+                draft = field_draft.build_draft(str(body.get("handover_id") or ""), body["resolution"], self.active_config,
+                                                body.get("equipment_id"), self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
+            saved = self.storage.save_handover(body)
+            if draft is None:
+                return saved
+            if draft["status"] == "attempt_only":
+                return {**saved, "draft": {"created": False, "reason": "attempt_only"}}
+            inserted = self.storage.save_card_draft({**draft, "handover_id": body["handover_id"]})
+            if not inserted:
+                return {**saved, "draft": {"created": False, "reason": "already_exists"}}
+            return {**saved, "draft": {"created": draft["status"] == "pending_review", "reason": draft["status"]}}
+
+    def card_drafts(self) -> dict[str, object]:
+        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""
+        with self._lock:
+            return {"drafts": self.storage.list_card_drafts(), "is_synthetic": True}
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -363,6 +381,7 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
+            if parsed.path == "/api/card-drafts": self._send(200, self.service.card_drafts()); return
             if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
             if parsed.path == "/api/outbox/pending":
                 rows = self.service.storage.pending_handovers()

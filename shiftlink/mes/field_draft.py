@@ -26,6 +26,8 @@ RESULTS = ("resolved", "temporary", "failed")
 RESULT_LABELS = {"resolved": "해결", "temporary": "임시조치", "failed": "효과 없음"}
 # 조치 기록(세션)에서 받는 값. 원인 모름은 빈칸이 아니라 '모른다'는 기록이다.
 CAUSE_UNKNOWN = "원인 모름"
+# 시뮬레이터 연동 칩: MES 복구 단계를 다 끝낸 뒤 라인을 다시 돌리는 조치(재가동은 위험 단어라 잠금 응답을 받는다).
+RESTART_ACTION = "재가동 (라인 복구 시작)"
 LOCKOUT_ANSWERS = ("예", "아니오", "해당 없음")
 SCENARIOS = ("S1", "S2", "S3")
 PLACEHOLDER = "현장 기록에 결과 없음 — 검수 보완"
@@ -220,7 +222,8 @@ def _recovery_event(prepared: dict[str, Any], run_id: str, events: list[dict[str
         return "질의 시각 정보 없음"
     for event in events:
         at = _instant(event.get("occurred_at"))
-        if event.get("run_id") == run_id and at is not None and at > asked and (
+        later = event.get("pending") or (at is not None and at > asked)  # pending: 다음 틱에 기록될 '지금' 이벤트
+        if event.get("run_id") == run_id and later and (
                 event.get("event_type") == "recovered"
                 or (event.get("event_type") == "alarm_cleared" and event.get("equipment_id") == prepared["eq"].equipment_id)):
             return ""

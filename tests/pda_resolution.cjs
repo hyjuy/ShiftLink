@@ -40,3 +40,15 @@ assert.match(draftNotice({created: false, reason: 'supporting', mes_recovered: t
 assert.match(draftNotice({created: false, reason: 'already_exists'}), /이미 카드 초안이/);
 assert.equal(draftNotice(undefined), '');
 console.log('PDA resolution session PASS');
+
+// 한 일 칩: 끝낸 MES 단계는 숨기고, 재가동은 MES 단계를 다 끝낸 뒤에만 누를 수 있다
+const {actionChips} = require('../shiftlink/mes/web/pda.js');
+const actions = [{text: '유면·냉각·밸브 점검', source: 'mes_recovery'}, {text: '냉각 성능 복구', source: 'mes_recovery'},
+  {text: '재가동 (라인 복구 시작)', source: 'mes_restart'}, {text: '팬 차단기 올림', source: 'field_record'}];
+let chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}]});
+assert.deepEqual(chips.map((c) => c.text), ['냉각 성능 복구', '재가동 (라인 복구 시작)', '팬 차단기 올림']);
+assert.equal(chips.find((c) => c.text.startsWith('재가동')).disabled, true);
+assert.equal(chips[0].tag, 'MES 단계');
+chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}, {action: '냉각 성능 복구'}, {action: '팬 차단기 올림'}]});
+assert.deepEqual(chips.map((c) => [c.text, c.disabled]), [['재가동 (라인 복구 시작)', false], ['팬 차단기 올림', false]]);
+console.log('PDA action chips PASS');

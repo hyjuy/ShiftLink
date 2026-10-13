@@ -1366,7 +1366,7 @@ async function openResolve(turn) {
     const out = await postJson('/api/resolution/start', {equipment_id: S.eq.equipment_id, question: turn.question,
       evidence: (turn.response && turn.response.evidence) || null});
     Object.assign(S.res, {sessionId: out.session_id, before: out.before, components: out.components || [],
-      actions: (out.action_suggestions || []).map((a) => a.text), causes: out.cause_suggestions || [CAUSE_UNKNOWN]});
+      actions: out.action_suggestions || [], causes: out.cause_suggestions || [CAUSE_UNKNOWN]});
     const pick = S.res.components.find((c) => c.suggested);
     if (pick) S.res.componentId = pick.component_id;
   } catch (err) {
@@ -1374,9 +1374,9 @@ async function openResolve(turn) {
   } finally { S.res.busy = false; renderResolve(); }
 }
 
-function chip(text, pressed, onClick, extra) {
+function chip(text, pressed, onClick, extra, disabled) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'chip'; b.textContent = text;
+  b.type = 'button'; b.className = 'chip'; b.textContent = text; b.disabled = !!disabled;
   if (pressed !== null) b.setAttribute('aria-pressed', String(pressed));
   if (extra) { const s = document.createElement('small'); s.textContent = extra; b.appendChild(s); }
   b.addEventListener('click', () => { haptic(15); onClick(); });
@@ -1397,7 +1397,8 @@ function renderResolve() {
   $('resSteps').replaceChildren(...r.steps.map((s) => {
     const li = document.createElement('li'); li.className = 'res-step';
     const a = document.createElement('b'); a.textContent = s.order + '. ' + s.action;
-    const res = document.createElement('span'); res.className = 'res'; res.textContent = '자동 결과: ' + s.result_text;
+    const res = document.createElement('span'); res.className = 'res';
+    res.textContent = (s.mes_linked ? 'MES 반영 · ' : '') + '자동 결과: ' + s.result_text;
     li.append(a, res);
     if (s.lockout) { const l = document.createElement('span'); l.className = 'lock'; l.textContent = '에너지 차단(잠금): ' + s.lockout; li.appendChild(l); }
     return li;
@@ -1427,7 +1428,8 @@ function renderResolve() {
     parts.push(done, cancel);
     live.replaceChildren(...parts);
   }
-  $('resActionChips').replaceChildren(...r.actions.map((a) => chip(a, null, () => { r.live = {action: a, lockout: null}; renderResolve(); })));
+  $('resActionChips').replaceChildren(...actionChips(r).map((a) => chip(a.text, null,
+    () => { r.live = {action: a.text, lockout: null}; renderResolve(); }, a.tag, a.disabled)));
   $('resFinish').disabled = r.busy || !r.sessionId || !!r.live || !r.steps.length;
   $('resFinish').textContent = r.steps.length ? '조치 마무리 — 조치 후 MES 확인' : '조치 마무리 (조치를 하나 이상 완료하면 켜짐)';
   // 마무리
@@ -1443,6 +1445,17 @@ function renderResolve() {
   $('resSave').disabled = r.busy;
 }
 
+/* 한 일 칩: MES 복구 단계(완료하면 MES에도 반영, 순서대로), 재가동(MES 단계를 다 끝낸 뒤), 이 설비의 이전 현장 기록.
+ * 이미 끝낸 MES 단계는 다시 보이지 않는다. */
+const ACTION_TAGS = {mes_recovery: 'MES 단계', mes_restart: 'MES', field_record: '이전 기록'};
+function actionChips(r) {
+  const done = new Set(r.steps.map((s) => s.action));
+  const mesSteps = r.actions.filter((a) => a.source === 'mes_recovery');
+  const mesDone = mesSteps.every((a) => done.has(a.text));
+  return r.actions.filter((a) => !(a.source !== 'field_record' && done.has(a.text)))
+    .map((a) => ({text: a.text, tag: ACTION_TAGS[a.source] || '', disabled: a.source === 'mes_restart' && !mesDone}));
+}
+
 async function completeStep() {
   const r = S.res;
   if (!r || !r.live || r.busy) return;
@@ -1450,7 +1463,7 @@ async function completeStep() {
   try {
     const out = await postJson('/api/resolution/' + r.sessionId + '/step', {action: r.live.action, lockout: r.live.lockout});
     r.steps.push({order: out.order, action: r.live.action, lockout: riskyAction(r.live.action) ? r.live.lockout : null,
-      result_text: out.result_text});
+      result_text: out.result_text, mes_linked: out.mes_linked || null});
     r.live = null; resolveWarn('');
   } catch (err) {
     resolveWarn(err.message === 'lockout_required' ? '잠금 여부를 골라 주세요.' : '조치를 기록하지 못했습니다 · ' + err.message);
@@ -2185,7 +2198,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice }; }
+if (typeof module !== 'undefined') { module.exports = { homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice, actionChips }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────

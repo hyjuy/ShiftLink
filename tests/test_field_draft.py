@@ -614,6 +614,46 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertEqual(out['draft']['reason'], 'contradicting')
         self.assertEqual(len(self.service.card_drafts()['drafts']), 2)
 
+    def test_pda_alone_drives_simulated_repair(self):
+        # 시연: MES 화면을 오가지 않고 PDA의 MES 단계 칩 3개 + 재가동 칩으로 복구까지 끝낸다.
+        self.overheat()
+        out = self.start()
+        sid = out['session_id']
+        chips = [a for a in out['action_suggestions'] if a['source'] in ('mes_recovery', 'mes_restart')]
+        self.assertEqual([c['text'] for c in chips],
+                         ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인', '재가동 (라인 복구 시작)'])
+        free = self.service.resolution_step(sid, {'action': '팬 차단기 트립 원인 확인 후 재투입', 'lockout': '예'})
+        self.assertIsNone(free['mes_linked'])  # 직접 적은 조치는 설비를 바꾸지 않는다
+        with self.assertRaises(ValueError):  # 순서가 틀리면 MES가 거절하고 단계도 남지 않는다
+            self.service.resolution_step(sid, {'action': '냉각 성능 복구'})
+        self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 1)
+        for title in ('유면·냉각·밸브 점검', '냉각 성능 복구'):
+            self.assertTrue(self.service.resolution_step(sid, {'action': title})['mes_linked'].startswith('recovery_action:'))
+        done = self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
+        self.assertRegex(done['result_text'], r'^유압유 온도 78→')
+        self.assertEqual(self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '해당 없음'})['mes_linked'], 'recover')
+        fin = self.service.resolution_finish(sid)
+        self.assertEqual((fin['verdict'], fin['suggested_result']), ('recovered', 'resolved'))
+
+    def test_restart_before_mes_steps_is_refused(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        with self.assertRaises(ValueError):
+            self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '예'})
+
+    def test_sim_link_can_be_turned_off(self):
+        from shiftlink.mes import server as server_module
+        self.overheat()
+        sid = self.start()['session_id']
+        old, server_module.SIM_LINK = server_module.SIM_LINK, False
+        try:
+            self.assertIsNone(self.service.resolution_step(sid, {'action': '유면·냉각·밸브 점검'})['mes_linked'])
+        finally:
+            server_module.SIM_LINK = old
+        recovery = self.service.resolution_get(sid)  # MES 조치는 그대로(완료 안 됨)
+        from dataclasses import asdict
+        self.assertFalse(asdict(self.service.engine.snapshot)['recovery']['actions'][0]['completed'])
+
     def test_handover_session_and_draft_are_atomic(self):
         sid = self.full_fix()
         def exhausted(*_):

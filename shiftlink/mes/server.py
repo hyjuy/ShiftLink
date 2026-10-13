@@ -57,6 +57,11 @@ def kb_cards() -> dict[str, object]:
             "handovers": handovers, "basis_records": basis_records, "is_synthetic": True}
 
 
+# 시뮬레이터 연동: PDA 조치 기록의 MES 단계 칩·재가동 칩이 모의 MES 조치를 함께 수행한다(시연에서 MES 화면을 오가지 않게).
+# 실제 MES·설비에 붙일 때는 SHIFTLINK_SIM_LINK=0 으로 끈다.
+SIM_LINK = os.environ.get("SHIFTLINK_SIM_LINK", "1") != "0"
+
+
 class ResolutionSessionNotFound(LookupError):
     """없는 조치 기록 세션 → 404."""
 
@@ -169,7 +174,7 @@ class MesService:
             field_draft.check_with_mes(
                 prepared, snap["measurements"],
                 [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
-                str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
+                str(snap["simulated_at"]), self.engine.run.run_id, self._events_for_check())
             self.storage._check_handover(body)
             known = self.storage.has_draft_record(body["handover_id"])
             op, reply = (None, {"created": False, "reason": "already_exists"}) if known else \
@@ -178,6 +183,16 @@ class MesService:
             if op is not None and not applied:
                 reply = {"created": False, "reason": "already_exists"}
             return {**saved, "draft": {**reply, "mes_recovered": prepared["mes_check"]["recovered"]}}
+
+    def _events_for_check(self) -> list[dict[str, Any]]:
+        """해결 확인용 이벤트: 기록된 이벤트 + 다음 틱에 기록될 대기 이벤트(pending).
+
+        재가동 직후의 경보 해제는 다음 틱(1초)에 기록되므로, 그 사이 마무리를 눌러도 확인되게 대기분도 본다.
+        대기 이벤트는 아직 일어나기 전이 아니라 '지금' 일어난 것이라 질의·조치 시작보다 뒤로 본다."""
+        events = [asdict(e) for e in self.engine.events]
+        run_id = self.engine.run.run_id
+        return events + [{"run_id": run_id, "event_type": t, "equipment_id": eq, "pending": True}
+                         for t, eq, _ in getattr(self.engine, "_pending_events", [])]
 
     def _server_evidence(self, resolution: object) -> object:
         """PDA가 돌려보낸 질의 근거를 서버가 질의 때 보관한 값으로 바꾼다. 없으면 근거 없음으로 둔다(값을 믿지 않는다)."""
@@ -261,7 +276,9 @@ class MesService:
             return {"session_id": session_id, "before": self._session_view(eq, before),
                     "components": [{"component_id": c["component_id"], "name": c["name"],
                                     "suggested": c["component_id"] == suggested} for c in snap["components"]],
-                    "action_suggestions": [{"text": a["title"], "source": "mes_recovery"} for a in (recovery or {}).get("actions") or []]
+                    "action_suggestions": [{"text": a["title"], "source": "mes_recovery", "action_id": a["action_id"]}
+                                           for a in (recovery or {}).get("actions") or []]
+                                          + ([{"text": field_draft.RESTART_ACTION, "source": "mes_restart"}] if recovery and SIM_LINK else [])
                                           + [{"text": a, "source": "field_record"} for a in field_actions],
                     "cause_suggestions": [*causes, field_draft.CAUSE_UNKNOWN] if field_draft.CAUSE_UNKNOWN not in causes else causes,
                     "is_synthetic": True}
@@ -280,16 +297,34 @@ class MesService:
             if risky and lockout not in field_draft.LOCKOUT_ANSWERS:
                 raise ValueError("lockout_required")
             eq = field_draft._equipment(self.active_config, session["equipment_id"])
+            linked = self._sim_link(eq.equipment_id, action) if SIM_LINK else None
             snap = self._eq_snapshot(eq.equipment_id)
             previous = data["steps"][-1]["measurements"] if data["steps"] else data["before"]["measurements"]
             step = {"order": len(data["steps"]) + 1, "action": action, "lockout": lockout,
                     "simulated_at": snap["simulated_at"], "measurements": snap["measurements"],
-                    "result_text": field_draft.delta_text(eq, data["watched"], previous, snap["measurements"])}
+                    "result_text": field_draft.delta_text(eq, data["watched"], previous, snap["measurements"]),
+                    "mes_linked": linked}
             data["steps"].append(step)
             data["after"] = data["verdict"] = None  # 조치를 더 하면 마무리를 다시 한다
             self.storage.update_resolution_session(session_id, data)
             return {"order": step["order"], "result_text": step["result_text"], "simulated_at": step["simulated_at"],
-                    "is_synthetic": True}
+                    "mes_linked": linked, "is_synthetic": True}
+
+    def _sim_link(self, equipment_id: str, action: str) -> str | None:
+        """시뮬레이터 연동(SIM_LINK): PDA에서 MES 복구 단계 칩을 완료하면 MES에도 그 조치를 수행하고,
+        재가동 칩이면 라인 복구를 시작한다. 실제 설비라면 센서가 스스로 바뀌므로 이 연결이 필요 없다(끄면 기록만 한다).
+        직접 적은 조치는 설비를 바꾸지 않는다. 순서가 틀리면 MES가 거절하고 단계도 남지 않는다."""
+        recovery = asdict(self.engine.snapshot).get("recovery") or {}
+        if recovery.get("equipment_id") != equipment_id:
+            return None
+        if action == field_draft.RESTART_ACTION:
+            self.control({"command": "recover"})
+            return "recover"
+        match = next((a for a in recovery.get("actions") or [] if a["title"] == action), None)
+        if match is None or match["completed"]:
+            return None
+        self.control({"command": "recovery_action", "action_id": match["action_id"]})
+        return "recovery_action:" + match["action_id"]
 
     def _finish_session(self, eq: Any, data: dict[str, Any]) -> dict[str, Any]:
         """그 순간 MES로 판정한다. 기준은 기존 해결 확인과 같다(질의·조치 시작 뒤 같은 실행의 복구 기록 필수)."""
@@ -297,7 +332,7 @@ class MesService:
         prepared = {"resolution": {"evidence": data["before"]}, "eq": eq,
                     "states": field_draft._states(eq, data["before"])}
         check = field_draft.check_with_mes(prepared, snap["measurements"], snap["alarms"], snap["simulated_at"],
-                                           self.engine.run.run_id, [asdict(e) for e in self.engine.events])
+                                           self.engine.run.run_id, self._events_for_check())
         after = {key: snap[key] for key in ("run_id", "equipment_id", "simulated_at", "measurements", "alarms")}
         data["after"] = after
         data["verdict"] = {**field_draft.verdict_of(check, len(data["steps"])), "check": check}

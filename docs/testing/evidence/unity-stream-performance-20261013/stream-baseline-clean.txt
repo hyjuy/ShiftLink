@@ -1,0 +1,1 @@
+label=baseline-clean; samples=100; warmup=10; resolution=960x540; quality=70; rate=10; editor=6000.3.12f1; gpu=NVIDIA GeForce MX150; main_ms_p50=72.684; main_ms_p95=93.666; publish_ms_p50=73.191; publish_ms_p95=94.892; allocation_counter=unavailable_on_this_Unity_Mono

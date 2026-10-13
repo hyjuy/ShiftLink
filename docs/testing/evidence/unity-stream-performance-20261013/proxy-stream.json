@@ -1,0 +1,11 @@
+{
+  "endpoint": "http://raspberrypi:8080/api/unity/stream",
+  "frames": 100,
+  "distinct": 100,
+  "receive_fps": 8.749716816298918,
+  "first_frame_ms": 172.8112000018882,
+  "gap_p50_ms": 116.07379999986733,
+  "gap_p95_ms": 142.09409999966738,
+  "gap_max_ms": 165.8489000001282,
+  "mean_jpeg_bytes": 42676.13
+}

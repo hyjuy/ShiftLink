@@ -35,7 +35,8 @@ const S = {
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0,
-  operator:null, linkedEquipment:null
+  operator:null, linkedEquipment:null,
+  foldOpen:{}   // 정상값 접기 펼침 상태(목록별) — 3초 갱신으로 다시 그려도 유지
 };
 
 const $ = (id) => document.getElementById(id);
@@ -164,8 +165,9 @@ function show(name) {
   document.querySelectorAll('.screen').forEach((el) => {
     el.classList.toggle('on', el.id === 's-' + name);
   });
+  // 대화 화면은 상태 줄(chatMes)이 설비 code·이름을 크게 보이므로 띠를 겹쳐 두지 않는다 — 답 영역 높이(A4).
   const hideCtx = name === 'scan' || name === 'manual' || name === 'boot' || name === 'alertGo'
-    || name === 'login' || name === 'face';
+    || name === 'login' || name === 'face' || name === 'chat';
   $('ctx').classList.toggle('on', !!S.eq && !hideCtx);
   $('net').hidden = (name === 'boot');
   const pane = document.querySelector('#s-' + name + ' .pane');
@@ -173,6 +175,7 @@ function show(name) {
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
   if (name === 'chat') { renderMesStatus(); renderChat(); }
+  if (name === 'home') renderHomeHandovers();
 }
 
 function haptic(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (_) {} } }
@@ -508,20 +511,51 @@ function readingDetail(o, spec) {
     + (o.observed_at ? ' · 측정 ' + stamp(o.observed_at) : '');
 }
 
-/* 현재 센서와 답변의 고정 근거를 같은 표기로 표시한다. 질의 입력의 수동 덮어쓰기는 별도로 유지한다. */
-function renderSensorReadings(box, readings, operating) {
+/* 정상값 접기 상자. 펼침 상태는 목록별 key로 S.foldOpen에 남겨 3초 갱신으로 다시 그려도 닫히지 않는다.
+ * noneShown — 늘 보이는 행(이탈·판정 불가·직접 입력)이 하나도 없을 때 「이상값 없음」을 앞에 붙인다. */
+function normalFold(key, rows, hasStopped, noneShown) {
+  const d = document.createElement('details');
+  d.className = 'okfold';
+  const s = document.createElement('summary');
+  s.textContent = (noneShown ? '이상값 없음 · ' : '') + (hasStopped ? '정상·정지 중 ' : '정상 ') + rows.length + '개 보기';
+  d.appendChild(s);
+  rows.forEach((r) => d.appendChild(r));
+  d.open = !!S.foldOpen[key];
+  d.addEventListener('toggle', () => { S.foldOpen[key] = d.open; });
+  return d;
+}
+
+/* 현재 센서와 답변의 고정 근거를 같은 표기로 표시한다. 질의 입력의 수동 덮어쓰기는 별도로 유지한다.
+ * 표시만 나눈다 — 범위 이탈(▲▼)·범위 미설정·품질 미충족(excluded)은 늘 보이고, 정상·정지 중 0은 접는다. 판정(stateOf)은 그대로. */
+function renderSensorReadings(box, readings, operating, foldKey, excluded) {
+  const shown = [], folded = [];
+  let hasStopped = false;
   readings.forEach((o) => {
     const spec = S.eq.signals.find((s) => s.signal === o.signal);
     if (!spec) return;
     const row = document.createElement('div');
     const stopped = spec.zeroStopped && o.value === 0 && operating && operating !== 'running';
     const status = stopped ? 'stopped' : stateOf(spec, o.value);
-    row.className = 'obs' + (status === 'low' || status === 'high' ? ' out' : '');
+    const out = status === 'low' || status === 'high';
+    row.className = 'obs' + (out ? ' out' : '');
     row.innerHTML = '<span class="txt"><span class="mono"></span><small></small></span>';
-    row.querySelector('.mono').textContent = obsText(o);
-    row.querySelector('small').textContent = readingDetail(o, spec) + ' · ' + (stopped ? '정지 중 0' : stateWord(status) || '범위 미설정');
-    box.appendChild(row);
+    row.querySelector('.mono').textContent = (status === 'low' ? '▼ ' : status === 'high' ? '▲ ' : '') + obsText(o);
+    row.querySelector('small').textContent = readingDetail(o, spec) + ' · '
+      + (stopped ? '정지 중 0' : status === 'low' ? '▼ 낮음' : status === 'high' ? '▲ 높음' : stateWord(status) || '범위 미설정');
+    if (stopped) hasStopped = true;
+    (stopped || status === 'normal' ? folded : shown).push(row);
   });
+  // MES가 보냈지만 품질·단위·시각 규칙(usableReadings)에 걸려 판정에서 뺀 신호 — 값은 쓰지 않으므로 이름만.
+  (excluded || []).forEach((sig) => {
+    const row = document.createElement('div');
+    row.className = 'obs';
+    row.innerHTML = '<span class="txt"><span class="mono"></span><small></small></span>';
+    row.querySelector('.mono').textContent = signalName(sig);
+    row.querySelector('small').textContent = '품질·단위·측정 시각 미충족 · 판정 불가(조건 평가에서 제외)';
+    shown.push(row);
+  });
+  shown.forEach((r) => box.appendChild(r));
+  if (folded.length) box.appendChild(normalFold(foldKey || 'sensors', folded, hasStopped, !shown.length));
 }
 
 /* 범위 이탈이면 방향과 경계 대비 차이를 만든다. MES 운영 화면과 같은 표기. */
@@ -546,7 +580,7 @@ function renderObsList() {
   head.className = 'hint';
   head.textContent = S.mes
     ? 'MES 관측 ' + S.observations.filter((o) => o.source === 'mes').length + '개 · 범위 이탈 ' + out.length + '개'
-      + (S.mesExcluded.length ? ' · 품질·시각 미충족 제외 ' + S.mesExcluded.length + '개' : '') + ' · ' + stamp(S.mes.at)
+      + (S.mesExcluded.length ? ' · 품질·시각 미충족 제외 ' + S.mesExcluded.length + '개(' + S.mesExcluded.map(signalName).join(', ') + ')' : '') + ' · ' + stamp(S.mes.at)
     : 'MES 관측을 읽지 못했습니다. 직접 추가한 값만 사용합니다.';
   box.appendChild(head);
   const mk = (r) => {
@@ -565,15 +599,14 @@ function renderObsList() {
     });
     return row;
   };
-  // 범위 이탈을 먼저 보이고, 이탈이 있으면 나머지는 접는다.
+  // 범위 이탈을 먼저, 그다음 판정 불가(범위 미설정)·직접 입력값을 늘 보인다. MES 정상·정지 중 0만 접는다.
+  // 직접 입력값은 작업자가 넣은 값이라 정상이어도 접지 않는다(넣은 값이 판정에 쓰이는지 바로 보이게).
+  const fold = (r) => r.o.source !== 'manual' && (r.v.st === 'normal' || r.v.st === 'stopped');
   out.forEach((r) => box.appendChild(mk(r)));
-  const rest = rows.filter((r) => !r.v.text);
-  if (!rest.length) return;
-  if (!out.length) { rest.forEach((r) => box.appendChild(mk(r))); return; }
-  const d = document.createElement('details');
-  d.innerHTML = '<summary class="hint">나머지 ' + rest.length + '개 보기 · 범위 내·정지 중 0·판정 불가</summary>';
-  rest.forEach((r) => d.appendChild(mk(r)));
-  box.appendChild(d);
+  const shown = rows.filter((r) => !r.v.text && !fold(r));
+  shown.forEach((r) => box.appendChild(mk(r)));
+  const rest = rows.filter(fold);
+  if (rest.length) box.appendChild(normalFold('obs', rest.map(mk), rest.some((r) => r.v.st === 'stopped'), !out.length && !shown.length));
 }
 
 const STATE_TXT = { running:'가동', stopped:'정지', waiting:'대기', normal:'정상', warning:'주의', critical:'자체 이상' };
@@ -582,8 +615,8 @@ function renderMesStatus() {
   const box = $('ctxMes');
   const sensors = $('ctxSensors'); sensors.innerHTML = '';
   if (S.mes) {
-    renderSensorReadings(sensors, S.mes.readings || [], S.mes.operating);
-    if (!(S.mes.readings || []).length) sensors.textContent = '사용 가능한 센서값이 없습니다.';
+    renderSensorReadings(sensors, S.mes.readings || [], S.mes.operating, 'ctx', S.mesExcluded);
+    if (!(S.mes.readings || []).length && !S.mesExcluded.length) sensors.textContent = '사용 가능한 센서값이 없습니다.';
   } else sensors.textContent = 'MES 연결을 확인해 주세요. 현재 센서값을 읽지 못했습니다.';
   const chat = $('chatMes');
   const out = S.observations.filter((o) => obsView(o).text).length;
@@ -591,7 +624,7 @@ function renderMesStatus() {
   if (S.screen === 'chat') renderAskSafety();
   if (!S.mes) {
     box.textContent = 'MES 상태를 읽지 못했습니다.'; box.classList.remove('bad');
-    chat.textContent = (S.eq ? S.eq.code + ' · ' : '') + 'MES 상태를 읽지 못했습니다.'; chat.classList.toggle('bad', true);
+    chatLine(chat, 'MES 상태를 읽지 못했습니다.', true);
     return;
   }
   const parts = ['MES ' + (STATE_TXT[S.mes.operating] || S.mes.operating || '—') + ' · '
@@ -602,8 +635,19 @@ function renderMesStatus() {
   box.textContent = parts.join(' · ');
   const bad = out > 0 || (!!S.mes.fault && S.mes.fault !== 'normal');
   box.classList.toggle('bad', bad);
-  chat.textContent = (S.eq ? S.eq.code + ' ' + (S.eq.group || '') + ' · ' : '') + parts.join(' · ');
-  chat.classList.toggle('bad', bad || S.mes.alarms.length > 0);
+  chatLine(chat, parts.join(' · '), bad || S.mes.alarms.length > 0);
+}
+
+/* 대화 화면 상태 줄 — 설비 code·이름을 크게, MES 상태를 그 옆에. 대화 화면에서는 #ctx 띠를 숨기므로 설비 표시는 여기 하나다. */
+function chatLine(el, status, bad) {
+  el.innerHTML = '';
+  if (S.eq) {
+    const eq = document.createElement('b'); eq.className = 'eqc'; eq.textContent = S.eq.code + ' ' + (S.eq.group || '');
+    el.appendChild(eq);
+  }
+  const st = document.createElement('span'); st.textContent = status;
+  el.appendChild(st);
+  el.classList.toggle('bad', bad);
 }
 
 /* 안전 수칙을 관문 색으로 펼칠 때 — MES를 못 읽음·정지·대기·이상·경보·증상 후보·범위 이탈, 또는 안전 카드의
@@ -757,11 +801,25 @@ function renderSymptoms() {
     b.type = 'button';
     b.className = item.score > 0 ? 'hot' : '';
     b.textContent = (item.score > 0 ? '▲ ' : '') + item.label;
+    // MES 관련 이유를 칩 안에 보인다(A3 — 툴팁에만 두지 않는다). relevance()가 만든 값만, 중복 제거.
+    if (item.score > 0 && item.why.length) {
+      const w = document.createElement('span'); w.className = 'why-tag';
+      w.textContent = ' · ' + Array.from(new Set(item.why)).join(' · ');
+      b.appendChild(w);
+    }
     b.title = item.text + (item.score > 0 ? ' · MES ' + item.why.join(' · ') : '');
     b.disabled = pending;
     b.addEventListener('click', () => { haptic(20); sendChat(item.text, item.label); });
     list.appendChild(b);
   });
+  // 답이 나온 뒤에는 칩을 한 버튼으로 접는다 — 안전 카드·답·인계 버튼이 한 화면에 들어오게(A4). ▲는 MES 관련 칩 수.
+  const compact = S.chat.length > 0 && items.length > 0;
+  const foot = $('chatFoot'), tg = $('suggToggle');
+  foot.classList.toggle('compact', compact);
+  foot.classList.toggle('open', compact && !!S.suggOpen);
+  tg.hidden = !compact;
+  tg.textContent = '추천 질문 ' + items.length + '개' + (related.length ? ' · ▲' + related.length : '') + (S.suggOpen ? ' ▴' : ' ▾');
+  tg.ariaExpanded = String(compact && !!S.suggOpen);
 }
 
 // ── 조건 평가 ──────────────────────────────────────────────────────
@@ -886,68 +944,149 @@ function rankCards(eq, observations = S.observations) {
 }
 
 // ── 렌더 ───────────────────────────────────────────────────────────
-function safetyEl(c, pin) {
+/* 안전 항목 한 줄 — 카드 title 원문 그대로(요약·잘라내기 없음)와 서버 공지의 멈춤 조건만 보인다(사용자 결정 10/13).
+ * 카드 ID·safety_basis·know_how는 묶음 하나의 「안전수칙 자세히 ▾」(safetyMore)로 간다. 설비 불일치·카드 없음은
+ * 접지 않고 경고 문구 그대로 항목에 보인다. opt.mark — 직전 답 대비 「추가」「변경」「빠짐」, opt.noStops — 직전 답과 같을 때. */
+function safetyEl(c, opt) {
+  opt = opt || {};
   const d = document.createElement('div');
-  d.className = 'safety' + (pin ? ' pin' : '') + (c.mismatch || c.missing ? ' invalid' : '');
-  d.innerHTML = '<div class="hd"><span class="dot"></span><span>⚠ 작업 전 안전 확인</span></div>'
-    + '<div class="kid"></div><div class="ttl"></div><p class="body" style="margin:0"></p>'
-    + '<p class="basis" style="margin:0"></p>'
-    + (pin ? '<div class="gate">안전 조건을 확인하고 준수한 뒤 작업하세요.</div>' : '');
-  if (c.mismatch) {
-    d.querySelector('.kid').textContent = c.card_id + ' · 설비 불일치';
-    d.querySelector('.ttl').textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
-    d.querySelector('.basis').textContent = '지침 숨김 — 다른 설비의 안전 지침이므로 표시하지 않습니다. 담당자 확인';
-    const gate = d.querySelector('.gate'); if (gate) gate.remove();
-    return d;
+  d.className = 'safety' + (c.mismatch || c.missing ? ' invalid' : '') + (opt.mark === '빠짐' ? ' gone' : '');
+  const line = document.createElement('div'); line.className = 's-line';
+  if (opt.mark) {
+    const m = document.createElement('span'); m.className = 'mark'; m.textContent = opt.mark;
+    line.appendChild(m);
   }
-  d.querySelector('.kid').textContent = c.missing ? c.card_id + ' · 로컬 카드 없음 · 설비 대조 불가' : c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade;
-  d.querySelector('.ttl').textContent = c.missing ? '로컬 카드 없음 — 카드 원문을 확인할 수 없어 현재 설비와 대조하지 못했습니다' : c.title;
-  d.querySelector('.body').textContent = c.missing ? '' : c.know_how;
-  d.querySelector('.basis').textContent = '근거 — ' + (c.safety_basis || '근거 미기재');
-  // 서버 공지의 멈춤 조건은 카드 본문을 덮지 않고 따로 붙인다.
-  (c.stop_conditions || []).forEach((t) => {
+  const ttl = document.createElement('span'); ttl.className = 'ttl';
+  if (c.mismatch) {
+    ttl.textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
+  } else if (c.missing) {
+    ttl.textContent = c.card_id + ' · 로컬 카드 없음 — 카드 원문을 확인할 수 없어 현재 설비와 대조하지 못했습니다';
+  } else ttl.textContent = c.title;
+  line.appendChild(ttl);
+  d.appendChild(line);
+  if (c.mismatch) {
+    const p = document.createElement('p'); p.className = 'basis';
+    p.textContent = '지침 숨김 — 다른 설비의 안전 지침이므로 표시하지 않습니다. 담당자 확인';
+    d.appendChild(p);
+  }
+  // 서버 공지의 멈춤 조건은 접지 않고 항목 바로 아래에 둔다(사용자 결정 원칙 2).
+  if (!opt.noStops && opt.mark !== '빠짐') (c.mismatch ? [] : (c.stop_conditions || [])).forEach((t) => {
     const p = document.createElement('p');
     p.className = 'stop'; p.textContent = '멈춤 · ' + t;
-    d.querySelector('.basis').before(p);
+    d.appendChild(p);
   });
   return d;
 }
 
-/* 안전 관문. 화면 상단에 고정하는 것은 얇은 관문 띠 하나뿐이고 카드는 일반 흐름으로 모두 펼친다 —
- * 내부 스크롤 상자나 카드별 sticky는 둘째 카드부터 근거를 가린다(B2). 띠는 pane 직계로 붙어야
- * pane 전체 스크롤 동안 고정되므로 상자는 display:contents(pda.html .safety-stack). */
+/* 묶음 하나의 상세 — 카드별 ID·제목·근거 전문·know_how. 카드마다 상세 버튼을 두지 않는다(원칙 3). */
+function safetyMore(cards) {
+  const det = document.createElement('details'); det.className = 'safety-more';
+  const sum = document.createElement('summary'); sum.textContent = '안전수칙 자세히';
+  det.appendChild(sum);
+  cards.forEach((c) => {
+    const s = document.createElement('div'); s.className = 'sd' + (c.mismatch || c.missing ? ' invalid' : '');
+    const add = (cls, text) => { const p = document.createElement('p'); p.className = cls; p.textContent = text; s.appendChild(p); };
+    if (c.mismatch) {
+      add('kid', c.card_id + ' · 설비 불일치');
+      add('basis', '지침 숨김 — 다른 설비의 안전 지침이므로 표시하지 않습니다. 담당자 확인');
+    } else {
+      add('kid', c.missing ? c.card_id + ' · 로컬 카드 없음 · 설비 대조 불가' : c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade);
+      if (!c.missing) add('ttl', c.title);
+      add('basis', '근거 — ' + (c.safety_basis || '근거 미기재'));
+      if (!c.missing && c.know_how) add('body', c.know_how);
+    }
+    det.appendChild(s);
+  });
+  return det;
+}
+
+/* 안전 묶음 머리 — 관문 문구를 카드마다 반복하지 않고 여기 한 번 둔다. 설비 불일치 카드는 지킬 수칙 수에서 뺀다. */
+function safetyHead(cards, lead) {
+  const bad = cards.filter((c) => c.mismatch).length;
+  return '⚠ ' + lead + ' ' + (cards.length - bad) + '건' + (bad ? ' · 설비 불일치 ' + bad + '건' : '')
+    + ' — 안전 조건을 확인하고 준수한 뒤 작업하세요.';
+}
+
+/* 직전 답 대비 바뀐 점(원칙 5). 같음 = card_id 집합과 각 카드의 멈춤 조건이 모두 같다. */
+const stopKey = (c) => (c.mismatch ? 'x' : '') + JSON.stringify(c.stop_conditions || []);
+function safetyDiff(cards, prev) {
+  const old = (id) => prev.find((p) => p.card_id === id);
+  const mark = (c) => !old(c.card_id) ? '추가' : stopKey(old(c.card_id)) !== stopKey(c) ? '변경' : '';
+  const gone = prev.filter((p) => !cards.some((c) => c.card_id === p.card_id));
+  return {mark: mark, gone: gone, same: !gone.length && cards.every((c) => !mark(c))};
+}
+
+/* 머리 + 짧은 항목 + 「안전수칙 자세히 ▾」 하나. 답·대기 말풍선과 시도 화면이 같은 모양을 쓴다.
+ * into(말풍선)를 주면 그 안에 바로 붙인다 — 머리가 말풍선 직계라야 sticky로 말풍선이 보이는 내내
+ * pane 위에 고정된다(B1, A3 결정). prev — 직전 답의 안전 카드. 주면 같음 / 추가·변경·빠짐을 표시한다. */
+function safetyGroup(cards, lead, into, prev) {
+  const g = into || document.createElement('div');
+  if (!into) g.className = 'safety-group';
+  const diff = prev ? safetyDiff(cards, prev) : null;
+  const list = document.createElement('div'); list.className = 'safety-cards' + (diff && diff.same ? ' compact' : '');
+  const h = document.createElement('p'); h.className = 'safety-head';
+  if (diff && diff.same) {
+    const bad = cards.filter((c) => c.mismatch).length;
+    h.textContent = '⚠ 안전사항 ' + (cards.length - bad) + '건' + (bad ? ' · 설비 불일치 ' + bad + '건' : '') + ' · 직전 답과 같음';
+    cards.forEach((c) => list.appendChild(safetyEl(c, {noStops: true})));
+  } else {
+    const n = (m) => cards.filter((c) => diff.mark(c) === m).length;
+    h.textContent = safetyHead(cards, lead) + (diff ? ' 직전 답 대비 추가 ' + n('추가') + ' · 변경 ' + n('변경')
+      + ' · 빠짐 ' + diff.gone.length + '건.' : '');
+    cards.forEach((c) => list.appendChild(safetyEl(c, {mark: diff ? diff.mark(c) : ''})));
+    if (diff) diff.gone.forEach((c) => list.appendChild(safetyEl(c, {mark: '빠짐'})));
+  }
+  g.appendChild(h);
+  g.appendChild(list);
+  g.appendChild(safetyMore(cards));
+  return g;
+}
+
+/* 시도 기록 화면의 안전 관문. 띠는 pane 직계로 붙어야 pane 전체 스크롤 동안 고정되므로 상자는
+ * display:contents(pda.html .safety-stack). 항목은 짧게, 근거·상세는 묶음 하나로 접는다. */
 function safetyStack(cards) {
   const box = document.createElement('div');
   box.className = 'safety-stack';
   const bar = document.createElement('div');
   bar.className = 'safety-bar';
-  bar.textContent = '⚠ 작업 전 확인할 안전 수칙 ' + cards.length + '건';
+  bar.textContent = safetyHead(cards, '작업 전 확인할 안전 수칙');
   box.appendChild(bar);
-  cards.forEach((c) => box.appendChild(safetyEl(c, true)));
+  const list = document.createElement('div'); list.className = 'safety-cards';
+  cards.forEach((c) => list.appendChild(safetyEl(c)));
+  box.appendChild(list);
+  box.appendChild(safetyMore(cards));
   return box;
 }
 
-/* 대화 화면 위 안전 수칙(B1). 평소에는 회색 한 줄로 접고, safetyAlert 일 때만 관문 색으로 펼친다(10/8 최재영 요청).
- * 판정이 그대로면 다시 그리지 않는다 — 작업자가 직접 펼친 상태가 3초 갱신마다 닫히지 않게. */
+/* 질의가 시작됐는가 — 대기 중이거나 답이 하나라도 있으면 이 질의의 안전사항은 말풍선 쪽에 있다. */
+const chatShowsSafety = () => chatPending() || !!lastAnswer();
+
+/* 대화 화면 위 상자 = 현재 설비의 안전 상태(원칙 4). 설비 code·MES 상태(safetyAlert)·이 설비 안전 수칙 건수.
+ * 질의 전에는 카드 title 짧은 항목만, 질의가 시작되면 한 줄 상태로 줄인다. 전문(근거·know_how)은 싣지 않는다 —
+ * 이 질의의 안전사항과 전문은 답 앞 묶음에 있다. 판정이 그대로면 다시 그리지 않는다. */
 function renderAskSafety() {
   const box = $('askSafety');
   if (!S.eq) { box.innerHTML = ''; S.safetyView = null; return; }
   const safety = rankCards(S.eq).safety;
   const hot = safetyAlert(S.mes, S.observations, safety);
-  const view = S.eq.equipment_id + ':' + safety.length + ':' + hot;
+  const inChat = chatShowsSafety();
+  const view = S.eq.equipment_id + ':' + safety.map((c) => c.card_id).join(',') + ':' + hot + ':' + !!S.mes + ':' + inChat;
   if (view === S.safetyView) return;
   S.safetyView = view;
   box.innerHTML = '';
   if (!safety.length) return;
-  const d = document.createElement('details');
-  d.className = 'fold safety-fold' + (hot ? ' hot' : '');
-  d.open = hot;
-  const sum = document.createElement('summary');
-  sum.textContent = hot ? '⚠ 작업 전 확인할 안전 수칙 ' + safety.length + '건 · MES 이상 또는 조건 일치'
-    : '안전 수칙 ' + safety.length + '건 · 펼치기';
-  d.appendChild(sum);
-  safety.forEach((c) => d.appendChild(safetyEl(c, true)));
-  box.appendChild(d);
+  const g = document.createElement('div');
+  g.className = 'safety-group safety-fold' + (hot ? ' hot' : '');
+  const h = document.createElement('p'); h.className = 'safety-head';
+  h.textContent = '⚠ ' + S.eq.code + ' · ' + (!S.mes ? 'MES 확인 불가' : hot ? 'MES 이상 또는 조건 일치' : 'MES 정상')
+    + ' · 이 설비 안전 수칙 ' + safety.length + '건' + (inChat ? ' — 이 질의의 안전사항은 답 앞에 있습니다' : '');
+  g.appendChild(h);
+  if (!inChat) {
+    const list = document.createElement('div'); list.className = 'safety-cards compact';
+    safety.forEach((c) => list.appendChild(safetyEl(c, {noStops: true})));
+    g.appendChild(list);
+  }
+  box.appendChild(g);
 }
 
 const RESTART_TEXT = {normal_stop_restart: '정상 정지 후 재가동', abnormal_stop_restart: '비정상 정지 후 재가동',
@@ -1064,18 +1203,28 @@ function answerBody(turn) {
   const d = document.createElement('div');
   const none = !res.review_queue && (res.no_knowledge === true || !res.answer);
   d.className = 'msg bot' + (none ? ' none' : '');
-  if (r.safety.length) {
-    const h = document.createElement('p'); h.className = 'safety-head';
-    h.textContent = '⚠ 이 답에 적용되는 안전 수칙 ' + r.safety.length + '건 — 먼저 확인';
-    d.appendChild(h);
-    r.safety.forEach((c) => d.appendChild(safetyEl(c, true)));
-  }
+  // 모든 답이 같은 구조(짧은 항목 + 자세히 하나). 직전 답과 비교해 같으면 한 줄로, 다르면 추가·변경·빠짐을 표시한다(원칙 5).
+  const done = S.chat.filter((t) => t.status === 'done');
+  const prev = done[done.indexOf(turn) - 1];
+  const prevSafety = prev && prev.ranked && prev.ranked.safety.length ? prev.ranked.safety : null;
+  if (r.safety.length) safetyGroup(r.safety, '이 답에 적용되는 안전 수칙', d, prevSafety);
   const answer = document.createElement('p');
-  answer.className = 'ans';
+  answer.className = 'ans lead';
   answer.textContent = res.review_queue ? '답변을 보류했습니다. 담당자 검토가 필요합니다.'
     : none ? '해당 지식 없음 — 이 질문에 맞는 근거 카드가 없어 추측으로 답하지 않습니다. 증상을 더 구체적으로 적거나 숙련자에게 문의해 주세요.'
     : res.answer;
-  d.appendChild(answer);
+  // 답과 다음 행동(인계 작성)을 한 줄에 — 버튼이 답 오른쪽에 붙어 세로 높이를 따로 먹지 않는다(A4). 인계 초안은 마지막 답에서만.
+  const row = document.createElement('div'); row.className = 'ans-row';
+  row.appendChild(answer);
+  d.appendChild(row);
+  if (turn === lastAnswer()) {
+    const next = document.createElement('div'); next.className = 'ans-next';
+    const ho = document.createElement('button');
+    ho.type = 'button'; ho.className = 'btn primary'; ho.textContent = '이 대화로 인계 작성';
+    ho.addEventListener('click', () => openHandoverNew(chatMemo(turn)));
+    next.appendChild(ho);
+    row.appendChild(next);
+  }
 
   const ids = r.actions.map((x) => x.card.card_id);
   const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
@@ -1090,7 +1239,7 @@ function answerBody(turn) {
     const label = document.createElement('p'); label.className = 'lbl';
     label.textContent = '질의 당시 MES 센서값 · ' + stamp(res.evidence.simulated_at) + ' · 고정된 답변 근거';
     more.appendChild(label);
-    renderSensorReadings(more, evidence);
+    renderSensorReadings(more, evidence, undefined, 'ev' + turn.id);
   }
   // 시도 기록은 마지막 답에만 이어진다(시도 화면이 S.ranked 를 쓴다).
   const triedIds = turn === lastAnswer() ? S.tries.map((t) => t.card_id) : [];
@@ -1250,21 +1399,28 @@ function userBubble(t) {
   return d;
 }
 
-const waitText = (t) => '답변 작성 중 · ' + Math.floor((Date.now() - t.started) / 1000) + '초';
+// 아는 것만 말한다 — 경과 초와 이 화면의 시간 제한(QUERY_TIMEOUT_MS). 서버가 단계 정보를 주지 않으므로 단계는 지어내지 않는다.
+const waitText = (t) => '답변 작성 중 · ' + Math.floor((Date.now() - t.started) / 1000) + '초 경과 · 최대 '
+  + Math.round(QUERY_TIMEOUT_MS / 1000) + '초';
 
 function botBubble(t) {
   if (t.status === 'done') return answerBody(t);
   const d = document.createElement('div');
   const p = document.createElement('p'); p.className = 'ans';
-  d.appendChild(p);
   if (t.status === 'pending') {
     d.className = 'msg bot wait'; d.id = 'turn-' + t.id;
+    // 기다리는 동안 이 설비의 안전 카드를 먼저 보인다(E1). 대기 문구는 아는 것(경과 초)만 — 서버가 단계를 주지 않는다.
+    const safety = S.eq ? rankCards(S.eq).safety : [];
+    if (safety.length) safetyGroup(safety, '답을 기다리는 동안 확인 · 이 설비 안전 수칙', d);
+    const row = document.createElement('div'); row.className = 'wait-row';
     p.textContent = waitText(t);
     const c = document.createElement('button');
     c.type = 'button'; c.className = 'btn sm ghost'; c.textContent = '취소';
     c.addEventListener('click', () => { t.status = 'cancelled'; renderChat(); renderSymptoms(); renderAskBlock(); });
-    d.appendChild(c);
+    row.appendChild(p); row.appendChild(c);
+    d.appendChild(row);
   } else {
+    d.appendChild(p);
     d.className = 'msg bot err';
     p.textContent = t.status === 'cancelled' ? '취소했습니다. 이 질문의 답은 표시하지 않습니다.'
       : '질의 실패 · ' + t.error + ' — 같은 질문을 다시 보내 주세요.';
@@ -1276,9 +1432,23 @@ function renderChat() {
   const log = $('chatLog'); log.innerHTML = '';
   let last = null;
   S.chat.forEach((t) => { log.appendChild(userBubble(t)); last = botBubble(t); log.appendChild(last); });
-  $('chatHandover').hidden = !lastAnswer();
-  // 새 답은 머리(안전 카드)부터 보이게 그 말풍선 위쪽으로 스크롤한다.
-  if (last && last.scrollIntoView) last.scrollIntoView({block: 'start'});
+  renderAskSafety();
+  if (last) scrollToTurn(last);
+}
+
+/* 새 말풍선의 안전 묶음 머리를 pane 위에 맞춘다. 그러면 답(과 바로 아래 인계 작성)이 화면 밖이면
+ * 그만큼만 더 내려 답이 보이게 한다 — 안전 카드가 많아 둘 다 못 들어갈 때는 답 쪽을 택한다(DOM 순서는 안전 → 답 그대로). */
+function scrollToTurn(el) {
+  const pane = $('chatPane');
+  if (!pane || !el.getBoundingClientRect) return;
+  const base = pane.getBoundingClientRect().top - pane.scrollTop;
+  let y = el.getBoundingClientRect().top - base - 8;
+  const tail = el.querySelector('.ans-next') || el.querySelector('.wait-row') || el.querySelector('.ans');
+  if (tail) {
+    const bottom = tail.getBoundingClientRect().bottom - base + 8;
+    if (bottom - y > pane.clientHeight) y = bottom - pane.clientHeight;
+  }
+  pane.scrollTop = Math.max(0, y);
 }
 
 async function sendChat(question, label) {
@@ -1288,7 +1458,7 @@ async function sendChat(question, label) {
     status: 'pending', started: Date.now(), eqId: S.eq.equipment_id};
   S.chat.push(turn);
   if (!label) $('question').value = '';
-  S.tries = []; S.attemptSeq = 0;
+  S.tries = []; S.attemptSeq = 0; S.suggOpen = false;
   renderChat(); renderSymptoms(); renderAskBlock();
   const timer = setInterval(() => {
     const el = $('turn-' + turn.id);
@@ -1331,6 +1501,99 @@ const HANDOVER_STATUS = {
 function handoverStatus(status) {
   return HANDOVER_STATUS[status] || ['상태 확인 필요', '등록된 상태를 담당자에게 확인해 주세요.'];
 }
+const HO_DONE = ['closed', 'done', 'withdrawn'];
+
+/* 「이 기기에서 확인함」 작업 체크 — 이 PDA의 localStorage에만 둔다. 서버로 보내지 않고 인계 상태(open·needs_recheck…)도
+ * 바꾸지 않는다(MES 수치가 돌아와도 자동 완료하지 않는 원칙과 같은 선). 키: shiftlink.hoCheck.<handover_id>.<item_id>,
+ * item_id가 없으면 i<인덱스>-<문구 해시>. 값: 체크한 시각(ISO). 저장소가 막혀도 이 탭 동안은 메모리 사본으로 동작한다. */
+const HO_CHECK_PREFIX = 'shiftlink.hoCheck.';
+const hoChecks = {};
+function textHash(t) {
+  let h = 5381;
+  for (const ch of String(t)) h = ((h * 33) ^ ch.codePointAt(0)) >>> 0;
+  return h.toString(36);
+}
+function hoItemKey(h, it, i) {
+  return HO_CHECK_PREFIX + h.handover_id + '.' + (it.item_id || it.id || ('i' + i + '-' + textHash(it.text)));
+}
+function hoCheckedAt(key) {
+  if (key in hoChecks) return hoChecks[key];
+  try { return localStorage.getItem(key) || ''; } catch (_) { return ''; }
+}
+function setHoChecked(key, on) {
+  hoChecks[key] = on ? new Date().toISOString() : '';
+  try { if (on) localStorage.setItem(key, hoChecks[key]); else localStorage.removeItem(key); } catch (_) { /* 메모리 사본만 */ }
+}
+const hhmm = (iso) => new Date(iso).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+
+/* 확인 체크 칸 — 네이티브 체크박스 + label(행 높이 전체가 클릭 영역, Space 동작). onChange는 저장 뒤 호출. */
+function hoCheckEl(key, onChange) {
+  const label = document.createElement('label');
+  label.className = 'ho-check';
+  const box = document.createElement('input');
+  box.type = 'checkbox'; box.dataset.key = key;
+  const word = document.createElement('span');
+  const paint = () => {
+    const at = hoCheckedAt(key);
+    box.checked = !!at;
+    word.textContent = at ? '확인함 ' + hhmm(at) : '확인';
+    label.classList.toggle('on', !!at);
+  };
+  paint();
+  box.addEventListener('change', () => { setHoChecked(key, box.checked); paint(); if (onChange) onChange(); });
+  label.appendChild(box); label.appendChild(word);
+  return label;
+}
+
+/* 문구에 적힌 설비 code(현재 구성에 있는 것만). 지어내지 않는다 — 없으면 빈 배열. */
+const hoCodes = (text) => S.equipment.filter((e) => String(text).includes(e.code)).map((e) => e.code);
+
+/* 홈 인계 목록 — 미완료 항목 전부, 확인한 항목은 아래로(숨기지 않음). 같은 묶음 안 순서는 인계 기록 순서. */
+function renderHomeHandovers(focusKey) {
+  const list = $('homeHoList');
+  if (!list) return;
+  const keep = list.scrollTop;
+  list.innerHTML = '';
+  const items = S.handovers.flatMap((h) => (h.open_items || []).map((it, i) => ({ h: h, it: it, key: hoItemKey(h, it, i) })))
+    .filter((x) => !HO_DONE.includes(x.it.status));
+  items.forEach((x) => { x.at = hoCheckedAt(x.key); });
+  items.sort((a, b) => !!a.at - !!b.at);   // 안정 정렬
+  $('homeHoProgress').textContent = items.length ? '확인 ' + items.filter((x) => x.at).length + ' / 전체 ' + items.length : '';
+  if (!items.length) {
+    const li = document.createElement('li'); li.className = 'empty'; li.textContent = '남은 인계 항목 없음';
+    list.appendChild(li); return;
+  }
+  items.forEach((x) => {
+    const li = document.createElement('li');
+    li.className = 'ho-item';
+    // 다시 정렬해 그린다. 키보드(Space)로 바꿨으면 그 칸에 초점을 돌려준다 — 마우스 클릭이면 목록 위치를 그대로 둔다.
+    li.appendChild(hoCheckEl(x.key, () => {
+      const kb = document.activeElement && document.activeElement.matches(':focus-visible');
+      renderHomeHandovers(kb ? x.key : null);
+    }));
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'ho-open';
+    b.innerHTML = '<span class="ho-top"><span class="pill st"></span><b class="eqc"></b><span class="due"></span></span>'
+      + '<span class="ho-text"></span><span class="ho-src"></span>';
+    const st = b.querySelector('.st');
+    st.textContent = handoverStatus(x.it.status)[0];
+    st.className = 'pill st ' + (x.it.status === 'open' ? 'miss' : 'unknown');   // 인계 확인 화면과 같은 표지
+    const codes = hoCodes(x.it.text);
+    b.querySelector('.eqc').textContent = codes.join(' · ');
+    b.querySelector('.due').textContent = x.it.due_shift ? x.it.due_shift + '조 마감' : '';
+    b.querySelector('.ho-text').textContent = x.it.text;
+    b.querySelector('.ho-src').textContent = x.h.handover_id + ' · ' + x.h.shift_from + '조 → ' + x.h.shift_to + '조 · ' + x.h.shift_date;
+    // 문구에 설비 code가 있으면 그 설비의 인계로, 없으면 전체 인계로. 설비 선택(S.eq)은 바꾸지 않는다.
+    b.addEventListener('click', () => openHandover(null, codes[0] || ''));
+    li.appendChild(b);
+    list.appendChild(li);
+  });
+  list.scrollTop = keep;
+  if (focusKey) {
+    const box = Array.from(list.querySelectorAll('input')).find((el) => el.dataset.key === focusKey);
+    if (box) box.focus();
+  }
+}
 
 function appendBasisDetails(parent, ids) {
   if (!ids.length) {
@@ -1355,11 +1618,14 @@ function appendBasisDetails(parent, ids) {
   });
 }
 
-function openHandover() {
+/* code — 홈 목록에서 올 때 그 항목의 설비 code('' = 전체). 버튼 배선(ev만 넘어옴)은 지금처럼 선택 설비 기준. */
+function openHandover(ev, code) {
   const pane = $('hoPane'); pane.innerHTML = '';
+  S.hoBack = S.screen === 'home' ? 'home' : null;
+  const focus = typeof code === 'string' ? code : (S.eq ? S.eq.code : '');
   const mine = S.handovers.filter((h) =>
-    (h.open_items || []).some((it) => String(it.text).indexOf(S.eq ? S.eq.code : '§') !== -1)
-    || !S.eq);
+    (h.open_items || []).some((it) => String(it.text).indexOf(focus || '§') !== -1)
+    || !focus);
   const list = mine.length ? mine : S.handovers;
 
   if (!list.length) {
@@ -1379,15 +1645,25 @@ function openHandover() {
     memo.querySelector('.body').textContent = h.memo_text;
     pane.appendChild(memo);
 
-    const open = (h.open_items || []).filter((it) => !['closed', 'done', 'withdrawn'].includes(it.status));
+    const open = (h.open_items || []).map((it, i) => ({ it: it, key: hoItemKey(h, it, i) }))
+      .filter((x) => !HO_DONE.includes(x.it.status));
     const l2 = document.createElement('p');
-    l2.className = 'lbl'; l2.textContent = '처리 또는 재확인이 필요한 항목 ' + open.length + '건';
+    l2.className = 'lbl';
+    const progress = () => {
+      l2.textContent = '처리 또는 재확인이 필요한 항목 ' + open.length + '건'
+        + (open.length ? ' · 확인 ' + open.filter((x) => hoCheckedAt(x.key)).length + ' / 전체 ' + open.length : '');
+    };
+    progress();
     pane.appendChild(l2);
     const legend = document.createElement('p'); legend.className = 'hint';
-    legend.textContent = '인계 기록에 등록된 상태입니다. MES 수치가 정상으로 돌아와도 자동으로 완료 처리하지 않습니다.';
+    legend.textContent = '인계 기록에 등록된 상태입니다. MES 수치가 정상으로 돌아와도 자동으로 완료 처리하지 않습니다.'
+      + (open.length ? ' 확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.' : '');
     pane.appendChild(legend);
 
-    open.forEach((it) => {
+    open.forEach(({ it, key }) => {
+      const row = document.createElement('div');
+      row.className = 'ho-item';
+      row.appendChild(hoCheckEl(key, progress));
       const d = document.createElement('div');
       d.className = 'card';
       d.innerHTML = '<div class="pills"><span class="pill miss st"></span>'
@@ -1403,7 +1679,8 @@ function openHandover() {
       d.querySelector('.du').textContent = it.due_shift + '조 마감';
       d.querySelector('.body').textContent = it.text;
       appendBasisDetails(d.querySelector('.src'), it.basis_ids || []);
-      pane.appendChild(d);
+      row.appendChild(d);
+      pane.appendChild(row);
     });
   });
   show('handover');
@@ -1903,13 +2180,13 @@ on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('c
 on('obsReload', () => loadMesObservations());
 on('askBack', () => show('ctx'));
 on('doSearch', () => sendChat(currentQuestion()));
+on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
 on('triesBack', () => show('chat'));
-on('chatHandover', () => openHandoverNew(chatMemo(lastAnswer())));
 on('toHandover', openHandover);
-on('toHandoverHome', openHandover);
+on('toHandoverHome', () => openHandover(null, ''));   // 전체 인계 — 선택 설비로 거르지 않는다
 on('homePending', openOutbox);
 on('hoPending', openOutbox);
-on('hoBack', () => show(S.eq ? 'ctx' : 'home'));
+on('hoBack', () => show(S.hoBack || (S.eq ? 'ctx' : 'home')));   // 홈 목록에서 왔으면 홈으로
 on('toHandoverNew', openHandoverNew);
 on('hoNewBack', () => show(S.hoNewBack || 'ctx'));
 on('hoLoadMes', importHandoverMes);
@@ -2043,8 +2320,6 @@ function renderDash() {
   const d = dashSummary(S.snap, S.equipment, S.handovers, S.faults);
   // 홈 타일의 한 줄 상태
   $('homeEqNote').textContent = S.equipment.length + '대';
-  $('homeHoNote').textContent = (d.openItems ? '처리·재확인 필요 ' + d.openItems + '건' : '남은 인계 항목 없음')
-    + (S.outboxLabels && S.outboxLabels.pending ? ' · ' + S.outboxLabels.pending : '');
   $('homeDashNote').textContent = d.faults.length || d.waiting.length
     ? ['⚠ 이상 ' + d.faults.length, d.waiting.length ? '후속 대기 ' + d.waiting.length : ''].filter(Boolean).join(' · ') : '라인 ' + d.line;
   $('toDash').classList.toggle('warn', d.faults.length > 0);

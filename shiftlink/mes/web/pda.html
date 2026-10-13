@@ -21,12 +21,17 @@
 -->
 <style>
   :root{
-    --bg:#0A0D11; --surface:#161B22; --surface-2:#1E252E; --edge:#2B333D;
-    --tx:#F3F6F9; --tx-2:#AEB9C4; --tx-3:#7C8792;
-    --safety:#F0453C; --safety-bg:#3A0F0D; --safety-edge:#8E241E;
-    --notice:#FFB020; --notice-bg:#2A210F; --notice-edge:#806322;
-    --ok:#31C25E; --warn:#FFB020; --fail:#FF8A3D; --scan:#38C6F2;
-    --hpu:#F0453C; --gr:#4A90F0; --rt:#F0C419; --cv:#2FC26B; --pdp:#A78BFA; --cau:#38C6F2;
+    /* ISA-101 — 중립 회색 바탕, 색은 의미(이상·주의·안전·선택)에만. 값은 MES 대시보드(style.css)와 같은 계열.
+       면은 밝기로 위계: bg < surface(패널) < surface-2(카드·버튼) < surface-3(답 본문·주 행동). OKLCH L 23→27→31→35%. */
+    --bg:#1c1d20; --surface:#26272b; --surface-2:#2f3034; --surface-3:#383a3e; --hover:#42444a; --edge:#3a3c41;
+    --tx:#eceeef; --tx-2:#c4c7cb; --tx-3:#a7acb1;
+    --accent:#74a6d1;                                   /* 선택·초점·주 행동 테두리. 면 채움에 쓰지 않는다 */
+    --ok:#669ccc; --ok-tx:#9cc4e6;                      /* MES 가동. --ok-tx는 핵심 상태 글자용(on surface 8.1:1) */
+    --notice:#e9b966; --notice-tx:#f3d39a; --notice-bg:#2d2a22; --notice-bg-2:#352f22; --notice-edge:#9a7640;  /* 주의·안전(앰버) */
+    --fault:#f0898f; --fault-tx:#ffc0c5; --fault-edge:#e5484d; --fault-bg:#3a2328; --fault-bg-2:#4a2c32;      /* 고장·이상 */
+    --shadow:rgba(0,0,0,.4);
+    /* 설비 종류 — 작은 레일·스와치에만. 저채도, 빨강·앰버(안전·주의 의미색)와 겹치지 않는다. code 글자가 1차 구분. */
+    --hpu:#8e9bd6; --gr:#6fb5ad; --rt:#a796cf; --cv:#8fb486; --pdp:#8aa9bd; --cau:#aba69d;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overflow:hidden}
@@ -38,7 +43,19 @@
   }
   .mono{font-family:ui-monospace,"Cascadia Mono",Consolas,"D2Coding",monospace;font-variant-numeric:tabular-nums}
   button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
-  :focus-visible{outline:3px solid var(--scan);outline-offset:2px}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  /* 마우스 신호(시연 키오스크) — 누를 수 있는 것만 손가락 커서, 올리면 테두리·바탕이 밝아지고, 누르면 살짝 눌린다. */
+  summary, select{cursor:pointer}
+  button[disabled]{cursor:not-allowed}
+  :is(.btn,.act,.home-tile,.chip,.sugg button,.dash-tile button,.hangul button,.appbar .ic,.obs .x,button.row,.ho-open,#alert .alrow){
+    transition:background-color .12s ease,border-color .12s ease,transform .1s ease-out}
+  :is(.btn,.act,.home-tile,.chip,.sugg button,.dash-tile button,.hangul button,.appbar .ic,.obs .x,button.row,.ho-open):not([disabled]):hover{
+    border-color:var(--tx-2);background-color:var(--hover)}
+  :is(.btn.primary):not([disabled]):hover{background-color:var(--tx-2);border-color:var(--tx-2)}
+  :is(.btn.big,.act.main):not([disabled]):hover{border-color:var(--tx)}
+  #alert .alrow:hover{background:var(--fault-bg-2)}
+  .fold > summary:hover, .basis-detail summary:hover, #obsList summary:hover{color:var(--tx);text-decoration:underline}
+  button:not([disabled]):active{transform:scale(.97)}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
   #app{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
@@ -55,46 +72,72 @@
   .appbar .sp{flex:1 1 auto}
   .appbar .mes-link{min-width:44px;min-height:32px;padding:0 8px;border:1px solid var(--edge);border-radius:6px;
     font-size:12px;text-decoration:none}
-  .appbar .ctx-change{border:1px solid var(--scan);border-radius:8px;color:var(--scan);min-height:44px}
+  .appbar .ctx-change{border:1px solid var(--accent);border-radius:8px;color:var(--accent);min-height:44px}
   .pane.ctx-pane{display:grid;grid-template-columns:minmax(260px,2fr) 3fr;gap:14px;overflow:hidden}
   .ctx-actions{display:flex;flex-direction:column;gap:10px;min-height:0}
   .ctx-sensors{display:flex;flex-direction:column;gap:8px;min-height:0;overflow-y:auto}
   .act{flex:1 1 0;min-height:76px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;
     padding:10px 16px;border:1px solid var(--edge);border-radius:10px;background:var(--surface-2);color:var(--tx);text-align:left}
   .act b{font-size:18px}
-  .act small{font-size:13px;font-weight:600;color:var(--tx-2)}
+  .act small{font-size:15px;font-weight:600;color:var(--tx-2)}
   .act small:empty{display:none}
-  .act.main{flex-grow:1.4;background:var(--scan);border-color:var(--scan);color:#04202B}
-  .act.main small{color:#04202B;opacity:.8}
-  .act.warn{border-color:var(--notice-edge)} .act.warn small{color:var(--warn)}
+  /* 주 행동 — 강조색은 테두리·표지에만, 면은 가장 밝은 중립(surface-3). 흐림(opacity) 없이 글자 대비 유지. */
+  .act.main{flex-grow:1.4;background:var(--surface-3);border:2px solid var(--accent)}
+  .act.main b::before{content:"▶ ";color:var(--accent)}
+  .act.warn{border-color:var(--notice-edge)} .act.warn small{color:var(--notice)}
   /* 세로·좁은 화면: 작업 버튼을 먼저, 센서값은 그 아래 */
   @media (max-width:760px){ .pane.ctx-pane{grid-template-columns:1fr;overflow-y:auto} .ctx-sensors{overflow:visible} .act{flex:0 0 auto} }
-  .home-grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .home-main{height:100%;flex-direction:column;font-size:28px}
-  .home-main .ico{font-size:44px}
-  .home-main small{font-size:15px;font-weight:700;opacity:.85}
-  .home-tiles{display:grid;grid-template-rows:repeat(3,minmax(76px,1fr));gap:12px}
+  .home-grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:minmax(0,1fr);gap:16px}
+  .home-tiles{display:grid;grid-template-rows:minmax(110px,2fr) repeat(2,minmax(76px,1fr));gap:12px}
+  .home-tile.main{background:var(--surface-3);border:2px solid var(--accent)}
+  .home-tile.main b{font-size:24px}
+  .home-tile.main b::before{content:"▶ ";color:var(--accent)}
+  .home-tile.main:not([disabled]):hover{border-color:var(--tx)}
+  /* 홈 인계 목록 — 상태 표지·문구 원문·설비 code·출처(handover_id·교대·날짜). 목록 칸 안에서만 세로 스크롤. */
+  .ho-home{min-height:0;display:flex;flex-direction:column;gap:8px}
+  .ho-home-head{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;flex:0 0 auto}
+  .ho-home-head .sp{flex:1 1 auto}
+  .ho-home-head .btn{width:auto;padding:0 16px}
+  .ho-prog{font-size:17px;font-weight:800;color:var(--tx)}
+  .ho-list{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;padding:0 4px 0 0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .ho-list .empty{font-size:17px;color:var(--tx-2);padding:12px}
+  .ho-item{display:flex;align-items:stretch;gap:8px;flex:0 0 auto}
+  .ho-item > .card{flex:1 1 auto;min-width:0}
+  /* 확인 체크 — 네이티브 체크박스 32px + label 전체가 클릭 영역. 확인한 항목은 흐리게 하지 않고 테두리·「확인함 HH:MM」으로 구분. */
+  .ho-check{flex:0 0 116px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;
+    padding:8px;border:1px solid var(--edge);border-radius:10px;background:var(--surface);font-size:16px;font-weight:700;
+    color:var(--tx-2);cursor:pointer;text-align:center;transition:background-color .12s ease,border-color .12s ease}
+  .ho-check input{width:32px;height:32px;margin:0;accent-color:var(--accent);cursor:pointer}
+  .ho-check:hover{border-color:var(--tx-2);background:var(--hover)}
+  .ho-check.on{border:2px solid var(--accent);color:var(--tx)}
+  .ho-open{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:4px;padding:10px 14px;
+    border:1px solid var(--edge);border-radius:10px;background:var(--surface-2);color:var(--tx)}
+  .ho-open .ho-top{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+  .ho-open .eqc{font-size:18px;font-weight:800}
+  .ho-open .due, .ho-open .ho-src{font-size:16px;color:var(--tx-2)}
+  .ho-open .ho-text{font-size:17px;line-height:1.45;overflow-wrap:anywhere}
+  .ho-open .ho-src::after{content:"  · 자세히 ›";font-weight:700;color:var(--tx)}
   .home-tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;padding:10px 18px;
     border:1px solid var(--edge);border-radius:10px;background:var(--surface-2);color:var(--tx);text-align:left}
   .home-tile b{font-size:19px}
-  .home-tile small{font-size:14px;font-weight:600;color:var(--tx-2)}
+  .home-tile small{font-size:16px;font-weight:600;color:var(--tx-2)}
   .home-tile small:empty{display:none}
-  .home-tile.warn{border-color:var(--notice-edge)} .home-tile.warn small{color:var(--warn)}
+  .home-tile.warn{border-color:var(--notice-edge)} .home-tile.warn small{color:var(--notice)}
   .home-foot{flex:0 0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .home-foot .sp{flex:1 1 auto}
   .home-foot .outbox-note{margin:0}
-  .dash-line{margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dash-line{margin:0;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
   .dash-line::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--tx-3)}
-  .dash-line.run::before{background:var(--ok)} .dash-line.warn::before{background:var(--warn)}
+  .dash-line.run::before{background:var(--ok)} .dash-line.warn::before{background:var(--notice)}
   .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .dash-tile{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
-    display:flex;flex-direction:column;gap:6px;min-height:110px}
-  .dash-tile.bad{border-color:var(--safety-edge)} .dash-tile.warn{border-color:var(--notice-edge)}
+    display:flex;flex-direction:column;gap:8px;min-height:110px}
+  .dash-tile.bad{border-color:var(--fault-edge)} .dash-tile.warn{border-color:var(--notice-edge)}
   .dash-tile .n{font-size:28px;font-weight:800;line-height:1}
-  .dash-tile .t{font-size:12px;font-weight:700;color:var(--tx-2)}
-  .dash-tile .d{font-size:13px;color:var(--tx-2);margin:0}
+  .dash-tile .t{font-size:15px;font-weight:700;color:var(--tx-2)}
+  .dash-tile .d{font-size:15px;color:var(--tx-2);margin:0}
   .dash-tile button{min-height:44px;text-align:left;padding:0 10px;border:1px solid var(--edge);border-radius:8px;
-    background:var(--surface-2);color:var(--tx);font-size:14px;font-weight:600}
+    background:var(--surface-2);color:var(--tx);font-size:16px;font-weight:600}
 
   /* 세로 스크롤 허용 — 안전 띠는 sticky 고정 (A3 결정 2026-09-22) */
   .pane{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
@@ -102,11 +145,11 @@
   .pane.flush{padding:0;overflow:hidden}
   .grow{flex:1 1 auto}
 
-  #net{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;
+  #net{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:15px;
     color:var(--tx-2);background:var(--surface);border-bottom:1px solid var(--edge);min-height:44px}
-  #net.warn{background:#2A1E06;border-color:var(--warn);color:#FFD98A}
+  #net.warn{background:var(--notice-bg);border-color:var(--notice);color:var(--notice-tx)}
   #net .dot{width:9px;height:9px;border-radius:50%;background:var(--tx-3);flex:0 0 auto}
-  #net.ok .dot{background:var(--ok)} #net.warn .dot{background:var(--warn)}
+  #net.ok .dot{background:var(--ok)} #net.warn .dot{background:var(--notice)}
   #net .q{margin-left:auto;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;
     background:var(--surface-2);border:1px solid var(--edge)}
 
@@ -115,32 +158,34 @@
   #ctx.on{display:flex}
   #ctx .rail{width:4px;align-self:stretch;min-height:38px;border-radius:2px;background:var(--tx-3)}
   #ctx .txt{flex:1 1 auto;min-width:0}
-  #ctx .id{font-size:16px;font-weight:800}
-  #ctx .nm{font-size:12px;color:var(--tx-2)}
+  #ctx .id{font-size:22px;font-weight:800}
+  #ctx .nm{font-size:17px;font-weight:700;color:var(--tx)}
   #ctx .src{font-size:11px;font-weight:700;color:var(--ok)}
-  #ctx .src.manual{color:var(--warn)}
+  #ctx .src.manual{color:var(--notice)}
 
   .btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:56px;padding:8px 14px;
     border-radius:10px;font-size:16px;font-weight:700;background:var(--surface-2);color:var(--tx);
     text-decoration:none;
     border:1px solid var(--edge);width:100%;flex:0 0 auto}
-  .btn.sm{min-height:48px;font-size:14px;font-weight:600}
-  .btn.primary{background:#F3F6F9;color:#0A0D11;border-color:#F3F6F9}
+  .btn.sm{min-height:48px;font-size:16px;font-weight:600}
+  .btn.primary{background:var(--tx);color:var(--bg);border-color:var(--tx)}
   .btn.ghost{background:transparent}
-  .btn[disabled]{opacity:.4}
-  .btn.big{min-height:76px;gap:10px;font-size:20px;background:var(--scan);
-    color:#04202B;border-color:var(--scan)}
+  /* 비활성 — 흐리게(opacity) 하지 않고 점선 테두리·어두운 바탕으로. 글자 대비는 4.5:1 이상 유지(--tx-3 on surface 6.5:1). */
+  .btn.btn[disabled]{background:var(--surface);color:var(--tx-3);border:1px dashed var(--tx-3)}
+  .btn.big{min-height:76px;gap:10px;font-size:20px;background:var(--surface-3);
+    color:var(--tx);border:2px solid var(--accent)}
+  .btn.big .ico{color:var(--accent)}
   .btn.big .ico{font-size:26px;line-height:1}
   .btn-row{display:flex;gap:8px;flex:0 0 auto}
   .btn-row>*{flex:1 1 0}
-  .outbox-note{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--warn)}
-  .outbox-note.bad{color:var(--safety)}
+  .outbox-note{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--notice)}
+  .outbox-note.bad{color:var(--fault)}
   button.outbox-note{min-height:48px;margin:0;padding:0 2px;flex:0 0 auto}
   button.outbox-note::after{content:"  내용 보기 ›";font-weight:600;color:var(--tx-2)}
 
-  .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--tx-2);text-transform:uppercase;margin:0;flex:0 0 auto}
-  .lbl.hot{color:var(--scan)}
-  .hint{font-size:12px;color:var(--tx-2);line-height:1.45;margin:0}
+  .lbl{font-size:15px;font-weight:700;letter-spacing:.1em;color:var(--tx-2);text-transform:uppercase;margin:0;flex:0 0 auto}
+  .lbl.hot{color:var(--accent)}
+  .hint{font-size:16px;color:var(--tx-2);line-height:1.45;margin:0}
 
   .chips{display:flex;gap:8px;flex-wrap:wrap}
   .chip{display:flex;align-items:center;gap:7px;min-height:48px;padding:0 14px;border-radius:999px;
@@ -148,187 +193,229 @@
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */
-  .vf{position:relative;flex:1 1 auto;min-height:0;background:#0E1319;overflow:hidden;display:grid;place-items:center}
+  .vf{position:relative;flex:1 1 auto;min-height:0;background:var(--bg);overflow:hidden;display:grid;place-items:center}
   /* 남은 촬영 영역에 맞춰 키운다. 고장 띠·설비 띠가 위에 붙어도 잘리지 않게 화면 높이(100vh)가 아니라 영역 크기를 기준으로 한다. */
   #s-scan .vf{container-type:size}
-  #unityCamera{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+  #unityCamera{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg)}
   .reticle{position:relative;z-index:1;width:min(80cqw,calc(86cqh * 4 / 3));aspect-ratio:4/3;border-radius:8px;
-    border:3px dashed #E8EDF2;transition:border-color .12s,box-shadow .12s}
-  .reticle.candidate{border-style:solid;border-color:var(--warn);box-shadow:0 0 0 6px rgba(255,176,32,.14)}
-  .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px rgba(49,194,94,.18)}
-  .reticle.failed{border-style:solid;border-color:var(--fail);box-shadow:0 0 0 6px rgba(255,138,61,.13)}
-  #scanState, #faceState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:14px;
-    font-weight:600;background:var(--surface);border-top:1px solid var(--edge);min-height:50px}
-  #scanState .dot, #faceState .dot{width:9px;height:9px;border-radius:50%;background:#E8EDF2;flex:0 0 auto}
-  #scanState.candidate{color:var(--warn)} #scanState.candidate .dot{background:var(--warn)}
-  #scanState.locked{color:var(--ok)} #scanState.locked .dot{background:var(--ok)}
-  #scanState.failed{color:var(--fail)} #scanState.failed .dot{background:var(--fail)}
+    border:3px dashed var(--tx);transition:border-color .12s,box-shadow .12s}
+  .reticle.candidate{border-style:solid;border-color:var(--notice);box-shadow:0 0 0 6px color-mix(in srgb,var(--notice) 15%,transparent)}
+  .reticle.locked{border-style:solid;border-color:var(--ok);box-shadow:0 0 0 7px color-mix(in srgb,var(--ok) 18%,transparent)}
+  .reticle.failed{border-style:solid;border-color:var(--fault);box-shadow:0 0 0 6px color-mix(in srgb,var(--fault) 14%,transparent)}
+  #scanState, #faceState{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:20px;
+    font-weight:800;background:var(--surface);border-top:1px solid var(--edge);min-height:50px}
+  #scanState .dot, #faceState .dot{width:9px;height:9px;border-radius:50%;background:var(--tx);flex:0 0 auto}
+  #scanState.candidate{color:var(--notice)} #scanState.candidate .dot{background:var(--notice)}
+  #scanState.locked{color:var(--ok-tx)} #scanState.locked .dot{background:var(--ok)}
+  #scanState.failed{color:var(--fault-tx)} #scanState.failed .dot{background:var(--fault)}
   .scanfoot{flex:0 0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
     border-top:1px solid var(--edge)}
   .field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700;color:var(--tx-2)}
   .field input{min-height:56px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);
     background:var(--surface);color:var(--tx);font:inherit;font-size:18px;font-weight:600}
   .hangul{display:flex;flex-direction:column;gap:6px}
-  .hangul .row{display:flex;gap:4px}
+  .hangul .row{display:flex;gap:8px}
   .hangul button{flex:1 1 0;min-height:48px;border-radius:8px;border:1px solid var(--edge);
     background:var(--surface-2);font-size:18px;font-weight:700}
   #s-face .vf{flex:1 1 auto;min-height:0;width:auto;height:auto;margin:0;display:grid;place-items:center}
-  #faceVideo{position:static;width:min(640px,100%);height:min(480px,100%);max-width:100%;max-height:100%;object-fit:contain;background:#000}
+  #faceVideo{position:static;width:min(640px,100%);height:min(480px,100%);max-width:100%;max-height:100%;object-fit:contain;background:var(--bg)}
   #toast{position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:30;max-width:90vw;
     padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--ok);
-    font-size:18px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    font-size:18px;font-weight:800;box-shadow:0 8px 24px var(--shadow)}
   #toast[hidden], #scanShoot[hidden]{display:none}
-  #faceState.ok{color:var(--ok)} #faceState.ok .dot{background:var(--ok)}
-  #faceState.failed{color:var(--fail)} #faceState.failed .dot{background:var(--fail)}
+  #faceState.ok{color:var(--ok-tx)} #faceState.ok .dot{background:var(--ok)}
+  #faceState.failed{color:var(--fault-tx)} #faceState.failed .dot{background:var(--fault)}
 
   .list{display:flex;flex-direction:column;gap:8px}
   .row{display:flex;align-items:center;gap:11px;width:100%;min-height:56px;padding:8px 12px;
     border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
   .row .rail{width:4px;min-height:34px;align-self:stretch;border-radius:2px;background:var(--tx-3)}
   .row .txt{flex:1 1 auto;min-width:0}
-  .row .id{font-size:15px;font-weight:700}
-  .row .nm{font-size:11.5px;color:var(--tx-2)}
-  .row .mk{font-size:11px;color:var(--tx-2);flex:0 0 auto;text-align:right}
+  .row .id{font-size:18px;font-weight:800}
+  .row .nm{font-size:15px;color:var(--tx-2)}
+  .row .mk{font-size:14px;color:var(--tx-2);flex:0 0 auto;text-align:right}
   /* 증상 질의 대화 — 위 MES 한 줄, 가운데 말풍선, 아래 추천 질문 칩과 입력칸(10/8 최재영 요청) */
-  .chatmes{flex:0 0 auto;margin:0;padding:8px 14px;font-size:13px;line-height:1.45;color:var(--tx-2);
-    background:var(--surface);border-bottom:1px solid var(--edge)}
-  .chatmes.bad{color:#FFD0B8;background:#2A140C;border-color:var(--fail)}
+  .chatmes{flex:0 0 auto;margin:0;padding:8px 14px;font-size:17px;font-weight:700;line-height:1.4;color:var(--tx);
+    background:var(--surface);border-bottom:1px solid var(--edge);display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 14px}
+  .chatmes .eqc{font-size:22px;font-weight:800;color:var(--tx)}
+  .chatmes.bad{color:var(--fault-tx);background:var(--fault-bg);border-color:var(--fault)}
   .chatlog{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
   .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요. 등록된 근거가 없으면 「해당 지식 없음」이라고 답합니다.";
-    font-size:13px;color:var(--tx-2);line-height:1.5}
-  .msg{max-width:92%;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
-  .msg.me{align-self:flex-end;background:#0F2A33;border:1px solid #1C6F88}
-  .msg.me .q{font-size:15px;font-weight:700;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
-  .msg.me .orig{font-size:12px;color:var(--tx-2);margin:0}
+    font-size:16px;color:var(--tx-2);line-height:1.5}
+  .msg{max-width:92%;border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  .msg.me{align-self:flex-end;background:var(--surface-2);border:1px solid var(--edge)}
+  .msg.me .q{font-size:18px;font-weight:700;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  .msg.me .orig{font-size:15px;color:var(--tx-2);margin:0}
   .msg.bot{align-self:stretch;max-width:none;background:var(--surface);border:1px solid var(--edge)}
-  .msg.bot .ans{font-size:15px;line-height:1.6;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
-  .msg.bot.none{border-color:var(--scan)}
-  .msg.bot.none .ans{font-weight:800}
-  .msg.bot.err{border-color:var(--fail)}
-  .msg .meta{font-size:11.5px;color:var(--tx-2);margin:0}
-  .msg.wait .ans{color:var(--tx-2)}
+  .msg.bot .ans{font-size:17px;line-height:1.55;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  /* 답 본문이 말풍선의 주인공 — 안전 카드 제목(18px)보다 크고, 좌측 강조선·밝은 바탕으로 따로 선다. */
+  .msg.bot .ans.lead{font-size:22px;font-weight:700;line-height:1.5;color:var(--tx);padding:12px 16px;
+    background:var(--surface-3);border-left:4px solid var(--accent);border-radius:6px}
+  .msg.bot.none .ans.lead{border-left-color:var(--tx-2)}
+  .ans-row{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+  .ans-row .ans.lead{flex:1 1 560px;min-width:0}
+  .ans-next{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto;align-items:flex-end}
+  .ans-next .btn{width:auto;min-height:56px;padding:8px 20px}
+  .wait-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .wait-row .btn{width:auto;min-width:96px}
+  .msg.bot.err{border-color:var(--fault)}
+  .msg .meta{font-size:15px;color:var(--tx-2);margin:0}
+  .msg.wait .ans{color:var(--tx);font-weight:700}
   .msg.wait .ans::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4) infinite}
   @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
   .msg .basis-detail{border-top:1px solid var(--edge)}
+  .basis-detail + .basis-detail{margin-top:8px}
   .msg .basis-detail[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
   .chatfoot{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:10px 14px;border-top:1px solid var(--edge);background:var(--bg)}
-  /* 추천 질문 — 한 줄 가로 스크롤. 누르면 바로 보낸다. */
-  .sugg{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  /* 추천 질문 — 줄바꿈으로 모두 보인다(가로 스크롤은 마우스 휠로 닿지 않는다, A3). 두 줄을 넘으면 세로 휠 스크롤. 누르면 바로 보낸다. */
+  .sugg{display:flex;flex-wrap:wrap;gap:8px;max-height:88px;overflow-y:auto}
   .sugg:empty{display:none}
-  .sugg button{flex:0 0 auto;max-width:78vw;min-height:48px;padding:6px 14px;border-radius:999px;border:1px solid var(--edge);
-    background:var(--surface);font-size:14px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sugg button.hot{border-color:var(--warn);color:#FFD98A}
-  .sugg button[disabled]{opacity:.4}
+  .sugg button{flex:0 0 auto;max-width:100%;min-height:40px;padding:4px 14px;border-radius:999px;border:1px solid var(--edge);
+    background:var(--surface);font-size:16px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sugg button.hot{border-color:var(--notice);color:var(--notice-tx)}
+  .sugg button .why-tag{font-weight:600;color:var(--tx)}   /* MES 관련 이유 — 툴팁이 아니라 칩 안에(A3) */
+  .sugg button[disabled]{color:var(--tx-3);border-style:dashed;background:var(--bg)}
   .chatin{display:flex;gap:8px;align-items:flex-end}
-  .chatin textarea{flex:1 1 auto;min-height:56px;max-height:120px;resize:none}
-  .chatin .btn{width:auto;flex:0 0 auto;min-width:88px}
+  /* 답이 나온 뒤에는 추천 질문을 「추천 질문 N개 ▾」 한 버튼으로 접어 안전 카드·답·인계 버튼이 한 화면에 들어오게 한다(A4). */
+  .chatfoot.compact .sugg{display:none}
+  .chatfoot.compact.open .sugg{display:flex}
+  .chatin .sugg-toggle{min-width:0;padding:0 14px;white-space:nowrap}
+  .chatfoot.open .sugg-toggle{border-color:var(--accent)}
+  .chatin textarea{flex:1 1 auto;min-height:48px;max-height:120px;resize:none;padding:10px 12px}
+  .chatin .btn{width:auto;flex:0 0 auto;min-width:96px;min-height:48px}
   /* 접힘 상자 — 관측값 입력, 평소의 안전 수칙 */
   .fold{flex:0 0 auto;border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:0 12px}
-  .fold > summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-size:14px;font-weight:700;color:var(--tx-2)}
+  .fold > summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-size:16px;font-weight:700;color:var(--tx-2)}
   .fold[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
   /* MES 고장 상황 알림 — 표시 전용. 탭하면 확인 화면(s-alertGo)으로만 간다(B3·A4). 행 간격 8px(A1). */
-  #alert{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;background:var(--safety-bg);border-bottom:2px solid var(--safety-edge)}
+  #alert{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;background:var(--fault-bg);border-bottom:2px solid var(--fault-edge)}
   #alert[hidden]{display:none}
-  #alert .alrow{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 14px;text-align:left;font-size:14px;
-    font-weight:700;line-height:1.4;color:#FFD7D4;background:none;border:0}
-  #alert .alrow + .alrow{border-top:1px solid var(--safety-edge)}
+  #alert .alrow{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 14px;text-align:left;font-size:16px;
+    font-weight:700;line-height:1.4;color:var(--fault-tx);background:none;border:0}
+  #alert .alrow + .alrow{border-top:1px solid var(--fault-edge)}
   #alert .t{flex:1 1 auto;min-width:0}
-  #alert .go{flex:0 0 auto;min-height:36px;display:grid;place-items:center;padding:0 12px;border:1px solid var(--safety-edge);
-    border-radius:999px;font-size:13px;white-space:nowrap}
-  #alert .almore{margin:0;padding:6px 14px 8px;font-size:13px;color:#FFC9C5}
+  #alert .go{flex:0 0 auto;min-height:36px;display:grid;place-items:center;padding:0 12px;border:1px solid var(--fault-edge);
+    border-radius:999px;font-size:16px;white-space:nowrap}
+  #alert .almore{margin:0;padding:6px 14px 8px;font-size:16px;color:var(--fault-tx)}
 
-  /* 안전 관문 — 스크롤해도 상단 고정 */
-  .safety{border:2px solid var(--notice-edge);background:var(--notice-bg);border-radius:10px;padding:12px;
-    display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
-  /* 고정은 관문 띠 하나만. 카드는 내부 스크롤 없이 일반 흐름으로 모두 펼쳐 어느 카드의 근거도
-     잘리거나 덮이지 않게 한다(B2). display:contents라 띠가 pane 직계로 놓여 pane 스크롤 내내 고정된다. */
+  /* 안전 관문 — 짧은 항목(카드 title 원문) + 멈춤 조건은 늘 보이고, ID·근거 전문·know_how는 묶음 하나의
+     「안전수칙 자세히 ▾」로 접는다(사용자 결정 10/13, B2 해석 변경). 앰버는 왼쪽 띠·제목에만, 근거·본문은 밝은 중립색. */
+  .safety{border-left:4px solid var(--notice);background:var(--notice-bg);border-radius:6px;padding:8px 12px;
+    display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
+  .safety .s-line{display:flex;align-items:baseline;gap:2px 10px;flex-wrap:wrap}
+  .safety .ttl{flex:1 1 280px;font-size:18px;font-weight:800;line-height:1.3;color:var(--notice-tx)}
+  /* 직전 답 대비 표지 — 바탕을 채워 3m에서도 「추가」「변경」이 눈에 띄게. 빠짐은 점선. */
+  .safety .mark{flex:0 0 auto;font-size:16px;font-weight:800;padding:1px 8px;border-radius:4px;background:var(--notice);color:var(--bg)}
+  .safety.gone{border-left-style:dashed;background:var(--surface)}
+  .safety.gone .mark{background:none;color:var(--tx);border:1px dashed var(--tx-2)}
+  .safety.gone .ttl{color:var(--tx);text-decoration:line-through}
+  .safety .basis, .safety-more .basis{margin:0;font-size:16px;line-height:1.4;color:var(--tx)}
+  .safety .stop{margin:0;font-size:16px;font-weight:700;color:var(--notice-tx)}
+  .safety.invalid{border-left-color:var(--fault-edge);background:var(--fault-bg)}
+  .safety.invalid .ttl, .safety.invalid .basis{color:var(--fault-tx)}
+  .safety-cards.compact .safety{padding:6px 12px}
+  .safety-cards.compact .ttl{font-size:16px}
+  /* 묶음 하나의 상세 — 카드별 ID·제목·근거 전문·know_how. 카드마다 상세 버튼을 두지 않는다. */
+  .safety-more{flex:0 0 auto;border:1px solid var(--notice-edge);border-radius:6px;background:var(--notice-bg)}
+  .safety-more > summary{min-height:44px;display:flex;align-items:center;padding:0 12px;font-size:16px;font-weight:700;
+    color:var(--notice-tx);list-style:none}
+  .safety-more > summary::-webkit-details-marker{display:none}
+  .safety-more > summary::after{content:" ▾";margin-left:6px}
+  .safety-more[open] > summary::after{content:" ▴"}
+  .safety-more > summary:hover{background:var(--notice-bg-2);color:var(--tx)}
+  .safety-more[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:10px}
+  .safety-more .sd{display:flex;flex-direction:column;gap:4px;margin:0 12px;padding-top:8px;border-top:1px solid var(--notice-edge)}
+  .safety-more .sd p{margin:0}
+  .safety-more .kid{font-size:16px;font-weight:800;color:var(--notice);font-family:ui-monospace,"Cascadia Mono",Consolas,"D2Coding",monospace}
+  .safety-more .ttl{font-size:17px;font-weight:800;color:var(--notice-tx)}
+  .safety-more .body{font-size:16px;line-height:1.5;color:var(--tx)}
+  .safety-more .sd.invalid .kid, .safety-more .sd.invalid .basis{color:var(--fault-tx)}
   .safety-stack{display:contents}
-  /* 대화 화면 위의 안전 수칙. 평소에는 회색 한 줄로 접고, MES 이상·정지이거나 안전 카드 조건이 맞으면 관문 색으로 펼친다. */
-  .safety-fold.hot{border:2px solid var(--notice);background:var(--notice-bg)}
-  .safety-fold.hot > summary{color:#FFF3D6;font-weight:800}
-  .msg .safety-head{margin:0;font-size:13px;font-weight:800;color:#FFF3D6;background:var(--notice-bg);
-    border-left:3px solid var(--notice);padding:6px 10px;border-radius:4px}
+  /* 안전 묶음 — 머리 한 줄(관문 문구 한 번) + 짧은 항목 + 자세히 하나. 위 상자·대기·답 말풍선이 같은 모양. 간격 8px(A1). */
+  .safety-group{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  /* 항목 — 가로 화면(1280)에서는 두 칸. 읽는 순서(DOM)는 왼쪽→오른쪽→다음 줄. 좁은 화면은 한 칸. */
+  .safety-cards{display:grid;grid-template-columns:1fr;gap:8px}
+  @media (min-width:1000px){ .safety-cards{grid-template-columns:1fr 1fr} }
+  .safety-head{margin:0;font-size:16px;font-weight:800;color:var(--notice-tx);background:var(--notice-bg);
+    border-left:4px solid var(--notice);padding:5px 10px;border-radius:4px}
+  /* 말풍선 안 머리는 말풍선이 보이는 동안 pane 위에 고정 — 답으로 내려가도 관문 문구가 남는다(B1). 불투명 바탕. */
+  .msg > .safety-head{position:sticky;top:-14px;z-index:4;box-shadow:0 2px 0 var(--surface)}
+  .safety-fold.hot .safety-head{background:var(--notice-bg-2);border-left-color:var(--notice)}
+  .safety-fold.hot .safety{background:var(--notice-bg-2)}
   .safety-bar{position:sticky;top:0;z-index:5;flex:0 0 auto;margin:0 -14px;padding:10px 14px;
-    background:var(--notice-bg);color:#FFF3D6;font-size:14px;font-weight:800;border-block:3px solid var(--notice)}
-  .safety.invalid{border-color:var(--safety-edge);background:var(--safety-bg)}
-  .safety .body:empty{display:none}
-  .safety .stop{margin:0;font-size:13.5px;font-weight:700;color:#FFF3D6}
-  .safety .hd{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFE0A3}
-  .safety .hd .dot{width:9px;height:9px;border-radius:50%;background:var(--notice);flex:0 0 auto}
-  .safety .pinbadge{margin-left:auto;font-size:12px;font-weight:800;padding:3px 8px;border-radius:3px;
-    background:#F3F6F9;color:#0A0D11;letter-spacing:.05em}
-  .safety .kid{font-size:11px;font-weight:700;color:#FFD284;letter-spacing:.06em}
-  .safety .ttl{font-size:16px;font-weight:800;line-height:1.35;color:#FFF3D6}
-  .safety .body{font-size:13.5px;color:#F0DFC0;line-height:1.6}
-  .safety .basis{font-size:11.5px;color:#D5C39E;border-top:1px solid var(--notice-edge);padding-top:7px}
-  .safety .gate{font-size:11.5px;font-weight:700;color:#FFE0A3}
+    background:var(--notice-bg);color:var(--notice-tx);font-size:16px;font-weight:800;border-block:3px solid var(--notice)}
 
   .card{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
     display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
-  .card.top{border-color:#1C6F88}
+  .card.top{border-color:var(--accent)}
   /* 흐리게 하지 않는다(A2) — 점선 테두리와 왼쪽 막대로 구분. 불일치는 주황, 미평가는 회색. */
   .card.out{border-style:dashed;box-shadow:inset 4px 0 0 var(--tx-2)}
-  .card.out.miss{border-color:var(--fail);box-shadow:inset 4px 0 0 var(--fail)}
-  .card.done{opacity:.5}
-  .card .kid{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--tx-2)}
-  .card .ttl{font-size:15px;font-weight:700;line-height:1.35}
-  .card .body{font-size:13.5px;color:var(--tx-2);line-height:1.6}
-  .card .src{font-size:11px;color:var(--tx-2)}
-  .card .exp{font-size:12px;color:var(--ok)}
+  .card.out.miss{border-color:var(--fault);box-shadow:inset 4px 0 0 var(--fault)}
+  .card.done{border-style:dashed;background:var(--bg)}
+  .card .kid{font-size:16px;font-weight:700;letter-spacing:.04em;color:var(--tx-2)}
+  .card .ttl{font-size:17px;font-weight:700;line-height:1.35}
+  .card .body{font-size:16px;color:var(--tx);line-height:1.55}
+  .card .src{font-size:14px;color:var(--tx-2)}
+  .card .exp{font-size:15px;color:var(--ok)}
 
   .rk{display:flex;align-items:center;gap:9px}
   .rkno{width:26px;height:26px;border-radius:13px;background:var(--surface-2);border:1px solid var(--edge);
     color:var(--tx-2);font-size:13px;font-weight:700;display:grid;place-items:center;flex:0 0 auto}
-  .rkno.one{background:var(--scan);border-color:var(--scan);color:#04202B}
-  .rkno.next{background:#3A2A0B;border-color:var(--warn);color:#FFD98A}
-  .why{font-size:11.5px;color:var(--scan)}
+  .rkno.one{background:var(--surface-3);border:2px solid var(--accent);color:var(--tx)}
+  .rkno.next{background:var(--notice-bg-2);border-color:var(--notice);color:var(--notice-tx)}
+  .why{font-size:15px;color:var(--accent)}
   .why.dim{color:var(--tx-2)}
-  .why.no{color:var(--fail)}
+  .why.no{color:var(--fault)}
 
   .pills{display:flex;flex-wrap:wrap;gap:6px}
-  .pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--surface-2);
+  .pill{font-size:16px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--surface-2);
     border:1px solid var(--edge);color:var(--tx-2)}
-  .pill.match{color:#6EE69A;border-color:#1E6B39}
-  .pill.miss{color:#FFB48A;border-color:#7A4218}
+  .pill.match{color:var(--ok);border-color:var(--ok)}
+  .pill.miss{color:var(--fault-tx);border-color:var(--fault)}
   .pill.unknown{color:var(--tx-2)}
   .steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;
-    font-size:13.5px;color:var(--tx-2)}
+    font-size:16px;color:var(--tx-2)}
   .steps li{display:flex;gap:7px}
-  .steps .st{color:var(--scan);font-weight:700;flex:0 0 auto}
+  .steps .st{color:var(--accent);font-weight:700;flex:0 0 auto}
   .steps .tx{display:flex;flex-direction:column;gap:2px}
   .steps .act{color:var(--tx)}
-  .steps .nx{font-size:12.5px}
-  .steps .stop{font-size:12.5px;font-weight:700;color:var(--fail)}
-  .steps .esc{font-size:12.5px;font-weight:700;color:var(--warn)}
-  .tf{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--fail);padding:4px 0 4px 9px;
-    font-size:12.5px;color:var(--tx-2)}
-  .tf .hd{font-size:11px;font-weight:700;color:var(--fail);letter-spacing:.03em}
-  .tf .act{font-size:13.5px;color:var(--tx)}
-  .tf .stop{font-weight:700;color:var(--warn)}
+  .steps .nx{font-size:15px}
+  .steps .stop{font-size:15px;font-weight:700;color:var(--fault)}
+  .steps .esc{font-size:15px;font-weight:700;color:var(--notice)}
+  .tf{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--fault);padding:4px 0 4px 9px;
+    font-size:15px;color:var(--tx-2)}
+  .tf .hd{font-size:14px;font-weight:700;color:var(--fault);letter-spacing:.03em}
+  .tf .act{font-size:16px;color:var(--tx)}
+  .tf .stop{font-weight:700;color:var(--notice)}
 
   .try{border:1px solid var(--edge);border-radius:10px;background:var(--surface);padding:12px;
     display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
-  .try.noeff{border-color:#7A4218}
-  .try.solved{border-color:#1E6B39}
-  .try.now{border-color:var(--warn);background:#221A0A}
+  .try.noeff{border-color:var(--fault)}
+  .try.solved{border-color:var(--ok)}
+  .try.now{border-color:var(--notice);background:var(--notice-bg)}
   .try .hd{display:flex;align-items:center;gap:8px}
-  .try .aid{font-size:11px;font-weight:700;color:var(--tx-2);letter-spacing:.05em}
-  .try .fld{display:flex;gap:8px;font-size:12.5px}
-  .try .fld .k{width:52px;flex:0 0 auto;color:var(--tx-2);font-size:11px;font-weight:700}
+  .try .aid{font-size:14px;font-weight:700;color:var(--tx-2);letter-spacing:.05em}
+  .try .fld{display:flex;gap:8px;font-size:16px}
+  .try .fld .k{width:52px;flex:0 0 auto;color:var(--tx-2);font-size:14px;font-weight:700}
   .try .fld .v{color:var(--tx-2);flex:1 1 auto}
 
-  .basis-detail summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--scan)}
+  .basis-detail summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--accent)}
   .basis-detail p{white-space:pre-wrap;overflow-wrap:anywhere}
   .t4{display:flex;flex-direction:column;gap:9px}
   .t4 .fld{display:flex;flex-direction:column;gap:4px}
-  .t4 .k{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--tx-2)}
-  .t4 .v{font-size:13.5px;color:var(--tx);border:1px solid var(--edge);border-radius:8px;
+  .t4 .k{font-size:15px;font-weight:700;letter-spacing:.1em;color:var(--tx-2)}
+  .t4 .v{font-size:16px;color:var(--tx);border:1px solid var(--edge);border-radius:8px;
     padding:12px;background:var(--surface);min-height:48px;display:flex;align-items:center}
-  .t4 .v.auto{border-color:#1C6F88;color:var(--tx-2)}
+  .t4 .v.auto{border-color:var(--accent);color:var(--tx-2)}
   .t4 input{width:100%;background:var(--surface);color:var(--tx);border:1px solid var(--edge);
     border-radius:8px;padding:12px;font:inherit;font-size:15px;min-height:48px}
-  .t4 input.req{border-color:var(--warn)}
+  .t4 input.req{border-color:var(--notice)}
 
+  .ho-cols{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .ho-col{min-height:0}
+  .ho-memo{flex:1 1 0;min-height:0}
+  .ho-memo textarea{flex:1 1 auto;min-height:96px}
+  @media (max-width:760px){ .ho-cols{grid-template-columns:1fr} }
   textarea,input[type=number],select{width:100%;background:var(--surface);color:var(--tx);
     border:1px solid var(--edge);border-radius:10px;padding:12px;font:inherit;font-size:16px;min-height:56px}
   textarea{min-height:104px;resize:vertical;line-height:1.5}
@@ -336,30 +423,38 @@
   .obsrow select{flex:1 1 auto;min-width:0}
   .obsrow input{flex:0 0 96px}
   .obsrow .btn{width:auto;flex:0 0 auto;min-width:56px}
-  .obs{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tx-2);
+  .obs{display:flex;align-items:center;gap:8px;font-size:16px;color:var(--tx-2);
     border:1px solid var(--edge);border-radius:8px;padding:10px;background:var(--surface);flex:0 0 auto}
   .obs .x{margin-left:auto;min-width:48px;min-height:48px;display:grid;place-items:center;color:var(--tx-2)}
   .obs .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .obs small{font-size:11.5px;color:var(--tx-2)}
-  .obs.out{border-color:var(--fail);background:#2A140C;box-shadow:inset 4px 0 0 var(--fail)}
-  .obs.out .mono{color:#FFD0B8;font-weight:700}
-  .obs.out small{color:#FFB48A;font-weight:700}
+  .obs small{font-size:14px;color:var(--tx-2)}
+  .obs.out{border-color:var(--fault);background:var(--fault-bg);box-shadow:inset 4px 0 0 var(--fault)}
+  .obs.out .mono{color:var(--fault-tx);font-weight:700}
+  .obs.out small{color:var(--fault-tx);font-weight:700}
   #obsList details{display:flex;flex-direction:column;gap:6px}
   #obsList summary{min-height:48px;display:flex;align-items:center;cursor:pointer}
-  .mesline{font-size:13px;line-height:1.5;color:var(--tx-2);border:1px solid var(--edge);border-radius:10px;
+  /* 정상값 접기 — 범위 이탈·판정 불가는 늘 보이고 정상·정지 중 0만 「정상 N개 보기」로 접는다. 3초 갱신에도 펼침 유지(S.foldOpen). */
+  .okfold{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+  .okfold > summary{min-height:48px;display:flex;align-items:center;padding:0 12px;border:1px solid var(--edge);border-radius:8px;
+    background:var(--surface);font-size:16px;font-weight:700;color:var(--tx-2);list-style:none;cursor:pointer}
+  .okfold > summary::-webkit-details-marker{display:none}
+  .okfold > summary::after{content:" ▾";margin-left:6px}
+  .okfold[open] > summary::after{content:" ▴"}
+  .okfold > summary:hover{border-color:var(--tx-2);background:var(--hover);color:var(--tx)}
+  .mesline{font-size:16px;line-height:1.5;color:var(--tx-2);border:1px solid var(--edge);border-radius:10px;
     padding:10px 12px;background:var(--surface)}
-  .mesline.bad{border-color:var(--fail);color:#FFD0B8;background:#2A140C}
+  .mesline.bad{border-color:var(--fault);color:var(--fault-tx);background:var(--fault-bg)}
 
-  .alert{border-radius:10px;border:1px solid var(--warn);background:#2A1E06;padding:12px;
+  .alert{border-radius:10px;border:1px solid var(--notice);background:var(--notice-bg);padding:12px;
     display:flex;flex-direction:column;gap:7px;flex:0 0 auto}
-  .alert .hd{font-size:15px;font-weight:800;color:#FFD98A;margin:0}
-  .alert .p{font-size:13px;color:#E7CFA0;line-height:1.5;margin:0}
-  .alert code{font-size:12px;color:#FFE9BC;background:#3A2A0B;padding:2px 5px;border-radius:3px;word-break:break-all}
-  .alert.bad{border-color:var(--safety-edge);background:var(--safety-bg)}
-  .alert.bad .hd{color:#FFD7D4} .alert.bad .p{color:#FFC9C5}
-  .alert.bad code{background:#511713;color:#FFE2E0}
+  .alert .hd{font-size:15px;font-weight:800;color:var(--notice-tx);margin:0}
+  .alert .p{font-size:16px;color:var(--tx);line-height:1.5;margin:0}
+  .alert code{font-size:12px;color:var(--notice-tx);background:var(--notice-bg-2);padding:2px 5px;border-radius:3px;word-break:break-all}
+  .alert.bad{border-color:var(--fault-edge);background:var(--fault-bg)}
+  .alert.bad .hd{color:var(--fault-tx)} .alert.bad .p{color:var(--fault-tx)}
+  .alert.bad code{background:var(--fault-bg-2);color:var(--fault-tx)}
 
-  .disclaimer{flex:0 0 auto;padding:10px 14px;font-size:11.5px;line-height:1.45;color:var(--tx-2);
+  .disclaimer{flex:0 0 auto;padding:6px 14px;font-size:16px;line-height:1.45;color:var(--tx-2);
     background:var(--surface);border-top:1px solid var(--edge);display:flex;gap:7px}
 
 </style>
@@ -430,12 +525,20 @@
       <a class="ic mes-link" href="/" title="MES 대시보드 (개발용)">MES</a><span class="sp"></span>
       <button class="ic" id="pdaExit" type="button">종료</button></div>
     <div class="pane">
-      <!-- 핵심인 인계 확인을 크게, 나머지는 누르기 전에 상황이 보이도록 한 줄 상태를 단 타일 -->
+      <!-- 왼쪽: 처리·재확인이 필요한 인계 항목을 홈에서 바로 읽는다(목록 안에서만 스크롤). 오른쪽: 다음 행동 타일, 설비 스캔이 맨 위·가장 크게. -->
       <div class="home-grid">
-        <button class="btn big home-main" id="toHandoverHome" type="button"><span class="ico">⇄</span>인계 확인
-          <small id="homeHoNote">이전 교대가 남긴 조치·재확인 항목을 확인합니다.</small></button>
+        <section class="ho-home" aria-labelledby="hoHomeTitle">
+          <div class="ho-home-head">
+            <h2 class="lbl" id="hoHomeTitle">처리·재확인 필요 인계</h2>
+            <span class="ho-prog" id="homeHoProgress"></span>
+            <span class="sp"></span>
+            <button class="btn sm" id="toHandoverHome" type="button">⇄ 전체 인계 보기 ›</button>
+          </div>
+          <p class="hint">확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.</p>
+          <ul class="ho-list" id="homeHoList"></ul>
+        </section>
         <div class="home-tiles">
-          <button class="home-tile" id="toScan" type="button"><b>◎ 설비 스캔</b><small>스캔하면 설비가 자동 선택</small></button>
+          <button class="home-tile main" id="toScan" type="button"><b>◎ 설비 스캔</b><small>스캔하면 설비가 자동 선택</small></button>
           <button class="home-tile" id="toManual" type="button"><b>☰ 설비 목록</b><small id="homeEqNote"></small></button>
           <button class="home-tile" id="toDash" type="button"><b>▦ 대시보드</b><small id="homeDashNote"></small></button>
         </div>
@@ -481,7 +584,7 @@
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
     <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">작업 선택</h1><span class="sp"></span>
+      <h1 style="color:var(--tx-2)">작업 선택</h1><span class="sp"></span>
       <!-- 잘못 잡힌 설비를 바로 바꿀 수 있게 상단에 둔다 -->
       <button class="ic ctx-change" id="ctxEdit" type="button">◎ 설비 변경</button>
       <button class="ic home" type="button">⌂ 홈</button></div>
@@ -505,7 +608,7 @@
   <!-- 고장 알림 → 설비 변경 확인. 탭한 순간의 equipment_id로 고정한다(B3) -->
   <section class="screen" id="s-alertGo">
     <div class="appbar"><button class="ic" id="alertGoBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">설비 변경 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="color:var(--tx-2)">설비 변경 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="lbl">MES 고장 알림 설비</p>
       <p class="mono" id="alertGoCode" style="margin:0;font-size:40px;font-weight:800;line-height:1.1"></p>
@@ -521,7 +624,7 @@
   <!-- 증상 질의 · 대화. 메시지 하나 = /api/query 하나. 이전 대화는 모델에 넘기지 않는다(10/14 채점과 같은 한 질문 구조). -->
   <section class="screen" id="s-chat">
     <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <p class="chatmes" id="chatMes" role="status">MES 상태 확인 중…</p>
     <div class="pane" id="chatPane">
       <div id="askSafety"></div>
@@ -539,12 +642,12 @@
         <p class="hint" id="obsRange"></p>
       </details>
       <div class="chatlog" id="chatLog" aria-live="polite"></div>
-      <button class="btn sm" id="chatHandover" type="button" hidden>이 대화로 인계 작성</button>
     </div>
-    <div class="chatfoot">
+    <div class="chatfoot" id="chatFoot">
       <p class="hint" id="symptomNote" hidden></p>
       <div class="sugg" id="symptomList"></div>
       <div class="chatin">
+        <button class="btn sm sugg-toggle" id="suggToggle" type="button" hidden aria-controls="symptomList" aria-expanded="false"></button>
         <textarea id="question" rows="1" placeholder="증상이나 질문을 적어 주세요" autocomplete="off" enterkeyhint="send"></textarea>
         <button class="btn primary" id="doSearch" type="button" disabled>보내기</button>
       </div>
@@ -555,14 +658,14 @@
   <!-- 시도 기록 -->
   <section class="screen" id="s-tries">
     <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="triesPane"></div>
   </section>
 
   <!-- 인계 확인 -->
   <section class="screen" id="s-handover">
     <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <button class="outbox-note" id="hoPending" type="button" hidden></button>
     <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
@@ -586,30 +689,35 @@
   <!-- 업로드 대기 -->
   <section class="screen" id="s-outbox">
     <div class="appbar"><button class="ic" id="obBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="obPane"></div>
   </section>
 
   <!-- 인계 작성 -->
   <section class="screen" id="s-hoNew">
     <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane">
+      <h1 style="color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보와 저장(A4). 좁은 화면은 한 칸. -->
+    <div class="pane ho-new">
       <p class="lbl">인계 — 메모와 전달 정보 모두 필수</p>
-      <label for="hoMemo" class="lbl">인계 메모</label>
-      <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea>
-      <div class="t4">
-        <div class="fld"><label class="k" for="hoCtx">작업 상황 및 측정 기록</label><textarea id="hoCtx" maxlength="12000" placeholder="측정값과 조치 내용을 입력해 주세요"></textarea></div>
-        <button class="btn sm" id="hoLoadMes" type="button">MES 기록 불러오기</button>
-        <p class="hint" id="hoMesStatus" role="status">선택한 설비의 현재 측정값과 최근 이벤트를 불러와 추가할 수 있습니다.</p>
-        <div class="fld"><label class="k" for="hoRole">받는 사람</label><input id="hoRole" value="야간조 정비 담당"></div>
-        <div class="fld"><label class="k" for="hoTiming">전달 시점</label><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
-        <div class="fld"><label class="k" for="hoChannel">전달 방법</label><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
-        <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
+      <div class="ho-cols">
+        <div class="ho-col t4">
+          <div class="fld ho-memo"><label for="hoMemo" class="k">인계 메모</label>
+            <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea></div>
+          <div class="fld ho-memo"><label class="k" for="hoCtx">작업 상황 및 측정 기록</label><textarea id="hoCtx" maxlength="12000" placeholder="측정값과 조치 내용을 입력해 주세요"></textarea></div>
+          <button class="btn sm" id="hoLoadMes" type="button">MES 기록 불러오기</button>
+          <p class="hint" id="hoMesStatus" role="status">선택한 설비의 현재 측정값과 최근 이벤트를 불러와 추가할 수 있습니다.</p>
+        </div>
+        <div class="ho-col t4">
+          <div class="fld"><label class="k" for="hoRole">받는 사람</label><input id="hoRole" value="야간조 정비 담당"></div>
+          <div class="fld"><label class="k" for="hoTiming">전달 시점</label><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
+          <div class="fld"><label class="k" for="hoChannel">전달 방법</label><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
+          <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
+          <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
+          <div class="grow"></div>
+          <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
+        </div>
       </div>
-      <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
-      <div class="grow"></div>
-      <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
     </div>
   </section>
 

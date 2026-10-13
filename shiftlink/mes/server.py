@@ -154,19 +154,29 @@ class MesService:
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
             # 해결 기록은 인계 저장 전에 검사한다. 잘못되면 인계도 남지 않는다.
-            draft = None
+            prepared = None
             if isinstance(body, dict) and body.get("resolution") is not None:
-                draft = field_draft.build_draft(str(body.get("handover_id") or ""), body["resolution"], self.active_config,
-                                                body.get("equipment_id"), self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
+                prepared = field_draft.prepare(body["resolution"], self.active_config, body.get("equipment_id"))
             saved = self.storage.save_handover(body)
-            if draft is None:
+            if prepared is None:
                 return saved
-            if draft["status"] == "attempt_only":
-                return {**saved, "draft": {"created": False, "reason": "attempt_only"}}
-            inserted = self.storage.save_card_draft({**draft, "handover_id": body["handover_id"]})
-            if not inserted:
-                return {**saved, "draft": {"created": False, "reason": "already_exists"}}
-            return {**saved, "draft": {"created": draft["status"] == "pending_review", "reason": draft["status"]}}
+            return {**saved, "draft": self._file_resolution(body["handover_id"], prepared)}
+
+    def _file_resolution(self, handover_id: str, prepared: dict[str, Any]) -> dict[str, object]:
+        """같은 설비·조건·겹치는 조치의 검수 대기 초안이 있으면 근거로 붙이고, 없으면 새 초안을 만든다."""
+        if self.storage.has_draft_record(handover_id):
+            return {"created": False, "reason": "already_exists"}
+        for row in self.storage.list_card_drafts():
+            if row["status"] == "pending_review" and field_draft.matches(row["card"], prepared):
+                draft, relation = field_draft.merge(row, prepared, handover_id)
+                self.storage.update_card_draft(row["draft_id"], handover_id, relation, draft)
+                return {"created": False, "reason": relation}
+        draft = field_draft.draft_from(prepared, handover_id, self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
+        if draft["status"] == "attempt_only":
+            return {"created": False, "reason": "attempt_only"}
+        if not self.storage.save_card_draft({**draft, "handover_id": handover_id}):
+            return {"created": False, "reason": "already_exists"}
+        return {"created": draft["status"] == "pending_review", "reason": draft["status"]}
 
     def card_drafts(self) -> dict[str, object]:
         """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""

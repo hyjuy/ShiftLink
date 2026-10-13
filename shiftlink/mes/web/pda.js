@@ -1298,15 +1298,16 @@ function evidenceSummary(evidence) {
 /* 저장 전 검사. 서버도 같은 규칙으로 다시 검사한다. */
 function resolutionError(form) {
   if (!form.symptom.trim()) return '현장에서 본 것을 적어 주세요.';
-  if (form.result !== 'failed' && !form.actions.some((a) => a.trim())) return '한 일을 한 가지 이상 적어 주세요.';
+  if (form.result !== 'failed' && !form.actions.some((a) => a.action.trim())) return '한 일을 한 가지 이상 적어 주세요.';
   if (form.result === 'resolved' && !form.verification.trim()) return '해결됐다고 본 근거를 적어 주세요.';
   return '';
 }
 
+/* 조치마다 직후 결과(선택)를 함께 보낸다. 서버가 초안 단계의 '기대 결과' 빈칸을 이것으로 채운다. */
 function resolutionPayload(form, turn) {
   return {question: turn.question, symptom: form.symptom.trim(),
-    actions: form.actions.map((a) => a.trim()).filter(Boolean), result: form.result,
-    verification: form.verification.trim(), evidence: turn.response.evidence || null};
+    actions: form.actions.filter((a) => a.action.trim()).map((a) => ({action: a.action.trim(), result: a.result.trim()})),
+    result: form.result, verification: form.verification.trim(), evidence: turn.response.evidence || null};
 }
 
 /* 인계 응답의 draft 필드 → 확인 문구. 응답에는 카드 내용이 없다. */
@@ -1314,13 +1315,15 @@ function draftNotice(draft) {
   if (!draft) return '';
   if (draft.reason === 'pending_review') return '이 해결 기록으로 카드 초안이 만들어졌고 검수를 기다립니다 — 검수 전에는 검색에 나오지 않습니다';
   if (draft.reason === 'attempt_only') return '효과 없음으로 시도 기록만 남겼습니다. 카드 초안은 만들지 않습니다.';
+  if (draft.reason === 'supporting') return '같은 증상의 검수 대기 카드 초안에 이 기록을 근거로 더했습니다 — 검수 전에는 검색에 나오지 않습니다';
+  if (draft.reason === 'contradicting') return '같은 조치가 효과 없었던 기록으로 검수 대기 카드 초안에 남겼습니다.';
   if (draft.reason === 'invalid') return '해결 기록을 담았지만 카드 형식이 맞지 않아 담당자 보완 대기로 보관했습니다.';
   return '이 인계에는 이미 카드 초안이 만들어져 있어 새로 만들지 않았습니다.';
 }
 
 function openResolve(turn) {
   S.resolveTurn = turn;
-  S.resolveForm = {symptom: '', actions: [''], result: 'resolved', verification: ''};
+  S.resolveForm = {symptom: '', actions: [{action: '', result: ''}], result: 'resolved', verification: ''};
   $('resSymptom').value = ''; $('resVerify').value = '';
   $('resEvidence').textContent = evidenceSummary(turn.response.evidence);
   $('resWarn').hidden = true;
@@ -1331,21 +1334,28 @@ function openResolve(turn) {
 function renderResolveActions() {
   const form = S.resolveForm, box = $('resActions');
   box.innerHTML = '';
-  form.actions.forEach((text, i) => {
+  form.actions.forEach((item, i) => {
     const row = document.createElement('div'); row.className = 'resrow';
     const no = document.createElement('span'); no.className = 'rkno'; no.textContent = String(i + 1);
     const input = document.createElement('input');
-    input.type = 'text'; input.maxLength = 500; input.value = text; input.placeholder = '조치 내용';
+    input.type = 'text'; input.maxLength = 500; input.value = item.action; input.placeholder = '조치 내용';
     input.setAttribute('aria-label', (i + 1) + '번째 조치');
-    input.addEventListener('input', () => { form.actions[i] = input.value; });
+    input.addEventListener('input', () => { item.action = input.value; });
     const del = document.createElement('button');
     del.type = 'button'; del.className = 'btn sm ghost'; del.textContent = '삭제';
     del.addEventListener('click', () => {
       form.actions.splice(i, 1);
-      if (!form.actions.length) form.actions.push('');
+      if (!form.actions.length) form.actions.push({action: '', result: ''});
       renderResolveActions();
     });
     row.append(no, input, del); box.appendChild(row);
+    // 조치 바로 아래 '이 조치 후 결과'. 비워 두면 마지막 조치만 해결 근거로 채운다.
+    const sub = document.createElement('div'); sub.className = 'resrow sub';
+    const result = document.createElement('input');
+    result.type = 'text'; result.maxLength = 500; result.value = item.result; result.placeholder = '이 조치 후 결과 (선택)';
+    result.setAttribute('aria-label', (i + 1) + '번째 조치 후 결과');
+    result.addEventListener('input', () => { item.result = result.value; });
+    sub.appendChild(result); box.appendChild(sub);
   });
 }
 
@@ -2295,7 +2305,7 @@ on('hoSave', async () => {
   $(id).addEventListener('input', validateHandover);
 });
 on('resBack', () => show('chat'));
-on('resAddAction', () => { S.resolveForm.actions.push(''); renderResolveActions(); });
+on('resAddAction', () => { S.resolveForm.actions.push({action: '', result: ''}); renderResolveActions(); });
 $('resResult').addEventListener('click', (ev) => {
   const chip = ev.target.closest('.chip');
   if (!chip) return;

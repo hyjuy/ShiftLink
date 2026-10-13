@@ -97,6 +97,8 @@ class MesStorage:
             CREATE TABLE IF NOT EXISTS card_drafts (
                 draft_id TEXT PRIMARY KEY, handover_id TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL,
                 status TEXT NOT NULL, card TEXT NOT NULL, review_flags TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS card_draft_records (
+                handover_id TEXT PRIMARY KEY, draft_id TEXT NOT NULL, relation TEXT NOT NULL, created_at TEXT NOT NULL);
         """)
         self.connection.commit()
 
@@ -132,14 +134,33 @@ class MesStorage:
             raise ValueError("field draft card id range is exhausted")
         return f"K-{number:04d}"
 
+    def has_draft_record(self, handover_id: str) -> bool:
+        """이 인계가 이미 어느 초안에 반영됐는지(처음 기록이든 덧붙은 근거든)."""
+        return self.connection.execute("SELECT 1 FROM card_draft_records WHERE handover_id = ?",
+                                       (handover_id,)).fetchone() is not None
+
     def save_card_draft(self, draft: dict[str, Any]) -> bool:
         """Pending-review store, one draft per handover. False when that handover already has one."""
+        now = datetime.now().astimezone().isoformat()
         with self.connection:
-            if self.connection.execute("SELECT 1 FROM card_drafts WHERE handover_id = ?", (draft["handover_id"],)).fetchone():
+            if self.has_draft_record(draft["handover_id"]):
                 return False
             self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)", (
-                draft["card"]["card_id"], draft["handover_id"], datetime.now().astimezone().isoformat(),
+                draft["card"]["card_id"], draft["handover_id"], now,
                 draft["status"], _dump(draft["card"]), _dump(draft["review_flags"])))
+            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
+                                    (draft["handover_id"], draft["card"]["card_id"], now))
+        return True
+
+    def update_card_draft(self, draft_id: str, handover_id: str, relation: str, draft: dict[str, Any]) -> bool:
+        """기존 초안에 기록을 근거로 덧붙인다. False면 그 인계는 이미 반영돼 있다."""
+        with self.connection:
+            if self.has_draft_record(handover_id):
+                return False
+            self.connection.execute("UPDATE card_drafts SET status = ?, card = ?, review_flags = ? WHERE draft_id = ?",
+                                    (draft["status"], _dump(draft["card"]), _dump(draft["review_flags"]), draft_id))
+            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, ?, ?)",
+                                    (handover_id, draft_id, relation, datetime.now().astimezone().isoformat()))
         return True
 
     def list_card_drafts(self) -> list[dict[str, Any]]:

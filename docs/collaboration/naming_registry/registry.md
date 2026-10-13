@@ -232,9 +232,12 @@
 
 | 이름 | 위치 | 뜻 | 담당자 |
 | --- | --- | --- | --- |
-| `resolution` | `POST /api/handover` 본문(PDA) | 질의가 '해당 지식 없음'일 때 작업자가 해결하고 남긴 기록. `question`·`symptom`·`actions`(순서 있는 문자열 목록)·`result`(`resolved`·`temporary`·`failed`)·`verification`·`evidence`(질의의 MES 근거). 없으면 기존 인계와 같다 | Claude |
+| `resolution` | `POST /api/handover` 본문(PDA) | 질의가 '해당 지식 없음'일 때 작업자가 해결하고 남긴 기록. `question`·`symptom`·`actions`(순서 있는 목록, 항목은 문자열 또는 `{action, result}` — result는 그 조치 직후 본 결과, 선택)·`result`(`resolved`·`temporary`·`failed`)·`verification`·`evidence`(질의의 MES 근거). 없으면 기존 인계와 같다 | Claude |
 | `check_resolution()` · `build_draft()` · `GENERATOR`(`field-resolution-v1`) · `ID_RANGE`(K-7000~K-7999) | `shiftlink/mes/field_draft.py` | 해결 기록을 검사하고 규칙 기반으로 `KnowledgeCard` 초안(status=draft, grade=L0, split=dev, confidence=0.0)을 만든다. LLM 없음. 상태 조건은 활성 구성의 정상 범위로 서버가 다시 계산한다. `failed`는 초안을 만들지 않는다 | Claude |
 | `card_drafts` · `save_card_draft()` · `list_card_drafts()` · `next_card_id()` | `shiftlink/mes/storage.py` | 검수 대기 초안 저장소. `draft_id`(=card_id, K-7000~) 기본키, `handover_id` 유일. `status`는 `pending_review`·`invalid`, `review_flags`에 안전 표현·자리표시자·lint·검증 오류를 담는다. 검색(kb_cards.json·질의 파이프라인)에는 나가지 않는다 | Claude |
 | `GET /api/card-drafts` · `card_drafts()` | `shiftlink/mes/server.py` | 검수 대기 초안 목록(읽기 전용). 승인·반려 API는 아직 없다. PDA는 호출하지 않는다 | Claude |
-| `draft` · `created` · `reason` | `/api/handover` 응답 | 해결 기록이 있을 때만 붙는다. `reason`: `pending_review`·`invalid`·`attempt_only`·`already_exists`. 카드 내용은 싣지 않는다 | Claude |
+| `draft` · `created` · `reason` | `/api/handover` 응답 | 해결 기록이 있을 때만 붙는다. `reason`: `pending_review`·`invalid`·`attempt_only`·`already_exists`·`supporting`(기존 초안에 지지 근거로 붙음)·`contradicting`(같은 조치가 효과 없었던 반대 근거). 카드 내용은 싣지 않는다 | Claude |
 | `resolutionError()` · `resolutionPayload()` · `draftNotice()` · `evidenceSummary()` · `openResolve()` · `#s-resolve` | `shiftlink/mes/web/pda.js`, `pda.html` | PDA '해결하면 기록 남기기' 화면. 저장은 인계 흐름(`submitHandover`, localStorage 대기 인계)을 그대로 쓰고, 저장 후 확인 문구만 보인다 | Claude |
+| `prepare()` · `draft_from()` · `matches()` · `merge()` · `completeness()` · `THIN_MIN` · `OVERLAP_MIN` | `shiftlink/mes/field_draft.py` | 같은 설비 + 같은 이상 조건 + 조치 전체 어간 겹침 50% 이상이면 새 초안 대신 기존 검수 대기 초안의 근거로 붙고 빈 단계 결과를 채운다. 조치가 다르면 다른 원인 후보로 따로 둔다. `review_flags.completeness`: `missing`(기록이 쌓이면 줄어드는 빈칸)·`operator`(부품·시나리오·안전 근거 — 운영자만)·`resolved_records`·`contradicting_records`·`ready`(빈칸 없음 + 해결 2건 이상 + 반대 근거 없음 = 승격 권장 표시, 자동 승격 없음). `thin_record`(짧은 기록)·`temporary`(제목 `[임시조치]`, 해결 기록이 붙으면 해제) | Claude |
+| `card_draft_records` · `has_draft_record()` · `update_card_draft()` | `shiftlink/mes/storage.py` | 인계 → 초안 연결(`relation`: `origin`·`supporting`·`contradicting`). 인계 하나는 초안 하나에만 반영된다(재전송 중복 방지) | Claude |
+| `HOLD_RESOLUTION_UPLOAD` | `shiftlink/mes/uploader.py` | True면 `resolution`이 실린 인계는 Aiven에 올리지 않고 로컬 pending으로 둔다. 기능 확정 시 False(10/13 결정) | Claude |

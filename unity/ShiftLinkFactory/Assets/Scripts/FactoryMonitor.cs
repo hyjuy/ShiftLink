@@ -89,19 +89,23 @@ public class FactoryMonitor : MonoBehaviour
     }
     void FaceCamera() { if(screen!=null && Camera.main!=null) screen.rotation=Camera.main.transform.rotation; }
     void LateUpdate() { FaceCamera(); }
-    Rect ButtonRect { get { return new Rect(Mathf.Max(18,Screen.width-200),18,182,34); } }
-    Rect ExpandedRect { get { return new Rect(Mathf.Max(18,Screen.width-420),62,Mathf.Min(402,Screen.width-36),Mathf.Min(540,Screen.height-80)); } }
-    public bool ContainsPointer(Vector2 pointer) { return ButtonRect.Contains(pointer) || (expanded && ExpandedRect.Contains(pointer)); }
+    public bool Expanded { get { return expanded; } }
+    Rect ButtonRect { get { return FactoryUi.ScreenLayout.Switcher; } }
+    Rect ExpandedRect { get { return FactoryUi.ScreenLayout.Details; } }
+    public bool ContainsPointer(Vector2 pointer) { return GetComponent<FactoryWorker>()?.IsWorkerMode!=true && (ButtonRect.Contains(pointer) || (expanded && ExpandedRect.Contains(pointer))); }
     void OnGUI()
     {
         if(GetComponent<FactoryWorker>()?.IsWorkerMode==true) return;
-        var button=new GUIStyle(GUI.skin.button) {font=font,fontSize=17};
-        if(GUI.Button(ButtonRect,expanded ? "현황 디스플레이 닫기" : "현황 디스플레이 확대",button)) expanded=!expanded;
-        if(!expanded) return;
-        GUILayout.BeginArea(ExpandedRect,GUI.skin.box);
-        scroll=GUILayout.BeginScrollView(scroll);
-        GUILayout.Label(Content,new GUIStyle(GUI.skin.label) {font=font,fontSize=18,richText=true,wordWrap=true});
-        GUILayout.EndScrollView(); GUILayout.EndArea();
+        var ui=FactoryUi.For(this);
+        using(ui.Use()) {
+            if(GUI.Button(ButtonRect,expanded ? "설비 상세로 돌아가기" : "공정 현황 보기")) expanded=!expanded;
+            if(!expanded) return;
+            GUILayout.BeginArea(ExpandedRect,GUI.skin.box);
+            GUILayout.Label("공정 현황",ui.Heading);
+            scroll=GUILayout.BeginScrollView(scroll);
+            GUILayout.Label(Content);
+            GUILayout.EndScrollView(); GUILayout.EndArea();
+        }
     }
     void OnDestroy()
     {

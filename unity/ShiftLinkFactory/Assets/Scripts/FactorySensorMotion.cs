@@ -210,24 +210,33 @@ public class FactorySensorMotion : MonoBehaviour
             if(p.kind=="leak" && value>=.5f) p.transform.localScale=p.scale*(1+.15f*Mathf.Sin(p.phase*2));
         }
     }
-    Rect PanelRect() { float width=Mathf.Min(410,Screen.width-36); return new Rect(Screen.width-width-18,18,width,290); }
-    public bool ContainsPointer(Vector2 pointer) { var demo=GetComponentInParent<FactoryDemo>(); return demo!=null && !string.IsNullOrEmpty(demo.SelectedId) && PanelRect().Contains(pointer); }
-    void OnGUI()
+    Rect PanelRect() { return FactoryUi.ScreenLayout.Details; }
+    bool PanelVisible()
     {
         var demo=GetComponentInParent<FactoryDemo>();
-        if(demo==null || string.IsNullOrEmpty(demo.SelectedId)) return;
-        var style=new GUIStyle(GUI.skin.label) {wordWrap=true};
-        GUILayout.BeginArea(PanelRect(),GUI.skin.box);
-        GUILayout.Label("장비 계측·합성 관찰 | "+demo.SelectedId);
-        GUILayout.Label("시나리오: "+(current?.scenario_id??"연결 없음"));
-        scroll=GUILayout.BeginScrollView(scroll);
-        GUILayout.Label(Observation(demo.SelectedId),style);
-        foreach(var c in channels.Where(c=>c.equipment.equipment_id==demo.SelectedId)) {
-            GUILayout.Label(SensorDescription(c.equipment.equipment_id,c.spec.signal),style);
+        return demo!=null && !string.IsNullOrEmpty(demo.SelectedId) &&
+            demo.GetComponent<FactoryWorker>()?.IsWorkerMode!=true && demo.GetComponent<FactoryMonitor>()?.Expanded!=true;
+    }
+    public bool ContainsPointer(Vector2 pointer) { return PanelVisible() && PanelRect().Contains(pointer); }
+    void OnGUI()
+    {
+        if(!PanelVisible()) return;
+        var demo=GetComponentInParent<FactoryDemo>();
+        var ui=FactoryUi.For(this);
+        using(ui.Use()) {
+            GUILayout.BeginArea(PanelRect(),GUI.skin.box);
+            GUILayout.Label("설비 계측",ui.Heading);
+            GUILayout.Label(demo.SelectedId+" · "+(current?.scenario_id??"연결 없음"),ui.Caption);
+            scroll=GUILayout.BeginScrollView(scroll);
+            GUILayout.Label(Observation(demo.SelectedId));
+            foreach(var c in channels.Where(c=>c.equipment.equipment_id==demo.SelectedId)) {
+                GUILayout.Space(8);
+                GUILayout.Label(SensorDescription(c.equipment.equipment_id,c.spec.signal));
+            }
+            GUILayout.Space(12);
+            GUILayout.Label("변위·클램프·승강·디버터는 시연 표현입니다. 정비 이력과 재가동 승인은 별도 확인합니다.",ui.Caption);
+            GUILayout.EndScrollView(); GUILayout.EndArea();
         }
-        GUILayout.Label("변위·클램프·승강·디버터 모션은 시연 표현입니다. 정비 이력과 재가동 승인 여부는 별도 확인합니다.",style);
-        GUILayout.EndScrollView();
-        GUILayout.EndArea();
     }
     void OnDestroy() { foreach(var m in materials) { if(Application.isPlaying) Destroy(m); else DestroyImmediate(m); } }
 }

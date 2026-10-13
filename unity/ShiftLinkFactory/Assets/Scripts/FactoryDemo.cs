@@ -489,13 +489,16 @@ public class FactoryDemo : MonoBehaviour
         AdvanceVisuals(Time.deltaTime);
         if(worker!=null && worker.IsWorkerMode) return;
         if(viewCamera==null) return;
-        if(Input.GetMouseButton(1)) { yaw+=Input.GetAxis("Mouse X")*3; pitch=Mathf.Clamp(pitch-Input.GetAxis("Mouse Y")*2,20,80); }
-        distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
-        UpdateCamera();
         var guiPointer = new Vector2(Input.mousePosition.x, Screen.height-Input.mousePosition.y);
-        bool overPanel = (faults?.ContainsPointer(guiPointer)==true) || (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer) == true) || (GetComponentInChildren<FactorySensorMotion>()?.ContainsPointer(guiPointer)==true) || new Rect(18,18,Mathf.Min(700,Screen.width-36),270).Contains(guiPointer) ||
-            new Rect(Screen.width-460,Screen.height-150,442,132).Contains(guiPointer) ||
-            (!string.IsNullOrEmpty(selectedId) && new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125).Contains(guiPointer));
+        var uiLayout=FactoryUi.ScreenLayout;
+        bool overPanel = (faults?.ContainsPointer(guiPointer)==true) || (GetComponent<FactoryMonitor>()?.ContainsPointer(guiPointer)==true) ||
+            (GetComponentInChildren<FactorySensorMotion>()?.ContainsPointer(guiPointer)==true) || uiLayout.Controls.Contains(guiPointer) ||
+            (!string.IsNullOrEmpty(selectedId) && uiLayout.Selection.Contains(guiPointer));
+        if(!overPanel) {
+            if(Input.GetMouseButton(1)) { yaw+=Input.GetAxis("Mouse X")*3; pitch=Mathf.Clamp(pitch-Input.GetAxis("Mouse Y")*2,20,80); }
+            distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*2,15,130);
+        }
+        UpdateCamera();
         if(Input.GetMouseButtonDown(0) && !overPanel) {
             RaycastHit hit;
             if(Physics.Raycast(viewCamera.ScreenPointToRay(Input.mousePosition),out hit)) {
@@ -575,47 +578,73 @@ public class FactoryDemo : MonoBehaviour
         viewCamera.transform.position=target+Quaternion.Euler(pitch,yaw,0)*new Vector3(0,0,-distance);
         viewCamera.transform.LookAt(target);
     }
+    static readonly string[] UiTabs = {"운전", "물류", "연결"};
+    int uiTab;
+    Vector2 controlsScroll, selectionScroll;
     void OnGUI()
     {
         if(worker!=null && worker.IsWorkerMode) return;
-        GUI.backgroundColor=new Color(.07f,.12f,.19f,.96f);
-        GUILayout.BeginArea(new Rect(18,18,Mathf.Min(700,Screen.width-36),270),GUI.skin.box);
-        GUILayout.Label("SHIFTLINK / FACTORY + MES + PDA");
-        GUI.color=online ? FactoryRules.Green : FactoryRules.Amber; GUILayout.Label(status); GUI.color=Color.white;
-        GUILayout.BeginHorizontal(); GUILayout.Label("MES",GUILayout.Width(40)); GUILayout.Label(mesUrl); GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal(); GUILayout.Label("PDA",GUILayout.Width(40)); GUILayout.Label(pdaUrl); GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal(); GUI.enabled=online && !controlBusy;
-        if(GUILayout.Button("Start")) StartCoroutine(Control("start"));
-        if(GUILayout.Button("Pause")) StartCoroutine(Control("pause"));
-        if(GUILayout.Button("Resume")) StartCoroutine(Control("resume"));
-        GUI.enabled=true; GUILayout.EndHorizontal();
-        GUILayout.Label("Right drag: orbit | Wheel: zoom | Click equipment: select");
-        if(GUILayout.Button(exteriorView ? "View factory interior" : "View factory exterior")) SetExteriorView(!exteriorView);
-        if(worker!=null && GUILayout.Button("Walk as employee / PDA camera [F]")) worker.EnterWorker();
-        if (GUILayout.Button("Open MES dashboard / fault scenarios")) Application.OpenURL(mesUrl.TrimEnd('/')+"/");
-        GUILayout.EndArea();
-        if(logistics!=null) {
-            GUILayout.BeginArea(new Rect(Screen.width-460,Screen.height-150,442,132),GUI.skin.box);
-            GUILayout.Label(logistics.Summary);
-            GUI.enabled=online;
-            logistics.SendToTruck=GUILayout.Toggle(logistics.SendToTruck,"Send next finished coils to truck (otherwise warehouse)");
+        var ui=FactoryUi.For(this);
+        using(ui.Use()) {
+            var layout=FactoryUi.ScreenLayout;
+            GUILayout.BeginArea(layout.Controls,GUI.skin.box);
+            GUILayout.Label("ShiftLink",ui.Heading);
+            GUILayout.Label("가상 공장 관제",ui.Caption);
+            GUI.contentColor=online ? new Color32(134,239,172,255) : new Color32(253,186,116,255);
+            GUILayout.Label(online ? "MES 연결됨" : "MES 연결 끊김 · 상태 미확인");
+            GUI.contentColor=Color.white;
             GUILayout.BeginHorizontal();
-            if(GUILayout.Button("Load stored coils")) logistics.DispatchStored();
-            if(GUILayout.Button("Dispatch loaded truck")) logistics.DepartTruck();
-            GUILayout.EndHorizontal(); GUI.enabled=true;
-            GUILayout.Label("Virtual finishing speed 2 m/s / session inventory");
-            GUILayout.EndArea();
-        }
-        if(!string.IsNullOrEmpty(selectedId) && equipment.ContainsKey(selectedId)) {
-            GUILayout.BeginArea(new Rect(18,Screen.height-145,Mathf.Min(560,Screen.width-36),125),GUI.skin.box);
-            GUILayout.Label("Selected: "+selectedId+" | Latest PDA scan: "+(lastScanId ?? "none"));
-            EquipmentReading reading; if(readings.TryGetValue(selectedId,out reading)) GUILayout.Label(reading.operating_state+" / "+reading.fault_level);
-            if(IsScrapEquipment(selectedId)) GUILayout.Label("스크랩 배출 중 "+DischargingScrapCount+"개 / 누적 "+ScrapCount+"개 · 적치 형상은 최대 20층 시연입니다. 판재는 실제 절단을 재현하지 않습니다.",new GUIStyle(GUI.skin.label) {wordWrap=true});
-            if(GUILayout.Button("Open this equipment on PDA"))
-                Application.OpenURL(pdaUrl.TrimEnd('/')+"/pda.html?equipment_id="+UnityWebRequest.EscapeURL(selectedId)+"&source=unity");
-            GUILayout.EndArea();
-            Vector3 pos=viewCamera.WorldToScreenPoint(positions[selectedId]+Vector3.up*5);
-            if(pos.z>0) { GUI.color=FactoryRules.Amber; GUI.Label(new Rect(pos.x-60,Screen.height-pos.y,160,30),"SELECTED / PDA"); GUI.color=Color.white; }
+            for(int index=0; index<UiTabs.Length; index++) {
+                if(GUILayout.Button(UiTabs[index],uiTab==index ? ui.Primary : GUI.skin.button)) { uiTab=index; controlsScroll=Vector2.zero; }
+            }
+            GUILayout.EndHorizontal();
+            controlsScroll=GUILayout.BeginScrollView(controlsScroll);
+            if(uiTab==0) {
+                GUILayout.BeginHorizontal(); GUI.enabled=online && !controlBusy;
+                if(GUILayout.Button("시작")) StartCoroutine(Control("start"));
+                if(GUILayout.Button("일시정지")) StartCoroutine(Control("pause"));
+                if(GUILayout.Button("재개")) StartCoroutine(Control("resume"));
+                GUI.enabled=true; GUILayout.EndHorizontal();
+                if(controlBusy) GUILayout.Label("운전 명령 처리 중…",ui.Caption);
+                if(GUILayout.Button(exteriorView ? "공장 내부 보기" : "공장 외부 보기")) SetExteriorView(!exteriorView);
+                if(worker!=null && GUILayout.Button("현장 이동 / PDA  [F]",ui.Primary)) worker.EnterWorker();
+                GUILayout.Label("우클릭 드래그: 회전\n휠: 확대·축소   설비 클릭: 상세",ui.Caption);
+            } else if(uiTab==1) {
+                GUILayout.Label("가상 물류",ui.Heading);
+                if(logistics!=null) {
+                    GUILayout.Label(logistics.Summary);
+                    GUI.enabled=online;
+                    logistics.SendToTruck=GUILayout.Toggle(logistics.SendToTruck,"신규 반출 코일을 트럭으로 보내기");
+                    GUILayout.Label("해제하면 보관장으로 보냅니다.",ui.Caption);
+                    if(GUILayout.Button("보관 코일 싣기")) logistics.DispatchStored();
+                    if(GUILayout.Button("적재 트럭 출하")) logistics.DepartTruck();
+                    GUI.enabled=true;
+                    GUILayout.Label("세션 내 가상 재고 · 후단 이송 2 m/s",ui.Caption);
+                } else GUILayout.Label("물류 정보를 준비 중입니다.");
+            } else {
+                GUILayout.Label("연결 정보",ui.Heading);
+                GUILayout.Label("MES  "+mesUrl,ui.Caption);
+                GUILayout.Label("PDA  "+pdaUrl,ui.Caption);
+                if(GUILayout.Button("MES 대시보드 열기")) Application.OpenURL(mesUrl.TrimEnd('/')+"/");
+            }
+            GUILayout.Space(8);
+            GUILayout.Label(status,ui.Caption);
+            GUILayout.EndScrollView(); GUILayout.EndArea();
+            if(!string.IsNullOrEmpty(selectedId) && equipment.ContainsKey(selectedId)) {
+                GUILayout.BeginArea(layout.Selection,GUI.skin.box);
+                selectionScroll=GUILayout.BeginScrollView(selectionScroll);
+                GUILayout.Label("선택 설비  "+selectedId);
+                EquipmentReading reading;
+                if(readings.TryGetValue(selectedId,out reading))
+                    GUILayout.Label(FactoryUi.StateLabel(reading.operating_state)+" / "+FactoryUi.StateLabel(reading.fault_level),ui.Caption);
+                if(IsScrapEquipment(selectedId)) GUILayout.Label("스크랩 배출 중 "+DischargingScrapCount+"개 / 누적 "+ScrapCount+"개 · 적치 최대 20층 시연",ui.Caption);
+                if(GUILayout.Button("PDA에서 설비 열기",ui.Primary))
+                    Application.OpenURL(pdaUrl.TrimEnd('/')+"/pda.html?equipment_id="+UnityWebRequest.EscapeURL(selectedId)+"&source=unity");
+                GUILayout.Label("최근 PDA 스캔: "+(lastScanId??"없음"),ui.Caption);
+                GUILayout.EndScrollView(); GUILayout.EndArea();
+                Vector3 pos=viewCamera.WorldToScreenPoint(positions[selectedId]+Vector3.up*5);
+                if(pos.z>0) { GUI.contentColor=FactoryUi.Accent; GUI.Label(new Rect(pos.x-60,Screen.height-pos.y,160,30),"선택 설비"); GUI.contentColor=Color.white; }
+            }
         }
     }
     Material MaterialFor(Color color)

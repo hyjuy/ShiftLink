@@ -116,7 +116,7 @@ public class FactoryCameraStream : MonoBehaviour
             streaming=true;
         } else if(!wanted && streaming) StopCamera();
         if(!streaming || Time.realtimeSinceStartup<nextFrame) return;
-        nextFrame=Time.realtimeSinceStartup+.05f;
+        nextFrame=Time.realtimeSinceStartup+.1f;
         try {
             if(!capture.RenderLivePreview()) return;
             if(target==null) {
@@ -128,7 +128,7 @@ public class FactoryCameraStream : MonoBehaviour
                 Graphics.Blit(capture.LivePreview,target); RenderTexture.active=target;
                 pixels.ReadPixels(new Rect(0,0,960,540),0,0); pixels.Apply();
             } finally { RenderTexture.active=previous; }
-            var frame=pixels.EncodeToJPG(85);
+            var frame=pixels.EncodeToJPG(70);
             lock(frameLock) { jpeg=frame; frameAt=DateTime.UtcNow.Ticks; }
             FrameCount++;
         } catch(Exception error) { Error=error.Message; }

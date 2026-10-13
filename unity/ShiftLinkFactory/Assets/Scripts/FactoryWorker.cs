@@ -21,7 +21,7 @@ public class FactoryWorker : MonoBehaviour
     bool galleryOpen;
     Texture2D galleryImage;
     string galleryPath;
-    Font uiFont;
+    Vector2 pdaScroll;
     string galleryStatus = "";
     CursorLockMode previousLock;
     bool previousCursor;
@@ -43,7 +43,6 @@ public class FactoryWorker : MonoBehaviour
     {
         if (WorkerRoot != null) return;
         demo = factory; observation = observationCamera;
-        uiFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Arial" }, 18);
         capture = GetComponent<FactoryCapture>() ?? gameObject.AddComponent<FactoryCapture>();
         WorkerRoot = new GameObject("Factory employee").transform; WorkerRoot.SetParent(transform, false);
         WorkerRoot.position = new Vector3(-16.8f, .05f, -12);
@@ -153,59 +152,65 @@ public class FactoryWorker : MonoBehaviour
     void DrawPhoto(Texture image)
     {
         float imageHeight = Mathf.Min(260, Mathf.Max(90, Screen.height - 340));
-        Rect rect = GUILayoutUtility.GetRect(250, imageHeight, GUILayout.ExpandWidth(true));
+        Rect rect = GUILayoutUtility.GetRect(0, imageHeight, GUILayout.ExpandWidth(true));
         GUI.DrawTexture(rect, image, ScaleMode.ScaleToFit, false);
     }
     void OnGUI()
     {
-        var previousFont = GUI.skin.font;
-        GUI.skin.font = uiFont;
-        try { DrawGui(); }
-        finally { GUI.skin.font = previousFont; }
+        if(!IsWorkerMode || WorkerRoot==null) return;
+        var ui=FactoryUi.For(this);
+        using(ui.Use()) { DrawGui(); }
     }
     void DrawGui()
     {
-        if (WorkerRoot == null) return;
-        if (!IsWorkerMode) return;
-        if (!PdaRaised) {
-            GUI.Box(new Rect(18, 18, 490, 72), "EMPLOYEE / WASD move / Mouse look\nP PDA / V first-person or third-person / F overview");
-            GUI.Label(new Rect(Screen.width / 2 - 5, Screen.height / 2 - 12, 20, 24), "+");
+        if(WorkerRoot==null || !IsWorkerMode) return;
+        var ui=FactoryUi.For(this);
+        if(!PdaRaised) {
+            GUI.Box(new Rect(16,16,Mathf.Min(320,Screen.width-32),96),"현장 이동\nWASD 이동 · 마우스 시점\nP PDA · V 시점 전환 · F 관제");
+            GUI.Label(new Rect(Screen.width/2-5,Screen.height/2-12,20,24),"+");
             return;
         }
-        // Consume shortcuts once, only in camera state. Preview buttons retain keyboard focus.
-        var e = Event.current;
-        if (!galleryOpen && !capture.HasPreview && e.type == EventType.KeyDown && (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter)) { capture.Capture(); e.Use(); }
-        panel = new Rect(Mathf.Max(12, (Screen.width - 580) / 2), 35, Mathf.Min(580, Screen.width - 24), Mathf.Max(350, Screen.height - 70));
-        GUILayout.BeginArea(panel, GUI.skin.box);
-        GUILayout.Label("PDA / " + (galleryOpen ? "Gallery" : capture.HasPreview ? "Photo preview" : "Camera"));
-        GUILayout.Label("장비 인식은 아직 연결되지 않았습니다.");
-        if (galleryOpen) {
-            GUILayout.Label(string.IsNullOrEmpty(galleryStatus) ? capture.Status : galleryStatus);
-            if (capture.Gallery.Count == 0) GUILayout.Label("No saved photos yet.");
-            if (galleryImage != null) DrawPhoto(galleryImage);
-            if (!string.IsNullOrEmpty(galleryPath)) GUILayout.Label(System.IO.Path.GetFileName(galleryPath));
-            galleryScroll = GUILayout.BeginScrollView(galleryScroll, GUILayout.Height(100));
-            foreach (var path in capture.Gallery) if (GUILayout.Button(System.IO.Path.GetFileName(path))) OpenGalleryImage(path);
+        var e=Event.current;
+        if(!galleryOpen && !capture.HasPreview && e.type==EventType.KeyDown &&
+            (e.keyCode==KeyCode.Space || e.keyCode==KeyCode.Return || e.keyCode==KeyCode.KeypadEnter)) { capture.Capture(); e.Use(); }
+        panel=FactoryUi.ScreenLayout.Pda;
+        GUI.Box(new Rect(0,0,Screen.width,Screen.height),GUIContent.none);
+        GUILayout.BeginArea(panel,GUI.skin.box);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("현장 PDA",ui.Heading);
+        if(GUILayout.Button("닫기 [P / Esc]",GUILayout.Width(132))) TogglePda();
+        GUILayout.EndHorizontal();
+        pdaScroll=GUILayout.BeginScrollView(pdaScroll);
+        GUILayout.Label(galleryOpen ? "사진 보관함" : capture.HasPreview ? "촬영 결과 확인" : "설비 사진 촬영",ui.Heading);
+        GUILayout.Label("촬영 · 저장 기능 / 장비 인식 미연결",ui.Caption);
+        if(galleryOpen) {
+            GUILayout.Label(string.IsNullOrEmpty(galleryStatus) ? capture.Status : galleryStatus,ui.Caption);
+            if(capture.Gallery.Count==0) GUILayout.Label("저장한 사진이 없습니다. 촬영 후 사진을 저장해 주세요.");
+            if(galleryImage!=null) DrawPhoto(galleryImage);
+            if(!string.IsNullOrEmpty(galleryPath)) GUILayout.Label(System.IO.Path.GetFileName(galleryPath),ui.Caption);
+            galleryScroll=GUILayout.BeginScrollView(galleryScroll,GUILayout.Height(120));
+            foreach(var path in capture.Gallery)
+                if(GUILayout.Button(System.IO.Path.GetFileName(path))) OpenGalleryImage(path);
             GUILayout.EndScrollView();
-            if (GUILayout.Button("돌아가기")) galleryOpen = false;
-        } else if (capture.HasPreview) {
+            if(GUILayout.Button("촬영 화면으로 돌아가기")) galleryOpen=false;
+        } else if(capture.HasPreview) {
             DrawPhoto(capture.Preview);
-            GUILayout.Label(capture.Status);
+            GUILayout.Label(capture.Status,ui.Caption);
             GUILayout.BeginHorizontal();
-            GUI.enabled = !capture.PreviewSaved;
-            if (GUILayout.Button("사진 저장")) capture.Save();
-            GUI.enabled = true;
-            if (GUILayout.Button("다시 촬영")) capture.Retake();
+            GUI.enabled=!capture.PreviewSaved;
+            if(GUILayout.Button(capture.PreviewSaved ? "저장 완료" : "사진 저장",ui.Primary)) capture.Save();
+            GUI.enabled=true;
+            if(GUILayout.Button("다시 촬영")) capture.Retake();
             GUILayout.EndHorizontal();
         } else {
-            if (capture.LivePreview != null) DrawPhoto(capture.LivePreview);
-            GUILayout.Label("P로 PDA를 닫고 시점을 조정하세요. Space / Enter로 촬영합니다.");
-            if (GUILayout.Button("촬영 [Space / Enter]", GUILayout.Height(42))) capture.Capture();
-            GUILayout.Label(capture.Status);
+            if(capture.LivePreview!=null) DrawPhoto(capture.LivePreview);
+            GUILayout.Label("P로 PDA를 닫고 시점을 조정하세요.",ui.Caption);
+            if(GUILayout.Button("사진 촬영 [Space / Enter]",ui.Primary,GUILayout.Height(44))) capture.Capture();
+            GUILayout.Label(capture.Status,ui.Caption);
         }
         GUILayout.Space(8);
-        if (!galleryOpen && GUILayout.Button("사진 보관함 (" + capture.Gallery.Count + ")")) { capture.RefreshGallery(); galleryOpen = true; }
-        if (GUILayout.Button("PDA 닫기 [P / Esc]")) TogglePda();
+        if(!galleryOpen && GUILayout.Button("사진 보관함 ("+capture.Gallery.Count+")")) { capture.RefreshGallery(); galleryOpen=true; }
+        GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
     void OnDisable() { ExitWorker(); }
@@ -213,7 +218,6 @@ public class FactoryWorker : MonoBehaviour
     {
         ExitWorker();
         Remove(galleryImage); foreach (var material in materials) Remove(material);
-        Remove(uiFont);
         if (WorkerRoot != null) Remove(WorkerRoot.gameObject);
     }
 }

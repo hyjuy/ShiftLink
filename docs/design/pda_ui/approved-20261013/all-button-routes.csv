@@ -1,0 +1,63 @@
+현재 화면,버튼/행동,이동 또는 펼침,코드 식별자
+공통,홈,s-home,모든 .home
+홈,인계 확인,s-handover,toHandoverHome
+홈,설비 스캔,s-scan,toScan
+홈,설비 목록,s-manual,toManual
+홈,대시보드,/ (외부 MES 대시보드),href=/
+홈,최근 선택 설비,s-ctx,동적 chip
+홈/인계,업로드 대기,s-outbox,homePending / hoPending
+홈/인계,확인 필요,"표시만, 이동 없음",homeConflict / hoConflict
+스캔,이전,s-home,scanClose
+스캔,직접 선택,s-manual,scanManual
+스캔,새 스캔 인식 성공,s-ctx (자동),lockScan
+스캔,인식 실패·20초 초과,s-manual (약 0.9초 뒤),failScan
+직접 선택,설비 행,s-ctx,동적 row
+직접 선택,이전,설비 확정됨: s-ctx / 없음: s-home,manualClose
+직접 선택,설비 스캔으로 돌아가기,s-scan,manualToScan
+작업 선택,이전,s-home,ctxBack
+작업 선택,증상 질의,s-ask,toAsk
+작업 선택,인계 확인,s-handover,toHandover
+작업 선택,인계 작성,s-hoNew,toHandoverNew
+작업 선택,설비 변경,s-scan,ctxEdit
+상단 고장 알림,확인,s-alertGo,동적 alrow
+설비 변경 확인,변경 · 증상 질의,s-ask,alertGoOk
+설비 변경 확인,취소 / 이전,진입 전 화면; scan/wait/boot였으면 작업 선택 또는 홈,alertGoCancel / alertGoBack
+증상 질의,이전,s-ctx,askBack
+증상 질의,증상 행,현재 화면 선택 상태 갱신,동적 sym
+증상 질의,기타 / 맞는 증상 카드 없음,현재 화면 직접 입력란 표시,other / alert.nm
+증상 질의,나머지 관측 보기,현재 화면 details 펼침,동적 details
+증상 질의,MES 관측 다시 읽기,현재 화면 갱신,obsReload
+증상 질의,관측 추가 / 삭제,현재 화면 관측 갱신,obsAdd / 동적 x
+증상 질의,검색,s-wait → s-result; 실패 시 s-ask,doSearch
+검색 중,취소,s-ask,waitCancel
+결과,이전,s-ctx,resultBack
+결과,T3 단계,현재 카드 details 펼침,step-detail
+결과,카드 원문·선정 이유·출처,현재 카드 details 펼침,card-reference
+결과,이 조치 시도 (시안: 미해결 시도 기록),s-tries; 효과 없음·증상 유지 즉시 기록,recordTry
+결과,시도 기록 보기,s-tries (시도 있을 때),동적 btn
+시도 기록,이전,s-result,triesBack
+시도 기록,조치 목록으로,s-result (다음 후보 있을 때),동적 go
+시도 기록,인계로 넘기기,s-hoNew (시도 포함),동적 go / alt
+지식 없음,이전,s-ctx,emptyBack
+지식 없음,다시 질의,s-ask; 현재 검색에서 독립 화면 진입 없음,emptyRetry
+인계 확인,이전,설비 확정됨: s-ctx / 없음: s-home,hoBack
+인계 확인,근거 보기,현재 항목 details 펼침; 원문·조치·결과 표시,basis-detail
+업로드 대기,이전,openOutbox()를 연 화면,obBack
+업로드 대기,대기 인계 항목,"표시만, 상세 이동 없음",동적 card
+인계 작성,이전,s-ctx,hoNewBack
+인계 작성,MES 기록 불러오기,현재 입력에 측정값·최근 이벤트 최대 5건 추가,hoLoadMes
+인계 작성,저장,현재 화면 성공 또는 실패 문구; pending payload 유지,hoSave
+인계 작성,대기 인계 재전송,현재 화면 기존 payload 재전송,hoSave 상태
+시작,데이터 적재 완료,s-home; 유효 equipment_id 링크면 s-ctx,boot
+시작,적재 실패,s-boot 오류 표시; 재시도 버튼 없음,boot catch
+LLM 챗봇 제안,이전,설비 작업 선택 s-ctx,UI 제안
+LLM 챗봇 제안,홈,s-home,UI 제안
+LLM 챗봇 제안,설비 변경,s-manual,기존 설비 선택 재사용
+LLM 챗봇 제안,질문 보내기,응답 대기 → 답변·보류·지식 없음·서버 오류,POST /api/query
+LLM 챗봇 제안,질의 취소,질문 입력; 늦은 응답 폐기,기존 waitAbort 동작
+LLM 챗봇 제안,인용 근거,근거 상세 패널,cited_card_ids + 기존 카드
+LLM 챗봇 제안,T3 단계,현재 근거 패널 details 펼침,type_payload.steps
+LLM 챗봇 제안,카드 원문·선정 근거,현재 근거 패널 details 펼침,know_how / rationale
+LLM 챗봇 제안,근거 닫기,답변 화면,UI 제안
+LLM 챗봇 제안,다시 질의,질문 입력,같은 API로 별도 단일 질의
+LLM 챗봇 제안,다시 보내기,응답 대기,기존 /api/query 재요청

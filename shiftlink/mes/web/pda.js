@@ -175,7 +175,7 @@ function show(name) {
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
   if (name === 'chat') { renderMesStatus(); renderChat(); }
-  if (name === 'home') renderHomeHandovers();
+  if (name === 'home') { renderHomeHandovers(); renderHomeStatus(); }
 }
 
 function haptic(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (_) {} } }
@@ -191,6 +191,9 @@ function renderNet() {
   const q = $('netQueue');
   q.hidden = S.outbox.length === 0;
   q.textContent = '대기 ' + S.outbox.length + '건';
+  $('homeConnection').textContent = S.online === false ? '연결 확인 필요' : '현장 작업 도우미';
+  document.querySelector('.overview-status .live-dot').classList.toggle('offline', S.online === false);
+  if (S.online === false) renderHomeStatus();
 }
 
 async function api(path, init, timeoutMs = API_TIMEOUT_MS) {
@@ -1510,10 +1513,7 @@ function botBubble(t) {
     if (safety.length) safetyGroup(safety, '답을 기다리는 동안 확인 · 이 설비 안전 수칙', d);
     const row = document.createElement('div'); row.className = 'wait-row';
     p.textContent = waitText(t);
-    const c = document.createElement('button');
-    c.type = 'button'; c.className = 'btn sm ghost'; c.textContent = '취소';
-    c.addEventListener('click', () => { t.status = 'cancelled'; renderChat(); renderSymptoms(); renderAskBlock(); });
-    row.appendChild(p); row.appendChild(c);
+    row.appendChild(p);
     d.appendChild(row);
   } else {
     d.appendChild(p);
@@ -1526,6 +1526,8 @@ function botBubble(t) {
 
 function renderChat() {
   const log = $('chatLog'); log.innerHTML = '';
+  $('chatPane').classList.toggle('centered-state', S.chat.length <= 1);
+  $('chatCancelDock').hidden = !chatPending();
   let last = null;
   S.chat.forEach((t) => { log.appendChild(userBubble(t)); last = botBubble(t); log.appendChild(last); });
   renderAskSafety();
@@ -1716,7 +1718,7 @@ function appendBasisDetails(parent, ids) {
 
 /* code — 홈 목록에서 올 때 그 항목의 설비 code('' = 전체). 버튼 배선(ev만 넘어옴)은 지금처럼 선택 설비 기준. */
 function openHandover(ev, code) {
-  const pane = $('hoPane'); pane.innerHTML = '';
+  const pane = $('hoPane'); pane.innerHTML = ''; pane.classList.remove('centered-state');
   S.hoBack = S.screen === 'home' ? 'home' : null;
   const focus = typeof code === 'string' ? code : (S.eq ? S.eq.code : '');
   const mine = S.handovers.filter((h) =>
@@ -1727,7 +1729,7 @@ function openHandover(ev, code) {
   if (!list.length) {
     const p = document.createElement('p');
     p.className = 'hint'; p.textContent = '등록된 인계 기록이 없습니다.';
-    pane.appendChild(p); show('handover'); return;
+    pane.appendChild(p); pane.classList.add('centered-state'); show('handover'); return;
   }
   list.forEach((h) => {
     const l = document.createElement('p');
@@ -1958,13 +1960,15 @@ async function openOutbox() {
   const back = S.screen;
   $('obBack').onclick = () => show(back);
   const pane = $('obPane');
+  pane.classList.remove('long-content');
   pane.innerHTML = '<p class="hint">불러오는 중…</p>';
   show('outbox');
   let list;
   try { list = (await getJson('/api/outbox/pending')).handovers || []; }
   catch (_) { pane.innerHTML = '<p class="hint">MES에서 대기 목록을 불러오지 못했습니다.</p>'; return; }
-  pane.innerHTML = '<p class="hint">MES(Jetson)에 저장되어 있고, 클라우드로 아직 올라가지 않은 인계입니다. 지워지지 않습니다.</p>';
+  pane.innerHTML = '<p class="hint">기기에 저장된 인계입니다. 클라우드 업로드를 기다리고 있습니다.</p>';
   if (!list.length) pane.insertAdjacentHTML('beforeend', '<p class="hint">대기 중인 인계가 없습니다.</p>');
+  pane.classList.toggle('long-content', list.length > 2);
   list.forEach((h) => {
     const v = outboxItemView(h, S.equipment);
     const d = document.createElement('div');
@@ -2055,6 +2059,29 @@ function hangulPress(st, key) {
   return hangulPress({ done: st.done, cho: -1, jung: -1, jong: 0 }, key);
 }
 
+function homeEquipmentSummary(equipment, faults, available) {
+  const ids = new Set(equipment.map(eq => eq.equipment_id));
+  const abnormal = new Set((faults || []).filter(f => ids.has(f.eq.equipment_id)).map(f => f.eq.equipment_id)).size;
+  return {total: equipment.length, normal: available ? equipment.length - abnormal : null, abnormal: available ? abnormal : null};
+}
+function renderHomeStatus() {
+  const view = homeEquipmentSummary(S.equipment, S.faults, !!S.snap && S.online !== false);
+  $('homeEquipmentCount').textContent = view.total;
+  $('homeNormalCount').textContent = view.normal == null ? '—' : view.normal;
+  $('homeFaultCount').textContent = view.abnormal == null ? '—' : view.abnormal;
+  const box = $('homeWarnings');
+  const key = JSON.stringify([view, (S.faults || []).map(f => [f.eq.equipment_id, f.items])]);
+  if (key === S.homeStatusKey) return;
+  S.homeStatusKey = key; box.replaceChildren();
+  if (view.abnormal == null || view.abnormal === 0) {
+    const p = document.createElement('p'); p.className = 'hint'; p.textContent = view.abnormal == null ? '설비 상태를 확인하는 중입니다.' : '현재 감지된 이상이 없습니다.'; box.append(p);
+  } else (S.faults || []).forEach(f => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = f.eq.code + ' · ' + f.items.join(' · ');
+    b.dataset.equipmentId = f.eq.equipment_id; box.append(b);
+  });
+}
+
+
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
 // 임계값·통과 장수는 서버 /api/face/config 와 프레임 응답이 준다. 여기 숫자는 두지 않는다.
 function faceVerdict(scores, threshold, need, max) {
@@ -2064,7 +2091,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, evidenceSummary, resolutionError, resolutionPayload, draftNotice }; }
+if (typeof module !== 'undefined') { module.exports = { homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, evidenceSummary, resolutionError, resolutionPayload, draftNotice }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -2269,6 +2296,9 @@ on('scanClose', () => show('home'));
 on('scanManual', openManual);
 on('scanShoot', shootScan);
 on('toManual', openManual);
+on('chatCancel', () => { const t = S.chat.find(turn => turn.status === 'pending'); if (!t) return; t.status = 'cancelled'; renderChat(); renderSymptoms(); renderAskBlock(); });
+on('homeWarnings', event => { const button = event.target.closest('button[data-equipment-id]'); if (!button) return; const f = (S.faults || []).find(f => f.eq.equipment_id === button.dataset.equipmentId); if (f) openAlertGo({equipment_id:f.eq.equipment_id,items:f.items.slice()}); });
+on('toChat', () => { if (S.eq) $('toAsk').click(); else openManual(); });
 on('manualClose', () => show(S.eq ? 'ctx' : 'home'));
 on('manualToScan', startScan);
 on('ctxBack', () => show('home'));
@@ -2433,9 +2463,11 @@ const alertGoLeave = () => { S.alertPick = null; show(S.alertBack || (S.eq ? 'ct
 on('alertGoCancel', alertGoLeave);
 on('alertGoBack', alertGoLeave);
 
+
 function renderDash() {
   if (!S.snap) return;
   const d = dashSummary(S.snap, S.equipment, S.handovers, S.faults);
+  renderHomeStatus();
   // 홈 타일의 한 줄 상태
   $('homeEqNote').textContent = S.equipment.length + '대';
   $('homeDashNote').textContent = d.faults.length || d.waiting.length

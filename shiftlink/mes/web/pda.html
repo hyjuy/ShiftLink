@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <title>ShiftLink PDA</title>
 <!--
   동작하는 프로토타입 · 모의 MES 서버가 /pda.html 로 서빙한다
@@ -422,7 +422,7 @@
   .ho-col{min-height:0}
   .ho-memo{flex:1 1 0;min-height:0}
   .ho-memo textarea{flex:1 1 auto;min-height:96px}
-  @media (max-width:760px){ .ho-cols{grid-template-columns:1fr} }
+  @media (max-width:760px){ .ho-cols{grid-template-columns:1fr;flex:0 0 auto}.ho-memo{flex:0 0 auto} }
   textarea,input[type=number],select{width:100%;background:var(--surface);color:var(--tx);
     border:1px solid var(--edge);border-radius:10px;padding:12px;font:inherit;font-size:16px;min-height:56px}
   textarea{min-height:104px;resize:vertical;line-height:1.5}
@@ -464,6 +464,19 @@
   .disclaimer{flex:0 0 auto;padding:6px 14px;font-size:16px;line-height:1.45;color:var(--tx-2);
     background:var(--surface);border-top:1px solid var(--edge);display:flex;gap:7px}
 
+
+/* Approved PDF colors; current PDA controls and workflows are retained. */
+:root{color-scheme:light;--bg:#f3f5f8;--surface:#fff;--surface-2:#edf1f6;--surface-3:#eaf1ff;--hover:#e4ecf8;--edge:#d1d9e5;--tx:#182b45;--tx-2:#465b73;--tx-3:#62768d;--accent:#235cc8;--ok:#197548;--ok-tx:#245e42;--notice:#a65b00;--notice-tx:#684500;--notice-bg:#fff7e6;--notice-bg-2:#fff0ca;--notice-edge:#dfbd78;--fault:#a72129;--fault-tx:#99232c;--fault-edge:#edb4b8;--fault-bg:#fff0f0;--fault-bg-2:#f9dfe1;--shadow:rgba(20,45,77,.08);--scan:#235cc8}
+.btn.primary{background:#235cc8;border-color:#235cc8;color:#fff}.btn.primary:not([disabled]):hover{background:#1c50b5;border-color:#1c50b5;color:#fff}.msg.me{background:#235cc8;color:#fff}.msg.me .orig{color:#e4edff}.appbar{background:#fff}.wait-row{flex-direction:column;align-items:center;text-align:center}.wait-row>.btn{width:min(540px,100%);align-self:center}.ans-next{justify-content:center;width:100%}.ans-row{flex-direction:column}.msg.none{text-align:center}.msg.none .ans.lead{border-left:0}.msg.none .ans-next{align-self:center}.disclaimer{justify-content:center;text-align:center}
+#chatPane.centered-state{justify-content:safe center}#chatPane.centered-state .chatlog:empty{padding:24px;text-align:center}#obPane{justify-content:safe center;align-items:center}#obPane>.hint{text-align:center;flex-shrink:0}#obPane>.card{width:min(1000px,100%);flex-shrink:0}#obPane.long-content{justify-content:flex-start}#hoPane.centered-state{justify-content:safe center;text-align:center}#hoLoadMes,#manualToScan{width:min(540px,100%);align-self:center}#hoSave{width:min(540px,100%);align-self:center}.resolution-actions,.btn-row{justify-content:center}.btn-row>.btn{max-width:540px}
+/* Home: reference composition reflowed to a 16:10 PDA, with a fixed dock. */
+#app:has(.overview-home.on)>#net,#app:has(.overview-home.on)>#alert,#app:has(.overview-home.on)>#ctx{display:none!important}#s-home.overview-home{background:var(--bg);overflow:hidden}.overview-bar{height:86px;flex:0 0 86px;border-bottom:1px solid var(--edge);padding:0 36px;display:flex;align-items:center;justify-content:space-between}.overview-brand{display:flex;align-items:center;gap:18px}.overview-brand>span{display:grid;place-items:center;width:48px;height:48px;border-radius:13px;background:var(--scan);color:#ffffff}.overview-brand svg{width:28px;height:28px}.overview-brand h1{font-size:29px;margin:0;letter-spacing:-1px}.overview-status{display:flex;align-items:center;gap:10px;font-size:16px;color:var(--tx-2)}.live-dot{width:8px;height:8px;border-radius:50%;background:#197548}.overview-body{display:flex;flex-direction:column;gap:22px;flex:1;min-height:0;padding:26px 36px 22px}.overview-intro h2{font-size:32px;line-height:1.3;letter-spacing:-1px;margin:0 0 8px}.overview-intro p{font-size:18px;margin:0;color:var(--tx-2)}.overview-panels{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px;flex:1;min-height:0}.overview-card{border:1px solid var(--edge);border-radius:20px;background:var(--surface);padding:24px 26px;display:flex;flex-direction:column;min-height:0;gap:16px}.overview-card>header{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:38px;flex:0 0 auto}.overview-card h3{font-size:23px;margin:0}.overview-card header>span{color:var(--tx-2);font-size:17px;display:flex;align-items:baseline;gap:9px}.overview-card header b{font-size:30px;color:var(--tx)}.overview-list{flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#92a8c0 #edf1f6;padding-right:16px}.overview-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 0;border-bottom:1px solid var(--edge);min-height:92px}.overview-row:first-child{padding-top:10px}.overview-row:last-child{border:0}.overview-row strong{font-size:18px;font-weight:650}.overview-row p{font-size:16px;color:var(--tx-2);margin:6px 0 0}.badge{flex:0 0 auto;white-space:nowrap;padding:7px 12px;background:#eaf1ff;color:#465b73;border-radius:10px;font-size:16px}.badge.amber{background:#fff0ca;color:#684500}.overview-link{min-height:48px;display:flex;align-items:center;justify-content:flex-end;gap:16px;font-size:17px;color:var(--tx);border-top:1px solid var(--edge);padding-top:14px;text-decoration:none;flex:0 0 auto;align-self:stretch}.overview-link svg{width:23px;height:23px}.overview-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:12px 0;gap:14px}.overview-stats>div{border-right:1px solid var(--edge);display:flex;flex-direction:column;gap:4px}.overview-stats>div:last-child{border:0}.overview-stats span{font-size:16px;color:var(--tx-2);white-space:nowrap}.overview-stats strong{font-size:36px;line-height:1.3}.overview-stats small{font-size:17px;font-weight:400;color:var(--tx-2)}.overview-warning{display:flex;align-items:center;gap:16px;padding:20px 18px;background:#fff7e6;color:#684500;border-radius:14px;font-size:18px;line-height:1.9;flex:1}.overview-warning svg{width:25px;height:25px}.overview-recent{display:flex;align-items:center;gap:20px;min-height:54px;flex:0 0 auto}.overview-recent>span{font-size:17px;color:var(--tx-2)}.overview-recent #recent{display:flex;gap:12px}.overview-recent .chip{border-radius:12px;font-size:17px;font-weight:400;min-height:54px;padding:0 20px;background:var(--surface-2)}.overview-dock{display:flex;align-items:center;gap:16px;border-top:1px solid var(--edge);height:102px;flex:0 0 102px;padding:14px 36px}.overview-dock button,.overview-dock a{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;min-width:150px;padding:12px 20px;border-radius:14px;border:1px solid #bdcbe0;background:var(--surface-2);font-size:18px;text-decoration:none;color:var(--tx)}.overview-dock svg{width:26px;height:26px}.overview-dock .dock-chat{margin-left:auto;background:#eaf1ff;border-color:#b3c8ee;color:#235cc8}.pending-pill{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--notice-edge);border-radius:10px;background:var(--notice-bg);color:var(--warn);min-height:48px;margin-right:16px;font-size:15px}.pending-pill svg{width:18px;height:18px}
+.overview-brand>span{color:#fff}.live-dot{background:#197548}.live-dot.offline{background:#a65b00}.overview-warning{color:#805007;background:#fff7e6;flex-direction:column;align-items:stretch;justify-content:safe center;overflow-y:auto;gap:8px}.overview-warning>button{min-height:48px;text-align:left;font-size:16px;line-height:1.5}.overview-warning>.hint{margin:0;text-align:center}.overview-dock .dock-chat{color:#235cc8;background:#eaf1ff;border-color:#b3c8ee}.overview-status{gap:10px}.overview-status .ic{min-width:44px;min-height:44px;font-size:14px}.overview-status .pending-pill[hidden],.overview-status .outbox-note[hidden]{display:none}.overview-status p{margin:0}.overview-status .pending-pill{margin:0}.overview-stats strong>span{font-size:36px;color:var(--tx);font-weight:700}.overview-link{justify-content:center}.overview-card{gap:12px;padding:22px 26px}.overview-card header .ho-prog{font-size:17px}.overview-check-note{font-size:13px;margin:0}.overview-recent .chip{color:var(--tx)}.overview-list{padding:0 10px 0 0}.overview-list .ho-check{flex-basis:88px;font-size:13px;padding:6px}.overview-list .ho-check input{width:24px;height:24px}.overview-list .ho-open{background:#fff;padding:8px 12px}.overview-list .ho-open .eqc{font-size:17px}.overview-list .ho-open .due{font-size:13px}.overview-list .ho-open .ho-text{font-size:15px}.overview-list .ho-open .ho-src{font-size:12px}.overview-list .pill{font-size:13px}
+@media(max-width:899px){.overview-bar{padding:0 20px;min-height:76px;height:auto;flex-basis:76px}.overview-brand{gap:10px}.overview-brand h1{font-size:25px}.overview-status{font-size:13px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}.overview-status #homeConnection,.overview-status .mes-link{display:none}.overview-body{padding:24px 20px;overflow-y:auto;flex:1}.overview-intro h2{font-size:28px}.overview-intro p{font-size:16px}.overview-panels{display:flex;flex-direction:column;flex:0 0 auto}.overview-card{min-height:320px}.overview-list{max-height:260px;flex:1}.overview-warning{min-height:100px}.overview-recent{flex-direction:column;align-items:flex-start;gap:12px}.overview-recent #recent{flex-wrap:wrap}.overview-dock{padding:12px 20px;gap:10px;flex-basis:94px;height:94px}.overview-dock button{min-width:0;min-height:64px;flex:1;flex-direction:column;gap:4px;padding:8px;font-size:15px}.overview-dock .dock-chat{margin-left:0}.overview-status #homePending{font-size:12px;padding:6px 8px;min-height:36px}.overview-list .ho-open .ho-top{gap:4px}.overview-list .ho-check{flex-basis:68px}.overview-list .ho-src{overflow-wrap:anywhere}}
+
+.chat-cancel{flex:0 0 auto;display:flex;justify-content:center;padding:10px 16px;background:var(--bg);border-top:1px solid var(--edge)}.chat-cancel[hidden]{display:none}.chat-cancel>.btn{width:min(540px,100%);min-height:52px}
+.ans-row .ans.lead{flex:0 0 auto}.msg.none .ans.lead{background:transparent;text-align:center}.msg.none>.btn{width:min(540px,100%);align-self:center}
+#s-hoNew>#hoSave{flex:0 0 auto;margin:0 14px 14px;width:min(540px,calc(100% - 28px))}
 </style>
 </head>
 <body>
@@ -526,39 +539,7 @@
   </section>
 
   <!-- 홈 -->
-  <section class="screen" id="s-home">
-    <div class="appbar"><h1>ShiftLink</h1>
-      <!-- 개발용: 전체 MES 대시보드(Jetson). 개발이 끝나면 이 줄만 지운다 -->
-      <a class="ic mes-link" href="/" title="MES 대시보드 (개발용)">MES</a><span class="sp"></span>
-      <button class="ic" id="pdaExit" type="button">종료</button></div>
-    <div class="pane">
-      <!-- 왼쪽: 처리·재확인이 필요한 인계 항목을 홈에서 바로 읽는다(목록 안에서만 스크롤). 오른쪽: 다음 행동 타일, 설비 스캔이 맨 위·가장 크게. -->
-      <div class="home-grid">
-        <section class="ho-home" aria-labelledby="hoHomeTitle">
-          <div class="ho-home-head">
-            <h2 class="lbl" id="hoHomeTitle">처리·재확인 필요 인계</h2>
-            <span class="ho-prog" id="homeHoProgress"></span>
-            <span class="sp"></span>
-            <button class="btn sm" id="toHandoverHome" type="button">⇄ 전체 인계 보기 ›</button>
-          </div>
-          <p class="hint">확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.</p>
-          <ul class="ho-list" id="homeHoList"></ul>
-        </section>
-        <div class="home-tiles">
-          <button class="home-tile main" id="toScan" type="button"><b>◎ 설비 스캔</b><small>스캔하면 설비가 자동 선택</small></button>
-          <button class="home-tile" id="toManual" type="button"><b>☰ 설비 목록</b><small id="homeEqNote"></small></button>
-          <button class="home-tile" id="toDash" type="button"><b>▦ 대시보드</b><small id="homeDashNote"></small></button>
-        </div>
-      </div>
-      <div class="home-foot">
-        <p class="lbl">최근 선택한 설비</p>
-        <div class="chips" id="recent"><p class="hint">아직 없습니다.</p></div>
-        <span class="sp"></span>
-        <button class="outbox-note" id="homePending" type="button" hidden></button>
-        <p class="outbox-note bad" id="homeConflict" hidden></p>
-      </div>
-    </div>
-  </section>
+<section class="screen overview-home" id="s-home" aria-label="홈"><header class="overview-bar"><div class="overview-brand"><span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h13m-13 0 4-4m-4 4 4 4M19 17H6m13 0-4-4m4 4-4 4"/></svg></span><h1>ShiftLink</h1></div><div class="overview-status"><button id="homePending" class="pending-pill" type="button" hidden></button><p id="homeConflict" class="outbox-note bad" hidden></p><span class="live-dot"></span><span id="homeConnection">현장 작업 도우미</span><a class="ic mes-link" href="/" title="MES 대시보드 (개발용)">MES</a><button class="ic" id="pdaExit" type="button">종료</button></div></header><main class="overview-body"><div class="overview-intro"><h2>현장 상황을 확인하세요</h2><p>인계 내용을 확인하고, 설비 작업을 이어가세요.</p></div><div class="overview-panels"><section class="overview-card handover-summary"><header><h3 id="hoHomeTitle">인계 상황</h3><span id="homeHoProgress" class="ho-prog"></span></header><p class="hint overview-check-note">확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.</p><ul class="ho-list overview-list" id="homeHoList"></ul><button id="toHandoverHome" class="overview-link" type="button">전체 인계 보기 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-7-7 7 7-7 7"/></svg></button></section><section class="overview-card equipment-summary"><header><h3>현재 설비 상황</h3></header><div class="overview-stats"><div><span>전체 설비</span><strong><span id="homeEquipmentCount">—</span> <small>대</small></strong></div><div><span>정상</span><strong><span id="homeNormalCount">—</span> <small>대</small></strong></div><div><span>이상 감지</span><strong><span id="homeFaultCount">—</span> <small>대</small></strong></div></div><div class="overview-warning" id="homeWarnings"><p class="hint">설비 상태를 확인하는 중…</p></div><button class="overview-link" id="toDash" type="button">대시보드 보기 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-7-7 7 7-7 7"/></svg></button></section></div><div class="overview-recent"><span>최근 선택한 설비</span><div id="recent" class="chips"><p class="hint">설비를 선택하면 여기에 표시됩니다.</p></div></div><span id="homeEqNote" hidden></span><span id="homeDashNote" hidden></span></main><nav class="overview-dock" aria-label="하단 바로가기"><button id="toScan" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>설비 스캔</span></button><button id="toManual" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>설비 목록</span></button><button class="dock-chat" id="toChat" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a9 9 0 0 1-9 9 9.6 9.6 0 0 1-4-.9L3 21l1.4-4.9A9 9 0 1 1 21 11.5Z"/></svg><span>챗봇</span></button></nav></section>
 
   <!-- 스캔 -->
   <section class="screen" id="s-scan">
@@ -659,6 +640,7 @@
         <button class="btn primary" id="doSearch" type="button" disabled>보내기</button>
       </div>
     </div>
+    <div class="chat-cancel" id="chatCancelDock" hidden><button class="btn sm ghost" id="chatCancel" type="button">취소</button></div>
     <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
   </section>
 
@@ -729,7 +711,7 @@
   <section class="screen" id="s-hoNew">
     <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보와 저장(A4). 좁은 화면은 한 칸. -->
+    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보. 저장은 화면 하단 중앙, 좁은 화면은 한 칸. -->
     <div class="pane ho-new">
       <p class="lbl">인계 — 메모와 전달 정보 모두 필수</p>
       <div class="ho-cols">
@@ -747,10 +729,10 @@
           <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
           <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
           <div class="grow"></div>
-          <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
         </div>
       </div>
     </div>
+    <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
   </section>
 
 

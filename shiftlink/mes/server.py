@@ -161,7 +161,7 @@ class MesService:
                 field_draft.check_with_mes(
                     prepared, snap["measurements"],
                     [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
-                    str(snap["simulated_at"]))
+                    str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
             saved = self.storage.save_handover(body)
             if prepared is None:
                 return saved

@@ -126,9 +126,40 @@ def prepare(raw: object, config: Configuration, equipment_id: object) -> dict[st
     return {"resolution": resolution, "eq": eq, "states": _states(eq, resolution["evidence"])}
 
 
+def _instant(value: object) -> datetime | None:
+    if isinstance(value, datetime):
+        return value
+    try:
+        return datetime.fromisoformat(str(value))
+    except ValueError:
+        return None
+
+
+def _recovery_event(prepared: dict[str, Any], run_id: str, events: list[dict[str, Any]]) -> str:
+    """질의 뒤 같은 실행에서 그 설비가 실제로 복구됐는지. '' 이면 확인됨, 아니면 확인 못 한 이유.
+
+    저장 순간 값만 보면 '새 시뮬레이션 시작'으로 초기화된 정상 값도 복구로 오인한다(10/13 실측).
+    """
+    evidence = prepared["resolution"]["evidence"] or {}
+    if evidence.get("run_id") != run_id:
+        return "질의 뒤 시뮬레이션이 새로 시작됨" if evidence.get("run_id") else "질의 실행 정보 없음"
+    asked = _instant(evidence.get("simulated_at"))
+    if asked is None:
+        return "질의 시각 정보 없음"
+    for event in events:
+        at = _instant(event.get("occurred_at"))
+        if event.get("run_id") == run_id and at is not None and at > asked and (
+                event.get("event_type") == "recovered"
+                or (event.get("event_type") == "alarm_cleared" and event.get("equipment_id") == prepared["eq"].equipment_id)):
+            return ""
+    return "질의 뒤 복구·경보 해제 기록 없음"
+
+
 def check_with_mes(prepared: dict[str, Any], measurements: list[dict[str, Any]],
-                   active_alarms: list[str], checked_at: str) -> dict[str, Any]:
-    """저장 시점의 MES로 '해결'을 확인한다. 질의 때 벗어났던 신호가 모두 정상 범위로 돌아오고 그 설비 경보가 없으면 recovered.
+                   active_alarms: list[str], checked_at: str,
+                   run_id: str = "", events: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """저장 시점의 MES로 '해결'을 확인한다. recovered는 세 가지가 모두 맞을 때다:
+    질의 때 벗어났던 신호가 모두 정상 범위, 그 설비 경보 없음, 질의 뒤 같은 실행에서 복구(또는 그 설비 경보 해제) 기록.
 
     작업자 표기(result)와 별개로 남긴다. 값은 서버 스냅샷에서 읽는다(PDA가 보낸 값이 아니다).
     """
@@ -139,8 +170,10 @@ def check_with_mes(prepared: dict[str, Any], measurements: list[dict[str, Any]],
     now = {m.get("signal"): m.get("value") for m in measurements if m.get("equipment_id") == eq.equipment_id}
     signals = [{"signal": spec.signal, "name": spec.name, "before": before.get(spec.signal), "now": now.get(spec.signal),
                 "back_to_normal": spec.signal not in still} for spec, _ in prepared["states"]]
+    unconfirmed = _recovery_event(prepared, run_id, events or [])
     check = {"checked_at": checked_at, "signals": signals, "active_alarms": sorted(active_alarms),
-             "recovered": bool(signals) and all(s["back_to_normal"] for s in signals) and not active_alarms}
+             "recovery_unconfirmed": unconfirmed,
+             "recovered": bool(signals) and all(s["back_to_normal"] for s in signals) and not active_alarms and not unconfirmed}
     prepared["mes_check"] = check
     return check
 
@@ -150,7 +183,13 @@ def _mes_line(check: dict[str, Any] | None) -> str:
         return "MES 확인 없음"
     values = ", ".join(f"{s['name']} {s['before']}→{s['now']}{'' if s['back_to_normal'] else '(아직 이상)'}" for s in check["signals"])
     alarms = "경보 " + ", ".join(check["active_alarms"]) if check["active_alarms"] else "경보 없음"
-    return f"MES 확인: {'정상 복귀' if check['recovered'] else '아직 이상'} ({values or '이상 신호 없음'}; {alarms})"
+    if check["recovered"]:
+        verdict = "정상 복귀"
+    elif check.get("recovery_unconfirmed") and not check["active_alarms"] and all(s["back_to_normal"] for s in check["signals"]):
+        verdict = "확인 불가 — " + check["recovery_unconfirmed"]
+    else:
+        verdict = "아직 이상"
+    return f"MES 확인: {verdict} ({values or '이상 신호 없음'}; {alarms})"
 
 
 def _record(handover_id: str, relation: str, prepared: dict[str, Any]) -> dict[str, Any]:

@@ -156,6 +156,14 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.directory.cleanup()
 
     def handover(self, handover_id, **extra):
+        # 실행 정보가 없는 근거(hot_evidence)는 실제 흐름처럼 '과열 중 질의 → MES 조치·복구' 뒤 저장한 것으로 만든다.
+        res = extra.get('resolution')
+        if res and res.get('evidence') and 'run_id' not in res['evidence']:
+            self.fault()
+            asked = self.evidence_now()
+            self.recover()
+            extra['resolution'] = {**res, 'evidence': {**res['evidence'], 'run_id': asked['run_id'],
+                                                       'simulated_at': asked['simulated_at']}}
         return {'handover_id': handover_id, 'memo_text': '작동유 온도 경보 처리', 'equipment_id': 'EQ-0001',
                 'required_context': {}, 'attempts': [], 'observations': [], **extra}
 
@@ -210,7 +218,8 @@ class FieldDraftServiceTests(unittest.TestCase):
     def test_matching_record_fills_blank_instead_of_new_draft(self):
         self.service.record_handover(self.handover('HO-300', resolution=resolution()))
         second = resolution(actions=[{'action': '냉각기 팬 필터 청소', 'result': '팬 풍량 회복'}], verification='유온 52도로 내려감')
-        out = self.service.record_handover(self.handover('HO-301', resolution=second))
+        body = self.handover('HO-301', resolution=second)
+        out = self.service.record_handover(body)
         self.assertEqual(out['draft'], {'created': False, 'reason': 'supporting', 'mes_recovered': True})
         [row] = self.draft()
         steps = row['card']['type_payload']['steps']
@@ -220,7 +229,7 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.assertEqual((done['missing'], done['resolved_records'], done['ready']), ([], 2, True))
         self.assertEqual([s['source_id'] for s in row['card']['provenance']['sources']], ['HO-300', 'HO-301'])
         KnowledgeCard.model_validate(row['card'])
-        again = self.service.record_handover(self.handover('HO-301', resolution=second))
+        again = self.service.record_handover(body)
         self.assertEqual(again['draft'], {'created': False, 'reason': 'already_exists', 'mes_recovered': True})
         self.assertEqual(len(self.draft()[0]['review_flags']['records']), 2)
 
@@ -296,7 +305,24 @@ class FieldDraftServiceTests(unittest.TestCase):
 
     def evidence_now(self):
         s = asdict(self.service.engine.snapshot)
-        return {'equipment_id': 'EQ-0001', 'measurements': [m for m in s['measurements'] if m['equipment_id'] == 'EQ-0001']}
+        return {'equipment_id': 'EQ-0001', 'run_id': s['run_id'], 'simulated_at': s['simulated_at'].isoformat(),
+                'measurements': [m for m in s['measurements'] if m['equipment_id'] == 'EQ-0001']}
+
+    def test_reset_after_query_is_not_a_recovery(self):
+        # '새 시뮬레이션 시작'으로 값이 정상처럼 보여도 복구가 아니다(10/13 실측).
+        self.fault()
+        asked = self.evidence_now()
+        self.service.control({'command': 'reset'})
+        self.service.control({'command': 'start'})
+        self.service.engine.tick(30)
+        out = self.service.record_handover(self.handover('HO-430', resolution=resolution(evidence=asked)))
+        self.assertFalse(out['draft']['mes_recovered'])
+        self.assertIn('MES 확인: 확인 불가 — 질의 뒤 시뮬레이션이 새로 시작됨', self.draft()[0]['card']['rationale'])
+        # 같은 실행에서 조치 없이 정상 운전처럼 보이는 경우도 복구 기록이 없으면 인정하지 않는다.
+        self.fault()
+        asked = self.evidence_now()
+        out = self.service.record_handover(self.handover('HO-431', resolution=resolution(evidence=asked)))
+        self.assertFalse(out['draft']['mes_recovered'])
 
     def test_mes_confirms_resolution_only_after_real_recovery(self):
         self.fault()
@@ -358,7 +384,8 @@ class FieldDraftHttpTests(unittest.TestCase):
                 body = json.dumps({'handover_id': 'HO-200', 'memo_text': 'memo', 'equipment_id': 'EQ-0001',
                                    'resolution': resolution()}).encode()
                 with urlopen(Request(base + '/api/handover', body, {'Content-Type': 'application/json'}), timeout=5) as res:
-                    self.assertEqual(json.load(res)['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': True})
+                    # 실행 정보 없는 근거라 MES 복구 확인은 안 된다
+                    self.assertEqual(json.load(res)['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': False})
                 with urlopen(base + '/api/card-drafts', timeout=5) as res:
                     listed = json.load(res)
                 self.assertEqual(listed['drafts'][0]['status'], 'pending_review')

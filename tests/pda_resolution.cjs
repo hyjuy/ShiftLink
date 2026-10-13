@@ -31,3 +31,7 @@ assert.match(draftNotice({created:false, reason:'supporting'}), /근거로 더�
 assert.match(draftNotice({created:false, reason:'contradicting'}), /효과 없었던 기록/);
 assert.equal(draftNotice(undefined), '');
 console.log('PDA resolution record PASS');
+// MES 확인 결과가 문구 끝에 붙는다
+assert.match(draftNotice({created:true, reason:'pending_review', mes_recovered:true}), /MES 정상 복귀 확인$/);
+assert.match(draftNotice({created:false, reason:'supporting', mes_recovered:false}), /MES는 아직 이상 — 해결로 세지 않습니다$/);
+console.log('PDA resolution MES notice PASS');

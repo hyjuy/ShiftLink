@@ -1310,14 +1310,21 @@ function resolutionPayload(form, turn) {
     result: form.result, verification: form.verification.trim(), evidence: turn.response.evidence || null};
 }
 
-/* 인계 응답의 draft 필드 → 확인 문구. 응답에는 카드 내용이 없다. */
+/* 인계 응답의 draft 필드 → 확인 문구. 응답에는 카드 내용이 없다.
+ * mes_recovered: 저장 시점 MES로 본 정상 복귀 여부(질의 때 벗어난 신호가 정상 범위 + 그 설비 경보 없음). */
 function draftNotice(draft) {
   if (!draft) return '';
-  if (draft.reason === 'pending_review') return '이 해결 기록으로 카드 초안이 만들어졌고 검수를 기다립니다 — 검수 전에는 검색에 나오지 않습니다';
-  if (draft.reason === 'attempt_only') return '효과 없음으로 시도 기록만 남겼습니다. 카드 초안은 만들지 않습니다.';
-  if (draft.reason === 'supporting') return '같은 증상의 검수 대기 카드 초안에 이 기록을 근거로 더했습니다 — 검수 전에는 검색에 나오지 않습니다';
-  if (draft.reason === 'contradicting') return '같은 조치가 효과 없었던 기록으로 검수 대기 카드 초안에 남겼습니다.';
-  if (draft.reason === 'invalid') return '해결 기록을 담았지만 카드 형식이 맞지 않아 담당자 보완 대기로 보관했습니다.';
+  const mes = draft.mes_recovered === true ? ' · MES 정상 복귀 확인'
+    : draft.mes_recovered === false ? ' · MES는 아직 이상 — 해결로 세지 않습니다' : '';
+  return draftReason(draft.reason) + mes;
+}
+
+function draftReason(reason) {
+  if (reason === 'pending_review') return '이 해결 기록으로 카드 초안이 만들어졌고 검수를 기다립니다 — 검수 전에는 검색에 나오지 않습니다';
+  if (reason === 'attempt_only') return '효과 없음으로 시도 기록만 남겼습니다. 카드 초안은 만들지 않습니다.';
+  if (reason === 'supporting') return '같은 증상의 검수 대기 카드 초안에 이 기록을 근거로 더했습니다 — 검수 전에는 검색에 나오지 않습니다';
+  if (reason === 'contradicting') return '같은 조치가 효과 없었던 기록으로 검수 대기 카드 초안에 남겼습니다.';
+  if (reason === 'invalid') return '해결 기록을 담았지만 카드 형식이 맞지 않아 담당자 보완 대기로 보관했습니다.';
   return '이 인계에는 이미 카드 초안이 만들어져 있어 새로 만들지 않았습니다.';
 }
 

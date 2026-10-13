@@ -157,20 +157,28 @@ class MesService:
             prepared = None
             if isinstance(body, dict) and body.get("resolution") is not None:
                 prepared = field_draft.prepare(body["resolution"], self.active_config, body.get("equipment_id"))
+                snap = asdict(self.engine.snapshot)
+                field_draft.check_with_mes(
+                    prepared, snap["measurements"],
+                    [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
+                    str(snap["simulated_at"]))
             saved = self.storage.save_handover(body)
             if prepared is None:
                 return saved
-            return {**saved, "draft": self._file_resolution(body["handover_id"], prepared)}
+            return {**saved, "draft": {**self._file_resolution(body["handover_id"], prepared),
+                                       "mes_recovered": prepared["mes_check"]["recovered"]}}
 
     def _file_resolution(self, handover_id: str, prepared: dict[str, Any]) -> dict[str, object]:
         """같은 설비·조건·겹치는 조치의 검수 대기 초안이 있으면 근거로 붙이고, 없으면 새 초안을 만든다."""
         if self.storage.has_draft_record(handover_id):
             return {"created": False, "reason": "already_exists"}
-        for row in self.storage.list_card_drafts():
-            if row["status"] == "pending_review" and field_draft.matches(row["card"], prepared):
-                draft, relation = field_draft.merge(row, prepared, handover_id)
-                self.storage.update_card_draft(row["draft_id"], handover_id, relation, draft)
-                return {"created": False, "reason": relation}
+        scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
+                  if row["status"] == "pending_review"]
+        score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))
+        if score > 0:  # 가장 많이 겹치는 초안 하나에만 붙인다
+            draft, relation = field_draft.merge(row, prepared, handover_id)
+            self.storage.update_card_draft(row["draft_id"], handover_id, relation, draft)
+            return {"created": False, "reason": relation}
         draft = field_draft.draft_from(prepared, handover_id, self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
         if draft["status"] == "attempt_only":
             return {"created": False, "reason": "attempt_only"}

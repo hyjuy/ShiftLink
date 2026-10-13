@@ -3,7 +3,7 @@ import json
 import tempfile
 import threading
 import unittest
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer
 from pathlib import Path
@@ -134,15 +134,16 @@ class FieldDraftBuilderTests(unittest.TestCase):
         self.assertIn('기록 빈약: 증상이 짧음, 조치가 짧음, 해결 근거가 짧음', thin['review_flags']['completeness']['missing'])
         temp = build_draft('HO-12', resolution(result='temporary', verification=''), hpu_config(), 'EQ-0001', 'K-7000', NOW)
         self.assertTrue(temp['card']['title'].startswith('[임시조치] HPU-01 '))
-        self.assertIn('해결 확인 기록', temp['review_flags']['completeness']['missing'])
+        self.assertIn('MES로 확인된 해결 기록', temp['review_flags']['completeness']['missing'])
 
     def test_completeness_lists_blanks_and_never_ready_from_one_record(self):
         out = build_draft('HO-13', resolution(actions=['차단기 재투입 후 냉각기 팬 확인', '작동유 온도 재확인']),
                           hpu_config(), 'EQ-0001', 'K-7000', NOW)
         done = out['review_flags']['completeness']
-        self.assertEqual(done['missing'], ['단계 결과 ST-01'])
-        self.assertEqual(done['operator'], ['부품 확인', '시나리오 확인', '안전 근거'])
-        self.assertEqual((done['resolved_records'], done['ready']), (1, False))
+        # 빌더만 부르면 MES 확인이 없다 → 해결 기록으로 세지 않고 불일치로 표시한다.
+        self.assertEqual(done['missing'], ['단계 결과 ST-01', 'MES로 확인된 해결 기록'])
+        self.assertEqual(done['operator'], ['부품 확인', '시나리오 확인', '안전 근거', '해결 표기와 MES 불일치 HO-13'])
+        self.assertEqual((done['resolved_records'], done['ready']), (0, False))
 
 
 class FieldDraftServiceTests(unittest.TestCase):
@@ -164,10 +165,10 @@ class FieldDraftServiceTests(unittest.TestCase):
     def test_handover_creates_one_pending_draft_and_retry_does_not_duplicate(self):
         body = self.handover('HO-100', resolution=resolution())
         first = self.service.record_handover(body)
-        self.assertEqual(first['draft'], {'created': True, 'reason': 'pending_review'})
+        self.assertEqual(first['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': True})
         again = self.service.record_handover(body)
         self.assertTrue(again['duplicate'])
-        self.assertEqual(again['draft'], {'created': False, 'reason': 'already_exists'})
+        self.assertEqual(again['draft'], {'created': False, 'reason': 'already_exists', 'mes_recovered': True})
         self.assertEqual(self.count(), 1)
         drafts = self.service.card_drafts()['drafts']
         self.assertEqual([d['draft_id'] for d in drafts], ['K-7000'])
@@ -181,7 +182,7 @@ class FieldDraftServiceTests(unittest.TestCase):
 
     def test_failed_and_plain_handover_store_no_draft(self):
         failed = self.service.record_handover(self.handover('HO-102', resolution=resolution(result='failed', actions=[], verification='')))
-        self.assertEqual(failed['draft'], {'created': False, 'reason': 'attempt_only'})
+        self.assertEqual(failed['draft'], {'created': False, 'reason': 'attempt_only', 'mes_recovered': True})
         plain = self.service.record_handover(self.handover('HO-103'))
         self.assertNotIn('draft', plain)
         self.assertEqual(self.count(), 0)
@@ -210,7 +211,7 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.service.record_handover(self.handover('HO-300', resolution=resolution()))
         second = resolution(actions=[{'action': '냉각기 팬 필터 청소', 'result': '팬 풍량 회복'}], verification='유온 52도로 내려감')
         out = self.service.record_handover(self.handover('HO-301', resolution=second))
-        self.assertEqual(out['draft'], {'created': False, 'reason': 'supporting'})
+        self.assertEqual(out['draft'], {'created': False, 'reason': 'supporting', 'mes_recovered': True})
         [row] = self.draft()
         steps = row['card']['type_payload']['steps']
         self.assertEqual(steps[0]['expected_result'], '팬 풍량 회복')
@@ -220,7 +221,7 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.assertEqual([s['source_id'] for s in row['card']['provenance']['sources']], ['HO-300', 'HO-301'])
         KnowledgeCard.model_validate(row['card'])
         again = self.service.record_handover(self.handover('HO-301', resolution=second))
-        self.assertEqual(again['draft'], {'created': False, 'reason': 'already_exists'})
+        self.assertEqual(again['draft'], {'created': False, 'reason': 'already_exists', 'mes_recovered': True})
         self.assertEqual(len(self.draft()[0]['review_flags']['records']), 2)
 
     def test_different_cause_same_condition_stays_separate(self):
@@ -235,7 +236,7 @@ class FieldDraftServiceTests(unittest.TestCase):
             actions=['냉각기 팬 필터 청소', '작동유 온도 재확인'], verification='온도 49도, 경보 해제')))
         out = self.service.record_handover(self.handover('HO-322', resolution=resolution(
             result='failed', actions=['냉각기 팬 필터 청소'], verification='')))
-        self.assertEqual(out['draft'], {'created': False, 'reason': 'contradicting'})
+        self.assertEqual(out['draft'], {'created': False, 'reason': 'contradicting', 'mes_recovered': True})
         done = self.draft()[0]['review_flags']['completeness']
         self.assertEqual((done['resolved_records'], done['contradicting_records'], done['ready']), (2, 1, False))
 
@@ -280,6 +281,69 @@ class FieldDraftServiceTests(unittest.TestCase):
         steps = self.draft()[0]['card']['type_payload']['steps']
         self.assertEqual([s['expected_result'] for s in steps], ['팬 다시 돎', PLACEHOLDER, '유온 52도'])
 
+    def fault(self):
+        # 유압유 과열 시나리오: 라인이 서고 유온 78, 경보 AL-HYD-HOT.
+        self.service.control({'command': 'start'})
+        self.service.engine.tick(30)
+        self.service.control({'command': 'scenario', 'scenario_id': 'hydraulic_overheat'})
+        self.service.engine.tick(5)
+
+    def recover(self):
+        for action in ('inspect', 'repair', 'verify'):
+            self.service.control({'command': 'recovery_action', 'action_id': action})
+        self.service.control({'command': 'recover'})
+        self.service.engine.tick(5)
+
+    def evidence_now(self):
+        s = asdict(self.service.engine.snapshot)
+        return {'equipment_id': 'EQ-0001', 'measurements': [m for m in s['measurements'] if m['equipment_id'] == 'EQ-0001']}
+
+    def test_mes_confirms_resolution_only_after_real_recovery(self):
+        self.fault()
+        at_fault = self.evidence_now()
+        # 아직 고장 중인데 '해결'로 저장 → MES 불일치, 해결 기록으로 세지 않는다.
+        early = self.service.record_handover(self.handover('HO-400', resolution=resolution(evidence=at_fault)))
+        self.assertFalse(early['draft']['mes_recovered'])
+        [row] = self.draft()
+        conditions = {c['signal'] for c in row['card']['conditions']}
+        self.assertIn('hpu_oil_temp_state', conditions)
+        self.assertNotIn('hpu_flow_state', conditions)  # 멈춰서 0인 유량은 조건이 아니다
+        self.assertIn('MES 확인: 아직 이상', row['card']['rationale'])
+        self.assertEqual(row['review_flags']['completeness']['resolved_records'], 0)
+        self.assertIn('해결 표기와 MES 불일치 HO-400', row['review_flags']['completeness']['operator'])
+        # 조치 3단계 + 재가동 뒤 저장 → 정상 복귀가 확인된 해결로 센다.
+        self.recover()
+        late = self.service.record_handover(self.handover('HO-401', resolution=resolution(evidence=at_fault)))
+        self.assertEqual(late['draft'], {'created': False, 'reason': 'supporting', 'mes_recovered': True})
+        row = self.draft()[0]
+        self.assertIn('MES 확인: 정상 복귀', row['card']['rationale'])
+        self.assertEqual(row['review_flags']['completeness']['resolved_records'], 1)
+
+    def test_same_fix_in_other_words_joins_and_other_cause_stays_apart(self):
+        # 10/13 같은 상황 실측 문구: 팬 정지를 두 사람이 다르게 적음 → 한 초안, 핀 막힘은 따로.
+        self.service.record_handover(self.handover('HO-410', resolution=resolution(
+            actions=['쿨러 팬 차단기 트립 확인 후 재투입', '팬 회전 확인', 'MES에서 조치 완료 후 재가동'])))
+        out = self.service.record_handover(self.handover('HO-411', resolution=resolution(
+            actions=['팬 차단기 올림', '팬 회전 방향·소음 확인', '재가동 후 유온 확인'])))
+        self.assertEqual(out['draft']['reason'], 'supporting')
+        out = self.service.record_handover(self.handover('HO-412', resolution=resolution(
+            actions=['쿨러 핀 에어 블로우로 먼지 제거', '기름때 세척제로 닦음', '재가동 후 유온 확인'])))
+        self.assertEqual(out['draft']['reason'], 'pending_review')
+        self.assertEqual(len(self.draft()), 2)
+
+    def test_resolution_mes_did_not_confirm_attaches_but_fills_nothing(self):
+        self.service.record_handover(self.handover('HO-420', resolution=resolution(
+            actions=['쿨러 팬 차단기 트립 확인 후 재투입', '팬 회전 확인'])))
+        self.fault()
+        out = self.service.record_handover(self.handover('HO-421', resolution=resolution(
+            evidence=self.evidence_now(),
+            actions=[{'action': '쿨러 팬 차단기 재투입', 'result': '팬 돌아서 해결된 듯'}])))
+        self.assertEqual(out['draft'], {'created': False, 'reason': 'supporting', 'mes_recovered': False})
+        row = self.draft()[0]
+        self.assertEqual(row['card']['type_payload']['steps'][0]['expected_result'], PLACEHOLDER)
+        self.assertEqual(row['review_flags']['completeness']['resolved_records'], 1)
+        self.assertIn('해결 표기와 MES 불일치 HO-421', row['review_flags']['completeness']['operator'])
+
 
 class FieldDraftHttpTests(unittest.TestCase):
     def test_get_lists_drafts_read_only(self):
@@ -294,7 +358,7 @@ class FieldDraftHttpTests(unittest.TestCase):
                 body = json.dumps({'handover_id': 'HO-200', 'memo_text': 'memo', 'equipment_id': 'EQ-0001',
                                    'resolution': resolution()}).encode()
                 with urlopen(Request(base + '/api/handover', body, {'Content-Type': 'application/json'}), timeout=5) as res:
-                    self.assertEqual(json.load(res)['draft'], {'created': True, 'reason': 'pending_review'})
+                    self.assertEqual(json.load(res)['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': True})
                 with urlopen(base + '/api/card-drafts', timeout=5) as res:
                     listed = json.load(res)
                 self.assertEqual(listed['drafts'][0]['status'], 'pending_review')

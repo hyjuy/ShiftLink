@@ -257,6 +257,29 @@ class FieldDraftServiceTests(unittest.TestCase):
         steps = self.draft()[0]['card']['type_payload']['steps']
         self.assertEqual([s['expected_result'] for s in steps], ['팬 다시 돎', '정방향, 이상음 없음', '유온 52도'])
 
+    def test_incidental_signals_are_pruned_as_records_accumulate(self):
+        # 실제 스냅샷처럼 압력도 함께 낮았던 첫 기록 → 두 번째 기록에는 유온만 → 공통 조건(유온)만 남는다.
+        first = hot_evidence()
+        first['measurements'][1]['value'] = 130.0
+        out = self.service.record_handover(self.handover('HO-350', resolution=resolution(evidence=first)))
+        [row] = self.draft()
+        self.assertEqual(len(row['card']['conditions']), 2)
+        self.assertTrue(row['card']['title'].startswith('HPU-01 유압유 온도 높음 외 1 — '))
+        out = self.service.record_handover(self.handover('HO-351', resolution=resolution()))
+        self.assertEqual(out['draft']['reason'], 'supporting')
+        self.assertEqual(self.draft()[0]['card']['conditions'],
+                         [{'signal': 'hpu_oil_temp_state', 'op': '==', 'value': 'high', 'unit': None}])
+
+    def test_generic_word_alone_does_not_fill_a_step(self):
+        # '팬 회전 확인'과 '유온 추이 확인'은 '확인'만 겹친다 → 결과를 옮기지 않는다.
+        self.service.record_handover(self.handover('HO-360', resolution=resolution(
+            actions=['쿨러 팬 전원 차단기 트립 확인 후 재투입', '팬 회전 확인', '20분 운전하며 유온 추이 확인'], verification='유온 52도')))
+        self.service.record_handover(self.handover('HO-361', resolution=resolution(
+            actions=[{'action': '쿨러 팬 차단기 트립 확인, 재투입', 'result': '팬 다시 돎'}, '유온 추이 확인'],
+            verification='30분 뒤 유온 54도')))
+        steps = self.draft()[0]['card']['type_payload']['steps']
+        self.assertEqual([s['expected_result'] for s in steps], ['팬 다시 돎', PLACEHOLDER, '유온 52도'])
+
 
 class FieldDraftHttpTests(unittest.TestCase):
     def test_get_lists_drafts_read_only(self):

@@ -125,8 +125,12 @@ def _conditions(states: list[tuple[Any, str]]) -> list[dict[str, Any]]:
     return [{"signal": f"{spec.signal}_state", "op": "==", "value": state, "unit": None} for spec, state in states]
 
 
+# 어느 조치에나 붙는 말. 이것만 겹쳐서 다른 조치로 묶이거나 다른 단계 결과가 들어가지 않게 뺀다.
+GENERIC_STEMS = {"확인", "재확", "점검", "상태", "조치", "작업", "실시"}
+
+
 def _stems(text: str) -> set[str]:
-    return {token[:2] for token in re.findall(r"\w+", text) if len(token) >= 2}
+    return {token[:2] for token in re.findall(r"\w+", text) if len(token) >= 2} - GENERIC_STEMS
 
 
 def _overlap(a: str, b: str) -> float:
@@ -178,6 +182,8 @@ def completeness(card: dict[str, Any], flags: dict[str, Any]) -> dict[str, Any]:
     if flags.get("thin_record"):
         missing.append("기록 빈약: " + ", ".join(flags["thin_record"]))
     operator = ["부품 확인", "시나리오 확인"]
+    if len(card["conditions"]) > 2:
+        operator.append("조건 확인(우연히 함께 벗어난 신호 정리)")
     if flags.get("needs_safety_review"):
         operator.append("안전 근거")
     return {"missing": missing, "operator": operator, "resolved_records": len(resolved),
@@ -214,7 +220,8 @@ def draft_from(prepared: dict[str, Any], handover_id: str, card_id: str, now: da
     actions = [a["action"] for a in resolution["actions"]]
     head = eq.code
     if states:
-        head += " " + "·".join(f"{spec.name} {'높음' if state == 'high' else '낮음'}" for spec, state in states)
+        spec, state = states[0]
+        head += f" {spec.name} {'높음' if state == 'high' else '낮음'}" + (f" 외 {len(states) - 1}" if len(states) > 1 else "")
     temporary = resolution["result"] == "temporary"
     steps = [{"step_id": f"ST-{i:02d}", "order": i, "action": action, "expected_result": result or PLACEHOLDER}
              for i, (action, result) in enumerate(zip(actions, _step_results(resolution)), start=1)]
@@ -252,15 +259,19 @@ def build_draft(handover_id: str, raw: object, config: Configuration, equipment_
     return draft_from(prepare(raw, config, equipment_id), handover_id, card_id, now)
 
 
-def matches(card: dict[str, Any], prepared: dict[str, Any]) -> bool:
-    """같은 설비 + 같은 이상 조건 + 겹치는 조치일 때만 한 초안으로 묶는다.
+def _keys(conditions: list[dict[str, Any]]) -> set[tuple[str, Any]]:
+    return {(c["signal"], c["value"]) for c in conditions}
 
+
+def matches(card: dict[str, Any], prepared: dict[str, Any]) -> bool:
+    """같은 설비 + 겹치는 이상 조건 + 겹치는 조치일 때만 한 초안으로 묶는다.
+
+    실제 스냅샷은 함께 벗어난 신호가 여럿이라 조건이 정확히 같기를 요구하지 않는다(하나 이상 공통).
     조건만 같고 조치가 다르면(예: 팬 정지 vs 핀 막힘) 다른 원인 후보라서 따로 둔다.
     """
     if card.get("mes_equipment_id") != prepared["eq"].equipment_id or not prepared["states"]:
         return False
-    key = lambda conditions: sorted((c["signal"], c["value"]) for c in conditions)  # noqa: E731
-    if key(card["conditions"]) != key(_conditions(prepared["states"])):
+    if not _keys(card["conditions"]) & _keys(_conditions(prepared["states"])):
         return False
     # 조치 전체로 비교한다. 단계 하나씩 비교하면 '온도 재확인' 같은 공통 단계 때문에 다른 원인이 묶인다.
     steps = " ".join(s["action"] for s in card["type_payload"]["steps"])
@@ -276,6 +287,9 @@ def merge(row: dict[str, Any], prepared: dict[str, Any], handover_id: str) -> tu
     resolution = prepared["resolution"]
     relation = "contradicting" if resolution["result"] == "failed" else "supporting"
     if relation == "supporting":
+        # 해결 기록마다 함께 벗어났던 조건만 남긴다. 우연히 같이 벗어난 신호는 기록이 쌓이며 빠진다.
+        common = _keys(_conditions(prepared["states"]))
+        card["conditions"] = [c for c in card["conditions"] if (c["signal"], c["value"]) in common]
         # 빈 단계마다 가장 많이 겹치는 새 조치의 결과를 쓴다. 새 조치 하나는 한 단계에만 쓴다('확인' 같은 공통어 오매칭 방지).
         candidates = [(item["action"], result) for item, result in zip(resolution["actions"], _step_results(resolution)) if result]
         for step in card["type_payload"]["steps"]:

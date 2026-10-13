@@ -192,8 +192,11 @@
     background:var(--surface);border:1px solid var(--edge);font-size:14px;font-weight:700}
   .chip[aria-pressed="true"]{border-color:var(--scan);color:var(--scan)}
   .resrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-  .resrow input{flex:1;min-height:48px}
-  .resrow.sub{margin:-4px 0 12px 26px}
+  .resrow input{flex:1;min-width:0;min-height:48px;background:var(--surface);color:var(--tx);
+    border:1px solid var(--edge);border-radius:10px;padding:0 12px;font:inherit;font-size:16px}
+  .resrow.sub input{font-size:14px;color:var(--tx-2)}
+  .resrow .btn{width:auto}
+  .resrow.sub{margin:-4px 0 12px 34px}
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */

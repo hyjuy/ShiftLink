@@ -32,6 +32,7 @@ public class FactoryCameraStream : MonoBehaviour
     bool readbackIssued;
     public int FrameCount { get { return Volatile.Read(ref frameCount); } }
     public bool Streaming { get { return streaming; } }
+    public RenderTexture Preview { get { return streaming ? target : null; } }
     public string Error { get; private set; }
 
     public void Initialize(FactoryWorker employee, FactoryCapture photos)

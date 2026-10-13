@@ -72,6 +72,7 @@ public static class FactoryStreamPerformanceChecks
                 regressionPhase=1; return;
             }
             if(stream.FrameCount==0) return;
+            if(stream.Preview==null || stream.Preview.width!=960 || capture.LivePreview!=null) throw new Exception("Unity PDA must share the dedicated stream preview without allocating a photo preview");
             var jpg=(byte[])typeof(FactoryCameraStream).GetField("jpeg",flags).GetValue(stream);
             var image=new Texture2D(2,2);
             if(!image.LoadImage(jpg) || image.width!=960 || image.height!=540) throw new Exception("Invalid async JPEG");

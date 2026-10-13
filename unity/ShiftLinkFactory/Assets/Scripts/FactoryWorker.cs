@@ -205,7 +205,8 @@ public class FactoryWorker : MonoBehaviour
             if(GUILayout.Button("다시 촬영")) capture.Retake();
             GUILayout.EndHorizontal();
         } else {
-            if(capture.LivePreview!=null) DrawPhoto(capture.LivePreview);
+            var live=cameraStream?.Preview ?? capture.LivePreview;
+            if(live!=null) DrawPhoto(live);
             GUILayout.Label("P로 PDA를 닫고 시점을 조정하세요.",ui.Caption);
             if(GUILayout.Button("사진 촬영 [Space / Enter]",ui.Primary,GUILayout.Height(44))) capture.Capture();
             GUILayout.Label(capture.Status,ui.Caption);

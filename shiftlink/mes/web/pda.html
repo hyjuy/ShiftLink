@@ -422,7 +422,7 @@
   .ho-col{min-height:0}
   .ho-memo{flex:1 1 0;min-height:0}
   .ho-memo textarea{flex:1 1 auto;min-height:96px}
-  @media (max-width:760px){ .ho-cols{grid-template-columns:1fr} }
+  @media (max-width:760px){ .ho-cols{grid-template-columns:1fr;flex:0 0 auto}.ho-memo{flex:0 0 auto} }
   textarea,input[type=number],select{width:100%;background:var(--surface);color:var(--tx);
     border:1px solid var(--edge);border-radius:10px;padding:12px;font:inherit;font-size:16px;min-height:56px}
   textarea{min-height:104px;resize:vertical;line-height:1.5}
@@ -476,6 +476,7 @@
 
 .chat-cancel{flex:0 0 auto;display:flex;justify-content:center;padding:10px 16px;background:var(--bg);border-top:1px solid var(--edge)}.chat-cancel[hidden]{display:none}.chat-cancel>.btn{width:min(540px,100%);min-height:52px}
 .ans-row .ans.lead{flex:0 0 auto}.msg.none .ans.lead{background:transparent;text-align:center}.msg.none>.btn{width:min(540px,100%);align-self:center}
+#s-hoNew>#hoSave{flex:0 0 auto;margin:0 14px 14px;width:min(540px,calc(100% - 28px))}
 </style>
 </head>
 <body>
@@ -710,7 +711,7 @@
   <section class="screen" id="s-hoNew">
     <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보와 저장(A4). 좁은 화면은 한 칸. -->
+    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보. 저장은 화면 하단 중앙, 좁은 화면은 한 칸. -->
     <div class="pane ho-new">
       <p class="lbl">인계 — 메모와 전달 정보 모두 필수</p>
       <div class="ho-cols">
@@ -728,10 +729,10 @@
           <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
           <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
           <div class="grow"></div>
-          <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
         </div>
       </div>
     </div>
+    <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
   </section>
 
 

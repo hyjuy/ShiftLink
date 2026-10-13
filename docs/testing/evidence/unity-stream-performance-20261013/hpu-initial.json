@@ -1,0 +1,36 @@
+{
+  "unity": {
+    "equipment_id": "EQ-0001",
+    "photo": "D:\\obsd\\Projects\\ShiftLink\\.worktrees\\unity-stream-performance-20261013\\unity\\ShiftLinkFactory\\Checks\\hpu-timing-photos\\6cb2bfea1be041c485b17d567c5a6b7a.png",
+    "move_unix_ms": 1791875191153,
+    "move_to_photo_ms": 251.90800000000002,
+    "capture_ms": 146.8178,
+    "save_ms": 102.92660000000001,
+    "move_to_stream_ready_ms": 539.6564000000001,
+    "hpu_visible": true
+  },
+  "pi": {
+    "endpoint": "http://raspberrypi:8080/api/unity/capture",
+    "http_status": 200,
+    "api_ms": 3743.39999999851,
+    "to_result_raf_ms": 4827,
+    "result": {
+      "class": "HPU",
+      "conf": 0.9939,
+      "ms": 69,
+      "confirmed": true,
+      "sent": true
+    },
+    "scan": {
+      "scan_id": "SC-2306d55239bd",
+      "class": "HPU",
+      "conf": 0.9939,
+      "device_id": "pi-01",
+      "ts": "2026-10-13T07:06:35.656172+00:00",
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "received_at": "2026-10-13T07:06:37.048680+00:00"
+    }
+  },
+  "method": "near-HPU synthetic move to Unity PNG+metadata; Pi capture API/classification to result RAF; one trial"
+}

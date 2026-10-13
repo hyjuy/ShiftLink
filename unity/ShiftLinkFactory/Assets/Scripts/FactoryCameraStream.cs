@@ -4,6 +4,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using UnityEngine.Rendering;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine;
 
 // ponytail: MJPEG for one PDA. Use WebRTC if measured latency or bandwidth requires it.
@@ -22,8 +25,14 @@ public class FactoryCameraStream : MonoBehaviour
     float nextFrame;
     RenderTexture target;
     Texture2D pixels;
-    public int FrameCount { get; private set; }
+    byte[] rgba;
+    int frameCount, pipelineBusy, generation;
+    Task encoder;
+    AsyncGPUReadbackRequest readback;
+    bool readbackIssued;
+    public int FrameCount { get { return Volatile.Read(ref frameCount); } }
     public bool Streaming { get { return streaming; } }
+    public RenderTexture Preview { get { return streaming ? target : null; } }
     public string Error { get; private set; }
 
     public void Initialize(FactoryWorker employee, FactoryCapture photos)
@@ -117,36 +126,67 @@ public class FactoryCameraStream : MonoBehaviour
         } else if(!wanted && streaming) StopCamera();
         if(!streaming || Time.realtimeSinceStartup<nextFrame) return;
         nextFrame=Time.realtimeSinceStartup+.1f;
+        if(Interlocked.CompareExchange(ref pipelineBusy,1,0)!=0) return;
+        int version=generation;
+        long capturedAt=DateTime.UtcNow.Ticks;
         try {
-            if(!capture.RenderLivePreview()) return;
             if(target==null) {
-                target=new RenderTexture(960,540,0); target.Create();
-                pixels=new Texture2D(960,540,TextureFormat.RGB24,false);
+                target=new RenderTexture(960,540,24,RenderTextureFormat.ARGB32,RenderTextureReadWrite.sRGB);
+                target.antiAliasing=1; target.Create();
+                rgba=new byte[960*540*4];
             }
-            var previous=RenderTexture.active;
-            try {
-                Graphics.Blit(capture.LivePreview,target); RenderTexture.active=target;
-                pixels.ReadPixels(new Rect(0,0,960,540),0,0); pixels.Apply();
-            } finally { RenderTexture.active=previous; }
-            var frame=pixels.EncodeToJPG(70);
-            lock(frameLock) { jpeg=frame; frameAt=DateTime.UtcNow.Ticks; }
-            FrameCount++;
-        } catch(Exception error) { Error=error.Message; }
+            if(!target.IsCreated()) target.Create();
+            if(!capture.RenderStreamPreview(target)) { Interlocked.Exchange(ref pipelineBusy,0); return; }
+            if(SystemInfo.supportsAsyncGPUReadback) {
+                readback=AsyncGPUReadback.Request(target,0,TextureFormat.RGBA32,request => {
+                    if(!running || version!=generation) { Interlocked.Exchange(ref pipelineBusy,0); return; }
+                    if(request.hasError) {
+                        Error="GPU readback failed"; Interlocked.Exchange(ref pipelineBusy,0); return;
+                    }
+                    try { request.GetData<byte>().CopyTo(rgba); Encode(rgba,version,capturedAt); }
+                    catch(Exception error) { Error=error.Message; Interlocked.Exchange(ref pipelineBusy,0); }
+                });
+                readbackIssued=true;
+            } else {
+                // shortcut: unsupported GPUs use synchronous readback; JPEG encoding still runs off the main thread.
+                if(pixels==null) pixels=new Texture2D(960,540,TextureFormat.RGBA32,false);
+                var previous=RenderTexture.active;
+                try { RenderTexture.active=target; pixels.ReadPixels(new Rect(0,0,960,540),0,0,false); }
+                finally { RenderTexture.active=previous; }
+                pixels.GetRawTextureData<byte>().CopyTo(rgba);
+                Encode(rgba,version,capturedAt);
+            }
+        } catch(Exception error) { Error=error.Message; Interlocked.Exchange(ref pipelineBusy,0); }
     }
+    void Encode(byte[] rgba,int version,long capturedAt)
+    {
+        encoder=Task.Run(() => {
+            try {
+                var frame=ImageConversion.EncodeArrayToJPG(rgba,GraphicsFormat.R8G8B8A8_UNorm,960,540,0,70);
+                lock(frameLock) {
+                    if(!running || !streaming || version!=generation) return;
+                    jpeg=frame; frameAt=capturedAt; Interlocked.Increment(ref frameCount);
+                }
+            } catch(Exception error) { if(running && version==generation) Error=error.Message; }
+            finally { Interlocked.Exchange(ref pipelineBusy,0); }
+        });
+    }
+
     void StopCamera()
     {
         if(raisedPda && worker.PdaRaised) worker.TogglePda();
         if(enteredWorker) worker.ExitWorker();
-        streaming=false;
-        lock(frameLock) { jpeg=null; frameAt=0; }
+        lock(frameLock) { streaming=false; generation++; jpeg=null; frameAt=0; }
     }
     void OnDisable()
     {
         running=false; listener?.Stop();
         Application.runInBackground=previousBackground;
         if(streaming && worker!=null) StopCamera();
+        if(readbackIssued && !readback.done) readback.WaitForCompletion();
+        encoder?.Wait();
         if(server!=null && server.IsAlive) server.Join(2500);
-        if(target!=null) { target.Release(); Destroy(target); }
-        if(pixels!=null) Destroy(pixels);
+        if(target!=null) { target.Release(); if(Application.isPlaying) Destroy(target); else DestroyImmediate(target); target=null; }
+        if(pixels!=null) { if(Application.isPlaying) Destroy(pixels); else DestroyImmediate(pixels); pixels=null; }
     }
 }

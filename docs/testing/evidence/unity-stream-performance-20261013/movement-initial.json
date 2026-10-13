@@ -1,0 +1,197 @@
+{
+  "url": "http://raspberrypi:8080/api/unity/stream",
+  "method": "synthetic controller.Step to decoded MJPEG pixel observed during Pi requestAnimationFrame; physical display scanout excluded",
+  "clock": {
+    "rtt_ms": 16,
+    "pi_minus_pc_ms": 41
+  },
+  "trials": [
+    {
+      "sequence": 1,
+      "input_unix_ms": 1791874877480,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874877984,
+      "estimated_input_to_decode_raf_ms": 463
+    },
+    {
+      "sequence": 2,
+      "input_unix_ms": 1791874879516,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874880147,
+      "estimated_input_to_decode_raf_ms": 590
+    },
+    {
+      "sequence": 3,
+      "input_unix_ms": 1791874881539,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874882496,
+      "estimated_input_to_decode_raf_ms": 916
+    },
+    {
+      "sequence": 4,
+      "input_unix_ms": 1791874883606,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874884201,
+      "estimated_input_to_decode_raf_ms": 554
+    },
+    {
+      "sequence": 5,
+      "input_unix_ms": 1791874885614,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874886145,
+      "estimated_input_to_decode_raf_ms": 490
+    },
+    {
+      "sequence": 6,
+      "input_unix_ms": 1791874887638,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874888329,
+      "estimated_input_to_decode_raf_ms": 650
+    },
+    {
+      "sequence": 7,
+      "input_unix_ms": 1791874889647,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874890329,
+      "estimated_input_to_decode_raf_ms": 641
+    },
+    {
+      "sequence": 8,
+      "input_unix_ms": 1791874891694,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874892229,
+      "estimated_input_to_decode_raf_ms": 494
+    },
+    {
+      "sequence": 9,
+      "input_unix_ms": 1791874893701,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874894481,
+      "estimated_input_to_decode_raf_ms": 739
+    },
+    {
+      "sequence": 10,
+      "input_unix_ms": 1791874895700,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874896462,
+      "estimated_input_to_decode_raf_ms": 721
+    },
+    {
+      "sequence": 11,
+      "input_unix_ms": 1791874897764,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874898416,
+      "estimated_input_to_decode_raf_ms": 611
+    },
+    {
+      "sequence": 12,
+      "input_unix_ms": 1791874899817,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874900463,
+      "estimated_input_to_decode_raf_ms": 605
+    },
+    {
+      "sequence": 13,
+      "input_unix_ms": 1791874901875,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874902495,
+      "estimated_input_to_decode_raf_ms": 579
+    },
+    {
+      "sequence": 14,
+      "input_unix_ms": 1791874903898,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874904529,
+      "estimated_input_to_decode_raf_ms": 590
+    },
+    {
+      "sequence": 15,
+      "input_unix_ms": 1791874905937,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874906567,
+      "estimated_input_to_decode_raf_ms": 589
+    },
+    {
+      "sequence": 16,
+      "input_unix_ms": 1791874908026,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874908711,
+      "estimated_input_to_decode_raf_ms": 644
+    },
+    {
+      "sequence": 17,
+      "input_unix_ms": 1791874910055,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874910732,
+      "estimated_input_to_decode_raf_ms": 636
+    },
+    {
+      "sequence": 18,
+      "input_unix_ms": 1791874912115,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874912710,
+      "estimated_input_to_decode_raf_ms": 554
+    },
+    {
+      "sequence": 19,
+      "input_unix_ms": 1791874914120,
+      "before_x": -16.799999237060547,
+      "after_x": -16.579999923706055,
+      "color": "red",
+      "observed_pi_unix_ms": 1791874914780,
+      "estimated_input_to_decode_raf_ms": 619
+    },
+    {
+      "sequence": 20,
+      "input_unix_ms": 1791874916153,
+      "before_x": -16.579999923706055,
+      "after_x": -16.799999237060547,
+      "color": "green",
+      "observed_pi_unix_ms": 1791874917240,
+      "estimated_input_to_decode_raf_ms": 1046
+    }
+  ],
+  "raf_summary_ms": {
+    "samples": 2853,
+    "p50": 16.699999999254942,
+    "p95": 18.900000002235174,
+    "max": 64.69999999925494
+  },
+  "observation_canvas": "960x540; initial measurement"
+}

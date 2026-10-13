@@ -1,0 +1,72 @@
+{
+    "schema_version": 1,
+    "seed": 0,
+    "image_width": 1280,
+    "image_height": 720,
+    "sequence": 5510,
+    "capture_id": "4701b20c33354a3da12ad09b43dc2469",
+    "session_id": "7276d1d29fbb423f8b83c74f638162a3",
+    "scene_id": "factory-default",
+    "captured_at": "2026-10-13T07:31:55.5721651Z",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "run_id": "0377b56e60e84f20bb6b1fa9a9d6b908",
+    "dataset_split": "",
+    "target_equipment_id": "",
+    "viewpoint": "",
+    "lighting_profile": "",
+    "standpoint_clear": false,
+    "sun_intensity": 0.0,
+    "interior_light_intensity": 0.0,
+    "standing_floor_y": 0.0,
+    "ambient_rgb": [],
+    "shot_kind": "",
+    "feature_name": "",
+    "feature_visible": false,
+    "angle_range_relaxed": false,
+    "direction_sector": 0,
+    "azimuth_degrees": 0.0,
+    "target_center": [],
+    "feature_aim": [],
+    "bbox_convention": "top-left xyxy exclusive",
+    "annotation_source": "visible-instance-mask",
+    "camera_pose": {
+        "position": [
+            -5.690000057220459,
+            1.5499999523162842,
+            3.6549999713897707
+        ],
+        "rotation": [
+            0.02111869864165783,
+            -0.029576707631349565,
+            0.000625034561380744,
+            0.99933922290802
+        ],
+        "field_of_view": 60.0,
+        "near_clip": 0.05000000074505806,
+        "far_clip": 300.0
+    },
+    "objects": [
+        {
+            "class_id": 0,
+            "equipment_type": "HPU",
+            "equipment_id": "EQ-0001",
+            "bbox_xyxy": [
+                470.0,
+                216.0,
+                787.0,
+                591.0
+            ]
+        },
+        {
+            "class_id": 5,
+            "equipment_type": "PDP",
+            "equipment_id": "EQ-0002",
+            "bbox_xyxy": [
+                1049.0,
+                237.0,
+                1280.0,
+                583.0
+            ]
+        }
+    ]
+}

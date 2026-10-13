@@ -5,13 +5,15 @@ using UnityEngine;
 // A session-only virtual finishing line. These objects are not MES assets or inventory records.
 public class FactoryLogistics : MonoBehaviour
 {
-    class Journey { public Transform load; public Queue<Vector3> path; public bool truck; public int slot=-1; }
+    class Journey { public Transform load; public Renderer[] renderers; public Queue<Vector3> path; public bool truck; public int slot=-1; }
     readonly List<Journey> journeys=new List<Journey>();
     readonly Dictionary<int,Transform> stored=new Dictionary<int,Transform>(), truck=new Dictionary<int,Transform>();
     readonly List<Transform> rollers=new List<Transform>();
     readonly Dictionary<Color,Material> materials=new Dictionary<Color,Material>();
     Transform campus,envelope,loads,shippingVehicle,incomingCarrier;
     readonly List<Transform> departing=new List<Transform>();
+    Renderer[] incomingRenderers;
+    TextMesh[] labels;
     float departureTime,feedTime;
     public bool SendToTruck { get; set; }
     public int StoredCount { get { return stored.Count; } }
@@ -122,6 +124,8 @@ public class FactoryLogistics : MonoBehaviour
         foreach(float x in new[]{-24.5f,-15.3f}) Shape("Incoming loader support",new Vector3(x,2.3f,2.6f),new Vector3(.25f,4.6f,.25f),yellow);
         incomingCarrier=FactoryRig.CreateLoad("Virtual incoming loader",campus,false); incomingCarrier.position=new Vector3(-24.5f,1.24f,0);
         Label("MES CORE  >  FINISHING  >  WAREHOUSE / SHIPPING",new Vector3(14,.06f,-13));
+        incomingRenderers=incomingCarrier.GetComponentsInChildren<Renderer>(true);
+        labels=campus.GetComponentsInChildren<TextMesh>(true);
     }
     static Vector3 Slot(bool onTruck,int i) { return onTruck ? new Vector3(43+(i%4)*2,1.1f,-6+(i/4)*2) : new Vector3(26+(i%6)*4,.16f,7+(i/6)*2); }
     void Saddle(Vector3 p)
@@ -138,7 +142,7 @@ public class FactoryLogistics : MonoBehaviour
     public void Accept(Transform load)
     {
         load.SetParent(loads,true);
-        journeys.Add(new Journey { load=load,truck=SendToTruck,path=new Queue<Vector3>(new[]{new Vector3(15.3f,1.24f,0),new Vector3(26,1.24f,0),new Vector3(38,1.24f,0),new Vector3(47,1.24f,0),new Vector3(50,1.24f,0)}) });
+        journeys.Add(new Journey { load=load,renderers=load.GetComponentsInChildren<Renderer>(true),truck=SendToTruck,path=new Queue<Vector3>(new[]{new Vector3(15.3f,1.24f,0),new Vector3(26,1.24f,0),new Vector3(38,1.24f,0),new Vector3(47,1.24f,0),new Vector3(50,1.24f,0)}) });
     }
     public void Advance(float dt,bool running)
     {
@@ -146,7 +150,7 @@ public class FactoryLogistics : MonoBehaviour
         feedTime=Mathf.Repeat(feedTime+dt,24);
         Vector3[] feed={new Vector3(-24.5f,1.24f,0),new Vector3(-24.5f,3.1f,0),new Vector3(-15.3f,3.1f,0),new Vector3(-15.3f,1.24f,0),new Vector3(-24.5f,1.24f,0)};
         int leg=Mathf.Min(3,(int)(feedTime/6)); incomingCarrier.position=Vector3.Lerp(feed[leg],feed[leg+1],(feedTime%6)/6);
-        foreach(var renderer in incomingCarrier.GetComponentsInChildren<Renderer>()) renderer.enabled=leg<3;
+        foreach(var renderer in incomingRenderers) renderer.enabled=leg<3;
         if(departureTime>0) {
             float travel=Mathf.Min(dt,departureTime)*3; shippingVehicle.position+=Vector3.right*travel;
             foreach(var load in departing) load.position+=Vector3.right*travel;
@@ -171,18 +175,18 @@ public class FactoryLogistics : MonoBehaviour
             if(index>0 && j.load.position.z==0 && journeys[index-1].load.position.z==0 && journeys[index-1].load.position.x-j.load.position.x<2.4f) continue;
             j.load.position=Vector3.MoveTowards(j.load.position,j.path.Peek(),2*dt);
             bool stripZone=j.load.position.z==0 && j.load.position.x>26 && j.load.position.x<38;
-            foreach(var renderer in j.load.GetComponentsInChildren<Renderer>()) renderer.enabled=!stripZone;
+            foreach(var renderer in j.renderers) renderer.enabled=!stripZone;
             if(Vector3.Distance(j.load.position,j.path.Peek())<.001f) j.path.Dequeue();
             if(j.path.Count==0 && j.slot>=0) { (j.truck ? truck : stored)[j.slot]=j.load; journeys.Remove(j); }
         }
-        var camera=Camera.main; if(camera!=null) foreach(var text in campus.GetComponentsInChildren<TextMesh>()) text.transform.rotation=camera.transform.rotation;
+        var camera=Camera.main; if(camera!=null) foreach(var text in labels) text.transform.rotation=camera.transform.rotation;
     }
     public void DispatchStored()
     {
         foreach(var pair in stored.ToArray()) {
             int slot=FreeSlot(true); if(slot<0) break;
             var end=Slot(true,slot);
-            journeys.Add(new Journey {load=pair.Value,truck=true,slot=slot,path=new Queue<Vector3>(new[]{pair.Value.position+Vector3.up*(4-pair.Value.position.y),new Vector3(pair.Value.position.x,4,4),new Vector3(52,4,4),new Vector3(52,4,-3),new Vector3(end.x,4,-3),new Vector3(end.x,4,end.z),end})});
+            journeys.Add(new Journey {load=pair.Value,renderers=pair.Value.GetComponentsInChildren<Renderer>(true),truck=true,slot=slot,path=new Queue<Vector3>(new[]{pair.Value.position+Vector3.up*(4-pair.Value.position.y),new Vector3(pair.Value.position.x,4,4),new Vector3(52,4,4),new Vector3(52,4,-3),new Vector3(end.x,4,-3),new Vector3(end.x,4,end.z),end})});
             stored.Remove(pair.Key);
         }
     }

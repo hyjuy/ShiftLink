@@ -154,15 +154,31 @@ public class FactoryFaults : MonoBehaviour
         ClearEffects(); current=null; online=false; Severity="normal"; Notification=""; UnknownEquipmentCount=0;
         incident=null; muted=false; elapsed=nextBeep=0; audioSource?.Stop();
     }
-    public bool ContainsPointer(Vector2 point) { return current!=null && Severity!="normal" && new Rect(18,Screen.height-285,Mathf.Min(640,Screen.width-36),130).Contains(point); }
+    Vector2 alertScroll;
+    bool AlertVisible { get { return current!=null && Severity!="normal" && GetComponent<FactoryWorker>()?.PdaRaised!=true; } }
+    Rect AlertRect {
+        get {
+            if(GetComponent<FactoryWorker>()?.IsWorkerMode==true)
+                return new Rect(16,124,Mathf.Min(320,Screen.width-32),Mathf.Min(176,Screen.height-140));
+            return FactoryUi.ScreenLayout.Alert;
+        }
+    }
+    public bool ContainsPointer(Vector2 point) { return AlertVisible && AlertRect.Contains(point); }
     void OnGUI()
     {
-        if(current==null || Severity=="normal") return;
-        var previous=GUI.color; GUI.color=!online ? FactoryRules.Grey : Severity=="critical" ? FactoryRules.Red : FactoryRules.Amber;
-        GUILayout.BeginArea(new Rect(18,Screen.height-285,Mathf.Min(640,Screen.width-36),130),GUI.skin.box);
-        GUILayout.Label((online ? "" : "MES 연결 끊김 · 마지막 관측, 현재 상태 미확인\n")+Notification,new GUIStyle(GUI.skin.label) {wordWrap=true});
-        if(online && GUILayout.Button(muted ? "알림음 꺼짐 (알림 유지)" : "이번 알림음 끄기")) Mute();
-        GUILayout.EndArea(); GUI.color=previous;
+        if(!AlertVisible) return;
+        var ui=FactoryUi.For(this);
+        using(ui.Use()) {
+            GUILayout.BeginArea(AlertRect,GUI.skin.box);
+            alertScroll=GUILayout.BeginScrollView(alertScroll);
+            GUI.contentColor=!online ? FactoryUi.Muted : Severity=="critical" ? new Color32(252,165,165,255) : new Color32(253,186,116,255);
+            GUILayout.Label(!online ? "마지막 알림 · 연결 끊김" : Severity=="critical" ? "비상 알림" : "설비 알림");
+            GUI.contentColor=Color.white;
+            if(!online) GUILayout.Label("현재 상태는 확인할 수 없습니다.",ui.Caption);
+            GUILayout.Label(Notification,ui.Caption);
+            if(online && GUILayout.Button(muted ? "알림음 꺼짐 · 알림 유지" : "이번 알림음 끄기  [M]")) Mute();
+            GUILayout.EndScrollView(); GUILayout.EndArea();
+        }
     }
     static void Remove(UnityEngine.Object obj) { if(obj==null) return; if(Application.isPlaying) Destroy(obj); else DestroyImmediate(obj); }
     void OnDestroy() { Clear(); Remove(warningClip); Remove(emergencyClip); }

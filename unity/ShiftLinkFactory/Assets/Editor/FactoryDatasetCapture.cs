@@ -53,10 +53,6 @@ public static class FactoryDatasetCapture
             demo.Build(config); demo.SetExteriorView(true); demo.Apply(state);
             groundFloor=demo.transform.Find("Factory floor").GetComponent<Renderer>().bounds.max.y;
             nodes=demo.transform.Find("MES equipment"); camera=Camera.main;
-            foreach(var name in new[]{"CAU utility platform","CAU stair landing"}) {
-                var deck=nodes.Find(name);
-                if(deck!=null) deck.gameObject.AddComponent<BoxCollider>();
-            }
             // Imported connections also occupy walking space, beyond equipment root colliders.
             foreach(var renderer in nodes.GetComponentsInChildren<MeshRenderer>()) {
                 if(renderer.GetComponent<TextMesh>()!=null || renderer.GetComponentInParent<Collider>()!=null || renderer.bounds.size.y<.1f) continue;

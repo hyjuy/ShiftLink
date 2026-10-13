@@ -10152,7 +10152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc286a5136704245966d5f0f0a3064d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FactoryDemo
-  mesUrl: http://127.0.0.1:8000
+  mesUrl: http://jetson-06:8000
   pdaUrl: http://127.0.0.1:8000
   pollSeconds: 0.5
 --- !u!4 &1799173348

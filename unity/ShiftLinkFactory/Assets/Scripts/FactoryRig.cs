@@ -96,9 +96,16 @@ public class FactoryRig : MonoBehaviour
         var line=obj.AddComponent<LineRenderer>(); line.positionCount=points.Length; line.SetPositions(points); line.widthMultiplier=.045f; line.numCornerVertices=4; line.numCapVertices=4;
         line.sharedMaterial=Solid(color);
     }
-    void Rail(string name,Vector3 a,Vector3 b)
+    void Rail(string name,Vector3 a,Vector3 b,bool solid=false)
     {
         Pipe(name,new[]{a,b},FactoryRules.Amber);
+        if(solid) {
+            var barrier=new GameObject(name+" collision").transform;
+            barrier.SetParent(transform);
+            barrier.position=(a+b)*.5f-Vector3.up*.5f;
+            barrier.rotation=Quaternion.FromToRotation(Vector3.right,b-a);
+            barrier.gameObject.AddComponent<BoxCollider>().size=new Vector3(Vector3.Distance(a,b),1,.06f);
+        }
         int count=Mathf.Max(1,Mathf.CeilToInt(Vector3.Distance(a,b)/1.2f));
         for(int i=0;i<=count;i++) {
             var p=Vector3.Lerp(a,b,(float)i/count);
@@ -123,16 +130,24 @@ public class FactoryRig : MonoBehaviour
         if(next.equipment.Any(e=>e.code=="CAU-01" && e.active)) {
             var p=EquipmentPosition(next,"CAU-01");
             float deck=LayoutSpacing>1 ? 2.5f : 1;
-            Block("CAU utility platform",p-Vector3.up*.15f,new Vector3(4.8f*deck,.3f,2.8f*deck),FactoryRules.Grey);
+            Block("CAU utility platform",p-Vector3.up*.15f,new Vector3(4.8f*deck,.3f,2.8f*deck),FactoryRules.Grey).AddComponent<BoxCollider>();
             foreach(float x in new[]{-2.1f,2.1f}) foreach(float z in new[]{-1.1f,1.1f})
                 Block("Platform support",p+new Vector3(x*deck,-1.75f,z*deck),new Vector3(.15f,2.9f,.15f),FactoryRules.Grey);
             Rail("CAU platform rail",p+new Vector3(-2.4f*deck,1,-1.4f*deck),p+new Vector3(2.4f*deck,1,-1.4f*deck));
             Rail("CAU back rail",p+new Vector3(-2.4f*deck,1,1.4f*deck),p+new Vector3(2.4f*deck,1,1.4f*deck));
             Rail("CAU left rail",p+new Vector3(-2.4f*deck,1,-1.4f*deck),p+new Vector3(-2.4f*deck,1,1.4f*deck));
-            Block("CAU stair landing",p+new Vector3(3.4f*deck,-.15f,0),new Vector3(3.2f*deck,.3f,1.5f),FactoryRules.Grey);
+            // End the landing at the top tread; extending over lower treads blocks the employee.
+            Block("CAU stair landing",p+new Vector3(3.4f*deck,-.15f,-.7f*deck),new Vector3(3.2f*deck,.3f,1.4f*deck),FactoryRules.Grey).AddComponent<BoxCollider>();
+            Rail("CAU landing back rail",p+new Vector3(2.4f*deck,1,-1.4f*deck),p+new Vector3(5*deck,1,-1.4f*deck),true);
+            Rail("CAU landing front rail",p+new Vector3(2.4f*deck,1,0),p+new Vector3(4.4f*deck-.75f,1,0),true);
+            Rail("CAU landing end rail",p+new Vector3(5*deck,1,-1.4f*deck),p+new Vector3(5*deck,1,0),true);
+            if(5*deck>4.4f*deck+.75f)
+                Rail("CAU landing outer front rail",p+new Vector3(4.4f*deck+.75f,1,0),p+new Vector3(5*deck,1,0),true);
+            Rail("CAU access back rail",p+new Vector3(2.4f*deck,1,0),p+new Vector3(2.4f*deck,1,1.4f*deck),true);
             var stairs=new GameObject("CAU access stairs").transform; stairs.SetParent(transform);
             for(int i=0;i<16;i++) {
                 var step=Block("Stair tread",p+new Vector3(4.4f*deck,(i+1)*.2f-p.y-.1f,4-(i+.5f)*.25f),new Vector3(1.5f,.2f,.25f),FactoryRules.Grey);
+                step.AddComponent<BoxCollider>();
                 step.transform.SetParent(stairs);
             }
             foreach(float x in new[]{4.4f*deck-.75f,4.4f*deck+.75f})

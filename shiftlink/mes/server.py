@@ -105,6 +105,7 @@ class MesService:
         from .query import query_service
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
+        self.storage.save_query_evidence(result.get("evidence"))
         try:
             rendered_response = render_response(AgentResponse.model_validate(result))
         except Exception:  # Log formatting must not prevent returning the generated answer.
@@ -153,38 +154,48 @@ class MesService:
 
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
-            # 해결 기록은 인계 저장 전에 검사한다. 잘못되면 인계도 남지 않는다.
-            prepared = None
-            if isinstance(body, dict) and body.get("resolution") is not None:
-                prepared = field_draft.prepare(body["resolution"], self.active_config, body.get("equipment_id"))
-                snap = asdict(self.engine.snapshot)
-                field_draft.check_with_mes(
-                    prepared, snap["measurements"],
-                    [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
-                    str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
-            saved = self.storage.save_handover(body)
-            if prepared is None:
-                return saved
-            return {**saved, "draft": {**self._file_resolution(body["handover_id"], prepared),
-                                       "mes_recovered": prepared["mes_check"]["recovered"]}}
+            # 해결 기록은 인계 저장 전에 검사하고 초안 반영까지 계산한다. 인계와 초안은 한 트랜잭션으로 남는다.
+            if not (isinstance(body, dict) and body.get("resolution") is not None):
+                return self.storage.save_handover(body)
+            prepared = field_draft.prepare(self._server_evidence(body["resolution"]), self.active_config,
+                                           body.get("equipment_id"))
+            snap = asdict(self.engine.snapshot)
+            field_draft.check_with_mes(
+                prepared, snap["measurements"],
+                [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
+                str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
+            self.storage._check_handover(body)
+            known = self.storage.has_draft_record(body["handover_id"])
+            op, reply = (None, {"created": False, "reason": "already_exists"}) if known else \
+                self._plan_resolution(body["handover_id"], prepared)
+            saved, applied = self.storage.save_handover_with_draft(body, op)
+            if op is not None and not applied:
+                reply = {"created": False, "reason": "already_exists"}
+            return {**saved, "draft": {**reply, "mes_recovered": prepared["mes_check"]["recovered"]}}
 
-    def _file_resolution(self, handover_id: str, prepared: dict[str, Any]) -> dict[str, object]:
-        """같은 설비·조건·겹치는 조치의 검수 대기 초안이 있으면 근거로 붙이고, 없으면 새 초안을 만든다."""
-        if self.storage.has_draft_record(handover_id):
-            return {"created": False, "reason": "already_exists"}
+    def _server_evidence(self, resolution: object) -> object:
+        """PDA가 돌려보낸 질의 근거를 서버가 질의 때 보관한 값으로 바꾼다. 없으면 근거 없음으로 둔다(값을 믿지 않는다)."""
+        if not isinstance(resolution, dict) or not isinstance(resolution.get("evidence"), dict):
+            return resolution
+        sent = resolution["evidence"]
+        stored = self.storage.get_query_evidence(sent.get("run_id"), sent.get("simulated_at"), sent.get("equipment_id"))
+        if stored is None:
+            return {**resolution, "evidence": None, "_evidence_note": "서버 질의 기록에 없는 근거"}
+        return {**resolution, "evidence": stored}
+
+    def _plan_resolution(self, handover_id: str, prepared: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, object]]:
+        """저장하지 않고 계산만 한다: 가장 많이 겹치는 검수 대기 초안에 붙이거나 새 초안을 만든다. 예외면 아무것도 남지 않는다."""
         scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
                   if row["status"] == "pending_review"]
         score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))
         if score > 0:  # 가장 많이 겹치는 초안 하나에만 붙인다
             draft, relation = field_draft.merge(row, prepared, handover_id)
-            self.storage.update_card_draft(row["draft_id"], handover_id, relation, draft)
-            return {"created": False, "reason": relation}
+            return {"kind": "merge", "draft": draft, "draft_id": row["draft_id"], "relation": relation}, \
+                {"created": False, "reason": relation}
         draft = field_draft.draft_from(prepared, handover_id, self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
         if draft["status"] == "attempt_only":
-            return {"created": False, "reason": "attempt_only"}
-        if not self.storage.save_card_draft({**draft, "handover_id": handover_id}):
-            return {"created": False, "reason": "already_exists"}
-        return {"created": draft["status"] == "pending_review", "reason": draft["status"]}
+            return None, {"created": False, "reason": "attempt_only"}
+        return {"kind": "new", "draft": draft}, {"created": draft["status"] == "pending_review", "reason": draft["status"]}
 
     def card_drafts(self) -> dict[str, object]:
         """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""

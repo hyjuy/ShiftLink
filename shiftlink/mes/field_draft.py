@@ -8,7 +8,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from math import isfinite
 from typing import Any
 
@@ -123,16 +123,18 @@ def prepare(raw: object, config: Configuration, equipment_id: object) -> dict[st
     """검사를 마친 해결 기록 + 설비 + 서버가 계산한 이상 상태. 인계 저장 전에 부른다."""
     resolution = check_resolution(raw)
     eq = _equipment(config, equipment_id)
-    return {"resolution": resolution, "eq": eq, "states": _states(eq, resolution["evidence"])}
+    note = raw.get("_evidence_note") if isinstance(raw, dict) else None
+    return {"resolution": resolution, "eq": eq, "states": _states(eq, resolution["evidence"]),
+            **({"evidence_note": note} if note else {})}
 
 
 def _instant(value: object) -> datetime | None:
-    if isinstance(value, datetime):
-        return value
+    """시간대가 없으면 UTC로 본다(서버 이벤트 시각은 UTC aware). 비교가 TypeError로 끝나지 않게 한다."""
     try:
-        return datetime.fromisoformat(str(value))
+        at = value if isinstance(value, datetime) else datetime.fromisoformat(str(value))
     except ValueError:
         return None
+    return at if at.tzinfo else at.replace(tzinfo=timezone.utc)
 
 
 def _recovery_event(prepared: dict[str, Any], run_id: str, events: list[dict[str, Any]]) -> str:
@@ -141,6 +143,8 @@ def _recovery_event(prepared: dict[str, Any], run_id: str, events: list[dict[str
     저장 순간 값만 보면 '새 시뮬레이션 시작'으로 초기화된 정상 값도 복구로 오인한다(10/13 실측).
     """
     evidence = prepared["resolution"]["evidence"] or {}
+    if not evidence:
+        return prepared.get("evidence_note") or "질의 실행 정보 없음"
     if evidence.get("run_id") != run_id:
         return "질의 뒤 시뮬레이션이 새로 시작됨" if evidence.get("run_id") else "질의 실행 정보 없음"
     asked = _instant(evidence.get("simulated_at"))

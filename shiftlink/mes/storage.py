@@ -99,11 +99,20 @@ class MesStorage:
                 status TEXT NOT NULL, card TEXT NOT NULL, review_flags TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS card_draft_records (
                 handover_id TEXT PRIMARY KEY, draft_id TEXT NOT NULL, relation TEXT NOT NULL, created_at TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS query_evidence (
+                run_id TEXT NOT NULL, simulated_at TEXT NOT NULL, equipment_id TEXT NOT NULL,
+                evidence TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (run_id, simulated_at, equipment_id));
         """)
         self.connection.commit()
 
     def save_handover(self, body: dict[str, Any]) -> dict[str, Any]:
         """Commit the original note locally; retries never overwrite it."""
+        self._check_handover(body)
+        with self.connection:
+            return self._insert_handover(body)
+
+    @staticmethod
+    def _check_handover(body: object) -> None:
         if not isinstance(body, dict):
             raise ValueError("handover body must be an object")
         handover_id, memo = body.get("handover_id"), body.get("memo_text")
@@ -111,19 +120,62 @@ class MesStorage:
             raise ValueError("handover_id must be a 1..64 char string")
         if not isinstance(memo, str) or not memo.strip() or len(memo) > 4000:
             raise ValueError("memo_text must be a 1..4000 char string")
-        encoded = _dump(body)
-        with self.connection:
-            inserted = self.connection.execute(
-                "INSERT OR IGNORE INTO handover_outbox (handover_id, created_at, payload) VALUES (?, ?, ?)",
-                (handover_id, datetime.now().astimezone().isoformat(), encoded),
-            ).rowcount
-            row = self.connection.execute(
-                "SELECT created_at, status, payload FROM handover_outbox WHERE handover_id = ?", (handover_id,)
-            ).fetchone()
-            if row[2] != encoded:
-                raise HandoverConflictError("handover_id already exists with different content")
+
+    def _insert_handover(self, body: dict[str, Any]) -> dict[str, Any]:
+        """INSERT inside the caller's transaction (save_handover / save_handover_with_draft)."""
+        handover_id, encoded = body["handover_id"], _dump(body)
+        inserted = self.connection.execute(
+            "INSERT OR IGNORE INTO handover_outbox (handover_id, created_at, payload) VALUES (?, ?, ?)",
+            (handover_id, datetime.now().astimezone().isoformat(), encoded),
+        ).rowcount
+        row = self.connection.execute(
+            "SELECT created_at, status, payload FROM handover_outbox WHERE handover_id = ?", (handover_id,)
+        ).fetchone()
+        if row[2] != encoded:
+            raise HandoverConflictError("handover_id already exists with different content")
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "duplicate": not bool(inserted), "is_synthetic": True}
+
+    def save_handover_with_draft(self, body: dict[str, Any], op: dict[str, Any] | None) -> tuple[dict[str, Any], bool]:
+        """인계와 초안 반영을 한 트랜잭션으로. op: None | {"kind": "new"|"merge", "draft", "draft_id"?, "relation"?}.
+
+        둘 중 하나가 실패하면 둘 다 남지 않는다. 이미 초안에 반영된 인계(재전송)면 op를 건너뛰고 False.
+        """
+        self._check_handover(body)
+        now = datetime.now().astimezone().isoformat()
+        with self.connection:
+            saved = self._insert_handover(body)
+            if op is None or self.has_draft_record(body["handover_id"]):
+                return saved, False
+            draft = op["draft"]
+            if op["kind"] == "new":
+                self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)", (
+                    draft["card"]["card_id"], body["handover_id"], now,
+                    draft["status"], _dump(draft["card"]), _dump(draft["review_flags"])))
+                self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
+                                        (body["handover_id"], draft["card"]["card_id"], now))
+            else:
+                self.connection.execute("UPDATE card_drafts SET status = ?, card = ?, review_flags = ? WHERE draft_id = ?",
+                                        (draft["status"], _dump(draft["card"]), _dump(draft["review_flags"]), op["draft_id"]))
+                self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, ?, ?)",
+                                        (body["handover_id"], op["draft_id"], op["relation"], now))
+        return saved, True
+
+    def save_query_evidence(self, evidence: dict[str, Any] | None) -> None:
+        """질의 때 서버가 쓴 MES 근거를 보관한다. 해결 기록은 PDA가 보낸 값 대신 이것으로 판정한다(업로드 대상 아님)."""
+        if not isinstance(evidence, dict) or not all(evidence.get(k) for k in ("run_id", "simulated_at", "equipment_id")):
+            return
+        with self.connection:
+            self.connection.execute(
+                "INSERT OR IGNORE INTO query_evidence VALUES (?, ?, ?, ?, ?)",
+                (evidence["run_id"], str(evidence["simulated_at"]), evidence["equipment_id"], _dump(evidence),
+                 datetime.now().astimezone().isoformat()))
+
+    def get_query_evidence(self, run_id: object, simulated_at: object, equipment_id: object) -> dict[str, Any] | None:
+        row = self.connection.execute(
+            "SELECT evidence FROM query_evidence WHERE run_id = ? AND simulated_at = ? AND equipment_id = ?",
+            (str(run_id), str(simulated_at), str(equipment_id))).fetchone()
+        return json.loads(row[0]) if row else None
 
     def next_card_id(self, first: int, last: int) -> str:
         """Next unused K-#### in the field range; drafts are never retrieved, so only this table is checked."""
@@ -138,30 +190,6 @@ class MesStorage:
         """이 인계가 이미 어느 초안에 반영됐는지(처음 기록이든 덧붙은 근거든)."""
         return self.connection.execute("SELECT 1 FROM card_draft_records WHERE handover_id = ?",
                                        (handover_id,)).fetchone() is not None
-
-    def save_card_draft(self, draft: dict[str, Any]) -> bool:
-        """Pending-review store, one draft per handover. False when that handover already has one."""
-        now = datetime.now().astimezone().isoformat()
-        with self.connection:
-            if self.has_draft_record(draft["handover_id"]):
-                return False
-            self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)", (
-                draft["card"]["card_id"], draft["handover_id"], now,
-                draft["status"], _dump(draft["card"]), _dump(draft["review_flags"])))
-            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
-                                    (draft["handover_id"], draft["card"]["card_id"], now))
-        return True
-
-    def update_card_draft(self, draft_id: str, handover_id: str, relation: str, draft: dict[str, Any]) -> bool:
-        """기존 초안에 기록을 근거로 덧붙인다. False면 그 인계는 이미 반영돼 있다."""
-        with self.connection:
-            if self.has_draft_record(handover_id):
-                return False
-            self.connection.execute("UPDATE card_drafts SET status = ?, card = ?, review_flags = ? WHERE draft_id = ?",
-                                    (draft["status"], _dump(draft["card"]), _dump(draft["review_flags"]), draft_id))
-            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, ?, ?)",
-                                    (handover_id, draft_id, relation, datetime.now().astimezone().isoformat()))
-        return True
 
     def list_card_drafts(self) -> list[dict[str, Any]]:
         rows = self.connection.execute(

@@ -145,6 +145,16 @@ class FieldDraftBuilderTests(unittest.TestCase):
         self.assertEqual(done['operator'], ['부품 확인', '시나리오 확인', '안전 근거', '해결 표기와 MES 불일치 HO-13'])
         self.assertEqual((done['resolved_records'], done['ready']), (0, False))
 
+    def test_symptom_carries_main_mes_symptom_in_plain_words(self):
+        out = build_draft('HO-14', resolution(), hpu_config(), 'EQ-0001', 'K-7000', NOW)
+        self.assertEqual(out['card']['symptom'], '작동유 온도 경보, 냉각기 소음이 평소보다 큼 (MES: 유압유 온도가 높아짐)')
+        low = hot_evidence(value=40.0)
+        low['measurements'][1]['value'] = 130.0  # 압력만 낮음
+        out = build_draft('HO-15', resolution(evidence=low), hpu_config(), 'EQ-0001', 'K-7000', NOW)
+        self.assertTrue(out['card']['symptom'].endswith('(MES: 유압 공급 압력이 낮아짐)'))
+        out = build_draft('HO-16', resolution(evidence=hot_evidence(value=40.0)), hpu_config(), 'EQ-0001', 'K-7000', NOW)
+        self.assertEqual(out['card']['symptom'], '작동유 온도 경보, 냉각기 소음이 평소보다 큼')
+
 
 class FieldDraftServiceTests(unittest.TestCase):
     def setUp(self):

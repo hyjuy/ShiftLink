@@ -233,7 +233,7 @@
 | 이름 | 위치 | 뜻 | 담당자 |
 | --- | --- | --- | --- |
 | `resolution` | `POST /api/handover` 본문(PDA) | 질의가 '해당 지식 없음'일 때 작업자가 해결하고 남긴 기록. `question`·`symptom`·`actions`(순서 있는 목록, 항목은 문자열 또는 `{action, result}` — result는 그 조치 직후 본 결과, 선택)·`result`(`resolved`·`temporary`·`failed`)·`verification`·`evidence`(질의의 MES 근거). 없으면 기존 인계와 같다 | Claude |
-| `check_resolution()` · `build_draft()` · `GENERATOR`(`field-resolution-v1`) · `ID_RANGE`(K-7000~K-7999) | `shiftlink/mes/field_draft.py` | 해결 기록을 검사하고 규칙 기반으로 `KnowledgeCard` 초안(status=draft, grade=L0, split=dev, confidence=0.0)을 만든다. LLM 없음. 상태 조건은 활성 구성의 정상 범위로 서버가 다시 계산한다. `failed`는 초안을 만들지 않는다 | Claude |
+| `check_resolution()` · `build_draft()` · `GENERATOR`(`field-resolution-v1`) · `ID_RANGE`(K-7000~K-7999) | `shiftlink/mes/field_draft.py` | 해결 기록을 검사하고 규칙 기반으로 `KnowledgeCard` 초안(status=draft, grade=L0, split=dev, confidence=0.0)을 만든다. 증상은 작업자 문장 뒤에 MES 주 증상(첫 이상 신호)을 붙인다: `… (MES: 유압유 온도가 높아짐)`. LLM 없음. 상태 조건은 활성 구성의 정상 범위로 서버가 다시 계산한다. `failed`는 초안을 만들지 않는다 | Claude |
 | `card_drafts` · `save_card_draft()` · `list_card_drafts()` · `next_card_id()` | `shiftlink/mes/storage.py` | 검수 대기 초안 저장소. `draft_id`(=card_id, K-7000~) 기본키, `handover_id` 유일. `status`는 `pending_review`·`invalid`, `review_flags`에 안전 표현·자리표시자·lint·검증 오류를 담는다. 검색(kb_cards.json·질의 파이프라인)에는 나가지 않는다 | Claude |
 | `GET /api/card-drafts` · `card_drafts()` | `shiftlink/mes/server.py` | 검수 대기 초안 목록(읽기 전용). 승인·반려 API는 아직 없다. PDA는 호출하지 않는다 | Claude |
 | `draft` · `created` · `reason` | `/api/handover` 응답 | 해결 기록이 있을 때만 붙는다. `reason`: `pending_review`·`invalid`·`attempt_only`·`already_exists`·`supporting`(기존 초안에 지지 근거로 붙음)·`contradicting`(같은 조치가 효과 없었던 반대 근거). `mes_recovered`: 저장 시점 MES로 본 정상 복귀 여부. 카드 내용은 싣지 않는다 | Claude |

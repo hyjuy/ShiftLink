@@ -238,6 +238,24 @@ def _thin(resolution: dict[str, Any]) -> list[str]:
     return reasons
 
 
+def _subject(word: str) -> str:
+    """'온도가' / '유량이' — 받침에 따라 주격 조사를 붙인다."""
+    last = word[-1:] if word else ""
+    return word + ("이" if "가" <= last <= "힣" and (ord(last) - 0xAC00) % 28 else "가")
+
+
+def _mes_symptom(states: list[tuple[Any, str]]) -> str:
+    """MES가 본 주 증상(첫 이상 신호)을 문장으로. 작업자는 원인을 모른 채 '온도가 높아요'부터 묻기 때문에 증상에 함께 둔다.
+
+    10/13 검색 시험: 첫 신호만 넣으면 '작동유 온도가 너무 높아요'·'유온이 높아요'가 현장 카드를 찾고 기존 HPU 증상 칩 1위는 그대로.
+    신호를 모두 넣으면 기존 카드 질문('기름이 뜨거워요')까지 가져가서 첫 신호만 둔다.
+    """
+    if not states:
+        return ""
+    spec, state = states[0]
+    return f" (MES: {_subject(spec.name)} {'높아짐' if state == 'high' else '낮아짐'})"
+
+
 def _record_line(handover_id: str, prepared: dict[str, Any]) -> str:
     resolution = prepared["resolution"]
     verification = resolution["verification"]
@@ -315,7 +333,7 @@ def draft_from(prepared: dict[str, Any], handover_id: str, card_id: str, now: da
         "tacit_type": "T3", "equipment": eq.code.split("-")[0], "component": eq.name,
         "mes_equipment_id": eq.equipment_id, "scenario": "S1",
         "title": ("[임시조치] " if temporary else "") + f"{head} — {actions[0][:60]}",
-        "symptom": resolution["symptom"], "know_how": "\n".join(actions),
+        "symptom": resolution["symptom"] + _mes_symptom(states), "know_how": "\n".join(actions),
         "rationale": _record_line(handover_id, prepared),
         "conditions": _conditions(states),
         "safety_flag": False, "confidence": 0.0,

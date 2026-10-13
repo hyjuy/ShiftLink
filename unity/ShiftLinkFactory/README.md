@@ -178,11 +178,11 @@ python -B scripts/run_unity_demo.py --mes-port 8010 --pda-port 8081
 Pi의 기존 PDA 앱도 해당 MES를 대상으로 실행한다. 각 장치의 `127.0.0.1`은 그 장치 자신이다.
 
 ```powershell
-python -B scripts/run_unity_demo.py --mes-url http://jetson-06:8000
+python -B scripts/run_unity_demo.py --mes-url http://jetson-06:8000 --pda-url http://raspberrypi:8080
 ```
 
 기존 MES를 지정하면 실행 스크립트는 해당 MES의 공정 상태를 변경하지 않는다.
-별도 PDA 웹 주소가 있으면 `--pda-url http://PDA_WEB_HOST:PORT`를 지정한다.
+PDA는 Pi의 `http://raspberrypi:8080`을 지정한다. Pi에서 한 번 `sudo tailscale serve --bg --tcp=8080 tcp://127.0.0.1:8080`을 실행하면 기존 PDA를 이 주소로 접속할 수 있다. PC의 `localhost:18080` PDA 전달 주소는 사용하지 않는다. 영상용 SSH 역터널과 자세한 실행 순서는 `docs/guides/unity-pda-camera-stream.md`를 따른다.
 Editor 위치가 다르면 `--editor 경로/Editor/Unity.exe`를 지정한다.
 
 ## 동작

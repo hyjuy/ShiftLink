@@ -10153,7 +10153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FactoryDemo
   mesUrl: http://jetson-06:8000
-  pdaUrl: http://127.0.0.1:8000
+  pdaUrl: http://raspberrypi:8080
   pollSeconds: 0.5
 --- !u!4 &1799173348
 Transform:

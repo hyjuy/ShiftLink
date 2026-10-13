@@ -8,6 +8,18 @@ MES 센서·질의는 계속 Jetson으로 요청하며 실제 웹캠을 이 영�
 
 ## 실행
 
+MES는 Jetson의 `http://jetson-06:8000`, PDA는 Pi의 `http://raspberrypi:8080`에 직접 연결한다.
+PC의 `localhost:18080` PDA 전달 주소는 사용하지 않는다.
+
+Pi에서 한 번만 아래 설정을 실행한다. 기존 PDA의 `127.0.0.1:8080`을 Tailscale 내부에 제공하며 재부팅 후에도 유지된다.
+
+```bash
+sudo tailscale serve --bg --tcp=8080 tcp://127.0.0.1:8080
+tailscale serve status
+```
+
+같은 tailnet에 연결된 PC에서 `http://raspberrypi:8080/pda.html`을 열어 확인한다.
+
 PC에서 SSH 터널을 유지한다. 비밀번호는 SSH 프롬프트에 입력하고 파일에 저장하지 않는다.
 
 ```powershell
@@ -17,7 +29,7 @@ ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCount
 다른 PC 터미널에서 Unity를 실행한다.
 
 ```powershell
-python -B scripts/run_unity_demo.py --editor D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe --mes-url http://jetson-06:8000
+python -B scripts/run_unity_demo.py --editor D:/obsd/Unity/Editors/6000.3.12f1/Editor/Unity.exe --mes-url http://jetson-06:8000 --pda-url http://raspberrypi:8080
 ```
 
 Pi의 PDA 실행 인자에 가상 카메라 주소를 지정한다.
@@ -37,7 +49,7 @@ PDA에서 로그인 후 **설비 스캔**을 누른다. Unity는 캐릭터의 �
 Unity나 터널이 끊기면 PDA는 이전 영상을 숨기고 자동으로 다시 연결한다.
 
 `--unity`를 지정하지 않은 PDA는 기존 실제 카메라 인식 결과 대기 방식을 사용한다.
-Unity 서버와 Pi PDA 서버는 모두 루프백에만 바인딩한다. 터널을 닫으면 영상 연결도 끊긴다.
+Unity 카메라와 Pi PDA 앱은 루프백에 바인딩한다. Pi PDA의 웹 접속은 Tailscale Serve가 `raspberrypi:8080`으로 전달한다. SSH 역터널은 Unity 카메라 영상에만 사용하므로 터널을 닫으면 영상 연결이 끊긴다.
 
 ## 혼자 실행하고 캐릭터 조작하기
 

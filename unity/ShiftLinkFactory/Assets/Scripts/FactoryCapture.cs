@@ -47,6 +47,8 @@ public class FactoryCapture : MonoBehaviour
     public bool PreviewSaved { get; private set; }
     public RenderTexture LivePreview { get; private set; }
     public readonly List<string> Gallery = new List<string>();
+    Renderer[] previewExcluded = new Renderer[0];
+    readonly List<Renderer> previewHidden = new List<Renderer>();
     Camera cameraSource;
     FactoryConfig config;
     Dictionary<string, GameObject> equipment = new Dictionary<string, GameObject>();
@@ -61,6 +63,7 @@ public class FactoryCapture : MonoBehaviour
         equipment = nodes == null ? new Dictionary<string, GameObject>() : new Dictionary<string, GameObject>(nodes);
         if (string.IsNullOrEmpty(sessionId)) sessionId = Guid.NewGuid().ToString("N");
         RefreshGallery();
+        RefreshPreviewRenderers();
     }
     public void SetContext(string currentConfigId, string currentRunId, int currentSequence)
     { configId = currentConfigId; runId = currentRunId; sequence = currentSequence; }
@@ -86,24 +89,34 @@ public class FactoryCapture : MonoBehaviour
         catch { Remove(texture); throw; }
     }
 
+    public void RefreshPreviewRenderers()
+    { previewExcluded = FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(Excluded).ToArray(); }
+
     public bool RenderLivePreview()
     {
         if (cameraSource == null || width < 1 || height < 1 || width > 8192 || height > 8192) return false;
-        var hidden = FindObjectsByType<Renderer>(FindObjectsSortMode.None).Where(r => r.enabled && Excluded(r)).ToArray();
+        if (LivePreview == null || LivePreview.width != width || LivePreview.height != height) {
+            Remove(LivePreview); LivePreview = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            LivePreview.antiAliasing = 1; LivePreview.Create();
+        }
+        return RenderStreamPreview(LivePreview);
+    }
+    public bool RenderStreamPreview(RenderTexture target)
+    {
+        if (cameraSource == null || target == null || !target.IsCreated()) return false;
+        previewHidden.Clear();
+        foreach (var renderer in previewExcluded)
+            if (renderer != null && renderer.enabled && renderer.gameObject.activeInHierarchy) previewHidden.Add(renderer);
         var targetBefore = cameraSource.targetTexture; float aspectBefore = cameraSource.aspect;
         bool hdrBefore = cameraSource.allowHDR, msaaBefore = cameraSource.allowMSAA;
         var activeBefore = RenderTexture.active;
         try {
-            if (LivePreview == null || LivePreview.width != width || LivePreview.height != height) {
-                Remove(LivePreview); LivePreview = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
-                LivePreview.antiAliasing = 1; LivePreview.Create();
-            }
-            foreach (var renderer in hidden) renderer.enabled = false;
-            cameraSource.aspect = (float)width / height; cameraSource.allowHDR = false; cameraSource.allowMSAA = false;
-            cameraSource.targetTexture = LivePreview; cameraSource.Render(); return true;
+            foreach (var renderer in previewHidden) renderer.enabled = false;
+            cameraSource.aspect = (float)target.width / target.height; cameraSource.allowHDR = false; cameraSource.allowMSAA = false;
+            cameraSource.targetTexture = target; cameraSource.Render(); return true;
         } catch (Exception error) { Status = "Camera preview failed: " + error.Message; return false; }
         finally {
-            foreach (var renderer in hidden) if (renderer != null) renderer.enabled = true;
+            foreach (var renderer in previewHidden) if (renderer != null) renderer.enabled = true;
             cameraSource.targetTexture = targetBefore; cameraSource.aspect = aspectBefore;
             cameraSource.allowHDR = hdrBefore; cameraSource.allowMSAA = msaaBefore; RenderTexture.active = activeBefore;
         }

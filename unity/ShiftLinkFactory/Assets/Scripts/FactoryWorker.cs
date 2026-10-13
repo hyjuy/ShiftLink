@@ -16,6 +16,7 @@ public class FactoryWorker : MonoBehaviour
     FactoryDemo demo;
     FactoryCapture capture;
     FactoryCameraStream cameraStream;
+    Renderer[] bodyRenderers = new Renderer[0];
     Transform body, leftLeg, rightLeg, pda, rightArm;
     float yaw, pitch, verticalSpeed, walkCycle;
     bool galleryOpen;
@@ -73,6 +74,7 @@ public class FactoryWorker : MonoBehaviour
         employeeView.nearClipPlane = .05f; employeeView.farClipPlane = 300; employeeView.fieldOfView = 60; employeeView.enabled = false;
         PdaCamera = new GameObject("PDA photo camera").AddComponent<Camera>(); PdaCamera.transform.SetParent(WorkerRoot, false);
         PdaCamera.nearClipPlane = .05f; PdaCamera.farClipPlane = 300; PdaCamera.fieldOfView = 60; PdaCamera.enabled = false;
+        bodyRenderers = body.GetComponentsInChildren<Renderer>(true);
         capture.excludedRoots = new[] { WorkerRoot };
         UpdateCameras();
         cameraStream=GetComponent<FactoryCameraStream>()??gameObject.AddComponent<FactoryCameraStream>();
@@ -92,7 +94,7 @@ public class FactoryWorker : MonoBehaviour
         if (!IsWorkerMode) return;
         IsWorkerMode = false; PdaRaised = false;
         if (employeeView != null) employeeView.enabled = false;
-        if (body != null) foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = true;
+        if (body != null) foreach (var renderer in bodyRenderers) renderer.enabled = true;
         if (observation != null) observation.enabled = true;
         if (demo != null) demo.SetExteriorView(false);
         Cursor.lockState = previousLock; Cursor.visible = previousCursor;
@@ -120,7 +122,7 @@ public class FactoryWorker : MonoBehaviour
         PdaCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         employeeView.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         employeeView.transform.localPosition = ThirdPerson ? new Vector3(0, 1.6f, 0) + Quaternion.Euler(pitch, 0, 0) * new Vector3(0, .4f, -3) : new Vector3(0, 1.58f, .12f);
-        foreach (var renderer in body.GetComponentsInChildren<Renderer>()) renderer.enabled = !IsWorkerMode || (ThirdPerson && !PdaRaised);
+        foreach (var renderer in bodyRenderers) renderer.enabled = !IsWorkerMode || (ThirdPerson && !PdaRaised);
     }
     void UpdateCursor()
     { Cursor.lockState = PdaRaised ? CursorLockMode.None : CursorLockMode.Locked; Cursor.visible = PdaRaised; }

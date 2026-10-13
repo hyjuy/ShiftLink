@@ -447,6 +447,19 @@ def build_draft(handover_id: str, raw: object, config: Configuration, equipment_
     return draft_from(prepare(raw, config, equipment_id), handover_id, card_id, now)
 
 
+def similar_kb_cards(card: dict[str, Any], provider: Any, *, k: int = 3) -> list[dict[str, Any]]:
+    """승격 전 확인: 이 초안의 증상·조건으로 기존(문서 기반) 카드 묶음을 검색해 겹칠 수 있는 카드를 보여 준다.
+
+    검색 기준값(KB_MIN_TOP_RELEVANCE) 아래면 빈 목록. 현장 카드(field-resolution)는 대상이 아니다.
+    """
+    observations = {c["signal"]: c["value"] for c in card.get("conditions") or []}
+    hits = provider.search_cards(query=card.get("symptom") or card.get("title") or "",
+                                 equipment_ids=[card.get("mes_equipment_id") or card.get("equipment")],
+                                 k=k, observations=observations)
+    return [{"card_id": h["card_id"], "title": h.get("title"), "condition_status": h.get("condition_status")}
+            for h in hits if not str((h.get("provenance") or {}).get("generator") or "").startswith("field-resolution")]
+
+
 def _keys(conditions: list[dict[str, Any]]) -> set[tuple[str, Any]]:
     return {(c["signal"], c["value"]) for c in conditions}
 

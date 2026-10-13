@@ -354,9 +354,19 @@ class MesService:
                                    "mes_verdict": data["verdict"]["verdict"]}}
 
     def card_drafts(self) -> dict[str, object]:
-        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""
+        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다.
+
+        각 초안에 겹칠 수 있는 기존 카드(similar_kb_cards)를 붙인다. 카드 묶음은 처음 한 번만 읽는다.
+        """
         with self._lock:
-            return {"drafts": self.storage.list_card_drafts(), "is_synthetic": True}
+            if getattr(self, "_kb_provider", None) is None:
+                from shiftlink.rag.loader import load_card_provider
+                from .query import ROOT
+                self._kb_provider = load_card_provider(ROOT / "docs/data/knowledge_cards/kb/kb_cards.json").provider
+            drafts = self.storage.list_card_drafts()
+            for row in drafts:
+                row["similar_kb_cards"] = field_draft.similar_kb_cards(row["card"], self._kb_provider)
+            return {"drafts": drafts, "is_synthetic": True}
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""

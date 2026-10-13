@@ -575,6 +575,16 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertFalse(card['safety_flag'])
         self.assertNotIn('safety_basis', card)
         self.assertEqual(self.service.resolution_get(sid)['status'], 'saved')
+        operator = flags['completeness']['operator']
+        self.assertNotIn('부품 확인', operator)  # 작업자가 골랐다
+        self.assertNotIn('시나리오 확인', operator)  # MES support_scenario에서 받았다
+
+    def test_sensor_noise_is_not_a_step_result(self):
+        eq = next(e for e in hpu_config().equipment if e.equipment_id == 'EQ-0001')
+        m = lambda v: [{'equipment_id': 'EQ-0001', 'signal': 'hpu_oil_temp', 'value': v}]  # noqa: E731
+        from shiftlink.mes.field_draft import delta_text
+        self.assertEqual(delta_text(eq, ['hpu_oil_temp'], m(45.7), m(45.8)), '센서값 변화 없음')
+        self.assertEqual(delta_text(eq, ['hpu_oil_temp'], m(78), m(45.66)), '유압유 온도 78→45.7')
 
     def test_same_cause_in_other_words_joins_one_draft(self):
         self.save(self.full_fix(), 'HO-RS-1')

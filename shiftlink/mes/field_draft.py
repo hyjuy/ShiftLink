@@ -148,8 +148,19 @@ def delta_text(eq: EquipmentConfig, watched: list[str], before: list[dict[str, A
     old = {m.get("signal"): m.get("value") for m in before}
     new = {m.get("signal"): m.get("value") for m in now}
     changed = [f"{names.get(sig, sig)} {_num(old.get(sig))}→{_num(new.get(sig))}" for sig in watched
-               if sig in old and sig in new and _num(old[sig]) != _num(new[sig])]
+               if sig in old and sig in new and _moved(old[sig], new[sig])]
     return ", ".join(changed) or "센서값 변화 없음"
+
+
+# 이보다 작은 변화는 측정 잡음으로 보고 '변화 없음'으로 둔다(10/13 실측: 복구 뒤 유온 45.7→45.8 같은 흔들림).
+# ponytail: 신호마다 같은 값. 단위가 크게 다른 신호(예: bar·%)에서 문제가 되면 정상 범위 폭의 비율로 바꾼다.
+DELTA_MIN = 0.5
+
+
+def _moved(old: object, new: object) -> bool:
+    if isinstance(old, (int, float)) and isinstance(new, (int, float)):
+        return abs(new - old) >= DELTA_MIN
+    return old != new
 
 
 def _num(value: object) -> object:
@@ -344,7 +355,8 @@ def completeness(card: dict[str, Any], flags: dict[str, Any]) -> dict[str, Any]:
         missing.append("MES로 확인된 해결 기록")
     if flags.get("thin_record"):
         missing.append("기록 빈약: " + ", ".join(flags["thin_record"]))
-    operator = ["부품 확인", "시나리오 확인"]
+    operator = [*([] if card.get("mes_component_code") else ["부품 확인"]),
+                *(["시나리오 확인"] if flags.get("scenario_default") else [])]
     if len(card["conditions"]) > 2:
         operator.append("조건 확인(우연히 함께 벗어난 신호 정리)")
     if flags.get("needs_safety_review"):

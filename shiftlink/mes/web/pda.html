@@ -197,6 +197,18 @@
   .resrow.sub input{font-size:14px;color:var(--tx-2)}
   .resrow .btn{width:auto}
   .resrow.sub{margin:-4px 0 12px 34px}
+  .resin{width:100%;min-height:52px;background:var(--surface);color:var(--tx);border:1px solid var(--edge);
+    border-radius:10px;padding:0 12px;font:inherit;font-size:16px}
+  .res-auto{font-size:14px;border:1px dashed var(--edge);border-radius:10px;padding:8px 10px}
+  .res-steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .res-step{border:1px solid var(--edge);border-radius:10px;padding:10px;background:var(--surface);display:grid;gap:4px}
+  .res-step .res{font-size:14px;color:var(--tx-2)}
+  .res-step .lock{font-size:13px;color:var(--notice)}
+  .res-live{border:2px solid var(--scan);border-radius:10px;padding:10px;display:grid;gap:8px}
+  .res-lock{border:1px solid var(--notice);border-radius:10px;padding:8px;color:var(--notice);font-size:14px;display:grid;gap:6px}
+  .res-verdict{border-radius:10px;padding:10px 12px;font-size:15px;border:1px solid var(--edge)}
+  .res-verdict.good{border-color:var(--ok);color:var(--ok-tx)}
+  .res-verdict.bad{border-color:var(--notice);color:var(--notice)}
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */
@@ -296,7 +308,7 @@
   .fold[open]{display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
   /* MES 고장 상황 알림 — 표시 전용. 탭하면 확인 화면(s-alertGo)으로만 간다(B3·A4). 행 간격 8px(A1). */
   #alert{flex:0 0 auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;background:var(--fault-bg);border-bottom:2px solid var(--fault-edge)}
-  #alert[hidden]{display:none}
+  #alert[hidden], .alert[hidden], #s-resolve [hidden]{display:none}
   #alert .alrow{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 14px;text-align:left;font-size:16px;
     font-weight:700;line-height:1.4;color:var(--fault-tx);background:none;border:0}
   #alert .alrow + .alrow{border-top:1px solid var(--fault-edge)}
@@ -685,25 +697,36 @@
   <!-- 해결 기록: '해당 지식 없음' 뒤 작업자가 한 일 -->
   <section class="screen" id="s-resolve">
     <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="font-size:14px;color:var(--tx-2)">해결 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+      <h1 style="font-size:14px;color:var(--tx-2)">조치 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
-      <p class="hint" id="resEvidence"></p>
+      <p class="hint res-auto" id="resBefore">조치 전 MES 값을 기록하고 있습니다…</p>
       <label for="resSymptom" class="lbl">현장에서 본 것</label>
-      <textarea id="resSymptom" maxlength="1000" placeholder="보인 증상과 상태를 있는 그대로 적어 주세요"></textarea>
-      <p class="lbl">한 일 (순서대로)</p>
-      <div id="resActions"></div>
-      <button class="btn sm" id="resAddAction" type="button">+ 조치 추가</button>
-      <p class="lbl">결과</p>
-      <div class="chips" id="resResult" role="group" aria-label="결과">
-        <button class="chip" type="button" data-value="resolved" aria-pressed="true">해결</button>
-        <button class="chip" type="button" data-value="temporary" aria-pressed="false">임시조치</button>
-        <button class="chip" type="button" data-value="failed" aria-pressed="false">효과 없음</button>
+      <input type="text" id="resSymptom" class="resin" maxlength="1000" placeholder="예: 쿨러 팬이 멈춰 있고 차단기가 트립돼 있음">
+      <div id="resWork">
+        <p class="lbl">부품</p>
+        <div class="chips" id="resComponents" role="group" aria-label="부품"></div>
+        <ol class="res-steps" id="resSteps"></ol>
+        <div class="res-live" id="resLive" hidden></div>
+        <div id="resPick">
+          <p class="lbl">한 일 고르기</p>
+          <div class="chips" id="resActionChips"></div>
+          <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="목록에 없으면 직접 입력" aria-label="조치 직접 입력">
+            <button class="btn sm" id="resAddCustom" type="button">추가</button></div>
+        </div>
+        <button class="btn primary" id="resFinish" type="button" disabled>조치 마무리 — 조치 후 MES 확인</button>
       </div>
-      <label for="resVerify" class="lbl">해결됐다고 본 근거</label>
-      <textarea id="resVerify" maxlength="1000" placeholder="예: 온도가 정상 범위로 내려가고 경보가 꺼짐"></textarea>
+      <div id="resWrap" hidden>
+        <div class="res-verdict" id="resVerdict"></div>
+        <p class="lbl">결과</p>
+        <div class="chips" id="resResult" role="group" aria-label="결과"></div>
+        <p class="lbl">원인</p>
+        <div class="chips" id="resCauses" role="group" aria-label="원인"></div>
+        <input type="text" id="resCauseCustom" class="resin" maxlength="200" placeholder="목록에 없으면 직접 (선택)" aria-label="원인 직접 입력">
+        <button class="btn sm" id="resMore" type="button">← 조치 더 하기</button>
+      </div>
       <div class="alert" id="resWarn" hidden></div>
       <div class="grow"></div>
-      <button class="btn primary" id="resSave" type="button">인계와 함께 저장</button>
+      <button class="btn primary" id="resSave" type="button" hidden>인계와 함께 저장</button>
     </div>
   </section>
 

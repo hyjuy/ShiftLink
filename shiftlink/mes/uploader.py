@@ -17,10 +17,22 @@ from pathlib import Path
 
 from .storage import MesStorage
 
+# 현장 해결 기록(`resolution`)이 실린 인계는 기능 확정 전까지 올리지 않고 로컬 pending으로 둔다(10/13 결정).
+# 확정되면 False로 바꾸면 쌓인 행이 다음 주기에 그대로 올라간다.
+HOLD_RESOLUTION_UPLOAD = True
+
+
+def _uploadable_handovers(storage: MesStorage):
+    rows = storage.pending_handovers()
+    if not HOLD_RESOLUTION_UPLOAD:
+        return rows
+    return [row for row in rows if "resolution" not in json.loads(row[2])]
+
+
 # (local rows, mark, cloud table, key column, extra columns from payload)
 def _specs(storage: MesStorage):
     return [
-        (storage.pending_handovers, storage.mark_handover, "handover_upload", "handover_id", ("equipment_id",)),
+        (lambda: _uploadable_handovers(storage), storage.mark_handover, "handover_upload", "handover_id", ("equipment_id",)),
         (storage.pending_queries, storage.mark_query, "query_upload", "query_id", ("equipment_id", "latency_ms", "no_knowledge")),
     ]
 

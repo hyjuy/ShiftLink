@@ -17,7 +17,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
-from . import configuration
+from . import configuration, field_draft
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
@@ -153,7 +153,43 @@ class MesService:
 
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
-            return self.storage.save_handover(body)
+            # 해결 기록은 인계 저장 전에 검사한다. 잘못되면 인계도 남지 않는다.
+            prepared = None
+            if isinstance(body, dict) and body.get("resolution") is not None:
+                prepared = field_draft.prepare(body["resolution"], self.active_config, body.get("equipment_id"))
+                snap = asdict(self.engine.snapshot)
+                field_draft.check_with_mes(
+                    prepared, snap["measurements"],
+                    [a["code"] for a in snap["active_alarms"] if a.get("equipment_id") == prepared["eq"].equipment_id],
+                    str(snap["simulated_at"]), self.engine.run.run_id, [asdict(e) for e in self.engine.events])
+            saved = self.storage.save_handover(body)
+            if prepared is None:
+                return saved
+            return {**saved, "draft": {**self._file_resolution(body["handover_id"], prepared),
+                                       "mes_recovered": prepared["mes_check"]["recovered"]}}
+
+    def _file_resolution(self, handover_id: str, prepared: dict[str, Any]) -> dict[str, object]:
+        """같은 설비·조건·겹치는 조치의 검수 대기 초안이 있으면 근거로 붙이고, 없으면 새 초안을 만든다."""
+        if self.storage.has_draft_record(handover_id):
+            return {"created": False, "reason": "already_exists"}
+        scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
+                  if row["status"] == "pending_review"]
+        score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))
+        if score > 0:  # 가장 많이 겹치는 초안 하나에만 붙인다
+            draft, relation = field_draft.merge(row, prepared, handover_id)
+            self.storage.update_card_draft(row["draft_id"], handover_id, relation, draft)
+            return {"created": False, "reason": relation}
+        draft = field_draft.draft_from(prepared, handover_id, self.storage.next_card_id(*field_draft.ID_RANGE), utc_now())
+        if draft["status"] == "attempt_only":
+            return {"created": False, "reason": "attempt_only"}
+        if not self.storage.save_card_draft({**draft, "handover_id": handover_id}):
+            return {"created": False, "reason": "already_exists"}
+        return {"created": draft["status"] == "pending_review", "reason": draft["status"]}
+
+    def card_drafts(self) -> dict[str, object]:
+        """검수 대기 카드 초안 목록(읽기 전용). 검색·PDA에는 나가지 않는다."""
+        with self._lock:
+            return {"drafts": self.storage.list_card_drafts(), "is_synthetic": True}
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -363,6 +399,7 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return
             if parsed.path == "/api/runs": self._send(200, self.service.runs()); return
+            if parsed.path == "/api/card-drafts": self._send(200, self.service.card_drafts()); return
             if parsed.path == "/api/outbox": self._send(200, {**self.service.storage.outbox_counts(), "is_synthetic": True}); return
             if parsed.path == "/api/outbox/pending":
                 rows = self.service.storage.pending_handovers()

@@ -76,3 +76,12 @@ def test_marked_uploaded_but_absent_in_cloud_is_missing_and_changed_hash_is_conf
     out = reconcile(read_local(storage.connection, "HO-recon-"), read_cloud(cloud.connect, "HO-recon-"))
     assert out["missing"] == ["HO-recon-1"] and out["conflict"] == ["HO-recon-2"] and out["cloud_only"] == 0
     assert not ok(out)
+
+
+def test_resolution_handover_waits_locally_while_upload_is_held():
+    storage, cloud = MesStorage(), FakeCloud()
+    storage.save_handover(_note(1))
+    storage.save_handover({**_note(2), "resolution": {"result": "resolved"}})
+    upload_pending(storage, cloud.connect)
+    assert list(cloud.rows) == ["HO-recon-1"]
+    assert [row[0] for row in storage.pending_handovers()] == ["HO-recon-2"]

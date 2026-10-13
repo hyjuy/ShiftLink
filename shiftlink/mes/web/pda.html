@@ -190,6 +190,13 @@
   .chips{display:flex;gap:8px;flex-wrap:wrap}
   .chip{display:flex;align-items:center;gap:7px;min-height:48px;padding:0 14px;border-radius:999px;
     background:var(--surface);border:1px solid var(--edge);font-size:14px;font-weight:700}
+  .chip[aria-pressed="true"]{border-color:var(--scan);color:var(--scan)}
+  .resrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .resrow input{flex:1;min-width:0;min-height:48px;background:var(--surface);color:var(--tx);
+    border:1px solid var(--edge);border-radius:10px;padding:0 12px;font:inherit;font-size:16px}
+  .resrow.sub input{font-size:14px;color:var(--tx-2)}
+  .resrow .btn{width:auto}
+  .resrow.sub{margin:-4px 0 12px 34px}
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */
@@ -691,6 +698,31 @@
     <div class="appbar"><button class="ic" id="obBack" type="button" aria-label="이전">← 이전</button>
       <h1 style="color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="obPane"></div>
+  </section>
+
+  <!-- 해결 기록: '해당 지식 없음' 뒤 작업자가 한 일 -->
+  <section class="screen" id="s-resolve">
+    <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전">← 이전</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">해결 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane">
+      <p class="hint" id="resEvidence"></p>
+      <label for="resSymptom" class="lbl">현장에서 본 것</label>
+      <textarea id="resSymptom" maxlength="1000" placeholder="보인 증상과 상태를 있는 그대로 적어 주세요"></textarea>
+      <p class="lbl">한 일 (순서대로)</p>
+      <div id="resActions"></div>
+      <button class="btn sm" id="resAddAction" type="button">+ 조치 추가</button>
+      <p class="lbl">결과</p>
+      <div class="chips" id="resResult" role="group" aria-label="결과">
+        <button class="chip" type="button" data-value="resolved" aria-pressed="true">해결</button>
+        <button class="chip" type="button" data-value="temporary" aria-pressed="false">임시조치</button>
+        <button class="chip" type="button" data-value="failed" aria-pressed="false">효과 없음</button>
+      </div>
+      <label for="resVerify" class="lbl">해결됐다고 본 근거</label>
+      <textarea id="resVerify" maxlength="1000" placeholder="예: 온도가 정상 범위로 내려가고 경보가 꺼짐"></textarea>
+      <div class="alert" id="resWarn" hidden></div>
+      <div class="grow"></div>
+      <button class="btn primary" id="resSave" type="button">인계와 함께 저장</button>
+    </div>
   </section>
 
   <!-- 인계 작성 -->

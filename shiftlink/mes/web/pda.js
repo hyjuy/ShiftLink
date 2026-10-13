@@ -1226,6 +1226,13 @@ function answerBody(turn) {
     row.appendChild(next);
   }
 
+  if (none) {
+    const record = document.createElement('button');
+    record.type = 'button'; record.className = 'btn sm';
+    record.textContent = '해결하면 기록 남기기';
+    record.addEventListener('click', () => openResolve(turn));
+    d.appendChild(record);
+  }
   const ids = r.actions.map((x) => x.card.card_id);
   const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
     ? (res.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id) : [];
@@ -1274,6 +1281,78 @@ function chatMemo(turn, max = 4000) {
     : (res.no_knowledge === true || !res.answer) ? '해당 지식 없음' : res.answer;
   const text = ['질문: ' + turn.question, '답: ' + answer, ids.length ? '근거 카드: ' + ids.join(', ') : ''].filter(Boolean).join('\n');
   return text.length > max ? text.slice(0, max - 1) + '…' : text;
+}
+
+// ── 현장 해결 기록 ─────────────────────────────────────────────────
+/* '해당 지식 없음' 뒤 작업자가 해결하면 남기는 기록. 인계와 함께 저장되고, 서버가 검수 대기 카드 초안으로 만든다.
+ * 초안은 검색에 나가지 않고 PDA 화면에도 목록으로 나오지 않는다. */
+const RESOLVE_RESULTS = [['resolved', '해결'], ['temporary', '임시조치'], ['failed', '효과 없음']];
+
+function evidenceSummary(evidence) {
+  if (!evidence) return 'MES 근거 없음 — 설비를 확정하지 않은 질의입니다.';
+  const used = (evidence.measurements || []).filter((m) => m.used_for_conditions);
+  const parts = used.map((m) => signalName(m.signal) + ' ' + m.value + ' ' + unitText(m.unit));
+  return 'MES 근거(질의 시점 ' + stamp(evidence.simulated_at) + '): ' + (parts.join(', ') || '사용한 측정값 없음');
+}
+
+/* 저장 전 검사. 서버도 같은 규칙으로 다시 검사한다. */
+function resolutionError(form) {
+  if (!form.symptom.trim()) return '현장에서 본 것을 적어 주세요.';
+  if (form.result !== 'failed' && !form.actions.some((a) => a.trim())) return '한 일을 한 가지 이상 적어 주세요.';
+  if (form.result === 'resolved' && !form.verification.trim()) return '해결됐다고 본 근거를 적어 주세요.';
+  return '';
+}
+
+function resolutionPayload(form, turn) {
+  return {question: turn.question, symptom: form.symptom.trim(),
+    actions: form.actions.map((a) => a.trim()).filter(Boolean), result: form.result,
+    verification: form.verification.trim(), evidence: turn.response.evidence || null};
+}
+
+/* 인계 응답의 draft 필드 → 확인 문구. 응답에는 카드 내용이 없다. */
+function draftNotice(draft) {
+  if (!draft) return '';
+  if (draft.reason === 'pending_review') return '이 해결 기록으로 카드 초안이 만들어졌고 검수를 기다립니다 — 검수 전에는 검색에 나오지 않습니다';
+  if (draft.reason === 'attempt_only') return '효과 없음으로 시도 기록만 남겼습니다. 카드 초안은 만들지 않습니다.';
+  if (draft.reason === 'invalid') return '해결 기록을 담았지만 카드 형식이 맞지 않아 담당자 보완 대기로 보관했습니다.';
+  return '이 인계에는 이미 카드 초안이 만들어져 있어 새로 만들지 않았습니다.';
+}
+
+function openResolve(turn) {
+  S.resolveTurn = turn;
+  S.resolveForm = {symptom: '', actions: [''], result: 'resolved', verification: ''};
+  $('resSymptom').value = ''; $('resVerify').value = '';
+  $('resEvidence').textContent = evidenceSummary(turn.response.evidence);
+  $('resWarn').hidden = true;
+  renderResolveActions(); paintResolveResult();
+  show('resolve');
+}
+
+function renderResolveActions() {
+  const form = S.resolveForm, box = $('resActions');
+  box.innerHTML = '';
+  form.actions.forEach((text, i) => {
+    const row = document.createElement('div'); row.className = 'resrow';
+    const no = document.createElement('span'); no.className = 'rkno'; no.textContent = String(i + 1);
+    const input = document.createElement('input');
+    input.type = 'text'; input.maxLength = 500; input.value = text; input.placeholder = '조치 내용';
+    input.setAttribute('aria-label', (i + 1) + '번째 조치');
+    input.addEventListener('input', () => { form.actions[i] = input.value; });
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'btn sm ghost'; del.textContent = '삭제';
+    del.addEventListener('click', () => {
+      form.actions.splice(i, 1);
+      if (!form.actions.length) form.actions.push('');
+      renderResolveActions();
+    });
+    row.append(no, input, del); box.appendChild(row);
+  });
+}
+
+function paintResolveResult() {
+  document.querySelectorAll('#resResult .chip').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.value === S.resolveForm.result));
+  });
 }
 
 // ── 시도 기록 ──────────────────────────────────────────────────────
@@ -1710,6 +1789,7 @@ async function submitHandover(note, request = api, store = localStorage) {
 /* memo: 대화에서 넘어올 때 마지막 질문·답 초안(chatMemo). 버튼 클릭 이벤트가 인자로 오면 무시한다. */
 function openHandoverNew(memo) {
   S.hoNewBack = S.screen === 'chat' ? 'chat' : 'ctx';
+  S.resolution = null;
   if (typeof memo === 'string' && memo) $('hoMemo').value = memo;
   const ctx = S.tries.length
     ? '시도 ' + S.tries.length + '건 실패 (' + S.tries.map((t) => t.attempt_id).join(' · ') + ')'
@@ -1967,7 +2047,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo }; }
+if (typeof module !== 'undefined') { module.exports = { unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, evidenceSummary, resolutionError, resolutionPayload, draftNotice }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -2199,9 +2279,12 @@ on('hoSave', async () => {
       equipment_id:S.eq ? S.eq.equipment_id : null,
       required_context:{recipient_role:$('hoRole').value.trim(), timing:$('hoTiming').value.trim(),
         channel:$('hoChannel').value.trim(), acknowledgement:$('hoAck').value.trim(), context:$('hoCtx').value.trim()},
-      attempts:S.tries, observations:S.observations});
+      attempts:S.tries, observations:S.observations,
+      ...(S.resolution ? {resolution: S.resolution} : {})});
     haptic([120]);
-    $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id;
+    $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id
+      + (result.draft ? ' · ' + draftNotice(result.draft) : '');
+    S.resolution = null;
     pollOutbox();   // 저장 즉시 '업로드 대기' 반영 — 다음 주기까지 기다리지 않는다
   } catch (err) {
     $('hoWarn').textContent = '저장 확인 실패 · ' + err.message + ' · 같은 메모로 다시 저장하면 재전송됩니다.';
@@ -2210,6 +2293,24 @@ on('hoSave', async () => {
 });
 ['hoMemo','hoCtx','hoRole','hoTiming','hoChannel','hoAck'].forEach((id) => {
   $(id).addEventListener('input', validateHandover);
+});
+on('resBack', () => show('chat'));
+on('resAddAction', () => { S.resolveForm.actions.push(''); renderResolveActions(); });
+$('resResult').addEventListener('click', (ev) => {
+  const chip = ev.target.closest('.chip');
+  if (!chip) return;
+  S.resolveForm.result = chip.dataset.value; paintResolveResult();
+});
+on('resSave', () => {
+  const form = S.resolveForm;
+  form.symptom = $('resSymptom').value; form.verification = $('resVerify').value;
+  const err = resolutionError(form);
+  $('resWarn').hidden = !err; $('resWarn').textContent = err;
+  if (err) return;
+  const turn = S.resolveTurn;
+  openHandoverNew(chatMemo(turn));
+  S.resolution = resolutionPayload(form, turn);   // openHandoverNew가 비운 뒤에 붙인다
+  S.hoNewBack = 'resolve';
 });
 
 $('question').addEventListener('input', renderAskBlock);

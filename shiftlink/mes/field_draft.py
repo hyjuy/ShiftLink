@@ -464,6 +464,12 @@ def _keys(conditions: list[dict[str, Any]]) -> set[tuple[str, Any]]:
     return {(c["signal"], c["value"]) for c in conditions}
 
 
+def card_cause(card: dict[str, Any]) -> str:
+    """현장 카드 노하우 첫 줄의 '원인: …'. 없으면 빈 문자열."""
+    first = (card.get("know_how") or "").splitlines()[0] if card.get("know_how") else ""
+    return first.removeprefix("원인: ") if first.startswith("원인: ") else ""
+
+
 def match_score(card: dict[str, Any], prepared: dict[str, Any]) -> float:
     """같은 설비 + 겹치는 이상 조건일 때 조치 겹침 비율. OVERLAP_MIN 이상이면 한 초안으로 묶는다(0이면 묶지 않음).
 
@@ -475,11 +481,18 @@ def match_score(card: dict[str, Any], prepared: dict[str, Any]) -> float:
     if not _keys(card["conditions"]) & _keys(_conditions(prepared["states"])):
         return 0.0
     # 조치 전체로 비교한다. 단계 하나씩 비교하면 '온도 재확인' 같은 공통 단계 때문에 다른 원인이 묶인다.
-    # 원인도 함께 비교한다: 같은 원인이면 조치 표현이 달라도 묶인다(카드는 know_how 첫 줄에 원인이 있다).
+    # 원인이 양쪽에 다 있으면 원인이 결정한다: 다른 원인은 묶지 않는다(10/13 실측: 핀 막힘이 MES 공통 단계
+    # '유온·공급 정상 확인' 때문에 팬 정지 초안에 묶였다). 한쪽이라도 원인 모름이면 조치로 비교하되,
+    # 누구나 하는 MES 복구 단계(prepared["generic_actions"])는 뺀다.
     resolution = prepared["resolution"]
-    cause = resolution.get("cause") if resolution.get("cause") != CAUSE_UNKNOWN else ""
-    score = _overlap(" ".join([card.get("know_how") or "", *(s["action"] for s in card["type_payload"]["steps"])]),
-                     " ".join([cause or "", *(a["action"] for a in resolution["actions"])]))
+    new_cause = resolution.get("cause") if resolution.get("cause") != CAUSE_UNKNOWN else ""
+    old_cause = card_cause(card)
+    if new_cause and old_cause:
+        score = _overlap(old_cause, new_cause)
+    else:
+        generic = prepared.get("generic_actions") or set()
+        score = _overlap(" ".join([old_cause, *(s["action"] for s in card["type_payload"]["steps"] if s["action"] not in generic)]),
+                         " ".join([new_cause or "", *(a["action"] for a in resolution["actions"] if a["action"] not in generic)]))
     return score if score >= OVERLAP_MIN else 0.0
 
 

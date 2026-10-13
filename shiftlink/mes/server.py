@@ -191,6 +191,8 @@ class MesService:
 
     def _plan_resolution(self, handover_id: str, prepared: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, object]]:
         """저장하지 않고 계산만 한다: 가장 많이 겹치는 검수 대기 초안에 붙이거나 새 초안을 만든다. 예외면 아무것도 남지 않는다."""
+        # MES 복구 단계 제목(시나리오별 + 일반 계획)은 누구나 하는 조치라 묶음 비교에서 뺀다.
+        prepared["generic_actions"] = {a.title for spec in self.active_config.scenarios for a in spec.recovery_actions}             | {"이상 신호 위치 확인", "원인 조치 기록", "정상 범위 회복 확인"}
         scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
                   if row["status"] == "pending_review"]
         score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))

@@ -596,6 +596,24 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertEqual(out['draft']['reason'], 'supporting')
         self.assertEqual(len(self.service.card_drafts()['drafts']), 1)
 
+    def test_different_cause_is_not_joined_by_shared_mes_step(self):
+        # 10/13 상황지 검증: 핀 막힘이 MES 공통 단계 '유온·공급 정상 확인' 때문에 팬 정지 초안에 묶였다.
+        def record(handover_id, first, cause, result='resolved', fix=True):
+            self.service.control({'command': 'reset'}); self.service.control({'command': 'start'}); self.service.engine.tick(30)
+            self.overheat()
+            sid = self.start()['session_id']
+            self.service.resolution_step(sid, {'action': first, 'lockout': '예'})
+            if fix:
+                self.mes('inspect', 'repair', 'verify', restart=True)
+                self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
+            return self.save(sid, handover_id, cause=cause, result=result)
+        record('HO-C1', '팬 차단기 트립 원인 확인 후 재투입', '팬 차단기 트립')
+        self.assertEqual(record('HO-C2', '쿨러 핀 에어 블로우로 먼지 제거', '쿨러 핀 막힘')['draft']['reason'], 'pending_review')
+        # 원인 모름 + 같은 조치(효과 없음)는 조치로 비교해 핀 막힘 초안의 반대 근거
+        out = record('HO-C3', '쿨러 핀 에어 블로우로 먼지 제거', '원인 모름', result='failed', fix=False)
+        self.assertEqual(out['draft']['reason'], 'contradicting')
+        self.assertEqual(len(self.service.card_drafts()['drafts']), 2)
+
     def test_handover_session_and_draft_are_atomic(self):
         sid = self.full_fix()
         def exhausted(*_):

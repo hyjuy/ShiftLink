@@ -516,6 +516,36 @@ class ResolutionSessionTests(unittest.TestCase):
         out = self.start(with_query=False)
         self.assertEqual(self.service.resolution_get(out['session_id'])['data']['before']['source'], 'snapshot')
 
+    def test_card_answer_session_records_card_and_makes_no_draft(self):
+        self.overheat()
+        with self.assertRaisesRegex(ValueError, 'card_ids'):
+            self.service.resolution_start({'equipment_id': 'EQ-0001', 'card_ids': ['K-9999']})
+        sid = self.service.resolution_start({'equipment_id': 'EQ-0001', 'card_ids': ['K-1002']})['session_id']
+        self.service.resolution_step(sid, {'action': '쿨러 출구 유온 확인'})
+        out = self.save(sid)
+        self.assertEqual(out['draft']['reason'], 'card_used')
+        self.assertEqual(self.service.storage.list_card_drafts(), [])
+        self.assertEqual(self.service.resolution_get(sid)['data']['card_ids'], ['K-1002'])
+
+    def test_card_step_chips_record_card_step_and_check_source(self):
+        self.overheat()
+        out = self.service.resolution_start({'equipment_id': 'EQ-0001', 'card_ids': ['K-1002', 'K-1025']})
+        chips = [a for a in out['action_suggestions'] if a['source'] == 'card_step']
+        self.assertEqual([(c['card_id'], c['step_id']) for c in chips[:2]], [('K-1002', 'ST-01'), ('K-1002', 'ST-02')])
+        self.assertEqual(out['action_suggestions'][len(chips)]['source'], 'mes_recovery')  # 카드 단계가 먼저
+        sid = out['session_id']
+        step = next(c for c in chips if c['step_id'] == 'ST-03' and c['card_id'] == 'K-1002')
+        self.service.resolution_step(sid, {'action': step['text'], 'card_id': 'K-1002', 'step_id': 'ST-03'})
+        self.assertEqual(self.service.resolution_get(sid)['data']['steps'][0]['card_step'],
+                         {'card_id': 'K-1002', 'step_id': 'ST-03', 'n': 3})
+        # 칩 글자에 위험어가 없어도 단계 원문(전원 차단·재기동 방지)으로 잠금 응답을 받는다
+        with self.assertRaisesRegex(ValueError, 'lockout_required'):
+            self.service.resolution_step(sid, {'action': '전원 끄기', 'card_id': 'K-1025', 'step_id': 'ST-01'})
+        with self.assertRaisesRegex(ValueError, 'seen in this session'):
+            self.service.resolution_step(sid, {'action': '코일 제거', 'card_id': 'K-1206', 'step_id': None})
+        with self.assertRaisesRegex(ValueError, 'unknown card step'):
+            self.service.resolution_step(sid, {'action': '없는 단계', 'card_id': 'K-1002', 'step_id': 'ST-99'})
+
     def test_risky_step_needs_lockout_answer(self):
         self.overheat()
         sid = self.start()['session_id']
@@ -561,6 +591,10 @@ class ResolutionSessionTests(unittest.TestCase):
         out = self.save(sid)
         self.assertEqual(out['draft'], {'created': True, 'reason': 'pending_review', 'mes_recovered': True,
                                         'mes_verdict': 'recovered'})
+        # 대시보드 지식 공백: 실제 질의(full_fix의 질의)·초안이 그대로 세어진다
+        gap = self.service.analytics()['knowledge']
+        self.assertEqual((gap['drafts'], gap['pending'], gap['approved']), (1, 1, 0))
+        self.assertEqual(gap['no_knowledge'], sum(q.get('no_knowledge') is True for q in self.service.storage.query_payloads()))
         [row] = self.service.card_drafts()['drafts']
         card, flags = row['card'], row['review_flags']
         KnowledgeCard.model_validate(card)

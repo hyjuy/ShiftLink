@@ -183,6 +183,19 @@ class MesStorage:
             "SELECT equipment_id, status, data FROM resolution_sessions WHERE session_id = ?", (str(session_id),)).fetchone()
         return {"session_id": session_id, "equipment_id": row[0], "status": row[1], "data": json.loads(row[2])} if row else None
 
+    def resolution_sessions(self, run_id: str) -> list[dict[str, Any]]:
+        """이 실행의 조치 기록 세션 전부(대시보드 사건 연결용)."""
+        rows = self.connection.execute("SELECT session_id, equipment_id, status, data FROM resolution_sessions")
+        sessions = [{"session_id": s, "equipment_id": e, "status": st, "data": json.loads(d)} for s, e, st, d in rows]
+        return [s for s in sessions if s["data"].get("run_id") == run_id]
+
+    def handover_payloads(self) -> list[dict[str, Any]]:
+        return [json.loads(p) for (p,) in self.connection.execute("SELECT payload FROM handover_outbox")]
+
+    def query_payloads(self) -> list[dict[str, Any]]:
+        """이 DB에 쌓인 PDA 질의 전부(업로드 여부와 관계없이). 대시보드 지식 공백용."""
+        return [json.loads(p) for (p,) in self.connection.execute("SELECT payload FROM query_log")]
+
     def update_resolution_session(self, session_id: str, data: dict[str, Any]) -> bool:
         """열린 세션만 고친다. False면 이미 저장된 세션이다."""
         with self.connection:

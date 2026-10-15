@@ -1238,13 +1238,12 @@ function answerBody(turn) {
     row.appendChild(next);
   }
 
-  if (none) {
-    const record = document.createElement('button');
-    record.type = 'button'; record.className = 'btn sm';
-    record.textContent = '조치 시작 — 기록하면서 작업';
-    record.addEventListener('click', () => openResolve(turn));
-    d.appendChild(record);
-  }
+  // 카드 답에서도 조치를 기록한다 — 본 카드 ID가 세션에 남아 대시보드 사건에 연결된다.
+  const record = document.createElement('button');
+  record.type = 'button'; record.className = 'btn sm';
+  record.textContent = '조치 시작 — 기록하면서 작업';
+  record.addEventListener('click', () => openResolve(turn));
+  d.appendChild(record);
   const ids = r.actions.map((x) => x.card.card_id);
   const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
     ? (res.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id) : [];
@@ -1306,6 +1305,8 @@ const LOCKOUTS = ['예', '아니오', '해당 없음'];
 const CAUSE_UNKNOWN = '원인 모름';
 
 function riskyAction(text) { return RISK_WORDS.some((w) => String(text || '').includes(w)); }
+// 카드 단계는 칩 글자가 잘려 있어도 서버가 단계 원문으로 판정한 risky를 따른다.
+function liveRisky(live) { return riskyAction(live.action) || !!(live.card && live.card.risky); }
 
 /* 조치 전(시작) 또는 조치 후(마무리) MES 요약 한 줄. */
 function mesSummary(label, view) {
@@ -1350,6 +1351,7 @@ function draftReason(reason) {
   if (reason === 'attempt_only') return '효과 없음으로 시도 기록만 남겼습니다. 카드 초안은 만들지 않습니다.';
   if (reason === 'supporting') return '같은 원인의 검수 대기 카드 초안에 이 기록을 근거로 더했습니다';
   if (reason === 'contradicting') return '같은 조치가 효과 없었던 기록으로 검수 대기 카드 초안에 남겼습니다.';
+  if (reason === 'card_used') return '카드를 보고 한 조치로 기록했습니다. 새 카드 초안은 만들지 않습니다.';
   if (reason === 'invalid') return '조치 기록을 담았지만 카드 형식이 맞지 않아 담당자 보완 대기로 보관했습니다.';
   return '이 인계에는 이미 카드 초안이 만들어져 있어 새로 만들지 않았습니다.';
 }
@@ -1373,7 +1375,8 @@ async function openResolve(turn) {
   show('resolve');
   try {
     const out = await postJson('/api/resolution/start', {equipment_id: S.eq.equipment_id, question: turn.question,
-      evidence: (turn.response && turn.response.evidence) || null});
+      evidence: (turn.response && turn.response.evidence) || null,
+      card_ids: ((turn.ranked && turn.ranked.actions) || []).map((x) => x.card.card_id)});
     Object.assign(S.res, {sessionId: out.session_id, before: out.before, components: out.components || [],
       actions: out.action_suggestions || [], causes: out.cause_suggestions || [CAUSE_UNKNOWN]});
     const pick = S.res.components.find((c) => c.suggested);
@@ -1407,7 +1410,7 @@ function renderResolve() {
     const li = document.createElement('li'); li.className = 'res-step';
     const a = document.createElement('b'); a.textContent = s.order + '. ' + s.action;
     const res = document.createElement('span'); res.className = 'res';
-    res.textContent = (s.mes_linked ? 'MES 반영 · ' : '') + '자동 결과: ' + s.result_text;
+    res.textContent = (s.card ? s.card.card_id + ' 단계 · ' : '') + (s.mes_linked ? 'MES 반영 · ' : '') + '자동 결과: ' + s.result_text;
     li.append(a, res);
     if (s.lockout) { const l = document.createElement('span'); l.className = 'lock'; l.textContent = '에너지 차단(잠금): ' + s.lockout; li.appendChild(l); }
     return li;
@@ -1419,7 +1422,7 @@ function renderResolve() {
   if (r.live) {
     const title = document.createElement('b'); title.textContent = (r.steps.length + 1) + '. ' + r.live.action + ' · 진행 중';
     const parts = [title];
-    const needLock = riskyAction(r.live.action);
+    const needLock = liveRisky(r.live);
     if (needLock) {
       const box = document.createElement('div'); box.className = 'res-lock';
       box.textContent = '차단기·재투입·재가동 같은 작업입니다. 에너지 차단(잠금) 후 작업했나요?';
@@ -1437,8 +1440,11 @@ function renderResolve() {
     parts.push(done, cancel);
     live.replaceChildren(...parts);
   }
-  $('resActionChips').replaceChildren(...actionChips(r).map((a) => chip(a.text, null,
-    () => { r.live = {action: a.text, lockout: null}; renderResolve(); }, a.tag, a.disabled)));
+  $('resActionChips').replaceChildren(...actionChips(r).map((a) => {
+    const c = chip(a.text, null, () => { r.live = {action: a.text, lockout: null, card: a.card}; renderResolve(); }, a.tag, a.disabled);
+    if (a.card) c.classList.add('card-step');
+    return c;
+  }));
   $('resFinish').disabled = r.busy || !r.sessionId || !!r.live || !r.steps.length;
   $('resFinish').textContent = r.steps.length ? '조치 마무리 — 조치 후 MES 확인' : '조치 마무리 (조치를 하나 이상 완료하면 켜짐)';
   // 마무리
@@ -1454,15 +1460,17 @@ function renderResolve() {
   $('resSave').disabled = r.busy;
 }
 
-/* 한 일 칩: MES 복구 단계(완료하면 MES에도 반영, 순서대로), 재가동(MES 단계를 다 끝낸 뒤), 이 설비의 이전 현장 기록.
- * 이미 끝낸 MES 단계는 다시 보이지 않는다. */
+/* 한 일 칩: 답에서 본 카드의 단계(완료하면 '카드 방법'으로 남음), MES 복구 단계(완료하면 MES에도 반영, 순서대로),
+ * 재가동(MES 단계를 다 끝낸 뒤), 이 설비의 이전 현장 기록. 이미 끝낸 카드·MES 단계는 다시 보이지 않는다. */
 const ACTION_TAGS = {mes_recovery: 'MES 단계', mes_restart: 'MES', field_record: '이전 기록'};
 function actionChips(r) {
   const done = new Set(r.steps.map((s) => s.action));
   const mesSteps = r.actions.filter((a) => a.source === 'mes_recovery');
   const mesDone = mesSteps.every((a) => done.has(a.text));
   return r.actions.filter((a) => !(a.source !== 'field_record' && done.has(a.text)))
-    .map((a) => ({text: a.text, tag: ACTION_TAGS[a.source] || '', disabled: a.source === 'mes_restart' && !mesDone}));
+    .map((a) => ({text: a.text, disabled: a.source === 'mes_restart' && !mesDone,
+      tag: a.source === 'card_step' ? a.card_id + (a.n ? ' · ' + a.n + '단계' : '') : ACTION_TAGS[a.source] || '',
+      card: a.source === 'card_step' ? {card_id: a.card_id, step_id: a.step_id, risky: !!a.risky} : null}));
 }
 
 async function completeStep() {
@@ -1470,9 +1478,11 @@ async function completeStep() {
   if (!r || !r.live || r.busy) return;
   r.busy = true; renderResolve();
   try {
-    const out = await postJson('/api/resolution/' + r.sessionId + '/step', {action: r.live.action, lockout: r.live.lockout});
-    r.steps.push({order: out.order, action: r.live.action, lockout: riskyAction(r.live.action) ? r.live.lockout : null,
-      result_text: out.result_text, mes_linked: out.mes_linked || null});
+    const card = r.live.card;
+    const out = await postJson('/api/resolution/' + r.sessionId + '/step', {action: r.live.action, lockout: r.live.lockout,
+      ...(card ? {card_id: card.card_id, step_id: card.step_id} : {})});
+    r.steps.push({order: out.order, action: r.live.action, lockout: liveRisky(r.live) ? r.live.lockout : null,
+      result_text: out.result_text, mes_linked: out.mes_linked || null, card: card || null});
     r.live = null; resolveWarn('');
   } catch (err) {
     resolveWarn(err.message === 'lockout_required' ? '잠금 여부를 골라 주세요.' : '조치를 기록하지 못했습니다 · ' + err.message);
@@ -1839,6 +1849,10 @@ function renderHome() {
   const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['조치 필요 장비', (S.faults || []).length]];
   const metrics = $('homeDashboard'); metrics.replaceChildren();
   counts.forEach(([label,value]) => metrics.appendChild(metricElement(label, S.snapshot && S.online !== false ? value : (label === '전체 설비' ? value : '—'))));
+  // 이상이 없으면 회색 상자는 숨긴다(조치 필요 장비 0이 같은 말) — 그 자리에 지켜볼 설비. 이상이 있으면 지켜볼 설비를 숨긴다
+  faultDetails.hidden = !!S.snapshot && S.online !== false && !(S.faults || []).length;
+  $('homeWatch').classList.toggle('busy', !!(S.faults || []).length);
+  renderHomeMade(); renderHomeWatch();
 }
 function metricElement(label, value, unit, bad) {
   const el = document.createElement('div'); el.className = 'metric' + (bad ? ' bad' : '');
@@ -1900,21 +1914,6 @@ function openHistory() {
     if (h.kind === 'work_log') return handoverEquipment(h,S.equipment).includes(S.eq) ? dutyTimeline(h,S.eq) : [];
     return dutyTimeline(h,S.eq);
   }); appendTimeline(pane,rows); show('history');
-}
-async function openDashboard() {
-  const pane = $('dashboardPane'); pane.replaceChildren(); show('dashboard');
-  const heading = (text) => { const h = document.createElement('h2'); h.textContent = text; pane.appendChild(h); };
-  heading('고장 · 조치 필요 장비');
-  const faults = S.faults || [];
-  faults.forEach((fault) => { const p = document.createElement('p'); p.textContent = fault.eq.code + ' · ' + fault.items.join(' · '); pane.appendChild(p); });
-  if (!faults.length) { const p=document.createElement('p');p.textContent='현재 조치 필요 장비가 없습니다.';pane.appendChild(p); }
-  heading('최근 정비 기록'); appendTimeline(pane,allHandovers().flatMap((h) => dutyTimeline(h)).slice(0,10));
-  heading('자주 정지된 장비 · 현재 MES 실행 기록');
-  try { const log = await getJson('/api/events'); if (S.screen !== 'dashboard') return;
-    const counts = new Map(); (log.events || []).filter((e) => /stop|정지/i.test([e.event_type,e.observation,e.operating_state].join(' '))).forEach((e) => counts.set(e.equipment_id,(counts.get(e.equipment_id)||0)+1));
-    if (!counts.size) { const p=document.createElement('p');p.textContent='현재 실행에서 집계된 정지 기록이 없습니다.';pane.appendChild(p); }
-    [...counts].sort((a,b) => b[1]-a[1]).forEach(([id,count]) => { const eq=S.equipment.find((e)=>e.equipment_id===id); const p=document.createElement('p');p.textContent=(eq?eq.code:id)+' · '+count+'건';pane.appendChild(p); });
-  } catch (_) { const p=document.createElement('p');p.textContent='MES 이벤트를 불러오지 못했습니다.';pane.appendChild(p); }
 }
 
 const HANDOVER_PENDING_KEY = 'shiftlink.handover.pending';
@@ -2198,7 +2197,127 @@ function homeEquipmentSummary(equipment, faults, available) {
   const abnormal = new Set((faults || []).filter(f => ids.has(f.eq.equipment_id)).map(f => f.eq.equipment_id)).size;
   return {total: equipment.length, normal: available ? equipment.length - abnormal : null, abnormal: available ? abnormal : null};
 }
+// 홈 생산 링 — 대시보드 정지 손실의 생산 링과 같은 그림(같은 좌표, 보이는 칸만 잘라 씀)
+function renderHomeMade() {
+  const box = $('homeMade'), v = S.an && lossView(S.an.production, S.an.loss);
+  box.hidden = !(v && v.planned);
+  if (box.hidden) return;
+  const {cx, r} = LOSS_CHART.made, cy = LOSS_CHART.cy, pad = 12, f1 = (n) => n.toFixed(1) + '%';
+  box.innerHTML = '<svg class="loss-chart made-only" viewBox="' + (cx - r - pad) + ' ' + (cy - r - pad) + ' ' + 2 * (r + pad) + ' ' + 2 * (r + pad)
+    + '" role="img"><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" class="made-base"/>'
+    + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
+    + '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" class="ctr">' + f1(v.producedPct) + '</text></svg>'
+    + '<p><span>이번 주 생산</span><b></b><span class="lost"></span></p>';
+  box.querySelector('svg').setAttribute('aria-label', '이번 주 계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct));
+  box.querySelector('b').textContent = v.produced.toLocaleString() + ' / ' + v.planned.toLocaleString() + '개';
+  box.querySelector('.lost').textContent = '손실 ' + v.lost + '개';
+}
+function renderHomeWatch() {
+  const box = $('homeWatch');
+  const rows = S.an ? homeWatch(S.an) : [];
+  box.hidden = !rows.length;
+  S.homeWatchRows = rows;
+  if (!rows.length) return;
+  const span = (cls, text) => { const s = document.createElement('span'); s.className = cls; s.textContent = text; return s; };
+  const h = document.createElement('p'); h.className = 'watch-h'; h.textContent = '지켜볼 설비';
+  box.replaceChildren(h, ...rows.map((w) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'watch-row';
+    const lb = span('lb', w.label);
+    if (w.unresolved) lb.appendChild(span('pill st miss', '원인 미확인'));
+    // 좁은 칸: 윗줄 증상, 아랫줄 언제·효과 있던 조치
+    b.append(span('eqc mono', w.code), lb, span('meta', [w.meta, w.fix && '효과 있던 조치 ' + w.fix].filter(Boolean).join(' · ')));
+    b.dataset.i = rows.indexOf(w);   // 누르면 그 증상의 지난 조치들(배선은 아래 DOM 블록 — openIncidents가 거기 있다)
+    return b;
+  }));
+}
 function renderHomeStatus() { renderHome(); }
+/* 대시보드 정지 손실 보기 — 모든 %는 계획 생산량(정상이면 만들었을 양) 대비, 소수 한 자리.
+ * 생산 % = 100 − 손실 %(합이 100이 되게). 설비마다 계획 대비 %(planPct)·색 종류(kind = 코드 앞부분).
+ * 원형 조각은 6개까지(작은 조각은 구별이 안 된다): 손실 상위 5대는 설비 종류 색, 나머지는 회색 '기타' 한 조각.
+ * 설비 줄의 표지 색(color)도 같은 규칙이라 링 조각과 줄이 맞는다. slices = 링에 그릴 조각. */
+const RING_MAX = 5;
+function lossView(production, loss) {
+  const p = production || {planned: 0, lost: 0, produced: 0};
+  const pct = (n) => p.planned ? Math.round(n / p.planned * 1000) / 10 : 0;
+  const kind = (id) => (((S.equipment.find((e) => e.equipment_id === id) || {}).code || '').split('-')[0] || 'pdp').toLowerCase();
+  const lostPct = pct(p.lost);
+  let shown = 0;
+  const rows = (loss || []).map((r) => {
+    const top = r.coils > 0 && shown++ < RING_MAX;
+    return {...r, kind: kind(r.equipment_id), planPct: pct(r.coils), color: top ? 'var(--' + kind(r.equipment_id) + ')' : 'var(--tx-3)'};
+  });
+  const lossRows = rows.filter((r) => r.coils);
+  const rest = lossRows.slice(RING_MAX).reduce((n, r) => n + r.coils, 0);
+  const slices = [...lossRows.slice(0, RING_MAX).map((r) => ({equipment_id: r.equipment_id, coils: r.coils, color: r.color})),
+    ...(rest ? [{equipment_id: null, coils: rest, color: 'var(--tx-3)'}] : [])];
+  return {planned: p.planned, produced: p.produced, lost: p.lost, lostPct,
+    producedPct: p.planned ? Math.round((100 - lostPct) * 10) / 10 : 0, rows, slices};
+}
+/* 정지 손실 그림(SVG 하나): 왼쪽 생산 링, 오른쪽 손실 도넛 — 같은 크기(반지름·굵기), 같은 중심 높이(cy)에 나란히.
+ * 손실 도넛 라벨은 조각 가운데 각도 바깥(labelR), 오른쪽 절반은 왼쪽 정렬·왼쪽 절반은 오른쪽 정렬.
+ * 같은 쪽 라벨끼리 세로 간격이 gap보다 좁으면 아래로 민다. 왼쪽 라벨 시작(약 x 140)과 생산 링 오른쪽(x 129) 사이는 비운다. */
+const LOSS_CHART = {w: 398, h: 190, cy: 95, gap: 16, minArc: 18, made: {cx: 66, r: 52}, loss: {cx: 264, r: 52, labelR: 76}};
+const ringPt = (cx, cy, a, rad) => [cx + rad * Math.sin(a), cy - rad * Math.cos(a)];   // a: 12시 = 0, 시계 방향
+function arcPath(cx, cy, r, a0, a1) {
+  if (a1 - a0 >= 2 * Math.PI - 1e-9)   // 전부면 원 두 반쪽으로
+    return 'M' + cx + ' ' + (cy - r) + ' A' + r + ' ' + r + ' 0 1 1 ' + cx + ' ' + (cy + r) + ' A' + r + ' ' + r + ' 0 1 1 ' + cx + ' ' + (cy - r);
+  const [x0, y0] = ringPt(cx, cy, a0, r), [x1, y1] = ringPt(cx, cy, a1, r);
+  return 'M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' A' + r + ' ' + r + ' 0 ' + (a1 - a0 > Math.PI ? 1 : 0) + ' 1 ' + x1.toFixed(1) + ' ' + y1.toFixed(1);
+}
+// 생산 링: 회색 원 위에 끝부분(생산 다음부터 12시까지)을 설비별 손실 조각으로 — 계획 대비 실제 비율
+function madeRingArcs(planned, produced, slices) {
+  const {cx, r} = LOSS_CHART.made, cy = LOSS_CHART.cy;
+  let at = planned ? 2 * Math.PI * produced / planned : 2 * Math.PI;
+  return slices.map((s) => { const a0 = at; at += 2 * Math.PI * s.coils / planned; return {...s, d: arcPath(cx, cy, r, a0, at)}; });
+}
+function lossDonut(slices) {
+  const total = slices.reduce((n, s) => n + s.coils, 0);
+  if (!total) return [];
+  const {cx, r, labelR} = LOSS_CHART.loss, cy = LOSS_CHART.cy;
+  let at = 0;
+  const out = slices.map((s) => {
+    const a0 = at, a1 = at + 2 * Math.PI * s.coils / total; at = a1;
+    const mid = (a0 + a1) / 2, [lx, ly] = ringPt(cx, cy, mid, labelR), [nx, ny] = ringPt(cx, cy, mid, r);
+    // 손실 개수는 링 안(조각 가운데)에 — 조각 호가 숫자보다 짧으면(MIN_ARC px 미만) 바깥 라벨 옆으로
+    const inside = r * (a1 - a0) >= LOSS_CHART.minArc;
+    return {...s, d: arcPath(cx, cy, r, a0, a1), lx: Math.round(lx), ly: Math.round(ly), anchor: lx >= cx ? 'start' : 'end',
+      nx: Math.round(nx), ny: Math.round(ny), inside};
+  });
+  ['start', 'end'].forEach((side) => {   // 같은 쪽 라벨 겹침 밀기
+    const list = out.filter((o) => o.anchor === side).sort((p, q) => p.ly - q.ly);
+    list.forEach((o, i) => { if (i && o.ly - list[i - 1].ly < LOSS_CHART.gap) o.ly = list[i - 1].ly + LOSS_CHART.gap; });
+  });
+  return out;
+}
+/* 홈 '지켜볼 설비' — 이번 교대에 다시 날 수 있는 것. ① '해결'로 닫았는데도 반복된 증상(원인 미확인) — 마지막 조치 뒤
+ * 재발 기간(7일)을 넘겨 버틴 것(재발 없음)은 뺀다, ② 최근 조치해 아직 재발 기간 안인 증상, 최근 것 먼저.
+ * 설비·증상당 한 줄, 최대 3줄. 누르면 그 증상의 지난 조치들. */
+function homeWatch(a) {
+  const code = (id) => (S.equipment.find((e) => e.equipment_id === id) || {}).code || id;
+  const ids = (eq, al) => a.incidents.filter((x) => x.equipment_id === eq && x.alarm_code === al).map((x) => x.incident_id);
+  const latest = (g) => a.incidents.find((x) => x.equipment_id === g.equipment_id && x.alarm_code === g.alarm_code) || {};
+  // 같은 설비·증상에서 재발 없이 버틴 조치(카드 방법 먼저) — 다시 나면 먼저 해 볼 것
+  const fix = (eq, al) => {
+    const g = a.repeats.find((x) => x.equipment_id === eq && x.alarm_code === al);
+    const ok = g ? (g.actions || []).filter((x) => x.held && !x.recurred) : [];
+    ok.sort((x, y) => (y.method === 'card') - (x.method === 'card') || y.held - x.held);
+    return ok[0] ? [ok[0].action, ...ok[0].card_ids].join(' · ') : '';
+  };
+  const rows = [], seen = new Set();
+  a.repeats.filter((g) => g.resolved_recurred && latest(g).outcome !== 'held').forEach((g) => {
+    seen.add(g.equipment_id + g.alarm_code);
+    rows.push({code: code(g.equipment_id), label: g.label, meta: '4주 ' + g.count + '회', unresolved: true,
+      fix: fix(g.equipment_id, g.alarm_code), incidents: g.incidents});
+  });
+  a.incidents.filter((i) => i.outcome === 'watching').forEach((i) => {   // incidents는 최근 경보가 먼저
+    if (seen.has(i.equipment_id + i.alarm_code)) return;
+    seen.add(i.equipment_id + i.alarm_code);
+    const days = Math.floor((new Date(a.now) - new Date(i.recovered_at)) / 86400000);
+    rows.push({code: code(i.equipment_id), label: i.label, meta: (days > 0 ? days + '일 전' : '오늘') + ' 조치', unresolved: false,
+      fix: fix(i.equipment_id, i.alarm_code), incidents: ids(i.equipment_id, i.alarm_code)});
+  });
+  return rows.slice(0, 3);
+}
 
 const REPORT_DRAFT_KEY = 'shiftlink.report.draft';
 function reportTargets(equipment, filter, faults, recent) {
@@ -2287,7 +2406,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice, actionChips }; }
+if (typeof module !== 'undefined') { module.exports = { equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, homeEquipmentSummary, homeWatch, lossView, lossDonut, madeRingArcs, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice, actionChips }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -2689,9 +2808,19 @@ function renderDash() {
   if (!S.snap) return;
   const d = dashSummary(S.snap, S.equipment, S.handovers, S.faults);
   renderHomeStatus();
-  if (S.screen !== 'dash') return;
+  loadAnalytics(false);   // 홈 생산 링·지켜볼 설비, 대시보드 분석(10초에 한 번)
+  // 이번 교대에 처리할 일 — 0이면 숨긴다(이상 설비는 홈 이상 칸에 이미 있다)
+  const todo = [d.waiting.length ? '후속 대기 ' + d.waiting.join(', ') : '', d.held ? '제품 보류 코일 ' + d.held : ''].filter(Boolean);
+  const tb = $('homeTodo');
+  tb.hidden = !todo.length;
+  $('homeWatch').classList.toggle('todo', todo.length > 0);
+  tb.replaceChildren(...todo.map((t) => { const s = document.createElement('span'); s.className = 'pill'; s.textContent = t; return s; }));
+  if (S.screen !== 'dashboard') return;
   const line = $('dashLine');
   line.textContent = '라인 ' + d.line;
+  // 화면 낭독기용 알림 — 이상·후속 대기 수가 바뀔 때만 글자를 바꾼다(시계처럼 매번 바뀌는 글자는 읽히지 않게)
+  const alertText = '이상 ' + d.faults.length + '대 · 후속 대기 ' + d.waiting.length + '대';
+  if ($('dashAlert').textContent !== alertText) $('dashAlert').textContent = alertText;
   line.className = 'dash-line ' + (d.faults.length || d.mode === 'quality_hold' ? 'warn' : d.mode === 'running' ? 'run' : '');
   const tile = (id, cls, n, title, desc) => {
     const el = $(id); el.className = 'dash-tile ' + cls; el.innerHTML = '<span class="n"></span><span class="t"></span><p class="d"></p>';
@@ -2705,17 +2834,215 @@ function renderDash() {
     b.addEventListener('click', () => openAlertGo({ equipment_id: f.equipment_id, items: f.items.slice() }));
     faults.appendChild(b);
   });
-  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '후속 대기 설비', d.waiting.length ? d.waiting.join(', ') + ' · 자체 고장 아님' : '없음');
-  tile('dashHeld', d.held ? 'warn' : '', d.held, '제품 보류 코일', d.held ? '검사·해제 전까지 이송 중지' : '없음');
-  const ho = tile('dashHandover', d.openItems ? 'warn' : '', d.openItems, '인계 미완료 항목', (S.outboxLabels && S.outboxLabels.pending) || '업로드 대기 없음');
-  const b = document.createElement('button'); b.type = 'button'; b.textContent = '인계 확인 ›';
-  b.addEventListener('click', openHandover); ho.appendChild(b);
-  if (S.outboxLabels && S.outboxLabels.pending) {
-    const o = document.createElement('button'); o.type = 'button'; o.textContent = '업로드 대기 보기 ›';
-    o.addEventListener('click', openOutbox); ho.appendChild(o);
-  }
+  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '후속 대기 설비', d.waiting.length ? d.waiting.join(', ') : '없음');
+  tile('dashHeld', d.held ? 'warn' : '', d.held, '제품 보류 코일', d.held ? '' : '없음');
 }
-on('toDash', () => { show('dash'); renderDash(); });
+
+// 홈 '상세 보기' → 대시보드(Depth 1): 라인 상태 한 줄 + 분석 4칸(정지 손실·반복 증상·조치 효과·지식 공백)
+function openDashboard() { show('dashboard'); renderDash(); if (S.an) renderAnalytics(); loadAnalytics(true); }   // 받아 둔 값이 있으면 먼저 그린다
+/* 대시보드 분석 — /api/analytics(저장 이력 + 이 실행의 사건). 계산은 서버(analytics.py), 화면은 숫자와 근거 사건만. */
+const AN_OUTCOME = { recurred: ['재발', 'miss'], watching: ['관찰 중', 'unknown'], held: ['재발 없음', 'match'], open: ['조치 중', 'miss'] };
+const AN_RESULT = { resolved: '해결', temporary: '임시 조치', failed: '실패' };
+const AN_REFRESH_MS = 10000;
+const eqCode = (id) => (S.equipment.find((e) => e.equipment_id === id) || {}).code || id;
+const mdhm = (iso) => { const d = new Date(iso); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + hhmm(iso); };
+async function loadAnalytics(force) {
+  if (!force && Date.now() - (S.anAt || 0) < AN_REFRESH_MS) return;
+  S.anAt = Date.now();
+  const err = $('anErr');
+  try { S.an = await getJson('/api/analytics'); } catch (_) {
+    // 조용히 넘기면 오래된 숫자가 최신처럼 보인다 — 실패를 알리고, 다음 갱신(10초)에 다시 시도한다
+    err.textContent = '분석을 불러오지 못했습니다 · 10초 뒤 다시 시도합니다' + (S.an ? ' · 아래는 이전 값' : '');
+    err.hidden = false;
+    return;
+  }
+  err.hidden = true;
+  renderAnalytics();
+  renderHomeWatch();
+  renderHomeMade();
+}
+
+
+function anPanel(id) {
+  const el = $(id);
+  el.querySelectorAll(':scope > :not(h2)').forEach((n) => n.remove());
+  return el;
+}
+function anRow(parent, cls, html, ids, title) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = cls; b.innerHTML = html;
+  b.addEventListener('click', () => openIncidents(title, ids));
+  parent.appendChild(b);
+  return b;
+}
+// 칸에 줄이 없는 나머지 설비를 한 줄로: "정지 없음 · PDP-01 · GR-01 …" — 전체 설비가 빠짐없이 보이게
+function restLine(parent, label, shownIds) {
+  const shown = new Set(shownIds);
+  const rest = S.equipment.filter((e) => !shown.has(e.equipment_id)).map((e) => e.code);
+  if (!rest.length) return;
+  const p = document.createElement('p'); p.className = 'an-rest';
+  p.textContent = label + ' · ' + rest.join(' · ');
+  parent.appendChild(p);
+}
+function anEmpty(parent, text) {
+  const p = document.createElement('p'); p.className = 'hint'; p.style.margin = '0'; p.textContent = text; parent.appendChild(p);
+}
+
+function renderAnalytics() {
+  const a = S.an;
+  if (!a || S.screen !== 'dashboard') return;
+  const keep = ['anLoss', 'anRepeat', 'anAction'].map((id) => [id, $(id).scrollTop]);   // 다시 그려도 칸 스크롤 유지
+  renderAnalyticsPanels(a);
+  keep.forEach(([id, top]) => { $(id).scrollTop = top; });
+}
+
+function renderAnalyticsPanels(a) {
+
+  // 정지 손실 — 못 만든 코일(라인을 세운 시간 × 표준 생산 속도). 위 한 줄은 이번 주 생산·손실.
+  // 위: 링 두 개 — ① 생산 링(100% = 정상이면 만들었을 계획 생산량: 회색 생산 + 끝부분 손실)
+  // ② 손실 링(100% = 이번 주 손실: 설비별 몫, 설비 종류 색). 오른쪽 요약.
+  // 그 아래 설비 줄: 같은 색 표지 · 못 만든 코일 · 계획 대비 % · 정지 분.
+  const loss = anPanel('anLoss'), v = lossView(a.production, a.loss);
+  if (v.planned) {
+    const f1 = (n) => n.toFixed(1) + '%';   // 97.0%처럼 소수 한 자리로 고정
+    const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'})[c]);
+    const C = LOSS_CHART, M = C.made, L = C.loss;
+    const center = (cx, big, small, cls) => '<text x="' + cx + '" y="' + (C.cy - 3) + '" text-anchor="middle" class="' + cls + '">' + big + '</text>'
+      + '<text x="' + cx + '" y="' + (C.cy + 15) + '" text-anchor="middle" class="ctr-s">' + small + '</text>';
+    // 위: 요약 한 줄. 아래: SVG 하나에 ① 작은 생산 링(왼쪽) ② 큰 손실 도넛(오른쪽, 조각 옆에 설비 코드·개수) — 같은 중심 높이
+    const head = document.createElement('div'); head.className = 'loss-head';
+    head.innerHTML = '<table class="loss-sum"><thead><tr><th>계획</th><th>생산</th><th>손실</th><th>손실률</th></tr></thead>'
+      + '<tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table>'
+      + '<svg class="loss-chart" viewBox="0 0 ' + C.w + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="img"></g></svg>';
+    // ① 생산 링: 회색 원 + 끝부분 손실(실제 비율, 설비 색)
+    head.querySelector('.g-made').innerHTML = '<circle cx="' + M.cx + '" cy="' + C.cy + '" r="' + M.r + '" class="made-base"/>'
+      + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
+      + center(M.cx, f1(v.producedPct), '생산', 'ctr');
+    // ② 손실 도넛: 손실만 100% — 설비별 몫과 바깥 라벨 "HPU-01 17". 손실이 없으면 회색 원
+    const arcs = lossDonut(v.slices);
+    head.querySelector('.g-lost').innerHTML = (arcs.length
+      ? arcs.map((s) => '<path d="' + s.d + '" class="lost-arc" style="stroke:' + s.color + '"/>').join('')
+        // 바깥 라벨은 설비 코드만, 손실 개수는 링 안 조각 가운데(좁은 조각만 바깥 라벨 옆에)
+        + arcs.map((s) => '<text x="' + s.lx + '" y="' + s.ly + '" text-anchor="' + s.anchor + '" class="lbl">'
+          + esc(s.equipment_id ? eqCode(s.equipment_id) : '기타') + (s.inside ? '' : ' <tspan class="n">' + s.coils + '</tspan>') + '</text>').join('')
+        + arcs.filter((s) => s.inside).map((s) => '<text x="' + s.nx + '" y="' + s.ny + '" text-anchor="middle" class="num">' + s.coils + '</text>').join('')
+      : '<circle cx="' + L.cx + '" cy="' + C.cy + '" r="' + L.r + '" class="lost-arc" style="stroke:var(--edge)"/>')
+      + center(L.cx, v.lost + '개', '손실', 'ctr');
+    [v.planned.toLocaleString() + '개', v.produced.toLocaleString() + '개', v.lost + '개', f1(v.lostPct)]
+      .forEach((t, i) => { head.querySelectorAll('.loss-sum td')[i].textContent = t; });
+    // 그림은 색만으로 읽으면 안 된다 — 화면 읽기용 요약
+    head.querySelector('.g-made').setAttribute('aria-label', '계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct) + ', 손실 ' + f1(v.lostPct));
+    head.querySelector('.g-lost').setAttribute('aria-label', '손실 ' + v.lost + '개 중 ' + (v.slices.map((r) =>
+      (r.equipment_id ? eqCode(r.equipment_id) : '기타') + ' ' + r.coils + '개').join(', ') || '없음'));
+    loss.appendChild(head);
+  }
+  const max = Math.max(1, ...v.rows.map((r) => r.coils));
+  v.rows.forEach((r) => {
+    const b = anRow(loss, 'an-row loss-row', '<b class="eqc mono"></b><span class="an-bar"><i></i></span><span class="v mono"></span><span class="s"></span>',
+      r.incidents, eqCode(r.equipment_id) + ' 정지 손실');
+    b.style.setProperty('--sw', r.color);   // 링 조각과 같은 색(상위 5대 밖은 회색 '기타')
+    b.querySelector('.eqc').textContent = eqCode(r.equipment_id);
+    b.querySelector('.an-bar i').style.width = (r.coils / max * 100) + '%';
+    b.querySelector('.v').textContent = r.coils + '개';
+    // 설비 MTBF(평균 고장 간격)·MTTR(평균 수리 시간) — 4주, 그 설비의 고장 전부
+    const rel = r.reliability;
+    b.querySelector('.s').textContent = [rel ? 'MTBF ' + rel.mtbf_h + '시간' : '', rel ? 'MTTR ' + rel.mttr_min + '분' : '',
+      '정지 ' + r.stop_min + '분', r.halts_line ? '' : '라인 영향 없음'].filter(Boolean).join(' · ');
+  });
+  restLine(loss, '정지 없음', a.loss.map((r) => r.equipment_id));   // 전체 설비가 한 칸에 보이게
+
+  const rep = anPanel('anRepeat');
+  a.repeats.forEach((g) => {
+    const b = anRow(rep, 'an-row', '<b class="eqc mono"></b><span class="m"></span><span class="v mono"></span><span class="s"></span>',
+      g.incidents, eqCode(g.equipment_id) + ' ' + g.label);
+    b.querySelector('.eqc').textContent = eqCode(g.equipment_id);
+    b.querySelector('.m').textContent = g.label;
+    b.querySelector('.v').textContent = g.count + '회';
+    b.querySelector('.s').textContent = ['재발 ' + g.recurred, g.causes[0][0] + ' ' + g.causes[0][1],
+      g.temporary ? '임시 조치 ' + g.temporary : '',
+      g.resolved_recurred ? '해결 후 재발 ' + g.resolved_recurred : ''].filter(Boolean).join(' · ');
+    if (g.resolved_recurred) {   // 배지는 아랫줄 맨 앞 — 누르는 줄의 제목이 두 줄로 감기지 않게
+      const p = document.createElement('span'); p.className = 'pill st miss'; p.textContent = '근본 원인 미확인';
+      b.querySelector('.s').prepend(p);
+    }
+  });
+  restLine(rep, '반복 없음', a.repeats.map((g) => g.equipment_id));
+
+  const act = anPanel('anAction');
+  a.repeats.forEach((g) => {
+    const h = document.createElement('p'); h.className = 'an-sub';
+    h.textContent = eqCode(g.equipment_id) + ' ' + g.label; act.appendChild(h);
+    // 같은 증상 안에서 카드 방법 → 카드 밖 방법. 한쪽 기록이 없으면 그 칸은 '기록 없음'.
+    [['card', '카드 방법'], ['other', '카드 밖 방법']].forEach(([key, name]) => {
+      const m = g.methods[key];
+      const mh = document.createElement('p'); mh.className = 'an-meth by-' + key;
+      mh.textContent = name + ' · ' + (m.count ? '재발 ' + m.recurred + '/' + m.count : '기록 없음')
+        + (m.no_change ? ' · 센서 변화 없이 닫음 ' + m.no_change : '');
+      act.appendChild(mh);
+      g.actions.filter((x) => x.method === key && x.action !== '기록 없음').forEach((x) => {
+        const b = anRow(act, 'an-row an-act' + (x.recurred ? ' bad' : ''), '<span class="m"></span><span class="v mono"></span><span class="s"></span>',
+          x.incidents, eqCode(g.equipment_id) + ' · ' + x.action);
+        b.querySelector('.m').textContent = x.action;
+        b.querySelector('.v').textContent = x.recurred ? '재발 ' + x.recurred + '/' + x.count : x.held ? '재발 없음' : '관찰 중';
+        b.querySelector('.s').textContent = [x.count + '건', x.avg_recur_days != null ? '평균 ' + x.avg_recur_days + '일 뒤 재발' : '',
+          x.card_ids.join(' ')].filter(Boolean).join(' · ');
+      });
+    });
+  });
+  if (!a.repeats.length) anEmpty(act, '반복 없음');
+
+
+  // 지식 공백 — 이 MES DB의 실제 기록(합성 이력 없음). 지식 없음 질의 → 카드 초안 → 검수 대기 → 승인 → 카드로 답.
+  const gap = anPanel('anGap'), k = a.knowledge;
+  if (!k) return;
+  const flow = document.createElement('div'); flow.className = 'an-flow';
+  [['지식 없음', k.no_knowledge, ''], ['카드 초안', k.drafts, ''], ['검수 대기', k.pending, ''],
+    ['승인', k.approved, k.approved ? 'ok' : ''], ['카드로 답', k.answered, k.answered ? 'ok' : '']].forEach(([t, n, cls]) => {
+    const d = document.createElement('div'); d.className = cls;
+    d.innerHTML = '<span class="n mono"></span><span class="t"></span>';
+    d.querySelector('.n').textContent = n; d.querySelector('.t').textContent = t;
+    if (t === '승인' && k.approved_ids.length) {
+      const ids = document.createElement('span'); ids.className = 'ids mono'; ids.textContent = k.approved_ids.join(' '); d.appendChild(ids);
+    }
+    flow.appendChild(d);
+  });
+  gap.appendChild(flow);
+}
+
+$('homeWatch').addEventListener('click', (e) => {
+  const b = e.target.closest('.watch-row'), w = b && (S.homeWatchRows || [])[b.dataset.i];
+  if (!w) return;
+  openIncidents(w.code + ' ' + w.label, w.incidents); S.dlFrom = 'home';
+});
+function openIncidents(title, ids) {
+  S.dlFrom = null;   // 대시보드에서 열면 '이전'은 대시보드로(홈에서 열 때만 호출한 쪽이 'home'으로 바꾼다)
+  const want = new Set(ids);
+  const pane = $('dlPane'); pane.innerHTML = '';
+  $('dlTitle').textContent = title;
+  S.an.incidents.filter((i) => want.has(i.incident_id)).forEach((i) => {
+    const d = document.createElement('div'); d.className = 'card inc';
+    d.innerHTML = '<div class="top"><span class="mono"></span><b class="mono"></b><span class="lb"></span><span class="pill st"></span></div>'
+      + '<div class="nums mono"></div><p class="body"></p><div class="src mono"></div>';
+    const [word, cls] = AN_OUTCOME[i.outcome] || ['', 'unknown'];
+    d.querySelector('.top span').textContent = mdhm(i.alarm_at);
+    d.querySelector('.top b').textContent = eqCode(i.equipment_id);
+    d.querySelector('.lb').textContent = i.label;
+    const st = d.querySelector('.st'); st.textContent = word; st.className = 'pill st ' + cls;
+    d.querySelector('.nums').textContent = '정지 ' + Math.round(i.down_min) + '분'
+      + (i.affected.length ? ' · 후속 대기 ' + i.affected.length + '대' : '');
+    d.querySelector('.body').textContent = [i.action || '조치 기록 없음', i.cause ? '원인 ' + i.cause : '',
+      AN_RESULT[i.result] || ''].filter(Boolean).join(' · ');
+    const card = i.card_id && S.cards.find((c) => c.card_id === i.card_id);
+    d.querySelector('.src').textContent = [i.handover_id, i.card_id ? i.card_id + (card ? ' ' + card.title : '') : '',
+      i.recurred_after_days != null ? i.recurred_after_days + '일 뒤 재발' : ''].filter(Boolean).join(' · ');
+    pane.appendChild(d);
+  });
+  show('dashList');
+}
+on('dlBack', () => {   // 홈 '지켜볼 설비'에서 왔으면 홈으로
+  const to = S.dlFrom || 'dashboard'; S.dlFrom = null;
+  show(to); if (to === 'dashboard') renderAnalytics();
+});
 
 async function watchMes() {
   if (S.equipment.length) {

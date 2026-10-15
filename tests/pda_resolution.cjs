@@ -51,4 +51,12 @@ assert.equal(chips.find((c) => c.text.startsWith('재가동')).disabled, true);
 assert.equal(chips[0].tag, 'MES 단계');
 chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}, {action: '냉각 성능 복구'}, {action: '팬 차단기 올림'}]});
 assert.deepEqual(chips.map((c) => [c.text, c.disabled]), [['재가동 (라인 복구 시작)', false], ['팬 차단기 올림', false]]);
+// 카드 단계 칩: 태그는 카드·단계 번호, 카드 출처와 서버 risky를 함께 넘기고, 끝낸 단계는 다시 안 보인다
+const withCard = [{text: '모터 전원을 차단하고 재기동을 방지한다', source: 'card_step', card_id: 'K-1025', step_id: 'ST-01', n: 1, risky: true},
+  {text: 'K-1206 방법대로', source: 'card_step', card_id: 'K-1206', step_id: null, n: null, risky: false}, ...actions];
+chips = actionChips({actions: withCard, steps: [{action: '모터 전원을 차단하고 재기동을 방지한다'}]});
+assert.deepEqual(chips[0], {text: 'K-1206 방법대로', disabled: false, tag: 'K-1206',
+  card: {card_id: 'K-1206', step_id: null, risky: false}});
+chips = actionChips({actions: withCard, steps: []});
+assert.deepEqual([chips[0].tag, chips[0].card.risky, chips[2].card], ['K-1025 · 1단계', true, null]);
 console.log('PDA action chips PASS');

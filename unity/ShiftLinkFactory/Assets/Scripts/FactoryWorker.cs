@@ -5,7 +5,7 @@ using UnityEngine;
 // Small built-in employee controller: no external character or camera packages.
 public class FactoryWorker : MonoBehaviour
 {
-    public float speed = 2.2f, lookSensitivity = 2f;
+    public float speed = 2.2f, runSpeed = 4.4f, jumpHeight = 1.1f, lookSensitivity = 2f;
     public bool IsWorkerMode { get; private set; }
     public bool PdaRaised { get; private set; }
     public Transform WorkerRoot { get; private set; }
@@ -100,16 +100,23 @@ public class FactoryWorker : MonoBehaviour
         Cursor.lockState = previousLock; Cursor.visible = previousCursor;
     }
     public void Step(float seconds, Vector2 movement, Vector2 look)
+    { StepMovement(seconds, movement, look, false, false); }
+    public void StepMovement(float seconds, Vector2 movement, Vector2 look, bool running, bool jump)
     {
         if (!IsWorkerMode || PdaRaised || controller == null || seconds <= 0 || float.IsNaN(seconds) || float.IsInfinity(seconds)) return;
         yaw += look.x * lookSensitivity; pitch = Mathf.Clamp(pitch - look.y * lookSensitivity, -75, 75);
         WorkerRoot.rotation = Quaternion.Euler(0, yaw, 0);
         Vector3 direction = WorkerRoot.TransformDirection(new Vector3(movement.x, 0, movement.y).normalized);
-        if (controller.isGrounded && verticalSpeed < 0) verticalSpeed = -2;
+        bool grounded = controller.isGrounded;
+        if (grounded && verticalSpeed < 0) verticalSpeed = -2;
+        if (grounded && jump) verticalSpeed = Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight);
         verticalSpeed += Physics.gravity.y * seconds;
-        controller.Move((direction * speed + Vector3.up * verticalSpeed) * seconds);
-        walkCycle += movement.sqrMagnitude > .001f ? seconds * 8 : 0;
-        float swing = movement.sqrMagnitude > .001f ? Mathf.Sin(walkCycle) * 22 : 0;
+        float moveSpeed = running ? runSpeed : speed;
+        var collisions = controller.Move((direction * moveSpeed + Vector3.up * verticalSpeed) * seconds);
+        if ((collisions & CollisionFlags.Above) != 0 && verticalSpeed > 0) verticalSpeed = 0;
+        bool moving = movement.sqrMagnitude > .001f && controller.isGrounded;
+        walkCycle += moving ? seconds * (running ? 12 : 8) : 0;
+        float swing = moving ? Mathf.Sin(walkCycle) * (running ? 35 : 22) : 0;
         leftLeg.localRotation = Quaternion.Euler(swing, 0, 0); rightLeg.localRotation = Quaternion.Euler(-swing, 0, 0);
         UpdateCameras();
     }
@@ -139,7 +146,9 @@ public class FactoryWorker : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P) || (PdaRaised && Input.GetKeyDown(KeyCode.Escape))) TogglePda();
         if (PdaRaised) { if (!galleryOpen && !capture.HasPreview && cameraStream?.Streaming!=true) capture.RenderLivePreview(); return; }
         if (Input.GetKeyDown(KeyCode.V)) { ThirdPerson = !ThirdPerson; UpdateCameras(); }
-        Step(Time.deltaTime, new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")), new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")));
+        StepMovement(Time.deltaTime, new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")),
+            new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")),
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift), Input.GetKeyDown(KeyCode.Space));
     }
     void OpenGalleryImage(string path)
     {
@@ -168,7 +177,7 @@ public class FactoryWorker : MonoBehaviour
         if(WorkerRoot==null || !IsWorkerMode) return;
         var ui=FactoryUi.For(this);
         if(!PdaRaised) {
-            GUI.Box(new Rect(16,16,Mathf.Min(320,Screen.width-32),96),"현장 이동\nWASD 이동 · 마우스 시점\nP PDA · V 시점 전환 · F 관제");
+            GUI.Box(new Rect(16,16,Mathf.Min(360,Screen.width-32),116),"현장 이동\nWASD 이동 · 마우스 시점\nShift 달리기 · Space 점프\nP PDA · V 시점 전환 · F 관제");
             GUI.Label(new Rect(Screen.width/2-5,Screen.height/2-12,20,24),"+");
             return;
         }

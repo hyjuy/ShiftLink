@@ -17,7 +17,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
-from . import configuration, field_draft
+from . import analytics, configuration, field_draft
 from .accounts import Accounts
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
@@ -37,6 +37,26 @@ _ROOT = Path(__file__).resolve().parents[2]
 # kb split only: dev/sealed evaluation files are never opened here (C-099).
 _KB_CARDS = _ROOT / "docs" / "data" / "knowledge_cards" / "kb" / "kb_cards.json"
 _KB_HANDOVERS = _ROOT / "docs" / "data" / "scenarios" / "EV-0031_upstream_cause.json"
+
+
+def _kb_card_map() -> dict[str, dict[str, Any]]:
+    return {c["card_id"]: c for c in json.loads(_KB_CARDS.read_text(encoding="utf-8"))["cards"]}
+
+
+def _card_step_chips(card: dict[str, Any]) -> list[dict[str, Any]]:
+    """카드 단계 → 조치 기록 칩. 칩 글자는 단계 첫 문장(길면 자름), 원문은 full. 단계가 없는 카드는 칩 하나."""
+    steps = (card.get("type_payload") or {}).get("steps") or []
+    if not steps:
+        return [{"text": card["card_id"] + " 방법대로", "source": "card_step", "card_id": card["card_id"], "step_id": None,
+                 "n": None, "full": card.get("know_how") or "",
+                 "risky": any(w in (card.get("know_how") or "") for w in field_draft.SAFETY_WORDS)}]
+    chips = []
+    for s in steps:
+        first = s["action"].split(". ")[0].rstrip(".")
+        chips.append({"text": first if len(first) <= 40 else first[:38] + "…", "source": "card_step",
+                      "card_id": card["card_id"], "step_id": s["step_id"], "n": s.get("order"), "full": s["action"],
+                      "risky": any(w in s["action"] for w in field_draft.SAFETY_WORDS)})
+    return chips
 
 
 def kb_cards() -> dict[str, object]:
@@ -265,8 +285,13 @@ class MesService:
                 before["source"] = "snapshot"
             before["support_scenario"] = snap["support_scenario"]
             watched = [item["signal"] for item in field_draft.out_of_range(eq, before)]
+            # 답에서 본 카드. 있으면 카드 효과 기록(대시보드)이고, 없으면 지식 공백 기록(카드 초안)이다.
+            card_ids = body.get("card_ids") or []
+            known = _kb_card_map()
+            if not (isinstance(card_ids, list) and len(card_ids) <= 10 and all(c in known for c in card_ids)):
+                raise ValueError("card_ids must be known card IDs")
             data = {"question": question, "run_id": before["run_id"], "before": before, "watched": watched,
-                    "steps": [], "after": None, "verdict": None}
+                    "card_ids": card_ids, "steps": [], "after": None, "verdict": None}
             session_id = self.storage.create_resolution_session(eq.equipment_id, data)
             recovery = snap["recovery"] if (snap["recovery"] or {}).get("equipment_id") == eq.equipment_id else None
             spec = next((s for s in self.active_config.scenarios if s.scenario_id == snap["scenario_id"]), None)
@@ -279,7 +304,8 @@ class MesService:
             return {"session_id": session_id, "before": self._session_view(eq, before),
                     "components": [{"component_id": c["component_id"], "name": c["name"],
                                     "suggested": c["component_id"] == suggested} for c in snap["components"]],
-                    "action_suggestions": [{"text": a["title"], "source": "mes_recovery", "action_id": a["action_id"]}
+                    "action_suggestions": [chip for cid in card_ids for chip in _card_step_chips(known[cid])]
+                                          + [{"text": a["title"], "source": "mes_recovery", "action_id": a["action_id"]}
                                            for a in (recovery or {}).get("actions") or []]
                                           + ([{"text": field_draft.RESTART_ACTION, "source": "mes_restart"}] if recovery and SIM_LINK else [])
                                           + [{"text": a, "source": "field_record"} for a in field_actions],
@@ -295,7 +321,17 @@ class MesService:
             action = field_draft._text(body.get("action"), 500, "action")
             if len(data["steps"]) >= 20:
                 raise ValueError("a session holds up to 20 steps")
-            risky = any(word in action for word in field_draft.SAFETY_WORDS)
+            # 카드 단계 칩으로 한 조치 — 이 세션에서 본 카드의 단계만 받는다. 위험 여부는 단계 원문으로도 본다.
+            card_step, full = None, ""
+            if body.get("card_id") is not None:
+                card_id, step_id = body.get("card_id"), body.get("step_id")
+                if card_id not in data.get("card_ids", []):
+                    raise ValueError("card step must come from a card seen in this session")
+                chips = {c["step_id"]: c for c in _card_step_chips(_kb_card_map()[card_id])}
+                if step_id not in chips:
+                    raise ValueError("unknown card step")
+                card_step, full = {"card_id": card_id, "step_id": step_id, "n": chips[step_id]["n"]}, chips[step_id]["full"]
+            risky = any(word in action or word in full for word in field_draft.SAFETY_WORDS)
             lockout = body.get("lockout") if risky else None
             if risky and lockout not in field_draft.LOCKOUT_ANSWERS:
                 raise ValueError("lockout_required")
@@ -306,7 +342,7 @@ class MesService:
             step = {"order": len(data["steps"]) + 1, "action": action, "lockout": lockout,
                     "simulated_at": snap["simulated_at"], "measurements": snap["measurements"],
                     "result_text": field_draft.delta_text(eq, data["watched"], previous, snap["measurements"]),
-                    "mes_linked": linked}
+                    "mes_linked": linked, "card_step": card_step}
             data["steps"].append(step)
             data["after"] = data["verdict"] = None  # 조치를 더 하면 마무리를 다시 한다
             self.storage.update_resolution_session(session_id, data)
@@ -388,7 +424,10 @@ class MesService:
                "lockout_answers": [{"action": s["action"], "lockout": s["lockout"]} for s in data["steps"] if s["lockout"]]}
         prepared = field_draft.prepare(raw, self.active_config, eq.equipment_id)
         prepared["mes_check"] = data["verdict"]["check"]  # 마무리 때의 판정을 쓴다
-        op, reply = self._plan_resolution(body["handover_id"], prepared)
+        if data.get("card_ids"):  # 카드를 보고 한 조치 — 새 초안이 아니라 그 카드의 효과 기록으로 남긴다
+            op, reply = None, {"created": False, "reason": "card_used"}
+        else:
+            op, reply = self._plan_resolution(body["handover_id"], prepared)
         saved, _ = self.storage.save_handover_with_draft(body, op, session=(res["session_id"], data))
         return {**saved, "draft": {**reply, "mes_recovered": data["verdict"]["check"]["recovered"],
                                    "mes_verdict": data["verdict"]["verdict"]}}
@@ -428,6 +467,20 @@ class MesService:
                 "config_id": self.active_config.config_id,
                 "symptom_diagnostics": self.engine.symptom_diagnostics(),
             }
+
+    def analytics(self) -> dict[str, object]:
+        """대시보드 분석 — 저장 4주 이력 + 이 실행의 사건(경보·조치 기록·인계)."""
+        with self._lock:
+            events = [asdict(e) for e in self.engine.events]
+            run, now = self.engine.run, self.engine.snapshot.simulated_at
+            sessions = self.storage.resolution_sessions(run.run_id)
+            handovers = self.storage.handover_payloads()
+            relations, route = self.active_config.relations, self.active_config.route
+            queries, drafts = self.storage.query_payloads(), self.storage.list_card_drafts()
+        standard = next((line.get("production_standard") for line in self.catalog.data.get("production_lines", [])), None)
+        out = analytics.summary([*analytics.load_history(run.started_at), *analytics.live_incidents(events, sessions, handovers)],
+                                relations, now, MesEngine.ALARM_LABELS, route=route, standard=standard)
+        return {**out, "knowledge": analytics.knowledge_gap(queries, drafts, set(_kb_card_map())), "is_synthetic": True}
 
     def events(self, after_sequence: int) -> dict[str, object]:
         with self._lock:
@@ -620,6 +673,7 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/catalog": self._send(200, {"data": self.service.catalog.data, "is_synthetic": True}); return
             if parsed.path == "/api/config": self._send(200, self.service.config()); return
             if parsed.path == "/api/kb/cards": self._send(200, kb_cards()); return
+            if parsed.path == "/api/analytics": self._send(200, self.service.analytics()); return
             if parsed.path.startswith("/api/configs/"):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
             if parsed.path == "/api/events": self._send(200, self.service.events(int(parse_qs(parsed.query).get("after_sequence", ["-1"])[0]))); return

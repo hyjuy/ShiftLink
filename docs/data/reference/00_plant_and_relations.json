@@ -69,6 +69,13 @@
         "unit": "m_min",
         "_note": "[가상 값]"
       },
+      "production_standard": {
+        "annual_capacity_t": 1500000,
+        "effective_hours_per_year": 7000,
+        "avg_coil_weight_t": 20,
+        "planned_hours_per_week": 168,
+        "_note": "[가상 값, 공개 자료 근거] 연간 능력 = 산세-냉간압연(PL/TCM) 실제 라인 0.9~2.3 Mt/년의 중간값, 유효 가동 시간 = 설계 계산 관행 7,000 h/년, 평균 코일 = 냉연 코일 최대 32~45 t의 절반 수준. 표준 속도 = 1,500,000 ÷ 7,000 ÷ 20 ≈ 시간당 10.7개. 계획 가동 = 주 168 h(연속 조업, 계획 정지 없음). 근거: docs/design/pda_ui/coil_loss_basis_20261015.md"
+      },
       "product_codes": [
         "CR-A08",
         "CR-B12"

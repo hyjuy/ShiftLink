@@ -2328,16 +2328,30 @@ function reportTargets(equipment, filter, faults, recent) {
 function selectedReportPayload(draft, equipment) {
   const targets = equipment.filter((eq) => draft.ids.includes(eq.equipment_id));
   if (!targets.length) throw new Error('대상 장비를 선택해 주세요.');
-  if (!draft.memo.trim() || !draft.author.trim()) throw new Error('작성자와 조치사항을 입력해 주세요.');
+  if (!draft.author.trim()) throw new Error('작성자를 입력해 주세요.');
   if (!draft.start || !draft.end || !Number.isFinite(Date.parse(draft.start)) || !Number.isFinite(Date.parse(draft.end)) || Date.parse(draft.end) < Date.parse(draft.start)) throw new Error('근무 시작·종료 시간을 확인해 주세요.');
-  return {kind:'work_log', memo_text:draft.memo.trim(), equipment_id:targets.length === 1 ? targets[0].equipment_id : null,
+  const records = draft.records || [];
+  const names = (ids) => equipment.filter(eq => ids.includes(eq.equipment_id)).map(eq => eq.code).join(', ');
+  const details = records.map((r,i) => {
+    if (!r.equipment.length || r.equipment.some(id => !targets.some(eq => eq.equipment_id === id))) throw new Error('기록 '+(i+1)+': 대상 설비를 선택해 주세요.');
+    if (!r.story.trim()) throw new Error('기록 '+(i+1)+': 상황·조치를 입력해 주세요.');
+    if ((r.causes || []).some(c => c.equipment.some(id => !targets.some(eq => eq.equipment_id === id)))) throw new Error('기록 '+(i+1)+': 원인의 대상 설비를 확인해 주세요. 일지 대상에서 제외된 설비는 체크를 해제해 주세요.');
+    return ['기록 '+(i+1)+' · '+r.type+' · '+names(r.equipment), r.story.trim(),
+      ...(r.causes || []).map(c => '원인·조치 · '+names(c.equipment)+' · '+c.certainty+' · '+c.note),
+      r.result !== null ? '결과·후속·인계: '+r.result : '', r.pms !== null ? 'PMS 계획 ID 메모: '+r.pms : '',
+      r.candidate ? '지식카드 후보 · 별도 검토 필요' : ''].filter(Boolean).join('\n');
+  });
+  const memo = [draft.memo.trim(), ...details].filter(Boolean).join('\n\n') || '별도 작성 내용 없음';
+  if (memo.length > 4000) throw new Error('전체 기록은 4000자 이내로 작성해 주세요.');
+  return {kind:'work_log', memo_text:memo, equipment_id:targets.length === 1 ? targets[0].equipment_id : null,
     equipment_ids:targets.map((eq) => eq.equipment_id), attempts:[], observations:[],
+    work_report:{records, legacy_memo:draft.memo, mes_context:draft.context},
     required_context:{author:draft.author.trim(), start_at:draft.start, end_at:draft.end,
       recipient_role:'다음 근무 담당자', timing:draft.start + ' ~ ' + draft.end, channel:'근무일지', acknowledgement:'인계 사항에서 읽음 확인',
       context:'대상 장비: ' + targets.map((eq) => eq.code).join(', ') + '\n' + draft.context}};
 }
 function reportDraft() {
-  return {ids:S.reportSelected.slice(),memo:$('reportMemo').value,author:$('reportAuthor').value,start:$('reportStart').value,end:$('reportEnd').value,context:S.reportContext || ''};
+  return {ids:S.reportSelected.slice(),memo:$('reportMemo').value,author:$('reportAuthor').value,start:$('reportStart').value,end:$('reportEnd').value,context:S.reportContext || '',records:S.reportRecords || []};
 }
 function saveReportDraft() {
   if(!S.reportDraftLoaded)return;
@@ -2347,10 +2361,12 @@ function saveReportDraft() {
 function openReport() {
   try {
     const pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null');
-    const draft=pending && pending.kind==='work_log' ? {ids:pending.equipment_ids,memo:pending.memo_text,author:pending.required_context.author,start:pending.required_context.start_at,end:pending.required_context.end_at,context:pending.required_context.context.replace(/^대상 장비: [^\n]*\n/,'')} : JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)||'null');
-    if (draft) { S.reportSelected=(draft.ids||[]).filter((id)=>S.equipment.some((eq)=>eq.equipment_id===id)); S.reportContext=draft.context||'';
+    const draft=pending && pending.kind==='work_log' ? {ids:pending.equipment_ids,memo:pending.work_report ? pending.work_report.legacy_memo : pending.memo_text,records:pending.work_report ? pending.work_report.records : [],author:pending.required_context.author,start:pending.required_context.start_at,end:pending.required_context.end_at,context:pending.required_context.context.replace(/^대상 장비: [^\n]*\n/,'')} : JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)||'null');
+    if (draft) { S.reportSelected=(draft.ids||[]).filter((id)=>S.equipment.some((eq)=>eq.equipment_id===id)); S.reportContext=draft.context||''; S.reportRecords=draft.records||[];
       $('reportMemo').value=draft.memo||''; $('reportAuthor').value=draft.author||''; $('reportStart').value=draft.start||''; $('reportEnd').value=draft.end||''; }
   } catch (_) { $('reportStatus').textContent='초안을 읽지 못했습니다. 입력 내용을 확인해 주세요.'; }
+  if (!S.reportRecords) S.reportRecords=[];
+  if (!$('reportAuthor').value) $('reportAuthor').value=(S.operator && (S.operator.name||S.operator.id))||'';
   S.reportDraftLoaded=true;renderReportSelection(); show('reportSelect');
 }
 function openEquipmentReport() {
@@ -2378,20 +2394,71 @@ function renderReportSelection() {
 }
 function openReportWrite() {
   $('reportTargets').textContent=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>eq.code).join(' · ');
-  $('reportDate').textContent=new Date().toLocaleDateString('ko-KR');saveReportDraft();show('reportWrite');
+  $('reportDate').textContent=new Date().toLocaleDateString('ko-KR');renderReportRecords();saveReportDraft();show('reportWrite');
 }
+
+function renderReportRecords() {
+  const records=S.reportRecords||[];
+  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const eqChecks=(ids,index,causeIndex)=>'<div class="eq-list">'+S.equipment.filter(eq=>S.reportSelected.includes(eq.equipment_id)||ids.includes(eq.equipment_id)).map(eq=>'<label class="check"><input type="checkbox" data-eq="'+esc(eq.equipment_id)+'" data-record="'+index+'" '+(causeIndex!==undefined?'data-cause="'+causeIndex+'"':'')+' '+(ids.includes(eq.equipment_id)?'checked':'')+'>'+esc(eq.code)+' '+esc(eq.group||'')+(S.reportSelected.includes(eq.equipment_id)?'':' (일지 대상에서 제외됨)')+'</label>').join('')+'</div>';
+  const edit=(value,key,index,placeholder,ci)=>'<textarea aria-label="'+placeholder+'" class="edit" data-key="'+key+'" data-record="'+index+'" '+(ci!==undefined?'data-cause="'+ci+'"':'')+' maxlength="4000" placeholder="'+placeholder+'">'+esc(value)+'</textarea>';
+  $('reportLegacy').hidden=!$('reportMemo').value;
+  $('reportMes').textContent=S.reportContext||'MES 기록을 불러오면 원본 값·단위·관측 시각이 표시됩니다. 미수신 값은 — 입니다.';
+  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><div class="record-head"><strong>기록 '+String(i+1).padStart(2,'0')+'</strong><select data-key="type" data-record="'+i+'" aria-label="기록 구분">'+['추가 기록','이상증상','고장·정비','PMS 정비'].map(t=>'<option '+(r.type===t?'selected':'')+'>'+t+'</option>').join('')+'</select><span class="sp"></span><span class="notice">유형은 선택 사항</span><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">기록 삭제</button></div><table><tbody><tr><th>대상 설비 *</th><td>'+eqChecks(r.equipment,i)+'</td></tr><tr><th>상황·조치 *</th><td>'+edit(r.story,'story',i,'어떤 상황이었고, 어떤 조치를 했는지 적습니다.')+'</td></tr>'+(r.causes.length?'<tr><th>확인한 원인<br><small>선택 기록</small></th><td>'+r.causes.map((c,ci)=>'<div class="cause-row"><div class="checks">'+eqChecks(c.equipment,i,ci)+'</div><select aria-label="원인 확인 상태" data-record="'+i+'" data-cause="'+ci+'" data-key="certainty">'+['추정','확인','배제'].map(t=>'<option '+(c.certainty===t?'selected':'')+'>'+t+'</option>').join('')+'</select>'+edit(c.note,'note',i,'원인·해당 조치·확인 근거',ci)+'</div>').join('')+'</td></tr>':'')+(r.result!==null?'<tr><th>결과·후속·인계<br><small>선택 기록</small></th><td>'+edit(r.result,'result',i,'조치 결과나 다음 근무자에게 전달할 내용')+'</td></tr>':'')+(r.pms!==null?'<tr><th>PMS 계획 ID<br><small>선택 메모</small></th><td>'+edit(r.pms,'pms',i,'참고할 PMS 계획 ID (메모로 보관)')+'</td></tr>':'')+'</tbody></table><div class="record-end"><button data-action="cause" data-record="'+i+'">＋ 원인·조치 추가</button>'+(r.result===null?'<button data-action="result" data-record="'+i+'">＋ 결과·인계</button>':'')+(r.pms===null?'<button data-action="pms" data-record="'+i+'">＋ PMS 연결</button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>지식카드 후보</label></div></section>').join(''):'<table aria-label="특이사항 미작성"><tbody><tr><td class="empty"><span>특이사항 기록란</span><p>별도 작성 내용 없음</p></td></tr></tbody></table>';
+}
+function addReportRecord() {
+  if (!S.reportRecords) S.reportRecords=[];
+  S.reportRecords.push({type:'추가 기록',equipment:[],story:'',causes:[],result:null,pms:null,candidate:false});
+  renderReportRecords();saveReportDraft();
+  $('reportRecords').lastElementChild?.scrollIntoView({block:'start'});
+}
+
 async function importReportMes() {
   $('reportImport').disabled=true;
   try { const [snap,log]=await Promise.all([getJson('/api/state'),getJson('/api/events')]);
     S.reportContext=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>mesHandoverContext(snap,log.events,eq)).join('\n\n');
+    $('reportMes').textContent=S.reportContext;
     $('reportStatus').textContent='선택 장비의 MES 기록을 첨부했습니다.';saveReportDraft();
   } catch(err) { $('reportStatus').textContent='MES 기록을 불러오지 못했습니다. '+err.message; }
   finally { $('reportImport').disabled=false; }
 }
+async function openReportArchive() {
+  const session=++reportArchiveSession;reportArchiveRequest++;
+  const dialog=$('reportArchive');
+  $('reportArchiveList').replaceChildren();$('reportArchiveDetail').textContent='';
+  $('reportArchiveStatus').textContent='DB에서 일지를 불러오는 중…';dialog.showModal();
+  try {
+    const {reports}=await getJson('/api/work-reports?limit=30');
+    if(session!==reportArchiveSession||!dialog.open)return;
+    for(const report of reports){
+      const button=document.createElement('button');button.type='button';
+      const context=report.required_context||{};
+      button.textContent=(context.start_at||report.created_at)+' · '+(context.author||'미기재');
+      button.addEventListener('click',()=>loadReportArchiveDetail(report.handover_id));
+      $('reportArchiveList').appendChild(button);
+    }
+    $('reportArchiveStatus').textContent=reports.length?'조회할 일지를 선택하세요.':'저장된 근무일지가 없습니다.';
+  }catch(err){if(session===reportArchiveSession&&dialog.open)$('reportArchiveStatus').textContent='일지를 불러오지 못했습니다. '+err.message;}
+}
+let reportArchiveRequest=0,reportArchiveSession=0;
+async function loadReportArchiveDetail(id) {
+  const request=++reportArchiveRequest;
+  $('reportArchiveDetail').textContent='';$('reportArchiveStatus').textContent='일지를 불러오는 중…';
+  try {
+    const {report}=await getJson('/api/work-reports/'+encodeURIComponent(id));
+    if(request!==reportArchiveRequest||!$('reportArchive').open)return;
+    const context=report.required_context||{};
+    const status={pending:'중앙 DB 업로드 대기',uploaded:'중앙 DB 업로드 완료',conflict:'중앙 DB 충돌 확인 필요'};
+    $('reportArchiveDetail').textContent=[context.start_at+' ~ '+context.end_at, '작성자: '+context.author,
+      report.memo_text, report.work_report ? report.work_report.mes_context : context.context].filter(Boolean).join('\n\n');
+    $('reportArchiveStatus').textContent='DB 저장 확인 · '+report.handover_id+' · '+(status[report.status]||report.status);
+  }catch(err){if(request===reportArchiveRequest&&$('reportArchive').open)$('reportArchiveStatus').textContent='일지를 불러오지 못했습니다. '+err.message;}
+}
+
 async function saveReport() {
   $('reportSave').disabled=true;
-  try { const note=selectedReportPayload(reportDraft(),S.equipment);const result=await submitHandover(note);
-    localStorage.removeItem(REPORT_DRAFT_KEY);S.reportDraftLoaded=false;S.reportSelected=[];S.reportContext='';$('reportMemo').value='';
+  try { const note=selectedReportPayload(reportDraft(),S.equipment);const result=await submitHandover(note, (_path,init)=>api('/api/work-reports',init));
+    localStorage.removeItem(REPORT_DRAFT_KEY);S.reportDraftLoaded=false;S.reportSelected=[];S.reportContext='';S.reportRecords=[];$('reportMemo').value='';
     $('reportStatus').textContent='MES 로컬 저장 완료 · '+result.handover_id; await refreshSavedHandovers();show('home');
   } catch(err) { $('reportStatus').textContent='저장 확인 실패 · '+err.message+' · 입력 내용은 유지됩니다.';saveReportDraft(); }
   finally { $('reportSave').disabled=false; }
@@ -2704,6 +2771,33 @@ on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('history
 on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',saveReport);on('reportImport',importReportMes);
 [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>on(id,()=>{S.reportFilter=filter;renderReportSelection();}));
 $('reportSelectAll').addEventListener('change',(event)=>{const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],S.recent).map((eq)=>eq.equipment_id);S.reportSelected=event.target.checked?[...new Set([...S.reportSelected,...visible])]:S.reportSelected.filter((id)=>!visible.includes(id));saveReportDraft();renderReportSelection();});
+
+on('reportArchiveOpen',openReportArchive);
+on('reportArchiveClose',()=>$('reportArchive').close());
+$('reportArchive').addEventListener('close',()=>{reportArchiveRequest++;reportArchiveSession++;});
+on('reportAdd',addReportRecord);
+$('reportRecords').addEventListener('input',event=>{
+  const t=event.target;if(t.dataset.record===undefined)return;
+  const r=S.reportRecords[Number(t.dataset.record)];
+  const target=t.dataset.cause!==undefined?r.causes[Number(t.dataset.cause)]:r;
+  if(t.dataset.eq){const ids=new Set(target.equipment);t.checked?ids.add(t.dataset.eq):ids.delete(t.dataset.eq);target.equipment=[...ids];}
+  if(t.dataset.key)target[t.dataset.key]=t.type==='checkbox'?t.checked:t.value;
+  saveReportDraft();
+});
+$('reportRecords').addEventListener('click',event=>{
+  const b=event.target.closest('button[data-action]');if(!b)return;
+  const index=Number(b.dataset.record);
+  const r=S.reportRecords[index];
+  if(b.dataset.action==='remove'){
+    if(!window.confirm('기록 '+(index+1)+'을 삭제할까요?'))return;
+    S.reportRecords.splice(index,1);
+  }
+  if(b.dataset.action==='cause')r.causes.push({equipment:[...r.equipment],certainty:'추정',note:''});
+  if(b.dataset.action==='result')r.result='';
+  if(b.dataset.action==='pms')r.pms='';
+  renderReportRecords();saveReportDraft();
+});
+
 ['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
 on('logout',()=>{if(!window.confirm('로그아웃하시겠습니까? 작성 중인 근무일지는 이 단말에 보관됩니다.'))return;saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
 on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));

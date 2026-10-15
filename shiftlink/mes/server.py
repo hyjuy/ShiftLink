@@ -17,7 +17,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
-from . import analytics, configuration, field_draft
+from . import analytics, configuration, field_draft, work_reports
 from .accounts import Accounts
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
@@ -186,6 +186,8 @@ class MesService:
 
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
+            if isinstance(body, dict) and "work_report" in body:
+                work_reports.validate(body, {eq.equipment_id for eq in self.active_config.equipment})
             # 해결 기록은 인계 저장 전에 검사하고 초안 반영까지 계산한다. 인계와 초안은 한 트랜잭션으로 남는다.
             if not (isinstance(body, dict) and body.get("resolution") is not None):
                 return self.storage.save_handover(body)
@@ -206,6 +208,23 @@ class MesService:
             if op is not None and not applied:
                 reply = {"created": False, "reason": "already_exists"}
             return {**saved, "draft": {**reply, "mes_recovered": prepared["mes_check"]["recovered"]}}
+
+    def record_work_report(self, body: dict[str, Any]) -> dict[str, object]:
+        if not isinstance(body, dict) or body.get("kind") != "work_log" or "work_report" not in body:
+            raise ValueError("work_log and work_report are required")
+        return self.record_handover(body)
+
+    def work_reports(self, limit: int = 30) -> dict[str, object]:
+        with self._lock:
+            return {"reports": self.storage.list_work_reports(limit), "is_synthetic": True}
+
+    def work_report(self, report_id: str) -> dict[str, object]:
+        with self._lock:
+            row = self.storage.get_handover(report_id)
+            if row is None or row["payload"].get("kind") != "work_log":
+                raise KeyError("work report not found")
+            return {"report": {**row["payload"], "created_at": row["created_at"], "status": row["status"]},
+                    "is_synthetic": True}
 
     def _events_for_check(self) -> list[dict[str, Any]]:
         """해결 확인용 이벤트: 기록된 이벤트 + 다음 틱에 기록될 대기 이벤트(pending).
@@ -669,6 +688,10 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/admin/accounts":
                 status, body = self.accounts.request("GET", parsed.path, token=self._account_token())
                 self._send(status, body); return
+            if parsed.path == "/api/work-reports":
+                self._send(200, self.service.work_reports(int(parse_qs(parsed.query).get("limit", ["30"])[0]))); return
+            if parsed.path.startswith("/api/work-reports/"):
+                self._send(200, self.service.work_report(parsed.path.removeprefix("/api/work-reports/"))); return
             if parsed.path == "/api/state": self._send(200, self.service.state()); return
             if parsed.path == "/api/catalog": self._send(200, {"data": self.service.catalog.data, "is_synthetic": True}); return
             if parsed.path == "/api/config": self._send(200, self.service.config()); return
@@ -732,7 +755,7 @@ class _Handler(BaseHTTPRequestHandler):
                 status, body = self.accounts.request("POST", account_path, payload, token=self._account_token())
                 self._send(status, body); return
             limit = _CONFIG_BODY_LIMIT if self.path.startswith("/api/config/") else _CONTROL_BODY_LIMIT
-            if self.path in ("/api/query", "/api/handover"):
+            if self.path in ("/api/query", "/api/handover", "/api/work-reports"):
                 limit = _ASSIST_BODY_LIMIT
             size = int(self.headers.get("Content-Length", "0"))
             if not 0 <= size <= limit:
@@ -742,6 +765,7 @@ class _Handler(BaseHTTPRequestHandler):
             if self.path == "/api/config/validate": self._send(200, self.service.validate_config(payload)); return
             if self.path == "/api/config/apply": self._send(200, self.service.apply_config(payload)); return
             if self.path == "/api/equipment/scan": self._send(201, self.service.record_scan(payload)); return
+            if self.path == "/api/work-reports": self._send(200, self.service.record_work_report(payload)); return
             if self.path == "/api/handover": self._send(200, self.service.record_handover(payload)); return
             if self.path == "/api/query": self._send(200, self.service.query(payload)); return
             if self.path == "/api/resolution/start": self._send(200, self.service.resolution_start(payload)); return

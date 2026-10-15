@@ -246,6 +246,16 @@ class MesStorage:
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "payload": json.loads(row[2])} if row else None
 
+    def list_work_reports(self, limit: int = 30) -> list[dict[str, Any]]:
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise ValueError("limit must be 1..100")
+        rows = self.connection.execute(
+            "SELECT created_at, status, payload FROM handover_outbox "
+            "WHERE json_extract(payload, '$.kind') = 'work_log' "
+            "ORDER BY created_at DESC, handover_id DESC LIMIT ?", (limit,))
+        return [{**json.loads(payload), "created_at": created_at, "status": status}
+                for created_at, status, payload in rows]
+
     def pending_handovers(self) -> list[tuple[str, str, str]]:
         """(handover_id, created_at, payload) not yet uploaded, oldest first."""
         return self.connection.execute(

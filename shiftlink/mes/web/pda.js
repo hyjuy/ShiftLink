@@ -23,7 +23,7 @@
 const SCAN_POLL_MS = 500;
 const SCAN_TIMEOUT_MS = 20000;  // 이 안에 새 인식이 없으면 직접 선택으로
 const API_TIMEOUT_MS = 8000;
-const RECENT_MAX = 3;
+const RECENT_MAX = 8;
 
 const TYPE_COLOR = { HPU:'hpu', GR:'gr', RT:'rt', CV:'cv', PDP:'pdp', CAU:'cau' };
 
@@ -35,7 +35,7 @@ const S = {
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
   waitAbort:false, ranked:null, tries:[], attemptSeq:0,
-  operator:null, linkedEquipment:null,
+  operator:null, linkedEquipment:null, chatHidden:false, reportSelected:[], reportFilter:'all', savedHandovers:[], reportDraftLoaded:false,
   foldOpen:{}   // 정상값 접기 펼침 상태(목록별) — 3초 갱신으로 다시 그려도 유지
 };
 
@@ -113,10 +113,10 @@ function equipmentFromLink(search, equipment) {
   return equipment.find((eq) => eq.equipment_id === ids[0]) || null;
 }
 
-let afterBoot = () => show('login');   // 문서 블록이 로그인 기억(sessionStorage)으로 바꾼다
+let afterBoot = () => show('account');   // 문서 블록이 로그인 기억(sessionStorage)으로 바꾼다
 
 async function boot() {
-  $('bootErr').innerHTML = '';
+  if (typeof document !== 'undefined') $('bootErr').innerHTML = '';
   try {
     const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
     S.equipment = equipmentFrom(cfg.config, cat.data);
@@ -126,7 +126,9 @@ async function boot() {
 
     if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
 
+    try { S.recent=JSON.parse(localStorage.getItem('shiftlink.recent')||'[]').filter((code)=>findByCode(code)); } catch (_) { S.recent=[]; }
     renderManualList();
+    if (typeof document !== 'undefined') { renderRecent();renderHome();refreshSavedHandovers(); }
     S.linkedEquipment = equipmentFromLink(window.location.search, S.equipment);
     afterBoot();
   } catch (err) {
@@ -159,26 +161,28 @@ function stopFaceCamera() {
 }
 
 function show(name) {
-  if (S.screen === 'scan' && name !== 'scan') { S.scanRun += 1; stopUnityCamera(); }
+  if (name === 'login') name = 'account';
+  if (name === 'chat') { S.chatHidden=false; name='ctx'; }
+  if (S.screen === 'scan' && name !== 'scan') { S.scanRun+=1; stopUnityCamera(); }
   if (S.screen === 'face' && name !== 'face') stopFaceCamera();
-  S.screen = name;
-  document.querySelectorAll('.screen').forEach((el) => {
-    el.classList.toggle('on', el.id === 's-' + name);
-  });
-  // 대화 화면은 상태 줄(chatMes)이 설비 code·이름을 크게 보이므로 띠를 겹쳐 두지 않는다 — 답 영역 높이(A4).
-  const hideCtx = name === 'scan' || name === 'manual' || name === 'boot' || name === 'alertGo'
-    || name === 'login' || name === 'face' || name === 'chat';
-  $('ctx').classList.toggle('on', !!S.eq && !hideCtx);
-  $('net').hidden = (name === 'boot');
-  const pane = document.querySelector('#s-' + name + ' .pane');
-  if (pane) pane.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  if (name === 'chat') { renderMesStatus(); renderChat(); }
-  if (name === 'home') { renderHomeHandovers(); renderHomeStatus(); }
+  S.screen=name;
+  document.querySelectorAll('.screen').forEach((el)=>el.classList.toggle('on',el.id==='s-'+name));
+  $('ctx').classList.toggle('on',!!S.eq&&['ctx','tries','hoNew','history','resolve'].includes(name));
+  const signedOut=['boot','login','account','faceSetup','face'].includes(name);
+  $('globalHeader').hidden=signedOut||name==='scan';$('net').hidden=signedOut;
+  $('alert').hidden=signedOut||!(S.faults||[]).length;
+  const pane=document.querySelector('#s-'+name+' .pane');if(pane)pane.scrollTop=0;
+  document.documentElement.scrollTop=0;document.body.scrollTop=0;
+  if(name==='home')renderHome();
+  if(name==='ctx'&&S.eq){
+    $('workEquipment').textContent=S.eq.code+' · '+S.eq.group;
+    $('equipmentWorkspace').classList.toggle('chat-hidden',S.chatHidden);
+    $('toggleChat').textContent=S.chatHidden?'채팅 열기':'채팅 숨기기';$('toggleChat').setAttribute('aria-expanded',String(!S.chatHidden));
+    renderMesStatus();renderChat();renderSymptoms();renderAskBlock();renderEquipmentMetrics();
+  }
 }
 
-function haptic(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (_) {} } }
+function haptic(p) { if (typeof navigator !== 'undefined' && navigator.vibrate) { try { navigator.vibrate(p); } catch (_) {} } }
 
 // ── 네트워크 ───────────────────────────────────────────────────────
 function renderNet() {
@@ -186,14 +190,12 @@ function renderNet() {
   el.classList.toggle('ok', S.online === true);
   el.classList.toggle('warn', S.online === false);
   $('netText').textContent =
-    S.online === true ? '로컬 정상' :
-    S.online === false ? (S.netNote || 'Jetson에 연결할 수 없음') : '연결 확인 중…';
+    S.online === true ? '연결 상태 · 정상' :
+    S.online === false ? (S.netNote || '연결 상태 · 연결 끊김') : '연결 상태 · 확인 중…';
   const q = $('netQueue');
   q.hidden = S.outbox.length === 0;
   q.textContent = '대기 ' + S.outbox.length + '건';
-  $('homeConnection').textContent = S.online === false ? '연결 확인 필요' : '현장 작업 도우미';
-  document.querySelector('.overview-status .live-dot').classList.toggle('offline', S.online === false);
-  if (S.online === false) renderHomeStatus();
+
 }
 
 async function api(path, init, timeoutMs = API_TIMEOUT_MS) {
@@ -220,6 +222,7 @@ function setContext(eq, source, extra) {
   S.safetyView = null;
   S.mes = null; S.mesExcluded = [];
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
+  try { localStorage.setItem('shiftlink.recent',JSON.stringify(S.recent)); } catch (_) {}
   renderContext(); renderRecent(); renderObsSignals(); renderObsList(); renderMesStatus();
   loadMesObservations();
 }
@@ -407,23 +410,28 @@ function failScan(run, text) {
 }
 
 // ── 직접 선택 ──────────────────────────────────────────────────────
+function equipmentGroups(equipment) {
+  return equipment.reduce((groups, eq) => {
+    const group = groups.find((g) => g.type === eq.type);
+    if (group) group.equipment.push(eq); else groups.push({type:eq.type, equipment:[eq]});
+    return groups;
+  }, []);
+}
 function renderManualList() {
   const list = $('manualList'); list.innerHTML = '';
-  S.equipment.forEach((eq) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'row';
-    b.innerHTML = '<i class="rail"></i><span class="txt"><span class="id"></span><br>'
-      + '<span class="nm"></span></span>';
-    b.querySelector('.rail').style.background = byType(eq.type);
-    b.querySelector('.id').textContent = eq.code;
-    b.querySelector('.nm').textContent = eq.group + ' · ' + eq.where;
-    b.addEventListener('click', () => {
-      setContext(eq, 'manual_selection', {}); haptic(30); show('ctx');
+  equipmentGroups(S.equipment).forEach((group) => {
+    const row = document.createElement('div'); row.className = 'eq-group';
+    const title = document.createElement('h3'); title.textContent = group.type; row.appendChild(title);
+    group.equipment.forEach((eq) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'number-button';
+      b.textContent = eq.code.slice(eq.type.length + 1); b.setAttribute('aria-label', eq.code + ' 선택');
+      b.addEventListener('click', () => { setContext(eq, 'manual_selection', {}); haptic(30); show('ctx'); });
+      row.appendChild(b);
     });
-    list.appendChild(b);
+    list.appendChild(row);
   });
 }
-function openManual() { show('manual'); }
+function openManual() { renderRecent(); show('manual'); }
 
 // ── 관측값 ─────────────────────────────────────────────────────────
 function renderObsSignals() {
@@ -496,17 +504,17 @@ async function loadMesObservations(given) {
     alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.label || a.code),
     diagnoses: (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
   };
-  renderObsList(); renderMesStatus();
+  renderObsList(); renderMesStatus(); renderEquipmentMetrics();
   // 증상 순서는 관측에 따라 바뀐다. 순서가 달라졌을 때만 다시 그린다(목록 깜박임 방지).
-  if (S.screen === 'chat' && symKey(symptomsFor(eq)) !== S.symKey) renderSymptoms();
+  if (S.screen === 'ctx' && symKey(symptomsFor(eq)) !== S.symKey) renderSymptoms();
 }
 
 function clearMesObservations() {
   S.mes = null;
   S.observations = S.observations.filter((o) => o.source === 'manual');
   S.mesExcluded = [];
-  renderObsList(); renderMesStatus();
-  if (S.screen === 'chat') renderSymptoms();
+  renderObsList(); renderMesStatus(); renderEquipmentMetrics();
+  if (S.screen === 'ctx') renderSymptoms();
 }
 
 function readingDetail(o, spec) {
@@ -624,7 +632,7 @@ function renderMesStatus() {
   const chat = $('chatMes');
   const out = S.observations.filter((o) => obsView(o).text).length;
   $('obsSummary').textContent = '관측값 · 직접 입력 — 범위 이탈 ' + out + '개';
-  if (S.screen === 'chat') renderAskSafety();
+  if (S.screen === 'ctx') renderAskSafety();
   if (!S.mes) {
     box.textContent = 'MES 상태를 읽지 못했습니다.'; box.classList.remove('bad');
     chatLine(chat, 'MES 상태를 읽지 못했습니다.', true);
@@ -1078,9 +1086,10 @@ function renderAskSafety() {
   S.safetyView = view;
   box.innerHTML = '';
   if (!safety.length) return;
-  const g = document.createElement('div');
+  const g = document.createElement('details');
+  g.open=hot;
   g.className = 'safety-group safety-fold' + (hot ? ' hot' : '');
-  const h = document.createElement('p'); h.className = 'safety-head';
+  const h = document.createElement('summary'); h.className = 'safety-head';
   h.textContent = '⚠ ' + S.eq.code + ' · ' + (!S.mes ? 'MES 확인 불가' : hot ? 'MES 이상 또는 조건 일치' : 'MES 정상')
     + ' · 이 설비 안전 수칙 ' + safety.length + '건' + (inChat ? ' — 이 질의의 안전사항은 답 앞에 있습니다' : '');
   g.appendChild(h);
@@ -1691,7 +1700,7 @@ async function sendChat(question, label) {
   } finally {
     clearInterval(timer);
   }
-  if (S.screen === 'chat') { renderChat(); renderSymptoms(); }
+  if (S.screen === 'ctx') { renderChat(); renderSymptoms(); }
   renderAskBlock();
 }
 
@@ -1754,51 +1763,7 @@ function hoCheckEl(key, onChange) {
 const hoCodes = (text) => S.equipment.filter((e) => String(text).includes(e.code)).map((e) => e.code);
 
 /* 홈 인계 목록 — 미완료 항목 전부, 확인한 항목은 아래로(숨기지 않음). 같은 묶음 안 순서는 인계 기록 순서. */
-function renderHomeHandovers(focusKey) {
-  const list = $('homeHoList');
-  if (!list) return;
-  const keep = list.scrollTop;
-  list.innerHTML = '';
-  const items = S.handovers.flatMap((h) => (h.open_items || []).map((it, i) => ({ h: h, it: it, key: hoItemKey(h, it, i) })))
-    .filter((x) => !HO_DONE.includes(x.it.status));
-  items.forEach((x) => { x.at = hoCheckedAt(x.key); });
-  items.sort((a, b) => !!a.at - !!b.at);   // 안정 정렬
-  $('homeHoProgress').textContent = items.length ? '확인 ' + items.filter((x) => x.at).length + ' / 전체 ' + items.length : '';
-  if (!items.length) {
-    const li = document.createElement('li'); li.className = 'empty'; li.textContent = '남은 인계 항목 없음';
-    list.appendChild(li); return;
-  }
-  items.forEach((x) => {
-    const li = document.createElement('li');
-    li.className = 'ho-item';
-    // 다시 정렬해 그린다. 키보드(Space)로 바꿨으면 그 칸에 초점을 돌려준다 — 마우스 클릭이면 목록 위치를 그대로 둔다.
-    li.appendChild(hoCheckEl(x.key, () => {
-      const kb = document.activeElement && document.activeElement.matches(':focus-visible');
-      renderHomeHandovers(kb ? x.key : null);
-    }));
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'ho-open';
-    b.innerHTML = '<span class="ho-top"><span class="pill st"></span><b class="eqc"></b><span class="due"></span></span>'
-      + '<span class="ho-text"></span><span class="ho-src"></span>';
-    const st = b.querySelector('.st');
-    st.textContent = handoverStatus(x.it.status)[0];
-    st.className = 'pill st ' + (x.it.status === 'open' ? 'miss' : 'unknown');   // 인계 확인 화면과 같은 표지
-    const codes = hoCodes(x.it.text);
-    b.querySelector('.eqc').textContent = codes.join(' · ');
-    b.querySelector('.due').textContent = x.it.due_shift ? x.it.due_shift + '조 마감' : '';
-    b.querySelector('.ho-text').textContent = x.it.text;
-    b.querySelector('.ho-src').textContent = x.h.handover_id + ' · ' + x.h.shift_from + '조 → ' + x.h.shift_to + '조 · ' + x.h.shift_date;
-    // 문구에 설비 code가 있으면 그 설비의 인계로, 없으면 전체 인계로. 설비 선택(S.eq)은 바꾸지 않는다.
-    b.addEventListener('click', () => openHandover(null, codes[0] || ''));
-    li.appendChild(b);
-    list.appendChild(li);
-  });
-  list.scrollTop = keep;
-  if (focusKey) {
-    const box = Array.from(list.querySelectorAll('input')).find((el) => el.dataset.key === focusKey);
-    if (box) box.focus();
-  }
-}
+function renderHomeHandovers() { renderHome(); }
 
 function appendBasisDetails(parent, ids) {
   if (!ids.length) {
@@ -1824,71 +1789,132 @@ function appendBasisDetails(parent, ids) {
 }
 
 /* code — 홈 목록에서 올 때 그 항목의 설비 code('' = 전체). 버튼 배선(ev만 넘어옴)은 지금처럼 선택 설비 기준. */
-function openHandover(ev, code) {
-  const pane = $('hoPane'); pane.innerHTML = ''; pane.classList.remove('centered-state');
-  S.hoBack = S.screen === 'home' ? 'home' : null;
-  const focus = typeof code === 'string' ? code : (S.eq ? S.eq.code : '');
-  const mine = S.handovers.filter((h) =>
-    (h.open_items || []).some((it) => String(it.text).indexOf(focus || '§') !== -1)
-    || !focus);
-  const list = mine.length ? mine : S.handovers;
-
-  if (!list.length) {
-    const p = document.createElement('p');
-    p.className = 'hint'; p.textContent = '등록된 인계 기록이 없습니다.';
-    pane.appendChild(p); pane.classList.add('centered-state'); show('handover'); return;
-  }
-  list.forEach((h) => {
-    const l = document.createElement('p');
-    l.className = 'lbl';
-    l.textContent = h.handover_id + ' · ' + h.shift_from + '조 → ' + h.shift_to + '조 · ' + h.shift_date;
-    pane.appendChild(l);
-
-    const memo = document.createElement('div');
-    memo.className = 'card';
-    memo.innerHTML = '<div class="kid">전 교대 메모</div><p class="body" style="margin:0"></p>';
-    memo.querySelector('.body').textContent = h.memo_text;
-    pane.appendChild(memo);
-
-    const open = (h.open_items || []).map((it, i) => ({ it: it, key: hoItemKey(h, it, i) }))
-      .filter((x) => !HO_DONE.includes(x.it.status));
-    const l2 = document.createElement('p');
-    l2.className = 'lbl';
-    const progress = () => {
-      l2.textContent = '처리 또는 재확인이 필요한 항목 ' + open.length + '건'
-        + (open.length ? ' · 확인 ' + open.filter((x) => hoCheckedAt(x.key)).length + ' / 전체 ' + open.length : '');
-    };
-    progress();
-    pane.appendChild(l2);
-    const legend = document.createElement('p'); legend.className = 'hint';
-    legend.textContent = '인계 기록에 등록된 상태입니다. MES 수치가 정상으로 돌아와도 자동으로 완료 처리하지 않습니다.'
-      + (open.length ? ' 확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.' : '');
-    pane.appendChild(legend);
-
-    open.forEach(({ it, key }) => {
-      const row = document.createElement('div');
-      row.className = 'ho-item';
-      row.appendChild(hoCheckEl(key, progress));
-      const d = document.createElement('div');
-      d.className = 'card';
-      d.innerHTML = '<div class="pills"><span class="pill miss st"></span>'
-        + '<span class="pill du"></span></div>'
-        + '<p class="body" style="margin:0"></p><div class="src"></div>';
-      const st = d.querySelector('.st');
-      const status = handoverStatus(it.status);
-      st.textContent = status[0];
-      const explanation = document.createElement('p');
-      explanation.className = 'hint'; explanation.textContent = status[1];
-      d.querySelector('.pills').after(explanation);
-      if (it.status !== 'open') st.className = 'pill unknown st';
-      d.querySelector('.du').textContent = it.due_shift + '조 마감';
-      d.querySelector('.body').textContent = it.text;
-      appendBasisDetails(d.querySelector('.src'), it.basis_ids || []);
-      row.appendChild(d);
-      pane.appendChild(row);
-    });
+function handoverEquipment(h, equipment) {
+  const ids = new Set([h.equipment_id, ...(h.equipment_ids || [])].filter(Boolean));
+  const text = [h.memo_text, ...((h.open_items || []).map((it) => it.text))].join(' ');
+  return equipment.filter((eq) => ids.has(eq.equipment_id) || text.split(/[^A-Za-z0-9-]+/).includes(eq.code));
+}
+function dutyTimeline(h, eq) {
+  if (h.kind === 'work_log') return [{time:h.required_context.start_at || h.created_at, author:h.required_context.author || '미기재', action:h.memo_text}];
+  return (h.open_items || []).filter((it) => !eq || String(it.text).split(/[^A-Za-z0-9-]+/).includes(eq.code))
+    .map((it) => ({time:h.created_at || h.shift_date, author:h.author_name || h.author_persona_id || '미기재', action:it.text, status:it.status, basis:it.basis_ids || []}));
+}
+function allHandovers() {
+  const ids = new Set(S.savedHandovers.map((h) => h.handover_id));
+  return [...S.savedHandovers, ...S.handovers.filter((h) => !ids.has(h.handover_id))];
+}
+async function refreshSavedHandovers() {
+  try { S.savedHandovers = (await getJson('/api/outbox/pending')).handovers || []; renderHome(); }
+  catch (_) { /* 보존된 정적 인계는 연결 끊김에도 열 수 있다. */ }
+}
+function handoverCard(h) {
+  const card = document.createElement('button'); card.className = 'summary-card'; card.type = 'button';
+  const info = document.createElement('div');
+  const title = document.createElement('div'); title.className = 'title'; title.textContent = h.kind === 'work_log' ? '근무일지' : '당직일지';
+  const meta = document.createElement('p'); meta.className = 'hint';
+  meta.textContent = (h.shift_date || (h.created_at || '').slice(0,10)) + ' · ' + (h.author_name || h.author_persona_id || (h.required_context || {}).author || '담당자 미기재');
+  const equipments = document.createElement('p');
+  const targets = handoverEquipment(h, S.equipment); equipments.textContent = targets.map((eq) => eq.code).join(' · ') || '대상 장비 미기재';
+  const badge = document.createElement('span'); badge.className = 'pill miss';
+  const open = (h.open_items || []).filter((it) => !['closed','done','withdrawn'].includes(it.status));
+  badge.textContent = open.length ? '조치 필요 ' + open.length + '건' : '일지 보기';
+  info.append(title,meta,equipments); card.append(info,badge);
+  card.addEventListener('click', () => openDutyDetail(h, S.screen)); return card;
+}
+function renderHome() {
+  const home = $('homeHandover'); if (!home) return; home.replaceChildren();
+  const rows = allHandovers(); rows.slice(0,2).forEach((h) => home.appendChild(handoverCard(h)));
+  const operator=S.operator||{};
+  $('homeGreeting').textContent='안녕하세요, '+(operator.name||operator.id||'작업자')+'님';
+  $('homeWorkDate').textContent=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' · 근무조 미등록';
+  const recent=rows.slice().sort((a,b)=>String(b.created_at||b.shift_date||'').localeCompare(String(a.created_at||a.shift_date||'')))[0];
+  const previous=recent&&(recent.author_name||(recent.required_context||{}).author||recent.author_persona_id);
+  $('homeShiftPeople').textContent='최초 담당자 미등록 · 직전 담당자 '+(previous||'미등록');
+  $('homeHandoverCount').textContent=rows.length+'건';
+  const faultDetails=$('homeFaultDetails');faultDetails.replaceChildren();
+  if(!S.snapshot||S.online===false)faultDetails.textContent='연결 상태를 확인해 주세요.';
+  else if(!(S.faults||[]).length)faultDetails.textContent='현재 감지된 이상이 없습니다.';
+  else (S.faults||[]).forEach((fault)=>{const p=document.createElement('p');p.textContent=fault.eq.code+' · '+fault.items.join(' · ');faultDetails.appendChild(p);});
+  if (!rows.length) home.textContent = '등록된 인계 사항이 없습니다.';
+  const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['조치 필요 장비', (S.faults || []).length]];
+  const metrics = $('homeDashboard'); metrics.replaceChildren();
+  counts.forEach(([label,value]) => metrics.appendChild(metricElement(label, S.snapshot && S.online !== false ? value : (label === '전체 설비' ? value : '—'))));
+}
+function metricElement(label, value, unit, bad) {
+  const el = document.createElement('div'); el.className = 'metric' + (bad ? ' bad' : '');
+  const title = document.createElement('span'); title.className = 'label'; title.textContent = label;
+  const number = document.createElement('span'); number.className = 'value'; number.textContent = String(value);
+  if (unit) { const u = document.createElement('span'); u.className = 'unit'; u.textContent = unit; number.appendChild(u); }
+  el.append(title,number); return el;
+}
+function renderEquipmentMetrics() {
+  const box = $('equipmentMetrics'); if (!box || !S.eq) return; box.replaceChildren();
+  const measurements = S.mes ? (S.mes.readings || []) : [];
+  S.eq.signals.forEach((spec) => {
+    const row = measurements.find((m) => m.signal === spec.signal);
+    const state = row && stateOf(spec, row.value);
+    box.appendChild(metricElement(spec.name, row ? row.value : '—', unitText(spec.unit), state === 'low' || state === 'high'));
   });
+  $('metricsTime').textContent = S.mes ? '측정 시각 · ' + S.mes.at : 'MES 데이터를 수신하지 못했습니다.';
+}
+function openHandover() {
+  const pane = $('hoPane'); pane.replaceChildren();
+  allHandovers().forEach((h) => pane.appendChild(handoverCard(h)));
+  if (!pane.children.length) pane.textContent = '등록된 인계 기록이 없습니다.';
   show('handover');
+}
+function appendTimeline(pane, rows) {
+  if (!rows.length) { const p = document.createElement('p'); p.className = 'hint'; p.textContent = '등록된 조치 기록이 없습니다.'; pane.appendChild(p); return; }
+  const table = document.createElement('table'); table.className = 'timeline';
+  table.innerHTML = '<thead><tr><th>시간</th><th>성명 / 기록 ID</th><th>조치사항</th></tr></thead>';
+  const body = document.createElement('tbody');
+  rows.forEach((row) => {
+    const tr = document.createElement('tr');
+    [row.time || '미기재', row.author, row.action].forEach((text) => { const td = document.createElement('td'); td.textContent = text; tr.appendChild(td); });
+    if (row.status) { const tag = document.createElement('span'); tag.className = 'pill status-' + row.status; tag.textContent = handoverStatus(row.status)[0]; tr.lastChild.prepend(tag,document.createElement('br')); }
+    if (row.basis) appendBasisDetails(tr.lastChild, row.basis);
+    body.appendChild(tr);
+  }); table.appendChild(body); pane.appendChild(table);
+}
+function openDutyDetail(h, back) {
+  const pane = $('dutyPane'); pane.replaceChildren();
+  const meta = document.createElement('p'); meta.className = 'lbl';
+  meta.textContent = h.handover_id + ' · ' + (h.created_at || h.shift_date || '') + ' · 이전 담당자 ' + (h.author_name || h.author_persona_id || (h.required_context || {}).author || '미기재');
+  const target = document.createElement('p'); target.textContent = handoverEquipment(h,S.equipment).map((eq) => eq.code).join(' · ');
+  const memo = document.createElement('p'); memo.className = 'body'; memo.textContent = h.memo_text;
+  pane.append(meta,target,memo); appendTimeline(pane, dutyTimeline(h));
+  $('dutyBack').onclick = () => show(back === 'home' ? 'home' : 'handover');
+  // 읽음 확인은 조치 상태나 정렬을 바꾸지 않는다. 이 단말에만 저장한다.
+  const ack = document.createElement('button'); ack.type = 'button'; ack.className = 'btn ghost'; ack.textContent = '읽음 확인'; ack.hidden = true;
+  const key = 'shiftlink.handover.read.' + h.handover_id;
+  try { if (localStorage.getItem(key)) ack.textContent = '읽음 확인 완료'; } catch (_) {}
+  ack.onclick = () => { try { localStorage.setItem(key,new Date().toISOString()); ack.textContent = '읽음 확인 완료'; } catch (_) { ack.textContent = '단말 저장 실패 · 다시 확인'; } };
+  const end = document.createElement('div'); end.setAttribute('aria-hidden','true'); end.style.minHeight = '1px'; pane.append(end,ack);
+  const checkEnd = () => { if (pane.scrollHeight - pane.scrollTop - pane.clientHeight < 80) ack.hidden = false; };
+  pane.onscroll = checkEnd; show('dutyDetail'); requestAnimationFrame(checkEnd);
+}
+function openHistory() {
+  if (!S.eq) return;
+  const pane = $('historyPane'); pane.replaceChildren(); $('historyTitle').textContent = S.eq.code + ' · 정비이력';
+  const rows = allHandovers().flatMap((h) => {
+    if (h.kind === 'work_log') return handoverEquipment(h,S.equipment).includes(S.eq) ? dutyTimeline(h,S.eq) : [];
+    return dutyTimeline(h,S.eq);
+  }); appendTimeline(pane,rows); show('history');
+}
+async function openDashboard() {
+  const pane = $('dashboardPane'); pane.replaceChildren(); show('dashboard');
+  const heading = (text) => { const h = document.createElement('h2'); h.textContent = text; pane.appendChild(h); };
+  heading('고장 · 조치 필요 장비');
+  const faults = S.faults || [];
+  faults.forEach((fault) => { const p = document.createElement('p'); p.textContent = fault.eq.code + ' · ' + fault.items.join(' · '); pane.appendChild(p); });
+  if (!faults.length) { const p=document.createElement('p');p.textContent='현재 조치 필요 장비가 없습니다.';pane.appendChild(p); }
+  heading('최근 정비 기록'); appendTimeline(pane,allHandovers().flatMap((h) => dutyTimeline(h)).slice(0,10));
+  heading('자주 정지된 장비 · 현재 MES 실행 기록');
+  try { const log = await getJson('/api/events'); if (S.screen !== 'dashboard') return;
+    const counts = new Map(); (log.events || []).filter((e) => /stop|정지/i.test([e.event_type,e.observation,e.operating_state].join(' '))).forEach((e) => counts.set(e.equipment_id,(counts.get(e.equipment_id)||0)+1));
+    if (!counts.size) { const p=document.createElement('p');p.textContent='현재 실행에서 집계된 정지 기록이 없습니다.';pane.appendChild(p); }
+    [...counts].sort((a,b) => b[1]-a[1]).forEach(([id,count]) => { const eq=S.equipment.find((e)=>e.equipment_id===id); const p=document.createElement('p');p.textContent=(eq?eq.code:id)+' · '+count+'건';pane.appendChild(p); });
+  } catch (_) { const p=document.createElement('p');p.textContent='MES 이벤트를 불러오지 못했습니다.';pane.appendChild(p); }
 }
 
 const HANDOVER_PENDING_KEY = 'shiftlink.handover.pending';
@@ -1914,7 +1940,8 @@ async function submitHandover(note, request = api, store = localStorage) {
 
 /* memo: 대화에서 넘어올 때 마지막 질문·답 초안(chatMemo). 버튼 클릭 이벤트가 인자로 오면 무시한다. */
 function openHandoverNew(memo) {
-  S.hoNewBack = S.screen === 'chat' ? 'chat' : 'ctx';
+  try { const pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null'); if(pending&&pending.kind==='work_log'){openReport();return;} } catch (_) {}
+  S.hoNewBack = S.screen === 'ctx' ? 'chat' : 'ctx';
   S.resolution = null;
   if (typeof memo === 'string' && memo) $('hoMemo').value = memo;
   const ctx = S.tries.length
@@ -2171,23 +2198,85 @@ function homeEquipmentSummary(equipment, faults, available) {
   const abnormal = new Set((faults || []).filter(f => ids.has(f.eq.equipment_id)).map(f => f.eq.equipment_id)).size;
   return {total: equipment.length, normal: available ? equipment.length - abnormal : null, abnormal: available ? abnormal : null};
 }
-function renderHomeStatus() {
-  const view = homeEquipmentSummary(S.equipment, S.faults, !!S.snap && S.online !== false);
-  $('homeEquipmentCount').textContent = view.total;
-  $('homeNormalCount').textContent = view.normal == null ? '—' : view.normal;
-  $('homeFaultCount').textContent = view.abnormal == null ? '—' : view.abnormal;
-  const box = $('homeWarnings');
-  const key = JSON.stringify([view, (S.faults || []).map(f => [f.eq.equipment_id, f.items])]);
-  if (key === S.homeStatusKey) return;
-  S.homeStatusKey = key; box.replaceChildren();
-  if (view.abnormal == null || view.abnormal === 0) {
-    const p = document.createElement('p'); p.className = 'hint'; p.textContent = view.abnormal == null ? '설비 상태를 확인하는 중입니다.' : '현재 감지된 이상이 없습니다.'; box.append(p);
-  } else (S.faults || []).forEach(f => {
-    const b = document.createElement('button'); b.type = 'button'; b.textContent = f.eq.code + ' · ' + f.items.join(' · ');
-    b.dataset.equipmentId = f.eq.equipment_id; box.append(b);
-  });
-}
+function renderHomeStatus() { renderHome(); }
 
+const REPORT_DRAFT_KEY = 'shiftlink.report.draft';
+function reportTargets(equipment, filter, faults, recent) {
+  if (filter === 'fault') return equipment.filter((eq) => faults.some((f) => f.eq.equipment_id === eq.equipment_id));
+  if (filter === 'recent') return equipment.filter((eq) => recent.includes(eq.code));
+  return equipment;
+}
+function selectedReportPayload(draft, equipment) {
+  const targets = equipment.filter((eq) => draft.ids.includes(eq.equipment_id));
+  if (!targets.length) throw new Error('대상 장비를 선택해 주세요.');
+  if (!draft.memo.trim() || !draft.author.trim()) throw new Error('작성자와 조치사항을 입력해 주세요.');
+  if (!draft.start || !draft.end || !Number.isFinite(Date.parse(draft.start)) || !Number.isFinite(Date.parse(draft.end)) || Date.parse(draft.end) < Date.parse(draft.start)) throw new Error('근무 시작·종료 시간을 확인해 주세요.');
+  return {kind:'work_log', memo_text:draft.memo.trim(), equipment_id:targets.length === 1 ? targets[0].equipment_id : null,
+    equipment_ids:targets.map((eq) => eq.equipment_id), attempts:[], observations:[],
+    required_context:{author:draft.author.trim(), start_at:draft.start, end_at:draft.end,
+      recipient_role:'다음 근무 담당자', timing:draft.start + ' ~ ' + draft.end, channel:'근무일지', acknowledgement:'인계 사항에서 읽음 확인',
+      context:'대상 장비: ' + targets.map((eq) => eq.code).join(', ') + '\n' + draft.context}};
+}
+function reportDraft() {
+  return {ids:S.reportSelected.slice(),memo:$('reportMemo').value,author:$('reportAuthor').value,start:$('reportStart').value,end:$('reportEnd').value,context:S.reportContext || ''};
+}
+function saveReportDraft() {
+  if(!S.reportDraftLoaded)return;
+  try { localStorage.setItem(REPORT_DRAFT_KEY,JSON.stringify(reportDraft())); }
+  catch (_) { $('reportStatus').textContent = '단말 초안 저장 실패 · 저장 전 화면을 닫지 마세요.'; }
+}
+function openReport() {
+  try {
+    const pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null');
+    const draft=pending && pending.kind==='work_log' ? {ids:pending.equipment_ids,memo:pending.memo_text,author:pending.required_context.author,start:pending.required_context.start_at,end:pending.required_context.end_at,context:pending.required_context.context.replace(/^대상 장비: [^\n]*\n/,'')} : JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)||'null');
+    if (draft) { S.reportSelected=(draft.ids||[]).filter((id)=>S.equipment.some((eq)=>eq.equipment_id===id)); S.reportContext=draft.context||'';
+      $('reportMemo').value=draft.memo||''; $('reportAuthor').value=draft.author||''; $('reportStart').value=draft.start||''; $('reportEnd').value=draft.end||''; }
+  } catch (_) { $('reportStatus').textContent='초안을 읽지 못했습니다. 입력 내용을 확인해 주세요.'; }
+  S.reportDraftLoaded=true;renderReportSelection(); show('reportSelect');
+}
+function openEquipmentReport() {
+  openReport();
+  if (!S.reportSelected.length && S.eq) {
+    S.reportSelected=[S.eq.equipment_id];saveReportDraft();renderReportSelection();
+  }
+}
+function renderReportSelection() {
+  const box=$('reportEquipment'); box.replaceChildren();
+  const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],S.recent);
+  visible.forEach((eq)=>{
+    const tr=document.createElement('tr');
+    const checkCell=document.createElement('td');const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.checked=S.reportSelected.includes(eq.equipment_id);check.setAttribute('aria-label',eq.code+' 선택');
+    check.onchange=()=>{S.reportSelected=check.checked?[...new Set([...S.reportSelected,eq.equipment_id])]:S.reportSelected.filter((id)=>id!==eq.equipment_id);saveReportDraft();renderReportSelection();};
+    label.appendChild(check);checkCell.appendChild(label);
+    const code=document.createElement('td');code.textContent=eq.code+' · '+eq.group;
+    const status=document.createElement('td');const badge=document.createElement('span');const fault=(S.faults||[]).some((f)=>f.eq.equipment_id===eq.equipment_id);badge.className='pill '+(fault?'miss':'status-done');badge.textContent=S.snapshot&&S.online!==false?(fault?'조치 필요':'정상'):'연결 확인 필요';status.appendChild(badge);tr.append(checkCell,code,status);box.appendChild(tr);
+  });
+  if (!visible.length) { const tr=document.createElement('tr'); const td=document.createElement('td');td.colSpan=3;td.textContent='해당 조건의 장비가 없습니다.';tr.appendChild(td);box.appendChild(tr); }
+  const selected=visible.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).length;
+  $('reportSelectAll').checked=visible.length>0&&selected===visible.length;$('reportSelectAll').indeterminate=selected>0&&selected<visible.length;$('reportSelectAll').disabled=!visible.length;
+  $('reportCount').textContent='선택 '+S.reportSelected.length+'대';$('reportWrite').disabled=!S.reportSelected.length;
+  [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>$(id).classList.toggle('primary',filter===S.reportFilter));
+}
+function openReportWrite() {
+  $('reportTargets').textContent=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>eq.code).join(' · ');
+  $('reportDate').textContent=new Date().toLocaleDateString('ko-KR');saveReportDraft();show('reportWrite');
+}
+async function importReportMes() {
+  $('reportImport').disabled=true;
+  try { const [snap,log]=await Promise.all([getJson('/api/state'),getJson('/api/events')]);
+    S.reportContext=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>mesHandoverContext(snap,log.events,eq)).join('\n\n');
+    $('reportStatus').textContent='선택 장비의 MES 기록을 첨부했습니다.';saveReportDraft();
+  } catch(err) { $('reportStatus').textContent='MES 기록을 불러오지 못했습니다. '+err.message; }
+  finally { $('reportImport').disabled=false; }
+}
+async function saveReport() {
+  $('reportSave').disabled=true;
+  try { const note=selectedReportPayload(reportDraft(),S.equipment);const result=await submitHandover(note);
+    localStorage.removeItem(REPORT_DRAFT_KEY);S.reportDraftLoaded=false;S.reportSelected=[];S.reportContext='';$('reportMemo').value='';
+    $('reportStatus').textContent='MES 로컬 저장 완료 · '+result.handover_id; await refreshSavedHandovers();show('home');
+  } catch(err) { $('reportStatus').textContent='저장 확인 실패 · '+err.message+' · 입력 내용은 유지됩니다.';saveReportDraft(); }
+  finally { $('reportSave').disabled=false; }
+}
 
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
 // 임계값·통과 장수는 서버 /api/face/config 와 프레임 응답이 준다. 여기 숫자는 두지 않는다.
@@ -2198,7 +2287,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice, actionChips }; }
+if (typeof module !== 'undefined') { module.exports = { equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, homeEquipmentSummary, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, mesSummary, resolveError, sessionPayload, draftNotice, actionChips }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -2234,10 +2323,10 @@ function loginError(text) {
 }
 
 function submitLogin() {
-  const name = $('loginName').value.trim();
+  const name = $('loginId').value.trim();
   const id = $('loginId').value.trim();
   if (!name || !id) {
-    loginError('이름과 사번을 모두 입력하세요.');
+    loginError('사번을 입력하세요.');
     return;
   }
   loginError('');
@@ -2393,7 +2482,7 @@ async function startFaceCamera() {
   $(id).addEventListener('keydown', (ev) => { if (ev.key === 'Enter') submitLogin(); });
 });
 on('loginGo', submitLogin);
-on('faceBack', () => show('login'));
+on('faceBack', () => show('faceSetup'));
 on('faceRetry', () => { startFaceCamera(); });
 on('faceBypass', enterWork);
 on('pdaExit', () => { try { sessionStorage.removeItem(OPERATOR_KEY); } catch (_) {} fetch('/api/pda/exit', { method: 'POST' }).catch(() => {}); });
@@ -2416,8 +2505,8 @@ on('askBack', () => show('ctx'));
 on('doSearch', () => sendChat(currentQuestion()));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
 on('triesBack', () => show('chat'));
-on('toHandover', openHandover);
-on('toHandoverHome', () => openHandover(null, ''));   // 전체 인계 — 선택 설비로 거르지 않는다
+on('toHandover', openHistory);
+on('toHandoverHome', openHandover);   // 전체 인계 — 선택 설비로 거르지 않는다
 on('homePending', openOutbox);
 on('hoPending', openOutbox);
 on('hoBack', () => show(S.hoBack || (S.eq ? 'ctx' : 'home')));   // 홈 목록에서 왔으면 홈으로
@@ -2439,7 +2528,7 @@ on('hoSave', async () => {
     $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id
       + (result.draft ? ' · ' + draftNotice(result.draft) : '');
     S.resolution = null;
-    pollOutbox();   // 저장 즉시 '업로드 대기' 반영 — 다음 주기까지 기다리지 않는다
+    refreshSavedHandovers(); pollOutbox();   // 저장 즉시 '업로드 대기' 반영 — 다음 주기까지 기다리지 않는다
   } catch (err) {
     $('hoWarn').textContent = '저장 확인 실패 · ' + err.message + ' · 같은 메모로 다시 저장하면 재전송됩니다.';
     $('hoSave').disabled = false;
@@ -2488,6 +2577,28 @@ on('obsAdd', () => {
 });
 
 
+// Deployed chat, camera and resolution handlers stay intact in the new layout.
+Array.from(document.querySelector('#s-chat').children).filter((el)=>!el.classList.contains('appbar')).forEach((el)=>$('chatPanel').appendChild(el));
+on('toggleChat',()=>{S.chatHidden=!S.chatHidden;show('ctx');});
+on('toDutyHandover',openHandover);on('toEquipmentReport',openEquipmentReport);
+on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('historyBack',()=>show('ctx'));
+on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',saveReport);on('reportImport',importReportMes);
+[['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>on(id,()=>{S.reportFilter=filter;renderReportSelection();}));
+$('reportSelectAll').addEventListener('change',(event)=>{const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],S.recent).map((eq)=>eq.equipment_id);S.reportSelected=event.target.checked?[...new Set([...S.reportSelected,...visible])]:S.reportSelected.filter((id)=>!visible.includes(id));saveReportDraft();renderReportSelection();});
+['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
+on('logout',()=>{if(!window.confirm('로그아웃하시겠습니까? 작성 중인 근무일지는 이 단말에 보관됩니다.'))return;saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
+on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));
+$('accountForm').addEventListener('submit',async(event)=>{
+  event.preventDefault();if($('accountSubmit').disabled)return;
+  $('accountSubmit').disabled=true;
+  try {
+    const res=await api('/api/account/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('employeeId').value.trim(),password:$('employeePassword').value})});
+    const data=await res.json();
+    if(!res.ok)throw Error(data.error||'로그인하지 못했습니다.');
+    S.operator=data.operator;$('employeePassword').value='';$('accountMessage').textContent='';enterWork();
+  } catch(err){$('employeePassword').value='';$('accountMessage').textContent=err.message;$('accountSubmit').disabled=false;}
+});
+
 // ── MES 실시간 감시 ────────────────────────────────────────────────
 /* ponytail: 3초 폴링. 푸시(SSE)는 파이 프록시와 MES 서버를 둘 다 고쳐야 해서 보류 — 지연이 문제면 그때. */
 const WATCH_MS = 3000;
@@ -2524,7 +2635,7 @@ function renderAlert(faults) {
   if (view === S.alertView) return;
   if (key && key !== S.alertKey) haptic([80, 60, 80]);
   S.alertKey = key; S.alertView = view;
-  el.hidden = !faults.length;
+  el.hidden = !faults.length || ['boot','login','account','faceSetup','face'].includes(S.screen);
   el.innerHTML = '';
   // 선택 설비를 맨 위에. ponytail: 3줄까지만 보이고 나머지는 대수만 — 동시 고장이 흔해지면 목록 화면으로.
   const sorted = alertOrder(faults, S.eq);
@@ -2578,11 +2689,6 @@ function renderDash() {
   if (!S.snap) return;
   const d = dashSummary(S.snap, S.equipment, S.handovers, S.faults);
   renderHomeStatus();
-  // 홈 타일의 한 줄 상태
-  $('homeEqNote').textContent = S.equipment.length + '대';
-  $('homeDashNote').textContent = d.faults.length || d.waiting.length
-    ? ['⚠ 이상 ' + d.faults.length, d.waiting.length ? '후속 대기 ' + d.waiting.length : ''].filter(Boolean).join(' · ') : '라인 ' + d.line;
-  $('toDash').classList.toggle('warn', d.faults.length > 0);
   if (S.screen !== 'dash') return;
   const line = $('dashLine');
   line.textContent = '라인 ' + d.line;
@@ -2616,9 +2722,9 @@ async function watchMes() {
     try {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
-      S.snap = snap; renderDash();
+      S.snap=snap;S.snapshot=snap;renderDash();if(S.screen==='home')renderHome();
       if (S.eq) await loadMesObservations(snap);
-    } catch (err) { if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
+    } catch (err) { S.snapshot=null;if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
   }
   setTimeout(watchMes, WATCH_MS);
 }

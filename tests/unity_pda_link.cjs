@@ -20,6 +20,9 @@ vm.runInContext(`
   getJson = async (path) => path === '/api/config' ? {config:{equipment:[{equipment_id:'EQ-0004'}]}}
     : path === '/api/catalog' ? {data:{}} : {cards:[{}]};
   renderManualList = () => {};
+  renderRecent = () => {};
+  renderHome = () => {};
+  refreshSavedHandovers = async () => {};
   setContext = (eq, source) => { S.eq = eq; S.source = source; };
   show = (screen) => { S.screen = screen; };
 `, context);
@@ -32,7 +35,7 @@ vm.runInContext('boot().then(() => ({source:S.source, eq:S.eq, linked:S.linkedEq
     assert.equal(state.source, null);
     assert.equal(state.eq, null);
     assert.equal(state.linked, 'EQ-0004');
-    assert.equal(state.screen, 'login');
+    assert.equal(state.screen, 'account');
     vm.runInContext('enterWork()', context);
     assert.equal(vm.runInContext('S.source', context), 'unity_link');
     assert.equal(vm.runInContext('S.eq.equipment_id', context), 'EQ-0004');

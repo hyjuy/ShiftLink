@@ -18,6 +18,7 @@ from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
 from . import configuration, field_draft
+from .accounts import Accounts
 from .catalog import Catalog
 from .contracts import Configuration, Run, utc_now
 from .engine import MesEngine
@@ -29,6 +30,8 @@ from .storage import HandoverConflictError, MesStorage
 _CONTROL_BODY_LIMIT = 8192
 _CONFIG_BODY_LIMIT = 256 * 1024
 _ASSIST_BODY_LIMIT = 64 * 1024
+_ACCOUNT_BODY_LIMIT = 4096
+_ACCOUNT_POST_ROUTES = {"/api/admin/login", "/api/admin/logout", "/api/admin/accounts", "/api/account/login"}
 _SCAN_KEEP = 50
 _ROOT = Path(__file__).resolve().parents[2]
 # kb split only: dev/sealed evaluation files are never opened here (C-099).
@@ -591,7 +594,12 @@ class MesService:
 
 class _Handler(BaseHTTPRequestHandler):
     service: MesService
+    accounts: Accounts
     web_root: Path
+
+    def _account_token(self) -> str:
+        scheme, _, token = self.headers.get("Authorization", "").partition(" ")
+        return token.strip() if scheme.lower() == "bearer" else ""
 
     def log_message(self, format: str, *args: object) -> None:  # noqa: A002
         return
@@ -605,6 +613,9 @@ class _Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         try:
+            if parsed.path == "/api/admin/accounts":
+                status, body = self.accounts.request("GET", parsed.path, token=self._account_token())
+                self._send(status, body); return
             if parsed.path == "/api/state": self._send(200, self.service.state()); return
             if parsed.path == "/api/catalog": self._send(200, {"data": self.service.catalog.data, "is_synthetic": True}); return
             if parsed.path == "/api/config": self._send(200, self.service.config()); return
@@ -634,7 +645,7 @@ class _Handler(BaseHTTPRequestHandler):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
                 page = "pda.html" if parsed.path == "/pda.html" else "index.html"
                 self._send(200, (self.web_root / page).read_bytes(), "text/html; charset=utf-8"); return
-            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "style.css", "pda.js"}:
+            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "accounts.js", "style.css", "pda.js"}:
                 if getattr(self, "api_only", False):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
@@ -647,6 +658,25 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         try:
+            account_path = urlparse(self.path).path
+            if account_path in _ACCOUNT_POST_ROUTES:
+                origin = self.headers.get("Origin")
+                if origin is not None:
+                    parsed_origin = urlparse(origin)
+                    if (parsed_origin.scheme not in {"http", "https"}
+                            or parsed_origin.netloc.lower() != self.headers.get("Host", "").lower()
+                            or parsed_origin.path not in {"", "/"} or parsed_origin.query or parsed_origin.fragment):
+                        self._send(403, {"error": "허용되지 않은 요청 출처입니다."}); return
+                if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+                    self._send(415, {"error": "JSON 요청이 필요합니다."}); return
+                size = int(self.headers.get("Content-Length", "0"))
+                if not 0 <= size <= _ACCOUNT_BODY_LIMIT:
+                    self._send(413, {"error": "요청 크기를 초과했습니다."}); return
+                payload = json.loads(self.rfile.read(size) or b"{}")
+                if not isinstance(payload, dict):
+                    self._send(400, {"error": "JSON 객체가 필요합니다."}); return
+                status, body = self.accounts.request("POST", account_path, payload, token=self._account_token())
+                self._send(status, body); return
             limit = _CONFIG_BODY_LIMIT if self.path.startswith("/api/config/") else _CONTROL_BODY_LIMIT
             if self.path in ("/api/query", "/api/handover"):
                 limit = _ASSIST_BODY_LIMIT
@@ -689,7 +719,8 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     database.parent.mkdir(parents=True, exist_ok=True)
     service = MesService(catalog_path or root / "docs" / "data" / "reference" / "00_plant_and_relations.json", MesStorage(database), seed,
                          random_faults=random_faults, run_nonce=run_nonce, fault_hazard=fault_hazard)
-    handler = type("MesHandler", (_Handler,), {"service": service, "web_root": Path(__file__).with_name("web"), "api_only": api_only})
+    accounts = Accounts(database.with_name("accounts.json"))
+    handler = type("MesHandler", (_Handler,), {"service": service, "accounts": accounts, "web_root": Path(__file__).with_name("web"), "api_only": api_only})
     server = ThreadingHTTPServer((host, port), handler)
     stopped = threading.Event()
     worker = threading.Thread(target=_run_ticks, args=(service, stopped), daemon=True); worker.start()

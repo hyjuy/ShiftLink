@@ -11,7 +11,7 @@
   <header class="app-header">
     <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><b class="brand-name">ShiftLink MES</b></div>
     <h1 class="board-title">생산라인 대시보드</h1>
-    <div class="header-side"><span class="clock-group"><span class="hint">현재 시각</span><time id="board-clock" class="board-clock"></time><span id="connection-status" class="conn-status pending" role="status">상태를 불러오는 중</span></span><a id="open-pda" href="/pda.html">PDA</a></div>
+    <div class="header-side"><span class="clock-group"><span class="hint">현재 시각</span><time id="board-clock" class="board-clock"></time><span id="connection-status" class="conn-status pending" role="status">상태를 불러오는 중</span></span><button id="admin-open" type="button">관리자 로그인</button><a id="open-pda" href="/pda.html">PDA</a></div>
   </header>
   <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 가상 냉연 코일 이송 보조설비 · 합성 데이터. 원인·안전·정비 최종 판정은 사람이 수행합니다. 실제 MES·PLC 제어가 아닙니다.</p>
   <main id="main-content">
@@ -116,7 +116,28 @@
     </section>
   </main>
   <footer>ShiftLink · 모의 MES <span>합성 레이아웃 · 센서 및 생산 데이터는 시연용입니다.</span></footer>
+  <dialog id="admin-dialog" class="admin-dialog" aria-labelledby="admin-title">
+    <div class="admin-dialog-heading"><h2 id="admin-title">관리자 로그인</h2><button id="admin-close" type="button" aria-label="계정 관리 창 닫기">닫기</button></div>
+    <p id="admin-message" role="status" aria-live="polite"></p>
+    <form id="admin-login-form" class="admin-form">
+      <label for="admin-id">관리자 아이디</label><input id="admin-id" name="id" autocomplete="username" maxlength="64" required>
+      <label for="admin-password">비밀번호</label><input id="admin-password" name="password" type="password" autocomplete="current-password" maxlength="256" required>
+      <button type="submit" class="primary-button">로그인</button>
+    </form>
+    <section id="admin-management" hidden>
+      <div class="admin-dialog-heading"><h3>작업자 계정 등록</h3><button id="admin-logout" type="button">관리자 로그아웃</button></div>
+      <form id="admin-register-form" class="admin-form">
+        <label for="worker-name">성명</label><input id="worker-name" name="name" autocomplete="off" maxlength="80" required>
+        <label for="worker-id">사번</label><input id="worker-id" name="id" autocomplete="off" maxlength="16" pattern="[A-Za-z0-9_\-]{1,16}" title="영문·숫자·밑줄·하이픈으로 16자 이내" required>
+        <label for="worker-password">비밀번호 (8자 이상)</label><input id="worker-password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="256" required>
+        <button type="submit" class="primary-button">작업자 계정 등록</button>
+      </form>
+      <div class="admin-dialog-heading"><h3>등록된 작업자</h3><button id="admin-refresh" type="button">목록 새로고침</button></div>
+      <div class="admin-table-scroll"><table class="admin-table"><thead><tr><th scope="col">사번</th><th scope="col">성명</th></tr></thead><tbody id="admin-account-list"></tbody></table></div>
+    </section>
+  </dialog>
   <script src="/static/operator.js"></script>
   <script src="/static/app.js"></script>
+  <script src="/static/accounts.js"></script>
 </body>
 </html>

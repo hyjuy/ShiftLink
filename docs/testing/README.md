@@ -38,3 +38,5 @@
 - [Jetson PRE-01~04 실측](../reports/Jetson_실측_PRE01-04.md)
 - [허재원 Day2 작업 결과](../reports/허재원_Day2작업결과.md)
 - [현장 해결 기록 → 카드 초안 검증 (10/13, 로컬·Jetson·파이)](field-resolution-card-draft.tdd.md) · [고도화 검토](../planning/현장해결기록_고도화_검토_20261013.md)
+- [PDA 사건 연결과 지식카드 승격 수용 계획](reusability-pda-card-flow-20261015.plan.md)
+- [PDA 사건 연결과 지식카드 승격 현재 단계 검증](reusability-pda-card-baseline-20261015.md)

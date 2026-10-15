@@ -26,7 +26,7 @@ const context=vm.createContext({console,Date,URLSearchParams,Set,Map,JSON,Promis
  localStorage:{getItem:key=>store.get(key)||null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)},
  fetch:async(path,init)=>{
   if(path==='/api/outbox/pending')return {ok:true,json:async()=>({handovers:stored})};
-  assert.equal(path,'/api/handover');const payload=JSON.parse(init.body);posted.push(payload);
+  assert.equal(path,'/api/work-reports');const payload=JSON.parse(init.body);posted.push(payload);
   if(loseAck){loseAck=false;throw new Error('lost acknowledgement');}
   stored=[{...payload,created_at:'2026-10-15T18:01:00+09:00'}];return {ok:true,json:async()=>({handover_id:payload.handover_id})};
  }});

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <title>ShiftLink PDA</title>
 <!--
   동작하는 프로토타입 · 모의 MES 서버가 /pda.html 로 서빙한다
@@ -15,7 +15,7 @@
   설비·신호·정상 범위는 /api/config, 관측은 /api/state, 카드는 /api/kb/cards 에서 읽는다.
   값을 복사해 두지 않으므로 MES 구성과 어긋날 수 없다.
 
-  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 얼굴 프레임은 이 기기에서만 점수 내고 저장하지 않는다.
+  D-42 — 원본 이미지는 이 단말 밖으로 나가지 않는다. 캡처·업로드 경로가 없다.
 
   실행:  python -m shiftlink.mes  →  http://127.0.0.1:8000/pda.html
 -->
@@ -37,7 +37,7 @@
   html,body{height:100%;overflow:hidden}
   body{
     margin:0;background:var(--bg);color:var(--tx);
-    font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-family:"Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
     font-size:16px;line-height:1.5;overscroll-behavior:none;
     display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);
   }
@@ -489,12 +489,102 @@
 .chat-cancel{flex:0 0 auto;display:flex;justify-content:center;padding:10px 16px;background:var(--bg);border-top:1px solid var(--edge)}.chat-cancel[hidden]{display:none}.chat-cancel>.btn{width:min(540px,100%);min-height:52px}
 .ans-row .ans.lead{flex:0 0 auto}.msg.none .ans.lead{background:transparent;text-align:center}.msg.none>.btn{width:min(540px,100%);align-self:center}
 #s-hoNew>#hoSave{flex:0 0 auto;margin:0 14px 14px;width:min(540px,calc(100% - 28px))}
+
+  [hidden]{display:none!important}
+  .row.sym.sel{background:#DDEEE8;color:var(--tx)}.safety .body{color:#663C22}.safety .title,.safety .ttl{color:#8A2F26}
+  /* 2차 시안: 터치 작업, 작성 시 외장 키보드 */
+  :root{--bg:#F3F7F6;--surface:#FFFFFF;--surface-2:#EAF2F0;--edge:#CDDDDA;--tx:#183632;--tx-2:#47625E;--tx-3:#627D77;--scan:#397F7C;--ok:#268650;--notice-bg:#FFF4DA;--notice-edge:#DAB876;--safety-bg:#FFF0EE;--safety-edge:#C86B64}
+  h2{font-size:20px;margin:0} .btn{border-radius:10px;min-height:48px}.btn.primary{background:#397F7C;color:white;border-color:#397F7C}.btn.ghost{background:var(--surface);color:var(--tx);border:1px solid var(--edge)}
+  input,textarea,select{background:var(--surface);color:var(--tx);border:1px solid var(--edge);border-radius:8px;padding:12px;font:inherit} input[type=checkbox]{accent-color:#268650;width:24px;height:24px;vertical-align:middle}button:disabled{opacity:.55;cursor:not-allowed}
+  .global-header{min-height:76px;display:flex;align-items:center;gap:12px;padding:12px 28px;background:var(--surface);border-bottom:1px solid var(--edge)}.global-header nav{display:flex;gap:10px}.global-header .sp{flex:1}.brand{font-size:25px;font-weight:800;color:#397F7C;padding:8px;white-space:nowrap}
+  #net{background:var(--surface);color:var(--tx-2);padding:5px 28px;font-size:13px}#net.warn{background:#FFF4DA;color:#72510D}#alert{max-height:110px;overflow:auto}.alrow{background:#FFF0EE;color:#8C3026}.appbar{background:var(--surface)}.appbar .ic{font-size:25px;color:#397F7C}.appbar .home{font-size:16px}.pane{padding:24px 28px;gap:16px}
+  #ctx{background:var(--surface-2);color:var(--tx)}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.section-heading h1{font-size:24px;margin:0}.section-heading .btn{width:auto;margin:0}.v2-home{max-width:1280px;width:100%;margin:auto}.home-handover-list{display:grid;gap:12px}.summary-card{background:var(--surface);border:1px solid var(--edge);border-radius:14px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}.summary-card .title{font-size:18px;font-weight:750}.summary-card p{margin:4px 0}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metric{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px}.metric .value{font-size:28px;font-weight:800;display:block}.metric .label{font-size:14px;color:var(--tx-2)}.metric .unit{font-size:14px;margin-left:4px}.metric.bad{border-color:#D28E75;background:#FFF4ED}.report-launch{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-radius:14px;background:#E1EFEB;font-size:22px;font-weight:750}.report-launch .btn{width:260px;margin:0}.eq-group{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--edge);padding:16px 4px;flex-wrap:wrap}.eq-group h3{width:100px;margin:0}.number-button{min-width:56px;min-height:48px;background:var(--surface);border:1px solid var(--edge);border-radius:8px;text-align:center;font-weight:750}.number-button.selected{background:#397F7C;color:white}.chips .chip{background:var(--surface);color:var(--tx);border:1px solid var(--edge)}
+  .equipment-workspace{display:grid;grid-template-columns:7fr 3fr;flex:1;min-height:0}.equipment-workspace.chat-hidden{grid-template-columns:1fr}.equipment-workspace.chat-hidden .chat-panel{display:none}.equipment-functions{min-width:0}.work-actions{display:flex;flex-wrap:wrap;gap:12px}.work-actions .btn{width:auto;min-width:120px;margin:0}.chat-panel{min-width:0;display:flex;flex-direction:column;border-left:1px solid var(--edge);background:#EDF5F2;overflow:hidden}.chat-panel>.pane{padding:18px;gap:12px}.chat-panel h2{font-size:18px}.chat-panel .row{padding:12px;min-height:52px}.chat-panel .id{font-size:15px}.chat-panel .nm,.chat-panel .hint{font-size:13px}.chat-panel .obsrow{flex-wrap:wrap}.chat-panel .obsrow select{width:100%}.chat-panel .obsrow input{width:80px}.chat-panel .lbl{font-size:13px}.chat-panel textarea{min-height:88px}.chat-panel .safety-stack{position:static}.chat-panel .safety-stack>div{position:static}.equipment-functions .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.pill{color:var(--tx)}.pill.miss{background:#FFF1DE;color:#8B5509;border-color:#E4BB7E}.pill.unknown{background:#E9EEF9;color:#3C5686;border-color:#B6C4E0}.status-done{background:#E1F2E8;color:#286A41}.body{white-space:pre-wrap}.table-scroll{overflow:auto}.report-table{width:100%;border-collapse:collapse;background:var(--surface)}.report-table th,.report-table td{padding:16px;text-align:left;border-bottom:1px solid var(--edge)}.report-table label{display:flex;align-items:center;gap:10px;min-height:44px}.report-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}.report-form-grid label{display:flex;flex-direction:column;gap:8px}#reportMemo{min-height:180px}.timeline{width:100%;border-collapse:collapse}.timeline th,.timeline td{padding:14px;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}.login-pane{max-width:560px;width:100%;margin:auto;justify-content:center}.login-pane h1{font-size:44px;color:#397F7C}.login-options{display:flex;flex-direction:column;gap:16px}.face-pane{align-items:center}.face-circle{border:3px solid #397F7C;border-radius:50%;width:min(464px,60vw);aspect-ratio:1;display:grid;place-items:center;background:#DDE9E5;color:var(--tx-2)}
+  @media(max-width:900px){.equipment-workspace{grid-template-columns:1fr 1fr}.equipment-functions .metric-grid{grid-template-columns:1fr 1fr}.global-header{padding:8px;gap:6px}.global-header .brand{font-size:19px}.global-header .btn{padding:8px;font-size:14px}.pane{padding:18px}.report-form-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.global-header{flex-wrap:wrap}.global-header .brand{flex:1}.global-header nav{order:2;width:100%}.global-header nav .btn{flex:1}.equipment-workspace{display:flex;flex-direction:column;overflow:auto}.equipment-functions,.chat-panel>.pane{overflow:visible;flex:0 0 auto}.chat-panel{overflow:visible;flex:0 0 auto}.equipment-workspace.chat-hidden .chat-panel{display:none}.metric-grid{grid-template-columns:1fr 1fr}.report-form-grid{grid-template-columns:1fr}.report-launch{font-size:18px;padding:16px}.report-launch .btn{width:auto}.summary-card{align-items:flex-start}}
+
+
+  #s-face .vf{display:grid;place-items:center;flex:1;min-height:0;margin:0;aspect-ratio:auto}#faceVideo{width:min(464px,70vw);height:min(464px,55vh);border-radius:50%;object-fit:cover;border:3px solid #397F7C}#s-face .scanfoot{align-items:center}#s-face .scanfoot .btn{width:240px}#s-face #faceState{justify-content:center;font-size:18px}#s-face .appbar h1{font-size:20px}
+  .chat-panel #chatPane{flex:1;min-height:0;padding:14px}.chat-panel .chatmes{display:none}.chat-panel .chatfoot{padding:10px;max-height:40%;overflow:auto}.chat-panel .chatin{display:flex;flex-wrap:wrap;gap:8px}.chat-panel .chatin textarea{flex:1;min-width:120px;min-height:48px;max-height:100px}.chat-panel .chatin .btn{width:auto;min-width:64px;padding:8px}.chat-panel .sugg{max-height:120px;overflow:auto}.chat-panel .sugg button{min-height:44px;font-size:13px;padding:8px}.chat-panel .msg,.chat-panel .safety .body,.chat-panel .ans{font-size:14px}.chat-panel .disclaimer{font-size:11px;padding:8px}.chat-panel .safety-head{font-size:13px}.chat-panel .safety-cards.compact .safety{font-size:13px}.chat-panel .chat-cancel{padding:8px}.chat-panel .fold summary{font-size:13px}.chat-panel .ans-next .btn{white-space:normal;font-size:14px}
+  .status-open{background:#FFF1DE;color:#8B5509}.status-needs_recheck{background:#E9EEF9;color:#3C5686}.status-in_progress{background:#F0E8F8;color:#71428E}.status-closed,.status-withdrawn{background:#E8ECEB;color:#53675E}
+
+  /* Figma 1280×800 shell: constrain controls instead of inheriting full-width form buttons. */
+  :root{--bg:#F2F5F5;--surface:#FFFFFF;--surface-2:#EAF2F0;--surface-3:#EAF2F0;--tx:#182C31;--tx-2:#587174;--edge:#DDE5E5;--accent:#397F7C;--scan:#397F7C;--hover:#E7F0EF}
+  #globalHeader{height:88px;min-height:88px;flex:0 0 88px;padding:20px 32px;gap:12px;flex-wrap:nowrap;overflow:visible}
+  #globalHeader>.brand{display:flex;align-items:center;gap:12px;flex:0 0 auto;width:auto;min-width:0;height:48px;padding:0;color:#397F7C;font-size:24px;font-weight:700;line-height:36px}
+  #globalHeader>.brand svg{width:32px;height:32px;flex:0 0 32px}
+  #globalHeader>.sp{flex:1 1 auto;min-width:24px}
+  #globalHeader>nav{display:flex;gap:12px;flex:0 0 auto;order:0;width:auto}
+  #globalHeader .btn{flex:0 0 auto;width:auto;height:48px;min-height:48px;padding:0 12px;border:1px solid #397F7C;border-radius:8px;background:#FFFFFF;color:#397F7C;font-size:16px;font-weight:500;line-height:24px;white-space:nowrap}
+  #globalHeader #toScan,#globalHeader #toManual{width:120px}
+  #globalHeader>a.btn{width:82px}
+  #globalHeader #logout{width:76px}
+  #globalHeader .btn:hover{background:#EAF2F0}
+  #app>#net{order:100;height:40px;min-height:40px;flex:0 0 40px;padding:8px 32px;border-top:1px solid #DDE5E5;border-bottom:0;background:#FFFFFF;color:#587174;font-size:14px;line-height:24px}
+  #app>#net.warn{background:#FFF4DA;color:#72510D}
+  #s-home>.v2-home{padding:32px;gap:24px}
+  .section-heading h1,.section-heading h2,.equipment-functions h2,.appbar h1{font-size:20px;font-weight:700;line-height:30px}
+  .section-heading>.btn{min-width:120px;height:48px;padding:0 16px;border-color:#397F7C;color:#397F7C;font-weight:500}
+  .report-launch{font-size:20px;font-weight:700;background:#EAF2F0}
+  .report-launch>.btn{width:256px;height:56px;min-height:56px;font-size:16px}
+  .summary-card{padding:20px 24px;border-radius:12px}.summary-card .title{font-size:18px;line-height:27px;font-weight:700}.summary-card .hint{font-size:14px;line-height:21px}
+  .chat-panel details.safety-fold>summary{list-style-position:inside;cursor:pointer;border-radius:8px;background:#EAF2F0;color:#397F7C;font-size:14px;line-height:21px;padding:12px;margin:0}
+  .chat-panel details.safety-fold.hot>summary{background:#FFF1DE;color:#8B5509}
+  @media(max-width:700px){#globalHeader{height:auto;min-height:88px;flex-basis:auto;padding:12px 16px;gap:8px;flex-wrap:wrap}#globalHeader>.brand{font-size:20px}#globalHeader>.brand svg{width:28px;height:28px;flex-basis:28px}#globalHeader>.sp{min-width:0}#globalHeader>nav{order:2;width:100%;gap:8px}#globalHeader #toScan,#globalHeader #toManual{width:auto;flex:1 1 0}#globalHeader>a.btn{width:64px}#globalHeader #logout{width:76px}#app>#net{padding-inline:16px}#s-home>.v2-home{padding:20px 16px;gap:16px}.report-launch>.btn{width:auto;min-width:160px}}
+
+
+  #app:has(#s-ctx.on)>#ctx{display:none}
+  #s-ctx .equipment-workspace{padding:32px;gap:24px;grid-template-columns:minmax(0,7fr) minmax(0,3fr)}
+  #s-ctx .equipment-workspace.chat-hidden{grid-template-columns:416px minmax(0,1fr)}
+  #s-ctx .equipment-functions,#s-ctx .equipment-mes,#s-ctx .chat-panel{border:1px solid #DDE5E5;border-radius:12px;background:#FFFFFF;min-height:0;min-width:0}
+  #s-ctx .equipment-functions{padding:24px;gap:24px}
+  #s-ctx .equipment-functions>.section-heading{align-items:flex-start;flex-wrap:wrap;gap:12px}
+  #s-ctx .equipment-functions>.section-heading h2{flex:1 1 auto;min-width:0}
+  #s-ctx .equipment-functions .work-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+  #s-ctx .equipment-functions .work-actions>.btn{width:100%;max-width:667px;height:56px;min-height:56px;padding:0 24px;justify-content:flex-start;border:1px solid #397F7C;border-radius:8px;color:#397F7C;background:#FFFFFF;font-size:16px;font-weight:500}
+  #s-ctx .equipment-functions .work-actions>.btn.primary{background:#397F7C;color:#FFFFFF}
+  #s-ctx .equipment-workspace.chat-hidden .work-actions>.btn{max-width:368px}
+  #s-ctx .equipment-functions .workspace-back{margin-top:auto;width:56px;min-height:56px;display:grid;place-items:center;flex:0 0 56px;border:1px solid #397F7C;border-radius:8px;color:#397F7C;font-size:24px;line-height:1}
+  #s-ctx .equipment-mes{display:none;padding:24px;gap:20px;overflow:hidden}
+  #s-ctx .equipment-workspace.chat-hidden .equipment-mes{display:flex}
+  #s-ctx .equipment-mes>.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-content:start;overflow-y:auto;min-height:0;max-height:240px;flex:0 1 auto}
+  #s-ctx .equipment-mes>.metric-grid>.metric{min-height:112px;padding:20px;border:1px solid #DDE5E5;border-radius:8px}
+  #s-ctx .equipment-mes .metric .value{font-size:24px;line-height:36px}#s-ctx .equipment-mes>#metricsTime{margin-top:auto}#s-ctx .chat-panel .safety-cards{grid-template-columns:1fr}#s-ctx .chat-panel .msg{overflow-wrap:anywhere}
+  #s-ctx .chat-panel{border-left:1px solid #DDE5E5}
+  @media(max-width:1000px) and (min-width:601px){#s-ctx .equipment-workspace.chat-hidden{grid-template-columns:minmax(240px,35fr) minmax(0,65fr)}#s-ctx .equipment-mes>.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#s-ctx .equipment-workspace{padding:24px;gap:16px}}
+  @media(max-width:600px){#s-ctx .equipment-workspace{padding:16px;gap:16px;overflow:auto}#s-ctx .equipment-functions,#s-ctx .equipment-mes{padding:20px;flex:0 0 auto}#s-ctx .equipment-mes>.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:420px;flex:0 0 auto}#s-ctx .equipment-functions .workspace-back{margin-top:8px}#s-ctx .chat-panel{min-height:480px}#globalHeader>nav{order:2}#globalHeader>.sp{order:0}}
+
+
+  #s-home>.v2-home{display:flex;overflow:hidden;gap:24px;padding:32px;align-items:stretch}
+  #s-home .home-summary{display:flex;align-items:center;justify-content:space-between;gap:24px;flex:0 0 auto;min-height:104px}
+  #s-home .home-summary-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
+  #s-home .home-summary h1{margin:0;color:#182C31;font-size:24px;line-height:36px;font-weight:700}
+  #s-home .home-summary p{margin:0;color:#587174;font-size:14px;line-height:21px}
+  #s-home .home-summary>#toReport{width:256px;height:56px;min-height:56px;flex:0 0 256px;border-radius:8px;font-size:16px;font-weight:500}
+  #s-home .home-panels{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:24px;flex:1 1 auto;min-height:0}
+  #s-home .home-panel{display:flex;flex-direction:column;min-width:0;min-height:0;gap:20px;padding:24px;background:#FFFFFF;border:1px solid #DDE5E5;border-radius:12px;overflow:hidden}
+  #s-home .home-panel>.section-heading{flex:0 0 auto;min-height:30px}
+  #s-home .home-panel h2{font-size:20px;line-height:30px;font-weight:700}
+  #s-home .home-handover-list{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;overflow:auto}
+  #s-home .home-handover-list>.summary-card{flex:0 0 auto;min-height:112px;padding:16px 20px;align-items:center}
+  #s-home .home-panel>.home-panel-link{margin-top:auto;flex:0 0 48px;width:100%;height:48px;min-height:48px;border:0;border-top:1px solid #DDE5E5;border-radius:0;padding:12px 0 0;justify-content:flex-end;color:#397F7C;background:#FFFFFF;font-size:16px;font-weight:500}
+  #s-home #homeDashboard{flex:0 0 auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  #s-home #homeDashboard>.metric{padding:0 8px 0 0;background:transparent;border:0;border-right:1px solid #DDE5E5;border-radius:0;min-width:0}
+  #s-home #homeDashboard>.metric:last-child{border:0;padding-right:0}
+  #s-home #homeDashboard .label{font-size:14px;line-height:21px;display:block;min-height:42px}
+  #s-home #homeDashboard .value{font-size:36px;line-height:54px;font-weight:700}
+  #s-home .home-fault-details{flex:1 1 auto;min-height:0;overflow:auto;border-radius:8px;background:#EAF2F0;padding:16px;color:#587174;font-size:14px;line-height:21px}
+  #s-home .home-fault-details p{margin:0 0 12px}#s-home .home-fault-details p:last-child{margin:0}
+  #s-home .home-outbox:empty,#s-home .home-outbox:not(:has(>:not([hidden]))){display:none}
+  @media(max-width:700px){#s-home>.v2-home{overflow:auto;padding:20px 16px;gap:20px}#s-home .home-summary{align-items:flex-start;flex-wrap:wrap;gap:16px}#s-home .home-summary>#toReport{width:100%;flex-basis:100%}#s-home .home-summary h1{font-size:22px}#s-home .home-panels{grid-template-columns:1fr;flex:0 0 auto}#s-home .home-panel{min-height:340px;padding:20px}#s-home .home-handover-list{max-height:300px;flex:1 0 auto}#s-home .home-fault-details{min-height:80px}}
+
 </style>
 </head>
 <body>
 
-<div id="app">
+<div id="app"><div id="toast" class="toast" role="status" hidden></div>
 
+  <header id="globalHeader" class="global-header"><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><span class="sp"></span><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost" id="logout" type="button">로그아웃</button></header>
   <div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
     <span class="q" id="netQueue" hidden>대기 0건</span></div>
 
@@ -516,29 +606,29 @@
       <div class="grow"></div></div>
   </section>
 
-  <!-- 로그인. 부팅 다음 첫 화면. -->
-  <section class="screen" id="s-login">
-    <div class="appbar"><h1>로그인</h1></div>
-    <div class="pane">
-      <p class="hint">이름은 화면에만 나옵니다. 얼굴 확인은 사번으로 합니다.</p>
-      <label class="field">이름
-        <input id="loginName" type="text" lang="ko" autocomplete="name" enterkeyhint="next">
-      </label>
-      <div id="loginHangul" class="hangul"></div>
-      <p class="hint">이름은 화면 자판으로 넣습니다. 사번은 키보드로 넣습니다.</p>
-      <label class="field">사번
-        <input id="loginId" class="mono" type="text" autocomplete="off" enterkeyhint="go" spellcheck="false">
-      </label>
-      <p class="hint" id="loginErr" hidden></p>
-      <div class="grow"></div>
-      <button class="btn primary" id="loginGo" type="button">로그인</button>
+  <!-- 홈 -->
+  <section class="screen" id="s-home" aria-label="홈">
+    <div class="pane v2-home">
+      <section class="home-summary" aria-label="근무 정보"><div class="home-summary-copy"><h1 id="homeGreeting">안녕하세요</h1><p id="homeWorkDate"></p><p id="homeShiftPeople"></p></div><button class="btn primary" id="toReport" type="button">근무일지 작성 →</button></section>
+      <div class="home-panels">
+        <section class="home-panel home-panel-handover" aria-label="인계 사항"><div class="section-heading"><h2>인계 사항</h2><span class="hint" id="homeHandoverCount"></span></div><div id="homeHandover" class="home-handover-list"></div><button class="btn sm ghost home-panel-link" id="toHandoverHome" type="button">전체 보기 ↗</button></section>
+        <section class="home-panel home-panel-dashboard" aria-label="대시보드"><div class="section-heading"><h2>대시보드</h2></div><div id="homeDashboard" class="metric-grid"></div><div id="homeFaultDetails" class="home-fault-details"></div><button class="btn sm ghost home-panel-link" id="toDashboard" type="button">상세 보기 ↗</button></section>
+      </div>
+      <div class="home-outbox"><button class="outbox-note" id="homePending" type="button" hidden></button><p class="outbox-note bad" id="homeConflict" hidden></p></div>
     </div>
   </section>
 
-  <!-- 얼굴 인증. 프레임은 이 기기 서버에서만 점수 내고, 저장하거나 Jetson으로 보내지 않는다(D-42). -->
+  <section class="screen" id="s-login" aria-label="로그인">
+    <div class="pane login-pane"><h1>ShiftLink</h1><div class="login-options"><button class="btn primary" id="accountOpen" type="button">계정 로그인</button><button class="btn" id="faceOpen" type="button">얼굴 인식 로그인</button></div></div>
+  </section>
+  <section class="screen" id="s-account" aria-label="계정 로그인">
+    <div class="appbar"><button class="ic" id="accountBack" aria-label="이전" type="button" hidden>↶</button><h1>계정 로그인</h1></div>
+    <form class="pane login-pane" id="accountForm"><label for="employeeId">사번</label><input id="employeeId" autocomplete="username" maxlength="16" pattern="[A-Za-z0-9_\-]{1,16}" required><label for="employeePassword">비밀번호</label><input id="employeePassword" type="password" autocomplete="current-password" maxlength="256" required><button class="btn primary" id="accountSubmit" type="submit">로그인</button><button class="btn ghost" id="accountFace" type="button">얼굴 인식 로그인</button><p class="hint" id="accountMessage" role="status"></p></form>
+  </section>
+  <section class="screen" id="s-faceSetup"><div class="appbar"><button class="ic" id="faceSetupBack" type="button" aria-label="이전">↶</button><h1>얼굴 인식 로그인</h1></div><div class="pane login-pane"><label for="loginId">사번</label><input id="loginId" autocomplete="username"><input id="loginName" hidden><p id="loginErr" class="hint" hidden></p><button class="btn primary" id="loginGo" type="button">얼굴 인식 시작</button><div id="loginHangul" hidden></div></div></section>
   <section class="screen" id="s-face">
-    <div class="appbar"><button class="ic" id="faceBack" type="button" aria-label="이전">← 이전</button>
-      <h1>얼굴 인증</h1><span class="sp"></span></div>
+    <div class="appbar"><button class="ic" id="faceBack" type="button" aria-label="이전">↶</button>
+      <h1>얼굴 인식</h1><span class="sp"></span></div>
     <div class="pane flush" style="display:flex;flex-direction:column">
       <div class="vf"><video id="faceVideo" width="640" height="480" autoplay muted playsinline></video></div>
       <div id="faceState"><span class="dot"></span><span id="faceText">카메라를 여는 중…</span></div>
@@ -550,32 +640,25 @@
     </div>
   </section>
 
-  <!-- 홈 -->
-<section class="screen overview-home" id="s-home" aria-label="홈"><header class="overview-bar"><div class="overview-brand"><span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h13m-13 0 4-4m-4 4 4 4M19 17H6m13 0-4-4m4 4-4 4"/></svg></span><h1>ShiftLink</h1></div><div class="overview-status"><button id="homePending" class="pending-pill" type="button" hidden></button><p id="homeConflict" class="outbox-note bad" hidden></p><span class="live-dot"></span><span id="homeConnection">현장 작업 도우미</span><a class="ic mes-link" href="/" title="MES 대시보드 (개발용)">MES</a><button class="ic" id="pdaExit" type="button">종료</button></div></header><main class="overview-body"><div class="overview-intro"><h2>현장 상황을 확인하세요</h2><p>인계 내용을 확인하고, 설비 작업을 이어가세요.</p></div><div class="overview-panels"><section class="overview-card handover-summary"><header><h3 id="hoHomeTitle">인계 상황</h3><span id="homeHoProgress" class="ho-prog"></span></header><p class="hint overview-check-note">확인 표시는 이 PDA에만 남고 인계 상태는 바뀌지 않습니다.</p><ul class="ho-list overview-list" id="homeHoList"></ul><button id="toHandoverHome" class="overview-link" type="button">전체 인계 보기 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-7-7 7 7-7 7"/></svg></button></section><section class="overview-card equipment-summary"><header><h3>현재 설비 상황</h3></header><div class="overview-stats"><div><span>전체 설비</span><strong><span id="homeEquipmentCount">—</span> <small>대</small></strong></div><div><span>정상</span><strong><span id="homeNormalCount">—</span> <small>대</small></strong></div><div><span>이상 감지</span><strong><span id="homeFaultCount">—</span> <small>대</small></strong></div></div><div class="overview-warning" id="homeWarnings"><p class="hint">설비 상태를 확인하는 중…</p></div><button class="overview-link" id="toDash" type="button">대시보드 보기 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-7-7 7 7-7 7"/></svg></button></section></div><div class="overview-recent"><span>최근 선택한 설비</span><div id="recent" class="chips"><p class="hint">설비를 선택하면 여기에 표시됩니다.</p></div></div><span id="homeEqNote" hidden></span><span id="homeDashNote" hidden></span></main><nav class="overview-dock" aria-label="하단 바로가기"><button id="toScan" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>설비 스캔</span></button><button id="toManual" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>설비 목록</span></button><button class="dock-chat" id="toChat" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a9 9 0 0 1-9 9 9.6 9.6 0 0 1-4-.9L3 21l1.4-4.9A9 9 0 1 1 21 11.5Z"/></svg><span>챗봇</span></button></nav></section>
-
   <!-- 스캔 -->
   <section class="screen" id="s-scan">
-    <div class="appbar"><button class="ic" id="scanClose" type="button" aria-label="이전">← 이전</button>
-      <h1>스캔</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="scanClose" type="button" aria-label="이전">↶</button>
+      <span class="sp"></span></div>
     <div class="pane flush" style="display:flex;flex-direction:column">
       <div class="vf"><img id="unityCamera" alt="Unity 가상 공장의 PDA 카메라 영상" hidden><div class="reticle" id="reticle"></div></div>
       <div id="scanState"><span class="dot"></span><span id="scanText">Jetson 연결 확인 중…</span></div>
       <div class="scanfoot">
-        <button class="btn big" id="scanShoot" type="button" hidden><span class="ico">◉</span>촬영</button>
-        <button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>
+        <button class="btn primary" id="scanShoot" type="button" hidden>설비 촬영</button><button class="btn sm ghost" id="scanManual" type="button">직접 선택</button>
       </div>
     </div>
   </section>
 
   <!-- 직접 선택 -->
   <section class="screen" id="s-manual">
-    <div class="appbar"><button class="ic" id="manualClose" type="button" aria-label="이전">← 이전</button>
-      <h1>직접 선택</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="manualClose" type="button" aria-label="이전">↶</button>
+      <h1>설비 목록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
-      <div class="alert">
-        <p class="hd">설비 미확정</p>
-        <p class="p">설비가 확정되기 전에는 카드 검색이 수행되지 않습니다. 아래에서 설비를 선택하세요.</p>
-      </div>
+      <h2>최근 조회 설비</h2><div class="chips" id="recent"></div><h2>설비 목록</h2>
       <div class="list" id="manualList"></div>
       <button class="btn sm ghost" id="manualToScan" type="button">설비 스캔으로 돌아가기</button>
     </div>
@@ -583,32 +666,25 @@
 
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
-    <div class="appbar"><button class="ic" id="ctxBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">작업 선택</h1><span class="sp"></span>
-      <!-- 잘못 잡힌 설비를 바로 바꿀 수 있게 상단에 둔다 -->
-      <button class="ic ctx-change" id="ctxEdit" type="button">◎ 설비 변경</button>
-      <button class="ic home" type="button">⌂ 홈</button></div>
-    <!-- 작업 버튼은 센서 수와 상관없이 항상 보이게 왼쪽 칸에 고정, 센서값은 오른쪽 칸에서 스크롤 -->
-    <div class="pane ctx-pane">
-      <div class="ctx-actions">
-        <p class="lbl">무엇을 하시겠습니까?</p>
-        <button class="act main" id="toAsk" type="button"><b>증상 질의</b><small>증상을 고르면 근거 카드로 답합니다</small></button>
-        <button class="act" id="toHandover" type="button"><b>⇄ 인계 확인</b><small id="ctxHoNote"></small></button>
-        <button class="act" id="toHandoverNew" type="button"><b>✎ 인계 작성</b><small>이 설비의 조치·측정을 다음 교대에 남깁니다</small></button>
+    <div class="equipment-workspace" id="equipmentWorkspace">
+      <div class="pane equipment-functions">
+        <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="btn sm ghost" id="toggleChat" type="button" aria-expanded="true">채팅 숨기기</button></div>
+        <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
+        <nav class="work-actions" aria-label="설비 작업"><button class="btn" id="toHandover" type="button">정비이력</button><button class="btn" id="toDutyHandover" type="button">인계 사항 확인</button><button class="btn" id="toEquipmentReport" type="button">보고서 작성</button></nav><button id="toAsk" type="button" hidden>채팅 열기</button><button id="toHandoverNew" type="button" hidden>인계 작성</button>
+        <button class="ic workspace-back" id="ctxBack" type="button" aria-label="이전">↶</button>
+        <button class="btn sm ghost" id="ctxEdit" type="button" hidden>설비 변경</button>
       </div>
-      <div class="ctx-sensors">
-        <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p>
-        <p class="lbl">현재 MES 센서값 · 3초마다 갱신</p>
-        <div id="ctxSensors" style="display:flex;flex-direction:column;gap:6px"></div>
-        <p class="hint" id="ctxFoot"></p>
-      </div>
+      <section class="pane equipment-mes" aria-label="MES 센서 데이터">
+        <h2>MES 센서 데이터</h2><div id="equipmentMetrics" class="metric-grid"></div><p class="hint" id="metricsTime"></p>
+      </section>
+      <aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"></aside>
     </div>
   </section>
 
   <!-- 고장 알림 → 설비 변경 확인. 탭한 순간의 equipment_id로 고정한다(B3) -->
   <section class="screen" id="s-alertGo">
-    <div class="appbar"><button class="ic" id="alertGoBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">설비 변경 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="alertGoBack" type="button" aria-label="이전">↶</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">설비 변경 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="lbl">MES 고장 알림 설비</p>
       <p class="mono" id="alertGoCode" style="margin:0;font-size:40px;font-weight:800;line-height:1.1"></p>
@@ -621,9 +697,8 @@
     </div>
   </section>
 
-  <!-- 증상 질의 · 대화. 메시지 하나 = /api/query 하나. 이전 대화는 모델에 넘기지 않는다(10/14 채점과 같은 한 질문 구조). -->
   <section class="screen" id="s-chat">
-    <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">← 이전</button>
+    <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전">↶</button>
       <h1 style="color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <p class="chatmes" id="chatMes" role="status">MES 상태 확인 중…</p>
     <div class="pane" id="chatPane">
@@ -658,45 +733,55 @@
 
   <!-- 시도 기록 -->
   <section class="screen" id="s-tries">
-    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전">↶</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="triesPane"></div>
+  </section>
+
+  <!-- 지식 없음 -->
+  <section class="screen" id="s-empty">
+    <div class="appbar"><button class="ic" id="emptyBack" type="button" aria-label="이전">↶</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">결과</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="empty">
+      <p class="big">해당 지식 없음</p>
+      <p class="p">입력하신 증상·조건에 맞는<br>근거 있는 카드가 없습니다.</p>
+      <p class="rule">추측으로 답하지 않습니다</p>
+      <ul>
+        <li>· 증상을 더 구체적으로 적어 보세요</li>
+        <li>· 관측값을 추가하세요</li>
+        <li>· 숙련자에게 문의하세요</li>
+      </ul>
+    </div>
+    <div class="pane" style="flex:0 0 auto;overflow:visible">
+      <button class="btn primary" id="emptyRetry" type="button">다시 질의</button>
+    </div>
   </section>
 
   <!-- 인계 확인 -->
   <section class="screen" id="s-handover">
-    <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">인계 확인</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전">↶</button>
+      <h1>인계 사항</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <button class="outbox-note" id="hoPending" type="button" hidden></button>
     <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
   </section>
 
-  <!-- 대시보드: 작업자용 라인 요약 -->
-  <section class="screen" id="s-dash">
-    <div class="appbar"><h1>대시보드</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane">
-      <p class="dash-line" id="dashLine">MES 상태를 불러오는 중…</p>
-      <div class="dash-grid">
-        <div class="dash-tile" id="dashFaults"></div>
-        <div class="dash-tile" id="dashWaiting"></div>
-        <div class="dash-tile" id="dashHeld"></div>
-        <div class="dash-tile" id="dashHandover"></div>
-      </div>
-      <p class="hint">가동률·처리량 같은 운영 지표는 상단 MES 버튼의 전체 대시보드에서 확인합니다.</p>
-    </div>
-  </section>
+  <section class="screen" id="s-dutyDetail"><div class="appbar"><button class="ic" id="dutyBack" type="button" aria-label="이전">↶</button><h1>당직일지</h1></div><div class="pane" id="dutyPane"></div></section>
+  <section class="screen" id="s-history"><div class="appbar"><button class="ic" id="historyBack" type="button" aria-label="이전">↶</button><h1 id="historyTitle">정비이력</h1></div><div class="pane" id="historyPane"></div></section>
+  <section class="screen" id="s-dashboard"><div class="appbar"><button class="ic" id="dashboardBack" type="button" aria-label="이전">↶</button><h1>대시보드</h1><span class="sp"></span><a class="btn sm ghost" href="/">MES</a></div><div class="pane" id="dashboardPane"></div></section>
+  <section class="screen" id="s-reportSelect"><div class="appbar"><button class="ic" id="reportBack" type="button" aria-label="이전">↶</button><h1>근무일지 · 대상 선택</h1><span class="sp"></span><span id="reportCount"></span></div><div class="pane"><div class="work-actions"><button class="btn sm ghost" id="reportFilterAll" type="button">전체 장비</button><button class="btn sm ghost" id="reportFilterFault" type="button">이상 장비</button><button class="btn sm ghost" id="reportFilterRecent" type="button">최근 조회 장비</button></div><div class="table-scroll"><table class="report-table"><thead><tr><th><label><input id="reportSelectAll" type="checkbox"> 선택</label></th><th>설비</th><th>상태</th></tr></thead><tbody id="reportEquipment"></tbody></table></div><button class="btn primary" id="reportWrite" type="button" disabled>작성</button></div></section>
+  <section class="screen" id="s-reportWrite"><div class="appbar"><button class="ic" id="reportEditTargets" type="button" aria-label="대상 다시 선택">↶</button><h1>근무일지 작성</h1><span class="sp"></span><time id="reportDate"></time></div><div class="pane"><p id="reportTargets" class="lbl"></p><div class="report-form-grid"><label>시작<input id="reportStart" type="datetime-local"></label><label>종료<input id="reportEnd" type="datetime-local"></label><label>작성자<input id="reportAuthor" maxlength="100" autocomplete="name"></label></div><label for="reportMemo">조치사항</label><textarea id="reportMemo" maxlength="4000" placeholder="시간 · 장비 · 조치사항을 작성해 주세요"></textarea><button class="btn sm ghost" id="reportImport" type="button">MES 기록 불러오기</button><p class="hint" id="reportStatus" role="status"></p><button class="btn primary" id="reportSave" type="button">저장</button></div></section>
 
   <!-- 업로드 대기 -->
   <section class="screen" id="s-outbox">
-    <div class="appbar"><button class="ic" id="obBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="appbar"><button class="ic" id="obBack" type="button" aria-label="이전">↶</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">업로드 대기</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane" id="obPane"></div>
   </section>
 
   <!-- 해결 기록: '해당 지식 없음' 뒤 작업자가 한 일 -->
   <section class="screen" id="s-resolve">
-    <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전">← 이전</button>
+    <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전">↶</button>
       <h1 style="font-size:14px;color:var(--tx-2)">조치 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
       <p class="hint res-auto" id="resBefore">조치 전 MES 값을 기록하고 있습니다…</p>
@@ -730,38 +815,47 @@
     </div>
   </section>
 
+  <!-- 대시보드: 작업자용 라인 요약 -->
+  <section class="screen" id="s-dash">
+    <div class="appbar"><h1>대시보드</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane">
+      <p class="dash-line" id="dashLine">MES 상태를 불러오는 중…</p>
+      <div class="dash-grid">
+        <div class="dash-tile" id="dashFaults"></div>
+        <div class="dash-tile" id="dashWaiting"></div>
+        <div class="dash-tile" id="dashHeld"></div>
+        <div class="dash-tile" id="dashHandover"></div>
+      </div>
+      <p class="hint">가동률·처리량 같은 운영 지표는 상단 MES 버튼의 전체 대시보드에서 확인합니다.</p>
+    </div>
+  </section>
+
   <!-- 인계 작성 -->
   <section class="screen" id="s-hoNew">
-    <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">← 이전</button>
-      <h1 style="color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <!-- 1280×800 가로에서 「저장」이 스크롤 없이 보이게 두 칸: 왼쪽 글(메모·작업 상황), 오른쪽 전달 정보. 저장은 화면 하단 중앙, 좁은 화면은 한 칸. -->
-    <div class="pane ho-new">
+    <div class="appbar"><button class="ic" id="hoNewBack" type="button" aria-label="이전">↶</button>
+      <h1 style="font-size:14px;color:var(--tx-2)">인계 작성</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
+    <div class="pane">
       <p class="lbl">인계 — 메모와 전달 정보 모두 필수</p>
-      <div class="ho-cols">
-        <div class="ho-col t4">
-          <div class="fld ho-memo"><label for="hoMemo" class="k">인계 메모</label>
-            <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea></div>
-          <div class="fld ho-memo"><label class="k" for="hoCtx">작업 상황 및 측정 기록</label><textarea id="hoCtx" maxlength="12000" placeholder="측정값과 조치 내용을 입력해 주세요"></textarea></div>
-          <button class="btn sm" id="hoLoadMes" type="button">MES 기록 불러오기</button>
-          <p class="hint" id="hoMesStatus" role="status">선택한 설비의 현재 측정값과 최근 이벤트를 불러와 추가할 수 있습니다.</p>
-        </div>
-        <div class="ho-col t4">
-          <div class="fld"><label class="k" for="hoRole">받는 사람</label><input id="hoRole" value="야간조 정비 담당"></div>
-          <div class="fld"><label class="k" for="hoTiming">전달 시점</label><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
-          <div class="fld"><label class="k" for="hoChannel">전달 방법</label><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
-          <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
-          <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
-          <div class="grow"></div>
-        </div>
+      <label for="hoMemo" class="lbl">인계 메모</label>
+      <textarea id="hoMemo" maxlength="4000" placeholder="다음 교대에 전달할 내용을 적어 주세요"></textarea>
+      <div class="t4">
+        <div class="fld"><label class="k" for="hoCtx">작업 상황 및 측정 기록</label><textarea id="hoCtx" maxlength="12000" placeholder="측정값과 조치 내용을 입력해 주세요"></textarea></div>
+        <button class="btn sm" id="hoLoadMes" type="button">MES 기록 불러오기</button>
+        <p class="hint" id="hoMesStatus" role="status">선택한 설비의 현재 측정값과 최근 이벤트를 불러와 추가할 수 있습니다.</p>
+        <div class="fld"><label class="k" for="hoRole">받는 사람</label><input id="hoRole" value="야간조 정비 담당"></div>
+        <div class="fld"><label class="k" for="hoTiming">전달 시점</label><input id="hoTiming" value="교대 직후 최초 기동 전"></div>
+        <div class="fld"><label class="k" for="hoChannel">전달 방법</label><input id="hoChannel" value="구두 인계 + 인계서 기록"></div>
+        <div class="fld"><label class="k" for="hoAck">인계 확인 방법</label><input id="hoAck" class="req" placeholder="예: 다음 교대 담당자가 인계서에 확인 서명"></div>
       </div>
+      <div class="alert" id="hoWarn"><p class="p">메모와 전달 정보를 모두 입력해 주세요.</p></div>
+      <div class="grow"></div>
+      <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
     </div>
-    <button class="btn primary" id="hoSave" type="button" disabled>저장</button>
   </section>
 
 
 </div>
 
 <script src="/static/pda.js"></script>
-<div id="toast" hidden></div>
 </body>
 </html>

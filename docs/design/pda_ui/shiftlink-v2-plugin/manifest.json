@@ -1,0 +1,15 @@
+{
+  "name": "ShiftLink · 2차 시안 코멘트 적용",
+  "id": "shiftlink-v2-comment-apply-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "none"
+    ]
+  }
+}

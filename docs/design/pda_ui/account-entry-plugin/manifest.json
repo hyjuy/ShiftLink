@@ -1,0 +1,15 @@
+{
+  "name": "ShiftLink · 계정 로그인 첫 화면",
+  "id": "shiftlink-account-entry-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "none"
+    ]
+  }
+}

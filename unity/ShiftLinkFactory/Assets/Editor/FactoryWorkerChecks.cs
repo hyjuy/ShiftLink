@@ -39,6 +39,77 @@ public static class FactoryWorkerChecks
         catch (TargetInvocationException error) { throw error.InnerException ?? error; }
     }
     static void Set(object target, string name, object value) { target.GetType().GetField(name).SetValue(target, value); }
+    public static void RunMovement()
+    {
+        try {
+            assertions = 0;
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            floor.transform.position = new Vector3(0, -.5f, 0);
+            floor.transform.localScale = new Vector3(100, 1, 100);
+            var host = new GameObject("Movement check");
+            var worker = host.AddComponent<FactoryWorker>();
+            worker.Initialize(null, new GameObject("Observation").AddComponent<Camera>());
+            worker.EnterWorker();
+            var root = worker.WorkerRoot;
+            var controller = root.GetComponent<CharacterController>();
+            foreach (float dt in new[] { 1f / 30, 1f / 60 }) {
+                controller.enabled = false; root.position = new Vector3(0, .05f, 0); controller.enabled = true;
+                Physics.SyncTransforms();
+                for (int i = 0; i < 30; i++) worker.Step(dt, Vector2.zero, Vector2.zero);
+                Check(controller.isGrounded, "employee settles on floor");
+                Vector3 before = root.position;
+                for (int i = 0; i < 30; i++) worker.Step(dt, Vector2.up, Vector2.zero);
+                float walk = root.position.z - before.z;
+                before = root.position;
+                for (int i = 0; i < 30; i++) Call(worker, "StepMovement", dt, Vector2.up, Vector2.zero, true, false);
+                float run = root.position.z - before.z;
+                Check(run > walk * 1.5f, "running is faster than walking");
+                before = root.position;
+                for (int i = 0; i < 30; i++) Call(worker, "StepMovement", dt, Vector2.one, Vector2.zero, true, false);
+                Check(Mathf.Abs(Vector3.Distance(before, root.position) - run) < .05f, "diagonal running has no speed boost");
+                before = root.position;
+                Call(worker, "StepMovement", dt, Vector2.zero, Vector2.zero, true, false);
+                Check(Vector3.Distance(before, root.position) < .001f, "run without direction stays still");
+                float ground = root.position.y;
+                Call(worker, "StepMovement", dt, Vector2.zero, Vector2.zero, false, true);
+                Check(root.position.y > ground + .03f, "grounded jump rises");
+                Call(worker, "StepMovement", dt, Vector2.zero, Vector2.zero, false, true);
+                float peak = root.position.y;
+                for (int i = 0; i < Mathf.CeilToInt(2 / dt); i++) {
+                    worker.Step(dt, Vector2.zero, Vector2.zero);
+                    peak = Mathf.Max(peak, root.position.y);
+                }
+                Check(peak - ground > .8f && peak - ground < 1.3f, "jump height and airborne jump rejection");
+                Check(controller.isGrounded && Mathf.Abs(root.position.y - ground) < .03f, "jump returns to floor");
+                Call(worker, "StepMovement", dt, Vector2.up, Vector2.zero, true, true);
+                Check(root.position.y > ground + .03f, "running jump rises");
+                for (int i = 0; i < 120; i++) worker.Step(dt, Vector2.zero, Vector2.zero);
+                worker.TogglePda(); before = root.position;
+                Call(worker, "StepMovement", dt, Vector2.up, Vector2.one, true, true);
+                Check(Vector3.Distance(before, root.position) < .001f, "PDA blocks running and jumping");
+                worker.TogglePda();
+                var ceiling = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                ceiling.transform.position = root.position + new Vector3(0, 2.1f, 0);
+                ceiling.transform.localScale = new Vector3(4, .2f, 4);
+                Physics.SyncTransforms();
+                Call(worker, "StepMovement", dt, Vector2.zero, Vector2.zero, false, true);
+                for (int i = 0; i < Mathf.CeilToInt(.5f / dt); i++) worker.Step(dt, Vector2.zero, Vector2.zero);
+                Check(controller.isGrounded, "ceiling collision cancels ascent and allows landing");
+                UnityEngine.Object.DestroyImmediate(ceiling);
+                before = root.position;
+                Call(worker, "StepMovement", float.NaN, Vector2.up, Vector2.zero, true, true);
+                Call(worker, "StepMovement", 0f, Vector2.up, Vector2.zero, true, true);
+                Check(Vector3.Distance(before, root.position) < .001f, "invalid timestep does not move employee");
+            }
+            worker.ExitWorker();
+            Vector3 exited = root.position;
+            Call(worker, "StepMovement", .1f, Vector2.up, Vector2.zero, true, true);
+            Check(Vector3.Distance(exited, root.position) < .001f, "observation mode blocks running and jumping");
+            Debug.Log("SHIFTLINK MOVEMENT CHECK PASS: " + assertions);
+            EditorApplication.Exit(0);
+        } catch (Exception error) { Debug.LogException(error); EditorApplication.Exit(1); }
+    }
     public static void Run()
     {
         string dir = Path.GetFullPath(Path.Combine(Application.dataPath, "../Checks"));

@@ -101,6 +101,8 @@ Unity 버전은 6000.3.12f1, Built-in Render Pipeline이다. 장비 프리팹과
 | 조작 | 동작 |
 |---|---|
 | WASD / 마우스 | 이동 / 시점 조정 |
+| Shift + WASD | 달리기 (4.4 m/s, 걷기 2.2 m/s) |
+| Space | 지상에서 점프 (높이 약 1.1 m) |
 | V | 직원 1인칭·3인칭 전환 |
 | P | PDA 열기·닫기 |
 | Space / Enter | PDA 카메라 화면에서 촬영 |

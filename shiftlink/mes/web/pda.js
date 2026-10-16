@@ -3068,7 +3068,9 @@ function renderAnalytics() {
   const a = S.an;
   if (!a || S.screen !== 'dashboard') return;
   const keep = ['anLoss', 'anRepeat', 'anGap'].map((id) => [id, $(id).scrollTop]);   // 다시 그려도 칸 스크롤 유지
+  const lossFocused = document.activeElement?.classList.contains('g-lost');
   renderAnalyticsPanels(a);
+  if (lossFocused) $('anLoss').querySelector('.g-lost')?.focus({preventScroll:true});
   keep.forEach(([id, top]) => { $(id).scrollTop = top; });
 }
 
@@ -3087,9 +3089,9 @@ function renderAnalyticsPanels(a) {
       + '<text x="' + cx + '" y="' + (C.cy + 15) + '" text-anchor="middle" class="ctr-s">' + small + '</text>';
     // 위: 요약 한 줄. 아래: SVG 하나에 ① 작은 생산 링(왼쪽) ② 큰 손실 도넛(오른쪽, 조각 옆에 설비 코드·개수) — 같은 중심 높이
     const head = document.createElement('div'); head.className = 'loss-head';
-    head.innerHTML = '<table class="loss-sum"><thead><tr><th>계획</th><th>생산</th><th>손실</th><th>손실률</th></tr></thead>'
-      + '<tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table>'
-      + '<div class="loss-chartrow"><svg class="loss-chart" viewBox="0 0 ' + (L.cx + L.r + 16) + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="img"></g></svg><ul class="loss-legend"></ul></div>';
+    head.innerHTML = '<table class="loss-sum"><thead><tr><th>계획</th><th>생산</th><th>손실률</th></tr></thead>'
+      + '<tbody><tr><td></td><td></td><td></td></tr></tbody></table>'
+      + '<div class="loss-chartrow"><svg class="loss-chart" viewBox="0 0 ' + (L.cx + L.r + 16) + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="button" tabindex="0" aria-controls="anLossEquipment"></g></svg><ul class="loss-legend"></ul></div>';
     // ① 생산 링: 회색 원 + 끝부분 손실(실제 비율, 설비 색)
     head.querySelector('.g-made').innerHTML = '<circle cx="' + M.cx + '" cy="' + C.cy + '" r="' + M.r + '" class="made-base"/>'
       + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
@@ -3102,7 +3104,7 @@ function renderAnalyticsPanels(a) {
         + arcs.filter((s) => s.inside).map((s) => '<text x="' + s.nx + '" y="' + s.ny + '" text-anchor="middle" class="num">' + s.coils + '</text>').join('')
       : '<circle cx="' + L.cx + '" cy="' + C.cy + '" r="' + L.r + '" class="lost-arc" style="stroke:var(--edge)"/>')
       + center(L.cx, v.lost + '개', '손실', 'ctr');
-    [v.planned.toLocaleString() + '개', v.produced.toLocaleString() + '개', v.lost + '개', f1(v.lostPct)]
+    [v.planned.toLocaleString() + '개', v.produced.toLocaleString() + '개', f1(v.lostPct)]
       .forEach((t, i) => { head.querySelectorAll('.loss-sum td')[i].textContent = t; });
     // 그림은 색만으로 읽으면 안 된다 — 화면 읽기용 요약
     head.querySelector('.g-made').setAttribute('aria-label', '계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct) + ', 손실 ' + f1(v.lostPct));
@@ -3110,22 +3112,40 @@ function renderAnalyticsPanels(a) {
       (r.equipment_id ? eqCode(r.equipment_id) : '기타') + ' ' + r.coils + '개').join(', ') || '없음'));
     head.querySelector('.loss-legend').innerHTML = arcs.map((s) => '<li><i style="background:' + s.color + '"></i>'
       + esc(s.equipment_id ? eqCode(s.equipment_id) : '기타') + '<span class="n">' + s.coils + '개</span></li>').join('');
+    const toggle = head.querySelector('.g-lost');
+    toggle.insertAdjacentHTML('afterbegin', '<circle class="loss-hit" cx="' + L.cx + '" cy="' + C.cy + '" r="' + (L.r + 12) + '"/>');
+    const summary = toggle.getAttribute('aria-label');
+    const hint = document.createElement('p'); hint.className = 'loss-toggle-hint';
+    const update = () => {
+      const open = !!S.lossEquipmentOpen;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', summary + ' · 설비별 현황 ' + (open ? '접기' : '펼치기'));
+      hint.textContent = '손실 그래프를 눌러 설비별 현황 ' + (open ? '접기' : '펼치기');
+      const details = $('anLossEquipment'); if (details) details.hidden = !open;
+    };
+    toggle.addEventListener('click', () => { S.lossEquipmentOpen = !S.lossEquipmentOpen; update(); });
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggle.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
+    });
+    update();
+    head.appendChild(hint);
     loss.appendChild(head);
   }
+  const details = document.createElement('div'); details.id = 'anLossEquipment'; details.className = 'loss-equipment';
+  details.hidden = !!v.planned && !S.lossEquipmentOpen;
+  const title = document.createElement('h3'); title.textContent = '설비별 현황'; details.appendChild(title);
+  loss.appendChild(details);
   const max = Math.max(1, ...v.rows.map((r) => r.coils));
   v.rows.forEach((r) => {
-    const b = anRow(loss, 'an-row loss-row', '<b class="eqc mono"></b><span class="an-bar"><i></i></span><span class="v mono"></span><span class="s"></span>',
+    const b = anRow(details, 'an-row loss-row', '<b class="eqc mono"></b><span class="an-bar"><i></i></span><span class="v mono"></span><span class="s"></span>',
       r.incidents, eqCode(r.equipment_id) + ' 정지 손실');
     b.style.setProperty('--sw', r.color);   // 링 조각과 같은 색(상위 5대 밖은 회색 '기타')
     b.querySelector('.eqc').textContent = eqCode(r.equipment_id);
     b.querySelector('.an-bar i').style.width = (r.coils / max * 100) + '%';
     b.querySelector('.v').textContent = r.coils + '개';
-    // 설비 MTBF(평균 고장 간격)·MTTR(평균 수리 시간) — 4주, 그 설비의 고장 전부
-    const rel = r.reliability;
-    b.querySelector('.s').textContent = [rel ? 'MTBF ' + rel.mtbf_h + '시간' : '', rel ? 'MTTR ' + rel.mttr_min + '분' : '',
-      '정지 ' + r.stop_min + '분', r.halts_line ? '' : '라인 영향 없음'].filter(Boolean).join(' · ');
+    b.querySelector('.s').textContent = r.incidents.length + '회 · 총 ' + r.stop_min + '분 정지';
   });
-  restLine(loss, '정지 없음', a.loss.map((r) => r.equipment_id));   // 전체 설비가 한 칸에 보이게
+  restLine(details, '정지 없음', a.loss.map((r) => r.equipment_id));   // 전체 설비가 한 칸에 보이게
 
   const rep = anPanel('anRepeat');
   a.repeats.forEach((g) => {

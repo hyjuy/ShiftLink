@@ -113,10 +113,12 @@ def test_mes_builds_s30h_and_warms_its_three_models(pipe, tmp_path, monkeypatch)
     built = Q.build_query_pipeline()
     assert built.answer_mode == "s30h" and built.judge_host == "http://judge:11436" and built.model.model == "exaone-rag-aug-ck106"
     assert G.KEEP_ALIVE == -1 and E.KEEP_ALIVE == -1
+    notices = built.safety("EQ-0001", "HPU")   # real KB cards (loader models), not dicts
+    assert notices and all(n.card_id.startswith("K-") and n.safety_basis for n in notices)
     posts = []
     monkeypatch.setattr(built, "_post", lambda host, path, body, timeout=300: posts.append((host, path, body["model"], body["options"])))
-    assert Q.warm_models(built) == ["exaone-rag-aug-ck106", "embeddinggemma:300m", "exaone-sft-judge"]
-    assert posts[1][3] == {"num_gpu": 0} and posts[2][0] == "http://judge:11436" and posts[2][3] == {"num_ctx": 2048}
+    assert Q.warm_models(built) == ["exaone-sft-judge", "exaone-rag-aug-ck106", "embeddinggemma:300m"]   # judge first
+    assert posts[0][0] == "http://judge:11436" and posts[0][3] == {"num_ctx": 2048} and posts[2][3] == {"num_gpu": 0}
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

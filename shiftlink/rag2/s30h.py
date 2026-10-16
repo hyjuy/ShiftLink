@@ -54,7 +54,8 @@ class S30hPipeline:
         self.model = SimpleNamespace(model=answer_model)   # the server logs pipeline.model.model
         # ponytail: module globals of the evaluated code; one pipeline per process. Pass them as arguments if that changes.
         G.GEN_MODEL, G.KEEP_ALIVE, E.KEEP_ALIVE = answer_model, -1, -1
-        self.cards = list(cards)
+        # the MES passes loader KnowledgeCard models; tests pass plain dicts
+        self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type = {}
@@ -123,10 +124,11 @@ class S30hPipeline:
         return SimpleNamespace(mode="query", output=output, tool_results=tool_results)
 
     def warm(self, attempts=30, wait_s=10.0, sleep=time.sleep) -> list[str]:
-        """Load ck106 (ctx 4096), the CPU embedding and the judge (judge server, its own ctx) before the first query."""
-        targets = [(self.host, "/api/generate", {"model": self.model.model, "keep_alive": -1, "options": {"num_ctx": 4096}}),
-                   (self.host, "/api/embed", {"model": CFG["model"], "input": ["x"], "keep_alive": -1, "options": {"num_gpu": 0}}),
-                   (self.judge_host, "/api/generate", {"model": self.judge_model, "keep_alive": -1, "options": {"num_ctx": self.judge_ctx}})]
+        """Load the judge (judge server, its own ctx), then ck106 (ctx 4096), then the CPU embedding, before the first query.
+        Judge first, as in the measured layout: on 10/16 the judge loaded after ck106 hit NvMap error 12 once (Ollama retried)."""
+        targets = [(self.judge_host, "/api/generate", {"model": self.judge_model, "keep_alive": -1, "options": {"num_ctx": self.judge_ctx}}),
+                   (self.host, "/api/generate", {"model": self.model.model, "keep_alive": -1, "options": {"num_ctx": 4096}}),
+                   (self.host, "/api/embed", {"model": CFG["model"], "input": ["x"], "keep_alive": -1, "options": {"num_gpu": 0}})]
         loaded = []
         for host, path, body in targets:
             for _ in range(attempts):

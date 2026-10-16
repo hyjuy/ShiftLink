@@ -5,8 +5,11 @@ class Element {
   constructor() { this.children = []; this.parts = {}; this.textContent = ''; this.classList = {remove(){},toggle(){}}; }
   set innerHTML(value) { this.children = []; this.parts = {}; }
   appendChild(child) { this.children.push(child); }
+  append(...children) { this.children.push(...children); }
+  replaceChildren(...children) { this.children=children; }
   querySelector(selector) { return this.parts[selector] ||= new Element(); }
   addEventListener() {}
+  setAttribute(name,value) { this[name]=value; }
   text() { return [this.textContent, ...this.children.map(x=>x.text()), ...Object.values(this.parts).map(x=>x.text())].join(' '); }
 }
 const nodes = {};
@@ -31,6 +34,7 @@ const snapshot = {simulated_at:'2026-10-07T06:18:57.622226+00:00',equipment:[{eq
 context.snapshot = snapshot;
 (async()=>{
   await vm.runInContext('loadMesObservations(snapshot)',context);
+  assert.equal(vm.runInContext('S.sensorsOpen',context),true,'abnormal readings open sensor values automatically');
   assert.match(nodes.ctxSensors.text(),/154\.845 bar/);
   assert.match(nodes.ctxSensors.text(),/47\.05 ℃/);
   assert.match(nodes.ctxSensors.text(),/정상 범위 145~165 bar/);

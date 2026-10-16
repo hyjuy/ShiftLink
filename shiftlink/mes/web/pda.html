@@ -969,12 +969,6 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #reportSaveConfirm .confirm-actions{display:flex;gap:12px;justify-content:flex-end}
 #reportSaveConfirm button{min-height:48px;min-width:110px;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600}
 #reportSaveConfirm button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.loss-chartrow{display:flex;align-items:center;gap:16px}
-.loss-chartrow .loss-chart{flex:1 1 0;min-width:0}
-.loss-legend{flex:0 0 auto;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:600}
-.loss-legend li{display:flex;align-items:center;gap:8px;white-space:nowrap}
-.loss-legend i{width:14px;height:14px;border-radius:3px;flex:0 0 14px}
-.loss-legend .n{color:var(--tx-2);font-weight:500;margin-left:auto;padding-left:10px}
 /* Keep back navigation in the existing top row, with a full PDA touch target. */
 .navigation-back{display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;min-height:48px;padding:0;border:0;border-radius:10px;color:var(--accent);background:transparent}
 .navigation-back:hover,.navigation-back:active{background:var(--hover)}
@@ -1012,18 +1006,217 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
  #s-dashboard #anGap .an-flow .t{font-size:12px}
 }
 @media(max-width:600px){#s-dashboard #anGap{grid-column:1 / -1}}
+
+/* 4차: 헤더 통일 · 이상 팝업 · 대시보드 정리 · 설비 색 */
+#s-account>.appbar,#s-account>.appbar.navigation-host{display:none!important}
+#globalHeader>a.btn,#globalHeader #headerHome,#globalHeader #logout{border-color:#a9c4b8;color:var(--accent);font-weight:600}
+#globalHeader>a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+#globalHeader #headerHome{width:64px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+#globalHeader #headerHome svg{width:24px;height:24px}
+#s-home .home-summary>#toReport{height:84px;min-height:84px}
+#s-reportSelect .report-actions{justify-content:flex-end}
+#s-reportSelect #reportWrite{flex:0 0 auto;width:256px;max-width:100%}
+#s-dashboard .dash-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.7fr);gap:8px;align-items:stretch}
+#s-dashboard .dash-tile{flex-direction:column;justify-content:flex-start;align-items:flex-start;align-content:flex-start;text-align:left;gap:4px;padding:12px 14px}
+#s-dashboard #anGap{padding:12px 14px}
+#s-dashboard .dash-tile .t,#s-dashboard #anGap h2{font-size:16px;line-height:24px;margin:0}
+#logoutConfirm{border:1px solid var(--edge);padding:24px 28px;min-width:320px;margin:auto}
+#logoutConfirm h2{margin:0 0 8px;font-size:20px}
+#logoutConfirm p{margin:0 0 20px;font-size:15px;color:var(--tx-2)}
+#logoutConfirm .confirm-actions{display:flex;gap:12px;justify-content:flex-end}
+#logoutConfirm button{min-height:48px;min-width:110px;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600}
+#logoutConfirm button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+
+
+/* 6차: 알림 종 · 정지 손실 요약/설비별 상세 */
+.eqchip{display:inline-block;width:14px;height:14px;margin-right:10px;border-radius:50%;vertical-align:-2px;flex:0 0 14px}
+#s-dashboard #anRepeat .an-row{grid-template-columns:104px minmax(0,1fr) auto}
+#globalHeader .notify-wrap{position:relative;display:inline-flex}
+#globalHeader .btn.notify{position:relative;width:64px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.notify svg{width:24px;height:24px}
+.notify-count{position:absolute;top:2px;right:2px;min-width:20px;height:20px;padding:0 4px;box-sizing:border-box;border:2px solid #fff;border-radius:999px;background:#b42318;color:#fff;font:700 11px/16px system-ui,sans-serif;text-align:center;pointer-events:none}
+.notify-count[hidden],.notify-bubble[hidden],.notify-floatwrap[hidden],#notifyPanel[hidden]{display:none}
+.notify-bubble{position:absolute;top:calc(100% + 10px);right:-8px;z-index:60;white-space:nowrap;padding:6px 12px;border:1.5px solid #b42318;border-radius:8px;background:#fff;color:#b42318;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.notify-bubble::before{content:"";position:absolute;top:-6px;right:30px;width:10px;height:10px;background:#fff;border-left:1.5px solid #b42318;border-top:1.5px solid #b42318;transform:rotate(45deg)}
+.notify-floatwrap{position:fixed;top:8px;right:12px;z-index:60}
+.notify-floatwrap .notify{position:relative;width:64px;height:48px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #a9c4b8;border-radius:8px;background:#fff;color:var(--accent)}
+#notifyPanel{position:fixed;top:84px;right:16px;z-index:70;width:min(460px,calc(100vw - 32px));max-height:calc(100vh - 100px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border:1px solid var(--edge);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.25)}
+#app:has(#globalHeader[hidden]) #notifyPanel{top:64px}
+#notifyPanel>header{display:flex;align-items:center;gap:8px;padding:10px 8px 10px 16px;border-bottom:1px solid var(--edge)}
+#notifyPanel h2{margin:0;flex:1 1 auto;font-size:19px}
+.np-all{min-height:44px;padding:0 10px;color:var(--accent);font-size:15px;font-weight:700}
+.np-all:disabled{color:var(--tx-3)}
+.np-x{width:44px;height:44px;color:var(--tx-2);font-size:20px;text-align:center}
+.np-list{overflow:auto}
+.np-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--edge)}
+.np-row:last-child{border-bottom:0}
+.np-dot{width:12px;height:12px;border-radius:50%;background:#b42318}
+.np-head{display:flex;align-items:center;gap:10px}
+.np-tag{padding:2px 10px;border-radius:6px;background:#b42318;color:#fff;font-size:14px;font-weight:700}
+.np-code{font-size:18px}
+.np-at{margin-left:auto;color:var(--tx-2);font-size:13px}
+.np-msg{margin:4px 0 0;font-size:15px}
+.np-go{min-height:48px;padding:0 14px;border-radius:6px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;white-space:nowrap}
+.np-row.warn .np-dot,.np-row.warn .np-tag{background:#d9822b}
+.np-row.acked .np-dot,.np-row.acked .np-tag{background:var(--tx-3)}
+.np-row.acked .np-msg{color:var(--tx-2)}
+#anLoss.loss-detail>h2{display:none}
+.ls-card{padding:14px;border:1px solid var(--edge);border-radius:12px;background:var(--surface)}
+.ls-card+.ls-card{margin-top:10px;background:#eaf3f0}
+.ls-card>header{display:flex;align-items:baseline;gap:10px}
+.ls-card h3{margin:0;flex:1 1 auto;font-size:19px}
+.asof{color:var(--tx-2);font-size:14px;white-space:nowrap}
+.ls-now{display:flex;align-items:baseline;gap:8px;margin-top:8px}
+.ls-now .lb{font-size:17px;font-weight:700}
+.ls-now b{color:var(--accent);font-size:44px;font-weight:800;line-height:1}
+.ls-now small{font-size:20px;font-weight:700;color:var(--accent)}
+.ls-now .plan{color:var(--tx-2);font-size:17px}
+.ls-bar{height:14px;margin-top:10px;border-radius:7px;background:var(--surface-3)}
+.ls-bar i{display:block;height:100%;border-radius:7px;background:var(--accent)}
+.ls-sub{display:flex;justify-content:space-between;margin-top:6px;font-size:15px;color:var(--tx)}
+.ls-loss header{align-items:center}
+.ls-loss .lostn{color:#8a3d0c;font-size:36px;font-weight:800;line-height:1}
+.ls-loss .lostn small{margin-left:2px;font-size:18px}
+.ls-loss .lostp{font-size:16px;font-weight:600}
+.ls-note{margin:4px 0 10px;color:var(--tx-2);font-size:15px}
+.ls-stack{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--surface-3)}
+.ls-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin:12px 0 0;padding:0;list-style:none}
+.ls-legend li{display:flex;align-items:center;gap:10px;font-size:16px}
+.ls-legend i{width:22px;height:22px;border-radius:6px;flex:0 0 22px}
+.ls-legend span{color:var(--tx-2);font-size:15px;white-space:nowrap}
+.ls-detail{display:block;margin:12px 0 0 auto;min-height:48px;padding:0 20px;border:1px solid var(--accent);border-radius:8px;background:#fff;color:var(--accent);font-size:16px;font-weight:700}
+.ld-head{display:flex;align-items:center;gap:12px}
+.ld-head h3{margin:0;flex:1 1 auto;font-size:19px}
+.ld-back{display:inline-flex;align-items:center;gap:2px;min-height:48px;padding:0 10px 0 0;color:var(--accent);font-size:16px;font-weight:700}
+.ld-back svg{width:24px;height:24px}
+.ld-tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-top:8px}
+.ld-tabs button{min-height:48px;border:1px solid #a9c4b8;border-radius:6px;background:#fff;color:var(--tx);font-size:16px;font-weight:700;text-align:center}
+.ld-tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.ld-band{display:flex;align-items:center;gap:12px;margin-top:10px;padding:12px 14px;border-radius:8px;background:#eaf3f0}
+.ld-band .t{font-size:18px;font-weight:800}
+.ld-band b{color:#8a3d0c;font-size:34px;font-weight:800;line-height:1}
+.ld-band b small{margin-left:2px;font-size:18px}
+.ld-band .r{margin-left:auto;padding-left:14px;border-left:1px solid var(--edge);font-size:16px}
+.ld-band .r strong{color:var(--accent);font-size:30px;font-weight:800}
+.ld-cmp{margin:10px 0 6px;font-size:15px}
+.ld-th,.ld-row{display:grid;grid-template-columns:130px minmax(0,1fr) 110px;gap:12px;align-items:center}
+.ld-th{padding:8px 10px;background:var(--surface-2);color:var(--tx-2);font-size:14px;font-weight:700}
+.ld-th span{text-align:center}
+.ld-row{width:100%;min-height:52px;padding:6px 10px;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:transparent;text-align:left}
+button.ld-row:hover{background:var(--surface-2)}
+.ld-row.top{background:#eaf3f0}
+.ld-row .eqc{font-size:17px;font-weight:800;white-space:nowrap}
+.ld-row .pct{display:flex;align-items:center;gap:10px;min-width:0}
+.ld-row .bar{flex:1 1 auto;height:12px;border-radius:6px;background:var(--surface-3);overflow:hidden}
+.ld-row .bar i{display:block;height:100%;border-radius:6px;background:var(--accent)}
+.ld-row .pct em{flex:0 0 52px;font-style:normal;font-size:15px}
+.ld-row .n{font-size:18px;font-weight:800}
+.ld-row .n small{margin-left:6px;color:var(--tx-2);font-size:12px;font-weight:500}
+
+/* 7차: 가운데 정렬·간격·스크롤바 숨김 */
+*{scrollbar-width:none}
+*::-webkit-scrollbar{display:none}
+#s-dashboard .dash-grid{align-items:stretch}
+#s-dashboard .dash-tile{flex-wrap:nowrap;align-content:center;align-items:center;justify-content:flex-start;text-align:center;gap:4px;padding:12px 14px}
+#s-dashboard .dash-tile .n,#s-dashboard #anGap .an-flow .n{font-size:24px;line-height:32px}
+#s-dashboard .dash-tile .t,#s-dashboard #anGap h2{font-size:16px;line-height:24px;margin:0}
+#s-dashboard #anGap{gap:4px;padding:12px 14px}
+#s-dashboard #anGap .an-flow{padding:0}
+.ls-card:not(.ls-loss){border:0;padding:4px 2px 14px}
+.ls-card{padding-top:16px}
+.ls-now{gap:10px}
+.ls-now small{margin-left:4px}
+.ls-now .plan{margin-left:8px}
+.ls-loss header{gap:16px}
+.ls-loss .lostn small{margin-left:4px}
+.ld-band{gap:14px}
+.ld-band b small{margin-left:4px}
+.ld-band .r{display:flex;align-items:baseline;gap:10px;padding-left:18px}
+.ld-row .n small{margin-left:10px}
+.ld-tabs button{display:flex;align-items:center;justify-content:center}
+
+/* 8차: 로그아웃 팝업 · 기간/기준 시각 · 생산 현황 배치 */
+#globalHeader #logout{width:96px}
+#logoutConfirm{box-sizing:border-box;width:min(380px,calc(100vw - 32px));padding:24px;text-align:center}
+#logoutConfirm:focus{outline:none}
+#logoutConfirm h2{margin:0 0 8px;font-size:20px}
+#logoutConfirm p{margin:0 0 20px}
+#logoutConfirm .confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#logoutConfirm button{min-width:0;width:100%;text-align:center}
+#logoutConfirm button:focus:not(:focus-visible){outline:none}
+.an h2 .per{font-weight:500}
+.an h2 .asof{margin-left:auto;font-weight:500}
+.per{color:var(--tx-2);font-size:14px;white-space:nowrap}
+.ls-card>header{gap:12px}
+.ls-card h3{flex:0 0 auto}
+.ls-card .pc{color:var(--accent);font-size:16px;font-weight:700;white-space:nowrap}
+.ls-card .asof{margin-left:auto}
+.ls-now{justify-content:space-between}
+.ls-now .val{display:flex;align-items:baseline;gap:10px;margin-left:auto}
+.ls-sub{justify-content:flex-end}
+.ls-loss .lostp{color:var(--tx);font-size:16px;font-weight:700;white-space:nowrap}
+.ls-loss .lostn{margin-left:auto}
+
+/* 9차 */
+.ls-loss .lostp{color:#b42318}
+
+/* 11차 */
+#s-dashboard .dash-tile,#s-dashboard #anGap{gap:10px}
+#s-dashboard #anGap .an-flow>div{align-items:center;text-align:center}
+#globalHeader .btn.notify,.notify-floatwrap .notify{background:var(--accent);border-color:var(--accent);color:#fff}
+#globalHeader .btn.notify:hover{background:#1f5c57}
+
+/* 12차: 상자 안 가로선 + 숫자 가운데 */
+#s-dashboard .dash-tile{position:relative;min-height:112px;gap:0;padding:12px 14px 8px;justify-content:flex-start}
+#s-dashboard .dash-tile .t{order:0;align-self:stretch;padding-bottom:8px;border-bottom:1px solid var(--edge)}
+#s-dashboard .dash-tile.bad .t{border-bottom-color:var(--fault-edge)}
+#s-dashboard .dash-tile.warn .t{border-bottom-color:var(--notice-edge)}
+#s-dashboard .dash-tile .n{order:1;flex:1 1 auto;align-self:stretch;display:flex;align-items:center;justify-content:center}
+#s-dashboard .dash-tile .d{order:2;position:absolute;left:8px;right:8px;bottom:4px;font-size:13px;line-height:16px}
+#s-dashboard #anGap{gap:0;padding:12px 14px 8px}
+#s-dashboard #anGap h2{padding-bottom:8px;border-bottom:1px solid var(--edge)}
+#s-dashboard #anGap .an-flow{flex:1 1 auto;align-items:center}
+
+/* 13차: 근무일지 대상 선택 표 */
+#s-reportSelect #reportCount{margin-right:auto;font-size:18px;font-weight:600}
+#s-reportSelect .report-table{border-collapse:collapse}
+#s-reportSelect .report-table :is(th,td){border:1px solid var(--edge)}
+#s-reportSelect .report-table th{font-size:18px;padding:14px 16px}
+#s-reportSelect .report-table td{font-size:20px;font-weight:600}
+#s-reportSelect .report-table td .pill,#s-reportSelect .report-table td .st{font-size:18px;padding:5px 20px;border-radius:6px}
+
+/* 14차: 대상 선택 표 열 */
+#s-reportSelect .report-table :is(th,td):first-child{width:72px;padding-left:0;padding-right:0;text-align:center}
+#s-reportSelect .report-table :is(th,td):first-child label{display:flex;justify-content:center}
+#s-reportSelect .report-table td:nth-child(2){text-align:left}
+#s-reportSelect .report-table{table-layout:fixed;width:100%}
+#s-reportSelect .report-table :is(th,td):nth-child(3){width:44%}
+
+/* 16차: 이전 기록 불러오기 팝업(로그아웃 팝업과 같은 모양) */
+#reportResume{box-sizing:border-box;width:min(380px,calc(100vw - 32px));margin:auto;padding:24px;border:1px solid var(--edge);text-align:center}
+#reportResume:focus{outline:none}
+#reportResume h2{margin:0 0 8px;font-size:20px}
+#reportResume p{margin:0 0 20px;font-size:15px;color:var(--tx-2)}
+#reportResume .confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#reportResume button{min-height:48px;width:100%;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600;text-align:center}
+#reportResume button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+
+#s-handover>.appbar,#s-dutyDetail>.appbar{padding-right:88px}
 </style>
 </head>
 <body>
 
 <div id="app"><div id="toast" class="toast" role="status" hidden></div>
 
-  <header id="globalHeader" class="global-header"><button id="navigationBack" class="navigation-back" type="button" aria-label="뒤로가기" title="뒤로가기" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><span class="sp"></span><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button">홈</button><button class="btn sm ghost" id="logout" type="button">Logout</button></header>
+  <header id="globalHeader" class="global-header"><button id="navigationBack" class="navigation-back" type="button" aria-label="뒤로가기" title="뒤로가기" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><span class="sp"></span><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button" aria-label="홈" title="홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M9 21v-7h6v7"/></svg></button><span class="notify-wrap"><button class="btn sm ghost notify" id="notifyBell" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span><button class="btn sm ghost" id="logout" type="button">로그아웃</button></header>
   <div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
 
     <span class="q" id="netQueue" hidden>대기 0건</span></div>
 
-  <div id="alert" hidden></div>
+  <dialog id="reportResume" aria-labelledby="reportResumeTitle" tabindex="-1"><h2 id="reportResumeTitle">이전 기록을 불러오시겠습니까?</h2><p>이전에 작성한 근무일지 내용이 있습니다.</p><div class="confirm-actions"><button id="reportResumeNew" type="button">새로 작성</button><button id="reportResumeLoad" class="primary" type="button">불러오기</button></div></dialog>
+  <section id="notifyPanel" aria-label="알림 목록" hidden></section>
+  <span class="notify-wrap notify-floatwrap" id="notifyFloatWrap" hidden><button class="notify" id="notifyFloat" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span>
+  <dialog id="logoutConfirm" aria-labelledby="logoutConfirmTitle" tabindex="-1"><h2 id="logoutConfirmTitle">로그아웃 하시겠습니까?</h2><p>작성 중인 근무일지는 이 단말에 보관됩니다.</p><div class="confirm-actions"><button id="logoutNo" type="button">취소</button><button id="logoutYes" class="primary" type="button">로그아웃</button></div></dialog>
 
   <div id="ctx">
     <i class="rail" id="ctxRail"></i>
@@ -1209,19 +1402,19 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
         <div class="dash-grid">
           <div class="dash-tile" id="dashFaults"></div>
           <div class="dash-tile" id="dashWaiting"></div>
-          <div class="dash-tile" id="dashHeld"></div><section class="an" id="anGap"><h2>지식 공백 <small>누적</small></h2></section>
+          <div class="dash-tile" id="dashHeld"></div><section class="an" id="anGap"><h2>지식 공백</h2></section>
         </div>
       </div>
       <p class="an-err" id="anErr" role="status" hidden></p>
       <div class="an-grid">
-        <section class="an" id="anLoss"><h2>정지 손실 <small>이번 주</small></h2></section>
-        <section class="an" id="anRepeat"><h2>반복 증상 <small>4주</small></h2></section>
+        <section class="an" id="anLoss"></section>
+        <section class="an" id="anRepeat"><h2>반복 증상</h2></section>
 
 
       </div>
     </div>
   </section>
-  <section class="screen" id="s-reportSelect"><div class="appbar"><h1 class="navigation-brand">ShiftLink</h1><span class="sp"></span><span id="reportCount"></span></div><div class="pane"><div class="work-actions"><button class="btn sm ghost" id="reportFilterAll" type="button" hidden>전체 장비</button><button class="btn sm ghost" id="reportFilterFault" type="button" hidden>이상 장비</button><button class="btn sm ghost" id="reportFilterRecent" type="button" aria-pressed="false">최근 정비 설비</button></div><div class="table-scroll"><table class="report-table"><thead><tr><th><label><input id="reportSelectAll" type="checkbox" aria-label="모두 선택 또는 모두 해제"></label></th><th>설비</th><th>상태</th></tr></thead><tbody id="reportEquipment"></tbody></table></div><div class="report-actions"><button class="btn primary" id="reportWrite" type="button" disabled>작성</button><button class="btn ghost back-icon" id="reportBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button></div></div></section>
+  <section class="screen" id="s-reportSelect"><div class="pane"><div class="work-actions"><button class="btn sm ghost" id="reportFilterAll" type="button" hidden>전체 장비</button><button class="btn sm ghost" id="reportFilterFault" type="button" hidden>이상 장비</button><button class="btn sm ghost" id="reportFilterRecent" type="button" aria-pressed="false">최근 정비 설비</button></div><div class="table-scroll"><table class="report-table"><thead><tr><th><label><input id="reportSelectAll" type="checkbox" aria-label="모두 선택 또는 모두 해제"></label></th><th>설비명</th><th>작동상태</th></tr></thead><tbody id="reportEquipment"></tbody></table></div><div class="report-actions"><span id="reportCount"></span><button class="btn primary" id="reportWrite" type="button" disabled>작성</button><button class="btn ghost back-icon" id="reportBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button></div></div></section>
   <section class="screen" id="s-reportWrite">
     <div class="appbar"><button class="ic" id="reportEditTargets" type="button" aria-label="대상 다시 선택"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>근무일지</h1><span class="sp"></span><time id="reportDate"></time></div>
 
@@ -1238,6 +1431,7 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
     </article></div>
     <div class="footer"><p id="reportStatus" role="status" aria-live="polite">입력 내용은 이 단말의 초안으로 보관됩니다.</p><button class="primary" id="reportSave" type="button">일지 저장</button></div>
     <dialog id="reportSaveConfirm" aria-labelledby="reportSaveTitle"><h2 id="reportSaveTitle">저장하시겠습니까?</h2><div class="confirm-actions"><button id="reportSaveNo" type="button">취소</button><button id="reportSaveYes" class="primary" type="button">저장</button></div></dialog>
+    
     <dialog id="reportArchive" aria-labelledby="reportArchiveTitle"><h2 id="reportArchiveTitle">저장된 근무일지 · 최근 30건</h2><p id="reportArchiveStatus" role="status" aria-live="polite"></p><div id="reportArchiveList"></div><pre id="reportArchiveDetail" class="mes-record"></pre><button id="reportArchiveClose" type="button">닫기</button></dialog>
   </section>
 

@@ -16,7 +16,7 @@ assert.deepEqual(pda.equipmentGroups(equipment).map(g=>g.equipment.length),[2,2]
 
 // DOM 경계만 대체하고 실제 선택·초안·저장 함수를 실행한다.
 function element(tag='div') {
- return {tag,children:[],value:'',textContent:'',checked:false,disabled:false,indeterminate:false,hidden:false,
+ return {tag,children:[],style:{},prepend(...c){this.children.unshift(...c);},value:'',textContent:'',checked:false,disabled:false,indeterminate:false,hidden:false,
   classList:{toggle(){}},setAttribute(){},appendChild(child){this.children.push(child);return child;},
   append(...children){this.children.push(...children);},replaceChildren(...children){this.children=children;}};
 }
@@ -39,7 +39,7 @@ context.equipment=equipment;context.draft=draft;
  assert.equal(JSON.parse(store.get('shiftlink.report.draft')).ids[0],'EQ-1');
  store.set('shiftlink.report.draft',JSON.stringify(draft));
  vm.runInContext('openEquipmentReport()',context);
- assert.deepEqual(JSON.parse(store.get('shiftlink.report.draft')).ids,draft.ids,'equipment report entry preserves an existing draft');
+ assert.deepEqual(JSON.parse(store.get('shiftlink.report.draft')).ids,['EQ-1'],'entering the report resets the previous selection to the current equipment');
  vm.runInContext('S.reportDraftLoaded=false',context);
  store.set('shiftlink.report.draft',JSON.stringify(draft));
  vm.runInContext('saveReportDraft()',context);

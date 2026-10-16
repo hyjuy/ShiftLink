@@ -181,7 +181,7 @@ function show(name) {
   document.querySelectorAll('.screen').forEach((el)=>el.classList.toggle('on',el.id==='s-'+name));
   $('ctx').classList.toggle('on',!!S.eq&&['ctx','tries','hoNew','resolve'].includes(name));
   const signedOut=['boot','login','account','faceSetup','face'].includes(name);
-  $('globalHeader').hidden=signedOut||['scan','handover','dutyDetail','reportSelect','reportWrite'].includes(name);$('net').hidden=signedOut;
+  $('globalHeader').hidden=signedOut||['scan','handover','dutyDetail'].includes(name);$('net').hidden=signedOut;
   const back = $('navigationBack');
   back.hidden=['boot','account','login','home'].includes(name);
   document.querySelectorAll('.navigation-host').forEach(el=>el.classList.remove('navigation-host'));
@@ -193,7 +193,7 @@ function show(name) {
     if (backHost !== $('globalHeader')) backHost.classList.add('navigation-host');
   }
   [['toScan','scan'],['toManual','manual']].forEach(([id,screen])=>{$(id).classList.toggle('active',name===screen);$(id).setAttribute('aria-current',name===screen?'page':'false');});
-  $('alert').hidden=signedOut||!(S.faults||[]).length;
+  $('notifyFloatWrap').hidden=signedOut||!$('globalHeader').hidden;$('notifyPanel').hidden=true;document.querySelectorAll('.notify').forEach((btn)=>btn.setAttribute('aria-expanded','false'));
   const pane=document.querySelector('#s-'+name+' .pane');if(pane)pane.scrollTop=0;
   document.documentElement.scrollTop=0;document.body.scrollTop=0;
   if(name==='home')renderHome();
@@ -672,7 +672,7 @@ function renderMesStatus() {
     + (STATE_TXT[S.mes.fault] || S.mes.fault || '—')];
   if (S.mes.alarms.length) parts.push('경보 ' + S.mes.alarms.join(', '));
   parts.push('범위 이탈 ' + out + '개');
-  S.mes.diagnoses.forEach((d) => parts.push('증상 후보: ' + d.symptom + ' (확정 아님)'));
+  S.mes.diagnoses.forEach((d) => parts.push('증상 후보: ' + d.symptom));
   box.textContent = parts.join(' · ');
   const bad = out > 0 || (!!S.mes.fault && S.mes.fault !== 'normal');
   if(bad&&!S.sensorWasBad){S.sensorsOpen=true;$('equipmentWorkspace').classList.toggle('sensors-open',true);$('toggleChat').textContent='센서값 닫기';$('toggleChat').setAttribute('aria-expanded','true');}
@@ -1876,9 +1876,9 @@ function renderHome() {
   const faultDetails=$('homeFaultDetails');faultDetails.replaceChildren();
   if(!S.snapshot||S.online===false)faultDetails.textContent='연결 상태를 확인해 주세요.';
   else if(!(S.faults||[]).length)faultDetails.textContent='현재 감지된 이상이 없습니다.';
-  else (S.faults||[]).forEach((fault)=>{const p=document.createElement('p');p.textContent=fault.eq.code+' · '+fault.items.join(' · ');faultDetails.appendChild(p);});
+  else (S.faults||[]).forEach((fault)=>{const p=document.createElement('p');p.textContent=fault.eq.code+' · '+fault.items.join(' · ');if(S.faults.length>1)p.prepend(eqChip(fault.eq.equipment_id));faultDetails.appendChild(p);});
   if (!rows.length) home.textContent = '등록된 인계 사항이 없습니다.';
-  const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['이상', (S.faults || []).length]];
+  const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['확인 필요', (S.faults || []).length]];
   const metrics = $('homeDashboard'); metrics.replaceChildren();
   counts.forEach(([label,value]) => metrics.appendChild(metricElement(label, S.snapshot && S.online !== false ? value : (label === '전체 설비' ? value : '—'))));
   // 이상이 없으면 회색 상자는 숨긴다(조치 필요 장비 0이 같은 말) — 그 자리에 지켜볼 설비. 이상이 있으면 지켜볼 설비를 숨긴다
@@ -2072,7 +2072,7 @@ function dashSummary(snap, equipment, handovers, faults) {
   const openItems = (handovers || []).flatMap((h) => h.open_items || []).filter((it) => !['closed', 'done', 'withdrawn'].includes(it.status));
   return {
     mode: snap.line_mode,
-    line: (LINE_MODE_TXT[snap.line_mode] || snap.line_mode || '상태 확인 중') + (snap.simulated_at ? ' · 모의 ' + new Date(snap.simulated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : ''),
+    line: (snap.simulated_at ? new Date(snap.simulated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' ' : '') + '라인 ' + (LINE_MODE_TXT[snap.line_mode] || snap.line_mode || '상태 확인 중'),
     faults: (faults || []).map((f) => ({ equipment_id: f.eq.equipment_id, code: f.eq.code, items: f.items })),
     waiting: waiting.map((e) => code(e.equipment_id)),
     held: (snap.coils || []).filter((c) => c.quality_status === 'hold').length,
@@ -2269,7 +2269,8 @@ function renderHomeWatch() {
     const lb = span('lb', w.label);
     if (w.unresolved) lb.appendChild(span('pill st miss', '원인 미확인'));
     // 좁은 칸: 윗줄 증상, 아랫줄 언제·효과 있던 조치
-    b.append(span('eqc mono', w.code), lb, span('meta', [w.meta, w.fix && '효과 있던 조치 ' + w.fix].filter(Boolean).join(' · ')));
+    const wq = S.equipment.find((e) => e.code === w.code), ec = span('eqc mono', w.code); if (wq) ec.prepend(eqChip(wq.equipment_id));
+    b.append(ec, lb, span('meta', [w.meta, w.fix && '효과 있던 조치 ' + w.fix].filter(Boolean).join(' · ')));
     b.dataset.i = rows.indexOf(w);   // 누르면 그 증상의 지난 조치들(배선은 아래 DOM 블록 — openIncidents가 거기 있다)
     return b;
   }));
@@ -2280,6 +2281,21 @@ function renderHomeStatus() { renderHome(); }
  * 원형 조각은 6개까지(작은 조각은 구별이 안 된다): 손실 상위 5대는 설비 종류 색, 나머지는 회색 '기타' 한 조각.
  * 설비 줄의 표지 색(color)도 같은 규칙이라 링 조각과 줄이 맞는다. slices = 링에 그릴 조각. */
 const RING_MAX = 5;
+// 설비마다 하나의 색 — 종류 색(--hpu 등)을 먼저 쓰고, 같은 종류의 둘째 설비부터 새 색
+const EQ_SPARE = ['#e0a96d', '#d98b8b', '#c9b458', '#7cc4d9'];
+function eqColor(id) {
+  if (!S.eqColors || !S.eqColors[id]) {
+    if (!S.equipment.length) return 'var(--tx-3)';
+    const used = new Set(); let spare = 0; S.eqColors = {};
+    S.equipment.forEach((e) => {
+      const k = ((e.code || '').split('-')[0] || 'pdp').toLowerCase();
+      if (used.has(k)) S.eqColors[e.equipment_id] = EQ_SPARE[spare++ % EQ_SPARE.length];
+      else { used.add(k); S.eqColors[e.equipment_id] = 'var(--' + k + ')'; }
+    });
+  }
+  return S.eqColors[id] || 'var(--tx-3)';
+}
+function eqChip(id) { const c = document.createElement('i'); c.className = 'eqchip'; c.style.background = eqColor(id); return c; }
 function lossView(production, loss) {
   const p = production || {planned: 0, lost: 0, produced: 0};
   const pct = (n) => p.planned ? Math.round(n / p.planned * 1000) / 10 : 0;
@@ -2288,14 +2304,14 @@ function lossView(production, loss) {
   let shown = 0;
   const rows = (loss || []).map((r) => {
     const top = r.coils > 0 && shown++ < RING_MAX;
-    return {...r, kind: kind(r.equipment_id), planPct: pct(r.coils), color: top ? 'var(--' + kind(r.equipment_id) + ')' : 'var(--tx-3)'};
+    return {...r, kind: kind(r.equipment_id), planPct: pct(r.coils), color: top ? eqColor(r.equipment_id) : 'var(--tx-3)'};
   });
   const lossRows = rows.filter((r) => r.coils);
   const rest = lossRows.slice(RING_MAX).reduce((n, r) => n + r.coils, 0);
   const slices = [...lossRows.slice(0, RING_MAX).map((r) => ({equipment_id: r.equipment_id, coils: r.coils, color: r.color})),
     ...(rest ? [{equipment_id: null, coils: rest, color: 'var(--tx-3)'}] : [])];
   return {planned: p.planned, produced: p.produced, lost: p.lost, lostPct,
-    producedPct: p.planned ? Math.round((100 - lostPct) * 10) / 10 : 0, rows, slices};
+    producedPct: pct(p.produced), rows, slices};
 }
 /* 정지 손실 그림(SVG 하나): 왼쪽 생산 링, 오른쪽 손실 도넛 — 같은 크기(반지름·굵기), 같은 중심 높이(cy)에 나란히.
  * 손실 도넛 라벨은 조각 가운데 각도 바깥(labelR), 오른쪽 절반은 왼쪽 정렬·왼쪽 절반은 오른쪽 정렬.
@@ -2403,14 +2419,18 @@ function saveReportDraft() {
   catch (_) { $('reportStatus').textContent = '단말 초안 저장 실패 · 저장 전 화면을 닫지 마세요.'; }
 }
 function openReport() {
+  S.reportInProgress=false;
+  let keepIds=false;   // 아직 못 보낸 일지(전송 대기)를 다시 열 때만 그 대상 선택을 살린다
   try {
     const pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null');
+    keepIds=!!(pending && pending.kind==='work_log');
     const draft=pending && pending.kind==='work_log' ? {ids:pending.equipment_ids,memo:pending.work_report ? pending.work_report.legacy_memo : pending.memo_text,records:pending.work_report ? pending.work_report.records : [],author:pending.required_context.author,start:pending.required_context.start_at,end:pending.required_context.end_at,context:pending.required_context.context.replace(/^대상 장비: [^\n]*\n/,'')} : JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)||'null');
     if (draft) { S.reportSelected=(draft.ids||[]).filter((id)=>S.equipment.some((eq)=>eq.equipment_id===id)); S.reportContext=draft.context||''; S.reportRecords=draft.records||[];
       $('reportMemo').value=draft.memo||''; $('reportAuthor').value=draft.author||''; $('reportStart').value=draft.start||''; $('reportEnd').value=draft.end||''; }
   } catch (_) { $('reportStatus').textContent='초안을 읽지 못했습니다. 입력 내용을 확인해 주세요.'; }
   if (!S.reportRecords) S.reportRecords=[];
   if (!$('reportAuthor').value) $('reportAuthor').value=(S.operator && (S.operator.name||S.operator.id))||'';
+  if (!keepIds) S.reportSelected=[];   // 화면에 들어올 때마다 지난 선택은 남기지 않는다(작성 중 내용은 그대로). 대상 다시 선택(reportEditTargets)은 이 함수를 거치지 않아 유지된다
   S.reportDraftLoaded=true;renderReportSelection(); show('reportSelect');
 }
 function openEquipmentReport() {
@@ -2427,7 +2447,7 @@ function renderReportSelection() {
     const checkCell=document.createElement('td');const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.checked=S.reportSelected.includes(eq.equipment_id);check.setAttribute('aria-label',eq.code+' 선택');
     check.onchange=()=>{S.reportSelected=check.checked?[...new Set([...S.reportSelected,eq.equipment_id])]:S.reportSelected.filter((id)=>id!==eq.equipment_id);saveReportDraft();renderReportSelection();};
     label.appendChild(check);checkCell.appendChild(label);
-    const code=document.createElement('td');code.textContent=eq.code+' · '+eq.group;
+    const code=document.createElement('td');code.textContent=eq.code+' · '+eq.group;code.prepend(eqChip(eq.equipment_id));
     const status=document.createElement('td');const badge=document.createElement('span');const fault=(S.faults||[]).some((f)=>f.eq.equipment_id===eq.equipment_id);badge.className='pill '+(fault?'miss':'status-done');badge.textContent=S.snapshot&&S.online!==false?(fault?'조치 필요':'정상'):'연결 확인 필요';status.appendChild(badge);tr.append(checkCell,code,status);box.appendChild(tr);
   });
   if (!visible.length) { const tr=document.createElement('tr'); const td=document.createElement('td');td.colSpan=3;td.textContent='해당 조건의 장비가 없습니다.';tr.appendChild(td);box.appendChild(tr); }
@@ -2453,7 +2473,24 @@ function syncReportShift() {
   $('reportStart').value=date+'T'+start;$('reportEnd').value=next.toISOString().slice(0,10)+'T'+end;
   saveReportDraft();
 }
+// 이전 기록 = 지난번에 쓰다 남긴 내용(자유 입력·추가 기록·불러온 센서값). 있으면 불러올지 묻고, 없으면 바로 보여 준다.
+// 전송 대기 중인 일지(다시 보내기)와, 같은 작성 중 '대상 다시 선택'으로 돌아온 경우는 묻지 않는다.
+function hasPreviousReport() {
+  return !!($('reportMemo').value || S.reportContext || (S.reportRecords || []).length);
+}
+function resetReportForm() {   // 새로 작성: 기본값이 있는 칸(날짜·근무시간·작성자)만 남기고 비운다
+  S.reportRecords=[];S.reportContext='';
+  $('reportMemo').value='';$('reportStart').value='';$('reportEnd').value='';
+  $('reportAuthor').value=(S.operator && (S.operator.name||S.operator.id))||'';
+  $('reportStatus').textContent='';
+}
 function openReportWrite() {
+  let pending=null;try{pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null');}catch(_){}
+  if (!S.reportInProgress && !(pending&&pending.kind==='work_log') && hasPreviousReport()) { $('reportResume').showModal();$('reportResume').focus();return; }
+  enterReportWrite();
+}
+function enterReportWrite() {
+  S.reportInProgress=true;
   const current=shiftAt(),saved=$('reportStart').value;
   $('reportWorkDate').value=saved?saved.slice(0,10):current.date;
   const hour=saved?Number(saved.slice(11,13)):null;
@@ -2880,7 +2917,7 @@ $('reportRecords').addEventListener('click',event=>{
 });
 
 ['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
-on('logout',()=>{if(!window.confirm('로그아웃하시겠습니까? 작성 중인 근무일지는 이 단말에 보관됩니다.'))return;saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
+on('reportResumeLoad',()=>{$('reportResume').close();enterReportWrite();});on('reportResumeNew',()=>{$('reportResume').close();resetReportForm();enterReportWrite();});on('notifyBell',toggleNotify);on('notifyFloat',toggleNotify);on('logout',()=>{$('logoutConfirm').showModal();$('logoutConfirm').focus();});on('logoutNo',()=>$('logoutConfirm').close());on('logoutYes',()=>{$('logoutConfirm').close();saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
 on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));
 $('accountForm').addEventListener('submit',async(event)=>{
   event.preventDefault();if($('accountSubmit').disabled)return;
@@ -2905,7 +2942,7 @@ function faultsFrom(snap) {
     const items = [];
     (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).forEach((a) => items.push('경보 ' + (a.label || a.code)));
     (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
-      .forEach((d) => items.push(d.symptom + '(확정 아님)'));
+      .forEach((d) => items.push(d.symptom));
     const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
     usableReadings(snap, eq).kept.forEach((o) => {
       const spec = eq.signals.find((x) => x.signal === o.signal);
@@ -2921,37 +2958,73 @@ function faultsFrom(snap) {
   }).filter((f) => f.items.length);
 }
 
+// 알림 — 헤더 종 + 미확인 배지 + 눌러 여는 목록. 미확인 = 아직 '확인'하지 않은 이상(같은 설비의 내용이 바뀌면 다시 미확인).
+const ackOf = () => (S.alertAck = S.alertAck || {});
+const ackKey = (f) => f.items.join('|');
+const unacked = (faults) => faults.filter((f) => ackOf()[f.eq.equipment_id] !== ackKey(f));
 function renderAlert(faults) {
-  const el = $('alert');
-  const key = faults.map((f) => f.eq.code + f.items.join()).join('|');
-  // 내용이 같으면 다시 그리지 않는다 — 누르는 도중 다시 그리면 클릭이 사라진다.
   S.faults = faults;
-  const view = key + '@' + (S.eq ? S.eq.code : '');   // 선택 설비를 먼저 보이므로 설비가 바뀌면 다시 그린다
-  if (view === S.alertView) return;
-  if (key && key !== S.alertKey) haptic([80, 60, 80]);
-  S.alertKey = key; S.alertView = view;
-  el.hidden = !faults.length || ['boot','login','account','faceSetup','face'].includes(S.screen);
-  el.innerHTML = '';
-  // 선택 설비를 맨 위에. ponytail: 3줄까지만 보이고 나머지는 대수만 — 동시 고장이 흔해지면 목록 화면으로.
-  const sorted = alertOrder(faults, S.eq);
-  sorted.slice(0, ALERT_ROWS).forEach((f) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'alrow';
-    b.innerHTML = '<span class="t"></span><span class="go">확인 ›</span>';
-    b.querySelector('.t').textContent = '⚠ ' + f.eq.code + ' 고장 상황 · ' + f.items.join(' · ');
-    // 설비를 바로 바꾸지 않는다 — 확인 화면에서 code를 크게 보이고 하단 버튼으로만 확정한다(B3·A4).
-    const pick = { equipment_id: f.eq.equipment_id, items: f.items.slice() };
-    b.addEventListener('click', () => openAlertGo(pick));
-    el.appendChild(b);
-  });
-  if (sorted.length > ALERT_ROWS) {
-    const more = document.createElement('p');
-    more.className = 'almore';
-    more.textContent = '외 ' + (sorted.length - ALERT_ROWS) + '대 고장 — ' + sorted.slice(ALERT_ROWS).map((f) => f.eq.code).join(', ');
-    el.appendChild(more);
-  }
+  const un = unacked(faults).length;
+  const view = faults.map((f) => f.eq.code + ackKey(f) + (ackOf()[f.eq.equipment_id] === ackKey(f))).join('|') + '@' + (S.eq ? S.eq.code : '');
+  if (view === S.alertView) return;   // 내용이 같으면 다시 그리지 않는다 — 누르는 도중 다시 그리면 클릭이 사라진다.
+  S.alertView = view;
+  if (un > (S.alertUn || 0)) { haptic([80, 60, 80]); notifyBubble(un); }
+  S.alertUn = un;
+  paintNotify();
 }
+function notifyBubble(n) {
+  document.querySelectorAll('.notify-bubble').forEach((el) => { el.textContent = '미확인 알림 ' + n + '건'; el.hidden = false; });
+  clearTimeout(S.bubbleT);
+  S.bubbleT = setTimeout(() => document.querySelectorAll('.notify-bubble').forEach((el) => { el.hidden = true; }), 6000);
+}
+function paintNotify() {
+  const un = unacked(S.faults || []).length;
+  document.querySelectorAll('.notify').forEach((btn) => {
+    const c = btn.querySelector('.notify-count');
+    c.hidden = !un; c.textContent = un > 99 ? '99+' : String(un);
+    btn.setAttribute('aria-label', '알림, 미확인 ' + un + '건');
+  });
+  if (!$('notifyPanel').hidden) renderNotifyPanel();
+}
+function closeNotify() {
+  $('notifyPanel').hidden = true;
+  document.querySelectorAll('.notify').forEach((btn) => btn.setAttribute('aria-expanded', 'false'));
+}
+function toggleNotify() {
+  const p = $('notifyPanel'), open = p.hidden;
+  p.hidden = !open;
+  document.querySelectorAll('.notify').forEach((btn) => btn.setAttribute('aria-expanded', String(open)));
+  document.querySelectorAll('.notify-bubble').forEach((el) => { el.hidden = true; });
+  if (open) renderNotifyPanel();
+}
+function renderNotifyPanel() {
+  const p = $('notifyPanel'), faults = alertOrder(S.faults || [], S.eq), un = unacked(faults).length;
+  p.innerHTML = '<header><h2></h2><button type="button" class="np-all">모두 확인</button><button type="button" class="np-x" aria-label="닫기">✕</button></header><div class="np-list"></div>';
+  p.querySelector('h2').textContent = un ? '미확인 알림 ' + un + '건' : faults.length ? '미확인 알림 없음' : '알림 없음';
+  const all = p.querySelector('.np-all'); all.disabled = !un;
+  all.addEventListener('click', () => { faults.forEach((f) => { ackOf()[f.eq.equipment_id] = ackKey(f); }); S.alertUn = 0; S.alertView = null; paintNotify(); });
+  p.querySelector('.np-x').addEventListener('click', closeNotify);
+  const list = p.querySelector('.np-list');
+  faults.forEach((f) => {
+    const acked = ackOf()[f.eq.equipment_id] === ackKey(f), row = document.createElement('div');
+    row.className = 'np-row' + (f.level === 0 ? '' : ' warn') + (acked ? ' acked' : '');
+    row.innerHTML = '<i class="np-dot"></i><div><div class="np-head"><span class="np-tag"></span><b class="np-code mono"></b><span class="np-at"></span></div><p class="np-msg"></p></div><button type="button" class="np-go">설비 확인</button>';
+    row.querySelector('.np-tag').textContent = f.level === 0 ? '고장' : '주의';
+    row.querySelector('.np-code').textContent = f.eq.code;
+    row.querySelector('.np-at').textContent = f.at ? new Date(f.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' 발생' : '';
+    row.querySelector('.np-msg').textContent = f.items.join(' · ');
+    // 설비를 바로 바꾸지 않는다 — 확인 화면에서 code를 크게 보이고 하단 버튼으로만 확정한다(B3·A4).
+    row.querySelector('.np-go').addEventListener('click', () => {
+      ackOf()[f.eq.equipment_id] = ackKey(f); S.alertUn = unacked(S.faults).length; S.alertView = null; closeNotify(); paintNotify();
+      openAlertGo({ equipment_id: f.eq.equipment_id, items: f.items.slice() });
+    });
+    list.appendChild(row);
+  });
+}
+document.addEventListener('click', (e) => {
+  if ($('notifyPanel').hidden || e.target.closest('#notifyPanel, .notify')) return;
+  closeNotify();
+});
 
 function openAlertGo(pick) {
   const eq = alertTarget(pick.equipment_id, S.equipment);
@@ -2986,16 +3059,16 @@ function renderDash() {
   renderHomeStatus();
   loadAnalytics(false);   // 홈 생산 링·지켜볼 설비, 대시보드 분석(10초에 한 번)
   // 이번 교대에 처리할 일 — 0이면 숨긴다(이상 설비는 홈 이상 칸에 이미 있다)
-  const todo = [d.waiting.length ? '후속 대기 ' + d.waiting.join(', ') : '', d.held ? '제품 보류 코일 ' + d.held : ''].filter(Boolean);
+  const todo = [d.waiting.length ? '연쇄 정지 ' + d.waiting.join(', ') : '', d.held ? '제품 보류 코일 ' + d.held : ''].filter(Boolean);
   const tb = $('homeTodo');
   tb.hidden = !todo.length;
   $('homeWatch').classList.toggle('todo', todo.length > 0);
   tb.replaceChildren(...todo.map((t) => { const s = document.createElement('span'); s.className = 'pill'; s.textContent = t; return s; }));
   if (S.screen !== 'dashboard') return;
   const line = $('dashLine');
-  line.textContent = '라인 ' + d.line;
+  line.textContent = d.line;
   // 화면 낭독기용 알림 — 이상·후속 대기 수가 바뀔 때만 글자를 바꾼다(시계처럼 매번 바뀌는 글자는 읽히지 않게)
-  const alertText = '이상 ' + d.faults.length + '대 · 후속 대기 ' + d.waiting.length + '대';
+  const alertText = '이상 ' + d.faults.length + '대 · 연쇄 정지 ' + d.waiting.length + '대';
   if ($('dashAlert').textContent !== alertText) $('dashAlert').textContent = alertText;
   line.className = 'dash-line ' + (d.faults.length || d.mode === 'quality_hold' ? 'warn' : d.mode === 'running' ? 'run' : '');
   const tile = (id, cls, n, title, desc) => {
@@ -3003,14 +3076,8 @@ function renderDash() {
     el.querySelector('.n').textContent = n; el.querySelector('.t').textContent = title; el.querySelector('.d').textContent = desc;
     return el;
   };
-  const faults = tile('dashFaults', d.faults.length ? 'bad' : '', d.faults.length, '확인 필요 설비', d.faults.length ? '' : '고장·주의 설비 없음');
-  d.faults.slice(0, ALERT_ROWS).forEach((f) => {   // 상단 고장 알림과 같은 확인 화면으로 — 설비를 바로 바꾸지 않는다
-    const b = document.createElement('button'); b.type = 'button';
-    b.textContent = f.code + ' · ' + f.items[0] + ' ›';
-    b.addEventListener('click', () => openAlertGo({ equipment_id: f.equipment_id, items: f.items.slice() }));
-    faults.appendChild(b);
-  });
-  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '후속 대기 설비', d.waiting.length ? d.waiting.join(', ') : '없음');
+  tile('dashFaults', d.faults.length ? 'bad' : '', d.faults.length, '이상 설비', d.faults.length ? '' : '이상 설비 없음');
+  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '연쇄 정지 설비', d.waiting.length ? d.waiting.join(', ') : '없음');
   tile('dashHeld', d.held ? 'warn' : '', d.held, '제품 보류 코일', d.held ? '' : '없음');
 }
 
@@ -3064,103 +3131,119 @@ function anEmpty(parent, text) {
   const p = document.createElement('p'); p.className = 'hint'; p.style.margin = '0'; p.textContent = text; parent.appendChild(p);
 }
 
+const ymd = (d) => { const x = new Date(d); return x.getFullYear() + '/' + String(x.getMonth() + 1).padStart(2, '0') + '/' + String(x.getDate()).padStart(2, '0'); };
+const periodText = (from, to, basis) => ymd(from) + ' - ' + ymd(to) + ' (' + basis + ' 기준)';
+const clockText = () => new Date((S.snap && S.snap.simulated_at) || Date.now()).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const lossKind = (id) => (((S.equipment.find((e) => e.equipment_id === id) || {}).code || '').split('-')[0] || '기타').toUpperCase();
+const lossPct = (n, d) => (d ? +(n / d * 100).toFixed(1) : 0) + '%';
+// 설비군 = 코드 앞부분(HPU·RT·CV…). 손실이 큰 3군 + 나머지는 '기타'.
+function lossGroups(v) {
+  const by = {};
+  S.equipment.forEach((e) => { const k = lossKind(e.equipment_id); (by[k] = by[k] || {key: k, ids: [], coils: 0}).ids.push(e.equipment_id); });
+  v.rows.forEach((r) => { const g = by[lossKind(r.equipment_id)]; if (g) g.coils += r.coils; });
+  const all = Object.values(by).sort((p, q) => q.coils - p.coils || q.ids.length - p.ids.length);
+  const groups = all.slice(0, 3).map((g) => ({...g, color: 'var(--' + g.key.toLowerCase() + ')'}));
+  const rest = all.slice(3);
+  if (rest.length) groups.push({key: '기타', ids: rest.flatMap((g) => g.ids), coils: rest.reduce((n, g) => n + g.coils, 0), color: 'var(--tx-3)'});
+  return groups;
+}
+function renderLoss(loss, v) {
+  const f1 = (n) => n.toFixed(1) + '%', groups = lossGroups(v), el = document.createElement('div');
+  const asof = '오늘 ' + clockText() + ' 기준';
+  const redraw = () => { loss.scrollTop = 0; renderAnalytics(); };
+  if (!S.lossDetail) {
+    el.innerHTML = '<section class="ls-card"><header><h3>생산 현황</h3><span class="per"></span><span class="asof"></span></header>'
+      + '<div class="ls-now"><span class="lb">현재 생산</span><span class="val"><b class="mono"></b><small>개</small><span class="plan"></span></span></div>'
+      + '<div class="ls-bar" role="img"><i></i></div><div class="ls-sub"><span class="b"></span></div></section>'
+      + '<section class="ls-card ls-loss"><header><h3>정지 손실</h3><b class="lostn mono"></b></header>'
+      + '<p class="ls-note"></p><div class="ls-stack" role="img"></div><ul class="ls-legend"></ul>'
+      + '<button type="button" class="ls-detail">설비별 상세</button></section>';
+    const q = (s) => el.querySelector(s);
+    const cur = Math.floor((S.prod && S.prod.coils) || 0), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = tickProduction 누적
+    q('.asof').textContent = asof;
+    q('.per').textContent = periodText(S.an.week_start, S.an.now, '1주');
+    q('.ls-now b').textContent = cur.toLocaleString();
+    q('.ls-now .plan').textContent = '/ 계획 ' + v.planned.toLocaleString() + '개';
+    q('.ls-bar i').style.width = curPct + '%';
+    q('.ls-bar').setAttribute('aria-label', '계획 ' + v.planned + '개 중 현재 생산 ' + cur + '개');
+    q('.ls-sub .b').textContent = '잔여 ' + Math.max(0, v.planned - cur).toLocaleString() + '개';
+    q('.lostn').innerHTML = v.lost.toLocaleString() + '<small>개</small>';
+    q('.ls-note').textContent = '설비군별 합계 · 전체 ' + S.equipment.length + '대';
+    q('.ls-stack').innerHTML = groups.filter((g) => g.coils).map((g) => '<i style="flex:' + g.coils + ';background:' + g.color + '"></i>').join('');
+    q('.ls-stack').setAttribute('aria-label', '손실 ' + v.lost + '개 — ' + groups.map((g) => g.key + ' ' + g.coils + '개').join(', '));
+    q('.ls-legend').innerHTML = groups.map((g) => '<li><i style="background:' + g.color + '"></i><b>' + g.key + ' ' + g.ids.length + '대</b><span>'
+      + g.coils + '개 · ' + lossPct(g.coils, v.lost) + '</span></li>').join('');
+    q('.ls-detail').addEventListener('click', () => { S.lossDetail = true; S.lossGroup = (groups[0] || {}).key; redraw(); });
+    loss.appendChild(el);
+    return;
+  }
+  // 설비별 상세 — 이 칸 전체. 탭 = 설비군, 표 = 그 군의 설비(누르면 그 설비의 사건 목록).
+  const g = groups.find((x) => x.key === S.lossGroup) || groups[0];
+  el.innerHTML = '<div class="ld-head"><button type="button" class="ld-back">' + '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>이전</button>'
+    + '<h3>설비별 정지 손실</h3><span class="asof"></span></div>'
+    + '<div class="ld-tabs" role="tablist"></div>'
+    + '<div class="ld-band"><span class="t"></span><b class="mono"></b><span class="r"></span></div>'
+    + '<p class="ld-cmp"></p><div class="ld-table"><div class="ld-th"><span>설비</span><span class="gn"></span><span>손실량</span></div></div>';
+  const q = (s) => el.querySelector(s);
+  q('.asof').textContent = asof;
+  q('.ld-back').addEventListener('click', () => { S.lossDetail = false; redraw(); });
+  groups.forEach((x) => {
+    const t = document.createElement('button'); t.type = 'button'; t.setAttribute('role', 'tab');
+    t.setAttribute('aria-selected', String(x === g)); t.textContent = x.key + ' ' + x.ids.length + '대';
+    if (x.key !== '기타') { const dot = document.createElement('i'); dot.className = 'eqchip'; dot.style.background = x.color; t.prepend(dot); }   // 탭 앞 둥근 색(기타 제외)
+    t.addEventListener('click', () => { S.lossGroup = x.key; redraw(); });
+    q('.ld-tabs').appendChild(t);
+  });
+  q('.ld-band .t').textContent = g.key + ' 정지 손실';
+  q('.ld-band b').innerHTML = g.coils.toLocaleString() + '<small>개</small>';
+  q('.ld-band .r').innerHTML = '전체 손실 ' + v.lost.toLocaleString() + '개 중 <strong>' + lossPct(g.coils, v.lost) + '</strong>';
+  q('.ld-cmp').textContent = '개별 설비 비교 · ' + g.key + ' 손실 ' + g.coils + '개 = 100%';
+  q('.ld-th .gn').textContent = g.key + ' 내 손실 비중';
+  loss.appendChild(el);
+  const rows = g.ids.map((id) => v.rows.find((r) => r.equipment_id === id) || {equipment_id: id, coils: 0, incidents: []})
+    .sort((p, q2) => q2.coils - p.coils || eqCode(p.equipment_id).localeCompare(eqCode(q2.equipment_id)));
+  const html = '<span class="eqc mono"></span><span class="pct"><span class="bar"><i></i></span><em></em></span><b class="n mono"></b>';
+  rows.forEach((r, i) => {
+    const title = eqCode(r.equipment_id) + ' 정지 손실';
+    let b;   // 사건이 있으면 누르면 로그(사건 목록)로 — 없으면 눌리지 않는 줄
+    if ((r.incidents || []).length) b = anRow(q('.ld-table'), 'ld-row', html, r.incidents, title);
+    else { b = document.createElement('div'); b.className = 'ld-row'; b.innerHTML = html; q('.ld-table').appendChild(b); }
+    if (r.coils && i === 0) b.classList.add('top');
+    b.querySelector('.eqc').textContent = eqCode(r.equipment_id);
+    if (g.key === '기타') b.querySelector('.eqc').prepend(eqChip(r.equipment_id));   // 기타 탭은 표에서 설비마다 색
+    b.querySelector('.bar i').style.width = (g.coils ? r.coils / g.coils * 100 : 0) + '%';
+    b.querySelector('em').textContent = lossPct(r.coils, g.coils);
+    b.querySelector('.n').textContent = r.coils + '개';
+    if (!r.coils) { const s = document.createElement('small'); s.textContent = '손실 없음'; b.querySelector('.n').appendChild(s); }
+  });
+}
 function renderAnalytics() {
   const a = S.an;
   if (!a || S.screen !== 'dashboard') return;
   const keep = ['anLoss', 'anRepeat', 'anGap'].map((id) => [id, $(id).scrollTop]);   // 다시 그려도 칸 스크롤 유지
-  const lossFocused = document.activeElement?.classList.contains('g-lost');
   renderAnalyticsPanels(a);
-  if (lossFocused) $('anLoss').querySelector('.g-lost')?.focus({preventScroll:true});
   keep.forEach(([id, top]) => { $(id).scrollTop = top; });
 }
 
 function renderAnalyticsPanels(a) {
 
-  // 정지 손실 — 못 만든 코일(라인을 세운 시간 × 표준 생산 속도). 위 한 줄은 이번 주 생산·손실.
-  // 위: 링 두 개 — ① 생산 링(100% = 정상이면 만들었을 계획 생산량: 회색 생산 + 끝부분 손실)
-  // ② 손실 링(100% = 이번 주 손실: 설비별 몫, 설비 종류 색). 오른쪽 요약.
-  // 그 아래 설비 줄: 같은 색 표지 · 못 만든 코일 · 계획 대비 % · 정지 분.
+  // 정지 손실 — 못 만든 코일(라인을 세운 시간 × 표준 생산 속도).
+  // 요약: 현재 생산(계획 대비) + 정지 손실(설비군별 막대). '설비별 상세'를 누르면 이 칸 전체가 설비별 표로 바뀐다.
   const loss = anPanel('anLoss'), v = lossView(a.production, a.loss);
-  if (v.planned) {
-    const f1 = (n) => n.toFixed(1) + '%';   // 97.0%처럼 소수 한 자리로 고정
-    const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'})[c]);
-    const C = LOSS_CHART, M = C.made, L = C.loss;
-    const center = (cx, big, small, cls) => '<text x="' + cx + '" y="' + (C.cy - 3) + '" text-anchor="middle" class="' + cls + '">' + big + '</text>'
-      + '<text x="' + cx + '" y="' + (C.cy + 15) + '" text-anchor="middle" class="ctr-s">' + small + '</text>';
-    // 위: 요약 한 줄. 아래: SVG 하나에 ① 작은 생산 링(왼쪽) ② 큰 손실 도넛(오른쪽, 조각 옆에 설비 코드·개수) — 같은 중심 높이
-    const head = document.createElement('div'); head.className = 'loss-head';
-    head.innerHTML = '<table class="loss-sum"><thead><tr><th>계획</th><th>생산</th><th>손실률</th></tr></thead>'
-      + '<tbody><tr><td></td><td></td><td></td></tr></tbody></table>'
-      + '<div class="loss-chartrow"><svg class="loss-chart" viewBox="0 0 ' + (L.cx + L.r + 16) + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="button" tabindex="0" aria-controls="anLossEquipment"></g></svg><ul class="loss-legend"></ul></div>';
-    // ① 생산 링: 회색 원 + 끝부분 손실(실제 비율, 설비 색)
-    head.querySelector('.g-made').innerHTML = '<circle cx="' + M.cx + '" cy="' + C.cy + '" r="' + M.r + '" class="made-base"/>'
-      + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
-      + center(M.cx, f1(v.producedPct), '생산', 'ctr');
-    // ② 손실 도넛: 손실만 100% — 설비별 몫과 바깥 라벨 "HPU-01 17". 손실이 없으면 회색 원
-    const arcs = lossDonut(v.slices);
-    head.querySelector('.g-lost').innerHTML = (arcs.length
-      ? arcs.map((s) => '<path d="' + s.d + '" class="lost-arc" style="stroke:' + s.color + '"/>').join('')
-        // 설비 이름은 도넛 옆이 아니라 오른쪽 범례에 둔다. 손실 개수는 링 안 조각 가운데
-        + arcs.filter((s) => s.inside).map((s) => '<text x="' + s.nx + '" y="' + s.ny + '" text-anchor="middle" class="num">' + s.coils + '</text>').join('')
-      : '<circle cx="' + L.cx + '" cy="' + C.cy + '" r="' + L.r + '" class="lost-arc" style="stroke:var(--edge)"/>')
-      + center(L.cx, v.lost + '개', '손실', 'ctr');
-    [v.planned.toLocaleString() + '개', v.produced.toLocaleString() + '개', f1(v.lostPct)]
-      .forEach((t, i) => { head.querySelectorAll('.loss-sum td')[i].textContent = t; });
-    // 그림은 색만으로 읽으면 안 된다 — 화면 읽기용 요약
-    head.querySelector('.g-made').setAttribute('aria-label', '계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct) + ', 손실 ' + f1(v.lostPct));
-    head.querySelector('.g-lost').setAttribute('aria-label', '손실 ' + v.lost + '개 중 ' + (v.slices.map((r) =>
-      (r.equipment_id ? eqCode(r.equipment_id) : '기타') + ' ' + r.coils + '개').join(', ') || '없음'));
-    head.querySelector('.loss-legend').innerHTML = arcs.map((s) => '<li><i style="background:' + s.color + '"></i>'
-      + esc(s.equipment_id ? eqCode(s.equipment_id) : '기타') + '<span class="n">' + s.coils + '개</span></li>').join('');
-    const toggle = head.querySelector('.g-lost');
-    toggle.insertAdjacentHTML('afterbegin', '<circle class="loss-hit" cx="' + L.cx + '" cy="' + C.cy + '" r="' + (L.r + 12) + '"/>');
-    const summary = toggle.getAttribute('aria-label');
-    const hint = document.createElement('p'); hint.className = 'loss-toggle-hint';
-    const update = () => {
-      const open = !!S.lossEquipmentOpen;
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', summary + ' · 설비별 현황 ' + (open ? '접기' : '펼치기'));
-      hint.textContent = '손실 그래프를 눌러 설비별 현황 ' + (open ? '접기' : '펼치기');
-      const details = $('anLossEquipment'); if (details) details.hidden = !open;
-    };
-    toggle.addEventListener('click', () => { S.lossEquipmentOpen = !S.lossEquipmentOpen; update(); });
-    toggle.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggle.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
-    });
-    update();
-    head.appendChild(hint);
-    loss.appendChild(head);
-  }
-  const details = document.createElement('div'); details.id = 'anLossEquipment'; details.className = 'loss-equipment';
-  details.hidden = !!v.planned && !S.lossEquipmentOpen;
-  const title = document.createElement('h3'); title.textContent = '설비별 현황'; details.appendChild(title);
-  loss.appendChild(details);
-  const max = Math.max(1, ...v.rows.map((r) => r.coils));
-  v.rows.forEach((r) => {
-    const b = anRow(details, 'an-row loss-row', '<b class="eqc mono"></b><span class="an-bar"><i></i></span><span class="v mono"></span><span class="s"></span>',
-      r.incidents, eqCode(r.equipment_id) + ' 정지 손실');
-    b.style.setProperty('--sw', r.color);   // 링 조각과 같은 색(상위 5대 밖은 회색 '기타')
-    b.querySelector('.eqc').textContent = eqCode(r.equipment_id);
-    b.querySelector('.an-bar i').style.width = (r.coils / max * 100) + '%';
-    b.querySelector('.v').textContent = r.coils + '개';
-    b.querySelector('.s').textContent = r.incidents.length + '회 · 총 ' + r.stop_min + '분 정지';
-  });
-  restLine(details, '정지 없음', a.loss.map((r) => r.equipment_id));   // 전체 설비가 한 칸에 보이게
+  loss.classList.toggle('loss-detail', !!(S.lossDetail && v.planned));
+  if (v.planned) renderLoss(loss, v);
 
   const rep = anPanel('anRepeat');
+  const repHead = rep.querySelector('h2');
+  repHead.replaceChildren(...[['span', '반복 증상', ''], ['small', periodText(Date.parse(a.now) - 28 * 864e5, a.now, '4주'), 'per'], ['small', '오늘 ' + clockText() + ' 기준', 'asof']]
+    .map(([tag, text, cls]) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; return e; }));
   a.repeats.forEach((g) => {
-    const b = anRow(rep, 'an-row', '<b class="eqc mono"></b><span class="m"></span><span class="v mono"></span><span class="s"></span>',
+    const b = anRow(rep, 'an-row', '<b class="eqc mono"></b><span class="m"></span><span class="v mono"></span>',
       g.incidents, eqCode(g.equipment_id) + ' ' + g.label);
     b.querySelector('.eqc').textContent = eqCode(g.equipment_id);
+    b.querySelector('.eqc').prepend(eqChip(g.equipment_id));
     b.querySelector('.m').textContent = g.label;
     b.querySelector('.v').textContent = g.count + '회';
-    b.querySelector('.s').textContent = ['재발 ' + g.recurred, g.causes[0][0] + ' ' + g.causes[0][1],
-      g.temporary ? '임시 조치 ' + g.temporary : '',
-      g.resolved_recurred ? '해결 후 재발 ' + g.resolved_recurred : ''].filter(Boolean).join(' · ');
-    if (g.resolved_recurred) {   // 배지는 아랫줄 맨 앞 — 누르는 줄의 제목이 두 줄로 감기지 않게
-      const p = document.createElement('span'); p.className = 'pill st miss'; p.textContent = '근본 원인 미확인';
-      b.querySelector('.s').prepend(p);
-    }
   });
   restLine(rep, '반복 없음', a.repeats.map((g) => g.equipment_id));
 
@@ -3198,10 +3281,11 @@ function openIncidents(title, ids) {
     const [word, cls] = AN_OUTCOME[i.outcome] || ['', 'unknown'];
     d.querySelector('.top span').textContent = mdhm(i.alarm_at);
     d.querySelector('.top b').textContent = eqCode(i.equipment_id);
+    d.querySelector('.top b').prepend(eqChip(i.equipment_id));
     d.querySelector('.lb').textContent = i.label;
     const st = d.querySelector('.st'); st.textContent = word; st.className = 'pill st ' + cls;
     d.querySelector('.nums').textContent = '정지 ' + Math.round(i.down_min) + '분'
-      + (i.affected.length ? ' · 후속 대기 ' + i.affected.length + '대' : '');
+      + (i.affected.length ? ' · 연쇄 정지 ' + i.affected.length + '대' : '');
     d.querySelector('.body').textContent = [i.action || '조치 기록 없음', i.cause ? '원인 ' + i.cause : '',
       AN_RESULT[i.result] || ''].filter(Boolean).join(' · ');
     const card = i.card_id && S.cards.find((c) => c.card_id === i.card_id);
@@ -3216,12 +3300,28 @@ on('dlBack', () => {   // 홈 '지켜볼 설비'에서 왔으면 홈으로
   show(to); if (to === 'dashboard') renderAnalytics();
 });
 
+// 현재 생산 — MES 실행(run_id)이 시작된 뒤 라인이 '운전 중'이던 모의 시간 × 시간당 생산 코일 수. 실행이 바뀌면(MES 재시작) 0으로 초기화.
+// ponytail: PDA가 켜져 있는 동안만 센다(10분 넘게 끊긴 구간은 세지 않음). 서버 집계로 옮기려면 analytics.py에 가동 시간 합을 추가.
+const PROD_KEY = 'shiftlink.production';
+function tickProduction(snap) {
+  const rate = S.an && S.an.production && S.an.production.coils_per_hour, t = Date.parse(snap.simulated_at);
+  let p = S.prod;
+  if (!p) { try { p = JSON.parse(localStorage.getItem(PROD_KEY) || 'null'); } catch (_) { p = null; } }
+  if (!p || p.run !== snap.run_id || !(t > 0)) p = { run: snap.run_id, last: t, mode: snap.line_mode, coils: 0 };
+  else {
+    const dt = (t - p.last) / 3600000;   // 시간
+    if (rate && p.mode === 'running' && dt > 0 && dt <= 1 / 6) p.coils += dt * rate;
+    p.last = t; p.mode = snap.line_mode;
+  }
+  S.prod = p;
+  try { localStorage.setItem(PROD_KEY, JSON.stringify(p)); } catch (_) { /* 저장 실패해도 화면은 계속 */ }
+}
 async function watchMes() {
   if (S.equipment.length) {
     try {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
-      S.snap=snap;S.snapshot=snap;renderDash();if(S.screen==='home')renderHome();
+      S.snap=snap;S.snapshot=snap;tickProduction(snap);renderDash();if(S.screen==='home')renderHome();
       if (S.eq) await loadMesObservations(snap);
     } catch (err) { S.snapshot=null;if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
   }

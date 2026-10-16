@@ -182,7 +182,16 @@ function show(name) {
   $('ctx').classList.toggle('on',!!S.eq&&['ctx','tries','hoNew','resolve'].includes(name));
   const signedOut=['boot','login','account','faceSetup','face'].includes(name);
   $('globalHeader').hidden=signedOut||['scan','handover','dutyDetail','reportSelect','reportWrite'].includes(name);$('net').hidden=signedOut;
-  $('backDock').hidden=['boot','account','login','home','faceSetup','scan','face','reportSelect','dashboard'].includes(name);
+  const back = $('navigationBack');
+  back.hidden=['boot','account','login','home'].includes(name);
+  document.querySelectorAll('.navigation-host').forEach(el=>el.classList.remove('navigation-host'));
+  const backHost = $('globalHeader').hidden
+    ? document.querySelector('#s-'+name+' > #scanState, #s-'+name+' > #faceState') || document.querySelector('#s-'+name+' > .appbar')
+    : $('globalHeader');
+  if (backHost) {
+    backHost.prepend(back);
+    if (backHost !== $('globalHeader')) backHost.classList.add('navigation-host');
+  }
   [['toScan','scan'],['toManual','manual']].forEach(([id,screen])=>{$(id).classList.toggle('active',name===screen);$(id).setAttribute('aria-current',name===screen?'page':'false');});
   $('alert').hidden=signedOut||!(S.faults||[]).length;
   const pane=document.querySelector('#s-'+name+' .pane');if(pane)pane.scrollTop=0;

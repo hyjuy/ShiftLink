@@ -23,6 +23,16 @@ JUDGE_MODEL = 'exaone-sft-judge'
 
 
 def build_query_pipeline():
+    if os.environ.get('SHIFTLINK_ANSWER_MODE', ANSWER_MODE) == 's30h':   # team decision 10/16 (demo = S30h)
+        from shiftlink.rag2.s30h import S30hPipeline
+        host = os.environ.get('OLLAMA_HOST', DEFAULT_HOST)
+        return S30hPipeline(
+            index_dir=os.environ.get('SHIFTLINK_S30H_INDEX', str(ROOT / 'data/rag2')), host=host,
+            judge_host=os.environ.get('SHIFTLINK_S30H_JUDGE_HOST', host),
+            answer_model=os.environ.get('SHIFTLINK_S30H_ANSWER_MODEL', 'exaone-rag-aug-ck106'),
+            judge_model=os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL),
+            judge_ctx=int(os.environ.get('SHIFTLINK_S30H_JUDGE_CTX', '2048')),
+            cards=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider.cards)
     return FixedPipeline(
         model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', ANSWER_MODEL),
                           judge_model=os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL),
@@ -39,6 +49,8 @@ def warm_models(pipeline, *, attempts=30, wait_s=10.0, sleep=time.sleep):
     Same num_ctx as the real calls, or Ollama reloads on the first query. Retries while Ollama is still starting after boot.
     Returns the names that loaded.
     """
+    if pipeline.answer_mode == 's30h':
+        return pipeline.warm(attempts=attempts, wait_s=wait_s, sleep=sleep)
     model = pipeline.model
     targets = [(model.judge_model, model.judge_num_ctx)]
     if pipeline.answer_mode != 'extract' and model.model != model.judge_model:

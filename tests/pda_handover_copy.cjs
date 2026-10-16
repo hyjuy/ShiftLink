@@ -36,7 +36,7 @@ const dash = dashSummary({line_mode:'running', simulated_at:'2026-10-08T13:42:05
   [{equipment_id:'EQ-6',code:'RT-01'},{equipment_id:'EQ-7',code:'RT-02'}],
   [{open_items:[{status:'open'},{status:'needs_recheck'},{status:'done'}]}],
   [{eq:{equipment_id:'EQ-1',code:'HPU-01'},items:['경보 출구 압력 저하']}]);
-assert.match(dash.line, /^운전 중 · 모의 \d\d:\d\d$/);   // 표시 시각은 기기 시간대 기준
+assert.match(dash.line, /^\d\d:\d\d 라인 운전 중$/);   // 표시 시각은 기기 시간대 기준
 assert.deepEqual(dash.waiting, ['RT-01']);
 assert.equal(dash.held, 1); assert.equal(dash.openItems, 2);
 assert.deepEqual(dash.faults, [{equipment_id:'EQ-1',code:'HPU-01',items:['경보 출구 압력 저하']}]);

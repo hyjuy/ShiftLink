@@ -181,8 +181,8 @@ function show(name) {
   document.querySelectorAll('.screen').forEach((el)=>el.classList.toggle('on',el.id==='s-'+name));
   $('ctx').classList.toggle('on',!!S.eq&&['ctx','tries','hoNew','resolve'].includes(name));
   const signedOut=['boot','login','account','faceSetup','face'].includes(name);
-  $('globalHeader').hidden=signedOut||['scan','handover','dutyDetail','reportSelect','reportWrite','dashboard'].includes(name);$('net').hidden=signedOut;
-  $('backDock').hidden=['boot','account','login','home','faceSetup'].includes(name);
+  $('globalHeader').hidden=signedOut||['scan','handover','dutyDetail','reportSelect','reportWrite'].includes(name);$('net').hidden=signedOut;
+  $('backDock').hidden=['boot','account','login','home','faceSetup','scan','face','reportSelect','dashboard'].includes(name);
   [['toScan','scan'],['toManual','manual']].forEach(([id,screen])=>{$(id).classList.toggle('active',name===screen);$(id).setAttribute('aria-current',name===screen?'page':'false');});
   $('alert').hidden=signedOut||!(S.faults||[]).length;
   const pane=document.querySelector('#s-'+name+' .pane');if(pane)pane.scrollTop=0;
@@ -1859,7 +1859,7 @@ function renderHome() {
   const rows = allHandovers(); appendTimeline(home, rows.flatMap(h=>dutyTimeline(h)));
   const operator=S.operator||{};
   $('homeGreeting').textContent='안녕하세요, '+(operator.name||operator.id||'작업자')+'님';
-  $('homeWorkDate').textContent=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' · '+shiftAt().code+'조';
+  $('homeWorkDate').textContent=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' · '+shiftAt().code+'조 '+SHIFT_HOURS[shiftAt().code];
   const recent=rows.slice().sort((a,b)=>String(b.created_at||b.shift_date||'').localeCompare(String(a.created_at||a.shift_date||'')))[0];
   const previous=recent&&(recent.author_name||(recent.required_context||{}).author||recent.author_persona_id);
   $('homeShiftPeople').textContent='이전 근무자 '+(previous||'미등록')+' · 다음 근무자 '+(operator.next_worker_name||'미등록');
@@ -2003,6 +2003,18 @@ function mesHandoverContext(snap, events, eq) {
   return ['MES 기록 · ' + eq.code + ' · ' + snap.simulated_at,
     ...readings.map((m) => (eq.signals.find((spec) => spec.signal === m.signal).name || m.signal) + ': ' + m.value + ' ' + unitText(m.unit) + ' · 측정 ' + m.observed_at),
     ...recent.map((e) => e.occurred_at + ' · ' + e.observation)].join('\n');
+}
+
+/* 근무일지용: 관측 시각은 맨 위에 한 번, 측정값 앞에 정상/비정상 */
+function reportMesContext(snap, events, eqs) {
+  const blocks = eqs.map((eq) => {
+    const recent = (events || []).filter((e) => e.equipment_id === eq.equipment_id).slice(-5);
+    return [eq.code, ...usableReadings(snap, eq).kept.map((m) => {
+      const spec = eq.signals.find((s) => s.signal === m.signal), st = stateOf(spec, m.value);
+      return (st === 'normal' ? '정상' : st ? '비정상' : '기준 없음') + ' · ' + (spec.name || m.signal) + ': ' + m.value + ' ' + unitText(m.unit);
+    }), ...recent.map((e) => '이벤트 · ' + e.occurred_at + ' · ' + e.observation)].join('\n');
+  });
+  return ['관측 시각 · ' + snap.simulated_at, ...blocks].join('\n\n');
 }
 
 /* 다시 불러와도 이미 입력에 있는 줄(측정값·이벤트)은 붙이지 않는다. 새 줄이 없으면 null. */
@@ -2414,10 +2426,12 @@ function renderReportSelection() {
   $('reportSelectAll').checked=visible.length>0&&selected===visible.length;$('reportSelectAll').indeterminate=false;$('reportSelectAll').disabled=!visible.length;
   $('reportCount').textContent='선택 '+S.reportSelected.length+'대';$('reportWrite').disabled=!S.reportSelected.length;
   [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>{$(id).classList.toggle('primary',filter===S.reportFilter);$(id).setAttribute('aria-pressed',String(filter===S.reportFilter));});
+  $('reportFilterRecent').textContent=S.reportFilter==='recent'?'전체 설비':'최근 정비 설비';
 }
 function recentMaintenanceCodes() {
   return [...new Set(allHandovers().filter(h=>h.kind!=='work_log'||(h.work_report?.records||[]).some(r=>['고장·정비','PMS 정비'].includes(r.type))).filter(h=>Date.parse(h.created_at||h.shift_date)>=Date.now()-7*86400000).flatMap(h=>handoverEquipment(h,S.equipment).map(eq=>eq.code)))];
 }
+const SHIFT_HOURS={A:'08:00 - 16:00',B:'16:00 - 24:00',C:'00:00 - 08:00'};
 function shiftAt(now = new Date()) {
   const local=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
   return {date:local.getFullYear()+'-'+String(local.getMonth()+1).padStart(2,'0')+'-'+String(local.getDate()).padStart(2,'0'),code:local.getHours()<8?'C':local.getHours()<16?'A':'B'};
@@ -2452,7 +2466,7 @@ function renderReportRecords() {
   const edit=(value,key,index,placeholder,ci)=>'<textarea aria-label="'+placeholder+'" class="edit" data-key="'+key+'" data-record="'+index+'" '+(ci!==undefined?'data-cause="'+ci+'"':'')+' maxlength="4000" placeholder="'+placeholder+'">'+esc(value)+'</textarea>';
   $('reportLegacy').hidden=!$('reportMemo').value;
   $('reportMes').textContent=S.reportContext||'센서값을 불러오면 원본 값·단위·관측 시각이 표시됩니다. 미수신 값은 — 입니다.';
-  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><div class="record-head"><strong>기록 '+String(i+1).padStart(2,'0')+'</strong><select data-key="type" data-record="'+i+'" aria-label="기록 구분">'+['추가 기록','이상증상','고장·정비','PMS 정비'].map(t=>'<option '+(r.type===t?'selected':'')+'>'+t+'</option>').join('')+'</select><span class="sp"></span><span class="notice">유형은 선택 사항</span><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">기록 삭제</button></div><table><tbody><tr><th>대상 설비 *</th><td>'+eqChecks(r.equipment,i)+'</td></tr><tr><th>상황·조치 *</th><td>'+edit(r.story,'story',i,'어떤 상황이었고, 어떤 조치를 했는지 적습니다.')+'</td></tr>'+(r.causes.length?'<tr><th>확인한 원인<br><small>선택 기록</small></th><td>'+r.causes.map((c,ci)=>'<div class="cause-row"><div class="checks">'+eqChecks(c.equipment,i,ci)+'</div><select aria-label="원인 확인 상태" data-record="'+i+'" data-cause="'+ci+'" data-key="certainty">'+['추정','확인','배제'].map(t=>'<option '+(c.certainty===t?'selected':'')+'>'+t+'</option>').join('')+'</select>'+edit(c.note,'note',i,'원인·해당 조치·확인 근거',ci)+'</div>').join('')+'</td></tr>':'')+(r.result!==null?'<tr><th>결과·후속·인계<br><small>선택 기록</small></th><td>'+edit(r.result,'result',i,'조치 결과나 다음 근무자에게 전달할 내용')+'</td></tr>':'')+(r.pms!==null?'<tr><th>PMS 계획 ID<br><small>선택 메모</small></th><td>'+edit(r.pms,'pms',i,'참고할 PMS 계획 ID (메모로 보관)')+'</td></tr>':'')+'</tbody></table><div class="record-end"><button data-action="cause" data-record="'+i+'">＋ 원인·조치 추가</button>'+(r.result===null?'<button data-action="result" data-record="'+i+'">＋ 결과·인계</button>':'')+(r.pms===null?'<button data-action="pms" data-record="'+i+'">＋ PMS 연결</button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>지식카드 후보</label></div></section>').join(''):'<table aria-label="특이사항 미작성"><tbody><tr><td class="empty"><span>특이사항 기록란</span><p>별도 작성 내용 없음</p></td></tr></tbody></table>';
+  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><div class="record-head"><strong>기록 '+String(i+1).padStart(2,'0')+'</strong><select data-key="type" data-record="'+i+'" aria-label="기록 구분">'+['추가 기록','이상증상','고장·정비','PMS 정비'].map(t=>'<option '+(r.type===t?'selected':'')+'>'+t+'</option>').join('')+'</select><span class="sp"></span><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">기록 삭제</button></div><table><tbody><tr><th>대상 설비 *</th><td>'+eqChecks(r.equipment,i)+'</td></tr><tr><th>상황·조치 *</th><td>'+edit(r.story,'story',i,'어떤 상황이었고, 어떤 조치를 했는지 적습니다.')+'</td></tr>'+(r.causes.length?'<tr><th>확인한 원인</th><td>'+r.causes.map((c,ci)=>'<div class="cause-row">'+(c.equipment.length===1?'<div class="cause-eq">'+esc(((S.equipment.find(e=>e.equipment_id===c.equipment[0])||{}).code)||c.equipment[0])+' '+esc((S.equipment.find(e=>e.equipment_id===c.equipment[0])||{}).group||'')+'</div>':'<div class="checks">'+eqChecks(c.equipment,i,ci)+'</div>')+'<select aria-label="원인 확인 상태" data-record="'+i+'" data-cause="'+ci+'" data-key="certainty">'+['추정','확인','배제'].map(t=>'<option '+(c.certainty===t?'selected':'')+'>'+t+'</option>').join('')+'</select>'+edit(c.note,'note',i,'원인·해당 조치·확인 근거',ci)+'</div>').join('')+'</td></tr>':'')+(r.result!==null?'<tr><th>결과·후속·인계<br><small>선택 기록</small></th><td>'+edit(r.result,'result',i,'조치 결과나 다음 근무자에게 전달할 내용')+'</td></tr>':'')+(r.pms!==null?'<tr><th>PMS 계획 ID</th><td>'+edit(r.pms,'pms',i,'참고할 PMS 계획 ID (메모로 보관)')+'</td></tr>':'')+'</tbody></table><div class="record-end"><button data-action="cause" data-record="'+i+'">＋ 원인·조치 추가</button>'+(r.result===null?'<button data-action="result" data-record="'+i+'">＋ 결과·인계</button>':'')+(r.pms===null?'<button data-action="pms" data-record="'+i+'">＋ PMS 연결</button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>지식카드 후보</label></div></section>').join(''):'<table aria-label="특이사항 미작성"><tbody><tr><td class="empty"><span>특이사항 기록란</span><p>별도 작성 내용 없음</p></td></tr></tbody></table>';
 }
 function addReportRecord() {
   if (!S.reportRecords) S.reportRecords=[];
@@ -2464,7 +2478,7 @@ function addReportRecord() {
 async function importReportMes() {
   $('reportImport').disabled=true;
   try { const [snap,log]=await Promise.all([getJson('/api/state'),getJson('/api/events')]);
-    S.reportContext=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>mesHandoverContext(snap,log.events,eq)).join('\n\n');
+    S.reportContext=reportMesContext(snap,log.events,S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)));
     $('reportMes').textContent=S.reportContext;
     $('reportStatus').textContent='선택 장비의 센서값을 첨부했습니다.';saveReportDraft();
   } catch(err) { $('reportStatus').textContent='센서값을 불러오지 못했습니다. '+err.message; }
@@ -2665,7 +2679,7 @@ async function watchFace(run) {
       return;
     }
     if (!data.face) {
-      setFaceStatus('', '얼굴이 안 보입니다');
+      setFaceStatus('fail', '얼굴이 안 보입니다');
     } else {
       scores.push(data.score);
       const passed = scores.filter((score) => score >= data.threshold).length;
@@ -2677,7 +2691,7 @@ async function watchFace(run) {
         return;
       }
       if (verdict === 'fail') {
-        setFaceStatus('fail', '거절');
+        setFaceStatus('fail', '얼굴 인식이 안 됐습니다');
         $('faceRetry').hidden = false;
         return;
       }
@@ -2691,7 +2705,7 @@ async function startFaceCamera() {
   stopFaceCamera();
   const run = faceRun;
   const video = $('faceVideo');
-  $('faceWho').textContent = S.operator.name + ' · ' + S.operator.id;
+  $('faceWho').textContent = '사번 : ' + S.operator.id;
   $('faceRetry').hidden = true;
   setFaceStatus('', '카메라를 여는 중…');
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -2826,7 +2840,7 @@ divider.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].include
 on('toggleChat',()=>{S.sensorsOpen=!S.sensorsOpen;show('ctx');});
 on('toDutyHandover',openHandover);on('toEquipmentReport',openEquipmentReport);
 on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('historyBack',()=>show('ctx'));
-on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',saveReport);on('reportImport',importReportMes);
+on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',()=>$('reportSaveConfirm').showModal());on('reportSaveYes',()=>{$('reportSaveConfirm').close();saveReport();});on('reportSaveNo',()=>$('reportSaveConfirm').close());on('reportImport',importReportMes);
 [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>on(id,()=>{S.reportFilter=filter==='recent'&&S.reportFilter==='recent'?'all':filter;renderReportSelection();}));
 $('reportSelectAll').addEventListener('change',(event)=>{const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],recentMaintenanceCodes()).map((eq)=>eq.equipment_id);S.reportSelected=event.target.checked?[...new Set([...S.reportSelected,...visible])]:S.reportSelected.filter((id)=>!visible.includes(id));saveReportDraft();renderReportSelection();});
 
@@ -2850,7 +2864,7 @@ $('reportRecords').addEventListener('click',event=>{
     if(!window.confirm('기록 '+(index+1)+'을 삭제할까요?'))return;
     S.reportRecords.splice(index,1);
   }
-  if(b.dataset.action==='cause')r.causes.push({equipment:[...r.equipment],certainty:'추정',note:''});
+  if(b.dataset.action==='cause'){const have=new Set(r.causes.flatMap(c=>c.equipment));const todo=r.equipment.filter(id=>!have.has(id));(todo.length?todo:[null]).forEach(id=>r.causes.push({equipment:id?[id]:[],certainty:'추정',note:''}));}
   if(b.dataset.action==='result')r.result='';
   if(b.dataset.action==='pms')r.pms='';
   renderReportRecords();saveReportDraft();
@@ -2867,7 +2881,8 @@ $('accountForm').addEventListener('submit',async(event)=>{
     const data=await res.json();
     if(!res.ok)throw Error(data.error||'로그인하지 못했습니다.');
     S.operator=data.operator;$('employeePassword').value='';$('accountMessage').textContent='';enterWork();
-  } catch(err){$('employeePassword').value='';$('accountMessage').textContent=err.message;$('accountSubmit').disabled=false;}
+  } catch(err){$('employeePassword').value='';$('accountMessage').textContent=err.message;}
+  finally{$('accountSubmit').disabled=false;}
 });
 
 // ── MES 실시간 감시 ────────────────────────────────────────────────
@@ -3065,7 +3080,7 @@ function renderAnalyticsPanels(a) {
     const head = document.createElement('div'); head.className = 'loss-head';
     head.innerHTML = '<table class="loss-sum"><thead><tr><th>계획</th><th>생산</th><th>손실</th><th>손실률</th></tr></thead>'
       + '<tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table>'
-      + '<svg class="loss-chart" viewBox="0 0 ' + C.w + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="img"></g></svg>';
+      + '<div class="loss-chartrow"><svg class="loss-chart" viewBox="0 0 ' + (L.cx + L.r + 16) + ' ' + C.h + '"><g class="g-made" role="img"></g><g class="g-lost" role="img"></g></svg><ul class="loss-legend"></ul></div>';
     // ① 생산 링: 회색 원 + 끝부분 손실(실제 비율, 설비 색)
     head.querySelector('.g-made').innerHTML = '<circle cx="' + M.cx + '" cy="' + C.cy + '" r="' + M.r + '" class="made-base"/>'
       + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
@@ -3074,9 +3089,7 @@ function renderAnalyticsPanels(a) {
     const arcs = lossDonut(v.slices);
     head.querySelector('.g-lost').innerHTML = (arcs.length
       ? arcs.map((s) => '<path d="' + s.d + '" class="lost-arc" style="stroke:' + s.color + '"/>').join('')
-        // 바깥 라벨은 설비 코드만, 손실 개수는 링 안 조각 가운데(좁은 조각만 바깥 라벨 옆에)
-        + arcs.map((s) => '<text x="' + s.lx + '" y="' + s.ly + '" text-anchor="' + s.anchor + '" class="lbl">'
-          + esc(s.equipment_id ? eqCode(s.equipment_id) : '기타') + (s.inside ? '' : ' <tspan class="n">' + s.coils + '</tspan>') + '</text>').join('')
+        // 설비 이름은 도넛 옆이 아니라 오른쪽 범례에 둔다. 손실 개수는 링 안 조각 가운데
         + arcs.filter((s) => s.inside).map((s) => '<text x="' + s.nx + '" y="' + s.ny + '" text-anchor="middle" class="num">' + s.coils + '</text>').join('')
       : '<circle cx="' + L.cx + '" cy="' + C.cy + '" r="' + L.r + '" class="lost-arc" style="stroke:var(--edge)"/>')
       + center(L.cx, v.lost + '개', '손실', 'ctr');
@@ -3086,6 +3099,8 @@ function renderAnalyticsPanels(a) {
     head.querySelector('.g-made').setAttribute('aria-label', '계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct) + ', 손실 ' + f1(v.lostPct));
     head.querySelector('.g-lost').setAttribute('aria-label', '손실 ' + v.lost + '개 중 ' + (v.slices.map((r) =>
       (r.equipment_id ? eqCode(r.equipment_id) : '기타') + ' ' + r.coils + '개').join(', ') || '없음'));
+    head.querySelector('.loss-legend').innerHTML = arcs.map((s) => '<li><i style="background:' + s.color + '"></i>'
+      + esc(s.equipment_id ? eqCode(s.equipment_id) : '기타') + '<span class="n">' + s.coils + '개</span></li>').join('');
     loss.appendChild(head);
   }
   const max = Math.max(1, ...v.rows.map((r) => r.coils));

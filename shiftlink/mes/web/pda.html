@@ -346,7 +346,7 @@
   .chatmes .eqc{font-size:22px;font-weight:800;color:var(--tx)}
   .chatmes.bad{color:var(--fault-tx);background:var(--fault-bg);border-color:var(--fault)}
   .chatlog{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
-  .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요. 등록된 근거가 없으면 「해당 지식 없음」이라고 답합니다.";
+  .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요.";
     font-size:16px;color:var(--tx-2);line-height:1.5}
   .msg{max-width:92%;border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
   .msg.me{align-self:flex-end;background:var(--surface-2);border:1px solid var(--edge)}
@@ -818,10 +818,42 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-ctx .equipment-mes .metric .label{font-size:14px;color:var(--tx-2)}
 #s-ctx .equipment-mes .metric .value{font-size:26px;line-height:40px;color:var(--tx)}
 #s-ctx .equipment-mes .metric.bad .value{color:var(--fault-tx)}
+.metric.idle{background:#F1F3F2;border-color:var(--edge)}.metric.idle .value{color:var(--tx-2);font-size:20px}
+.mes-head{display:flex;align-items:center;gap:6px}.mes-head h2{flex:1 1 auto;margin:0}
+.mes-ic{width:40px;height:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--edge);border-radius:8px;background:var(--surface);color:var(--tx-2)}
+.mes-ic svg{width:20px;height:20px}.mes-ic[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+#s-ctx .equipment-mes>.metric-grid{gap:0;background:var(--surface);border:1px solid var(--edge);border-radius:8px;overflow:hidden;max-height:none;flex:0 0 auto}
+#s-ctx .equipment-mes>.metric-grid>.metric{border-right:0;background:var(--surface);box-shadow:1px 0 0 var(--edge),0 1px 0 var(--edge)}
+#s-ctx .workspace-divider:focus:not(:focus-visible){outline:0}
+#s-ctx .equipment-mes>.metric-grid>.metric.bad{border-radius:0}
+#s-ctx .equipment-mes>.metric-grid>.metric.idle{background:#F1F3F2}#s-ctx .equipment-mes .metric.idle .value{color:var(--tx-2);font-size:20px}
+#s-ctx .chat-panel .sugg{flex-wrap:wrap-reverse;align-content:flex-start;gap:6px}
+#s-ctx .chat-panel .sugg button{min-height:40px;padding:4px 10px}
+#s-ctx .equipment-functions .work-actions{margin-top:0}
+#s-ctx .chat-panel #chatPane.centered-state{justify-content:flex-start}
+/* 21차: 화면 보기 전환 — 아이콘 20px·높이 44px·가운데 정렬, 선택은 배경과 색 (KakaoTalk_20261016_4 「텍스트와 함께 사용」) */
+#s-ctx .workspace-controls{align-self:flex-start;display:flex;gap:4px;margin:12px 28px 0;padding:4px;width:min(560px,calc(100% - 56px));box-sizing:border-box;border-radius:10px;background:#E3ECE9;flex-wrap:nowrap}
+#s-ctx .workspace-controls .btn{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;height:44px;padding:0 10px;border:0;border-radius:8px;background:transparent;color:#3F5A54;font-size:14px;font-weight:600;white-space:nowrap}
+#s-ctx .workspace-controls .btn svg{width:20px;height:20px;flex:0 0 20px}
+#s-ctx .workspace-controls .btn[aria-pressed=true]{background:var(--accent);color:#fff;border:0}
+/* 구분 막대: 칸은 0, 잡는 영역 16px만 칸 사이에 겹쳐 둔다(보이지 않고 끌기는 그대로) */
+#s-ctx .equipment-workspace{grid-template-columns:minmax(0,var(--equipment-width,60fr)) 0 minmax(0,var(--chat-width,40fr))}
+#s-ctx .workspace-divider{width:16px;justify-self:center;z-index:7}
+/* 20차: 분할 보기 정리 — MES 칸은 내용 높이만, 남는 높이는 설비 칸(버튼 아래 여백)으로 */
+#s-ctx .equipment-workspace.sensors-open{grid-template-rows:minmax(0,1fr) auto}
+#s-ctx .equipment-workspace.sensors-open .equipment-functions{padding-bottom:20px}
+#s-ctx .equipment-functions>.section-heading{align-items:center}
+#s-ctx .equipment-functions>.section-heading .btn{margin:0}
+#s-ctx .workspace-divider{cursor:col-resize}
+#obsList small{white-space:pre-line}
+.report-ask{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-2)}
+.report-ask p{flex:1 1 auto;margin:0;font-weight:600}
+.report-ask .btn{width:auto;min-width:72px;margin:0}
+#s-ctx .chat-panel #askSafety{position:sticky;top:-14px;z-index:6;margin-top:-14px;padding:14px 0 6px;background:var(--surface);flex:0 0 auto}
+#s-ctx .chat-panel #askSafety:empty{display:none}
+#s-ctx .chat-panel #askSafety details[open]>.safety-cards{max-height:40vh;overflow:auto}
 #s-ctx #metricsTime{font-size:13px;color:var(--tx-2);overflow-wrap:anywhere}
 #s-ctx .workspace-divider{background:transparent;border:0;position:relative}
-#s-ctx .workspace-divider::after{content:'';position:absolute;inset:30% 2px;border-radius:2px;background:#9bb7aa}
-#s-ctx .workspace-divider:hover::after{background:var(--accent)}
 #s-ctx .chat-panel .safety-head{border-left-width:1px}
 #s-ctx .chat-panel .safety .body{font-weight:500;line-height:1.6;color:#704914}
 #s-ctx .chat-panel .safety{border-left-width:1px;border-radius:6px;padding:8px 12px}
@@ -1163,8 +1195,8 @@ button.ld-row:hover{background:var(--surface-2)}
 /* 11차 */
 #s-dashboard .dash-tile,#s-dashboard #anGap{gap:10px}
 #s-dashboard #anGap .an-flow>div{align-items:center;text-align:center}
-#globalHeader .btn.notify,.notify-floatwrap .notify{background:var(--accent);border-color:var(--accent);color:#fff}
-#globalHeader .btn.notify:hover{background:#1f5c57}
+#globalHeader .btn.notify.on,.notify-floatwrap .notify.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#globalHeader .btn.notify.on:hover{background:#1f5c57}
 
 /* 12차: 상자 안 가로선 + 숫자 가운데 */
 #s-dashboard .dash-tile{position:relative;min-height:112px;gap:0;padding:12px 14px 8px;justify-content:flex-start}
@@ -1292,16 +1324,16 @@ button.ld-row:hover{background:var(--surface-2)}
 
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
-    <div class="workspace-controls"><button class="btn sm ghost" id="expandEquipment" type="button" aria-pressed="false">장비 전체 보기</button><button class="btn sm ghost" id="splitWorkspace" type="button" aria-pressed="true">분할 보기</button><button class="btn sm ghost" id="expandChat" type="button" aria-pressed="false">채팅 전체 보기</button></div><div class="equipment-workspace" id="equipmentWorkspace">
+    <div class="workspace-controls" role="group" aria-label="화면 보기 전환"><button class="btn sm ghost" id="expandEquipment" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="5" width="5" height="10" rx="1" fill="currentColor"/></svg><span>장비 전체 보기</span></button><button class="btn sm ghost" id="splitWorkspace" type="button" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="5" width="4" height="10" rx="1" fill="currentColor"/><rect x="11" y="5" width="4" height="10" rx="1" fill="currentColor"/></svg><span>분할 보기</span></button><button class="btn sm ghost" id="expandChat" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="5" width="5" height="10" rx="1" fill="currentColor"/></svg><span>채팅 전체 보기</span></button></div><div class="equipment-workspace" id="equipmentWorkspace">
       <div class="pane equipment-functions">
-        <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="btn sm ghost" id="toggleChat" type="button" aria-expanded="false">센서값 화면</button></div>
-        <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
+        <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="btn sm ghost" id="toggleChat" type="button" aria-expanded="false">센서값 열기</button></div>
+        <p class="mesline" id="ctxMes" role="status" hidden>MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
         <nav class="work-actions" aria-label="설비 작업"><button class="btn" id="toHandover" type="button">정비이력</button><button id="toDutyHandover" type="button" hidden>인계 사항 확인</button><button class="btn" id="toEquipmentReport" type="button">근무일지 작성</button></nav><button id="toAsk" type="button" hidden>채팅 열기</button><button id="toHandoverNew" type="button" hidden>인계 작성</button>
         <button class="ic workspace-back" id="ctxBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
         <button class="btn sm ghost" id="ctxEdit" type="button" hidden>설비 변경</button>
       </div>
       <section class="pane equipment-mes" aria-label="MES 센서 데이터">
-        <h2>MES 센서 데이터</h2><div id="equipmentMetrics" class="metric-grid"></div><p class="hint" id="metricsTime"></p>
+        <div class="mes-head"><h2>MES 센서 데이터</h2><button class="mes-ic" id="mesPin" type="button" aria-pressed="true" aria-label="값 고정"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 3h6l-1 6 3 4H7l3-4z"/></svg></button><button class="mes-ic" id="mesRefresh" type="button" aria-label="새로고침" title="최신 값으로 새로고침"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button></div><div id="equipmentMetrics" class="metric-grid"></div><p class="hint" id="metricsTime"></p>
       </section>
       <div class="workspace-divider" role="separator" aria-label="설비와 채팅 너비 조절" aria-orientation="vertical" tabindex="0"></div><aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"></aside>
     </div>
@@ -1331,7 +1363,6 @@ button.ld-row:hover{background:var(--surface-2)}
       <div id="askSafety"></div>
       <details class="fold" id="obsFold">
         <summary id="obsSummary">관측값 · 직접 입력</summary>
-        <p class="hint">답변에는 MES가 질의를 접수한 당시의 값을 기록합니다.</p>
         <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
         <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
         <p class="hint">MES에서 가져오지 못한 측정값은 직접 입력해 주세요. 같은 항목을 입력하면 직접 입력한 값이 화면 판정에 사용됩니다.</p>
@@ -1354,7 +1385,7 @@ button.ld-row:hover{background:var(--surface-2)}
       </div>
     </div>
     <div class="chat-cancel" id="chatCancelDock" hidden><button class="btn sm ghost" id="chatCancel" type="button">취소</button></div>
-    <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
+    <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 본인 책임입니다.</span></div>
   </section>
 
   <!-- 시도 기록 -->

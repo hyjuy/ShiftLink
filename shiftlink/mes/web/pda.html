@@ -707,7 +707,6 @@
 #s-reportWrite .report-viewport{display:block;padding:16px 24px;overflow:auto}#s-reportWrite .toolbar{flex-wrap:wrap}#s-reportWrite textarea{width:100%;resize:vertical;background:white;border:1px solid #acbbce;border-radius:4px;min-height:72px;padding:10px}#s-reportWrite textarea:focus-visible{outline:3px solid #235cc8;outline-offset:2px}#s-reportWrite .record-end button{min-height:48px}#s-reportWrite .footer{flex-wrap:wrap}#s-reportWrite .footer p{flex:1}#s-reportWrite .report-form-grid{margin-bottom:16px}#s-reportWrite .mes-record{white-space:pre-wrap;overflow-wrap:anywhere}#s-reportWrite .eq-list{max-height:180px;overflow:auto}#s-reportWrite .record .edit{font-size:15px}#s-reportWrite .toolbar button{width:auto;margin:0}#s-reportWrite #reportMemo{min-height:90px}#s-reportWrite .paper{width:100%;min-height:0}#s-reportWrite .summaryline{flex-wrap:wrap}#s-reportWrite .doc-id{position:static;text-align:center}#s-reportWrite .check{white-space:normal}#s-reportWrite input[type=datetime-local],#s-reportWrite input{min-width:0;width:100%}#s-reportWrite input[type=checkbox]{width:22px;flex:none}#s-reportWrite .record-end .check{margin-left:0}@media(max-width:600px){#s-reportWrite .report-viewport{padding:12px}#s-reportWrite .paper{padding:16px 12px}#s-reportWrite .toolbar{padding:10px 12px}#s-reportWrite .document-head h2{letter-spacing:4px}#s-reportWrite .record table th{width:80px}#s-reportWrite .footer{padding:12px}#s-reportWrite .record-end{gap:8px}}
 
 /* PDA 수정 메모: 화면별 공통 바, 터치 간격, 작업 분할. */
-#backDock{order:99;flex:0 0 auto;padding:8px 28px;background:var(--surface);border-top:1px solid var(--edge)}#backDock .btn{width:auto;min-width:140px}
 .screen>.appbar{display:none!important}#s-history>.appbar{display:flex!important}#s-history .appbar>button{display:none}
 #globalHeader>nav{margin-left:120px}#globalHeader .btn.active{background:var(--accent);color:white}#globalHeader #logout{width:88px}
 #accountForm{gap:10px;padding:24px;overflow:auto;justify-content:safe center}#accountForm input{min-height:52px}#accountForm .btn{margin:10px 0 0;min-height:52px}.login-brand{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px}.login-brand svg{width:44px;height:44px;color:var(--accent)}.login-brand h1{margin:0;font-size:38px}.factory-banner{width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:16px}.login-pane{gap:16px}.face-heading{font-size:28px!important;margin:0 0 24px;text-align:center}
@@ -754,8 +753,6 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #globalHeader :is(#toScan,#toManual).active{background:var(--accent);color:#fff;border-color:var(--accent)}
 #globalHeader #headerHome{min-width:64px}
 #app>#net{height:36px;min-height:36px;flex-basis:36px;padding:6px 28px;font-size:13px;color:var(--tx-2)}
-#backDock{padding:8px 28px;border-color:var(--edge)}
-#backDock .btn{border-color:var(--edge);color:var(--tx-2);font-weight:600}
 #s-account{align-items:center;padding:24px 0}
 #accountForm{flex:0 1 auto;width:min(520px,calc(100% - 32px));max-height:100%;margin:auto;padding:28px 32px;gap:8px;background:var(--surface);border:1px solid var(--edge);border-radius:16px;justify-content:safe center}
 #accountForm .login-brand{gap:12px;margin-bottom:12px;flex:0 0 auto}
@@ -888,7 +885,7 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
   #s-home .home-panels{grid-template-columns:1fr}
   #s-home .home-made{min-height:160px}
   #s-manual>.pane,#s-handover>.pane,#s-history>.pane{padding:20px 16px}
-  #backDock{padding:8px 16px}#app>#net{padding:6px 16px}
+  #app>#net{padding:6px 16px}
   #s-dashboard>.pane{padding:20px 16px}
   #s-reportWrite .toolbar{gap:8px;padding:12px}
   #s-reportWrite .paper{padding:20px 16px}
@@ -926,14 +923,27 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
+/* Keep back navigation in the existing top row, with a full PDA touch target. */
+.navigation-back{display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;min-height:48px;padding:0;border:0;border-radius:10px;color:var(--accent);background:transparent}
+.navigation-back:hover,.navigation-back:active{background:var(--hover)}
+.navigation-back svg{width:24px;height:24px;flex:none}
+#globalHeader:has(>#navigationBack:not([hidden]))>.brand svg{display:none}
+.screen>.appbar.navigation-host{display:flex!important;flex:0 0 auto;min-height:64px;padding:8px 16px;gap:12px}
+.navigation-host.appbar>button:not(#navigationBack){display:none}
+#s-history .appbar>#navigationBack{display:inline-flex}
+#scanState.navigation-host{justify-content:flex-start;gap:10px;padding:4px 16px}
+#s-reportWrite .toolbar.navigation-host{grid-template-columns:48px repeat(3,minmax(0,1fr))}
+#s-reportWrite .toolbar>#navigationBack{width:48px;min-width:48px;height:48px;align-self:center;padding:0;flex:0 0 48px;border:0;background:transparent}
+#s-reportWrite .toolbar>#navigationBack:hover,#s-reportWrite .toolbar>#navigationBack:active{background:var(--hover)}
+@media(max-width:700px){#globalHeader:has(>#navigationBack:not([hidden])){gap:6px}#globalHeader:has(>#navigationBack:not([hidden]))>.brand{font-size:18px}}
 </style>
 </head>
 <body>
 
 <div id="app"><div id="toast" class="toast" role="status" hidden></div>
 
-  <header id="globalHeader" class="global-header"><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><span class="sp"></span><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button">홈</button><button class="btn sm ghost" id="logout" type="button">Logout</button></header>
-  <div id="backDock" hidden><button class="btn sm ghost" id="navigationBack" type="button">← 뒤로가기</button></div><div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
+  <header id="globalHeader" class="global-header"><button id="navigationBack" class="navigation-back" type="button" aria-label="뒤로가기" title="뒤로가기" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><span class="sp"></span><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button">홈</button><button class="btn sm ghost" id="logout" type="button">Logout</button></header>
+  <div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
     <span class="q" id="netQueue" hidden>대기 0건</span></div>
 
   <div id="alert" hidden></div>

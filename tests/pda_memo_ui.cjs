@@ -42,6 +42,21 @@ const {chromium}=require('playwright');
  const cards=await page.evaluate(()=>['dashHeld','anGap'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,h:r.height}}));assert.ok(cards[1].x>cards[0].x);assert.equal(cards[0].y,cards[1].y);assert.equal(cards[0].h,cards[1].h);
  await page.screenshot({path:'output/pda-memo-dashboard.png'});
  for(const width of [800,375]){await page.setViewportSize({width,height:800});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);await page.screenshot({path:'output/pda-memo-dashboard-'+width+'.png'});}
+ for(const width of [1280,375]){
+  await page.setViewportSize({width,height:800});
+  for(const screen of ['account','home','manual','ctx','scan','handover','dutyDetail','reportSelect','reportWrite','dashboard','faceSetup','face']){
+   await page.evaluate(screen=>show(screen),screen);
+   const back=page.getByRole('button',{name:'뒤로가기',exact:true}).filter({has:page.locator('svg')});
+   if(['account','home'].includes(screen)){assert.ok(await page.locator('#navigationBack').isHidden());continue;}
+   assert.ok(await back.isVisible(),screen);
+   const box=await back.boundingBox();assert.ok(box.width>=48&&box.height>=48,screen);
+   assert.ok(box.x<=(width>700?64:32)&&box.y<160,`${screen}: ${JSON.stringify(box)}`);
+   assert.equal(await page.locator('#backDock').count(),0);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,screen);
+   await back.focus();assert.equal(await page.evaluate(()=>document.activeElement.id),'navigationBack');
+   if(['ctx','reportWrite','dashboard'].includes(screen))await page.screenshot({path:`output/pda-back-${screen}-${width}.png`});
+  }
+ }
  assert.deepEqual(errors,[]);
  console.log('PASS: memo UI, login/banner, back stack, 60/40 panes, sensors/resize/expand, shift dates, author, select-all, dashboard placement, responsive widths, zero browser errors');
  }finally{await browser.close()}

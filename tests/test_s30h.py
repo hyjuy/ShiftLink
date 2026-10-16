@@ -66,7 +66,7 @@ def test_confident_route_forces_an_answer_and_lists_sources(pipe, monkeypatch):
     monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: calls.append((host, prefix)) or
                         {"raw": prefix + '압력 152 bar를 확인합니다 [S1][S2]", "citations": ["S1", "S2"]}', "prompt_tokens": 9})
     r = pipe.run({"question": "압력이 낮아요", "eq_id": "EQ-0001"})
-    assert r.tool_results["route"] == "confident" and r.tool_results["evidence"] == ["c1", "c2"]   # c4 < 0.3 dropped
+    assert r.tool_results["route"] == "confident" and r.tool_results["kept"] == ["c1", "c2"]   # c4 < 0.3 dropped
     assert calls == [("http://main:11434", G.FORCE_PREFIX)]
     assert {(h, m, c) for _, h, m, c in seen} == {("http://judge:11436", "exaone-sft-judge", 2048)}
     out = r.output
@@ -80,8 +80,9 @@ def test_confident_route_forces_an_answer_and_lists_sources(pipe, monkeypatch):
 def test_model_route_abstains_at_threshold(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.6, "c2": 0.4, "c4": 0.0})
     monkeypatch.setattr(G, "ask", lambda p, host, logprobs: answer("152 bar 확인 [S1]", ["S1"], p_insuff=S.T))
-    out = pipe.run({"question": "q", "eq_id": "EQ-0001"}).output
-    assert out.no_knowledge and out.answer == "" and out.cited_card_ids == []
+    r = pipe.run({"question": "q", "eq_id": "EQ-0001"})
+    out = r.output
+    assert out.no_knowledge and out.answer == "" and out.cited_card_ids == [] and r.tool_results["abstain_reason"] == "threshold"
     assert [n.card_id for n in out.safety_notices] == ["K-S1"]   # the safety gate stays even without an answer
 
 
@@ -97,7 +98,8 @@ def test_nothing_kept_abstains_without_a_model_call(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.29, "c2": 0.0, "c4": 0.1})
     monkeypatch.setattr(G, "ask", lambda *a, **k: pytest.fail("no model call when every chunk is dropped"))
     r = pipe.run({"question": "q", "eq_id": "EQ-0001"})
-    assert r.tool_results["route"] == "drop_all" and r.output.no_knowledge
+    assert r.tool_results["route"] == "drop_all" and r.output.no_knowledge and r.tool_results["abstain_reason"] == "drop_all"
+    assert r.tool_results["kept"] == [] and r.tool_results["judge_p"] == [0.29, 0.0, 0.1]
 
 
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
@@ -128,8 +130,12 @@ def test_query_service_returns_the_pda_shape(pipe, monkeypatch):
     try:
         judged(monkeypatch, {"c1": 0.95, "c2": 0.1, "c4": 0.1})
         monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '152 bar [S1]", "citations": ["S1"]}'})
-        result = Q.query_service(service, {"question": "압력", "equipment_id": "EQ-0001"}, pipeline=pipe)
+        service.query_pipeline = pipe
+        result = service.query({"question": "압력", "equipment_id": "EQ-0001"})
         assert result["answer"].startswith("152 bar") and result["no_knowledge"] is False
         assert {"cited_card_ids", "safety_notices", "evidence", "scan", "review_queue"} <= set(result)
+        logged = json.loads(service.storage.pending_queries()[-1][2])["s30h_trace"]   # why it answered, kept in the MES log
+        assert logged["route"] == "confident" and logged["candidates"] == ["c1", "c2", "c4"] and logged["judge_p"] == [0.95, 0.1, 0.1]
+        assert logged["kept"] == ["c1"] and logged["abstain_reason"] == ""
     finally:
         service.storage.close()

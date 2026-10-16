@@ -119,8 +119,12 @@ class S30hPipeline:
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))
-        tool_results = {"answer_mode": "s30h", "route": route, "evidence": [r["chunk_id"] for r in ev2],
-                        "judge_p": [round(s, 4) for s in scores], "p_insuff": out.get("p_insuff"), "seconds": round(time.time() - t0, 2)}
+        # why it answered or abstained (MES query log): candidates with their judge P(>=2), what survived LO, the route,
+        # the model's decision probability and the abstain reason (drop_all / insufficient / no_cite / broken_json / threshold)
+        reason = ("drop_all" if route == "drop_all" else "threshold" if abstain and not res["abstain"] else res["reason"]) if abstain else ""
+        tool_results = {"answer_mode": "s30h", "route": route, "candidates": [r["chunk_id"] for r in ev],
+                        "judge_p": [round(s, 4) for s in scores], "kept": [r["chunk_id"] for r in ev2],
+                        "p_insuff": out.get("p_insuff"), "abstain_reason": reason, "seconds": round(time.time() - t0, 2)}
         return SimpleNamespace(mode="query", output=output, tool_results=tool_results)
 
     def warm(self, attempts=30, wait_s=10.0, sleep=time.sleep) -> list[str]:

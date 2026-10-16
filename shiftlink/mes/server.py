@@ -150,7 +150,8 @@ class MesService:
             "no_knowledge": result.get("no_knowledge"), "review_queue": result.get("review_queue"),
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
-            "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True})
+            "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True,
+            **({"s30h_trace": result["s30h_trace"]} if "s30h_trace" in result else {})})
         return result
 
     def record_scan(self, body: dict[str, Any]) -> dict[str, object]:

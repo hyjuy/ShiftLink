@@ -118,4 +118,5 @@ def query_service(service, body, *, pipeline=None):
     # A model request can take a minute; never hold the simulator lock during it.
     result = pipeline.run(prepared['request'].model_dump(mode='json'))
     return {**result.output.model_dump(mode='json'), 'scan': scan,
-            'evidence': prepared['evidence'], 'is_synthetic': True}
+            'evidence': prepared['evidence'], 'is_synthetic': True,
+            **({'s30h_trace': result.tool_results} if getattr(pipeline, 'answer_mode', None) == 's30h' else {})}

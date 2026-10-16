@@ -11,7 +11,7 @@ const {chromium}=require('playwright');
  assert.ok(await page.locator('.factory-banner').evaluate(e=>e.complete&&e.naturalWidth>0));
  assert.ok(await page.locator('#globalHeader').isHidden());
  await page.screenshot({path:'output/pda-memo-login.png'});
- await page.locator('#accountFace').click();await page.locator('#faceSetupReturn').click();assert.ok(await page.locator('#s-account').isVisible());
+ await page.locator('#accountFace').click();await page.locator('#navigationBack').click();assert.ok(await page.locator('#s-account').isVisible());
  await page.evaluate(()=>{S.operator={name:'시연 작업자',id:'local-review'};show('home');});
  assert.match(await page.locator('#homeWorkDate').innerText(),/[ABC]조/);
  assert.match(await page.locator('#homeShiftPeople').innerText(),/이전 근무자.*다음 근무자/);
@@ -33,12 +33,13 @@ const {chromium}=require('playwright');
  await page.locator('#headerHome').click();await page.locator('#toReport').click();
  const select=page.locator('#reportSelectAll');await select.check();await page.locator('#reportEquipment input').first().uncheck();assert.equal(await select.evaluate(e=>e.indeterminate),false);
  await page.locator('#reportWrite').click();assert.equal(await page.locator('#reportAuthor').inputValue(),'시연 작업자');
+ await page.locator('#reportSave').click();assert.ok(await page.locator('#reportSaveConfirm').isVisible());await page.locator('#reportSaveNo').click();
  await page.locator('#reportWorkDate').fill('2026-10-15');
  for(const [shift,start,end] of [['A','2026-10-15T08:00','2026-10-15T16:00'],['B','2026-10-15T16:00','2026-10-16T00:00'],['C','2026-10-15T00:00','2026-10-15T08:00']]){
  await page.locator('#reportShift').selectOption(shift);assert.deepEqual(await page.evaluate(()=>[$('reportStart').value,$('reportEnd').value]),[start,end]);}
  await page.screenshot({path:'output/pda-memo-report.png'});
  await page.locator('#navigationBack').click();assert.ok(await page.locator('#s-reportSelect').isVisible());await page.locator('#navigationBack').click();assert.ok(await page.locator('#s-home').isVisible());
- await page.locator('#toDashboard').click();assert.ok(await page.locator('#globalHeader').isHidden());assert.equal(await page.locator('#anAction').count(),0);
+ await page.locator('#toDashboard').click();assert.ok(await page.locator('#globalHeader').isVisible());assert.equal(await page.locator('#anAction').count(),0);assert.ok(await page.locator('.loss-legend').isVisible());
  const cards=await page.evaluate(()=>['dashHeld','anGap'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,h:r.height}}));assert.ok(cards[1].x>cards[0].x);assert.equal(cards[0].y,cards[1].y);assert.equal(cards[0].h,cards[1].h);
  await page.screenshot({path:'output/pda-memo-dashboard.png'});
  for(const width of [800,375]){await page.setViewportSize({width,height:800});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);await page.screenshot({path:'output/pda-memo-dashboard-'+width+'.png'});}
@@ -52,6 +53,8 @@ const {chromium}=require('playwright');
    const box=await back.boundingBox();assert.ok(box.width>=48&&box.height>=48,screen);
    assert.ok(box.x<=(width>700?64:32)&&box.y<160,`${screen}: ${JSON.stringify(box)}`);
    assert.equal(await page.locator('#backDock').count(),0);
+   for(const id of ['faceBack','scanClose','reportBack','faceSetupReturn'])assert.ok(await page.locator('#'+id).isHidden());
+   assert.equal(await back.evaluate(el=>getComputedStyle(el).borderTopWidth),'0px');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,screen);
    await back.focus();assert.equal(await page.evaluate(()=>document.activeElement.id),'navigationBack');
    if(['ctx','reportWrite','dashboard'].includes(screen))await page.screenshot({path:`output/pda-back-${screen}-${width}.png`});

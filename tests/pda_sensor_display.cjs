@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 class Element {
-  constructor() { this.children = []; this.parts = {}; this.textContent = ''; this.classList = {remove(){},toggle(){}}; }
+  constructor() { this.children = []; this.parts = {}; this.textContent = ''; this.classList = {remove(){},toggle(){},add(){}}; }
   set innerHTML(value) { this.children = []; this.parts = {}; }
   appendChild(child) { this.children.push(child); }
   append(...children) { this.children.push(...children); }
@@ -52,6 +52,18 @@ context.snapshot = snapshot;
     S.observations=[{signal:'hpu_pressure',value:155,unit:'bar',source:'manual'}];`,context);
   assert.equal(vm.runInContext('rankCards(S.eq).excluded.length',context),1);
   assert.equal(vm.runInContext('rankCards(S.eq, S.queryResponse.evidence.measurements).actions.length',context),1,'result ranking uses frozen evidence, not recovered live pressure');
+  vm.runInContext('setSensorsOpen(true)', context);
+  const frozenTime = nodes.metricsTime.textContent;
+  assert.match(nodes.equipmentMetrics.text(), /154\.845/);
+  snapshot.measurements[0].value = 160;
+  snapshot.simulated_at = '2026-10-07T06:19:00.000000+00:00';
+  await vm.runInContext('loadMesObservations(snapshot)', context);
+  assert.match(nodes.equipmentMetrics.text(), /154\.845/, 'open sensor panel keeps its values');
+  assert.equal(nodes.metricsTime.textContent, frozenTime, 'snapshot time stays fixed');
+  assert.equal(vm.runInContext('S.mes.readings[0].value',context), 160, 'live monitoring still updates');
+  vm.runInContext('setSensorsOpen(false);setSensorsOpen(true)',context);
+  assert.match(nodes.equipmentMetrics.text(), /160/, 'reopening captures current readings');
+  snapshot.measurements[0].value = 154.845;
   snapshot.measurements[0].quality = 'bad';
   await vm.runInContext('loadMesObservations(snapshot)',context);
   assert.doesNotMatch(nodes.ctxSensors.text(),/154\.845/);

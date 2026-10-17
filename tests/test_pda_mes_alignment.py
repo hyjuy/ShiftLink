@@ -68,7 +68,7 @@ const r = pda.usableReadings(fx.state, hpu);
 S.observations = r.kept;
 const dp = S.observations.find(o => o.signal === 'hpu_filter_dp');
 assert.ok(dp && dp.value > 1.2, 'injected anomaly is read from MES');
-assert.match(pda.obsView(dp).text, /▲ 상한 1.2 대비/);
+assert.match(pda.obsView(dp).text, /▲ 상한 1\.2 bar 대비 \+0\.3 bar/);
 assert.equal(pda.evalCondition({signal:'hpu_filter_dp_state', op:'==', value:'high'}).state, 'match');
 assert.equal(pda.evalCondition({signal:'hpu_filter_dp', op:'>', value:1.2, unit:'psi'}).state, 'unknown', 'unit mismatch stays unverified');
 assert.equal(pda.stateOf({min:0, max:1.2}, 1.2), 'normal', 'boundary is normal');

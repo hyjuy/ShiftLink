@@ -1,5 +1,5 @@
 // 증상 질의 대화(10/8 최재영 요청). node tests/pda_chat.cjs
-// 지키는 것: 메시지 하나 = /api/query 하나, 이전 대화를 보내지 않음 · 평소 안전 수칙은 접고 이상일 때만 펼침 · 인계 초안.
+// 지키는 것: 메시지 하나 = /api/query 하나, 이전 대화를 보내지 않음 · 안전 수칙은 상단 바에서 접어서 표시 · 인계 초안.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
@@ -10,7 +10,8 @@ class Element {
   set innerHTML(v) { this.children = []; this.parts = {}; }
   appendChild(c) { this.children.push(c); }
   querySelector(sel) { return this.parts[sel] ||= new Element(); }
-  addEventListener() {}
+  querySelectorAll(sel) { return [this.querySelector(sel + '1'), this.querySelector(sel + '2')]; }
+  addEventListener(name, fn) { (this.events ||= {})[name] = fn; }
   text() { return [this.textContent, ...this.children.map((x) => x.text()), ...Object.values(this.parts).map((x) => x.text())].join(' '); }
 }
 const nodes = {};
@@ -57,9 +58,22 @@ context.api = async (path, init) => {
   assert.deepEqual(sent[1].body, {question:'그럼 다음은?', equipment_id:'EQ-0001'}, '이전 대화를 모델에 넘기지 않는다');
   assert.equal(nodes.question.value, '', '직접 쓴 질문은 보낸 뒤 비운다');
 
-  // 3. 답 말풍선: 안전 카드 → 답 → 근거 카드 ID. 지식 없음은 그대로 말한다.
+  // 3. 안전 카드는 상단 바에만, 답 말풍선에는 해결 답변과 근거만 표시한다.
   const first = run('answerBody(S.chat[0])').text();
-  assert.ok(first.indexOf('K-1003') < first.indexOf('릴리프 밸브를 확인합니다'), '안전 카드가 답보다 앞(G2)');
+  assert.doesNotMatch(first, /K-1003|안전수칙 자세히/);
+  assert.match(first, /릴리프 밸브를 확인합니다/);
+  assert.match(nodes.askSafety.text(), /K-1003/);
+  assert.equal(nodes.askSafety.children[0].open, false, '이상·정지 상태에도 최초에는 접는다');
+  nodes.askSafety.children[0].open = true;
+  nodes.askSafety.children[0].events.toggle();
+  run("S.chat[0].ranked.safety[0].stop_conditions=['압력 해제 전 작업 중지'];renderAskSafety();");
+  assert.equal(nodes.askSafety.children[0].open, true, '안전 정보 갱신 후에도 펼침 상태 유지');
+  assert.match(nodes.askSafety.text(), /압력 해제 전 작업 중지/);
+  nodes.askSafety.children[0].open = false;nodes.askSafety.children[0].events.toggle();
+  run("S.chat.push({status:'done',ranked:{safety:[{card_id:'NEW',title:'새 수칙',know_how:'차단 확인',stop_conditions:[]}]}});renderAskSafety();");
+  assert.equal(nodes.askSafety.children[0].open, false);
+  assert.match(nodes.askSafety.text(), /새 수칙/);
+  run('S.chat.pop();');
   assert.match(first, /근거 카드 K-1001/);
   assert.match(run('answerBody(S.chat[1])').text(), /해당 지식 없음/);
   assert.equal(run('S.chat.length'), 2);

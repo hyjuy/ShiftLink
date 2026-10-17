@@ -346,7 +346,7 @@
   .chatmes .eqc{font-size:22px;font-weight:800;color:var(--tx)}
   .chatmes.bad{color:var(--fault-tx);background:var(--fault-bg);border-color:var(--fault)}
   .chatlog{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
-  .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요. 등록된 근거가 없으면 「해당 지식 없음」이라고 답합니다.";
+  .chatlog:empty::before{content:"아래 추천 질문을 누르거나 직접 적어 보내세요.";
     font-size:16px;color:var(--tx-2);line-height:1.5}
   .msg{max-width:92%;border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
   .msg.me{align-self:flex-end;background:var(--surface-2);border:1px solid var(--edge)}
@@ -799,7 +799,9 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 .number-button:hover,.number-button:focus-visible{background:var(--hover);border-color:var(--accent)}
 .workspace-controls{padding:12px 28px 0;gap:8px}
 .workspace-controls .btn{padding:0 16px;min-height:44px;font-size:14px;background:transparent;border-color:transparent;color:var(--tx-2)}
-.workspace-controls .btn[aria-pressed=true]{background:var(--surface);border-color:var(--edge);color:var(--accent)}
+.workspace-controls .btn[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:white}
+.workspace-controls .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.workspace-controls .btn svg{width:20px;height:20px;flex:0 0 20px}
 #s-ctx .equipment-workspace{padding:16px 28px;gap:8px}
 #s-ctx .equipment-functions,#s-ctx .equipment-mes,#s-ctx .chat-panel{border-color:var(--edge)}
 #s-ctx .equipment-functions{padding:20px 24px;gap:16px;justify-content:flex-start}
@@ -818,10 +820,35 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-ctx .equipment-mes .metric .label{font-size:14px;color:var(--tx-2)}
 #s-ctx .equipment-mes .metric .value{font-size:26px;line-height:40px;color:var(--tx)}
 #s-ctx .equipment-mes .metric.bad .value{color:var(--fault-tx)}
+.metric.idle{background:#F1F3F2;border-color:var(--edge)}.metric.idle .value{color:var(--tx-2);font-size:20px}
+.mes-head{display:flex;align-items:center;gap:6px}.mes-head h2{flex:1 1 auto;margin:0}
+.mes-ic{width:40px;height:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--edge);border-radius:8px;background:var(--surface);color:var(--tx-2)}
+.mes-ic svg{width:20px;height:20px}.mes-ic[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+#s-ctx .equipment-mes>.metric-grid{gap:1px;background:var(--edge);border:1px solid var(--edge);border-radius:8px;overflow-x:hidden;overflow-y:auto}
+#s-ctx .equipment-mes>.metric-grid>.metric{border-right:0;background:var(--surface)}
+#s-ctx .equipment-mes>.metric-grid>.metric.bad{border-radius:0}
+#s-ctx .equipment-mes>.metric-grid>.metric.idle{background:#F1F3F2}#s-ctx .equipment-mes .metric.idle .value{color:var(--tx-2);font-size:20px}
+#s-ctx .chat-panel .sugg{flex-wrap:wrap-reverse;align-content:flex-start;gap:6px}
+#s-ctx .chat-panel .sugg button{min-height:40px;padding:4px 10px}
+#s-ctx .equipment-functions .work-actions{margin-top:24px}
+#s-ctx .chat-panel #chatPane.centered-state{justify-content:flex-start}
+/* 20차: 분할 보기 정리 — MES 칸은 내용 높이만, 남는 높이는 설비 칸(버튼 아래 여백)으로 */
+#s-ctx .equipment-workspace.sensors-open{grid-template-rows:minmax(0,1fr) auto}
+#s-ctx .equipment-workspace.sensors-open .equipment-functions{padding-bottom:20px}
+#s-ctx .equipment-functions>.section-heading{align-items:center}
+#s-ctx .equipment-functions>.section-heading .btn{margin:0}
+#s-ctx .workspace-divider{cursor:col-resize}
+#obsList small{white-space:pre-line}
+.report-ask{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-2)}
+.report-ask p{flex:1 1 auto;margin:0;font-weight:600}
+.report-ask .btn{width:auto;min-width:72px;margin:0}
+#s-ctx .chat-panel #askSafety{padding:12px 14px 0;background:var(--surface);flex:0 0 auto;min-height:0;max-height:45%;overflow:auto}
+#s-ctx .chat-panel #askSafety:empty{display:none}
+#s-ctx .chat-panel #askSafety .safety-head{position:sticky;top:0;z-index:1}
+#s-ctx .chat-panel #askSafety summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#s-ctx .chat-panel #askSafety .safety-content{display:flex;flex-direction:column;gap:8px;padding:8px 0}
 #s-ctx #metricsTime{font-size:13px;color:var(--tx-2);overflow-wrap:anywhere}
 #s-ctx .workspace-divider{background:transparent;border:0;position:relative}
-#s-ctx .workspace-divider::after{content:'';position:absolute;inset:30% 2px;border-radius:2px;background:#9bb7aa}
-#s-ctx .workspace-divider:hover::after{background:var(--accent)}
 #s-ctx .chat-panel .safety-head{border-left-width:1px}
 #s-ctx .chat-panel .safety .body{font-weight:500;line-height:1.6;color:#704914}
 #s-ctx .chat-panel .safety{border-left-width:1px;border-radius:6px;padding:8px 12px}
@@ -899,9 +926,10 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
   .workspace-controls{padding:8px 12px 0;gap:4px}
   .workspace-controls .btn{padding:0 10px;font-size:13px;min-height:44px}
   #s-ctx .equipment-workspace{display:flex;flex-direction:column;padding:12px;overflow:auto}
-  #s-ctx .equipment-functions,#s-ctx .equipment-mes,#s-ctx .chat-panel{flex:0 0 auto;overflow:visible}
-  #s-ctx .equipment-mes>.metric-grid{max-height:none}
-  #s-ctx .chat-panel{min-height:480px;overflow:hidden}
+  #s-ctx .equipment-functions,#s-ctx .equipment-mes{flex:0 0 auto;overflow:visible}
+  #s-ctx .equipment-mes>.metric-grid{max-height:240px}
+  #s-ctx .chat-panel{height:660px;min-height:480px;overflow:hidden}
+  #s-ctx .chat-panel #chatPane{overflow-y:auto;flex:1;min-height:0}
   #s-ctx .equipment-workspace:not(.sensors-open){grid-template-rows:auto auto auto}
   #s-ctx .equipment-functions,#s-ctx .equipment-mes{padding:20px 16px}
   #s-ctx #workEquipment{font-size:20px}
@@ -1163,8 +1191,8 @@ button.ld-row:hover{background:var(--surface-2)}
 /* 11차 */
 #s-dashboard .dash-tile,#s-dashboard #anGap{gap:10px}
 #s-dashboard #anGap .an-flow>div{align-items:center;text-align:center}
-#globalHeader .btn.notify,.notify-floatwrap .notify{background:var(--accent);border-color:var(--accent);color:#fff}
-#globalHeader .btn.notify:hover{background:#1f5c57}
+#globalHeader .btn.notify.on,.notify-floatwrap .notify.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#globalHeader .btn.notify.on:hover{background:#1f5c57}
 
 /* 12차: 상자 안 가로선 + 숫자 가운데 */
 #s-dashboard .dash-tile{position:relative;min-height:112px;gap:0;padding:12px 14px 8px;justify-content:flex-start}
@@ -1292,16 +1320,16 @@ button.ld-row:hover{background:var(--surface-2)}
 
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
-    <div class="workspace-controls"><button class="btn sm ghost" id="expandEquipment" type="button" aria-pressed="false">장비 전체 보기</button><button class="btn sm ghost" id="splitWorkspace" type="button" aria-pressed="true">분할 보기</button><button class="btn sm ghost" id="expandChat" type="button" aria-pressed="false">채팅 전체 보기</button></div><div class="equipment-workspace" id="equipmentWorkspace">
+    <div class="workspace-controls"><button class="btn sm ghost" id="expandEquipment" type="button" aria-pressed="false" title="장비만 보기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="20" height="20" rx="3"/><rect x="5" y="5" width="8" height="14" rx="1" fill="currentColor" stroke="none"/></svg><span>장비</span></button><button class="btn sm ghost" id="splitWorkspace" type="button" aria-pressed="true" title="장비와 채팅 함께 보기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="20" height="20" rx="3"/><rect x="5" y="5" width="5.5" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="13.5" y="5" width="5.5" height="14" rx="1" fill="currentColor" stroke="none"/></svg><span>함께 보기</span></button><button class="btn sm ghost" id="expandChat" type="button" aria-pressed="false" title="채팅만 보기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="20" height="20" rx="3"/><rect x="11" y="5" width="8" height="14" rx="1" fill="currentColor" stroke="none"/></svg><span>채팅</span></button></div><div class="equipment-workspace" id="equipmentWorkspace">
       <div class="pane equipment-functions">
-        <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="btn sm ghost" id="toggleChat" type="button" aria-expanded="false">센서값 화면</button></div>
-        <p class="mesline" id="ctxMes" role="status">MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
+        <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="btn sm ghost" id="toggleChat" type="button" aria-expanded="false">센서값 열기</button></div>
+        <p class="mesline" id="ctxMes" role="status" hidden>MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
         <nav class="work-actions" aria-label="설비 작업"><button class="btn" id="toHandover" type="button">정비이력</button><button id="toDutyHandover" type="button" hidden>인계 사항 확인</button><button class="btn" id="toEquipmentReport" type="button">근무일지 작성</button></nav><button id="toAsk" type="button" hidden>채팅 열기</button><button id="toHandoverNew" type="button" hidden>인계 작성</button>
         <button class="ic workspace-back" id="ctxBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
         <button class="btn sm ghost" id="ctxEdit" type="button" hidden>설비 변경</button>
       </div>
       <section class="pane equipment-mes" aria-label="MES 센서 데이터">
-        <h2>MES 센서 데이터</h2><div id="equipmentMetrics" class="metric-grid"></div><p class="hint" id="metricsTime"></p>
+        <div class="mes-head"><h2>MES 센서 데이터</h2><button class="mes-ic" id="mesRefresh" type="button" aria-label="새로고침" title="최신 값으로 새로고침"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button></div><div id="equipmentMetrics" class="metric-grid" tabindex="0" role="region" aria-label="MES 센서값"></div><p class="hint" id="metricsTime"></p>
       </section>
       <div class="workspace-divider" role="separator" aria-label="설비와 채팅 너비 조절" aria-orientation="vertical" tabindex="0"></div><aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"></aside>
     </div>
@@ -1327,11 +1355,10 @@ button.ld-row:hover{background:var(--surface-2)}
     <div class="appbar"><button class="ic" id="askBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       <h1 style="color:var(--tx-2)">증상 질의</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <p class="chatmes" id="chatMes" role="status">MES 상태 확인 중…</p>
+    <div id="askSafety" aria-label="안전 수칙"></div>
     <div class="pane" id="chatPane">
-      <div id="askSafety"></div>
       <details class="fold" id="obsFold">
         <summary id="obsSummary">관측값 · 직접 입력</summary>
-        <p class="hint">답변에는 MES가 질의를 접수한 당시의 값을 기록합니다.</p>
         <div id="obsList" style="display:flex;flex-direction:column;gap:6px"></div>
         <button class="btn sm ghost" id="obsReload" type="button">MES 관측 다시 읽기</button>
         <p class="hint">MES에서 가져오지 못한 측정값은 직접 입력해 주세요. 같은 항목을 입력하면 직접 입력한 값이 화면 판정에 사용됩니다.</p>
@@ -1354,7 +1381,7 @@ button.ld-row:hover{background:var(--surface-2)}
       </div>
     </div>
     <div class="chat-cancel" id="chatCancelDock" hidden><button class="btn sm ghost" id="chatCancel" type="button">취소</button></div>
-    <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 숙련자·관리자 책임입니다.</span></div>
+    <div class="disclaimer"><span>⚠</span><span>보조 정보입니다. 최종 판단과 조치는 본인 책임입니다.</span></div>
   </section>
 
   <!-- 시도 기록 -->

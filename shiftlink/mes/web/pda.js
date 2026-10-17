@@ -51,13 +51,27 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // 화면용 단위 표기(데이터의 unit 값은 그대로 둔다). MES 대시보드 operator.js 의 unitText 와 같은 표.
 const UNIT_TEXT = { m_min: 'm/min', L_min: 'L/min', mm_s: 'mm/s', degC: '℃', pct: '%', bool: '', min: '분' };
 const unitText = (u) => (u in UNIT_TEXT ? UNIT_TEXT[u] : String(u || '').replace(/_/g, '/'));
+/* 화면용 짧은 이름. 구성(MES)의 name 은 그대로 둔다. */
+const SHORT_NAMES = {
+  '동일 조건 정상 대비 아이들러 회전 비율': '아이들러 회전 비율', '컨베이어 구동부 진동 RMS': '구동부 진동 RMS',
+  '컨베이어 모터 전류': '모터 전류', '컨베이어 속도': '벨트 속도',
+  '리턴 라인 유면 아래 잠김 깊이': '리턴 라인 잠김 깊이', '유면과 흡입 위치 높이차': '흡입 높이차',
+  '냉각기 통과 오일 유량': '냉각기 오일 유량', '축압기 가스측 운전 압력': '축압기 가스 압력', '축압기 유체측 압력': '축압기 유체 압력',
+  '감속기 오일 수분 함량': '오일 수분', '감속기 베어링 온도': '베어링 온도', '감속기 구동 전류': '구동 전류',
+  '감속기 오일 레벨': '오일 레벨', '감속기 표면 온도': '표면 온도', '감속기 회전속도': '회전속도', '감속기 진동 RMS': '진동 RMS',
+  '공기분사기 유출 압력': '분사기 압력', '차단기 L1극 표면 온도': 'L1극 온도', '차단기 L2극 표면 온도': 'L2극 온도', '차단기 L3극 표면 온도': 'L3극 온도'
+};
+const shortName = (n) => { const s = String(n || '').split(' (')[0]; return SHORT_NAMES[s] || s; };
 /* 신호 ID 대신 MES 구성의 한글 이름. 파생 <signal>_state 는 "이름 상태". */
 function signalName(sig) {
   const base = String(sig).replace(/_state$/, '');
   const spec = S.eq && S.eq.signals.find((x) => x.signal === base);
-  const name = spec ? String(spec.name || base).split(' (')[0] : base;
+  const name = spec ? shortName(spec.name || base) : base;
   return base !== sig ? name + ' 상태' : name;
 }
+/* 서버·카드 원문의 단위·신호 ID를 화면용으로(질의에는 원문을 그대로 보낸다). */
+const plain = (t) => String(t == null ? '' : t).replace(/\bdegC\b/g, '℃').replace(/\b(mm_s|m_min|L_min)\b/g, (u) => UNIT_TEXT[u]).replace(/(\d)\s*pct\b/g, '$1%')
+  .replace(/\b[a-z]{2,}(?:_[a-z0-9]+)+\b/g, (id) => (S.eq && S.eq.signals.some((x) => x.signal === id.replace(/_state$/, '')) ? signalName(id) : id));
 const obsText = (o) => signalName(o.signal) + ' ' + o.value + (unitText(o.unit) ? ' ' + unitText(o.unit) : '');
 
 
@@ -188,7 +202,7 @@ function show(name) {
   const backHost = $('globalHeader').hidden
     ? document.querySelector('#s-'+name+' > #scanState, #s-'+name+' > #faceState') || document.querySelector('#s-'+name+' > .appbar')
     : $('globalHeader');
-  if (backHost) {
+  if (backHost && !back.hidden) {
     backHost.prepend(back);
     if (backHost !== $('globalHeader')) backHost.classList.add('navigation-host');
   }
@@ -201,7 +215,7 @@ function show(name) {
     $('workEquipment').textContent=S.eq.code+' · '+S.eq.group;
     if(S.sensorsOpen===undefined)S.sensorsOpen=(S.faults||[]).some(f=>f.eq.equipment_id===S.eq.equipment_id);
     $('equipmentWorkspace').classList.toggle('sensors-open',!!S.sensorsOpen);
-    $('toggleChat').textContent=S.sensorsOpen?'센서값 닫기':'센서값 화면';$('toggleChat').setAttribute('aria-expanded',String(!!S.sensorsOpen));
+    $('toggleChat').textContent=S.sensorsOpen?'센서값 닫기':'센서값 열기';$('toggleChat').setAttribute('aria-expanded',String(!!S.sensorsOpen));
     renderMesStatus();renderChat();renderSymptoms();renderAskBlock();renderEquipmentMetrics();
   }
 }
@@ -244,8 +258,8 @@ function setContext(eq, source, extra) {
   S.sensorsOpen=(S.faults||[]).some(f=>f.eq.equipment_id===eq.equipment_id);S.sensorWasBad=false;
   S.scanId = (extra && extra.scanId) || null;
   S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.chat = [];
-  S.safetyView = null;
-  S.mes = null; S.mesExcluded = [];
+  S.safetyView = null; S.safetyOpen = false;
+  S.mes = null; S.mesExcluded = []; S.sensorSnapshot = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   try { localStorage.setItem('shiftlink.recent',JSON.stringify(S.recent)); } catch (_) {}
   renderContext(); renderRecent(); renderObsSignals(); renderObsList(); renderMesStatus();
@@ -480,7 +494,13 @@ function renderObsRange() {
 }
 const fmt = (v) => (v == null ? '—' : String(v));
 const num = (v) => String(Number(Number(v).toFixed(3)));
-const stamp = (v) => (v ? new Date(v).toLocaleTimeString('ko-KR', { hour12: false }) : '시각 없음');
+const fullStamp = (v) => {
+  if (!v) return '시각 없음';
+  const p = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' })
+    .formatToParts(new Date(v)).forEach((x) => { p[x.type] = x.value; });
+  return p.year + '년 ' + p.month + '월 ' + p.day + '일 ' + p.hour + '시 ' + p.minute + '분 ' + p.second + '초';
+};
+const stamp = (v) => (v ? new Date(v).toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', hour12: false }) : '시각 없음');
 
 /* MesCardAdapter 와 같은 판정. 경계값은 normal. 범위가 없으면 상태 없음. */
 function stateOf(spec, value) {
@@ -606,10 +626,10 @@ function obsView(o) {
   if (spec && spec.zeroStopped && o.value === 0 && S.mes && S.mes.operating !== 'running') return { st: 'stopped', text: '' };
   const st = stateOf(spec, o.value);
   if (st !== 'low' && st !== 'high') return { st: st, text: '' };
-  const bound = st === 'low' ? spec.min : spec.max, diff = o.value - bound;
-  const pct = bound ? ' (' + (diff > 0 ? '+' : '') + Math.round(diff / Math.abs(bound) * 100) + '%)' : '';
-  return { st: st, text: (st === 'low' ? '▼ 하한 ' : '▲ 상한 ') + num(bound) + ' 대비 '
-    + (diff > 0 ? '+' : '') + num(diff) + ' ' + unitText(o.unit) + pct };
+  const bound = st === 'low' ? spec.min : spec.max, diff = o.value - bound, u = unitText(o.unit);
+  const bu = u === '%' ? '%' : u ? ' ' + u : '', du = u === '%' ? '%p' : bu;   // 비율의 차이는 %p
+  return { st: st, text: (st === 'low' ? '▼ 하한 ' : '▲ 상한 ') + num(bound) + bu + ' 대비 '
+    + (diff > 0 ? '+' : '') + num(diff) + du };
 }
 
 function renderObsList() {
@@ -619,11 +639,8 @@ function renderObsList() {
   const out = rows.filter((r) => r.v.text);
   const head = document.createElement('p');
   head.className = 'hint';
-  head.textContent = S.mes
-    ? 'MES 관측 ' + S.observations.filter((o) => o.source === 'mes').length + '개 · 범위 이탈 ' + out.length + '개'
-      + (S.mesExcluded.length ? ' · 품질·시각 미충족 제외 ' + S.mesExcluded.length + '개(' + S.mesExcluded.map(signalName).join(', ') + ')' : '') + ' · ' + stamp(S.mes.at)
-    : 'MES 관측을 읽지 못했습니다. 직접 추가한 값만 사용합니다.';
-  box.appendChild(head);
+  head.textContent = 'MES 관측을 읽지 못했습니다. 직접 추가한 값만 사용합니다.';
+  if (!S.mes) box.appendChild(head);
   const mk = (r) => {
     const row = document.createElement('div');
     row.className = 'obs' + (r.v.text ? ' out' : '');
@@ -631,8 +648,10 @@ function renderObsList() {
       + '<button class="x" type="button" aria-label="삭제">✕</button>';
     const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
     row.querySelector('.mono').textContent = signalName(r.o.signal) + ' = ' + r.o.value + (unitText(r.o.unit) ? ' ' + unitText(r.o.unit) : '');
-    row.querySelector('small').textContent = (r.v.text ? r.v.text + ' · ' : r.v.st === 'stopped' ? '정지 중 0 · 정상 · ' : '')
-      + (r.o.source === 'manual' ? '직접 입력' : 'MES') + ' · ' + readingDetail(r.o, spec);
+    // 줄 나눔: 이탈·출처·정상 범위 / 측정 시각
+    row.querySelector('small').textContent = (r.v.text ? r.v.text + ' · ' : r.v.st === 'stopped' ? '정지 중 0 · ' : '')
+      + (r.o.source === 'manual' ? '직접 입력' : 'MES') + ' · 정상 범위 ' + fmt(spec.min) + '~' + fmt(spec.max) + ' ' + unitText(spec.unit)
+      + (r.o.observed_at ? '\n측정 ' + fullStamp(r.o.observed_at) : '');
     row.querySelector('.x').addEventListener('click', () => {
       S.observations.splice(S.observations.indexOf(r.o), 1);
       if (r.o.source === 'mes') S.obsRemoved.push(r.o.signal);
@@ -675,7 +694,7 @@ function renderMesStatus() {
   S.mes.diagnoses.forEach((d) => parts.push('증상 후보: ' + d.symptom));
   box.textContent = parts.join(' · ');
   const bad = out > 0 || (!!S.mes.fault && S.mes.fault !== 'normal');
-  if(bad&&!S.sensorWasBad){S.sensorsOpen=true;$('equipmentWorkspace').classList.toggle('sensors-open',true);$('toggleChat').textContent='센서값 닫기';$('toggleChat').setAttribute('aria-expanded','true');}
+  if (bad && !S.sensorWasBad && !S.sensorsOpen) setSensorsOpen(true);
   S.sensorWasBad=bad;
   box.classList.toggle('bad', bad);
   chatLine(chat, parts.join(' · '), bad || S.mes.alarms.length > 0);
@@ -765,7 +784,7 @@ function situation() {
   return S.observations.map((o) => ({ o: o, st: obsView(o).st })).filter((r) => r.st === 'low' || r.st === 'high')
     .map((r) => {
       const spec = S.eq.signals.find((x) => x.signal === r.o.signal) || {};
-      return { signal: r.o.signal, name: String(spec.name || r.o.signal).split(' (')[0], dir: r.st };
+      return { signal: r.o.signal, name: shortName(spec.name || r.o.signal), dir: r.st };
     });
 }
 
@@ -835,9 +854,8 @@ function renderSymptoms() {
   const sit = situation();
   // 이상은 감지됐지만 그 신호를 다루는 증상 카드가 없다 — 순서가 그대로인 이유를 알린다.
   const note = $('symptomNote');
-  note.hidden = !(sit.length && !related.length) && items.length > 0;
-  note.textContent = !items.length ? '이 설비에 등록된 추천 질문이 없습니다. 직접 적어 보내세요.'
-    : '맞는 증상 카드 없음 · ' + sit.map((x) => x.name + ' ' + (x.dir === 'low' ? '낮음' : '높음')).join(' · ') + ' — 직접 적어 보내세요';
+  note.hidden = items.length > 0;
+  note.textContent = '이 설비에 등록된 추천 질문이 없습니다. 직접 적어 보내세요.';
   const pending = chatPending();
   items.forEach((item) => {
     const b = document.createElement('button');
@@ -1004,7 +1022,7 @@ function safetyEl(c, opt) {
     ttl.textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
   } else if (c.missing) {
     ttl.textContent = c.card_id + ' · 로컬 카드 없음 — 카드 원문을 확인할 수 없어 현재 설비와 대조하지 못했습니다';
-  } else ttl.textContent = c.title;
+  } else ttl.textContent = plain(c.title);
   line.appendChild(ttl);
   d.appendChild(line);
   if (c.mismatch) {
@@ -1015,7 +1033,7 @@ function safetyEl(c, opt) {
   // 서버 공지의 멈춤 조건은 접지 않고 항목 바로 아래에 둔다(사용자 결정 원칙 2).
   if (!opt.noStops && opt.mark !== '빠짐') (c.mismatch ? [] : (c.stop_conditions || [])).forEach((t) => {
     const p = document.createElement('p');
-    p.className = 'stop'; p.textContent = '멈춤 · ' + t;
+    p.className = 'stop'; p.textContent = '멈춤 · ' + plain(t);
     d.appendChild(p);
   });
   return d;
@@ -1034,9 +1052,9 @@ function safetyMore(cards) {
       add('basis', '지침 숨김 — 다른 설비의 안전 지침이므로 표시하지 않습니다. 담당자 확인');
     } else {
       add('kid', c.missing ? c.card_id + ' · 로컬 카드 없음 · 설비 대조 불가' : c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade);
-      if (!c.missing) add('ttl', c.title);
-      add('basis', '근거 — ' + (c.safety_basis || '근거 미기재'));
-      if (!c.missing && c.know_how) add('body', c.know_how);
+      if (!c.missing) add('ttl', plain(c.title));
+      add('basis', '근거 — ' + plain(c.safety_basis || '근거 미기재'));
+      if (!c.missing && c.know_how) add('body', plain(c.know_how));
     }
     det.appendChild(s);
   });
@@ -1092,7 +1110,7 @@ function safetyStack(cards) {
   box.className = 'safety-stack';
   const bar = document.createElement('div');
   bar.className = 'safety-bar';
-  bar.textContent = safetyHead(cards, '작업 전 확인할 안전 수칙');
+  bar.textContent = safetyHead(cards, S.mes && S.mes.operating !== 'running' && safetyReason(true) !== '설비 이상' && safetyReason(true) !== '경보' && safetyReason(true) !== '증상 후보' ? '정지 중 — 작업 전 확인' : '작업 전 확인할 안전 수칙');
   box.appendChild(bar);
   const list = document.createElement('div'); list.className = 'safety-cards';
   cards.forEach((c) => list.appendChild(safetyEl(c)));
@@ -1101,35 +1119,56 @@ function safetyStack(cards) {
   return box;
 }
 
-/* 질의가 시작됐는가 — 대기 중이거나 답이 하나라도 있으면 이 질의의 안전사항은 말풍선 쪽에 있다. */
-const chatShowsSafety = () => chatPending() || !!lastAnswer();
 
 /* 대화 화면 위 상자 = 현재 설비의 안전 상태(원칙 4). 설비 code·MES 상태(safetyAlert)·이 설비 안전 수칙 건수.
  * 질의 전에는 카드 title 짧은 항목만, 질의가 시작되면 한 줄 상태로 줄인다. 전문(근거·know_how)은 싣지 않는다 —
  * 이 질의의 안전사항과 전문은 답 앞 묶음에 있다. 판정이 그대로면 다시 그리지 않는다. */
+/* 안전 상자 머리의 이유 — 정지·이상·경보·증상 후보·범위 이탈을 구분한다. */
+function safetyReason(hot) {
+  const m = S.mes;
+  if (!m) return 'MES 확인 불가';
+  if (!hot) return 'MES 정상';
+  if (m.fault && m.fault !== 'normal') return '설비 이상';
+  if ((m.alarms || []).length) return '경보';
+  if ((m.diagnoses || []).length) return '증상 후보';
+  if (m.operating !== 'running') return 'MES 정지 중 · 설비 이상 없음';
+  return '범위 이탈 또는 조건 일치';
+}
+/* 안전 수칙은 상단 바 한 곳에서 갱신한다. 사용자가 고른 펼침 상태는 갱신 중에도 유지한다. */
 function renderAskSafety() {
   const box = $('askSafety');
   if (!S.eq) { box.innerHTML = ''; S.safetyView = null; return; }
-  const safety = rankCards(S.eq).safety;
-  const hot = safetyAlert(S.mes, S.observations, safety);
-  const inChat = chatShowsSafety();
-  const view = S.eq.equipment_id + ':' + safety.map((c) => c.card_id).join(',') + ':' + hot + ':' + !!S.mes + ':' + inChat;
+  const base = rankCards(S.eq).safety;
+  const cards = base.slice();
+  S.chat.filter((t) => t.status === 'done' && t.ranked).forEach((t) => {
+    t.ranked.safety.forEach((c) => {
+      const i = cards.findIndex((x) => x.card_id === c.card_id);
+      if (i >= 0) cards[i] = c;
+      else cards.push(c);
+    });
+  });
+  const hot = safetyAlert(S.mes, S.observations, cards);
+  const reason = safetyReason(hot);
+  const view = JSON.stringify([S.eq.equipment_id, cards, reason]);
   if (view === S.safetyView) return;
   S.safetyView = view;
   box.innerHTML = '';
-  if (!safety.length) return;
   const g = document.createElement('details');
-  g.open=hot;
+  g.open = !!S.safetyOpen;
   g.className = 'safety-group safety-fold' + (hot ? ' hot' : '');
+  g.addEventListener('toggle', () => { S.safetyOpen = g.open; });
   const h = document.createElement('summary'); h.className = 'safety-head';
-  h.textContent = '⚠ ' + S.eq.code + ' · ' + (!S.mes ? 'MES 확인 불가' : hot ? 'MES 이상 또는 조건 일치' : 'MES 정상')
-    + ' · 이 설비 안전 수칙 ' + safety.length + '건' + (inChat ? ' — 이 질의의 안전사항은 답 앞에 있습니다' : '');
+  h.textContent = S.eq.code + ' · 안전 수칙 ' + cards.filter((c) => !c.mismatch).length + '건 · ' + reason;
   g.appendChild(h);
-  if (!inChat) {
-    const list = document.createElement('div'); list.className = 'safety-cards compact';
-    safety.forEach((c) => list.appendChild(safetyEl(c, {noStops: true})));
-    g.appendChild(list);
+  const content = document.createElement('div'); content.className = 'safety-content';
+  cards.forEach((c) => content.appendChild(safetyEl(c)));
+  if (cards.length) content.appendChild(safetyMore(cards));
+  else {
+    const empty = document.createElement('p');
+    empty.textContent = '등록된 안전 수칙이 없습니다. 작업 전 현장 안전 절차를 확인하세요.';
+    content.appendChild(empty);
   }
+  g.appendChild(content);
   box.appendChild(g);
 }
 
@@ -1240,34 +1279,28 @@ function actionEl(item, rank, tried) {
   return d;
 }
 
-/* 답 말풍선 하나. 순서는 이전 결과 화면과 같다: 안전 카드(해당될 때) → 답 → 근거 카드 ID(펼쳐 보기).
- * 안전 카드를 답보다 앞에 두는 것은 완료 게이트 G2 조건이라 대화형에서도 그대로 둔다. */
+/* 답 말풍선에는 해결 답변을 표시하고, 안전 카드는 상단 바에서만 제공한다. */
 function answerBody(turn) {
   const r = turn.ranked, res = turn.response;
   const d = document.createElement('div');
   const none = !res.review_queue && (res.no_knowledge === true || !res.answer);
   d.className = 'msg bot' + (none ? ' none' : '');
-  // 모든 답이 같은 구조(짧은 항목 + 자세히 하나). 직전 답과 비교해 같으면 한 줄로, 다르면 추가·변경·빠짐을 표시한다(원칙 5).
-  const done = S.chat.filter((t) => t.status === 'done');
-  const prev = done[done.indexOf(turn) - 1];
-  const prevSafety = prev && prev.ranked && prev.ranked.safety.length ? prev.ranked.safety : null;
-  if (r.safety.length) safetyGroup(r.safety, '이 답에 적용되는 안전 수칙', d, prevSafety);
   const answer = document.createElement('p');
   answer.className = 'ans lead';
   answer.textContent = res.review_queue ? '답변을 보류했습니다. 담당자 검토가 필요합니다.'
     : none ? '해당 지식 없음 — 이 질문에 맞는 근거 카드가 없어 추측으로 답하지 않습니다. 증상을 더 구체적으로 적거나 숙련자에게 문의해 주세요.'
-    : res.answer;
-  // 답과 다음 행동(인계 작성)을 한 줄에 — 버튼이 답 오른쪽에 붙어 세로 높이를 따로 먹지 않는다(A4). 인계 초안은 마지막 답에서만.
+    : plain(res.answer);
   const row = document.createElement('div'); row.className = 'ans-row';
   row.appendChild(answer);
   d.appendChild(row);
-  if (turn === lastAnswer()) {
-    const next = document.createElement('div'); next.className = 'ans-next';
-    const ho = document.createElement('button');
-    ho.type = 'button'; ho.className = 'btn primary'; ho.textContent = '이 대화로 인계 작성';
-    ho.addEventListener('click', () => openHandoverNew(chatMemo(turn)));
-    next.appendChild(ho);
-    row.appendChild(next);
+  // 지식 카드를 찾지 못한 답 — 이 대화로 근무일지를 쓸지 묻는다. 고른 뒤에는 다시 묻지 않는다.
+  if (none && !turn.reportAsked) {
+    const ask = document.createElement('div'); ask.className = 'report-ask';
+    ask.innerHTML = '<p>이 대화 내용으로 근무일지를 작성하시겠습니까?</p><button type="button" class="btn sm">아니오</button><button type="button" class="btn sm primary">네</button>';
+    const [no, yes] = ask.querySelectorAll('button');
+    no.addEventListener('click', () => { turn.reportAsked = 'no'; ask.remove(); });
+    yes.addEventListener('click', () => { turn.reportAsked = 'yes'; ask.remove(); reportFromChat(turn); });
+    d.appendChild(ask);
   }
 
   // 카드 답에서도 조치를 기록한다 — 본 카드 ID가 세션에 남아 대시보드 사건에 연결된다.
@@ -1666,9 +1699,6 @@ function botBubble(t) {
   const p = document.createElement('p'); p.className = 'ans';
   if (t.status === 'pending') {
     d.className = 'msg bot wait'; d.id = 'turn-' + t.id;
-    // 기다리는 동안 이 설비의 안전 카드를 먼저 보인다(E1). 대기 문구는 아는 것(경과 초)만 — 서버가 단계를 주지 않는다.
-    const safety = S.eq ? rankCards(S.eq).safety : [];
-    if (safety.length) safetyGroup(safety, '답을 기다리는 동안 확인 · 이 설비 안전 수칙', d);
     const row = document.createElement('div'); row.className = 'wait-row';
     p.textContent = waitText(t);
     row.appendChild(p);
@@ -1692,8 +1722,7 @@ function renderChat() {
   if (last) scrollToTurn(last);
 }
 
-/* 새 말풍선의 안전 묶음 머리를 pane 위에 맞춘다. 그러면 답(과 바로 아래 인계 작성)이 화면 밖이면
- * 그만큼만 더 내려 답이 보이게 한다 — 안전 카드가 많아 둘 다 못 들어갈 때는 답 쪽을 택한다(DOM 순서는 안전 → 답 그대로). */
+/* 새 답변을 대화 스크롤 안에 표시한다. 안전 바는 이 스크롤 밖에 있다. */
 function scrollToTurn(el) {
   const pane = $('chatPane');
   if (!pane || !el.getBoundingClientRect) return;
@@ -1893,15 +1922,29 @@ function metricElement(label, value, unit, bad) {
   if (unit) { const u = document.createElement('span'); u.className = 'unit'; u.textContent = unit; number.appendChild(u); }
   el.append(title,number); return el;
 }
+function setSensorsOpen(open) {
+  S.sensorsOpen = open;
+  S.sensorSnapshot = null;
+  $('equipmentWorkspace').classList.toggle('sensors-open', open);
+  $('toggleChat').textContent = open ? '센서값 닫기' : '센서값 열기';
+  $('toggleChat').setAttribute('aria-expanded', String(open));
+  renderEquipmentMetrics();
+}
 function renderEquipmentMetrics() {
   const box = $('equipmentMetrics'); if (!box || !S.eq) return; box.replaceChildren();
-  const measurements = S.mes ? (S.mes.readings || []) : [];
+  if (S.sensorsOpen && !S.sensorSnapshot && S.mes) S.sensorSnapshot = JSON.parse(JSON.stringify(S.mes));
+  const mes = S.sensorsOpen ? S.sensorSnapshot : S.mes;
+  const measurements = mes ? (mes.readings || []) : [];
   S.eq.signals.forEach((spec) => {
     const row = measurements.find((m) => m.signal === spec.signal);
     const state = row && stateOf(spec, row.value);
-    box.appendChild(metricElement(spec.name, row ? row.value : '—', unitText(spec.unit), state === 'low' || state === 'high'));
+    const idle = row && spec.zeroStopped && row.value === 0 && mes.operating !== 'running';
+    const el = idle ? metricElement(shortName(spec.name), '정지 중') : metricElement(shortName(spec.name), row ? num(row.value) : '—', unitText(spec.unit), state === 'low' || state === 'high');
+    if (idle) el.classList.add('idle');
+    box.appendChild(el);
   });
-  $('metricsTime').textContent = S.mes ? '측정 시각 · ' + S.mes.at : 'MES 데이터를 수신하지 못했습니다.';
+  $('metricsTime').textContent = mes ? '측정 시각 · ' + fullStamp(mes.at) + (S.sensorsOpen ? ' · 고정된 값' : '')
+    + (!S.mes ? ' · 현재 MES 연결 끊김' : '') : 'MES 데이터를 수신하지 못했습니다.';
 }
 function openHandover() {
   const pane = $('hoPane'); pane.replaceChildren();
@@ -2439,6 +2482,16 @@ function openEquipmentReport() {
     S.reportSelected=[S.eq.equipment_id];saveReportDraft();renderReportSelection();
   }
 }
+/* 지식 없음 답에서 「네」 — 현재 설비를 대상으로, 질문·답을 이상증상 기록 하나로 넣고 바로 작성 화면으로 간다. */
+function reportFromChat(turn) {
+  const eq=S.eq;if(!eq)return;
+  openEquipmentReport();
+  if(!S.reportSelected.includes(eq.equipment_id))S.reportSelected.push(eq.equipment_id);
+  S.reportRecords.push({type:'이상증상',equipment:[eq.equipment_id],story:chatMemo(turn),causes:[],result:null,pms:null,candidate:false});
+  saveReportDraft();enterReportWrite();
+  // 직접 작성으로 들어왔으므로 중간 대상 선택 화면은 뒤로가기 이력에서 제외한다.
+  if (navigationStack[navigationStack.length - 1] === 'reportSelect') navigationStack.pop();
+}
 function renderReportSelection() {
   const box=$('reportEquipment'); box.replaceChildren();
   const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],recentMaintenanceCodes());
@@ -2795,6 +2848,7 @@ on('ctxBack', () => show('home'));
 on('ctxEdit', startScan);
 on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('chat'); loadMesObservations(); });
 on('obsReload', () => loadMesObservations());
+on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = null; renderEquipmentMetrics(); });
 on('askBack', () => show('ctx'));
 on('doSearch', () => sendChat(currentQuestion()));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
@@ -2883,7 +2937,7 @@ divider.setAttribute('aria-valuemin','25');divider.setAttribute('aria-valuemax',
 divider.addEventListener('pointerdown',event=>{divider.setPointerCapture(event.pointerId);});
 divider.addEventListener('pointermove',event=>{if(!divider.hasPointerCapture(event.pointerId))return;const r=$('equipmentWorkspace').getBoundingClientRect();resizeWorkspace((event.clientX-r.left)/r.width*100);});
 divider.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();resizeWorkspace(Number(divider.getAttribute('aria-valuenow'))+(event.key==='ArrowRight'?5:-5));}});
-on('toggleChat',()=>{S.sensorsOpen=!S.sensorsOpen;show('ctx');});
+on('toggleChat', () => setSensorsOpen(!S.sensorsOpen));
 on('toDutyHandover',openHandover);on('toEquipmentReport',openEquipmentReport);
 on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('historyBack',()=>show('ctx'));
 on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',()=>$('reportSaveConfirm').showModal());on('reportSaveYes',()=>{$('reportSaveConfirm').close();saveReport();});on('reportSaveNo',()=>$('reportSaveConfirm').close());on('reportImport',importReportMes);
@@ -2981,6 +3035,7 @@ function paintNotify() {
   const un = unacked(S.faults || []).length;
   document.querySelectorAll('.notify').forEach((btn) => {
     const c = btn.querySelector('.notify-count');
+    btn.classList.toggle('on', un > 0);
     c.hidden = !un; c.textContent = un > 99 ? '99+' : String(un);
     btn.setAttribute('aria-label', '알림, 미확인 ' + un + '건');
   });
@@ -3322,7 +3377,7 @@ async function watchMes() {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
       S.snap=snap;S.snapshot=snap;tickProduction(snap);renderDash();if(S.screen==='home')renderHome();
-      if (S.eq) await loadMesObservations(snap);
+      if (S.eq) await loadMesObservations(snap);   // 화면의 고정 값과 별도로 최신 MES 상태를 감시한다
     } catch (err) { S.snapshot=null;if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
   }
   setTimeout(watchMes, WATCH_MS);

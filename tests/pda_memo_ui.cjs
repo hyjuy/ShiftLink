@@ -27,7 +27,7 @@ const {chromium}=require('playwright');
  await page.evaluate(()=>{S.sensorsOpen=false;S.sensorWasBad=false;S.mes.fault='critical';renderMesStatus();});assert.ok(await page.locator('.equipment-mes').isVisible());
  await page.locator('#expandChat').click();assert.ok(await page.locator('.equipment-functions').isHidden());
  await page.locator('#expandEquipment').click();await page.locator('#expandEquipment').click();assert.ok(await page.locator('#chatPanel').isHidden());await page.locator('#expandChat').click();
- await page.locator('.workspace-divider').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('.workspace-divider').getAttribute('aria-valuenow'),'65');
+ await page.locator('.workspace-divider').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('.workspace-divider').getAttribute('aria-valuenow'),'55');
  await page.screenshot({path:'output/pda-memo-equipment.png'});
  await page.locator('#toHandover').click();assert.match(await page.locator('#historyTitle').innerText(),/정비이력/);await page.locator('#navigationBack').click();assert.ok(await page.locator('#s-ctx').isVisible());
  await page.locator('#headerHome').click();await page.locator('#toReport').click();

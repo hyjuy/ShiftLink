@@ -158,7 +158,7 @@ class MesService:
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
             "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True,
             **({"s30h_trace": result["s30h_trace"]} if "s30h_trace" in result else {})})
-        return result
+        return {**result, "query_id": query_id}
 
     def record_scan(self, body: dict[str, Any]) -> dict[str, object]:
         """웹캠 CNN 확정 결과 {class, conf, device_id, ts} → 설비 기록 (작업계획 C2)."""

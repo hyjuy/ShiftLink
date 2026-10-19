@@ -129,6 +129,17 @@ def query_service(service, body, *, pipeline=None):
             pipeline = service.query_pipeline
     # A model request can take a minute; never hold the simulator lock during it.
     result = pipeline.run(prepared['request'].model_dump(mode='json'))
-    return {**result.output.model_dump(mode='json'), 'scan': scan,
+    output = result.output.model_dump(mode='json')
+    if output.get('review_queue') or output.get('validation_errors'):
+        knowledge_status = 'answer_withheld'
+    elif output.get('no_knowledge') and output.get('unverified_card_ids'):
+        knowledge_status = 'conditions_unverified'
+    elif output.get('no_knowledge'):
+        knowledge_status = 'no_applicable_card'
+    elif output.get('cited_card_ids'):
+        knowledge_status = 'answered'
+    else:
+        knowledge_status = 'unknown'
+    return {**output, 'scan': scan, 'query_context': context, 'knowledge_status': knowledge_status,
             'evidence': prepared['evidence'], 'is_synthetic': True,
             **({'s30h_trace': result.tool_results} if getattr(pipeline, 'answer_mode', None) == 's30h' else {})}

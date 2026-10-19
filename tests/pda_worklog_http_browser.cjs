@@ -62,7 +62,13 @@ const {chromium}=require('playwright');
     await page.locator('[data-key=worker]').fill('첫 조치 근무자');
     await page.locator('[data-key=performed_at]').fill('2026-10-16T09:20');
     await page.locator('[data-key=outcome]').selectOption('temporary');
-    await shot('write-1280');
+    for(const width of [1280,375]){
+      await page.setViewportSize({width,height:900});
+      await page.locator('[data-key=action]').scrollIntoViewIfNeeded();
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
+      await shot('write-'+width);
+    }
+    await page.setViewportSize({width:1280,height:900});
     const first=await save();
     const firstDetail=await (await page.request.get(base+'/api/work-reports/'+first.handover_id)).json();
     assert.equal(firstDetail.report.work_report.records[0].action_steps[0].worker,'첫 조치 근무자');
@@ -105,6 +111,8 @@ const {chromium}=require('playwright');
       await page.setViewportSize({width,height:900});
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
       await shot('detail-'+width);
+      await page.locator('#dutyPane .worklog-record').scrollIntoViewIfNeeded();
+      await shot('detail-record-'+width);
     }
     await page.locator('#dutyPane details').filter({has:page.locator('summary',{hasText:'같은 문제의 기록'})}).locator('summary').click();
     await page.waitForFunction(()=>document.querySelectorAll('.incident-history li').length===2);

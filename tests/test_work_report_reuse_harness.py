@@ -266,6 +266,8 @@ def test_query_link_cannot_move_between_incidents(service):
     followup = report(service, query_id, report_id='HO-FOLLOWUP')
     with pytest.raises(ValueError, match='another incident'): service.record_work_report(followup)
     followup['work_report']['records'][0]['incident_id'] = incident_id
+    with pytest.raises(ValueError, match='이전 인계 기록'): service.record_work_report(followup)
+    followup['work_report']['records'][0]['followup_from'] = {'handover_id':note['handover_id'],'record_index':0}
     saved = service.record_work_report(followup)
     assert saved['candidates'][0]['incident_id'] == incident_id
     assert len(service.incident(incident_id)['incident']['queries']) == 1

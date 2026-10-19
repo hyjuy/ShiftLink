@@ -282,7 +282,6 @@ function renderContext() {
   const open = S.handovers.flatMap((h) => h.open_items || [])
     .filter((it) => String(it.text).includes(S.eq.code) && !['closed', 'done', 'withdrawn'].includes(it.status)).length;
   $('ctxHoNote').textContent = open ? '이 설비 처리·재확인 필요 ' + open + '건' : '이 설비의 남은 인계 항목 없음';
-  $('toHandover').classList.toggle('warn', open > 0);
 }
 
 function renderRecent() {
@@ -1299,7 +1298,7 @@ function answerBody(turn) {
   // 답 본문: 첫 문장은 제목처럼, 나머지는 설명으로. 「근거:」 줄은 답 아래 기준 줄로 옮긴다. 글은 바꾸지 않는다.
   const parts = res.review_queue || none ? null : answerParts(plain(res.answer));
   if (parts) {
-    answer.textContent = parts.title;
+    answer.textContent = parts.title; answer.classList.add('bul');   // 첫 문장도 나머지와 같은 글머리 기호·크기·굵기
     if (parts.items.length) {
       const ul = document.createElement('ul'); ul.className = 'ans-list';
       parts.items.forEach((t) => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
@@ -3640,7 +3639,7 @@ $('reportAuthor').addEventListener('input',()=>{
   input.dataset.workerDefault=worker;
 });
 ['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
-on('eqListX',()=>$('eqListModal').close());on('eqListClose',()=>$('eqListModal').close());$('eqListModal').addEventListener('click',(e)=>{if(e.target===$('eqListModal'))$('eqListModal').close();});
+on('eqListX',()=>$('eqListModal').close());on('ilDetailX',()=>$('ilDetail').close());on('ilDetailClose',()=>$('ilDetail').close());$('ilDetail').addEventListener('click',(e)=>{if(e.target===$('ilDetail'))$('ilDetail').close();});on('eqListClose',()=>$('eqListModal').close());$('eqListModal').addEventListener('click',(e)=>{if(e.target===$('eqListModal'))$('eqListModal').close();});
 on('reportResumeLoad',()=>{$('reportResume').close();enterReportWrite();});on('reportResumeNew',()=>{$('reportResume').close();resetReportForm();enterReportWrite();});on('notifyBell',toggleNotify);on('notifyFloat',toggleNotify);on('logout',()=>{$('logoutConfirm').showModal();$('logoutConfirm').focus();});on('logoutNo',()=>$('logoutConfirm').close());on('logoutYes',()=>{$('logoutConfirm').close();saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
 on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));
 $('accountForm').addEventListener('submit',async(event)=>{
@@ -4011,25 +4010,22 @@ $('homeWatch').addEventListener('click', (e) => {
   if (!w) return;
   openIncidents(w.code + ' ' + w.label, w.incidents); S.dlFrom = 'home';
 });
-/* 반복 증상 → 근무일지 이력(10/19 시안). 근무일지 항목 순서: 발생 시각 · 관찰 내용(상황·증상) · 원인 검토(원인·판단 근거)
- * · 조치 내용 · 조치 결과 · 조치 상태 · 인계 기록 · 참고 카드. 요약은 발생·재발·총 정지·원인 확인 수. */
+/* 반복 증상 → 조치 이력(10/19 시안 KakaoTalk_20261019_165205843). 표: 발생 시각 · 증상 · 원인 · 조치·결과 · 상태·후속 조치 · 상세보기.
+ * 전체 건을 다 보이고 화면을 밀어서 본다(스크롤바 없음). 상세보기는 그 사건의 근무일지 전체(근거·조치 단계별 결과·인계·카드)를 팝업으로. */
 const IL_STATE = { recurred: 'miss', watching: 'unknown', held: 'match', open: 'open' };
 const recurText = (days) => { const h = Math.round(days * 24); return Math.floor(h / 24) + '일 ' + (h % 24) + '시간 후'; };
-function ilList(items, mark) {
-  if (!items.length) return null;
-  const ul = document.createElement('ul'); ul.className = 'il-steps';
-  items.forEach((it, i) => {
-    const li = document.createElement('li'), tag = mark(it, i);
-    if (tag) li.appendChild(tag); else li.classList.add('bare');
-    const t = document.createElement('span'); t.textContent = it.text; li.appendChild(t);
-    if (it.sub) { const s = document.createElement('small'); s.textContent = it.sub; li.appendChild(s); }
-    ul.appendChild(li);
-  });
-  return ul;
+// 화면에 쓰는 원인 = 추정·확인한 것(배제는 원인이 아님을 확인한 기록이라 뺀다)
+const ilCauses = (i) => (i.causes && i.causes.length ? i.causes : i.cause ? [{certainty: null, note: i.cause, evidence: ''}] : []).filter((c) => c.certainty !== '배제');
+const ilSteps = (i) => i.action_steps && i.action_steps.length ? i.action_steps : i.action ? [{action: i.action, observed_result: ''}] : [];
+function ilState(i) {
+  const pill = document.createElement('span'), [word] = AN_OUTCOME[i.outcome] || ['', ''];
+  pill.className = 'il-state ' + (IL_STATE[i.outcome] || ''); pill.textContent = word;
+  return pill;
 }
 function openIncidents(title, ids) {
   S.dlFrom = null;   // 대시보드에서 열면 '이전'은 대시보드로(홈에서 열 때만 호출한 쪽이 'home'으로 바꾼다)
   const want = new Set(ids), list = S.an.incidents.filter((i) => want.has(i.incident_id));
+  S.ilList = list; S.ilTitle = title;
   const pane = $('dlPane'); pane.replaceChildren();
   $('dlTitle').textContent = title;
   const eqId = list[0] && list[0].equipment_id, eq = S.equipment.find((e) => e.equipment_id === eqId);
@@ -4046,7 +4042,7 @@ function openIncidents(title, ids) {
   const tiles = document.createElement('div'); tiles.className = 'il-tiles';
   [['발생', list.length, '회', ''], ['재발', list.filter((i) => i.outcome === 'recurred').length, '회', 'bad'],
     ['총 정지', Math.round(list.reduce((n, i) => n + i.down_min, 0)), '분', ''],
-    ['원인 확인', done.filter((i) => (i.causes || []).some((c) => c.certainty === '확인')).length, '/ ' + done.length + '건', '']]
+    ['원인 확인', done.filter((i) => ilCauses(i).some((c) => c.certainty === '확인')).length, '/ ' + done.length + '건', '']]
     .forEach(([t, n, unit, cls]) => {
       const d = document.createElement('div'); d.className = 'il-tile ' + cls;
       d.innerHTML = '<span class="t"></span><span class="n"><b></b><small></small></span>';
@@ -4054,67 +4050,107 @@ function openIncidents(title, ids) {
       tiles.appendChild(d);
     });
   pane.appendChild(tiles);
-  // 근무일지 이력 표
-  const box = document.createElement('section'); box.className = 'il-box';
-  box.innerHTML = '<h2>근무일지 이력 <small>· 최신순</small></h2><div class="il-scroll"><table class="il-table"><thead><tr>'
-    + ['발생 시각', '관찰 내용', '원인 검토', '조치 내용', '조치 결과', '조치 상태', '인계 기록', '참고 카드'].map((h) => '<th scope="col">' + h + '</th>').join('')
+  const box = document.createElement('section'); box.className = 'il-box'; box.id = 'ilBox';
+  pane.appendChild(box);
+  renderIncidentTable(eq);
+  show('dashList');
+}
+function renderIncidentTable(eq) {
+  const box = $('ilBox'), list = S.ilList || [], shown = list;
+  box.innerHTML = '<div class="il-box-head"><h2>조치 이력</h2><span class="il-count"></span></div><div class="il-scroll"><table class="il-table"><thead><tr>'
+    + ['발생 시각', '증상', '원인', '조치·결과', '경과', '상세보기'].map((h) => '<th scope="col">' + h + '</th>').join('')
     + '</tr></thead><tbody></tbody></table></div>';
+  box.querySelector('.il-count').textContent = '전체 ' + list.length + '건 · 최신순';
+  requestAnimationFrame(alignIncidentRows);
   const body = box.querySelector('tbody');
   const none = () => { const s = document.createElement('span'); s.className = 'il-none'; s.textContent = '기록 없음'; return s; };
-  const num = (it, i) => { const s = document.createElement('span'); s.className = 'il-no'; s.textContent = i + 1; return s; };
-  list.forEach((i) => {
+  shown.forEach((i) => {
     const tr = document.createElement('tr'); if (i.outcome === 'open') tr.className = 'open';
     const td = () => { const c = document.createElement('td'); tr.appendChild(c); return c; };
     const when = td(); when.innerHTML = '<b></b><small></small>';
     when.querySelector('b').textContent = mdhm(i.alarm_at);
     when.querySelector('small').textContent = '정지 ' + Math.round(i.down_min) + '분' + (i.outcome === 'open' ? '째' : '');
     const story = td(); if (i.story) story.textContent = i.story; else story.appendChild(none());
-    const causes = (i.causes && i.causes.length ? i.causes : i.cause ? [{certainty: null, note: i.cause, evidence: ''}] : [])
-      .map((c) => ({text: c.note, sub: c.evidence, certainty: c.certainty}));
-    const steps = i.action_steps && i.action_steps.length ? i.action_steps : i.action ? [{action: i.action, observed_result: ''}] : [];
-    const cell = (items, mark) => { const c = td(), ul = ilList(items, mark); c.appendChild(ul || none()); };
-    cell(causes, (it) => { if (!it.certainty) return null; const s = document.createElement('span'); s.className = 'il-cert ' + ({확인: 'ok', 추정: 'guess', 배제: 'out'}[it.certainty] || ''); s.textContent = it.certainty; return s; });
-    cell(steps.map((s) => ({text: s.action})), num);
-    cell(steps.filter((s) => s.observed_result).length ? steps.map((s) => ({text: s.observed_result || '—'})) : [], num);
-    const st = td(), pill = document.createElement('span'), [word] = AN_OUTCOME[i.outcome] || ['', ''];
-    pill.className = 'il-state ' + (IL_STATE[i.outcome] || '');
-    // 재발은 두 줄: '재발' / 'N일 N시간 후' — 칸 폭을 넘지 않게
-    if (i.outcome === 'recurred' && i.recurred_after_days != null) { pill.textContent = word; const b = document.createElement('small'); b.textContent = recurText(i.recurred_after_days); pill.appendChild(b); }
-    else pill.textContent = word;
-    st.appendChild(pill);
-    const ho = td();
-    if (i.handover_id) ho.textContent = i.handover_id;
+    // 원인: 추정·확인한 원인만(배제는 뺀다). 조치·결과와 같은 칸 나눔 — 원인(진하게) / 근거(연하게)
+    const causes = ilCauses(i), cause = td();
+    if (!causes.length) cause.appendChild(none());
+    causes.forEach((c) => {
+      const d = document.createElement('div'); d.className = 'il-step';
+      d.innerHTML = '<b></b>' + (c.evidence ? '<small></small>' : '');
+      d.querySelector('b').textContent = c.note; if (c.evidence) d.querySelector('small').textContent = c.evidence;
+      cause.appendChild(d);
+    });
+    // 조치·결과: 단계마다 조치(진하게)와 결과(연하게)
+    const steps = ilSteps(i), act = td();
+    if (!steps.length) act.appendChild(none());
+    steps.forEach((s) => {
+      const d = document.createElement('div'); d.className = 'il-step';
+      d.innerHTML = '<b></b>' + (s.observed_result ? '<small></small>' : '');
+      d.querySelector('b').textContent = s.action; if (s.observed_result) d.querySelector('small').textContent = s.observed_result;
+      act.appendChild(d);
+    });
+    // 경과: 상태 배지 + 재발까지 걸린 시간
+    const st = td(); st.appendChild(ilState(i));
+    if (i.outcome === 'recurred' && i.recurred_after_days != null) { const f = document.createElement('small'); f.className = 'il-follow'; f.textContent = recurText(i.recurred_after_days); st.appendChild(f); }
     else if (i.outcome === 'open' && eq) {
       const w = document.createElement('button'); w.type = 'button'; w.className = 'il-write'; w.textContent = '근무일지 작성 ›';
       w.addEventListener('click', () => { setContext(eq, 'manual_selection', {}); openEquipmentReport(); });
-      ho.appendChild(w);
-    } else ho.textContent = '—';
-    const card = td();
-    if (i.card_id) { const c = document.createElement('span'); c.className = 'il-card'; c.textContent = i.card_id; card.appendChild(c); } else card.textContent = '—';
+      st.appendChild(w);
+    }
+    // 상세보기 — 인계 표의 상세보기 버튼과 같은 모양
+    const dt = td(), b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn sm handover-detail'; b.title = '상세보기';
+    b.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>';
+    b.setAttribute('aria-label', mdhm(i.alarm_at) + ' 조치 기록 상세');
+    b.addEventListener('click', () => openIncidentDetail(i));
+    dt.appendChild(b);
     body.appendChild(tr);
   });
-  pane.appendChild(box);
-  show('dashList');
-  requestAnimationFrame(alignIncidentRows);
 }
-/* 원인 검토·조치 내용·조치 결과의 같은 번째 항목을 같은 줄에서 시작하게 높이를 맞춘다(행마다, 항목 순서끼리). */
+/* 원인 칸과 조치·결과 칸의 같은 번째 항목을 같은 줄에서 시작하게(행마다 항목 높이·칸 전체 높이를 맞춘다). */
 function alignIncidentRows() {
   document.querySelectorAll('#dlPane .il-table tbody tr').forEach((tr) => {
-    const lists = [...tr.querySelectorAll('.il-steps')];
-    lists.forEach((ul) => [...ul.children].forEach((li) => { li.style.minHeight = ''; }));
-    const n = Math.max(0, ...lists.map((ul) => ul.children.length));
+    const cells = [tr.children[2], tr.children[3]].filter(Boolean);
+    const lists = cells.map((td) => [...td.querySelectorAll(':scope > .il-step')]);
+    lists.flat().forEach((el) => { el.style.minHeight = ''; });
+    const n = Math.max(0, ...lists.map((l) => l.length));
     for (let k = 0; k < n; k++) {
-      const items = lists.map((ul) => ul.children[k]).filter(Boolean);
-      const h = Math.max(...items.map((li) => li.getBoundingClientRect().height));
-      items.forEach((li) => { li.style.minHeight = h + 'px'; });
+      const items = lists.map((l) => l[k]).filter(Boolean);
+      const h = Math.max(...items.map((el) => el.getBoundingClientRect().height));
+      items.forEach((el) => { el.style.minHeight = h + 'px'; });
     }
-    // 항목 수가 달라도 세 칸 목록 높이를 같게 — 세로 가운데 정렬에서도 첫 항목이 같은 줄에서 시작한다
-    lists.forEach((ul) => { ul.style.minHeight = ''; });
-    const top = Math.max(0, ...lists.map((ul) => ul.getBoundingClientRect().height));
-    lists.forEach((ul) => { ul.style.minHeight = top + 'px'; });
+    // 항목 수가 달라도 첫 항목이 같은 줄 — 마지막 항목 아래를 채워 두 칸 내용 높이를 같게
+    const tail = lists.map((l) => l[l.length - 1]).filter(Boolean);
+    const total = (l) => l.reduce((t, el) => t + el.getBoundingClientRect().height, 0) + Math.max(0, l.length - 1) * 6;
+    const max = Math.max(0, ...lists.map(total));
+    lists.forEach((l) => { const last = l[l.length - 1]; if (last) last.style.minHeight = (last.getBoundingClientRect().height + max - total(l)) + 'px'; });
   });
 }
 window.addEventListener('resize', () => { if (S.screen === 'dashList') alignIncidentRows(); });
+/* 조치 기록 상세 — 근무일지 항목 그대로: 증상(상황·증상), 원인(확신도·근거), 조치·결과(단계), 상태, 인계 기록, 참고 카드 */
+function openIncidentDetail(i) {
+  const d = $('ilDetail'), body = $('ilDetailBody');
+  $('ilDetailTitle').textContent = mdhm(i.alarm_at) + ' · ' + eqCode(i.equipment_id) + ' ' + (i.label || '');
+  body.replaceChildren();
+  const row = (label, fill) => { const r = document.createElement('div'); r.className = 'ild-row'; const k = document.createElement('span'); k.className = 'k'; k.textContent = label; const v = document.createElement('div'); v.className = 'v'; fill(v); r.append(k, v); body.appendChild(r); };
+  const text = (s) => (v) => { if (s) v.textContent = s; else { v.textContent = '기록 없음'; v.classList.add('il-none'); } };
+  row('정지', text('정지 ' + Math.round(i.down_min) + '분' + (i.affected && i.affected.length ? ' · 연쇄 정지 ' + i.affected.map(eqCode).join(', ') : '')));
+  row('증상', text(i.story));
+  row('원인', (v) => {
+    const cs = ilCauses(i); if (!cs.length) return text('')(v);
+    cs.forEach((c) => { const x = document.createElement('div'); x.className = 'ild-item bare'; const t = document.createElement('span'); t.textContent = c.note; x.appendChild(t);
+      if (c.evidence) { const e = document.createElement('small'); e.textContent = c.evidence; x.appendChild(e); } v.appendChild(x); });
+  });
+  row('조치·결과', (v) => {
+    const ss = ilSteps(i); if (!ss.length) return text('')(v);
+    ss.forEach((s, n) => { const x = document.createElement('div'); x.className = 'ild-item'; const no = document.createElement('span'); no.className = 'il-no'; no.textContent = n + 1; const t = document.createElement('span'); t.textContent = s.action; x.append(no, t);
+      if (s.observed_result) { const e = document.createElement('small'); e.textContent = s.observed_result; x.appendChild(e); } v.appendChild(x); });
+  });
+  row('상태', (v) => { v.appendChild(ilState(i)); if (i.outcome === 'recurred' && i.recurred_after_days != null) v.append(' ' + recurText(i.recurred_after_days)); });
+  row('인계 기록', text(i.handover_id));
+  row('참고 카드', (v) => { const card = i.card_id && S.cards.find((c) => c.card_id === i.card_id); text(i.card_id ? i.card_id + (card ? ' · ' + plain(card.title) : '') : '')(v); });
+  d.showModal();
+}
 on('dlBack', () => {   // 홈 '지켜볼 설비'에서 왔으면 홈으로
   const to = S.dlFrom || 'dashboard'; S.dlFrom = null;
   show(to); if (to === 'dashboard') renderAnalytics();

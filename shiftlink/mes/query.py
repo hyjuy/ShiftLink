@@ -81,8 +81,8 @@ def judge_model_status(host=None, name=None, timeout=3.0):
 
 
 def query_service(service, body, *, pipeline=None):
-    if not isinstance(body, dict) or set(body) - {'question', 'equipment_id', 'scan_id', 'k'}:
-        raise ValueError('query body must contain question and optional equipment_id, scan_id, k')
+    if not isinstance(body, dict) or set(body) - {'question', 'equipment_id', 'scan_id', 'k', 'incident_id'}:
+        raise ValueError('query body must contain question and optional equipment_id, scan_id, k, incident_id')
     question = body.get('question')
     if not isinstance(question, str) or not question.strip() or len(question) > 4000:
         raise ValueError('question must be a nonblank string of at most 4000 characters')
@@ -102,6 +102,18 @@ def query_service(service, body, *, pipeline=None):
                 raise ValueError('equipment scan changed; scan again before asking')
             equipment_id = scan['equipment_id']
         config = service.active_config
+        equipment = next((eq for eq in config.equipment if eq.equipment_id == equipment_id and eq.active), None)
+        if equipment is None:
+            raise ValueError('equipment_id must name active equipment')
+        incident_id = body.get('incident_id')
+        if 'incident_id' in body:
+            if not isinstance(incident_id, str) or not incident_id.strip() or len(incident_id) > 64:
+                raise ValueError('incident_id must be a nonblank string of at most 64 characters')
+            incident = service.storage.get_incident(incident_id)
+            if incident is None or incident['assets'].get(equipment_id) != equipment.asset_id:
+                raise ValueError('incident does not match the selected equipment/asset')
+        context = {'config_id': config.config_id, 'equipment_id': equipment_id, 'asset_id': equipment.asset_id,
+                   'incident_id': incident_id}
         # Only these fields reach MesCardAdapter. Scenario labels and ground truth are excluded.
         snap = asdict(service.engine.snapshot)
         visible = {key: snap[key] for key in ('run_id', 'line_id', 'simulated_at', 'measurements', 'active_alarms')}

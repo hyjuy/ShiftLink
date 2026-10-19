@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict');
+const pda=require('../shiftlink/mes/web/pda.js');
+assert.equal(pda.reportLocalDateTime(new Date('2026-10-14T15:30:00Z')),'2026-10-15T00:30');
+assert.equal(pda.reportCalendarDays(2028,1).filter(day=>day.inMonth).length,29);
+assert.ok(pda.reportCalendarDays(2028,1).some(day=>day.date==='2028-02-29'&&day.inMonth));
+const equipment=[{equipment_id:'EQ-1',code:'HPU-01'}];
+const draft={ids:['EQ-1'],author:'작업자',start:'2026-10-15T08:00',end:'2026-10-15T17:00',memo:'',context:'',records:[],workType:'정상 근무',remarks:'특이사항 없음'};
+const note=pda.selectedReportPayload(draft,equipment);
+assert.equal(note.work_report.work_type,'정상 근무');assert.equal(note.work_report.remarks,'특이사항 없음');
+assert.match(note.memo_text,/근무 유형: 정상 근무/);assert.match(note.memo_text,/추가 메모: 특이사항 없음/);
+assert.throws(()=>pda.selectedReportPayload({...draft,workType:''},equipment),/유형/);
+assert.equal(pda.selectedReportPayload({...draft,remarks:' '},equipment).work_report.remarks,'');
+console.log('PASS: Korea today default, leap-day calendar, required work type and optional normal-shift remarks and payload preservation');

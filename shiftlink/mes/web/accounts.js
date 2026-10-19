@@ -14,6 +14,7 @@
     token = value;
     try { if (token) sessionStorage.setItem(storageKey, token); else sessionStorage.removeItem(storageKey); } catch (_) { /* In-memory session still works. */ }
     $("admin-open").textContent = token ? "계정 관리" : "관리자 로그인";
+    $("admin-logout").hidden = !token;
     $("admin-title").textContent = token ? "작업자 계정 관리" : "관리자 로그인";
     loginForm.hidden = Boolean(token);
     $("admin-management").hidden = !token;

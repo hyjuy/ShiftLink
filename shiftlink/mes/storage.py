@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import json
 import sqlite3
+from hashlib import sha256
 from contextlib import nullcontext
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
@@ -13,6 +14,7 @@ from typing import Any, Iterable
 from uuid import uuid4
 
 from .contracts import Alarm, EquipmentState, GroundTruth, Measurement, Run, RuntimeEvent, Snapshot
+from .work_reports import has_incident
 
 
 def _json_default(value: object) -> object:
@@ -91,6 +93,15 @@ class MesStorage:
             CREATE TABLE IF NOT EXISTS handover_outbox (
                 handover_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS incidents (
+                incident_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
+                equipment_ids TEXT NOT NULL, assets TEXT NOT NULL, config_id TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS incident_records (
+                handover_id TEXT NOT NULL, record_index INTEGER NOT NULL, incident_id TEXT NOT NULL,
+                PRIMARY KEY (handover_id, record_index),
+                FOREIGN KEY (handover_id) REFERENCES handover_outbox(handover_id),
+                FOREIGN KEY (incident_id) REFERENCES incidents(incident_id));
+            CREATE INDEX IF NOT EXISTS incident_records_incident ON incident_records(incident_id);
             CREATE TABLE IF NOT EXISTS query_log (
                 query_id TEXT PRIMARY KEY, created_at TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL);
@@ -99,12 +110,30 @@ class MesStorage:
                 status TEXT NOT NULL, card TEXT NOT NULL, review_flags TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS card_draft_records (
                 handover_id TEXT PRIMARY KEY, draft_id TEXT NOT NULL, relation TEXT NOT NULL, created_at TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS card_draft_reviews (
+                review_id INTEGER PRIMARY KEY AUTOINCREMENT, draft_id TEXT NOT NULL,
+                revision INTEGER NOT NULL, action TEXT NOT NULL, status TEXT NOT NULL,
+                reviewer_id TEXT NOT NULL, reviewer_name TEXT NOT NULL, reason TEXT NOT NULL,
+                created_at TEXT NOT NULL, UNIQUE(draft_id,revision),
+                FOREIGN KEY (draft_id) REFERENCES card_drafts(draft_id));
             CREATE TABLE IF NOT EXISTS query_evidence (
                 run_id TEXT NOT NULL, simulated_at TEXT NOT NULL, equipment_id TEXT NOT NULL,
                 evidence TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY (run_id, simulated_at, equipment_id));
             CREATE TABLE IF NOT EXISTS resolution_sessions (
                 session_id TEXT PRIMARY KEY, created_at TEXT NOT NULL, equipment_id TEXT NOT NULL,
                 status TEXT NOT NULL, data TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS work_report_sensor_evidence (
+                handover_id TEXT PRIMARY KEY, evidence TEXT NOT NULL,
+                FOREIGN KEY (handover_id) REFERENCES handover_outbox(handover_id));
+            CREATE TABLE IF NOT EXISTS incident_queries (
+                incident_id TEXT NOT NULL, query_id TEXT NOT NULL,
+                PRIMARY KEY (incident_id, query_id), FOREIGN KEY (incident_id) REFERENCES incidents(incident_id),
+                FOREIGN KEY (query_id) REFERENCES query_log(query_id));
+            CREATE TABLE IF NOT EXISTS work_report_candidates (
+                handover_id TEXT NOT NULL, record_index INTEGER NOT NULL, query_id TEXT, draft_id TEXT, reason TEXT NOT NULL,
+                PRIMARY KEY (handover_id, record_index),
+                FOREIGN KEY (handover_id, record_index) REFERENCES incident_records(handover_id, record_index),
+                FOREIGN KEY (query_id) REFERENCES query_log(query_id), FOREIGN KEY (draft_id) REFERENCES card_drafts(draft_id));
         """)
         self.connection.commit()
 
@@ -113,6 +142,104 @@ class MesStorage:
         self._check_handover(body)
         with self.connection:
             return self._insert_handover(body)
+
+    def save_work_report(self, body: dict[str, Any], assets: dict[str, str], config_id: str,
+                         candidates: dict[int, dict[str, Any]] | None = None,
+                         sensor_evidence: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Save the immutable report and its fault references in the same transaction."""
+        self._check_handover(body)
+        with self.connection:
+            saved = self._insert_handover(body)
+            # Retrying a legacy report must not invent incidents retroactively.
+            if not saved["duplicate"]:
+                if sensor_evidence is not None:
+                    self.connection.execute("INSERT INTO work_report_sensor_evidence VALUES (?, ?)",
+                                            (body['handover_id'], _dump(sensor_evidence)))
+                for index, record in enumerate(body["work_report"]["records"]):
+                    if not has_incident(record):
+                        continue
+                    equipment_ids = sorted(record["equipment"])
+                    targets = {eq: assets[eq] for eq in equipment_ids}
+                    incident_id = record.get("incident_id")
+                    if incident_id is not None:
+                        row = self.connection.execute(
+                            "SELECT assets FROM incidents WHERE incident_id = ?", (incident_id,)).fetchone()
+                        if row is None or json.loads(row[0]) != targets:
+                            raise ValueError("Incident not found or equipment/asset does not match")
+                    else:
+                        incident_id = "INC-" + uuid4().hex
+                        self.connection.execute("INSERT INTO incidents VALUES (?, ?, ?, ?, ?)",
+                            (incident_id, saved["created_at"], _dump(equipment_ids), _dump(targets), config_id))
+                    self.connection.execute("INSERT INTO incident_records VALUES (?, ?, ?)",
+                                            (body["handover_id"], index, incident_id))
+                    if candidates is not None:
+                        decision = candidates[index]
+                        query_id, draft = decision["query_id"], decision["draft"]
+                        if query_id:
+                            self.connection.execute("INSERT OR IGNORE INTO incident_queries VALUES (?, ?)",
+                                                    (incident_id, query_id))
+                        draft_id = None
+                        if draft is not None:
+                            draft_id = draft["card"]["card_id"]
+                            draft["review_flags"]["work_report"]["incident_id"] = incident_id
+                            draft["card"]["provenance"]["sources"].append({"source_id":incident_id, "locator":"incident"})
+                            # Keep internal references outside the API's 64-character handover ID space.
+                            source_ref = "work-report-record:" + sha256(f"{body['handover_id']}:{index}".encode()).hexdigest()
+                            self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)",
+                                (draft_id, source_ref, saved["created_at"], draft["status"],
+                                 _dump(draft["card"]), _dump(draft["review_flags"])))
+                            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
+                                                    (source_ref, draft_id, saved["created_at"]))
+                        self.connection.execute("INSERT INTO work_report_candidates VALUES (?, ?, ?, ?, ?)",
+                                                (body["handover_id"], index, query_id, draft_id, decision["reason"]))
+            return {**saved, "incidents": self.report_incidents(body["handover_id"]),
+                    "candidates": self.work_report_candidates(report_id=body["handover_id"]),
+                    "server_sensor_evidence": self.work_report_sensors(body["handover_id"])}
+
+    def work_report_sensors(self, report_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute("SELECT evidence FROM work_report_sensor_evidence WHERE handover_id = ?",
+                                      (report_id,)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def work_report_candidates(self, *, report_id: str | None = None, incident_id: str | None = None) -> list[dict[str, Any]]:
+        rows = self.connection.execute(
+            "SELECT c.handover_id, c.record_index, r.incident_id, c.query_id, c.draft_id, c.reason "
+            "FROM work_report_candidates c JOIN incident_records r USING (handover_id, record_index) "
+            "WHERE (? IS NULL OR c.handover_id = ?) AND (? IS NULL OR r.incident_id = ?) "
+            "ORDER BY r.rowid", (report_id, report_id, incident_id, incident_id))
+        return [{"handover_id":h, "record_index":i, "incident_id":inc, "query_id":q, "draft_id":d, "reason":reason}
+                for h, i, inc, q, d, reason in rows]
+
+    def report_incidents(self, handover_id: str) -> list[dict[str, Any]]:
+        return [{"record_index": index, "incident_id": incident_id} for index, incident_id in
+                self.connection.execute("SELECT record_index, incident_id FROM incident_records "
+                                        "WHERE handover_id = ? ORDER BY record_index", (handover_id,))]
+
+    def get_incident(self, incident_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute("SELECT created_at, equipment_ids, assets, config_id FROM incidents "
+                                      "WHERE incident_id = ?", (incident_id,)).fetchone()
+        if row is None:
+            return None
+        records = [{"handover_id": report_id, "record_index": index, "created_at": created_at,
+                    "record": json.loads(payload)["work_report"]["records"][index],
+                    "required_context": json.loads(payload).get('required_context',{})} for report_id, index, created_at, payload in
+                   self.connection.execute("SELECT r.handover_id, r.record_index, h.created_at, h.payload "
+                                           "FROM incident_records r JOIN handover_outbox h USING (handover_id) "
+                                           "WHERE r.incident_id = ? ORDER BY r.rowid",
+                                           (incident_id,))]
+        return {"incident_id": incident_id, "created_at": row[0], "equipment_ids": json.loads(row[1]),
+                "assets": json.loads(row[2]), "config_id": row[3], "records": records,
+                "queries": [{**json.loads(payload), "query_id":query_id} for query_id, payload in self.connection.execute(
+                    "SELECT q.query_id, q.payload FROM query_log q JOIN incident_queries i USING (query_id) "
+                    "WHERE i.incident_id = ? ORDER BY q.created_at, q.query_id", (incident_id,))],
+                "candidates": self.work_report_candidates(incident_id=incident_id)}
+
+    def list_incidents(self, limit: int = 30) -> list[dict[str, Any]]:
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise ValueError("limit must be 1..100")
+        ids = self.connection.execute("SELECT incident_id FROM incidents ORDER BY created_at DESC, incident_id LIMIT ?",
+                                      (limit,)).fetchall()
+        return [self.get_incident(incident_id) for (incident_id,) in ids]
 
     @staticmethod
     def _check_handover(body: object) -> None:
@@ -246,14 +373,38 @@ class MesStorage:
         return {"handover_id": handover_id, "created_at": row[0], "status": row[1],
                 "payload": json.loads(row[2])} if row else None
 
-    def list_work_reports(self, limit: int = 30) -> list[dict[str, Any]]:
+    def get_card_draft(self, draft_id: str) -> dict[str, Any] | None:
+        row=self.connection.execute('SELECT draft_id,handover_id,created_at,status,card,review_flags FROM card_drafts WHERE draft_id=?',(draft_id,)).fetchone()
+        if row is None:return None
+        reviews=[dict(zip(('revision','action','status','reviewer_id','reviewer_name','reason','created_at'),review)) for review in
+                 self.connection.execute('SELECT revision,action,status,reviewer_id,reviewer_name,reason,created_at FROM card_draft_reviews WHERE draft_id=? ORDER BY revision',(draft_id,))]
+        return {'draft_id':row[0],'handover_id':row[1],'created_at':row[2],'status':row[3],
+                'card':json.loads(row[4]),'review_flags':json.loads(row[5]),'reviews':reviews,
+                'revision':reviews[-1]['revision'] if reviews else 0}
+
+    def review_card_draft(self,draft_id: str,action: str,status: str,reason: str,revision: int,actor: dict) -> dict:
+        with self.connection:
+            draft=self.get_card_draft(draft_id)
+            if draft is None:raise KeyError('후보를 찾을 수 없습니다.')
+            if draft['revision']!=revision:raise HandoverConflictError('다른 관리자가 먼저 처리했습니다. 최신 내용을 다시 불러와 주세요.')
+            self.connection.execute('UPDATE card_drafts SET status=? WHERE draft_id=?',(status,draft_id))
+            self.connection.execute('INSERT INTO card_draft_reviews (draft_id,revision,action,status,reviewer_id,reviewer_name,reason,created_at) VALUES (?,?,?,?,?,?,?,?)',
+                (draft_id,revision+1,action,status,actor['id'],actor['name'],reason,datetime.now().astimezone().isoformat()))
+        return self.get_card_draft(draft_id)
+
+    def list_work_reports(self, limit: int = 30, offset: int = 0) -> list[dict[str, Any]]:
         if type(limit) is not int or not 1 <= limit <= 100:
             raise ValueError("limit must be 1..100")
+        if type(offset) is not int or offset < 0:
+            raise ValueError("offset must be a nonnegative integer")
         rows = self.connection.execute(
             "SELECT created_at, status, payload FROM handover_outbox "
             "WHERE json_extract(payload, '$.kind') = 'work_log' "
-            "ORDER BY created_at DESC, handover_id DESC LIMIT ?", (limit,))
-        return [{**json.loads(payload), "created_at": created_at, "status": status}
+            "ORDER BY created_at DESC, handover_id DESC LIMIT ? OFFSET ?", (limit,offset))
+        return [{**json.loads(payload), "created_at": created_at, "status": status,
+                 "incidents": self.report_incidents(json.loads(payload)["handover_id"]),
+                 "candidates": self.work_report_candidates(report_id=json.loads(payload)["handover_id"]),
+                 "server_sensor_evidence": self.work_report_sensors(json.loads(payload)["handover_id"])}
                 for created_at, status, payload in rows]
 
     def pending_handovers(self) -> list[tuple[str, str, str]]:
@@ -272,7 +423,15 @@ class MesStorage:
         with self.connection:
             self.connection.execute("INSERT INTO query_log (query_id, created_at, payload) VALUES (?, ?, ?)",
                                     (query_id, datetime.now().astimezone().isoformat(), _dump(record)))
+            incident_id = (record.get("query_context") or {}).get("incident_id")
+            if incident_id:
+                self.connection.execute("INSERT INTO incident_queries VALUES (?, ?)", (incident_id, query_id))
         return query_id
+
+    def get_query(self, query_id: str) -> dict[str, Any] | None:
+        row = self.connection.execute("SELECT created_at, status, payload FROM query_log WHERE query_id = ?",
+                                      (query_id,)).fetchone()
+        return {"query_id":query_id, "created_at":row[0], "status":row[1], "payload":json.loads(row[2])} if row else None
 
     def pending_queries(self) -> list[tuple[str, str, str]]:
         return self.connection.execute(

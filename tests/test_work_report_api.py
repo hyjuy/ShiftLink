@@ -48,7 +48,7 @@ class WorkReportApiTests(unittest.TestCase):
         self.assertEqual(caught.exception.code,409);caught.exception.close()
     def test_invalid_records_rejected_on_both_save_routes(self):
         variants=[]
-        for field,value in [('equipment',[]),('story',' '),('candidate','yes')]:
+        for field,value in [('equipment',[]),('story',' '),('candidate','yes'),('occurred_at','not-a-date'),('occurred_at',123),('occurred_at','2026-10-15')]:
             note=deepcopy(self.note);note['work_report']['records'][0][field]=value;variants.append(note)
         note=deepcopy(self.note);note['work_report']['records'][0]['causes'][0]['equipment']=['UNKNOWN'];variants.append(note)
         for path in ['/api/work-reports','/api/handover']:
@@ -57,6 +57,11 @@ class WorkReportApiTests(unittest.TestCase):
                     with self.assertRaises(HTTPError) as caught: self.request(path,note)
                     self.assertEqual(caught.exception.code,400);caught.exception.close()
         self.assertEqual(self.service.storage.pending_handovers(),[])
+    def test_occurrence_timestamp_roundtrip(self):
+        self.note['work_report']['records'][0]['occurred_at'] = '2026-10-15T09:20'
+        self.request('/api/work-reports',self.note)
+        saved = self.request('/api/work-reports/HO-REPORT-API')['report']
+        self.assertEqual(saved['work_report']['records'][0]['occurred_at'],'2026-10-15T09:20')
     def test_normal_report_and_missing_or_nonreport_detail(self):
         note=deepcopy(self.note);note['work_report']['records']=[];note['memo_text']='별도 작성 내용 없음'
         self.request('/api/work-reports',note)
@@ -94,5 +99,145 @@ class WorkReportApiTests(unittest.TestCase):
             self.request('/api/work-reports',self.note,base)
             self.assertEqual(self.request('/api/work-reports',base=base)['reports'][0]['work_report'],self.note['work_report'])
         finally: proxy.shutdown();worker.join();proxy.server_close()
+
+    def test_fault_records_create_distinct_incidents_and_keep_candidate_intent(self):
+        note = deepcopy(self.note)
+        record = note['work_report']['records'][0]
+        other = deepcopy(record)
+        other['candidate'] = False
+        note['work_report']['records'] += [other, {**deepcopy(record), 'type': 'PMS 정비'}]
+        saved = self.request('/api/work-reports', note)
+        links = saved['incidents']
+        self.assertEqual([link['record_index'] for link in links], [0, 1])
+        self.assertNotEqual(links[0]['incident_id'], links[1]['incident_id'])
+        incident = self.request('/api/incidents/' + links[0]['incident_id'])['incident']
+        self.assertEqual(incident['equipment_ids'], sorted(record['equipment']))
+        self.assertEqual(incident['records'][0]['record'], record)
+        self.assertEqual(incident['records'][0]['handover_id'], note['handover_id'])
+        self.assertEqual(self.service.storage.list_card_drafts(), [])
+        detail = self.request('/api/work-reports/' + note['handover_id'])['report']
+        self.assertEqual(detail['incidents'], links)
+        self.assertEqual(self.request('/api/work-reports')['reports'][0]['incidents'], links)
+        self.assertEqual(self.service.storage.get_handover(note['handover_id'])['payload'], note)
+
+    def test_incident_retry_restart_and_handover_route(self):
+        saved = self.request('/api/handover', self.note)
+        self.stop(); self.start()
+        retry = self.request('/api/work-reports', self.note)
+        self.assertTrue(retry['duplicate'])
+        self.assertEqual(retry['incidents'], saved['incidents'])
+        self.assertEqual(len(self.request('/api/incidents')['incidents']), 1)
+        self.assertEqual(self.request('/api/incidents/' + saved['incidents'][0]['incident_id'])['incident']['records'][0]['record'],
+                         self.note['work_report']['records'][0])
+
+    def test_explicit_incident_continuation_and_same_equipment_new_fault(self):
+        first = self.request('/api/work-reports', self.note)['incidents'][0]['incident_id']
+        note = deepcopy(self.note)
+        note['handover_id'] = 'HO-CONTINUED'
+        note['work_report']['records'][0]['incident_id'] = first
+        note['work_report']['records'][0]['followup_from'] = {'handover_id':self.note['handover_id'],'record_index':0}
+        self.assertEqual(self.request('/api/work-reports', note)['incidents'][0]['incident_id'], first)
+        self.assertEqual(len(self.request('/api/incidents/' + first)['incident']['records']), 2)
+        note['handover_id'] = 'HO-NEW-FAULT'
+        del note['work_report']['records'][0]['incident_id']
+        del note['work_report']['records'][0]['followup_from']
+        self.assertNotEqual(self.request('/api/work-reports', note)['incidents'][0]['incident_id'], first)
+
+    def test_report_pages_keep_older_reports_reachable(self):
+        for index in range(3):
+            note=deepcopy(self.note);note['handover_id']=f'HO-PAGE-{index}'
+            self.request('/api/work-reports',note)
+        first=self.request('/api/work-reports?limit=2&offset=0')['reports']
+        second=self.request('/api/work-reports?limit=2&offset=2')['reports']
+        self.assertEqual(len(first),2);self.assertEqual(len(second),1)
+        self.assertEqual(len({h['handover_id'] for h in first+second}),3)
+        with self.assertRaises(HTTPError) as caught:self.request('/api/work-reports?offset=-1')
+        self.assertEqual(caught.exception.code,400);caught.exception.close()
+
+    def test_invalid_incident_reference_rolls_back_whole_report(self):
+        from dataclasses import replace
+        first = self.request('/api/work-reports', self.note)['incidents'][0]['incident_id']
+        for suffix, change in [('unknown', {'incident_id': 'INC-missing'}),
+                               ('equipment', {'incident_id': first, 'equipment': self.note['equipment_ids'][:1]}),
+                               ('nonfault', {'incident_id': first, 'type': 'PMS 정비'}),
+                               ('badtype', {'incident_id': 123}), ('blank', {'incident_id': ''})]:
+            note = deepcopy(self.note)
+            note['handover_id'] = 'HO-BAD-' + suffix
+            note['work_report']['records'].append({**deepcopy(note['work_report']['records'][0]), **change,
+                'followup_from':{'handover_id':self.note['handover_id'],'record_index':0}})
+            with self.subTest(suffix=suffix):
+                with self.assertRaises(HTTPError) as caught:
+                    self.request('/api/work-reports', note)
+                self.assertEqual(caught.exception.code, 400); caught.exception.close()
+                self.assertIsNone(self.service.storage.get_handover(note['handover_id']))
+                self.assertEqual(len(self.request('/api/incidents')['incidents']), 1)
+        eq = self.service.active_config.equipment[0]
+        self.service.active_config = replace(self.service.active_config,
+            equipment=(replace(eq, asset_id=eq.asset_id + '-replacement'), *self.service.active_config.equipment[1:]))
+        note = deepcopy(self.note); note['handover_id'] = 'HO-REPLACED'
+        note['work_report']['records'][0]['incident_id'] = first
+        note['work_report']['records'][0]['followup_from'] = {'handover_id':self.note['handover_id'],'record_index':0}
+        with self.assertRaises(HTTPError) as caught: self.request('/api/work-reports', note)
+        self.assertEqual(caught.exception.code, 400); caught.exception.close()
+        self.assertIsNone(self.service.storage.get_handover(note['handover_id']))
+
+    def test_nonfault_and_legacy_reports_do_not_gain_invented_incidents(self):
+        self.service.storage.save_handover(self.note)
+        self.assertEqual(self.request('/api/work-reports', self.note)['incidents'], [])
+        note = deepcopy(self.note); note['handover_id'] = 'HO-PMS'
+        note['work_report']['records'][0]['type'] = 'PMS 정비'
+        self.assertEqual(self.request('/api/work-reports', note)['incidents'], [])
+        self.assertEqual(self.request('/api/incidents')['incidents'], [])
+        with self.assertRaises(HTTPError) as caught: self.request('/api/incidents/INC-missing')
+        self.assertEqual(caught.exception.code, 404); caught.exception.close()
+        for limit in ('0', '101', 'nope'):
+            with self.assertRaises(HTTPError) as caught: self.request('/api/incidents?limit=' + limit)
+            self.assertEqual(caught.exception.code, 400); caught.exception.close()
+
+    def test_incident_creation_rolls_back_on_database_failure(self):
+        self.service.storage.connection.execute(
+            "CREATE TRIGGER reject_incident BEFORE INSERT ON incidents BEGIN SELECT RAISE(ABORT, 'test failure'); END")
+        import sqlite3
+        with self.assertRaises(sqlite3.IntegrityError): self.service.record_work_report(self.note)
+        self.assertIsNone(self.service.storage.get_handover(self.note['handover_id']))
+        self.assertEqual(self.service.incidents()['incidents'], [])
+
+    def test_concurrent_retries_create_only_one_incident(self):
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=4) as workers:
+            replies = list(workers.map(lambda _: self.request('/api/work-reports', self.note), range(4)))
+        self.assertEqual(sum(not reply['duplicate'] for reply in replies), 1)
+        self.assertTrue(all(reply['incidents'] == replies[0]['incidents'] for reply in replies))
+        self.assertEqual(len(self.request('/api/incidents')['incidents']), 1)
+
+    def test_legacy_database_upgrade_preserves_report_without_backfill(self):
+        import sqlite3
+        old_path = Path(self.directory.name) / 'legacy.sqlite3'
+        with sqlite3.connect(old_path) as connection:
+            connection.execute("CREATE TABLE handover_outbox (handover_id TEXT PRIMARY KEY, created_at TEXT NOT NULL, "
+                               "status TEXT NOT NULL DEFAULT 'pending', payload TEXT NOT NULL)")
+            connection.execute("INSERT INTO handover_outbox VALUES (?, ?, 'uploaded', ?)",
+                               (self.note['handover_id'], '2026-10-15T08:00:00+09:00',
+                                json.dumps(self.note, ensure_ascii=False, sort_keys=True)))
+        connection.close()
+        storage = MesStorage(old_path)
+        try:
+            self.assertEqual(storage.get_handover(self.note['handover_id'])['payload'], self.note)
+            self.assertEqual(storage.list_work_reports()[0]['incidents'], [])
+            self.assertEqual(storage.list_incidents(), [])
+            self.assertTrue(storage.save_work_report(self.note, {}, 'current')['duplicate'])
+        finally:
+            storage.close()
+
+    def test_pi_proxy_exposes_incident_detail(self):
+        proxy = ThreadingHTTPServer(('127.0.0.1', 0), make_handler(self.base))
+        worker = threading.Thread(target=proxy.serve_forever); worker.start()
+        try:
+            base = f'http://127.0.0.1:{proxy.server_port}'
+            saved = self.request('/api/work-reports', self.note, base)
+            incident_id = saved['incidents'][0]['incident_id']
+            self.assertEqual(self.request('/api/incidents/' + incident_id, base=base)['incident']['incident_id'], incident_id)
+        finally:
+            proxy.shutdown(); worker.join(); proxy.server_close()
 
 if __name__=='__main__':unittest.main()

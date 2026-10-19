@@ -1,0 +1,47 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {spawn}=require('node:child_process');
+const {once}=require('node:events');
+const {chromium}=require('playwright');
+(async()=>{
+ const root=path.resolve(__dirname,'..'),env={...process.env,PYTHONPATH:[root,path.join(root,'.test-deps'),process.env.PYTHONPATH||''].join(path.delimiter),PYTHONDONTWRITEBYTECODE:'1'};
+ const child=spawn('python',['tests/typed_report_server.py'],{cwd:root,env,stdio:['pipe','pipe','pipe']});
+ let diagnostics='';child.stderr.on('data',data=>diagnostics+=data.toString());
+ const metadata=await new Promise((resolve,reject)=>{let buffer='';const timer=setTimeout(()=>reject(new Error('Test server startup timeout: '+diagnostics)),20000);child.stdout.on('data',data=>{buffer+=data.toString();if(buffer.includes('\n')){clearTimeout(timer);try{resolve(JSON.parse(buffer.split('\n')[0]))}catch(error){reject(error)}}});child.once('exit',code=>{clearTimeout(timer);reject(new Error('Test server exited '+code+': '+diagnostics))});});
+ const base='http://127.0.0.1:'+metadata.port,artifact=path.join(root,'artifacts/typed-work-report-20261016');
+ const browser=await chromium.launch({channel:'chrome',headless:true});
+ try{
+ const page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const html=fs.readFileSync(path.join(root,'shiftlink/mes/web/pda.html'),'utf8').replace(/<script[\s\S]*?<\/script>/g,'');
+ await page.route(base+'/pda.html',route=>route.fulfill({contentType:'text/html',body:html}));await page.goto(base+'/pda.html');
+ const js=fs.readFileSync(path.join(root,'shiftlink/mes/web/pda.js'),'utf8');
+ await page.addScriptTag({content:js.split('// Node 테스트는 DOM 없이')[0]});
+ await page.addScriptTag({content:`const on=(id,fn)=>$(id)?.addEventListener('click',fn);['reportWorkDate','reportShift'].forEach(id=>$(id).addEventListener('change',syncReportShift));`+js.slice(js.indexOf("on('toReport',openReport)"),js.indexOf("on('logout'"))});
+ await page.evaluate(equipment=>{S.equipment=equipment;S.operator={name:'하네스 작업자'};renderHome=()=>{};refreshSavedHandovers=async()=>{};showToast=text=>window.lastToast=text;},metadata.equipment);
+ const begin=async kind=>{await page.evaluate(kind=>{openReport();S.reportSelected=[S.equipment[0].equipment_id];$('reportType').value=kind;openReportWrite();},kind);};
+ const save=async()=>{const wait=page.waitForResponse(r=>r.url()===base+'/api/work-reports'&&r.request().method()==='POST');await page.locator('#reportSave').click();await page.locator('#reportSaveYes').click();const response=await wait;assert.equal(response.status(),200,await response.text());return response.json();};
+ const shot=async name=>{await page.screenshot({path:path.join(artifact,name+'.png')});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),await page.evaluate(()=>innerWidth));};
+ await begin('정상 근무');assert.equal(await page.locator('#reportRecords .record').count(),0);assert.equal(await page.locator('#reportRemarks').inputValue(),'');
+ await page.locator('#reportWorkDate').fill('2026-10-16');await page.locator('#reportShift').selectOption('B');
+ assert.equal(await page.locator('#reportStart').inputValue(),'2026-10-16T16:00');assert.equal(await page.locator('#reportEnd').inputValue(),'2026-10-17T00:00');
+ await page.locator('#reportSave').click();await page.locator('#reportSaveNo').click();assert.equal(await page.locator('#reportSaveConfirm').isVisible(),false);
+ await page.locator('#reportDateCalendar').click();await page.locator('#reportCalendarDays [data-date="2026-10-17"]').click();assert.equal(await page.locator('#reportStart').inputValue(),'2026-10-17T16:00');assert.equal(await page.locator('#reportDate').innerText(),'2026-10-17');
+ await shot('normal-1280');const normal=await save();assert.ok(normal.server_sensor_evidence.measurements.length);assert.equal(normal.server_sensor_evidence.scope,'save_snapshot');
+ let detail=await (await page.request.get(base+'/api/work-reports/'+normal.handover_id)).json();assert.equal(detail.report.work_report.records.length,0);
+ await begin('정비 작업');await page.locator('#reportAdd').click();await page.locator('[data-key="story"]').fill('정기 점검 후 필터 교체');
+ await page.locator('[data-action="add-part"]').click();await page.locator('[data-key="name"]').fill('유압 필터');await page.locator('[data-key="part_number"]').fill('F-001');await page.locator('[data-key="quantity"]').fill('2');await page.locator('[data-key="usage"]').fill('교체');
+ await shot('maintenance-1280');const maintenance=await save();detail=await (await page.request.get(base+'/api/work-reports/'+maintenance.handover_id)).json();assert.equal(detail.report.work_report.records[0].parts[0].quantity,2);assert.equal(detail.report.work_report.records[0].parts[0].part_number,'F-001');
+ await begin('고장·이상 대응');await page.locator('#reportAdd').click();await page.locator('[data-key="story"]').fill('센서 경보를 확인했습니다');await page.locator('[data-action="add-sensor"]').click();
+ const eq=metadata.equipment[0],spec=eq.signals[0];await page.locator('[data-key="sensor_key"]').selectOption(JSON.stringify([eq.equipment_id,spec.signal]));await page.locator('[data-key="problem"]').fill('수치 이상');
+ await page.locator('[data-sample="before"][data-key="value"]').fill('90');await page.locator('[data-sample="after"][data-key="value"]').fill('60');await page.locator('[data-key="solution"]').fill('필터 청소와 연결 상태 점검');await page.locator('[data-key="outcome"]').selectOption('resolved');await page.locator('[data-key="result"]').fill('작업자가 수치 회복을 확인했습니다');
+ const query=await (await page.request.post(base+'/api/query',{data:{question:'카드가 없는 하네스 고장',equipment_id:eq.equipment_id}})).json();await page.evaluate(response=>S.queryResponse=response,query);
+ await page.locator('[data-action="link-query"]').click();await page.locator('[data-key="candidate"]').check();
+ await page.evaluate(()=>{openReport();openReportWrite();});assert.equal(await page.locator('[data-key="solution"]').inputValue(),'필터 청소와 연결 상태 점검');assert.equal(await page.locator('[data-sample="before"][data-key="value"]').inputValue(),'90');
+ await shot('fault-1280');await page.setViewportSize({width:390,height:844});await page.locator('[data-key="solution"]').scrollIntoViewIfNeeded();await shot('fault-390');await page.setViewportSize({width:1280,height:800});
+ const fault=await save();assert.ok(fault.candidates[0].draft_id);detail=await (await page.request.get(base+'/api/work-reports/'+fault.handover_id)).json();assert.equal(detail.report.work_report.records[0].fault_sensors[0].before.source,'manual');assert.equal(detail.report.work_report.records[0].fault_sensors[0].after.value,60);
+ await page.evaluate(()=>{show('reportWrite');});await page.locator('#reportArchiveOpen').click();await page.locator('#reportArchiveList button').first().click();await page.waitForFunction(()=>$('reportArchiveStatus').textContent.includes('DB 저장 확인'));assert.match(await page.locator('#reportArchiveDetail').innerText(),/저장 시점 MES 자동 기록/);assert.match(await page.locator('#reportArchiveDetail').innerText(),/필터 청소/);await page.locator('#reportArchiveClose').click();
+ await begin('정상 근무');await page.evaluate(()=>{const pending={handover_id:'HO-PENDING-OLD',kind:'work_log',equipment_id:S.equipment[0].equipment_id,equipment_ids:[S.equipment[0].equipment_id],memo_text:'원본 전송 대기',required_context:{author:'작업자',start_at:'2026-10-16T08:00',end_at:'2026-10-16T17:00',context:''},work_report:{legacy_memo:'',mes_context:'',records:[]}};localStorage.setItem(HANDOVER_PENDING_KEY,JSON.stringify(pending));openReport();openReportWrite();});assert.ok(await page.locator('#reportAuthor').isDisabled());const pending=await save();assert.equal(pending.handover_id,'HO-PENDING-OLD');
+ assert.deepEqual(errors,[]);console.log('PASS: typed PDA -> actual HTTP API -> temporary SQLite -> archive, proposal, draft restore, pending retry, desktop/mobile');
+ }finally{await browser.close();child.stdin.end('\n');await once(child,'exit');assert.equal(child.exitCode,0,diagnostics);}
+})().catch(error=>{console.error(error);process.exitCode=1});

@@ -11,7 +11,10 @@
   <header class="app-header">
     <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><b class="brand-name">ShiftLink MES</b></div>
     <h1 class="board-title">생산라인 대시보드</h1>
-    <div class="header-side"><span class="clock-group"><span class="hint">현재 시각</span><time id="board-clock" class="board-clock"></time><span id="connection-status" class="conn-status pending" role="status">상태를 불러오는 중</span></span><button id="admin-open" type="button">관리자 로그인</button><a id="open-pda" href="/pda.html">PDA</a></div>
+    <div class="header-side dashboard-menu">
+      <div class="header-status"><span class="clock-group"><span class="hint">현재 시각</span><time id="board-clock" class="board-clock"></time><span id="connection-status" class="conn-status pending" role="status">상태를 불러오는 중</span></span><button id="admin-logout" type="button" hidden>로그아웃</button></div>
+      <div class="header-actions"><a class="review-link" href="/knowledge-candidates.html">지식카드 관리</a><button id="admin-open" type="button">관리자 로그인</button><a id="open-pda" href="/pda.html">PDA</a></div>
+    </div>
   </header>
   <p id="synthetic-notice" class="synthetic"><span class="demo-tag">SIMULATION</span> 가상 냉연 코일 이송 보조설비 · 합성 데이터. 원인·안전·정비 최종 판정은 사람이 수행합니다. 실제 MES·PLC 제어가 아닙니다.</p>
   <main id="main-content">
@@ -125,7 +128,7 @@
       <button type="submit" class="primary-button">로그인</button>
     </form>
     <section id="admin-management" hidden>
-      <div class="admin-dialog-heading"><h3>작업자 계정 등록</h3><button id="admin-logout" type="button">관리자 로그아웃</button></div>
+      <div class="admin-dialog-heading"><h3>작업자 계정 등록</h3></div>
       <form id="admin-register-form" class="admin-form">
         <label for="worker-name">성명</label><input id="worker-name" name="name" autocomplete="off" maxlength="80" required>
         <label for="worker-id">사번</label><input id="worker-id" name="id" autocomplete="off" maxlength="16" pattern="[A-Za-z0-9_\-]{1,16}" title="영문·숫자·밑줄·하이픈으로 16자 이내" required>

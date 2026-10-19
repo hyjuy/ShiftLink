@@ -137,13 +137,19 @@ class MesService:
         from .query import query_service
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
+        with self._lock:
+            return self._save_query_result(body, result, started)
+
+    def _save_query_result(self, body, result, started):
         self.storage.save_query_evidence(result.get("evidence"))
         try:
             rendered_response = render_response(AgentResponse.model_validate(result))
         except Exception:  # Log formatting must not prevent returning the generated answer.
             rendered_response = None
-        self.storage.save_query({
+        query_id = self.storage.save_query({
             "question": body.get("question"), "equipment_id": (result.get("evidence") or {}).get("equipment_id"),
+            "query_context": result.get("query_context"), "evidence": result.get("evidence"),
+            "knowledge_status": result.get("knowledge_status"),
             "answer": result.get("answer"), "cited_card_ids": result.get("cited_card_ids"),
             "safety_notices": result.get("safety_notices", []),
             "rendered_response": rendered_response,
@@ -188,7 +194,14 @@ class MesService:
     def record_handover(self, body: dict[str, Any]) -> dict[str, object]:
         with self._lock:
             if isinstance(body, dict) and "work_report" in body:
-                work_reports.validate(body, {eq.equipment_id for eq in self.active_config.equipment})
+                work_reports.validate(body, {eq.equipment_id for eq in self.active_config.equipment}, self.active_config)
+                candidates = None if self.storage.get_handover(body.get("handover_id")) else self._plan_work_report(body)
+                return self.storage.save_work_report(body,
+                    {eq.equipment_id: eq.asset_id for eq in self.active_config.equipment}, self.active_config.config_id,
+                    candidates=candidates, sensor_evidence=work_reports.sensor_evidence(
+                        asdict(self.engine.snapshot), self.active_config, body['equipment_ids'])
+                        if candidates is not None and (body['work_report'].get('form_version')==2 or
+                            any(r.get('capture_version')==1 for r in body['work_report']['records'])) else None)
             # 해결 기록은 인계 저장 전에 검사하고 초안 반영까지 계산한다. 인계와 초안은 한 트랜잭션으로 남는다.
             if not (isinstance(body, dict) and body.get("resolution") is not None):
                 return self.storage.save_handover(body)
@@ -210,22 +223,111 @@ class MesService:
                 reply = {"created": False, "reason": "already_exists"}
             return {**saved, "draft": {**reply, "mes_recovered": prepared["mes_check"]["recovered"]}}
 
+    def _plan_work_report(self, body):
+        plans = {}
+        seen_incidents=set()
+        next_number = None
+        assets = {eq.equipment_id: eq.asset_id for eq in self.active_config.equipment}
+        for index, record in enumerate(body["work_report"]["records"]):
+            chain=None
+            if not work_reports.has_incident(record):
+                continue
+            if source := record.get('followup_from'):
+                original=self.storage.get_handover(source['handover_id'])
+                links=self.storage.report_incidents(source['handover_id'])
+                if original is None or original['payload'].get('kind')!='work_log' or not any(
+                    link['record_index']==source['record_index'] and link['incident_id']==record['incident_id']
+                    for link in links):
+                    raise ValueError('Follow-up source does not belong to the incident')
+                incident=self.storage.get_incident(record['incident_id'])
+                latest=incident['records'][-1]
+                if (latest['handover_id'],latest['record_index'])!=(source['handover_id'],source['record_index']):
+                    raise ValueError('최신 인계 기록을 이어서 작성해 주세요.')
+                if work_reports.handover_resolved(latest['record']) and any(c['draft_id'] and c['handover_id']==latest['handover_id'] and c['record_index']==latest['record_index'] for c in incident['candidates']):
+                    raise ValueError('정상 운전 확인과 후보 구성이 완료된 사건입니다. 재발은 새 사건으로 기록해 주세요.')
+                if record['incident_id'] in seen_incidents:raise ValueError('같은 사건은 한 일지에서 한 번만 이어서 기록해 주세요.')
+                seen_incidents.add(record['incident_id'])
+                chain=work_reports.handover_chain(incident['records'],source)+[{
+                    'handover_id':body['handover_id'],'record_index':index,'required_context':body['required_context'],'record':record}]
+            query_id = record.get("query_id")
+            query = None
+            if query_id:
+                stored = self.storage.get_query(query_id)
+                if stored is None:
+                    raise ValueError("query_id not found")
+                query = {**stored["payload"], "query_id": query_id}
+                context = query.get("query_context") or {}
+                eq = query.get("equipment_id")
+                if eq not in record["equipment"] or not context.get("asset_id") or context["asset_id"] != assets.get(eq):
+                    raise ValueError("query does not match the work report equipment/asset")
+                if context.get("incident_id") and context["incident_id"] != record.get("incident_id"):
+                    raise ValueError("query belongs to another incident; specify its incident_id")
+            draft = None
+            if not record["candidate"]:
+                reason = "not_requested"
+            elif chain is not None:
+                reason='insufficient_handover'
+                if not work_reports.handover_missing(chain):
+                    if next_number is None:next_number=int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
+                    if next_number>field_draft.ID_RANGE[1]:raise ValueError('field draft card id range is exhausted')
+                    draft=work_reports.handover_candidate_from(chain,self.active_config,f'K-{next_number:04d}',utc_now())
+                    next_number+=1;reason=draft['status']
+            elif record.get('capture_version')==1:
+                reason='insufficient_capture'
+                if not work_reports.capture_missing(record):
+                    if next_number is None:next_number=int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
+                    if next_number>field_draft.ID_RANGE[1]:raise ValueError('field draft card id range is exhausted')
+                    draft=work_reports.capture_candidate_from(record,self.active_config,body['handover_id'],index,
+                                                             f'K-{next_number:04d}',utc_now())
+                    next_number+=1;reason=draft['status']
+            elif query is None:
+                reason = "missing_query"
+            elif query.get("knowledge_status") != "no_applicable_card":
+                reason = "query_not_knowledge_gap"
+            elif (query.get("query_context") or {}).get("config_id") != self.active_config.config_id:
+                reason = "query_configuration_changed"
+            else:
+                if next_number is None:
+                    next_number = int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
+                if next_number > field_draft.ID_RANGE[1]:
+                    raise ValueError("field draft card id range is exhausted")
+                draft = work_reports.candidate_from(record, query, self.active_config, body["handover_id"],
+                                                     index, f"K-{next_number:04d}", utc_now())
+                next_number += 1
+                reason = draft["status"]
+            plans[index] = {"query_id":query_id, "reason":reason, "draft":draft}
+        return plans
+
     def record_work_report(self, body: dict[str, Any]) -> dict[str, object]:
         if not isinstance(body, dict) or body.get("kind") != "work_log" or "work_report" not in body:
             raise ValueError("work_log and work_report are required")
         return self.record_handover(body)
 
-    def work_reports(self, limit: int = 30) -> dict[str, object]:
+    def work_reports(self, limit: int = 30, offset: int = 0) -> dict[str, object]:
         with self._lock:
-            return {"reports": self.storage.list_work_reports(limit), "is_synthetic": True}
+            return {"reports": self.storage.list_work_reports(limit,offset), "is_synthetic": True}
 
     def work_report(self, report_id: str) -> dict[str, object]:
         with self._lock:
             row = self.storage.get_handover(report_id)
             if row is None or row["payload"].get("kind") != "work_log":
                 raise KeyError("work report not found")
-            return {"report": {**row["payload"], "created_at": row["created_at"], "status": row["status"]},
+            return {"report": {**row["payload"], "created_at": row["created_at"], "status": row["status"],
+                               "incidents": self.storage.report_incidents(report_id),
+                               "candidates": self.storage.work_report_candidates(report_id=report_id),
+                               "server_sensor_evidence": self.storage.work_report_sensors(report_id)},
                     "is_synthetic": True}
+
+    def incidents(self, limit: int = 30) -> dict[str, object]:
+        with self._lock:
+            return {"incidents": self.storage.list_incidents(limit), "is_synthetic": True}
+
+    def incident(self, incident_id: str) -> dict[str, object]:
+        with self._lock:
+            row = self.storage.get_incident(incident_id)
+            if row is None:
+                raise KeyError("incident not found")
+            return {"incident": row, "is_synthetic": True}
 
     def _events_for_check(self) -> list[dict[str, Any]]:
         """해결 확인용 이벤트: 기록된 이벤트 + 다음 틱에 기록될 대기 이벤트(pending).
@@ -252,7 +354,7 @@ class MesService:
         # MES 복구 단계 제목(시나리오별 + 일반 계획)은 누구나 하는 조치라 묶음 비교에서 뺀다.
         prepared["generic_actions"] = {a.title for spec in self.active_config.scenarios for a in spec.recovery_actions}             | {"이상 신호 위치 확인", "원인 조치 기록", "정상 범위 회복 확인"}
         scored = [(field_draft.match_score(row["card"], prepared), row) for row in self.storage.list_card_drafts()
-                  if row["status"] == "pending_review"]
+                  if row["status"] == "pending_review" and not row["review_flags"].get("work_report")]
         score, row = max(scored, key=lambda pair: pair[0], default=(0.0, None))
         if score > 0:  # 가장 많이 겹치는 초안 하나에만 붙인다
             draft, relation = field_draft.merge(row, prepared, handover_id)
@@ -466,6 +568,22 @@ class MesService:
             for row in drafts:
                 row["similar_kb_cards"] = field_draft.similar_kb_cards(row["card"], self._kb_provider)
             return {"drafts": drafts, "is_synthetic": True}
+
+    def admin_card_drafts(self):
+        with self._lock:
+            drafts=[self.storage.get_card_draft(row['draft_id']) for row in self.storage.list_card_drafts()]
+            return {'drafts':drafts,'is_synthetic':True}
+
+    def admin_card_draft(self,draft_id):
+        from .candidate_review import detail
+        with self._lock:return {'draft':detail(self.storage,draft_id),'is_synthetic':True}
+
+    def review_card_draft(self,draft_id,body,actor):
+        from .candidate_review import validate_decision
+        action,status,reason,revision=validate_decision(body)
+        with self._lock:
+            self.storage.review_card_draft(draft_id,action,status,reason,revision,actor)
+            return self.admin_card_draft(draft_id)
 
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
@@ -686,11 +804,23 @@ class _Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         try:
+            if parsed.path=='/api/admin/card-drafts' or parsed.path.startswith('/api/admin/card-drafts/'):
+                actor=self.accounts.administrator(self._account_token())
+                if not actor:
+                    self._send(401,{'error':'MES 관리자 로그인이 필요합니다.'});return
+                suffix=parsed.path.removeprefix('/api/admin/card-drafts')
+                result=self.service.admin_card_drafts() if not suffix else self.service.admin_card_draft(suffix[1:])
+                self._send(200,{**result,'administrator':actor});return
             if parsed.path == "/api/admin/accounts":
                 status, body = self.accounts.request("GET", parsed.path, token=self._account_token())
                 self._send(status, body); return
+            if parsed.path == "/api/incidents":
+                self._send(200, self.service.incidents(int(parse_qs(parsed.query).get("limit", ["30"])[0]))); return
+            if parsed.path.startswith("/api/incidents/"):
+                self._send(200, self.service.incident(parsed.path.removeprefix("/api/incidents/"))); return
             if parsed.path == "/api/work-reports":
-                self._send(200, self.service.work_reports(int(parse_qs(parsed.query).get("limit", ["30"])[0]))); return
+                params=parse_qs(parsed.query)
+                self._send(200, self.service.work_reports(int(params.get("limit",["30"])[0]),int(params.get("offset",["0"])[0]))); return
             if parsed.path.startswith("/api/work-reports/"):
                 self._send(200, self.service.work_report(parsed.path.removeprefix("/api/work-reports/"))); return
             if parsed.path == "/api/state": self._send(200, self.service.state()); return
@@ -718,12 +848,12 @@ class _Handler(BaseHTTPRequestHandler):
                 query = parse_qs(parsed.query); run_id = query.get("run_id", [self.service.engine.run.run_id])[0]; format_name = query.get("format", ["jsonl"])[0]
                 content_type = "text/csv; charset=utf-8" if format_name == "csv" else "application/x-ndjson; charset=utf-8"
                 self._send(200, self.service.export(run_id, format_name).encode(), content_type); return
-            if parsed.path in ("/", "/pda.html"):
+            if parsed.path in ("/", "/pda.html", "/knowledge-candidates.html"):
                 if getattr(self, "api_only", False):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
-                page = "pda.html" if parsed.path == "/pda.html" else "index.html"
+                page = parsed.path[1:] if parsed.path!='/' else "index.html"
                 self._send(200, (self.web_root / page).read_bytes(), "text/html; charset=utf-8"); return
-            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "accounts.js", "style.css", "pda.js"}:
+            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "accounts.js", "style.css", "pda.js", "candidate-review.js", "candidate-review.css"}:
                 if getattr(self, "api_only", False):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"
@@ -737,7 +867,11 @@ class _Handler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         try:
             account_path = urlparse(self.path).path
-            if account_path in _ACCOUNT_POST_ROUTES:
+            review_route=account_path.startswith('/api/admin/card-drafts/') and account_path.endswith('/review')
+            if account_path in _ACCOUNT_POST_ROUTES or review_route:
+                actor=self.accounts.administrator(self._account_token()) if review_route else None
+                if review_route and not actor:
+                    self._send(401,{'error':'MES 관리자 로그인이 필요합니다.'});return
                 origin = self.headers.get("Origin")
                 if origin is not None:
                     parsed_origin = urlparse(origin)
@@ -753,6 +887,8 @@ class _Handler(BaseHTTPRequestHandler):
                 payload = json.loads(self.rfile.read(size) or b"{}")
                 if not isinstance(payload, dict):
                     self._send(400, {"error": "JSON 객체가 필요합니다."}); return
+                if review_route:
+                    self._send(200,self.service.review_card_draft(account_path.split('/')[4],payload,actor));return
                 status, body = self.accounts.request("POST", account_path, payload, token=self._account_token())
                 self._send(status, body); return
             limit = _CONFIG_BODY_LIMIT if self.path.startswith("/api/config/") else _CONTROL_BODY_LIMIT

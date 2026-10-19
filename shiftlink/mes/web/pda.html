@@ -1478,7 +1478,6 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .equipment-functions .work-actions{margin-top:12px;padding-bottom:20px;border-bottom:1px solid var(--edge)}
 #s-ctx .equipment-functions .work-actions>.btn,#s-ctx .equipment-functions #toEquipmentReport{display:inline-flex;align-items:center;justify-content:center;gap:12px;height:64px;min-height:64px;border:1px solid var(--edge);border-radius:8px;background:var(--surface);color:var(--tx);font-size:17px;font-weight:600}
 #s-ctx .equipment-functions .work-actions>.btn svg{width:24px;height:24px;flex:0 0 auto}
-#s-ctx .equipment-functions .work-actions>.btn.warn{border-color:var(--notice-edge)}
 #s-ctx .equipment-mes{padding-top:0;gap:4px}
 #s-ctx .equipment-mes .mes-head h2{font-size:22px;font-weight:800}
 #s-ctx .equipment-mes .mes-ic{width:44px;height:44px}
@@ -1513,7 +1512,10 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .bot-mark{display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--edge);border-radius:50%;background:var(--surface);color:var(--accent)}
 #s-ctx .chat-panel .bot-mark svg{width:18px;height:18px}
 #s-ctx .chat-panel .msg.bot .ans.lead{padding:0;border:0;background:none;font-size:18px;font-weight:700;line-height:1.6;text-align:left}
-#s-ctx .chat-panel .msg.bot .ans-list{margin-top:0;margin-bottom:0;padding-left:1.4em;list-style:disc;font-size:18px;line-height:1.6;color:var(--tx-2)}
+#s-ctx .chat-panel .msg.bot .ans-list{margin-top:0;margin-bottom:0;padding-left:1.4em;list-style:disc;font-size:18px;font-weight:700;line-height:1.6;color:var(--tx)}
+/* 답변 문장 모두 같은 글머리 기호 목록: 첫 문장(.ans.lead.bul)도 목록 항목처럼 */
+#s-ctx .chat-panel .msg.bot .ans.lead.bul{display:list-item;list-style:disc outside;margin-left:1.4em}
+#s-ctx .chat-panel .msg.bot .ans-row:has(.bul)+.ans-list{margin-top:-8px}
 #s-ctx .chat-panel .msg.bot .ans-list li{overflow-wrap:anywhere}
 #s-ctx .chat-panel .msg.bot .ans-list li+li{margin-top:2px}
 /* 근무일지 질문: 채팅 칸 폭마다 버튼이 따로 줄바꿈되지 않게 두 줄 고정 — 문구 / 오른쪽에 같은 크기 버튼 둘 */
@@ -1703,40 +1705,58 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-dashList .il-tile .n small{font-size:16px;font-weight:600;color:var(--tx)}
 #s-dashList .il-tile.bad .n b,#s-dashList .il-tile.bad .n small{color:var(--fault-tx)}
 #s-dashList .il-box{border:1px solid var(--edge);border-radius:10px;background:var(--surface);overflow:hidden}
-#s-dashList .il-box h2{margin:0;padding:14px 18px;font-size:20px;font-weight:800;color:var(--tx)}
-#s-dashList .il-box h2 small{font-size:14px;font-weight:600;color:var(--tx-2)}
+#s-dashList .il-box-head{display:flex;align-items:center;gap:12px;padding:14px 18px}
+#s-dashList .il-box-head h2{margin:0;font-size:20px;font-weight:800;color:var(--tx)}
+#s-dashList .il-count{margin-left:auto;font-size:14px;color:var(--tx-2)}
 #s-dashList .il-scroll{overflow-x:auto}
-#s-dashList .il-table{width:100%;min-width:1100px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:15px}
+/* 표: 인계 표(.handover-table) 규칙 — 칸 선·회색 머리줄·글 칸 왼쪽·짧은 값 칸 가운데, 세로 가운데 */
+#s-dashList .il-table{width:100%;min-width:1000px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:15px;font-variant-numeric:tabular-nums}
 #s-dashList .il-table :is(th,td){padding:16px 14px;border-top:1px solid var(--edge);border-right:1px solid var(--edge);vertical-align:middle;text-align:left;overflow-wrap:anywhere}
 #s-dashList .il-table :is(th,td):last-child{border-right:0}
 #s-dashList .il-table thead th{background:var(--surface-2);color:var(--tx-2);font-weight:700;white-space:nowrap}
-#s-dashList .il-table :is(th,td):nth-child(1),#s-dashList .il-table :is(th,td):nth-child(n+6){text-align:center}
-#s-dashList .il-table th:nth-child(1){width:124px}#s-dashList .il-table th:nth-child(6){width:140px}#s-dashList .il-table th:nth-child(7){width:132px}#s-dashList .il-table th:nth-child(8){width:96px}
+#s-dashList .il-table :is(th,td):nth-child(1),#s-dashList .il-table :is(th,td):nth-child(5),#s-dashList .il-table :is(th,td):nth-child(6){text-align:center}
+#s-dashList .il-table th:nth-child(1){width:124px}#s-dashList .il-table th:nth-child(3){width:200px}#s-dashList .il-table th:nth-child(5){width:150px}#s-dashList .il-table th:nth-child(6){width:96px}
 #s-dashList .il-table tbody tr:hover td{background:var(--hover)}
 #s-dashList .il-table tr.open td{background:#FFFAF2}
 #s-dashList .il-table td:nth-child(1) b{display:block;font-weight:700;white-space:nowrap}
 #s-dashList .il-table td:nth-child(1) small{display:block;font-size:14px;color:var(--tx-2)}
 #s-dashList .il-none{font-size:14px;color:var(--tx-2)}
-#s-dashList .il-steps{margin:0;padding:0;list-style:none}
-/* 항목 = [표지][글] 한 줄 + 근거(다음 줄, 표지 왼쪽부터). 같은 번째 항목은 alignIncidentRows()가 높이를 맞춘다 */
-#s-dashList .il-steps li{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;align-content:start;gap:2px 6px}
-#s-dashList .il-steps li.bare{grid-template-columns:minmax(0,1fr)}
-#s-dashList .il-steps li>small{grid-column:1/-1}
-#s-dashList .il-steps li+li{margin-top:6px;padding-top:6px;border-top:1px dashed var(--edge)}
-#s-dashList .il-steps small{font-size:13px;color:var(--tx-2)}
-#s-dashList .il-no{display:grid;place-items:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:var(--surface-2);color:var(--accent);font-size:12px;font-weight:800}
-#s-dashList .il-cert{min-width:32px;margin-top:2px;padding:0 5px;border-radius:4px;font-size:12px;line-height:18px;font-weight:700;text-align:center}
-#s-dashList .il-cert.ok{background:#DCF0E5;color:#23704C}
-#s-dashList .il-cert.guess{background:#EEF1F0;color:var(--tx-2)}
-#s-dashList .il-cert.out{background:#F3EDED;color:#8A5A55}
-#s-dashList .il-state{display:inline-block;padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700;line-height:1.4;white-space:nowrap;background:var(--surface-2);color:var(--tx-2)}
-#s-dashList .il-state.miss{background:#FDECE9;color:#A2392E}
-#s-dashList .il-state.open{background:#FFF1DE;color:#B4620B}
-#s-dashList .il-state.match{background:#DCF0E5;color:#23704C}
-#s-dashList .il-state small{display:block;font-size:12px;font-weight:600}
-#s-dashList .il-card{display:inline-block;padding:1px 8px;border:1px solid #BFD8D2;border-radius:5px;color:var(--accent);font-size:13px;font-weight:700}
-#s-dashList .il-write{min-height:44px;padding:0 12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer}
+#s-dashList .il-step{box-sizing:border-box}
+#s-dashList .il-step+.il-step{margin-top:6px;padding-top:6px;border-top:1px dashed var(--edge)}
+#s-dashList .il-step b{display:block;font-weight:600;color:var(--tx)}
+#s-dashList .il-step small{display:block;font-size:14px;color:var(--tx-2)}
+#s-dashList .il-state,#ilDetail .il-state{display:inline-block;padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700;line-height:1.4;white-space:nowrap;background:var(--surface-2);color:var(--tx-2)}
+#s-dashList .il-state.miss,#ilDetail .il-state.miss{background:#FDECE9;color:#A2392E}
+#s-dashList .il-state.open,#ilDetail .il-state.open{background:#FFF1DE;color:#B4620B}
+#s-dashList .il-state.match,#ilDetail .il-state.match{background:#DCF0E5;color:#23704C}
+#s-dashList .il-follow{display:block;margin-top:6px;font-size:14px;color:var(--tx-2);white-space:nowrap}
+#s-dashList .il-write{display:block;margin:8px auto 0;min-height:44px;padding:0 12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer}
+/* 상세보기 버튼 — 인계 표의 .handover-detail과 같게 */
+#s-dashList .il-table .btn.handover-detail{display:inline-flex;align-items:center;justify-content:center;width:48px;min-width:48px;min-height:48px;margin:0;padding:10px;background:#245f5a;border-color:#245f5a;border-radius:6px;color:#fff}
+#s-dashList .il-table .btn.handover-detail:hover:not(:disabled){background:#194b46;border-color:#194b46;color:#fff}
+#s-dashList .il-table .btn.handover-detail:active:not(:disabled){background:#123b37;border-color:#123b37}
+#s-dashList .il-table .btn.handover-detail:focus-visible{outline:3px solid #113e3b;outline-offset:3px}
 #s-dashList :is(.il-go,.il-write):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* 조치 기록 상세 팝업 */
+#ilDetail{width:min(720px,calc(100vw - 32px));max-height:calc(100dvh - 48px);padding:0;border:0;border-radius:16px;background:var(--surface);color:var(--tx);box-shadow:0 16px 48px rgba(20,44,40,.18)}
+#ilDetail::backdrop{background:rgba(20,44,40,.35)}
+#ilDetail .ild{display:flex;flex-direction:column;gap:4px;max-height:calc(100dvh - 48px);padding:24px 28px;box-sizing:border-box;overflow-y:auto}
+#ilDetail .ild-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+#ilDetail h2{margin:0;font-size:22px;font-weight:800}
+#ilDetail .ild-row{display:grid;grid-template-columns:100px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--edge)}
+#ilDetail .ild-row .k{font-size:15px;font-weight:700;color:var(--tx-2)}
+#ilDetail .ild-row .v{font-size:16px;line-height:1.5}
+#ilDetail .ild-item{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:2px 8px}
+#ilDetail .ild-item+.ild-item{margin-top:8px}
+#ilDetail .ild-item.bare{grid-template-columns:minmax(0,1fr)}
+#ilDetail .ild-item small{grid-column:1/-1;font-size:14px;color:var(--tx-2)}
+#ilDetail .il-no{display:grid;place-items:center;width:20px;height:20px;margin-top:2px;border-radius:50%;background:var(--surface-2);color:var(--accent);font-size:12px;font-weight:800}
+#ilDetail .il-none{color:var(--tx-2);font-size:15px}
+#ilDetail .eqm-x{display:grid;place-items:center;width:44px;height:44px;margin-left:auto;padding:0;border:0;border-radius:8px;background:none;color:var(--tx-2);cursor:pointer}
+#ilDetail .eqm-x svg{width:24px;height:24px}
+#ilDetail .eqm-foot{display:flex;justify-content:flex-end;margin-top:12px}
+#ilDetail .eqm-foot .btn{width:auto;min-width:100px;min-height:44px;margin:0}
+#ilDetail button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:900px){#s-dashList>.pane{padding:12px}#s-dashList .il-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}#s-dashList .il-head h1{font-size:22px}}
 </style>
 </head>
@@ -1752,6 +1772,7 @@ button.ld-row:hover{background:var(--surface-2)}
   <dialog id="reportResume" aria-labelledby="reportResumeTitle" tabindex="-1"><h2 id="reportResumeTitle">이전 기록을 불러오시겠습니까?</h2><p>이전에 작성한 근무일지 내용이 있습니다.</p><div class="confirm-actions"><button id="reportResumeNew" type="button">새로 작성</button><button id="reportResumeLoad" class="primary" type="button">불러오기</button></div></dialog>
   <section id="notifyPanel" aria-label="알림 목록" hidden></section>
   <span class="notify-wrap notify-floatwrap" id="notifyFloatWrap" hidden><button class="notify" id="notifyFloat" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span>
+  <dialog id="ilDetail" aria-labelledby="ilDetailTitle"><div class="ild"><div class="ild-head"><h2 id="ilDetailTitle"></h2><button class="eqm-x" id="ilDetailX" type="button" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="ilDetailBody"></div><div class="eqm-foot"><button class="btn primary" id="ilDetailClose" type="button">닫기</button></div></div></dialog>
   <dialog id="eqListModal" aria-labelledby="eqListTitle"><div class="eqm"><div class="eqm-head"><h2 id="eqListTitle"></h2><span class="eqm-count" id="eqListCount"></span><button class="eqm-x" id="eqListX" type="button" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div class="eqm-scroll"><table class="eqm-table"><thead><tr><th>설비</th><th>상태</th><th>상세</th></tr></thead><tbody id="eqListRows"></tbody></table></div><div class="eqm-foot"><button class="btn primary" id="eqListClose" type="button">닫기</button></div></div></dialog>
   <dialog id="logoutConfirm" aria-labelledby="logoutConfirmTitle" tabindex="-1"><h2 id="logoutConfirmTitle">로그아웃 하시겠습니까?</h2><p>작성 중인 근무일지는 이 단말에 보관됩니다.</p><div class="confirm-actions"><button id="logoutNo" type="button">취소</button><button id="logoutYes" class="primary" type="button">로그아웃</button></div></dialog>
 

@@ -1292,6 +1292,8 @@ function answerBody(turn) {
   const row = document.createElement('div'); row.className = 'ans-row';
   row.appendChild(answer);
   d.appendChild(row);
+  // 인사·감사·작별에 대한 정해진 답(서버 smalltalk) — 조치 기록·근거·근무일지 질문을 붙이지 않는다.
+  if (res.smalltalk) return d;
   // 답 본문: 첫 문장은 제목처럼, 나머지는 설명으로. 「근거:」 줄은 답 아래 기준 줄로 옮긴다. 글은 바꾸지 않는다.
   const parts = res.review_queue || none ? null : answerParts(plain(res.answer));
   if (parts) {

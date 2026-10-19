@@ -9,11 +9,13 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from shiftlink.agent.pipeline import FixedPipeline
+from shiftlink.agent.response import AgentResponse
 from shiftlink.edge.ollama import DEFAULT_HOST, DEFAULT_TIMEOUT_S, KEEP_ALIVE, OllamaModel
 from shiftlink.rag.loader import load_card_provider
 from shiftlink.rag.retrieval import InMemoryToolProvider
 
 from .card_adapter import MesCardAdapter
+from .smalltalk import LEAD, REPLY, classify
 
 ROOT = Path(__file__).resolve().parents[2]
 # Demo server defaults (hybrid confirmed 10/7): SFT answer model + guard v2 (E1 on a guard hit) and the SFT judge.
@@ -88,6 +90,8 @@ def query_service(service, body, *, pipeline=None):
         raise ValueError('question must be a nonblank string of at most 4000 characters')
     if 'equipment_id' in body and 'scan_id' in body:
         raise ValueError('select equipment_id or scan_id, not both')
+    # greeting/thanks/bye alone -> a fixed reply, no model; a leading greeting -> only the rest goes to the pipeline
+    smalltalk, rest = classify(question)
     with service._lock:
         scan = service._scans[-1].copy() if service._scans else None
         if 'equipment_id' in body:
@@ -122,7 +126,11 @@ def query_service(service, body, *, pipeline=None):
         empty = InMemoryToolProvider(cards=[], equipment_db=service.catalog.data['equipment'],
                                      equipment_types=service.catalog.data['equipment_types'])
         prepared = MesCardAdapter(observer, config, empty).search(
-            visible['run_id'], equipment_id, question, k=body.get('k', 5))
+            visible['run_id'], equipment_id, rest or question, k=body.get('k', 5))
+        if rest is None:
+            return {**AgentResponse(mode='query', answer=REPLY[smalltalk]).model_dump(mode='json'), 'scan': scan,
+                    'query_context': context, 'knowledge_status': 'smalltalk', 'evidence': prepared['evidence'],
+                    'is_synthetic': True, 'smalltalk': smalltalk}
         if pipeline is None:
             if service.query_pipeline is None:
                 service.query_pipeline = build_query_pipeline()
@@ -130,6 +138,8 @@ def query_service(service, body, *, pipeline=None):
     # A model request can take a minute; never hold the simulator lock during it.
     result = pipeline.run(prepared['request'].model_dump(mode='json'))
     output = result.output.model_dump(mode='json')
+    if smalltalk in LEAD and output.get('answer') and not output.get('no_knowledge') and not output.get('review_queue'):
+        output['answer'] = LEAD[smalltalk] + output['answer']
     if output.get('review_queue') or output.get('validation_errors'):
         knowledge_status = 'answer_withheld'
     elif output.get('no_knowledge') and output.get('unverified_card_ids'):

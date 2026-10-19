@@ -5,7 +5,11 @@ const timers = [];
 const errors = {innerHTML:'', appendChild() { this.count = (this.count || 0) + 1; }};
 const context = vm.createContext({URLSearchParams, window:{location:{search:''}},
   setTimeout:(fn, ms) => timers.push({fn, ms})});
-vm.runInContext(fs.readFileSync(require.resolve('../shiftlink/mes/web/pda.js'), 'utf8'), context);
+const source = fs.readFileSync(require.resolve('../shiftlink/mes/web/pda.js'), 'utf8');
+vm.runInContext(source, context);
+// Run the real browser login boundary; the VM omits the document wiring block.
+context.sessionStorage = {getItem:() => null};
+vm.runInContext(source.slice(source.indexOf("const OPERATOR_KEY ="), source.indexOf('function enterWork()')), context);
 context.document = {getElementById:id => id === 'bootErr' ? errors : {},
   createElement:() => ({querySelector:() => ({})})};
 vm.runInContext(`getJson = async () => { throw new Error('offline'); };`, context);
@@ -16,7 +20,8 @@ vm.runInContext(`getJson = async () => { throw new Error('offline'); };`, contex
   vm.runInContext(`getJson = async (path) => path === '/api/config'
     ? {config:{equipment:[{equipment_id:'EQ-0004'}]}}
     : path === '/api/catalog' ? {data:{}} : {cards:[{}]};
-    renderManualList = () => {}; show = name => { S.screen = name; };`, context);
+    renderManualList = () => {}; renderRecent = () => {}; renderHome = () => {}; refreshSavedHandovers = async () => {};
+    show = name => { S.screen = name; };`, context);
   await timers[0].fn();
   assert.equal(vm.runInContext('S.screen', context), 'login');
   assert.equal(vm.runInContext('S.eq', context), null, 'boot must not bypass login');

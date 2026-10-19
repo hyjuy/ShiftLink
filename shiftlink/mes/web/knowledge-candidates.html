@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>지식카드 후보 검토 · ShiftLink MES</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/candidate-review.css">
+</head>
+<body class="candidate-page">
+  <a class="skip-link" href="#candidate-main">후보 검토로 바로가기</a>
+  <header class="app-header">
+    <a class="brand" href="/" aria-label="ShiftLink MES 홈"><span class="brand-mark" aria-hidden="true">S</span><b class="brand-name">ShiftLink MES</b></a>
+    <div class="header-side"><a class="review-link" href="/">MES 대시보드</a><button id="review-logout" type="button" hidden>로그아웃</button></div>
+  </header>
+  <main id="candidate-main" class="review-main">
+    <div class="review-page-heading"><div><h1>지식카드 후보</h1><p>원인과 조치 경과, 정상 운전 확인을 검토합니다.</p></div><button id="review-refresh" type="button" hidden>목록 새로고침</button></div>
+    <p id="review-message" class="review-message" role="status" aria-live="polite"></p>
+    <section id="review-login" class="review-login-panel panel" aria-labelledby="review-login-title">
+      <h2 id="review-login-title">관리자 로그인</h2><p>MES 관리자 계정으로 후보를 확인하고 검토할 수 있습니다.</p>
+      <form id="review-login-form" class="review-login-form">
+        <label for="review-admin-id">관리자 아이디</label><input id="review-admin-id" autocomplete="username" maxlength="64" required>
+        <label for="review-admin-password">비밀번호</label><input id="review-admin-password" type="password" autocomplete="current-password" maxlength="256" required>
+        <button type="submit" class="primary-button">로그인</button>
+      </form>
+    </section>
+    <div id="review-workspace" class="review-grid" hidden>
+      <aside class="review-list-panel" aria-labelledby="candidate-list-title">
+        <div class="review-list-heading"><h2 id="candidate-list-title">후보 목록</h2><span id="candidate-count"></span></div>
+        <div class="review-filters">
+          <label for="candidate-search">검색<input id="candidate-search" type="search" placeholder="설비명, 제목, 카드 번호" autocomplete="off"></label>
+          <label for="candidate-status">검토 상태<select id="candidate-status"><option value="pending_review">검토 대기</option><option value="all">전체</option><option value="changes_requested">보완 요청</option><option value="review_approved">검토 승인</option><option value="rejected">반려</option></select></label>
+          <label for="candidate-type">유형<select id="candidate-type"><option value="all">전체 유형</option><option value="T3">T3 · 문제 해결</option><option value="T4">T4 · 인계 해결 사례</option><option value="T6">T6 · 재가동 경험</option></select></label>
+        </div>
+        <div id="candidate-list" class="candidate-list" aria-live="polite"></div>
+      </aside>
+      <section id="candidate-detail" class="candidate-detail" aria-label="선택한 후보 상세" aria-live="polite"><p class="review-empty">목록에서 검토할 후보를 선택하세요.</p></section>
+    </div>
+  </main>
+  <footer>ShiftLink MES <span>검토 승인은 정식 지식카드 게시·검색 반영과 별도입니다.</span></footer>
+  <script src="/static/candidate-review.js"></script>
+</body>
+</html>

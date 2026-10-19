@@ -607,6 +607,10 @@
   #globalHeader>a.btn{width:82px}
   #globalHeader #logout{width:76px}
   #globalHeader .btn:hover{background:#EAF2F0}
+  #globalHeader #globalPending{flex:0 1 auto;min-width:0;padding:4px 8px;text-align:left;font-size:14px;line-height:1.5;white-space:normal}
+  #globalHeader #globalPending:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media(max-width:1100px){#globalHeader{flex-wrap:wrap}}
+  @media(max-width:700px){#globalHeader #globalPending{font-size:12px}#globalHeader #globalPending::after{display:block}}
   #app>#net{order:100;height:40px;min-height:40px;flex:0 0 40px;padding:8px 32px;border-top:1px solid #DDE5E5;border-bottom:0;background:#FFFFFF;color:#587174;font-size:14px;line-height:24px}
   #app>#net.warn{background:#FFF4DA;color:#72510D}
   #s-home>.v2-home{padding:32px;gap:24px}
@@ -654,6 +658,12 @@
   #s-home .home-panel h2{font-size:20px;line-height:30px;font-weight:700}
   #s-home .home-handover-list{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;overflow:auto}
   #s-home .home-handover-list>.summary-card{flex:0 0 auto;min-height:112px;padding:16px 20px;align-items:center}
+  #s-home .home-handover-entry{display:block;flex:0 0 auto;width:100%;min-width:0;min-height:48px;padding:16px 0;text-align:left;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:transparent;color:var(--tx);white-space:normal;overflow-wrap:anywhere}
+  #s-home .home-handover-entry:hover{background:var(--hover)}
+  #s-home .home-handover-entry:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  #s-home .home-handover-entry strong{font-size:16px;line-height:1.5}
+  #s-home .home-handover-summary{margin:8px 0;font-size:16px;line-height:1.6;white-space:pre-line;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  #s-home .home-handover-meta{margin:0;font-size:14px;line-height:1.6;color:var(--tx-2);font-weight:400}
   #s-home .home-panel>.home-panel-link{margin-top:auto;flex:0 0 48px;width:100%;height:48px;min-height:48px;border:0;border-top:1px solid #DDE5E5;border-radius:0;padding:12px 0 0;justify-content:flex-end;color:#397F7C;background:#FFFFFF;font-size:16px;font-weight:500}
   #s-home #homeDashboard{flex:0 0 auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
   #s-home #homeDashboard>.metric{padding:0 8px 0 0;background:transparent;border:0;border-right:1px solid #DDE5E5;border-radius:0;min-width:0}
@@ -979,7 +989,8 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 .appbar .ic svg{width:26px;height:26px}
 #s-scan #scanClose{align-self:flex-end}
 #faceSetupReturn{align-self:center}
-#s-reportSelect .report-table :is(th,td):nth-child(n+2){text-align:center}
+#s-reportSelect .report-table th{text-align:center}
+#s-reportSelect .report-table td:nth-child(n+2){text-align:left}
 #s-reportSelect .report-actions{display:flex;gap:12px;align-items:center;width:100%}
 #s-reportSelect #reportWrite{flex:1 1 auto;width:auto}
 #s-reportWrite :is(input,select,textarea,button,.record,.record-head,.mes-record){border-radius:0!important}
@@ -1230,13 +1241,199 @@ button.ld-row:hover{background:var(--surface-2)}
 #reportResume button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 
 #s-handover>.appbar,#s-dutyDetail>.appbar{padding-right:88px}
+#s-handover>.appbar{display:none}
+/* 근무일지 한 건을 한 행으로 표시하고 작은 화면에서는 표 내부만 가로 스크롤한다. */
+#hoPane{min-width:0}
+#hoPane .handover-summary{margin:0 0 8px;font-size:20px;font-weight:700}
+#hoPane .handover-table-hint{margin:0 0 20px;max-width:72ch}
+.handover-scroll-hint{display:none}
+@media(max-width:1100px){.handover-scroll-hint{display:block;margin-top:6px;font-size:13px}}
+.handover-table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--edge);border-radius:8px;background:var(--surface);scrollbar-color:var(--tx-3) var(--surface-2)}
+.handover-table{width:100%;min-width:1160px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:15px;font-variant-numeric:tabular-nums}
+.handover-table :is(th,td){padding:16px 14px;vertical-align:top;text-align:left;border-bottom:1px solid var(--edge);border-right:1px solid var(--edge);overflow-wrap:anywhere}
+.handover-table :is(th,td):last-child{border-right:0}
+.handover-table thead th{background:var(--surface-2);color:var(--tx-2);font-weight:700;white-space:nowrap}
+.handover-table tbody th{font-weight:600;background:var(--surface)}
+.handover-table tbody tr:last-child :is(th,td){border-bottom:0}
+.handover-table th:nth-child(1){width:140px}
+.handover-table th:nth-child(3){width:140px}
+.handover-table th:nth-child(4){width:124px}
+.handover-table th:nth-child(5){width:76px}
+.handover-table th:nth-child(6){width:108px}
+.handover-table th:nth-child(7){width:112px}
+.handover-table :is(th,td):nth-child(n+3){text-align:center}
+.handover-table td:nth-child(2){font-size:16px;font-weight:500}
+.handover-table th:nth-child(6),.handover-table td:nth-child(6){word-break:keep-all;overflow-wrap:normal}
+.handover-table tbody tr:hover :is(th,td),.handover-table tbody tr:focus-within :is(th,td){background:var(--hover)}
+.handover-table .handover-value{white-space:pre-line}
+.handover-table td:nth-child(3) .handover-value,.handover-table td:nth-child(4) .handover-value{white-space:pre;line-height:1.75}
+.handover-table .handover-excerpt{white-space:pre-line;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden;line-height:1.6}
+.handover-followup{margin-top:8px;font-size:14px;font-weight:400;color:var(--tx-2);white-space:pre-line;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.6}
+.handover-table .btn{min-height:44px;min-width:80px;padding:8px 10px;font-size:14px;white-space:nowrap}
+.handover-table .btn.handover-detail{display:inline-flex;align-items:center;justify-content:center;width:48px;min-width:48px;min-height:48px;padding:10px;background:#245f5a;border-color:#245f5a;border-radius:6px;color:#fff;font-size:16px;font-weight:700}
+.handover-table .btn.handover-detail:hover:not(:disabled){background:#194b46;border-color:#194b46;color:#fff}
+.handover-table .btn.handover-detail:active:not(:disabled){background:#123b37;border-color:#123b37}
+.handover-table .btn.handover-detail:focus-visible{outline:3px solid #113e3b;outline-offset:3px}
+#dutyPane>.body{white-space:pre-wrap;overflow-wrap:anywhere}
+#dutyPane{min-width:0}
+.duty-report{max-width:1060px;margin:0 auto 24px;padding:28px 32px;background:var(--surface);border:1px solid var(--edge)}
+.worklog-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:2px solid var(--tx)}
+.worklog-head h2{margin:0;font-size:28px;letter-spacing:0}
+.worklog-head span{font-size:14px;color:var(--tx-2)}
+.worklog-meta{display:grid;grid-template-columns:1fr 1fr;margin:0 0 32px;column-gap:32px}
+.worklog-meta>.worklog-field{padding:16px 0;border-bottom:1px solid var(--edge)}
+.worklog-meta>.worklog-field:last-child{grid-column:1/-1}
+.worklog-field{min-width:0}
+.worklog-field dt{color:var(--tx-2);font-size:14px;font-weight:600}
+.worklog-field dd{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.worklog-meta dd{font-size:17px;font-weight:600}
+.worklog-notes h3{font-size:21px;margin:0 0 16px}
+.worklog-record{margin:0 0 20px;border:1px solid var(--edge);scroll-margin-top:24px}
+.worklog-record-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 20px;background:var(--surface-2);border-bottom:1px solid var(--edge)}
+.worklog-record-head h4{font-size:16px;margin:0}
+.worklog-record-head span{font-size:14px;color:var(--tx-2)}
+.worklog-record.is-selected{border-color:var(--accent)}
+.worklog-record.is-selected .worklog-record-head{background:var(--hover)}
+.worklog-fields{margin:0}
+.worklog-fields>.worklog-field{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;padding:16px 20px;border-bottom:1px solid var(--edge)}
+.worklog-fields>.worklog-field:last-child{border-bottom:0}
+.worklog-fields dd{margin:0;line-height:1.75}
+.worklog-fields>.worklog-field:nth-child(2) dd{font-size:18px;font-weight:500}
+.worklog-memo{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75}
+.worklog-sensors{margin-top:32px;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+.worklog-sensors summary{min-height:52px;padding:14px 0;font-weight:600;color:var(--tx-2)}
+.worklog-sensors pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:inherit;font-size:14px;line-height:1.7;margin:0 0 20px}
+.worklog-id{margin:20px 0 0;color:var(--tx-2);font-size:12px;overflow-wrap:anywhere}
+.incident-history{margin:0;padding:0 0 0 24px}
+.incident-history>li{padding:12px 16px 16px 4px;border-bottom:1px solid var(--edge)}
+.incident-history>li:last-child{border-bottom:0}
+.incident-history .worklog-memo{margin:0;font-size:15px}
+.incident-status{padding:0 20px;white-space:pre-wrap}
+#s-reportWrite input[data-key=occurred_at]{width:min(280px,100%);padding:8px;min-height:44px}
+@media(max-width:600px){.duty-report .worklog-meta{grid-template-columns:1fr;gap:0}.duty-report .worklog-meta>.worklog-field{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;padding:12px 0}.duty-report .worklog-meta dd{margin:0;font-size:16px}}
+@media(max-width:600px){#hoPane .handover-summary{font-size:18px}.handover-table :is(th,td){padding:14px 12px}.handover-table-scroll{border-radius:6px}.duty-report{padding:20px 16px}.worklog-head{align-items:flex-start;flex-direction:column;gap:8px}.worklog-head h2{font-size:24px}.worklog-meta{column-gap:20px;margin-bottom:24px}.worklog-meta dd{font-size:16px}.worklog-record-head{padding:12px 16px;flex-direction:column;gap:4px}.worklog-fields>.worklog-field{display:block;padding:14px 16px}.worklog-fields dd{margin-top:8px}.worklog-fields>.worklog-field:nth-child(2) dd{font-size:17px}.worklog-notes h3{font-size:19px}}
+/* 저장 일지도 작성 화면과 같은 문서·표 스타일로 표시한다. */
+#s-dutyDetail>.appbar{display:none!important}
+#dutyPane .incident-actions{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface-2);border-top:1px solid var(--edge)}
+#dutyPane .incident-actions>.btn{width:auto;min-width:144px;min-height:48px;margin:0;padding:10px 20px;background:#245f5a;border-color:#245f5a;color:#fff;font-size:16px;font-weight:700}
+#dutyPane .incident-actions>.btn:hover:not(:disabled){background:#194b46;border-color:#194b46}
+#dutyPane .incident-actions>.btn:focus-visible{outline:3px solid #113e3b;outline-offset:3px}
+#s-dutyDetail{--bg:#f2f5f4;--surface:#fff;--surface-2:#eaf1ef;--tx:#19332f;--tx-2:#4d6861;--edge:#d5e0dc;background:var(--bg);color:var(--tx)}
+#dutyPane{display:block;background:var(--bg);padding:16px 24px}
+#dutyPane .duty-report{box-sizing:border-box;width:100%;max-width:1120px;min-width:0;margin:0 auto 24px;padding:24px;border:1px solid var(--edge);border-radius:12px;box-shadow:none;background:#fff;font-size:16px;line-height:1.6}
+#dutyPane .worklog-head{display:block;min-height:44px;padding:0;border:0;margin-bottom:24px;text-align:center}
+#dutyPane .worklog-head h2{font-size:28px;line-height:44px}
+#dutyPane .worklog-meta{grid-template-columns:1fr 1fr 1fr;gap:16px;margin:0 0 16px}
+#dutyPane .worklog-meta>.worklog-field{padding:0;border:0}
+#dutyPane .worklog-meta dd{min-height:44px;margin:8px 0 0;padding:8px 10px;background:#fff;border:1px solid #acbbce;border-radius:4px;font-size:16px;font-weight:400}
+#dutyPane .worklog-meta>.worklog-field:last-child{grid-column:1/-1;border:1px solid var(--edge)}
+#dutyPane .worklog-meta>.worklog-field:last-child dt{padding:12px 16px;background:var(--surface-2);text-align:center}
+#dutyPane .worklog-meta>.worklog-field:last-child dd{margin:0;padding:12px 16px;border:0;border-top:1px solid var(--edge);border-radius:0}
+#dutyPane .worklog-notes h3,#dutyPane>.duty-report>.worklog-sensors>summary{font-size:17px;font-weight:700;margin:24px 0 14px;padding:0;min-height:0;color:var(--tx)}
+#dutyPane .worklog-record-head{display:grid;grid-template-columns:144px minmax(0,1fr);gap:0;padding:0;align-items:stretch}
+#dutyPane .worklog-record-head>*{margin:0;padding:14px 16px;font-size:14px;font-weight:600;color:var(--tx)}
+#dutyPane .worklog-record-head h4{border-right:1px solid var(--edge)}
+#dutyPane .worklog-fields>.worklog-field{display:grid;grid-template-columns:144px minmax(0,1fr);gap:0;padding:0}
+#dutyPane .worklog-fields dt{display:flex;align-items:center;padding:14px 16px;background:var(--surface-2);border-right:1px solid var(--edge);color:var(--tx);font-size:14px;font-weight:600;word-break:keep-all}
+#dutyPane .worklog-fields dd{margin:0;padding:14px 16px;font-size:16px;font-weight:400;line-height:1.6}
+#dutyPane .worklog-record.is-selected{border-color:#397f7c}
+#dutyPane .worklog-record.is-selected .worklog-record-head{background:var(--surface-2)}
+#dutyPane .worklog-sensors{margin:0 0 24px;border:0}
+#dutyPane .worklog-sensors pre{padding:14px 16px;border:1px solid var(--edge);background:#fff;font-size:16px;color:var(--tx)}
+#dutyPane .worklog-record .worklog-sensors{margin:0;padding:0 16px;border-top:1px solid var(--edge)}
+#dutyPane .worklog-sensors summary{min-height:48px;cursor:pointer}
+@media(max-width:800px){#dutyPane .worklog-fields>.worklog-field,#dutyPane .worklog-record-head{grid-template-columns:112px minmax(0,1fr)}}
+@media(max-width:600px){#dutyPane{padding:12px}#dutyPane .duty-report{padding:16px 12px}#dutyPane .worklog-head h2{font-size:24px;letter-spacing:.08em}#dutyPane .worklog-meta{grid-template-columns:1fr;gap:12px}#dutyPane .worklog-meta>.worklog-field{display:block}#dutyPane .worklog-fields>.worklog-field,#dutyPane .worklog-record-head{grid-template-columns:96px minmax(0,1fr)}#dutyPane .worklog-fields dt,#dutyPane .worklog-fields dd,#dutyPane .worklog-record-head>*{padding:12px 10px}}
+/* 근무일지의 표·입력 도구 정렬 */
+#s-reportWrite{--report-control-height:44px}
+#s-reportWrite .paper{box-shadow:none}
+#s-reportWrite .document-head{position:relative;display:block;min-height:var(--report-control-height);margin-bottom:24px}
+#s-reportWrite .document-head h2{width:max-content;max-width:100%;margin:0 auto;padding:0;text-align:center;white-space:nowrap;line-height:var(--report-control-height)}
+#s-reportWrite .document-head .report-mini{position:absolute;top:0;right:0;left:auto;bottom:auto;transform:none;width:auto}
+#s-reportWrite .report-mini,#s-reportWrite .record-head .smallbtn,#s-reportWrite .record-end button{display:inline-flex;align-items:center;justify-content:center;min-height:var(--report-control-height);height:var(--report-control-height);padding:0 14px;line-height:1.2;white-space:nowrap}
+#s-reportWrite .section-title{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 16px;font-size:17px;line-height:1.5}
+#s-reportWrite .section-title small{grid-column:1/-1;grid-row:2}
+#s-reportWrite .section-title .report-mini{grid-column:2;grid-row:1;margin:0}
+#s-reportWrite .record-head{display:table-row;padding:0;border:0;background:var(--surface-2)}
+#s-reportWrite .record-head>td{background:var(--surface-2)}
+#s-reportWrite .record-head>th,#s-reportWrite .record-head>td{vertical-align:middle}
+#s-reportWrite .record-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#s-reportWrite .record-head .sp{display:none}
+#s-reportWrite .record-head strong{flex:none;white-space:nowrap}
+#s-reportWrite .record-head select{flex:1 1 150px;width:auto;min-width:0;height:var(--report-control-height)}
+#s-reportWrite .record-head .smallbtn{margin-left:auto;font-size:14px}
+#s-reportWrite .record table th,#s-reportWrite .record table td{padding:14px 16px;border-color:var(--edge);vertical-align:middle;line-height:1.6}
+#s-reportWrite .record table th{width:144px;word-break:keep-all;overflow-wrap:normal;background:var(--surface-2);font-size:14px;font-weight:600;text-align:left}
+#s-reportWrite .report-equipment th,#s-reportWrite .report-equipment td{vertical-align:middle;width:auto;padding:12px 16px;border-color:var(--edge)}
+#s-reportWrite table td,#s-reportWrite table :is(input,select,textarea){text-align:left}
+#s-reportWrite table input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
+#s-reportWrite .report-equipment th{font-size:14px;font-weight:600;background:var(--surface-2)}
+#s-reportWrite .record .edit{min-height:84px;line-height:1.6}
+#s-reportWrite .record td:has(>.report-remove-field){position:relative;padding-right:72px}
+#s-reportWrite .cause-row:has(>.report-remove-field){position:relative;padding-right:56px}
+#s-reportWrite button.report-remove-field{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;width:var(--report-control-height);min-width:var(--report-control-height);height:var(--report-control-height);min-height:var(--report-control-height);padding:0;text-align:center;font-size:24px;line-height:1}
+#s-reportWrite .cause-row>button.report-remove-field{top:10px;right:0}
+#s-reportWrite .record-end{gap:10px;padding:12px 16px;align-items:center;border-color:var(--edge)}
+@media(max-width:800px){#s-reportWrite .record table th{width:112px}}
+@media(max-width:600px){#s-reportWrite .record table th,#s-reportWrite .record table td{padding:12px 10px}#s-reportWrite .record table th{width:96px}#s-reportWrite .record td:has(>.report-remove-field){padding-right:64px}#s-reportWrite button.report-remove-field{top:12px;right:10px}#s-reportWrite .cause-row>button.report-remove-field{top:10px;right:0}#s-reportWrite .record-head{padding:10px;gap:8px}#s-reportWrite .record-head select{flex-basis:130px}#s-reportWrite .record-head .smallbtn{padding:0 10px}#s-reportWrite .document-head h2{font-size:24px;letter-spacing:.08em}#s-reportWrite .section-title{gap:8px;font-size:16px}}
+@media(max-width:600px){#s-reportWrite .document-head{padding-top:56px}}
+@media(max-width:440px){#s-reportWrite .report-form-grid{grid-template-columns:minmax(0,1fr);gap:12px}}
+#s-reportWrite .capture-step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;gap:16px 12px;margin-bottom:20px}
+#s-reportWrite .capture-step-meta{grid-column:1/3;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-width:0}
+#s-reportWrite .capture-step-meta>label{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:14px;line-height:1.6}
+#s-reportWrite .capture-step-meta input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid #acbbce;border-radius:4px;background:#fff;font:inherit}
+#s-reportWrite .report-followup-summary{margin:0 0 10px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+#s-reportWrite .capture-step>label,#s-reportWrite .capture-observation>label{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:14px;line-height:1.6}
+#s-reportWrite .capture-step textarea{display:block;margin:0}
+#s-reportWrite .record .capture-step :is(input,textarea){box-sizing:border-box;font-size:16px;line-height:1.6;padding:8px 10px;border:1px solid #acbbce;border-radius:4px;background:#fff}
+#s-reportWrite .record .capture-step input{height:44px}
+#s-reportWrite .record .capture-step textarea{min-height:100px}
+#s-reportWrite .capture-step>button.report-remove-field{position:static;grid-column:3;grid-row:1;align-self:start;margin-top:30.4px}
+#s-reportWrite .capture-step .capture-failed{grid-column:1/3;grid-row:3;display:flex;flex-direction:row;align-items:center;margin:0}
+#s-reportWrite .capture-restart{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#s-reportWrite .capture-restart .check{margin:0}
+#s-reportWrite .capture-restart select{flex:1 1 180px;min-width:0}
+#s-reportWrite .capture-observation{display:grid;gap:12px}
+#s-reportWrite .capture-observation small{font-size:13px;color:var(--tx-2)}
+#s-reportWrite .capture-select,#s-reportWrite .capture-restart select,#s-reportWrite .capture-observation :is(select,input){display:block;width:100%;height:var(--report-control-height);min-height:var(--report-control-height);padding:6px 10px;border:1px solid #acbbce;background:var(--surface);border-radius:4px}
+#s-reportWrite .record tr.capture-extra-row>td{padding:0}
+#s-reportWrite .report-capture-extra>summary{padding:14px 16px;cursor:pointer}
+#s-reportWrite .report-capture-extra>table{border:0}
+#s-reportWrite .report-capture-extra>table th{border-left:0}
+#s-reportWrite .report-capture-extra>table td{border-right:0}
+#s-reportWrite .report-capture-extra>table tr:last-child :is(th,td){border-bottom:0}
+#s-reportWrite .record-end>small{flex-basis:100%;font-size:13px;color:var(--tx-2)}
+#s-reportWrite .paper>table :is(th,td){padding:12px 16px;border-color:var(--edge);vertical-align:middle;line-height:1.6}
+#s-reportWrite .paper>table th{background:var(--surface-2);font-size:14px;font-weight:600;text-align:center}
+@media(max-width:600px){#s-reportWrite .record-end{padding:12px 10px}#s-reportWrite .paper>table :is(th,td){padding:12px 10px}}
+#s-reportWrite .report-add-tools{grid-column:2;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}
+#s-reportWrite #reportRecordEquipment{width:240px;height:var(--report-control-height);min-width:0;background:var(--surface);font-size:16px;font-weight:400}
+#s-reportWrite #reportAdd{width:var(--report-control-height);min-width:var(--report-control-height);padding:0;font-size:24px}
+#s-reportWrite .report-action-icon{display:block;flex:none;width:20px;height:20px;pointer-events:none}
+#s-reportWrite :is(.report-mini,.record-end button){gap:6px}
+#s-reportWrite :is(#reportAdd,button.report-remove-field){border-radius:6px;border-color:#b5c9c0;color:var(--accent);background:var(--surface)}
+#s-reportWrite :is(#reportAdd,button.report-remove-field):hover:not(:disabled){background:var(--surface-2);border-color:var(--accent)}
+#s-reportWrite select.cause-sensors{width:100%;min-width:0;height:var(--report-control-height);font-size:14px;font-weight:400}
+#s-reportWrite .cause-row{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+#s-reportWrite .cause-sensor-field{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:10px;align-items:center;min-width:0}
+#s-reportWrite .cause-sensor-value{min-width:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#s-reportWrite .cause-row>select[data-key=certainty]{grid-column:1;grid-row:2;width:100%;min-width:0}
+#s-reportWrite .cause-row>textarea{grid-column:2;grid-row:2;min-width:0}
+#s-reportWrite button:has(>.report-action-icon){border:0;background:transparent;box-shadow:none}
+#s-reportWrite button:has(>.report-action-icon):hover:not(:disabled){background:var(--surface-2)}
+@media(max-width:850px){#s-reportWrite .cause-row:has(>.report-remove-field){grid-template-columns:minmax(0,1fr) 44px;padding-right:0}#s-reportWrite .cause-row>.cause-sensor-field{grid-column:1/-1;grid-row:1;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#s-reportWrite .cause-row>select:not(.cause-sensors){grid-column:1;grid-row:2}#s-reportWrite .cause-row>textarea{grid-column:1/-1;grid-row:3}#s-reportWrite .cause-row>button.report-remove-field{position:static;grid-column:2;grid-row:2;justify-self:end}}
+@media(max-width:600px){#s-reportWrite .section-title:has(.report-add-tools){grid-template-columns:minmax(0,1fr)}#s-reportWrite .report-add-tools{grid-column:1;grid-row:2}#s-reportWrite #reportRecordEquipment{flex:1;width:0}#s-reportWrite .section-title:has(.report-add-tools) small{grid-row:3}}
+@media(max-width:600px){#s-reportWrite .report-capture-extra>summary{padding:12px 10px}}
+#s-reportWrite .capture-step>.capture-step-body{grid-column:1;grid-row:2}
+#s-reportWrite .capture-step>.capture-step-body:nth-of-type(2){grid-column:2}
+@media(max-width:600px){#s-reportWrite .capture-step{grid-template-columns:minmax(0,1fr)}#s-reportWrite .capture-step-meta{grid-column:1;grid-template-columns:minmax(0,1fr);gap:16px}#s-reportWrite .record .capture-step input[type=datetime-local]{font-size:14px}#s-reportWrite .capture-step>.capture-step-body{grid-column:1;grid-row:2}#s-reportWrite .capture-step>.capture-step-body:nth-of-type(2){grid-column:1;grid-row:3}#s-reportWrite .capture-step>button.report-remove-field{grid-column:1;grid-row:4;justify-self:end;margin-top:0}#s-reportWrite .capture-step .capture-failed{grid-column:1;grid-row:5}}
 </style>
 </head>
 <body>
 
 <div id="app"><div id="toast" class="toast" role="status" hidden></div>
 
-  <header id="globalHeader" class="global-header"><button id="navigationBack" class="navigation-back" type="button" aria-label="뒤로가기" title="뒤로가기" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><span class="sp"></span><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button" aria-label="홈" title="홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M9 21v-7h6v7"/></svg></button><span class="notify-wrap"><button class="btn sm ghost notify" id="notifyBell" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span><button class="btn sm ghost" id="logout" type="button">로그아웃</button></header>
+  <header id="globalHeader" class="global-header"><button id="navigationBack" class="navigation-back" type="button" aria-label="뒤로가기" title="뒤로가기" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><button class="brand home" type="button" aria-label="ShiftLink 홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg><span>ShiftLink</span></button><button class="outbox-note" id="globalPending" type="button" hidden></button><span class="sp"></span><nav aria-label="주 메뉴"><button class="btn sm ghost" id="toScan" type="button">설비 스캔</button><button class="btn sm ghost" id="toManual" type="button">설비 목록</button></nav><a class="btn sm ghost" href="/">MES</a><button class="btn sm ghost home" id="headerHome" type="button" aria-label="홈" title="홈"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M9 21v-7h6v7"/></svg></button><span class="notify-wrap"><button class="btn sm ghost notify" id="notifyBell" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span><button class="btn sm ghost" id="logout" type="button">로그아웃</button></header>
   <div id="net" hidden><span class="dot"></span><span id="netText">연결 확인 중…</span>
 
     <span class="q" id="netQueue" hidden>대기 0건</span></div>
@@ -1270,7 +1467,7 @@ button.ld-row:hover{background:var(--surface-2)}
         <section class="home-panel home-panel-handover" aria-label="인계 사항"><div class="section-heading"><h2>인계 사항</h2><span class="hint" id="homeHandoverCount"></span></div><div id="homeHandover" class="home-handover-list"></div><button class="btn sm ghost home-panel-link" id="toHandoverHome" type="button">전체 보기 →</button></section>
         <section class="home-panel home-panel-dashboard" aria-label="대시보드"><div class="section-heading"><h2>대시보드</h2></div><div id="homeDashboard" class="metric-grid"></div><div class="home-made" id="homeMade" hidden></div><p class="home-todo" id="homeTodo" hidden></p><div id="homeFaultDetails" class="home-fault-details"></div><div class="home-watch" id="homeWatch" hidden></div><button class="btn sm ghost home-panel-link" id="toDashboard" type="button">상세 보기 →</button></section>
       </div>
-      <div class="home-outbox"><button class="outbox-note" id="homePending" type="button" hidden></button><p class="outbox-note bad" id="homeConflict" hidden></p></div>
+      <div class="home-outbox"><p class="outbox-note bad" id="homeConflict" hidden></p></div>
     </div>
   </section>
 
@@ -1414,12 +1611,11 @@ button.ld-row:hover{background:var(--surface-2)}
   <section class="screen" id="s-handover">
     <div class="appbar"><button class="ic" id="hoBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       <h1>인계 사항</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <button class="outbox-note" id="hoPending" type="button" hidden></button>
     <p class="outbox-note bad" id="hoConflict" hidden></p>
     <div class="pane" id="hoPane"></div>
   </section>
 
-  <section class="screen" id="s-dutyDetail"><div class="appbar"><button class="ic" id="dutyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>당직일지</h1></div><div class="pane" id="dutyPane"></div></section>
+  <section class="screen" id="s-dutyDetail"><div class="appbar"><button class="ic" id="dutyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1 id="dutyTitle">당직일지</h1></div><div class="pane" id="dutyPane"></div></section>
   <section class="screen" id="s-history"><div class="appbar"><button class="ic" id="historyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1 id="historyTitle">정비이력</h1></div><div class="pane" id="historyPane"></div></section>
   <section class="screen" id="s-dashboard"><div class="appbar"><button class="ic" id="dashboardBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>대시보드</h1><span class="sp"></span><a class="btn sm ghost" href="/">MES</a></div>
     <div class="pane">
@@ -1447,14 +1643,14 @@ button.ld-row:hover{background:var(--surface-2)}
 
     <div class="pane report-viewport"><article class="paper" aria-label="근무일지 보고서">
       <div class="document-head"><h2>근 무 일 지</h2><button id="reportArchiveOpen" class="report-mini" type="button">저장 일지 조회</button></div>
-      <div class="report-form-grid"><label>날짜<input id="reportWorkDate" type="date" aria-label="근무 날짜"></label><label>근무시간<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무시간</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>작성자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
-      <table class="meta"><tbody><tr><th>대상 설비</th><td colspan="5" id="reportTargets"></td></tr></tbody></table>
-      <h3 class="section-title">1. 설비 운전·측정 기록 <small>MES 원본 연결 · 수기 작성 없음</small><button id="reportImport" class="report-mini" type="button">센서값 불러오기</button></h3>
-      <table aria-label="MES 수집 기록"><thead><tr><th>측정값 · 관측 시각 · 경보·이벤트</th></tr></thead><tbody><tr><td class="mes-record" id="reportMes">센서값을 불러오면 원본 값·단위·관측 시각이 표시됩니다.</td></tr></tbody></table>
-      <h3 class="section-title">2. 근무 중 특이사항·정비 기록 <small>발생한 경우에만 추가 작성</small><button id="reportAdd" class="report-mini" type="button">＋ 추가 기록</button></h3>
+      <div class="report-form-grid"><label>날짜<input id="reportWorkDate" type="date" aria-label="근무 날짜"></label><label>근무시간<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무시간</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>근무자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
+      <table class="meta report-equipment"><tbody><tr><th scope="col">설비명</th></tr><tr><td id="reportTargets"></td></tr></tbody></table>
+      <h3 class="section-title">1. 설비 운전·측정 기록 <button id="reportImport" class="report-mini" type="button">센서값 불러오기</button></h3>
+      <table aria-label="MES 수집 기록"><thead><tr><th>측정값 · 단위 · 관측시각 · 경보·이벤트</th></tr></thead><tbody><tr><td class="mes-record" id="reportMes">센서값을 불러오면 원본 값·단위·관측 시각이 표시됩니다.</td></tr></tbody></table>
+      <h3 class="section-title">2. 특이사항·정비 기록 <span class="report-add-tools"><select id="reportRecordEquipment" aria-label="기록 대상 설비"><option value="">설비 선택</option></select><button id="reportAdd" class="report-mini" type="button" aria-label="기록 추가" title="기록 추가" disabled><svg class="report-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></span></h3>
       <div id="reportLegacy" hidden><label for="reportMemo">기존 초안의 조치사항</label><textarea id="reportMemo" maxlength="4000"></textarea></div>
       <div id="reportRecords"></div>
-      <div class="summaryline"><span>PMS: 계획 ID 메모 보관</span><span>지식카드: 후보 표시 후 별도 검토</span></div>
+      <div class="summaryline"><span>지식카드: 후보 표시 후 별도 검토</span></div>
     </article></div>
     <div class="footer"><p id="reportStatus" role="status" aria-live="polite">입력 내용은 이 단말의 초안으로 보관됩니다.</p><button class="primary" id="reportSave" type="button">일지 저장</button></div>
     <dialog id="reportSaveConfirm" aria-labelledby="reportSaveTitle"><h2 id="reportSaveTitle">저장하시겠습니까?</h2><div class="confirm-actions"><button id="reportSaveNo" type="button">취소</button><button id="reportSaveYes" class="primary" type="button">저장</button></div></dialog>

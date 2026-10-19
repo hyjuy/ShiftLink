@@ -1,0 +1,68 @@
+[
+  {
+    "id": "resolved_gap",
+    "query": "gap",
+    "expected": "pending_review"
+  },
+  {
+    "id": "not_requested",
+    "query": "gap",
+    "candidate": false,
+    "expected": "not_requested"
+  },
+  {
+    "id": "missing_query",
+    "query": null,
+    "expected": "missing_query"
+  },
+  {
+    "id": "already_answered",
+    "query": "answered",
+    "expected": "query_not_knowledge_gap"
+  },
+  {
+    "id": "answer_withheld",
+    "query": "withheld",
+    "expected": "query_not_knowledge_gap"
+  },
+  {
+    "id": "conditions_unverified",
+    "query": "unverified",
+    "expected": "query_not_knowledge_gap"
+  },
+  {
+    "id": "existing_form_fields",
+    "query": "gap",
+    "expected": "pending_review",
+    "causes": []
+  },
+  {
+    "id": "failed_attempt",
+    "query": "gap",
+    "expected": "pending_review",
+    "result": "청소 후에도 효과 없음"
+  },
+  {
+    "id": "temporary_fix",
+    "query": "gap",
+    "expected": "pending_review",
+    "result": "임시 조치 후 다음 근무에서 재확인"
+  },
+  {
+    "id": "configuration_changed",
+    "query": "gap",
+    "config_changed": true,
+    "expected": "query_configuration_changed"
+  },
+  {
+    "id": "existing_form_without_result",
+    "query": "gap",
+    "result": null,
+    "expected": "pending_review"
+  },
+  {
+    "id": "unknown_answer_state",
+    "query": "unknown",
+    "expected": "query_not_knowledge_gap"
+  }
+]

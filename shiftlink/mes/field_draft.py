@@ -358,6 +358,10 @@ def completeness(card: dict[str, Any], flags: dict[str, Any]) -> dict[str, Any]:
         missing.append("MES로 확인된 해결 기록")
     if flags.get("thin_record"):
         missing.append("기록 빈약: " + ", ".join(flags["thin_record"]))
+    if flags.get("unstructured_work_report"):
+        missing += ["근무일지 해결 여부 확인", "원문에서 재사용 조치 절차 분리"]
+        if flags.get("missing_worker_result"):
+            missing.append("작업자 결과 기록")
     operator = [*([] if card.get("mes_component_code") else ["부품 확인"]),
                 *(["시나리오 확인"] if flags.get("scenario_default") else [])]
     if len(card["conditions"]) > 2:

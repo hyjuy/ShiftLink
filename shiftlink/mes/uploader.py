@@ -23,10 +23,17 @@ HOLD_RESOLUTION_UPLOAD = True
 
 
 def _uploadable_handovers(storage: MesStorage):
-    rows = storage.pending_handovers()
-    if not HOLD_RESOLUTION_UPLOAD:
-        return rows
-    return [row for row in rows if "resolution" not in json.loads(row[2])]
+    rows = []
+    for row_id, created_at, payload in storage.pending_handovers():
+        body = json.loads(payload)
+        if HOLD_RESOLUTION_UPLOAD and "resolution" in body:
+            continue
+        evidence = storage.work_report_sensors(row_id)
+        if evidence is not None:
+            body['server_sensor_evidence'] = evidence
+            payload = json.dumps(body, ensure_ascii=False, sort_keys=True)
+        rows.append((row_id, created_at, payload))
+    return rows
 
 
 # (local rows, mark, cloud table, key column, extra columns from payload)

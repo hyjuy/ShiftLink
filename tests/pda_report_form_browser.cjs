@@ -11,27 +11,27 @@ const {chromium}=require('playwright');
  await page.addScriptTag({content:`const on=(id,fn)=>$(id).addEventListener('click',fn);`+js.slice(js.indexOf("on('reportArchiveOpen'"),js.indexOf("on('logout'"))});
  await page.evaluate(()=>{
  S.equipment=[{equipment_id:'EQ-1',code:'HPU-01',group:'유압 유닛',signals:[]},{equipment_id:'EQ-2',code:'CL-01',group:'냉각기',signals:[]}];S.operator={name:'작업자'};
- openReport();S.reportSelected=['EQ-1','EQ-2'];$('reportStart').value='2026-10-15T08:00';$('reportEnd').value='2026-10-15T17:00';openReportWrite();
+ openReport();S.reportSelected=['EQ-1','EQ-2'];$('reportStart').value='2026-10-15T08:00';$('reportEnd').value='2026-10-15T17:00';$('reportType').value='정상 근무';openReportWrite();
  $('reportSave').onclick=saveReport;$('reportImport').onclick=importReportMes;
- renderHome=()=>{};refreshSavedHandovers=async()=>{};
+ renderHome=()=>{};refreshSavedHandovers=async()=>{};showToast=()=>{};
  api=async(path,init)=>{if(path!=='/api/work-reports')throw new Error('unexpected save route');window.posted=JSON.parse(init.body);return {ok:true,json:async()=>({handover_id:'HO-test'})}};
  getJson=async(path)=>path==='/api/events'?{events:[]}:{simulated_at:'2026-10-15T09:00',equipment:[],measurements:[]};
  });
  assert.equal(await page.locator('#reportRecords .record').count(),0);
- await page.locator('#reportSave').click();assert.match(await page.evaluate(()=>posted.memo_text),/별도 작성 내용 없음/);
- await page.evaluate(()=>{openReport();S.reportSelected=['EQ-1','EQ-2'];openReportWrite()});
+ await page.locator('#reportSave').click();assert.match(await page.evaluate(()=>posted.memo_text),/근무 유형: 정상 근무/);
+ await page.evaluate(()=>{openReport();S.reportSelected=['EQ-1','EQ-2'];$('reportType').value='정상 근무';openReportWrite()});
  await page.locator('#reportAdd').click();
  page.once('dialog',dialog=>dialog.accept());await page.locator('[data-action="remove"]').click();
  assert.equal(await page.locator('#reportRecords .record').count(),0);
  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('shiftlink.report.draft')).records),[]);
- await page.locator('#reportAdd').click();await page.locator('#reportSave').click();assert.match(await page.locator('#reportStatus').innerText(),/대상 설비/);
+ await page.locator('#reportAdd').click();await page.locator('#reportRecords [data-eq="EQ-1"]').uncheck();await page.locator('#reportRecords [data-eq="EQ-2"]').uncheck();await page.locator('#reportSave').click();assert.match(await page.locator('#reportStatus').innerText(),/대상 설비/);
  await page.locator('#reportRecords [data-eq="EQ-1"]').check();await page.locator('#reportRecords [data-eq="EQ-2"]').check();
  await page.locator('#reportSave').click();assert.match(await page.locator('#reportStatus').innerText(),/상황·조치/);
  await page.locator('[data-key="story"]').fill('냉却状態確認 <script>alert(1)</script>');
- await page.locator('[data-action="cause"]').click();await page.locator('[data-key="note"]').fill('냉각기 오염 확인');await page.locator('[data-key="certainty"]').selectOption('확인');
+ await page.locator('[data-action="cause"]').click();assert.equal(await page.locator('[data-key="note"]').count(),2);for(const field of await page.locator('[data-key="note"]').all())await field.fill('냉각기 오염 확인');for(const field of await page.locator('[data-key="certainty"]').all())await field.selectOption('확인');
  await page.locator('[data-action="result"]').click();await page.locator('[data-key="result"]').fill('다음 조 확인');
  await page.locator('[data-action="pms"]').click();await page.locator('[data-key="pms"]').fill('PMS-01');await page.locator('[data-key="candidate"]').check();
- await page.locator('#reportImport').click();assert.match(await page.locator('#reportMes').innerText(),/MES 기록/);
+ await page.locator('#reportImport').click();assert.match(await page.locator('#reportMes').innerText(),/관측 시각/);
  await page.evaluate(()=>{openReport();openReportWrite()});assert.equal(await page.locator('[data-key="pms"]').inputValue(),'PMS-01');assert.ok(await page.locator('[data-key="candidate"]').isChecked());
  await page.locator('#reportAdd').click();
  page.once('dialog',dialog=>dialog.dismiss());await page.locator('[data-action="remove"]').last().click();
@@ -41,10 +41,10 @@ const {chromium}=require('playwright');
  assert.equal(await page.locator('[data-key="pms"]').inputValue(),'PMS-01');
  for(const width of [1280,375]){
  await page.setViewportSize({width,height:800});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
- await page.locator('#reportAdd').scrollIntoViewIfNeeded();await page.screenshot({path:'output/pda-report-'+width+'.png'});
+ await page.locator('#reportAdd').scrollIntoViewIfNeeded();await page.screenshot({path:'artifacts/typed-work-report-20261016/legacy-'+width+'.png'});
  }
- await page.evaluate(()=>{S.reportSelected=['EQ-1'];openReportWrite()});
- assert.ok(await page.locator('[data-eq="EQ-2"][data-cause="0"]').isVisible());
+ await page.evaluate(()=>{S.reportRecords[0].causes=[{...S.reportRecords[0].causes[0],equipment:['EQ-1','EQ-2']}];S.reportSelected=['EQ-1'];openReportWrite()}); // Restore a legacy multi-equipment cause before testing scope validation.
+ assert.ok(await page.locator('[data-eq="EQ-2"][data-cause="0"]').isVisible(),JSON.stringify(await page.evaluate(()=>({selected:S.reportSelected,records:S.reportRecords.map(r=>({equipment:r.equipment,causes:r.causes}))}))));
  await page.locator('[data-eq="EQ-2"]:not([data-cause])').uncheck();
  await page.locator('#reportSave').click();assert.match(await page.locator('#reportStatus').innerText(),/원인의 대상 설비/);
  await page.locator('[data-eq="EQ-2"][data-cause="0"]').uncheck();

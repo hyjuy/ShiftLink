@@ -17,6 +17,7 @@ class Accounts:
         self.lock = threading.Lock()
         self.failures = []
         self.sessions = {}
+        self.session_actors = {}
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if not self.path.exists():
             try:
@@ -38,6 +39,14 @@ class Accounts:
     def _public(row):
         return {key:row[key] for key in ('id','name','role')}
 
+    def administrator(self, token):
+        with self.lock:
+            if self.sessions.get(token,0)<=time.monotonic():
+                self.sessions.pop(token,None);self.session_actors.pop(token,None)
+                return None
+            actor=self.session_actors.get(token)
+            return dict(actor) if actor and actor['role']=='admin' else None
+
     def request(self, method, path, payload=None, token=''):
         payload = payload or {}
         try:
@@ -51,6 +60,7 @@ class Accounts:
     def _request(self, method, path, payload, token):
         now = time.monotonic()
         self.sessions = {key:expires for key,expires in self.sessions.items() if expires > now}
+        self.session_actors = {key:actor for key,actor in self.session_actors.items() if key in self.sessions}
         rows = self._read()
         if method == 'POST' and path in ('/api/admin/login','/api/account/login'):
             employee, password = payload.get('id'), payload.get('password')
@@ -70,6 +80,7 @@ class Accounts:
             if role == 'admin':
                 session = secrets.token_urlsafe(32)
                 self.sessions[session] = now + 3600
+                self.session_actors[session] = self._public(row)
                 return 200, {'token':session,'name':row['name'],'role':'admin'}
             return 200, {'operator':{'id':row['id'],'name':row['name']}}
         if path.startswith('/api/admin/'):
@@ -77,6 +88,7 @@ class Accounts:
                 return 401, {'error':'MES 관리자 로그인이 필요합니다.'}
             if method == 'POST' and path == '/api/admin/logout':
                 self.sessions.pop(token,None)
+                self.session_actors.pop(token,None)
                 return 200, {'ok':True}
             if method == 'GET' and path == '/api/admin/accounts':
                 return 200, {'accounts':[self._public(row) for row in rows]}

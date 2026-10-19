@@ -34,7 +34,6 @@ const snapshot = {simulated_at:'2026-10-07T06:18:57.622226+00:00',equipment:[{eq
 context.snapshot = snapshot;
 (async()=>{
   await vm.runInContext('loadMesObservations(snapshot)',context);
-  assert.equal(vm.runInContext('S.sensorsOpen',context),true,'abnormal readings open sensor values automatically');
   assert.match(nodes.ctxSensors.text(),/154\.845 bar/);
   assert.match(nodes.ctxSensors.text(),/47\.05 ℃/);
   assert.match(nodes.ctxSensors.text(),/정상 범위 145~165 bar/);
@@ -52,17 +51,17 @@ context.snapshot = snapshot;
     S.observations=[{signal:'hpu_pressure',value:155,unit:'bar',source:'manual'}];`,context);
   assert.equal(vm.runInContext('rankCards(S.eq).excluded.length',context),1);
   assert.equal(vm.runInContext('rankCards(S.eq, S.queryResponse.evidence.measurements).actions.length',context),1,'result ranking uses frozen evidence, not recovered live pressure');
-  vm.runInContext('setSensorsOpen(true)', context);
+  vm.runInContext('S.sensorSnapshot = null; renderEquipmentMetrics()', context);
   const frozenTime = nodes.metricsTime.textContent;
   assert.match(nodes.equipmentMetrics.text(), /154\.845/);
   snapshot.measurements[0].value = 160;
   snapshot.simulated_at = '2026-10-07T06:19:00.000000+00:00';
   await vm.runInContext('loadMesObservations(snapshot)', context);
-  assert.match(nodes.equipmentMetrics.text(), /154\.845/, 'open sensor panel keeps its values');
+  assert.match(nodes.equipmentMetrics.text(), /154\.845/, 'sensor panel keeps its values until refresh');
   assert.equal(nodes.metricsTime.textContent, frozenTime, 'snapshot time stays fixed');
   assert.equal(vm.runInContext('S.mes.readings[0].value',context), 160, 'live monitoring still updates');
-  vm.runInContext('setSensorsOpen(false);setSensorsOpen(true)',context);
-  assert.match(nodes.equipmentMetrics.text(), /160/, 'reopening captures current readings');
+  vm.runInContext('S.sensorSnapshot = null; renderEquipmentMetrics()',context);  // 새로고침 버튼과 같은 동작
+  assert.match(nodes.equipmentMetrics.text(), /160/, 'refresh captures current readings');
   snapshot.measurements[0].value = 154.845;
   snapshot.measurements[0].quality = 'bad';
   await vm.runInContext('loadMesObservations(snapshot)',context);

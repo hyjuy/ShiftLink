@@ -177,3 +177,48 @@ def test_query_log_keeps_safety_when_answer_is_withheld(service, review_queue, n
     assert logged['safety_notices'][0]['card_id'] == 'K-S'
     assert '카드: K-S' in logged['rendered_response']
     assert 'withheld answer' not in logged['rendered_response']
+
+
+class NoPipeline:
+    def run(self, payload):
+        raise AssertionError('greetings must not reach the answer pipeline')
+
+
+@pytest.mark.parametrize('text, kind, rest', [
+    ('안녕', 'greet', None), ('안녕하세요!!', 'greet', None), ('하이~', 'greet', None), ('좋은 아침', 'greet', None),
+    ('고마워ㅎㅎ', 'thanks', None), ('감사합니다.', 'thanks', None), ('수고하세요', 'bye', None), ('Thank you', 'thanks', None),
+    ('안녕 쿨러 팬이 멈췄어', 'greet', '쿨러 팬이 멈췄어'), ('하이 연기가 나요', 'greet', '연기가 나요'),
+    ('안녕하세요, 근데 HPU 압력이 낮아요', 'greet', 'HPU 압력이 낮아요'),
+    ('고마워 근데 차단기 트립은 어떻게 해?', None, '고마워 근데 차단기 트립은 어떻게 해?'),   # only greetings are split off
+    ('감사 결과 보고 알려줘', None, '감사 결과 보고 알려줘'), ('하이드로 펌프 소음', None, '하이드로 펌프 소음'),
+    ('안녕연기', None, '안녕연기'), ('배고파', None, '배고파'), ('안녕 ㅎ', 'greet', None),
+])
+def test_smalltalk_classify(text, kind, rest):
+    from shiftlink.mes.smalltalk import classify
+    assert classify(text) == (kind, rest)
+
+
+def test_greeting_alone_gets_a_fixed_reply_without_the_model(service):
+    from shiftlink.mes.smalltalk import REPLY
+    service.record_scan({'class': 'HPU', 'conf': .9, 'device_id': 'pi'})
+    result = query_service(service, {'question': '안녕하세요'}, pipeline=NoPipeline())
+    assert result['answer'] == REPLY['greet'] and result['smalltalk'] == 'greet'
+    assert result['knowledge_status'] == 'smalltalk' and not result['no_knowledge'] and result['cited_card_ids'] == []
+    assert query_service(service, {'question': '감사합니다'}, pipeline=NoPipeline())['answer'] == REPLY['thanks']
+
+
+def test_leading_greeting_sends_only_the_rest_and_greets_back(service):
+    service.record_scan({'class': 'HPU', 'conf': .9, 'device_id': 'pi'})
+    pipeline = Pipeline()
+    result = query_service(service, {'question': '안녕 bearing temperature'}, pipeline=pipeline)
+    assert pipeline.payload['question'] == 'bearing temperature'
+    assert result['answer'] == '안녕하세요. grounded answer' and 'smalltalk' not in result
+
+
+def test_leading_greeting_adds_nothing_to_a_no_knowledge_answer(service):
+    class NoKnowledge:
+        def run(self, payload):
+            return SimpleNamespace(output=AgentResponse(mode='query', answer='', no_knowledge=True))
+    service.record_scan({'class': 'HPU', 'conf': .9, 'device_id': 'pi'})
+    result = query_service(service, {'question': '안녕 bearing temperature'}, pipeline=NoKnowledge())
+    assert result['answer'] == '' and result['knowledge_status'] == 'no_applicable_card'

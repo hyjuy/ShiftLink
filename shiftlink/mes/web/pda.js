@@ -2344,7 +2344,7 @@ function openDutyDetail(h, back, selectedRecord) {
 }
 function openHistory() {
   if (!S.eq) return;
-  const pane = $('historyPane'); pane.replaceChildren(); $('historyTitle').textContent = S.eq.code + ' · '+S.eq.group+' · 정비이력';
+  const pane = $('historyPane'); pane.replaceChildren(); $('historyTitle').textContent = S.eq.code + ' · '+S.eq.group+' · 정비 이력';
   const rows = allHandovers().flatMap((h) => {
     if (h.kind === 'work_log') return handoverEquipment(h,S.equipment).includes(S.eq) ? dutyTimeline(h,S.eq) : [];
     return dutyTimeline(h,S.eq);
@@ -3488,7 +3488,7 @@ on('navigationBack',goBack);on('faceSetupReturn',goBack);
 window.addEventListener('resize',()=>{if(S.screen==='manual')layoutManualList();});
 // 가운데 줄: ‹ 채팅 전체 화면, › 장비 전체 화면. 전체 화면에서는 남은 버튼 하나가 함께 보기로 되돌린다.
 function setWorkspaceMode(mode){const w=$('equipmentWorkspace');w.classList.remove('equipment-only','chat-only');if(mode)w.classList.add(mode);
-  $('expandChat').setAttribute('aria-label',mode==='equipment-only'?'함께 보기':'채팅 확대');$('expandEquipment').setAttribute('aria-label',mode==='chat-only'?'함께 보기':'장비 확대');
+  $('expandChat').setAttribute('aria-label',mode==='equipment-only'?'함께 보기':'채팅 확대');$('expandEquipment').setAttribute('aria-label',mode==='chat-only'?'함께 보기':'설비 확대');
   $('expandChat').title=$('expandChat').getAttribute('aria-label');$('expandEquipment').title=$('expandEquipment').getAttribute('aria-label');}
 on('expandChat',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains('equipment-only')?'':'chat-only'));
 on('expandEquipment',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains('chat-only')?'':'equipment-only'));
@@ -3953,32 +3953,110 @@ $('homeWatch').addEventListener('click', (e) => {
   if (!w) return;
   openIncidents(w.code + ' ' + w.label, w.incidents); S.dlFrom = 'home';
 });
+/* 반복 증상 → 근무일지 이력(10/19 시안). 근무일지 항목 순서: 발생 시각 · 관찰 내용(상황·증상) · 원인 검토(원인·판단 근거)
+ * · 조치 내용 · 조치 결과 · 조치 상태 · 인계 기록 · 참고 카드. 요약은 발생·재발·총 정지·원인 확인 수. */
+const IL_STATE = { recurred: 'miss', watching: 'unknown', held: 'match', open: 'open' };
+const recurText = (days) => { const h = Math.round(days * 24); return Math.floor(h / 24) + '일 ' + (h % 24) + '시간 후'; };
+function ilList(items, mark) {
+  if (!items.length) return null;
+  const ul = document.createElement('ul'); ul.className = 'il-steps';
+  items.forEach((it, i) => {
+    const li = document.createElement('li'), tag = mark(it, i);
+    if (tag) li.appendChild(tag); else li.classList.add('bare');
+    const t = document.createElement('span'); t.textContent = it.text; li.appendChild(t);
+    if (it.sub) { const s = document.createElement('small'); s.textContent = it.sub; li.appendChild(s); }
+    ul.appendChild(li);
+  });
+  return ul;
+}
 function openIncidents(title, ids) {
   S.dlFrom = null;   // 대시보드에서 열면 '이전'은 대시보드로(홈에서 열 때만 호출한 쪽이 'home'으로 바꾼다)
-  const want = new Set(ids);
-  const pane = $('dlPane'); pane.innerHTML = '';
+  const want = new Set(ids), list = S.an.incidents.filter((i) => want.has(i.incident_id));
+  const pane = $('dlPane'); pane.replaceChildren();
   $('dlTitle').textContent = title;
-  S.an.incidents.filter((i) => want.has(i.incident_id)).forEach((i) => {
-    const d = document.createElement('div'); d.className = 'card inc';
-    d.innerHTML = '<div class="top"><span class="mono"></span><b class="mono"></b><span class="lb"></span><span class="pill st"></span></div>'
-      + '<div class="nums mono"></div><p class="body"></p><div class="src mono"></div>';
-    const [word, cls] = AN_OUTCOME[i.outcome] || ['', 'unknown'];
-    d.querySelector('.top span').textContent = mdhm(i.alarm_at);
-    d.querySelector('.top b').textContent = eqCode(i.equipment_id);
-    d.querySelector('.top b').prepend(eqChip(i.equipment_id));
-    d.querySelector('.lb').textContent = i.label;
-    const st = d.querySelector('.st'); st.textContent = word; st.className = 'pill st ' + cls;
-    d.querySelector('.nums').textContent = '정지 ' + Math.round(i.down_min) + '분'
-      + (i.affected.length ? ' · 연쇄 정지 ' + i.affected.length + '대' : '');
-    d.querySelector('.body').textContent = [i.action || '조치 기록 없음', i.cause ? '원인 ' + i.cause : '',
-      AN_RESULT[i.result] || ''].filter(Boolean).join(' · ');
-    const card = i.card_id && S.cards.find((c) => c.card_id === i.card_id);
-    d.querySelector('.src').textContent = [i.handover_id, i.card_id ? i.card_id + (card ? ' ' + card.title : '') : '',
-      i.recurred_after_days != null ? i.recurred_after_days + '일 뒤 재발' : ''].filter(Boolean).join(' · ');
-    pane.appendChild(d);
+  const eqId = list[0] && list[0].equipment_id, eq = S.equipment.find((e) => e.equipment_id === eqId);
+  // 머리: 설비 색 점 · 제목 · 4주 기간 · 설비 확인
+  const head = document.createElement('div'); head.className = 'il-head';
+  head.innerHTML = '<h1></h1><span class="il-per"></span><button type="button" class="il-go">설비 확인<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>';
+  head.querySelector('h1').textContent = title; if (eqId) head.querySelector('h1').prepend(eqChip(eqId));
+  head.querySelector('.il-per').textContent = periodText(S.an.window_start || Date.parse(S.an.now) - 28 * 864e5, S.an.window_end || S.an.now, '4주');
+  const go = head.querySelector('.il-go');
+  if (eq) go.addEventListener('click', () => { setContext(eq, 'manual_selection', {}); show('ctx'); }); else go.hidden = true;
+  pane.appendChild(head);
+  // 요약 4칸
+  const done = list.filter((i) => i.outcome !== 'open');
+  const tiles = document.createElement('div'); tiles.className = 'il-tiles';
+  [['발생', list.length, '회', ''], ['재발', list.filter((i) => i.outcome === 'recurred').length, '회', 'bad'],
+    ['총 정지', Math.round(list.reduce((n, i) => n + i.down_min, 0)), '분', ''],
+    ['원인 확인', done.filter((i) => (i.causes || []).some((c) => c.certainty === '확인')).length, '/ ' + done.length + '건', '']]
+    .forEach(([t, n, unit, cls]) => {
+      const d = document.createElement('div'); d.className = 'il-tile ' + cls;
+      d.innerHTML = '<span class="t"></span><span class="n"><b></b><small></small></span>';
+      d.querySelector('.t').textContent = t; d.querySelector('b').textContent = n; d.querySelector('small').textContent = unit;
+      tiles.appendChild(d);
+    });
+  pane.appendChild(tiles);
+  // 근무일지 이력 표
+  const box = document.createElement('section'); box.className = 'il-box';
+  box.innerHTML = '<h2>근무일지 이력 <small>· 최신순</small></h2><div class="il-scroll"><table class="il-table"><thead><tr>'
+    + ['발생 시각', '관찰 내용', '원인 검토', '조치 내용', '조치 결과', '조치 상태', '인계 기록', '참고 카드'].map((h) => '<th scope="col">' + h + '</th>').join('')
+    + '</tr></thead><tbody></tbody></table></div>';
+  const body = box.querySelector('tbody');
+  const none = () => { const s = document.createElement('span'); s.className = 'il-none'; s.textContent = '기록 없음'; return s; };
+  const num = (it, i) => { const s = document.createElement('span'); s.className = 'il-no'; s.textContent = i + 1; return s; };
+  list.forEach((i) => {
+    const tr = document.createElement('tr'); if (i.outcome === 'open') tr.className = 'open';
+    const td = () => { const c = document.createElement('td'); tr.appendChild(c); return c; };
+    const when = td(); when.innerHTML = '<b></b><small></small>';
+    when.querySelector('b').textContent = mdhm(i.alarm_at);
+    when.querySelector('small').textContent = '정지 ' + Math.round(i.down_min) + '분' + (i.outcome === 'open' ? '째' : '');
+    const story = td(); if (i.story) story.textContent = i.story; else story.appendChild(none());
+    const causes = (i.causes && i.causes.length ? i.causes : i.cause ? [{certainty: null, note: i.cause, evidence: ''}] : [])
+      .map((c) => ({text: c.note, sub: c.evidence, certainty: c.certainty}));
+    const steps = i.action_steps && i.action_steps.length ? i.action_steps : i.action ? [{action: i.action, observed_result: ''}] : [];
+    const cell = (items, mark) => { const c = td(), ul = ilList(items, mark); c.appendChild(ul || none()); };
+    cell(causes, (it) => { if (!it.certainty) return null; const s = document.createElement('span'); s.className = 'il-cert ' + ({확인: 'ok', 추정: 'guess', 배제: 'out'}[it.certainty] || ''); s.textContent = it.certainty; return s; });
+    cell(steps.map((s) => ({text: s.action})), num);
+    cell(steps.filter((s) => s.observed_result).length ? steps.map((s) => ({text: s.observed_result || '—'})) : [], num);
+    const st = td(), pill = document.createElement('span'), [word] = AN_OUTCOME[i.outcome] || ['', ''];
+    pill.className = 'il-state ' + (IL_STATE[i.outcome] || '');
+    // 재발은 두 줄: '재발' / 'N일 N시간 후' — 칸 폭을 넘지 않게
+    if (i.outcome === 'recurred' && i.recurred_after_days != null) { pill.textContent = word; const b = document.createElement('small'); b.textContent = recurText(i.recurred_after_days); pill.appendChild(b); }
+    else pill.textContent = word;
+    st.appendChild(pill);
+    const ho = td();
+    if (i.handover_id) ho.textContent = i.handover_id;
+    else if (i.outcome === 'open' && eq) {
+      const w = document.createElement('button'); w.type = 'button'; w.className = 'il-write'; w.textContent = '근무일지 작성 ›';
+      w.addEventListener('click', () => { setContext(eq, 'manual_selection', {}); openEquipmentReport(); });
+      ho.appendChild(w);
+    } else ho.textContent = '—';
+    const card = td();
+    if (i.card_id) { const c = document.createElement('span'); c.className = 'il-card'; c.textContent = i.card_id; card.appendChild(c); } else card.textContent = '—';
+    body.appendChild(tr);
   });
+  pane.appendChild(box);
   show('dashList');
+  requestAnimationFrame(alignIncidentRows);
 }
+/* 원인 검토·조치 내용·조치 결과의 같은 번째 항목을 같은 줄에서 시작하게 높이를 맞춘다(행마다, 항목 순서끼리). */
+function alignIncidentRows() {
+  document.querySelectorAll('#dlPane .il-table tbody tr').forEach((tr) => {
+    const lists = [...tr.querySelectorAll('.il-steps')];
+    lists.forEach((ul) => [...ul.children].forEach((li) => { li.style.minHeight = ''; }));
+    const n = Math.max(0, ...lists.map((ul) => ul.children.length));
+    for (let k = 0; k < n; k++) {
+      const items = lists.map((ul) => ul.children[k]).filter(Boolean);
+      const h = Math.max(...items.map((li) => li.getBoundingClientRect().height));
+      items.forEach((li) => { li.style.minHeight = h + 'px'; });
+    }
+    // 항목 수가 달라도 세 칸 목록 높이를 같게 — 세로 가운데 정렬에서도 첫 항목이 같은 줄에서 시작한다
+    lists.forEach((ul) => { ul.style.minHeight = ''; });
+    const top = Math.max(0, ...lists.map((ul) => ul.getBoundingClientRect().height));
+    lists.forEach((ul) => { ul.style.minHeight = top + 'px'; });
+  });
+}
+window.addEventListener('resize', () => { if (S.screen === 'dashList') alignIncidentRows(); });
 on('dlBack', () => {   // 홈 '지켜볼 설비'에서 왔으면 홈으로
   const to = S.dlFrom || 'dashboard'; S.dlFrom = null;
   show(to); if (to === 'dashboard') renderAnalytics();

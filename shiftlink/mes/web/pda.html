@@ -1650,6 +1650,59 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-reportSelect .rs :is(button,input):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:900px){#s-reportSelect .rs{overflow-y:auto}#s-reportSelect .rs-body{grid-template-columns:minmax(0,1fr);flex:0 0 auto;overflow:visible}#s-reportSelect .rs .table-scroll{overflow:visible}#s-reportSelect .rs .report-table th{position:static}#s-reportSelect .rs-all{border-right:0;border-bottom:1px solid var(--edge)}#s-reportSelect .rs-picked{overflow:visible}}
 @media(max-width:600px){#s-reportSelect .rs{padding:12px 12px 0}#s-reportSelect .rs-head h1{font-size:24px}#s-reportSelect .rs-steps{margin-left:0}#s-reportSelect .rs-steps li+li::before{width:28px;margin:0 8px}#s-reportSelect .rs .report-table :is(th,td):nth-child(3){width:110px}#s-reportSelect .rs .report-table td{font-size:16px;padding:12px 8px}#s-reportSelect .rs-foot{position:static;padding:12px 0 0}#s-reportSelect .rs-foot #reportWrite{max-width:none}#s-reportSelect .rs-foot #reportWrite{width:auto;flex:1}}
+/* 46차: 반복 증상 → 근무일지 이력(10/19 시안). 표는 인계 표 규칙 + 세로 가운데 */
+#s-dashList>.pane{padding:16px 28px 28px;gap:16px;overflow-y:auto;scrollbar-width:none}
+#s-dashList>.pane::-webkit-scrollbar{display:none}
+#s-dashList>.pane>*{flex:0 0 auto}
+#s-dashList .il-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#s-dashList .il-head h1{display:flex;align-items:center;gap:10px;margin:0;font-size:28px;font-weight:800;line-height:1.3;color:var(--tx)}
+#s-dashList .il-head h1 .eqchip{width:12px;height:12px;margin:0}
+#s-dashList .il-per{font-size:15px;color:var(--tx-2)}
+#s-dashList .il-go{display:inline-flex;align-items:center;gap:4px;margin-left:auto;min-height:44px;padding:0 16px;border:1px solid var(--edge);border-radius:8px;background:var(--surface);color:var(--accent);font-size:15px;font-weight:700;cursor:pointer}
+#s-dashList .il-go svg{width:18px;height:18px}
+#s-dashList .il-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#s-dashList .il-tile{display:flex;flex-direction:column;padding:14px 16px 12px;border:1px solid var(--edge);border-radius:10px;background:var(--surface);text-align:center}
+#s-dashList .il-tile .t{padding-bottom:8px;border-bottom:1px solid var(--edge);font-size:15px;font-weight:600;color:var(--tx-2)}
+#s-dashList .il-tile .n{display:flex;align-items:baseline;justify-content:center;gap:2px;padding:14px 0 6px}
+#s-dashList .il-tile .n b{font-size:32px;font-weight:800;line-height:1;color:var(--tx)}
+#s-dashList .il-tile .n small{font-size:16px;font-weight:600;color:var(--tx)}
+#s-dashList .il-tile.bad .n b,#s-dashList .il-tile.bad .n small{color:var(--fault-tx)}
+#s-dashList .il-box{border:1px solid var(--edge);border-radius:10px;background:var(--surface);overflow:hidden}
+#s-dashList .il-box h2{margin:0;padding:14px 18px;font-size:20px;font-weight:800;color:var(--tx)}
+#s-dashList .il-box h2 small{font-size:14px;font-weight:600;color:var(--tx-2)}
+#s-dashList .il-scroll{overflow-x:auto}
+#s-dashList .il-table{width:100%;min-width:1100px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:15px}
+#s-dashList .il-table :is(th,td){padding:16px 14px;border-top:1px solid var(--edge);border-right:1px solid var(--edge);vertical-align:middle;text-align:left;overflow-wrap:anywhere}
+#s-dashList .il-table :is(th,td):last-child{border-right:0}
+#s-dashList .il-table thead th{background:var(--surface-2);color:var(--tx-2);font-weight:700;white-space:nowrap}
+#s-dashList .il-table :is(th,td):nth-child(1),#s-dashList .il-table :is(th,td):nth-child(n+6){text-align:center}
+#s-dashList .il-table th:nth-child(1){width:124px}#s-dashList .il-table th:nth-child(6){width:140px}#s-dashList .il-table th:nth-child(7){width:132px}#s-dashList .il-table th:nth-child(8){width:96px}
+#s-dashList .il-table tbody tr:hover td{background:var(--hover)}
+#s-dashList .il-table tr.open td{background:#FFFAF2}
+#s-dashList .il-table td:nth-child(1) b{display:block;font-weight:700;white-space:nowrap}
+#s-dashList .il-table td:nth-child(1) small{display:block;font-size:14px;color:var(--tx-2)}
+#s-dashList .il-none{font-size:14px;color:var(--tx-2)}
+#s-dashList .il-steps{margin:0;padding:0;list-style:none}
+/* 항목 = [표지][글] 한 줄 + 근거(다음 줄, 표지 왼쪽부터). 같은 번째 항목은 alignIncidentRows()가 높이를 맞춘다 */
+#s-dashList .il-steps li{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;align-content:start;gap:2px 6px}
+#s-dashList .il-steps li.bare{grid-template-columns:minmax(0,1fr)}
+#s-dashList .il-steps li>small{grid-column:1/-1}
+#s-dashList .il-steps li+li{margin-top:6px;padding-top:6px;border-top:1px dashed var(--edge)}
+#s-dashList .il-steps small{font-size:13px;color:var(--tx-2)}
+#s-dashList .il-no{display:grid;place-items:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:var(--surface-2);color:var(--accent);font-size:12px;font-weight:800}
+#s-dashList .il-cert{min-width:32px;margin-top:2px;padding:0 5px;border-radius:4px;font-size:12px;line-height:18px;font-weight:700;text-align:center}
+#s-dashList .il-cert.ok{background:#DCF0E5;color:#23704C}
+#s-dashList .il-cert.guess{background:#EEF1F0;color:var(--tx-2)}
+#s-dashList .il-cert.out{background:#F3EDED;color:#8A5A55}
+#s-dashList .il-state{display:inline-block;padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700;line-height:1.4;white-space:nowrap;background:var(--surface-2);color:var(--tx-2)}
+#s-dashList .il-state.miss{background:#FDECE9;color:#A2392E}
+#s-dashList .il-state.open{background:#FFF1DE;color:#B4620B}
+#s-dashList .il-state.match{background:#DCF0E5;color:#23704C}
+#s-dashList .il-state small{display:block;font-size:12px;font-weight:600}
+#s-dashList .il-card{display:inline-block;padding:1px 8px;border:1px solid #BFD8D2;border-radius:5px;color:var(--accent);font-size:13px;font-weight:700}
+#s-dashList .il-write{min-height:44px;padding:0 12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer}
+#s-dashList :is(.il-go,.il-write):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:900px){#s-dashList>.pane{padding:12px}#s-dashList .il-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}#s-dashList .il-head h1{font-size:22px}}
 </style>
 </head>
 <body>
@@ -1742,17 +1795,17 @@ button.ld-row:hover{background:var(--surface-2)}
   <!-- 컨텍스트 확정 -->
   <section class="screen" id="s-ctx">
     <div class="equipment-workspace sensors-open" id="equipmentWorkspace">
-      <div class="pane equipment-functions"><div class="panel-head"><h2>장비</h2></div>
+      <div class="pane equipment-functions"><div class="panel-head"><h2>설비</h2></div>
         <div class="section-heading"><h2 id="workEquipment">선택 설비</h2><button class="eq-change" id="ctxEdit" type="button">설비 변경<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></div>
         <p class="mesline" id="ctxMes" role="status" hidden>MES 상태 확인 중…</p><p class="hint" id="ctxFoot" hidden></p><span id="ctxHoNote" hidden></span><div id="ctxSensors" hidden></div>
-        <nav class="work-actions" aria-label="설비 작업"><button class="btn" id="toHandover" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>정비이력</button><button id="toDutyHandover" type="button" hidden>인계 사항 확인</button><button class="btn" id="toEquipmentReport" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/></svg>근무일지 작성</button></nav><button id="toAsk" type="button" hidden>채팅 열기</button><button id="toHandoverNew" type="button" hidden>인계 작성</button>
+        <nav class="work-actions" aria-label="설비 작업"><button class="btn" id="toHandover" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>정비 이력</button><button id="toDutyHandover" type="button" hidden>인계 사항 확인</button><button class="btn" id="toEquipmentReport" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/></svg>근무일지 작성</button></nav><button id="toAsk" type="button" hidden>채팅 열기</button><button id="toHandoverNew" type="button" hidden>인계 작성</button>
         <button class="ic workspace-back" id="ctxBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       </div>
       <section class="pane equipment-mes" aria-label="MES 센서 데이터">
         <div class="mes-head"><h2>MES 센서 데이터</h2><button class="mes-ic" id="mesRefresh" type="button" aria-label="새로고침" title="최신 값으로 새로고침"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button></div><p class="hint" id="metricsTime"></p><div id="equipmentMetrics" class="sensor-list" tabindex="0" role="region" aria-label="MES 센서값"></div>
         <p class="eq-safety"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>작업 전 현장 안전 기준과 매뉴얼을 확인하세요.</p>
       </section>
-      <div class="workspace-gutter"><div class="gut-box"><button class="gut-btn" id="expandChat" type="button" aria-label="채팅 확대" title="채팅 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button><div class="workspace-divider" role="separator" aria-label="너비 조절" aria-orientation="vertical" tabindex="0"></div><button class="gut-btn" id="expandEquipment" type="button" aria-label="장비 확대" title="장비 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></div></div><aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"><div class="panel-head"><h2>채팅</h2></div></aside>
+      <div class="workspace-gutter"><div class="gut-box"><button class="gut-btn" id="expandChat" type="button" aria-label="채팅 확대" title="채팅 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button><div class="workspace-divider" role="separator" aria-label="너비 조절" aria-orientation="vertical" tabindex="0"></div><button class="gut-btn" id="expandEquipment" type="button" aria-label="설비 확대" title="설비 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></div></div><aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"><div class="panel-head"><h2>채팅</h2></div></aside>
     </div>
   </section>
 
@@ -1824,7 +1877,7 @@ button.ld-row:hover{background:var(--surface-2)}
   </section>
 
   <section class="screen" id="s-dutyDetail"><div class="appbar"><button class="ic" id="dutyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1 id="dutyTitle">당직일지</h1></div><div class="pane" id="dutyPane"></div></section>
-  <section class="screen" id="s-history"><div class="appbar"><button class="ic" id="historyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1 id="historyTitle">정비이력</h1></div><div class="pane" id="historyPane"></div></section>
+  <section class="screen" id="s-history"><div class="appbar"><button class="ic" id="historyBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1 id="historyTitle">정비 이력</h1></div><div class="pane" id="historyPane"></div></section>
   <section class="screen" id="s-dashboard"><div class="appbar"><button class="ic" id="dashboardBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>대시보드</h1><span class="sp"></span><a class="btn sm ghost" href="/">MES</a></div>
     <div class="pane">
       <div class="dash-status">

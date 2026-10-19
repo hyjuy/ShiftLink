@@ -656,14 +656,47 @@
   #s-home .home-panel{display:flex;flex-direction:column;min-width:0;min-height:0;gap:20px;padding:24px;background:#FFFFFF;border:1px solid #DDE5E5;border-radius:12px;overflow:hidden}
   #s-home .home-panel>.section-heading{flex:0 0 auto;min-height:30px}
   #s-home .home-panel h2{font-size:20px;line-height:30px;font-weight:700}
-  #s-home .home-handover-list{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;overflow:auto}
+  #s-home .home-handover-list{display:flex;flex-direction:column;gap:0;flex:1 1 auto;min-height:0;overflow:auto;scrollbar-width:none}
+  #s-home .home-handover-list::-webkit-scrollbar{display:none}
   #s-home .home-handover-list>.summary-card{flex:0 0 auto;min-height:112px;padding:16px 20px;align-items:center}
-  #s-home .home-handover-entry{display:block;flex:0 0 auto;width:100%;min-width:0;min-height:48px;padding:16px 0;text-align:left;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:transparent;color:var(--tx);white-space:normal;overflow-wrap:anywhere}
-  #s-home .home-handover-entry:hover{background:var(--hover)}
+  #s-home .home-panel.home-panel-handover{--handover-tracks:minmax(84px,16fr) minmax(0,44fr) minmax(0,20fr) minmax(0,20fr);container-type:inline-size;gap:8px}
+  #s-home .home-handover-filters{display:flex;flex-wrap:wrap;gap:8px;flex:0 0 auto;padding:8px 0 4px}
+  #s-home .home-handover-filters button{min-height:48px;padding:10px 14px;border:0;border-radius:8px;background:transparent;color:var(--tx-2);font-size:15px;font-weight:600}
+  #s-home .home-handover-filters button[aria-pressed=true]{color:#fff;background:var(--accent)}
+  #s-home .home-handover-filters button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #s-home .home-handover-columns{display:grid;grid-template-columns:var(--handover-tracks);gap:12px;flex:0 0 auto;padding:8px 12px 4px;color:var(--tx-2);font-size:15px;font-weight:600;line-height:1.5}
+  #s-home .home-handover-entry{display:grid;grid-template-columns:var(--handover-tracks);align-items:start;gap:12px;flex:0 0 auto;width:100%;min-width:0;min-height:48px;padding:20px 12px;text-align:left;border:0;border-radius:8px;background:transparent;color:var(--tx);white-space:normal;overflow-wrap:anywhere}
+  #s-home .home-handover-entry:nth-child(even){background:#F2F6F4}
+  #s-home .home-handover-entry:active{background:#E4EEEA}
+  @media(hover:hover) and (pointer:fine){#s-home .home-handover-entry:hover{background:#EAF2EF}}
   #s-home .home-handover-entry:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-  #s-home .home-handover-entry strong{font-size:16px;line-height:1.5}
-  #s-home .home-handover-summary{margin:8px 0;font-size:16px;line-height:1.6;white-space:pre-line;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
-  #s-home .home-handover-meta{margin:0;font-size:14px;line-height:1.6;color:var(--tx-2);font-weight:400}
+  #s-home .home-handover-identity{display:flex;align-items:flex-start;flex-direction:column;gap:10px;min-width:0;padding-top:0}
+  #s-home .home-handover-equipment{font-size:16px;line-height:1.5;font-weight:700;font-variant-numeric:tabular-nums}
+  #s-home .home-handover-status{padding:4px 8px;border-radius:5px;background:var(--surface-2);color:var(--tx-2);font-size:14px;font-weight:600;line-height:1.5}
+  #s-home .home-handover-status.attention{background:#fff0cf;color:#77500b}
+  #s-home .home-handover-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+  #s-home .home-handover-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  #s-home .home-handover-primary{font-size:16px;line-height:1.5;font-weight:700;white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere}
+  #s-home .home-handover-action{font-size:14px;line-height:1.65;color:var(--tx-2);font-weight:400;white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere}
+  #s-home .home-handover-normal{display:flex;align-items:baseline;gap:7px;font-size:14px;line-height:1.65;color:#77500b;font-weight:500;word-break:keep-all;overflow-wrap:anywhere}
+  #s-home .home-handover-normal::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:0 0 7px}
+  #s-home .home-handover-normal.confirmed{color:var(--accent)}
+  #s-home .home-handover-verification{min-width:0;display:flex;flex-direction:column;gap:6px}
+  #s-home .home-handover-column-label{display:none;font-size:14px;font-weight:500;line-height:1.5;color:var(--tx-2)}
+  #s-home .home-handover-column-label.fallback{display:block}
+  #s-home .home-handover-meta{display:flex;flex-direction:column;gap:6px;min-width:0;margin:0;font-size:14px;line-height:1.5;color:var(--tx-2);font-weight:400;font-variant-numeric:tabular-nums}
+  #s-home .home-handover-time{max-width:12ch}
+  #s-home .home-handover-worker{font-size:14px}
+  @container(max-width:620px){
+    #s-home .home-handover-columns{display:none}
+    #s-home .home-handover-entry{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    #s-home .home-handover-identity{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap;padding:0}
+    #s-home .home-handover-body{grid-column:1/-1}
+    #s-home .home-handover-verification{grid-column:1}
+    #s-home .home-handover-meta{grid-column:2}
+    #s-home .home-handover-column-label{display:block}
+    #s-home .home-handover-label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip-path:none;white-space:normal;font-size:14px;line-height:1.5;color:var(--tx-2);font-weight:500}
+  }
   #s-home .home-panel>.home-panel-link{margin-top:auto;flex:0 0 48px;width:100%;height:48px;min-height:48px;border:0;border-top:1px solid #DDE5E5;border-radius:0;padding:12px 0 0;justify-content:flex-end;color:#397F7C;background:#FFFFFF;font-size:16px;font-weight:500}
   #s-home #homeDashboard{flex:0 0 auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
   #s-home #homeDashboard>.metric{padding:0 8px 0 0;background:transparent;border:0;border-right:1px solid #DDE5E5;border-radius:0;min-width:0}
@@ -1688,7 +1721,7 @@ button.ld-row:hover{background:var(--surface-2)}
     <div class="pane v2-home">
       <section class="home-summary" aria-label="근무 정보"><div class="home-summary-copy"><h1 id="homeGreeting">안녕하세요</h1><p id="homeWorkDate"></p><p id="homeShiftPeople"></p></div><button class="btn primary" id="toReport" type="button">근무일지 작성</button></section>
       <div class="home-panels">
-        <section class="home-panel home-panel-handover" aria-label="인계 사항"><div class="section-heading"><h2>인계 사항</h2><span class="hint" id="homeHandoverCount"></span></div><div id="homeHandover" class="home-handover-list"></div><button class="btn sm ghost home-panel-link" id="toHandoverHome" type="button">전체 보기 →</button></section>
+        <section class="home-panel home-panel-handover" aria-label="인계 사항"><div class="section-heading"><h2>인계 사항</h2><span class="hint" id="homeHandoverCount"></span></div><div class="home-handover-filters" role="group" aria-label="인계 사항 표시"><button type="button" id="homeHandoverPending" aria-pressed="true" aria-controls="homeHandover">조치·확인 필요 0</button><button type="button" id="homeHandoverComplete" aria-pressed="false" aria-controls="homeHandover">해결·확인 완료 0</button></div><div id="homeHandoverColumns" class="home-handover-columns" aria-hidden="true"><span>설비·상태</span><span>인계 내용</span><span>정상 운전 확인</span><span>최근 조치</span></div><div id="homeHandover" class="home-handover-list"></div><button class="btn sm ghost home-panel-link" id="toHandoverHome" type="button">전체 보기 →</button></section>
         <section class="home-panel home-panel-dashboard" aria-label="대시보드"><div class="section-heading"><h2>대시보드</h2></div><div id="homeDashboard" class="metric-grid"></div><div class="home-made" id="homeMade" hidden></div><p class="home-todo" id="homeTodo" hidden></p><div id="homeFaultDetails" class="home-fault-details"></div><div class="home-watch" id="homeWatch" hidden></div><button class="btn sm ghost home-panel-link" id="toDashboard" type="button">전체 보기 →</button></section>
       </div>
       <div class="home-outbox"><p class="outbox-note bad" id="homeConflict" hidden></p></div>

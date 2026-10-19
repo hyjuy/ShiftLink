@@ -1956,27 +1956,82 @@ function handoverCard(h) {
   info.append(title,meta,equipments); card.append(info,badge);
   card.addEventListener('click', () => openDutyDetail(h, S.screen)); return card;
 }
+/* Home-only presentation: keep follow-up requests, action provenance and verification separate. */
+function homeHandoverView(entry, now = Date.now()) {
+  const {h,row,recordIndex} = entry;
+  const r = recordIndex == null ? null : h.work_report?.records?.[recordIndex];
+  const steps = (r?.action_steps || []).filter(step => step.action?.trim());
+  const timed = steps.length && steps.every(step => step.performed_at && Number.isFinite(Date.parse(step.performed_at)));
+  const localStep = timed ? steps.slice().sort((a,b) => Date.parse(b.performed_at)-Date.parse(a.performed_at))[0] : steps.at(-1);
+  const action = entry.recentAction || (localStep ? {step:localStep,entry} : null);
+  const step = action?.step || (r?.solution?.trim() ? {action:r.solution,observed_result:r.result} : null);
+  const verified = r?.normal_run_status === 'no_recurrence' && r.normal_run_minutes > 0 && !!r.normal_run_evidence?.trim();
+  const complete = !!r && reportHandoverResolved(r);
+  // A completed report's save time is the available completion timestamp; preserve unknown-time records.
+  const savedAt = Date.parse(h.created_at);
+  const expired = complete && Number.isFinite(savedAt) && now-savedAt >= 7*86400000;
+  const followUp = r?.follow_up?.trim() || r?.next_maintenance?.trim();
+  const primary = complete ? (r.normal_run_evidence?.trim() || r.result?.trim() || row.summary)
+    : (followUp || r?.story?.trim() || row.summary);
+  const needsNormal = !!r && (reportFaultRecord(r) || reportStructuredRecord(r) || r.normal_run_status);
+  const normal = !needsNormal ? '' : verified ? r.normal_run_minutes+'분 · 관찰 종료·재발 없음'
+    : r.normal_run_status === 'observing' ? '관찰 중'
+    : r.normal_run_status === 'recurred' ? '관찰 중 재발'
+    : r.normal_run_status === 'no_recurrence' ? '확인 근거 부족' : '미확인';
+  const author = step?.worker?.trim() || action?.entry.row.author || row.author;
+  const recentTime = step ? reportTimeLabel(step.performed_at) : row.occurred.replace('\n',' ');
+  const recentLabel = step ? '최근 조치' : '발생시각';
+  return {
+    equipment:row.equipment, status:REPORT_OUTCOMES[r?.outcome] || '상태 미기재',
+    attention:['open','temporary','failed'].includes(r?.outcome), complete, verified, expired,
+    primary, primaryLabel:complete ? '확인 결과' : followUp ? '다음 근무' : '인계 내용',
+    action:step ? step.action+' → '+(step.observed_result?.trim() || '결과 미기재') : r?.result?.trim() || '',
+    actionLabel:step ? '직전 조치' : '기록 결과', normal,
+    recentTime, recentLabel, worker:author, meta:recentLabel+' '+recentTime+' · 근무자 '+author
+  };
+}
 function renderHome() {
-  const home = $('homeHandover'); if (!home) return; home.replaceChildren();
+  const home = $('homeHandover'); if (!home) return; const scrollTop=home.scrollTop; home.replaceChildren();
   const rows = handoverIncidentRows(allHandovers(),S.equipment)
     .sort((a,b) => b.row.sortAt - a.row.sortAt || b.row.occurredSort - a.row.occurredSort);
-  rows.forEach(({h,row,recordIndex}) => {
+  const items = rows.map(entry => ({entry,view:homeHandoverView(entry)})).filter(item => !item.view.expired);
+  const completed = S.homeHandoverFilter === 'complete';
+  [['homeHandoverPending',false,'조치·확인 필요'],['homeHandoverComplete',true,'해결·확인 완료']].forEach(([id,filter,label]) => {
+    const button = $(id);
+    button.textContent = label+' '+items.filter(item => item.view.complete === filter).length;
+    button.setAttribute('aria-pressed',String(completed === filter));
+  });
+  const visible = items.filter(item => item.view.complete === completed);
+  $('homeHandoverColumns').hidden=!visible.length;
+  visible.forEach(({entry:source,view}) => {
+    const {h,recordIndex} = source;
     const entry = document.createElement('button'); entry.type = 'button'; entry.className = 'home-handover-entry';
-    const equipment = document.createElement('strong'); equipment.textContent = row.equipment;
-    const summary = document.createElement('p'); summary.className = 'home-handover-summary'; summary.textContent = row.summary;
-    const meta = document.createElement('p'); meta.className = 'home-handover-meta';
-    meta.textContent = '발생시각 '+row.occurred.replace('\n',' ')+' · 근무자 '+row.author;
-    entry.append(equipment,summary,meta);
+    const text = (tag,cls,value) => { const el=document.createElement(tag);el.className=cls;el.textContent=value;return el; };
+    const identity = document.createElement('span'); identity.className='home-handover-identity';
+    identity.append(text('strong','home-handover-equipment',view.equipment),
+      text('span','home-handover-status'+(view.attention?' attention':''),view.status));
+    const body = document.createElement('span'); body.className='home-handover-body';
+    body.append(text('span','home-handover-label',view.primaryLabel),text('span','home-handover-primary',view.primary));
+    if(view.action)body.append(text('span','home-handover-action',view.actionLabel+'  '+view.action));
+    const verification = document.createElement('span'); verification.className='home-handover-verification';
+    verification.append(text('span','home-handover-column-label','정상 운전 확인'),
+      text('span','home-handover-normal'+(view.verified?' confirmed':''),view.normal || '기록 없음'));
+    const meta = document.createElement('span'); meta.className='home-handover-meta';
+    meta.append(text('span','home-handover-column-label'+(view.recentLabel==='발생시각'?' fallback':''),view.recentLabel),
+      text('span','home-handover-time',view.recentTime),text('span','home-handover-worker','근무자 '+view.worker));
+    entry.append(identity,body,verification,meta);
     entry.addEventListener('click',() => openDutyDetail(h,'home',recordIndex));
     home.appendChild(entry);
   });
+  if(rows.length && !visible.length)home.textContent=!items.length ? '홈에 표시할 인계 사항이 없습니다.' : completed ? '최근 7일 내 해결·확인 완료된 인계 사항이 없습니다.' : '조치·확인이 필요한 인계 사항이 없습니다.';
+  home.scrollTop=scrollTop;
   const operator=S.operator||{};
   $('homeGreeting').textContent='안녕하세요, '+(operator.name||operator.id||'작업자')+'님';
   $('homeWorkDate').textContent=new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' · '+shiftAt().code+'조 '+SHIFT_HOURS[shiftAt().code];
   const recent=allHandovers().slice().sort((a,b)=>String(b.created_at||b.shift_date||'').localeCompare(String(a.created_at||a.shift_date||'')))[0];
   const previous=recent&&(recent.author_name||(recent.required_context||{}).author||recent.author_persona_id);
   $('homeShiftPeople').textContent='이전 근무자 '+(previous||'미등록')+' · 다음 근무자 '+(operator.next_worker_name||'미등록');
-  $('homeHandoverCount').textContent=rows.length+'건';
+  $('homeHandoverCount').textContent='전체 '+items.length+'건';
   const faultDetails=$('homeFaultDetails');faultDetails.replaceChildren();
   if(!S.snapshot||S.online===false)faultDetails.textContent='연결 상태를 확인해 주세요.';
   else if(!(S.faults||[]).length)faultDetails.textContent='현재 감지된 이상이 없습니다.';
@@ -2075,7 +2130,7 @@ function handoverIncidentRows(handovers,equipment) {
     const step=action?.step,result=(action?.entry===latest?step.observed_result:null)||r?.result||r?.normal_run_evidence||step?.observed_result;
     const summary=[[(REPORT_OUTCOMES[r?.outcome]||'상태 미기재'),result].filter(Boolean).join(' · '),
       r?.story,(step?.action||r?.solution)?'최근 조치: '+(step?.action||r.solution):null].filter(Boolean).join('\n');
-    return {...latest,row:{...latest.row,author:step?.worker?.trim()||action?.entry.row.author||latest.row.author,summary,
+    return {...latest,recentAction:action,row:{...latest.row,author:step?.worker?.trim()||action?.entry.row.author||latest.row.author,summary,
       occurred:first.row.occurred,occurredSort:first.row.occurredSort}};
   });
 }
@@ -3411,6 +3466,7 @@ on('doSearch', () => (chatPending() ? cancelChat() : sendChat(currentQuestion())
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
 on('triesBack', () => show('chat'));
 on('toHandover', openHistory);
+[['homeHandoverPending','pending'],['homeHandoverComplete','complete']].forEach(([id,filter])=>on(id,()=>{S.homeHandoverFilter=filter;$('homeHandover').scrollTop=0;renderHome();}));
 on('toHandoverHome', openHandover);   // 전체 인계 — 선택 설비로 거르지 않는다
 on('globalPending', openOutbox);
 on('hoBack', () => show(S.hoBack || (S.eq ? 'ctx' : 'home')));   // 홈 목록에서 왔으면 홈으로

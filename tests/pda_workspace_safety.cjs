@@ -29,11 +29,12 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
    assert.equal(await page.locator('.equipment-functions .panel-head h2').innerText(),'장비');
    assert.equal(await page.locator('#chatPanel .panel-head h2').innerText(),'채팅');
    assert.equal(await page.locator('#splitWorkspace').count(),0,'no separate split button');
-   // 패널 머리 버튼: 누르면 그 칸만, 다시 누르면 함께 보기
-   for(const [id,hidden] of [['expandEquipment','#chatPanel'],['expandChat','.equipment-functions']]) {
+   // 가운데 줄: › 장비 전체, ‹ 채팅 전체. 전체 화면에서는 반대쪽 버튼 하나가 함께 보기로 되돌린다(좁은 화면은 위아래 배치라 없음)
+   if(width>600) for(const [id,hidden,back] of [['expandEquipment','#chatPanel','expandChat'],['expandChat','.equipment-functions','expandEquipment']]) {
     await page.locator('#'+id).click();assert.equal(await page.locator(hidden).isVisible(),false);
-    assert.equal(await page.locator('#'+id).getAttribute('aria-pressed'),'true');
-    await page.locator('#'+id).click();assert.equal(await page.locator(hidden).isVisible(),true);
+    assert.equal(await page.locator('#'+id).isVisible(),false,'only the way back is shown');
+    assert.equal(await page.locator('#'+back).getAttribute('aria-label'),'함께 보기');
+    await page.locator('#'+back).click();assert.equal(await page.locator(hidden).isVisible(),true);
    }
    assert.ok(await page.locator('#chatPanel').isVisible());
    const gap=await page.evaluate(()=>document.querySelector('.equipment-functions .work-actions').getBoundingClientRect().top-document.querySelector('.equipment-functions .section-heading').getBoundingClientRect().bottom);
@@ -46,8 +47,8 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
    assert.match(await page.locator('#equipmentMetrics').innerText(),/160/);
    // Many sensors must scroll inside the existing panel, with no visible scrollbar.
    await page.evaluate(()=>{const base=S.eq.signals[0];S.eq.signals=Array.from({length:30},(_,i)=>({...base,signal:i?'extra_'+i:base.signal,name:'센서 '+i}));renderEquipmentMetrics();});
-   for(const mode of ['expandEquipment','expandEquipment']) {
-    await page.locator('#'+mode).click();
+   for(const mode of ['expandEquipment','expandChat']) {
+    if(width>600) await page.locator('#'+mode).click();
     const grid=page.locator('#equipmentMetrics');
     assert.ok(await grid.evaluate(e=>e.scrollHeight>e.clientHeight),'sensor values overflow inside bounded panel');
     assert.equal(await grid.evaluate(e=>getComputedStyle(e).overflowY),'auto');

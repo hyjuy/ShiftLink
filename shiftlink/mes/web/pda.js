@@ -855,7 +855,7 @@ function renderSymptoms() {
   // 이상은 감지됐지만 그 신호를 다루는 증상 카드가 없다 — 순서가 그대로인 이유를 알린다.
   const note = $('symptomNote');
   note.hidden = items.length > 0;
-  note.textContent = '이 설비에 등록된 추천 질문이 없습니다. 직접 적어 보내세요.';
+  note.textContent = '이 설비에 등록된 추천 질문이 없습니다. 직접 적어 주세요.';
   const pending = chatPending();
   items.forEach((item) => {
     const b = document.createElement('button');
@@ -3461,8 +3461,12 @@ Array.from(document.querySelector('#s-chat').children).filter((el)=>!el.classLis
 on('navigationBack',goBack);on('faceSetupReturn',goBack);
 ['reportWorkDate','reportShift'].forEach(id=>$(id).addEventListener('change',syncReportShift));
 window.addEventListener('resize',()=>{if(S.screen==='manual')layoutManualList();});
-// 패널 머리의 「장비」「채팅」: 누르면 그 칸만 전체 화면, 다시 누르면 함께 보기.
-[['expandEquipment','equipment-only'],['expandChat','chat-only']].forEach(([id,mode])=>on(id,()=>{const w=$('equipmentWorkspace'),on_=!w.classList.contains(mode);w.classList.remove('equipment-only','chat-only');if(on_)w.classList.add(mode);['expandEquipment','expandChat'].forEach(button=>$(button).setAttribute('aria-pressed',String(on_&&button===id)));}));
+// 가운데 줄: ‹ 채팅 전체 화면, › 장비 전체 화면. 전체 화면에서는 남은 버튼 하나가 함께 보기로 되돌린다.
+function setWorkspaceMode(mode){const w=$('equipmentWorkspace');w.classList.remove('equipment-only','chat-only');if(mode)w.classList.add(mode);
+  $('expandChat').setAttribute('aria-label',mode==='equipment-only'?'함께 보기':'채팅 확대');$('expandEquipment').setAttribute('aria-label',mode==='chat-only'?'함께 보기':'장비 확대');
+  $('expandChat').title=$('expandChat').getAttribute('aria-label');$('expandEquipment').title=$('expandEquipment').getAttribute('aria-label');}
+on('expandChat',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains('equipment-only')?'':'chat-only'));
+on('expandEquipment',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains('chat-only')?'':'equipment-only'));
 const divider=document.querySelector('.workspace-divider');
 function resizeWorkspace(percent){const w=$('equipmentWorkspace');const n=Math.max(25,Math.min(75,percent));w.style.setProperty('--equipment-width',n+'fr');w.style.setProperty('--chat-width',(100-n)+'fr');divider.setAttribute('aria-valuenow',Math.round(n));}
 divider.setAttribute('aria-valuemin','25');divider.setAttribute('aria-valuemax','75');divider.setAttribute('aria-valuenow','60');
@@ -3578,8 +3582,7 @@ function faultsFrom(snap) {
   return S.equipment.map((eq) => {
     const items = [];
     (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).forEach((a) => items.push('경보 ' + (a.label || a.code)));
-    (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
-      .forEach((d) => items.push(d.symptom));
+    // 증상 진단 문장(symptom_diagnostics)은 알림에 넣지 않는다 — 아래 신호 ▼▲와 같은 현상을 두 번 말하게 된다. 채팅 추천 질문에서 쓴다.
     const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
     usableReadings(snap, eq).kept.forEach((o) => {
       const spec = eq.signals.find((x) => x.signal === o.signal);
@@ -3646,12 +3649,12 @@ function renderNotifyPanel() {
   faults.forEach((f) => {
     const acked = ackOf()[f.eq.equipment_id] === ackKey(f), row = document.createElement('div');
     row.className = 'np-row' + (f.level === 0 ? '' : ' warn') + (acked ? ' acked' : '');
-    row.innerHTML = '<i class="np-dot"></i><div><div class="np-head"><span class="np-tag"></span><b class="np-code mono"></b><span class="np-at"></span></div><p class="np-msg"></p></div><button type="button" class="np-go">설비 확인</button>';
+    row.innerHTML = '<div><div class="np-head"><span class="np-tag"></span><b class="np-code mono"></b><span class="np-at"></span></div><p class="np-msg"></p></div><button type="button" class="np-go">설비 확인</button>';
     row.querySelector('.np-tag').textContent = f.level === 0 ? '고장' : '주의';
     row.querySelector('.np-code').textContent = f.eq.code;
     row.querySelector('.np-at').textContent = f.at ? new Date(f.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' 발생' : '';
     row.querySelector('.np-msg').textContent = f.items.join(' · ');
-    // 설비를 바로 바꾸지 않는다 — 확인 화면에서 code를 크게 보이고 하단 버튼으로만 확정한다(B3·A4).
+    // 누른 순간의 설비로 바로 채팅을 연다(확인 화면 없음).
     row.querySelector('.np-go').addEventListener('click', () => {
       ackOf()[f.eq.equipment_id] = ackKey(f); S.alertUn = unacked(S.faults).length; S.alertView = null; closeNotify(); paintNotify();
       openAlertGo({ equipment_id: f.eq.equipment_id, items: f.items.slice() });
@@ -3664,31 +3667,15 @@ document.addEventListener('click', (e) => {
   closeNotify();
 });
 
+// 알림 「설비 확인」 → 확인 화면 없이 그 설비의 채팅으로 바로 간다. 설비는 누른 순간의 equipment_id로 고정(B3).
 function openAlertGo(pick) {
   const eq = alertTarget(pick.equipment_id, S.equipment);
   if (!eq) return;
-  S.alertPick = pick.equipment_id;
-  // 스캔·대기 화면은 돌아가도 이어지지 않으므로 작업 선택(또는 홈)으로 돌린다.
-  S.alertBack = ['scan', 'wait', 'boot', 'alertGo'].includes(S.screen) ? (S.eq ? 'ctx' : 'home') : S.screen;
-  $('alertGoCode').textContent = eq.code;
-  $('alertGoName').textContent = eq.group + (eq.where ? ' · ' + eq.where : '');
-  $('alertGoItems').textContent = pick.items.join(' · ');
-  $('alertGoNow').textContent = S.eq === eq ? '지금 선택된 설비입니다.'
-    : (S.eq ? '지금 설비 ' + S.eq.code + ' → ' + eq.code + '(으)로 바뀝니다.' : eq.code + '(으)로 설비를 확정합니다.');
-  show('alertGo');
-}
-on('alertGoOk', () => {
-  const eq = alertTarget(S.alertPick, S.equipment);
-  S.alertPick = null;
-  if (!eq) { show(S.eq ? 'ctx' : 'home'); return; }
   if (S.eq !== eq) setContext(eq, 'manual_selection', {});
   haptic(30);
   $('toAsk').click();
   renderAlert(S.faults);   // 고른 설비를 띠 맨 위로
-});
-const alertGoLeave = () => { S.alertPick = null; show(S.alertBack || (S.eq ? 'ctx' : 'home')); };
-on('alertGoCancel', alertGoLeave);
-on('alertGoBack', alertGoLeave);
+}
 
 
 function renderDash() {

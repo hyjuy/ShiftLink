@@ -166,7 +166,7 @@ out.length? out.join(' | ') : 'ALL FIT'
 
 **사용자 결정**: main `dbc796d`(PR #294)의 안전 수칙 표시가 맞다. 10/16에 Pi에만 직접 반영했던 "안전 수칙을 접지 않고 답 앞에 펼침"(git에 없음)은 채택하지 않는다.
 
-**현재 동작(`shiftlink/mes/web/pda.js` `renderAskSafety`)**:
+**현재 동작(`shiftlink/mes/web/pda.js` `renderAskSafety`, main `ab08810`에서도 같음)**:
 1. 안전 수칙은 대화 화면 상단 바 한 곳에서만 보인다. 이 설비의 안전 수칙에 질의 답에서 나온 안전 카드를 합쳐 같은 바에서 갱신한다.
 2. 바는 기본 접힘(`<details>`)이다. 요약 줄은 `설비 코드 · 안전 수칙 N건 · MES 사유`다. 사용자가 펼치면 갱신 중에도 그 상태를 유지한다.
 3. MES 이상·경보·증상 후보·범위 이탈·조건 일치(`safetyAlert`)이면 바가 강조색(`hot`)으로 바뀐다. 자동으로 펼치지는 않는다.

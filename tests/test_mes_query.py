@@ -192,6 +192,7 @@ class NoPipeline:
     ('고마워 근데 차단기 트립은 어떻게 해?', None, '고마워 근데 차단기 트립은 어떻게 해?'),   # only greetings are split off
     ('감사 결과 보고 알려줘', None, '감사 결과 보고 알려줘'), ('하이드로 펌프 소음', None, '하이드로 펌프 소음'),
     ('안녕연기', None, '안녕연기'), ('배고파', None, '배고파'), ('안녕 ㅎ', 'greet', None),
+    ('ㅎ2', 'greet', None), ('ㅂㅇ', 'bye', None), ('ㅂ2~', 'bye', None), ('ㅎ2 HPU 압력이 낮아요', 'greet', 'HPU 압력이 낮아요'),
 ])
 def test_smalltalk_classify(text, kind, rest):
     from shiftlink.mes.smalltalk import classify

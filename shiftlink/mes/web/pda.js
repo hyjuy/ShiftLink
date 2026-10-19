@@ -100,6 +100,8 @@ function unityLocation(eq, config, auxiliary) {
 }
 
 /* MES 구성의 설비·신호에 기준정보의 그룹명·위치 문구만 덧붙인다. */
+// PDA에서 보이지 않게 뺄 MES 신호(10/19 요청: 적재 대기율). 센서 칸·알림·답변 근거·관측값 입력 모두 이 목록을 따른다.
+const PDA_HIDDEN_SIGNALS = ['cv_queue_len'];
 function equipmentFrom(config, catalog) {
   const groups = {}, rows = {};
   (catalog.equipment_groups || []).forEach((g) => { groups[g.equipment_group_id] = g; });
@@ -112,7 +114,7 @@ function equipmentFrom(config, catalog) {
       type: String(e.code).split('-')[0],
       group: (groups[row.equipment_group_id] || {}).name || e.name || '',
       where: unityLocation(e, config, config.equipment.indexOf(e)),
-      signals: (e.signals || []).map((m) => ({
+      signals: (e.signals || []).filter((m) => !PDA_HIDDEN_SIGNALS.includes(m.signal)).map((m) => ({
         signal: m.signal, name: m.name || m.signal, unit: m.unit,
         min: m.normal_min, max: m.normal_max, semantics: m.semantics || {}, zeroStopped: m.zero_when_stopped === true
       }))
@@ -1316,7 +1318,7 @@ function answerBody(turn) {
     ask.innerHTML = '<p>이 대화 내용으로 근무일지를 작성하시겠습니까?</p><button type="button" class="btn sm">아니오</button><button type="button" class="btn sm primary">네</button>';
     const [no, yes] = ask.querySelectorAll('button');
     no.addEventListener('click', () => { turn.reportAsked = 'no'; ask.remove(); });
-    yes.addEventListener('click', () => { turn.reportAsked = 'yes'; ask.remove(); reportFromChat(turn); });
+    yes.addEventListener('click', () => reportFromChat(turn));   // 일지에서 이전으로 돌아와도 다시 쓸 수 있게 질문을 남긴다
     d.appendChild(ask);
   }
 
@@ -1980,7 +1982,7 @@ function renderHome() {
   else if(!(S.faults||[]).length)faultDetails.textContent='현재 감지된 이상이 없습니다.';
   else (S.faults||[]).forEach((fault)=>{const p=document.createElement('p');p.textContent=fault.eq.code+' · '+fault.items.join(' · ');if(S.faults.length>1)p.prepend(eqChip(fault.eq.equipment_id));faultDetails.appendChild(p);});
   if (!rows.length) home.textContent = '등록된 인계 사항이 없습니다.';
-  const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['확인 필요', (S.faults || []).length]];
+  const counts = [['전체 설비', S.equipment.length], ['가동 중', (S.snapshot && S.snapshot.equipment || []).filter((e) => e.operating_state === 'running').length], ['확인 필요', checkNeeded()]];
   const metrics = $('homeDashboard'); metrics.replaceChildren();
   counts.forEach(([label,value]) => metrics.appendChild(metricElement(label, S.snapshot && S.online !== false ? value : (label === '전체 설비' ? value : '—'))));
   // 이상이 없으면 회색 상자는 숨긴다(조치 필요 장비 0이 같은 말) — 그 자리에 지켜볼 설비. 이상이 있으면 지켜볼 설비를 숨긴다
@@ -2653,18 +2655,23 @@ function homeEquipmentSummary(equipment, faults, available) {
   return {total: equipment.length, normal: available ? equipment.length - abnormal : null, abnormal: available ? abnormal : null};
 }
 // 홈 생산 링 — 대시보드 정지 손실의 생산 링과 같은 그림(같은 좌표, 보이는 칸만 잘라 씀)
+// 현재 생산(개) — tickProduction이 쌓는 값. 홈과 대시보드 상세가 같이 쓴다.
+function currentProduced() { return Math.floor((S.prod && S.prod.coils) || 0); }
 function renderHomeMade() {
   const box = $('homeMade'), v = S.an && lossView(S.an.production, S.an.loss);
   box.hidden = !(v && v.planned);
   if (box.hidden) return;
   const {cx, r} = LOSS_CHART.made, cy = LOSS_CHART.cy, pad = 12, f1 = (n) => n.toFixed(1) + '%';
+  // 홈도 상세 보기와 같은 '현재 생산'(tickProduction 누적)을 쓴다 — 서버의 계획−손실 예상치와 섞지 않는다
+  const cur = currentProduced(), curPct = v.planned ? cur / v.planned * 100 : 0;
   box.innerHTML = '<svg class="loss-chart made-only" viewBox="' + (cx - r - pad) + ' ' + (cy - r - pad) + ' ' + 2 * (r + pad) + ' ' + 2 * (r + pad)
     + '" role="img"><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" class="made-base"/>'
-    + madeRingArcs(v.planned, v.produced, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
-    + '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" class="ctr">' + f1(v.producedPct) + '</text></svg>'
+    + (cur > 0 ? '<path d="' + arcPath(cx, cy, r, 0, 2 * Math.PI * Math.min(cur, v.planned) / v.planned) + '" class="made-now"/>' : '')   // 바탕은 회색, 생산한 만큼만 초록
+    + madeRingArcs(v.planned, cur, v.slices).map((s) => '<path d="' + s.d + '" class="made-arc" style="stroke:' + s.color + '"/>').join('')
+    + '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" class="ctr">' + f1(curPct) + '</text></svg>'
     + '<p><span>이번 주</span><b></b><span class="lost"></span></p>';
-  box.querySelector('svg').setAttribute('aria-label', '이번 주 계획 ' + v.planned + '개 중 생산 ' + f1(v.producedPct));
-  box.querySelector('b').textContent = v.produced.toLocaleString() + ' / ' + v.planned.toLocaleString() + '개';
+  box.querySelector('svg').setAttribute('aria-label', '이번 주 계획 ' + v.planned + '개 중 현재 생산 ' + f1(curPct));
+  box.querySelector('b').textContent = cur.toLocaleString() + ' / ' + v.planned.toLocaleString() + '개';
   box.querySelector('.lost').textContent = '손실 ' + v.lost + '개';
 }
 function renderHomeWatch() {
@@ -2685,6 +2692,12 @@ function renderHomeWatch() {
     b.dataset.i = rows.indexOf(w);   // 누르면 그 증상의 지난 조치들(배선은 아래 DOM 블록 — openIncidents가 거기 있다)
     return b;
   }));
+}
+// 홈 '확인 필요' = 대시보드의 이상 설비 + 연쇄 정지 설비(같은 dashSummary 기준)
+function checkNeeded() {
+  if (!S.snapshot) return (S.faults || []).length;
+  const d = dashSummary(S.snapshot, S.equipment, S.handovers, S.faults);
+  return d.faults.length + d.waiting.length;
 }
 function renderHomeStatus() { renderHome(); }
 /* 대시보드 정지 손실 보기 — 모든 %는 계획 생산량(정상이면 만들었을 양) 대비, 소수 한 자리.
@@ -2917,7 +2930,8 @@ function reportFromChat(turn) {
   const eq=S.eq;if(!eq)return;
   openEquipmentReport();
   if(!S.reportSelected.includes(eq.equipment_id))S.reportSelected.push(eq.equipment_id);
-  S.reportRecords.push({type:'이상증상',equipment:[eq.equipment_id],story:chatMemo(turn),causes:[],result:null,pms:null,candidate:false});
+  const story=chatMemo(turn);
+  if(!S.reportRecords.some((r)=>r.story===story))S.reportRecords.push({type:'이상증상',equipment:[eq.equipment_id],story,causes:[],result:null,pms:null,candidate:false});
   saveReportDraft();enterReportWrite();
   // 직접 작성으로 들어왔으므로 중간 대상 선택 화면은 뒤로가기 이력에서 제외한다.
   if (navigationStack[navigationStack.length - 1] === 'reportSelect') navigationStack.pop();
@@ -2930,13 +2944,22 @@ function renderReportSelection() {
     const checkCell=document.createElement('td');const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.checked=S.reportSelected.includes(eq.equipment_id);check.setAttribute('aria-label',eq.code+' 선택');
     check.onchange=()=>{S.reportSelected=check.checked?[...new Set([...S.reportSelected,eq.equipment_id])]:S.reportSelected.filter((id)=>id!==eq.equipment_id);saveReportDraft();renderReportSelection();};
     label.appendChild(check);checkCell.appendChild(label);
-    const code=document.createElement('td');code.textContent=eq.code+' · '+eq.group;code.prepend(eqChip(eq.equipment_id));
-    const status=document.createElement('td');const badge=document.createElement('span');const fault=(S.faults||[]).some((f)=>f.eq.equipment_id===eq.equipment_id);badge.className='pill '+(fault?'miss':'status-done');badge.textContent=S.snapshot&&S.online!==false?(fault?'조치 필요':'정상'):'연결 확인 필요';status.appendChild(badge);tr.append(checkCell,code,status);box.appendChild(tr);
+    const code=document.createElement('td');code.textContent=eq.code;code.prepend(eqChip(eq.equipment_id));
+    const status=document.createElement('td');const badge=document.createElement('span');const fault=(S.faults||[]).some((f)=>f.eq.equipment_id===eq.equipment_id);const known=S.snapshot&&S.online!==false;badge.className='rs-state '+(!known?'unk':fault?'warn':'ok');badge.innerHTML='<i></i>';badge.append(known?(fault?'조치 필요':'정상'):'연결 확인 필요');status.appendChild(badge);tr.append(checkCell,code,status);box.appendChild(tr);
   });
   if (!visible.length) { const tr=document.createElement('tr'); const td=document.createElement('td');td.colSpan=3;td.textContent='해당 조건의 장비가 없습니다.';tr.appendChild(td);box.appendChild(tr); }
   const selected=visible.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).length;
   $('reportSelectAll').checked=visible.length>0&&selected===visible.length;$('reportSelectAll').indeterminate=false;$('reportSelectAll').disabled=!visible.length;
-  $('reportCount').textContent='선택 '+S.reportSelected.length+'대';$('reportWrite').disabled=!S.reportSelected.length;
+  $('reportWrite').disabled=!S.reportSelected.length;
+  $('reportTotal').textContent=visible.length+'대';$('reportPickedCount').textContent=S.reportSelected.length+'대';
+  // 오른쪽 '선택한 설비' — ×로 하나씩 빼고, '선택 해제'로 모두 뺀다
+  const picked=$('reportPicked');picked.replaceChildren();
+  S.reportSelected.forEach((id)=>{const eq=S.equipment.find((e)=>e.equipment_id===id);if(!eq)return;
+    const li=document.createElement('li');const name=document.createElement('span');name.textContent=eq.code;name.prepend(eqChip(id));
+    const x=document.createElement('button');x.type='button';x.setAttribute('aria-label',eq.code+' 선택 빼기');x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>';
+    x.onclick=()=>{S.reportSelected=S.reportSelected.filter((v)=>v!==id);saveReportDraft();renderReportSelection();};
+    li.append(name,x);picked.appendChild(li);});
+  $('reportClear').hidden=!S.reportSelected.length;
   [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>{$(id).classList.toggle('primary',filter===S.reportFilter);$(id).setAttribute('aria-pressed',String(filter===S.reportFilter));});
   $('reportFilterRecent').textContent=S.reportFilter==='recent'?'전체 설비':'최근 정비 설비';
 }
@@ -3471,13 +3494,13 @@ on('expandChat',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains(
 on('expandEquipment',()=>setWorkspaceMode($('equipmentWorkspace').classList.contains('chat-only')?'':'equipment-only'));
 const divider=document.querySelector('.workspace-divider');
 function resizeWorkspace(percent){const w=$('equipmentWorkspace');const n=Math.max(25,Math.min(75,percent));w.style.setProperty('--equipment-width',n+'fr');w.style.setProperty('--chat-width',(100-n)+'fr');divider.setAttribute('aria-valuenow',Math.round(n));}
-divider.setAttribute('aria-valuemin','25');divider.setAttribute('aria-valuemax','75');divider.setAttribute('aria-valuenow','60');
+divider.setAttribute('aria-valuemin','25');divider.setAttribute('aria-valuemax','75');divider.setAttribute('aria-valuenow','50');
 divider.addEventListener('pointerdown',event=>{divider.setPointerCapture(event.pointerId);});
 divider.addEventListener('pointermove',event=>{if(!divider.hasPointerCapture(event.pointerId))return;const r=$('equipmentWorkspace').getBoundingClientRect();resizeWorkspace((event.clientX-r.left)/r.width*100);});
 divider.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();resizeWorkspace(Number(divider.getAttribute('aria-valuenow'))+(event.key==='ArrowRight'?5:-5));}});
 on('toDutyHandover',openHandover);on('toEquipmentReport',openEquipmentReport);
 on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('historyBack',()=>show('ctx'));
-on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',()=>$('reportSaveConfirm').showModal());on('reportSaveYes',()=>{$('reportSaveConfirm').close();saveReport();});on('reportSaveNo',()=>$('reportSaveConfirm').close());on('reportImport',importReportMes);
+on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportClear',()=>{S.reportSelected=[];saveReportDraft();renderReportSelection();});on('reportSave',()=>$('reportSaveConfirm').showModal());on('reportSaveYes',()=>{$('reportSaveConfirm').close();saveReport();});on('reportSaveNo',()=>$('reportSaveConfirm').close());on('reportImport',importReportMes);
 [['reportFilterAll','all'],['reportFilterFault','fault'],['reportFilterRecent','recent']].forEach(([id,filter])=>on(id,()=>{S.reportFilter=filter==='recent'&&S.reportFilter==='recent'?'all':filter;renderReportSelection();}));
 $('reportSelectAll').addEventListener('change',(event)=>{const visible=reportTargets(S.equipment,S.reportFilter,S.faults||[],recentMaintenanceCodes()).map((eq)=>eq.equipment_id);S.reportSelected=event.target.checked?[...new Set([...S.reportSelected,...visible])]:S.reportSelected.filter((id)=>!visible.includes(id));saveReportDraft();renderReportSelection();});
 
@@ -3729,7 +3752,7 @@ function openEqList(kind, title) {
   rows.forEach((r) => {
     const eq = S.equipment.find((e) => e.equipment_id === r.equipment_id);
     const tr = document.createElement('tr');
-    tr.innerHTML = '<td><div class="eqm-name"><b></b><span></span></div><small></small></td><td><span class="eqm-state"><i></i></span></td><td><button type="button" class="eqm-go">상세 보기<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></td>';
+    tr.innerHTML = '<td><div class="eqm-name"><b></b><span></span></div><small></small></td><td><span class="eqm-state"><i></i></span></td><td><button type="button" class="eqm-go">선택<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></td>';
     tr.querySelector('b').textContent = r.code; tr.querySelector('.eqm-name span').textContent = eq ? eq.group : '';
     tr.querySelector('small').textContent = r.detail || (eq ? eq.where : '');
     const st = tr.querySelector('.eqm-state'); st.classList.add(kind); st.append(kind === 'faults' ? '이상' : '정지');
@@ -3820,7 +3843,7 @@ function renderLoss(loss, v) {
       + '<p class="ls-note"></p><div class="ls-stack" role="img"></div><ul class="ls-legend"></ul>'
       + '<button type="button" class="ls-detail">설비별 상세</button></section>';
     const q = (s) => el.querySelector(s);
-    const cur = Math.floor((S.prod && S.prod.coils) || 0), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = tickProduction 누적
+    const cur = currentProduced(), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = tickProduction 누적
     q('.asof').textContent = asof;
     q('.per').textContent = periodText(S.an.week_start, S.an.week_end || S.an.now, '1주');
     q('.ls-now b').textContent = cur.toLocaleString();

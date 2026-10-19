@@ -628,7 +628,11 @@
   if (globalThis.location && new URLSearchParams(globalThis.location.search).get("view")!=="full") setDiagramMode(true,false);
   // PDA 키오스크에서 열었으면(파이가 ?from=pda로 보냄) 주소창이 없으니 돌아가기·재시작 버튼을 보인다.
   // 머리줄 PDA 버튼도 파이 PDA로 — Jetson의 /pda.html로 가면 출처가 달라 로그인이 풀리고, 거기서 다시 온 대시보드엔 ?from=pda가 없다
-  if (globalThis.location && new URLSearchParams(globalThis.location.search).get("from")==="pda") { $("#kiosk-bar").hidden = false; $("#open-pda").href = $("#kiosk-bar a").href; }
+  // ?from=pda는 이 탭에 기억한다 — 지식카드 관리 등 MES 안에서 옮겨 다니면 주소에서 빠져 Jetson의 옛 /pda.html로 가던 문제.
+  const fromPda = globalThis.location && new URLSearchParams(globalThis.location.search).get("from")==="pda";
+  let kiosk = fromPda;
+  try { if (fromPda) sessionStorage.setItem("shiftlink.fromPda", "1"); kiosk = kiosk || sessionStorage.getItem("shiftlink.fromPda")==="1"; } catch (_) {}
+  if (kiosk) { $("#kiosk-bar").hidden = false; $("#open-pda").href = $("#kiosk-bar a").href; }
   refresh();
   const tickClock = () => { const d = new Date(), p = (n) => String(n).padStart(2, "0"); setText("#board-clock", `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())}  ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`); };
   tickClock();

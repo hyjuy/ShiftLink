@@ -8,14 +8,21 @@ from __future__ import annotations
 
 import json
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
 HISTORY = Path(__file__).resolve().parents[2] / "docs" / "data" / "analytics" / "line_history.json"
 RECUR_WITHIN = timedelta(days=7)   # 복구 뒤 이 안에 같은 설비·같은 경보가 다시 나면 재발
 WEEK = timedelta(days=7)
-WINDOW = timedelta(days=28)
+KST = timezone(timedelta(hours=9))
+
+
+def calendar_weeks(now: datetime, weeks: int) -> tuple[datetime, datetime]:
+    """달력 주(월~일, 한국 시각) 기준 구간 [시작, 끝). 이번 주를 포함해 weeks주 — 시작점이 '지금'에 따라 흔들리지 않는다."""
+    local = now.astimezone(KST) if now.tzinfo else now
+    monday = (local - timedelta(days=local.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+    return monday - WEEK * (weeks - 1), monday + WEEK
 # 원인 설비가 멈추면 이 관계로 이어진 설비가 같이 선다. 라인 경로(route)까지 이어지면 출측 코일 생산이 멈춘다.
 # ponytail: 같은 시간으로 본다(전달 지연 lag_seconds 무시).
 PROPAGATES = {"drive", "hydraulic_supply", "interlock", "power_supply", "pneumatic_supply"}
@@ -151,7 +158,10 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
             standard: dict[str, Any] | None = None) -> dict[str, Any]:
     labels = labels or {}
     relations = list(relations)
-    incidents = [dict(i) for i in incidents if i["alarm_at"] <= now and now - i["alarm_at"] <= WINDOW]
+    # 반복 증상·신뢰성은 이번 주 포함 달력 4주(월~일), 정지 손실·생산은 이번 주(월~일).
+    window_start, window_end = calendar_weeks(now, 4)
+    week_start, week_end = calendar_weeks(now, 1)
+    incidents = [dict(i) for i in incidents if window_start <= i["alarm_at"] <= now]
     _link_recurrence(incidents)
     affected = defaultdict(list)
     for r in relations:
@@ -165,12 +175,11 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
         inc["outcome"] = _outcome(inc, now)
         inc["label"] = labels.get(inc["alarm_code"], inc["alarm_code"])
 
-    # 정지 손실 — 이번 주(지금부터 7일). 원인 설비가 라인을 세운 시간 × 표준 생산 속도 = 못 만든 코일.
+    # 정지 손실 — 이번 주(월요일 0시부터 지금까지). 원인 설비가 라인을 세운 시간 × 표준 생산 속도 = 못 만든 코일.
     # 직렬 라인이라 몇 대가 같이 기다려도 출측이 멈춘 시간은 한 번이다(대기 설비 수를 곱하지 않는다).
     # ponytail: 서로 다른 원인이 같은 시간에 겹치면 두 번 센다. 겹침이 생기면 라인 정지 구간을 합집합으로 바꾼다.
     rate = coils_per_hour(standard) if standard else 0.0
     route_set = set(route)
-    week_start = now - WEEK
     loss: dict[str, dict[str, Any]] = {}
     for inc in incidents:
         start, end = max(inc["alarm_at"], week_start), inc["recovered_at"] or now
@@ -193,17 +202,17 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
                   "coils_per_hour": round(rate, 1)}
 
     # 설비 신뢰성(4주, 설비 단위 — 증상 구분 없이 그 설비의 고장 전부):
-    #   MTTR(평균 수리 시간) = 정지 시간 합 ÷ 고장 수,  MTBF(평균 고장 간격) = (4주 − 정지 시간 합) ÷ 고장 수.
+    #   MTTR(평균 수리 시간) = 정지 시간 합 ÷ 고장 수,  MTBF(평균 고장 간격) = (4주 구간 시작부터 지금까지 − 정지 시간 합) ÷ 고장 수.
     by_eq: dict[str, list[float]] = defaultdict(list)
     for inc in incidents:
         by_eq[inc["equipment_id"]].append(inc["down_min"])
-    window_h = WINDOW.total_seconds() / 3600
+    window_h = (now - window_start).total_seconds() / 3600
     reliability = {eq: {"failures": len(d), "mttr_min": round(sum(d) / len(d)),
                         "mtbf_h": round((window_h - sum(d) / 60) / len(d))} for eq, d in by_eq.items()}
     for r in loss_rows:   # 정지 손실 줄에 그 설비의 MTBF·MTTR
         r["reliability"] = reliability.get(r["equipment_id"])
 
-    # 반복 증상 — 4주 안에 같은 설비·같은 경보 2회 이상. 원인·결과 분포와 조치별 재발.
+    # 반복 증상 — 달력 4주 안에 같은 설비·같은 경보 2회 이상. 원인·결과 분포와 조치별 재발.
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for inc in incidents:
         groups[(inc["equipment_id"], inc["alarm_code"])].append(inc)
@@ -239,7 +248,8 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
     def view(inc: dict[str, Any]) -> dict[str, Any]:
         return {**{k: v.isoformat() if isinstance(v, datetime) else v for k, v in inc.items()}}
 
-    return {"now": now.isoformat(), "week_start": week_start.isoformat(), "loss": loss_rows, "production": production,
+    return {"now": now.isoformat(), "week_start": week_start.isoformat(), "week_end": week_end.isoformat(),
+            "window_start": window_start.isoformat(), "window_end": window_end.isoformat(), "loss": loss_rows, "production": production,
             "repeats": repeats,
             "incidents": [view(i) for i in sorted(incidents, key=lambda i: i["alarm_at"], reverse=True)]}
 

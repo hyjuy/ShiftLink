@@ -26,7 +26,7 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
    await page.evaluate(()=>{S.operator={id:'test',name:'검증'};setContext(S.equipment[0],'manual_selection');show('ctx');});
    await page.locator('#equipmentMetrics .sensor-row').first().waitFor({state:'attached'});
    assert.equal(await page.locator('#mesPin').count(),0);
-   assert.equal(await page.locator('.equipment-functions .panel-head h2').innerText(),'장비');
+   assert.equal(await page.locator('.equipment-functions .panel-head h2').innerText(),'설비');
    assert.equal(await page.locator('#chatPanel .panel-head h2').innerText(),'채팅');
    assert.equal(await page.locator('#splitWorkspace').count(),0,'no separate split button');
    // 가운데 줄: › 장비 전체, ‹ 채팅 전체. 전체 화면에서는 반대쪽 버튼 하나가 함께 보기로 되돌린다(좁은 화면은 위아래 배치라 없음)

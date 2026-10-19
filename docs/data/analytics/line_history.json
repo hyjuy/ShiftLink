@@ -17,7 +17,25 @@
    "cause": "냉각팬 먼지 막힘",
    "result": "temporary",
    "handover_id": "HO-H0001",
-   "card_id": null
+   "card_id": null,
+   "story": "감속기 표면이 뜨겁고 냉각팬 흡기구에 먼지가 쌓임",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각팬 먼지 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각팬 흡기구 먼지 청소",
+     "observed_result": "감속기 온도 하강 시작"
+    },
+    {
+     "action": "운전 재개",
+     "observed_result": "온도 정상 범위"
+    }
+   ]
   },
   {
    "incident_id": "IN-0002",
@@ -30,7 +48,21 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0002",
-   "card_id": null
+   "card_id": null,
+   "story": "출측 정체 알람, 원인 위치를 찾는 데 시간이 걸림",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    }
+   ]
   },
   {
    "incident_id": "IN-0003",
@@ -43,7 +75,21 @@
    "cause": "과부하 트립",
    "result": "resolved",
    "handover_id": "HO-H0003",
-   "card_id": null
+   "card_id": null,
+   "story": "배전반 차단기 트립, 리셋하면 바로 정상",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "과부하 트립",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "차단기 리셋",
+     "observed_result": "정상 통전"
+    }
+   ]
   },
   {
    "incident_id": "IN-0004",
@@ -56,7 +102,25 @@
    "cause": "냉각팬 먼지 막힘",
    "result": "temporary",
    "handover_id": "HO-H0004",
-   "card_id": null
+   "card_id": null,
+   "story": "감속기 표면이 뜨겁고 냉각팬 흡기구에 먼지가 쌓임",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각팬 먼지 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각팬 흡기구 먼지 청소",
+     "observed_result": "감속기 온도 하강 시작"
+    },
+    {
+     "action": "운전 재개",
+     "observed_result": "온도 정상 범위"
+    }
+   ]
   },
   {
    "incident_id": "IN-0005",
@@ -69,7 +133,21 @@
    "cause": "냉각수 유량 부족",
    "result": "temporary",
    "handover_id": "HO-H0005",
-   "card_id": null
+   "card_id": null,
+   "story": "유압유 온도가 상한 근처, 쿨러 출구 냉각수가 따뜻함",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각수 유량 부족",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각수 밸브 개도 확대",
+     "observed_result": "유온 소폭 하강"
+    }
+   ]
   },
   {
    "incident_id": "IN-0006",
@@ -82,7 +160,21 @@
    "cause": "롤러 베어링 마모",
    "result": "temporary",
    "handover_id": "HO-H0006",
-   "card_id": null
+   "card_id": null,
+   "story": "롤러 쪽 금속성 소음과 진동 상승",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "롤러 베어링 마모",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "롤러 그리스 주입",
+     "observed_result": "소음 감소"
+    }
+   ]
   },
   {
    "incident_id": "IN-0007",
@@ -95,7 +187,21 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0007",
-   "card_id": null
+   "card_id": null,
+   "story": "적재부 끝에서 코일 정체",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    }
+   ]
   },
   {
    "incident_id": "IN-0008",
@@ -108,7 +214,25 @@
    "cause": "냉각팬 먼지 막힘",
    "result": "temporary",
    "handover_id": "HO-H0008",
-   "card_id": null
+   "card_id": null,
+   "story": "감속기 표면이 뜨겁고 냉각팬 흡기구에 먼지가 쌓임",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각팬 먼지 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각팬 흡기구 먼지 청소",
+     "observed_result": "감속기 온도 하강 시작"
+    },
+    {
+     "action": "운전 재개",
+     "observed_result": "온도 정상 범위"
+    }
+   ]
   },
   {
    "incident_id": "IN-0009",
@@ -121,7 +245,21 @@
    "cause": "과부하 트립",
    "result": "resolved",
    "handover_id": "HO-H0009",
-   "card_id": null
+   "card_id": null,
+   "story": "같은 차단기가 다시 트립, 재투입하면 정상",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "과부하 트립",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "차단기 재투입",
+     "observed_result": "정상 통전"
+    }
+   ]
   },
   {
    "incident_id": "IN-0010",
@@ -134,7 +272,21 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0010",
-   "card_id": null
+   "card_id": null,
+   "story": "출측 코일이 비스듬히 멈춤",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    }
+   ]
   },
   {
    "incident_id": "IN-0011",
@@ -147,7 +299,21 @@
    "cause": "롤러 베어링 마모",
    "result": "temporary",
    "handover_id": "HO-H0011",
-   "card_id": null
+   "card_id": null,
+   "story": "롤러 쪽 금속성 소음과 진동 상승",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "롤러 베어링 마모",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "롤러 그리스 주입",
+     "observed_result": "소음 감소"
+    }
+   ]
   },
   {
    "incident_id": "IN-0012",
@@ -160,7 +326,25 @@
    "cause": "냉각팬 먼지 막힘",
    "result": "temporary",
    "handover_id": "HO-H0012",
-   "card_id": null
+   "card_id": null,
+   "story": "감속기 표면이 뜨겁고 냉각팬 흡기구에 먼지가 쌓임",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각팬 먼지 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각팬 흡기구 먼지 청소",
+     "observed_result": "감속기 온도 하강 시작"
+    },
+    {
+     "action": "운전 재개",
+     "observed_result": "온도 정상 범위"
+    }
+   ]
   },
   {
    "incident_id": "IN-0013",
@@ -173,7 +357,21 @@
    "cause": "오일실 마모",
    "result": "resolved",
    "handover_id": "HO-H0013",
-   "card_id": null
+   "card_id": null,
+   "story": "감속기 축 주변 누유",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "오일실 마모",
+     "evidence": "실 립 마모"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "오일실 교체",
+     "observed_result": "누유 멈춤"
+    }
+   ]
   },
   {
    "incident_id": "IN-0014",
@@ -186,7 +384,21 @@
    "cause": "드레인 막힘",
    "result": "resolved",
    "handover_id": "HO-H0014",
-   "card_id": null
+   "card_id": null,
+   "story": "공압 공급 압력 저하, 드레인 쪽에 물기",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "드레인 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "드레인 밸브 점검·배수",
+     "observed_result": "압력 회복"
+    }
+   ]
   },
   {
    "incident_id": "IN-0015",
@@ -199,7 +411,21 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0015",
-   "card_id": null
+   "card_id": null,
+   "story": "적재부 걸림, 걷어내니 바로 풀림",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    }
+   ]
   },
   {
    "incident_id": "IN-0016",
@@ -212,7 +438,21 @@
    "cause": "과부하 트립",
    "result": "resolved",
    "handover_id": "HO-H0016",
-   "card_id": null
+   "card_id": null,
+   "story": "같은 차단기가 다시 트립, 재투입하면 정상",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "과부하 트립",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "차단기 재투입",
+     "observed_result": "정상 통전"
+    }
+   ]
   },
   {
    "incident_id": "IN-0017",
@@ -225,7 +465,21 @@
    "cause": "롤러 베어링 마모",
    "result": "temporary",
    "handover_id": "HO-H0017",
-   "card_id": null
+   "card_id": null,
+   "story": "롤러 쪽 금속성 소음과 진동 상승",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "롤러 베어링 마모",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "롤러 그리스 주입",
+     "observed_result": "소음 감소"
+    }
+   ]
   },
   {
    "incident_id": "IN-0018",
@@ -238,7 +492,21 @@
    "cause": "커넥터 접촉 불량",
    "result": "resolved",
    "handover_id": "HO-H0018",
-   "card_id": null
+   "card_id": null,
+   "story": "속도값이 0과 정상값 사이를 튐",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "커넥터 접촉 불량",
+     "evidence": "커넥터를 흔들면 값 변동"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "커넥터 재체결",
+     "observed_result": "값 안정"
+    }
+   ]
   },
   {
    "incident_id": "IN-0019",
@@ -251,7 +519,21 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0019",
-   "card_id": "K-1206"
+   "card_id": "K-1206",
+   "story": "적재부 걸림, 반출 지연은 없음",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    }
+   ]
   },
   {
    "incident_id": "IN-0020",
@@ -264,7 +546,30 @@
    "cause": "윤활유 열화",
    "result": "resolved",
    "handover_id": "HO-H0020",
-   "card_id": "K-1025"
+   "card_id": "K-1025",
+   "story": "냉각팬 청소 뒤에도 1시간 안에 온도가 다시 오르고 오일 색이 짙음",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "윤활유 열화",
+     "evidence": "오일 샘플 갈변·점도 저하"
+    },
+    {
+     "certainty": "배제",
+     "note": "냉각팬 먼지 막힘",
+     "evidence": "팬 청소 직후에도 온도 상승"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "윤활유 배출·교체",
+     "observed_result": "오일 색 정상"
+    },
+    {
+     "action": "30분 시운전",
+     "observed_result": "베어링 온도 58℃에서 안정"
+    }
+   ]
   },
   {
    "incident_id": "IN-0021",
@@ -277,7 +582,21 @@
    "cause": "스크랩 걸림",
    "result": "resolved",
    "handover_id": "HO-H0021",
-   "card_id": null
+   "card_id": null,
+   "story": "스크랩 코일 배출구 정체",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "스크랩 걸림",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "정체 스크랩 제거",
+     "observed_result": "배출 재개"
+    }
+   ]
   },
   {
    "incident_id": "IN-0022",
@@ -290,7 +609,30 @@
    "cause": "접속부 과열",
    "result": "resolved",
    "handover_id": "HO-H0022",
-   "card_id": "K-1317"
+   "card_id": "K-1317",
+   "story": "같은 차단기가 5일 간격으로 트립, 패널 안에서 탄 냄새",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "접속부 과열",
+     "evidence": "열화상 출력 단자 85℃"
+    },
+    {
+     "certainty": "배제",
+     "note": "과부하 트립",
+     "evidence": "트립 시점 부하 전류 정상"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "열화상 점검",
+     "observed_result": "출력 단자 85℃"
+    },
+    {
+     "action": "단자 재체결",
+     "observed_result": "30분 뒤 42℃"
+    }
+   ]
   },
   {
    "incident_id": "IN-0023",
@@ -303,7 +645,30 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0023",
-   "card_id": "K-1206"
+   "card_id": "K-1206",
+   "story": "같은 위치, 코일 앞쪽이 가이드 쪽으로 치우침",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    },
+    {
+     "certainty": "추정",
+     "note": "가이드 간격 좁음",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    },
+    {
+     "action": "가이드 간격 육안 확인",
+     "observed_result": "측정 못 함"
+    }
+   ]
   },
   {
    "incident_id": "IN-0024",
@@ -316,7 +681,21 @@
    "cause": "장착 볼트 풀림",
    "result": "resolved",
    "handover_id": "HO-H0024",
-   "card_id": "K-1030"
+   "card_id": "K-1030",
+   "story": "구동부 진동 상승, 커플링 쪽 덜컹거림",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "장착 볼트 풀림",
+     "evidence": "커플링 볼트 2개 풀림"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "커플링 볼트 재체결",
+     "observed_result": "진동 정상"
+    }
+   ]
   },
   {
    "incident_id": "IN-0025",
@@ -329,7 +708,21 @@
    "cause": "냉각수 유량 부족",
    "result": "temporary",
    "handover_id": "HO-H0025",
-   "card_id": null
+   "card_id": null,
+   "story": "유압유 온도가 상한 근처, 쿨러 출구 냉각수가 따뜻함",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "냉각수 유량 부족",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "냉각수 밸브 개도 확대",
+     "observed_result": "유온 소폭 하강"
+    }
+   ]
   },
   {
    "incident_id": "IN-0026",
@@ -342,7 +735,25 @@
    "cause": "롤러 베어링 마모",
    "result": "resolved",
    "handover_id": "HO-H0026",
-   "card_id": "K-1017"
+   "card_id": "K-1017",
+   "story": "그리스 주입 뒤에도 소음이 다시 나고 베어링 하우징이 뜨거움",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "롤러 베어링 마모",
+     "evidence": "분해 시 궤도면 박리"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "롤러 베어링 교체",
+     "observed_result": "진동 RMS 정상"
+    },
+    {
+     "action": "시운전",
+     "observed_result": "소음 없음"
+    }
+   ]
   },
   {
    "incident_id": "IN-0027",
@@ -355,7 +766,26 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0027",
-   "card_id": "K-1206"
+   "card_id": "K-1206",
+   "story": "적재부 끝에서 코일이 가이드에 걸려 멈춤",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    },
+    {
+     "certainty": "배제",
+     "note": "벨트 장력 저하",
+     "evidence": "장력 418 kPa 정상"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "벨트 재가동, 대기율 하강"
+    }
+   ]
   },
   {
    "incident_id": "IN-0028",
@@ -368,7 +798,21 @@
    "cause": "이물 끼임",
    "result": "resolved",
    "handover_id": "HO-H0028",
-   "card_id": "K-1208"
+   "card_id": "K-1208",
+   "story": "롤러 사이 소음과 진동, 이물이 보임",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "이물 끼임",
+     "evidence": "롤러 사이 철편"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "이물 제거",
+     "observed_result": "진동 정상"
+    }
+   ]
   },
   {
    "incident_id": "IN-0029",
@@ -381,7 +825,30 @@
    "cause": "쿨러 튜브 스케일",
    "result": "resolved",
    "handover_id": "HO-H0029",
-   "card_id": "K-1002"
+   "card_id": "K-1002",
+   "story": "밸브 개도 조정 뒤에도 유온이 다시 오르고 쿨러 입·출구 오일 온도차가 작음",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "쿨러 튜브 스케일",
+     "evidence": "튜브 내부 스케일 육안 확인"
+    },
+    {
+     "certainty": "배제",
+     "note": "냉각수 유량 부족",
+     "evidence": "냉각수 유량계 정상"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "쿨러 튜브 스케일 세정",
+     "observed_result": "입·출구 온도차 회복"
+    },
+    {
+     "action": "재가동",
+     "observed_result": "유온 정상 범위"
+    }
+   ]
   },
   {
    "incident_id": "IN-0030",
@@ -394,7 +861,21 @@
    "cause": "드레인 막힘",
    "result": "resolved",
    "handover_id": "HO-H0030",
-   "card_id": null
+   "card_id": null,
+   "story": "공압 공급 압력 저하, 드레인 쪽에 물기",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "드레인 막힘",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "드레인 밸브 점검·배수",
+     "observed_result": "압력 회복"
+    }
+   ]
   },
   {
    "incident_id": "IN-0031",
@@ -407,7 +888,30 @@
    "cause": "코일 걸림",
    "result": "resolved",
    "handover_id": "HO-H0031",
-   "card_id": "K-1206"
+   "card_id": "K-1206",
+   "story": "가이드 쪽 같은 위치에서 다시 걸림, 가이드 고정 볼트 주변 긁힘",
+   "causes": [
+    {
+     "certainty": "추정",
+     "note": "코일 걸림",
+     "evidence": ""
+    },
+    {
+     "certainty": "추정",
+     "note": "가이드 간격 좁음",
+     "evidence": ""
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "걸린 코일 제거",
+     "observed_result": "재가동"
+    },
+    {
+     "action": "가이드 간격 측정 요청 인계",
+     "observed_result": "정비 일정 대기"
+    }
+   ]
   },
   {
    "incident_id": "IN-0032",
@@ -420,7 +924,26 @@
    "cause": "브리더 막힘",
    "result": "resolved",
    "handover_id": "HO-H0032",
-   "card_id": "K-1027"
+   "card_id": "K-1027",
+   "story": "감속기 상부에 오일이 비침",
+   "causes": [
+    {
+     "certainty": "확인",
+     "note": "브리더 막힘",
+     "evidence": "브리더 먼지 막힘"
+    },
+    {
+     "certainty": "배제",
+     "note": "오일실 마모",
+     "evidence": "실 주변 누유 없음"
+    }
+   ],
+   "action_steps": [
+    {
+     "action": "브리더 청소",
+     "observed_result": "비침 멈춤"
+    }
+   ]
   }
  ]
 }

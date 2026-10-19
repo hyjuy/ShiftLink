@@ -103,6 +103,10 @@ def live_incidents(events: Iterable[dict[str, Any]], sessions: list[dict[str, An
                     # 모든 조치가 센서를 움직이지 못했는데 닫은 기록 — 엉뚱한 시도인지 가르는 객관 신호
                     "no_change": bool(done) and not any("→" in s["result_text"] for s in done),
                     "cause": resolution.get("cause"), "result": resolution.get("result"),
+                    # 근무일지 항목과 같은 이름: 본 것 → 상황·증상, 조치마다 센서 변화 → 조치 결과. 확신도는 받지 않으므로 비운다.
+                    "story": resolution.get("symptom"),
+                    "causes": [{"certainty": None, "note": resolution["cause"], "evidence": ""}] if resolution.get("cause") else [],
+                    "action_steps": [{"action": s["action"], "observed_result": s.get("result_text", "")} for s in done],
                     "handover_id": (by_session.get(session["session_id"]) or {}).get("handover_id") if session else None,
                     "card_id": (session["data"].get("card_ids") or [None])[0] if session else None})
     return out

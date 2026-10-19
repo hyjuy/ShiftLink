@@ -35,3 +35,9 @@ node tests/pda_worklog_http_browser.cjs
 실행 결과와 스크린샷은 `artifacts/pda-worklog-http-20261019/`에 보관한다. 실제 계정·DB는 변경하지 않으며 임시 서버는 검사 종료 시 닫고 DB를 제거한다.
 
 이번 검사 범위와 별개로 `test_pda_accounts.py`의 POSIX `0600` 파일 모드 assertion은 Windows에서 `0666`으로 보고돼 실패했다. 계정 구현·보안 기대값은 변경하지 않았다. 운영 배포·실장비·중앙 DB·외부 모델 검증과 전체 저장소 테스트는 이번 검증 범위에 포함하지 않는다. 이전 유형별 양식의 `pda_typed_report_browser`·`pda_report_form_browser` 대신 현재 화면 흐름은 새 실제 HTTP E2E에서 검증했다.
+
+## 배포 역할 정정
+
+Jetson은 MES 화면·API·업로더만 운영하고 PDA는 라즈베리파이의 `shiftlink.pda`에서 제공한다. Jetson의 MES 서비스에 `SHIFTLINK_SERVE_PDA=0`을 설정하면 `/pda.html`과 `/static/pda.js`만 404로 차단하며 MES 관리 화면·API는 유지한다. 라즈베리파이 PDA 서버의 파일 제공과 API 프록시에는 영향을 주지 않는다.
+
+`test_mes_pda_hosting.py`에서 PDA 제공을 꺼도 200으로 응답하던 실패를 재현한 뒤 최소 경로 차단을 추가했다. 쿼리 문자열·정적 파일 별칭 차단과 MES 화면·API 유지 검사, 기존 `test_work_report_api.py`를 합쳐 **18 passed**를 확인했다. 기존 PDA 파일의 배포 후 별도 변경은 보존하고 Jetson의 PDA 경로 제공만 중단한다.

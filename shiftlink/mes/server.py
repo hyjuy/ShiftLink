@@ -803,6 +803,10 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
+        if os.environ.get("SHIFTLINK_SERVE_PDA", "1") == "0" and (
+                parsed.path == "/pda.html" or
+                (parsed.path.startswith("/static/") and Path(parsed.path).name == "pda.js")):
+            self._send(404, {"error": "not found", "is_synthetic": True}); return
         try:
             if parsed.path=='/api/admin/card-drafts' or parsed.path.startswith('/api/admin/card-drafts/'):
                 actor=self.accounts.administrator(self._account_token())

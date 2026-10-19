@@ -212,10 +212,8 @@ function show(name) {
   document.documentElement.scrollTop=0;document.body.scrollTop=0;
   if(name==='home')renderHome();
   if(name==='ctx'&&S.eq){
-    $('workEquipment').textContent=S.eq.code+' · '+S.eq.group;
-    if(S.sensorsOpen===undefined)S.sensorsOpen=(S.faults||[]).some(f=>f.eq.equipment_id===S.eq.equipment_id);
-    $('equipmentWorkspace').classList.toggle('sensors-open',!!S.sensorsOpen);
-    $('toggleChat').textContent=S.sensorsOpen?'센서값 닫기':'센서값 열기';$('toggleChat').setAttribute('aria-expanded',String(!!S.sensorsOpen));
+    const code=document.createElement('b'),group=document.createElement('span');code.textContent=S.eq.code;group.textContent=S.eq.group;
+    $('workEquipment').replaceChildren(code,group);$('chatEq').textContent=S.eq.code;
     renderMesStatus();renderChat();renderSymptoms();renderAskBlock();renderEquipmentMetrics();
   }
 }
@@ -255,7 +253,7 @@ async function probeServer() { try { await api('/api/state'); } catch (_) {} }
 // ── 컨텍스트 ───────────────────────────────────────────────────────
 function setContext(eq, source, extra) {
   S.eq = eq; S.source = source; S.queryResponse = null;
-  S.sensorsOpen=(S.faults||[]).some(f=>f.eq.equipment_id===eq.equipment_id);S.sensorWasBad=false;
+  S.sensorWasBad=false;
   S.scanId = (extra && extra.scanId) || null;
   S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.chat = [];
   S.safetyView = null; S.safetyOpen = false;
@@ -501,6 +499,7 @@ const fullStamp = (v) => {
   return p.year + '년 ' + p.month + '월 ' + p.day + '일 ' + p.hour + '시 ' + p.minute + '분 ' + p.second + '초';
 };
 const stamp = (v) => (v ? new Date(v).toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', hour12: false }) : '시각 없음');
+const clock = (v) => (v ? new Date(v).toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hourCycle: 'h23' }) : '시각 없음');
 
 /* MesCardAdapter 와 같은 판정. 경계값은 normal. 범위가 없으면 상태 없음. */
 function stateOf(spec, value) {
@@ -694,7 +693,8 @@ function renderMesStatus() {
   S.mes.diagnoses.forEach((d) => parts.push('증상 후보: ' + d.symptom));
   box.textContent = parts.join(' · ');
   const bad = out > 0 || (!!S.mes.fault && S.mes.fault !== 'normal');
-  if (bad && !S.sensorWasBad && !S.sensorsOpen) setSensorsOpen(true);
+  // 센서값은 새로고침 전까지 고정이다. 새 이상이 생긴 순간에만 그 값으로 다시 고정한다.
+  if (bad && !S.sensorWasBad) { S.sensorSnapshot = null; renderEquipmentMetrics(); }
   S.sensorWasBad=bad;
   box.classList.toggle('bad', bad);
   chatLine(chat, parts.join(' · '), bad || S.mes.alarms.length > 0);
@@ -873,14 +873,13 @@ function renderSymptoms() {
     b.addEventListener('click', () => { haptic(20); sendChat(item.text, item.label); });
     list.appendChild(b);
   });
-  // 답이 나온 뒤에는 칩을 한 버튼으로 접는다 — 안전 카드·답·인계 버튼이 한 화면에 들어오게(A4). ▲는 MES 관련 칩 수.
-  const compact = S.chat.length > 0 && items.length > 0;
-  const foot = $('chatFoot'), tg = $('suggToggle');
-  foot.classList.toggle('compact', compact);
-  foot.classList.toggle('open', compact && !!S.suggOpen);
-  tg.hidden = !compact;
-  tg.textContent = '추천 질문 ' + items.length + '개' + (related.length ? ' · ▲' + related.length : '') + (S.suggOpen ? ' ▴' : ' ▾');
-  tg.ariaExpanded = String(compact && !!S.suggOpen);
+  // 추천 질문·관측값 입력은 입력창의 +로 연다(열리면 −). 닫힌 + 위의 숫자는 MES 관련(▲) 추천 질문 수.
+  const open = !!S.suggOpen, tg = $('suggToggle');
+  $('chatFoot').classList.toggle('open', open);
+  tg.textContent = open ? '−' : '+';
+  tg.setAttribute('data-hot', !open && related.length ? String(related.length) : '');
+  tg.setAttribute('aria-label', (open ? '추천 질문 닫기' : '추천 질문 열기') + ' · ' + items.length + '개' + (related.length ? ' · MES 관련 ' + related.length + '개' : ''));
+  tg.setAttribute('aria-expanded', String(open));
 }
 
 // ── 조건 평가 ──────────────────────────────────────────────────────
@@ -1293,6 +1292,22 @@ function answerBody(turn) {
   const row = document.createElement('div'); row.className = 'ans-row';
   row.appendChild(answer);
   d.appendChild(row);
+  // 답 본문: 첫 문장은 제목처럼, 나머지는 설명으로. 「근거:」 줄은 답 아래 기준 줄로 옮긴다. 글은 바꾸지 않는다.
+  const parts = res.review_queue || none ? null : answerParts(plain(res.answer));
+  if (parts) {
+    answer.textContent = parts.title;
+    if (parts.items.length) {
+      const ul = document.createElement('ul'); ul.className = 'ans-list';
+      parts.items.forEach((t) => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+      d.appendChild(ul);
+    }
+  }
+  const at = res.evidence && res.evidence.simulated_at;
+  if (parts && (at || parts.source)) {
+    const meta = document.createElement('p'); meta.className = 'ans-meta';
+    meta.textContent = [at ? '답변 기준 · ' + clock(at) + ' 센서값' : '', parts.source].filter(Boolean).join(' · ');
+    d.appendChild(meta);
+  }
   // 지식 카드를 찾지 못한 답 — 이 대화로 근무일지를 쓸지 묻는다. 고른 뒤에는 다시 묻지 않는다.
   if (none && !turn.reportAsked) {
     const ask = document.createElement('div'); ask.className = 'report-ask';
@@ -1308,19 +1323,20 @@ function answerBody(turn) {
   record.type = 'button'; record.className = 'btn sm';
   record.textContent = '조치 시작 — 기록하면서 작업';
   record.addEventListener('click', () => openResolve(turn));
-  d.appendChild(record);
   const ids = r.actions.map((x) => x.card.card_id);
   const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
     ? (res.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id) : [];
-  if (!ids.length && !r.excluded.length && !evidence.length) return d;
+  if (!ids.length && !r.excluded.length && !evidence.length) { d.appendChild(record); return d; }
   const more = document.createElement('details');
   more.className = 'basis-detail';
   const sum = document.createElement('summary');
-  sum.textContent = (ids.length ? '근거 카드 ' + ids.join(' · ') : '근거 카드 없음') + ' · 펼쳐 보기';
+  sum.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span></span><small></small>';
+  sum.querySelector('span').textContent = ids.length ? '참고 매뉴얼 보기' : '답변 근거 보기';
+  sum.querySelector('small').textContent = ids.join(' · ');
   more.appendChild(sum);
   if (evidence.length) {
     const label = document.createElement('p'); label.className = 'lbl';
-    label.textContent = '질의 당시 MES 센서값 · ' + stamp(res.evidence.simulated_at) + ' · 고정된 답변 근거';
+    label.textContent = '질의 당시 MES 센서값 · ' + clock(res.evidence.simulated_at);
     more.appendChild(label);
     renderSensorReadings(more, evidence, undefined, 'ev' + turn.id);
   }
@@ -1343,7 +1359,17 @@ function answerBody(turn) {
     more.appendChild(b);
   }
   d.appendChild(more);
+  d.appendChild(record);
   return d;
+}
+
+/* 답 글을 제목(첫 문장)·나머지 문장 목록(•)·근거 줄로 나눈다. 문장 끝(. ! ? 뒤 띄어쓰기)이나 줄바꿈에서 자른다. 글은 바꾸지 않는다. */
+function answerParts(text) {
+  const lines = String(text).split('\n');
+  const source = lines.filter((l) => /^\s*근거\s*:/.test(l)).map((l) => l.trim()).join(' · ');
+  const body = lines.filter((l) => !/^\s*근거\s*:/.test(l)).join('\n').trim();
+  const sentences = body.split(/(?<=[.!?])\s+|\n+/).map((x) => x.replace(/^\s*[-•·*]\s*/, '').trim()).filter(Boolean);
+  return {title: sentences[0] || body, items: sentences.slice(1), source};
 }
 
 const lastAnswer = () => S.chat.filter((t) => t.status === 'done').slice(-1)[0] || null;
@@ -1661,10 +1687,16 @@ function renderTries() {
 /* 한 번에 한 질문만 보낸다 — Jetson 부하, 그리고 답이 어느 질문의 것인지 섞이지 않게. */
 const chatPending = () => S.chat.some((t) => t.status === 'pending');
 
+const SEND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+const STOP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
 function renderAskBlock() {
   const btn = $('doSearch');
-  btn.disabled = !S.eq || !S.source || chatPending() || !currentQuestion();
-  btn.textContent = chatPending() ? '답변 대기' : '보내기';
+  // 답을 기다리는 동안 보내기 버튼이 정지 버튼이 된다(누르면 이 질문 취소).
+  const pending = chatPending();
+  btn.disabled = !pending && (!S.eq || !S.source || !currentQuestion());
+  btn.classList.toggle('stop', pending);
+  btn.setAttribute('aria-label', pending ? '답변 취소' : '보내기');
+  btn.innerHTML = pending ? STOP_ICON : SEND_ICON;
 }
 
 /* 고장 알림 확인 화면의 대상. 탭한 순간의 equipment_id로만 찾는다 — 띠가 다시 그려져도 바뀌지 않는다(B3). */
@@ -1693,6 +1725,12 @@ function userBubble(t) {
 const waitText = (t) => '답변 작성 중 · ' + Math.floor((Date.now() - t.started) / 1000) + '초 경과 · 최대 '
   + Math.round(QUERY_TIMEOUT_MS / 1000) + '초';
 
+const BOT_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-4-4m4 4-4 4M19 17H5l4-4m-4 4 4 4"/></svg>';
+function botHead() {
+  const head = document.createElement('div'); head.className = 'bot-head';
+  head.innerHTML = '<span class="bot-mark">' + BOT_MARK + '</span><b>ShiftLink</b>';
+  return head;
+}
 function botBubble(t) {
   if (t.status === 'done') return answerBody(t);
   const d = document.createElement('div');
@@ -1715,9 +1753,11 @@ function botBubble(t) {
 function renderChat() {
   const log = $('chatLog'); log.innerHTML = '';
   $('chatPane').classList.toggle('centered-state', S.chat.length <= 1);
-  $('chatCancelDock').hidden = !chatPending();
   let last = null;
-  S.chat.forEach((t) => { log.appendChild(userBubble(t)); last = botBubble(t); log.appendChild(last); });
+  S.chat.forEach((t) => {
+    const at = document.createElement('p'); at.className = 'msg-time'; at.textContent = '오늘 ' + hhmm(t.started);
+    log.appendChild(at); log.appendChild(userBubble(t)); log.appendChild(botHead()); last = botBubble(t); log.appendChild(last);
+  });
   renderAskSafety();
   if (last) scrollToTurn(last);
 }
@@ -1953,29 +1993,36 @@ function metricElement(label, value, unit, bad) {
   if (unit) { const u = document.createElement('span'); u.className = 'unit'; u.textContent = unit; number.appendChild(u); }
   el.append(title,number); return el;
 }
-function setSensorsOpen(open) {
-  S.sensorsOpen = open;
-  S.sensorSnapshot = null;
-  $('equipmentWorkspace').classList.toggle('sensors-open', open);
-  $('toggleChat').textContent = open ? '센서값 닫기' : '센서값 열기';
-  $('toggleChat').setAttribute('aria-expanded', String(open));
-  renderEquipmentMetrics();
-}
+/* 설비 칸 센서 목록. 값은 새로고침(또는 새 이상) 전까지 고정한다 — 읽는 동안 숫자가 바뀌지 않게. */
 function renderEquipmentMetrics() {
   const box = $('equipmentMetrics'); if (!box || !S.eq) return; box.replaceChildren();
-  if (S.sensorsOpen && !S.sensorSnapshot && S.mes) S.sensorSnapshot = JSON.parse(JSON.stringify(S.mes));
-  const mes = S.sensorsOpen ? S.sensorSnapshot : S.mes;
+  if (!S.sensorSnapshot && S.mes) S.sensorSnapshot = JSON.parse(JSON.stringify(S.mes));
+  const mes = S.sensorSnapshot;
   const measurements = mes ? (mes.readings || []) : [];
-  S.eq.signals.forEach((spec) => {
+  // 위에서부터 이상값 → 정지 → 정상 → 값 없음·범위 미설정. 같은 묶음 안은 구성 순서.
+  const rows = S.eq.signals.map((spec) => {
     const row = measurements.find((m) => m.signal === spec.signal);
     const state = row && stateOf(spec, row.value);
-    const idle = row && spec.zeroStopped && row.value === 0 && mes.operating !== 'running';
-    const el = idle ? metricElement(shortName(spec.name), '정지 중') : metricElement(shortName(spec.name), row ? num(row.value) : '—', unitText(spec.unit), state === 'low' || state === 'high');
-    if (idle) el.classList.add('idle');
+    const idle = !!row && !!spec.zeroStopped && row.value === 0 && mes.operating !== 'running';
+    const bad = !idle && (state === 'low' || state === 'high');
+    return {spec, row, state, idle, bad, rank: bad ? 0 : idle ? 1 : state === 'normal' ? 2 : 3};
+  });
+  rows.sort((a, b) => a.rank - b.rank);
+  rows.forEach(({spec, row, state, idle, bad}) => {
+    const el = document.createElement('div'); el.className = 'sensor-row' + (bad ? ' bad' : '') + (idle ? ' idle' : '');
+    const name = document.createElement('div'); name.className = 'sensor-name';
+    const label = document.createElement('b'); label.textContent = shortName(spec.name);
+    const at = document.createElement('small'); at.textContent = row && row.observed_at ? clock(row.observed_at) : '';
+    name.append(label, at);
+    const value = document.createElement('div'); value.className = 'sensor-value';
+    value.textContent = idle ? '정지 중' : row ? num(row.value) : '—';
+    if (!idle && row) { const u = document.createElement('span'); u.textContent = unitText(spec.unit); value.appendChild(u); }
+    const pill = document.createElement('span'); pill.className = 'sensor-state' + (row && !idle && state === 'normal' ? ' ok' : '');
+    pill.textContent = !row ? '값 없음' : idle ? '정지' : bad ? '범위 이탈' : state === 'normal' ? '정상' : '범위 미설정';
+    el.append(name, value, pill);
     box.appendChild(el);
   });
-  $('metricsTime').textContent = mes ? '측정 시각 · ' + fullStamp(mes.at) + (S.sensorsOpen ? ' · 고정된 값' : '')
-    + (!S.mes ? ' · 현재 MES 연결 끊김' : '') : 'MES 데이터를 수신하지 못했습니다.';
+  $('metricsTime').textContent = mes ? clock(mes.at) + ' 기준' + (!S.mes ? ' · 현재 MES 연결 끊김' : '') : 'MES 데이터를 수신하지 못했습니다.';
 }
 function handoverIncidentRows(handovers,equipment) {
   const rows=handovers.flatMap(h=>handoverEntries(h,equipment));
@@ -2438,6 +2485,7 @@ function dashSummary(snap, equipment, handovers, faults) {
     line: (snap.simulated_at ? new Date(snap.simulated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' ' : '') + '라인 ' + (LINE_MODE_TXT[snap.line_mode] || snap.line_mode || '상태 확인 중'),
     faults: (faults || []).map((f) => ({ equipment_id: f.eq.equipment_id, code: f.eq.code, items: f.items })),
     waiting: waiting.map((e) => code(e.equipment_id)),
+    waitingRows: waiting.map((e) => ({ equipment_id: e.equipment_id, code: code(e.equipment_id), reason: e.wait_reason })),
     held: (snap.coils || []).filter((c) => c.quality_status === 'hold').length,
     openItems: openItems.length,
   };
@@ -2642,16 +2690,16 @@ function renderHomeStatus() { renderHome(); }
  * 원형 조각은 6개까지(작은 조각은 구별이 안 된다): 손실 상위 5대는 설비 종류 색, 나머지는 회색 '기타' 한 조각.
  * 설비 줄의 표지 색(color)도 같은 규칙이라 링 조각과 줄이 맞는다. slices = 링에 그릴 조각. */
 const RING_MAX = 5;
-// 설비마다 하나의 색 — 종류 색(--hpu 등)을 먼저 쓰고, 같은 종류의 둘째 설비부터 새 색
+// 같은 종류 설비는 같은 색(CV-01·CV-02 → --cv). 색이 정해지지 않은 종류만 예비 색을 종류마다 하나씩.
 const EQ_SPARE = ['#e0a96d', '#d98b8b', '#c9b458', '#7cc4d9'];
 function eqColor(id) {
   if (!S.eqColors || !S.eqColors[id]) {
     if (!S.equipment.length) return 'var(--tx-3)';
-    const used = new Set(); let spare = 0; S.eqColors = {};
+    const spare = {}; S.eqColors = {};
     S.equipment.forEach((e) => {
-      const k = ((e.code || '').split('-')[0] || 'pdp').toLowerCase();
-      if (used.has(k)) S.eqColors[e.equipment_id] = EQ_SPARE[spare++ % EQ_SPARE.length];
-      else { used.add(k); S.eqColors[e.equipment_id] = 'var(--' + k + ')'; }
+      const k = (e.code || '').split('-')[0].toUpperCase();
+      S.eqColors[e.equipment_id] = TYPE_COLOR[k] ? 'var(--' + TYPE_COLOR[k] + ')'
+        : (spare[k] ||= EQ_SPARE[Object.keys(spare).length % EQ_SPARE.length]);
     });
   }
   return S.eqColors[id] || 'var(--tx-3)';
@@ -3323,18 +3371,18 @@ on('scanClose', () => show('home'));
 on('scanManual', openManual);
 on('scanShoot', shootScan);
 on('toManual', openManual);
-on('chatCancel', () => { const t = S.chat.find(turn => turn.status === 'pending'); if (!t) return; t.status = 'cancelled'; renderChat(); renderSymptoms(); renderAskBlock(); });
+const cancelChat = () => { const t = S.chat.find(turn => turn.status === 'pending'); if (!t) return; t.status = 'cancelled'; renderChat(); renderSymptoms(); renderAskBlock(); };
 on('homeWarnings', event => { const button = event.target.closest('button[data-equipment-id]'); if (!button) return; const f = (S.faults || []).find(f => f.eq.equipment_id === button.dataset.equipmentId); if (f) openAlertGo({equipment_id:f.eq.equipment_id,items:f.items.slice()}); });
 on('toChat', () => { if (S.eq) $('toAsk').click(); else openManual(); });
 on('manualClose', () => show(S.eq ? 'ctx' : 'home'));
 on('manualToScan', startScan);
 on('ctxBack', () => show('home'));
-on('ctxEdit', startScan);
+on('ctxEdit', openManual);
 on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('chat'); loadMesObservations(); });
 on('obsReload', () => loadMesObservations());
 on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = null; renderEquipmentMetrics(); });
 on('askBack', () => show('ctx'));
-on('doSearch', () => sendChat(currentQuestion()));
+on('doSearch', () => (chatPending() ? cancelChat() : sendChat(currentQuestion())));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
 on('triesBack', () => show('chat'));
 on('toHandover', openHistory);
@@ -3413,14 +3461,14 @@ Array.from(document.querySelector('#s-chat').children).filter((el)=>!el.classLis
 on('navigationBack',goBack);on('faceSetupReturn',goBack);
 ['reportWorkDate','reportShift'].forEach(id=>$(id).addEventListener('change',syncReportShift));
 window.addEventListener('resize',()=>{if(S.screen==='manual')layoutManualList();});
-[['expandEquipment','equipment-only'],['expandChat','chat-only'],['splitWorkspace','']].forEach(([id,mode])=>on(id,()=>{const w=$('equipmentWorkspace');w.classList.remove('equipment-only','chat-only');if(mode)w.classList.add(mode);['expandEquipment','expandChat','splitWorkspace'].forEach(button=>$(button).setAttribute('aria-pressed',String(button===id)));}));
+// 패널 머리의 「장비」「채팅」: 누르면 그 칸만 전체 화면, 다시 누르면 함께 보기.
+[['expandEquipment','equipment-only'],['expandChat','chat-only']].forEach(([id,mode])=>on(id,()=>{const w=$('equipmentWorkspace'),on_=!w.classList.contains(mode);w.classList.remove('equipment-only','chat-only');if(on_)w.classList.add(mode);['expandEquipment','expandChat'].forEach(button=>$(button).setAttribute('aria-pressed',String(on_&&button===id)));}));
 const divider=document.querySelector('.workspace-divider');
 function resizeWorkspace(percent){const w=$('equipmentWorkspace');const n=Math.max(25,Math.min(75,percent));w.style.setProperty('--equipment-width',n+'fr');w.style.setProperty('--chat-width',(100-n)+'fr');divider.setAttribute('aria-valuenow',Math.round(n));}
 divider.setAttribute('aria-valuemin','25');divider.setAttribute('aria-valuemax','75');divider.setAttribute('aria-valuenow','60');
 divider.addEventListener('pointerdown',event=>{divider.setPointerCapture(event.pointerId);});
 divider.addEventListener('pointermove',event=>{if(!divider.hasPointerCapture(event.pointerId))return;const r=$('equipmentWorkspace').getBoundingClientRect();resizeWorkspace((event.clientX-r.left)/r.width*100);});
 divider.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();resizeWorkspace(Number(divider.getAttribute('aria-valuenow'))+(event.key==='ArrowRight'?5:-5));}});
-on('toggleChat', () => setSensorsOpen(!S.sensorsOpen));
 on('toDutyHandover',openHandover);on('toEquipmentReport',openEquipmentReport);
 on('toDashboard',openDashboard);on('dashboardBack',()=>show('home'));on('historyBack',()=>show('ctx'));
 on('toReport',openReport);on('reportBack',()=>show('home'));on('reportEditTargets',()=>{saveReportDraft();renderReportSelection();show('reportSelect');});on('reportWrite',openReportWrite);on('reportSave',()=>$('reportSaveConfirm').showModal());on('reportSaveYes',()=>{$('reportSaveConfirm').close();saveReport();});on('reportSaveNo',()=>$('reportSaveConfirm').close());on('reportImport',importReportMes);
@@ -3505,6 +3553,7 @@ $('reportAuthor').addEventListener('input',()=>{
   input.dataset.workerDefault=worker;
 });
 ['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
+on('eqListX',()=>$('eqListModal').close());on('eqListClose',()=>$('eqListModal').close());$('eqListModal').addEventListener('click',(e)=>{if(e.target===$('eqListModal'))$('eqListModal').close();});
 on('reportResumeLoad',()=>{$('reportResume').close();enterReportWrite();});on('reportResumeNew',()=>{$('reportResume').close();resetReportForm();enterReportWrite();});on('notifyBell',toggleNotify);on('notifyFloat',toggleNotify);on('logout',()=>{$('logoutConfirm').showModal();$('logoutConfirm').focus();});on('logoutNo',()=>$('logoutConfirm').close());on('logoutYes',()=>{$('logoutConfirm').close();saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
 on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));
 $('accountForm').addEventListener('submit',async(event)=>{
@@ -3648,11 +3697,11 @@ function renderDash() {
   renderHomeStatus();
   loadAnalytics(false);   // 홈 생산 링·지켜볼 설비, 대시보드 분석(10초에 한 번)
   // 이번 교대에 처리할 일 — 0이면 숨긴다(이상 설비는 홈 이상 칸에 이미 있다)
-  const todo = [d.waiting.length ? '연쇄 정지 ' + d.waiting.join(', ') : '', d.held ? '제품 보류 코일 ' + d.held : ''].filter(Boolean);
+  const todo = [d.waiting.length ? ['연쇄 정지 ' + d.waiting.length + '대', d.waiting.join(', ')] : null, d.held ? ['제품 보류 코일 ' + d.held, ''] : null].filter(Boolean);
   const tb = $('homeTodo');
   tb.hidden = !todo.length;
   $('homeWatch').classList.toggle('todo', todo.length > 0);
-  tb.replaceChildren(...todo.map((t) => { const s = document.createElement('span'); s.className = 'pill'; s.textContent = t; return s; }));
+  tb.replaceChildren(...todo.map(([t, list]) => { const s = document.createElement('span'); s.className = 'pill'; s.textContent = t; if (list) s.title = list; return s; }));
   if (S.screen !== 'dashboard') return;
   const line = $('dashLine');
   line.textContent = d.line;
@@ -3665,9 +3714,42 @@ function renderDash() {
     el.querySelector('.n').textContent = n; el.querySelector('.t').textContent = title; el.querySelector('.d').textContent = desc;
     return el;
   };
-  tile('dashFaults', d.faults.length ? 'bad' : '', d.faults.length, '이상 설비', d.faults.length ? '' : '이상 설비 없음');
-  tile('dashWaiting', d.waiting.length ? 'warn' : '', d.waiting.length, '연쇄 정지 설비', d.waiting.length ? d.waiting.join(', ') : '없음');
+  // 이상·연쇄 정지 설비: 숫자만 보이고, 1대 이상이면 「설비 목록 보기」 → 팝업(openEqList). 목록은 카드에 늘어놓지 않는다.
+  S.dashRows = {faults: d.faults.map((f) => ({equipment_id: f.equipment_id, code: f.code, detail: f.items.join(' · ')})),
+    waiting: d.waitingRows.map((w) => ({equipment_id: w.equipment_id, code: w.code, detail: WAIT_REASON_TXT[w.reason] || ''}))};
+  // 제품 보류 코일과 같은 카드. 1대 이상이면 제목 줄 오른쪽 위 › 를 눌러 설비 목록 팝업(openEqList).
+  const eqTile = (id, cls, kind, title) => {
+    const n = S.dashRows[kind].length, el = tile(id, n ? cls : '', n, title, '');
+    if (!n) return;
+    const go = document.createElement('button'); go.type = 'button'; go.className = 'eq-tile-go'; go.setAttribute('aria-label', title + ' 목록 보기');
+    go.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+    go.addEventListener('click', () => openEqList(kind, title));
+    el.appendChild(go);
+  };
+  eqTile('dashFaults', 'bad', 'faults', '이상 설비');
+  eqTile('dashWaiting', 'warn', 'waiting', '연쇄 정지 설비');
   tile('dashHeld', d.held ? 'warn' : '', d.held, '제품 보류 코일', d.held ? '' : '없음');
+}
+
+const WAIT_REASON_TXT = {downstream_block: '하류 정체로 대기', upstream_drive_fault: '상류 구동 이상으로 대기', hydraulic_supply_low: '유압 공급 저하로 대기'};
+/* 대시보드 「설비 목록 보기」 팝업. 연 순간의 목록을 보여 주고, 「상세 보기」는 그 설비 화면으로 간다. */
+function openEqList(kind, title) {
+  const rows = S.dashRows[kind] || [];
+  $('eqListTitle').textContent = title; $('eqListCount').textContent = rows.length + '대';
+  const body = $('eqListRows'); body.replaceChildren();
+  rows.forEach((r) => {
+    const eq = S.equipment.find((e) => e.equipment_id === r.equipment_id);
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><div class="eqm-name"><b></b><span></span></div><small></small></td><td><span class="eqm-state"><i></i></span></td><td><button type="button" class="eqm-go">상세 보기<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></td>';
+    tr.querySelector('b').textContent = r.code; tr.querySelector('.eqm-name span').textContent = eq ? eq.group : '';
+    tr.querySelector('small').textContent = r.detail || (eq ? eq.where : '');
+    const st = tr.querySelector('.eqm-state'); st.classList.add(kind); st.append(kind === 'faults' ? '이상' : '정지');
+    const go = tr.querySelector('.eqm-go');
+    if (eq) go.addEventListener('click', () => { $('eqListModal').close(); setContext(eq, 'manual_selection', {}); show('ctx'); });
+    else go.disabled = true;
+    body.appendChild(tr);
+  });
+  $('eqListModal').showModal();
 }
 
 // 홈 '상세 보기' → 대시보드(Depth 1): 라인 상태 한 줄 + 분석 4칸(정지 손실·반복 증상·조치 효과·지식 공백)
@@ -3721,7 +3803,8 @@ function anEmpty(parent, text) {
 }
 
 const ymd = (d) => { const x = new Date(d); return x.getFullYear() + '/' + String(x.getMonth() + 1).padStart(2, '0') + '/' + String(x.getDate()).padStart(2, '0'); };
-const periodText = (from, to, basis) => ymd(from) + ' - ' + ymd(to) + ' (' + basis + ' 기준)';
+// 기간은 달력 주(월~일). 서버의 끝(다음 주 월요일 0시, 미포함)을 일요일로 보인다. 예전 서버는 끝 값이 없어 지금 시각을 쓴다.
+const periodText = (from, to, basis) => ymd(from) + ' - ' + ymd(Date.parse(to) - 1) + ' (' + basis + ' 기준)';
 const clockText = () => new Date((S.snap && S.snap.simulated_at) || Date.now()).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const lossKind = (id) => (((S.equipment.find((e) => e.equipment_id === id) || {}).code || '').split('-')[0] || '기타').toUpperCase();
 const lossPct = (n, d) => (d ? +(n / d * 100).toFixed(1) : 0) + '%';
@@ -3750,7 +3833,7 @@ function renderLoss(loss, v) {
     const q = (s) => el.querySelector(s);
     const cur = Math.floor((S.prod && S.prod.coils) || 0), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = tickProduction 누적
     q('.asof').textContent = asof;
-    q('.per').textContent = periodText(S.an.week_start, S.an.now, '1주');
+    q('.per').textContent = periodText(S.an.week_start, S.an.week_end || S.an.now, '1주');
     q('.ls-now b').textContent = cur.toLocaleString();
     q('.ls-now .plan').textContent = '/ 계획 ' + v.planned.toLocaleString() + '개';
     q('.ls-bar i').style.width = curPct + '%';
@@ -3824,7 +3907,7 @@ function renderAnalyticsPanels(a) {
 
   const rep = anPanel('anRepeat');
   const repHead = rep.querySelector('h2');
-  repHead.replaceChildren(...[['span', '반복 증상', ''], ['small', periodText(Date.parse(a.now) - 28 * 864e5, a.now, '4주'), 'per'], ['small', '오늘 ' + clockText() + ' 기준', 'asof']]
+  repHead.replaceChildren(...[['span', '반복 증상', ''], ['small', periodText(a.window_start || Date.parse(a.now) - 28 * 864e5, a.window_end || a.now, '4주'), 'per'], ['small', '오늘 ' + clockText() + ' 기준', 'asof']]
     .map(([tag, text, cls]) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; return e; }));
   a.repeats.forEach((g) => {
     const b = anRow(rep, 'an-row', '<b class="eqc mono"></b><span class="m"></span><span class="v mono"></span>',

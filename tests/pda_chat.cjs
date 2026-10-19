@@ -12,6 +12,7 @@ class Element {
   querySelector(sel) { return this.parts[sel] ||= new Element(); }
   querySelectorAll(sel) { return [this.querySelector(sel + '1'), this.querySelector(sel + '2')]; }
   addEventListener(name, fn) { (this.events ||= {})[name] = fn; }
+  setAttribute(name, value) { this[name] = value; }
   text() { return [this.textContent, ...this.children.map((x) => x.text()), ...Object.values(this.parts).map((x) => x.text())].join(' '); }
 }
 const nodes = {};
@@ -74,7 +75,7 @@ context.api = async (path, init) => {
   assert.equal(nodes.askSafety.children[0].open, false);
   assert.match(nodes.askSafety.text(), /새 수칙/);
   run('S.chat.pop();');
-  assert.match(first, /근거 카드 K-1001/);
+  assert.match(first, /참고 매뉴얼 보기 K-1001/);
   assert.match(run('answerBody(S.chat[1])').text(), /해당 지식 없음/);
   assert.equal(run('S.chat.length'), 2);
 

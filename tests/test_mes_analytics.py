@@ -10,7 +10,18 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
 RELATIONS, ROUTE = from_catalog(CATALOG).relations, from_catalog(CATALOG).route
 STANDARD = CATALOG["production_lines"][0]["production_standard"]
-END = analytics._dt(json.loads(analytics.HISTORY.read_text(encoding="utf-8"))["_meta"]["end"])
+# 집계는 달력 주(월~일) 기준이다. 저장 이력(28일)이 달력 4주 안에 다 들어오게 이력 끝을 일요일 밤으로 옮겨 계산한다.
+END = analytics._dt("2026-10-18T23:00:00+09:00")
+
+
+def test_calendar_weeks_start_on_monday():
+    wed = analytics._dt("2026-10-14T06:00:00+09:00")
+    assert analytics.calendar_weeks(wed, 1) == (analytics._dt("2026-10-12T00:00:00+09:00"), analytics._dt("2026-10-19T00:00:00+09:00"))
+    assert analytics.calendar_weeks(wed, 4)[0] == analytics._dt("2026-09-21T00:00:00+09:00")
+    # 시작점은 지금 시각에 따라 흔들리지 않는다 — 같은 주 안이면 같다
+    assert analytics.calendar_weeks(analytics._dt("2026-10-18T23:59:00+09:00"), 4) == analytics.calendar_weeks(wed, 4)
+    out = analytics.summary([], [], wed)
+    assert (out["week_start"], out["week_end"], out["window_start"]) ==         ("2026-10-12T00:00:00+09:00", "2026-10-19T00:00:00+09:00", "2026-09-21T00:00:00+09:00")
 
 
 def _summary(extra=(), now=END):
@@ -38,7 +49,7 @@ def test_planted_stories():
     # 설비 MTBF·MTTR(4주, 설비 단위 — GR-02는 누유 2회 + 진동 1회 = 고장 3회)
     rel = {r["equipment_id"]: r["reliability"] for r in out["loss"]}   # 정지 손실 줄에 붙는다
     assert all(r["reliability"] for r in out["loss"]) and "reliability" not in out["repeats"][0]
-    assert rel["EQ-0009"] == {"failures": 8, "mttr_min": 25, "mtbf_h": 84}
+    assert rel["EQ-0009"] == {"failures": 8, "mttr_min": 25, "mtbf_h": 83}   # (월 0시~일 23시 671h − 정지) ÷ 8
     assert rel["EQ-0005"]["failures"] == 3
     pdp = {a["action"]: a for a in groups[("EQ-0002", "AL-PDP-TRIP")]["actions"]}
     assert (pdp["차단기 재투입"]["recurred"], pdp["접속부 열화상 점검·단자 재체결"]["held"]) == (2, 1)   # K-1317로 고침

@@ -24,28 +24,29 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
    assert.equal(await page.locator('#s-account>.appbar').isVisible(),false,'no empty login header');
    await page.screenshot({path:`output/pda-login-updated-${width}.png`});
    await page.evaluate(()=>{S.operator={id:'test',name:'검증'};setContext(S.equipment[0],'manual_selection');show('ctx');});
-   await page.locator('#equipmentMetrics .metric').first().waitFor({state:'attached'});
+   await page.locator('#equipmentMetrics .sensor-row').first().waitFor({state:'attached'});
    assert.equal(await page.locator('#mesPin').count(),0);
-   assert.equal(await page.locator('#expandEquipment').innerText(),'장비');
-   assert.equal(await page.locator('#splitWorkspace').innerText(),'함께 보기');
-   assert.equal(await page.locator('#expandChat').innerText(),'채팅');
+   assert.equal(await page.locator('.equipment-functions .panel-head h2').innerText(),'장비');
+   assert.equal(await page.locator('#chatPanel .panel-head h2').innerText(),'채팅');
+   assert.equal(await page.locator('#splitWorkspace').count(),0,'no separate split button');
+   // 패널 머리 버튼: 누르면 그 칸만, 다시 누르면 함께 보기
    for(const [id,hidden] of [['expandEquipment','#chatPanel'],['expandChat','.equipment-functions']]) {
     await page.locator('#'+id).click();assert.equal(await page.locator(hidden).isVisible(),false);
+    assert.equal(await page.locator('#'+id).getAttribute('aria-pressed'),'true');
+    await page.locator('#'+id).click();assert.equal(await page.locator(hidden).isVisible(),true);
    }
-   await page.locator('#splitWorkspace').click();
    assert.ok(await page.locator('#chatPanel').isVisible());
-   const gap=await page.evaluate(()=>document.querySelector('.work-actions').getBoundingClientRect().top-document.querySelector('.section-heading').getBoundingClientRect().bottom);
-   assert.ok(gap>=24,'work buttons moved below heading');
-   if(!(await page.locator('#toggleChat').getAttribute('aria-expanded')==='true'))await page.locator('#toggleChat').click();
+   const gap=await page.evaluate(()=>document.querySelector('.equipment-functions .work-actions').getBoundingClientRect().top-document.querySelector('.equipment-functions .section-heading').getBoundingClientRect().bottom);
+   assert.ok(gap>=24,'work buttons moved below heading: '+gap);
    const old=await page.locator('#equipmentMetrics').innerText(), time=await page.locator('#metricsTime').innerText();
    value=160;await page.evaluate(()=>loadMesObservations());
    assert.equal(await page.locator('#equipmentMetrics').innerText(),old);
    assert.equal(await page.locator('#metricsTime').innerText(),time);
-   await page.locator('#toggleChat').click();await page.locator('#toggleChat').click();
+   await page.locator('#mesRefresh').click();await page.waitForFunction(()=>/160/.test(document.getElementById('equipmentMetrics').innerText));
    assert.match(await page.locator('#equipmentMetrics').innerText(),/160/);
    // Many sensors must scroll inside the existing panel, with no visible scrollbar.
    await page.evaluate(()=>{const base=S.eq.signals[0];S.eq.signals=Array.from({length:30},(_,i)=>({...base,signal:i?'extra_'+i:base.signal,name:'센서 '+i}));renderEquipmentMetrics();});
-   for(const mode of ['expandEquipment','splitWorkspace']) {
+   for(const mode of ['expandEquipment','expandEquipment']) {
     await page.locator('#'+mode).click();
     const grid=page.locator('#equipmentMetrics');
     assert.ok(await grid.evaluate(e=>e.scrollHeight>e.clientHeight),'sensor values overflow inside bounded panel');
@@ -55,7 +56,6 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
     await page.waitForFunction(()=>document.getElementById('equipmentMetrics').scrollTop>0);
     await grid.focus();await page.keyboard.press('End');
    }
-   await page.locator('#splitWorkspace').click();
    const summary=page.locator('#askSafety>details>summary');
    assert.equal(await page.locator('#askSafety>details').evaluate(e=>e.open),false);
    await summary.click();assert.equal(await page.locator('#askSafety>details').evaluate(e=>e.open),true);

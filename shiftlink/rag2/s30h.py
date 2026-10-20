@@ -38,6 +38,32 @@ def source_label(chunk: dict) -> str:
     return "인계 기록"
 
 
+def _num(x) -> str:
+    return f"{x:g}" if isinstance(x, (int, float)) else str(x)
+
+
+def state_lines(specs: dict, observations: list) -> list[str]:
+    """M1 of the 10/20 MES-context run (exp/mes-context-20261020 mes_ctx.state_lines): one line per low/high MES state.
+    specs: signal -> SignalSpec of the baseline configuration. Normal, missing and invalid signals add nothing, so with
+    MES all normal the search text is the question alone."""
+    values = {o["signal"]: o["value"] for o in observations}
+    lines = []
+    for o in observations:
+        if not o["signal"].endswith("_state") or o["value"] not in ("low", "high"):
+            continue
+        sig = o["signal"][:-len("_state")]
+        spec = specs.get(sig)
+        if spec is None or sig not in values:
+            continue
+        v = values[sig]
+        if spec.unit == "bool":
+            lines.append(f"{spec.name.split(' (')[0]}: {_num(v)} (정상 {_num(spec.normal_max)})")
+        else:
+            rng = f"{_num(spec.normal_min)}–{_num(spec.normal_max)} {spec.unit}"
+            lines.append(f"{spec.name} {_num(v)} {spec.unit} (정상 {rng} {'초과' if o['value'] == 'high' else '미만'})")
+    return lines
+
+
 class S30hPipeline:
     answer_mode = "s30h"
 
@@ -61,6 +87,8 @@ class S30hPipeline:
         self.eq_type = {}
         for e in cat["equipment"]:
             self.eq_type[e["equipment_id"]] = self.eq_type[e["code"]] = types[e["equipment_type_id"]]
+        from shiftlink.mes.configuration import from_catalog   # names/ranges as the MES shows them (catalog points have no names)
+        self.specs = {e.equipment_id: {s.signal: s for s in e.signals} for e in from_catalog(cat).equipment}
 
     def _post(self, host, path, body, timeout=300):
         req = urllib.request.Request(f"{host}{path}", data=json.dumps(body).encode())
@@ -94,7 +122,10 @@ class S30hPipeline:
         question, eq_id = payload["question"], payload["eq_id"]
         eq_type = self.eq_type.get(eq_id)
         t0 = time.time()
-        ev = self.evidence(question, eq_type)
+        # MES low/high states go into the embedding search only; the judge and answer prompts keep the question
+        # (adopted 10/20 by user decision although prereg gate Q1 missed by one: docs/experiments/mes-context-result-20261020.md)
+        mes = state_lines(self.specs.get(eq_id, {}), payload.get("observations") or [])
+        ev = self.evidence("\n".join([question, *mes]), eq_type)
         with ThreadPoolExecutor(self.judge_workers) as ex:
             dists = list(ex.map(lambda r: E.judge_dist(question, r, self.judge_host, model=self.judge_model, ctx=self.judge_ctx), ev))
         if any(p is None for p in dists):   # strict like hybrid: never answer from evidence the judge did not score
@@ -122,7 +153,7 @@ class S30hPipeline:
         # why it answered or abstained (MES query log): candidates with their judge P(>=2), what survived LO, the route,
         # the model's decision probability and the abstain reason (drop_all / insufficient / no_cite / broken_json / threshold)
         reason = ("drop_all" if route == "drop_all" else "threshold" if abstain and not res["abstain"] else res["reason"]) if abstain else ""
-        tool_results = {"answer_mode": "s30h", "route": route, "candidates": [r["chunk_id"] for r in ev],
+        tool_results = {"answer_mode": "s30h", "mes_lines": mes, "route": route, "candidates": [r["chunk_id"] for r in ev],
                         "judge_p": [round(s, 4) for s in scores], "kept": [r["chunk_id"] for r in ev2],
                         "p_insuff": out.get("p_insuff"), "abstain_reason": reason, "seconds": round(time.time() - t0, 2)}
         return SimpleNamespace(mode="query", output=output, tool_results=tool_results)

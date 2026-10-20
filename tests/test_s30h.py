@@ -59,6 +59,23 @@ def test_folder_filter_keeps_equipment_and_common_folders(pipe):
     assert len(pipe.evidence("q", None)) == 4
 
 
+def test_other_units_events_are_dropped_without_backfill(tmp_path, monkeypatch):
+    rows = [chunk("e1", "event", "K-1101", "COMMON", text="14:18 HPU-01 압력 저하 알람"),
+            chunk("e2", "event", "K-1110", "COMMON", text="GR-01 베어링 85℃, 주 모터 정지"),
+            chunk("e3", "event", "K-1110", "COMMON", text="운전 복귀는 아직 안 된다"),   # no code: inherits GR-01
+            chunk("c1", "card", "K-1003", "HPU"), chunk("c2", "source", "hpu_manual.pdf", "HPU", page=5)]
+    (tmp_path / "chunks_700.jsonl").write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows), encoding="utf-8")
+    np.save(tmp_path / "vectors_700__embeddinggemma_300m.npy", np.eye(5, dtype=np.float32))
+    p = S.S30hPipeline(tmp_path, "http://main:11434", "http://judge:11436", catalog=CATALOG)
+    monkeypatch.setattr(p, "_embed", lambda q: np.array([4, 5, 3, 2, 1], dtype=np.float32) / 7.4)
+    assert [r["chunk_id"] for r in p.evidence("q", "HPU")] == ["e2", "c1", "c2"]   # event_cap 1: the top event only
+    assert [r["chunk_id"] for r in p.evidence("q", "HPU", "EQ-0001")] == ["c1", "c2"]   # GR-01 event out, e1 not moved up
+    assert [r["chunk_id"] for r in p.evidence("q", "GR", "EQ-0004")] == ["e2"]   # GR-01 keeps it
+    monkeypatch.setattr(p, "_embed", lambda q: np.array([1, 2, 5, 0, 0], dtype=np.float32) / 5.5)
+    assert "e3" in [r["chunk_id"] for r in p.evidence("q", "HPU")]
+    assert "e3" not in [r["chunk_id"] for r in p.evidence("q", "HPU", "EQ-0001")]   # codeless chunk inherits GR-01
+
+
 def test_confident_route_forces_an_answer_and_lists_sources(pipe, monkeypatch):
     seen = []
     judged(monkeypatch, {"c1": 0.95, "c2": 0.5, "c4": 0.1}, seen)

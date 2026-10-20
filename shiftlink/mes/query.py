@@ -34,6 +34,7 @@ def build_query_pipeline():
             answer_model=os.environ.get('SHIFTLINK_S30H_ANSWER_MODEL', 'exaone-rag-aug-ck106'),
             judge_model=os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL),
             judge_ctx=int(os.environ.get('SHIFTLINK_S30H_JUDGE_CTX', '2048')),
+            source_conditions=os.environ.get('SHIFTLINK_S30H_SOURCE_CONDITIONS') == '1',
             cards=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider.cards)
     return FixedPipeline(
         model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', ANSWER_MODEL),

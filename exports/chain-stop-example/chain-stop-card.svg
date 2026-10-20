@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240" viewBox="0 0 360 240" fill="none">
+  <title>연쇄 정지 설비 카드 예시</title>
+  <desc>연쇄 정지 설비 3대. 숫자 아래에 청록색 설비 목록 보기 문구와 오른쪽 화살표가 있는 카드.</desc>
+  <rect x="1" y="1" width="358" height="238" rx="16" fill="white" stroke="#DCE5E3" stroke-width="2"/>
+  <text x="28" y="46" fill="#192525" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif" font-size="19" font-weight="600">연쇄 정지 설비</text>
+  <text x="180" y="139" text-anchor="middle" fill="#111B1B" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif"><tspan font-size="60" font-weight="700">3</tspan><tspan dx="7" font-size="24" font-weight="500">대</tspan></text>
+  <text x="166" y="186" text-anchor="middle" fill="#168578" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif" font-size="16" font-weight="600">설비 목록 보기</text>
+  <path d="m231 174 6 6-6 6" stroke="#168578" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

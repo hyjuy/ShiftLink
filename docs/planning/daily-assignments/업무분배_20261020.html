@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ShiftLink 업무 분배 — 2026-10-20</title><meta name="source-sha256" content="101f7d27851a4fd0a73c0174eb253dd34ffc73d93fe6888ae5b7769315d373c2"><style>body{margin:0;background:#f3f5f9;color:#25333e;font:16px/1.75 system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}main{max-width:1160px;margin:24px auto;padding:36px;background:white;border-radius:12px}h1{font-size:30px;line-height:1.4}h2{font-size:23px;margin-top:42px;border-top:2px solid #d9e3ec;padding-top:20px}h3{font-size:19px;margin-top:28px;color:#214e71}a{color:#155d99;text-underline-offset:3px;overflow-wrap:anywhere}code{font-size:.88em;overflow-wrap:anywhere;background:#eef2f6;padding:2px 4px}li{margin:10px 0}ul{padding-left:24px}.table-scroll{overflow-x:auto}table{width:100%;min-width:760px;border-collapse:collapse;font-size:14px}td,th{border:1px solid #dce3eb;padding:12px;text-align:left;vertical-align:top}th{background:#eaf1f8}tr:nth-child(even){background:#f8fafc}p{overflow-wrap:anywhere}@media(max-width:700px){main{margin:0;padding:18px;border-radius:0}h1{font-size:26px}h2{font-size:21px}td,th{padding:9px}}@media print{body{background:white;font-size:10pt}main{margin:0;padding:0;max-width:none}h2,h3{break-after:avoid}tr{break-inside:avoid}.table-scroll{overflow:visible}table{min-width:0;font-size:8pt}td,th{padding:5px}a{color:inherit}h1{font-size:20pt}}</style></head><body><main>
+<h1>ShiftLink 업무 분배 — 2026-10-20</h1>
+<h2>날짜와 이번 주 기준</h2>
+<ul>
+<li>전날 기록: <strong>2026-10-19 00:00~24:00 KST</strong>. 조회 범위는 UTC 2026-10-18T15:00:00Z 이상, 2026-10-19T15:00:00Z 미만이다.</li>
+<li>오늘: <strong>2026-10-20 화요일</strong>. <a href="https://www.kasa.go.kr/bbs/BBSMSTR_000000000010/view.do?nttId=B000000001860Pe2zT3">우주항공청 2026년 월력요항</a> 기준 공휴일·대체공휴일이 아니다. 접근한 계획·대화에서 오늘 팀 휴무 확정 기록은 확인되지 않았다.</li>
+<li><strong>확정된 방향:</strong> 사용자 결정에 따라 개발 마감은 10/16, 10/19부터는 시연 영상·발표 준비·QA·버그 수정에 집중한다. 주말·공휴일은 파일과 Notion 누적도 제외하며 소급 생성하지 않는다.</li>
+<li>아래 개인별 오늘 업무는 기존 역할과 완료 기록을 반영한 <strong>제안</strong>이다. 새 기능이나 전날 병합된 기능을 다시 개발하는 업무는 넣지 않았다. 출근·장비 가용 시간은 별도 확인이 필요하며 10/7 결석을 연장하지 않는다.</li>
+</ul>
+<h2>전날 팀원별 작업</h2>
+<div class="table-scroll"><table>
+<tr><th>팀원</th><th>확인한 작업과 증거</th><th>완료·검증 상태</th></tr>
+<tr><td>전혜민(NickyJeon)</td><td><a href="https://github.com/hyjuy/ShiftLink/pull/304">#304</a> 채팅 안전수칙 상단 바의 헤더·펼친 내용·글자 위계와 색 정리. <a href="https://app.notion.com/p/3ffb7d115dd181a49b59f5e85bf5c035">완료 로그</a></td><td>1건 생성·병합. PR 본문 기준 pda_chat·공백 검사 통과. Playwright 모듈 부재로 workspace_safety 화면 검사 실행 불가. 실장비 안전 화면은 별도 확인 필요.</td></tr>
+<tr><td>유현준(hyjuy)</td><td><a href="https://github.com/hyjuy/ShiftLink/pull/293">#293</a> 근무일지·사건별 인계·질문 ID 연결 수정, <a href="https://github.com/hyjuy/ShiftLink/pull/302">#302</a> 홈 인계·날짜·운전 확인 개선. <a href="https://app.notion.com/p/3ffb7d115dd1814bb18dd0bf508f62a4">완료 로그</a></td><td>4건 생성, 2건 병합. #300·#303은 닫힘·미병합. #293은 PR 본문 기준 Chrome 8개·Python/API 170개·Node 14개 통과. 임시 SQLite·외부 모델 미호출 조건의 로컬 HTTP 검증이며 실장비·중앙 DB·운영 배포 완료가 아니다. Windows 권한 검사 1건 실패 별도.</td></tr>
+<tr><td>최재영(nalziori)</td><td><a href="https://github.com/hyjuy/ShiftLink/pull/295">#295</a> 인사·감사·작별 고정 응답과 앞 인사 분리, <a href="https://github.com/hyjuy/ShiftLink/pull/297">#297</a> 초성 인사 처리, <a href="https://github.com/hyjuy/ShiftLink/pull/298">#298</a> 안전수칙 상단 바 기준 문서화. <a href="https://app.notion.com/p/3ffb7d115dd181a1bf23db4011b9ea01">완료 로그</a></td><td>3건 생성·병합. PR 본문 기준 Python 75개 및 질의 검사 41개 통과(각 실행이므로 합산하지 않음). #299 작성 시점 인사 서버 변경은 Jetson 미배포였고, 그 이후 운영 반영 완료 기록은 미확인. #298은 문서 변경이며 장치 시험이 아니다.</td></tr>
+<tr><td>허재원(hjwblue)</td><td><a href="https://github.com/hyjuy/ShiftLink/pull/294">#294</a> 설비·채팅/대시보드, <a href="https://github.com/hyjuy/ShiftLink/pull/296">#296</a> 알림 이동·분할 조작부, <a href="https://github.com/hyjuy/ShiftLink/pull/299">#299</a> 근무일지 설비 선택·수치 일치, <a href="https://github.com/hyjuy/ShiftLink/pull/301">#301</a> 이력, <a href="https://github.com/hyjuy/ShiftLink/pull/305">#305</a> 조치 상세·답변 글머리 정리. <a href="https://app.notion.com/p/3ffb7d115dd181b2abf6fdc656925d45">완료 로그</a></td><td>5건 생성·병합. PR 본문 기준 Pi 화면 단계별 배포, #299·#301에서 Jetson analytics 반영. 로컬 화면·관련 검사 통과 기록이 있으나 #305의 기존 실패 6개는 미해결 상태로 구분한다. 합성 4주 이력 32건은 실제 현장 성과가 아니다.</td></tr>
+</table></div>
+<p><strong>PR 밖 자료:</strong> 로컬 <code>exports/presentation-20261019/revised/ShiftLink_발표대본_10분_시연구성_QA.md</code>에 본편 10분·별도 시연 5분 구성과 예상 질문·리허설 체크가 있다. 발표자는 전혜민으로 명시돼 있으나 파일 작성자·완료 시각은 이 자료만으로 단정하지 않는다. 영상 파일은 포함하지 않았다고 명시되어 있다. 대본을 새로 만드는 대신 현재 파일로 리허설한다.</p>
+<h3>전날 생성·병합 PR 대조</h3>
+<p>당일 생성 <strong>13개</strong>, 당일 병합 <strong>11개</strong>, 고유 대상 <strong>13개</strong>. 생성 검색·병합 검색 각각 total_count와 실제 결과가 일치하고 incomplete_results=false이며, per_page=100의 1페이지에서 모두 확인했다. 이전 날짜 생성 PR이 이날 병합된 사례는 <strong>0개</strong>다. 생성과 병합은 같은 작업의 사건이므로 24개 작업으로 합산하지 않는다.</p>
+<p>표 시각은 모두 <strong>10/19 KST</strong>다. 현재 조회 상태와 전날 종료 상태가 일치한다(11개는 당일 병합, 2개는 당일 닫힘). #300은 #302의 이전 안, #303은 #304와 동일 범위의 미병합 원본이므로 독립 완료 기능으로 중복 집계하지 않는다.</p>
+<div class="table-scroll"><table>
+<tr><th>PR·제목</th><th>작성자</th><th>생성</th><th>병합</th><th>조회 상태</th></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/293">#293</a> feat(pda): 근무일지 및 사건별 인계사항 화면 개발</td><td>hyjuy</td><td>09:15:11</td><td>09:34:16</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/294">#294</a> feat(pda): 장비·채팅 화면 시안 반영, 대시보드 설비 목록 팝업·달력 주 기간</td><td>hjwblue</td><td>12:33:38</td><td>12:35:38</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/295">#295</a> [claude] feat(mes): 인사·감사·작별은 정해진 답, 맨 앞 인사는 떼고 질문만 답변 경로로</td><td>nalziori</td><td>13:23:37</td><td>13:34:07</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/296">#296</a> feat(pda): 알림 → 바로 채팅, 가운데 분할 조작부, 알림 표기 정리</td><td>hjwblue</td><td>13:27:09</td><td>13:29:09</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/297">#297</a> [claude] fix(mes): ㅎ2는 인사, ㅂㅇ·ㅂ2는 작별로 처리</td><td>nalziori</td><td>13:59:52</td><td>14:01:51</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/298">#298</a> [claude] docs(pda-ui): 루브릭 B2를 안전 수칙 상단 바(기본 접힘) 결정에 맞춤</td><td>nalziori</td><td>14:08:46</td><td>14:10:29</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/299">#299</a> feat(pda): 근무일지 대상 설비 화면, 홈 수치 대시보드와 통일, 적재 대기율 숨김</td><td>hjwblue</td><td>14:29:08</td><td>14:30:08</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/300">#300</a> 홈 인계 사항 UI 개선 및 후속 확인·완료 항목 구분</td><td>hyjuy</td><td>15:24:30</td><td>—</td><td>닫힘·미병합</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/301">#301</a> feat(pda): 반복 증상 → 근무일지 이력 화면, 합성 이력에 근무일지 항목 추가</td><td>hjwblue</td><td>15:47:54</td><td>15:49:51</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/302">#302</a> 홈 인계 사항 간소화 및 날짜·조치 후 운전 확인 표시 개선</td><td>hyjuy</td><td>16:44:17</td><td>16:46:38</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/303">#303</a> style(pda): 채팅 창 안전수칙 UI 정리</td><td>hyjuy</td><td>17:00:51</td><td>—</td><td>닫힘·미병합</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/304">#304</a> style(pda): 채팅 창 안전수칙 UI 정리</td><td>NickyJeon</td><td>17:04:27</td><td>17:06:25</td><td>병합 완료</td></tr>
+<tr><td><a href="https://github.com/hyjuy/ShiftLink/pull/305">#305</a> feat(pda): 조치 이력 표·상세보기, 채팅 답변 글머리 통일, 정비 이력 버튼 색 고정</td><td>hjwblue</td><td>17:13:51</td><td>17:15:47</td><td>병합 완료</td></tr>
+</table></div>
+<h2>오늘 팀원별 우선순위 — 제안</h2>
+<h3>전혜민 — 대본 리허설과 증거 확인</h3>
+<ul>
+<li><strong>기존 10분 대본을 타이머로 1회 리허설.</strong> 끝 기준: 본편 실제 소요 시간·넘친 구간·수정할 표현과 5분 영상 큐를 기록한다. 함께: 허재원(영상), 최재영(모델 설명). 선행: 기존 대본과 사용할 영상 확보. 대본 초안을 다시 만드는 일은 제외한다.</li>
+<li><strong>팀원이 준 실행 증거를 체크표에 대조.</strong> 끝 기준: 촬영→답변/안전 카드→인계→클라우드 각 단계의 실제 화면·로그/ID·실행 설정을 연결해 완료/미검증/보류로 표시한다. 함께: 유현준·최재영·허재원. 선행: 아래 요청 자료 수령. 혜민이 대신 장치 시험을 끝낼 필요는 없으며, 받은 결과의 범위와 누락만 확인한다.</li>
+<li><strong>발표 주장 확인.</strong> 끝 기준: 합성 이력은 합성으로 표시하고, S30h 답함 25/35와 정답 인용 14/35·기준 27/35 미충족을 구분한다. 함께: 최재영. 선행: 기존 평가 요약과 최종 시연 설정. “현재 센서로 AI가 진단한다” 또는 “전체 흐름 검증 완료”로 확대하지 않는다.</li>
+</ul>
+<h3>유현준 — 최종 시연 구성의 인계·클라우드 QA</h3>
+<ul>
+<li><strong>이미 구현한 질문→일지→사건→후속 인계를 최종 장비에서 확인.</strong> 끝 기준: 질문 ID·원본·같은 사건 후속 기록·새로고침 후 보존을 화면/로그로 남기고, 결함만 수정 대상으로 분류한다. 함께: 허재원·최재영. 선행: 사용할 Pi·Jetson 버전과 답변 모드 확인. #293 로컬 검증을 새로 개발할 일로 되돌리지 않는다.</li>
+<li><strong>이번 근무일지/조치 기록의 실제 업로드 범위를 확인.</strong> 끝 기준: 로컬 저장 ID와 클라우드 수신 ID를 맞추고, 의도적 업로드 보류 유형·미전송·미지원 유형을 명시한다. 함께: 최재영, 결과 확인 전혜민. 선행: 장비 담당자의 운영 상태 확인. 기존 10/8 업로드 증거만으로 새 조치 세션 업로드 완료를 인정하지 않는다.</li>
+<li><strong>변경된 홈·안전 화면 회귀 확인.</strong> 끝 기준: 최종 Pi 버전에서 #302·#304·#305 표시, 7일 경계·운전 확인 근거와 안전 바 펼침을 확인하고 실패 6종을 재현 결함/환경 의존/이전 화면 기대값으로 구분한다. 함께: 허재원·전혜민. 선행: 기존 실패 목록·재현 환경. 모든 기존 실패를 새 회귀나 통과로 단정하지 않는다.</li>
+</ul>
+<h3>최재영 — S30h 실제 운영과 발표 수치 QA</h3>
+<ul>
+<li><strong>최종 시연 장비의 실행 설정·동작 증거 확보.</strong> 끝 기준: 실제 서비스의 S30h 모드·모델·색인 버전·예열 순서와 인용/거절/안전 바 화면을 연결한 기록을 전달한다. 함께: 유현준·허재원. 선행: 운영 전환·서비스 준비 여부 확인. 앱 코드 준비와 서비스 가동을 구분하고 이 자동화는 설정을 바꾸지 않는다.</li>
+<li><strong>인사 처리 회귀 QA.</strong> 끝 기준: 인사만 보낼 때 고정 응답, “하이 연기가 나요” 같은 인사+신고에서 실제 신고가 보존되는지 최종 장비 결과와 배포 버전을 기록한다. 함께: 유현준. 선행: #295·#297의 현재 운영 반영 여부 확인. 기능 확장은 배정하지 않는다.</li>
+<li><strong>평가 설명과 기존 잠금 결과 대조.</strong> 끝 기준: 기존 결과의 분모·설정·최종 앱 대응 및 거절 약점 설명을 전혜민에게 전달한다. 함께: 전혜민. 선행: 이미 실행한 결과 보고서 접근. 원자료 미확인 항목은 그대로 적으며 재채점·평가셋 개봉을 요청하지 않는다.</li>
+</ul>
+<h3>허재원 — 본영상·백업영상과 촬영 QA</h3>
+<ul>
+<li><strong>기존 5분 편집 큐로 연속 시연 촬영.</strong> 끝 기준: 촬영→답변/안전 카드→인계→클라우드 순서를 보여주는 본영상과 재생 가능한 백업의 위치를 전달한다. 함께: 유현준·최재영, 검토 전혜민. 선행: 최종 Pi·Jetson 구성과 지원 업로드 유형 확인. 승인된 Unity 작업자 시점→Pi CNN 촬영 경로를 쓰며 저장 사진 주입을 실시간 촬영으로 표시하지 않는다.</li>
+<li><strong>최신 화면에서 촬영 전 회귀 확인.</strong> 끝 기준: 알림→동일 설비 채팅, 일지 선택·저장·상세, 조치 이력 팝업, 안전 바 펼침과 화면 잘림을 실제 Pi에서 확인해 버그만 기록한다. 함께: 유현준. 선행: #305까지의 화면 버전 확인.</li>
+<li><strong>카메라 20건 증거 보유 여부 확인 후 QA 범위 합의.</strong> 끝 기준: 기존 실시간 20건 결과가 있으면 성공 수·전체 분모·p95 대상·설정을 전달하고, 없으면 미검증으로 남기고 촬영 일정과 함께 시험 시간을 합의한다. 함께: 최재영·유현준. 선행: 장비 시간 확보. 이전 저장 사진 17/20·질의 p95 7.08초를 실시간 촬영 20건 완료로 바꾸지 않는다.</li>
+</ul>
+<h2>막힌 점과 팀 확인 사항</h2>
+<ul>
+<li><strong>안전 표시의 최신 기준:</strong> <a href="https://github.com/hyjuy/ShiftLink/pull/298">#298</a>의 10/19 사용자 결정은 “상단 바 한 곳, 기본 접힘, 이상 시 색 변경, 자동 펼침 없음, 답 앞 안전 묶음 없음”이다. 펼치면 항목·멈춤 조건·근거를 볼 수 있는지를 확인한다. 예전 G2의 “항상 답 앞 펼침”을 새 QA 기준으로 강요하지 않으며 과거 게이트 통과 이력과 구분한다.</li>
+<li><strong>배포 상태를 항목별로 확인:</strong> Pi 최신 화면·Jetson analytics 반영은 PR 본문에 있으나 S30h 최종 운영·인사 서버 변경·새 일지 클라우드 업로드를 모두 완료했다는 증거는 아니다. #305는 #302·#304 포함 main 위의 Pi 배포라고 적혀 있으므로 #302 작성 당시 미배포를 현재 전체 미배포로 옮기지 않는다.</li>
+<li><strong>필요한 자료:</strong> 유현준에게 최종 일지/후속 인계·로컬/클라우드 ID 대조, 최재영에게 실제 S30h 설정·인용/거절 결과와 기존 평가 요약, 허재원에게 본영상/백업영상 링크와 촬영 조건을 받으면 된다. 자료 접근 불가는 실패나 작업 미수행으로 판단하지 않는다.</li>
+<li><strong>계획 충돌:</strong> <a href="https://app.notion.com/p/3ecb7d115dd1804192afee466a51940c">Notion 계획서</a>는 10/7 편집본으로 hybrid·웹캠 설명이 남아 있다. 최신 10/16 S30h 팀 결정, 승인된 Unity 촬영 경로, 10/19 안전 바 결정 및 사용자의 이번 주 발표·QA 전환 지시를 우선했다. 10/7 배정안의 역할은 오늘 확정 배정으로 간주하지 않는다.</li>
+<li><strong>공식 진척률 유지:</strong> <a href="https://app.notion.com/p/3fbb7d115dd1815980b2d3c4df82c36a">마지막 확인 보고 6주차·10/16</a> 기준 W1 10/10·W2 10/10·W3 8/12의 평균 88.888…%, 표시 <strong>89%</strong>. 마지막 검증 게이트 <strong>5/7</strong>, 주된 실행 증거 10/7~10/8. 10/19 병합 수·UI 변경·대본 존재만으로 올리지 않는다. 새 S30h/안전 바까지 재검증된 5/7이라는 뜻은 아니다.</li>
+<li><strong>자료 범위와 한계:</strong> 10/20 조회 시 네 명의 10/19 완료 로그 모두 접근했고, 내용은 PR 기반의 기록이다. 별도 외부 장치 원로그·영상 원본·ShiftLink-records 원자료는 이번에 직접 확인하지 않았다. 해당 범위의 마지막 확인일은 각각 기존 보고서에 적힌 10/7~10/8 장치 시험·10/16 평가/모델 기록이며 이후 완료를 단정하지 않는다. 로컬 HEAD와 조회한 원격 main은 모두 <code>63ea4e978ca78365032d39ee810a8f291657f3cc</code>로 일치한다.</li>
+</ul>
+<h2>전혜민이 먼저 시작할 일 하나</h2>
+<p><strong>기존 발표 대본을 열고 타이머로 본편 10분 리허설 1회를 해보자.</strong> 말이 막히거나 증거가 필요한 문장에 표시하고, 팀원에게 받은 화면·로그·영상 링크를 해당 장면에 붙이면 된다. 시연의 끝 기준은 <strong>촬영→답변/안전 카드→인계→클라우드</strong>로 유지하되, 실제로 확인한 범위만 완료로 체크한다.</p>
+<h2>보고서 검증</h2>
+<p>MD 원본에서 HTML을 생성해 날짜·담당·PR 링크·상태를 대조한다. 외부 스크립트·라이브러리는 사용하지 않는다. 파일 재읽기·링크 32개·제목 정합 검사를 통과했고, 1280px 브라우저 화면에서 한글·표 가독성과 본문 가로 넘침 없음을 확인했다. 모바일·인쇄 CSS를 포함했지만 모바일 실화면·인쇄 렌더링은 미검증이다. 실장비 QA와 평가를 재실행한 보고서는 아니다.</p>
+</main></body></html>

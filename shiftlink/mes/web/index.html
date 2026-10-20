@@ -33,10 +33,10 @@
       <button type="button" id="tab-detail" role="tab" aria-controls="workspace-detail" aria-selected="false" tabindex="-1" data-workspace="detail">설비 상세·조치</button>
       <button type="button" id="tab-history" role="tab" aria-controls="workspace-history" aria-selected="false" tabindex="-1" data-workspace="history">이력·분석</button>
     </nav>
-    <details id="simulation-controls" class="simulation-controls"><summary>시뮬레이션 제어 <span id="control-status" class="hint">모의 운전 전용</span></summary>
+    <details id="simulation-controls" class="simulation-controls" open><summary>시뮬레이션 제어 <span id="control-status" class="hint">모의 운전 전용</span></summary>
     <section id="control-panel" class="control-bar" aria-label="시연 제어 (모의 운전 전용)">
       <span id="run-state" class="run-state">—</span>
-      <button id="run-toggle" type="button" data-command="start" class="primary-button">▶ 시작</button><button data-command="recover" aria-describedby="recover-hint">모의 복구 시작</button><button data-command="reset" class="quiet-button">새 시뮬레이션 시작</button>
+      <button id="run-toggle" type="button" data-command="start" class="primary-button">▶ 시작</button><button data-command="recover" aria-describedby="recover-hint">모의 복구</button><button data-command="reset" class="quiet-button">초기화</button>
       <span class="ctl-group"><label for="speed">배속</label><select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="5">5×</option></select></span>
       <span class="ctl-group ctl-scenario"><label for="scenario-equipment">시나리오</label><select id="scenario-equipment" aria-label="시나리오 설비"></select><select id="scenario" aria-label="시나리오"></select></span>
       <small id="recover-hint" class="hint"></small>

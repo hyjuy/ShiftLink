@@ -200,9 +200,12 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
     loss_rows = sorted(({**{k: v for k, v in r.items() if k != "coils_exact"}, "stop_min": round(r["stop_min"]),
                          "coils": round(r["coils_exact"])} for r in loss.values()),
                        key=lambda r: (-loss[r["equipment_id"]]["coils_exact"], -r["stop_min"]))
-    lost = round(sum(r["coils_exact"] for r in loss.values()))
+    lost_exact = sum(r["coils_exact"] for r in loss.values())
+    lost = round(lost_exact)
     planned = round(standard["planned_hours_per_week"] * rate) if standard else 0
-    production = {"planned": planned, "lost": lost, "produced": planned - lost,
+    # current = 이번 주 월요일 0시부터 지금까지 정상이면 만들었을 양 − 손실. now가 모의 시계라 일시정지 중엔 늘지 않는다.
+    current = max(0, min(planned, round(_minutes(week_start, now) / 60 * rate - lost_exact)))
+    production = {"planned": planned, "lost": lost, "produced": planned - lost, "current": current,
                   "coils_per_hour": round(rate, 1)}
 
     # 설비 신뢰성(4주, 설비 단위 — 증상 구분 없이 그 설비의 고장 전부):

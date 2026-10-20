@@ -105,6 +105,6 @@ Pi PDA의 직접 접속 주소는 `http://raspberrypi:8080/pda.html`이다. Pi�
 | 촬영 버튼이 없다 | 파이 autostart에 `--cnn`이 빠졌거나 모델 폴더가 없다 → 2절 설치 다시 |
 | 질의가 25~54초 걸린다 | Jetson 데스크톱·VNC가 켜져 두 번째 모델이 밀려났다 → `~/.local/bin/vnc off`, `multi-user.target` 확인 |
 | 질의 503 | 판정 불가 또는 모델 미예열. 30초 뒤 다시. 계속되면 `journalctl -u shiftlink-mes -n 50` |
-| 대시보드에 다녀온 뒤 카메라가 안 열림 | PDA 재시작(대시보드의 재시작 버튼 또는 `/pda/restart`) |
+| 대시보드에 다녀온 뒤 카메라가 안 열림 | PDA 재시작(Line overview의 재시작 버튼 또는 `/pda/restart`) |
 | 업로드 대기 건수가 줄지 않는다 | 클라우드 끊김. 업로더는 30초마다 다시 시도하고 대기 건은 재시작해도 남는다(`docs/testing/cloud-cut-test-plan-20261008.md`) |
 | 한글이 안 쳐진다 | Ctrl+Space 또는 한/영 키. fcitx5 미설치면 2절 apt |

@@ -78,28 +78,33 @@
     const xs=placed.filter(p=>p.group==="route" && own.has(p.equipment_id)).map(p=>p.x);
     return xs.length?(Math.min(...xs)+Math.max(...xs))/2:fallback;
   }
+  // 구역 줄 간격. 기본 250, 도면이 들어갈 칸이 가로로 덜 길면(16:10 화면 등) 줄 간격을 벌려 칸을 채운다.
+  let PITCH=250, flowAspect=0;
+  const setFlowAspect=a=>{flowAspect=a>0?a:0;};
   function layout(model) {
     let row=0; const placed=[], zones=[];
     const groups = [model.nodes.filter(n=>n.group==="route").sort((a,b)=>model.config.route.indexOf(a.equipment_id)-model.config.route.indexOf(b.equipment_id)),
       model.nodes.filter(n=>n.group==="branch" || (n.capabilities || []).includes("drive")),
       model.nodes.filter(n=>n.group==="support" && !(n.capabilities || []).includes("drive"))];
+    const total=groups.reduce((n,g)=>n+(g.length?Math.ceil(g.length/4):0),0);
+    PITCH=flowAspect && total?Math.round(Math.min(330,Math.max(250,(1200/flowAspect+16)/total))):250;
     groups.forEach((group,g)=>{
       if (!group.length) return;
       const cols=Math.min(4,group.length), rows=Math.ceil(group.length/4);
-      const items=group.map((n,i)=>({n,x:g===1?anchoredX(model,placed,n,(i%cols+0.5)*300):(i%cols+0.5)*300,y:94+(row+Math.floor(i/cols))*250}));
+      const items=group.map((n,i)=>({n,x:g===1?anchoredX(model,placed,n,(i%cols+0.5)*300):(i%cols+0.5)*300,y:94+(row+Math.floor(i/cols))*PITCH}));
       // 관계선은 칸 사이 통로(x=300·600·900)로 다니므로 카드는 칸(150·450·750·1050)에만 놓는다 — 가장 가까운 빈 칸
       if (g===1) { const taken=new Set(); items.sort((a,b)=>a.x-b.x).forEach(it=>{
         const free=[150,450,750,1050].filter(c=>!taken.has(`${it.y}|${c}`)).sort((a,b)=>Math.abs(a-it.x)-Math.abs(b-it.x) || a-b);
         if (free.length) { it.x=free[0]; taken.add(`${it.y}|${it.x}`); } }); }
       items.forEach(it=>placed.push({...it.n,x:it.x,y:it.y}));
-      zones.push({title:ZONES[g],y:94+row*250,rows,main:g===0});
+      zones.push({title:ZONES[g],y:94+row*PITCH,rows,main:g===0});
       row+=rows;
     });
-    return {nodes:placed,zones,height:Math.max(250,row*250-16)};
+    return {nodes:placed,zones,height:Math.max(250,row*PITCH-16)};
   }
   // 구역 띠: 줄마다 무엇을 모아 둔 줄인지 보인다. 코일 이송 라인만 진하게.
   function zoneView(zones) {
-    return zones.map(z=>`<g class="flow-zone ${z.main?"main":""}" aria-hidden="true"><rect x="8" y="${z.y-78}" width="1184" height="${z.rows*250-20}" rx="14"/><text x="26" y="${z.y-56}">${esc(z.title)}</text></g>`).join("");
+    return zones.map(z=>`<g class="flow-zone ${z.main?"main":""}" aria-hidden="true"><rect x="8" y="${z.y-78}" width="1184" height="${z.rows*PITCH-20}" rx="14"/><text x="26" y="${z.y-56}">${esc(z.title)}</text></g>`).join("");
   }
 
   // 카드 맨 아래 줄: 정상 범위를 가장 많이 벗어난 센서값. 관측 근거 표와 같은 규칙(품질·단위·정지 중 0 제외).
@@ -131,7 +136,7 @@
     if (a.y===b.y && a.group==="route" && b.group==="route") return [[ax,a.y-48],[ax,a.y-82+lane*14],[bx,a.y-82+lane*14],[bx,b.y-48]];
     if (a.y===b.y) return [[ax,a.y+108],[ax,band(a.y)],[bx,band(a.y)],[bx,b.y+108]];
     const down=b.y>a.y, corridor=a.x+(a.x===1050?-150:150)+(lane-4)*10;
-    const sourceLane=band(a.y-(down?0:250)), targetLane=band(b.y-(down?250:0));
+    const sourceLane=band(a.y-(down?0:PITCH)), targetLane=band(b.y-(down?PITCH:0));
     if (sourceLane===targetLane) return [[ax,a.y+(down?108:-48)],[ax,sourceLane],[bx,targetLane],[bx,b.y+(down?-48:108)]];
     return [[ax,a.y+(down?108:-48)],[ax,sourceLane],[corridor,sourceLane],[corridor,targetLane],[bx,targetLane],[bx,b.y+(down?-48:108)]];
   }
@@ -262,7 +267,7 @@
       unconfirmed:["실제 원인","실제 조립 위치","실제 점검 성공","안전 재가동 가능 여부"], held_coils:model.held.map(c=>c.coil_id)};
   }
 
-  const api={unitText,contextDraft,legendView,buildOperatorModel,flowView,incidentView,evidenceView,partView,layout,relationKey,routePoints};
+  const api={unitText,contextDraft,legendView,buildOperatorModel,flowView,setFlowAspect,incidentView,evidenceView,partView,layout,relationKey,routePoints};
   if (typeof module!=="undefined") module.exports=api;
   if (typeof window!=="undefined") window.MesOperator=api;
 })();

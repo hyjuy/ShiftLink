@@ -2670,14 +2670,14 @@ function homeEquipmentSummary(equipment, faults, available) {
   return {total: equipment.length, normal: available ? equipment.length - abnormal : null, abnormal: available ? abnormal : null};
 }
 // 홈 생산 링 — 대시보드 정지 손실의 생산 링과 같은 그림(같은 좌표, 보이는 칸만 잘라 씀)
-// 현재 생산(개) — tickProduction이 쌓는 값. 홈과 대시보드 상세가 같이 쓴다.
-function currentProduced() { return Math.floor((S.prod && S.prod.coils) || 0); }
+// 현재 생산(개) — 서버 /api/analytics의 production.current(이번 주 월요일부터 모의 시계 기준). 홈과 대시보드 상세가 같이 쓴다.
+function currentProduced() { return Math.floor((S.an && S.an.production && S.an.production.current) || 0); }
 function renderHomeMade() {
   const box = $('homeMade'), v = S.an && lossView(S.an.production, S.an.loss);
   box.hidden = !(v && v.planned);
   if (box.hidden) return;
   const {cx, r} = LOSS_CHART.made, cy = LOSS_CHART.cy, pad = 12, f1 = (n) => n.toFixed(1) + '%';
-  // 홈도 상세 보기와 같은 '현재 생산'(tickProduction 누적)을 쓴다 — 서버의 계획−손실 예상치와 섞지 않는다
+  // 홈도 상세 보기와 같은 '현재 생산'(production.current)을 쓴다 — 예상 마감량 produced와 섞지 않는다
   const cur = currentProduced(), curPct = v.planned ? cur / v.planned * 100 : 0;
   box.innerHTML = '<svg class="loss-chart made-only" viewBox="' + (cx - r - pad) + ' ' + (cy - r - pad) + ' ' + 2 * (r + pad) + ' ' + 2 * (r + pad)
     + '" role="img"><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" class="made-base"/>'
@@ -3859,7 +3859,7 @@ function renderLoss(loss, v) {
       + '<p class="ls-note"></p><div class="ls-stack" role="img"></div><ul class="ls-legend"></ul>'
       + '<button type="button" class="ls-detail">설비별 상세</button></section>';
     const q = (s) => el.querySelector(s);
-    const cur = currentProduced(), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = tickProduction 누적
+    const cur = currentProduced(), curPct = v.planned ? cur / v.planned * 100 : 0;   // 현재 생산 = production.current
     q('.asof').textContent = asof;
     q('.per').textContent = periodText(S.an.week_start, S.an.week_end || S.an.now, '1주');
     q('.ls-now b').textContent = cur.toLocaleString();
@@ -4115,28 +4115,12 @@ on('dlBack', () => {   // 홈 '지켜볼 설비'에서 왔으면 홈으로
   show(to); if (to === 'dashboard') renderAnalytics();
 });
 
-// 현재 생산 — MES 실행(run_id)이 시작된 뒤 라인이 '운전 중'이던 모의 시간 × 시간당 생산 코일 수. 실행이 바뀌면(MES 재시작) 0으로 초기화.
-// ponytail: PDA가 켜져 있는 동안만 센다(10분 넘게 끊긴 구간은 세지 않음). 서버 집계로 옮기려면 analytics.py에 가동 시간 합을 추가.
-const PROD_KEY = 'shiftlink.production';
-function tickProduction(snap) {
-  const rate = S.an && S.an.production && S.an.production.coils_per_hour, t = Date.parse(snap.simulated_at);
-  let p = S.prod;
-  if (!p) { try { p = JSON.parse(localStorage.getItem(PROD_KEY) || 'null'); } catch (_) { p = null; } }
-  if (!p || p.run !== snap.run_id || !(t > 0)) p = { run: snap.run_id, last: t, mode: snap.line_mode, coils: 0 };
-  else {
-    const dt = (t - p.last) / 3600000;   // 시간
-    if (rate && p.mode === 'running' && dt > 0 && dt <= 1 / 6) p.coils += dt * rate;
-    p.last = t; p.mode = snap.line_mode;
-  }
-  S.prod = p;
-  try { localStorage.setItem(PROD_KEY, JSON.stringify(p)); } catch (_) { /* 저장 실패해도 화면은 계속 */ }
-}
 async function watchMes() {
   if (S.equipment.length) {
     try {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
-      S.snap=snap;S.snapshot=snap;tickProduction(snap);renderDash();if(S.screen==='home')renderHome();
+      S.snap=snap;S.snapshot=snap;renderDash();if(S.screen==='home')renderHome();
       if (S.eq) await loadMesObservations(snap);   // 화면의 고정 값과 별도로 최신 MES 상태를 감시한다
     } catch (err) { S.snapshot=null;if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
     refreshReportCauseSensors();

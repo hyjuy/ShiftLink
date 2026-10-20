@@ -35,7 +35,7 @@ def test_planted_stories():
     assert [(r["equipment_id"], r["stop_min"], r["coils"], r["halts_line"]) for r in out["loss"]] == \
         [("EQ-0001", 97, 17, True), ("EQ-0007", 51, 9, True), ("EQ-0009", 41, 7, True),
          ("EQ-0003", 39, 7, True), ("EQ-0005", 33, 6, True), ("EQ-0008", 23, 4, True)]
-    assert out["production"] == {"planned": 1800, "lost": 51, "produced": 1749, "coils_per_hour": 10.7}
+    assert out["production"] == {"planned": 1800, "lost": 51, "produced": 1749, "current": 1739, "coils_per_hour": 10.7}
     # 4주 이력에 설비 10대가 모두 나온다
     assert len({i["equipment_id"] for i in out["incidents"]}) == 10
 
@@ -125,3 +125,12 @@ def test_line_halt_follows_relations_over_several_steps():
     assert analytics._halts_line("RT1", edges, route)        # 경로 설비 자체
     assert not analytics._halts_line("CAU", edges, route)    # 분기(CV2)만 세우면 출측 생산은 계속
     assert not analytics._halts_line("X", edges, route)
+
+
+def test_current_production_follows_the_week_clock():
+    # 현재 생산 = 월요일 0시부터 지금까지 정상이면 만들었을 양 − 손실. 월요일 0시엔 0, 10시간 뒤 약 107개
+    def at(stamp):
+        return analytics.summary([], [], analytics._dt(stamp), route=ROUTE, standard=STANDARD)["production"]["current"]
+    assert at("2026-10-12T00:00:00+09:00") == 0
+    assert at("2026-10-12T10:00:00+09:00") == 107
+    assert at("2026-10-12T10:00:00+09:00") < at("2026-10-12T11:00:00+09:00")

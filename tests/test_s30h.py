@@ -102,6 +102,22 @@ def test_nothing_kept_abstains_without_a_model_call(pipe, monkeypatch):
     assert r.tool_results["kept"] == [] and r.tool_results["judge_p"] == [0.29, 0.0, 0.1]
 
 
+def test_mes_low_high_states_reach_the_search_only(pipe, monkeypatch):
+    searched, judged_q, prompts = [], [], []
+    monkeypatch.setattr(pipe, "_embed", lambda q: searched.append(q) or np.ones(4, dtype=np.float32) / 2)
+    monkeypatch.setattr(E, "judge_dist", lambda q, r, host, model, ctx: judged_q.append(q) or [0.0, 0.0, 1.0, 0.0])
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: prompts.append(p) or {"raw": prefix + '확인 [S1]", "citations": ["S1"]}'})
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"},
+           {"signal": "hpu_pressure", "value": 150}, {"signal": "hpu_pressure_state", "value": "normal"}]
+    r = pipe.run({"question": "필터 차압 경보", "eq_id": "EQ-0001", "observations": obs})
+    assert searched == ["필터 차압 경보\n유압유 탱크 유면 60 pct (정상 70–100 pct 미만)"]
+    assert r.tool_results["mes_lines"] == ["유압유 탱크 유면 60 pct (정상 70–100 pct 미만)"]
+    assert set(judged_q) == {"필터 차압 경보"} and "정상 70–100" not in prompts[0]   # judge and answer keep the question
+    searched.clear()
+    pipe.run({"question": "필터 차압 경보", "eq_id": "EQ-0001", "observations": obs[2:]})
+    assert searched == ["필터 차압 경보"]   # MES all normal: same search as before
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):

@@ -106,7 +106,24 @@ class DiagnosticContractTests(unittest.TestCase):
         after = predict_signed_ewma(altered, specs("S"), stats, 3)
         self.assertEqual(first["r", 1], after["r", 1])
         self.assertEqual(first["r", 2], after["r", 2])
-        self.assertEqual(first, predict_signed_ewma({"r": runs["r"]}, specs("S"), stats, 3))
+        two = {"r": runs["r"], "new": [(frame(1, {"S": 0}), {"faults": []})]}
+        self.assertFalse(predict_signed_ewma(two, specs("S"), stats, 3)["new", 1])
+
+    def test_signed_clears_state_in_inactive_modes(self):
+        runs = {"r": [(frame(i, {"S": v}), {"faults": []})
+                      for i, v in enumerate([8, 0, 5], 1)]}
+        runs["r"][1][0]["line_mode"] = "paused"
+        result = predict_signed_ewma(runs, specs("S"), {("S", "x"): (0, 1)}, 3)
+        self.assertIn("S", result["r", 1])
+        self.assertFalse(result["r", 2])
+        self.assertFalse(result["r", 3])
+
+    def test_persistent_response_and_partial_validity_remain_explicit(self):
+        f, c = frame(1, {"S": 2}), frame(1, {"S": 0})
+        result, records = classify_alarms({"r": [(f, {"faults": []})]},
+                                        {("r", 1): {"S"}}, {"r": [(c, {})]}, specs("S"), {})
+        self.assertEqual(records[0]["context"], "persistent_twin_difference")
+        self.assertEqual(result["twin_response_detected_equipment_seconds"], 1)
 
 
 if __name__ == "__main__":

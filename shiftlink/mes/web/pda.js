@@ -1282,8 +1282,8 @@ function answerBody(turn) {
 
   // 카드 답에서도 조치를 기록한다 — 본 카드 ID가 세션에 남아 대시보드 사건에 연결된다.
   const record = document.createElement('button');
-  record.type = 'button'; record.className = 'btn sm';
-  record.textContent = '조치 시작 — 기록하면서 작업';
+  record.type = 'button'; record.className = 'btn primary';   // 주 행동 56px(A1)
+  record.textContent = '조치 시작';
   record.addEventListener('click', () => openResolve(turn));
   const ids = r.actions.map((x) => x.card.card_id);
   const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
@@ -1472,7 +1472,13 @@ function renderResolve() {
   const live = $('resLive');
   live.hidden = !r.live;
   $('resPick').hidden = !!r.live;
-  if (r.live) {
+  if (r.live && r.live.auto) {   // 1탭 완료 대기 — 취소만 보인다
+    const title = document.createElement('b'); title.textContent = (r.steps.length + 1) + '. ' + r.live.action + ' · 기록 중';
+    const cancel = document.createElement('button');
+    cancel.type = 'button'; cancel.className = 'btn sm'; cancel.textContent = '취소';
+    cancel.addEventListener('click', () => { clearTimeout(r.live.auto); r.live = null; renderResolve(); });
+    live.replaceChildren(title, cancel);
+  } else if (r.live) {
     const title = document.createElement('b'); title.textContent = (r.steps.length + 1) + '. ' + r.live.action + ' · 진행 중';
     const parts = [title];
     const needLock = liveRisky(r.live);
@@ -1494,7 +1500,7 @@ function renderResolve() {
     live.replaceChildren(...parts);
   }
   $('resActionChips').replaceChildren(...actionChips(r).map((a) => {
-    const c = chip(a.text, null, () => { r.live = {action: a.text, lockout: null, card: a.card}; renderResolve(); }, a.tag, a.disabled);
+    const c = chip(a.text, null, () => startStep(r, {action: a.text, lockout: null, card: a.card}), a.tag, a.disabled);
     if (a.card) c.classList.add('card-step');
     return c;
   }));
@@ -1526,6 +1532,23 @@ function actionChips(r) {
       card: a.source === 'card_step' ? {card_id: a.card_id, step_id: a.step_id, risky: !!a.risky} : null}));
 }
 
+/* 위험하지 않은 조치는 칩 1탭으로 완료한다. 서버에 단계 삭제가 없고 MES 단계 칩은 모의 MES를 움직이므로
+ * 바로 보내지 않고 STEP_UNDO_MS 동안 취소를 받는다. 위험 조치는 잠금 응답 → 「완료」 그대로 —
+ * 응답 순간이 아니라 작업을 끝낸 순간의 센서값을 남기기 위해서다. */
+const STEP_UNDO_MS = 3000;
+function startStep(r, live) {
+  r.live = live;
+  if (!liveRisky(live)) {
+    const go = () => {
+      if (S.res !== r || r.live !== live) return;   // 취소했거나 새 조치 기록을 열었다
+      if (r.busy) { live.auto = setTimeout(go, 500); return; }
+      completeStep();
+    };
+    live.auto = setTimeout(go, STEP_UNDO_MS);
+  }
+  renderResolve();
+}
+
 async function completeStep() {
   const r = S.res;
   if (!r || !r.live || r.busy) return;
@@ -1538,6 +1561,7 @@ async function completeStep() {
       result_text: out.result_text, mes_linked: out.mes_linked || null, card: card || null});
     r.live = null; resolveWarn('');
   } catch (err) {
+    if (r.live) r.live.auto = null;   // 1탭 기록이 실패하면 「완료」로 다시 보낼 수 있게
     resolveWarn(err.message === 'lockout_required' ? '잠금 여부를 골라 주세요.' : '조치를 기록하지 못했습니다 · ' + err.message);
   } finally { r.busy = false; renderResolve(); }
 }
@@ -3461,9 +3485,10 @@ on('resBack', () => show('chat'));
 on('resAddCustom', () => {
   const text = $('resCustom').value.trim();
   if (!text || !S.res) return;
-  S.res.live = {action: text, lockout: null}; $('resCustom').value = ''; renderResolve();
+  $('resCustom').value = ''; startStep(S.res, {action: text, lockout: null});
 });
 on('resFinish', finishResolve);
+on('resToReport', () => { if (S.res) reportFromChat(S.res.turn); });
 on('resMore', () => { if (S.res) { S.res.phase = 'work'; renderResolve(); } });
 $('resSymptom').addEventListener('input', () => { if (S.res) S.res.symptom = $('resSymptom').value; });
 $('resCauseCustom').addEventListener('input', () => { if (S.res) { S.res.causeCustom = $('resCauseCustom').value; renderResolve(); } });

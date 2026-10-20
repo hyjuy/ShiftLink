@@ -1268,6 +1268,13 @@ button.ld-row:hover{background:var(--surface-2)}
 #reportResume .confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 #reportResume button{min-height:48px;width:100%;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600;text-align:center}
 #reportResume button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#reportFollowupChoice,#reportPreviousDialog{box-sizing:border-box;width:min(960px,calc(100vw - 32px));max-height:85dvh;padding:24px;border:1px solid var(--edge);border-radius:10px;color:var(--tx)}
+#reportFollowupChoice::backdrop,#reportPreviousDialog::backdrop{background:#182b4580}
+#reportFollowupChoice{width:min(560px,calc(100vw - 32px))}
+#reportFollowupChoice .confirm-actions,#reportPreviousDialog .confirm-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+#reportFollowupChoice button,#reportPreviousDialog button{min-height:48px;padding:8px 16px}
+#reportFollowupChoice button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#reportPreviousBody{max-height:calc(85dvh - 140px);overflow:auto}
 
 #s-handover>.appbar,#s-dutyDetail>.appbar{padding-right:88px}
 #s-handover>.appbar{display:none}
@@ -1398,13 +1405,13 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-reportWrite table input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
 #s-reportWrite .report-equipment th{font-size:14px;font-weight:600;background:var(--surface-2)}
 #s-reportWrite .record .edit{min-height:84px;line-height:1.6}
-#s-reportWrite .record td:has(>.report-remove-field){position:relative;padding-right:72px}
-#s-reportWrite .cause-row:has(>.report-remove-field){position:relative;padding-right:56px}
-#s-reportWrite button.report-remove-field{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;width:var(--report-control-height);min-width:var(--report-control-height);height:var(--report-control-height);min-height:var(--report-control-height);padding:0;text-align:center;font-size:24px;line-height:1}
+#s-reportWrite .record td:has(>.report-remove-field){position:relative;padding-right:96px}
+#s-reportWrite .cause-row:has(>.report-remove-field){position:relative;padding-right:84px}
+#s-reportWrite button.report-remove-field{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:64px;height:var(--report-control-height);min-height:var(--report-control-height);padding:0 10px;text-align:center;font-size:14px;line-height:1}
 #s-reportWrite .cause-row>button.report-remove-field{top:10px;right:0}
 #s-reportWrite .record-end{gap:10px;padding:12px 16px;align-items:center;border-color:var(--edge)}
 @media(max-width:800px){#s-reportWrite .record table th{width:112px}}
-@media(max-width:600px){#s-reportWrite .record table th,#s-reportWrite .record table td{padding:12px 10px}#s-reportWrite .record table th{width:96px}#s-reportWrite .record td:has(>.report-remove-field){padding-right:64px}#s-reportWrite button.report-remove-field{top:12px;right:10px}#s-reportWrite .cause-row>button.report-remove-field{top:10px;right:0}#s-reportWrite .record-head{padding:10px;gap:8px}#s-reportWrite .record-head select{flex-basis:130px}#s-reportWrite .record-head .smallbtn{padding:0 10px}#s-reportWrite .document-head h2{font-size:24px;letter-spacing:.08em}#s-reportWrite .section-title{gap:8px;font-size:16px}}
+@media(max-width:600px){#s-reportWrite .record table th,#s-reportWrite .record table td{padding:12px 10px}#s-reportWrite .record table th{width:96px}#s-reportWrite .record td:has(>.report-remove-field){padding-right:84px}#s-reportWrite button.report-remove-field{top:12px;right:10px}#s-reportWrite .cause-row>button.report-remove-field{top:10px;right:0}#s-reportWrite .record-head{padding:10px;gap:8px}#s-reportWrite .record-head select{flex-basis:130px}#s-reportWrite .record-head .smallbtn{padding:0 10px}#s-reportWrite .document-head h2{font-size:24px;letter-spacing:.08em}#s-reportWrite .section-title{gap:8px;font-size:16px}}
 @media(max-width:600px){#s-reportWrite .document-head{padding-top:56px}}
 @media(max-width:440px){#s-reportWrite .report-form-grid{grid-template-columns:minmax(0,1fr);gap:12px}}
 #s-reportWrite .capture-step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;gap:16px 12px;margin-bottom:20px}
@@ -1445,12 +1452,12 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-reportWrite select.cause-sensors{width:100%;min-width:0;height:var(--report-control-height);font-size:14px;font-weight:400}
 #s-reportWrite .cause-row{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
 #s-reportWrite .cause-sensor-field{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:10px;align-items:center;min-width:0}
-#s-reportWrite .cause-sensor-value{min-width:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#s-reportWrite input.cause-sensor-value{box-sizing:border-box;width:100%;min-width:0;height:var(--report-control-height);padding:6px 10px;border:1px solid #acbbce;border-radius:4px;background:var(--surface-2);font-variant-numeric:tabular-nums}
 #s-reportWrite .cause-row>select[data-key=certainty]{grid-column:1;grid-row:2;width:100%;min-width:0}
 #s-reportWrite .cause-row>textarea{grid-column:2;grid-row:2;min-width:0}
 #s-reportWrite button:has(>.report-action-icon){border:0;background:transparent;box-shadow:none}
 #s-reportWrite button:has(>.report-action-icon):hover:not(:disabled){background:var(--surface-2)}
-@media(max-width:850px){#s-reportWrite .cause-row:has(>.report-remove-field){grid-template-columns:minmax(0,1fr) 44px;padding-right:0}#s-reportWrite .cause-row>.cause-sensor-field{grid-column:1/-1;grid-row:1;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#s-reportWrite .cause-row>select:not(.cause-sensors){grid-column:1;grid-row:2}#s-reportWrite .cause-row>textarea{grid-column:1/-1;grid-row:3}#s-reportWrite .cause-row>button.report-remove-field{position:static;grid-column:2;grid-row:2;justify-self:end}}
+@media(max-width:850px){#s-reportWrite .cause-row:has(>.report-remove-field){grid-template-columns:minmax(0,1fr) 70px;padding-right:0}#s-reportWrite .cause-row>.cause-sensor-field{grid-column:1/-1;grid-row:1;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#s-reportWrite .cause-row>select:not(.cause-sensors){grid-column:1;grid-row:2}#s-reportWrite .cause-row>textarea{grid-column:1/-1;grid-row:3}#s-reportWrite .cause-row>button.report-remove-field{position:static;grid-column:2;grid-row:2;justify-self:end}}
 @media(max-width:600px){#s-reportWrite .section-title:has(.report-add-tools){grid-template-columns:minmax(0,1fr)}#s-reportWrite .report-add-tools{grid-column:1;grid-row:2}#s-reportWrite #reportRecordEquipment{flex:1;width:0}#s-reportWrite .section-title:has(.report-add-tools) small{grid-row:3}}
 @media(max-width:600px){#s-reportWrite .report-capture-extra>summary{padding:12px 10px}}
 #s-reportWrite .capture-step>.capture-step-body{grid-column:1;grid-row:2}
@@ -1491,6 +1498,9 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .sensor-state.ok{background:#DCF0E5;color:#23704C}
 #s-ctx .sensor-row.bad .sensor-state{background:#FDE6C4;color:#A4470F}
 #s-ctx .sensor-row.bad .sensor-value{color:var(--fault-tx)}
+#s-ctx .sensor-overview{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:17px}#s-ctx .sensor-overview strong{font-size:21px}#s-ctx .sensor-alerts{margin:4px 0 8px;font-size:14px;font-weight:600;color:var(--fault-tx)}
+#s-ctx .sensor-group{margin:16px 0 0;padding:8px 0;border-bottom:2px solid var(--edge);font-size:15px;color:var(--tx-2)}#s-ctx .sensor-row{grid-template-columns:86px minmax(0,1.2fr) minmax(100px,.8fr) minmax(100px,.8fr);gap:10px}#s-ctx .sensor-state{grid-column:1;grid-row:1;justify-self:start;min-width:0;font-size:13px;padding:6px 8px}#s-ctx .sensor-name{grid-column:2;grid-row:1}#s-ctx .sensor-value{grid-column:3;grid-row:1;text-align:right;font-size:25px;font-variant-numeric:tabular-nums}#s-ctx .sensor-value span{font-size:15px;margin-left:5px}#s-ctx .sensor-range{grid-column:4;grid-row:1;text-align:right;color:var(--tx-2);font-size:13px}#s-ctx .sensor-detail{display:none}#s-ctx .sensor-history{border-top:1px solid var(--edge);padding-top:10px;font-size:14px}#s-ctx .sensor-history summary,#s-ctx .sensor-detail summary{cursor:pointer;min-height:44px}#s-ctx .sensor-event{padding:8px 0;border-bottom:1px solid var(--edge);overflow-wrap:anywhere}#s-ctx .sensor-row.delayed .sensor-state{background:#FFF1DE;color:#8B5509}
+@media(max-width:600px){#s-ctx .sensor-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name value" "state state" "detail detail";gap:6px}#s-ctx .sensor-name{grid-area:name;flex-direction:column}#s-ctx .sensor-value{grid-area:value;font-size:24px}#s-ctx .sensor-state{grid-area:state}#s-ctx .sensor-range{display:none}#s-ctx .sensor-detail{display:block;grid-area:detail;color:var(--tx-2);font-size:13px}#s-ctx .sensor-detail summary{display:list-item}#s-ctx .sensor-list{max-height:360px}}
 #s-ctx .eq-safety{display:flex;align-items:center;gap:10px;margin:auto 0 0;padding-top:16px;font-size:15px;color:var(--tx-2)}
 #s-ctx .eq-safety svg{width:24px;height:24px;flex:0 0 auto}
 #s-ctx .workspace-divider::after{content:"";position:absolute;top:50%;left:50%;width:10px;height:40px;transform:translate(-50%,-50%);border:1px solid var(--edge);border-radius:6px;background:linear-gradient(90deg,transparent 3px,var(--tx-3) 3px 4px,transparent 4px 5px,var(--tx-3) 5px 6px,transparent 6px) var(--surface)}
@@ -1635,7 +1645,7 @@ button.ld-row:hover{background:var(--surface-2)}
 #globalHeader .hdr-sep{flex:0 0 1px;width:1px;height:32px;margin:0 8px;background:var(--edge)}
 #globalHeader :is(.btn,a.btn):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:700px){#globalHeader .hdr-sep{display:none}#globalHeader>nav .btn{justify-content:center}#globalHeader>nav .btn,#globalHeader>a.btn,#globalHeader #logout{font-size:15px;gap:6px;padding:0 8px}#globalHeader .hdr-ic{width:24px;height:24px}}
-@media(max-width:600px){#s-ctx .sensor-list{flex:0 0 auto;max-height:360px}#s-ctx .sensor-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name name" "value state";row-gap:6px}#s-ctx .sensor-name{grid-area:name;flex-direction:row;align-items:baseline;gap:8px}#s-ctx .sensor-value{grid-area:value;font-size:30px}#s-ctx .sensor-state{grid-area:state}#s-ctx #workEquipment b{font-size:28px}}
+@media(max-width:600px){#s-ctx .sensor-list{flex:0 0 auto;max-height:360px}#s-ctx #workEquipment b{font-size:28px}}
 /* 40차: 근무일지 작성 1단계(대상 설비) — KakaoTalk_20261019_102650013 시안 */
 #s-reportSelect .rs{display:flex;flex-direction:column;gap:16px;padding:20px 32px 24px;min-height:0}
 #s-reportSelect .rs-head{display:flex;align-items:center;gap:24px;flex-wrap:wrap;flex:0 0 auto;min-height:44px}
@@ -1755,6 +1765,27 @@ button.ld-row:hover{background:var(--surface-2)}
 #ilDetail .eqm-foot .btn{width:auto;min-width:100px;min-height:44px;margin:0}
 #ilDetail button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:900px){#s-dashList>.pane{padding:12px}#s-dashList .il-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}#s-dashList .il-head h1{font-size:22px}}
+#s-reportWrite .report-flow-heading th{padding:12px 16px;text-align:left;background:var(--surface-2);color:var(--tx);font-size:17px}
+#s-reportWrite .report-optional-heading th{background:var(--surface);font-size:15px}
+#s-reportWrite .report-optional-heading small{display:block;color:var(--tx-2);font-size:13px;font-weight:400}
+#s-reportWrite .capture-step{position:relative;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;padding:14px 86px 14px 14px;border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
+#s-reportWrite .capture-step-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#s-reportWrite .capture-step>.capture-step-body,#s-reportWrite .capture-step>.capture-step-body:nth-of-type(2){display:flex;grid-column:auto;grid-row:auto}
+#s-reportWrite .capture-step>button.report-remove-field{position:absolute;top:14px;right:10px;grid-column:auto;grid-row:auto;margin:0}
+#s-reportWrite .capture-step .capture-failed{grid-column:auto;grid-row:auto}
+#s-reportWrite .report-review-notes>summary{cursor:pointer;font-weight:600}
+#reportSavePreview{max-height:55dvh;overflow:auto;margin:12px 0 20px}
+#reportSavePreview .report-preview-record{padding:12px 0;border-bottom:1px solid var(--edge)}
+#reportSavePreview h3{margin:0 0 8px;font-size:16px}
+#reportSavePreview dl{display:grid;grid-template-columns:minmax(124px,9em) minmax(0,1fr);gap:6px 12px;margin:0}
+#reportSavePreview dt{font-weight:700;color:var(--tx-2);word-break:keep-all;overflow-wrap:break-word}
+#reportSavePreview dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+#reportSavePreview .report-preview-hint{margin:14px 0 0;color:var(--tx-2)}
+#reportSavePreview .report-preview-error{padding:12px;margin:0;background:#fff1ed;color:#a72129;font-weight:700}
+#reportSavePreview .report-preview-warning{display:block;padding:10px;margin:10px 0;background:#fff5df;color:#684600;font-weight:600}
+#reportSavePreview h4{margin:12px 0 4px}#reportSavePreview ul{margin:0 0 10px;padding-left:22px}
+#reportSaveYes:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:600px){#s-reportWrite .capture-step{padding-right:86px}#s-reportWrite .capture-step-meta{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -1767,6 +1798,8 @@ button.ld-row:hover{background:var(--surface-2)}
     <span class="q" id="netQueue" hidden>대기 0건</span></div>
 
   <dialog id="reportResume" aria-labelledby="reportResumeTitle" tabindex="-1"><h2 id="reportResumeTitle">이전 기록을 불러오시겠습니까?</h2><p>이전에 작성한 근무일지 내용이 있습니다.</p><div class="confirm-actions"><button id="reportResumeNew" type="button">새로 작성</button><button id="reportResumeLoad" class="primary" type="button">불러오기</button></div></dialog>
+  <dialog id="reportFollowupChoice" aria-labelledby="reportFollowupChoiceTitle"><h2 id="reportFollowupChoiceTitle">작성 중인 근무일지가 있습니다</h2><p>기존 기록을 유지하고 후속 조치를 추가할지 선택해 주세요.</p><form method="dialog" class="confirm-actions"><button value="cancel" type="submit">취소</button><button value="discard" type="submit">기존 기록 삭제</button><button value="keep" class="primary" type="submit">유지하고 계속 기록</button></form></dialog>
+  <dialog id="reportPreviousDialog" aria-labelledby="reportPreviousTitle"><h2 id="reportPreviousTitle">이전 인계 기록</h2><div id="reportPreviousBody"></div><div class="confirm-actions"><button id="reportPreviousClose" type="button">닫기</button></div></dialog>
   <section id="notifyPanel" aria-label="알림 목록" hidden></section>
   <span class="notify-wrap notify-floatwrap" id="notifyFloatWrap" hidden><button class="notify" id="notifyFloat" type="button" aria-label="알림, 미확인 0건" aria-expanded="false" aria-controls="notifyPanel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10v3.2c0 1.5.5 2.8 1.5 3.8h-15c1-1 1.5-2.3 1.5-3.8V10a6 6 0 0 1 12 0Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0M12 2v2"/></svg><span class="notify-count" aria-hidden="true" hidden></span></button><span class="notify-bubble" hidden></span></span>
   <dialog id="ilDetail" aria-labelledby="ilDetailTitle"><div class="ild"><div class="ild-head"><h2 id="ilDetailTitle"></h2><button class="eqm-x" id="ilDetailX" type="button" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="ilDetailBody"></div><div class="eqm-foot"><button class="btn primary" id="ilDetailClose" type="button">닫기</button></div></div></dialog>
@@ -1855,7 +1888,7 @@ button.ld-row:hover{background:var(--surface-2)}
         <button class="ic workspace-back" id="ctxBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       </div>
       <section class="pane equipment-mes" aria-label="MES 센서 데이터">
-        <div class="mes-head"><h2>MES 센서 데이터</h2><button class="mes-ic" id="mesRefresh" type="button" aria-label="새로고침" title="최신 값으로 새로고침"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button></div><p class="hint" id="metricsTime"></p><div id="equipmentMetrics" class="sensor-list" tabindex="0" role="region" aria-label="MES 센서값"></div>
+        <div class="mes-head"><h2>MES 센서 데이터</h2><button class="mes-ic" id="mesRefresh" type="button" aria-label="새로고침" title="최신 값으로 새로고침"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button></div><div class="sensor-overview"><strong id="metricsEquipment"></strong><span id="metricsOperating"></span></div><p class="hint" id="metricsTime"></p><p class="hint" id="metricsConnection"></p><p class="sensor-alerts" id="metricsAlerts" role="status"></p><div id="equipmentMetrics" class="sensor-list" tabindex="0" role="region" aria-label="MES 센서값"></div><details class="sensor-history"><summary>알람·이벤트 이력</summary><div id="metricsHistory"></div></details>
         <p class="eq-safety"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>작업 전 현장 안전 기준과 매뉴얼을 확인하세요.</p>
       </section>
       <div class="workspace-gutter"><div class="gut-box"><button class="gut-btn" id="expandChat" type="button" aria-label="채팅 확대" title="채팅 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button><div class="workspace-divider" role="separator" aria-label="너비 조절" aria-orientation="vertical" tabindex="0"></div><button class="gut-btn" id="expandEquipment" type="button" aria-label="설비 확대" title="설비 확대"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></div></div><aside class="chat-panel" id="chatPanel" aria-label="설비 채팅"><div class="panel-head"><h2>채팅</h2></div></aside>
@@ -1955,19 +1988,18 @@ button.ld-row:hover{background:var(--surface-2)}
   <section class="screen" id="s-reportWrite">
     <div class="appbar"><button class="ic" id="reportEditTargets" type="button" aria-label="대상 다시 선택"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>근무일지</h1><span class="sp"></span><time id="reportDate"></time></div>
 
-    <div class="pane report-viewport"><article class="paper" aria-label="근무일지 보고서">
+    <div class="pane report-viewport"><article class="paper" aria-label="근무일지 작성">
       <div class="document-head"><h2>근 무 일 지</h2><button id="reportArchiveOpen" class="report-mini" type="button">저장 일지 조회</button></div>
-      <div class="report-form-grid"><label>날짜<input id="reportWorkDate" type="date" aria-label="근무 날짜"></label><label>근무시간<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무시간</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>근무자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
+      <div class="report-form-grid"><label>근무일<input id="reportWorkDate" type="date" aria-label="근무일"></label><label>근무조<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무조</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>작성자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
       <table class="meta report-equipment"><tbody><tr><th scope="col">설비명</th></tr><tr><td id="reportTargets"></td></tr></tbody></table>
-      <h3 class="section-title">1. 설비 운전·측정 기록 <button id="reportImport" class="report-mini" type="button">센서값 불러오기</button></h3>
-      <table aria-label="MES 수집 기록"><thead><tr><th>측정값 · 단위 · 관측시각 · 경보·이벤트</th></tr></thead><tbody><tr><td class="mes-record" id="reportMes">센서값을 불러오면 원본 값·단위·관측 시각이 표시됩니다.</td></tr></tbody></table>
-      <h3 class="section-title">2. 특이사항·정비 기록 <span class="report-add-tools"><select id="reportRecordEquipment" aria-label="기록 대상 설비"><option value="">설비 선택</option></select><button id="reportAdd" class="report-mini" type="button" aria-label="기록 추가" title="기록 추가" disabled><svg class="report-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></span></h3>
+      <h3 class="section-title">특이사항·정비 기록 <span class="report-add-tools"><select id="reportRecordEquipment" aria-label="기록 대상 설비"><option value="">설비 선택</option></select><button id="reportAdd" class="report-mini" type="button" aria-label="기록 추가" title="기록 추가" disabled><svg class="report-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></span></h3>
       <div id="reportLegacy" hidden><label for="reportMemo">기존 초안의 조치사항</label><textarea id="reportMemo" maxlength="4000"></textarea></div>
       <div id="reportRecords"></div>
-      <div class="summaryline"><span>지식카드: 후보 표시 후 별도 검토</span></div>
+      <h3 class="section-title">MES 운전·계측 기록 <button id="reportImport" class="report-mini" type="button">MES 측정값 새로고침</button></h3>
+      <table id="reportMesTable" aria-label="MES 수집 기록" hidden><thead><tr><th>측정값 · 단위 · 측정시각 · 알람·이벤트</th></tr></thead><tbody><tr><td class="mes-record" id="reportMes"></td></tr></tbody></table>
     </article></div>
     <div class="footer"><p id="reportStatus" role="status" aria-live="polite">입력 내용은 이 단말의 초안으로 보관됩니다.</p><button class="primary" id="reportSave" type="button">일지 저장</button></div>
-    <dialog id="reportSaveConfirm" aria-labelledby="reportSaveTitle"><h2 id="reportSaveTitle">저장하시겠습니까?</h2><div class="confirm-actions"><button id="reportSaveNo" type="button">취소</button><button id="reportSaveYes" class="primary" type="button">저장</button></div></dialog>
+    <dialog id="reportSaveConfirm" aria-labelledby="reportSaveTitle"><h2 id="reportSaveTitle">저장 전 내용 확인</h2><div id="reportSavePreview"></div><div class="confirm-actions"><button id="reportSaveNo" type="button">취소</button><button id="reportSaveYes" class="primary" type="button">저장</button></div></dialog>
     
     <dialog id="reportArchive" aria-labelledby="reportArchiveTitle"><h2 id="reportArchiveTitle">저장된 근무일지 · 최근 30건</h2><p id="reportArchiveStatus" role="status" aria-live="polite"></p><div id="reportArchiveList"></div><pre id="reportArchiveDetail" class="mes-record"></pre><button id="reportArchiveClose" type="button">닫기</button></dialog>
   </section>

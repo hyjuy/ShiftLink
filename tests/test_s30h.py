@@ -118,7 +118,10 @@ def test_source_conditions_are_opt_in_and_do_not_change_route_or_abstention(pipe
     card = next(c for c in cards if c["card_id"] == "K-1027")
     ev = [chunk("card_K-1027", "card", "K-1027", "GR", text=card["know_how"])]
     pipe.cards = [card]
-    monkeypatch.setattr(pipe, "evidence", lambda q, eq: ev)
+    def fixed_evidence(question, eq_type, equipment_id):
+        assert eq_type == "GR" and equipment_id == "EQ-0004"
+        return ev
+    monkeypatch.setattr(pipe, "evidence", fixed_evidence)
     judged(monkeypatch, {"card_K-1027": 0.95 if probability is None else 0.6})
     calls = []
     def fake(*args, **kwargs):

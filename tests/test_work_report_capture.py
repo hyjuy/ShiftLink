@@ -9,7 +9,7 @@ from shiftlink.agent.schemas import KnowledgeCard
 
 def captured(service, **changes):
     note=report(service)
-    note['work_report']['records'][0].update(capture_version=1,
+    note['work_report']['records'][0].update(capture_version=1,occurred_at='2026-10-16T09:00',
         action_steps=[{'action':'필터 오염 확인','observed_result':'오염 확인','failed':False},
                       {'action':'필터 교체','observed_result':'압력 정상 범위 복귀','failed':False}],
         restart_performed=False,restart_type='unknown',outcome='resolved',
@@ -121,6 +121,23 @@ def test_cause_sensor_reference_is_validated_and_saved(service,invalid):
         assert service.storage.list_card_drafts()[0]['review_flags']['reported_causes'][0]['sensor_ref']==reference
 
 
+@pytest.mark.parametrize('value,valid',[(154.8,True),('154.8',False)])
+def test_selected_sensor_reading_is_saved_with_cause(service,value,valid):
+    eq=service.active_config.equipment[0]
+    note=captured(service)
+    cause=note['work_report']['records'][0]['causes'][0]
+    cause['sensor_ref']={'equipment_id':eq.equipment_id,'signal':eq.signals[0].signal}
+    cause['sensor_reading']={'value':value,'unit':eq.signals[0].unit,'observed_at':'2026-10-20T09:00:00+09:00'}
+    if not valid:
+        with pytest.raises(ValueError,match='측정값'):
+            service.record_work_report(note)
+        return
+    service.record_work_report(note)
+    restored=service.storage.get_handover(note['handover_id'])['payload']
+    assert restored['work_report']['records'][0]['causes'][0]['sensor_reading']==cause['sensor_reading']
+    assert service.storage.list_card_drafts()[0]['review_flags']['reported_causes'][0]['sensor_reading']==cause['sensor_reading']
+
+
 def test_routine_maintenance_only_becomes_candidate_when_requested(service):
     note=captured(service,type='PMS 정비',candidate=False)
     assert service.record_work_report(note)['candidates']==[]
@@ -172,3 +189,14 @@ def test_capture_validated_at_api_boundary(service,change):
     elif change=='bad_bool':r['restart_performed']='yes'
     with pytest.raises(ValueError):service.record_work_report(note)
     assert service.storage.get_handover(note['handover_id']) is None
+
+
+@pytest.mark.parametrize('occurred_at',[None,''])
+def test_structured_report_requires_occurrence_time(service,occurred_at):
+    note=captured(service)
+    if occurred_at is None:
+        del note['work_report']['records'][0]['occurred_at']
+    else:
+        note['work_report']['records'][0]['occurred_at']=occurred_at
+    with pytest.raises(ValueError,match='발생시각'):
+        service.record_work_report(note)

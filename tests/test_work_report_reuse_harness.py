@@ -190,6 +190,31 @@ def test_multiple_records_and_parallel_retries_do_not_duplicate_drafts(service):
         assert incident['candidates'][0]['draft_id'] == candidate['draft_id']
 
 
+def test_legacy_candidate_rows_migrate_without_losing_drafts(service, tmp_path):
+    query_id = ask(service)['query_id']
+    saved = service.record_work_report(report(service, query_id))
+    note = report(service, report_id='HO-LEGACY-NO-DRAFT')
+    note['work_report']['records'][0]['candidate'] = False
+    no_draft = service.record_work_report(note)
+    service.storage.close()
+    path = tmp_path / 'mes.sqlite3'
+    with sqlite3.connect(path) as connection:
+        connection.execute('''CREATE TABLE old_candidates AS SELECT handover_id, record_index,
+                              query_id, draft_id, reason FROM work_report_candidates''')
+        connection.execute('DROP TABLE work_report_candidates')
+        connection.execute('''ALTER TABLE old_candidates RENAME TO work_report_candidates''')
+    reopened = MesStorage(path)
+    try:
+        [migrated] = reopened.work_report_candidates(report_id=saved['handover_id'])
+        [undrafted] = reopened.work_report_candidates(report_id=no_draft['handover_id'])
+        assert migrated['kind'] == 'T3' and migrated['draft_id'] == saved['candidates'][0]['draft_id']
+        assert undrafted['kind'] == 'legacy' and undrafted['draft_id'] is None
+        assert len(reopened.list_card_drafts()) == 1
+        assert reopened.work_report_candidates(report_id=saved['handover_id']) == [migrated]
+    finally:
+        reopened.close()
+
+
 def test_candidate_database_failure_is_atomic(service):
     query_id = ask(service)['query_id']
     service.storage.connection.execute("CREATE TRIGGER reject_draft BEFORE INSERT ON card_drafts "
@@ -199,6 +224,19 @@ def test_candidate_database_failure_is_atomic(service):
     assert service.incidents()['incidents'] == []
     assert service.storage.list_card_drafts() == []
     assert service.storage.connection.execute('SELECT COUNT(*) FROM incident_queries').fetchone()[0] == 0
+
+
+def test_second_candidate_failure_rolls_back_first_draft(service):
+    from test_work_report_capture import captured
+    note = captured(service, candidate=False, auto_candidate=True,
+                    interpretation='bearing vibration means wear', interpretation_basis='compared with baseline')
+    service.storage.connection.execute("CREATE TRIGGER reject_second_draft BEFORE INSERT ON card_drafts "
+        "WHEN NEW.draft_id = 'K-7001' BEGIN SELECT RAISE(ABORT, 'second draft rejected'); END")
+    with pytest.raises(sqlite3.IntegrityError):
+        service.record_work_report(note)
+    assert service.storage.get_handover(note['handover_id']) is None
+    assert service.storage.list_card_drafts() == []
+    assert service.storage.work_report_candidates(report_id=note['handover_id']) == []
 
 
 def test_query_failure_is_not_logged_as_a_knowledge_gap(service):

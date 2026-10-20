@@ -2,9 +2,13 @@
   'use strict';
   const $=id=>document.getElementById(id),key='shiftlink.mes.adminToken';
   const labels={pending_review:'검토 대기',changes_requested:'보완 요청',review_approved:'검토 승인',rejected:'반려'};
-  const types={T3:'문제 해결',T4:'인계 해결 사례',T6:'재가동 경험'};
+  const types={T1:'징후 해석',T2:'운전 조건',T3:'문제 해결',T4:'인계 해결 사례',T5:'안전 조치',T6:'재가동 경험'};
   const outcomes={open:'미해결',temporary:'임시 복구',failed:'실패',resolved:'해결'};
   const normalStates={unconfirmed:'미확인',observing:'관찰 중',no_recurrence:'관찰 종료·재발 없음',recurred:'관찰 중 재발'};
+  const observationFields=[['interpretation','징후 해석'],['interpretation_basis','해석 근거'],
+    ['condition_signal','운전 조건 항목'],['condition_op','비교 방식'],['condition_value','운전 조건 값'],
+    ['condition_unit','운전 조건 단위'],['condition_method','조건에서 수행한 방법'],['condition_result','조건에서 관찰한 결과'],
+    ['safety_notes','발견한 위험·주의사항'],['safety_action','중지·격리 조치'],['safety_basis','안전 근거']];
   let token='',drafts=[],selected=null,detail=null,detailRequest=0,listRequest=0,saving=false;
   try{token=sessionStorage.getItem(key)||'';}catch(_){}
   const el=(tag,className,text)=>{const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
@@ -68,6 +72,8 @@
     const flags=draft.review_flags,causes=section('원인·판단 근거');
     const reported=flags.reported_causes||[];
     causes.append(el('p','',reported.length?reported.map(item=>(item.certainty||'확인 상태 미기재')+' · '+item.note).join('\n'):'별도 원인 기록 없음 · 원본 근무일지를 확인하세요.'));box.append(causes);
+    const observations=observationFields.filter(([key])=>flags.observations?.[key]);
+    if(observations.length){const worker=section('작업자 판단·조건·안전 근거');worker.append(facts(observations.map(([key,label])=>[label,flags.observations[key]])));box.append(worker);}
     const normal=flags.normal_operation||{},normalSection=section('정상 운전 확인');
     normalSection.append(facts([['확인 상태',normalStates[normal.status]||'미확인'],['지속시간',normal.minutes===undefined?'미기재':normal.minutes+'분'],['확인 근거',normal.evidence]]),el('p','section-note','근무자가 기록한 관찰 결과입니다. 저장된 센서값만으로 연속 운전을 확정하지 않습니다.'));box.append(normalSection);
     if(flags.safety_report?.text){const safety=section('발견한 위험·주의사항');safety.append(el('p','',flags.safety_report.text));box.append(safety);}
@@ -76,17 +82,29 @@
       const row=el('li'),context=item.required_context||{};
       row.append(el('h4','',context.author||'근무자 미기재'),el('p','history-context',stamp(context.start_at)+' – '+stamp(context.end_at)+' · '+(outcomes[item.record.outcome]||'상태 미기재')),
         el('p','',item.record.story||''),renderSteps(item.record));
-      if(item.record.follow_up)row.append(el('p','','다음 근무 요청: '+item.record.follow_up));list.append(row);
+      for(const [key,label] of [['remaining_issue','남은 문제'],['next_check','다음 확인 내용'],['next_check_at','확인 시점'],['follow_up','다음 근무 요청']]){
+        if(item.record[key])row.append(el('p','',label+': '+item.record[key]));
+      }
+      list.append(row);
     }
     if(!items.length)history.append(renderSteps({action_steps:flags.action_steps||[]}));else history.append(list);box.append(history);
     const sourceSection=section('원본 근무일지·측정 근거');
+    const recordRefs=new Map();
+    for(const ref of draft.card.provenance?.sources||[]){
+      const index=/^work_report\.records\[(\d+)\]$/.exec(ref.locator||'');
+      if(index){if(!recordRefs.has(ref.source_id))recordRefs.set(ref.source_id,new Set());recordRefs.get(ref.source_id).add(Number(index[1]));}
+    }
     for(const source of draft.sources||[]){
       const context=source.required_context||{},sourceBox=disclosure((context.author||'근무자 미기재')+' · '+stamp(context.start_at)+' · '+source.handover_id);
       sourceBox.append(facts([['근무자',context.author],['근무시간',stamp(context.start_at)+' – '+stamp(context.end_at)],['저장시각',stamp(source.created_at)]]));
-      for(const record of source.work_report?.records||[]){
+      for(const [index,record] of (source.work_report?.records||[]).entries()){
+        if(recordRefs.has(source.handover_id)&&!recordRefs.get(source.handover_id).has(index))continue;
         sourceBox.append(el('p','','발생시각: '+stamp(record.occurred_at)),el('p','',record.story||''),renderSteps(record));
         for(const cause of record.causes||[])sourceBox.append(el('p','',(cause.certainty||'')+' · '+cause.note));
         if(record.normal_run_evidence)sourceBox.append(el('p','','정상 운전 확인: '+record.normal_run_evidence));
+        const workerFields=[...observationFields,['remaining_issue','남은 문제'],['next_check','다음 확인 내용'],['next_check_at','확인 시점'],
+          ['follow_up','다음 근무 요청'],['references','참고 자료']].filter(([key])=>record[key]);
+        if(workerFields.length)sourceBox.append(facts(workerFields.map(([key,label])=>[label,record[key]])));
       }
       if(source.memo_text&&!source.work_report)sourceBox.append(el('p','',source.memo_text));
       const measurements=source.server_sensor_evidence?.measurements||[];

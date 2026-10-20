@@ -56,6 +56,10 @@ def state_lines(specs: dict, observations: list) -> list[str]:
         if spec is None or sig not in values:
             continue
         v = values[sig]
+        # stopped line: the MES marks 0 rpm/A/flow low, but it is not a fault (Jetson 10/20, line_mode stopped).
+        # ponytail: also hides a real 0 on a running line; send line_mode in the request if that case matters.
+        if spec.zero_when_stopped and v == 0:
+            continue
         if spec.unit == "bool":
             lines.append(f"{spec.name.split(' (')[0]}: {_num(v)} (정상 {_num(spec.normal_max)})")
         else:

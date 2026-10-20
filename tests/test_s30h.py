@@ -116,6 +116,10 @@ def test_mes_low_high_states_reach_the_search_only(pipe, monkeypatch):
     searched.clear()
     pipe.run({"question": "필터 차압 경보", "eq_id": "EQ-0001", "observations": obs[2:]})
     assert searched == ["필터 차압 경보"]   # MES all normal: same search as before
+    searched.clear()
+    stopped = [{"signal": "hpu_pump_current", "value": 0}, {"signal": "hpu_pump_current_state", "value": "low"}]
+    pipe.run({"question": "필터 차압 경보", "eq_id": "EQ-0001", "observations": stopped})
+    assert searched == ["필터 차압 경보"]   # line stopped: 0 A is not an abnormal state
 
 
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):

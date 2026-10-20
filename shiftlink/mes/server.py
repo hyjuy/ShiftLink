@@ -243,7 +243,7 @@ class MesService:
                 latest=incident['records'][-1]
                 if (latest['handover_id'],latest['record_index'])!=(source['handover_id'],source['record_index']):
                     raise ValueError('최신 인계 기록을 이어서 작성해 주세요.')
-                if work_reports.handover_resolved(latest['record']) and any(c['draft_id'] and c['handover_id']==latest['handover_id'] and c['record_index']==latest['record_index'] for c in incident['candidates']):
+                if work_reports.handover_resolved(latest['record']) and any(c['kind']=='T4' and c['draft_id'] and c['handover_id']==latest['handover_id'] and c['record_index']==latest['record_index'] for c in incident['candidates']):
                     raise ValueError('정상 운전 확인과 후보 구성이 완료된 사건입니다. 재발은 새 사건으로 기록해 주세요.')
                 if record['incident_id'] in seen_incidents:raise ValueError('같은 사건은 한 일지에서 한 번만 이어서 기록해 주세요.')
                 seen_incidents.add(record['incident_id'])
@@ -262,40 +262,46 @@ class MesService:
                     raise ValueError("query does not match the work report equipment/asset")
                 if context.get("incident_id") and context["incident_id"] != record.get("incident_id"):
                     raise ValueError("query belongs to another incident; specify its incident_id")
-            draft = None
-            if not record["candidate"]:
-                reason = "not_requested"
-            elif chain is not None:
-                reason='insufficient_handover'
-                if not work_reports.handover_missing(chain):
-                    if next_number is None:next_number=int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
-                    if next_number>field_draft.ID_RANGE[1]:raise ValueError('field draft card id range is exhausted')
-                    draft=work_reports.handover_candidate_from(chain,self.active_config,f'K-{next_number:04d}',utc_now())
-                    next_number+=1;reason=draft['status']
-            elif record.get('capture_version')==1:
-                reason='insufficient_capture'
-                if not work_reports.capture_missing(record):
-                    if next_number is None:next_number=int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
-                    if next_number>field_draft.ID_RANGE[1]:raise ValueError('field draft card id range is exhausted')
-                    draft=work_reports.capture_candidate_from(record,self.active_config,body['handover_id'],index,
-                                                             f'K-{next_number:04d}',utc_now())
-                    next_number+=1;reason=draft['status']
-            elif query is None:
-                reason = "missing_query"
-            elif query.get("knowledge_status") != "no_applicable_card":
-                reason = "query_not_knowledge_gap"
-            elif (query.get("query_context") or {}).get("config_id") != self.active_config.config_id:
-                reason = "query_configuration_changed"
+            ready, incomplete = [], []
+            requested = record["candidate"] or record.get("auto_candidate")
+
+            def add(kind, missing_reason, make_draft=None):
+                nonlocal next_number
+                draft = None
+                if make_draft is not None:
+                    if next_number is None:
+                        next_number = int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
+                    if next_number > field_draft.ID_RANGE[1]:
+                        raise ValueError('field draft card id range is exhausted')
+                    draft = make_draft(f'K-{next_number:04d}')
+                    next_number += 1
+                decision = {'kind': kind, 'query_id': query_id, 'reason': draft['status'] if draft else missing_reason,
+                            'draft': draft}
+                (ready if draft else incomplete).append(decision)
+
+            if not requested:
+                add('legacy', 'not_requested')
             else:
-                if next_number is None:
-                    next_number = int(self.storage.next_card_id(*field_draft.ID_RANGE)[2:])
-                if next_number > field_draft.ID_RANGE[1]:
-                    raise ValueError("field draft card id range is exhausted")
-                draft = work_reports.candidate_from(record, query, self.active_config, body["handover_id"],
-                                                     index, f"K-{next_number:04d}", utc_now())
-                next_number += 1
-                reason = draft["status"]
-            plans[index] = {"query_id":query_id, "reason":reason, "draft":draft}
+                for kind in work_reports.observation_kinds(record):
+                    missing = work_reports.observation_missing(record, kind)
+                    add(kind, 'insufficient_safety' if kind == 'T5' else 'insufficient_' + kind.lower(),
+                        None if missing else lambda card_id, kind=kind: work_reports.observation_candidate_from(
+                            record, self.active_config, body['handover_id'], index, card_id, utc_now(), kind))
+                if chain is not None:
+                    add('T4', 'insufficient_handover', None if work_reports.handover_missing(chain) else
+                        lambda card_id: work_reports.handover_candidate_from(chain, self.active_config, card_id, utc_now()))
+                elif record.get('capture_version') == 1:
+                    kind = 'T6' if record['restart_performed'] else 'T3'
+                    add(kind, 'insufficient_capture', None if work_reports.capture_missing(record) else
+                        lambda card_id: work_reports.capture_candidate_from(
+                            record, self.active_config, body['handover_id'], index, card_id, utc_now()))
+                elif query is not None or not ready and not incomplete:
+                    reason = ('missing_query' if query is None else
+                              'query_not_knowledge_gap' if query.get('knowledge_status') != 'no_applicable_card' else
+                              'query_configuration_changed' if (query.get('query_context') or {}).get('config_id') != self.active_config.config_id else None)
+                    add('T3', reason or 'pending_review', None if reason else lambda card_id: work_reports.candidate_from(
+                        record, query, self.active_config, body['handover_id'], index, card_id, utc_now()))
+            plans[index] = ready + incomplete
         return plans
 
     def record_work_report(self, body: dict[str, Any]) -> dict[str, object]:

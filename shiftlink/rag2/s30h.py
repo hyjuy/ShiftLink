@@ -23,10 +23,12 @@ from . import evidence_score as E
 from . import generate as G
 from .embed import prefixes, slug
 from .retrieve import COMMON_FOLDERS, load
+from .source_conditions import with_source_conditions
 
 LO, HI, T = 0.3, 0.9, 0.35277185049977805   # preregistered 10/15; never round T
 CFG = G.CONFIGS["C"]
 ROOT = Path(__file__).resolve().parents[2]
+UNIT_CODE = re.compile(r"\b(?:HPU|PDP|CAU|GR|RT|CV)-0\d\b")
 
 
 def source_label(chunk: dict) -> str:
@@ -72,13 +74,20 @@ class S30hPipeline:
     answer_mode = "s30h"
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
-                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None):
+                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
         if len(self.vec) != len(self.rows):
             raise ValueError(f"index mismatch: {len(self.rows)} chunks, {len(self.vec)} vectors")
         self.folders = np.array([r["metadata"]["folder"] for r in self.rows])
+        # event chunks are all folder COMMON; tag each with the unit codes in its text, else those of its whole event
+        by_event = {}
+        for r in self.rows:
+            if r["metadata"]["kind"] == "event":
+                by_event.setdefault(r["metadata"]["source"], set()).update(UNIT_CODE.findall(r["text"]))
+        self.event_units = {r["chunk_id"]: set(UNIT_CODE.findall(r["text"])) or by_event[r["metadata"]["source"]]
+                            for r in self.rows if r["metadata"]["kind"] == "event"}
         self.host, self.judge_host = host.rstrip("/"), judge_host.rstrip("/")
         self.judge_model, self.judge_ctx, self.judge_workers = judge_model, judge_ctx, judge_workers
         self.model = SimpleNamespace(model=answer_model)   # the server logs pipeline.model.model
@@ -86,11 +95,13 @@ class S30hPipeline:
         G.GEN_MODEL, G.KEEP_ALIVE, E.KEEP_ALIVE = answer_model, -1, -1
         # the MES passes loader KnowledgeCard models; tests pass plain dicts
         self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
+        self.source_conditions = source_conditions
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
-        self.eq_type = {}
+        self.eq_type, self.eq_code = {}, {}
         for e in cat["equipment"]:
             self.eq_type[e["equipment_id"]] = self.eq_type[e["code"]] = types[e["equipment_type_id"]]
+            self.eq_code[e["equipment_id"]] = e["code"]
         from shiftlink.mes.configuration import from_catalog   # names/ranges as the MES shows them (catalog points have no names)
         self.specs = {e.equipment_id: {s.signal: s for s in e.signals} for e in from_catalog(cat).equipment}
 
@@ -105,10 +116,14 @@ class S30hPipeline:
         v = np.array(d["embeddings"][0], dtype=np.float32)
         return v / np.linalg.norm(v)
 
-    def evidence(self, question: str, eq_type: str | None) -> list[dict]:
+    def evidence(self, question: str, eq_type: str | None, eq_id: str | None = None) -> list[dict]:
         idx = np.where(np.isin(self.folders, list(COMMON_FOLDERS | {eq_type})))[0] if eq_type else np.arange(len(self.rows))
         ranking = idx[np.argsort(-(self.vec[idx] @ self._embed(question)))][:CFG["top"]].tolist()
-        return G.evidence(self.rows, ranking, CFG)
+        ev = G.evidence(self.rows, ranking, CFG)
+        # another unit's handover event is not this unit's history: drop it without moving the next chunk up
+        # (F′ of the 10/20 event-filter run, ShiftLink-records/experiments/evfilter_20261020; backfilling cost 충분 answers)
+        code = self.eq_code.get(eq_id)
+        return [r for r in ev if not code or r["metadata"]["kind"] != "event" or code in self.event_units[r["chunk_id"]]]
 
     def safety(self, eq_id: str, eq_type: str | None) -> list[SafetyNotice]:
         out = []
@@ -129,7 +144,7 @@ class S30hPipeline:
         # MES low/high states go into the embedding search only; the judge and answer prompts keep the question
         # (adopted 10/20 by user decision although prereg gate Q1 missed by one: docs/experiments/mes-context-result-20261020.md)
         mes = state_lines(self.specs.get(eq_id, {}), payload.get("observations") or [])
-        ev = self.evidence("\n".join([question, *mes]), eq_type)
+        ev = self.evidence("\n".join([question, *mes]), eq_type, eq_id)
         with ThreadPoolExecutor(self.judge_workers) as ex:
             dists = list(ex.map(lambda r: E.judge_dist(question, r, self.judge_host, model=self.judge_model, ctx=self.judge_ctx), ev))
         if any(p is None for p in dists):   # strict like hybrid: never answer from evidence the judge did not score
@@ -148,9 +163,13 @@ class S30hPipeline:
         abstain = res["abstain"] or (route == "model" and out.get("p_insuff") is not None and out["p_insuff"] >= T)
         cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"]]
         answer = ""
+        condition_cards = []
         if not abstain:
             labels = list(dict.fromkeys(source_label(r) for r in cited))
-            answer = re.sub(r"\s*\[S\d+\]", "", res["answer"]).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+            answer = res["answer"]
+            if self.source_conditions:
+                answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
+            answer = re.sub(r"\s*\[S\d+\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))
@@ -160,6 +179,8 @@ class S30hPipeline:
         tool_results = {"answer_mode": "s30h", "mes_lines": mes, "route": route, "candidates": [r["chunk_id"] for r in ev],
                         "judge_p": [round(s, 4) for s in scores], "kept": [r["chunk_id"] for r in ev2],
                         "p_insuff": out.get("p_insuff"), "abstain_reason": reason, "seconds": round(time.time() - t0, 2)}
+        if self.source_conditions:
+            tool_results["source_condition_cards"] = condition_cards
         return SimpleNamespace(mode="query", output=output, tool_results=tool_results)
 
     def warm(self, attempts=30, wait_s=10.0, sleep=time.sleep) -> list[str]:

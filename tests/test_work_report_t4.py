@@ -9,12 +9,13 @@ from test_work_report_reuse_harness import service
 from shiftlink.agent.schemas import KnowledgeCard
 
 
-def chain(service,causes_missing=False):
+def chain(service,causes_missing=False,origin_notes=None):
     origin=captured(service,candidate=False,outcome='open',normal_run_status='unconfirmed',normal_run_minutes=None,normal_run_evidence='')
     origin['handover_id']='HO-T4-ORIGIN'
     origin['required_context'].update(author='첫 근무자',start_at='2026-10-15T08:00',end_at='2026-10-15T16:00')
     origin['work_report']['records'][0]['follow_up']='다음 근무에서 필터 차압 확인'
     origin['work_report']['records'][0]['safety_notes']='커버 개방 중 위험 발견'
+    origin['work_report']['records'][0].update(origin_notes or {})
     if causes_missing:origin['work_report']['records'][0]['causes']=[]
     incident_id=service.record_work_report(origin)['incidents'][0]['incident_id']
     middle=captured(service,candidate=False,outcome='temporary',normal_run_status='observing',normal_run_minutes=None,normal_run_evidence='',
@@ -63,6 +64,22 @@ def test_t4_retains_step_worker_and_actual_time(service):
     assert '교대 지원 근무자' in draft['card']['know_how']
     assert '2026-10-16T01:35' in draft['card']['know_how']
     assert draft['review_flags']['handover_chain'][-1]['record']['action_steps'][0]['worker']=='교대 지원 근무자'
+
+
+def test_t4_history_retains_each_shifts_remaining_work(service):
+    _, _, final = chain(service, origin_notes={'remaining_issue':'차압이 다시 상승함',
+        'next_check':'필터 상태 재확인','next_check_at':'다음 교대 시작'})
+    final['work_report']['records'][0].update(remaining_issue='교체 후 장기 관찰 필요',
+                                              next_check='다음 가동에서 차압 확인',
+                                              next_check_at='다음 가동 시')
+    service.record_work_report(final)
+    know_how = service.storage.list_card_drafts()[0]['card']['know_how']
+    assert '남은 문제: 차압이 다시 상승함' in know_how
+    assert '다음 확인 내용: 필터 상태 재확인' in know_how
+    assert '확인 시점: 다음 교대 시작' in know_how
+    assert '남은 문제: 교체 후 장기 관찰 필요' in know_how
+    assert '다음 확인 내용: 다음 가동에서 차압 확인' in know_how
+    assert '확인 시점: 다음 가동 시' in know_how
 
 
 def test_three_followups_preserve_four_workers_times_and_saved_times(service):

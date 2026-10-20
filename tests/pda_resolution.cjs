@@ -67,7 +67,7 @@ console.log('PDA action groups PASS');
 
 // 조치 기록 → 근무일지 기록(새 양식): 단계 결과는 「MES 센서:」, 잠금 응답은 안전 사항, 카드 후보 없음, 세션 ID로 업로드 보류
 const {sessionRecord} = require('../shiftlink/mes/web/pda.js');
-const res = {sessionId: 'RS-9', turn: {question: '작동유 온도가 너무 높아요', response: {query_id: 'Q-1'}},
+const res = {sessionId: 'RS-9', turn: {question: '작동유 온도가 너무 높아요', started: Date.parse('2026-10-20T04:59:00Z'), response: {query_id: 'Q-1'}},
   before: {alarms: ['AL-HYD-HOT']}, components: [{component_id: 'cooling', name: '냉각 계통'}], componentId: 'cooling',
   symptom: '', cause: '쿨러 튜브 스케일', causeCustom: '', phase: 'wrap', result: 'resolved', verdict: {text: 'MES 정상 복귀 확인'},
   steps: [{order: 1, action: '팬 차단기 재투입', lockout: '예', result_text: '센서값 변화 없음', at: '2026-10-20T14:01'},
@@ -76,6 +76,7 @@ const res = {sessionId: 'RS-9', turn: {question: '작동유 온도가 너무 높
     {order: 4, action: 'K-1002 1단계', lockout: null, result_text: '센서값 변화 없음', card: {card_id: 'K-1002'}, at: ''}]};
 let rec = sessionRecord(res, 'EQ-0001');
 assert.equal(rec.type, '고장·정비');
+assert.equal(rec.occurred_at, '2026-10-20T13:59');   // 새 양식 필수 — 질문 보낸 시각(KST)
 assert.equal(rec.story, '작동유 온도가 너무 높아요');
 assert.deepEqual(rec.causes, [{equipment: ['EQ-0001'], certainty: '추정', note: '쿨러 튜브 스케일'}]);
 assert.deepEqual(rec.action_steps[1], {action: '유온·공급 정상 확인', observed_result: 'MES 센서: 유압유 온도 78→47', failed: false, performed_at: '2026-10-20T14:03'});

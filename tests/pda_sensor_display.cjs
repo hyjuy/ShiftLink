@@ -62,6 +62,21 @@ context.snapshot = snapshot;
   assert.equal(vm.runInContext('S.mes.readings[0].value',context), 160, 'live monitoring still updates');
   vm.runInContext('S.sensorSnapshot = null; renderEquipmentMetrics()',context);  // 새로고침 버튼과 같은 동작
   assert.match(nodes.equipmentMetrics.text(), /160/, 'refresh captures current readings');
+  vm.runInContext(`S.eq.signals=[
+    {signal:'hpu_pressure',name:'유압 압력',unit:'bar',min:145,max:165,semantics:{}},
+    {signal:'hpu_flow',name:'유압 펌프 유량',unit:'L_min',min:38,max:46,semantics:{}},
+    {signal:'rt_speed',name:'회전 속도',unit:'m_min',min:50,max:100,zeroStopped:true,semantics:{}}
+  ];S.sensorSnapshot=null;S.mes={at:'2026-10-20T06:13:10Z',receivedAt:'2026-10-20T06:13:11Z',operating:'stopped',alarms:[],alarmItems:[],readings:[
+    {signal:'hpu_pressure',value:150,unit:'bar',observed_at:'2026-10-20T06:13:10Z'},
+    {signal:'hpu_flow',value:0,unit:'L_min',observed_at:'2026-10-20T06:13:10Z'},
+    {signal:'rt_speed',value:0,unit:'m_min',observed_at:'2026-10-20T06:13:10Z'}]};renderEquipmentMetrics();`,context);
+  assert.match(nodes.metricsTime.textContent,/2026-10-20 15:13:10 KST/);
+  assert.match(nodes.equipmentMetrics.text(),/판정 기준 확인 필요/,'stopped flow has no confirmed zero allowance');
+  assert.match(nodes.equipmentMetrics.text(),/정지 중 0 허용/,'only configured stopped-zero signal is allowed');
+  assert.match(nodes.equipmentMetrics.text(),/0 L\/min/,'zero remains a measurement');
+  vm.runInContext("S.sensorSnapshot=null;S.mes.operating='running';renderEquipmentMetrics()",context);
+  assert.match(nodes.equipmentMetrics.text(),/하한 미만/,'running zero uses operating range');
+  assert.equal(vm.runInContext('stateOf(S.eq.signals[1],0)',context),'low','underlying condition logic is unchanged');
   snapshot.measurements[0].value = 154.845;
   snapshot.measurements[0].quality = 'bad';
   await vm.runInContext('loadMesObservations(snapshot)',context);

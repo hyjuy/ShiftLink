@@ -136,6 +136,22 @@ class MesStorage:
                 FOREIGN KEY (query_id) REFERENCES query_log(query_id), FOREIGN KEY (draft_id) REFERENCES card_drafts(draft_id));
         """)
         self.connection.commit()
+        if "kind" not in {row[1] for row in self.connection.execute("PRAGMA table_info(work_report_candidates)")}:
+            with self.connection:
+                self.connection.execute("ALTER TABLE work_report_candidates RENAME TO work_report_candidates_old")
+                self.connection.execute("""CREATE TABLE work_report_candidates (
+                    handover_id TEXT NOT NULL, record_index INTEGER NOT NULL, kind TEXT NOT NULL,
+                    query_id TEXT, draft_id TEXT, reason TEXT NOT NULL,
+                    PRIMARY KEY (handover_id, record_index, kind),
+                    FOREIGN KEY (handover_id, record_index) REFERENCES incident_records(handover_id, record_index),
+                    FOREIGN KEY (query_id) REFERENCES query_log(query_id),
+                    FOREIGN KEY (draft_id) REFERENCES card_drafts(draft_id))""")
+                self.connection.execute("""INSERT INTO work_report_candidates
+                    SELECT old.handover_id, old.record_index,
+                           COALESCE(json_extract(d.card, '$.tacit_type'), 'legacy'),
+                           old.query_id, old.draft_id, old.reason
+                    FROM work_report_candidates_old old LEFT JOIN card_drafts d ON d.draft_id = old.draft_id""")
+                self.connection.execute("DROP TABLE work_report_candidates_old")
 
     def save_handover(self, body: dict[str, Any]) -> dict[str, Any]:
         """Commit the original note locally; retries never overwrite it."""
@@ -144,7 +160,7 @@ class MesStorage:
             return self._insert_handover(body)
 
     def save_work_report(self, body: dict[str, Any], assets: dict[str, str], config_id: str,
-                         candidates: dict[int, dict[str, Any]] | None = None,
+                         candidates: dict[int, list[dict[str, Any]]] | None = None,
                          sensor_evidence: dict[str, Any] | None = None) -> dict[str, Any]:
         """Save the immutable report and its fault references in the same transaction."""
         self._check_handover(body)
@@ -173,25 +189,26 @@ class MesStorage:
                     self.connection.execute("INSERT INTO incident_records VALUES (?, ?, ?)",
                                             (body["handover_id"], index, incident_id))
                     if candidates is not None:
-                        decision = candidates[index]
-                        query_id, draft = decision["query_id"], decision["draft"]
-                        if query_id:
-                            self.connection.execute("INSERT OR IGNORE INTO incident_queries VALUES (?, ?)",
-                                                    (incident_id, query_id))
-                        draft_id = None
-                        if draft is not None:
-                            draft_id = draft["card"]["card_id"]
-                            draft["review_flags"]["work_report"]["incident_id"] = incident_id
-                            draft["card"]["provenance"]["sources"].append({"source_id":incident_id, "locator":"incident"})
-                            # Keep internal references outside the API's 64-character handover ID space.
-                            source_ref = "work-report-record:" + sha256(f"{body['handover_id']}:{index}".encode()).hexdigest()
-                            self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)",
-                                (draft_id, source_ref, saved["created_at"], draft["status"],
-                                 _dump(draft["card"]), _dump(draft["review_flags"])))
-                            self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
-                                                    (source_ref, draft_id, saved["created_at"]))
-                        self.connection.execute("INSERT INTO work_report_candidates VALUES (?, ?, ?, ?, ?)",
-                                                (body["handover_id"], index, query_id, draft_id, decision["reason"]))
+                        for decision in candidates[index]:
+                            query_id, draft = decision["query_id"], decision["draft"]
+                            if query_id:
+                                self.connection.execute("INSERT OR IGNORE INTO incident_queries VALUES (?, ?)",
+                                                        (incident_id, query_id))
+                            draft_id = None
+                            if draft is not None:
+                                draft_id = draft["card"]["card_id"]
+                                draft["review_flags"]["work_report"]["incident_id"] = incident_id
+                                draft["card"]["provenance"]["sources"].append({"source_id":incident_id, "locator":"incident"})
+                                source_ref = "work-report-record:" + sha256(
+                                    f"{body['handover_id']}:{index}:{decision['kind']}".encode()).hexdigest()
+                                self.connection.execute("INSERT INTO card_drafts VALUES (?, ?, ?, ?, ?, ?)",
+                                    (draft_id, source_ref, saved["created_at"], draft["status"],
+                                     _dump(draft["card"]), _dump(draft["review_flags"])))
+                                self.connection.execute("INSERT INTO card_draft_records VALUES (?, ?, 'origin', ?)",
+                                                        (source_ref, draft_id, saved["created_at"]))
+                            self.connection.execute("INSERT INTO work_report_candidates VALUES (?, ?, ?, ?, ?, ?)",
+                                                    (body["handover_id"], index, decision["kind"], query_id,
+                                                     draft_id, decision["reason"]))
             return {**saved, "incidents": self.report_incidents(body["handover_id"]),
                     "candidates": self.work_report_candidates(report_id=body["handover_id"]),
                     "server_sensor_evidence": self.work_report_sensors(body["handover_id"])}
@@ -203,12 +220,13 @@ class MesStorage:
 
     def work_report_candidates(self, *, report_id: str | None = None, incident_id: str | None = None) -> list[dict[str, Any]]:
         rows = self.connection.execute(
-            "SELECT c.handover_id, c.record_index, r.incident_id, c.query_id, c.draft_id, c.reason "
+            "SELECT c.handover_id, c.record_index, r.incident_id, c.kind, c.query_id, c.draft_id, c.reason "
             "FROM work_report_candidates c JOIN incident_records r USING (handover_id, record_index) "
             "WHERE (? IS NULL OR c.handover_id = ?) AND (? IS NULL OR r.incident_id = ?) "
-            "ORDER BY r.rowid", (report_id, report_id, incident_id, incident_id))
-        return [{"handover_id":h, "record_index":i, "incident_id":inc, "query_id":q, "draft_id":d, "reason":reason}
-                for h, i, inc, q, d, reason in rows]
+            "ORDER BY r.rowid, c.rowid", (report_id, report_id, incident_id, incident_id))
+        return [{"handover_id":h, "record_index":i, "incident_id":inc, "kind":kind,
+                 "query_id":q, "draft_id":d, "reason":reason}
+                for h, i, inc, kind, q, d, reason in rows]
 
     def report_incidents(self, handover_id: str) -> list[dict[str, Any]]:
         return [{"record_index": index, "incident_id": incident_id} for index, incident_id in

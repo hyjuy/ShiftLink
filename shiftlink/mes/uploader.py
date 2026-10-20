@@ -26,7 +26,9 @@ def _uploadable_handovers(storage: MesStorage):
     rows = []
     for row_id, created_at, payload in storage.pending_handovers():
         body = json.loads(payload)
-        if HOLD_RESOLUTION_UPLOAD and "resolution" in body:
+        # 조치 기록을 근무일지로 넘긴 기록(source_session_id)도 같은 해결 기록이라 함께 보류한다(10/20 결정).
+        records = (body.get("work_report") or {}).get("records") or []
+        if HOLD_RESOLUTION_UPLOAD and ("resolution" in body or any(r.get("source_session_id") for r in records)):
             continue
         evidence = storage.work_report_sensors(row_id)
         if evidence is not None:

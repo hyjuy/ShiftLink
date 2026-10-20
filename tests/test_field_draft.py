@@ -509,7 +509,30 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertIn({'component_id': 'cooling', 'name': '냉각 계통', 'suggested': True}, out['components'])
         self.assertEqual([a['text'] for a in out['action_suggestions'] if a['source'] == 'mes_recovery'],
                          ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
-        self.assertEqual(out['cause_suggestions'], ['원인 모름'])
+        # 초안이 없어도 이 설비의 지난 사건(저장 이력 IN-0005·0025·0029, 같은 경보)에서 원인 칩을 낸다
+        self.assertEqual(out['cause_suggestions'], ['쿨러 튜브 스케일', '냉각수 유량 부족', '원인 모름'])
+
+    def test_remove_one_or_all_steps_but_not_ones_applied_to_mes(self):
+        self.overheat()
+        sid = self.start()['session_id']
+        step = lambda action: self.service.resolution_step(sid, {'action': action})
+        step('쿨러 팬 소리 확인')
+        self.assertTrue(step('유면·냉각·밸브 점검')['mes_linked'])
+        step('냉각 성능 복구'); step('유온·공급 정상 확인')   # 셋째 MES 단계에서 유온이 내려간다
+        step('쿨러 핀 사진 촬영')
+        # 중간 단계를 지우면 순번이 당겨지고, 다음 단계의 센서 변화는 남은 앞 단계 기준으로 다시 쓴다
+        out = self.service.resolution_remove(sid, {'order': 1})['steps']
+        self.assertEqual([s['order'] for s in out], [1, 2, 3, 4])
+        self.assertEqual(out[0]['action'], '유면·냉각·밸브 점검')
+        self.assertIn('→', out[2]['result_text'])
+        with self.assertRaisesRegex(ValueError, 'mes_linked_step'):
+            self.service.resolution_remove(sid, {'order': 1})
+        with self.assertRaisesRegex(ValueError, 'unknown step'):
+            self.service.resolution_remove(sid, {'order': 9})
+        # 전부 지우기: MES에 반영된 세 단계만 남는다
+        out = self.service.resolution_remove(sid, {'all': True})['steps']
+        self.assertEqual([s['action'] for s in out], ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
+        self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 3)
 
     def test_start_without_query_falls_back_to_snapshot(self):
         self.overheat()

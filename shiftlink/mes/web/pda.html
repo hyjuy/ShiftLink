@@ -286,11 +286,26 @@
   .resrow.sub{margin:-4px 0 12px 34px}
   .resin{width:100%;min-height:52px;background:var(--surface);color:var(--tx);border:1px solid var(--edge);
     border-radius:10px;padding:0 12px;font:inherit;font-size:16px}
-  .res-auto{font-size:14px;border:1px dashed var(--edge);border-radius:10px;padding:8px 10px}
   .res-steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
   .res-step{border:1px solid var(--edge);border-radius:10px;padding:10px;background:var(--surface);display:grid;gap:4px}
   .res-step .res{font-size:14px;color:var(--tx-2)}
   .res-step .lock{font-size:13px;color:var(--notice)}
+  /* 조치 기록 간격: 제목→내용 8px, 칸→칸 16px(제목 위 8px 더). 안쪽 묶음도 같은 흐름 */
+  #s-resolve .pane{gap:8px}
+  #resWork,#resPick,#resWrap{display:flex;flex-direction:column;gap:8px}
+  #s-resolve .lbl{margin-top:8px}#s-resolve .pane>.lbl:first-child{margin-top:0}
+  /* 진행 단계 ① 조치 ─ ② 마무리 ─ ③ 근무일지 — 이 화면의 끝이 근무일지임을 이름만으로 보인다 */
+  .res-flow{list-style:none;margin:0 0 8px;padding:0;display:flex;align-items:center;gap:10px;counter-reset:flow;
+    font-size:15px;color:var(--tx-2)}
+  .res-flow li{display:flex;align-items:center;gap:6px;counter-increment:flow}
+  .res-flow li::before{content:counter(flow);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;
+    border:1.5px solid currentColor;font-size:13px;font-weight:700}
+  .res-flow li:not(:last-child)::after{content:"";width:28px;height:1.5px;background:var(--edge);margin-left:4px}
+  .res-flow li[aria-current]{color:var(--accent);font-weight:700}
+  .res-flow li[aria-current]::before{background:var(--accent);border-color:var(--accent);color:#fff}
+  .res-step{position:relative}.res-step:has(.res-x){padding-right:58px}
+  .res-step .res-x{position:absolute;top:4px;right:4px;width:48px;height:48px;display:grid;place-items:center;
+    border:0;border-radius:8px;background:transparent;color:var(--tx-2);font-size:20px;cursor:pointer}
   .res-live{border:2px solid var(--scan);border-radius:10px;padding:10px;display:grid;gap:8px}
   .res-lock{border:1px solid var(--notice);border-radius:10px;padding:8px;color:var(--notice);font-size:14px;display:grid;gap:6px}
   .res-verdict{border-radius:10px;padding:10px 12px;font-size:15px;border:1px solid var(--edge)}
@@ -874,6 +889,11 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-ctx .chat-panel #askSafety .safety-fold[open]>.safety-head{border-bottom:1px solid var(--edge);border-radius:9px 9px 0 0}
 #s-ctx .chat-panel #askSafety .safety-head:hover{background:var(--hover)}
 #s-ctx .chat-panel #askSafety summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+/* 안전 바·「안전수칙 자세히」도 참고 매뉴얼과 같은 펼침 기호 — 접힘 ⌄, 펼침 ⌃(오른쪽 끝) */
+#s-ctx .chat-panel #askSafety details>summary{display:flex;align-items:center;gap:8px;list-style:none}
+#s-ctx .chat-panel #askSafety details>summary::-webkit-details-marker{display:none}
+#s-ctx .chat-panel #askSafety details>summary::after{content:"";width:8px;height:8px;margin:-4px 4px 0 auto;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(135deg);flex:0 0 auto}
+#s-ctx .chat-panel #askSafety details[open]>summary::after{transform:rotate(-45deg);margin-top:4px}
 #s-ctx .chat-panel #askSafety .safety-content{display:flex;flex-direction:column;gap:0;padding:0 14px 12px}
 #s-ctx .chat-panel #askSafety .safety{padding:12px 0;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:var(--surface);gap:6px}
 #s-ctx .chat-panel #askSafety .safety .ttl{font-size:16px;font-weight:600;line-height:1.6;color:var(--tx);overflow-wrap:anywhere}
@@ -1524,11 +1544,12 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .msg.bot .ans-row:has(.bul)+.ans-list{margin-top:-8px}
 #s-ctx .chat-panel .msg.bot .ans-list li{overflow-wrap:anywhere}
 #s-ctx .chat-panel .msg.bot .ans-list li+li{margin-top:2px}
-/* 근무일지 질문: 채팅 칸 폭마다 버튼이 따로 줄바꿈되지 않게 두 줄 고정 — 문구 / 오른쪽에 같은 크기 버튼 둘 */
-#s-ctx .chat-panel .msg.bot .report-ask{display:grid;grid-template-columns:minmax(0,1fr) 80px 80px;align-items:center;gap:10px 8px;margin:0;padding:12px 12px 12px 16px}
+/* 근무일지 상자: 질문 / 「조치하며 작성」(주, 꽉 참) / 「바로 작성」·「아니오」(보조, 반반) — 근무일지로 가는 두 길을 한 상자에 */
+#s-ctx .chat-panel .msg.bot .report-ask{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10px 8px;margin:0;padding:12px 12px 12px 16px}
 #s-ctx .chat-panel .msg.bot .report-ask p{grid-column:1/-1;margin:0;text-align:left;font-size:16px;line-height:1.5}
-#s-ctx .chat-panel .msg.bot .report-ask .btn{width:80px;min-width:0;height:40px;min-height:40px;margin:0;padding:0;font-size:15px;justify-content:center}
-#s-ctx .chat-panel .msg.bot .report-ask .btn:first-of-type{grid-column:2}
+#s-ctx .chat-panel .msg.bot .report-ask .btn{width:auto;min-width:0;height:48px;min-height:48px;margin:0;padding:0;font-size:15px;justify-content:center}
+#s-ctx .chat-panel .msg.bot .report-ask .btn.primary{grid-column:1/-1;height:56px;min-height:56px;font-size:17px}
+#s-ctx .chat-panel .msg.bot .report-ask .btn.yes{background:var(--surface);border-color:var(--accent);color:var(--accent)}
 #s-ctx .chat-panel .msg.bot .ans-meta{margin-top:4px;margin-bottom:0;font-size:14px;color:var(--tx-2)}
 #s-ctx .chat-panel .msg .basis-detail{border:1px solid var(--edge);border-radius:8px;background:var(--surface)}
 #s-ctx .chat-panel .msg .basis-detail[open]{padding:0 16px 12px}
@@ -1537,12 +1558,14 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .basis-detail>summary::-webkit-details-marker{display:none}
 #s-ctx .chat-panel .basis-detail>summary svg{width:26px;height:26px;flex:0 0 auto;color:var(--accent)}
 #s-ctx .chat-panel .basis-detail>summary small{margin-left:auto;font-size:14px;color:var(--tx-2)}
-#s-ctx .chat-panel .basis-detail>summary::after{content:"";width:9px;height:9px;margin:0 4px 0 8px;border:solid var(--tx);border-width:2px 2px 0 0;transform:rotate(45deg);flex:0 0 auto}
+/* 아래로 펼쳐지므로 접힘 ⌄, 펼침 ⌃ */
+#s-ctx .chat-panel .basis-detail>summary::after{content:"";width:9px;height:9px;margin:-5px 4px 0 8px;border:solid var(--tx);border-width:2px 2px 0 0;transform:rotate(135deg);flex:0 0 auto}
 #s-ctx .chat-panel .basis-detail>summary:not(:has(small:not(:empty)))::after{margin-left:auto}
-#s-ctx .chat-panel .basis-detail[open]>summary::after{transform:rotate(135deg)}
+#s-ctx .chat-panel .basis-detail[open]>summary::after{transform:rotate(-45deg);margin-top:5px}
 #s-ctx .chat-panel .msg.bot>.btn{align-self:flex-start;width:auto}
-#s-ctx .chat-panel .msg.bot>.btn.primary{min-height:56px;padding:0 24px}   /* 답 아래 주 행동 「조치 시작」(A1) */
 #s-ctx .chat-panel .msg.bot.none>.btn{align-self:flex-start}
+/* 답 아래 주 행동 「조치 시작」(A1) — 위의 근무일지 질문·참고 매뉴얼 줄과 같은 폭, 맨 아래 */
+#s-ctx .chat-panel .msg.bot>.btn.primary{align-self:stretch;width:auto;min-height:56px;font-size:17px}
 #s-ctx .chat-panel .chatfoot{max-height:none;overflow:visible;padding:8px 14px 4px;background:var(--surface)}
 #s-ctx .chat-panel .chat-plus{display:none;flex-direction:column;gap:8px;max-height:38vh;overflow-y:auto;padding-bottom:4px}
 #s-ctx .chat-panel .chatfoot.open .chat-plus{display:flex}
@@ -2023,16 +2046,18 @@ button.ld-row:hover{background:var(--surface-2)}
     <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       <h1 style="font-size:14px;color:var(--tx-2)">조치 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
     <div class="pane">
-      <p class="hint res-auto" id="resBefore">조치 전 MES 값을 기록하고 있습니다…</p>
+      <ol class="res-flow" id="resFlow" aria-label="진행 단계"><li>조치</li><li>마무리</li><li>근무일지</li></ol>
       <label for="resSymptom" class="lbl">현장에서 본 것</label>
       <input type="text" id="resSymptom" class="resin" maxlength="1000" placeholder="예: 쿨러 팬이 멈춰 있고 차단기가 트립돼 있음">
       <div id="resWork">
         <p class="lbl">부품</p>
         <div class="chips" id="resComponents" role="group" aria-label="부품"></div>
         <ol class="res-steps" id="resSteps"></ol>
+        <button class="btn sm ghost" id="resClear" type="button" hidden>전체 취소</button>
         <div class="res-live" id="resLive" hidden></div>
         <div id="resPick">
           <p class="lbl">한 일 고르기</p>
+          <div class="chips" id="resBatch"></div>
           <div class="chips" id="resActionChips"></div>
           <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="목록에 없으면 직접 입력" aria-label="조치 직접 입력">
             <button class="btn sm" id="resAddCustom" type="button">추가</button></div>
@@ -2050,8 +2075,8 @@ button.ld-row:hover{background:var(--surface-2)}
       </div>
       <div class="alert" id="resWarn" hidden></div>
       <div class="grow"></div>
-      <button class="btn sm" id="resToReport" type="button">일지로 넘기기</button>
-      <button class="btn primary" id="resSave" type="button" hidden>인계와 함께 저장</button>
+      <button class="btn sm" id="resSave" type="button" hidden>인계와 함께 저장</button>
+      <button class="btn sm" id="resToReport" type="button">근무일지 작성</button>
     </div>
   </section>
 

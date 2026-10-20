@@ -84,10 +84,10 @@ context.api = async (path, init) => {
   assert.match(run('chatMemo(lastAnswer())'), /답: 해당 지식 없음/);
   assert.equal(run(`chatMemo({question:'q', response:{answer:'x'.repeat(5000)}, ranked:null})`).length, 4000);
 
-  // 4b. 인사·감사(서버 smalltalk)는 답 문장만 — 조치 시작·근거·근무일지 질문을 붙이지 않는다.
+  // 4b. 인사·감사(서버 smalltalk)는 답 문장만 — 조치하며 작성·근거·근무일지 질문을 붙이지 않는다.
   const hello = run(`answerBody({question:'안녕', status:'done', ranked:S.chat[0].ranked, response:{answer:'안녕하세요. 설비 이름과 증상을 적어 주세요.', smalltalk:'greet', cited_card_ids:[], safety_notices:[], review_queue:false, no_knowledge:false}})`).text();
   assert.match(hello, /안녕하세요/);
-  assert.doesNotMatch(hello, /조치 시작|참고 매뉴얼|근무일지|해당 지식 없음/);
+  assert.doesNotMatch(hello, /조치하며 작성|참고 매뉴얼|근무일지|해당 지식 없음/);
 
   // 5. 답을 기다리는 동안 두 번째 질문은 보내지 않는다.
   context.api = () => new Promise(() => {});

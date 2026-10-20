@@ -426,9 +426,15 @@ class MesService:
             suggested = spec.component_id if spec and recovery else ""
             drafts = [row for row in self.storage.list_card_drafts() if row["card"].get("mes_equipment_id") == eq.equipment_id]
             field_actions = list(dict.fromkeys(s["action"] for row in drafts for s in row["card"]["type_payload"]["steps"]))[:5]
-            causes = list(dict.fromkeys(line.removeprefix("원인: ") for row in drafts
-                                        for line in (row["card"].get("know_how") or "").splitlines()
-                                        if line.startswith("원인: ")))[:5]
+            # 원인 칩: 현장 카드 초안의 원인, 그다음 이 설비의 지난 사건(저장 이력 + 근무일지 사건)에 적힌 원인
+            past = [*analytics.load_history(self.engine.run.started_at),
+                    *({"equipment_id": eq_id, "causes": rec["record"].get("causes")}
+                      for inc in self.storage.list_incidents(100) for rec in inc["records"]
+                      for eq_id in rec["record"].get("equipment") or [])]
+            causes = list(dict.fromkeys([*(line.removeprefix("원인: ") for row in drafts
+                                           for line in (row["card"].get("know_how") or "").splitlines()
+                                           if line.startswith("원인: ")),
+                                         *analytics.cause_suggestions(past, eq.equipment_id, before.get("alarms") or [])]))[:5]
             return {"session_id": session_id, "before": self._session_view(eq, before),
                     "components": [{"component_id": c["component_id"], "name": c["name"],
                                     "suggested": c["component_id"] == suggested} for c in snap["components"]],
@@ -476,6 +482,36 @@ class MesService:
             self.storage.update_resolution_session(session_id, data)
             return {"order": step["order"], "result_text": step["result_text"], "simulated_at": step["simulated_at"],
                     "mes_linked": linked, "is_synthetic": True}
+
+    def resolution_remove(self, session_id: str, body: dict[str, Any]) -> dict[str, object]:
+        """조치 기록을 지운다 — {"order": n}이면 그 단계, {"all": true}면 전부. MES에 반영된 단계는 설비 상태를
+        되돌릴 수 없으므로 지우지 않는다(전부 지우기에서도 남는다). 남은 단계의 센서 변화는 바로 앞 단계 기준으로 다시 쓴다."""
+        with self._lock:
+            session = self._open_session(session_id)
+            data = session["data"]
+            if not isinstance(body, dict):
+                raise ValueError("body must be an object")
+            if body.get("all") is True:
+                keep = [s for s in data["steps"] if s.get("mes_linked")]
+            else:
+                order = body.get("order")
+                target = next((s for s in data["steps"] if type(order) is int and s["order"] == order), None)
+                if target is None:
+                    raise ValueError("unknown step")
+                if target.get("mes_linked"):
+                    raise ValueError("mes_linked_step")
+                keep = [s for s in data["steps"] if s is not target]
+            eq = field_draft._equipment(self.active_config, session["equipment_id"])
+            previous = data["before"]["measurements"]
+            for i, step in enumerate(keep):
+                step["order"] = i + 1
+                step["result_text"] = field_draft.delta_text(eq, data["watched"], previous, step["measurements"])
+                previous = step["measurements"]
+            data["steps"] = keep
+            data["after"] = data["verdict"] = None
+            self.storage.update_resolution_session(session_id, data)
+            return {"steps": [{key: s.get(key) for key in ("order", "action", "lockout", "result_text", "mes_linked", "card_step")}
+                              for s in keep], "is_synthetic": True}
 
     def _sim_link(self, equipment_id: str, action: str) -> str | None:
         """시뮬레이터 연동(SIM_LINK): PDA에서 MES 복구 단계 칩을 완료하면 MES에도 그 조치를 수행하고,
@@ -917,6 +953,8 @@ class _Handler(BaseHTTPRequestHandler):
                 self._send(200, self.service.resolution_step(parts[3], payload)); return
             if len(parts) == 5 and parts[1:3] == ["api", "resolution"] and parts[4] == "finish":
                 self._send(200, self.service.resolution_finish(parts[3])); return
+            if len(parts) == 5 and parts[1:3] == ["api", "resolution"] and parts[4] == "remove":
+                self._send(200, self.service.resolution_remove(parts[3], payload)); return
             self._send(404, {"error": "not found", "is_synthetic": True})
         except ResolutionSessionNotFound as error:
             self._send(404, {"error": str(error), "is_synthetic": True})

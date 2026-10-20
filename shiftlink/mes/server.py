@@ -425,16 +425,20 @@ class MesService:
             spec = next((s for s in self.active_config.scenarios if s.scenario_id == snap["scenario_id"]), None)
             suggested = spec.component_id if spec and recovery else ""
             drafts = [row for row in self.storage.list_card_drafts() if row["card"].get("mes_equipment_id") == eq.equipment_id]
-            field_actions = list(dict.fromkeys(s["action"] for row in drafts for s in row["card"]["type_payload"]["steps"]))[:5]
-            # 원인 칩: 현장 카드 초안의 원인, 그다음 이 설비의 지난 사건(저장 이력 + 근무일지 사건)에 적힌 원인
+            # 이전 기록 칩·원인 칩: 현장 카드 초안 다음에 이 설비의 지난 사건(저장 이력 + 근무일지 사건)에 적힌 조치·원인.
+            # 고장이 안 걸렸거나 카드가 없는 질문에서도 고를 것이 남게 한다.
             past = [*analytics.load_history(self.engine.run.started_at),
-                    *({"equipment_id": eq_id, "causes": rec["record"].get("causes")}
+                    *({"equipment_id": eq_id, "causes": rec["record"].get("causes"),
+                       "action_steps": rec["record"].get("action_steps")}
                       for inc in self.storage.list_incidents(100) for rec in inc["records"]
                       for eq_id in rec["record"].get("equipment") or [])]
+            alarms = before.get("alarms") or []
+            field_actions = list(dict.fromkeys([*(s["action"] for row in drafts for s in row["card"]["type_payload"]["steps"]),
+                                                *analytics.past_actions(past, eq.equipment_id, alarms)]))[:5]
             causes = list(dict.fromkeys([*(line.removeprefix("원인: ") for row in drafts
                                            for line in (row["card"].get("know_how") or "").splitlines()
                                            if line.startswith("원인: ")),
-                                         *analytics.cause_suggestions(past, eq.equipment_id, before.get("alarms") or [])]))[:5]
+                                         *analytics.cause_suggestions(past, eq.equipment_id, alarms)]))[:5]
             return {"session_id": session_id, "before": self._session_view(eq, before),
                     "components": [{"component_id": c["component_id"], "name": c["name"],
                                     "suggested": c["component_id"] == suggested} for c in snap["components"]],
@@ -575,7 +579,9 @@ class MesService:
             raise ValueError("complete at least one action before saving")
         cause = field_draft._text(res.get("cause"), 200, "cause")
         components = {c["component_id"]: c["name"] for c in self._eq_snapshot(eq.equipment_id)["components"]}
-        if res.get("component_id") not in components:
+        component = res.get("component_id") or ""
+        # 부품이 등록되지 않은 설비(예: PDP·CAU)는 부품 없이 저장한다 — 초안 부품명은 설비 이름이 된다
+        if components and component not in components:
             raise ValueError("component_id must be one of the equipment components")
         if data["verdict"] is None:
             self._finish_session(eq, data)
@@ -583,7 +589,7 @@ class MesService:
         raw = {"question": data["question"], "symptom": res.get("symptom"), "result": res["result"],
                "actions": [{"action": s["action"], "result": s["result_text"]} for s in data["steps"]],
                "verification": data["verdict"]["text"], "evidence": data["before"], "cause": cause,
-               "component_id": res["component_id"], "component_name": components[res["component_id"]],
+               "component_id": component, "component_name": components.get(component, ""),
                "scenario": scenario if scenario in field_draft.SCENARIOS else None,
                "lockout_answers": [{"action": s["action"], "lockout": s["lockout"]} for s in data["steps"] if s["lockout"]]}
         prepared = field_draft.prepare(raw, self.active_config, eq.equipment_id)

@@ -89,6 +89,23 @@ def cause_suggestions(incidents: Iterable[dict[str, Any]], equipment_id: str, al
     return sorted((n for n in score if score[n][2]), key=lambda n: score[n], reverse=True)[:limit]
 
 
+def past_actions(incidents: Iterable[dict[str, Any]], equipment_id: str, alarms: Iterable[str],
+                 limit: int = 5) -> list[str]:
+    """조치 기록의 한 일 칩 후보 — 이 설비의 지난 사건에서 한 조치. 지금 경보와 같은 경보였던 사건 먼저, 그다음 자주 한 순."""
+    alarms, score = set(alarms), {}
+    for inc in incidents:
+        if inc.get("equipment_id") != equipment_id:
+            continue
+        for step in inc.get("action_steps") or []:
+            action = (step.get("action") or "").strip()
+            if not action:
+                continue
+            s = score.setdefault(action, [False, 0])
+            s[0] = s[0] or inc.get("alarm_code") in alarms
+            s[1] += 1
+    return sorted(score, key=lambda a: score[a], reverse=True)[:limit]
+
+
 def _action_name(steps: list[dict[str, Any]]) -> str | None:
     """카드 단계로 한 조치가 있으면 '카드 방법' — 이름을 카드와 단계 번호로(K-1025 1·2·4단계). 없으면 첫 조치."""
     cards = [s["card_step"] for s in steps if s.get("card_step")]

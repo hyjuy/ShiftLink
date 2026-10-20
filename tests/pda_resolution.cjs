@@ -9,12 +9,13 @@ assert.equal(riskyAction(undefined), false);
 
 
 // 저장 전 검사: 본 것·부품·조치(효과 없음 제외)·원인·결과
-const r = {sessionId: 'RS-1', symptom: '쿨러 팬이 멈춰 있음', componentId: 'cooling', steps: [{order: 1}],
+const r = {sessionId: 'RS-1', symptom: '쿨러 팬이 멈춰 있음', componentId: 'cooling', components: [{component_id: 'cooling'}], steps: [{order: 1}],
   cause: '팬 차단기 트립', causeCustom: '', result: 'resolved'};
 assert.equal(resolveError(r), '');
 assert.match(resolveError({...r, sessionId: null}), /시작하지 못했습니다/);
 assert.match(resolveError({...r, symptom: ' '}), /현장에서 본 것/);
 assert.match(resolveError({...r, componentId: ''}), /부품/);
+assert.equal(resolveError({...r, componentId: '', components: []}), '');   // 부품이 등록되지 않은 설비(PDP·CAU)는 묻지 않는다
 assert.match(resolveError({...r, steps: []}), /조치를 하나 이상/);
 assert.equal(resolveError({...r, steps: [], result: 'failed'}), '');
 assert.match(resolveError({...r, cause: '', causeCustom: ' '}), /원인 모름/);

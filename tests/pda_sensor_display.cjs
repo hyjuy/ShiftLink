@@ -44,9 +44,8 @@ context.snapshot = snapshot;
   vm.runInContext(`S.queryResponse = {answer:'확인', evidence:{equipment_id:'EQ-0001',simulated_at:'2026-10-07T06:00:00Z',
     measurements:[{equipment_id:'EQ-0001',signal:'hpu_pressure',value:120,unit:'bar',observed_at:'2026-10-07T06:00:00Z',used_for_conditions:true}]}};
     S.ranked = {safety:[],actions:[],excluded:[]}; answer = answerBody({response:S.queryResponse, ranked:S.ranked});`,context);
-  // 답변 근거는 질의 당시 값을 유지한다. 설비 칸의 현재값과 구분한다.
-  assert.match(context.answer.text(),/질의 당시 MES 센서값/);
-  assert.match(context.answer.text(),/120 bar/);
+  // 질의 당시 센서값은 설비 칸이 보여 주므로 답 근거에 다시 싣지 않는다(사용자 결정 10/20)
+  assert.doesNotMatch(context.answer.text(),/질의 당시|120 bar/);
   assert.doesNotMatch(context.answer.text(),/154\.845/);
   vm.runInContext(`S.eq.type='HPU'; S.cards=[{card_id:'K',equipment:'HPU',conditions:[{signal:'hpu_pressure',op:'<',value:145}]}];
     S.observations=[{signal:'hpu_pressure',value:155,unit:'bar',source:'manual'}];`,context);

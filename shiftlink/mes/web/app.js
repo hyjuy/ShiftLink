@@ -119,7 +119,7 @@
       {title: "안정화 관찰", done, current:plan.stage === "stabilizing"}, {title: "정상 복귀", done}];
     const flow = steps.map((s, i) => `<li class="${s.done ? "done" : ""} ${s.current ? "current" : ""}" ${s.current ? 'aria-current="step"' : ''}><span>${s.done ? "✓" : i + 1}</span><b>${escape(s.title)}</b><small>${s.current ? "현재 단계" : s.done ? "완료" : s.unrecorded ? "조치 기록 없음" : "대기"}</small></li>`).join("");
     const action = plan.stage === "actions" ? plan.actions[next] : null;
-    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 모의 복구 시작을 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · 모의 관찰 ${plan.remaining_ticks}회 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
+    const status = done ? "정상 복귀 완료" : plan.stage === "ready" ? "필수 조치 완료 · 모의 복구를 눌러 안정화 관찰을 시작하세요." : plan.stage === "stabilizing" ? `안정화 관찰 중 · 모의 관찰 ${plan.remaining_ticks}회 남음${snapshot.line_mode === "paused" ? " · 재개 버튼을 누르세요." : ""}` : plan.required === false ? "안내된 조치를 차례로 기록하거나 바로 복귀를 진행할 수 있습니다." : "다음 조치를 완료해야 복귀할 수 있습니다.";
     const held = (snapshot.coils || []).filter(c => c.quality_status === "hold");
     const source = /^https:\/\//.test(plan.source_url || "") ? `<a href="${escape(plan.source_url)}" target="_blank" rel="noopener noreferrer">근거 매뉴얼 ↗</a>` : "";
     return `<div class="recovery-heading"><h3>${escape(plan.title)}</h3>${source}</div><ol class="recovery-flow" aria-label="정상 복귀 단계">${flow}</ol><p class="recovery-status">${escape(status)}</p>${action ? `<div class="next-action"><div><b>${escape(action.title)}</b><p>${escape(action.detail)}</p></div>${interactive ? `<button type="button" class="primary-button" data-action="${escape(action.action_id)}">조치 완료</button>` : '<span class="hint">기록 조회 전용</span>'}</div>` : ""}${interactive && plan.stage === "ready" ? '<button type="button" class="primary-button" data-command="recover">모의 복구 시작 · 안정화 관찰</button>' : ""}${interactive && plan.stage === "actions" && plan.required === false ? '<p class="hint">이 시나리오의 조치는 원인별 절차가 아닌 일반 안내입니다.</p><button type="button" data-command="recover">조치 기록 없이 모의 복구 시작</button>' : ""}${interactive && snapshot.line_mode === "paused" ? '<button type="button" data-command="resume">모의 운전 재개</button>' : ""}${held.length ? `<p class="held-coils">보류 코일 ${held.length}개 · ${held.map(c => escape(c.coil_id)).join(" · ")}</p>` : ""}`;
@@ -216,6 +216,7 @@
     $("#selected-connection").classList.toggle("has-relation", Boolean(relation));
     setText("#selected-connection", relation ? `${relation.from.code || relation.from_id} ${relation.directionSymbol} ${relation.to.code || relation.to_id} · ${relation.label} · ${relation.affected ? "후속 대기 설비" : "구성상 연결 · 원인 확정 아님"}` : selectedId ? `${name(selectedId,config)} 직접 관계와 기본 소재 흐름을 표시합니다. 강조 필터는 선을 숨기지 않습니다.` : "기본 소재 흐름 · 설비를 선택하면 직접 연결된 관계를 추가합니다.");
     setText("#process-story",processMessage(snapshot,config));
+    { const box=$(".map-scroll"); operator.setFlowAspect(document.body.classList.contains("diagram-only") && box?.clientHeight ? box.clientWidth / box.clientHeight : 0); }
     setView("#line-map",operator.flowView(model,"learn",$("#relation-filter").value,selectedRelation));
     setView("#relation-legend",operator.legendView("learn"));
     setView("#diagram-legend-content",operator.legendView("expert"));
@@ -427,7 +428,7 @@
   async function control(command, extra = {}) {
     if (mode !== "live" || controlPending || stale) return;
     controlPending = true; updateControls();
-    try { await request("/api/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ command, ...extra }) }); setText("#control-message", "명령이 적용되었습니다."); }
+    try { await request("/api/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ command, ...extra }) }); setText("#control-message", document.body.classList.contains("diagram-only") ? "" : "명령이 적용되었습니다."); }
     catch (error) { setText("#control-message", `제어 실패 · ${error.message}`); pickedScenarioGroup = null; if (lastSnapshot) renderScenarioPicker(currentConfig(), lastSnapshot.scenario_id); }
     finally { controlPending = false; updateControls(); await refresh(); }
   }
@@ -585,7 +586,7 @@
     if (button.dataset.command === "reset") {
       if (!resetArmed) {
         button.classList.add("attention");   // 주황 테두리 = 한 번 더 누르면 실행
-        setText("#control-message", "새 시뮬레이션을 시작하려면 3초 안에 한 번 더 누르세요. 현재 실행은 이력에 보존됩니다.");
+        setText("#control-message", "초기화하려면 3초 안에 한 번 더 누르세요. 현재 실행은 이력에 보존됩니다.");
         resetArmed = setTimeout(() => disarmReset(button), 3000);
         return;
       }

@@ -411,16 +411,10 @@
   .safety .s-line{display:flex;align-items:baseline;gap:2px 10px;flex-wrap:wrap}
   .safety .ttl{flex:1 1 280px;font-size:18px;font-weight:800;line-height:1.3;color:var(--notice-tx)}
   /* 직전 답 대비 표지 — 바탕을 채워 3m에서도 「추가」「변경」이 눈에 띄게. 빠짐은 점선. */
-  .safety .mark{flex:0 0 auto;font-size:16px;font-weight:800;padding:1px 8px;border-radius:4px;background:var(--notice);color:var(--bg)}
-  .safety.gone{border-left-style:dashed;background:var(--surface)}
-  .safety.gone .mark{background:none;color:var(--tx);border:1px dashed var(--tx-2)}
-  .safety.gone .ttl{color:var(--tx);text-decoration:line-through}
   .safety .basis, .safety-more .basis{margin:0;font-size:16px;line-height:1.4;color:var(--tx)}
   .safety .stop{margin:0;font-size:16px;font-weight:700;color:var(--notice-tx)}
   .safety.invalid{border-left-color:var(--fault-edge);background:var(--fault-bg)}
   .safety.invalid .ttl, .safety.invalid .basis{color:var(--fault-tx)}
-  .safety-cards.compact .safety{padding:6px 12px}
-  .safety-cards.compact .ttl{font-size:16px}
   /* 묶음 하나의 상세 — 카드별 ID·제목·근거 전문·know_how. 카드마다 상세 버튼을 두지 않는다. */
   .safety-more{flex:0 0 auto;border:1px solid var(--notice-edge);border-radius:6px;background:var(--notice-bg)}
   .safety-more > summary{min-height:44px;display:flex;align-items:center;padding:0 12px;font-size:16px;font-weight:700;
@@ -592,7 +586,7 @@
 
 
   #s-face .vf{display:grid;place-items:center;flex:1;min-height:0;margin:0;aspect-ratio:auto}#faceVideo{width:min(464px,70vw);height:min(464px,55vh);border-radius:50%;object-fit:cover;border:3px solid #397F7C}#s-face .scanfoot{align-items:center}#s-face .scanfoot .btn{width:240px}#s-face #faceState{justify-content:center;font-size:18px}#s-face .appbar h1{font-size:20px}
-  .chat-panel #chatPane{flex:1;min-height:0;padding:14px}.chat-panel .chatmes{display:none}.chat-panel .chatfoot{padding:10px;max-height:40%;overflow:auto}.chat-panel .chatin{display:flex;flex-wrap:wrap;gap:8px}.chat-panel .chatin textarea{flex:1;min-width:120px;min-height:48px;max-height:100px}.chat-panel .chatin .btn{width:auto;min-width:64px;padding:8px}.chat-panel .sugg{max-height:120px;overflow:auto}.chat-panel .sugg button{min-height:44px;font-size:13px;padding:8px}.chat-panel .msg,.chat-panel .safety .body,.chat-panel .ans{font-size:14px}.chat-panel .disclaimer{font-size:11px;padding:8px}.chat-panel .safety-head{font-size:13px}.chat-panel .safety-cards.compact .safety{font-size:13px}.chat-panel .chat-cancel{padding:8px}.chat-panel .fold summary{font-size:13px}.chat-panel .ans-next .btn{white-space:normal;font-size:14px}
+  .chat-panel #chatPane{flex:1;min-height:0;padding:14px}.chat-panel .chatmes{display:none}.chat-panel .chatfoot{padding:10px;max-height:40%;overflow:auto}.chat-panel .chatin{display:flex;flex-wrap:wrap;gap:8px}.chat-panel .chatin textarea{flex:1;min-width:120px;min-height:48px;max-height:100px}.chat-panel .chatin .btn{width:auto;min-width:64px;padding:8px}.chat-panel .sugg{max-height:120px;overflow:auto}.chat-panel .sugg button{min-height:44px;font-size:13px;padding:8px}.chat-panel .msg,.chat-panel .safety .body,.chat-panel .ans{font-size:14px}.chat-panel .disclaimer{font-size:11px;padding:8px}.chat-panel .safety-head{font-size:13px}.chat-panel .chat-cancel{padding:8px}.chat-panel .fold summary{font-size:13px}.chat-panel .ans-next .btn{white-space:normal;font-size:14px}
   .status-open{background:#FFF1DE;color:#8B5509}.status-needs_recheck{background:#E9EEF9;color:#3C5686}.status-in_progress{background:#F0E8F8;color:#71428E}.status-closed,.status-withdrawn{background:#E8ECEB;color:#53675E}
 
   /* Figma 1280×800 shell: constrain controls instead of inheriting full-width form buttons. */

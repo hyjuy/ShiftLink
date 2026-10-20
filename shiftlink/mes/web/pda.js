@@ -713,8 +713,8 @@ function chatLine(el, status, bad) {
   el.classList.toggle('bad', bad);
 }
 
-/* 안전 수칙을 관문 색으로 펼칠 때 — MES를 못 읽음·정지·대기·이상·경보·증상 후보·범위 이탈, 또는 안전 카드의
- * 조건이 지금 관측과 맞을 때. 그 밖(정상 가동)에는 접는다. 답 말풍선의 안전 카드는 이 규칙과 무관하게 항상 답 앞(G2). */
+/* 상단 안전 바를 강조색으로 칠할 때 — MES를 못 읽음·정지·대기·이상·경보·증상 후보·범위 이탈, 또는 안전 카드의
+ * 조건이 지금 관측과 맞을 때. 그 밖(정상 가동)에는 기본색이다. 어느 쪽이든 바는 접힌 채이고 자동으로 펼치지 않는다. */
 function safetyAlert(mes, observations, safety) {
   if (!mes) return true;
   if (mes.operating !== 'running' || (mes.fault && mes.fault !== 'normal')) return true;
@@ -1007,16 +1007,11 @@ function rankCards(eq, observations = S.observations) {
 // ── 렌더 ───────────────────────────────────────────────────────────
 /* 안전 항목 한 줄 — 카드 title 원문 그대로(요약·잘라내기 없음)와 서버 공지의 멈춤 조건만 보인다(사용자 결정 10/13).
  * 카드 ID·safety_basis·know_how는 묶음 하나의 「안전수칙 자세히 ▾」(safetyMore)로 간다. 설비 불일치·카드 없음은
- * 접지 않고 경고 문구 그대로 항목에 보인다. opt.mark — 직전 답 대비 「추가」「변경」「빠짐」, opt.noStops — 직전 답과 같을 때. */
-function safetyEl(c, opt) {
-  opt = opt || {};
+ * 접지 않고 경고 문구 그대로 항목에 보인다. */
+function safetyEl(c) {
   const d = document.createElement('div');
-  d.className = 'safety' + (c.mismatch || c.missing ? ' invalid' : '') + (opt.mark === '빠짐' ? ' gone' : '');
+  d.className = 'safety' + (c.mismatch || c.missing ? ' invalid' : '');
   const line = document.createElement('div'); line.className = 's-line';
-  if (opt.mark) {
-    const m = document.createElement('span'); m.className = 'mark'; m.textContent = opt.mark;
-    line.appendChild(m);
-  }
   const ttl = document.createElement('span'); ttl.className = 'ttl';
   if (c.mismatch) {
     ttl.textContent = '설비 불일치 — ' + c.eqCode + '에 해당하지 않는 안전 공지(' + c.card_id + ')';
@@ -1031,7 +1026,7 @@ function safetyEl(c, opt) {
     d.appendChild(p);
   }
   // 서버 공지의 멈춤 조건은 접지 않고 항목 바로 아래에 둔다(사용자 결정 원칙 2).
-  if (!opt.noStops && opt.mark !== '빠짐') (c.mismatch ? [] : (c.stop_conditions || [])).forEach((t) => {
+  (c.mismatch ? [] : (c.stop_conditions || [])).forEach((t) => {
     const p = document.createElement('p');
     p.className = 'stop'; p.textContent = '멈춤 · ' + plain(t);
     d.appendChild(p);
@@ -1068,41 +1063,6 @@ function safetyHead(cards, lead) {
     + ' — 안전 조건을 확인하고 준수한 뒤 작업하세요.';
 }
 
-/* 직전 답 대비 바뀐 점(원칙 5). 같음 = card_id 집합과 각 카드의 멈춤 조건이 모두 같다. */
-const stopKey = (c) => (c.mismatch ? 'x' : '') + JSON.stringify(c.stop_conditions || []);
-function safetyDiff(cards, prev) {
-  const old = (id) => prev.find((p) => p.card_id === id);
-  const mark = (c) => !old(c.card_id) ? '추가' : stopKey(old(c.card_id)) !== stopKey(c) ? '변경' : '';
-  const gone = prev.filter((p) => !cards.some((c) => c.card_id === p.card_id));
-  return {mark: mark, gone: gone, same: !gone.length && cards.every((c) => !mark(c))};
-}
-
-/* 머리 + 짧은 항목 + 「안전수칙 자세히 ▾」 하나. 답·대기 말풍선과 시도 화면이 같은 모양을 쓴다.
- * into(말풍선)를 주면 그 안에 바로 붙인다 — 머리가 말풍선 직계라야 sticky로 말풍선이 보이는 내내
- * pane 위에 고정된다(B1, A3 결정). prev — 직전 답의 안전 카드. 주면 같음 / 추가·변경·빠짐을 표시한다. */
-function safetyGroup(cards, lead, into, prev) {
-  const g = into || document.createElement('div');
-  if (!into) g.className = 'safety-group';
-  const diff = prev ? safetyDiff(cards, prev) : null;
-  const list = document.createElement('div'); list.className = 'safety-cards' + (diff && diff.same ? ' compact' : '');
-  const h = document.createElement('p'); h.className = 'safety-head';
-  if (diff && diff.same) {
-    const bad = cards.filter((c) => c.mismatch).length;
-    h.textContent = '⚠ 안전사항 ' + (cards.length - bad) + '건' + (bad ? ' · 설비 불일치 ' + bad + '건' : '') + ' · 직전 답과 같음';
-    cards.forEach((c) => list.appendChild(safetyEl(c, {noStops: true})));
-  } else {
-    const n = (m) => cards.filter((c) => diff.mark(c) === m).length;
-    h.textContent = safetyHead(cards, lead) + (diff ? ' 직전 답 대비 추가 ' + n('추가') + ' · 변경 ' + n('변경')
-      + ' · 빠짐 ' + diff.gone.length + '건.' : '');
-    cards.forEach((c) => list.appendChild(safetyEl(c, {mark: diff ? diff.mark(c) : ''})));
-    if (diff) diff.gone.forEach((c) => list.appendChild(safetyEl(c, {mark: '빠짐'})));
-  }
-  g.appendChild(h);
-  g.appendChild(list);
-  g.appendChild(safetyMore(cards));
-  return g;
-}
-
 /* 시도 기록 화면의 안전 관문. 띠는 pane 직계로 붙어야 pane 전체 스크롤 동안 고정되므로 상자는
  * display:contents(pda.html .safety-stack). 항목은 짧게, 근거·상세는 묶음 하나로 접는다. */
 function safetyStack(cards) {
@@ -1120,9 +1080,6 @@ function safetyStack(cards) {
 }
 
 
-/* 대화 화면 위 상자 = 현재 설비의 안전 상태(원칙 4). 설비 code·MES 상태(safetyAlert)·이 설비 안전 수칙 건수.
- * 질의 전에는 카드 title 짧은 항목만, 질의가 시작되면 한 줄 상태로 줄인다. 전문(근거·know_how)은 싣지 않는다 —
- * 이 질의의 안전사항과 전문은 답 앞 묶음에 있다. 판정이 그대로면 다시 그리지 않는다. */
 /* 안전 상자 머리의 이유 — 정지·이상·경보·증상 후보·범위 이탈을 구분한다. */
 function safetyReason(hot) {
   const m = S.mes;
@@ -1134,7 +1091,9 @@ function safetyReason(hot) {
   if (m.operating !== 'running') return 'MES 정지 중 · 설비 이상 없음';
   return '범위 이탈 또는 조건 일치';
 }
-/* 안전 수칙은 상단 바 한 곳에서 갱신한다. 사용자가 고른 펼침 상태는 갱신 중에도 유지한다. */
+/* 대화 화면 상단 안전 바 = 현재 설비의 안전 상태(원칙 4). 안전 수칙은 이 한 곳에만 둔다 — 답 앞 묶음은 없다
+ * (사용자 결정 10/19, main dbc796d). 요약은 설비 code·안전 수칙 건수·MES 사유이고, 설비 기본 수칙에 완료된 답의
+ * 안전 카드를 더한다. 기본 접힘이며 사용자가 고른 펼침 상태는 갱신 중에도 유지한다. 판정이 그대로면 다시 그리지 않는다. */
 function renderAskSafety() {
   const box = $('askSafety');
   if (!S.eq) { box.innerHTML = ''; S.safetyView = null; return; }

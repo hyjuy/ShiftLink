@@ -1092,7 +1092,7 @@ function safetyReason(hot) {
   return '범위 이탈 또는 조건 일치';
 }
 /* 대화 화면 상단 안전 바 = 현재 설비의 안전 상태(원칙 4). 안전 수칙은 이 한 곳에만 둔다 — 답 앞 묶음은 없다
- * (사용자 결정 10/19, main dbc796d). 요약은 설비 code·안전 수칙 건수·MES 사유이고, 설비 기본 수칙에 완료된 답의
+ * (사용자 결정 10/19, main dbc796d). 요약은 설비 code·안전 수칙 건수이고(MES 사유 문구는 10/20 뺌), 설비 기본 수칙에 완료된 답의
  * 안전 카드를 더한다. 기본 접힘이며 사용자가 고른 펼침 상태는 갱신 중에도 유지한다. 판정이 그대로면 다시 그리지 않는다. */
 function renderAskSafety() {
   const box = $('askSafety');
@@ -1107,8 +1107,7 @@ function renderAskSafety() {
     });
   });
   const hot = safetyAlert(S.mes, S.observations, cards);
-  const reason = safetyReason(hot);
-  const view = JSON.stringify([S.eq.equipment_id, cards, reason]);
+  const view = JSON.stringify([S.eq.equipment_id, cards, hot]);
   if (view === S.safetyView) return;
   S.safetyView = view;
   box.innerHTML = '';
@@ -1117,7 +1116,8 @@ function renderAskSafety() {
   g.className = 'safety-group safety-fold' + (hot ? ' hot' : '');
   g.addEventListener('toggle', () => { S.safetyOpen = g.open; });
   const h = document.createElement('summary'); h.className = 'safety-head';
-  h.textContent = S.eq.code + ' · 안전 수칙 ' + cards.filter((c) => !c.mismatch).length + '건 · ' + reason;
+  // MES 상태 문구는 붙이지 않는다 — 설비 칸이 보여 주고, 바 색(hot)으로 강조한다(사용자 결정 10/20).
+  h.textContent = S.eq.code + ' · 안전 수칙 ' + cards.filter((c) => !c.mismatch).length + '건';
   g.appendChild(h);
   const content = document.createElement('div'); content.className = 'safety-content';
   cards.forEach((c) => content.appendChild(safetyEl(c)));
@@ -1290,9 +1290,8 @@ function answerBody(turn) {
     d.appendChild(ask);
   } else d.appendChild(record);
   const ids = r.actions.map((x) => x.card.card_id);
-  const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
-    ? (res.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id) : [];
-  if (!ids.length && !r.excluded.length && !evidence.length) return d;
+  // 질의 당시 센서값은 싣지 않는다 — 같은 화면의 설비 칸이 보여 준다(사용자 결정 10/20).
+  if (!ids.length && !r.excluded.length) return d;
   const more = document.createElement('details');
   more.className = 'basis-detail';
   const sum = document.createElement('summary');
@@ -1300,12 +1299,6 @@ function answerBody(turn) {
   sum.querySelector('span').textContent = ids.length ? '참고 매뉴얼 보기' : '답변 근거 보기';
   sum.querySelector('small').textContent = ids.join(' · ');
   more.appendChild(sum);
-  if (evidence.length) {
-    const label = document.createElement('p'); label.className = 'lbl';
-    label.textContent = '질의 당시 MES 센서값 · ' + clock(res.evidence.simulated_at);
-    more.appendChild(label);
-    renderSensorReadings(more, evidence, undefined, 'ev' + turn.id);
-  }
   // 시도 기록은 마지막 답에만 이어진다(시도 화면이 S.ranked 를 쓴다).
   const triedIds = turn === lastAnswer() ? S.tries.map((t) => t.card_id) : [];
   r.actions.forEach((x, i) => more.appendChild(actionEl(x, i + 1, triedIds.indexOf(x.card.card_id) !== -1)));
@@ -1368,7 +1361,7 @@ function liveRisky(live) { return riskyAction(live.action) || !!(live.card && li
 function resolveError(r) {
   if (!r.sessionId) return '조치 기록을 시작하지 못했습니다. 이전으로 돌아가 다시 시도해 주세요.';
   if (!r.symptom.trim()) return '현장에서 본 것을 한 줄 적어 주세요.';
-  if (!r.componentId) return '부품을 골라 주세요.';
+  if (!r.componentId && (r.components || []).length) return '부품을 골라 주세요.';   // 부품이 등록되지 않은 설비는 묻지 않는다
   if (r.result !== 'failed' && !r.steps.length) return '조치를 하나 이상 완료해 주세요.';
   if (!(r.cause || r.causeCustom.trim())) return '원인을 골라 주세요. 모르면 "원인 모름"을 누릅니다.';
   if (!r.result) return '결과를 골라 주세요.';
@@ -1452,7 +1445,8 @@ function renderResolve() {
   $('resWork').hidden = r.phase !== 'work';
   $('resWrap').hidden = r.phase !== 'wrap';
   $('resSave').hidden = r.phase !== 'wrap';
-  // 부품
+  // 부품 — 등록되지 않은 설비는 칸을 숨긴다
+  $('resComponentsLbl').hidden = $('resComponents').hidden = !r.components.length;
   $('resComponents').replaceChildren(...r.components.map((c) => chip(c.name, r.componentId === c.component_id,
     () => { r.componentId = c.component_id; renderResolve(); }, c.suggested ? 'MES 추천' : '')));
   // 끝낸 조치

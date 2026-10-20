@@ -38,6 +38,19 @@ def test_cause_suggestions_rank_same_alarm_then_confirmed():
     assert analytics.cause_suggestions(incidents, "EQ-1", ["AL-A"], limit=1) == ["스케일"]
 
 
+def test_past_actions_rank_same_alarm_then_frequency():
+    s = lambda action: {"action": action, "observed_result": ""}
+    incidents = [
+        {"equipment_id": "EQ-1", "alarm_code": "AL-B", "action_steps": [s("자주 한 조치"), s(" ")]},
+        {"equipment_id": "EQ-1", "alarm_code": "AL-B", "action_steps": [s("자주 한 조치")]},
+        {"equipment_id": "EQ-1", "alarm_code": "AL-A", "action_steps": [s("같은 경보 조치")]},
+        {"equipment_id": "EQ-2", "alarm_code": "AL-A", "action_steps": [s("다른 설비")]},
+        {"equipment_id": "EQ-1", "alarm_code": None},
+    ]
+    assert analytics.past_actions(incidents, "EQ-1", ["AL-A"]) == ["같은 경보 조치", "자주 한 조치"]
+    assert analytics.past_actions(incidents, "EQ-1", []) == ["자주 한 조치", "같은 경보 조치"]
+
+
 def _summary(extra=(), now=END):
     return analytics.summary([*analytics.load_history(END), *extra], RELATIONS, now, route=ROUTE, standard=STANDARD)
 

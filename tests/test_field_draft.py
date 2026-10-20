@@ -534,6 +534,22 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertEqual([s['action'] for s in out], ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
         self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 3)
 
+    def test_equipment_without_components_still_suggests_and_saves(self):
+        # PDP-01은 부품이 등록되지 않았고 고장도 없다 — 한 일 칩은 지난 사건의 조치에서, 부품 없이 저장된다
+        out = self.service.resolution_start({'equipment_id': 'EQ-0002', 'question': '대형 모터 기동 시 버스 전압이 순간 강하해요'})
+        self.assertEqual(out['components'], [])
+        past = [a['text'] for a in out['action_suggestions'] if a['source'] == 'field_record']
+        self.assertTrue(past, 'past incidents of PDP-01 give action chips')
+        sid = out['session_id']
+        self.service.resolution_step(sid, {'action': '부하 분산 확인'})
+        saved = self.service.record_handover({'handover_id': 'HO-PDP-1', 'memo_text': '조치 기록', 'equipment_id': 'EQ-0002',
+            'resolution': {'session_id': sid, 'symptom': '전압 순간 강하', 'cause': '원인 모름', 'component_id': '', 'result': 'temporary'}})
+        self.assertIn('draft', saved)
+        hpu = self.start()['session_id']
+        self.service.resolution_step(hpu, {'action': '쿨러 팬 소리 확인'})
+        with self.assertRaisesRegex(ValueError, 'component_id'):   # 부품이 있는 설비는 여전히 고르게 한다
+            self.save(hpu, handover_id='HO-RS-x', component_id='')
+
     def test_start_without_query_falls_back_to_snapshot(self):
         self.overheat()
         out = self.start(with_query=False)

@@ -29,3 +29,11 @@
 5. 연구 후보 통과는 양팔 모두 기존 gate_failures로 matched v4 IF와 EWMA3 대비 탐지·false 시작·오진 시간·p95·설비/유형별 악화가 없고, 적합/관측 보류/비유한 점수 문제가 없으며, matched v4 IF 대비 탐지 증가 또는 오진 설비초 감소가 하나 이상 있어야 한다. robust z6은 동일 표에 보조 기준으로 제시한다. 실패하면 보류하고 재튜닝하지 않는다.
 
 테스트를 먼저 실패시킨 뒤 새 비교 스크립트를 구현한다. 관련 회귀·새 코드 coverage와 독립 결과 검토를 기록한다. 정상 running 단일 모드·합성 지문·정답 기반 정상 선택·짧은 시간·창 자기상관·반복 연구 선택의 한계는 유지한다.
+
+## 실행 전 정정 — 공유 작업 폴더의 동시 변경
+
+모델 점수 계산 전, 기존 pattern의 config_id 검사에서 중단됐다. 실행 도중 다른 작업이 engine.py(시료 관측 시각), signal_dynamics.py(60초 캐시), signal_semantics.py(시료 설명)를 바꿨다. 새 구성 `23e0e6b3aa6f073857d48e81fd7430068ee40ca2f0cfe77147bae37741a0b036`과 기존 구성 `3713bf5f3e0f9ef808ff264ea1fa12dee6ded2b97ac4b549816c275c7f568900`을 섞지 않는다. config_id는 생성기 난수 nonce에도 들어간다.
+
+기존 DB의 구성 payload를 읽기 전용으로 복원해 해시를 확인했다. 구성 차이는 5개 수동 시료의 applicability 문구뿐이지만 실제 시료 생성 동작도 별도로 바뀌었다. 처음 만든 `mes-fault-coherent-v7-seed1371-20261021`, `mes-fault-weak-v7-seed1371-20261021`는 **구성 불일치로 미평가**이며 보존한다.
+
+운영 작업 파일은 수정하지 않는다. `output/mes-training-source-runtime-20261021/`에 관련 Python 소스와 카탈로그를 복사하고, 위 3개 파일만 Git HEAD의 이전 수집 동작으로 고정한다. 나머지 기존 연구 코드와 작업 중 random_factory는 복사 시점의 해시를 고정한다. 이 별도 프로세스에서 기존 구성 해시와 기존 v7 factual replay를 다시 확인한 뒤, 동일 시드·조건의 새 폴더 `mes-fault-coherent-v7-seed1371-frozen-20261021`, `mes-fault-weak-v7-seed1371-frozen-20261021`를 생성한다. 코드 스냅숏 provenance를 보존한다. 학습/채점 설계·임계값·판정은 그대로다. 미평가 생성 시드 재사용이며 결과를 보고 시드를 고른 것이 아니다.

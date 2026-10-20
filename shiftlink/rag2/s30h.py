@@ -23,6 +23,7 @@ from . import evidence_score as E
 from . import generate as G
 from .embed import prefixes, slug
 from .retrieve import COMMON_FOLDERS, load
+from .source_conditions import with_source_conditions
 
 LO, HI, T = 0.3, 0.9, 0.35277185049977805   # preregistered 10/15; never round T
 CFG = G.CONFIGS["C"]
@@ -72,7 +73,7 @@ class S30hPipeline:
     answer_mode = "s30h"
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
-                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None):
+                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -86,6 +87,7 @@ class S30hPipeline:
         G.GEN_MODEL, G.KEEP_ALIVE, E.KEEP_ALIVE = answer_model, -1, -1
         # the MES passes loader KnowledgeCard models; tests pass plain dicts
         self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
+        self.source_conditions = source_conditions
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type = {}
@@ -148,9 +150,13 @@ class S30hPipeline:
         abstain = res["abstain"] or (route == "model" and out.get("p_insuff") is not None and out["p_insuff"] >= T)
         cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"]]
         answer = ""
+        condition_cards = []
         if not abstain:
             labels = list(dict.fromkeys(source_label(r) for r in cited))
-            answer = re.sub(r"\s*\[S\d+\]", "", res["answer"]).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+            answer = res["answer"]
+            if self.source_conditions:
+                answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
+            answer = re.sub(r"\s*\[S\d+\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))
@@ -160,6 +166,8 @@ class S30hPipeline:
         tool_results = {"answer_mode": "s30h", "mes_lines": mes, "route": route, "candidates": [r["chunk_id"] for r in ev],
                         "judge_p": [round(s, 4) for s in scores], "kept": [r["chunk_id"] for r in ev2],
                         "p_insuff": out.get("p_insuff"), "abstain_reason": reason, "seconds": round(time.time() - t0, 2)}
+        if self.source_conditions:
+            tool_results["source_condition_cards"] = condition_cards
         return SimpleNamespace(mode="query", output=output, tool_results=tool_results)
 
     def warm(self, attempts=30, wait_s=10.0, sleep=time.sleep) -> list[str]:

@@ -94,6 +94,41 @@ def test_model_route_answers_below_threshold(pipe, monkeypatch):
     assert r.output.answer == "152 bar 확인\n근거: hpu_manual p.12"
 
 
+@pytest.mark.parametrize("probability", [None, S.T - 1e-9, S.T])
+def test_source_conditions_are_opt_in_and_do_not_change_route_or_abstention(pipe, monkeypatch, probability):
+    from shiftlink.rag2.source_conditions import NOTICE
+    cards = json.loads(S.ROOT.joinpath("docs/data/knowledge_cards/kb/kb_cards.json").read_text(encoding="utf-8"))["cards"]
+    card = next(c for c in cards if c["card_id"] == "K-1027")
+    ev = [chunk("card_K-1027", "card", "K-1027", "GR", text=card["know_how"])]
+    pipe.cards = [card]
+    monkeypatch.setattr(pipe, "evidence", lambda q, eq: ev)
+    judged(monkeypatch, {"card_K-1027": 0.95 if probability is None else 0.6})
+    calls = []
+    def fake(*args, **kwargs):
+        calls.append((args, kwargs))
+        return answer("누유를 확인합니다 [S1]", ["S1"], probability)
+    monkeypatch.setattr(G, "ask_raw", fake)
+    monkeypatch.setattr(G, "ask", fake)
+    payload = {"question": "누유", "eq_id": "EQ-0004"}
+    baseline = pipe.run(payload)
+    assert "수행 조건" not in baseline.output.answer
+    pipe.source_conditions = True
+    candidate = pipe.run(payload)
+    assert len(calls) == 2 and calls[0] == calls[1]
+    assert candidate.tool_results["route"] == baseline.tool_results["route"]
+    assert candidate.tool_results["p_insuff"] == baseline.tool_results["p_insuff"]
+    assert candidate.output.no_knowledge == baseline.output.no_knowledge
+    assert candidate.output.cited_card_ids == baseline.output.cited_card_ids
+    assert candidate.output.safety_notices == baseline.output.safety_notices
+    if probability == S.T:
+        assert candidate.output.answer == "" and candidate.tool_results["source_condition_cards"] == []
+    else:
+        assert NOTICE in candidate.output.answer and "[S" not in candidate.output.answer
+        assert "재기동을 막은 뒤" in candidate.output.answer
+        assert candidate.output.answer.endswith("누유를 확인합니다\n근거: K-1027")
+        assert candidate.tool_results["source_condition_cards"] == ["K-1027"]
+
+
 def test_nothing_kept_abstains_without_a_model_call(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.29, "c2": 0.0, "c4": 0.1})
     monkeypatch.setattr(G, "ask", lambda *a, **k: pytest.fail("no model call when every chunk is dropped"))
@@ -141,6 +176,16 @@ def test_mes_builds_s30h_and_warms_its_three_models(pipe, tmp_path, monkeypatch)
     monkeypatch.setattr(built, "_post", lambda host, path, body, timeout=300: posts.append((host, path, body["model"], body["options"])))
     assert Q.warm_models(built) == ["exaone-sft-judge", "exaone-rag-aug-ck106", "embeddinggemma:300m"]   # judge first
     assert posts[0][0] == "http://judge:11436" and posts[0][3] == {"num_ctx": 2048} and posts[2][3] == {"num_gpu": 0}
+
+
+@pytest.mark.parametrize("flag,enabled", [(None, False), ("0", False), ("1", True)])
+def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
+    monkeypatch.setenv("SHIFTLINK_ANSWER_MODE", "s30h")
+    monkeypatch.setenv("SHIFTLINK_S30H_INDEX", str(tmp_path))
+    monkeypatch.delenv("SHIFTLINK_S30H_SOURCE_CONDITIONS", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_SOURCE_CONDITIONS", flag)
+    assert Q.build_query_pipeline().source_conditions is enabled
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

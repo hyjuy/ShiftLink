@@ -1,5 +1,4 @@
 """Training source ablation must keep preprocessing, budgets, and test sealing."""
-import copy
 import json
 import tempfile
 import unittest
@@ -36,6 +35,12 @@ class TrainingSourceTests(unittest.TestCase):
         samples, diagnostic = matched_samples(a, b)
         self.assertEqual(len(samples["reference"]["EQ"]), 130)
         self.assertGreaterEqual(diagnostic["EQ"]["reference"]["selected_keys"][0][1], 28)
+
+    def test_healthy_spans_split_on_sequence_gaps_and_runs(self):
+        value = entry()
+        value["keys"] = [("a", i + 8 if i < 60 else i + 30) for i in range(120)]
+        _, diagnostic = matched_samples({"EQ": value}, {"EQ": value})
+        self.assertEqual(diagnostic["EQ"]["reference"]["available_healthy_spans"], 2)
 
     def test_bad_count_dimension_and_nonfinite_inputs_fail(self):
         with self.assertRaisesRegex(ValueError, "100"):

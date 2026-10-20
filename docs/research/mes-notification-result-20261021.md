@@ -44,6 +44,8 @@
 
 신규 runner도 실행 전에 실제 runtime provenance SHA와 개발 결과의 SHA 연결, 실제 D16 캐시 SHA 연결, 시작 시 출력 존재 거부를 추가했다. 후보 소스 SHA는 `a6713dc608c5baeb75c15db3f9c50f035b8668392a9c7378ee2f96a966042203`다. 재구성한 정상 통계 SHA는 `55f9d4cd7afa9eaef6969a81fd1e78dbcb93f5bf1be55f375a5ebc74a678019a`다. 생성·점수 확인 뒤 후보 수정이나 quiet/threshold 검색은 하지 않았다.
 
+[신규 확인의 독립 감사](../../output/mes-notification-independent-audit-20261021.json)도 통과했다. 검토자는 원래2371 train 통계로 결정적 EWMA를 재구성해 정상 통계 해시, raw 경보 해시, 개별 사건의 첫 알림 시각, 설비/run별 집계, 1~2초 억제 간격, 3초 유효 quiet 종료와 모든 prefix/소스 해시를 확인했다. 신규 적합·score()·튜닝·test 읽기는 없었다. 첫 감사의 도구 출력이 유실되어 같은 감사를 출력 회수 목적으로 반복했으며 신규 실험 선택에는 쓰지 않았다.
+
 개발 재현은 기존 출력과 다른 이름을 쓴다. 새 평가를 추가로 선택하는 목적이 아니라 고정 결과 재현용이다.
 
 ```powershell

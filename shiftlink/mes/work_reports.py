@@ -62,6 +62,8 @@ def validate(body, known_ids, config=None):
             raise ValueError('기록 구분을 확인해 주세요.')
         if 'capture_version' in record:
             validate_capture(record)
+            if not record.get('occurred_at'):
+                raise ValueError('발생시각을 입력해 주세요.')
         if 'query_id' in record:
             _text(record['query_id'], '질문 ID', 64, True)
         if 'incident_id' in record:
@@ -90,6 +92,21 @@ def validate(body, known_ids, config=None):
             _text(record['normal_run_evidence'],'정상 운전 확인 근거')
         if type(record.get('candidate')) is not bool:
             raise ValueError('지식카드 후보 표시를 확인해 주세요.')
+        if 'auto_candidate' in record and type(record['auto_candidate']) is not bool:
+            raise ValueError('지식카드 자동 판단 설정을 확인해 주세요.')
+        for key in ('interpretation','interpretation_basis','condition_signal','condition_value',
+                    'condition_unit','condition_method','condition_result','condition_observed_at','safety_action','safety_basis'):
+            if key in record:_text(record[key],key)
+        if 'condition_op' in record and record['condition_op'] not in ('','==','!=','>','>=','<','<='):
+            raise ValueError('운전 조건 비교 방식을 확인해 주세요.')
+        if record.get('condition_observed_at'):
+            _text(record['condition_observed_at'],'운전 조건 측정시각',40,True)
+            if not record.get('condition_signal') or not record.get('condition_value'):
+                raise ValueError('운전 조건의 MES 측정값을 확인해 주세요.')
+            try:
+                datetime.fromisoformat(record['condition_observed_at'])
+            except ValueError:
+                raise ValueError('운전 조건 측정시각을 확인해 주세요.') from None
         for key in ('result', 'pms'):
             if record.get(key) is not None:
                 _text(record[key], key)
@@ -110,6 +127,16 @@ def validate(body, known_ids, config=None):
                 eq=next((eq for eq in config.equipment if eq.equipment_id==reference['equipment_id']),None) if config else None
                 if reference['equipment_id'] not in record['equipment'] or eq is None or not any(sensor.signal==reference['signal'] for sensor in eq.signals):
                     raise ValueError('해당 기록의 설비에 등록된 센서를 선택해 주세요.')
+            reading=cause.get('sensor_reading')
+            if reading is not None:
+                if reference is None or not isinstance(reading,dict) or set(reading)!={'value','unit','observed_at'} or type(reading['value']) not in (int,float) or not isfinite(reading['value']):
+                    raise ValueError('선택한 센서의 측정값을 확인해 주세요.')
+                _text(reading['unit'],'측정 단위',100,True)
+                _text(reading['observed_at'],'측정시각',40,True)
+                try:
+                    datetime.fromisoformat(reading['observed_at'])
+                except ValueError:
+                    raise ValueError('센서 측정시각을 확인해 주세요.') from None
     if 'form_version' in report:
         if type(report['form_version']) is not int or report['form_version'] != 2:
             raise ValueError('지원하지 않는 근무일지 양식입니다.')
@@ -125,7 +152,9 @@ RESTART_TYPES = ('normal_stop_restart','abnormal_stop_restart','maintenance_rest
 
 def has_incident(record):
     return record['type'] in FAULT_TYPES or (record['type']=='PMS 정비' and record.get('capture_version')==1
-                                           and (record.get('restart_performed') is True or record.get('candidate') is True))
+                                           and (record.get('restart_performed') is True or record.get('candidate') is True)) or (
+        record.get('auto_candidate') is True and (observation_kind(record) is not None or
+        any(step['action'].strip() or step['observed_result'].strip() for step in record.get('action_steps',[]))))
 
 
 def validate_capture(record):
@@ -149,7 +178,7 @@ def validate_capture(record):
                     raise ValueError('조치시각의 날짜와 시간을 확인해 주세요.') from None
     if type(record.get('restart_performed')) is not bool or record.get('restart_type') not in RESTART_TYPES:
         raise ValueError('재가동 여부와 정지 구분을 확인해 주세요.')
-    for key in ('operating_context','safety_notes','follow_up','references'):
+    for key in ('operating_context','safety_notes','follow_up','remaining_issue','next_check','next_check_at','references'):
         _text(record.get(key,''),key)
     if record['type'] in (*FAULT_TYPES,'PMS 정비') and record.get('outcome') not in OUTCOMES:
         raise ValueError('조치 상태를 선택해 주세요.')
@@ -201,10 +230,86 @@ def capture_candidate_from(record, config, report_id, record_index, card_id, now
     risk=record.get('safety_notes','')
     flags={'work_report':{'handover_id':report_id,'record_index':record_index},'normal_operation':normal,
            'action_steps':steps,'reported_causes':record['causes'],'operating_context':record.get('operating_context',''),
+           'observations':observation_evidence(record),
            'references':record.get('references',''),'safety_report':{'text':risk,'status':'needs_document_review' if risk else 'not_reported'},
            'needs_safety_review':bool(risk) or any(word in card['know_how'] for word in field_draft.SAFETY_WORDS),
            'scenario_default':'S1 기본 분류·검토 필요','lint':lint_card(card,known_fields=set(KnowledgeCard.model_fields)),
            'completeness':{'missing':[],'operator':['재사용 타당성·적용 조건·안전 근거 판정'],'ready':False}}
+    return {'status':'pending_review','card':card,'review_flags':flags}
+
+
+def observation_evidence(record):
+    return {key:record[key] for key in ('interpretation','interpretation_basis','condition_signal','condition_op',
+            'condition_value','condition_unit','condition_observed_at','condition_method','condition_result','safety_notes','safety_action','safety_basis')
+            if record.get(key)}
+
+
+def condition_action_evidence(record):
+    """Reuse completed action steps; older reports can keep their dedicated T2 text."""
+    if record.get('condition_method') and record.get('condition_result'):
+        return record['condition_method'],record['condition_result']
+    steps=[step for step in record.get('action_steps',[]) if step.get('action','').strip()
+           and step.get('observed_result','').strip() and not step.get('failed')]
+    return ('\n'.join(step['action'] for step in steps),
+            '\n'.join(step['observed_result'] for step in steps))
+
+
+def observation_kind(record):
+    kinds = observation_kinds(record)
+    return next((kind for kind in kinds if not observation_missing(record, kind)), kinds[0] if kinds else None)
+
+
+def observation_kinds(record):
+    present={'T5':any(record.get(key) for key in ('safety_notes','safety_action','safety_basis')),
+             'T2':any(record.get(key) for key in ('condition_signal','condition_value','condition_method','condition_result')),
+             'T1':bool(record.get('interpretation') or record.get('interpretation_basis'))}
+    return [kind for kind in ('T1', 'T2', 'T5') if present[kind]]
+
+
+def observation_missing(record, kind):
+    fields={'T1':('interpretation','interpretation_basis'),
+            'T2':('condition_signal','condition_op','condition_value'),
+            'T5':('safety_notes','safety_action','safety_basis')}[kind]
+    missing=[key for key in fields if not str(record.get(key) or '').strip()]
+    if kind=='T2':
+        method,result=condition_action_evidence(record)
+        if not method:missing.append('조치 단계')
+        if not result:missing.append('조치 후 결과')
+    return missing + (
+        ['후보 대상 설비 한 대'] if len(record['equipment'])!=1 else [])
+
+
+def observation_candidate_from(record, config, report_id, record_index, card_id, now, kind):
+    """Build an unapproved draft only from the worker's explicit observation and evidence."""
+    eq=next(eq for eq in config.equipment if eq.equipment_id==record['equipment'][0])
+    if kind=='T1':
+        know_how,rationale,conditions=record['interpretation'],record['interpretation_basis'],[]
+    elif kind=='T2':
+        know_how,rationale=condition_action_evidence(record)
+        conditions=[{'signal':record['condition_signal'],'op':record['condition_op'],
+                     'value':record['condition_value'],'unit':record.get('condition_unit') or None}]
+    else:
+        know_how,rationale,conditions=record['safety_action'],record['safety_notes'],[]
+    card={'card_id':card_id,'version':'1','grade':'L0','status':'draft','tacit_type':kind,
+          'equipment':eq.code.split('-')[0],'component':eq.name,'mes_equipment_id':eq.equipment_id,
+          'scenario':'S1','title':f"[근무일지 후보] {eq.code} — {record['story']}"[:80],
+          'symptom':record['story'] if kind=='T1' else None,
+          'know_how':know_how,'rationale':rationale,'conditions':conditions,
+          'safety_flag':kind=='T5','safety_basis':record.get('safety_basis') if kind=='T5' else None,
+          'confidence':0.0,'split':'dev','provenance':{
+              'seed_ids':[],'persona_id':'field-work-report','event_ids':[],
+              'generator':'work-report-observation-v1','generated_at':now.isoformat(),
+              'extraction_method':'rule','schema_version':field_draft.SCHEMA_VERSION,
+              'sources':[{'source_id':report_id,'locator':f'work_report.records[{record_index}]'}]}}
+    card=KnowledgeCard.model_validate(card).model_dump(mode='json')
+    flags={'work_report':{'handover_id':report_id,'record_index':record_index},
+           'reported_causes':record['causes'],
+           'observations':observation_evidence(record),
+           'safety_report':{'text':record.get('safety_notes',''),'status':'needs_document_review' if kind=='T5' else 'not_reported'},
+           'needs_safety_review':kind=='T5',
+           'scenario_default':'S1 기본 분류·검토 필요',
+           'lint':lint_card(card,known_fields=set(KnowledgeCard.model_fields)),
+           'completeness':{'missing':[],'operator':['재사용 타당성·적용 조건·근거 검토'],'ready':False}}
     return {'status':'pending_review','card':card,'review_flags':flags}
 
 
@@ -255,7 +360,9 @@ def handover_candidate_from(chain, config, card_id, now):
             *(f"원인({c['certainty']}): {c['note']}" for c in r.get('causes',[])),
             *(f"{step_worker_time(s)}\n조치: {s['action']} → 결과: {s['observed_result']}" for s in r.get('action_steps',[]) if s['action'].strip() or s['observed_result'].strip()),
             *([f"조치: {r['solution']}"] if not r.get('capture_version') and r.get('solution') else []),
-            f"결과: {r.get('result') or '미기재'}",f"후속 확인: {r.get('follow_up') or '미기재'}"]))
+            f"결과: {r.get('result') or '미기재'}",f"후속 확인: {r.get('follow_up') or '미기재'}",
+            *(f"{label}: {r[key]}" for key,label in (('remaining_issue','남은 문제'),('next_check','다음 확인 내용'),
+                ('next_check_at','확인 시점')) if r.get(key))]))
     card.update(tacit_type='T4',title=f"[인계 사례 후보] {first['record']['story']}"[:80],know_how='\n\n'.join(history),
         type_payload={'handover_method':{
             'required_context':[first['record']['story'],*history],

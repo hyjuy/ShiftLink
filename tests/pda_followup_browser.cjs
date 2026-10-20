@@ -115,9 +115,12 @@ const {chromium}=require('playwright');
   }
   await page.setViewportSize({width:1280,height:900});
   await page.getByRole('button',{name:'이전 기록 보기',exact:true}).click();
-  await page.waitForFunction(()=>S.screen==='dutyDetail');
-  assert.match(await page.locator('#dutyPane').innerText(),/압력 저하/);
-  await page.evaluate(()=>goBack());
+  await page.locator('#reportPreviousDialog').waitFor({state:'visible'});
+  assert.equal(await page.evaluate(()=>S.screen),'reportWrite');
+  assert.match(await page.locator('#reportPreviousBody').innerText(),/압력 저하/);
+  assert.equal(await page.locator('#reportPreviousBody .incident-actions').count(),0);
+  await page.getByRole('button',{name:'닫기',exact:true}).click();
+  assert.equal(await page.evaluate(()=>S.screen),'reportWrite');
   assert.equal(await page.locator('[data-key="worker"]').inputValue(),'지원 근무자');
   await page.locator('[data-key="story"]').fill('필터 막힘 확인');
   assert.equal(followup.capture_version,1);assert.equal(followup.candidate,true);
@@ -149,6 +152,11 @@ const {chromium}=require('playwright');
   assert.match(await page.locator('#dutyPane').innerText(),/필터 점검/);
   // Existing drafts survive another handover, and unsent payloads cannot be changed by it.
   await page.getByRole('button',{name:'이어서 기록',exact:true}).click();
+  await page.locator('#reportFollowupChoice').waitFor({state:'visible'});
+  await page.getByRole('button',{name:'취소',exact:true}).click();
+  assert.equal(await page.evaluate(()=>S.screen),'dutyDetail');
+  await page.getByRole('button',{name:'이어서 기록',exact:true}).click();
+  await page.getByRole('button',{name:'유지하고 계속 기록',exact:true}).click();
   await page.waitForFunction(()=>S.screen==='reportWrite');
   assert.equal(await page.evaluate(()=>S.reportRecords.length),1);
   assert.equal(await page.evaluate(()=>S.reportRecords[0].normal_run_minutes),120);

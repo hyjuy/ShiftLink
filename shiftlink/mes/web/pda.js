@@ -1406,9 +1406,9 @@ function resolveWarn(text) { $('resWarn').hidden = !text; $('resWarn').textConte
 
 async function openResolve(turn) {
   S.res = {turn: turn, sessionId: null, before: null, components: [], actions: [], causes: [CAUSE_UNKNOWN],
-    steps: [], live: null, phase: 'work', verdict: null, symptom: '', componentId: '', cause: '', causeCustom: '',
+    steps: [], live: null, phase: 'work', verdict: null, symptom: String(turn.question || '').slice(0, 1000), componentId: '', cause: '', causeCustom: '',
     result: null, busy: true};
-  $('resSymptom').value = ''; $('resCustom').value = ''; $('resCauseCustom').value = '';
+  $('resSymptom').value = S.res.symptom; $('resCustom').value = ''; $('resCauseCustom').value = '';
   resolveWarn('');
   renderResolve();
   show('resolve');
@@ -1440,15 +1440,33 @@ function renderResolve() {
   [...$('resFlow').children].forEach((li, i) => {
     if (i === (r.phase === 'wrap' ? 1 : 0)) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
   });
-  // 끝은 근무일지 — 마무리 뒤에는 「근무일지 작성」이 주 행동, 「인계와 함께 저장」은 보조
-  $('resToReport').className = 'btn ' + (r.phase === 'wrap' ? 'primary' : 'sm');
+  $('resEquipment').textContent = S.eq ? S.eq.code : '';
+  const before = r.before;
+  $('resBefore').textContent = before ? [before.simulated_at ? stamp(before.simulated_at) : '',
+    ...(before.out_of_range || []).map(m => m.name + ' ' + m.value + ' · ' + (m.state === 'low' ? '낮음' : '높음')),
+    (before.alarms || []).length ? '경보 ' + before.alarms.join(', ') : '경보 없음'].filter(Boolean).join(' · ')
+    : r.busy ? 'MES 기록을 불러오고 있습니다…' : 'MES 기록을 불러오지 못했습니다.';
+  $('resToReport').hidden = r.phase !== 'wrap';
+  $('resToReport').disabled = r.busy || !!r.live || !r.sessionId;
+  $('resFinish').hidden = r.phase !== 'work' || !!r.live;
+  $('resAlternative').hidden = r.phase !== 'wrap';
+  $('resCompleted').hidden = !r.steps.length;
+  $('resCompletedTitle').textContent = '완료한 조치 · ' + r.steps.length + '건';
+  $('resStatus').textContent = r.live ? '실제 작업을 마친 뒤 완료를 기록해 주세요.'
+    : r.phase === 'wrap' ? '조치와 결과를 근무일지에서 검토한 뒤 저장합니다.'
+    : r.steps.length ? '조치를 더 기록하거나 결과를 확인하세요.' : '조치를 하나 이상 완료하면 결과를 확인할 수 있습니다.';
   $('resWork').hidden = r.phase !== 'work';
   $('resWrap').hidden = r.phase !== 'wrap';
   $('resSave').hidden = r.phase !== 'wrap';
-  // 부품 — 등록되지 않은 설비는 칸을 숨긴다
+  // 부품은 하나만 선택하므로 목록 하나로 제공한다.
   $('resComponentsLbl').hidden = $('resComponents').hidden = !r.components.length;
-  $('resComponents').replaceChildren(...r.components.map((c) => chip(c.name, r.componentId === c.component_id,
-    () => { r.componentId = c.component_id; renderResolve(); }, c.suggested ? 'MES 추천' : '')));
+  const placeholder = document.createElement('option'); placeholder.value = ''; placeholder.textContent = '조치 대상 선택';
+  $('resComponents').replaceChildren(placeholder, ...r.components.map(c => {
+    const option = document.createElement('option'); option.value = c.component_id;
+    option.textContent = c.name + (c.suggested ? ' · MES 추천' : ''); return option;
+  }));
+  $('resComponents').value = r.componentId;
+  $('resComponents').disabled = r.busy;
   // 끝낸 조치
   $('resSteps').replaceChildren(...r.steps.map((s) => {
     const li = document.createElement('li'); li.className = 'res-step';
@@ -1484,30 +1502,50 @@ function renderResolve() {
       box.appendChild(row); parts.push(box);
     }
     const done = document.createElement('button');
-    done.type = 'button'; done.className = 'btn primary'; done.textContent = '완료 — 지금 센서값 기록';
+    done.type = 'button'; done.className = 'btn primary'; done.textContent = '작업 완료 기록';
     done.disabled = r.busy || (needLock && !r.live.lockout);
     done.addEventListener('click', completeStep);
     const cancel = document.createElement('button');
-    cancel.type = 'button'; cancel.className = 'btn sm ghost'; cancel.textContent = '이 조치 취소';
+    cancel.type = 'button'; cancel.className = 'btn sm ghost'; cancel.textContent = '선택 취소';
+    cancel.disabled = r.busy;
     cancel.addEventListener('click', () => { r.live = null; renderResolve(); });
     parts.push(done, cancel);
     live.replaceChildren(...parts);
   }
   const chips = actionChips(r);
-  $('resBatch').replaceChildren(...actionGroups(chips).map((g) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'btn sm'; b.textContent = g.label + ' 모두 완료 · ' + g.chips.length;
-    b.disabled = r.busy;
-    b.addEventListener('click', () => completeAll(r, g.chips));
-    return b;
-  }));
-  $('resActionChips').replaceChildren(...chips.map((a) => {
-    const c = chip(a.text, null, () => startStep(r, {action: a.text, lockout: null, card: a.card}), a.tag, a.disabled || r.busy);
-    if (a.card) c.classList.add('card-step');
-    return c;
-  }));
+  const list = items => {
+    const box = document.createElement('div'); box.className = 'res-action-list';
+    const seen = new Set();
+    items.forEach(a => {
+      // 출처·단계가 다른 조치는 MES 효과와 안전 확인이 달라 같은 문구라도 합치지 않는다.
+      const key = JSON.stringify([a.text, a.tag, a.card]); if (seen.has(key)) return; seen.add(key);
+      const row = document.createElement('div'); row.className = 'res-action';
+      const label = document.createElement('div'); const title = document.createElement('b'); title.textContent = a.text;
+      const meta = document.createElement('small'); meta.textContent = a.tag + (a.disabled ? ' · 앞선 MES 조치를 먼저 완료해 주세요' : '');
+      label.append(title, meta);
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'btn sm ghost'; button.textContent = '선택';
+      button.disabled = a.disabled || r.busy || !r.sessionId;
+      button.setAttribute('aria-label', a.text + ' 선택');
+      button.addEventListener('click', () => startStep(r, {action: a.text, lockout: null, card: a.card}));
+      row.append(label, button); box.append(row);
+    }); return box;
+  };
+  const cards = chips.filter(a => a.card);
+  const mes = chips.filter(a => !a.card && a.tag !== ACTION_TAGS.field_record);
+  const previous = chips.filter(a => a.tag === ACTION_TAGS.field_record);
+  const groups = [];
+  const fold = (title, items) => {
+    const details = document.createElement('details'); details.className = 'res-details';
+    const summary = document.createElement('summary'); summary.textContent = title + ' · ' + items.length + '건';
+    details.append(summary, list(items)); return details;
+  };
+  if (cards.length) groups.push(list(cards));
+  if (mes.length) groups.push(cards.length ? fold('MES 연동 조치', mes) : list(mes));
+  if (previous.length) groups.push(fold('이전 현장 기록 참고', previous));
+  if (!groups.length) { const empty = document.createElement('p'); empty.className = 'hint res-help'; empty.textContent = r.busy ? '조치 목록을 불러오고 있습니다…' : '추천 조치가 없습니다. 다른 조치 입력에서 기록해 주세요.'; groups.push(empty); }
+  $('resActionChips').replaceChildren(...groups);
   $('resFinish').disabled = r.busy || !r.sessionId || !!r.live || !r.steps.length;
-  $('resFinish').textContent = r.steps.length ? '조치 마무리 — 조치 후 MES 확인' : '조치 마무리 (조치를 하나 이상 완료하면 켜짐)';
+  $('resFinish').textContent = r.busy ? '확인 중…' : '결과 확인';
   // 마무리
   if (r.phase === 'wrap' && r.verdict) {
     const v = $('resVerdict');
@@ -1534,11 +1572,12 @@ function actionChips(r) {
       card: a.source === 'card_step' ? {card_id: a.card_id, step_id: a.step_id, risky: !!a.risky} : null}));
 }
 
-/* 위험하지 않은 조치는 칩 1탭으로 바로 기록한다(잘못 누르면 단계의 ✕나 「전체 취소」). 위험 조치는 잠금 응답 →
- * 「완료」 그대로 — 응답 순간이 아니라 작업을 끝낸 순간의 센서값을 남기기 위해서다. */
+/* 조치 선택과 완료 기록을 구분한다. 센서값은 실제 작업을 끝낸 순간에 기록한다. */
 function startStep(r, live) {
+  if (r.busy || !r.sessionId) return;
   r.live = live;
-  if (liveRisky(live)) renderResolve(); else completeStep();
+  renderResolve();
+  $('resLive').scrollIntoView({block: 'nearest'});
 }
 
 /* 「모두 완료」 묶음: MES 단계, 카드별 단계. 남은 칩이 둘 이상인 묶음만, 칩 순서 그대로. */
@@ -1629,6 +1668,7 @@ async function finishResolve() {
   try {
     r.verdict = await postJson('/api/resolution/' + r.sessionId + '/finish', {});
     r.result = r.verdict.suggested_result; r.phase = 'wrap'; resolveWarn('');
+    document.querySelector('#s-resolve > .pane').scrollTop = 0;
   } catch (err) {
     resolveWarn('조치 후 MES를 확인하지 못했습니다 · ' + err.message);
   } finally { r.busy = false; renderResolve(); }
@@ -3734,6 +3774,7 @@ on('hoSave', async () => {
   $(id).addEventListener('input', validateHandover);
 });
 on('resBack', () => show('chat'));
+$('resComponents').addEventListener('change', () => { if (S.res) S.res.componentId = $('resComponents').value; });
 on('resAddCustom', () => {
   const text = $('resCustom').value.trim();
   if (!text || !S.res) return;
@@ -3741,8 +3782,11 @@ on('resAddCustom', () => {
 });
 on('resFinish', finishResolve);
 on('resClear', () => removeSteps({all: true}));
-on('resToReport', () => { if (S.res) reportFromSession(S.res); });
-on('resMore', () => { if (S.res) { S.res.phase = 'work'; renderResolve(); } });
+on('resToReport', () => {
+  const r = S.res; if (!r || r.busy || r.live || r.phase !== 'wrap') return;
+  const err = resolveError(r); resolveWarn(err); if (!err) reportFromSession(r);
+});
+on('resMore', () => { if (S.res && !S.res.busy) { S.res.phase = 'work'; renderResolve(); document.querySelector('#s-resolve > .pane').scrollTop = 0; } });
 $('resSymptom').addEventListener('input', () => { if (S.res) S.res.symptom = $('resSymptom').value; });
 $('resCauseCustom').addEventListener('input', () => { if (S.res) { S.res.causeCustom = $('resCauseCustom').value; renderResolve(); } });
 on('resSave', () => {

@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const {riskyAction, mesSummary, resolveError, sessionPayload, draftNotice} = require('../shiftlink/mes/web/pda.js');
+const {riskyAction, resolveError, sessionPayload, draftNotice} = require('../shiftlink/mes/web/pda.js');
 
 // 위험 조치: 서버 SAFETY_WORDS와 같은 말이면 잠금 응답을 받는다
 assert.equal(riskyAction('팬 차단기 트립 원인 확인 후 재투입'), true);
@@ -7,13 +7,6 @@ assert.equal(riskyAction('재가동 후 유온 추이 확인'), true);
 assert.equal(riskyAction('쿨러 핀 에어 블로우 청소'), false);
 assert.equal(riskyAction(undefined), false);
 
-// MES 요약 한 줄: 첫 이상 신호 + 외 N + 경보
-const before = {simulated_at: '2026-10-13T08:59:00+00:00', alarms: ['AL-HYD-HOT'],
-  out_of_range: [{signal: 'hpu_oil_temp', name: '유압유 온도', value: 78, state: 'high'},
-                 {signal: 'hpu_cooler_oil_in_temp', name: '냉각기 오일 입구 온도', value: 78, state: 'high'}]};
-assert.match(mesSummary('조치 전', before), /^조치 전 MES 자동 기록 · .+ · 유압유 온도 78 ▲ 외 1 · 경보 AL-HYD-HOT$/);
-assert.match(mesSummary('조치 후', {simulated_at: null, out_of_range: [], alarms: []}), /이상 신호 없음 · 경보 없음$/);
-assert.match(mesSummary('조치 전', null), /기록하고 있습니다/);
 
 // 저장 전 검사: 본 것·부품·조치(효과 없음 제외)·원인·결과
 const r = {sessionId: 'RS-1', symptom: '쿨러 팬이 멈춰 있음', componentId: 'cooling', steps: [{order: 1}],
@@ -60,3 +53,38 @@ assert.deepEqual(chips[0], {text: 'K-1206 방법대로', disabled: false, tag: '
 chips = actionChips({actions: withCard, steps: []});
 assert.deepEqual([chips[0].tag, chips[0].card.risky, chips[2].card], ['K-1025 · 1단계', true, null]);
 console.log('PDA action chips PASS');
+
+// 「모두 완료」 묶음: MES 단계·카드별, 남은 칩 둘 이상, 잠긴 칩(재가동)·이전 기록은 묶지 않는다
+const {actionGroups} = require('../shiftlink/mes/web/pda.js');
+const twoCard = [{text: 'A1', source: 'card_step', card_id: 'K-1', step_id: 'ST-01', n: 1}, {text: 'A2', source: 'card_step', card_id: 'K-1', step_id: 'ST-02', n: 2},
+  {text: 'B1', source: 'card_step', card_id: 'K-2', step_id: 'ST-01', n: 1}, ...actions];
+let groups = actionGroups(actionChips({actions: twoCard, steps: []}));
+assert.deepEqual(groups.map((g) => [g.label, g.chips.map((c) => c.text)]),
+  [['K-1', ['A1', 'A2']], ['MES 단계', ['유면·냉각·밸브 점검', '냉각 성능 복구']]]);
+groups = actionGroups(actionChips({actions: twoCard, steps: [{action: '유면·냉각·밸브 점검'}, {action: 'A1'}]}));
+assert.deepEqual(groups, []);
+console.log('PDA action groups PASS');
+
+// 조치 기록 → 근무일지 기록(새 양식): 단계 결과는 「MES 센서:」, 잠금 응답은 안전 사항, 카드 후보 없음, 세션 ID로 업로드 보류
+const {sessionRecord} = require('../shiftlink/mes/web/pda.js');
+const res = {sessionId: 'RS-9', turn: {question: '작동유 온도가 너무 높아요', response: {query_id: 'Q-1'}},
+  before: {alarms: ['AL-HYD-HOT']}, components: [{component_id: 'cooling', name: '냉각 계통'}], componentId: 'cooling',
+  symptom: '', cause: '쿨러 튜브 스케일', causeCustom: '', phase: 'wrap', result: 'resolved', verdict: {text: 'MES 정상 복귀 확인'},
+  steps: [{order: 1, action: '팬 차단기 재투입', lockout: '예', result_text: '센서값 변화 없음', at: '2026-10-20T14:01'},
+    {order: 2, action: '유온·공급 정상 확인', lockout: null, result_text: '유압유 온도 78→47', mes_linked: 'recovery_action:verify', card: null, at: '2026-10-20T14:03'},
+    {order: 3, action: '재가동 (라인 복구 시작)', lockout: '해당 없음', result_text: '센서값 변화 없음', mes_linked: 'recover', at: '2026-10-20T14:04'},
+    {order: 4, action: 'K-1002 1단계', lockout: null, result_text: '센서값 변화 없음', card: {card_id: 'K-1002'}, at: ''}]};
+let rec = sessionRecord(res, 'EQ-0001');
+assert.equal(rec.type, '고장·정비');
+assert.equal(rec.story, '작동유 온도가 너무 높아요');
+assert.deepEqual(rec.causes, [{equipment: ['EQ-0001'], certainty: '추정', note: '쿨러 튜브 스케일'}]);
+assert.deepEqual(rec.action_steps[1], {action: '유온·공급 정상 확인', observed_result: 'MES 센서: 유압유 온도 78→47', failed: false, performed_at: '2026-10-20T14:03'});
+assert.deepEqual([rec.restart_performed, rec.restart_type, rec.outcome, rec.normal_run_status], [true, 'abnormal_stop_restart', 'resolved', 'unconfirmed']);
+assert.equal(rec.safety_notes, '에너지 차단(잠금) · 1. 팬 차단기 재투입: 예\n에너지 차단(잠금) · 3. 재가동 (라인 복구 시작): 해당 없음');
+assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, rec.operating_context],
+  [false, 'Q-1', 'RS-9', 'K-1002', '부품: 냉각 계통']);
+// 마무리 전에 넘기면 미해결, 단계가 없으면 빈 단계 한 줄
+rec = sessionRecord({...res, phase: 'work', result: null, verdict: null, steps: [], before: {alarms: []}, turn: {question: 'q', response: {}}}, 'EQ-0001');
+assert.deepEqual([rec.type, rec.outcome, rec.action_steps.length, rec.restart_performed, 'query_id' in rec, 'normal_run_evidence' in rec],
+  ['이상증상', 'open', 1, false, false, false]);
+console.log('PDA session record PASS');

@@ -24,6 +24,20 @@ def test_calendar_weeks_start_on_monday():
     assert (out["week_start"], out["week_end"], out["window_start"]) ==         ("2026-10-12T00:00:00+09:00", "2026-10-19T00:00:00+09:00", "2026-09-21T00:00:00+09:00")
 
 
+def test_cause_suggestions_rank_same_alarm_then_confirmed():
+    c = lambda certainty, note: {"certainty": certainty, "note": note}
+    incidents = [
+        {"equipment_id": "EQ-1", "alarm_code": "AL-A", "causes": [c("추정", "유량 부족")]},
+        {"equipment_id": "EQ-1", "alarm_code": "AL-A", "causes": [c("확인", "스케일"), c("배제", "유량 부족")]},
+        {"equipment_id": "EQ-1", "alarm_code": "AL-B", "causes": [c("확인", "다른 경보 원인"), c("확인", "다른 경보 원인")]},
+        {"equipment_id": "EQ-1", "alarm_code": None, "causes": [c("배제", "배제만"), c("추정", " ")]},
+        {"equipment_id": "EQ-2", "alarm_code": "AL-A", "causes": [c("확인", "다른 설비")]},
+    ]
+    assert analytics.cause_suggestions(incidents, "EQ-1", ["AL-A"]) == ["스케일", "유량 부족", "다른 경보 원인"]
+    assert analytics.cause_suggestions(incidents, "EQ-1", []) == ["다른 경보 원인", "스케일", "유량 부족"]
+    assert analytics.cause_suggestions(incidents, "EQ-1", ["AL-A"], limit=1) == ["스케일"]
+
+
 def _summary(extra=(), now=END):
     return analytics.summary([*analytics.load_history(END), *extra], RELATIONS, now, route=ROUTE, standard=STANDARD)
 

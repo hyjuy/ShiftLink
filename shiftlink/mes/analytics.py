@@ -70,6 +70,25 @@ def load_history(end: datetime, path: Path = HISTORY) -> list[dict[str, Any]]:
     return out
 
 
+def cause_suggestions(incidents: Iterable[dict[str, Any]], equipment_id: str, alarms: Iterable[str],
+                      limit: int = 5) -> list[str]:
+    """조치 기록의 원인 칩 후보 — 이 설비의 지난 사건에 적힌 원인. 지금 경보와 같은 경보였던 사건 먼저,
+    그다음 확인 수 − 배제 수, 언급 수. 배제로만 적힌 원인은 뺀다."""
+    alarms, score = set(alarms), {}
+    for inc in incidents:
+        if inc.get("equipment_id") != equipment_id:
+            continue
+        for c in inc.get("causes") or []:
+            note = (c.get("note") or "").strip()
+            if not note:
+                continue
+            s = score.setdefault(note, [False, 0, 0])
+            s[0] = s[0] or inc.get("alarm_code") in alarms
+            s[1] += {"확인": 1, "배제": -1}.get(c.get("certainty"), 0)
+            s[2] += c.get("certainty") != "배제"
+    return sorted((n for n in score if score[n][2]), key=lambda n: score[n], reverse=True)[:limit]
+
+
 def _action_name(steps: list[dict[str, Any]]) -> str | None:
     """카드 단계로 한 조치가 있으면 '카드 방법' — 이름을 카드와 단계 번호로(K-1025 1·2·4단계). 없으면 첫 조치."""
     cards = [s["card_step"] for s in steps if s.get("card_step")]

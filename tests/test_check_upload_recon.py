@@ -82,6 +82,9 @@ def test_resolution_handover_waits_locally_while_upload_is_held():
     storage, cloud = MesStorage(), FakeCloud()
     storage.save_handover(_note(1))
     storage.save_handover({**_note(2), "resolution": {"result": "resolved"}})
+    # 조치 기록을 근무일지로 넘긴 기록도 보류, 그 밖의 근무일지 기록은 올린다
+    storage.save_handover({**_note(3), "work_report": {"records": [{"source_session_id": "RS-1"}]}})
+    storage.save_handover({**_note(4), "work_report": {"records": [{"story": "평상 근무"}]}})
     upload_pending(storage, cloud.connect)
-    assert list(cloud.rows) == ["HO-recon-1"]
-    assert [row[0] for row in storage.pending_handovers()] == ["HO-recon-2"]
+    assert sorted(cloud.rows) == ["HO-recon-1", "HO-recon-4"]
+    assert [row[0] for row in storage.pending_handovers()] == ["HO-recon-2", "HO-recon-3"]

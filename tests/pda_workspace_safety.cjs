@@ -74,8 +74,8 @@ function snapshot() {return {simulated_at:new Date().toISOString(),equipment:[{e
    // Accepting the no-knowledge report offer must return directly to this chat.
    noKnowledge=true;
    await page.locator('#question').fill('등록되지 않은 증상');await page.locator('#doSearch').click();
-   await page.locator('#chatLog .report-ask').waitFor();
-   await page.locator('#chatLog .report-ask').getByRole('button',{name:'네',exact:true}).click();
+   const gapAsk=page.locator('#chatLog .msg.bot').filter({hasText:'해당 지식 없음'}).locator('.report-ask');await gapAsk.waitFor();
+   await gapAsk.getByRole('button',{name:'바로 작성',exact:true}).click();
    await page.locator('#s-reportWrite.on').waitFor();
    await page.locator('#navigationBack').click();
    await page.locator('#s-ctx.on').waitFor();

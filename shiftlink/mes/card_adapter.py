@@ -93,16 +93,17 @@ class MesCardAdapter:
                 continue
             observations.append(Observation(signal=f"{signal}_state", value=state))
 
+        alarms = sorted({alarm["code"] for alarm in snapshot.get("active_alarms", [])
+                         if alarm.get("equipment_id") == eq.equipment_id and alarm.get("code")})
         request = QueryRequest(question=question, line_id=snapshot.get("line_id") or self.config.line_id,
-                               eq_id=eq.equipment_id, observations=observations, k=k)
+                               eq_id=eq.equipment_id, observations=observations,
+                               snapshot_at=_timestamp(snapshot.get("simulated_at")), active_alarms=alarms, k=k)
         values = {item.signal: {"value": item.value, "unit": item.unit}
                   for item in request.observations}
         safety = self.cards.search_safety_cards(equipment_ids=[eq.equipment_id], observations=values)
         ranked = self.cards.search_cards(query=question, equipment_ids=[eq.equipment_id],
                                          k=k, observations=values)
         cards = list({card["card_id"]: card for card in safety + ranked}.values())
-        alarms = sorted({alarm["code"] for alarm in snapshot.get("active_alarms", [])
-                         if alarm.get("equipment_id") == eq.equipment_id and alarm.get("code")})
         source = {"run_id": run_id, "equipment_id": eq.equipment_id, "equipment_code": eq.code,
                   "simulated_at": _timestamp(snapshot.get("simulated_at")),
                   "measurements": evidence, "alarms": alarms}

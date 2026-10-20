@@ -208,7 +208,7 @@ def evaluate(full_path, weak_path):
         "pairing": pairing, "training": training, "fit_seconds": fit_seconds,
         "arms": arms, "conditional_D17": candidate, "strict_scorer_changed": False,
         "test_rows_read": 0, "source_test_rows_generated": sum(m["splits"]["test"]["frames"] for m in manifests.values()),
-        "model_input": "current valid measurements only; labels and twins used for fit-normal selection/evaluation, never prediction",
+        "model_input": "causal valid measurement history; IF uses current and trailing eight-frame features; labels and twins used for fit-normal selection/evaluation, never prediction",
         "input_prefix_sha256": {name: prefix_hashes(path, manifests[name]) for name, path in (("full", full_path), ("weak", weak_path))},
         "runtime_provenance_sha256": hashlib.sha256((ROOT/"provenance.json").read_bytes()).hexdigest(),
         "versions": {"python": platform.python_version(), "numpy": np.__version__, "sklearn": sklearn.__version__},

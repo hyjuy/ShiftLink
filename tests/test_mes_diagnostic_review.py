@@ -37,6 +37,30 @@ class DiagnosticReviewTests(unittest.TestCase):
         result = review_signed(runs, alerts, alerts, [])
         self.assertIn("no strict improvement", result["failures"])
 
+    def test_fragmentation_counterexample_is_rejected(self):
+        from scripts.evaluate_mes_fault_models import predict_ewma
+        from scripts.mes_diagnostic_contract import predict_signed_ewma
+        from tests.test_mes_diagnostic_contract import fault, specs
+        runs = {"r": [(frame(i, {"S": value}), {"faults": [fault()]})
+                      for i, value in enumerate([10, -10, -10], 1)]}
+        stats = {("S", "x"): (0, 1)}
+        baseline = predict_ewma(runs, specs("S"), stats, 3)
+        candidate = predict_signed_ewma(runs, specs("S"), stats, 3)
+        result = review_signed(runs, baseline, candidate, [])
+        self.assertIn("false_alerts", result["failures"])
+        self.assertIn("duplicate_alert_episodes", result["failures"])
+
+    def test_response_and_source_event_losses_cannot_be_hidden_by_alarm_reduction(self):
+        from tests.test_mes_diagnostic_contract import fault
+        for labels in ([], [fault()]):
+            runs = {"r": [(frame(1, {"S": 4}), {"faults": labels})]}
+            records = [{"run_id": "r", "sequence": 1, "equipment_id": "S",
+                        "seconds": 1, "changed": True, "context": "source_active"}]
+            result = review_signed(runs, {("r", 1): {"S"}}, {("r", 1): set()}, records)
+            self.assertIn("twin response coverage lost", result["failures"])
+            if labels:
+                self.assertIn("individual event lost", result["failures"])
+
 
 if __name__ == "__main__":
     unittest.main()

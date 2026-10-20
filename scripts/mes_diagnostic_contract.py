@@ -123,7 +123,7 @@ def classify_alarms(runs, alerts, clean_runs, specs, stats):
                     "equipment_id": eq, "seconds": seconds, "context": context,
                     "source_positive": source_positive, "prefault": prefault,
                     "local_end_age": end_age, "remote_source_active": bool(active-{eq}),
-                    "state_or_coil_count_diverged": state_diverged, **item})
+                    "any_equipment_state_or_mode_diverged": state_diverged, **item})
     assert sum(v["alarm_equipment_seconds"] for v in contexts.values()) == total
     assert sum(v["strict_wrong_equipment_seconds"] for v in contexts.values()) == wrong_total
     return {"contexts": {key: dict(value) for key, value in sorted(contexts.items())},

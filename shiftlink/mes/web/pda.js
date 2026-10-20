@@ -259,11 +259,11 @@ function setContext(eq, source, extra) {
   S.scanId = (extra && extra.scanId) || null;
   S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.chat = [];
   S.safetyView = null; S.safetyOpen = false;
-  S.mes = null; S.mesExcluded = []; S.sensorSnapshot = null; S.mesEvents = [];
+  S.mes = null; S.mesExcluded = []; S.sensorSnapshot = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
   try { localStorage.setItem('shiftlink.recent',JSON.stringify(S.recent)); } catch (_) {}
   renderContext(); renderRecent(); renderObsSignals(); renderObsList(); renderMesStatus();
-  loadMesObservations(); loadMesEvents(eq);
+  loadMesObservations();
 }
 
 /* 확정 설비 해제. 이전 설비의 관측·응답·시도도 함께 버린다. */
@@ -550,9 +550,8 @@ async function loadMesObservations(given) {
   const state = (snap.equipment || []).find((e) => e.equipment_id === eq.equipment_id) || {};
   S.mes = {
     readings: r.kept,
-    at: snap.simulated_at, receivedAt: new Date().toISOString(), operating: state.operating_state, fault: state.fault_level,
+    at: snap.simulated_at, operating: state.operating_state, fault: state.fault_level,
     alarms: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id).map((a) => a.label || a.code),
-    alarmItems: (snap.active_alarms || []).filter((a) => a.equipment_id === eq.equipment_id),
     diagnoses: (snap.symptom_diagnostics || []).filter((d) => d.equipment_id === eq.equipment_id)
   };
   renderObsList(); renderMesStatus(); renderEquipmentMetrics();
@@ -566,15 +565,6 @@ function clearMesObservations() {
   S.mesExcluded = [];
   renderObsList(); renderMesStatus(); renderEquipmentMetrics();
   if (S.screen === 'ctx') renderSymptoms();
-}
-
-async function loadMesEvents(eq) {
-  try {
-    const payload=await getJson('/api/events');
-    if(S.eq!==eq)return;
-    S.mesEvents=(payload.events||[]).filter(event=>event.equipment_id===eq.equipment_id).slice(-20);
-  } catch (_) { if(S.eq===eq)S.mesEvents=null; }
-  if(S.eq===eq)renderEquipmentMetrics();
 }
 
 function readingDetail(o, spec) {
@@ -1102,7 +1092,7 @@ function safetyReason(hot) {
   return '범위 이탈 또는 조건 일치';
 }
 /* 대화 화면 상단 안전 바 = 현재 설비의 안전 상태(원칙 4). 안전 수칙은 이 한 곳에만 둔다 — 답 앞 묶음은 없다
- * (사용자 결정 10/19, main dbc796d). 요약은 설비 code·안전 수칙 건수이고(MES 사유 문구는 10/20 뺌), 설비 기본 수칙에 완료된 답의
+ * (사용자 결정 10/19, main dbc796d). 요약은 설비 code·안전 수칙 건수·MES 사유이고, 설비 기본 수칙에 완료된 답의
  * 안전 카드를 더한다. 기본 접힘이며 사용자가 고른 펼침 상태는 갱신 중에도 유지한다. 판정이 그대로면 다시 그리지 않는다. */
 function renderAskSafety() {
   const box = $('askSafety');
@@ -1117,7 +1107,8 @@ function renderAskSafety() {
     });
   });
   const hot = safetyAlert(S.mes, S.observations, cards);
-  const view = JSON.stringify([S.eq.equipment_id, cards, hot]);
+  const reason = safetyReason(hot);
+  const view = JSON.stringify([S.eq.equipment_id, cards, reason]);
   if (view === S.safetyView) return;
   S.safetyView = view;
   box.innerHTML = '';
@@ -1126,8 +1117,7 @@ function renderAskSafety() {
   g.className = 'safety-group safety-fold' + (hot ? ' hot' : '');
   g.addEventListener('toggle', () => { S.safetyOpen = g.open; });
   const h = document.createElement('summary'); h.className = 'safety-head';
-  // MES 상태 문구는 붙이지 않는다 — 설비 칸이 보여 주고, 바 색(hot)으로 강조한다.
-  h.textContent = S.eq.code + ' · 안전 수칙 ' + cards.filter((c) => !c.mismatch).length + '건';
+  h.textContent = S.eq.code + ' · 안전 수칙 ' + cards.filter((c) => !c.mismatch).length + '건 · ' + reason;
   g.appendChild(h);
   const content = document.createElement('div'); content.className = 'safety-content';
   cards.forEach((c) => content.appendChild(safetyEl(c)));
@@ -1300,8 +1290,9 @@ function answerBody(turn) {
     d.appendChild(ask);
   } else d.appendChild(record);
   const ids = r.actions.map((x) => x.card.card_id);
-  // 질의 당시 센서값은 싣지 않는다 — 같은 화면의 설비 칸이 보여 준다.
-  if (!ids.length && !r.excluded.length) return d;
+  const evidence = res.evidence && res.evidence.equipment_id === S.eq.equipment_id
+    ? (res.evidence.measurements || []).filter((m) => m.used_for_conditions && m.equipment_id === S.eq.equipment_id) : [];
+  if (!ids.length && !r.excluded.length && !evidence.length) return d;
   const more = document.createElement('details');
   more.className = 'basis-detail';
   const sum = document.createElement('summary');
@@ -1309,6 +1300,12 @@ function answerBody(turn) {
   sum.querySelector('span').textContent = ids.length ? '참고 매뉴얼 보기' : '답변 근거 보기';
   sum.querySelector('small').textContent = ids.join(' · ');
   more.appendChild(sum);
+  if (evidence.length) {
+    const label = document.createElement('p'); label.className = 'lbl';
+    label.textContent = '질의 당시 MES 센서값 · ' + clock(res.evidence.simulated_at);
+    more.appendChild(label);
+    renderSensorReadings(more, evidence, undefined, 'ev' + turn.id);
+  }
   // 시도 기록은 마지막 답에만 이어진다(시도 화면이 S.ranked 를 쓴다).
   const triedIds = turn === lastAnswer() ? S.tries.map((t) => t.card_id) : [];
   r.actions.forEach((x, i) => more.appendChild(actionEl(x, i + 1, triedIds.indexOf(x.card.card_id) !== -1)));
@@ -2101,75 +2098,36 @@ function metricElement(label, value, unit, bad) {
   if (unit) { const u = document.createElement('span'); u.className = 'unit'; u.textContent = unit; number.appendChild(u); }
   el.append(title,number); return el;
 }
-function mesKst(value) {
-  const date=new Date(value);
-  if(!value||!Number.isFinite(date.getTime()))return '시각 없음';
-  const parts={};new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(date).forEach(part=>{parts[part.type]=part.value;});
-  return parts.year+'-'+parts.month+'-'+parts.day+' '+parts.hour+':'+parts.minute+':'+parts.second+' KST';
-}
-function sensorGroup(spec) {
-  const key=(spec.signal+' '+spec.name).toLowerCase();
-  if(/cool|냉각/.test(key))return '냉각';
-  if(/accum|축압/.test(key))return '축압기';
-  if(/tank|reservoir|탱크|유면|흡입|리턴/.test(key))return '탱크·유로';
-  if(/^hpu_|유압|펌프|필터/.test(key))return '유압·펌프';
-  if(/motor|drive|모터|구동|감속기/.test(key))return '구동부';
-  return '기타 계측';
-}
-/* 값은 새로고침(또는 새 이상) 전까지 고정한다. 행 순서는 MES 구성 순서다. */
+/* 설비 칸 센서 목록. 값은 새로고침(또는 새 이상) 전까지 고정한다 — 읽는 동안 숫자가 바뀌지 않게. */
 function renderEquipmentMetrics() {
   const box = $('equipmentMetrics'); if (!box || !S.eq) return; box.replaceChildren();
   if (!S.sensorSnapshot && S.mes) S.sensorSnapshot = JSON.parse(JSON.stringify(S.mes));
   const mes = S.sensorSnapshot;
   const measurements = mes ? (mes.readings || []) : [];
-  $('metricsEquipment').textContent=S.eq.code+' '+(S.eq.group||'');
-  $('metricsOperating').textContent='운전 상태 · '+(mes?(STATE_TXT[mes.operating]||mes.operating||'확인 필요'):'확인 필요');
-  $('metricsTime').textContent='측정 시각 · '+(mes?mesKst(mes.at):'미수신');
-  const latestReceived=S.mes?.receivedAt||mes?.receivedAt;
-  $('metricsConnection').textContent='연결 상태 · '+(S.mes?'연결됨':'연결 끊김')+' · 마지막 데이터 수신 · '+(latestReceived?mesKst(latestReceived):'없음')+(mes&&!S.mes?' · 이전 측정값 표시 중':'');
-  const groups=new Map(),badNames=[];let delayedCount=0,unknownCount=0;
-  S.eq.signals.forEach(spec=>{
-    const row=measurements.find(m=>m.signal===spec.signal);
-    const age=row&&mes?Date.parse(mes.at)-Date.parse(row.observed_at):NaN;
-    const delayed=!!row&&(!Number.isFinite(age)||age>6000);
-    const state=row?stateOf(spec,row.value):null;
-    const stopped=!!mes&&mes.operating!=='running';
-    const idle=!!row&&stopped&&spec.zeroStopped&&row.value===0;
-    const bad=!!row&&!stopped&&!delayed&&(state==='low'||state==='high');
-    const label=!row?'미수신':delayed?'수신 지연':idle?'정지 중 0 허용':stopped?'판정 기준 확인 필요':bad?(state==='low'?'하한 미만':'상한 초과'):state==='normal'?'정상':'판정 기준 확인 필요';
-    if(bad)badNames.push(shortName(spec.name));if(delayed)delayedCount++;if(!row||label==='판정 기준 확인 필요')unknownCount++;
-    const group=sensorGroup(spec);if(!groups.has(group))groups.set(group,[]);
-    groups.get(group).push({spec,row,label,bad,delayed,idle});
+  // 위에서부터 이상값 → 정지 → 정상 → 값 없음·범위 미설정. 같은 묶음 안은 구성 순서.
+  const rows = S.eq.signals.map((spec) => {
+    const row = measurements.find((m) => m.signal === spec.signal);
+    const state = row && stateOf(spec, row.value);
+    const idle = !!row && !!spec.zeroStopped && row.value === 0 && mes.operating !== 'running';
+    const bad = !idle && (state === 'low' || state === 'high');
+    return {spec, row, state, idle, bad, rank: bad ? 0 : idle ? 1 : state === 'normal' ? 2 : 3};
   });
-  $('metricsAlerts').textContent=[mes?.alarms?.length?'활성 알람 · '+mes.alarms.join(', '):null,badNames.length?'운전 중 범위 이탈 · '+badNames.join(', '):null,delayedCount?'수신 지연 '+delayedCount+'건':null,unknownCount?'판정·수신 확인 '+unknownCount+'건':null].filter(Boolean).join(' · ')||'현재 표시값에 주의 항목 없음';
-  groups.forEach((rows,group)=>{
-    const heading=document.createElement('h3');heading.className='sensor-group';heading.textContent=group;box.appendChild(heading);
-    rows.forEach(({spec,row,label:statusLabel,bad,delayed,idle})=>{
-    const el = document.createElement('div'); el.className = 'sensor-row' + (bad ? ' bad' : '') + (idle ? ' idle' : '')+(delayed?' delayed':'');
+  rows.sort((a, b) => a.rank - b.rank);
+  rows.forEach(({spec, row, state, idle, bad}) => {
+    const el = document.createElement('div'); el.className = 'sensor-row' + (bad ? ' bad' : '') + (idle ? ' idle' : '');
     const name = document.createElement('div'); name.className = 'sensor-name';
     const label = document.createElement('b'); label.textContent = shortName(spec.name);
-    const at = document.createElement('small'); at.textContent = row && row.observed_at ? mesKst(row.observed_at) : '';
+    const at = document.createElement('small'); at.textContent = row && row.observed_at ? clock(row.observed_at) : '';
     name.append(label, at);
     const value = document.createElement('div'); value.className = 'sensor-value';
-    value.textContent=row?num(row.value):'—';
-    if(row) { const u = document.createElement('span'); u.textContent = unitText(spec.unit); value.appendChild(u); }
-    const pill = document.createElement('span'); pill.className = 'sensor-state' + (statusLabel==='정상' ? ' ok' : '');pill.textContent=statusLabel;
-    const range=document.createElement('small');range.className='sensor-range';range.textContent='정상 범위 '+fmt(spec.min)+' ~ '+fmt(spec.max)+' '+unitText(spec.unit);
-    const detail=document.createElement('details');detail.className='sensor-detail';detail.open=!!S.foldOpen['metric:'+spec.signal];detail.addEventListener('toggle',()=>{S.foldOpen['metric:'+spec.signal]=detail.open;});const summary=document.createElement('summary');summary.textContent='정상 범위·측정 시각';const content=document.createElement('span');content.textContent=range.textContent+' · '+(row?mesKst(row.observed_at):'측정값 없음');detail.append(summary,content);
-    el.append(pill,name,value,range,detail);
+    value.textContent = idle ? '정지 중' : row ? num(row.value) : '—';
+    if (!idle && row) { const u = document.createElement('span'); u.textContent = unitText(spec.unit); value.appendChild(u); }
+    const pill = document.createElement('span'); pill.className = 'sensor-state' + (row && !idle && state === 'normal' ? ' ok' : '');
+    pill.textContent = !row ? '값 없음' : idle ? '정지' : bad ? '범위 이탈' : state === 'normal' ? '정상' : '범위 미설정';
+    el.append(name, value, pill);
     box.appendChild(el);
-    });
   });
-  const history=$('metricsHistory');history.replaceChildren();
-  if(S.mesEvents===null){history.textContent='이력을 읽지 못했습니다.';return;}
-  const events=S.mesEvents||[];
-  if(!events.length){history.textContent='이력이 없습니다.';return;}
-  events.slice().reverse().forEach(event=>{
-    const item=document.createElement('div');item.className='sensor-event';
-    const cleared=event.event_type==='alarm_cleared'||(event.event_type==='alarm_raised'&&!mes?.alarmItems?.some(alarm=>alarm.code===event.observation));
-    item.textContent=mesKst(event.occurred_at)+' · '+S.eq.code+' · '+(event.event_type==='alarm_raised'?'알람 발생':event.event_type==='alarm_cleared'?'알람 해제':event.event_type)+' · '+event.observation+' · '+(event.event_type==='alarm_raised'||event.event_type==='alarm_cleared'?(cleared?'해제':'활성'):'해제 대상 아님');
-    history.appendChild(item);
-  });
+  $('metricsTime').textContent = mes ? clock(mes.at) + ' 기준' + (!S.mes ? ' · 현재 MES 연결 끊김' : '') : 'MES 데이터를 수신하지 못했습니다.';
 }
 function handoverIncidentRows(handovers,equipment) {
   const rows=handovers.flatMap(h=>handoverEntries(h,equipment));
@@ -2374,7 +2332,6 @@ async function startReportFollowup(h,index) {
   S.reportRecords.push(record);S.reportDraftLoaded=true;enterReportWrite();
   const recordIndex=S.reportRecords.length-1;
   $('reportRecords').lastElementChild?.scrollIntoView({block:'start'});
-  importReportMes();
   return true;
 }
 function reportHandoverResolved(r) {
@@ -3106,7 +3063,8 @@ function openReport() {
     const draft=pending && pending.kind==='work_log' ? {ids:pending.equipment_ids,memo:pending.work_report ? pending.work_report.legacy_memo : pending.memo_text,records:pending.work_report ? pending.work_report.records : [],author:pending.required_context.author,start:pending.required_context.start_at,end:pending.required_context.end_at,context:pending.required_context.context.replace(/^대상 장비: [^\n]*\n/,'')} : JSON.parse(localStorage.getItem(REPORT_DRAFT_KEY)||'null');
     if (draft) { S.reportSelected=(draft.ids||[]).filter((id)=>S.equipment.some((eq)=>eq.equipment_id===id)); S.reportContext=draft.context||''; S.reportRecords=draft.records||[];
       $('reportMemo').value=draft.memo||''; $('reportAuthor').value=draft.author||''; $('reportStart').value=draft.start||''; $('reportEnd').value=draft.end||''; }
-  } catch (_) { $('reportStatus').textContent='초안을 읽지 못했습니다. 입력 내용을 확인해 주세요.'; }
+    else { resetReportForm();S.reportSelected=[]; }
+  } catch (_) { resetReportForm();S.reportSelected=[];$('reportStatus').textContent='초안을 읽지 못했습니다. 입력 내용을 확인해 주세요.'; }
   if (!S.reportRecords) S.reportRecords=[];
   if (!$('reportAuthor').value) $('reportAuthor').value=(S.operator && (S.operator.name||S.operator.id))||'';
   S.reportDraftLoaded=true;renderReportSelection(); show('reportSelect');
@@ -3744,7 +3702,7 @@ on('ctxBack', () => show('home'));
 on('ctxEdit', openManual);
 on('toAsk', () => { renderSymptoms(); renderObsList(); renderAskBlock(); show('chat'); loadMesObservations(); });
 on('obsReload', () => loadMesObservations());
-on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = null; renderEquipmentMetrics();if(S.eq)loadMesEvents(S.eq); });
+on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = null; renderEquipmentMetrics(); });
 on('askBack', () => show('ctx'));
 on('doSearch', () => (chatPending() ? cancelChat() : sendChat(currentQuestion())));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });

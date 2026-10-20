@@ -33,4 +33,20 @@
 - 지식카드 후보 항목을 별도 조치 내역처럼 반복 입력하지 않는다. 이상 징후 분석은 이상 징후 기록에서만 새로 보이고, 기존 입력은 유형 변경 후에도 보존한다. 운전 조건은 조치 내역 아래 선택 입력으로 두고 MES 신호 선택 시 측정값·단위·시각을 한 번 가져온다. T2 후보는 동일 기록의 성공한 조치 단계와 확인 결과를 재사용한다. `artifacts/live-device-test/verify_condition_ui.py`와 `tests/test_work_report_auto_candidates.py`로 화면·후보 흐름을 확인한다.
 - 현장 용어를 바꿀 때 데이터 필드 이름과 후보 종류 코드는 유지하고, 입력 화면·저장 전 확인·저장 일지의 표시 문구를 함께 맞춘다.
 - 이상 징후 기록의 MES 신호는 `정상 상태 대비 근거`에 선택 시점 값·등록 정상범위·측정시각을 고정한다. 운전 조건 비교를 새로 요구하지 않는다. `artifacts/live-device-test/verify_condition_ui.py`에서 확인한다.
-- 설비 센서 패널은 구성 순서와 기능별 그룹을 고정하고 주의 항목을 상단에 요약한다. 정지 중 0 허용은 `zero_when_stopped`가 있는 신호에만 표시하고, 나머지 정지 중 값은 판정 기준 확인 필요로 둔다. 판정 함수와 지식카드 조건은 바꾸지 않는다. `tests/pda_sensor_display.cjs`와 `artifacts/live-device-test/verify_sensor_panel.py`에서 이상·지연·미수신·정지·모바일 펼침을 확인한다.
+- PDA 설비·채팅 화면은 센서 표시 개선 요청의 대상을 잘못 해석해 변경했던 영역이므로 이전 배치로 복구했다. #317의 조치 기록·근무일지 연결은 유지한다. `tests/pda_sensor_display.cjs`에서 질의 당시 센서 근거와 실시간 관측의 분리, 새로고침 전 값 고정, 연결 실패 처리를 확인한다. `tests/pda_resolution.cjs`에서 #317의 조치 결과·질의 ID·세션 ID 전달을 확인한다.
+
+## 새 일지의 MES 기록 재표시 방지
+
+초안이 없는 상태에서 작성 화면을 다시 열면 이전 화면의 `S.reportContext`가 메모리에 남아 MES 기록 표를 채울 수 있었다. 후속 기록 진입에서도 MES 첨부 함수를 자동 호출했다. 새 작성 진입은 메모리의 이전 값까지 지우고, 후속 기록에서는 사용자가 `MES 측정값 새로고침`을 누를 때만 첨부한다. 저장된 초안은 기존대로 복원한다.
+
+- `tests/pda_report_empty_mes.cjs`: 초안 없음은 이전 MES 값을 비우고, 저장된 초안은 복원하는지 확인한다.
+- 로컬·Pi 브라우저: 새로 작성과 후속 기록의 `MES 수집 기록` 표가 비어 있는지 확인한다.
+
+## PDA 설비·채팅 화면 복구와 #317 유지
+
+화면 복구는 `32ef95d`의 설비 센서 목록·채팅의 질의 당시 근거 표시를 기준으로 한다. #317의 `조치하며 작성`, 단계 추가·취소, 원인 제안, `sessionRecord`의 조치·질의 ID·세션 ID 전달은 유지한다. 화면 표시를 바꿔도 근무일지 저장과 서버 후보 판정은 그대로 사용한다.
+
+- 회귀 검사: `node tests/pda_sensor_display.cjs`, `node tests/pda_report_empty_mes.cjs`, `node tests/pda_resolution.cjs`. CI에서도 실행한다.
+- 후보·DB 검사: `tests/test_work_report_reuse_harness.py`, `tests/test_work_report_auto_candidates.py`, `tests/test_work_report_t4.py` 62건 통과. #317 관련 `tests/test_field_draft.py`, `tests/test_check_upload_recon.py`, `tests/test_mes_analytics.py` 64건 통과.
+- `artifacts/live-device-test/verify_restored_workspace.py`로 로컬·Pi의 1280px·390px 화면, 질의 당시 근거, 바로 작성과 조치 세션의 근무일지 전달을 확인했다.
+- 기존 제한: `HOLD_RESOLUTION_UPLOAD=True`이므로 `source_session_id`가 있는 근무일지는 중앙 업로드를 보류한다. 로컬 후보 생성 검증을 중앙 승격 완료로 표현하지 않는다.

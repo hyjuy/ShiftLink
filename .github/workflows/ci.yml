@@ -33,6 +33,12 @@ jobs:
       - name: pytest
         run: python -m pytest -q
 
+      - name: PDA sensor and work-report regressions
+        run: |
+          node tests/pda_sensor_display.cjs
+          node tests/pda_report_empty_mes.cjs
+          node tests/pda_resolution.cjs
+
       - name: kb_cards.json
         run: |
           python docs/data/knowledge_cards/kb/build_kb.py

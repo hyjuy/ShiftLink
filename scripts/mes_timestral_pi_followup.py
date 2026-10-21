@@ -52,7 +52,7 @@ def choose(candidates, baseline):
     def order(row):
         m=row['metrics'];delay=m['p95_onset_delay_seconds']
         return (-m['detected_events'],m['wrong_alert_equipment_seconds'],
-                float('inf') if delay is None else delay,row['scale'],row['k'],row['n'])
+                float('inf') if delay is None else delay,row['scale'],row['k'],row['n'],row.get('gate',0))
     return min(passed or candidates,key=order),bool(passed)
 
 
@@ -62,7 +62,9 @@ def improved(before,after):
 
 
 def hybrid_alerts(keys,values,equipment,thresholds,baseline,scale,k,n,gate):
-    raise NotImplementedError
+    accepted=causal_alerts(keys,values,equipment,thresholds,gate,1,1)
+    additional=causal_alerts(keys,values,equipment,thresholds,scale,k,n)
+    return {key:(baseline.get(key,set())&accepted[key])|additional[key] for key in keys}
 
 
 def paths():
@@ -157,18 +159,30 @@ def evaluate(args):
     if args.phase=='develop':
         if metrics['finetuned_default']!=original['metrics']['finetuned']:raise ValueError('development forecasts differ')
         grid=[]
-        for scale in (.5,.75,1,1.25,1.5,2):
-            for k,n in ((1,1),(2,3),(3,5)):
-                candidate=complete(causal_alerts(keys,values,equipment,thresholds,scale,k,n))
-                grid.append({'scale':scale,'k':k,'n':n,'metrics':score(runs,candidate)})
+        if args.hybrid:
+            for gate in (.1,.25,.5):
+                for scale in (1,1.5,2):
+                    for k,n in ((1,1),(2,3)):
+                        candidate=complete(hybrid_alerts(keys,values,equipment,thresholds,baseline,scale,k,n,gate))
+                        grid.append({'gate':gate,'scale':scale,'k':k,'n':n,'metrics':score(runs,candidate)})
+        else:
+            for scale in (.5,.75,1,1.25,1.5,2):
+                for k,n in ((1,1),(2,3),(3,5)):
+                    candidate=complete(causal_alerts(keys,values,equipment,thresholds,scale,k,n))
+                    grid.append({'scale':scale,'k':k,'n':n,'metrics':score(runs,candidate)})
         chosen,passed=choose(grid,metrics['ewma'])
     else:grid=None;passed=selected['development_passed']
     tick=time.perf_counter()
-    alerts['candidate']=complete(causal_alerts(keys,values,equipment,thresholds,chosen['scale'],chosen['k'],chosen['n']))
+    if 'gate' in chosen:
+        alerts['candidate']=complete(hybrid_alerts(keys,values,equipment,thresholds,baseline,chosen['scale'],chosen['k'],chosen['n'],chosen['gate']))
+    else:
+        alerts['candidate']=complete(causal_alerts(keys,values,equipment,thresholds,chosen['scale'],chosen['k'],chosen['n']))
     alarm_seconds=time.perf_counter()-tick
+    if args.phase=='confirm':
+        alerts['standalone_diagnostic']=complete(causal_alerts(keys,values,equipment,thresholds,.75,1,1))
     for name,current in alerts.items():metrics[name]=score(runs,current)
     manifest=json.loads((dataset/'manifest.json').read_text(encoding='utf-8'))
-    result={'phase':args.phase,'selected':{key:chosen[key] for key in ('scale','k','n')},
+    result={'phase':args.phase,'selected':{key:chosen[key] for key in ('scale','k','n','gate') if key in chosen},
         'development_passed':passed,'grid':grid,'metrics':metrics,'thresholds':thresholds,
         'requested_improvement_vs':{name:improved(metrics[name],metrics['candidate']) for name in metrics if name!='candidate'},
         'paired_events':{name:paired_events(runs,current,alerts['candidate'],metrics[name],metrics['candidate']) for name,current in alerts.items() if name!='candidate'},
@@ -190,6 +204,7 @@ def main():
     parser.add_argument('--out-dir',type=Path,required=True)
     parser.add_argument('--fresh',type=Path)
     parser.add_argument('--selection',type=Path)
+    parser.add_argument('--hybrid',action='store_true')
     args=parser.parse_args()
     if args.phase=='confirm' and (args.fresh is None or args.selection is None):parser.error('confirmation requires fresh and selection')
     args.out_dir.mkdir(parents=True,exist_ok=False)

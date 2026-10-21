@@ -117,16 +117,29 @@ def test_sensor_acquisition_and_reference_definitions_survive_configuration_stor
     ('EQ-0001', 'hpu_return_submergence'),
     ('EQ-0001', 'hpu_suction_head'),
 ])
-def test_manual_sample_retains_value_and_time_until_next_sample(eq_id, signal):
+@pytest.mark.parametrize('engine_type', ['standard', 'random'])
+def test_synthetic_samples_are_generated_with_the_same_snapshot(eq_id, signal, engine_type):
     config = from_catalog(CATALOG)
-    engine = MesEngine(Run.create(seed=3, config_id=config.config_id), config)
+    run = Run.create(seed=3, config_id=config.config_id)
+    if engine_type == 'random':
+        from shiftlink.mes.random_factory import RandomFactoryEngine
+        engine = RandomFactoryEngine(run, config, run_nonce='same-snapshot', faults_enabled=False)
+    else:
+        engine = MesEngine(run, config)
     initial = readings(engine.snapshot, eq_id)[signal]
+    spec = next(s for eq in config.equipment if eq.equipment_id == eq_id for s in eq.signals if s.signal == signal)
+    assert spec.semantics['acquisition'] == 'manual_sample'
+    assert '매 관측 회차' in spec.semantics['applicability']
     engine.start()
-    for _ in range(59):
-        assert readings(engine.tick(), eq_id)[signal] == initial
-    refreshed = readings(engine.tick(), eq_id)[signal]
-    assert refreshed.observed_at == initial.observed_at + timedelta(seconds=60)
-    assert refreshed.quality == 'good'
+    values = {initial.value}
+    for _ in range(3):
+        snapshot = engine.tick()
+        refreshed = readings(snapshot, eq_id)[signal]
+        assert {m.observed_at for m in snapshot.measurements} == {snapshot.simulated_at}
+        assert refreshed.observed_at > initial.observed_at
+        assert refreshed.quality == 'good'
+        values.add(refreshed.value)
+    assert len(values) > 1, 'synthetic sample values must be regenerated, not only relabelled'
 
 
 @pytest.mark.parametrize('age,accepted', [(59, True), (60, False), (-1, False)])

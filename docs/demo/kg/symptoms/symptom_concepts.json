@@ -1,0 +1,566 @@
+{
+  "concepts": [
+    {
+      "id": "sym:hpu-outlet-pressure-absent",
+      "label": "펌프 출구 압력 없음",
+      "definition": "펌프가 운전 중인데 출구 압력계에 압력이 읽히지 않는 상태. 압력이 읽히지만 작업에 부족한 상태와 구별한다."
+    },
+    {
+      "id": "sym:hpu-outlet-pressure-low-present",
+      "label": "펌프 출구 압력은 읽히나 작업 압력·유량 부족",
+      "definition": "펌프 출구 압력은 읽히지만 작업에 필요한 압력 또는 유량이 부족한 상태. 압력이 전혀 읽히지 않는 상태와 구별한다."
+    },
+    {
+      "id": "sym:hpu-cooler-outlet-oil-temp-over-limit",
+      "label": "냉각기 출구 유온 상한 초과",
+      "definition": "냉각기 출구 포트의 오일 온도 측정값이 카드가 밝힌 프로젝트 설정 상한 58 degC를 초과하는 관측. 이 수치는 원문 제조사 임계값이 아니며 '냉각 성능 확인 필요'는 포함하지 않는다."
+    },
+    {
+      "id": "sym:hpu-pump-noise-low-output-milky-foam",
+      "label": "펌프 소음 증가·유량 또는 압력 저하·탱크 우유빛 거품",
+      "definition": "펌프 운전 중 정상 기록 대비 소음이 증가하고, 유량 38 L_min 미만 또는 압력 145 bar 미만이며 탱크 유면에 우유빛 거품이 함께 관찰되는 상태. 소음 증가는 정성 관측이다. 작동유 변색·젤라틴 덩어리와는 구별한다."
+    },
+    {
+      "id": "sym:hpu-fluid-cream-color-gel-rust",
+      "label": "작동유 크림색 변색·젤라틴 덩어리·녹",
+      "definition": "작동유 색이 투명에서 크림색(우유빛)으로 바뀌고, 탱크나 부품에 젤라틴 같은 덩어리가 보이거나 금속면에 녹이 생기는 외관 변화. 펌프 소음·유량 저하와 유면 거품이 함께 나타나는 상태와 구별하며, 수분 오염이라는 원인 판단은 포함하지 않는다."
+    },
+    {
+      "id": "sym:cv-idler-roll-slow-or-stopped-squeal",
+      "label": "부착물 없는 아이들러 롤 회전 지연·정지와 끽끽 소리",
+      "definition": "운전 중 부착물 없는 아이들러 롤의 회전수가 동일 조건 정상 기록의 80% 미만이거나 0 rpm이고, 정상 주행 때 없던 고음의 끽끽 소리가 관찰되는 상태. 80%는 프로젝트 기준이며 원문 임계값이 아니다."
+    },
+    {
+      "id": "sym:cv-belt-section-drift-at-all-points",
+      "label": "벨트 특정 구간만 모든 지점에서 한쪽으로 이탈",
+      "definition": "벨트의 같은 구간이 지나갈 때마다 컨베이어 모든 지점에서 한쪽으로 벗어나고 나머지 구간은 똑바로 도는 상태. 벨트 전체가 중앙을 벗어나 치우치는 상태와 구별한다."
+    },
+    {
+      "id": "sym:cv-belt-cover-spot-stripe-swelling",
+      "label": "벨트 커버 점·줄무늬 부풂",
+      "definition": "벨트 커버 표면이 군데군데 점이나 줄무늬 모양으로 부풀어 있는 외관 상태. 기름·그리스 오염은 원인 후보이며 정의에 포함하지 않는다."
+    },
+    {
+      "id": "sym:gr-reducer-regular-abnormal-noise",
+      "label": "감속기 규칙적 이상음",
+      "definition": "감속기에서 평소와 다른 규칙적인 운전음이 나는 상태. 불규칙한 운전음이나 장착부 주변의 소리와 구별한다."
+    },
+    {
+      "id": "sym:common-signal-out-of-range-without-alarm",
+      "label": "알람 없이 계측값이 정상 범위 이탈",
+      "definition": "알람은 표시되지 않았지만 순회 중 읽은 계측값이 정상 범위를 벗어난 관측. 알람 부재와 계측 신호 부재는 다르며, 정상 범위 경계는 실제 알람 설정값이 아니다."
+    },
+    {
+      "id": "sym:hpu-filter-dp-above-1-2-bar",
+      "label": "HPU 필터 차압 1.2 bar 초과",
+      "definition": "hpu_filter_dp 측정값이 1.2 bar를 초과하는 관측(MES 정상 범위 0–1.2 bar, 1.2 bar는 정상에 포함). 이 경계는 제조사 고장 기준이 아니며 막힘·교체 필요 판정은 포함하지 않는다."
+    },
+    {
+      "id": "sym:cau-air-pressure-drop",
+      "label": "압축공기 계통 압력 저하",
+      "definition": "압축공기 계통 압력이 떨어진 관측. 압력 상승, 공급량 부족, 누설음과 구별하며 누설은 원인 후보로서 정의에 포함하지 않는다."
+    },
+    {
+      "id": "sym:pdp-bus-voltage-dip-at-motor-start",
+      "label": "대형 모터 기동·부하 피크 시점 버스 전압 순간 강하",
+      "definition": "대형 모터 기동이나 부하 피크와 시각이 겹쳐 배전 버스 전압이 잠깐 떨어지는 상태. 기동·피크와 겹치지 않는 강하나 차단기 트립이 동반된 전압 저하와 구별한다."
+    },
+    {
+      "id": "sym:cau-compressor-stop-during-load-run",
+      "label": "압축기 부하 운전 중 정지",
+      "definition": "압축기가 부하 운전 중 정지하며 과열 정지, 과부하 트립, 토출 고온 경보가 동반될 수 있는 상태. 정전·복전 후 기동 불가와 구별한다."
+    },
+    {
+      "id": "sym:cau-compressor-no-start-after-power-restore",
+      "label": "복전 후 압축기 기동 불가",
+      "definition": "정전 뒤 전원이 복구되었는데 압축기가 기동하지 않는 상태. 재기동 확인 순서 자체와 자동 재기동 설정은 포함하지 않는다."
+    },
+    {
+      "id": "sym:cau-compressor-discharge-temp-high",
+      "label": "압축기 토출 고온",
+      "definition": "압축기 토출 온도가 높은 상태. 부하 운전 중 정지가 동반되는 상태와 구별하며, 지정 외 윤활유 사용은 원인 후보로서 포함하지 않는다."
+    },
+    {
+      "id": "sym:cau-compressor-oil-consumption-increase",
+      "label": "압축기 윤활유 소비 증가",
+      "definition": "압축기 윤활유 소비량이 늘어난 관측. 지정 외 윤활유 사용은 원인 후보로서 포함하지 않는다."
+    },
+    {
+      "id": "sym:cau-compressor-oil-foaming",
+      "label": "압축기 윤활유 거품",
+      "definition": "압축기 윤활유에 거품이 생긴 관측. 작동유 탱크의 우유빛 거품과는 설비·매체가 달라 구별한다."
+    }
+  ],
+  "card_map": {
+    "K-1001": [
+      "sym:hpu-outlet-pressure-absent"
+    ],
+    "K-1002": [
+      "sym:hpu-cooler-outlet-oil-temp-over-limit"
+    ],
+    "K-1003": [],
+    "K-1004": [
+      "sym:hpu-pump-noise-low-output-milky-foam"
+    ],
+    "K-1005": [],
+    "K-1006": [],
+    "K-1007": [],
+    "K-1008": [
+      "sym:hpu-fluid-cream-color-gel-rust"
+    ],
+    "K-1009": [],
+    "K-1010": [],
+    "K-1011": [
+      "sym:cv-idler-roll-slow-or-stopped-squeal"
+    ],
+    "K-1012": [],
+    "K-1013": [
+      "sym:cv-belt-section-drift-at-all-points"
+    ],
+    "K-1014": [],
+    "K-1015": [],
+    "K-1016": [
+      "sym:cv-belt-cover-spot-stripe-swelling"
+    ],
+    "K-1017": [],
+    "K-1018": [],
+    "K-1019": [],
+    "K-1020": [],
+    "K-1021": [],
+    "K-1022": [],
+    "K-1023": [],
+    "K-1024": [],
+    "K-1025": [],
+    "K-1026": [
+      "sym:gr-reducer-regular-abnormal-noise"
+    ],
+    "K-1027": [],
+    "K-1028": [],
+    "K-1029": [],
+    "K-1030": [],
+    "K-1101": [],
+    "K-1102": [],
+    "K-1103": [],
+    "K-1104": [],
+    "K-1105": [
+      "sym:common-signal-out-of-range-without-alarm"
+    ],
+    "K-1106": [],
+    "K-1107": [],
+    "K-1108": [],
+    "K-1109": [],
+    "K-1110": [],
+    "K-1111": [],
+    "K-1201": [
+      "sym:hpu-filter-dp-above-1-2-bar"
+    ],
+    "K-1202": [
+      "sym:hpu-filter-dp-above-1-2-bar"
+    ],
+    "K-1203": [
+      "sym:hpu-outlet-pressure-low-present"
+    ],
+    "K-1204": [],
+    "K-1205": [],
+    "K-1206": [],
+    "K-1207": [],
+    "K-1208": [],
+    "K-1209": [],
+    "K-1210": [],
+    "K-1211": [],
+    "K-1212": [],
+    "K-1213": [],
+    "K-1214": [],
+    "K-1215": [],
+    "K-1216": [],
+    "K-1217": [],
+    "K-1218": [],
+    "K-1219": [],
+    "K-1301": [
+      "sym:cau-air-pressure-drop"
+    ],
+    "K-1302": [],
+    "K-1303": [
+      "sym:cau-air-pressure-drop"
+    ],
+    "K-1304": [],
+    "K-1305": [],
+    "K-1306": [],
+    "K-1307": [
+      "sym:pdp-bus-voltage-dip-at-motor-start"
+    ],
+    "K-1308": [],
+    "K-1309": [],
+    "K-1310": [],
+    "K-1311": [
+      "sym:cau-compressor-stop-during-load-run"
+    ],
+    "K-1312": [],
+    "K-1313": [],
+    "K-1314": [],
+    "K-1315": [],
+    "K-1316": [],
+    "K-1317": [],
+    "K-1318": [],
+    "K-1319": [],
+    "K-1320": [],
+    "K-1321": [],
+    "K-1322": [
+      "sym:cau-compressor-no-start-after-power-restore"
+    ],
+    "K-1323": [
+      "sym:cau-compressor-discharge-temp-high",
+      "sym:cau-compressor-oil-consumption-increase",
+      "sym:cau-compressor-oil-foaming"
+    ],
+    "K-1324": [],
+    "K-1325": [],
+    "K-1401": []
+  },
+  "needs_review": [
+    {
+      "card_id": "K-1001",
+      "reason": "비안전 후보 연결, 사람 검수 전. 압력 '없음'. K-1203의 '읽히나 부족'과 병합하지 않음."
+    },
+    {
+      "card_id": "K-1002",
+      "reason": "비안전 후보 연결, 사람 검수 전. 원문 증상의 '냉각 성능 확인이 필요하다'는 확인 요구라서 증상 개념에 넣지 않음. 58 degC는 프로젝트 설정값."
+    },
+    {
+      "card_id": "K-1003",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1004",
+      "reason": "비안전 후보 연결, 사람 검수 전. 소음·유량/압력 미달·거품이 한 증상으로 함께 서술되어 복합 개념으로 둠. K-1008과 병합하지 않음."
+    },
+    {
+      "card_id": "K-1005",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1006",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1007",
+      "reason": "symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류. 안전 카드 아님."
+    },
+    {
+      "card_id": "K-1008",
+      "reason": "비안전 후보 연결, 사람 검수 전. 작동유 외관 변화. 원문이 에어레이션 거품과 혼동 가능하다고 명시하여 K-1004와 분리."
+    },
+    {
+      "card_id": "K-1009",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1010",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1011",
+      "reason": "비안전 후보 연결, 사람 검수 전. 회전수(정지/지연)와 소리가 함께 서술됨. 80%는 프로젝트 기준."
+    },
+    {
+      "card_id": "K-1012",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1013",
+      "reason": "비안전 후보 연결, 사람 검수 전. 특정 구간·모든 지점이라는 조건이 증상의 일부. 일반적 벨트 사행과 분리."
+    },
+    {
+      "card_id": "K-1014",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1015",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1016",
+      "reason": "비안전 후보 연결, 사람 검수 전. 외관 증상만 연결. 기름·그리스 오염은 원인 후보."
+    },
+    {
+      "card_id": "K-1017",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1018",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1019",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1020",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1021",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1022",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1023",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1024",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1025",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1026",
+      "reason": "비안전 후보 연결, 사람 검수 전. 원문 증상은 '규칙적인 운전음'. 갈리는/두드리는 구분은 know_how의 원인 후보 분기라 개념으로 나누지 않음."
+    },
+    {
+      "card_id": "K-1027",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1028",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1029",
+      "reason": "symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류. 안전 카드 아님."
+    },
+    {
+      "card_id": "K-1030",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1101",
+      "reason": "연결 보류. 증상이 아니라 인계 상황(확인 완료 범위·정상 결과의 다음 조 인계)을 서술. 증상 개념으로 만들지 않음."
+    },
+    {
+      "card_id": "K-1102",
+      "reason": "연결 보류. 조치 후 계측값 회복 부족을 다음 조에 넘기는 인계 기록 절차. 특정 설비 증상이 없음."
+    },
+    {
+      "card_id": "K-1103",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1104",
+      "reason": "연결 보류. 감각 관측을 기록하는 방법에 관한 카드. 소리·외관은 예시이며 특정 증상 개념으로 확정할 수 없음."
+    },
+    {
+      "card_id": "K-1105",
+      "reason": "비안전 후보 연결, 사람 검수 전. 인계 카드지만 증상 문장에 '알람 없이 정상 범위 이탈'이 관측으로 서술됨. 인계 방법 자체는 증상이 아니므로 제외."
+    },
+    {
+      "card_id": "K-1106",
+      "reason": "연결 보류. 조치 절차가 없는 상태의 인계 방법. 증상이 특정되지 않음."
+    },
+    {
+      "card_id": "K-1107",
+      "reason": "연결 보류. 공급받는 설비의 유지압·장력 저하가 언급되나 설비와 신호가 여러 종류이고 핵심은 공급원 상태 인계. 개념 단위 확정 불가로 보류."
+    },
+    {
+      "card_id": "K-1108",
+      "reason": "연결 보류. 추정과 관측을 구분해 적는 방법. 증상이 아님."
+    },
+    {
+      "card_id": "K-1109",
+      "reason": "연결 보류. 요청만 접수된 상태의 인계 방법. 증상이 아님."
+    },
+    {
+      "card_id": "K-1110",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1111",
+      "reason": "연결 보류. 수치 없이 눈대중으로 본 관측을 인계하는 방법. 증상이 특정되지 않음."
+    },
+    {
+      "card_id": "K-1201",
+      "reason": "비안전 후보 연결, 사람 검수 전. 관측 부분만 연결. '실제 막힘 표시 확인이 필요하다'는 확인 요구라 제외."
+    },
+    {
+      "card_id": "K-1202",
+      "reason": "비안전 후보 연결, 사람 검수 전. K-1201과 같은 관측(1.2 bar 초과)으로 병합. '교체 필요 여부 확인'은 조치 판단이라 제외."
+    },
+    {
+      "card_id": "K-1203",
+      "reason": "비안전 후보 연결, 사람 검수 전. 압력은 읽히고 압력 또는 유량이 부족. K-1001(압력 없음)과 병합하지 않음."
+    },
+    {
+      "card_id": "K-1204",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1205",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1206",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1207",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1208",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1209",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1210",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1211",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1212",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1213",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1214",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1215",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1216",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1217",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1218",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1219",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1301",
+      "reason": "비안전 후보 연결, 사람 검수 전. 압력 저하만 연결. '공압 설비 출력 저하'는 결과 서술이며 별도 개념으로 만들지 않음(검수 시 필요 여부 확인)."
+    },
+    {
+      "card_id": "K-1302",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1303",
+      "reason": "비안전 후보 연결, 사람 검수 전. '누설 의심'은 원인 후보라 제외. 압력 저하 관측만 연결."
+    },
+    {
+      "card_id": "K-1304",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1305",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1306",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1307",
+      "reason": "비안전 후보 연결, 사람 검수 전. 기동·부하 피크와 시각이 겹친다는 조건을 정의에 포함. 차단기 트립 동반 전압 저하(K-1310)와 구별."
+    },
+    {
+      "card_id": "K-1308",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1309",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1310",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1311",
+      "reason": "비안전 후보 연결, 사람 검수 전. 정지가 중심. 경보 종류(고온/과부하) 분기는 확인 순서라 개념으로 나누지 않음."
+    },
+    {
+      "card_id": "K-1312",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1313",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1314",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1315",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1316",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1317",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1318",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1319",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1320",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1321",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류."
+    },
+    {
+      "card_id": "K-1322",
+      "reason": "비안전 후보 연결, 사람 검수 전. '복전 후 기동 불가'만 연결. '정전 후 재기동' 상황·확인 순서는 증상이 아니라 제외."
+    },
+    {
+      "card_id": "K-1323",
+      "reason": "비안전 후보 연결, 사람 검수 전. 증상 문장에서 '다른 회사·상표 오일 사용'은 원인 후보라 제외하고 관측 3건만 연결. K-1311의 '정지 동반 토출 고온 경보'와 병합하지 않음."
+    },
+    {
+      "card_id": "K-1324",
+      "reason": "연결 보류. 전원 투입 순서(절차)를 서술. 증상이 아님."
+    },
+    {
+      "card_id": "K-1325",
+      "reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상)."
+    },
+    {
+      "card_id": "K-1401",
+      "reason": "연결 보류. 정비 작업 완료 증거 대조와 인계 절차. 증상이 아님."
+    }
+  ]
+}

@@ -8,6 +8,10 @@ m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 P=dict(gate=.1,on_scale=1,on_z=3,off_z=2,release=1)
 
 class StatefulTests(unittest.TestCase):
+    def test_hold_requires_current_evidence_after_ewma_turns_off(self):
+        got=m.hold_evidence(np.array([4,4,4,1,np.nan]),np.array([0,.05,.2,2,2]),np.array([True,False,False,True,True]),2.5,.1)
+        np.testing.assert_equal(got,[True,False,True,False,False])
+
     def run_case(self,z,ratio,*,baseline=True,resets=None,params=None,use_timestral=True):
         keys=[('a',i) for i in range(len(z))]
         alerts=m.stateful_alerts(keys,np.array(z)[:,None],np.array(ratio)[:,None],

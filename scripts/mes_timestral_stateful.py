@@ -63,6 +63,10 @@ def choose(candidates, baselines):
     return min(passed or candidates,key=lambda row:order(row,bool(passed))),bool(passed)
 
 
+def hold_evidence(raw_z,ratio,ewma,off_z,hold_ts):
+    raise NotImplementedError
+
+
 def setup():
     p=previous.paths();base.verify_runtime(p['runtime']);sys.path.insert(0,str(p['runtime']))
     from scripts.mes_validation_candidate_review import load_train_validation

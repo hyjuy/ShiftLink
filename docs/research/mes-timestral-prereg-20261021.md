@@ -15,3 +15,7 @@
 - 예상되는 한계: 합성 running 모드, 임의 .2 변위, 수동 시료의 합성 매프레임 갱신, 예측의 고장 상태 적응, 짧은64-step 이력. 일반 예측 벤치마크의 우수함은 고장 진단 개선 근거가 아니다. 장치 성능·실제 원인 진단은 미검증.
 
 검증: 인과 window, label 독립성, run/mode reset, 누락·품질, 비대칭 분위수, train-only 보정, 경보 시작/지연, 출력 덮어쓰기 방지 테스트 후 실행. 결과·원본 수치·재현 명령·실제 버전을 보존한다.
+
+## 결과 확인 전 계산 설정 정정
+
+첫 실행은 정상 학습 예측 중 중단했으며 calibration·검증 점수·예측 파일은 생성되지 않았다. 난수 `(B,68,64)` 입력의 CPU 측정에서 8-thread/batch8은 창당 .297초, 4-thread/batch1은 .222초였다. 16개 창 반복에서는 4-thread/1worker .278초, 2-thread/2workers .216초, 1-thread/4workers .161초였다. `output/mes-timestral-throughput-preflight-20261021.json`과 `mes-timestral-parallel-preflight-20261021.json`에 보존했다. 계산 설정만 **1 thread × 4 workers, batch1**로 정정한다. 각 창은 여전히 독립 B1이며 라인68채널 V의 joint 예측이다. 학습 전체 예측 대신 정상 보정에 실제 사용하는171창만 예측한다. 같은 입력의 예측이므로 모델·데이터·점수·임계값 선택 계약은 유지한다. CPU용 PyTorch 설치의 드라이브 간 복사가 느려 환경만 C: 임시 폴더로 옮겼다. 최초 D: 설치 파일과 중단 로그를 보존한다.

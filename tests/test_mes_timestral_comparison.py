@@ -109,9 +109,13 @@ class ComparisonTests(unittest.TestCase):
             self.assertEqual(equipment, ['eq'])
             self.assertEqual(values[0,0], 64.)
             self.assertEqual(timing['windows'], 6)
-            np.testing.assert_equal(calls[0][0,0], np.arange(64))
+            self.assertTrue(any(np.array_equal(call[0,0],np.arange(64)) for call in calls))
             with np.load(artifact) as saved:
                 self.assertEqual(saved['quantiles'].shape,(6,1,3))
+            subset, _, _, _ = m.forecast_scores({'r':frames()}, [('eq','x')], {('eq','x'):(0.,1.)},
+                lambda f:{('eq','x'):f['value']}, Forecaster(),Path(folder)/'subset.npz',
+                selected={('r',65)},workers=1)
+            self.assertEqual(subset,[('r',65)])
             with self.assertRaises(FileExistsError):
                 m.forecast_scores({'r':frames()}, [('eq','x')], {('eq','x'):(0.,1.)},
                     lambda f:{('eq','x'):f['value']}, Forecaster(), artifact, batch=2)
@@ -138,6 +142,25 @@ class ComparisonTests(unittest.TestCase):
         self.assertEqual(result['normal_label_equipment_frames'],2)
         self.assertEqual(result['prefault_equipment_frames'],1)
         self.assertEqual(result['active_source_alert_equipment_frames'],1)
+
+    def test_calibration_rejects_changed_training_source(self):
+        calibration = dict(model={'rev':'1'},channels=[['eq','x']],runtime_provenance_sha256='r',
+                           training_provenance={'stats_sha256':'a'})
+        m.validate_calibration(calibration,{'rev':'1'},[('eq','x')],'r',{'stats_sha256':'a'})
+        with self.assertRaises(ValueError):
+            m.validate_calibration(calibration,{'rev':'1'},[('eq','x')],'r',{'stats_sha256':'b'})
+
+    def test_seed_overlap_and_pairing_rejected(self):
+        source = {'runs':[{'split':'train','seed':1},{'split':'validation','seed':2}]}
+        full = {'runs':[{'split':'train','seed':3},{'split':'validation','seed':4}]}
+        m.check_manifest_pair(source,full,full,True)
+        with self.assertRaises(ValueError):
+            m.check_manifest_pair(source,full,source,False)
+        with self.assertRaises(ValueError):
+            m.check_manifest_pair(source,source,source,True)
+        overlap = {'runs':[{'split':'validation','seed':1}]}
+        with self.assertRaises(ValueError):
+            m.check_manifest_pair(source,overlap,overlap,False)
 
 
 if __name__ == '__main__':

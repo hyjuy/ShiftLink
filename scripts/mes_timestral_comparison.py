@@ -6,6 +6,7 @@ import platform
 import sys
 import time
 from collections import defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
@@ -113,22 +114,49 @@ def verify_runtime(runtime):
     return sha(runtime/'provenance.json')
 
 
-def forecast_scores(frames, channels, stats, valid_values, forecaster, artifact, batch=8):
+def validate_calibration(calibration, model, channels, provenance, training):
+    if (calibration['model'] != model or calibration['channels'] != [list(c) for c in channels]
+            or calibration['runtime_provenance_sha256'] != provenance
+            or calibration['training_provenance'] != training):
+        raise ValueError('calibration provenance mismatch')
+
+
+def check_manifest_pair(source, full, weak, confirmation):
+    if full['runs'] != weak['runs']:
+        raise ValueError('full/weak manifest pairing differs')
+    training_seeds = {r['seed'] for r in source['runs'] if r['split'] == 'train'}
+    validation_seeds = {r['seed'] for r in full['runs'] if r['split'] == 'validation'}
+    if training_seeds & validation_seeds:
+        raise ValueError('train/validation seed overlap')
+    if confirmation and ({r['seed'] for r in source['runs']} & {r['seed'] for r in full['runs']}):
+        raise ValueError('confirmation seed overlap')
+
+
+def forecast_scores(frames, channels, stats, valid_values, forecaster, artifact, batch=1, selected=None, workers=4):
     started = time.perf_counter()
     x, keys = causal_windows(frames, channels, valid_values)
+    if selected is not None:
+        keep = np.array([key in selected for key in keys])
+        x, keys = x[keep], [key for key in keys if key in selected]
     if not keys:
         raise ValueError('no causal windows')
     lookup = {(run, f['sequence']): f for run, rows in frames.items() for f in rows}
-    actual = np.array([[valid_values(lookup[k]).get(c, np.nan) for c in channels] for k in keys])
+    observed = [valid_values(lookup[k]) for k in keys]
+    actual = np.array([[row.get(c, np.nan) for c in channels] for row in observed])
     estimates, elapsed = [], []
-    for start in range(0, len(keys), batch):
+    def call(start):
         tick = time.perf_counter()
         forecast = forecaster.forecast(x[start:start+batch], prediction_length=1)
-        estimates.append(np.stack([forecast.quantile(q).detach().cpu().numpy()[:, :, 0]
-                                   for q in (.01, .5, .99)], axis=-1))
-        elapsed.append(time.perf_counter()-tick)
-        if start % (batch*40) == 0:
-            print(f'{artifact.stem}: {start+len(estimates[-1])}/{len(keys)} windows', flush=True)
+        return (np.stack([forecast.quantile(q).detach().cpu().numpy()[:, :, 0]
+                          for q in (.01, .5, .99)], axis=-1), time.perf_counter()-tick)
+    forecast_started = time.perf_counter()
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for start, (estimate, seconds) in zip(range(0,len(keys),batch),pool.map(call,range(0,len(keys),batch))):
+            estimates.append(estimate)
+            elapsed.append(seconds)
+            if start % 128 == 0:
+                print(f'{artifact.stem}: {start+len(estimate)}/{len(keys)} windows', flush=True)
+    forecast_seconds = time.perf_counter()-forecast_started
     quantiles = np.concatenate(estimates)
     values = channel_scores(actual, quantiles[:,:,1], quantiles[:,:,0], quantiles[:,:,2],
                             np.array([stats[c][1] for c in channels]))
@@ -145,8 +173,9 @@ def forecast_scores(frames, channels, stats, valid_values, forecaster, artifact,
         tick = time.perf_counter()
         forecaster.forecast(x[i:i+1], prediction_length=1)
         singles.append(time.perf_counter()-tick)
-    timing = {'windows': len(keys), 'batch_size': batch, 'forecast_seconds': sum(elapsed),
-              'seconds_per_window_batched': sum(elapsed)/len(keys),
+    timing = {'windows': len(keys), 'batch_size': batch, 'workers':workers,
+              'forecast_seconds':forecast_seconds, 'summed_call_seconds':sum(elapsed),
+              'seconds_per_window_batched':forecast_seconds/len(keys),
               'single_window_seconds': singles, 'total_seconds': time.perf_counter()-started,
               'forecast_sha256': sha(artifact)}
     return keys, aggregated, equipment, timing
@@ -190,37 +219,44 @@ def evaluate(args):
     import timestral
     from timestral import TimestralForecaster
     from huggingface_hub import HfApi, snapshot_download
-    torch.set_num_threads(8)
+    torch.set_num_threads(1)
     torch.manual_seed(20261021)
     torch.use_deterministic_algorithms(True)
     config, source = load_train_validation(args.train_full, profile='independent')
+    source_manifest = json.loads((args.train_full/'manifest.json').read_text(encoding='utf-8'))
+    manifests = {name:json.loads((path/'manifest.json').read_text(encoding='utf-8'))
+                 for name,path in (('full',args.full),('weak',args.weak))}
+    check_manifest_pair(source_manifest,manifests['full'],manifests['weak'],args.phase=='confirmation')
     specs, stats = fit_normal(source['train'], config)
     normals = [valid_values(f, specs) for rows in source['train'].values() for f,l in rows if not l['faults']]
     channels = [c for c in sorted(stats) if sum(c in v for v in normals)/len(normals) >= .95]
     values = lambda frame: valid_values(frame, specs)
-    revision = HfApi().model_info(MODEL).sha
+    training = {'source_prefix':prefix_hashes(args.train_full,source_manifest),
+                'stats_sha256':hashlib.sha256(json.dumps([[*c,*stats[c]] for c in sorted(stats)]).encode()).hexdigest()}
+    calibration = (json.loads(args.calibration.read_text(encoding='utf-8'))
+                   if args.calibration.exists() else None)
+    if args.phase == 'confirmation' and calibration is None:
+        raise ValueError('confirmation requires fixed development calibration')
+    revision = calibration['model']['revision'] if calibration else HfApi().model_info(MODEL).sha
     model_path = Path(snapshot_download(MODEL, revision=revision,
         cache_dir=str(args.artifacts/'hub'), allow_patterns=['config.json','model.safetensors','LICENSE','README.md']))
     model_meta = {'id': MODEL, 'revision': revision, 'code_revision': CODE_REVISION,
                   'files': {p.name:sha(p) for p in model_path.iterdir() if p.is_file()},
                   'torch':torch.__version__, 'numpy':np.__version__, 'python':platform.python_version(),
-                  'timestral_source':str(Path(timestral.__file__).parent), 'cpu_threads':8}
+                  'timestral_source':str(Path(timestral.__file__).parent), 'cpu_threads_per_call':1,'workers':4}
     forecaster = TimestralForecaster.from_pretrained(str(model_path), device='cpu')
-    if args.calibration.exists():
-        calibration = json.loads(args.calibration.read_text(encoding='utf-8'))
-        if (calibration['model'] != model_meta or calibration['channels'] != [list(c) for c in channels]
-                or calibration['runtime_provenance_sha256'] != provenance_hash):
-            raise ValueError('calibration provenance mismatch')
+    if calibration is not None:
+        validate_calibration(calibration,model_meta,channels,provenance_hash,training)
         thresholds = calibration['thresholds']
     else:
         frames = {run:[f for f,_ in rows] for run,rows in source['train'].items()}
         keys, scores, equipment, timing = forecast_scores(frames, channels, stats, values, forecaster,
-                                                         args.artifacts/'train-forecasts.npz')
+            args.artifacts/'train-forecasts.npz', selected=normal_window_keys(source['train']))
         thresholds, counts = calibrate(keys, scores, equipment, normal_window_keys(source['train']))
         calibration = {'model':model_meta, 'channels':[list(c) for c in channels],
                        'thresholds':thresholds, 'clean_windows_per_equipment':counts,
                        'runtime_provenance_sha256':provenance_hash, 'timing':timing,
-                       'train_source':str(args.train_full), 'context':CONTEXT}
+                       'train_source':str(args.train_full), 'training_provenance':training, 'context':CONTEXT}
         write_new(args.calibration, calibration)
     result = {'model':model_meta, 'calibration_sha256':sha(args.calibration),
               'calibration':calibration, 'runtime_provenance_sha256':provenance_hash,

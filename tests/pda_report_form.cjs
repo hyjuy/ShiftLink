@@ -44,3 +44,8 @@ assert.throws(()=>selectedReportPayload({...draft,records:[{...record,story:'가
 console.log('PASS: normal shift, multi-equipment records, optional details, candidate, required fields and storage limit');
 
 assert.throws(()=>selectedReportPayload({...draft,ids:['EQ-1'],records:[{...record,equipment:['EQ-1']}]},equipment),/원인의 대상 설비/);
+
+const withSymptom={...record,symptom:'고온 경보가 반복됨'};
+assert.equal(selectedReportPayload({...draft,records:[withSymptom]},equipment).work_report.records[0].symptom,'고온 경보가 반복됨');
+assert.match(reportArchiveText(selectedReportPayload({...draft,records:[withSymptom]},equipment),equipment),/발생 현상: 고온 경보가 반복됨/);
+assert.throws(()=>selectedReportPayload({...draft,records:[{...record,symptom:'가'.repeat(4001)}]},equipment),/발생 현상.*4000/);

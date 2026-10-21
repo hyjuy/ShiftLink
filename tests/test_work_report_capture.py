@@ -200,3 +200,13 @@ def test_structured_report_requires_occurrence_time(service,occurred_at):
         note['work_report']['records'][0]['occurred_at']=occurred_at
     with pytest.raises(ValueError,match='발생시각'):
         service.record_work_report(note)
+
+
+def test_symptom_roundtrips_and_is_validated(service):
+    note=captured(service,symptom='모터에서 소음이 남')
+    service.record_work_report(note)
+    assert service.work_report(note['handover_id'])['report']['work_report']['records'][0]['symptom']=='모터에서 소음이 남'
+    for bad in (42,'x'*4001):
+        other=captured(service,symptom=bad);other['handover_id']='HO-SYMPTOM-BAD'
+        with pytest.raises(ValueError):service.record_work_report(other)
+    assert service.storage.get_handover('HO-SYMPTOM-BAD') is None

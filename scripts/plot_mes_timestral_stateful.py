@@ -18,9 +18,13 @@ def main():
     args=parser.parse_args()
     result=json.loads(args.result.read_text(encoding='utf-8'))
     args.out_dir.mkdir(parents=True,exist_ok=False)
-    names=['ewma','previous_hybrid','stateful','ewma_stateful_ablation']
-    labels=['EWMA','Previous\nhybrid','Stateful\nhybrid','EWMA stateful\n(no Timestral)']
-    colors=['#52677a','#c48b33','#327d6f','#83567b']
+    preserving='preserved_hybrid' in result['metrics']
+    names=(['ewma','original_hybrid','preserved_hybrid'] if preserving else
+           ['ewma','previous_hybrid','stateful','ewma_stateful_ablation'])
+    labels=(['EWMA','Original\nhybrid','Preserved\nhybrid'] if preserving else
+            ['EWMA','Previous\nhybrid','Stateful\nhybrid','EWMA stateful\n(no Timestral)'])
+    colors=['#52677a','#c48b33','#327d6f','#83567b'][:len(names)]
+    diagnostic='original_hybrid' if preserving else 'previous_hybrid'
     fig,axes=plt.subplots(2,2,figsize=(12,8),layout='constrained')
     for ax,field,title in zip(axes.flat,('injected_event_recall','wrong_alert_equipment_seconds',
             'duplicate_alert_episodes','p95_onset_delay_seconds'),
@@ -56,7 +60,7 @@ def main():
     for r,rows in runs.items():
         before=set()
         for f,_ in rows:
-            current=alerts['previous_hybrid'][(r,f['sequence'])]
+            current=alerts[diagnostic][(r,f['sequence'])]
             for eq in current-before:counts[(r,eq)]=counts.get((r,eq),0)+1
             before=current
     r,eq=min(counts,key=lambda key:(-counts[key],key))
@@ -65,11 +69,11 @@ def main():
     for ax,name,label,color in zip(axes[:3],names[:3],labels[:3],colors[:3]):
         ax.step(sequence,[int(eq in alerts[name][(r,s)]) for s in sequence],where='post',color=color)
         ax.set(ylabel=label.replace('\n',' '),ylim=(-.1,1.2))
-    axes[0].set_title(f'Most previous-hybrid alert starts: {r[:10]} / {eq} (fixed diagnostic selection)')
+    axes[0].set_title(f'Most original-hybrid alert starts: {r[:10]} / {eq} (fixed diagnostic selection)')
     axes[3].step(sequence,[int(any(fault['equipment_id']==eq and fault['intensity']>0 for fault in label['faults'])) for _,label in rows],where='post',color='#83567b')
     axes[3].set(ylabel='Active source',xlabel='Sequence (1-second frames)',ylim=(-.1,1.2))
     fig.savefig(args.out_dir/'alarm-trace.png',dpi=160);plt.close(fig)
-    summary={'delays':delays,'trace_run':r,'trace_equipment':eq,'selection':'most previous-hybrid starts; lexical ties'}
+    summary={'delays':delays,'trace_run':r,'trace_equipment':eq,'selection':f'most {diagnostic} starts; lexical ties'}
     (args.out_dir/'plot-data.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
     print(args.out_dir)
 

@@ -4,7 +4,7 @@
 분석 대상: 현재 로컬 작업 트리. 커밋되지 않은 변경과 미추적 파일도 포함한다.
 목적: 대화 컨텍스트가 초기화되어도 구조·진입점·확인 경로를 복원하는 공통 안내서.
 
-공유 기준 주의: 이 문서는 로컬 작업 트리 분석을 바탕으로 작성되었다. `codex/kg-base`는 이미 공유된 커밋 `000b9102a10914ca694852aa0ff92285e3cc2056`에 승인된 세 문서만 추가한다. 아래에 언급된 다른 미커밋 구현·미추적 자료는 이 기준에 포함되지 않는다. 실제 파일이 없는 경로는 미공유 자료로 구분하고, 실행 동작은 체크아웃한 코드로 확인한다.
+공유 기준 주의: 이 문서는 로컬 작업 트리 분석을 바탕으로 작성되었다. 지식 그래프 공통 기준 커밋 `5167376b5ded1e33725394f2b65cb6977c121dec`는 이미 공유된 커밋 `000b9102a10914ca694852aa0ff92285e3cc2056`에 승인된 세 문서만 추가했다. 이후 PR #327의 CI 복구에는 기존 연구 테스트가 참조하는 누락 소스와 CI 의존성 설치를 포함한다. 그 밖의 미커밋 구현·미추적 자료는 공유 기준에 포함되지 않는다. 실제 파일이 없는 경로는 미공유 자료로 구분하고, 실행 동작은 체크아웃한 코드로 확인한다.
 
 ## 1. 읽는 순서와 사실의 우선순위
 
@@ -146,8 +146,9 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 - `scripts/mes_*.py`와 관련 `docs/research/`, `docs/experiments/`에는
   데이터셋 감사·모델 비교·위치 추정·EWMA·PCA·forest·Timestral 등의 연구 경로가 있다.
   파일 존재나 연구 보고서만으로 실시간 서버에 채택됐다고 단정하지 않는다.
-- `requirements-mes-research.txt`는 오프라인 연구 의존성이다.
-  `requirements-vision.txt`와 NumPy 버전이 다르므로 무조건 한 환경에 합치지 않는다.
+- 로컬 `requirements-mes-research.txt`는 미공유 오프라인 연구 의존성이다.
+  이 파일의 NumPy·SciPy 버전은 CI의 Python 3.10·비전 환경과 다르므로 무조건 합치지 않는다.
+  공유 연구 테스트의 설치 버전은 `.github/workflows/ci.yml`을 따른다.
 - `uploader.py`는 로컬 pending 기록을 업로드한다. 현재
   `HOLD_RESOLUTION_UPLOAD = True`이므로 조치 기록 및 관련 source_session_id가 있는
   인계 일부는 업로드를 보류한다. “모든 기록을 클라우드에 동기화”한다고 설명하지 않는다.
@@ -178,6 +179,8 @@ python eval/qa/route_score.py
 
 현재 로컬 `.github/workflows/ci.yml`:
 Python 3.10, pytest, 선택된 Node PDA 회귀, KB 재생성 diff 검사, route_score.
+pytest 전에 비전 의존성과 scikit-learn, CPU PyTorch, 고정 커밋의 Timestral을 설치한다.
+연구 테스트도 전체 pytest에 포함하며, Timestral 테스트는 작은 임시 모델로 실행한다.
 기준은 `MIN_DEV_ROUTE=21`, `MIN_SANITY_ROUTE=28`이다.
 루트 README의 dev 20/30 설명과 다르므로 CI 파일을 우선 확인한다.
 

@@ -1,6 +1,7 @@
 """Causality and calibration guarantees for the offline Timestral experiment."""
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -86,6 +87,57 @@ class ComparisonTests(unittest.TestCase):
         self.assertEqual(m.aggregate_failures(baseline, dict(baseline, duplicate_alert_episodes=29)), [])
         self.assertIn('no_strict_improvement', m.aggregate_failures(baseline, baseline))
         self.assertIn('p95_onset_delay_seconds', m.aggregate_failures(baseline, dict(baseline,p95_onset_delay_seconds=None)))
+
+    def test_forecast_adapter_end_to_end_and_artifact_preservation(self):
+        class ArrayTensor:
+            def __init__(self, a): self.a = a
+            def detach(self): return self
+            def cpu(self): return self
+            def numpy(self): return self.a
+        calls = []
+        class Forecaster:
+            def forecast(self, x, prediction_length):
+                self_shape = (len(x), x.shape[1], 1)
+                calls.append(x.copy())
+                return SimpleNamespace(quantile=lambda q: ArrayTensor(np.full(self_shape,
+                    {.01:-1., .5:0., .99:1.}[q])))
+        with tempfile.TemporaryDirectory() as folder:
+            artifact = Path(folder)/'forecasts.npz'
+            keys, values, equipment, timing = m.forecast_scores({'r':frames()}, [('eq','x')],
+                {('eq','x'):(0.,1.)}, lambda f:{('eq','x'):f['value']}, Forecaster(), artifact, batch=2)
+            self.assertEqual(len(keys), 6)
+            self.assertEqual(equipment, ['eq'])
+            self.assertEqual(values[0,0], 64.)
+            self.assertEqual(timing['windows'], 6)
+            np.testing.assert_equal(calls[0][0,0], np.arange(64))
+            with np.load(artifact) as saved:
+                self.assertEqual(saved['quantiles'].shape,(6,1,3))
+            with self.assertRaises(FileExistsError):
+                m.forecast_scores({'r':frames()}, [('eq','x')], {('eq','x'):(0.,1.)},
+                    lambda f:{('eq','x'):f['value']}, Forecaster(), artifact, batch=2)
+            with self.assertRaises(ValueError):
+                m.forecast_scores({'r':frames(5)}, [('eq','x')], {('eq','x'):(0.,1.)},
+                    lambda f:{('eq','x'):f['value']}, Forecaster(), Path(folder)/'short.npz')
+
+    def test_write_new_and_runtime_integrity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root/'a.py').write_text('pass',encoding='utf-8')
+            m.write_new(root/'provenance.json', {'files':{'a.py':m.sha(root/'a.py')}})
+            self.assertEqual(m.verify_runtime(root),m.sha(root/'provenance.json'))
+            with self.assertRaises(FileExistsError):
+                m.write_new(root/'provenance.json', {})
+            (root/'a.py').write_text('changed',encoding='utf-8')
+            with self.assertRaises(ValueError):
+                m.verify_runtime(root)
+
+    def test_background_distinguishes_prefault_and_recovery(self):
+        rows = [(f, {'faults':[]}) for f in frames(3)]
+        rows[1][1]['faults']=[{'equipment_id':'eq','intensity':1}]
+        result = m.background({'r':rows},{('r',i):{'eq'} for i in (1,2,3)})
+        self.assertEqual(result['normal_label_equipment_frames'],2)
+        self.assertEqual(result['prefault_equipment_frames'],1)
+        self.assertEqual(result['active_source_alert_equipment_frames'],1)
 
 
 if __name__ == '__main__':

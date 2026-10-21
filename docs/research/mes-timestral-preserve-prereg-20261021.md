@@ -10,6 +10,8 @@
 
 별도의 초기진입은 현재 TSratio>early_scale & rawZ>=early_z일 때만 OR추가한다. early는 원본anchor를 초기화하지 않는다. 연결은 원본ON이 있었고 직전 출력도ON인 경우에만 허용하며, anchor로부터 max_gap을 초과하면 early가 중간에 있어도 연결하지 않는다. rawZ누락/비가동에서는 추가진입과 연결을 금지하지만 원본 출력은 변경하지 않는다.
 
+early의현재ON은추가직접출력이며단절연결은아니다. 이때기존anchor는재설정하지않고그대로두며, 실제원본/early/연결모두OFF인프레임에서anchor를폐기한다. 따라서early로연결예산을늘릴수없다. 테스트에서early만의효과는EWMA OFF로구분한다.
+
 max_gap{1,2,3}×hold_z{3,3.5,4}×hold_ratio{.025,.05}×early{비활성 또는 (early_scale{1,1.25}×early_z{2,2.5,3})}, 총126개와 변경없는원본1개, 합127개다. 이후 후보 범위를 늘리지 않는다.
 
 ## 개발·선정·독립 확인

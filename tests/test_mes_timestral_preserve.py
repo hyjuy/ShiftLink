@@ -8,10 +8,11 @@ m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 P=dict(gap=2,hold_z=3,hold_ratio=.05,early_scale=None,early_z=None)
 
 class PreserveTests(unittest.TestCase):
-    def run_case(self,ratios,z=None,params=None,resets=None):
+    def run_case(self,ratios,z=None,params=None,resets=None,ewma_flags=None):
         keys=[('r',i+1) for i in range(len(ratios))]
+        flags=ewma_flags if ewma_flags is not None else [True]*len(keys)
         out=m.preserve_alerts(keys,np.array(z if z is not None else [4]*len(keys))[:,None],
-            np.array(ratios)[:,None],{k:{'e'} for k in keys},['e'],resets or [False]*len(keys),params or P)
+            np.array(ratios)[:,None],{k:{'e'} if yes else set() for k,yes in zip(keys,flags)},['e'],resets or [False]*len(keys),params or P)
         return [bool(out[k]) for k in keys]
 
     def test_original_on_never_removed_and_gap_is_bounded(self):
@@ -28,8 +29,8 @@ class PreserveTests(unittest.TestCase):
 
     def test_early_does_not_refresh_original_anchor(self):
         p=dict(P,early_scale=1,early_z=2)
-        self.assertEqual(self.run_case([.2,1.2,.08,.08],z=[4,2.5,4,4],params=p),[True,True,True,False])
-        self.assertEqual(self.run_case([1.2,.08],z=[2.5,4],params=p),[True,False])
+        self.assertEqual(self.run_case([.2,1.2,.08,.08],z=[4,2.5,4,4],params=p,ewma_flags=[True,False,True,True]),[True,True,True,False])
+        self.assertEqual(self.run_case([1.2,.08],z=[2.5,4],params=p,ewma_flags=[False,True]),[True,False])
 
     def test_control_is_exact_original(self):
         self.assertEqual(self.run_case([.2,.08,1.6,0],params=dict(P,gap=0)),[True,False,True,False])

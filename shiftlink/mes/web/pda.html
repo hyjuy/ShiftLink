@@ -308,9 +308,6 @@
     border:0;border-radius:8px;background:transparent;color:var(--tx-2);font-size:20px;cursor:pointer}
   .res-live{border:2px solid var(--scan);border-radius:10px;padding:10px;display:grid;gap:8px}
   .res-lock{border:1px solid var(--notice);border-radius:10px;padding:8px;color:var(--notice);font-size:14px;display:grid;gap:6px}
-  .res-verdict{border-radius:10px;padding:10px 12px;font-size:15px;border:1px solid var(--edge)}
-  .res-verdict.good{border-color:var(--ok);color:var(--ok-tx)}
-  .res-verdict.bad{border-color:var(--notice);color:var(--notice)}
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */
@@ -878,9 +875,6 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-ctx .equipment-functions>.section-heading .btn{margin:0}
 #s-ctx .workspace-divider{cursor:col-resize}
 #obsList small{white-space:pre-line}
-.report-ask{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-2)}
-.report-ask p{flex:1 1 auto;margin:0;font-weight:600}
-.report-ask .btn{width:auto;min-width:72px;margin:0}
 #s-ctx .chat-panel #askSafety{margin-top:12px;padding:0 14px;background:var(--surface);flex:0 0 auto;min-height:0;max-height:45%;overflow:auto}
 #s-ctx .chat-panel #askSafety:empty{display:none}
 #s-ctx .chat-panel #askSafety .safety-fold{gap:0;border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
@@ -1542,11 +1536,6 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .msg.bot .ans-list li{overflow-wrap:anywhere}
 #s-ctx .chat-panel .msg.bot .ans-list li+li{margin-top:2px}
 /* 근무일지 상자: 질문 / 「조치하며 작성」(주, 꽉 참) / 「바로 작성」·「아니오」(보조, 반반) — 근무일지로 가는 두 길을 한 상자에 */
-#s-ctx .chat-panel .msg.bot .report-ask{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10px 8px;margin:0;padding:12px 12px 12px 16px}
-#s-ctx .chat-panel .msg.bot .report-ask p{grid-column:1/-1;margin:0;text-align:left;font-size:16px;line-height:1.5}
-#s-ctx .chat-panel .msg.bot .report-ask .btn{width:auto;min-width:0;height:48px;min-height:48px;margin:0;padding:0;font-size:15px;justify-content:center}
-#s-ctx .chat-panel .msg.bot .report-ask .btn.primary{grid-column:1/-1;height:56px;min-height:56px;font-size:17px}
-#s-ctx .chat-panel .msg.bot .report-ask .btn.yes{background:var(--surface);border-color:var(--accent);color:var(--accent)}
 #s-ctx .chat-panel .msg.bot .ans-meta{margin-top:4px;margin-bottom:0;font-size:14px;color:var(--tx-2)}
 #s-ctx .chat-panel .msg .basis-detail{border:1px solid var(--edge);border-radius:8px;background:var(--surface)}
 #s-ctx .chat-panel .msg .basis-detail[open]{padding:0 16px 12px}
@@ -1575,9 +1564,9 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .sugg-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #s-ctx .chat-panel .chatfoot.open .sugg-toggle{border-color:var(--accent);color:var(--accent)}
 #s-ctx .chat-panel .sugg-toggle:not([data-hot=""])::after{content:attr(data-hot);position:absolute;top:-6px;left:30px;right:auto;box-sizing:border-box;min-width:20px;height:20px;padding:0 5px;text-align:center;border-radius:10px;background:var(--notice);color:#fff;font-size:12px;font-weight:700;line-height:20px}
-#s-ctx .chat-panel .chatin-eq{position:relative;margin-left:22px;padding:6px 18px;border-radius:999px;background:var(--surface-2);font-size:16px;font-weight:500;color:var(--tx)}
-#s-ctx .chat-panel .chatin-eq:empty{display:none}
-#s-ctx .chat-panel .chatin-eq::before{content:"";position:absolute;left:-12px;top:6px;bottom:6px;width:1px;background:var(--edge)}
+#s-ctx .chat-panel .chatin-report{position:relative;margin-left:22px;min-height:44px;padding:0 18px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);font:inherit;font-size:16px;font-weight:700;color:var(--accent);cursor:pointer}
+#s-ctx .chat-panel .chatin-report::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:1px;background:var(--edge)}
+#s-ctx .chat-panel .chatin-report.hot{background:var(--accent);color:#fff}
 #s-ctx .chat-panel .chatin #doSearch{margin-left:auto;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border-radius:10px;display:grid;place-items:center}
 #s-ctx .chat-panel .chatin #doSearch svg{width:24px;height:24px}
 #s-ctx .chat-panel .chatin #doSearch.stop{background:var(--tx);border-color:var(--tx);color:#fff}
@@ -1808,9 +1797,6 @@ button.ld-row:hover{background:var(--surface-2)}
 
 
   #s-resolve .appbar{background:var(--surface)}
-  #s-resolve .res-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px 0;flex:0 0 auto;width:100%;max-width:780px;align-self:center}
-  #s-resolve .res-heading h2{margin:0;font-size:20px}
-  #resEquipment{font-size:14px;color:var(--tx-2);padding-right:12px}
   #s-resolve .res-flow{flex:0 0 auto;justify-content:center;flex-wrap:wrap;margin:0;padding:16px;border-bottom:1px solid var(--edge);font-size:14px}
   #s-resolve .res-flow li::before{display:none}
   #s-resolve .res-flow li:not(:last-child)::after{width:20px;height:1px}
@@ -1819,15 +1805,36 @@ button.ld-row:hover{background:var(--surface-2)}
   #s-resolve .res-component .lbl{margin:0}
   #resComponents{min-height:48px;padding:10px 12px;background:var(--surface);color:var(--tx);font:inherit;border:1px solid var(--edge);width:100%}
   #s-resolve .resin{padding:12px;resize:vertical}
+  #resSymptom{min-height:104px}   /* 관찰한 증상: 3줄이 한 번에 보이게 */
   #s-resolve .res-help{font-size:14px}
-  #s-resolve .res-details{border-bottom:1px solid var(--edge);padding:0 0 4px;color:var(--tx-2)}
-  #s-resolve .res-details summary{min-height:44px;padding:10px 0;font-size:14px}
-  #s-resolve .res-details[open]>:not(summary){margin-bottom:12px}
+  #s-resolve .res-custom{margin:12px 0 4px}   /* 다른 조치 입력: 항상 펼쳐 둔다 */
+  #s-resolve .resrow .box{flex:0 0 auto;width:48px;height:48px;min-height:0;padding:0;border:2px solid var(--accent);border-radius:10px;background:var(--surface);color:#fff;font:inherit;font-size:28px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #s-resolve .resrow .box.done{background:var(--accent)}
+  #s-resolve .resrow .box.done::after{content:"✓"}
+  #s-resolve .res-custom{align-items:center;gap:12px}
   #s-resolve .res-action-list{display:grid;gap:0}
   #s-resolve .res-action{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;padding:16px 0;border-top:1px solid var(--edge);align-items:center}
   #s-resolve .res-action b{font-size:16px;font-weight:600;overflow-wrap:anywhere}
   #s-resolve .res-action small{display:block;color:var(--tx-2);font-size:13px;margin-top:4px}
   #s-resolve .res-action .btn{width:auto;min-width:76px;min-height:44px}
+  /* 한 일 체크 목록: 왼쪽 문장 · 오른쪽 체크(MES 단계는 '적용' 버튼, 두 번 눌러 적용) */
+  #s-resolve .res-grp{margin:14px 0 4px;font-size:14px;font-weight:700;color:var(--tx-2)}
+  #s-resolve .res-check{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:12px 0;border-top:1px solid var(--edge);cursor:pointer;user-select:none}
+  #s-resolve .res-check .t{font-size:16px;line-height:1.45;overflow-wrap:anywhere}
+  #s-resolve .res-check .t small{display:block;margin-top:2px;font-size:13px;color:var(--tx-3)}
+  #s-resolve .res-check .box{width:48px;height:48px;min-height:0;padding:0;border:2px solid var(--accent);border-radius:10px;background:var(--surface);color:#fff;font:inherit;font-size:28px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #s-resolve .res-check.done .box{background:var(--accent)}
+  #s-resolve .res-check.done .box::after{content:"✓"}
+  #s-resolve .res-check.done .t{color:var(--tx-2)}
+  #s-resolve .res-check .mesbtn{width:auto;min-width:80px;padding:0 14px;font-size:16px;font-weight:700;color:var(--accent)}
+  #s-resolve .res-check .mesbtn::after{content:"적용"}
+  #s-resolve .res-check.arm .mesbtn{background:var(--notice);border-color:var(--notice);color:#fff}
+  #s-resolve .res-check.done .mesbtn{background:var(--accent);border-color:var(--accent);color:#fff}
+  #s-resolve .res-check.done .mesbtn::after{content:"✓";font-size:24px}
+  #s-resolve .res-check.off{cursor:default;opacity:.55}
+  #s-resolve .res-check.off .box{border-style:dashed;border-color:var(--edge)}
+  #s-resolve .res-check.plain{cursor:default}
+  #s-resolve .res-check.plain .t{color:var(--tx-2);font-size:15px}
   #s-resolve .res-step{background:transparent;border:0;border-top:1px solid var(--edge);border-radius:0;padding:14px 0}
   #s-resolve .res-step:has(.res-x){padding-right:54px}
   #resCompleted{margin-top:16px}
@@ -2116,18 +2123,12 @@ button.ld-row:hover{background:var(--surface-2)}
       </div>
       <div class="chatin">
         <textarea id="question" rows="1" placeholder="증상이나 질문을 적어 주세요." autocomplete="off" enterkeyhint="send"></textarea>
-        <div class="chatin-tools"><button class="sugg-toggle" id="suggToggle" type="button" aria-controls="chatPlus" aria-expanded="false" aria-label="추천 질문 열기">+</button><span class="chatin-eq" id="chatEq"></span><button class="btn primary" id="doSearch" type="button" disabled aria-label="보내기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+        <div class="chatin-tools"><button class="sugg-toggle" id="suggToggle" type="button" aria-controls="chatPlus" aria-expanded="false" aria-label="추천 질문 열기">+</button><button class="chatin-report" id="chatReport" type="button">근무일지 작성</button><button class="btn primary" id="doSearch" type="button" disabled aria-label="보내기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </div>
     <div class="disclaimer"><span>보조 정보입니다. 조치 전 매뉴얼과 현장 기준을 확인하세요.</span></div>
   </section>
 
-  <!-- 시도 기록 -->
-  <section class="screen" id="s-tries">
-    <div class="appbar"><button class="ic" id="triesBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
-      <h1 style="font-size:14px;color:var(--tx-2)">조치 시도 기록</h1><span class="sp"></span><button class="ic home" type="button">⌂ 홈</button></div>
-    <div class="pane" id="triesPane"></div>
-  </section>
 
   <!-- 지식 없음 -->
   <section class="screen" id="s-empty">
@@ -2213,44 +2214,39 @@ button.ld-row:hover{background:var(--surface-2)}
     <div class="pane" id="obPane"></div>
   </section>
 
-  <!-- 현장 조치 → 결과 확인 → 근무일지 검토 -->
+  <!-- 현장 조치 → 결과 확인 → 근무일지 작성 -->
   <section class="screen" id="s-resolve">
     <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       <h1>조치 기록</h1></div>
-    <div class="res-heading"><h2>조치 기록</h2><span id="resEquipment"></span></div>
-    <ol class="res-flow" id="resFlow" aria-label="진행 단계"><li>조치 입력</li><li>결과 확인</li><li>근무일지 검토</li></ol>
+    <ol class="res-flow" id="resFlow" aria-label="진행 단계"><li>조치 입력</li><li>결과 확인</li><li>근무일지 작성</li></ol>
     <div class="pane">
-      <details class="res-details"><summary>조치 전 MES 기록</summary><p id="resBefore" class="hint" role="status"></p></details>
       <label for="resSymptom" class="lbl">관찰한 증상</label>
-      <textarea id="resSymptom" class="resin" rows="2" maxlength="1000" placeholder="현장에서 확인한 증상을 적어 주세요"></textarea>
+      <textarea id="resSymptom" class="resin" rows="3" maxlength="1000" placeholder="현장에서 확인한 증상을 적어 주세요"></textarea>
+      <p class="res-step" id="resSymptomView" hidden></p>
       <div id="resWork">
         <div class="res-component"><label for="resComponents" class="lbl" id="resComponentsLbl">조치 대상</label><select id="resComponents" aria-label="조치 대상 부품"></select></div>
         <div class="res-live" id="resLive" hidden></div>
         <div id="resPick">
-          <p class="lbl">수행할 조치</p>
-          <p class="hint res-help">작업을 선택하고, 실제로 마친 뒤 완료를 기록해 주세요.</p>
+          <p class="lbl">수행 조치</p>
           <div id="resActionChips"></div>
-          <details class="res-details"><summary>다른 조치 입력</summary>
-            <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="실제로 수행할 조치" aria-label="조치 직접 입력"><button class="btn sm" id="resAddCustom" type="button">선택</button></div>
-          </details>
+          <div id="resCustomSteps"></div>
+          <div class="resrow res-custom"><input type="text" id="resCustom" maxlength="500" aria-label="다른 조치 입력" enterkeyhint="done"><button type="button" class="box" id="resCustomBox" role="checkbox" aria-checked="false" aria-label="다른 조치 완료"></button></div>
+          <div id="resMesChips"></div>
         </div>
-      </div>
-      <div id="resWrap" hidden>
-        <div class="res-verdict" id="resVerdict" role="status"></div>
-        <p class="lbl">조치 결과</p>
-        <div class="chips" id="resResult" role="group" aria-label="결과"></div>
-        <p class="lbl">확인한 원인</p>
-        <div class="chips" id="resCauses" role="group" aria-label="원인"></div>
-        <details class="res-details"><summary>원인 직접 입력</summary><input type="text" id="resCauseCustom" class="resin" maxlength="200" placeholder="목록에 없는 원인" aria-label="원인 직접 입력"></details>
-        <button class="btn sm ghost" id="resMore" type="button">조치 더 하기</button>
       </div>
       <div id="resCompleted" hidden><p class="lbl" id="resCompletedTitle">완료한 조치</p><ol class="res-steps" id="resSteps"></ol>
         <button class="btn sm ghost" id="resClear" type="button" hidden>기록 전체 취소</button>
       </div>
-      <details class="res-details" id="resAlternative" hidden><summary>별도 인계 작성</summary><p class="hint res-help">근무일지 대신 별도 인계서로 이어집니다.</p><button class="btn sm ghost" id="resSave" type="button">인계서 작성</button></details>
+      <div id="resWrap" hidden>
+        <p class="lbl">조치 결과</p>
+        <div class="chips" id="resResult" role="group" aria-label="결과"></div>
+        <p class="lbl">확인한 원인</p>
+        <div class="chips" id="resCauses" role="group" aria-label="원인"></div>
+        <div class="resrow res-custom"><input type="text" id="resCauseCustom" class="resin" maxlength="200" aria-label="원인 직접 입력"><button type="button" class="box" id="resCauseBox" role="checkbox" aria-checked="false" aria-label="원인 직접 입력 선택"></button></div>
+      </div>
       <div class="alert" id="resWarn" role="alert" hidden></div>
     </div>
-    <div class="res-footer"><p id="resStatus" class="hint" role="status"></p><button class="btn primary" id="resFinish" type="button" disabled>결과 확인</button><button class="btn primary" id="resToReport" type="button" hidden>근무일지 검토</button></div>
+    <div class="res-footer"><p id="resStatus" class="hint" role="status"></p><button class="btn primary" id="resFinish" type="button" disabled>결과 확인</button><button class="btn primary" id="resToReport" type="button" hidden>근무일지 작성</button><button class="btn sm ghost" id="resMore" type="button" hidden>조치 보완</button></div>
   </section>
 
   <!-- 인계 작성 -->

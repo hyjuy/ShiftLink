@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -70,6 +71,14 @@ def load_history(end: datetime, path: Path = HISTORY) -> list[dict[str, Any]]:
     return out
 
 
+_SYNTH_TAG = re.compile(r"^\s*\[합성[^\]]*\]\s*")
+
+
+def plain_note(text: str) -> str:
+    """칩·기록에 보일 글에서 '[합성 시나리오]' 같은 표시를 뺀다(합성 데이터라는 표시는 화면에 내지 않는다)."""
+    return _SYNTH_TAG.sub("", text or "").strip()
+
+
 def cause_suggestions(incidents: Iterable[dict[str, Any]], equipment_id: str, alarms: Iterable[str],
                       limit: int = 5) -> list[str]:
     """조치 기록의 원인 칩 후보 — 이 설비의 지난 사건에 적힌 원인. 지금 경보와 같은 경보였던 사건 먼저,
@@ -79,7 +88,7 @@ def cause_suggestions(incidents: Iterable[dict[str, Any]], equipment_id: str, al
         if inc.get("equipment_id") != equipment_id:
             continue
         for c in inc.get("causes") or []:
-            note = (c.get("note") or "").strip()
+            note = plain_note(c.get("note"))
             if not note:
                 continue
             s = score.setdefault(note, [False, 0, 0])
@@ -97,7 +106,7 @@ def past_actions(incidents: Iterable[dict[str, Any]], equipment_id: str, alarms:
         if inc.get("equipment_id") != equipment_id:
             continue
         for step in inc.get("action_steps") or []:
-            action = (step.get("action") or "").strip()
+            action = plain_note(step.get("action"))
             if not action:
                 continue
             s = score.setdefault(action, [False, 0])
@@ -237,7 +246,7 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
                          "coils": round(r["coils_exact"])} for r in loss.values()),
                        key=lambda r: (-loss[r["equipment_id"]]["coils_exact"], -r["stop_min"]))
     lost_exact = sum(r["coils_exact"] for r in loss.values())
-    lost = round(lost_exact)
+    lost = sum(r["coils"] for r in loss_rows)   # 화면의 설비별 손실(반올림한 값)을 더하면 이 합계가 되게
     planned = round(standard["planned_hours_per_week"] * rate) if standard else 0
     # current = 이번 주 월요일 0시부터 지금까지 정상이면 만들었을 양 − 손실. now가 모의 시계라 일시정지 중엔 늘지 않는다.
     current = max(0, min(planned, round(_minutes(week_start, now) / 60 * rate - lost_exact)))

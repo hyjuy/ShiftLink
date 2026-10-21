@@ -30,7 +30,7 @@ class FieldCardPromoteTests(unittest.TestCase):
         service.control({"command": "scenario", "scenario_id": "hydraulic_overheat"}); service.engine.tick(5)
         sid = service.resolution_start({"equipment_id": "EQ-0001"})["session_id"]
         service.resolution_step(sid, {"action": "팬 차단기 트립 원인 확인 후 재투입", "lockout": "예"})
-        for action in ("inspect", "repair", "verify"):
+        for action in ("verify",):
             service.control({"command": "recovery_action", "action_id": action})
         service.control({"command": "recover"}); service.engine.tick(5)
         service.resolution_step(sid, {"action": "팬 회전 방향과 소리 확인"})

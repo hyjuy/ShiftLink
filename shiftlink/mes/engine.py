@@ -115,7 +115,8 @@ class MesEngine:
         action = spec.recovery_actions[len(self._completed_actions)]
         self._completed_actions.append(action_id)
         cause = self._cause_equipment_id(spec)
-        if action_id == "repair":
+        authored = self._scenario_by_id.get(self._scenario)
+        if any(a.action_id == "repair" for a in (authored.recovery_actions if authored else ())):   # 줄인 계획의 마지막 확인에서 원인 부품 정비를 함께 기록한다
             for component in self._components:
                 if component["equipment_id"] == cause and component["component_id"] == spec.component_id:
                     component["health_percent"] = 95.0
@@ -383,17 +384,13 @@ class MesEngine:
         return bool(self._recovery_spec and authored and authored.recovery_actions)
 
     def _recovery_plan(self, spec: ScenarioSpec) -> ScenarioSpec:
-        """Scenarios without authored steps get a generic synthetic check-repair-verify plan."""
+        """복구 단계는 마지막 확인 하나만 둔다(재가동은 이 확인 뒤에만 가능). 직접 쓴 단계가 있으면 그 마지막 단계를,
+        없으면 기본 '정상 범위 회복 확인'을 쓴다."""
         if spec.recovery_actions:
-            return spec
-        eq = self._equipment_by_id.get(self._cause_equipment_id(spec))
-        names = {s.signal: s.name for s in (eq.signals if eq else ())}
-        signals = ", ".join(names.get(e.signal, e.signal) for e in spec.signal_effects) or "관측 신호"
-        code = eq.code if eq else "원인 설비"
+            return replace(spec, recovery_actions=spec.recovery_actions[-1:])
+        # 직접 쓴 단계가 없으면 정상 범위 회복 확인 하나만 둔다(재가동은 이 확인 뒤에만 가능).
         return replace(spec, recovery_actions=(
-            RecoveryAction("inspect", "이상 신호 위치 확인", f"정지·에너지 차단 확인 후 {code}의 {signals} 측정 위치와 계측 상태를 점검한 것으로 기록합니다."),
-            RecoveryAction("repair", "원인 조치 기록", "이 시나리오에는 원인별 정비 절차가 정의되어 있지 않습니다. 확인된 원인에 대한 조치 완료를 모의 기록합니다."),
-            RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다.")))
+            RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다."),))
 
     def _signal_effect(self, equipment, signal):
         spec = self._scenario_by_id.get(self._scenario)

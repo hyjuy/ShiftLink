@@ -1807,13 +1807,11 @@ button.ld-row:hover{background:var(--surface-2)}
   #s-resolve .resin{padding:12px;resize:vertical}
   #resSymptom{min-height:104px}   /* 관찰한 증상: 3줄이 한 번에 보이게 */
   #s-resolve .res-help{font-size:14px}
-  #s-resolve .res-details{border-bottom:1px solid var(--edge);padding:0 0 4px;color:var(--tx-2)}
-  #s-resolve .res-details summary{min-height:44px;padding:10px 0;font-size:14px}
-  #s-resolve .res-details summary{list-style:none;cursor:pointer}
-  #s-resolve .res-details summary::-webkit-details-marker{display:none}
-  #s-resolve .res-details summary::before{content:"▼";display:inline-block;width:1.5em;font-size:.85em}   /* 접힘 ▼ · 펼침 ▲ */
-  #s-resolve .res-details[open]>summary::before{content:"▲"}
-  #s-resolve .res-details[open]>:not(summary){margin-bottom:12px}
+  #s-resolve .res-custom{margin:12px 0 4px}   /* 다른 조치 입력: 항상 펼쳐 둔다 */
+  #s-resolve .resrow .box{flex:0 0 auto;width:48px;height:48px;min-height:0;padding:0;border:2px solid var(--accent);border-radius:10px;background:var(--surface);color:#fff;font:inherit;font-size:28px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #s-resolve .resrow .box.done{background:var(--accent)}
+  #s-resolve .resrow .box.done::after{content:"✓"}
+  #s-resolve .res-custom{align-items:center;gap:12px}
   #s-resolve .res-action-list{display:grid;gap:0}
   #s-resolve .res-action{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;padding:16px 0;border-top:1px solid var(--edge);align-items:center}
   #s-resolve .res-action b{font-size:16px;font-weight:600;overflow-wrap:anywhere}
@@ -2238,9 +2236,7 @@ button.ld-row:hover{background:var(--surface-2)}
           <p class="lbl">수행 조치</p>
           <div id="resActionChips"></div>
           <div id="resCustomSteps"></div>
-          <details class="res-details"><summary>다른 조치 입력</summary>
-            <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="실제로 수행한 조치를 적고 Enter" aria-label="조치 직접 입력" enterkeyhint="done"></div>
-          </details>
+          <div class="resrow res-custom"><input type="text" id="resCustom" maxlength="500" aria-label="다른 조치 입력" enterkeyhint="done"><button type="button" class="box" id="resCustomBox" role="checkbox" aria-checked="false" aria-label="다른 조치 완료"></button></div>
           <div id="resMesChips"></div>
         </div>
       </div>
@@ -2252,7 +2248,7 @@ button.ld-row:hover{background:var(--surface-2)}
         <div class="chips" id="resResult" role="group" aria-label="결과"></div>
         <p class="lbl">확인한 원인</p>
         <div class="chips" id="resCauses" role="group" aria-label="원인"></div>
-        <details class="res-details"><summary>원인 직접 입력</summary><input type="text" id="resCauseCustom" class="resin" maxlength="200" placeholder="목록에 없는 원인" aria-label="원인 직접 입력"></details>
+        <div class="resrow res-custom"><input type="text" id="resCauseCustom" class="resin" maxlength="200" aria-label="원인 직접 입력"><button type="button" class="box" id="resCauseBox" role="checkbox" aria-checked="false" aria-label="원인 직접 입력 선택"></button></div>
       </div>
       <div class="alert" id="resWarn" role="alert" hidden></div>
     </div>

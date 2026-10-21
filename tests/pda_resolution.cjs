@@ -83,11 +83,13 @@ assert.equal(rec.type, '고장·정비');
 assert.equal(rec.occurred_at, '2026-10-20T13:59');   // 새 양식 필수 — 질문 보낸 시각(KST)
 assert.equal(rec.story, '작동유 온도가 너무 높아요');
 assert.deepEqual(rec.causes, [{equipment: ['EQ-0001'], certainty: '추정', note: '쿨러 튜브 스케일'}]);
-assert.deepEqual(rec.action_steps[1], {action: '유온·공급 정상 확인', observed_result: 'MES 센서: 유압유 온도 78→47', failed: false, performed_at: '2026-10-20T14:03'});
+// MES 연동 단계(회복 확인·재가동)는 조치 내용 칸에 적지 않고, 마지막 조치 칸의 확인 결과에 내용과 센서값을 적는다
+assert.deepEqual(rec.action_steps.map((x) => x.action), ['팬 차단기 재투입', 'K-1002 1단계']);
+assert.equal(rec.action_steps[1].observed_result, '유온·공급 정상 확인 — 유압유 온도 78→47\n재가동');
 assert.deepEqual([rec.restart_performed, rec.restart_type, rec.outcome, rec.normal_run_status], [true, 'abnormal_stop_restart', 'resolved', 'unconfirmed']);
 assert.equal(rec.safety_notes, '에너지 차단(잠금) · 1. 팬 차단기 재투입: 예\n에너지 차단(잠금) · 3. 재가동 (라인 복구 시작): 해당 없음');
-assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, 'operating_context' in rec],
-  [false, 'Q-1', 'RS-9', 'K-1002', false]);   // 부품 이름은 운전 조건·주의사항 칸(지식카드 근거)에 넣지 않는다
+assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, rec.operating_context],
+  [false, 'Q-1', 'RS-9', 'K-1002', '조치 대상: 냉각 계통']);   // 조치 대상(부품)은 전용 칸이 없어 이름을 붙여 이 칸에 둔다
 // 자동 입력: 조치 전 벗어났던 신호 → 원인의 관련 센서(측정값·시각), 미해결이면 남은 문제·다음 확인 내용. 해결이면 넣지 않는다
 const {S: appState} = require('../shiftlink/mes/web/pda.js');
 appState.equipment = [{equipment_id: 'EQ-0001', signals: [{signal: 'hpu_pressure', unit: 'bar'}]}];
@@ -100,6 +102,41 @@ assert.equal(rec.remaining_issue, '조치 후 MES: 아직 이상 (유압 공급 
 assert.equal(rec.next_check, '유압 공급 압력 정상 범위 회복 여부');
 rec = sessionRecord({...out, result: 'resolved', verdict: {verdict: 'recovered', text: 'MES 정상 복귀 확인'}}, 'EQ-0001');
 assert.deepEqual(['remaining_issue' in rec, 'next_check' in rec], [false, false]);
+// 원인 모름은 원인 줄을 만들지 않고, 효과 없음이어도 센서를 움직인 단계는 실패로 표시하지 않는다
+rec = sessionRecord({...out, result: 'failed', cause: '원인 모름',
+  steps: [{order: 1, action: 'a', result_text: '센서값 변화 없음', at: ''}, {order: 2, action: 'b', result_text: '유압 공급 압력 116.0→155.6', mes_linked: 'recovery_action:verify', at: ''}]}, 'EQ-0001');
+assert.deepEqual([rec.causes, rec.action_steps.map((s) => s.failed)], [[], [true]]);   // MES 단계는 조치 칸이 아니다
+// 조치 단계 묶기: 같은 카드는 「1. 2.」로 한 칸, 다른 카드는 다른 칸, 직접 입력은 한 칸. MES 단계는 마지막 칸의 확인 결과로. 센서가 안 바뀌면 확인 결과는 비운다
+rec = sessionRecord({...out, result: 'resolved', steps: [
+  {order: 1, action: 'A1', result_text: '센서값 변화 없음', card: {card_id: 'K-1', step_id: 'ST-01'}, at: '2026-10-21T13:00'},
+  {order: 2, action: '직접 한 일', result_text: '센서값 변화 없음', at: '2026-10-21T13:01'},
+  {order: 3, action: 'A2', result_text: '유압 공급 압력 116.0→155.6', card: {card_id: 'K-1', step_id: 'ST-02'}, at: '2026-10-21T13:02'},
+  {order: 4, action: 'B1', result_text: '센서값 변화 없음', card: {card_id: 'K-2', step_id: 'S1'}, at: '2026-10-21T13:03'},
+  {order: 5, action: '직접 한 일 둘', result_text: '센서값 변화 없음', at: '2026-10-21T13:04'},
+  {order: 6, action: '정상 범위 회복 확인', result_text: '유압 공급 압력 155.6→154.3', mes_linked: 'recovery_action:verify', at: '2026-10-21T13:05'}]}, 'EQ-0001');
+assert.deepEqual(rec.action_steps.map((x) => x.action), ['1. A1\n2. A2', '1. 직접 한 일\n2. 직접 한 일 둘', 'B1']);
+// 확인 결과도 조치 번호에 맞춘다(바뀐 것만 값, 나머지는 '-'). MES 연동 줄은 마지막 칸 끝에 붙는다
+assert.deepEqual(rec.action_steps.map((x) => x.observed_result), ['1. -\n2. MES 센서: 유압 공급 압력 116.0→155.6', '', '정상 범위 회복 확인 — 유압 공급 압력 155.6→154.3']);
+assert.deepEqual(rec.action_steps.map((x) => x.performed_at), ['2026-10-21T13:00', '2026-10-21T13:01', '2026-10-21T13:03']);
+// 센서 변화가 없어도 그 시점의 센서값(readings_text)을 적고, MES 단계만 했으면 조치 내용은 비워 작업자가 적게 한다
+rec = sessionRecord({...out, result: 'resolved', steps: [{order: 1, action: '재가동 (라인 복구 시작)', result_text: '센서값 변화 없음', readings_text: '유압 공급 압력 154.3 bar', mes_linked: 'recover', at: ''}]}, 'EQ-0001');
+assert.deepEqual([rec.action_steps[0].action, rec.action_steps[0].observed_result], ['', '재가동 — 유압 공급 압력 154.3 bar']);
+// 설비 창 센서값: 소수점 둘째 자리까지 십진 반올림(154.845 → 154.85), 정수도 둘째 자리까지
+const {fix2} = require('../shiftlink/mes/web/pda.js');
+assert.deepEqual([154.845, 116, 46.532, 0.004, -1.005, '47.05'].map(fix2), ['154.85', '116.00', '46.53', '0.00', '-1.01', '47.05']);
+// 조치 시작: 답이 인용한 카드는 화면의 조건 판정에서 빠졌어도 포함한다(중복 없이)
+const {citedCardIds} = require('../shiftlink/mes/web/pda.js');
+assert.deepEqual(citedCardIds({response: {cited_card_ids: ['K-1025', 'K-1001']}, ranked: {actions: [{card: {card_id: 'K-1001'}}]}}), ['K-1025', 'K-1001']);
+assert.deepEqual(citedCardIds({response: {}, ranked: null}), []);
+// 채팅 옆 고정 「근무일지 작성」: 이 설비에서 조치를 기록한 세션이 있어야 조치·증상·원인을 넘긴다(질문·답만 넘기면 체크한 조치가 사라진다)
+const {resumableSession} = require('../shiftlink/mes/web/pda.js');
+appState.eq = {equipment_id: 'EQ-0001'};
+appState.res = {sessionId: 'RS-1', steps: [{order: 1}], turn: {eqId: 'EQ-0001'}};
+assert.equal(resumableSession(), appState.res);
+assert.equal((appState.res.steps = [], resumableSession()), null);                      // 조치를 하나도 안 했으면 아니다
+appState.res = {sessionId: 'RS-1', steps: [{order: 1}], turn: {eqId: 'EQ-0002'}};
+assert.equal(resumableSession(), null);                                                // 다른 설비의 세션은 넘기지 않는다
+appState.res = null;
 // 마무리 전에 넘기면 미해결, 단계가 없으면 빈 단계 한 줄
 rec = sessionRecord({...res, phase: 'work', result: null, verdict: null, steps: [], before: {alarms: []}, turn: {question: 'q', response: {}}}, 'EQ-0001');
 assert.deepEqual([rec.type, rec.outcome, rec.action_steps.length, rec.restart_performed, 'query_id' in rec, 'normal_run_evidence' in rec],

@@ -115,7 +115,8 @@ class MesEngine:
         action = spec.recovery_actions[len(self._completed_actions)]
         self._completed_actions.append(action_id)
         cause = self._cause_equipment_id(spec)
-        if action_id == "repair":
+        authored = self._scenario_by_id.get(self._scenario)
+        if any(a.action_id == "repair" for a in (authored.recovery_actions if authored else ())):   # 줄인 계획의 마지막 확인에서 원인 부품 정비를 함께 기록한다
             for component in self._components:
                 if component["equipment_id"] == cause and component["component_id"] == spec.component_id:
                     component["health_percent"] = 95.0
@@ -383,9 +384,10 @@ class MesEngine:
         return bool(self._recovery_spec and authored and authored.recovery_actions)
 
     def _recovery_plan(self, spec: ScenarioSpec) -> ScenarioSpec:
-        """Scenarios without authored steps get a generic synthetic verify-only plan."""
+        """복구 단계는 마지막 확인 하나만 둔다(재가동은 이 확인 뒤에만 가능). 직접 쓴 단계가 있으면 그 마지막 단계를,
+        없으면 기본 '정상 범위 회복 확인'을 쓴다."""
         if spec.recovery_actions:
-            return spec
+            return replace(spec, recovery_actions=spec.recovery_actions[-1:])
         # 직접 쓴 단계가 없으면 정상 범위 회복 확인 하나만 둔다(재가동은 이 확인 뒤에만 가능).
         return replace(spec, recovery_actions=(
             RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다."),))

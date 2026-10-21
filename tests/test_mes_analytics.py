@@ -163,3 +163,11 @@ def test_current_production_follows_the_week_clock():
     assert at("2026-10-12T00:00:00+09:00") == 0
     assert at("2026-10-12T10:00:00+09:00") == 107
     assert at("2026-10-12T10:00:00+09:00") < at("2026-10-12T11:00:00+09:00")
+
+
+def test_plain_note_drops_the_synthetic_scenario_tag():
+    assert analytics.plain_note("[합성 시나리오] 회전부 또는 베어링 이상 가능성.") == "회전부 또는 베어링 이상 가능성."
+    assert analytics.plain_note("냉각팬 먼지 막힘") == "냉각팬 먼지 막힘"
+    causes = analytics.cause_suggestions([{"equipment_id": "EQ-1", "alarm_code": "A", "causes": [
+        {"note": "[합성 시나리오] 원인 미확인.", "certainty": "추정"}]}], "EQ-1", ["A"])
+    assert causes == ["원인 미확인."]

@@ -39,9 +39,7 @@ class RecoveryTests(unittest.TestCase):
                 self.select(scenario)
                 with self.assertRaises(ValueError):
                     self.engine.recover()
-                actions = self.actions()
-                with self.assertRaises(ValueError):
-                    self.service.control({"command": "recovery_action", "action_id": actions[-1]["action_id"]})
+                self.assertEqual(len(self.actions()), 1)   # 복구 단계는 마지막 확인 하나(재가동은 그 뒤에만)
                 with self.assertRaises(ValueError):
                     self.engine.set_scenario("drive_fault")
                 self.finish_actions()
@@ -120,7 +118,7 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(self.engine.snapshot.active_alarms[0].code, "AL-GR-HOT")
         self.finish_actions()
         events = self.service.replay(self.engine.run.run_id, -1)["events"]
-        self.assertEqual(sum(e["event_type"] == "recovery_action_completed" for e in events), 3)
+        self.assertEqual(sum(e["event_type"] == "recovery_action_completed" for e in events), 1)
 
     def test_baseline_restart_adds_scenarios_without_rewriting_past_config(self):
         payload = configuration.to_payload(self.engine.config)

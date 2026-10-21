@@ -64,7 +64,7 @@ class KnowledgeGapRehearsal(unittest.TestCase):
         for action, lockout in actions:
             self.service.resolution_step(sid, {"action": action, "lockout": lockout})
         if mes:
-            for action_id in ("inspect", "repair", "verify"):
+            for action_id in ("verify",):
                 self.service.control({"command": "recovery_action", "action_id": action_id})
             self.service.control({"command": "recover"})
             self.service.engine.tick(5)

@@ -169,6 +169,14 @@ def _num(value: object) -> object:
     return round(value, 1) if isinstance(value, float) else value
 
 
+def readings_text(eq: EquipmentConfig, watched: list[str], now: list[dict[str, Any]]) -> str:
+    """조치 시점에 지켜보는 신호의 지금 값 '유압 공급 압력 154.3 bar'. MES 연동 단계의 확인 결과에 센서값으로 적는다."""
+    specs = {spec.signal: spec for spec in eq.signals}
+    values = {m.get("signal"): m.get("value") for m in now}
+    return ", ".join(f"{specs[sig].name} {_num(values[sig])}" + (f" {specs[sig].unit}" if specs[sig].unit else "")
+                     for sig in watched if sig in specs and values.get(sig) is not None)
+
+
 def verdict_of(check: dict[str, Any], step_count: int) -> dict[str, str]:
     """마무리 판정: recovered / not_yet / unconfirmed + 작업자에게 보일 문장 + 미리 골라 둘 결과."""
     signals = check["signals"]

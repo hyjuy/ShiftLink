@@ -311,7 +311,7 @@ class FieldDraftServiceTests(unittest.TestCase):
         self.service.engine.tick(5)
 
     def recover(self):
-        for action in ('inspect', 'repair', 'verify'):
+        for action in ('verify',):
             self.service.control({'command': 'recovery_action', 'action_id': action})
         self.service.control({'command': 'recover'})
         self.service.engine.tick(5)
@@ -495,7 +495,7 @@ class ResolutionSessionTests(unittest.TestCase):
         self.overheat()
         sid = self.start()['session_id']
         self.service.resolution_step(sid, {'action': cause_actions[0], 'lockout': '예'})
-        self.mes('inspect', 'repair', 'verify', restart=True)
+        self.mes('verify', restart=True)
         self.service.resolution_step(sid, {'action': cause_actions[1], 'lockout': '해당 없음'})
         self.service.resolution_finish(sid)
         return sid
@@ -508,7 +508,7 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertIn(('hpu_oil_temp', 'high'), {(o['signal'], o['state']) for o in out['before']['out_of_range']})
         self.assertIn({'component_id': 'cooling', 'name': '냉각 계통', 'suggested': True}, out['components'])
         self.assertEqual([a['text'] for a in out['action_suggestions'] if a['source'] == 'mes_recovery'],
-                         ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
+                         ['유온·공급 정상 확인'])   # 직접 쓴 복구 단계도 마지막 확인 하나만
         # 초안이 없어도 이 설비의 지난 사건(저장 이력 IN-0005·0025·0029, 같은 경보)에서 원인 칩을 낸다
         self.assertEqual(out['cause_suggestions'], ['쿨러 튜브 스케일', '냉각수 유량 부족', '원인 모름'])
 
@@ -517,22 +517,20 @@ class ResolutionSessionTests(unittest.TestCase):
         sid = self.start()['session_id']
         step = lambda action: self.service.resolution_step(sid, {'action': action})
         step('쿨러 팬 소리 확인')
-        self.assertTrue(step('유면·냉각·밸브 점검')['mes_linked'])
-        step('냉각 성능 복구'); step('유온·공급 정상 확인')   # 셋째 MES 단계에서 유온이 내려간다
+        self.assertTrue(step('유온·공급 정상 확인')['mes_linked'])   # MES 확인 단계에서 유온이 내려간다
         step('쿨러 핀 사진 촬영')
         # 중간 단계를 지우면 순번이 당겨지고, 다음 단계의 센서 변화는 남은 앞 단계 기준으로 다시 쓴다
         out = self.service.resolution_remove(sid, {'order': 1})['steps']
-        self.assertEqual([s['order'] for s in out], [1, 2, 3, 4])
-        self.assertEqual(out[0]['action'], '유면·냉각·밸브 점검')
-        self.assertIn('→', out[2]['result_text'])
+        self.assertEqual([s['order'] for s in out], [1, 2])
+        self.assertEqual(out[0]['action'], '유온·공급 정상 확인')
         with self.assertRaisesRegex(ValueError, 'mes_linked_step'):
             self.service.resolution_remove(sid, {'order': 1})
         with self.assertRaisesRegex(ValueError, 'unknown step'):
             self.service.resolution_remove(sid, {'order': 9})
-        # 전부 지우기: MES에 반영된 세 단계만 남는다
+        # 전부 지우기: MES에 반영된 단계만 남는다
         out = self.service.resolution_remove(sid, {'all': True})['steps']
-        self.assertEqual([s['action'] for s in out], ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인'])
-        self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 3)
+        self.assertEqual([s['action'] for s in out], ['유온·공급 정상 확인'])
+        self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 1)
 
     def test_equipment_without_components_still_suggests_and_saves(self):
         # PDP-01은 부품이 등록되지 않았고 고장도 없다 — 한 일 칩은 지난 사건의 조치에서, 부품 없이 저장된다
@@ -604,7 +602,7 @@ class ResolutionSessionTests(unittest.TestCase):
     def test_step_result_is_sensor_change_measured_by_server(self):
         self.overheat()
         sid = self.start()['session_id']
-        self.mes('inspect', 'repair', 'verify')
+        self.mes('verify')
         step = self.service.resolution_step(sid, {'action': '냉각 성능 복구'})
         self.assertRegex(step['result_text'], r'^유압유 온도 78→\d')
 
@@ -614,7 +612,7 @@ class ResolutionSessionTests(unittest.TestCase):
         self.service.resolution_step(sid, {'action': '쿨러 핀 청소'})
         early = self.service.resolution_finish(sid)
         self.assertEqual((early['verdict'], early['suggested_result']), ('not_yet', 'failed'))
-        self.mes('inspect', 'repair', 'verify')
+        self.mes('verify')
         self.assertEqual(self.service.resolution_finish(sid)['suggested_result'], 'temporary')  # 경보·라인 복구 전
         self.mes(restart=True)
         done = self.service.resolution_finish(sid)
@@ -683,7 +681,7 @@ class ResolutionSessionTests(unittest.TestCase):
             sid = self.start()['session_id']
             self.service.resolution_step(sid, {'action': first, 'lockout': '예'})
             if fix:
-                self.mes('inspect', 'repair', 'verify', restart=True)
+                self.mes('verify', restart=True)
                 self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
             return self.save(sid, handover_id, cause=cause, result=result)
         record('HO-C1', '팬 차단기 트립 원인 확인 후 재투입', '팬 차단기 트립')
@@ -694,25 +692,32 @@ class ResolutionSessionTests(unittest.TestCase):
         self.assertEqual(len(self.service.card_drafts()['drafts']), 2)
 
     def test_pda_alone_drives_simulated_repair(self):
-        # 시연: MES 화면을 오가지 않고 PDA의 MES 단계 칩 3개 + 재가동 칩으로 복구까지 끝낸다.
+        # 시연: MES 화면을 오가지 않고 PDA의 MES 칩(마지막 확인 + 재가동)으로 복구까지 끝낸다.
         self.overheat()
         out = self.start()
         sid = out['session_id']
         chips = [a for a in out['action_suggestions'] if a['source'] in ('mes_recovery', 'mes_restart')]
-        self.assertEqual([c['text'] for c in chips],
-                         ['유면·냉각·밸브 점검', '냉각 성능 복구', '유온·공급 정상 확인', '재가동 (라인 복구 시작)'])
+        self.assertEqual([c['text'] for c in chips], ['유온·공급 정상 확인', '재가동 (라인 복구 시작)'])
         free = self.service.resolution_step(sid, {'action': '팬 차단기 트립 원인 확인 후 재투입', 'lockout': '예'})
         self.assertIsNone(free['mes_linked'])  # 직접 적은 조치는 설비를 바꾸지 않는다
-        with self.assertRaises(ValueError):  # 순서가 틀리면 MES가 거절하고 단계도 남지 않는다
-            self.service.resolution_step(sid, {'action': '냉각 성능 복구'})
+        with self.assertRaises(ValueError):  # 확인 전의 재가동은 MES가 거절하고 단계도 남지 않는다
+            self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '해당 없음'})
         self.assertEqual(len(self.service.resolution_get(sid)['data']['steps']), 1)
-        for title in ('유면·냉각·밸브 점검', '냉각 성능 복구'):
-            self.assertTrue(self.service.resolution_step(sid, {'action': title})['mes_linked'].startswith('recovery_action:'))
         done = self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
         self.assertRegex(done['result_text'], r'^유압유 온도 78→')
         self.assertEqual(self.service.resolution_step(sid, {'action': '재가동 (라인 복구 시작)', 'lockout': '해당 없음'})['mes_linked'], 'recover')
         fin = self.service.resolution_finish(sid)
         self.assertEqual((fin['verdict'], fin['suggested_result']), ('recovered', 'resolved'))
+
+    def test_step_returns_current_readings_of_watched_signals(self):
+        # MES 연동 단계의 확인 결과에 적을 센서값: 지켜보는 신호의 그 시점 값(단위 포함)
+        self.overheat()
+        sid = self.start()['session_id']
+        free = self.service.resolution_step(sid, {'action': '쿨러 팬 소리 확인'})
+        self.assertRegex(free['readings_text'], r'^유압유 온도 \d+(\.\d)? ')
+        done = self.service.resolution_step(sid, {'action': '유온·공급 정상 확인'})
+        self.assertIn('유압유 온도', done['readings_text'])
+        self.assertEqual(self.service.resolution_get(sid)['data']['steps'][-1]['readings_text'], done['readings_text'])
 
     def test_restart_before_mes_steps_is_refused(self):
         self.overheat()

@@ -60,8 +60,7 @@ def _card_step_chips(card: dict[str, Any]) -> list[dict[str, Any]]:
             {**common, "text": card["card_id"] + " 방법대로", "step_id": None, "n": None, "full": "", "check": True, "risky": False}]
     chips = []
     for s in steps:
-        first = s["action"].split(". ")[0].rstrip(".")
-        chips.append({**common, "text": first if len(first) <= 40 else first[:38] + "…",
+        chips.append({**common, "text": s["action"].rstrip("."),   # 자르지 않고 단계 문장 전체를 보인다
                       "step_id": s["step_id"], "n": s.get("order"), "full": s["action"], "check": True,
                       "risky": any(w in s["action"] for w in field_draft.SAFETY_WORDS)})
     return chips
@@ -443,7 +442,7 @@ class MesService:
             alarms = before.get("alarms") or []
             field_actions = list(dict.fromkeys([*(s["action"] for row in drafts for s in (row["card"].get("type_payload") or {}).get("steps") or []),
                                                 *analytics.past_actions(past, eq.equipment_id, alarms)]))[:5]
-            causes = list(dict.fromkeys([*(line.removeprefix("원인: ") for row in drafts
+            causes = list(dict.fromkeys([*(analytics.plain_note(line.removeprefix("원인: ")) for row in drafts
                                            for line in (row["card"].get("know_how") or "").splitlines()
                                            if line.startswith("원인: ")),
                                          *analytics.cause_suggestions(past, eq.equipment_id, alarms)]))[:5]
@@ -488,12 +487,13 @@ class MesService:
             step = {"order": len(data["steps"]) + 1, "action": action, "lockout": lockout,
                     "simulated_at": snap["simulated_at"], "measurements": snap["measurements"],
                     "result_text": field_draft.delta_text(eq, data["watched"], previous, snap["measurements"]),
+                    "readings_text": field_draft.readings_text(eq, data["watched"], snap["measurements"]),
                     "mes_linked": linked, "card_step": card_step}
             data["steps"].append(step)
             data["after"] = data["verdict"] = None  # 조치를 더 하면 마무리를 다시 한다
             self.storage.update_resolution_session(session_id, data)
-            return {"order": step["order"], "result_text": step["result_text"], "simulated_at": step["simulated_at"],
-                    "mes_linked": linked, "is_synthetic": True}
+            return {"order": step["order"], "result_text": step["result_text"], "readings_text": step["readings_text"],
+                    "simulated_at": step["simulated_at"], "mes_linked": linked, "is_synthetic": True}
 
     def resolution_remove(self, session_id: str, body: dict[str, Any]) -> dict[str, object]:
         """조치 기록을 지운다 — {"order": n}이면 그 단계, {"all": true}면 전부. MES에 반영된 단계는 설비 상태를

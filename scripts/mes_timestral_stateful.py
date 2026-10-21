@@ -30,10 +30,12 @@ def stateful_alerts(keys, raw_z, ratio, baseline, equipment, resets, params, *, 
         valid=np.isfinite(raw_z[i])
         above=valid&(raw_z[i]>=off_z)
         entered=active.copy()
-        low=np.where(above,0,low+1)
+        ewma=np.array([eq in baseline.get(key,set()) for eq in equipment])
+        continuation=(hold_evidence(raw_z[i],ratio[i] if use_timestral else np.full(len(equipment),np.nan),ewma,off_z,params['hold_ts'])
+                      if 'hold_ts' in params else above)
+        low=np.where(continuation,0,low+1)
         active &= valid&(low<release)
         accepted=(ratio[i]>gate) if use_timestral and gate else np.ones(len(equipment),dtype=bool)
-        ewma=np.array([eq in baseline.get(key,set()) for eq in equipment])
         extra=(ratio[i]>on_scale)&(raw_z[i]>=on_z) if use_timestral else np.zeros(len(equipment),dtype=bool)
         start=(~entered)&above&((ewma&accepted)|extra)
         active |= start;low[start]=0
@@ -55,7 +57,7 @@ def choose(candidates, baselines):
         wrong=sum(m['wrong_alert_equipment_seconds'] for m in metrics)
         duplicate=sum(m['duplicate_alert_episodes'] for m in metrics)
         delay=max(float('inf') if m['p95_onset_delay_seconds'] is None else m['p95_onset_delay_seconds'] for m in metrics)
-        tie=tuple(p[k] for k in ('gate','on_scale','on_z','off_z','release'))
+        tie=tuple(p[k] for k in ('gate','on_scale','on_z','off_z','release'))+(p.get('hold_ts',0),)
         if passed:return (-events,wrong,duplicate,delay,*tie)
         return (violations(row),max(m['duplicate_alert_episodes']/max(b['duplicate_alert_episodes'],1) for m,b in zip(metrics,baselines)),
             max((float('inf') if m['p95_onset_delay_seconds'] is None else m['p95_onset_delay_seconds'])/max(b['p95_onset_delay_seconds'],1) for m,b in zip(metrics,baselines)),wrong,-events,*tie)
@@ -64,7 +66,7 @@ def choose(candidates, baselines):
 
 
 def hold_evidence(raw_z,ratio,ewma,off_z,hold_ts):
-    raise NotImplementedError
+    return np.isfinite(raw_z)&(raw_z>=off_z)&(ewma|(ratio>hold_ts))
 
 
 def setup():
@@ -136,6 +138,7 @@ def main():
     parser.add_argument('--out-dir',type=Path,required=True)
     parser.add_argument('--selection',type=Path)
     parser.add_argument('--fresh',type=Path)
+    parser.add_argument('--bounded-release',action='store_true')
     args=parser.parse_args();args.out_dir.mkdir(parents=True,exist_ok=False)
     p,config,specs,stats,ref,ft=setup();channels=[tuple(c) for c in ref['channels']]
     from scripts.evaluate_mes_fault_models import score
@@ -152,11 +155,16 @@ def main():
             if d['config_id']!=config.config_id or score(d['runs'],d['baseline'])!=reference:raise ValueError('development differs')
             datasets.append(d)
         grid=[];baselines=[score(d['runs'],d['baseline']) for d in datasets]
-        for index,values in enumerate(itertools.product((0,.1),(.75,1,1.5),(2.5,3,3.5),(1.5,2,2.5),(1,2))):
-            params=dict(zip(('gate','on_scale','on_z','off_z','release'),values))
+        if args.bounded_release:
+            parameters=[dict(gate=0,on_scale=scale,on_z=on,off_z=off,release=1,hold_ts=hold)
+                        for off,on,scale,hold in itertools.product((2.5,3),(3,3.5),(.75,1,1.5,2),(.1,.5))]
+        else:
+            parameters=[dict(zip(('gate','on_scale','on_z','off_z','release'),values))
+                        for values in itertools.product((0,.1),(.75,1,1.5),(2.5,3,3.5),(1.5,2,2.5),(1,2))]
+        for index,params in enumerate(parameters):
             metrics=[score(d['runs'],predict(d,params)) for d in datasets]
             grid.append({'params':params,'metrics':metrics})
-            if index%18==0:print(f'development: {index+1}/108',flush=True)
+            if index%16==0:print(f'development: {index+1}/{len(parameters)}',flush=True)
         chosen,passed=choose(grid,baselines)
         result={'selected':chosen['params'],'development_passed':passed,'selected_metrics':chosen['metrics'],
             'baselines':baselines,'grid':grid,'script_sha256':base.sha(__file__),
@@ -195,7 +203,10 @@ def main():
             'alarm_seconds':alarm_seconds,'grid':None}
     result['total_seconds']=time.perf_counter()-started
     base.write_new(args.out_dir/'result.json',result)
-    if args.phase=='develop':print(json.dumps({k:result[k] for k in ('selected','development_passed','selected_metrics','baselines')}),flush=True)
+    if args.phase=='develop':
+        fields=('detected_events','injected_events','wrong_alert_equipment_seconds','duplicate_alert_episodes','p95_onset_delay_seconds')
+        print(json.dumps({'selected':result['selected'],'development_passed':result['development_passed'],
+            'metrics':[{key:m[key] for key in fields} for m in result['selected_metrics']]}),flush=True)
     else:print(json.dumps({name:{key:m[key] for key in ('detected_events','injected_events','wrong_alert_equipment_seconds','duplicate_alert_episodes','p95_onset_delay_seconds')} for name,m in result['metrics'].items()}),flush=True)
 
 

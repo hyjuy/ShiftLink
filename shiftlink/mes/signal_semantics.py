@@ -63,7 +63,7 @@ def definition(signal):
         return {}
     location, reference = DEFINITIONS[signal]
     acquisition = 'manual_sample' if signal in SAMPLES else 'derived' if signal in DERIVED else 'event' if signal == 'rt_lift_delay' else 'continuous'
-    applicability = ('시료값은 60초 간격 모의 수집; 채취 시각과 기준 온도를 대조'
+    applicability = ('모의 시료값은 다른 신호와 매 관측 회차에 함께 생성; 실제 시료는 채취 시각과 기준 온도를 대조'
                      if acquisition == 'manual_sample' else '리프트 완료 이벤트에서만 사용'
                      if acquisition == 'event' else '해당 측정 위치의 운전 상태와 동일 시각 관측으로 해석')
     if signal.startswith('hpu_accumulator'):

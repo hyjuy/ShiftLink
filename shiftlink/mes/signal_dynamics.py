@@ -5,7 +5,6 @@ observations less trivial. No scenario, fault, alarm or label fields are read.
 """
 import math
 from dataclasses import replace
-from datetime import timedelta
 from random import Random
 
 
@@ -22,7 +21,6 @@ class SignalDynamics:
         self.local = {e:self.rng.uniform(.2,.8) for e in self.eq_ids}
         self.heat = {e:self.rng.uniform(.4,.6) for e in self.eq_ids}
         self.noise = {}
-        self.samples = {}
         self.sequence = 0
         self.cached = None
 
@@ -120,14 +118,7 @@ class SignalDynamics:
             value=round(values[key],3)
             if spec.unit=='pct': value=min(100.,max(0.,value))
             value=max(0.,value)
-            observed_at=at
-            if spec.semantics.get('acquisition')=='manual_sample':
-                bucket=sequence//60
-                cached=self.samples.get(key)
-                if cached is None or cached[0]!=bucket:
-                    self.samples[key]=(bucket,value,at-timedelta(seconds=sequence%60))
-                _,value,observed_at=self.samples[key]
-            output.append(replace(m,value=value,observed_at=observed_at))
+            output.append(replace(m,value=value,observed_at=at))
         self.sequence=sequence
         self.cached=tuple(output)
         return output

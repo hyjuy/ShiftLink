@@ -182,6 +182,15 @@ def validate_capture(record):
         _text(record.get(key,''),key)
     if record['type'] in (*FAULT_TYPES,'PMS 정비') and record.get('outcome') not in OUTCOMES:
         raise ValueError('조치 상태를 선택해 주세요.')
+    if 'maintenance_status' in record and record['maintenance_status'] not in ('unconfirmed','completed','partial','pending'):
+        raise ValueError('정비 작업 완료 상태를 확인해 주세요.')
+
+
+def routine_maintenance(record):
+    return (record['type']=='PMS 정비' and 'maintenance_status' in record
+            and record.get('outcome')=='open' and not record.get('restart_performed')
+            and not record.get('candidate') and record.get('normal_run_status','unconfirmed')=='unconfirmed'
+            and record.get('normal_run_minutes') is None and not record.get('normal_run_evidence'))
 
 
 def capture_missing(record):
@@ -239,7 +248,7 @@ def capture_candidate_from(record, config, report_id, record_index, card_id, now
 
 
 def observation_evidence(record):
-    return {key:record[key] for key in ('interpretation','interpretation_basis','condition_signal','condition_op',
+    return {key:record[key] for key in ('operating_context','interpretation','interpretation_basis','condition_signal','condition_op',
             'condition_value','condition_unit','condition_observed_at','condition_method','condition_result','safety_notes','safety_action','safety_basis')
             if record.get(key)}
 
@@ -286,8 +295,16 @@ def observation_candidate_from(record, config, report_id, record_index, card_id,
         know_how,rationale,conditions=record['interpretation'],record['interpretation_basis'],[]
     elif kind=='T2':
         know_how,rationale=condition_action_evidence(record)
+        value=record['condition_value']
+        if any(signal.signal==record['condition_signal'] for signal in eq.signals):
+            try:
+                number=float(value)
+            except ValueError:
+                pass
+            else:
+                if isfinite(number):value=number
         conditions=[{'signal':record['condition_signal'],'op':record['condition_op'],
-                     'value':record['condition_value'],'unit':record.get('condition_unit') or None}]
+                     'value':value,'unit':record.get('condition_unit') or None}]
     else:
         know_how,rationale,conditions=record['safety_action'],record['safety_notes'],[]
     card={'card_id':card_id,'version':'1','grade':'L0','status':'draft','tacit_type':kind,

@@ -1054,11 +1054,11 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-reportWrite .section-title{display:flex;align-items:center;gap:12px}
 #s-reportWrite .section-title .report-mini{margin-left:auto;flex:0 0 auto}
 #s-reportWrite .cause-eq{font-weight:700;padding:6px 0}
-#reportSaveConfirm{border:1px solid var(--edge);padding:24px 28px;min-width:320px}
-#reportSaveConfirm h2{margin:0 0 20px;font-size:20px}
-#reportSaveConfirm .confirm-actions{display:flex;gap:12px;justify-content:flex-end}
-#reportSaveConfirm button{min-height:48px;min-width:110px;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600}
-#reportSaveConfirm button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#reportSaveConfirm,#reportDeleteConfirm{border:1px solid var(--edge);padding:24px 28px;min-width:320px}
+#reportSaveConfirm h2,#reportDeleteConfirm h2{margin:0 0 20px;font-size:20px}
+#reportSaveConfirm .confirm-actions,#reportDeleteConfirm .confirm-actions{display:flex;gap:12px;justify-content:flex-end}
+#reportSaveConfirm button,#reportDeleteConfirm button{min-height:48px;min-width:110px;border:1px solid var(--edge);background:var(--surface);font-size:16px;font-weight:600}
+#reportSaveConfirm button.primary,#reportDeleteConfirm button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 /* Keep back navigation in the existing top row, with a full PDA touch target. */
 .navigation-back{display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;min-height:48px;padding:0;border:0;border-radius:10px;color:var(--accent);background:transparent}
 .navigation-back:hover,.navigation-back:active{background:var(--hover)}
@@ -1401,7 +1401,7 @@ button.ld-row:hover{background:var(--surface-2)}
 @media(max-width:800px){#dutyPane .worklog-fields>.worklog-field,#dutyPane .worklog-record-head{grid-template-columns:112px minmax(0,1fr)}}
 @media(max-width:600px){#dutyPane{padding:12px}#dutyPane .duty-report{padding:16px 12px}#dutyPane .worklog-head h2{font-size:24px;letter-spacing:.08em}#dutyPane .worklog-meta{grid-template-columns:1fr;gap:12px}#dutyPane .worklog-meta>.worklog-field{display:block}#dutyPane .worklog-fields>.worklog-field,#dutyPane .worklog-record-head{grid-template-columns:96px minmax(0,1fr)}#dutyPane .worklog-fields dt,#dutyPane .worklog-fields dd,#dutyPane .worklog-record-head>*{padding:12px 10px}}
 /* 근무일지의 표·입력 도구 정렬 */
-#s-reportWrite{--report-control-height:44px}
+#s-reportWrite{--report-control-height:48px;--report-field-gap:12px;--report-group-gap:24px;--report-text-height:96px;--report-field-border:#b5c9c0;--report-field-radius:4px}
 #s-reportWrite .paper{box-shadow:none}
 #s-reportWrite .document-head{position:relative;display:block;min-height:var(--report-control-height);margin-bottom:24px}
 #s-reportWrite .document-head h2{width:max-content;max-width:100%;margin:0 auto;padding:0;text-align:center;white-space:nowrap;line-height:var(--report-control-height)}
@@ -1411,7 +1411,7 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-reportWrite .section-title small{grid-column:1/-1;grid-row:2}
 #s-reportWrite .section-title .report-mini{grid-column:2;grid-row:1;margin:0}
 #s-reportWrite .record-head{display:table-row;padding:0;border:0;background:var(--surface-2)}
-#s-reportWrite .record-head>td{background:var(--surface-2)}
+#s-reportWrite .record-head>td{background:var(--surface)}
 #s-reportWrite .record-head>th,#s-reportWrite .record-head>td{vertical-align:middle}
 #s-reportWrite .record-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 #s-reportWrite .record-head .sp{display:none}
@@ -1463,7 +1463,7 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-reportWrite .paper>table th{background:var(--surface-2);font-size:14px;font-weight:600;text-align:center}
 @media(max-width:600px){#s-reportWrite .record-end{padding:12px 10px}#s-reportWrite .paper>table :is(th,td){padding:12px 10px}}
 #s-reportWrite .report-add-tools{grid-column:2;grid-row:1;display:flex;align-items:center;gap:8px;min-width:0}
-#s-reportWrite #reportRecordEquipment{width:240px;height:var(--report-control-height);min-width:0;background:var(--surface);font-size:16px;font-weight:400}
+#s-reportWrite #reportRecordEquipment{width:auto;max-width:100%;padding:0 36px 0 12px;height:var(--report-control-height);min-width:0;background:var(--surface);font-size:16px;font-weight:400}
 #s-reportWrite #reportAdd{width:var(--report-control-height);min-width:var(--report-control-height);padding:0;font-size:24px}
 #s-reportWrite .report-action-icon{display:block;flex:none;width:20px;height:20px;pointer-events:none}
 #s-reportWrite :is(.report-mini,.record-end button){gap:6px}
@@ -1785,13 +1785,13 @@ button.ld-row:hover{background:var(--surface-2)}
 #ilDetail .eqm-foot .btn{width:auto;min-width:100px;min-height:44px;margin:0}
 #ilDetail button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:900px){#s-dashList>.pane{padding:12px}#s-dashList .il-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}#s-dashList .il-head h1{font-size:22px}}
-#s-reportWrite .report-flow-heading th{padding:12px 16px;text-align:left;background:var(--surface-2);color:var(--tx);font-size:17px}
-#s-reportWrite .report-optional-heading th{background:var(--surface);font-size:15px}
+#s-reportWrite .record table .report-flow-heading th{padding:12px 16px;text-align:left;background:var(--surface-2);color:var(--tx);font-size:17px;font-weight:700}
+#s-reportWrite .record table .report-optional-heading th{background:var(--surface);font-size:15px}
 #s-reportWrite .report-optional-heading small{display:block;color:var(--tx-2);font-size:13px;font-weight:400}
-#s-reportWrite .capture-step{position:relative;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;padding:14px 86px 14px 14px;border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
+#s-reportWrite .capture-step{position:relative;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;padding:14px;border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
 #s-reportWrite .capture-step-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #s-reportWrite .capture-step>.capture-step-body,#s-reportWrite .capture-step>.capture-step-body:nth-of-type(2){display:flex;grid-column:auto;grid-row:auto}
-#s-reportWrite .capture-step>button.report-remove-field{position:absolute;top:14px;right:10px;grid-column:auto;grid-row:auto;margin:0}
+#s-reportWrite .capture-step>button.report-remove-field{position:static;align-self:flex-end;grid-column:auto;grid-row:auto;margin:0}
 #s-reportWrite .capture-step .capture-failed{grid-column:auto;grid-row:auto}
 #s-reportWrite .report-review-notes>summary{cursor:pointer;font-weight:600}
 #reportSavePreview{max-height:55dvh;overflow:auto;margin:12px 0 20px}
@@ -1805,7 +1805,7 @@ button.ld-row:hover{background:var(--surface-2)}
 #reportSavePreview .report-preview-warning{display:block;padding:10px;margin:10px 0;background:#fff5df;color:#684600;font-weight:600}
 #reportSavePreview h4{margin:12px 0 4px}#reportSavePreview ul{margin:0 0 10px;padding-left:22px}
 #reportSaveYes:disabled{opacity:.5;cursor:not-allowed}
-@media(max-width:600px){#s-reportWrite .capture-step{padding-right:86px}#s-reportWrite .capture-step-meta{grid-template-columns:minmax(0,1fr)}}
+
 
   #s-resolve .appbar{background:var(--surface)}
   #s-resolve .res-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px 0;flex:0 0 auto;width:100%;max-width:780px;align-self:center}
@@ -1838,6 +1838,148 @@ button.ld-row:hover{background:var(--surface-2)}
   #s-resolve .res-footer .hint{text-align:center;font-size:14px}
   #s-resolve .res-footer .hint:empty{display:none}
   @media(max-width:600px){#s-resolve>.pane{padding:16px}#s-resolve .res-footer{padding:12px 16px}#s-resolve .res-flow{gap:6px;font-size:13px;padding:12px 8px}#s-resolve .res-flow li:not(:last-child)::after{width:12px}#s-resolve .res-action{gap:8px}#s-resolve .res-action .btn{min-width:64px;padding:8px}}
+@media(max-width:600px){#s-reportWrite .capture-step-meta{grid-template-columns:minmax(0,1fr)}}
+/* Work-report layout: touch controls and dialogs must fit the PDA viewport. */
+#s-reportWrite .cause-row:has(>.report-remove-field){grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--report-field-gap);padding:0;margin:0;border:0}
+#s-reportWrite .cause-row:has(>.report-remove-field)+.cause-row{margin-top:var(--report-field-gap);padding-top:var(--report-field-gap);border-top:1px solid var(--edge)}
+#s-reportWrite .cause-row+.report-mini{margin-top:var(--report-field-gap)}
+#s-reportWrite .cause-row>.cause-sensor-field{grid-column:1/-1;grid-row:1;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--report-field-gap)}
+#s-reportWrite .cause-row>select[data-key=certainty]{grid-column:1;grid-row:2}
+#s-reportWrite .cause-row>textarea{grid-column:1/-1;grid-row:3}
+#s-reportWrite .cause-row>button.report-remove-field{position:static;grid-column:2;grid-row:2;align-self:start;justify-self:end;margin:0}
+#s-reportWrite .record :is(select,input:not([type=checkbox]):not([type=radio])),#s-reportWrite .report-form-grid :is(input,select),#s-reportWrite .record .capture-step input{box-sizing:border-box;height:var(--report-control-height);min-height:var(--report-control-height);padding:8px 10px;font-size:16px}
+#s-reportWrite .record .edit,#s-reportWrite .record .capture-step textarea{min-height:var(--report-text-height);padding:10px;font-size:16px;line-height:1.6}
+#s-reportWrite .record button.report-remove-field,#s-reportWrite .record-head .smallbtn{min-width:88px;min-height:var(--report-control-height);height:var(--report-control-height)}
+#s-reportWrite .capture-step{gap:var(--report-field-gap);margin-bottom:var(--report-group-gap)}
+#s-reportWrite .capture-step>details{min-width:0;width:100%}
+#s-reportWrite .record :is(input,select,textarea){max-width:100%;min-width:0}
+#s-reportWrite .record summary{padding:10px 0;line-height:1.5;overflow-wrap:anywhere}
+#s-reportWrite .record summary small{font-weight:400}
+#s-reportWrite .footer{align-items:center;gap:12px;flex-wrap:nowrap;padding:10px 16px}
+#s-reportWrite #reportStatus{min-width:0;margin:0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+#s-reportWrite #reportSave{flex:none;min-height:48px;white-space:nowrap}
+#reportDeleteConfirm,#reportSaveConfirm{box-sizing:border-box;min-width:0;width:min(440px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:24px;border:1px solid var(--edge);border-radius:12px;background:var(--surface);color:var(--tx);overflow:auto}
+#reportDeleteConfirm::backdrop,#reportSaveConfirm::backdrop{background:#182b4580}
+#reportDeleteConfirm form{display:grid;gap:20px;margin:0;min-width:0}
+#reportDeleteConfirm h2,#reportSaveConfirm h2{margin:0;font-size:20px;line-height:1.4;text-align:left}
+#reportDeleteMessage{margin:0;line-height:1.6;overflow-wrap:anywhere}
+#reportDeleteConfirm .confirm-actions,#reportSaveConfirm .confirm-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0}
+#reportDeleteConfirm button,#reportSaveConfirm .confirm-actions button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:100%;min-width:0;min-height:48px;padding:10px 16px;text-align:center;line-height:1.4;border-radius:6px}
+#reportDeleteConfirm button[value=delete]{background:var(--fault);border-color:var(--fault);color:#fff}
+#reportDeleteConfirm button:focus-visible,#reportSaveConfirm button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#reportSaveConfirm{width:min(720px,calc(100vw - 32px))}
+#reportSaveConfirm[open]{display:flex;flex-direction:column;gap:16px}
+#reportSavePreview{flex:1;min-height:0;max-height:none;overflow:auto;margin:0;padding:0 4px}
+#reportSaveConfirm .confirm-actions{flex:none}
+@media(max-width:1100px){
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader{box-sizing:border-box;height:auto;min-height:64px;flex:0 0 auto;flex-wrap:wrap;padding:8px 12px;gap:4px 8px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader>nav{order:2;flex:1 0 100%;width:100%;margin:0;gap:8px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader>nav .btn{flex:1;justify-content:center}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader :is(.btn,a.btn){height:44px;min-height:44px;padding:0 8px;font-size:15px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader :is(#headerHome,#notifyBell){width:44px;min-width:44px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader .hdr-sep{display:none}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader .brand{font-size:20px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader #globalPending{font-size:12px}
+  #s-reportWrite .report-viewport{padding:12px}
+  #s-reportWrite .paper{padding:16px}
+}
+@media(max-width:700px){
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader{display:grid;grid-template-columns:44px minmax(0,1fr) 44px 44px 64px;align-items:center;gap:4px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader #navigationBack{grid-column:1;grid-row:1}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader .brand{grid-column:2;grid-row:1;gap:4px;margin:0;font-size:18px}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader #headerHome{grid-column:3;grid-row:1}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader .notify-wrap{grid-column:4;grid-row:1}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader #logout{grid-column:5;grid-row:1}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader>nav{grid-column:1/5;grid-row:2;width:100%;order:0}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader>a.btn{grid-column:5;grid-row:2;width:auto}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader #globalPending{grid-column:1/-1;grid-row:3;width:100%;padding:4px;text-align:center}
+  #app:has(#s-reportWrite.on,#s-reportSelect.on) #globalHeader>.sp{display:none}
+  #s-reportWrite .report-viewport{padding:8px}
+  #s-reportWrite .paper{padding:12px;border-radius:8px}
+  #s-reportWrite .document-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;min-height:0;padding:0;margin-bottom:16px}
+  #s-reportWrite .document-head h2{margin:0;font-size:22px;line-height:1.5;letter-spacing:normal}
+  #s-reportWrite .document-head .report-mini{position:static}
+  #s-reportWrite .report-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #s-reportWrite .report-form-grid>label:last-of-type{grid-column:1/-1}
+  #s-reportWrite .record table,#s-reportWrite .record tbody{display:block;width:100%}
+  #s-reportWrite .record table tr{display:grid;grid-template-columns:minmax(0,1fr)}
+  #s-reportWrite .record table tr.record-head{padding:0;gap:0}
+  #s-reportWrite .record table th,#s-reportWrite .record table td{display:block;box-sizing:border-box;width:auto;min-width:0;padding:10px 12px}
+  #s-reportWrite .record table th{border-bottom:0;padding-bottom:4px;font-size:15px}
+  #s-reportWrite .record table td{border-top:0;padding-top:8px}
+  #s-reportWrite .record table .report-flow-heading th{padding:12px;font-size:16px}
+  #s-reportWrite .record-head>th{padding-bottom:0}
+  #s-reportWrite .record-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+  #s-reportWrite .record-head select{box-sizing:border-box;width:100%;font-size:16px}
+  #s-reportWrite .record .edit{font-size:16px}
+  #s-reportWrite .record td:has(>.report-remove-field){padding-right:12px}
+  #s-reportWrite .record td>button.report-remove-field{position:static;display:flex;margin:10px 0 0 auto}
+  #reportSavePreview dl{grid-template-columns:minmax(0,1fr);gap:4px}
+  #reportSavePreview dd{margin:0 0 12px}
+}
+@media(max-width:440px){
+  #s-reportWrite .cause-row>.cause-sensor-field{grid-template-columns:minmax(0,1fr)}
+  #s-reportWrite .footer{padding:8px 12px}
+  #reportDeleteConfirm,#reportSaveConfirm{padding:20px}
+}
+@media(max-width:360px){#s-reportWrite .report-form-grid{grid-template-columns:minmax(0,1fr)}}
+/* Button-opened work-report views keep their actions outside scrolling content. */
+#reportArchive,#reportPreviousDialog,#reportFollowupChoice,#reportResume{box-sizing:border-box;max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:24px;border:1px solid var(--edge);border-radius:12px;background:var(--surface);color:var(--tx);overflow:auto}
+#reportArchive::backdrop,#reportPreviousDialog::backdrop,#reportFollowupChoice::backdrop,#reportResume::backdrop{background:#182b4580}
+#reportArchive h2,#reportPreviousDialog h2,#reportFollowupChoice h2,#reportResume h2{flex:none;margin:0;font-size:20px;line-height:1.4}
+#reportArchive[open],#reportPreviousDialog[open]{display:flex;flex-direction:column;gap:16px;width:min(1040px,calc(100vw - 32px));height:min(700px,calc(100dvh - 32px));overflow:hidden}
+#reportArchiveStatus{flex:none;margin:0;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+#reportArchive .report-archive-layout{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:16px;flex:1;min-height:0;min-width:0}
+#reportArchiveList{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;overflow:auto;padding:3px}
+#s-reportWrite #reportArchive button{margin:0;min-height:48px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:1px solid var(--edge);border-radius:6px;background:var(--surface);color:var(--tx);font:inherit;line-height:1.5}
+#s-reportWrite #reportArchiveList button{flex:none;justify-content:flex-start;text-align:left;white-space:normal;overflow-wrap:anywhere;width:100%;font-size:15px}
+#s-reportWrite #reportArchiveList button[aria-pressed=true]{background:var(--surface-2);border-color:var(--accent);color:var(--accent);font-weight:600}
+#reportArchiveDetail{box-sizing:border-box;min-width:0;min-height:0;margin:0;padding:16px;border:1px solid var(--edge);border-radius:6px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.7}
+#reportArchive .confirm-actions,#reportPreviousDialog .confirm-actions{display:flex;justify-content:flex-end;flex:none;gap:12px;margin:0}
+#reportArchiveClose,#reportPreviousClose{min-width:120px}
+#reportPreviousBody{flex:1;min-height:0;max-height:none;overflow:auto;overscroll-behavior:contain}
+#reportPreviousDialog button,#reportFollowupChoice button,#reportResume button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 16px;margin:0;border:1px solid var(--edge);border-radius:6px;background:var(--surface);color:var(--tx);font:inherit;line-height:1.5;text-align:center}
+#reportResume .confirm-actions,#reportFollowupChoice .confirm-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0}
+#reportFollowupChoice .confirm-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+#reportResume,#reportFollowupChoice{text-align:left}
+#reportResume p,#reportFollowupChoice p{margin:12px 0 20px;line-height:1.6}
+#reportResume button.primary,#reportFollowupChoice button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#reportArchive button:focus-visible,#reportPreviousDialog button:focus-visible,#reportFollowupChoice button:focus-visible,#reportResume button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#s-reportWrite .report-review-notes :is(.report-safety-source,.report-anomaly-source){display:block;box-sizing:border-box;width:100%;min-height:44px;margin:8px 0 12px;padding:8px 10px;font:inherit}
+#s-reportWrite .report-form-grid.report-equipment-field{grid-template-columns:minmax(0,1fr)}
+#s-reportWrite .report-equipment-field output{display:block;box-sizing:border-box;width:100%;min-height:var(--report-control-height);padding:8px 12px;border:1px solid #b5c9c0;border-radius:4px;background:var(--surface);color:var(--tx);font-size:16px;font-weight:400;line-height:30px;text-align:left;overflow-wrap:anywhere}
+#s-reportWrite .record :is(input:not([type=checkbox]):not([type=radio]),select,textarea),#s-reportWrite .report-form-grid :is(input,select,output),#s-reportWrite .record .capture-step :is(input,textarea){box-sizing:border-box;padding:8px 12px;border:1px solid var(--report-field-border);border-radius:var(--report-field-radius);background:var(--surface);color:var(--tx);font-size:16px;line-height:1.6}
+#s-reportWrite .record :is(.report-record-equipment,input.cause-sensor-value){box-sizing:border-box;display:block;width:100%;min-height:var(--report-control-height);padding:8px 12px;border:1px solid var(--report-field-border);border-radius:var(--report-field-radius);background:var(--surface);color:var(--tx);font-size:16px;line-height:30px;text-align:left;overflow-wrap:anywhere}
+#s-reportWrite .record input.cause-sensor-value{background:var(--surface-2)}
+#s-reportWrite .report-equipment-field output{line-height:30px}
+#s-reportWrite .report-review-notes :is(.report-safety-source,.report-anomaly-source){border-color:var(--report-field-border);border-radius:var(--report-field-radius);padding-inline:12px}
+#s-reportWrite #reportArchiveDetail,#s-reportWrite #reportMesTable :is(th,td){border-color:var(--report-field-border);text-align:left}
+@media(max-width:700px){
+  #reportArchive,#reportPreviousDialog,#reportResume,#reportFollowupChoice{padding:20px}
+  #reportArchive .report-archive-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(96px,25dvh) minmax(0,1fr);gap:12px}
+  #reportArchiveClose,#reportPreviousClose{width:100%}
+  #reportArchive .confirm-actions,#reportPreviousDialog .confirm-actions{display:block}
+  #reportFollowupChoice .confirm-actions{grid-template-columns:minmax(0,1fr)}
+}
+/* Worklog guides share one style; recorded content keeps its normal text style. */
+#s-reportWrite :is(.report-help,.hint,.record small){font-size:13px;font-weight:400;line-height:1.5;color:var(--tx-2)}
+#s-reportWrite :is(p.report-help,td>small,.capture-observation>small){display:block;margin:8px 0}
+#s-reportWrite summary .report-help{margin-left:8px}
+#s-reportWrite .report-help[hidden],#s-reportWrite .record small[hidden]{display:none!important}
+#s-reportWrite .report-help-title{position:relative;display:inline-block;max-width:calc(100% - 44px);vertical-align:baseline}
+#s-reportWrite .record .report-help-button{position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:flex-start;min-width:44px;width:44px;min-height:44px;height:44px;padding:0 0 0 4px;margin:0;border:0;border-radius:4px;background:transparent;color:var(--tx-2);cursor:help}
+#s-reportWrite .record .report-help-button:hover,#s-reportWrite .record .report-help-button[aria-expanded=true]{background:var(--surface-2);color:var(--accent)}
+#s-reportWrite .record>table>tbody>tr>td[colspan="2"]:has(>details.report-review-notes){padding:12px 16px}
+#s-reportWrite .record .report-review-notes>summary{padding:10px 0}
+@media(max-width:700px){#s-reportWrite .record>table>tbody>tr>td[colspan="2"]:has(>details.report-review-notes){padding:12px}}
+#s-reportWrite .report-help-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#reportHelpMemo{position:fixed;z-index:1000;box-sizing:border-box;width:max-content;max-width:min(320px,calc(100vw - 24px));padding:12px 16px;border:1px solid var(--report-field-border);border-radius:6px;background:var(--surface);box-shadow:0 4px 12px #182b4526;color:var(--tx);font-size:14px;font-weight:400;line-height:1.5;overflow-wrap:anywhere}
+#s-reportWrite .report-occurrence{display:grid;grid-template-columns:minmax(180px,210px) minmax(140px,160px);gap:12px;max-width:100%}
+#s-reportWrite .report-occurrence label{display:grid;gap:6px;min-width:0;font-size:14px;font-weight:500}
+#s-reportWrite .report-occurrence input:not([type=hidden]){width:100%;font-variant-numeric:tabular-nums}
+#s-reportWrite .report-occurrence input::-webkit-datetime-edit-fields-wrapper{padding:0}
+#s-reportWrite .report-occurrence input::-webkit-datetime-edit-text{padding:0 3px}
+@media(max-width:440px){#s-reportWrite .report-occurrence{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -2041,19 +2183,20 @@ button.ld-row:hover{background:var(--surface-2)}
     <div class="appbar"><button class="ic" id="reportEditTargets" type="button" aria-label="대상 다시 선택"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button><h1>근무일지</h1><span class="sp"></span><time id="reportDate"></time></div>
 
     <div class="pane report-viewport"><article class="paper" aria-label="근무일지 작성">
-      <div class="document-head"><h2>근 무 일 지</h2><button id="reportArchiveOpen" class="report-mini" type="button">저장 일지 조회</button></div>
-      <div class="report-form-grid"><label>근무일<input id="reportWorkDate" type="date" aria-label="근무일"></label><label>근무조<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무조</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>작성자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
-      <table class="meta report-equipment"><tbody><tr><th scope="col">설비명</th></tr><tr><td id="reportTargets"></td></tr></tbody></table>
+      <div class="document-head"><h2>근 무 일 지</h2><button id="reportArchiveOpen" class="report-mini" type="button">근무 일지 조회</button></div>
+      <div class="report-form-grid"><label>근무일<input id="reportWorkDate" type="date" aria-label="근무일"></label><label>근무조<select id="reportShift" aria-label="근무조"><option id="reportPendingShift" value="pending" hidden>전송 대기 근무조</option><option value="A">A조 · 08:00–16:00</option><option value="B">B조 · 16:00–24:00</option><option value="C">C조 · 00:00–08:00</option></select></label><label>근무자<input id="reportAuthor" maxlength="100" autocomplete="name"></label><input id="reportStart" type="hidden"><input id="reportEnd" type="hidden"></div>
+      <div class="report-form-grid report-equipment-field"><label>설비명<output id="reportTargets"></output></label></div>
       <h3 class="section-title">특이사항·정비 기록 <span class="report-add-tools"><select id="reportRecordEquipment" aria-label="기록 대상 설비"><option value="">설비 선택</option></select><button id="reportAdd" class="report-mini" type="button" aria-label="기록 추가" title="기록 추가" disabled><svg class="report-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></span></h3>
       <div id="reportLegacy" hidden><label for="reportMemo">기존 초안의 조치사항</label><textarea id="reportMemo" maxlength="4000"></textarea></div>
       <div id="reportRecords"></div>
       <h3 class="section-title">MES 운전·계측 기록 <button id="reportImport" class="report-mini" type="button">MES 측정값 새로고침</button></h3>
       <table id="reportMesTable" aria-label="MES 수집 기록" hidden><thead><tr><th>측정값 · 단위 · 측정시각 · 알람·이벤트</th></tr></thead><tbody><tr><td class="mes-record" id="reportMes"></td></tr></tbody></table>
     </article></div>
+    <div id="reportHelpMemo" role="tooltip" hidden></div>
     <div class="footer"><p id="reportStatus" role="status" aria-live="polite">입력 내용은 이 단말의 초안으로 보관됩니다.</p><button class="primary" id="reportSave" type="button">일지 저장</button></div>
     <dialog id="reportSaveConfirm" aria-labelledby="reportSaveTitle"><h2 id="reportSaveTitle">저장 전 내용 확인</h2><div id="reportSavePreview"></div><div class="confirm-actions"><button id="reportSaveNo" type="button">취소</button><button id="reportSaveYes" class="primary" type="button">저장</button></div></dialog>
     
-    <dialog id="reportArchive" aria-labelledby="reportArchiveTitle"><h2 id="reportArchiveTitle">저장된 근무일지 · 최근 30건</h2><p id="reportArchiveStatus" role="status" aria-live="polite"></p><div id="reportArchiveList"></div><pre id="reportArchiveDetail" class="mes-record"></pre><button id="reportArchiveClose" type="button">닫기</button></dialog>
+    <dialog id="reportArchive" aria-labelledby="reportArchiveTitle"><h2 id="reportArchiveTitle">저장된 근무일지 · 최근 30건</h2><p id="reportArchiveStatus" role="status" aria-live="polite"></p><div class="report-archive-layout"><div id="reportArchiveList" role="group" aria-label="저장 일지 목록"></div><pre id="reportArchiveDetail" class="mes-record" aria-label="선택한 일지 상세"></pre></div><div class="confirm-actions"><button id="reportArchiveClose" type="button">닫기</button></div></dialog>
   </section>
 
   <!-- 대시보드 근거 사건 목록 -->
@@ -2136,6 +2279,7 @@ button.ld-row:hover{background:var(--surface-2)}
 
 </div>
 
+<dialog id="reportDeleteConfirm" aria-labelledby="reportDeleteTitle"><form method="dialog"><h2 id="reportDeleteTitle">삭제 확인</h2><p id="reportDeleteMessage"></p><div class="confirm-actions"><button type="submit" value="cancel" autofocus>취소</button><button type="submit" value="delete" class="primary">삭제</button></div></form></dialog>
 <script src="/static/pda.js"></script>
 </body>
 </html>

@@ -2363,7 +2363,7 @@ async function startReportFollowup(h,index) {
     followup_context:[latest.required_context?.author || '이전 근무자',source.story,
       '조치 상태: '+(REPORT_OUTCOMES[source.outcome]||'미기재'),source.follow_up].filter(Boolean).join('\n'),
     normal_run_status:'unconfirmed',normal_run_minutes:null,normal_run_evidence:''};
-  S.reportRecords.push(record);S.reportDraftLoaded=true;enterReportWrite();
+  S.reportRecords.push(record);S.reportDraftLoaded=true;enterReportWrite(!previous);
   const recordIndex=S.reportRecords.length-1;
   $('reportRecords').lastElementChild?.scrollIntoView({block:'start'});
   return true;
@@ -2371,7 +2371,7 @@ async function startReportFollowup(h,index) {
 function reportHandoverResolved(r) {
   return r.outcome==='resolved'&&r.normal_run_status==='no_recurrence'&&r.normal_run_minutes>0&&!!r.normal_run_evidence?.trim();
 }
-const REPORT_CANDIDATE_LABELS={T1:'이상 징후 분석',T2:'운전 조건별 조치',T3:'고장 조치 절차',T4:'교대 인계 사례',T5:'안전 조치',T6:'재가동 절차'};
+const REPORT_CANDIDATE_LABELS={T1:'이상증상 분석',T2:'운전 조건별 조치',T3:'고장 조치 절차',T4:'교대 인계 사례',T5:'안전 조치',T6:'재가동 절차'};
 function reportCandidateLines(candidates,index) {
   return (candidates||[]).filter(c=>c.record_index===index).map(c=>{
     const label=c.kind?(REPORT_CANDIDATE_LABELS[c.kind]||c.kind)+' · ':'';
@@ -2465,15 +2465,16 @@ function renderReadOnlyWorklog(h, selectedRecord) {
     (r.causes || []).forEach(c=>fields.append(field('원인·판단 근거',reportCauseText(c))));
     if(reportStructuredRecord(r))fields.append(field('조치 내역·결과',reportCaptureText(r).filter(Boolean).join('\n')));
     else if(r.solution)fields.append(field('수행 조치',r.solution));
-    if((reportFaultRecord(r)||r.type==='PMS 정비')&&r.outcome)fields.append(field('조치 상태',REPORT_OUTCOMES[r.outcome] || r.outcome));
+    if((reportFaultRecord(r)||r.type==='PMS 정비')&&r.outcome)fields.append(field(r.type==='PMS 정비'?'정비 후 설비 상태':'조치 상태',(r.type==='PMS 정비'?REPORT_MAINTENANCE_OUTCOMES:REPORT_OUTCOMES)[r.outcome] || r.outcome));
     [['remaining_issue','남은 문제'],['next_check','다음 확인 내용'],['next_check_at','확인 시점'],...REPORT_REVIEW_FIELDS,...REPORT_MAINTENANCE_FIELDS,
       ['interpretation','징후 판단'],['interpretation_basis','정상 상태 대비 근거'],
-      ['condition_signal','운전 조건 항목'],['condition_op','운전 조건 비교'],['condition_value','설정·측정값'],['condition_unit','측정 단위'],
+      ['condition_signal','운전 조건 항목'],['condition_op','운전 조건 비교'],['condition_value','조치 적용 기준값'],['condition_unit','측정 단위'],
       ['condition_method','해당 조건의 조치'],['condition_result','조치 후 확인 결과'],
       ['safety_action','실시한 정지·격리 조치'],['safety_basis','적용 안전 기준']].forEach(([key,label])=>{if(r[key])fields.append(field(label,r[key]));});
     const repeatedResult=reportStructuredRecord(r)&&[r.action_steps.at(-1)?.observed_result,r.normal_run_evidence].filter(Boolean).some(text=>text.trim()===r.result?.trim());
     if(r.result&&!repeatedResult)fields.append(field(r.type==='PMS 정비'&&!reportStructuredRecord(r)?'작업 완료 확인':'결과·후속·인계',r.result));
     if(r.followup_from)fields.append(field('이전 인계 연결',r.followup_from.handover_id+' · 기록 '+(r.followup_from.record_index+1)+'\n'+(r.followup_context || '')));
+    if(r.maintenance_status)fields.append(field('정비 작업 완료',REPORT_MAINTENANCE_STATUS[r.maintenance_status]||r.maintenance_status));
     if(r.normal_run_status)fields.append(field('정상 운전 지속 확인',normalRunText(r)));
     if(r.mes_context){const mes=make('details','worklog-sensors');mes.append(make('summary','','이 특이사항에 첨부한 MES 기록'),make('pre','',r.mes_context));fields.append(mes);}
     if(r.pms)fields.append(field('정기정비 계획 ID',r.pms));
@@ -2597,6 +2598,23 @@ function mesHandoverContext(snap, events, eq) {
 
 const reportMeasurementFormat=new Intl.NumberFormat('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false});
 function reportMeasurementNumber(value){return typeof value==='number'&&Number.isFinite(value)?reportMeasurementFormat.format(value):'—';}
+function reportEventDescription(event) {
+  const text=String(event.observation||'').trim();
+  const coil=text.match(/^(COIL-[\w-]+)(?:\s|$)/)?.[1];
+  const type=event.event_type||( /^COIL-[\w-]+ entered$/.test(text)?'coil_entered':/^COIL-[\w-]+ discharged$/.test(text)?'coil_exited':'');
+  const coilActions={coil_entered:'코일 투입',coil_exited:'코일 배출',coil_held:'코일 보류',coil_released:'코일 보류 해제',coil_rejected:'코일 분리 배출'};
+  if(coilActions[type])return coilActions[type]+(coil?' · '+coil:'');
+  const states={started:'라인 운전 시작',paused:'라인 일시정지',recovered:'라인 운전 안정화',run_closed:'생산 종료'};
+  if(states[type])return states[type];
+  const actions={alarm_raised:'경보 발생',alarm_cleared:'경보 해제',recovery_action_completed:'복구 조치 완료'};
+  return actions[type]?[actions[type],text].filter(Boolean).join(' · '):text;
+}
+function reportMesDisplayContext(text) {
+  return (text||'').split('\n').map(line=>{
+    const old=line.match(/^이벤트 · \S+ · (.*)$/);
+    return old?reportEventDescription({observation:old[1]}):line;
+  }).join('\n');
+}
 /* 설비명과 공통 측정시각은 한 번만 표시한다. 원본 숫자는 바꾸지 않는다. */
 function reportMesContext(snap, events, eqs) {
   const entries=eqs.map(eq=>({eq,readings:usableReadings(snap,eq).kept}));
@@ -2611,11 +2629,11 @@ function reportMesContext(snap, events, eqs) {
     readings.forEach(m=>{
       const spec=eq.signals.find(s=>s.signal===m.signal),st=stateOf(spec,m.value);
       lines.push((st==='normal'?'정상':st?'비정상':'기준 없음')+' · '+(spec.name||m.signal)+': '+reportMeasurementNumber(m.value)+' '+unitText(m.unit)+
-        ' · 정상 범위 '+reportMeasurementNumber(spec.min)+' ~ '+reportMeasurementNumber(spec.max)+' '+unitText(m.unit)+
+        (st==='low'||st==='high'?' · 정상 범위 '+reportMeasurementNumber(spec.min)+' ~ '+reportMeasurementNumber(spec.max)+' '+unitText(m.unit):'')+
         (times.size>1?' · 측정시각 '+timeLabels.get(m.observed_at||'미확인'):''));
     });
     lines.push(...alarms.map(a=>'활성 경보 · '+a.code+' · '+(a.message||a.label||'')),
-      ...recent.map(e=>'이벤트 · '+e.occurred_at+' · '+e.observation));
+      ...recent.map(reportEventDescription));
     return lines.join('\n');
   });
   const timeLines=[...timeLabels].map(([time,index])=>'측정시각'+(times.size>1?' '+index:'')+' · '+time);
@@ -2991,12 +3009,16 @@ function reportTargets(equipment, filter, faults, recent) {
   if (filter === 'recent') return equipment.filter((eq) => recent.includes(eq.code));
   return equipment;
 }
-const REPORT_TYPE_LABELS = {'추가 기록':'추가 기록','이상증상':'이상 징후','고장·정비':'고장 대응·수리','PMS 정비':'정기 예방정비'};
+const REPORT_TYPE_LABELS = {'추가 기록':'추가 기록','이상증상':'이상증상','고장·정비':'고장 대응·수리','PMS 정비':'정기 예방정비'};
 function reportTypeLabel(type) { return REPORT_TYPE_LABELS[type] || type; }
 const REPORT_OUTCOMES = {open:'미해결',resolved:'해결',temporary:'임시 복구',failed:'실패'};
+const REPORT_MAINTENANCE_STATUS={unconfirmed:'미확인',completed:'작업 완료',partial:'일부 완료',pending:'미완료'};
+const REPORT_MAINTENANCE_OUTCOMES={open:'운전 미확인',resolved:'정상 운전 확인',temporary:'임시 복구',failed:'이상 지속'};
+function reportRoutineMaintenance(r){return r.type==='PMS 정비'&&r.maintenance_status!==undefined&&r.outcome==='open'&&!r.restart_performed&&!r.candidate&&(!r.normal_run_status||r.normal_run_status==='unconfirmed')&&r.normal_run_minutes==null&&!r.normal_run_evidence;}
 const REPORT_RESTART_TYPES={unknown:'미확인',normal_stop_restart:'정상 정지 후 재가동',abnormal_stop_restart:'고장 후 재가동',maintenance_restart:'정비 후 재가동'};
 function reportStructuredRecord(r) {return r.capture_version===1&&['이상증상','고장·정비','PMS 정비'].includes(r.type);}
 function reportCaptureText(r) {
+  if(r.maintenance_status!==undefined&&!Object.hasOwn(REPORT_MAINTENANCE_STATUS,r.maintenance_status))throw Error('정비 작업 완료 상태를 확인해 주세요.');
   if(r.capture_version===undefined)return [];
   if(r.capture_version!==1||!Array.isArray(r.action_steps)||r.action_steps.length>50||typeof r.restart_performed!=='boolean'||!Object.hasOwn(REPORT_RESTART_TYPES,r.restart_type))throw Error('조치 내용·결과와 재가동 구분을 확인해 주세요.');
   for(const step of r.action_steps){
@@ -3008,6 +3030,7 @@ function reportCaptureText(r) {
   if(!Object.hasOwn(REPORT_OUTCOMES,r.outcome))throw Error('조치 상태를 선택해 주세요.');
   return [...r.action_steps.filter(s=>s.action.trim()||s.observed_result.trim()).map((s,i)=>
     (i+1)+'. 근무자: '+(s.worker||'미기재')+' · 조치시각: '+reportTimeLabel(s.performed_at)+'\n조치 내용: '+s.action+' → 조치 결과: '+(s.observed_result||'미확인')+(r.restart_performed&&s.failed?' · 조치 효과 없음':'')),
+    r.type==='PMS 정비'&&r.maintenance_status?'정비 작업: '+REPORT_MAINTENANCE_STATUS[r.maintenance_status]:'',
     r.restart_performed?'재가동 구분: '+REPORT_RESTART_TYPES[r.restart_type]:''];
 }
 const REPORT_NORMAL_STATUS={unconfirmed:'미확인',observing:'확인 진행 중',no_recurrence:'확인 구간 내 재발 없음',recurred:'동일 증상 재발'};
@@ -3028,9 +3051,9 @@ const REPORT_MAINTENANCE_FIELDS = [
   ['next_maintenance','다음 정비·미완료 작업 인계','다음 정비 시점, 미완료 작업과 설비 상태, 다음 근무의 확인 요청·시점. 없으면 없음']
 ];
 const REPORT_REVIEW_FIELDS = [
-  ['operating_context','발생 당시 조건','기동 중·정비 후·부하·직전 변경 등 MES에 없는 조건'],
-  ['failed_attempts','실패한 시도','시도한 조치와 반응. 없으면 없음, 확인하지 못한 경우 미확인'],
-  ['safety_notes','안전 사항','정지·격리·보호 조치와 중지 조건. 확인하지 못한 경우 미확인'],
+  ['operating_context','운전 상황·조치 시 유의사항','기동 직후·정비 후·부하·직전 변경 또는 이 조치를 적용할 때 주의할 점'],
+  ['failed_attempts','실패한 시도','시도한 조치와 반응'],
+  ['safety_notes','안전 사항','정지·격리·보호 조치와 중지 조건'],
   ['follow_up','후속 확인·인계','남은 문제, 다음 근무에서 확인할 내용과 시점'],
   ['references','참고 근거','사진·작업지시·매뉴얼 번호나 링크']
 ];
@@ -3040,13 +3063,13 @@ function reportReviewText(record) {
   const fields=[['solution','수행 조치'],['normal_run_evidence','정상 운전 확인 근거'],
     ['remaining_issue','남은 문제'],['next_check','다음 확인 내용'],['next_check_at','확인 시점'],...REPORT_REVIEW_FIELDS,...REPORT_MAINTENANCE_FIELDS,
     ['interpretation','징후 판단'],['interpretation_basis','정상 상태 대비 근거'],
-    ['condition_signal','운전 조건 항목'],['condition_op','운전 조건 비교'],['condition_value','설정·측정값'],['condition_unit','측정 단위'],
+    ['condition_signal','운전 조건 항목'],['condition_op','운전 조건 비교'],['condition_value','조치 적용 기준값'],['condition_unit','측정 단위'],
     ['condition_method','해당 조건의 조치'],['condition_result','조치 후 확인 결과'],
     ['safety_action','실시한 정지·격리 조치'],['safety_basis','적용 안전 기준']];
   for(const [key,label] of fields)if(record[key]!==undefined && (typeof record[key]!=='string'||record[key].length>4000))throw Error(label+': 4000자 이내로 작성해 주세요.');
   if(record.outcome!==undefined && record.outcome!=='' && !Object.hasOwn(REPORT_OUTCOMES,record.outcome))throw Error('조치 결과를 확인해 주세요.');
   return [...captured,...fields.filter(([key])=>key!=='normal_run_evidence'&&!(key==='solution'&&reportStructuredRecord(record))&&record[key]?.trim()).map(([key,label])=>label+': '+record[key]),
-    record.outcome?'조치 결과: '+REPORT_OUTCOMES[record.outcome]:'',normalRunText(record),
+    record.outcome?(record.type==='PMS 정비'?'정비 후 설비 상태: '+REPORT_MAINTENANCE_OUTCOMES[record.outcome]:'조치 결과: '+REPORT_OUTCOMES[record.outcome]):'',normalRunText(record),
     record.followup_from?'이전 인계: '+record.followup_from.handover_id+' · 기록 '+(record.followup_from.record_index+1):''];
 }
 function selectedReportPayload(draft, equipment) {
@@ -3128,9 +3151,10 @@ function reportFromSession(res) {
 function reportWith(addRecord) {
   const eq=S.eq;if(!eq)return;
   openEquipmentReport();
+  const fresh=!hasPreviousReport();
   if(!S.reportSelected.includes(eq.equipment_id))S.reportSelected.push(eq.equipment_id);
   addRecord(eq);
-  saveReportDraft();enterReportWrite();
+  saveReportDraft();enterReportWrite(fresh);
   // 직접 작성으로 들어왔으므로 중간 대상 선택 화면은 뒤로가기 이력에서 제외한다.
   if (navigationStack[navigationStack.length - 1] === 'reportSelect') navigationStack.pop();
 }
@@ -3184,6 +3208,8 @@ function hasPreviousReport() {
 }
 function resetReportForm() {   // 새로 작성: 기본값이 있는 칸(날짜·근무시간·작성자)만 남기고 비운다
   S.reportRecords=[];S.reportContext='';
+  S.reportMesRequest=(S.reportMesRequest||0)+1;
+  $('reportImport').disabled=false;
   $('reportMemo').value='';$('reportStart').value='';$('reportEnd').value='';
   $('reportAuthor').value=(S.operator && (S.operator.name||S.operator.id))||'';
   $('reportStatus').textContent='';
@@ -3191,9 +3217,9 @@ function resetReportForm() {   // 새로 작성: 기본값이 있는 칸(날짜�
 function openReportWrite() {
   let pending=null;try{pending=JSON.parse(localStorage.getItem(HANDOVER_PENDING_KEY)||'null');}catch(_){}
   if (!S.reportInProgress && !(pending&&pending.kind==='work_log') && hasPreviousReport()) { $('reportResume').showModal();$('reportResume').focus();return; }
-  enterReportWrite();
+  enterReportWrite(!S.reportInProgress&&!hasPreviousReport());
 }
-function enterReportWrite() {
+function enterReportWrite(importMes=false) {
   S.reportInProgress=true;
   const current=shiftAt(),saved=$('reportStart').value;
   $('reportWorkDate').value=saved?saved.slice(0,10):current.date;
@@ -3207,6 +3233,7 @@ function enterReportWrite() {
   }else syncReportShift();
   $('reportTargets').textContent=S.equipment.filter((eq)=>S.reportSelected.includes(eq.equipment_id)).map((eq)=>eq.code).join(' · ');
   $('reportDate').textContent=new Date().toLocaleDateString('ko-KR');renderReportRecords();saveReportDraft();show('reportWrite');
+  if(importMes&&!retry)importReportMes();
 }
 
 // Lucide plus/minus geometry; license: lucide-license.txt.
@@ -3235,53 +3262,120 @@ function reportRemoveButton(field,index,label,causeIndex) {
   return '<button type="button" class="smallbtn report-remove-field" aria-label="'+label+'" title="'+label+'" data-action="remove-'+field+'" data-record="'+index+'" '+
     (causeIndex===undefined?'':'data-cause="'+causeIndex+'" ')+'>'+'삭제</button>';
 }
+function confirmReportDelete(message) {
+  const dialog=$('reportDeleteConfirm');
+  if(dialog.open)return Promise.resolve(false);
+  $('reportDeleteMessage').textContent=message;
+  dialog.returnValue='cancel';
+  return new Promise(resolve=>{
+    dialog.addEventListener('close',()=>resolve(dialog.returnValue==='delete'),{once:true});
+    dialog.showModal();
+  });
+}
+function reportOccurrenceFields(r,i,esc) {
+  const [date='',time='']=(r.occurred_at||'').split('T');
+  const attrs=' data-record="'+i+'"'+(r.followup_from?' readonly':'');
+  return '<div class="report-occurrence"><label><input type="date" data-occurrence-part="date" aria-label="발생일"'+attrs+' value="'+esc(date)+'"></label>'+
+    '<label><input type="time" data-occurrence-part="time" aria-label="발생시간"'+attrs+' value="'+esc(time)+'"></label>'+
+    '<input type="hidden" data-key="occurred_at" data-record="'+i+'" value="'+esc(r.occurred_at||'')+'"></div>';
+}
+let reportHelpCloseTimer;
+function hideReportHelp() {
+  clearTimeout(reportHelpCloseTimer);
+  const memo=$('reportHelpMemo');
+  if(!memo)return;
+  memo.hidden=true;
+  document.querySelectorAll('.report-help-button[aria-expanded="true"]').forEach(button=>button.setAttribute('aria-expanded','false'));
+}
+function showReportHelp(anchor) {
+  const button=anchor?.querySelector('.report-help-button');
+  const help=button?.getAttribute&&document.getElementById(button.getAttribute('aria-describedby'));
+  if(!help)return;
+  hideReportHelp();
+  const memo=$('reportHelpMemo');
+  memo.textContent=help.textContent;memo.hidden=false;
+  button.setAttribute('aria-expanded','true');
+  const rect=button.getBoundingClientRect(),box=memo.getBoundingClientRect();
+  memo.style.left=Math.max(12,Math.min(rect.left,window.innerWidth-box.width-12))+'px';
+  memo.style.top=Math.max(12,rect.bottom+8+box.height>window.innerHeight?rect.top-box.height-8:rect.bottom+8)+'px';
+}
+function prepareReportHelp() {
+  hideReportHelp();
+  $('reportRecords').querySelectorAll('.report-help,summary>small,.record-end>small').forEach((help,n)=>{
+    help.id='reportHelpText-'+n;help.hidden=true;
+    const button=document.createElement('button');
+    button.type='button';button.className='report-help-button';
+    button.setAttribute('aria-label','작성 도움말');button.setAttribute('aria-describedby',help.id);button.setAttribute('aria-expanded','false');
+    button.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></svg>';
+    let anchor=help.matches('p')?help.closest('details').querySelector('summary'):help.closest('summary,td,.record-end');
+    if(anchor.tagName==='TD'){
+      anchor.parentElement.dataset.reportHelpAnchor='';
+      anchor=anchor.parentElement.querySelector(':scope>th')||anchor;
+    }
+    let title=anchor.querySelector(':scope>.report-help-title');
+    if(!title){
+      title=document.createElement('span');title.className='report-help-title';
+      const text=[...anchor.childNodes].filter(node=>node.nodeType===Node.TEXT_NODE&&node.textContent.trim());
+      if(text.length){anchor.insertBefore(title,text[0]);text.forEach(node=>title.appendChild(node));}
+      else anchor.prepend(title);
+    }
+    anchor.dataset.reportHelpAnchor='';title.appendChild(button);
+  });
+}
+function reportCauseFields(r,i,edit,esc) {
+  const causes=r.causes.length?r.causes:[{equipment:r.equipment.slice(),certainty:'추정',note:''}];
+  return '<tr><th>원인·판단 근거</th><td>'+causes.map((c,ci)=>
+    '<div class="cause-row">'+reportCauseSensors(r,c,i,ci,esc)+
+    '<select aria-label="원인 확인 상태" data-record="'+i+'" data-cause="'+ci+'" data-key="certainty">'+['추정','확인','배제'].map(t=>'<option '+(c.certainty===t?'selected':'')+'>'+t+'</option>').join('')+'</select>'+
+    edit(c.note,'note',i,'원인 및 판단 근거',ci)+
+    reportRemoveButton('cause',i,'원인 지우기',ci)+'</div>').join('')+
+    '<button type="button" class="report-mini" data-action="cause" data-record="'+i+'">다른 원인 추가</button></td></tr>';
+}
 function reportConditionFields(r,i,esc) {
-  if(r.type==='이상증상'&&!r.condition_signal&&!r.condition_value&&!r.condition_method&&!r.condition_result)return '';
-  const eq=r.equipment.length===1?S.equipment.find(item=>item.equipment_id===r.equipment[0]):null;
-  const sensors=(eq?.signals||[]).map(sensor=>'<option value="'+esc(sensor.signal)+'" '+(r.condition_signal===sensor.signal?'selected':'')+'>'+esc(sensor.name||sensor.signal)+'</option>').join('');
-  return '<tr><th>적용 조건<br><small>선택 입력</small></th><td><details class="report-review-notes" '+((r.condition_signal||r.condition_value)?'open':'')+'><summary>이 조치가 적용되는 운전 조건</summary>'+
-    (sensors?'<label>MES 신호 선택<select class="report-condition-source" data-record="'+i+'"><option value="">신호 선택</option>'+sensors+'</select></label>':'')+
-    '<div class="capture-step-meta"><label>조건 항목<input data-key="condition_signal" data-record="'+i+'" maxlength="200" value="'+esc(r.condition_signal||'')+'" placeholder="예: 운전 모드, 부하율"></label><label>비교<select data-key="condition_op" data-record="'+i+'"><option value="" '+(!r.condition_op?'selected':'')+'>선택</option>'+[['==','같음 (=)'],['!=','다름 (≠)'],['>','초과 (>)'],['>=','이상 (≥)'],['<','미만 (<)'],['<=','이하 (≤)']].map(([op,label])=>'<option value="'+op+'" '+(r.condition_op===op?'selected':'')+'>'+label+'</option>').join('')+'</select></label><label>기준값<input data-key="condition_value" data-record="'+i+'" maxlength="200" value="'+esc(r.condition_value||'')+'" placeholder="MES값을 가져온 뒤 적용 기준 확인"></label><label>단위<input data-key="condition_unit" data-record="'+i+'" maxlength="100" value="'+esc(r.condition_unit||'')+'" placeholder="해당 시 입력"></label></div><small class="report-condition-status">'+esc(r.condition_observed_at?'MES 측정시각 · '+r.condition_observed_at:'MES 신호를 선택하면 현재값과 단위를 가져옵니다. 적용 기준과 비교 방식은 확인해 주세요.')+'</small>'+
-    ((r.condition_method||r.condition_result)?'<p>기존 조치 근거 · '+esc([r.condition_method,r.condition_result].filter(Boolean).join(' / '))+'</p>':'')+
-    '</details></td></tr>';
+  const rule=[r.condition_signal,r.condition_op,r.condition_value,r.condition_unit].filter(Boolean).join(' ');
+  const legacy=[rule,r.condition_method,r.condition_result].filter(Boolean);
+  return legacy.length?'<tr><td colspan="2"><details class="report-review-notes"><summary>기존 적용 기준 기록</summary><p>'+legacy.map(esc).join('<br>')+'</p></details></td></tr>':'';
 }
 function reportKnowledgeFields(r,i,edit,esc) {
   if(r.capture_version!==1)return '';
   const eq=r.equipment.length===1?S.equipment.find(item=>item.equipment_id===r.equipment[0]):null;
   const sensors=(eq?.signals||[]).map(sensor=>'<option value="'+esc(sensor.signal)+'">'+esc(sensor.name||sensor.signal)+'</option>').join('');
-  return (r.type==='이상증상'||r.interpretation||r.interpretation_basis?'<tr><td colspan="2"><details class="report-review-notes" '+((r.interpretation||r.interpretation_basis)?'open':'')+'><summary>이상 징후 분석 <small>판단 근거가 있을 때</small></summary><table><tbody>'+
-    '<tr><th>징후 판단</th><td>'+edit(r.interpretation||'','interpretation',i,'소음·진동·온도 등 이상 징후가 가리키는 설비 상태')+'</td></tr>'+
-    '<tr><th>정상 상태 대비 근거</th><td>'+(sensors?'<label>MES 신호 선택<select class="report-anomaly-source" data-record="'+i+'"><option value="">신호 선택</option>'+sensors+'</select></label>':'')+edit(r.interpretation_basis||'','interpretation_basis',i,'MES 측정값과 등록 정상범위 또는 평소 운전 상태를 비교한 근거')+'<small class="report-anomaly-status">등록 정상범위는 MES 구성값입니다. 기준이 없으면 작업자가 확인한 근거를 기록하세요.</small></td></tr>'+
+  return (r.type==='이상증상'||r.interpretation||r.interpretation_basis?'<tr><td colspan="2"><details class="report-review-notes" '+((r.interpretation||r.interpretation_basis)?'open':'')+'><summary>이상증상 분석</summary><table><tbody>'+
+    '<tr><th>분석 내용</th><td>'+edit(r.interpretation||'','interpretation',i,'소음·진동·온도 등 증상 분석')+'</td></tr>'+
+    '<tr><th>정상 대비 근거</th><td>'+(sensors?'<label>MES 신호 선택<select class="report-anomaly-source" data-record="'+i+'"><option value="">신호 선택</option>'+sensors+'</select></label>':'')+edit(r.interpretation_basis||'','interpretation_basis',i,'정상범위·평상시 운전값과 비교')+'<small class="report-help report-anomaly-status">정상범위: MES 등록 기준</small></td></tr>'+
     '</tbody></table></details></td></tr>':'')+
-    '<tr><td colspan="2"><details class="report-review-notes"><summary>안전 조치 기록 <small>위험 요인이 있었을 때</small></summary><table><tbody>'+
-    '<tr><th>위험 요인·작업 중지 기준</th><td>'+edit(r.safety_notes||'','safety_notes',i,'위험 요인과 작업을 중지해야 하는 조건')+'</td></tr>'+
-    '<tr><th>실시한 정지·격리 조치</th><td>'+edit(r.safety_action||'','safety_action',i,'설비 정지·에너지 격리 등 실제 실시한 조치')+'</td></tr>'+
-    '<tr><th>적용 안전 기준</th><td>'+edit(r.safety_basis||'','safety_basis',i,'적용한 작업표준서·안전 절차서 번호. 확인하지 못했다면 비워두세요')+'</td></tr>'+
+    '<tr><td colspan="2"><details class="report-review-notes"><summary>안전 조치 기록</summary><p class="report-help">조치 내역에서 안전 조치를 선택할 수 있습니다.</p><table><tbody>'+
+    '<tr><th>위험·작업중지 기준</th><td>'+edit(r.safety_notes||'','safety_notes',i,'위험요인·작업중지 기준')+'</td></tr>'+
+    '<tr><th>정지·격리 조치</th><td>'+('<select aria-label="기록한 안전 조치" class="report-safety-source" data-record="'+i+'"><option value="">안전 조치 선택</option>'+(r.action_steps||[]).map((step,n)=>step.action?.trim()?'<option value="'+n+'">'+(n+1)+'. '+esc(step.action)+'</option>':'').join('')+'</select>')+edit(r.safety_action||'','safety_action',i,'설비 정지·전원 차단·에너지 격리')+'</td></tr>'+
+    '<tr><th>안전 기준</th><td>'+edit(r.safety_basis||'','safety_basis',i,'작업표준서·안전절차서 번호')+'</td></tr>'+
     '</tbody></table></details></td></tr>';
 }
 function reportCaptureFields(r,i,edit,esc) {
   r.action_steps.forEach(step=>{if(step.worker===undefined&&$('reportAuthor').value.trim())step.worker=$('reportAuthor').value.trim();});
   const steps=r.action_steps.map((step,n)=>'<div class="capture-step">'+
-    '<label class="capture-step-body">수행 조치<textarea class="edit" data-key="action" data-step="'+n+'" data-record="'+i+'" maxlength="4000" aria-label="조치 내용 '+(n+1)+'" placeholder="점검·조정·교체 등 실제 수행한 조치">'+esc(step.action)+'</textarea></label>'+
-    '<div class="capture-step-meta"><label>조치시각<input type="datetime-local" data-key="performed_at" data-step="'+n+'" data-record="'+i+'" aria-label="조치시각 '+(n+1)+'" value="'+esc(step.performed_at||'')+'"></label><label>작업자<input type="text" maxlength="100" data-key="worker" data-step="'+n+'" data-record="'+i+'" aria-label="작업자 '+(n+1)+'" value="'+esc(step.worker||'')+'"></label></div>'+
-    '<label class="capture-step-body">조치 후 확인 결과<textarea class="edit" data-key="observed_result" data-step="'+n+'" data-record="'+i+'" maxlength="4000" aria-label="조치 결과 '+(n+1)+'" placeholder="조치 후 설비 상태·측정값. 확인하지 못했다면 비워두세요">'+esc(step.observed_result)+'</textarea></label>'+
+    '<label class="capture-step-body">조치 내용<textarea class="edit" data-key="action" data-step="'+n+'" data-record="'+i+'" maxlength="4000" aria-label="조치 내용 '+(n+1)+'" placeholder="점검·조정·교체 내용">'+esc(step.action)+'</textarea></label>'+
+    '<details class="report-review-notes" '+(step.performed_at?'open':'')+'><summary>조치시각·작업자 <small class="report-help">작업자 기본값: 근무자</small></summary><div class="capture-step-meta"><label>조치시각<input type="datetime-local" data-key="performed_at" data-step="'+n+'" data-record="'+i+'" aria-label="조치시각 '+(n+1)+'" value="'+esc(step.performed_at||'')+'"></label><label>작업자<input type="text" maxlength="100" data-key="worker" data-step="'+n+'" data-record="'+i+'" aria-label="작업자 '+(n+1)+'" value="'+esc(step.worker||'')+'"></label></div></details>'+
+    '<label class="capture-step-body">확인 결과<textarea class="edit" data-key="observed_result" data-step="'+n+'" data-record="'+i+'" maxlength="4000" aria-label="조치 결과 '+(n+1)+'" placeholder="조치 후 설비 상태·측정값">'+esc(step.observed_result)+'</textarea></label>'+
     (r.restart_performed?'<label class="check capture-failed"><input type="checkbox" data-key="failed" data-step="'+n+'" data-record="'+i+'" '+(step.failed?'checked':'')+'>조치 효과 없음</label>':'')+
     '<button type="button" class="smallbtn report-remove-field" aria-label="조치 단계 '+(n+1)+' 삭제" title="조치 단계 삭제" data-action="remove-step" data-step="'+n+'" data-record="'+i+'">삭제</button></div>').join('');
+  const maintenance=r.type==='PMS 정비';
   const followupVisible=r.outcome!=='resolved';
+  const outcomes=maintenance?REPORT_MAINTENANCE_OUTCOMES:REPORT_OUTCOMES;
   return (r.followup_from?'<tr><th>이전 인계</th><td><p class="report-followup-summary">'+esc((r.followup_context||'').split('\n').slice(0,4).join('\n'))+'</p><button type="button" class="report-mini" data-action="previous" data-record="'+i+'">이전 기록 보기</button></td></tr>':'')+
-    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">2. 조치 내역</th></tr>'+
+    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">조치 내역</th></tr>'+
     '<tr><th>조치 단계</th><td>'+steps+'<button type="button" class="report-mini" data-action="step" data-record="'+i+'">'+reportIcon(true)+'<span>조치 단계 추가</span></button></td></tr>'+
-    reportConditionFields(r,i,esc)+
-    '<tr><th>재가동 실시 여부</th><td><div class="capture-restart"><label class="check"><input type="checkbox" data-key="restart_performed" data-record="'+i+'" '+(r.restart_performed?'checked':'')+'>실제 재가동 실시</label>'+
+    '<tr><th>운전 조건·주의사항</th><td>'+edit(r.operating_context||'','operating_context',i,'기동·부하 등 운전 조건, 작업 시 주의사항')+'</td></tr>'+
+    '<tr><th>재가동 여부</th><td><div class="capture-restart"><label class="check"><input type="checkbox" data-key="restart_performed" data-record="'+i+'" '+(r.restart_performed?'checked':'')+'>재가동 실시</label>'+
     (r.restart_performed?'<select aria-label="재가동 구분" data-key="restart_type" data-record="'+i+'">'+Object.entries(REPORT_RESTART_TYPES).map(([value,label])=>'<option value="'+value+'" '+(r.restart_type===value?'selected':'')+'>'+label+'</option>').join('')+'</select>':'')+'</div></td></tr>'+
-    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">3. 조치 결과</th></tr>'+
-    '<tr><th>조치 상태</th><td><select class="capture-select" aria-label="조치 상태" data-key="outcome" data-record="'+i+'">'+Object.entries(REPORT_OUTCOMES).map(([value,label])=>'<option value="'+value+'" '+(r.outcome===value?'selected':'')+'>'+label+'</option>').join('')+'</select><small>조치 상태는 작업 완료 확인이나 재가동 허가를 대신하지 않습니다. 완료 근거가 없으면 미확인으로 인계하세요.</small></td></tr>'+
-    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">4. 다음 교대조 인계</th></tr>'+
-    (followupVisible?'<tr><th>남은 문제</th><td>'+edit(r.remaining_issue||'','remaining_issue',i,'현재 남아 있는 문제. 확인하지 못했다면 미확인')+'</td></tr><tr><th>다음 확인 내용</th><td>'+edit(r.next_check||'','next_check',i,'다음 근무자가 확인할 내용')+'</td></tr><tr><th>확인 시점</th><td><input type="text" data-key="next_check_at" data-record="'+i+'" maxlength="4000" aria-label="확인 시점" value="'+esc(r.next_check_at||'')+'" placeholder="예: 다음 조 시작 시"></td></tr>':'')+
+    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">조치 결과</th></tr>'+
+    (maintenance?'<tr><th>정비 상태</th><td><select aria-label="정비 작업 완료" data-key="maintenance_status" data-record="'+i+'">'+Object.entries(REPORT_MAINTENANCE_STATUS).map(([value,label])=>'<option value="'+value+'" '+((r.maintenance_status||'unconfirmed')===value?'selected':'')+'>'+label+'</option>').join('')+'</select><small class="report-help">작업 완료와 운전 확인은 별도입니다.</small></td></tr>':'')+
+    '<tr><th>'+(maintenance?'설비 상태':'조치 상태')+'</th><td><select class="capture-select" aria-label="조치 상태" data-key="outcome" data-record="'+i+'">'+Object.entries(outcomes).map(([value,label])=>'<option value="'+value+'" '+(r.outcome===value?'selected':'')+'>'+label+'</option>').join('')+'</select><small class="report-help">'+(maintenance?'시운전 전에는 운전 미확인으로 기록합니다.':'재가동은 승인 절차에 따릅니다.')+'</small></td></tr>'+
+    '<tr class="report-flow-heading"><th colspan="2" scope="colgroup">인계사항</th></tr>'+
+    (followupVisible?'<tr><th>남은 문제</th><td>'+edit(r.remaining_issue||'','remaining_issue',i,'현재 남아 있는 문제')+'</td></tr><tr><th>후속 점검</th><td>'+edit(r.next_check||'','next_check',i,'후속 점검 내용')+'</td></tr><tr><th>확인 시점</th><td><input type="text" data-key="next_check_at" data-record="'+i+'" maxlength="4000" aria-label="확인 시점" value="'+esc(r.next_check_at||'')+'" placeholder="예: 다음 조 시작 시"></td></tr>':'')+
     (followupVisible&&r.follow_up?'<tr><th>기존 인계 메모</th><td>'+edit(r.follow_up,'follow_up',i,'기존 초안에 기록한 인계 내용')+'</td></tr>':'')+
-    (r.outcome==='resolved'?'<tr><th>정상 운전 확인</th><td><div class="capture-observation"><label>확인 상태<select aria-label="정상 운전 확인 상태" data-key="normal_run_status" data-record="'+i+'">'+Object.entries(REPORT_NORMAL_STATUS).map(([value,label])=>'<option value="'+value+'" '+((r.normal_run_status||'unconfirmed')===value?'selected':'')+'>'+label+'</option>').join('')+'</select></label><label>정상 운전 지속시간 (분)<input type="number" min="0" step="any" data-key="normal_run_minutes" data-record="'+i+'" aria-label="정상 운전 지속시간 (분)" value="'+esc(r.normal_run_minutes??'')+'"></label><label>확인 근거'+edit(r.normal_run_evidence||'','normal_run_evidence',i,'운전 확인 구간·방법, 정지·재발 여부')+'</label><small>정지·미확인 구간을 제외한 실제 운전시간을 기록합니다. 동일 증상 재발은 사라졌던 증상이 다시 발생한 경우입니다. 증상이 계속되면 조치 결과에 증상 지속으로 기록하세요.</small></div></td></tr>':'')+
-    '<tr class="capture-extra-row"><td colspan="2"><details class="report-review-notes report-capture-extra"><summary>추가 작업 정보</summary><table><tbody>'+
-    REPORT_REVIEW_FIELDS.filter(([key])=>!['failed_attempts','safety_notes'].includes(key)&&!(followupVisible&&key==='follow_up')).map(([key,label,hint])=>'<tr><th>'+label+'</th><td>'+edit(r[key]||'',key,i,hint)+'</td></tr>').join('')+
+    (r.outcome==='resolved'?'<tr><th>정상 운전 확인</th><td><div class="capture-observation"><label>확인 상태<select aria-label="정상 운전 확인 상태" data-key="normal_run_status" data-record="'+i+'">'+Object.entries(REPORT_NORMAL_STATUS).map(([value,label])=>'<option value="'+value+'" '+((r.normal_run_status||'unconfirmed')===value?'selected':'')+'>'+label+'</option>').join('')+'</select></label><label>정상 운전 지속시간 (분)<input type="number" min="0" step="any" data-key="normal_run_minutes" data-record="'+i+'" aria-label="정상 운전 지속시간 (분)" value="'+esc(r.normal_run_minutes??'')+'"></label><label>확인 근거'+edit(r.normal_run_evidence||'','normal_run_evidence',i,'운전 확인 구간·방법, 정지·재발 여부')+'</label><small class="report-help">운전 확인시간에서 정지·미확인 구간은 제외합니다.</small></div></td></tr>':'')+
+    '<tr class="capture-extra-row"><td colspan="2"><details class="report-review-notes report-capture-extra"><summary>추가 정보</summary><table><tbody>'+
+    REPORT_REVIEW_FIELDS.filter(([key])=>!['failed_attempts','safety_notes','operating_context'].includes(key)&&!(followupVisible&&key==='follow_up')).map(([key,label,hint])=>'<tr><th>'+label+'</th><td>'+edit(r[key]||'',key,i,hint)+'</td></tr>').join('')+
     (r.type==='PMS 정비'?'<tr><th>부품·소모품 사용</th><td>'+edit(r.parts_used||'','parts_used',i,REPORT_MAINTENANCE_FIELDS[1][2])+'</td></tr>':'')+
     '</tbody></table></details></td></tr>';
 }
@@ -3300,7 +3394,7 @@ function reportFaultFields(r,i,edit,esc) {
     '<tr><th>조치 결과</th><td><select data-key="outcome" data-record="'+i+'" aria-label="조치 결과">'+
     '<option value="">미기재</option>'+Object.entries(REPORT_OUTCOMES).map(([value,label])=>'<option value="'+value+'" '+(r.outcome===value?'selected':'')+'>'+label+'</option>').join('')+'</select></td></tr>'+
     (r.result!==null?'<tr><th>결과 확인·인계</th><td>'+edit(r.result || '','result',i,'정상 확인 방법·관찰 시간·재발 여부 또는 다음 근무에서 확인할 내용')+reportRemoveButton('result',i,'결과 확인·인계 삭제')+'</td></tr>':'')+
-    '<tr><th>정상 운전 확인</th><td><select data-key="normal_run_status" data-record="'+i+'" aria-label="정상 운전 확인 상태">'+Object.entries(REPORT_NORMAL_STATUS).map(([value,label])=>'<option value="'+value+'" '+((r.normal_run_status || 'unconfirmed')===value?'selected':'')+'>'+label+'</option>').join('')+'</select><label>확인한 지속시간 (분)<input class="report-run-minutes" type="number" min="0" step="any" data-key="normal_run_minutes" data-record="'+i+'" aria-label="정상 운전 지속시간 (분)" value="'+esc(r.normal_run_minutes ?? '')+'"></label>'+edit(r.normal_run_evidence || '','normal_run_evidence',i,'확인한 운전 구간·방법, 정지·재발 여부. MES 현재값만으로 연속 운전을 확정하지 않습니다.')+'<small>작업자가 실제 확인한 운전시간만 기록합니다. 정지·미확인 구간은 제외합니다. 동일 증상 재발은 사라졌던 증상이 다시 발생한 경우입니다. 증상이 계속되면 조치 결과에 증상 지속으로 기록하세요.</small></td></tr>'+
+    '<tr><th>정상 운전 확인</th><td><select data-key="normal_run_status" data-record="'+i+'" aria-label="정상 운전 확인 상태">'+Object.entries(REPORT_NORMAL_STATUS).map(([value,label])=>'<option value="'+value+'" '+((r.normal_run_status || 'unconfirmed')===value?'selected':'')+'>'+label+'</option>').join('')+'</select><label>확인한 지속시간 (분)<input class="report-run-minutes" type="number" min="0" step="any" data-key="normal_run_minutes" data-record="'+i+'" aria-label="정상 운전 지속시간 (분)" value="'+esc(r.normal_run_minutes ?? '')+'"></label>'+edit(r.normal_run_evidence || '','normal_run_evidence',i,'확인한 운전 구간·방법, 정지·재발 여부. MES 현재값만으로 연속 운전을 확정하지 않습니다.')+'<small class="report-help">운전 확인시간에서 정지·미확인 구간은 제외합니다.</small></td></tr>'+
     '<tr><td colspan="2"><details class="report-review-notes"><summary>검토에 필요한 추가 정보 <small>해당하는 항목만 작성</small></summary><table><tbody>'+
     REPORT_REVIEW_FIELDS.map(([key,label,hint])=>'<tr><th>'+label+'</th><td>'+edit(r[key] || '',key,i,hint)+'</td></tr>').join('')+
     '</tbody></table></details></td></tr>';
@@ -3313,13 +3407,14 @@ function renderReportRecords() {
   const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const edit=(value,key,index,placeholder,ci)=>'<textarea aria-label="'+placeholder+'" class="edit" data-key="'+key+'" data-record="'+index+'" '+(ci!==undefined?'data-cause="'+ci+'"':'')+' maxlength="4000" placeholder="'+placeholder+'">'+esc(value)+'</textarea>';
   $('reportLegacy').hidden=!$('reportMemo').value;
-  $('reportMes').textContent=S.reportContext||'';$('reportMesTable').hidden=!S.reportContext;
-  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><table><tbody><tr class="record-head"><th scope="row">기록 '+String(i+1).padStart(2,'0')+'</th><td><div class="record-tools"><select data-key="type" data-record="'+i+'" aria-label="기록 구분" '+(r.followup_from?'disabled':'')+'>'+Object.entries(REPORT_TYPE_LABELS).map(([value,label])=>'<option value="'+value+'" '+(r.type===value?'selected':'')+'>'+label+'</option>').join('')+'</select><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">기록 삭제</button></div></td></tr><tr><th>설비명</th><td>'+r.equipment.map(id=>{const eq=S.equipment.find(eq=>eq.equipment_id===id);return esc(eq?[eq.code,eq.name||eq.group].filter(Boolean).join(' '):id);}).join(' · ')+'</td></tr><tr><th>발생시각</th><td><input type="datetime-local" '+(r.followup_from?'readonly ':'')+'data-key="occurred_at" data-record="'+i+'" aria-label="발생시각" value="'+esc(r.occurred_at || '')+'"></td></tr><tr><th>'+(reportStructuredRecord(r)?'발생 상황·이상 증상':'작업 상황·조치')+'</th><td>'+edit(r.story,'story',i,reportFaultRecord(r)?'발생 상황과 이상 증상. 알람·측정값은 MES 운전·계측 기록 참고':'발생 상황과 수행한 작업을 기록합니다.')+'</td></tr>'+(r.causes.length?'<tr><th>원인·판단 근거</th><td>'+r.causes.map((c,ci)=>'<div class="cause-row">'+reportCauseSensors(r,c,i,ci,esc)+'<select aria-label="원인 확인 상태" data-record="'+i+'" data-cause="'+ci+'" data-key="certainty">'+['추정','확인','배제'].map(t=>'<option '+(c.certainty===t?'selected':'')+'>'+t+'</option>').join('')+'</select>'+edit(c.note,'note',i,'원인 판단과 근거를 기록합니다. 센서 측정값은 자동 첨부됩니다. 모르면 원인 미확인',ci)+reportRemoveButton('cause',i,'원인 삭제',ci)+'</div>').join('')+'</td></tr>':'')+(reportStructuredRecord(r)?reportCaptureFields(r,i,edit,esc):reportFaultRecord(r)?reportFaultFields(r,i,edit,esc):r.type==='PMS 정비'?reportMaintenanceFields(r,i,edit):'')+(r.result!==null&&!reportFaultRecord(r)&&r.type!=='PMS 정비'?'<tr><th>조치 결과·인계사항<br><small>선택 기록</small></th><td>'+edit(r.result,'result',i,'현장에서 확인한 조치 결과와 다음 교대조 인계사항. MES 측정값은 아래에 자동 첨부됩니다')+reportRemoveButton('result',i,'조치 결과·인계사항 삭제')+'</td></tr>':'')+'</tbody></table><div class="record-end"><button data-action="cause" data-record="'+i+'">'+reportIcon(true)+'<span>원인 항목 추가</span></button>'+(r.result===null&&!reportStructuredRecord(r)?'<button data-action="result" data-record="'+i+'">'+reportIcon(true)+'<span>결과·인계 추가</span></button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>'+(r.followup_from?'인계 사례 후보':'지식카드 후보')+'</label>'+(reportStructuredRecord(r)?'<small>'+(r.followup_from?'이전 인계부터 해결·정상 운전 확인까지의 기록을 묶어 검토합니다.':'원인·조치 결과·정상 운전 확인 기록을 바탕으로 검토합니다.')+'</small>':'')+'</div></section>').join(''):'<table aria-label="특이사항 없음"><tbody><tr><td class="empty"><span>특이사항 기록 0건</span><p>정상 근무라면 저장 전 확인에서 다시 확인해 주세요.</p></td></tr></tbody></table>';
+  $('reportMes').textContent=reportMesDisplayContext(S.reportContext);$('reportMesTable').hidden=!S.reportContext;
+  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><table><tbody><tr class="record-head"><th scope="row">기록 '+(i+1)+'</th><td><div class="record-tools"><select data-key="type" data-record="'+i+'" aria-label="기록 구분" '+(r.followup_from?'disabled':'')+'>'+Object.entries(REPORT_TYPE_LABELS).map(([value,label])=>'<option value="'+value+'" '+(r.type===value?'selected':'')+'>'+label+'</option>').join('')+'</select><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">삭제</button></div></td></tr><tr><th>설비명</th><td><output class="report-record-equipment">'+r.equipment.map(id=>{const eq=S.equipment.find(eq=>eq.equipment_id===id);return esc(eq?[eq.code,eq.name||eq.group].filter(Boolean).join(' '):id);}).join(' · ')+'</output></td></tr><tr><th>발생시각</th><td>'+reportOccurrenceFields(r,i,esc)+'</td></tr><tr><th>'+(r.type==='PMS 정비'?'정비 사유':reportStructuredRecord(r)?'발생 현상':'작업 내용')+'</th><td>'+edit(r.story,'story',i,reportFaultRecord(r)?'발생 상황·이상증상':reportStructuredRecord(r)?'정비 대상·점검 목적':'작업 내용')+'</td></tr>'+reportCauseFields(r,i,edit,esc)+(reportStructuredRecord(r)?reportCaptureFields(r,i,edit,esc):reportFaultRecord(r)?reportFaultFields(r,i,edit,esc):r.type==='PMS 정비'?reportMaintenanceFields(r,i,edit):'')+(r.result!==null&&!reportFaultRecord(r)&&r.type!=='PMS 정비'?'<tr><th>조치 결과·인계사항</th><td>'+edit(r.result,'result',i,'조치 결과·인계사항')+reportRemoveButton('result',i,'조치 결과·인계사항 삭제')+'</td></tr>':'')+'</tbody></table><div class="record-end">'+(r.result===null&&!reportStructuredRecord(r)?'<button data-action="result" data-record="'+i+'">'+reportIcon(true)+'<span>결과·인계 추가</span></button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>'+(r.followup_from?'인계 사례 후보':'지식카드 후보')+'</label>'+(reportStructuredRecord(r)?'<small>'+(r.followup_from?'이전 인계부터 해결·정상 운전 확인까지의 기록을 묶어 검토합니다.':'입력한 내용에 해당하는 후보만 검토합니다.')+'</small>':'')+'</div></section>').join(''):'<table aria-label="특이사항 없음"><tbody><tr><td class="empty"><span>특이사항 기록 0건</span><p>정상 근무라면 저장 전 확인에서 다시 확인해 주세요.</p></td></tr></tbody></table>';
   records.forEach((r,i)=>{
     if(r.capture_version!==1)return;
     const body=$('reportRecords').querySelectorAll('.record > table > tbody')[i];
-    body?.querySelector('input[data-key="occurred_at"]')?.closest('tr')?.insertAdjacentHTML('beforebegin','<tr class="report-flow-heading"><th colspan="2" scope="colgroup">1. 상황</th></tr>');
-    body?.insertAdjacentHTML('beforeend','<tr class="report-flow-heading report-optional-heading"><th colspan="2" scope="colgroup">지식카드 후보 근거 <small>평소와 다른 점·조건별 방법·안전 조치가 있으면 적어 주세요.</small></th></tr>');
+    body?.querySelector('input[data-key="occurred_at"]')?.closest('tr')?.insertAdjacentHTML('beforebegin','<tr class="report-flow-heading"><th colspan="2" scope="colgroup">상황</th></tr>');
+    body?.insertAdjacentHTML('beforeend','<tr class="report-flow-heading report-optional-heading"><th colspan="2" scope="colgroup">추가 근거</th></tr>');
+    if(reportStructuredRecord(r)||r.condition_signal||r.condition_value||r.condition_method||r.condition_result)body?.insertAdjacentHTML('beforeend',reportConditionFields(r,i,esc));
     body?.insertAdjacentHTML('beforeend',reportKnowledgeFields(r,i,edit,esc));
   });
   [...$('reportRecords').querySelectorAll('.record')].forEach((section,i)=>{
@@ -3330,6 +3425,7 @@ function renderReportRecords() {
     input.closest('label')?.replaceWith(document.createTextNode('지식카드 후보 자동 검토'));
   });
   refreshReportCauseSensors();
+  prepareReportHelp();
 }
 function renderReportRecordEquipment() {
   const select=$('reportRecordEquipment'),previous=select.value;
@@ -3358,17 +3454,20 @@ async function importReportMes() {
   const ids=S.reportSelected.slice();
   const records=S.reportRecords;
   if(!ids.length)return;
+  const request=S.reportMesRequest=(S.reportMesRequest||0)+1;
+  const active=()=>S.reportMesRequest===request&&S.reportRecords===records&&ids.join()===S.reportSelected.join();
   $('reportImport').disabled=true;
+  $('reportStatus').textContent='선택 설비의 MES 측정값·이벤트를 불러오는 중…';
   try { const [snap,log]=await Promise.all([getJson('/api/state'),getJson('/api/events')]);
-    if(S.reportRecords!==records || ids.join()!==S.reportSelected.join())return;
+    if(!active())return;
     const text=reportMesContext(snap,log.events,S.equipment.filter((eq)=>ids.includes(eq.equipment_id)));
     S.reportContext=text;
     $('reportMes').textContent=text;
     $('reportMesTable').hidden=!text;
     $('reportStatus').textContent='선택 설비의 MES 측정값·이벤트를 첨부했습니다.';
     saveReportDraft();
-  } catch(err) { $('reportStatus').textContent='MES 기록을 불러오지 못했습니다. 기존 첨부와 입력은 유지됩니다. '+err.message; }
-  finally { $('reportImport').disabled=false; }
+  } catch(err) { if(active())$('reportStatus').textContent='MES 기록을 불러오지 못했습니다. 기존 첨부와 입력은 유지됩니다. '+err.message; }
+  finally { if(S.reportMesRequest===request)$('reportImport').disabled=false; }
 }
 async function openReportArchive() {
   const session=++reportArchiveSession;reportArchiveRequest++;
@@ -3380,6 +3479,7 @@ async function openReportArchive() {
     if(session!==reportArchiveSession||!dialog.open)return;
     for(const report of reports){
       const button=document.createElement('button');button.type='button';
+      button.dataset.reportId=report.handover_id;button.setAttribute('aria-pressed','false');
       const context=report.required_context||{};
       button.textContent=(context.start_at||report.created_at)+' · '+(context.author||'미기재');
       button.addEventListener('click',()=>loadReportArchiveDetail(report.handover_id));
@@ -3413,6 +3513,7 @@ async function loadReportArchiveDetail(id) {
     const context=report.required_context||{};
     const status={pending:'중앙 DB 업로드 대기',uploaded:'중앙 DB 업로드 완료',conflict:'중앙 DB 충돌 확인 필요'};
     $('reportArchiveDetail').textContent=reportArchiveText(report,S.equipment);
+    $('reportArchiveList').querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.reportId===id)));
     $('reportArchiveStatus').textContent='DB 저장 확인 · '+report.handover_id+' · '+(status[report.status]||report.status);
   }catch(err){if(request===reportArchiveRequest&&$('reportArchive').open)$('reportArchiveStatus').textContent='일지를 불러오지 못했습니다. '+err.message;}
 }
@@ -3424,17 +3525,23 @@ function reportPreviewLines(r) {
   const remaining=r.outcome==='resolved'
     ? (r.normal_run_evidence?.trim()||'정상 운전 확인 미기재')
     : ([r.remaining_issue,r.next_check,r.next_check_at].filter(v=>v?.trim()).join(' / ')||r.follow_up?.trim()||r.next_maintenance?.trim()||'다음 근무 인계 미기재');
-  const chosen=[['징후 판단',r.interpretation],['정상 상태 대비 근거',r.interpretation_basis],
+  const chosen=[['운전 상황·조치 시 유의사항',r.operating_context],['징후 판단',r.interpretation],['정상 상태 대비 근거',r.interpretation_basis],
     ['적용 운전 조건',[r.condition_signal,r.condition_op,r.condition_value,r.condition_unit].filter(Boolean).join(' ')],
     ['MES 측정시각',r.condition_observed_at],
     ['기존 조건별 조치',r.condition_method],['기존 조건별 확인 결과',r.condition_result],
     ['위험 요인·작업 중지 기준',r.safety_notes],['실시한 정지·격리 조치',r.safety_action],['적용 안전 기준',r.safety_basis]]
     .filter(([,value])=>value?.trim());
-  return [['발생 상황',r.story.trim()||'미기재'],['원인·판단 근거',(r.causes||[]).map(reportCauseText).join('\n')||'미기재'],
-    ['수행 조치',action],['조치 후 결과',result],['미완료 사항·인계',remaining],...chosen];
+  if(r.type==='추가 기록')return [['작업 상황·조치',r.story.trim()||'미기재'],
+    ...((r.causes||[]).length?[['원인·판단 근거',r.causes.map(reportCauseText).join('\n')]]:[]),
+    ...(r.result?.trim()?[['조치 결과·인계사항',r.result.trim()]]:[]),...chosen];
+  return [[r.type==='PMS 정비'?'정비 대상·점검 목적':'발생 상황',r.story.trim()||'미기재'],
+    ...(!reportRoutineMaintenance(r)||(r.causes||[]).length?[['원인·판단 근거',(r.causes||[]).map(reportCauseText).join('\n')||'미기재']]:[]),
+    ['수행 조치',action],['조치 후 결과',result],...(r.type==='PMS 정비'&&r.maintenance_status?[['정비 작업 완료',REPORT_MAINTENANCE_STATUS[r.maintenance_status]],['정비 후 설비 상태',REPORT_MAINTENANCE_OUTCOMES[r.outcome]]]:[]),
+    ...(!reportRoutineMaintenance(r)||[r.remaining_issue,r.next_check,r.next_check_at,r.follow_up,r.next_maintenance].some(v=>v?.trim())?[[r.outcome==='resolved'?'정상 운전 확인':'미완료 사항·인계',remaining]]:[]),...chosen];
 }
 function reportSaveWarnings(r) {
   if(!reportStructuredRecord(r))return [];
+  if(reportRoutineMaintenance(r))return r.maintenance_status!=='completed'&&![r.remaining_issue,r.next_check,r.follow_up].some(value=>value?.trim())?['미완료 작업이나 다음 확인 사항이 있으면 인계해 주세요.']:[];
   if(r.outcome==='resolved')return r.normal_run_evidence?.trim()&&r.normal_run_status==='no_recurrence'&&r.normal_run_minutes>0?[]:['해결로 기록했지만 정상 운전 확인 근거가 부족합니다.'];
   return [r.remaining_issue,r.next_check,r.follow_up].some(value=>value?.trim())?[]:['미해결·임시 복구·실패 상태입니다. 남은 문제와 다음 확인 내용·시점을 인계해 주세요.'];
 }
@@ -3447,7 +3554,7 @@ function reportCandidatePreview(r) {
   if(r.capture_version!==1)return [];
   const [method,result]=reportConditionActionEvidence(r);
   const kinds=[
-    ['이상 징후 분석',[r.interpretation,r.interpretation_basis],['징후 판단','정상 상태 대비 근거']],
+    ['이상증상 분석',[r.interpretation,r.interpretation_basis],['징후 판단','정상 상태 대비 근거']],
     ['운전 조건별 조치',[r.condition_signal,r.condition_op,r.condition_value,method,result],['조건 항목','비교','기준값','조치 단계','조치 후 결과']],
     ['안전 조치',[r.safety_notes,r.safety_action,r.safety_basis],['위험 요인','정지·격리 조치','적용 안전 기준']]
   ];
@@ -3456,6 +3563,7 @@ function reportCandidatePreview(r) {
     if(r.equipment.length!==1)missing.push('후보 대상 설비 한 대');
     return name+' · '+(missing.length?'보완: '+missing.join('·'):'후보 초안 예상');
   });
+  if(!reportStructuredRecord(r)||reportRoutineMaintenance(r))return lines;
   const steps=(r.action_steps||[]).filter(step=>step.action?.trim()||step.observed_result?.trim());
   const missing=[];
   if(!steps.length||steps.some(step=>!step.action?.trim()||!step.observed_result?.trim()))missing.push('단계별 조치·결과');
@@ -3513,6 +3621,16 @@ async function saveReport() {
   finally { $('reportSave').disabled=false; }
 }
 
+let toastTimer = 0;
+function showToast(text) {
+  const el = $('toast');
+  if (!el) return;
+  el.hidden = false;
+  el.textContent = text;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
+}
+
 // Node 테스트는 DOM 없이 순수 함수만 쓴다.
 // 임계값·통과 장수는 서버 /api/face/config 와 프레임 응답이 준다. 여기 숫자는 두지 않는다.
 function faceVerdict(scores, threshold, need, max) {
@@ -3568,17 +3686,6 @@ function submitLogin() {
   S.operator = { name: name, id: id };
   show('face');
   startFaceCamera();
-}
-
-let toastTimer = 0;
-
-function showToast(text) {
-  const el = $('toast');
-  if (!el) return;
-  el.hidden = false;
-  el.textContent = text;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
 }
 
 // 대시보드(Jetson 주소)에 갔다 돌아오면 pda.html을 새로 연다. 같은 탭 동안만 로그인을 기억한다 —
@@ -3847,9 +3954,49 @@ on('reportArchiveClose',()=>$('reportArchive').close());
 on('reportPreviousClose',()=>$('reportPreviousDialog').close());
 $('reportArchive').addEventListener('close',()=>{reportArchiveRequest++;reportArchiveSession++;});
 on('reportAdd',addReportRecord);
+$('reportRecords').addEventListener('pointerover',event=>{
+  if(event.pointerType==='touch')return;
+  const anchor=event.target.closest('[data-report-help-anchor]');
+  if(anchor&&(!anchor.contains(event.relatedTarget)||$('reportHelpMemo').hidden))showReportHelp(anchor);
+});
+$('reportRecords').addEventListener('pointerout',event=>{
+  const anchor=event.target.closest('[data-report-help-anchor]');
+  if(anchor&&!anchor.contains(event.relatedTarget)&&!$('reportHelpMemo').contains(event.relatedTarget))reportHelpCloseTimer=setTimeout(hideReportHelp,180);
+});
+$('reportRecords').addEventListener('focusout',event=>{
+  if(!event.target.closest('[data-report-help-anchor]')?.contains(event.relatedTarget))hideReportHelp();
+});
+document.addEventListener('pointerdown',event=>{
+  if(!event.target.closest('[data-report-help-anchor],#reportHelpMemo'))hideReportHelp();
+});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')hideReportHelp();});
+$('reportHelpMemo').addEventListener('pointerleave',hideReportHelp);
+$('reportHelpMemo').addEventListener('pointerenter',()=>clearTimeout(reportHelpCloseTimer));
+$('s-reportWrite').addEventListener('scroll',hideReportHelp,true);
+$('reportRecords').addEventListener('focusin',event=>{
+  const select=event.target;
+  showReportHelp(select.closest('[data-report-help-anchor]'));
+  requestAnimationFrame(()=>{
+    if(document.activeElement===select)showReportHelp(select.closest('[data-report-help-anchor]'));
+  });
+  if(!select.classList.contains('report-safety-source'))return;
+  const record=S.reportRecords[Number(select.dataset.record)];
+  select.replaceChildren(new Option('안전 조치 선택',''));
+  (record?.action_steps||[]).forEach((step,n)=>{if(step.action?.trim())select.append(new Option((n+1)+'. '+step.action,String(n)));});
+});
 $('reportRecords').addEventListener('input',event=>{
   const t=event.target;if(t.dataset.record===undefined)return;
   const r=S.reportRecords[Number(t.dataset.record)];
+  if(t.dataset.occurrencePart){
+    if(r.followup_from)return;
+    const group=t.closest('.report-occurrence');
+    const date=group.querySelector('[data-occurrence-part="date"]').value;
+    const time=group.querySelector('[data-occurrence-part="time"]').value;
+    r.occurred_at=date||time?date+'T'+time:'';
+    group.querySelector('[data-key="occurred_at"]').value=r.occurred_at;
+    saveReportDraft();return;
+  }
+  if(t.dataset.cause!==undefined&&!r.causes[Number(t.dataset.cause)])r.causes[Number(t.dataset.cause)]={equipment:r.equipment.slice(),certainty:'추정',note:''};
   const target=t.dataset.step!==undefined?r.action_steps[Number(t.dataset.step)]:t.dataset.cause!==undefined?r.causes[Number(t.dataset.cause)]:r;
   if(t.dataset.eq){const ids=new Set(target.equipment);t.checked?ids.add(t.dataset.eq):ids.delete(t.dataset.eq);target.equipment=[...ids];}
   if(t.dataset.key==='sensor_ref'){
@@ -3863,48 +4010,39 @@ $('reportRecords').addEventListener('input',event=>{
     refreshReportCauseSensors();
   }else if(t.dataset.key){
     target[t.dataset.key]=t.type==='checkbox'?t.checked:t.type==='number'?(t.value===''?null:Number(t.value)):t.value;
-    if(['condition_signal','condition_value','condition_unit'].includes(t.dataset.key)){
-      delete r.condition_observed_at;
-      const section=t.closest('.record');
-      const source=section?.querySelector('.report-condition-source');if(source)source.value='';
-      const status=section?.querySelector('.report-condition-status');if(status)status.textContent='기준값을 직접 수정했습니다.';
-    }
+
   }
   saveReportDraft();
 });
 $('reportRecords').addEventListener('change',event=>{
   const t=event.target;if(t.dataset.record===undefined)return;
   const index=Number(t.dataset.record),r=S.reportRecords[index];
+  if(t.classList.contains('report-safety-source')){
+    if(t.value==='')return;
+    const action=r.action_steps?.[Number(t.value)]?.action;
+    if(!action?.trim())return;
+    if(r.safety_action?.trim()&&r.safety_action!==action&&!window.confirm('기존 안전 조치 내용을 선택한 조치로 바꿀까요?'))return;
+    r.safety_action=action;
+    t.closest('td').querySelector('[data-key="safety_action"]').value=action;
+    saveReportDraft();return;
+  }
   if(t.classList.contains('report-anomaly-source')){
     if(!t.value)return;
     const eq=S.equipment.find(eq=>eq.equipment_id===r.equipment[0]);
     const reading=eq&&S.snapshot?usableReadings(S.snapshot,eq).kept.find(m=>m.signal===t.value):null;
     const status=t.closest('td').querySelector('.report-anomaly-status');
-    if(!reading){status.textContent='유효한 MES 측정값이 없습니다. 확인한 근거를 직접 기록하세요.';return;}
+    if(!reading){status.textContent='MES 측정값 없음 · 직접 입력';return;}
     const spec=eq.signals.find(sensor=>sensor.signal===t.value);
     const bounds=spec.min!=null||spec.max!=null?'등록 정상범위 '+(spec.min!=null?reportMeasurementNumber(spec.min):'미설정')+' ~ '+(spec.max!=null?reportMeasurementNumber(spec.max):'미설정')+' '+unitText(reading.unit):'등록 정상범위 없음';
     const basis='MES 측정 · '+(spec.name||reading.signal)+': '+reportMeasurementNumber(reading.value)+' '+unitText(reading.unit)+' · '+bounds+' · 측정시각 '+reading.observed_at;
     const previous=(r.interpretation_basis||'').split('\n').filter(line=>!line.startsWith('MES 측정 · '));
     r.interpretation_basis=[...previous.filter(Boolean),basis].join('\n');
     t.closest('td').querySelector('[data-key="interpretation_basis"]').value=r.interpretation_basis;
-    status.textContent='선택 시점의 측정값을 기록했습니다. 이후 MES 값이 바뀌어도 이 근거는 유지됩니다.';
-    saveReportDraft();return;
-  }
-  if(t.classList.contains('report-condition-source')){
-    if(!t.value)return;
-    const eq=S.equipment.find(eq=>eq.equipment_id===r.equipment[0]);
-    const reading=eq&&S.snapshot?usableReadings(S.snapshot,eq).kept.find(m=>m.signal===t.value):null;
-    const status=t.closest('td').querySelector('.report-condition-status');
-    if(!reading){status.textContent='유효한 MES 측정값이 없습니다. 조건을 직접 입력해 주세요.';return;}
-    r.condition_signal=reading.signal;r.condition_value=reportMeasurementNumber(reading.value);
-    r.condition_unit=reading.unit;r.condition_observed_at=reading.observed_at;
-    t.closest('td').querySelector('[data-key="condition_signal"]').value=r.condition_signal;
-    t.closest('td').querySelector('[data-key="condition_value"]').value=r.condition_value;
-    t.closest('td').querySelector('[data-key="condition_unit"]').value=r.condition_unit;
-    status.textContent='MES 측정시각 · '+reading.observed_at+' · 비교 방식과 적용 기준을 확인해 주세요.';
+    status.textContent='선택 시점의 측정값으로 고정됩니다.';
     saveReportDraft();return;
   }
   if(t.dataset.key==='type'){
+    if(r.type==='PMS 정비'&&r.capture_version===1&&r.maintenance_status===undefined)r.maintenance_status='unconfirmed';
     if(!reportStructuredRecord(r)&&(reportFaultRecord(r)||r.type==='PMS 정비')&&r.result===null)r.result='';
     renderReportRecords();
     saveReportDraft();
@@ -3915,7 +4053,9 @@ $('reportRecords').addEventListener('change',event=>{
     delete r.mes_context;renderReportRecords();saveReportDraft();
   }
 });
-$('reportRecords').addEventListener('click',event=>{
+$('reportRecords').addEventListener('click',async event=>{
+  const help=event.target.closest('.report-help-button');
+  if(help){event.preventDefault();showReportHelp(help.closest('[data-report-help-anchor]'));return;}
   const b=event.target.closest('button[data-action]');if(!b)return;
   const index=Number(b.dataset.record);
   const r=S.reportRecords[index];
@@ -3929,7 +4069,7 @@ $('reportRecords').addEventListener('click',event=>{
   }
   if(b.dataset.action==='remove-step'){
     const n=Number(b.dataset.step),step=r.action_steps[n];
-    if((step.action.trim()||step.observed_result.trim()||step.performed_at||(step.worker&&step.worker!==$('reportAuthor').value.trim()))&&!window.confirm('기록 '+(index+1)+'의 단계 '+(n+1)+'를 삭제할까요?'))return;
+    if((step.action.trim()||step.observed_result.trim()||step.performed_at||(step.worker&&step.worker!==$('reportAuthor').value.trim()))&&!await confirmReportDelete('기록 '+(index+1)+'의 단계 '+(n+1)+'를 삭제할까요?'))return;
     r.action_steps.splice(n,1);
     renderReportRecords();saveReportDraft();return;
   }
@@ -3938,16 +4078,19 @@ $('reportRecords').addEventListener('click',event=>{
     const causeIndex=Number(b.dataset.cause);
     const value=field==='cause'?r.causes[causeIndex]?.note:r[field];
     const label={cause:'원인·조치',result:'결과·후속·인계'}[field];
-    if(value?.trim()&&!window.confirm('기록 '+(index+1)+'의 '+label+' 입력 내용을 삭제할까요?'))return;
+    const entered=!!value?.trim()||(field==='cause'&&!!(r.causes[causeIndex]?.sensor_ref||r.causes[causeIndex]?.sensor_reading));
+    if(entered&&!await confirmReportDelete('기록 '+(index+1)+'의 '+label+' 입력 내용을 삭제할까요?'))return;
     if(field==='cause')r.causes.splice(causeIndex,1);else r[field]=null;
     renderReportRecords();saveReportDraft();return;
   }
   if(b.dataset.action==='remove'){
-    if(!window.confirm('기록 '+(index+1)+'을 삭제할까요?'))return;
-    S.reportRecords.splice(index,1);
+    if(!await confirmReportDelete('기록 '+(index+1)+'의 입력 내용을 삭제할까요?'))return;
+    const current=S.reportRecords.indexOf(r);if(current<0)return;
+    S.reportRecords.splice(current,1);
   }
   if(b.dataset.action==='cause'){
     if(r.causes.length>=50){$('reportStatus').textContent='한 기록에는 원인 항목을 50건까지 추가할 수 있습니다.';return;}
+    if(!r.causes.length)r.causes.push({equipment:r.equipment.slice(),certainty:'추정',note:''});
     r.causes.push({equipment:r.equipment.length===1?r.equipment.slice():[],certainty:'추정',note:''});
   }
   if(b.dataset.action==='result')r.result='';
@@ -3967,7 +4110,7 @@ $('reportAuthor').addEventListener('input',()=>{
 });
 ['reportMemo','reportAuthor','reportStart','reportEnd'].forEach((id)=>$(id).addEventListener('input',saveReportDraft));
 on('eqListX',()=>$('eqListModal').close());on('ilDetailX',()=>$('ilDetail').close());on('ilDetailClose',()=>$('ilDetail').close());$('ilDetail').addEventListener('click',(e)=>{if(e.target===$('ilDetail'))$('ilDetail').close();});on('eqListClose',()=>$('eqListModal').close());$('eqListModal').addEventListener('click',(e)=>{if(e.target===$('eqListModal'))$('eqListModal').close();});
-on('reportResumeLoad',()=>{$('reportResume').close();enterReportWrite();});on('reportResumeNew',()=>{$('reportResume').close();resetReportForm();enterReportWrite();});on('notifyBell',toggleNotify);on('notifyFloat',toggleNotify);on('logout',()=>{$('logoutConfirm').showModal();$('logoutConfirm').focus();});on('logoutNo',()=>$('logoutConfirm').close());on('logoutYes',()=>{$('logoutConfirm').close();saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
+on('reportResumeLoad',()=>{$('reportResume').close();enterReportWrite();});on('reportResumeNew',()=>{$('reportResume').close();resetReportForm();enterReportWrite(true);});on('notifyBell',toggleNotify);on('notifyFloat',toggleNotify);on('logout',()=>{$('logoutConfirm').showModal();$('logoutConfirm').focus();});on('logoutNo',()=>$('logoutConfirm').close());on('logoutYes',()=>{$('logoutConfirm').close();saveReportDraft();stopFaceCamera();stopUnityCamera();releaseContext(S);S.operator=null;S.linkedEquipment=null;try{sessionStorage.removeItem(OPERATOR_KEY);}catch(_){}renderContext();$('employeePassword').value='';show('login');});
 on('accountOpen',()=>show('account'));on('accountBack',()=>show('login'));on('faceOpen',()=>show('faceSetup'));on('accountFace',()=>show('faceSetup'));on('faceSetupBack',()=>show('login'));
 $('accountForm').addEventListener('submit',async(event)=>{
   event.preventDefault();if($('accountSubmit').disabled)return;

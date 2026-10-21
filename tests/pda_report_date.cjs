@@ -1,0 +1,28 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const source=fs.readFileSync('shiftlink/mes/web/pda.js','utf8');
+const context=vm.createContext({module:{exports:{}}});
+vm.runInContext(source,context);
+const handlers={};
+context.document={getElementById:()=>({addEventListener:(name,fn)=>handlers[name]=fn})};
+vm.runInContext(`var stored='';saveReportDraft=()=>stored=S.reportRecords[0].occurred_at;
+ S.reportRecords=[{occurred_at:'',causes:[]}];`,context);
+vm.runInContext(source.slice(source.indexOf("$('reportRecords').addEventListener('input'"),source.indexOf("$('reportRecords').addEventListener('change'")),context);
+const date={value:''},time={value:''},canonical={value:''};
+const group={querySelector:selector=>selector.includes('"date"')?date:selector.includes('"time"')?time:canonical};
+const edit=(part,value)=>{
+  (part==='date'?date:time).value=value;
+  handlers.input({target:{dataset:{record:'0',occurrencePart:part},closest:()=>group}});
+};
+edit('date','2026-10-21');assert.equal(context.stored,'2026-10-21T','partial draft must not invent a time');
+edit('time','16:20');assert.equal(context.stored,'2026-10-21T16:20');assert.equal(canonical.value,context.stored);
+const rendered=vm.runInContext('reportOccurrenceFields(S.reportRecords[0],0,String)',context);
+assert.match(rendered,/type="date".*value="2026-10-21"/);
+assert.match(rendered,/type="time".*value="16:20"/);
+edit('date','');assert.equal(context.stored,'T16:20','clearing a date must not silently keep the old date');
+edit('time','');assert.equal(context.stored,'');
+vm.runInContext('S.reportRecords[0].occurred_at="2026-10-20T08:00";S.reportRecords[0].followup_from={handover_id:"old"};',context);
+edit('date','2026-10-22');assert.equal(vm.runInContext('S.reportRecords[0].occurred_at',context),'2026-10-20T08:00','followup cannot change the original occurrence');
+assert.equal((vm.runInContext('reportOccurrenceFields(S.reportRecords[0],0,String)',context).match(/ readonly/g)||[]).length,2);
+console.log('PASS: occurrence date/time merge, partial drafts, clearing and readonly followup');

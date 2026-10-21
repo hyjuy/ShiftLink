@@ -18,13 +18,15 @@ def main():
     args=parser.parse_args()
     result=json.loads(args.result.read_text(encoding='utf-8'))
     args.out_dir.mkdir(parents=True,exist_ok=False)
-    preserving='preserved_hybrid' in result['metrics']
-    names=(['ewma','original_hybrid','preserved_hybrid'] if preserving else
+    preserving='preserved_hybrid' in result['metrics'];rearming='rearmed_hybrid' in result['metrics']
+    names=(['ewma','preserved_hybrid','rearmed_hybrid'] if rearming else
+           ['ewma','original_hybrid','preserved_hybrid'] if preserving else
            ['ewma','previous_hybrid','stateful','ewma_stateful_ablation'])
-    labels=(['EWMA','Original\nhybrid','Preserved\nhybrid'] if preserving else
+    labels=(['EWMA','Current preserved\nhybrid','Rearmed\nhybrid'] if rearming else
+            ['EWMA','Original\nhybrid','Preserved\nhybrid'] if preserving else
             ['EWMA','Previous\nhybrid','Stateful\nhybrid','EWMA stateful\n(no Timestral)'])
     colors=['#52677a','#c48b33','#327d6f','#83567b'][:len(names)]
-    diagnostic='original_hybrid' if preserving else 'previous_hybrid'
+    diagnostic='preserved_hybrid' if rearming else 'original_hybrid' if preserving else 'previous_hybrid'
     fig,axes=plt.subplots(2,2,figsize=(12,8),layout='constrained')
     for ax,field,title in zip(axes.flat,('injected_event_recall','wrong_alert_equipment_seconds',
             'duplicate_alert_episodes','p95_onset_delay_seconds'),
@@ -34,7 +36,8 @@ def main():
         ax.spines[['top','right']].set_visible(False)
         for i,value in enumerate(values):ax.text(i,value,f'{value:.1f}',ha='center',va='bottom')
         ax.margins(y=.18)
-    fig.suptitle('Fresh synthetic confirmation | CPU 1 thread, worker 1, batch 1\nFixed checkpoint and causal alarm state; not Raspberry Pi hardware timing')
+    stage='Development replay (not held-out)' if rearming and 'diagnostic_only' in result else 'Fresh synthetic confirmation'
+    fig.suptitle(f'{stage} | CPU 1 thread, worker 1, batch 1\nFixed checkpoint and causal alarm state; not Raspberry Pi hardware timing')
     fig.savefig(args.out_dir/'confirmation.png',dpi=160);plt.close(fig)
     root=Path(__file__).resolve().parents[1]
     sys.path.insert(0,str(root/'output/mes-diagnostic-runtime-20261021'))
@@ -69,7 +72,7 @@ def main():
     for ax,name,label,color in zip(axes[:3],names[:3],labels[:3],colors[:3]):
         ax.step(sequence,[int(eq in alerts[name][(r,s)]) for s in sequence],where='post',color=color)
         ax.set(ylabel=label.replace('\n',' '),ylim=(-.1,1.2))
-    axes[0].set_title(f'Most original-hybrid alert starts: {r[:10]} / {eq} (fixed diagnostic selection)')
+    axes[0].set_title(f'Most {diagnostic.replace("_","-")} alert starts: {r[:10]} / {eq} (fixed diagnostic selection)')
     axes[3].step(sequence,[int(any(fault['equipment_id']==eq and fault['intensity']>0 for fault in label['faults'])) for _,label in rows],where='post',color='#83567b')
     axes[3].set(ylabel='Active source',xlabel='Sequence (1-second frames)',ylim=(-.1,1.2))
     fig.savefig(args.out_dir/'alarm-trace.png',dpi=160);plt.close(fig)

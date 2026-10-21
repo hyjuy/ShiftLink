@@ -139,6 +139,7 @@ def main():
     parser.add_argument('--selection',type=Path)
     parser.add_argument('--fresh',type=Path)
     parser.add_argument('--bounded-release',action='store_true')
+    parser.add_argument('--final-grid',action='store_true')
     args=parser.parse_args();args.out_dir.mkdir(parents=True,exist_ok=False)
     p,config,specs,stats,ref,ft=setup();channels=[tuple(c) for c in ref['channels']]
     from scripts.evaluate_mes_fault_models import score
@@ -155,7 +156,10 @@ def main():
             if d['config_id']!=config.config_id or score(d['runs'],d['baseline'])!=reference:raise ValueError('development differs')
             datasets.append(d)
         grid=[];baselines=[score(d['runs'],d['baseline']) for d in datasets]
-        if args.bounded_release:
+        if args.final_grid:
+            parameters=[dict(gate=0,on_scale=scale,on_z=on,off_z=off,release=release,hold_ts=.1)
+                        for off,on,scale,release in itertools.product((1.5,2,2.5),(1.5,2,2.5),(.75,1,1.5,2),(1,2)) if on>=off]
+        elif args.bounded_release:
             parameters=[dict(gate=0,on_scale=scale,on_z=on,off_z=off,release=1,hold_ts=hold)
                         for off,on,scale,hold in itertools.product((2.5,3),(3,3.5),(.75,1,1.5,2),(.1,.5))]
         else:

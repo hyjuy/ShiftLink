@@ -43,8 +43,17 @@ def render(eq_code: str, specs: dict, observations: list, snapshot_at: str | Non
     return f'<mes id="M" eq="{eq_code}" snapshot_at="{snapshot_at or "미상"}">\n{body}\n</mes>'
 
 
-def prompt(question: str, mes: str, ev: list[dict]) -> str:
-    return G.prompt(question, ev).replace("\n\n[근거]\n", f"\n\n[MES]\n{mes}\n\n[근거]\n", 1)
+def where(m: dict, event_label: bool = True) -> str:
+    """Source label; with event_label an event chunk is a handover record, not the card it was filed under
+    (10/20 event-conflict cause 1: the model could not tell event K-11xx from card K-11xx). Off = G.prompt labels."""
+    if m["kind"] == "source":
+        return f'{m["source"]} p.{m["page"]}'
+    return f'{"인계 기록" if event_label and m["kind"] == "event" else "카드"} {m["source"]}'
+
+
+def prompt(question: str, mes: str, ev: list[dict], event_label: bool = True) -> str:
+    parts = [f'<source id="S{n}" from="{where(r["metadata"], event_label)}">\n{r["text"]}\n</source>' for n, r in enumerate(ev, 1)]
+    return f"[질문]\n{question}\n\n[MES]\n{mes}\n\n[근거]\n" + "\n".join(parts)
 
 
 def demo():
@@ -61,8 +70,11 @@ def demo():
     assert "누유 감지 1 · 높음 (기준 0)" in m, m
     assert "활성 경보: 센서값 범위 이탈(AL-SENSOR-ANOMALY)" in m, m
     assert "유효 관측 없음" in render("PDP-01", specs, [], None, [])
-    p = prompt("q", m, [])
+    ev = [{"text": "t", "metadata": {"kind": k, "source": s, "page": 3}} for k, s in (("event", "K-1103"), ("card", "K-1210"), ("source", "m.pdf"))]
+    p = prompt("q", m, ev)
     assert p.index("[MES]") < p.index("[근거]"), p
+    assert 'from="인계 기록 K-1103"' in p and 'from="카드 K-1210"' in p and 'from="m.pdf p.3"' in p, p
+    assert prompt("q", m, ev, event_label=False).replace(f"\n\n[MES]\n{m}", "") == G.prompt("q", ev)   # block-only ablation
     assert RULES in SYSTEM and '"M"]' in SYSTEM
 
 

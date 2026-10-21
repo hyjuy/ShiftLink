@@ -75,7 +75,8 @@ class S30hPipeline:
     answer_mode = "s30h"
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
-                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False):
+                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
+                 event_label=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -100,6 +101,7 @@ class S30hPipeline:
         # experimental (default off): the unit's MES snapshot as an [MES] block in the answer prompt, for an answer model
         # trained on it (MES SFT 10/21); ck106 never saw the block
         self.mes_block = mes_block
+        self.event_label = event_label   # with the block only: event chunks shown as 인계 기록 (separate switch for ablation)
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -163,7 +165,7 @@ class S30hPipeline:
         if self.mes_block and eq_id in self.specs:
             block = MB.render(self.eq_code[eq_id], self.specs[eq_id], payload.get("observations") or [],
                               payload.get("snapshot_at"), payload.get("active_alarms") or [], self.alarm_labels)
-        p, extra = (MB.prompt(question, block, ev2), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
+        p, extra = (MB.prompt(question, block, ev2, self.event_label), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
         elif route == "confident":

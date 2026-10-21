@@ -230,6 +230,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_MES_BLOCK", flag)
     assert Q.build_query_pipeline().mes_block is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_EVENT_LABEL", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_EVENT_LABEL", flag)
+    assert Q.build_query_pipeline().event_label is enabled
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

@@ -1,0 +1,209 @@
+# ShiftLink 프로젝트 구조와 작업 시작점
+
+기준일: 2026-10-21 (Asia/Seoul)
+분석 대상: 현재 로컬 작업 트리. 커밋되지 않은 변경과 미추적 파일도 포함한다.
+목적: 대화 컨텍스트가 초기화되어도 구조·진입점·확인 경로를 복원하는 공통 안내서.
+
+공유 기준 주의: 이 문서는 로컬 작업 트리 분석을 바탕으로 작성되었다. `codex/kg-base`는 이미 공유된 커밋 `000b9102a10914ca694852aa0ff92285e3cc2056`에 승인된 세 문서만 추가한다. 아래에 언급된 다른 미커밋 구현·미추적 자료는 이 기준에 포함되지 않는다. 실제 파일이 없는 경로는 미공유 자료로 구분하고, 실행 동작은 체크아웃한 코드로 확인한다.
+
+## 1. 읽는 순서와 사실의 우선순위
+
+1. 루트 `AGENTS.md`와 작업 폴더의 하위 지침을 확인한다.
+2. 이 문서를 읽고, 아래 작업별 시작점에서 필요한 파일만 연다.
+3. 실행 코드·설정과 문서가 다르면 현재 파일을 확인해 구분한다.
+4. 구조·진입점·실행 모드가 바뀌면 이 문서도 함께 갱신한다.
+
+이 문서는 구조 지도이며 전체 코드, 배포 상태, 현재 테스트 결과를 대체하지 않는다.
+과거 보고서의 성공 결과를 현재 작업 트리의 성공으로 간주하지 않는다.
+
+## 2. 시스템 개요
+
+ShiftLink는 베테랑 노하우와 설비 관측을 이용해 현장 질의·조치 기록·교대 인계를 돕는 MES 보조 에이전트다.
+저장소에는 합성 MES, Python HTTP 서버, 정적 웹 화면, Raspberry Pi PDA 앱, 검색·추론,
+얼굴·설비 인식, Unity 공장 시연 및 오프라인 평가 도구가 함께 있다.
+
+```text
+Unity PC: 공장 상태 시각화·작업자 이동·카메라 스트림
+   │ MES 상태 조회                          │ 영상 / 촬영
+   ▼                                        ▼
+Jetson MES :8000  ◀── /api/* 프록시 ── Raspberry Pi PDA :8080
+   │                                       얼굴 확인·설비 CNN
+   ├─ 합성 엔진 → 센서·알람·이벤트
+   ├─ 질의 → 현재 관측 근거 → 검색·판정·답변 → PDA
+   ├─ 근무일지·조치·인계 → SQLite
+   └─ uploader → Aiven MySQL (업로드 대상 기록만)
+```
+
+위 장비 배치는 [시연 가이드](../guides/run-demo.md)의 구성이다.
+현재 장비가 이대로 실행 중인지는 별도 확인이 필요하다.
+PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있다.
+
+## 3. 주요 디렉터리
+
+| 경로 | 책임과 경계 |
+|---|---|
+| `shiftlink/agent/` | 요청 라우팅, 공통 스키마, 고정 파이프라인, 답변 조합·검증 |
+| `shiftlink/mes/` | MES 서비스 조립, HTTP API, 합성 엔진, 저장, 관측·조치·인계·계정 |
+| `shiftlink/mes/web/` | 프레임워크 빌드 없이 제공하는 HTML/CSS/JavaScript 화면 |
+| `shiftlink/pda/` | Pi 화면 서버·Jetson API 프록시·키오스크·Unity 영상 연동 |
+| `shiftlink/communication/` | 재사용 HTTP 클라이언트와 통신 오류 처리 |
+| `shiftlink/rag/` | 카드 로더·검색 공급자·추출 및 카드 기반 질의 CLI |
+| `shiftlink/rag2/` | 매뉴얼 청크·임베딩 검색, 근거 점수, 생성, S30h 질의 경로 |
+| `shiftlink/edge/` | Ollama 호출·프롬프트·모델 연결 및 픽스처 실행 CLI |
+| `shiftlink/data/` | 카드·시나리오·내러티브 생성과 카드 린트 |
+| `shiftlink/face/` | 얼굴 모델 준비·등록·검증·템플릿 저장 |
+| `shiftlink/vision/` | 설비 사진 수집·데이터셋·학습·평가·양자화·ONNX 분류 |
+| `unity/ShiftLinkFactory/` | Unity 프로젝트. C# 실행 코드, 장면·모델, 편집기 도구 |
+| `scripts/` | 실행 보조, 장비·HTTP 점검, 데이터 준비, 모델 비교·연구 스크립트 |
+| `tests/` | Python 회귀 테스트, Node DOM 검사, 실제 브라우저·장비 연동 검사 |
+| `eval/` | 평가 하니스, 픽스처, QA 분할·채점 및 결과 위치 |
+| `bench/` | Jetson 질의·Pi 분류·카메라 흐름 등의 성능 측정 |
+| `db/` | Aiven SQL 스키마와 적용 도구 |
+| `deploy/` | Jetson MES·업로더·Pi 설치 및 S30h 배포 안내 |
+| `docs/` | 설계·실행 안내·데이터 계약·실험·검증·연구·실패 기록 |
+| `seeds/`, `splits/` | 생성 기준·페르소나·출처 등록부와 데이터 분할 메타데이터 |
+| `data/`, `mes_data/` | 로컬 데이터·모델 관련 산출물, MES 실행 DB. 문서 자료와 구분 |
+| `output/`, `artifacts/`, `tmp/`, `graphify-out/` | 로컬 빌드·실험·임시 산출물. 구현의 기준 파일로 취급하지 않는다 |
+| `third_party_licenses/` | 외부 모델·라이브러리의 라이선스 관련 자료 |
+
+루트에 `package.json`이나 Python `pyproject.toml` 기반 패키지 설정은 발견되지 않았다.
+핵심 Python 코드는 저장소 루트에서 `python -m shiftlink.<모듈>` 형식으로 실행한다.
+웹 화면은 React/Vite 앱으로 가정하지 않는다.
+
+## 4. MES 내부 책임
+
+| 파일·묶음 | 역할 |
+|---|---|
+| `__main__.py` | host·port·DB·랜덤 고장 설정을 읽는 MES 실행 진입점 |
+| `server.py` | `MesService`와 `_Handler`. 엔진·저장·질의·업무 API를 연결하는 중심 |
+| `engine.py` | 시간·UI·DB와 분리된 결정적 합성 상태 엔진 `MesEngine` |
+| `random_factory.py` | `RandomFactoryEngine`. 랜덤 합성 센서·고장 운전 경로 |
+| `signal_dynamics.py`, `fault_schedule.py` | 신호 동역학·고장 스케줄 |
+| `contracts.py`, `catalog.py`, `configuration.py` | 데이터 계약·카탈로그·활성 설비/시나리오 구성 |
+| `signal_semantics.py`, `symptoms.py`, `scenarios/` | 신호 의미·증상·시나리오 기준 |
+| `query.py`, `card_adapter.py` | 요청과 관측 근거를 검색·추론 경로에 연결 |
+| `storage.py` | SQLite 기록·복원·내보내기와 업로드 상태 |
+| `work_reports.py`, `handover_board.py` | 근무일지·교대 인계 업무 |
+| `field_draft.py`, `candidate_review.py` | 현장 지식 초안·후보 검토 |
+| `publication.py`, `rag/embedding.py` | 검수 산출물의 임베딩 작업·SQLite delta 검색 인덱스·공용 모델 prefix |
+| `accounts.py` | 관리자·작업자 계정 관련 처리 |
+| `analytics.py`, `uploader.py` | 집계와 별도 클라우드 업로드 프로세스 |
+
+`MesService`는 엔진 한 개를 소유하고 일반 상태 조회 자체로 엔진을 진행시키지 않는다.
+`--random-faults`가 켜지면 기본 `MesEngine` 대신 `RandomFactoryEngine`을 구성한다.
+합성 데이터는 실측 또는 보정된 물리 모델의 출력으로 해석하지 않는다.
+
+주요 API 예: `/api/state`, `/api/config`, `/api/catalog`, `/api/query`,
+`/api/equipment/scan`, `/api/work-reports`, `/api/shift-handover`.
+전체 HTTP 계약은 [MES 계약](mock-mes-contract.md)과 `server.py`의 라우트를 함께 확인한다.
+
+## 5. 질의·검색 경로: hybrid와 S30h를 구분
+
+공통 시작점은 `shiftlink/mes/query.py:build_query_pipeline`이다.
+
+- 코드의 기본값은 `ANSWER_MODE = 'hybrid'`다. 카드 로더와 `FixedPipeline`,
+  Ollama 답변 모델·판정기를 연결한다.
+- `SHIFTLINK_ANSWER_MODE=s30h`일 때 `rag2/s30h.py:S30hPipeline`을 선택한다.
+  매뉴얼 검색 인덱스, 임베딩, 청크 근거 점수·판정 및 답변 생성을 이용한다.
+- 두 경로는 `run(payload) -> .output` 형태와 `AgentResponse` 계약을 공유한다.
+- [S30h 배포 안내](../../deploy/s30h.md)는 10/16 시연 채택을 기록하지만,
+  현재 Jetson의 환경 변수·서비스 설정을 이번 분석에서 조회하지는 않았다.
+- `data/rag2/` 인덱스와 Ollama 모델은 외부 준비가 필요하다.
+  기본 `requirements.txt`만으로 모든 S30h·비전·연구 환경이 갖춰진다고 가정하지 않는다.
+
+`FixedPipeline`은 라우팅 → 도구/검색 → 모델 또는 추출/하이브리드 경로 → 응답 검증으로 구성된다.
+검수된 현장 카드는 `knowledge_publications` SQLite delta 인덱스에서 질의용 뷰로 읽는다. S30h는 같은 모델의 벡터를 합치며, FixedPipeline은 게시된 카드만 기존 검색 방식으로 합친다. 정적 KB·인덱스 파일은 수정하지 않는다. [게시 흐름과 검증](../guides/knowledge-publication.md)을 참고한다.
+무근거 응답 보류, 관측 조건, 인용 카드, 안전 고지 등의 처리는
+`pipeline.py`, `response.py`, `compose.py`, `router.py`에서 확인한다.
+최상단의 “one model call” 설명만 보고 판정·예열·재시도까지 호출 한 번이라고 단정하지 않는다.
+
+## 6. PDA·인식·Unity
+
+- `pda/__main__.py`가 `mes/web/` 화면을 제공하고 `/api/*`를 Jetson으로 프록시한다.
+  Unity 영상 프록시·촬영 분류도 이 경로에 있다.
+- `mes/web/pda.html`, `pda.js`는 작업자 화면이다.
+  `index.html`, `app.js`, `operator.js`, `accounts.js`와 후보 검토 화면도 별도로 존재한다.
+- `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
+  모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
+- Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로
+  `FactorySensorMotion.cs`, `FactoryLogistics.cs`, `FactoryWorker.cs`,
+  `FactoryCameraStream.cs` 등으로 공장 동작·작업자·영상을 나눈다.
+- `FactoryShiftNetwork.cs`, `FactoryShiftMultiplayer.cs`와
+  `scripts/start_unity_pda_shift.ps1`는 로컬의 두 PC 교대 시연 경로다.
+  이 세 파일과 `docs/guides/unity-two-pc-handover.md`는 **미공유 로컬 자료**로, `codex/kg-base`에 포함되지 않는다. 해당 작업 소유자가 공유한 뒤 별도로 확인한다.
+- Unity 편집기 도구는 `Assets/Editor/`에, 설정은 `Packages/`, `ProjectSettings/`에 있다.
+  `Library/`, `Logs/`, `UserSettings/`를 소스 기준으로 분석하지 않는다.
+
+**PDA UI 작업 전에는 반드시 `shiftlink/mes/web/AGENTS.md`를 읽는다.** 이 파일은 로컬 지침으로, 다른 PC에는 별도 전달이 필요하다.
+외관 수정과 센서 수신·상태·질의 근거 변경의 경계가 명시되어 있다.
+
+## 7. 데이터·연구·저장 경계
+
+- KB 통합 위치: `docs/data/knowledge_cards/kb/kb_cards.json`.
+  통합 생성기는 같은 폴더의 `build_kb.py`다. 카드 수는 파일을 다시 확인한다.
+- 기준정보 예: `docs/data/reference/00_plant_and_relations.json`.
+- `docs/data/`는 작성·검토 자료, `mes_data/`는 실행 DB 위치다.
+- `scripts/mes_*.py`와 관련 `docs/research/`, `docs/experiments/`에는
+  데이터셋 감사·모델 비교·위치 추정·EWMA·PCA·forest·Timestral 등의 연구 경로가 있다.
+  파일 존재나 연구 보고서만으로 실시간 서버에 채택됐다고 단정하지 않는다.
+- `requirements-mes-research.txt`는 오프라인 연구 의존성이다.
+  `requirements-vision.txt`와 NumPy 버전이 다르므로 무조건 한 환경에 합치지 않는다.
+- `uploader.py`는 로컬 pending 기록을 업로드한다. 현재
+  `HOLD_RESOLUTION_UPLOAD = True`이므로 조치 기록 및 관련 source_session_id가 있는
+  인계 일부는 업로드를 보류한다. “모든 기록을 클라우드에 동기화”한다고 설명하지 않는다.
+- `.env`, 인증서, 접속 코드, 얼굴 템플릿과 모델 파일의 내용을 문서에 복사하지 않는다.
+  버전 관리 범위는 `.gitignore`와 해당 데이터 계약을 따른다.
+
+## 8. 실행·검증 시작점
+
+다음은 실행 위치와 명령을 찾기 위한 안내다. 이번 문서 작업에서 서비스를 시작하지 않았다.
+
+```powershell
+# 저장소 루트, 설치된 프로젝트 Python 환경에서
+python -m shiftlink.mes --host 127.0.0.1 --port 8000
+python -m shiftlink.pda --jetson http://127.0.0.1:8000 --port 8080 --no-window
+
+# 카드 질의 CLI (모델 호출 없이 입력 구성 확인)
+python -m shiftlink.rag --cards docs/data/knowledge_cards/kb/kb_cards.json --equipment HPU --question "압력이 떨어졌다" --dry-run
+
+# 전체 회귀 / 검색 평가: 필요할 때 실행
+python -m pytest -q
+python eval/qa/route_score.py
+```
+
+`build_kb.py`는 파일을 다시 생성하므로 읽기 전용 구조 점검의 일부로 실행하지 않는다.
+실제 장비 설치·예열·기동 순서는 [run-demo](../guides/run-demo.md),
+[모의 MES 사용법](../guides/mock-mes-usage.md),
+[S30h](../../deploy/s30h.md)를 대조한다.
+
+현재 로컬 `.github/workflows/ci.yml`:
+Python 3.10, pytest, 선택된 Node PDA 회귀, KB 재생성 diff 검사, route_score.
+기준은 `MIN_DEV_ROUTE=21`, `MIN_SANITY_ROUTE=28`이다.
+루트 README의 dev 20/30 설명과 다르므로 CI 파일을 우선 확인한다.
+
+## 9. 변경 작업별 빠른 지도
+
+| 작업 | 시작 파일 | 관련 검증 예 |
+|---|---|---|
+| MES API·상태 | `mes/server.py`, `engine.py`, `storage.py` | `tests/test_mes_server.py`, `test_mes_engine.py`, `test_mes_storage.py` |
+| 센서·고장 의미 | `signal_semantics.py`, `symptoms.py`, `random_factory.py` | `test_mes_sensor_semantics_ui.py`, `test_mes_random_factory.py`, `test_mes_signal_map_runtime.py` |
+| 답변·보류·인용 | `mes/query.py`, `agent/`, `rag/`, `rag2/` | `test_router_pipeline.py`, `test_answer_guards.py`, `test_s30h.py` |
+| PDA 화면 | `mes/web/pda.html`, `pda.js`와 하위 AGENTS | 하위 AGENTS의 최소 확인 명령 |
+| 근무일지·교대 | `work_reports.py`, `handover_board.py`, `storage.py` | `test_work_report_api.py`, `test_shift_handover.py` |
+| 영상·분류·얼굴 | `pda/`, `vision/`, `face/` | `test_vision.py`, `test_face.py`, `test_unity_camera_proxy.py` |
+| Unity 동작 | `Assets/Scripts/`, `Assets/Editor/` | Unity Checks 및 `tests/test_unity_mes.py` |
+| 모델 실험 | 해당 `scripts/mes_*.py`와 연구 프로토콜 | 같은 기능명의 `tests/test_mes_*.py` |
+
+테스트 예시는 선택 지침이지 전체 필수 목록이 아니다. 변경 영향에 맞는 최소 검증부터 실행한다.
+
+## 10. 이번 분석의 확인 범위와 갱신 규칙
+
+- 확인: 루트와 주요 하위 파일 목록, README·문서 목차, 실행 진입점,
+  MES 서비스 조립·질의 모드 선택·업로더 일부, CI와 Unity 교대 연결 코드.
+- 실행 검증: 구조 문서의 상대 링크·코드 경로 존재, 지속 참조 지침, 문서 diff.
+- 미확인: 전체 구현의 정확성·보안, 전체 테스트 통과, 실장비 상태, 모델/인덱스 존재,
+  실측 성능, 연구 후보의 현재 채택 여부.
+- 분석 시 여러 코드·문서가 이미 수정되거나 미추적 상태였다.
+  이번 작업은 구조 문서와 안내 링크만 변경하며 기존 작업을 정리·되돌리지 않는다.
+- 경로·계약·실행 모드·CI·데이터 경계 변경 시 해당 절과 기준일을 갱신한다.
+  서비스가 실제로 확인되지 않았으면 “배포됨/가동 중”으로 바꾸지 않는다.

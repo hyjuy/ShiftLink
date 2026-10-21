@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d4-title d4-desc" id="d4-root">
+        <title id="d4-title">MES 구성</title>
+        <desc id="d4-desc">설비 상태 엔진이 센서 신호와 경보를 만들어 MES API로 내보내고, MES API는 PDA 화면, 답변 엔진 연결, 분석 대시보드, 지식 후보 검토로 데이터를 나누며 기록은 SQLite에 저장하고 검수된 카드만 지식카드에 반영된다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d4-root { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #1e293b; }
+      #d4-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d4-root .diagram-container { overflow-x: visible; }
+}</style>
+<marker id="d4-d4-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d4-d4-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d4-d4-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d4-d4-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<path d="M320,340 H432" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d4-d4-default)"/>
+<path d="M720,160 H488 Q480,160 480,168 V276" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#d4-d4-link)"/>
+<path d="M624,288 H720" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d4-d4-default)"/>
+<path d="M624,360 H676 Q684,360 684,368 V436 Q684,444 692,444 H720" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d4-d4-default)"/>
+<path d="M624,388 H656 Q664,388 664,396 V564 Q664,572 672,572 H720" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d4-d4-default)"/>
+<path d="M528,404 V520" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d4-d4-default)"/>
+<path d="M944,288 H1008" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d4-d4-accent)"/>
+<path d="M944,572 H1008" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d4-d4-default)"/>
+<rect x="332" y="316" width="88" height="16" fill="#ffffff"/><text x="376" y="328" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">스냅샷·이벤트</text>
+<rect x="564" y="136" width="56" height="16" fill="#ffffff"/><text x="592" y="148" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" font-weight="500" fill="#2563eb" text-anchor="middle">/api/*</text>
+<rect x="532" y="448" width="32" height="16" fill="#ffffff"/><text x="548" y="460" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">저장</text>
+<rect x="960" y="264" width="32" height="16" fill="#ffffff"/><text x="976" y="276" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">요청</text>
+<rect x="950" y="548" width="52" height="16" fill="#ffffff"/><text x="976" y="560" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">검수 후</text>
+<rect x="64" y="276" width="256" height="128" rx="6" fill="#ffffff"/>
+<rect x="64" y="276" width="256" height="128" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="80" y="304" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">설비 상태 엔진</text>
+<text x="80" y="326" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">센서 신호 · 고장 시나리오</text>
+<text x="80" y="346" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">경보 판정 · 증상</text>
+<text x="80" y="366" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">설비 10대 카탈로그</text>
+<rect x="432" y="276" width="192" height="128" rx="6" fill="#ffffff"/>
+<rect x="432" y="276" width="192" height="128" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="448" y="304" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">MES API</text>
+<text x="448" y="326" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">:8000</text>
+<text x="448" y="346" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">/api/state · events</text>
+<text x="448" y="366" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">/api/query · handover</text>
+<rect x="720" y="124" width="224" height="72" rx="6" fill="#ffffff"/>
+<rect x="720" y="124" width="224" height="72" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="736" y="152" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">PDA 화면</text>
+<text x="736" y="174" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">상태 · 질의 · 인계 · 근무일지</text>
+<rect x="720" y="252" width="224" height="72" rx="6" fill="#ffffff"/>
+<rect x="720" y="252" width="224" height="72" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="736" y="280" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">답변 엔진 연결</text>
+<text x="736" y="302" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">관측·경보를 질의에 첨부</text>
+<rect x="720" y="408" width="224" height="72" rx="6" fill="#ffffff"/>
+<rect x="720" y="408" width="224" height="72" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="736" y="436" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">분석 대시보드</text>
+<text x="736" y="458" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">정지 손실 · 반복 증상</text>
+<rect x="720" y="536" width="224" height="72" rx="6" fill="#ffffff"/>
+<rect x="720" y="536" width="224" height="72" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="736" y="564" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">지식 후보 검토</text>
+<text x="736" y="586" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">현장 해결 기록 → 카드 초안</text>
+<rect x="1008" y="252" width="232" height="72" rx="6" fill="#ffffff"/>
+<rect x="1008" y="252" width="232" height="72" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="1024" y="280" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">근거 기반 답변 엔진</text>
+<text x="1024" y="302" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">검색 · 판정 · 선별 · 답변</text>
+<rect x="1008" y="536" width="232" height="72" rx="6" fill="#ffffff"/>
+<rect x="1008" y="536" width="232" height="72" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="1024" y="564" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">지식카드</text>
+<text x="1024" y="586" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">검수된 카드만 검색에 반영</text>
+<rect x="432" y="520" width="192" height="72" rx="6" fill="#ffffff"/>
+<rect x="432" y="520" width="192" height="72" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="448" y="548" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">SQLite</text>
+<text x="448" y="570" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">기록 · 인계 outbox</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<rect x="124" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="148" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">현장 장치</text>
+<rect x="232" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="256" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">모델</text>
+<rect x="308" y="668" width="16" height="12" rx="2" fill="#dcfce7" stroke="#15803d"/>
+<text x="332" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">저장소</text>
+<line x1="396" y1="674" x2="428" y2="674" stroke="#2563eb" stroke-width="1.2"/>
+<text x="436" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">HTTP</text>
+<line x1="496" y1="674" x2="528" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="536" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">전달</text>
+<line x1="588" y1="674" x2="620" y2="674" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="628" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">검수 후 반영</text>
+      </svg>

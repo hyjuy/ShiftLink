@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d0-overview-title d0-overview-desc" id="d0-overview-root">
+        <title id="d0-overview-title">ShiftLink 전체 파이프라인</title>
+        <desc id="d0-overview-desc">작업자와 Unity 가상 공장의 입력이 라즈베리파이를 거쳐 Jetson의 MES 서버로 들어가고, 근거 기반 답변 엔진이 검색·판정·선별·답변 네 단계로 답을 만들며, 기록은 SQLite에 적재된 뒤 업로더가 Aiven 클라우드로 올린다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d0-overview-root { --color-paper:  #ffffff;
+      --color-ink:    #1e293b;
+      --color-muted:  #475569;
+      --font-sans:    'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      --font-serif:   'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace; }
+      #d0-overview-root { font-family: var(--font-sans); color: var(--color-ink); }
+      #d0-overview-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d0-overview-root .diagram-container { overflow-x: visible; }
+}</style>
+          <marker id="d0-overview-d0-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+          <marker id="d0-overview-d0-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+          <marker id="d0-overview-d0-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#ffffff"/>
+
+        <g transform="translate(0,-32)">
+        <!-- Jetson boundary -->
+        <rect x="600" y="96" width="460" height="528" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+        <text x="616" y="120" font-family="'Geist', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#475569">Jetson Orin Nano</text>
+
+        <!-- ===== Arrows (behind nodes) ===== -->
+        <!-- 작업자 → 파이 (질문·메모·얼굴) -->
+        <path d="M240,172 H360 Q368,172 368,180 V264" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+        <!-- 파이 → 작업자 (답변), dashed -->
+        <path d="M336,264 V212 Q336,204 328,204 H240" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d0-overview-d0-arrow)"/>
+        <!-- Unity → 파이 (설비 사진) -->
+        <path d="M240,480 H392 Q400,480 400,472 V400" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+        <!-- 파이 → MES (HTTP :8000) -->
+        <line x1="544" y1="300" x2="628" y2="300" stroke="#2563eb" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow-link)"/>
+        <!-- MES → 파이 (응답), dashed -->
+        <line x1="628" y1="340" x2="544" y2="340" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d0-overview-d0-arrow-link)"/>
+        <!-- MES → SQLite (적재) -->
+        <line x1="716" y1="372" x2="716" y2="540" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+        <!-- SQLite → 업로더 -->
+        <line x1="804" y1="572" x2="856" y2="572" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+        <!-- 업로더 → Aiven -->
+        <line x1="1040" y1="572" x2="1100" y2="572" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+
+        <!-- ===== Arrow labels ===== -->
+        <g font-family="'Geist', 'Noto Sans KR', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">
+          <rect x="256" y="148" width="96" height="16" fill="#ffffff"/><text x="304" y="160">질문·메모·얼굴</text>
+          <rect x="268" y="212" width="40" height="16" fill="#ffffff"/><text x="288" y="224">답변</text>
+          <rect x="284" y="456" width="56" height="16" fill="#ffffff"/><text x="312" y="468">설비 사진</text>
+          <rect x="736" y="236" width="92" height="16" fill="#ffffff"/><text x="782" y="248">질문·MES 관측</text>
+          <rect x="814" y="172" width="32" height="16" fill="#ffffff"/><text x="830" y="184">후보</text>
+          <rect x="724" y="448" width="32" height="16" fill="#ffffff"/><text x="740" y="460">적재</text>
+        </g>
+        <g font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#2563eb" text-anchor="middle">
+          <rect x="548" y="276" width="48" height="16" fill="#ffffff"/><text x="572" y="288">:8000</text>
+        </g>
+
+        <!-- ===== Nodes ===== -->
+        <g font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif">
+          <!-- 작업자 -->
+          <rect x="48" y="148" width="192" height="72" rx="6" fill="#ffffff"/>
+          <rect x="48" y="148" width="192" height="72" rx="6" fill="#fde7ef" stroke="#be185d" stroke-width="1"/>
+          <text x="64" y="178" font-size="16" font-weight="600" fill="#1e293b">작업자</text>
+          <text x="64" y="202" font-size="12" font-weight="500" fill="#475569">교대 근무자 · 정비 담당</text>
+
+          <!-- Unity 가상 공장 -->
+          <rect x="48" y="444" width="192" height="72" rx="6" fill="#ffffff"/>
+          <rect x="48" y="444" width="192" height="72" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+          <text x="64" y="474" font-size="16" font-weight="600" fill="#1e293b">Unity 가상 공장</text>
+          <text x="64" y="498" font-size="12" font-weight="500" fill="#475569">2인 인수인계 시연 · 설비 화면</text>
+
+          <!-- 라즈베리파이 -->
+          <rect x="320" y="264" width="224" height="136" rx="6" fill="#ffffff"/>
+          <rect x="320" y="264" width="224" height="136" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+          <text x="336" y="294" font-size="16" font-weight="600" fill="#1e293b">라즈베리파이</text>
+          <text x="336" y="322" font-size="12" font-weight="500" fill="#334155">PDA 화면</text>
+          <text x="336" y="346" font-size="12" font-weight="500" fill="#334155">얼굴 로그인</text>
+          <text x="336" y="370" font-size="12" font-weight="500" fill="#334155">설비 인식</text>
+          <text x="528" y="322" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569" text-anchor="end">:8080</text>
+          <text x="528" y="370" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569" text-anchor="end">:8090</text>
+
+          <!-- 지식 색인 -->
+          <rect x="628" y="140" width="176" height="64" rx="6" fill="#ffffff"/>
+          <rect x="628" y="140" width="176" height="64" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+          <text x="644" y="166" font-size="16" font-weight="600" fill="#1e293b">지식 색인</text>
+          <text x="644" y="190" font-size="12" font-weight="500" fill="#475569">카드 · 매뉴얼 · 인계 기록</text>
+
+          <!-- MES 서버 -->
+          <rect x="628" y="276" width="176" height="96" rx="6" fill="#ffffff"/>
+          <rect x="628" y="276" width="176" height="96" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+          <text x="644" y="318" font-size="16" font-weight="600" fill="#1e293b">MES 서버</text>
+          <text x="644" y="342" font-size="12" font-weight="500" fill="#475569">센서 · 경보 · 인계 · 질의</text>
+          <text x="644" y="362" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">/api/*</text>
+
+          <!-- 근거 기반 답변 엔진 (internal name S30h): container with four steps -->
+          <rect x="856" y="140" width="184" height="376" rx="6" fill="#ffffff"/>
+          <rect x="856" y="140" width="184" height="376" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+          <text x="868" y="166" font-size="16" font-weight="600" fill="#1e293b">근거 기반 답변 엔진</text>
+          <!-- arrows ending on/starting from the steps: drawn over the container background, under the step boxes -->
+          <line x1="804" y1="196" x2="868" y2="196" stroke="#475569" stroke-width="1.2" marker-end="url(#d0-overview-d0-arrow)"/>
+          <path d="M804,300 H828 Q836,300 836,292 V224 Q836,216 844,216 H868" fill="none" stroke="#b45309" stroke-width="1.4" marker-end="url(#d0-overview-d0-arrow-accent)"/>
+          <path d="M868,468 H852 Q844,468 844,460 V348 Q844,340 836,340 H804" fill="none" stroke="#b45309" stroke-width="1.4" marker-end="url(#d0-overview-d0-arrow-accent)"/>
+          <line x1="948" y1="252" x2="948" y2="264" stroke="#b45309" stroke-width="1.4" marker-end="url(#d0-overview-d0-arrow-accent)"/>
+          <line x1="948" y1="336" x2="948" y2="348" stroke="#b45309" stroke-width="1.4" marker-end="url(#d0-overview-d0-arrow-accent)"/>
+          <line x1="948" y1="420" x2="948" y2="432" stroke="#b45309" stroke-width="1.4" marker-end="url(#d0-overview-d0-arrow-accent)"/>
+          <g>
+            <rect x="868" y="180" width="160" height="72" rx="4" fill="#ffffff" stroke="#b45309" stroke-width="1"/>
+            <text x="880" y="198" font-size="14" font-weight="600" fill="#92400e">① 검색</text>
+            <text x="880" y="214" font-size="12" font-weight="500" fill="#475569">지식 색인에서</text>
+            <text x="880" y="230" font-size="12" font-weight="500" fill="#475569">관련 카드 후보 추리기</text>
+            <text x="880" y="246" font-size="11" font-weight="600" fill="#b45309">EmbeddingGemma 300M</text>
+            <rect x="868" y="264" width="160" height="72" rx="4" fill="#ffffff" stroke="#b45309" stroke-width="1"/>
+            <text x="880" y="282" font-size="14" font-weight="600" fill="#92400e">② 판정</text>
+            <text x="880" y="298" font-size="12" font-weight="500" fill="#475569">카드마다 관련도</text>
+            <text x="880" y="314" font-size="12" font-weight="500" fill="#475569">점수 매기기</text>
+            <text x="880" y="330" font-size="11" font-weight="600" fill="#b45309">EXAONE 3.5 판정 모델</text>
+            <rect x="868" y="348" width="160" height="72" rx="4" fill="#ffffff" stroke="#b45309" stroke-width="1"/>
+            <text x="880" y="366" font-size="14" font-weight="600" fill="#92400e">③ 선별</text>
+            <text x="880" y="382" font-size="12" font-weight="500" fill="#475569">기준 미달 카드 제외</text>
+            <text x="880" y="398" font-size="12" font-weight="500" fill="#475569">확신 높으면 바로 답변</text>
+            <text x="880" y="414" font-size="11" font-weight="600" fill="#b45309">규칙 · 모델 없음</text>
+            <rect x="868" y="432" width="160" height="72" rx="4" fill="#ffffff" stroke="#b45309" stroke-width="1"/>
+            <text x="880" y="450" font-size="14" font-weight="600" fill="#92400e">④ 답변</text>
+            <text x="880" y="466" font-size="12" font-weight="500" fill="#475569">남은 카드로 작성·인용</text>
+            <text x="880" y="482" font-size="12" font-weight="500" fill="#475569">근거 없으면 답 보류</text>
+            <text x="880" y="498" font-size="11" font-weight="600" fill="#b45309">EXAONE 3.5 답변 모델</text>
+          </g>
+
+          <!-- SQLite -->
+          <rect x="628" y="540" width="176" height="64" rx="6" fill="#ffffff"/>
+          <rect x="628" y="540" width="176" height="64" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+          <text x="644" y="566" font-size="16" font-weight="600" fill="#1e293b">SQLite</text>
+          <text x="644" y="588" font-size="12" font-weight="500" fill="#475569">질의 · 인계 · 근무일지</text>
+
+          <!-- 업로더 -->
+          <rect x="856" y="540" width="184" height="64" rx="6" fill="#ffffff"/>
+          <rect x="856" y="540" width="184" height="64" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+          <text x="872" y="566" font-size="16" font-weight="600" fill="#1e293b">업로더</text>
+          <text x="872" y="588" font-size="12" font-weight="500" fill="#475569">30초 주기 · 오프라인 재시도</text>
+
+          <!-- Aiven MySQL -->
+          <rect x="1100" y="540" width="140" height="64" rx="6" fill="#ffffff"/>
+          <rect x="1100" y="540" width="140" height="64" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1"/>
+          <text x="1116" y="566" font-size="16" font-weight="600" fill="#1e293b">Aiven MySQL</text>
+          <text x="1116" y="588" font-size="12" font-weight="500" fill="#475569">클라우드 보관</text>
+        </g>
+
+        <!-- ===== Legend strip ===== -->
+        <line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+        <g font-family="'Geist', 'Noto Sans KR', sans-serif" font-size="12" font-weight="500" fill="#334155">
+          <rect x="48" y="668" width="16" height="12" rx="2" fill="#fde7ef" stroke="#be185d"/><text x="72" y="679">사람</text>
+          <rect x="120" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/><text x="144" y="679">현장 장치</text>
+          <rect x="228" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/><text x="252" y="679">서버</text>
+          <rect x="300" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="324" y="679">모델(핵심)</text>
+          <rect x="416" y="668" width="16" height="12" rx="2" fill="#dcfce7" stroke="#15803d"/><text x="440" y="679">저장소</text>
+          <rect x="500" y="668" width="16" height="12" rx="2" fill="#f1f5f9" stroke="#475569"/><text x="524" y="679">클라우드</text>
+          <line x1="604" y1="674" x2="636" y2="674" stroke="#475569" stroke-width="1.2"/><text x="644" y="679">요청·전달</text>
+          <line x1="724" y1="674" x2="756" y2="674" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4"/><text x="764" y="679">응답</text>
+          <line x1="812" y1="674" x2="844" y2="674" stroke="#2563eb" stroke-width="1.2"/><text x="852" y="679">HTTP</text>
+        </g>
+        </g>
+      </svg>

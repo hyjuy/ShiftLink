@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설비 인식</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #ffffff; color: #1e293b; min-height: 100vh; display: flex; align-items: center;
+           justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-size: 0.8rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">처리 과정 · ShiftLink 아키텍처 D7</p>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d7-title d7-desc">
+        <title id="d7-title">설비 인식</title>
+        <desc id="d7-desc">PC에서 웹캠·Unity 사진으로 MobileNetV3-Small을 전이학습해 INT8로 양자화하고, 라즈베리파이가 카메라나 Unity 사진을 실시간 분류해 신뢰도 0.8 이상이 5프레임 이어지면 클래스명만 Jetson MES 서버로 보내 PDA가 그 설비를 선택한다.</desc>
+        <defs>
+<marker id="d7-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d7-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d7-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d7-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="40" y="64" width="928" height="168" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="88" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">PC</text>
+<text x="84.8" y="88" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">학습</text>
+<rect x="280" y="352" width="488" height="168" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="296" y="376" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">라즈베리파이</text>
+<text x="392.0" y="376" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">실시간 분류</text>
+<rect x="816" y="352" width="216" height="168" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="832" y="376" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">Jetson</text>
+<path d="M264,156 H300" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d7-default)"/>
+<path d="M504,156 H540" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d7-default)"/>
+<path d="M744,156 H780" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d7-default)"/>
+<path d="M624,200 V396" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d7-default)"/>
+<path d="M504,444 H540" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d7-default)"/>
+<path d="M744,444 H836" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d7-accent)"/>
+<path d="M1012,444 H1052" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#d7-link)"/>
+<rect x="574" y="296" width="100" height="16" fill="#ffffff"/><text x="624" y="308" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">INT8 모델 배포</text>
+<rect x="764" y="420" width="56" height="16" fill="#ffffff"/><text x="792" y="432" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">클래스명</text>
+<rect x="64" y="112" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="64" y="112" width="200" height="88" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<text x="80" y="140" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">학습 사진</text>
+<text x="80" y="162" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">웹캠 촬영 · 숫자키 1~6</text>
+<text x="80" y="182" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">Unity 가상 설비 사진</text>
+<rect x="304" y="112" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="304" y="112" width="200" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="320" y="140" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">전이학습</text>
+<text x="320" y="162" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">MobileNetV3-Small</text>
+<text x="320" y="182" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">6클래스 → ONNX</text>
+<rect x="544" y="112" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="544" y="112" width="200" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="560" y="140" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">양자화</text>
+<text x="560" y="162" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">INT8 정적 양자화</text>
+<text x="560" y="182" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">보정은 학습 사진만</text>
+<rect x="784" y="112" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="784" y="112" width="160" height="88" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<text x="800" y="140" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">평가</text>
+<text x="800" y="162" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">클래스별 정확도</text>
+<text x="800" y="182" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">1장 추론 시간</text>
+<rect x="304" y="400" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="304" y="400" width="200" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="320" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">입력</text>
+<text x="320" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">카메라 프레임</text>
+<text x="320" y="470" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">Unity 사진 수신 :8090</text>
+<rect x="544" y="400" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="544" y="400" width="200" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="560" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">실시간 분류</text>
+<text x="560" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">신뢰도 ≥ 0.8</text>
+<text x="560" y="470" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">같은 결과 5프레임 연속</text>
+<rect x="840" y="400" width="172" height="88" rx="6" fill="#ffffff"/>
+<rect x="840" y="400" width="172" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="856" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">MES 서버</text>
+<text x="856" y="450" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">/api/equipment/scan</text>
+<text x="856" y="470" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">클래스명만 받음</text>
+<rect x="1056" y="400" width="168" height="88" rx="6" fill="#ffffff"/>
+<rect x="1056" y="400" width="168" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="1072" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">PDA 설비 선택</text>
+<text x="1072" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">스캔한 설비로 이동</text>
+<text x="64" y="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">클래스 6개: HPU · GR · RT · CV · CAU · PDP. 사진은 파이에서만 처리하고 Jetson에는 클래스명만 보낸다.</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#ffffff" stroke="#94a3b8"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">단계</text>
+<rect x="124" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="148" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">모델</text>
+<rect x="200" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="224" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">현장 장치</text>
+<rect x="308" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="332" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<line x1="384" y1="674" x2="416" y2="674" stroke="#b45309" stroke-width="1.2"/>
+<text x="424" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">확정 결과 전송</text>
+<line x1="540" y1="674" x2="572" y2="674" stroke="#2563eb" stroke-width="1.2"/>
+<text x="580" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">HTTP</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

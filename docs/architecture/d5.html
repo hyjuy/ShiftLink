@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDA 사용 흐름</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #ffffff; color: #1e293b; min-height: 100vh; display: flex; align-items: center;
+           justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-size: 0.8rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">사용 흐름 · ShiftLink 아키텍처 D5</p>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d5-title d5-desc">
+        <title id="d5-title">PDA 사용 흐름</title>
+        <desc id="d5-desc">작업자 A가 얼굴 로그인, 설비 선택, 설비 확인, 증상 질의, 조치 기록, 근무일지·인계 작성을 거치면 인계가 다음 조 작업자 B에게 전달되고, B는 로그인 뒤 인계 사항과 설비를 확인한다.</desc>
+        <defs>
+<marker id="d5-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d5-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d5-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d5-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="40" y="80" width="1200" height="168" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="104" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">작업자 A</text>
+<text x="126.80000000000001" y="104" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">이번 조</text>
+<rect x="40" y="352" width="1200" height="168" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="376" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">작업자 B</text>
+<text x="126.80000000000001" y="376" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">다음 조</text>
+<path d="M224,172 H252" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<path d="M416,172 H444" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<path d="M608,172 H636" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d5-accent)"/>
+<path d="M800,172 H828" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<path d="M992,172 H1020" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<path d="M1104,216 V300 Q1104,308 1096,308 H728 Q720,308 720,316 V396" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#d5-link)"/>
+<path d="M608,444 H636" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<path d="M800,444 H828" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d5-default)"/>
+<rect x="880" y="300" width="64" height="16" fill="#ffffff"/><text x="912" y="312" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">인계 전달</text>
+<rect x="64" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="64" y="128" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="80" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">① 얼굴 로그인</text>
+<text x="80" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">안면 인식</text>
+<text x="80" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">실패 시 사번 로그인</text>
+<rect x="256" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="256" y="128" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="272" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">② 설비 선택</text>
+<text x="272" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">촬영 스캔</text>
+<text x="272" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">또는 설비 목록</text>
+<rect x="448" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="448" y="128" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="464" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">③ 설비 확인</text>
+<text x="464" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">MES 상태 · 센서값</text>
+<text x="464" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">정비 이력 · 인계</text>
+<rect x="640" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="640" y="128" width="160" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="656" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">④ 증상 질의</text>
+<text x="656" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">근거 카드로 답</text>
+<text x="656" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">없으면 답 보류</text>
+<rect x="832" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="832" y="128" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="848" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">⑤ 조치 기록</text>
+<text x="848" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">조치 입력</text>
+<text x="848" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">결과 확인</text>
+<rect x="1024" y="128" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="1024" y="128" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="1040" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">⑥ 근무일지·인계</text>
+<text x="1040" y="178" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">센서값 불러오기</text>
+<text x="1040" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">전송 대기 후 업로드</text>
+<rect x="448" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="448" y="400" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="464" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">① 얼굴 로그인</text>
+<text x="464" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">같은 PDA 화면</text>
+<rect x="640" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="640" y="400" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="656" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">② 인계 사항 확인</text>
+<text x="656" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">받은 메모 · 센서값</text>
+<rect x="832" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="832" y="400" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="848" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">③ 설비 확인</text>
+<text x="848" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">인계 받은 설비부터</text>
+<text x="64" y="584" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">Unity 가상 공장에서 플레이어 2명이 캐릭터로 교대 · 인수인계를 시연한다. 가상 설비 화면은 ② 설비 선택의 촬영 입력이 된다.</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">PDA 화면</text>
+<rect x="156" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="180" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">답변 엔진을 쓰는 단계</text>
+<line x1="340" y1="674" x2="372" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="380" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">화면 이동</text>
+<line x1="464" y1="674" x2="496" y2="674" stroke="#2563eb" stroke-width="1.2"/>
+<text x="504" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">다음 조로 전달</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

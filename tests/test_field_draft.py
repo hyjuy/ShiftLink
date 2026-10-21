@@ -555,6 +555,12 @@ class ResolutionSessionTests(unittest.TestCase):
         out = self.start(with_query=False)
         self.assertEqual(self.service.resolution_get(out['session_id'])['data']['before']['source'], 'snapshot')
 
+    def test_start_survives_draft_without_type_payload(self):
+        # 기기 시험으로 들어간 초안은 type_payload가 None — 조치 기록 시작이 TypeError로 죽으면 안 된다
+        row = {'status': 'pending_review', 'review_flags': {}, 'card': {'mes_equipment_id': 'EQ-0001', 'type_payload': None}}
+        self.service.storage.list_card_drafts = lambda: [row]
+        self.assertIn('session_id', self.service.resolution_start({'equipment_id': 'EQ-0001'}))
+
     def test_card_answer_session_records_card_and_makes_no_draft(self):
         self.overheat()
         with self.assertRaisesRegex(ValueError, 'card_ids'):
@@ -577,22 +583,22 @@ class ResolutionSessionTests(unittest.TestCase):
         self.service.resolution_step(sid, {'action': step['text'], 'card_id': 'K-1002', 'step_id': 'ST-03'})
         self.assertEqual(self.service.resolution_get(sid)['data']['steps'][0]['card_step'],
                          {'card_id': 'K-1002', 'step_id': 'ST-03', 'n': 3})
-        # 칩 글자에 위험어가 없어도 단계 원문(전원 차단·재기동 방지)으로 잠금 응답을 받는다
-        with self.assertRaisesRegex(ValueError, 'lockout_required'):
-            self.service.resolution_step(sid, {'action': '전원 끄기', 'card_id': 'K-1025', 'step_id': 'ST-01'})
+        # 위험한 단계도 잠금 응답 없이 기록된다(받은 응답은 그대로 남긴다)
+        self.service.resolution_step(sid, {'action': '전원 끄기', 'card_id': 'K-1025', 'step_id': 'ST-01'})
         with self.assertRaisesRegex(ValueError, 'seen in this session'):
             self.service.resolution_step(sid, {'action': '코일 제거', 'card_id': 'K-1206', 'step_id': None})
         with self.assertRaisesRegex(ValueError, 'unknown card step'):
             self.service.resolution_step(sid, {'action': '없는 단계', 'card_id': 'K-1002', 'step_id': 'ST-99'})
 
-    def test_risky_step_needs_lockout_answer(self):
+    def test_risky_step_lockout_answer_is_optional(self):
         self.overheat()
         sid = self.start()['session_id']
-        with self.assertRaisesRegex(ValueError, 'lockout_required'):
-            self.service.resolution_step(sid, {'action': '팬 차단기 재투입'})
-        self.assertEqual(self.service.resolution_step(sid, {'action': '팬 차단기 재투입', 'lockout': '예'})['order'], 1)
+        self.assertEqual(self.service.resolution_step(sid, {'action': '팬 차단기 재투입'})['order'], 1)
+        with self.assertRaisesRegex(ValueError, 'lockout_required'):   # 받는다면 정해진 답이어야 한다
+            self.service.resolution_step(sid, {'action': '팬 차단기 재투입', 'lockout': '모르겠음'})
+        self.assertEqual(self.service.resolution_step(sid, {'action': '팬 차단기 재투입', 'lockout': '예'})['order'], 2)
         step = self.service.resolution_step(sid, {'action': '쿨러 핀 청소', 'lockout': '예'})
-        self.assertIsNone(self.service.resolution_get(sid)['data']['steps'][1]['lockout'])  # 위험하지 않으면 무시
+        self.assertIsNone(self.service.resolution_get(sid)['data']['steps'][2]['lockout'])  # 위험하지 않으면 무시
         self.assertEqual(step['result_text'], '센서값 변화 없음')
 
     def test_step_result_is_sensor_change_measured_by_server(self):
@@ -786,7 +792,7 @@ class ResolutionSessionHttpTests(unittest.TestCase):
                 with urlopen(f'{base}/api/resolution/{sid}', timeout=5) as res:
                     self.assertEqual(json.load(res)['status'], 'open')
                 for path, code in ((f'/api/resolution/{sid}/step', 400), ('/api/resolution/RS-x/finish', 404)):
-                    body = {'action': '팬 차단기 재투입'} if code == 400 else {}
+                    body = {'action': '팬 차단기 재투입', 'lockout': '모르겠음'} if code == 400 else {}
                     with self.assertRaises(HTTPError) as caught:
                         post(path, body)
                     self.assertEqual(caught.exception.code, code)

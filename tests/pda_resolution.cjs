@@ -35,34 +35,37 @@ assert.match(draftNotice({created: false, reason: 'already_exists'}), /이미 �
 assert.equal(draftNotice(undefined), '');
 console.log('PDA resolution session PASS');
 
-// 한 일 칩: 끝낸 MES 단계는 숨기고, 재가동은 MES 단계를 다 끝낸 뒤에만 누를 수 있다
+// 한 일 칩: 끝낸 칩은 done(체크됨)으로 남고, 재가동은 MES 단계를 다 끝낸 뒤에만 누를 수 있다. 이전 현장 기록은 목록에 없다
 const {actionChips} = require('../shiftlink/mes/web/pda.js');
 const actions = [{text: '유면·냉각·밸브 점검', source: 'mes_recovery'}, {text: '냉각 성능 복구', source: 'mes_recovery'},
   {text: '재가동 (라인 복구 시작)', source: 'mes_restart'}, {text: '팬 차단기 올림', source: 'field_record'}];
-let chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}]});
-assert.deepEqual(chips.map((c) => c.text), ['냉각 성능 복구', '재가동 (라인 복구 시작)', '팬 차단기 올림']);
+let chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검', order: 1}]});
+assert.deepEqual(chips.map((c) => c.text), ['유면·냉각·밸브 점검', '냉각 성능 복구', '재가동 (라인 복구 시작)']);
+assert.deepEqual(chips.map((c) => !!c.done), [true, false, false]);
 assert.equal(chips.find((c) => c.text.startsWith('재가동')).disabled, true);
-assert.equal(chips[0].tag, 'MES 단계');
-chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}, {action: '냉각 성능 복구'}, {action: '팬 차단기 올림'}]});
-assert.deepEqual(chips.map((c) => [c.text, c.disabled]), [['재가동 (라인 복구 시작)', false], ['팬 차단기 올림', false]]);
-// 카드 단계 칩: 태그는 카드·단계 번호, 카드 출처와 서버 risky를 함께 넘기고, 끝낸 단계는 다시 안 보인다
-const withCard = [{text: '모터 전원을 차단하고 재기동을 방지한다', source: 'card_step', card_id: 'K-1025', step_id: 'ST-01', n: 1, risky: true},
-  {text: 'K-1206 방법대로', source: 'card_step', card_id: 'K-1206', step_id: null, n: null, risky: false}, ...actions];
-chips = actionChips({actions: withCard, steps: [{action: '모터 전원을 차단하고 재기동을 방지한다'}]});
-assert.deepEqual(chips[0], {text: 'K-1206 방법대로', disabled: false, tag: 'K-1206',
-  card: {card_id: 'K-1206', step_id: null, risky: false}});
-chips = actionChips({actions: withCard, steps: []});
-assert.deepEqual([chips[0].tag, chips[0].card.risky, chips[2].card], ['K-1025 · 1단계', true, null]);
+assert.equal(chips[1].tag, 'MES 단계');
+assert.equal(chips.every((c) => c.mes), true);
+chips = actionChips({actions, steps: [{action: '유면·냉각·밸브 점검'}, {action: '냉각 성능 복구'}]});
+assert.deepEqual(chips.map((c) => [c.text, c.disabled]), [['유면·냉각·밸브 점검', false], ['냉각 성능 복구', false], ['재가동 (라인 복구 시작)', false]]);
+// 카드 칩: T3 단계는 태그 '카드 · N단계', 문장 줄(S1…)은 태그 없이 카드 머리글 아래에. T1(check=false)은 체크 못 함. 서버 risky를 함께 넘긴다
+const withCard = [{text: '모터 전원을 차단하고 재기동을 방지한다', source: 'card_step', card_id: 'K-1025', step_id: 'ST-01', n: 1, risky: true, tacit_type: 'T3', check: true},
+  {text: '정비 전에는 압력을 뺀다', source: 'card_step', card_id: 'K-1006', step_id: 'S2', n: 2, risky: false, tacit_type: 'T5', check: true},
+  {text: '이 소리면 베어링을 의심한다', source: 'card_step', card_id: 'K-1026', step_id: 'S1', n: 1, risky: false, tacit_type: 'T1', check: false}, ...actions];
+chips = actionChips({actions: withCard, steps: [{action: '모터 전원을 차단하고 재기동을 방지한다', order: 1, card: {card_id: 'K-1025', step_id: 'ST-01'}}]});
+assert.deepEqual([chips[0].tag, chips[0].card, !!chips[0].done, chips[0].type], ['K-1025 · 1단계', {card_id: 'K-1025', step_id: 'ST-01', risky: true}, true, 'T3']);
+assert.equal(chips.some((c) => c.type === 'T1'), false);   // 판단 문장(T1)은 목록에서 뺀다
+assert.deepEqual([chips[1].tag, chips[1].check], ['', true]);
+assert.equal(chips[2].card, null);
 console.log('PDA action chips PASS');
 
-// 「모두 완료」 묶음: MES 단계·카드별, 남은 칩 둘 이상, 잠긴 칩(재가동)·이전 기록은 묶지 않는다
+// 「모두 완료」 묶음: MES 단계·카드별, 남은 칩 둘 이상, 잠긴 칩(재가동)·끝낸 칩은 묶지 않는다
 const {actionGroups} = require('../shiftlink/mes/web/pda.js');
 const twoCard = [{text: 'A1', source: 'card_step', card_id: 'K-1', step_id: 'ST-01', n: 1}, {text: 'A2', source: 'card_step', card_id: 'K-1', step_id: 'ST-02', n: 2},
   {text: 'B1', source: 'card_step', card_id: 'K-2', step_id: 'ST-01', n: 1}, ...actions];
 let groups = actionGroups(actionChips({actions: twoCard, steps: []}));
 assert.deepEqual(groups.map((g) => [g.label, g.chips.map((c) => c.text)]),
   [['K-1', ['A1', 'A2']], ['MES 단계', ['유면·냉각·밸브 점검', '냉각 성능 복구']]]);
-groups = actionGroups(actionChips({actions: twoCard, steps: [{action: '유면·냉각·밸브 점검'}, {action: 'A1'}]}));
+groups = actionGroups(actionChips({actions: twoCard, steps: [{action: '유면·냉각·밸브 점검'}, {action: 'A1', card: {card_id: 'K-1', step_id: 'ST-01'}}]}));
 assert.deepEqual(groups, []);
 console.log('PDA action groups PASS');
 
@@ -85,6 +88,18 @@ assert.deepEqual([rec.restart_performed, rec.restart_type, rec.outcome, rec.norm
 assert.equal(rec.safety_notes, '에너지 차단(잠금) · 1. 팬 차단기 재투입: 예\n에너지 차단(잠금) · 3. 재가동 (라인 복구 시작): 해당 없음');
 assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, rec.operating_context],
   [false, 'Q-1', 'RS-9', 'K-1002', '부품: 냉각 계통']);
+// 자동 입력: 조치 전 벗어났던 신호 → 원인의 관련 센서(측정값·시각), 미해결이면 남은 문제·다음 확인 내용. 해결이면 넣지 않는다
+const {S: appState} = require('../shiftlink/mes/web/pda.js');
+appState.equipment = [{equipment_id: 'EQ-0001', signals: [{signal: 'hpu_pressure', unit: 'bar'}]}];
+const out = {...res, result: 'failed', verdict: {verdict: 'not_yet', text: '아직 이상 (유압 공급 압력 116.0)'},
+  before: {alarms: [], simulated_at: '2026-10-21T02:00:00+00:00', out_of_range: [{signal: 'hpu_pressure', name: '유압 공급 압력', value: 116, state: 'low'}]}};
+rec = sessionRecord(out, 'EQ-0001');
+assert.deepEqual(rec.causes[0].sensor_ref, {equipment_id: 'EQ-0001', signal: 'hpu_pressure'});
+assert.deepEqual(rec.causes[0].sensor_reading, {value: 116, unit: 'bar', observed_at: '2026-10-21T02:00:00+00:00'});
+assert.equal(rec.remaining_issue, '조치 후 MES: 아직 이상 (유압 공급 압력 116.0)');
+assert.equal(rec.next_check, '유압 공급 압력 정상 범위 회복 여부');
+rec = sessionRecord({...out, result: 'resolved', verdict: {verdict: 'recovered', text: 'MES 정상 복귀 확인'}}, 'EQ-0001');
+assert.deepEqual(['remaining_issue' in rec, 'next_check' in rec], [false, false]);
 // 마무리 전에 넘기면 미해결, 단계가 없으면 빈 단계 한 줄
 rec = sessionRecord({...res, phase: 'work', result: null, verdict: null, steps: [], before: {alarms: []}, turn: {question: 'q', response: {}}}, 'EQ-0001');
 assert.deepEqual([rec.type, rec.outcome, rec.action_steps.length, rec.restart_performed, 'query_id' in rec, 'normal_run_evidence' in rec],

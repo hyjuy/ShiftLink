@@ -383,17 +383,12 @@ class MesEngine:
         return bool(self._recovery_spec and authored and authored.recovery_actions)
 
     def _recovery_plan(self, spec: ScenarioSpec) -> ScenarioSpec:
-        """Scenarios without authored steps get a generic synthetic check-repair-verify plan."""
+        """Scenarios without authored steps get a generic synthetic verify-only plan."""
         if spec.recovery_actions:
             return spec
-        eq = self._equipment_by_id.get(self._cause_equipment_id(spec))
-        names = {s.signal: s.name for s in (eq.signals if eq else ())}
-        signals = ", ".join(names.get(e.signal, e.signal) for e in spec.signal_effects) or "관측 신호"
-        code = eq.code if eq else "원인 설비"
+        # 직접 쓴 단계가 없으면 정상 범위 회복 확인 하나만 둔다(재가동은 이 확인 뒤에만 가능).
         return replace(spec, recovery_actions=(
-            RecoveryAction("inspect", "이상 신호 위치 확인", f"정지·에너지 차단 확인 후 {code}의 {signals} 측정 위치와 계측 상태를 점검한 것으로 기록합니다."),
-            RecoveryAction("repair", "원인 조치 기록", "이 시나리오에는 원인별 정비 절차가 정의되어 있지 않습니다. 확인된 원인에 대한 조치 완료를 모의 기록합니다."),
-            RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다.")))
+            RecoveryAction("verify", "정상 범위 회복 확인", "주입한 모의 신호를 구성의 정상 범위로 되돌리고 재가동 전 확인을 기록합니다."),))
 
     def _signal_effect(self, equipment, signal):
         spec = self._scenario_by_id.get(self._scenario)

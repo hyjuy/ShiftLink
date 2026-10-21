@@ -237,7 +237,7 @@ def summary(incidents: list[dict[str, Any]], relations: Iterable[Any], now: date
                          "coils": round(r["coils_exact"])} for r in loss.values()),
                        key=lambda r: (-loss[r["equipment_id"]]["coils_exact"], -r["stop_min"]))
     lost_exact = sum(r["coils_exact"] for r in loss.values())
-    lost = round(lost_exact)
+    lost = sum(r["coils"] for r in loss_rows)   # 화면의 설비별 손실(반올림한 값)을 더하면 이 합계가 되게
     planned = round(standard["planned_hours_per_week"] * rate) if standard else 0
     # current = 이번 주 월요일 0시부터 지금까지 정상이면 만들었을 양 − 손실. now가 모의 시계라 일시정지 중엔 늘지 않는다.
     current = max(0, min(planned, round(_minutes(week_start, now) / 60 * rate - lost_exact)))

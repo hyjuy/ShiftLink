@@ -62,7 +62,9 @@ def test_planted_stories():
     assert [(r["equipment_id"], r["stop_min"], r["coils"], r["halts_line"]) for r in out["loss"]] == \
         [("EQ-0001", 97, 17, True), ("EQ-0007", 51, 9, True), ("EQ-0009", 41, 7, True),
          ("EQ-0003", 39, 7, True), ("EQ-0005", 33, 6, True), ("EQ-0008", 23, 4, True)]
-    assert out["production"] == {"planned": 1800, "lost": 51, "produced": 1749, "current": 1739, "coils_per_hour": 10.7}
+    # 전체 손실 = 설비별 손실의 합(각각 반올림한 뒤 더한다 — 화면에서 더해도 맞게)
+    assert out["production"] == {"planned": 1800, "lost": 50, "produced": 1750, "current": 1739, "coils_per_hour": 10.7}
+    assert out["production"]["lost"] == sum(r["coils"] for r in out["loss"])
     # 4주 이력에 설비 10대가 모두 나온다
     assert len({i["equipment_id"] for i in out["incidents"]}) == 10
 

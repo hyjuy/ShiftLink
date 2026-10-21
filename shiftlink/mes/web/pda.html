@@ -308,9 +308,6 @@
     border:0;border-radius:8px;background:transparent;color:var(--tx-2);font-size:20px;cursor:pointer}
   .res-live{border:2px solid var(--scan);border-radius:10px;padding:10px;display:grid;gap:8px}
   .res-lock{border:1px solid var(--notice);border-radius:10px;padding:8px;color:var(--notice);font-size:14px;display:grid;gap:6px}
-  .res-verdict{border-radius:10px;padding:10px 12px;font-size:15px;border:1px solid var(--edge)}
-  .res-verdict.good{border-color:var(--ok);color:var(--ok-tx)}
-  .res-verdict.bad{border-color:var(--notice);color:var(--notice)}
   .sw{width:10px;height:10px;border-radius:2px;flex:0 0 auto;background:var(--tx-3)}
 
   /* 뷰파인더 */
@@ -1808,9 +1805,6 @@ button.ld-row:hover{background:var(--surface-2)}
 @media(max-width:600px){#s-reportWrite .capture-step{padding-right:86px}#s-reportWrite .capture-step-meta{grid-template-columns:minmax(0,1fr)}}
 
   #s-resolve .appbar{background:var(--surface)}
-  #s-resolve .res-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px 0;flex:0 0 auto;width:100%;max-width:780px;align-self:center}
-  #s-resolve .res-heading h2{margin:0;font-size:20px}
-  #resEquipment{font-size:14px;color:var(--tx-2);padding-right:12px}
   #s-resolve .res-flow{flex:0 0 auto;justify-content:center;flex-wrap:wrap;margin:0;padding:16px;border-bottom:1px solid var(--edge);font-size:14px}
   #s-resolve .res-flow li::before{display:none}
   #s-resolve .res-flow li:not(:last-child)::after{width:20px;height:1px}
@@ -1819,15 +1813,38 @@ button.ld-row:hover{background:var(--surface-2)}
   #s-resolve .res-component .lbl{margin:0}
   #resComponents{min-height:48px;padding:10px 12px;background:var(--surface);color:var(--tx);font:inherit;border:1px solid var(--edge);width:100%}
   #s-resolve .resin{padding:12px;resize:vertical}
+  #resSymptom{min-height:104px}   /* 관찰한 증상: 3줄이 한 번에 보이게 */
   #s-resolve .res-help{font-size:14px}
   #s-resolve .res-details{border-bottom:1px solid var(--edge);padding:0 0 4px;color:var(--tx-2)}
   #s-resolve .res-details summary{min-height:44px;padding:10px 0;font-size:14px}
+  #s-resolve .res-details summary{list-style:none;cursor:pointer}
+  #s-resolve .res-details summary::-webkit-details-marker{display:none}
+  #s-resolve .res-details summary::before{content:"▼";display:inline-block;width:1.5em;font-size:.85em}   /* 접힘 ▼ · 펼침 ▲ */
+  #s-resolve .res-details[open]>summary::before{content:"▲"}
   #s-resolve .res-details[open]>:not(summary){margin-bottom:12px}
   #s-resolve .res-action-list{display:grid;gap:0}
   #s-resolve .res-action{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;padding:16px 0;border-top:1px solid var(--edge);align-items:center}
   #s-resolve .res-action b{font-size:16px;font-weight:600;overflow-wrap:anywhere}
   #s-resolve .res-action small{display:block;color:var(--tx-2);font-size:13px;margin-top:4px}
   #s-resolve .res-action .btn{width:auto;min-width:76px;min-height:44px}
+  /* 한 일 체크 목록: 왼쪽 문장 · 오른쪽 체크(MES 단계는 '적용' 버튼, 두 번 눌러 적용) */
+  #s-resolve .res-grp{margin:14px 0 4px;font-size:14px;font-weight:700;color:var(--tx-2)}
+  #s-resolve .res-check{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:12px 0;border-top:1px solid var(--edge);cursor:pointer;user-select:none}
+  #s-resolve .res-check .t{font-size:16px;line-height:1.45;overflow-wrap:anywhere}
+  #s-resolve .res-check .t small{display:block;margin-top:2px;font-size:13px;color:var(--tx-3)}
+  #s-resolve .res-check .box{width:48px;height:48px;min-height:0;padding:0;border:2px solid var(--accent);border-radius:10px;background:var(--surface);color:#fff;font:inherit;font-size:28px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #s-resolve .res-check.done .box{background:var(--accent)}
+  #s-resolve .res-check.done .box::after{content:"✓"}
+  #s-resolve .res-check.done .t{color:var(--tx-2)}
+  #s-resolve .res-check .mesbtn{width:auto;min-width:80px;padding:0 14px;font-size:16px;font-weight:700;color:var(--accent)}
+  #s-resolve .res-check .mesbtn::after{content:"적용"}
+  #s-resolve .res-check.arm .mesbtn{background:var(--notice);border-color:var(--notice);color:#fff}
+  #s-resolve .res-check.done .mesbtn{background:var(--accent);border-color:var(--accent);color:#fff}
+  #s-resolve .res-check.done .mesbtn::after{content:"✓";font-size:24px}
+  #s-resolve .res-check.off{cursor:default;opacity:.55}
+  #s-resolve .res-check.off .box{border-style:dashed;border-color:var(--edge)}
+  #s-resolve .res-check.plain{cursor:default}
+  #s-resolve .res-check.plain .t{color:var(--tx-2);font-size:15px}
   #s-resolve .res-step{background:transparent;border:0;border-top:1px solid var(--edge);border-radius:0;padding:14px 0}
   #s-resolve .res-step:has(.res-x){padding-right:54px}
   #resCompleted{margin-top:16px}
@@ -2074,40 +2091,37 @@ button.ld-row:hover{background:var(--surface-2)}
   <section class="screen" id="s-resolve">
     <div class="appbar"><button class="ic" id="resBack" type="button" aria-label="이전"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5A9 9 0 1 1 5 18"/><path d="M4 11V4h7"/></svg></button>
       <h1>조치 기록</h1></div>
-    <div class="res-heading"><h2>조치 기록</h2><span id="resEquipment"></span></div>
     <ol class="res-flow" id="resFlow" aria-label="진행 단계"><li>조치 입력</li><li>결과 확인</li><li>근무일지 검토</li></ol>
     <div class="pane">
-      <details class="res-details"><summary>조치 전 MES 기록</summary><p id="resBefore" class="hint" role="status"></p></details>
       <label for="resSymptom" class="lbl">관찰한 증상</label>
-      <textarea id="resSymptom" class="resin" rows="2" maxlength="1000" placeholder="현장에서 확인한 증상을 적어 주세요"></textarea>
+      <textarea id="resSymptom" class="resin" rows="3" maxlength="1000" placeholder="현장에서 확인한 증상을 적어 주세요"></textarea>
+      <p class="res-step" id="resSymptomView" hidden></p>
       <div id="resWork">
         <div class="res-component"><label for="resComponents" class="lbl" id="resComponentsLbl">조치 대상</label><select id="resComponents" aria-label="조치 대상 부품"></select></div>
         <div class="res-live" id="resLive" hidden></div>
         <div id="resPick">
-          <p class="lbl">수행할 조치</p>
-          <p class="hint res-help">작업을 선택하고, 실제로 마친 뒤 완료를 기록해 주세요.</p>
+          <p class="lbl">수행 조치</p>
           <div id="resActionChips"></div>
+          <div id="resCustomSteps"></div>
           <details class="res-details"><summary>다른 조치 입력</summary>
-            <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="실제로 수행할 조치" aria-label="조치 직접 입력"><button class="btn sm" id="resAddCustom" type="button">선택</button></div>
+            <div class="resrow"><input type="text" id="resCustom" maxlength="500" placeholder="실제로 수행한 조치를 적고 Enter" aria-label="조치 직접 입력" enterkeyhint="done"></div>
           </details>
+          <div id="resMesChips"></div>
         </div>
       </div>
+      <div id="resCompleted" hidden><p class="lbl" id="resCompletedTitle">완료한 조치</p><ol class="res-steps" id="resSteps"></ol>
+        <button class="btn sm ghost" id="resClear" type="button" hidden>기록 전체 취소</button>
+      </div>
       <div id="resWrap" hidden>
-        <div class="res-verdict" id="resVerdict" role="status"></div>
         <p class="lbl">조치 결과</p>
         <div class="chips" id="resResult" role="group" aria-label="결과"></div>
         <p class="lbl">확인한 원인</p>
         <div class="chips" id="resCauses" role="group" aria-label="원인"></div>
         <details class="res-details"><summary>원인 직접 입력</summary><input type="text" id="resCauseCustom" class="resin" maxlength="200" placeholder="목록에 없는 원인" aria-label="원인 직접 입력"></details>
-        <button class="btn sm ghost" id="resMore" type="button">조치 더 하기</button>
       </div>
-      <div id="resCompleted" hidden><p class="lbl" id="resCompletedTitle">완료한 조치</p><ol class="res-steps" id="resSteps"></ol>
-        <button class="btn sm ghost" id="resClear" type="button" hidden>기록 전체 취소</button>
-      </div>
-      <details class="res-details" id="resAlternative" hidden><summary>별도 인계 작성</summary><p class="hint res-help">근무일지 대신 별도 인계서로 이어집니다.</p><button class="btn sm ghost" id="resSave" type="button">인계서 작성</button></details>
       <div class="alert" id="resWarn" role="alert" hidden></div>
     </div>
-    <div class="res-footer"><p id="resStatus" class="hint" role="status"></p><button class="btn primary" id="resFinish" type="button" disabled>결과 확인</button><button class="btn primary" id="resToReport" type="button" hidden>근무일지 검토</button></div>
+    <div class="res-footer"><p id="resStatus" class="hint" role="status"></p><button class="btn primary" id="resFinish" type="button" disabled>결과 확인</button><button class="btn primary" id="resToReport" type="button" hidden>근무일지 작성</button><button class="btn sm ghost" id="resMore" type="button" hidden>조치 보완</button></div>
   </section>
 
   <!-- 인계 작성 -->

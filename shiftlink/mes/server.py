@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import os
 import csv
 from collections import deque
@@ -43,18 +44,25 @@ def _kb_card_map() -> dict[str, dict[str, Any]]:
     return {c["card_id"]: c for c in json.loads(_KB_CARDS.read_text(encoding="utf-8"))["cards"]}
 
 
+def _sentences(text: str) -> list[str]:
+    return [t.strip().rstrip(".") for t in re.split(r"(?<=[.!?])\s+|\n+", text or "") if t.strip()]
+
+
 def _card_step_chips(card: dict[str, Any]) -> list[dict[str, Any]]:
-    """카드 단계 → 조치 기록 칩. 칩 글자는 단계 첫 문장(길면 자름), 원문은 full. 단계가 없는 카드는 칩 하나."""
+    """카드 → 조치 기록 칩. 단계가 있는 카드(T3)는 단계마다, 없는 카드는 know_how를 문장마다 한 줄(step_id S1…).
+    이상 징후 분석(T1)은 판단 문장이라 check=False — 화면에 글자로만 보이고 '한 일'로 고르지 못한다."""
     steps = (card.get("type_payload") or {}).get("steps") or []
+    common = {"source": "card_step", "card_id": card["card_id"], "tacit_type": card.get("tacit_type")}
     if not steps:
-        return [{"text": card["card_id"] + " 방법대로", "source": "card_step", "card_id": card["card_id"], "step_id": None,
-                 "n": None, "full": card.get("know_how") or "",
-                 "risky": any(w in (card.get("know_how") or "") for w in field_draft.SAFETY_WORDS)}]
+        lines = _sentences(card.get("know_how") or "")[:8]
+        return [{**common, "text": line, "step_id": f"S{i}", "n": i, "full": line, "check": card.get("tacit_type") != "T1",
+                 "risky": any(w in line for w in field_draft.SAFETY_WORDS)} for i, line in enumerate(lines, 1)] or [
+            {**common, "text": card["card_id"] + " 방법대로", "step_id": None, "n": None, "full": "", "check": True, "risky": False}]
     chips = []
     for s in steps:
         first = s["action"].split(". ")[0].rstrip(".")
-        chips.append({"text": first if len(first) <= 40 else first[:38] + "…", "source": "card_step",
-                      "card_id": card["card_id"], "step_id": s["step_id"], "n": s.get("order"), "full": s["action"],
+        chips.append({**common, "text": first if len(first) <= 40 else first[:38] + "…",
+                      "step_id": s["step_id"], "n": s.get("order"), "full": s["action"], "check": True,
                       "risky": any(w in s["action"] for w in field_draft.SAFETY_WORDS)})
     return chips
 
@@ -433,7 +441,7 @@ class MesService:
                       for inc in self.storage.list_incidents(100) for rec in inc["records"]
                       for eq_id in rec["record"].get("equipment") or [])]
             alarms = before.get("alarms") or []
-            field_actions = list(dict.fromkeys([*(s["action"] for row in drafts for s in row["card"]["type_payload"]["steps"]),
+            field_actions = list(dict.fromkeys([*(s["action"] for row in drafts for s in (row["card"].get("type_payload") or {}).get("steps") or []),
                                                 *analytics.past_actions(past, eq.equipment_id, alarms)]))[:5]
             causes = list(dict.fromkeys([*(line.removeprefix("원인: ") for row in drafts
                                            for line in (row["card"].get("know_how") or "").splitlines()
@@ -471,7 +479,7 @@ class MesService:
                 card_step, full = {"card_id": card_id, "step_id": step_id, "n": chips[step_id]["n"]}, chips[step_id]["full"]
             risky = any(word in action or word in full for word in field_draft.SAFETY_WORDS)
             lockout = body.get("lockout") if risky else None
-            if risky and lockout not in field_draft.LOCKOUT_ANSWERS:
+            if lockout is not None and lockout not in field_draft.LOCKOUT_ANSWERS:   # 응답은 받으면 기록하고, 필수로 묻지 않는다
                 raise ValueError("lockout_required")
             eq = field_draft._equipment(self.active_config, session["equipment_id"])
             linked = self._sim_link(eq.equipment_id, action) if SIM_LINK else None

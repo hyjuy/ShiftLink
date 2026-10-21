@@ -498,7 +498,7 @@ def match_score(card: dict[str, Any], prepared: dict[str, Any]) -> float:
         score = _overlap(old_cause, new_cause)
     else:
         generic = prepared.get("generic_actions") or set()
-        score = _overlap(" ".join([old_cause, *(s["action"] for s in card["type_payload"]["steps"] if s["action"] not in generic)]),
+        score = _overlap(" ".join([old_cause, *(s["action"] for s in (card.get("type_payload") or {}).get("steps") or [] if s["action"] not in generic)]),
                          " ".join([new_cause or "", *(a["action"] for a in resolution["actions"] if a["action"] not in generic)]))
     return score if score >= OVERLAP_MIN else 0.0
 

@@ -216,6 +216,20 @@ def test_mes_only_route_asks_the_model_when_nothing_is_kept(pipe, monkeypatch):
     assert pipe.run(payload).tool_results["route"] == "drop_all"   # needs the block
 
 
+def test_mes_prefix_states_the_unit_in_code_and_fills_abstentions(pipe, monkeypatch):
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "q", "eq_id": "EQ-0001", "observations": obs, "active_alarms": ["AL-HYD-LOW"]}
+    judged(monkeypatch, {"c1": 0.95, "c2": 0.1, "c4": 0.1})
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '152 bar [S1]", "citations": ["S1"]}'})
+    assert pipe.run(payload).output.answer == "152 bar\n근거: hpu_manual p.12"   # off: unchanged
+    pipe.mes_prefix = True
+    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 활성 경보 유압 공급 저하(AL-HYD-LOW)."
+    assert pipe.run(payload).output.answer == f"{head}\n152 bar\n근거: hpu_manual p.12"
+    judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
+    out = pipe.run(payload).output
+    assert out.no_knowledge and out.answer == f"{head} 근거 자료에서 이 상황의 조치를 찾지 못했습니다. 조치는 정비 담당 확인이 필요합니다."
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):
@@ -257,6 +271,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_MES_ONLY", flag)
     assert Q.build_query_pipeline().mes_only is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_PREFIX", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_PREFIX", flag)
+    assert Q.build_query_pipeline().mes_prefix is enabled
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

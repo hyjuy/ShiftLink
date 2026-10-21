@@ -19,11 +19,10 @@ def _num(x) -> str:
     return f"{x:g}" if isinstance(x, (int, float)) and not isinstance(x, bool) else str(x)
 
 
-def render(eq_code: str, specs: dict, observations: list, snapshot_at: str | None, active_alarms: list,
-           labels: dict | None = None) -> str:
-    """specs: signal -> SignalSpec (from_catalog); observations: QueryRequest observations (value rows + <sig>_state rows)."""
+def _rows(specs: dict, observations: list) -> list[tuple[str, str, str, str]]:
+    """(name, value with unit, state word, range) per valid signal, in observation order."""
     states = {o["signal"][:-len("_state")]: o["value"] for o in observations if o["signal"].endswith("_state")}
-    lines = []
+    rows = []
     for o in observations:
         sig = o["signal"]
         if sig.endswith("_state") or sig not in specs:
@@ -36,11 +35,34 @@ def render(eq_code: str, specs: dict, observations: list, snapshot_at: str | Non
             rng, val = f"기준 {_num(spec.normal_min)}–{_num(spec.normal_max)}", f"{_num(v)} {spec.unit}"
         # same rule as s30h.state_lines: a 0 on a zero-when-stopped signal is the stopped line, not a low reading
         state = "정지 중 0" if spec.zero_when_stopped and v == 0 else STATE_KO.get(states.get(sig), "상태 없음")
-        lines.append(f"{name} {val} · {state} ({rng})")
+        rows.append((name, val, state, rng))
+    return rows
+
+
+def _alarms(active_alarms: list, labels: dict | None) -> str:
     labels = labels or {}
-    alarms = ", ".join(f"{labels.get(c, c)}({c})" for c in active_alarms) if active_alarms else "없음"
-    body = "\n".join([f"활성 경보: {alarms}", *(lines or ["유효 관측 없음"])])
+    return ", ".join(f"{labels.get(c, c)}({c})" for c in active_alarms) if active_alarms else "없음"
+
+
+def render(eq_code: str, specs: dict, observations: list, snapshot_at: str | None, active_alarms: list,
+           labels: dict | None = None) -> str:
+    """specs: signal -> SignalSpec (from_catalog); observations: QueryRequest observations (value rows + <sig>_state rows)."""
+    lines = [f"{n} {v} · {s} ({r})" for n, v, s, r in _rows(specs, observations)]
+    body = "\n".join([f"활성 경보: {_alarms(active_alarms, labels)}", *(lines or ["유효 관측 없음"])])
     return f'<mes id="M" eq="{eq_code}" snapshot_at="{snapshot_at or "미상"}">\n{body}\n</mes>'
+
+
+NO_ACTION = "근거 자료에서 이 상황의 조치를 찾지 못했습니다. 조치는 정비 담당 확인이 필요합니다."
+
+
+def summary(eq_code: str, specs: dict, observations: list, active_alarms: list, labels: dict | None = None) -> str:
+    """(가) 10/21: one code-written sentence of the unit's MES state put in front of the answer (no model involved)."""
+    rows = _rows(specs, observations)
+    off = [f"{n} {v} {'높음' if s == '높음' else '낮음'}({r})" for n, v, s, r in rows if s in ("높음", "낮음")]
+    alarm = f"활성 경보 {_alarms(active_alarms, labels)}"
+    if not rows:
+        return f"현재 MES({eq_code}): 유효 관측 없음, {alarm}."
+    return f"현재 MES({eq_code}): {', '.join(off) if off else '측정값 모두 정상 범위'}, {alarm}."
 
 
 def where(m: dict, event_label: bool = True) -> str:
@@ -70,6 +92,10 @@ def demo():
     assert "누유 감지 1 · 높음 (기준 0)" in m, m
     assert "활성 경보: 센서값 범위 이탈(AL-SENSOR-ANOMALY)" in m, m
     assert "유효 관측 없음" in render("PDP-01", specs, [], None, [])
+    s = summary("HPU-01", specs, obs, ["AL-SENSOR-ANOMALY"], {"AL-SENSOR-ANOMALY": "센서값 범위 이탈"})
+    assert s == "현재 MES(HPU-01): 리턴 필터 차압 1.5 bar 높음(기준 0–1.2), 누유 감지 1 높음(기준 0), 활성 경보 센서값 범위 이탈(AL-SENSOR-ANOMALY).", s
+    assert summary("PDP-01", specs, [], []) == "현재 MES(PDP-01): 유효 관측 없음, 활성 경보 없음."
+    assert summary("HPU-01", specs, obs[2:4], []) == "현재 MES(HPU-01): 측정값 모두 정상 범위, 활성 경보 없음."   # stopped 0
     ev = [{"text": "t", "metadata": {"kind": k, "source": s, "page": 3}} for k, s in (("event", "K-1103"), ("card", "K-1210"), ("source", "m.pdf"))]
     p = prompt("q", m, ev)
     assert p.index("[MES]") < p.index("[근거]"), p

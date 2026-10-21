@@ -76,7 +76,7 @@ class S30hPipeline:
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
-                 event_label=False, mes_only=False):
+                 event_label=False, mes_only=False, mes_prefix=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -105,6 +105,7 @@ class S30hPipeline:
         # with the block only: drop_all still asks the model with the [MES] block and no evidence, same threshold T
         # (option A of 10/21; the MES SFT data has 338 such rows, ck106 has none)
         self.mes_only = mes_only
+        self.mes_prefix = mes_prefix   # independent of the block: works with ck106 too
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -188,6 +189,11 @@ class S30hPipeline:
             if self.source_conditions:
                 answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
             answer = re.sub(r"\s*\[(?:S\d+|M)\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+        if self.mes_prefix and eq_id in self.specs:
+            # (가) 10/21: code states the unit's MES; an abstention becomes that state + "no action found" (still no_knowledge)
+            head = MB.summary(self.eq_code[eq_id], self.specs[eq_id], payload.get("observations") or [],
+                              payload.get("active_alarms") or [], self.alarm_labels)
+            answer = f"{head}\n{answer}" if answer else f"{head} {MB.NO_ACTION}"
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))

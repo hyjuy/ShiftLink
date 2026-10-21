@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d2-title d2-desc" id="d2-root">
+        <title id="d2-title">질의 한 건의 흐름</title>
+        <desc id="d2-desc">PDA에서 보낸 질문이 MES 서버에서 관측·경보를 붙여 답변 엔진으로 가고, 엔진이 Ollama로 임베딩·판정·답변을 거쳐 답과 인용을 돌려주면 MES가 기록하고 PDA에 표시한다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d2-root { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #1e293b; }
+      #d2-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d2-root .diagram-container { overflow-x: visible; }
+}</style>
+<marker id="d2-d2-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d2-d2-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d2-d2-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d2-d2-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="136" y1="136" x2="136" y2="628" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="392" y1="136" x2="392" y2="628" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="648" y1="136" x2="648" y2="628" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="904" y1="136" x2="904" y2="628" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+<line x1="1144" y1="136" x2="1144" y2="628" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+<path d="M136,168 H388" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#d2-d2-link)"/>
+<rect x="196" y="144" width="136" height="16" fill="#ffffff"/><text x="264" y="156" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">① 질문 · 선택한 설비</text>
+<path d="M392,264 H644" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d2-d2-accent)"/>
+<rect x="444" y="240" width="152" height="16" fill="#ffffff"/><text x="520" y="252" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">③ 질문 + MES 관측·경보</text>
+<path d="M648,312 H900" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<rect x="724" y="288" width="104" height="16" fill="#ffffff"/><text x="776" y="300" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">④ 검색어 임베딩</text>
+<path d="M648,360 H900" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<rect x="700" y="336" width="152" height="16" fill="#ffffff"/><text x="776" y="348" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">⑤ 후보 카드별 판정 점수</text>
+<path d="M648,456 H900" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<rect x="700" y="432" width="152" height="16" fill="#ffffff"/><text x="776" y="444" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">⑦ 남은 카드로 답변 생성</text>
+<path d="M648,504 H396" fill="none" stroke="#b45309" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d2-d2-accent)"/>
+<rect x="434" y="480" width="172" height="16" fill="#ffffff"/><text x="520" y="492" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">⑧ 답변 · 인용 · 안전 카드</text>
+<path d="M392,552 H1140" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<rect x="712" y="528" width="112" height="16" fill="#ffffff"/><text x="768" y="540" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">⑨ 질의·근거 기록</text>
+<path d="M392,600 H140" fill="none" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d2-d2-link)"/>
+<rect x="224" y="576" width="80" height="16" fill="#ffffff"/><text x="264" y="588" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">⑩ 답변 표시</text>
+<path d="M392,200 H440 Q448,200 448,208 V224 Q448,232 440,232 H396" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<text x="460" y="222" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="start">② MES 관측·경보 붙이기</text>
+<path d="M648,384 H696 Q704,384 704,392 V400 Q704,408 696,408 H652" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d2-d2-default)"/>
+<text x="716" y="404" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="start">⑥ 기준 미달 제외 · 확신 시 바로 답변</text>
+<rect x="52" y="72" width="168" height="64" rx="6" fill="#ffffff"/>
+<rect x="52" y="72" width="168" height="64" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="68" y="100" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">PDA 화면</text>
+<text x="68" y="122" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">라즈베리파이</text>
+<rect x="308" y="72" width="168" height="64" rx="6" fill="#ffffff"/>
+<rect x="308" y="72" width="168" height="64" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="324" y="100" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">MES 서버</text>
+<text x="324" y="122" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">:8000</text>
+<rect x="552" y="72" width="192" height="64" rx="6" fill="#ffffff"/>
+<rect x="552" y="72" width="192" height="64" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="568" y="100" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">근거 기반 답변 엔진</text>
+<text x="568" y="122" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">검색·판정·선별·답변</text>
+<rect x="820" y="72" width="168" height="64" rx="6" fill="#ffffff"/>
+<rect x="820" y="72" width="168" height="64" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="836" y="100" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">Ollama 모델</text>
+<text x="836" y="122" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">임베딩·판정·답변</text>
+<rect x="1060" y="72" width="168" height="64" rx="6" fill="#ffffff"/>
+<rect x="1060" y="72" width="168" height="64" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="1076" y="100" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">SQLite</text>
+<text x="1076" y="122" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">질의 기록</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">현장 장치</text>
+<rect x="156" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="180" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<rect x="232" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="256" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">모델</text>
+<rect x="308" y="668" width="16" height="12" rx="2" fill="#dcfce7" stroke="#15803d"/>
+<text x="332" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">저장소</text>
+<line x1="396" y1="674" x2="428" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="436" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">요청</text>
+<line x1="488" y1="674" x2="520" y2="674" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="528" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">응답</text>
+<line x1="580" y1="674" x2="612" y2="674" stroke="#2563eb" stroke-width="1.2"/>
+<text x="620" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">HTTP</text>
+      </svg>

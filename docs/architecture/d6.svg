@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d6-title d6-desc" id="d6-root">
+        <title id="d6-title">얼굴 로그인</title>
+        <desc id="d6-desc">PDA 카메라 프레임에서 YuNet으로 얼굴을 찾고 SFace로 임베딩을 만든 뒤 본인 등록 임베딩과 코사인 0.363 이상인지 비교하고, 5장 중 3장 이상 통과하면 로그인한다. 등록 때는 임베딩만 저장하고 원본 이미지는 저장하지 않는다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d6-root { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #1e293b; }
+      #d6-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d6-root .diagram-container { overflow-x: visible; }
+}</style>
+<marker id="d6-d6-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d6-d6-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d6-d6-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d6-d6-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="40" y="64" width="1200" height="464" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="88" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">라즈베리파이</text>
+<text x="152.0" y="88" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">얼굴 이미지와 임베딩은 기기 밖으로 나가지 않는다</text>
+<text x="64" y="124" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="500" fill="#0369a1" text-anchor="start">로그인</text>
+<text x="264" y="388" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="500" fill="#0369a1" text-anchor="start">등록</text>
+<path d="M224,184 H260" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M424,184 H460" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M624,184 H660" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M824,184 H860" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d6-d6-accent)"/>
+<path d="M1024,184 H1060" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d6-d6-accent)"/>
+<path d="M344,400 V232" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M544,228 V396" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M624,444 H736 Q744,444 744,436 V232" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d6-d6-default)"/>
+<path d="M944,228 V396" fill="none" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d6-d6-default)"/>
+<rect x="518" y="300" width="52" height="16" fill="#ffffff"/><text x="544" y="312" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">등록 때</text>
+<rect x="706" y="300" width="76" height="16" fill="#ffffff"/><text x="744" y="312" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">등록 임베딩</text>
+<rect x="928" y="300" width="32" height="16" fill="#ffffff"/><text x="944" y="312" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">실패</text>
+<rect x="64" y="140" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="64" y="140" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="80" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">카메라 프레임</text>
+<text x="80" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">PDA 화면 카메라</text>
+<text x="80" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">:8080 로컬 프록시</text>
+<rect x="264" y="140" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="264" y="140" width="160" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="280" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">얼굴 검출·정렬</text>
+<text x="280" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">YuNet 2023mar</text>
+<text x="280" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">검출 점수 ≥ 0.8</text>
+<rect x="464" y="140" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="464" y="140" width="160" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="480" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">얼굴 임베딩</text>
+<text x="480" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">SFace 2021dec</text>
+<text x="480" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">얼굴 특징 벡터</text>
+<rect x="664" y="140" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="664" y="140" width="160" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="680" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">1:1 비교</text>
+<text x="680" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">코사인 ≥ 0.363</text>
+<text x="680" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">본인 등록과만 비교</text>
+<rect x="864" y="140" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="864" y="140" width="160" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="880" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">프레임 판정</text>
+<text x="880" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">5장 중 3장 이상</text>
+<text x="880" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">한 장 우연 통과 방지</text>
+<rect x="1064" y="140" width="152" height="88" rx="6" fill="#ffffff"/>
+<rect x="1064" y="140" width="152" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="1080" y="168" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">로그인 완료</text>
+<text x="1080" y="190" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">홈 화면</text>
+<rect x="264" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="264" y="400" width="160" height="88" rx="6" fill="#fde7ef" stroke="#be185d" stroke-width="1"/>
+<text x="280" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">얼굴 등록</text>
+<text x="280" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">사번 + 얼굴 8장</text>
+<text x="280" y="470" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">동의 철회 시 삭제</text>
+<rect x="464" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="464" y="400" width="160" height="88" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="480" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">임베딩 저장</text>
+<text x="480" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">사번.npz · 권한 600</text>
+<text x="480" y="470" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">원본 이미지 저장 안 함</text>
+<rect x="864" y="400" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="864" y="400" width="160" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="880" y="428" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">사번 로그인</text>
+<text x="880" y="450" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">사번 · 비밀번호</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">현장 장치</text>
+<rect x="156" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="180" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">모델</text>
+<rect x="232" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="256" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<rect x="308" y="668" width="16" height="12" rx="2" fill="#dcfce7" stroke="#15803d"/>
+<text x="332" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">저장소</text>
+<rect x="396" y="668" width="16" height="12" rx="2" fill="#fde7ef" stroke="#be185d"/>
+<text x="420" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">사람</text>
+<line x1="472" y1="674" x2="504" y2="674" stroke="#b45309" stroke-width="1.2"/>
+<text x="512" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">통과 판단</text>
+<line x1="596" y1="674" x2="628" y2="674" stroke="#475569" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="636" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">실패 시</text>
+      </svg>

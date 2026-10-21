@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모듈 구성</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #ffffff; color: #1e293b; min-height: 100vh; display: flex; align-items: center;
+           justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1320px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-size: 0.8rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">의존 관계 · ShiftLink 아키텍처 D9</p>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d9-title d9-desc">
+        <title id="d9-title">모듈 구성</title>
+        <desc id="d9-desc">shiftlink 패키지에서 mes가 rag2, agent, rag, edge, data를 불러 쓰고 rag2와 mes는 서로를 import한다. 라즈베리파이 쪽 pda는 face와 vision만 불러 쓴다.</desc>
+        <defs>
+<marker id="d9-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d9-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d9-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d9-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="40" y="48" width="236" height="536" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="72" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">라즈베리파이에서 실행</text>
+<path d="M620,184 V224 Q620,232 612,232 H428 Q420,232 420,240 V284" fill="none" stroke="#b45309" stroke-width="1.2" marker-start="url(#d9-accent)" marker-end="url(#d9-accent)"/>
+<path d="M660,184 V476" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M700,184 V224 Q700,232 708,232 H892 Q900,232 900,240 V284" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M760,128 H1032 Q1040,128 1040,136 V516 Q1040,524 1032,524 H1004" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M560,128 H300 Q292,128 292,136 V516 Q292,524 300,524 H316" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M460,376 V416 Q460,424 468,424 H612 Q620,424 620,432 V476" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d9-accent)"/>
+<path d="M860,376 V416 Q860,424 852,424 H708 Q700,424 700,432 V476" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M520,524 H556" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M760,524 H796" fill="none" stroke="#475569" stroke-width="1.2" marker-start="url(#d9-default)" marker-end="url(#d9-default)"/>
+<path d="M142,184 V284" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<path d="M232,140 H244 Q252,140 252,148 V516 Q252,524 244,524 H236" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d9-default)"/>
+<rect x="52" y="96" width="180" height="88" rx="6" fill="#ffffff"/>
+<rect x="52" y="96" width="180" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="68" y="124" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">PDA 키오스크</text>
+<text x="68" y="146" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.pda</text>
+<text x="68" y="166" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">286줄</text>
+<rect x="52" y="288" width="180" height="88" rx="6" fill="#ffffff"/>
+<rect x="52" y="288" width="180" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="68" y="316" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">얼굴 로그인</text>
+<text x="68" y="338" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.face</text>
+<text x="68" y="358" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">397줄</text>
+<rect x="52" y="480" width="180" height="88" rx="6" fill="#ffffff"/>
+<rect x="52" y="480" width="180" height="88" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="68" y="508" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">설비 인식</text>
+<text x="68" y="530" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.vision</text>
+<text x="68" y="550" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">810줄</text>
+<rect x="560" y="96" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="560" y="96" width="200" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="576" y="124" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">MES 서버·화면</text>
+<text x="576" y="146" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.mes</text>
+<text x="576" y="166" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">5,928줄</text>
+<rect x="320" y="288" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="320" y="288" width="200" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="336" y="316" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">근거 기반 답변 엔진</text>
+<text x="336" y="338" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.rag2</text>
+<text x="336" y="358" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">985줄</text>
+<rect x="800" y="288" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="800" y="288" width="200" height="88" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<text x="816" y="316" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">카드·학습 데이터 도구</text>
+<text x="816" y="338" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.data</text>
+<text x="816" y="358" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">1,109줄</text>
+<rect x="320" y="480" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="320" y="480" width="200" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="336" y="508" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">Ollama 연결</text>
+<text x="336" y="530" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.edge</text>
+<text x="336" y="550" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">537줄</text>
+<rect x="560" y="480" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="560" y="480" width="200" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="576" y="508" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">질의 라우팅·검증</text>
+<text x="576" y="530" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.agent</text>
+<text x="576" y="550" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">1,690줄</text>
+<rect x="800" y="480" width="200" height="88" rx="6" fill="#ffffff"/>
+<rect x="800" y="480" width="200" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="816" y="508" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">카드 검색 v1</text>
+<text x="816" y="530" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">shiftlink.rag</text>
+<text x="816" y="550" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">819줄</text>
+<text x="1064" y="300" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="start">A → B: A가 B를 import</text>
+<text x="1064" y="324" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">import 한 번뿐인 연결</text>
+<text x="1064" y="344" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">data→rag, rag↔edge 생략</text>
+<text x="1064" y="368" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">작은 모듈 communication,</text>
+<text x="1064" y="388" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">unity_demo 생략</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">파이 쪽</text>
+<rect x="144" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="168" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버·공통</text>
+<rect x="252" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="276" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">답변 엔진·모델 연결</text>
+<rect x="424" y="668" width="16" height="12" rx="2" fill="#ffffff" stroke="#94a3b8"/>
+<text x="448" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">오프라인 도구</text>
+<line x1="556" y1="674" x2="588" y2="674" stroke="#b45309" stroke-width="1.2"/>
+<text x="596" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">답변 엔진 경로</text>
+<line x1="712" y1="674" x2="744" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="752" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">import</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

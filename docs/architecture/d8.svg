@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d8-title d8-desc" id="d8-root">
+        <title id="d8-title">데이터 적재</title>
+        <desc id="d8-desc">Jetson SQLite의 질의 기록과 인계·근무일지 테이블에서 미전송 행만 업로더가 30초마다 Aiven MySQL의 query_upload와 handover_upload로 올리고, 연결이 끊기면 다음 주기에 다시 시도하며 해시가 다르면 보류한다. 인계 보드는 handover_upload를 읽기만 한다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d8-root { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #1e293b; }
+      #d8-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d8-root .diagram-container { overflow-x: visible; }
+}</style>
+<marker id="d8-d8-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d8-d8-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d8-d8-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d8-d8-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="40" y="56" width="544" height="472" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="56" y="80" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">SQLite</text>
+<text x="118.4" y="80" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">Jetson · mock-mes.sqlite3</text>
+<rect x="936" y="56" width="304" height="472" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="952" y="80" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#475569">Aiven MySQL</text>
+<text x="1056.4" y="80" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b">클라우드</text>
+<path d="M560,148 H584 Q592,148 592,156 V200 Q592,208 600,208 H636" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d8-d8-default)"/>
+<path d="M560,276 H584 Q592,276 592,268 V256 Q592,248 600,248 H636" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d8-d8-accent)"/>
+<path d="M880,208 H900 Q908,208 908,200 V156 Q908,148 916,148 H956" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d8-d8-default)"/>
+<path d="M880,248 H900 Q908,248 908,256 V268 Q908,276 916,276 H956" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d8-d8-accent)"/>
+<path d="M1088,320 V412" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d8-d8-default)"/>
+<rect x="892" y="172" width="32" height="16" fill="#ffffff"/><text x="908" y="184" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">TLS</text>
+<rect x="1066" y="360" width="44" height="16" fill="#ffffff"/><text x="1088" y="372" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">조회만</text>
+<rect x="64" y="104" width="232" height="88" rx="6" fill="#ffffff"/>
+<rect x="64" y="104" width="232" height="88" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="80" y="132" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">MES 실행</text>
+<text x="80" y="154" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">runs · snapshots</text>
+<text x="80" y="174" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">runtime_events</text>
+<rect x="64" y="232" width="232" height="88" rx="6" fill="#ffffff"/>
+<rect x="64" y="232" width="232" height="88" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="80" y="260" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">사건</text>
+<text x="80" y="282" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">incidents</text>
+<text x="80" y="302" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">incident_records</text>
+<rect x="64" y="360" width="232" height="108" rx="6" fill="#ffffff"/>
+<rect x="64" y="360" width="232" height="108" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="80" y="388" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">지식 후보</text>
+<text x="80" y="410" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">card_drafts</text>
+<text x="80" y="430" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">card_draft_records</text>
+<text x="80" y="450" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">card_draft_reviews</text>
+<rect x="320" y="104" width="240" height="88" rx="6" fill="#ffffff"/>
+<rect x="320" y="104" width="240" height="88" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="336" y="132" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">질의 기록</text>
+<text x="336" y="154" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">query_log</text>
+<text x="336" y="174" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">query_evidence</text>
+<rect x="320" y="232" width="240" height="108" rx="6" fill="#ffffff"/>
+<rect x="320" y="232" width="240" height="108" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="336" y="260" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">인계 · 근무일지</text>
+<text x="336" y="282" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">handover_outbox</text>
+<text x="336" y="302" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">work_report_*</text>
+<text x="336" y="322" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">resolution_sessions</text>
+<text x="320" y="392" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">왼쪽 열은 Jetson에만 남는다.</text>
+<text x="320" y="412" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">오른쪽 열의 미전송 행만 올린다.</text>
+<rect x="640" y="168" width="240" height="128" rx="6" fill="#ffffff"/>
+<rect x="640" y="168" width="240" height="128" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="656" y="196" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">업로더</text>
+<text x="656" y="218" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">30초 주기 · 미전송 행만</text>
+<text x="656" y="238" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">연결 실패 → 다음 주기 재시도</text>
+<text x="656" y="258" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">해시가 다르면 conflict 보류</text>
+<text x="640" y="328" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">현장 해결 기록이 실린 인계는</text>
+<text x="640" y="348" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="start">기능 확정 전까지 로컬에 둔다 (10/13).</text>
+<rect x="960" y="104" width="256" height="88" rx="6" fill="#ffffff"/>
+<rect x="960" y="104" width="256" height="88" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1"/>
+<text x="976" y="132" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">질의 업로드</text>
+<text x="976" y="154" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">query_upload</text>
+<text x="976" y="174" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">설비 · 지연 · 지식 없음 여부</text>
+<rect x="960" y="232" width="256" height="88" rx="6" fill="#ffffff"/>
+<rect x="960" y="232" width="256" height="88" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1"/>
+<text x="976" y="260" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">인계 업로드</text>
+<text x="976" y="282" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">handover_upload</text>
+<text x="976" y="302" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">인계 본문 · 근무일지</text>
+<rect x="960" y="416" width="256" height="88" rx="6" fill="#ffffff"/>
+<rect x="960" y="416" width="256" height="88" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="976" y="444" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">인계 보드</text>
+<text x="976" y="466" font-family="'Geist Mono', ui-monospace, monospace" font-size="12" fill="#475569">:8810</text>
+<text x="976" y="486" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">다음 조 인계 목록 · 읽기 전용</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#dcfce7" stroke="#15803d"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">저장소</text>
+<rect x="136" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="160" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<rect x="212" y="668" width="16" height="12" rx="2" fill="#f1f5f9" stroke="#475569"/>
+<text x="236" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">클라우드</text>
+<line x1="312" y1="674" x2="344" y2="674" stroke="#b45309" stroke-width="1.2"/>
+<text x="352" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">인계가 올라가는 길</text>
+<line x1="492" y1="674" x2="524" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="532" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">전달</text>
+      </svg>

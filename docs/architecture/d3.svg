@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="d3-title d3-desc" id="d3-root">
+        <title id="d3-title">근거 기반 답변 엔진의 판단</title>
+        <desc id="d3-desc">질문과 MES 관측으로 후보 카드를 검색하고 판정 모델이 점수를 매긴 뒤, 남은 카드가 없으면 보류하고, 확신이 높으면 반드시 답하며, 애매하면 답변 모델이 보류 여부를 정하고, 검증을 통과한 답만 PDA에 나간다.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #d3-root { font-family: 'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; color: #1e293b; }
+      #d3-root .diagram-container { width: 100%; overflow-x: auto; }
+      @media print {
+#d3-root .diagram-container { overflow-x: visible; }
+}</style>
+<marker id="d3-d3-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#475569"/></marker>
+<marker id="d3-d3-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+<marker id="d3-d3-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#b45309"/></marker>
+<marker id="d3-d3-exp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#ffffff"/>
+<path d="M224,200 H264" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M464,200 H504" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M704,200 H732" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M868,200 H952" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M800,252 V368" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M1020,252 V352" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M1088,200 H1144 Q1152,200 1152,208 V372 Q1152,380 1144,380 H1100" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d3-d3-accent)"/>
+<path d="M940,396 H864" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M1020,440 V520" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d3-d3-accent)"/>
+<path d="M1100,560 H1136" fill="none" stroke="#b45309" stroke-width="1.2" marker-end="url(#d3-d3-accent)"/>
+<path d="M940,568 H792 Q784,568 784,560 V440" fill="none" stroke="#475569" stroke-width="1.2" marker-end="url(#d3-d3-default)"/>
+<path d="M664,404 H704" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#d3-d3-exp)"/>
+<rect x="900" y="176" width="20" height="16" fill="#ffffff"/><text x="910" y="188" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">예</text>
+<rect x="778" y="300" width="44" height="16" fill="#ffffff"/><text x="800" y="312" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">아니오</text>
+<rect x="964" y="296" width="112" height="16" fill="#ffffff"/><text x="1020" y="308" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">애매 · 모델 판단</text>
+<rect x="1096" y="280" width="112" height="16" fill="#ffffff"/><text x="1152" y="292" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">확신 · 반드시 답</text>
+<rect x="870" y="372" width="64" height="16" fill="#ffffff"/><text x="902" y="384" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">보류 판단</text>
+<rect x="1030" y="472" width="20" height="16" fill="#ffffff"/><text x="1040" y="484" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">답</text>
+<rect x="820" y="576" width="64" height="16" fill="#ffffff"/><text x="852" y="588" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155" text-anchor="middle">검증 실패</text>
+<text x="910" y="124" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="500" fill="#92400e" text-anchor="middle">③ 선별</text>
+<rect x="48" y="160" width="176" height="80" rx="6" fill="#ffffff"/>
+<rect x="48" y="160" width="176" height="80" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="64" y="188" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">질문 + MES 관측</text>
+<text x="64" y="210" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">MES 서버에서</text>
+<rect x="264" y="148" width="200" height="104" rx="6" fill="#ffffff"/>
+<rect x="264" y="148" width="200" height="104" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="280" y="176" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">① 검색</text>
+<text x="280" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">후보 카드 최대 8개</text>
+<text x="280" y="218" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">다른 설비 인계 기록 제외</text>
+<text x="280" y="238" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">EmbeddingGemma 300M</text>
+<rect x="504" y="148" width="200" height="104" rx="6" fill="#ffffff"/>
+<rect x="504" y="148" width="200" height="104" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="520" y="176" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">② 판정</text>
+<text x="520" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">카드마다 관련도 점수</text>
+<text x="520" y="218" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569"></text>
+<text x="520" y="238" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">EXAONE 3.5 판정 모델</text>
+<polygon points="732,200 800,148 868,200 800,252" fill="#ffffff"/><polygon points="732,200 800,148 868,200 800,252" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/><text x="800" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#1e293b" text-anchor="middle">남은 카드?</text><text x="800" y="216" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">점수 ≥ 0.3</text>
+<polygon points="952,200 1020,148 1088,200 1020,252" fill="#ffffff"/><polygon points="952,200 1020,148 1088,200 1020,252" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/><text x="1020" y="198" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#1e293b" text-anchor="middle">확신 높음?</text><text x="1020" y="216" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">최고 ≥ 0.9</text>
+<rect x="940" y="352" width="160" height="88" rx="6" fill="#ffffff"/>
+<rect x="940" y="352" width="160" height="88" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="956" y="380" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">④ 답변 작성</text>
+<text x="956" y="402" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">남은 카드로 · 인용</text>
+<text x="956" y="422" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="11" font-weight="600" fill="#b45309">EXAONE 3.5 답변 모델</text>
+<rect x="704" y="368" width="160" height="72" rx="6" fill="#ffffff"/>
+<rect x="704" y="368" width="160" height="72" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<text x="720" y="396" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">답 보류</text>
+<text x="720" y="418" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">해당 지식 없음 표시</text>
+<rect x="940" y="520" width="160" height="80" rx="6" fill="#ffffff"/>
+<rect x="940" y="520" width="160" height="80" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1"/>
+<text x="956" y="548" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="16" font-weight="600" fill="#1e293b">검증</text>
+<text x="956" y="570" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">인용·숫자 확인</text>
+<text x="956" y="590" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">안전 조건 덧붙임</text>
+<rect x="1136" y="520" width="104" height="80" rx="6" fill="#ffffff"/>
+<rect x="1136" y="520" width="104" height="80" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="1"/>
+<text x="1152" y="548" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="15" font-weight="600" fill="#1e293b">답변 출력</text>
+<text x="1152" y="570" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">PDA 표시</text>
+<rect x="264" y="360" width="400" height="88" rx="6" fill="#ffffff"/>
+<rect x="264" y="360" width="400" height="88" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="280" y="388" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="14" font-weight="600" fill="#1e293b">실험 중</text>
+<text x="280" y="410" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">[MES] 블록을 답변 모델 입력에 추가</text>
+<text x="280" y="430" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#475569">근거 0개여도 MES 관측만으로 답변</text>
+<line x1="48" y1="648" x2="1232" y2="648" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="48" y="668" width="16" height="12" rx="2" fill="#ede9fe" stroke="#6d28d9"/>
+<text x="72" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">서버</text>
+<rect x="124" y="668" width="16" height="12" rx="2" fill="#fef3c7" stroke="#b45309"/>
+<text x="148" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">모델</text>
+<rect x="200" y="668" width="16" height="12" rx="2" fill="#ffffff" stroke="#94a3b8"/>
+<text x="224" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">단계</text>
+<rect x="276" y="668" width="16" height="12" rx="2" fill="#e0f2fe" stroke="#0369a1"/>
+<text x="300" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">현장 장치</text>
+<rect x="384" y="668" width="16" height="12" rx="2" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="3,2"/>
+<text x="408" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">실험 중</text>
+<line x1="480" y1="674" x2="512" y2="674" stroke="#b45309" stroke-width="1.2"/>
+<text x="520" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">답이 나가는 길</text>
+<line x1="636" y1="674" x2="668" y2="674" stroke="#475569" stroke-width="1.2"/>
+<text x="676" y="679" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="12" font-weight="500" fill="#334155">흐름</text>
+      </svg>

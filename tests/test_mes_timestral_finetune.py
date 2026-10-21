@@ -95,5 +95,19 @@ class FinetuneTests(unittest.TestCase):
         self.assertFalse(m.requested_improvement(before,dict(before,wrong_alert_equipment_seconds=20)))
         self.assertTrue(m.requested_improvement(before,dict(detected_events=36,wrong_alert_equipment_seconds=20)))
 
+    def test_parallel_capture_keeps_windows_and_passes_separate(self):
+        f=tiny()
+        frames=[({'run_id':'r','sequence':i+1,'simulated_at':f'2026-01-01T00:{i//60:02}:{i%60:02}+00:00',
+                  'line_mode':'running','value':float(i+1)}, {'faults':[]}) for i in range(80)]
+        channels=[('eq','a'),('eq','b')]
+        with tempfile.TemporaryDirectory() as d:
+            cache,keys,meta=m.collect({'r':frames},channels,
+                lambda frame:{('eq','a'):frame['value'],('eq','b'):frame['value']+1},
+                f,Path(d)/'parallel.npz',thin=2)
+            self.assertEqual(keys,[('r',i) for i in range(65,81,2)])
+            self.assertEqual(cache['hidden'].shape,(8,2,2,8))
+            np.testing.assert_equal(cache['actual'][:,0],np.arange(65,81,2))
+            self.assertLess(meta['max_official_reconstruction_error'],1e-4)
+
 
 if __name__=='__main__':unittest.main()

@@ -62,7 +62,9 @@ def test_planted_stories():
     assert [(r["equipment_id"], r["stop_min"], r["coils"], r["halts_line"]) for r in out["loss"]] == \
         [("EQ-0001", 97, 17, True), ("EQ-0007", 51, 9, True), ("EQ-0009", 41, 7, True),
          ("EQ-0003", 39, 7, True), ("EQ-0005", 33, 6, True), ("EQ-0008", 23, 4, True)]
-    assert out["production"] == {"planned": 1800, "lost": 51, "produced": 1749, "current": 1739, "coils_per_hour": 10.7}
+    # 전체 손실 = 설비별 손실의 합(각각 반올림한 뒤 더한다 — 화면에서 더해도 맞게)
+    assert out["production"] == {"planned": 1800, "lost": 50, "produced": 1750, "current": 1739, "coils_per_hour": 10.7}
+    assert out["production"]["lost"] == sum(r["coils"] for r in out["loss"])
     # 4주 이력에 설비 10대가 모두 나온다
     assert len({i["equipment_id"] for i in out["incidents"]}) == 10
 
@@ -161,3 +163,11 @@ def test_current_production_follows_the_week_clock():
     assert at("2026-10-12T00:00:00+09:00") == 0
     assert at("2026-10-12T10:00:00+09:00") == 107
     assert at("2026-10-12T10:00:00+09:00") < at("2026-10-12T11:00:00+09:00")
+
+
+def test_plain_note_drops_the_synthetic_scenario_tag():
+    assert analytics.plain_note("[합성 시나리오] 회전부 또는 베어링 이상 가능성.") == "회전부 또는 베어링 이상 가능성."
+    assert analytics.plain_note("냉각팬 먼지 막힘") == "냉각팬 먼지 막힘"
+    causes = analytics.cause_suggestions([{"equipment_id": "EQ-1", "alarm_code": "A", "causes": [
+        {"note": "[합성 시나리오] 원인 미확인.", "certainty": "추정"}]}], "EQ-1", ["A"])
+    assert causes == ["원인 미확인."]

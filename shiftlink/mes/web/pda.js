@@ -34,7 +34,7 @@ const S = {
   chat:[], chatSeq:0,   // 증상 질의 대화. 한 턴 = /api/query 한 번 — 이전 턴은 서버로 보내지 않는다
   observations:[], obsRemoved:[], recent:[], outbox:[], online:null, netNote:null,
   scanRun:0, scanStartedAt:0, mes:null, mesExcluded:[],
-  waitAbort:false, ranked:null, tries:[], attemptSeq:0,
+  waitAbort:false, ranked:null,
   operator:null, linkedEquipment:null, chatHidden:false, reportSelected:[], reportFilter:'all', savedHandovers:[], reportDraftLoaded:false,
   foldOpen:{}   // 정상값 접기 펼침 상태(목록별) — 3초 갱신으로 다시 그려도 유지
 };
@@ -195,7 +195,7 @@ function show(name) {
   }
   S.screen=name;
   document.querySelectorAll('.screen').forEach((el)=>el.classList.toggle('on',el.id==='s-'+name));
-  $('ctx').classList.toggle('on',!!S.eq&&['ctx','tries','hoNew','resolve'].includes(name));
+  $('ctx').classList.toggle('on',!!S.eq&&['ctx','hoNew','resolve'].includes(name));
   const signedOut=['boot','login','account','faceSetup','face'].includes(name);
   $('globalHeader').hidden=signedOut||name==='scan';$('net').hidden=signedOut;
   const back = $('navigationBack');
@@ -213,9 +213,10 @@ function show(name) {
   const pane=document.querySelector('#s-'+name+' .pane');if(pane)pane.scrollTop=0;
   document.documentElement.scrollTop=0;document.body.scrollTop=0;
   if(name==='home')renderHome();
+  if(name==='reportWrite')setTimeout(growStepBoxes,0);   // 화면이 보인 뒤에야 칸 높이를 잴 수 있다
   if(name==='ctx'&&S.eq){
     const code=document.createElement('b'),group=document.createElement('span');code.textContent=S.eq.code;group.textContent=S.eq.group;
-    $('workEquipment').replaceChildren(code,group);$('chatEq').textContent=S.eq.code;
+    $('workEquipment').replaceChildren(code,group);
     renderMesStatus();renderChat();renderSymptoms();renderAskBlock();renderEquipmentMetrics();
   }
 }
@@ -257,7 +258,7 @@ function setContext(eq, source, extra) {
   S.eq = eq; S.source = source; S.queryResponse = null;
   S.sensorWasBad=false;
   S.scanId = (extra && extra.scanId) || null;
-  S.observations = []; S.obsRemoved = []; S.ranked = null; S.tries = []; S.attemptSeq = 0; S.chat = [];
+  S.observations = []; S.obsRemoved = []; S.ranked = null; S.chat = [];
   S.safetyView = null; S.safetyOpen = false;
   S.mes = null; S.mesExcluded = []; S.sensorSnapshot = null;
   S.recent = [eq.code].concat(S.recent.filter((c) => c !== eq.code)).slice(0, RECENT_MAX);
@@ -269,7 +270,7 @@ function setContext(eq, source, extra) {
 /* 확정 설비 해제. 이전 설비의 관측·응답·시도도 함께 버린다. */
 function releaseContext(state) {
   Object.assign(state, {eq: null, source: null, scanId: null, queryResponse: null, ranked: null,
-    observations: [], obsRemoved: [], mes: null, mesExcluded: [], tries: [], attemptSeq: 0, chat: []});
+    observations: [], obsRemoved: [], mes: null, mesExcluded: [], chat: []});
 }
 
 function renderContext() {
@@ -493,6 +494,8 @@ function renderObsRange() {
 }
 const fmt = (v) => (v == null ? '—' : String(v));
 const num = (v) => String(Number(Number(v).toFixed(3)));
+// 소수점 둘째 자리까지 반올림해 보인다. toFixed는 154.845를 154.84로 내리므로(이진수 오차) 십진 반올림으로 한다.
+const fix2 = (v) => { const n = Number(v), a = Math.abs(n); return !isFinite(n) || /e/i.test(String(a)) ? n.toFixed(2) : (Math.sign(n) * Number(Math.round(a + 'e2') + 'e-2')).toFixed(2); };
 const fullStamp = (v) => {
   if (!v) return '시각 없음';
   const p = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' })
@@ -1134,20 +1137,15 @@ function renderAskSafety() {
 const RESTART_TEXT = {normal_stop_restart: '정상 정지 후 재가동', abnormal_stop_restart: '비정상 정지 후 재가동',
   maintenance_restart: '정비 후 재가동'};
 
-function actionEl(item, rank, tried) {
+function actionEl(item, rank) {
   const c = item.card;
   const d = document.createElement('div');
-  d.className = 'card' + (rank === 1 && !tried ? ' top' : '') + (tried ? ' done' : '');
+  d.className = 'card' + (rank === 1 ? ' top' : '');
   const head = document.createElement('div');
   head.className = 'rk';
-  head.innerHTML = '<span class="rkno' + (rank === 1 && !tried ? ' one' : '') + '">'
+  head.innerHTML = '<span class="rkno' + (rank === 1 ? ' one' : '') + '">'
     + (rank || '—') + '</span><span class="kid"></span>';
   head.querySelector('.kid').textContent = c.card_id + ' · ' + c.tacit_type + ' · ' + c.grade;
-  if (tried) {
-    const p = document.createElement('span');
-    p.className = 'pill miss'; p.textContent = '시도함 · 효과 없음';
-    p.style.marginLeft = 'auto'; head.appendChild(p);
-  }
   d.appendChild(head);
 
   const ttl = document.createElement('div');
@@ -1228,13 +1226,6 @@ function actionEl(item, rank, tried) {
   src.className = 'src'; src.textContent = '출처: 합성 데이터 · split=' + c.split;
   d.appendChild(src);
 
-  if (!item.excluded && !tried) {
-    const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn';   // 주 행동 56px(A1)
-    btn.textContent = '이 조치 시도';
-    btn.addEventListener('click', () => recordTry(c));
-    d.appendChild(btn);
-  }
   return d;
 }
 
@@ -1270,25 +1261,14 @@ function answerBody(turn) {
     meta.textContent = [at ? '답변 기준 · ' + clock(at) + ' 센서값' : '', parts.source].filter(Boolean).join(' · ');
     d.appendChild(meta);
   }
-  // 「조치하며 작성」 — 조치 기록 화면으로 가고, 그 끝이 근무일지다. 카드 답에서도 조치를 기록한다
-  // (본 카드 ID가 세션에 남아 대시보드 사건에 연결된다).
-  const record = document.createElement('button');
-  record.type = 'button'; record.className = 'btn primary';   // 주 행동 56px(A1)
-  record.textContent = '조치하며 작성';
-  record.addEventListener('click', () => openResolve(turn));
-  // 카드가 있든 없든 같은 상자 — 근무일지로 가는 두 길(조치하며 / 바로)을 묶는다. 「아니오」면 상자만 걷고
-  // 「조치하며 작성」은 남긴다. 일지에서 이전으로 돌아와도 다시 쓸 수 있게 「바로 작성」 뒤에도 상자를 남긴다.
-  // 상자는 참고 매뉴얼보다 위에 둔다 — 매뉴얼을 펼쳐도 주 행동이 아래로 밀려나지 않게.
-  if (!turn.reportAsked) {
-    const ask = document.createElement('div'); ask.className = 'report-ask';
-    const q = document.createElement('p'); q.textContent = '근무일지를 작성할까요?';
-    const now = document.createElement('button'); now.type = 'button'; now.className = 'btn sm yes'; now.textContent = '바로 작성';
-    const no = document.createElement('button'); no.type = 'button'; no.className = 'btn sm no'; no.textContent = '아니오';
-    [q, record, now, no].forEach((el) => ask.appendChild(el));
-    no.addEventListener('click', () => { turn.reportAsked = 'no'; ask.replaceWith(record); });
-    now.addEventListener('click', () => reportFromChat(turn));
-    d.appendChild(ask);
-  } else d.appendChild(record);
+  // 「조치 시작」 — 매뉴얼·지식카드를 참고한 답이면 종류와 관계없이 항상 둔다. 조치 기록 화면으로 가며
+  // (본 카드 ID가 세션에 남아 대시보드 사건에 연결된다), 근무일지는 입력칸 옆 고정 버튼으로 쓴다(답마다 묻지 않는다).
+  if (citedCardIds(turn).length) {
+    const record = document.createElement('button');
+    record.type = 'button'; record.className = 'btn primary'; record.textContent = '조치 시작';   // 주 행동 56px(A1)
+    record.addEventListener('click', () => openResolve(turn));
+    d.appendChild(record);
+  }
   const ids = r.actions.map((x) => x.card.card_id);
   // 질의 당시 센서값은 싣지 않는다 — 같은 화면의 설비 칸이 보여 준다(사용자 결정 10/20).
   if (!ids.length && !r.excluded.length) return d;
@@ -1299,9 +1279,7 @@ function answerBody(turn) {
   sum.querySelector('span').textContent = ids.length ? '참고 매뉴얼 보기' : '답변 근거 보기';
   sum.querySelector('small').textContent = ids.join(' · ');
   more.appendChild(sum);
-  // 시도 기록은 마지막 답에만 이어진다(시도 화면이 S.ranked 를 쓴다).
-  const triedIds = turn === lastAnswer() ? S.tries.map((t) => t.card_id) : [];
-  r.actions.forEach((x, i) => more.appendChild(actionEl(x, i + 1, triedIds.indexOf(x.card.card_id) !== -1)));
+  r.actions.forEach((x, i) => more.appendChild(actionEl(x, i + 1)));
   if (r.excluded.length) {
     const l2 = document.createElement('p'); l2.className = 'lbl';
     l2.textContent = '조건 불일치·미평가 ' + r.excluded.length + '건 — 이유와 함께 남김';
@@ -1309,13 +1287,6 @@ function answerBody(turn) {
     r.excluded.forEach((x) => {
       const el = actionEl(x, null); el.className += ' out' + (x.miss ? ' miss' : ''); more.appendChild(el);
     });
-  }
-  if (triedIds.length) {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'btn sm ghost';
-    b.textContent = '시도 기록 보기 (' + S.tries.length + '건)';
-    b.addEventListener('click', () => renderTries());
-    more.appendChild(b);
   }
   d.appendChild(more);
   return d;
@@ -1331,6 +1302,15 @@ function answerParts(text) {
 }
 
 const lastAnswer = () => S.chat.filter((t) => t.status === 'done').slice(-1)[0] || null;
+/* 답이 참고한 카드: 서버가 인용한 카드 + 화면에서 고른 카드. 조건이 안 맞아 '조건 불일치'로 빠진 카드도 답이 참고했으면 조치 시작에서 본다. */
+function citedCardIds(turn) {
+  const ids = [...((turn.response && turn.response.cited_card_ids) || []), ...((turn.ranked && turn.ranked.actions) || []).map((x) => x.card.card_id)];
+  return [...new Set(ids)].slice(0, 10);
+}
+function resumableSession() {
+  const r = S.res;
+  return r && r.sessionId && r.steps.length && S.eq && r.turn && r.turn.eqId === S.eq.equipment_id ? r : null;
+}
 
 /* 마지막 질문과 답을 인계 메모 초안으로. 메모 칸 최대 길이(4000자)를 넘지 않게 자른다. */
 function chatMemo(turn, max = 4000) {
@@ -1415,7 +1395,7 @@ async function openResolve(turn) {
   try {
     const out = await postJson('/api/resolution/start', {equipment_id: S.eq.equipment_id, question: turn.question,
       evidence: (turn.response && turn.response.evidence) || null,
-      card_ids: ((turn.ranked && turn.ranked.actions) || []).map((x) => x.card.card_id)});
+      card_ids: citedCardIds(turn)});
     Object.assign(S.res, {sessionId: out.session_id, before: out.before, components: out.components || [],
       actions: out.action_suggestions || [], causes: out.cause_suggestions || [CAUSE_UNKNOWN]});
     const pick = S.res.components.find((c) => c.suggested);
@@ -1440,30 +1420,26 @@ function renderResolve() {
   [...$('resFlow').children].forEach((li, i) => {
     if (i === (r.phase === 'wrap' ? 1 : 0)) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
   });
-  $('resEquipment').textContent = S.eq ? S.eq.code : '';
-  const before = r.before;
-  $('resBefore').textContent = before ? [before.simulated_at ? stamp(before.simulated_at) : '',
-    ...(before.out_of_range || []).map(m => m.name + ' ' + m.value + ' · ' + (m.state === 'low' ? '낮음' : '높음')),
-    (before.alarms || []).length ? '경보 ' + before.alarms.join(', ') : '경보 없음'].filter(Boolean).join(' · ')
-    : r.busy ? 'MES 기록을 불러오고 있습니다…' : 'MES 기록을 불러오지 못했습니다.';
+  $('resSymptom').hidden = r.phase === 'wrap';   // 결과 확인에서는 증상을 고칠 수 없이 글자로만 보인다
+  $('resSymptomView').hidden = r.phase !== 'wrap';
+  $('resSymptomView').textContent = r.symptom;
   $('resToReport').hidden = r.phase !== 'wrap';
+  $('resMore').hidden = r.phase !== 'wrap';
+  $('resMore').disabled = r.busy;
   $('resToReport').disabled = r.busy || !!r.live || !r.sessionId;
-  $('resFinish').hidden = r.phase !== 'work' || !!r.live;
-  $('resAlternative').hidden = r.phase !== 'wrap';
-  $('resCompleted').hidden = !r.steps.length;
+  $('resFinish').hidden = r.phase !== 'work';
+  $('resCompleted').hidden = !r.steps.length || r.phase === 'work';   // 작업 중엔 체크한 줄이 그 결과를 보인다
   $('resCompletedTitle').textContent = '완료한 조치 · ' + r.steps.length + '건';
-  $('resStatus').textContent = r.live ? '실제 작업을 마친 뒤 완료를 기록해 주세요.'
-    : r.phase === 'wrap' ? '조치와 결과를 근무일지에서 검토한 뒤 저장합니다.'
-    : r.steps.length ? '조치를 더 기록하거나 결과를 확인하세요.' : '조치를 하나 이상 완료하면 결과를 확인할 수 있습니다.';
+  $('resStatus').textContent = r.phase === 'wrap' ? '조치와 결과를 근무일지에서 검토한 뒤 저장합니다.'
+    : r.steps.length ? '' : '조치를 하나 이상 완료하면 결과를 확인할 수 있습니다.';
   $('resWork').hidden = r.phase !== 'work';
   $('resWrap').hidden = r.phase !== 'wrap';
-  $('resSave').hidden = r.phase !== 'wrap';
   // 부품은 하나만 선택하므로 목록 하나로 제공한다.
   $('resComponentsLbl').hidden = $('resComponents').hidden = !r.components.length;
   const placeholder = document.createElement('option'); placeholder.value = ''; placeholder.textContent = '조치 대상 선택';
   $('resComponents').replaceChildren(placeholder, ...r.components.map(c => {
     const option = document.createElement('option'); option.value = c.component_id;
-    option.textContent = c.name + (c.suggested ? ' · MES 추천' : ''); return option;
+    option.textContent = c.name; return option;   // MES가 추천한 부품은 미리 골라 두되 '추천' 표시는 두지 않는다
   }));
   $('resComponents').value = r.componentId;
   $('resComponents').disabled = r.busy;
@@ -1471,9 +1447,7 @@ function renderResolve() {
   $('resSteps').replaceChildren(...r.steps.map((s) => {
     const li = document.createElement('li'); li.className = 'res-step';
     const a = document.createElement('b'); a.textContent = s.order + '. ' + s.action;
-    const res = document.createElement('span'); res.className = 'res';
-    res.textContent = (s.card ? s.card.card_id + ' 단계 · ' : '') + (s.mes_linked ? 'MES 반영 · ' : '') + '자동 결과: ' + s.result_text;
-    li.append(a, res);
+    li.append(a);
     if (s.lockout) { const l = document.createElement('span'); l.className = 'lock'; l.textContent = '에너지 차단(잠금): ' + s.lockout; li.appendChild(l); }
     if (!s.mes_linked && r.phase === 'work' && !r.live) {   // MES에 반영된 단계는 되돌릴 수 없어 지우지 않는다
       const x = document.createElement('button');
@@ -1484,106 +1458,113 @@ function renderResolve() {
     }
     return li;
   }));
-  // 진행 중인 조치
-  const live = $('resLive');
-  live.hidden = !r.live;
-  $('resPick').hidden = !!r.live;
-  $('resClear').hidden = !r.steps.some((s) => !s.mes_linked) || !!r.live || r.phase !== 'work';
+  $('resLive').hidden = true; $('resPick').hidden = false;
+  $('resClear').hidden = !r.steps.some((s) => !s.mes_linked) || r.phase !== 'work';
   $('resClear').disabled = r.busy;
-  if (r.live) {
-    const title = document.createElement('b'); title.textContent = (r.steps.length + 1) + '. ' + r.live.action + ' · 진행 중';
-    const parts = [title];
-    const needLock = liveRisky(r.live);
-    if (needLock) {
-      const box = document.createElement('div'); box.className = 'res-lock';
-      box.textContent = '차단기·재투입·재가동 같은 작업입니다. 에너지 차단(잠금) 후 작업했나요?';
-      const row = document.createElement('div'); row.className = 'chips';
-      row.append(...LOCKOUTS.map((v) => chip(v, r.live.lockout === v, () => { r.live.lockout = v; renderResolve(); })));
-      box.appendChild(row); parts.push(box);
-    }
-    const done = document.createElement('button');
-    done.type = 'button'; done.className = 'btn primary'; done.textContent = '작업 완료 기록';
-    done.disabled = r.busy || (needLock && !r.live.lockout);
-    done.addEventListener('click', completeStep);
-    const cancel = document.createElement('button');
-    cancel.type = 'button'; cancel.className = 'btn sm ghost'; cancel.textContent = '선택 취소';
-    cancel.disabled = r.busy;
-    cancel.addEventListener('click', () => { r.live = null; renderResolve(); });
-    parts.push(done, cancel);
-    live.replaceChildren(...parts);
-  }
+  // 한 일 체크 목록: 왼쪽 문장 · 오른쪽 체크. 체크 = 완료 기록(그 순간 센서값이 결과). 카드·MES 묶음마다 머리글.
+  // MES 단계는 되돌릴 수 없어 버튼을 두 번 눌러야 적용된다(첫 번째는 색만 바뀌고 3초 뒤 풀린다).
+  const cardGroups = [], mesGroups = [];
+  let box = null, boxKey = null;
   const chips = actionChips(r);
-  const list = items => {
-    const box = document.createElement('div'); box.className = 'res-action-list';
-    const seen = new Set();
-    items.forEach(a => {
-      // 출처·단계가 다른 조치는 MES 효과와 안전 확인이 달라 같은 문구라도 합치지 않는다.
-      const key = JSON.stringify([a.text, a.tag, a.card]); if (seen.has(key)) return; seen.add(key);
-      const row = document.createElement('div'); row.className = 'res-action';
-      const label = document.createElement('div'); const title = document.createElement('b'); title.textContent = a.text;
-      const meta = document.createElement('small'); meta.textContent = a.tag + (a.disabled ? ' · 앞선 MES 조치를 먼저 완료해 주세요' : '');
-      label.append(title, meta);
-      const button = document.createElement('button'); button.type = 'button'; button.className = 'btn sm ghost'; button.textContent = '선택';
-      button.disabled = a.disabled || r.busy || !r.sessionId;
-      button.setAttribute('aria-label', a.text + ' 선택');
-      button.addEventListener('click', () => startStep(r, {action: a.text, lockout: null, card: a.card}));
-      row.append(label, button); box.append(row);
-    }); return box;
-  };
-  const cards = chips.filter(a => a.card);
-  const mes = chips.filter(a => !a.card && a.tag !== ACTION_TAGS.field_record);
-  const previous = chips.filter(a => a.tag === ACTION_TAGS.field_record);
-  const groups = [];
-  const fold = (title, items) => {
-    const details = document.createElement('details'); details.className = 'res-details';
-    const summary = document.createElement('summary'); summary.textContent = title + ' · ' + items.length + '건';
-    details.append(summary, list(items)); return details;
-  };
-  if (cards.length) groups.push(list(cards));
-  if (mes.length) groups.push(cards.length ? fold('MES 연동 조치', mes) : list(mes));
-  if (previous.length) groups.push(fold('이전 현장 기록 참고', previous));
-  if (!groups.length) { const empty = document.createElement('p'); empty.className = 'hint res-help'; empty.textContent = r.busy ? '조치 목록을 불러오고 있습니다…' : '추천 조치가 없습니다. 다른 조치 입력에서 기록해 주세요.'; groups.push(empty); }
-  $('resActionChips').replaceChildren(...groups);
+  chips.forEach((a) => {
+    const key = a.card ? a.card.card_id : 'MES';
+    if (key !== boxKey) {
+      boxKey = key;
+      const h = document.createElement('p'); h.className = 'res-grp';
+      h.textContent = a.card ? a.card.card_id + (CARD_TYPE_LABELS[a.type] ? ' · ' + CARD_TYPE_LABELS[a.type] : '') : 'MES 연동';
+      box = document.createElement('div'); box.className = 'res-action-list';
+      (a.card ? cardGroups : mesGroups).push(h, box);
+    }
+    box.append(checkRow(r, a));
+  });
+  // 직접 입력한 조치: 목록에 없는 한 일은 체크된 줄로 보이고, 눌러서 취소한다
+  const listed = new Set(chips.map((c) => c.done).filter(Boolean));
+  const custom = r.steps.filter((s) => !listed.has(s));
+  // MES 연동: 이 설비에 걸린 고장의 복구 단계가 없으면(다른 설비·고장 없음) 서버가 주지 않으므로, 같은 두 줄을 흐리게 보인다
+  if (!chips.some((c) => c.mes)) {
+    const h = document.createElement('p'); h.className = 'res-grp'; h.textContent = 'MES 연동';
+    const ph = document.createElement('div'); ph.className = 'res-action-list';
+    ['정상 범위 회복 확인', MES_RESTART_TEXT].forEach((text) => ph.append(checkRow(r, {text, done: null, check: true, mes: true, tag: '', card: null, disabled: true})));
+    mesGroups.push(h, ph);
+  }
+  const customBox = document.createElement('div'); customBox.className = 'res-action-list';
+  custom.forEach((s) => customBox.append(checkRow(r, {text: s.action, done: s, check: true, mes: false, tag: '', card: null, disabled: false})));
+  $('resCustomSteps').replaceChildren(...(custom.length ? [customBox] : []));
+  if (!cardGroups.length && !mesGroups.length && !custom.length) { const empty = document.createElement('p'); empty.className = 'hint res-help'; empty.textContent = r.busy ? '조치 목록을 불러오고 있습니다…' : '추천 조치가 없습니다. 다른 조치 입력에서 기록해 주세요.'; cardGroups.push(empty); }
+  $('resActionChips').replaceChildren(...cardGroups);
+  $('resMesChips').replaceChildren(...mesGroups);
+  syncCustomBoxes();
   $('resFinish').disabled = r.busy || !r.sessionId || !!r.live || !r.steps.length;
   $('resFinish').textContent = r.busy ? '확인 중…' : '결과 확인';
   // 마무리
   if (r.phase === 'wrap' && r.verdict) {
-    const v = $('resVerdict');
-    v.className = 'res-verdict ' + (r.verdict.verdict === 'recovered' ? 'good' : 'bad');
-    v.textContent = '조치 후 자동 확인 · ' + r.verdict.text;
     $('resResult').replaceChildren(...RESOLVE_RESULTS.map(([k, t]) => chip(t, r.result === k,
-      () => { r.result = k; renderResolve(); }, r.verdict.suggested_result === k ? 'MES 제안' : '')));
+      () => { r.result = k; renderResolve(); })));
     $('resCauses').replaceChildren(...r.causes.map((c) => chip(c, r.cause === c && !r.causeCustom.trim(),
       () => { r.cause = c; r.causeCustom = ''; $('resCauseCustom').value = ''; renderResolve(); })));
   }
-  $('resSave').disabled = r.busy;
 }
 
 /* 한 일 칩: 답에서 본 카드의 단계(완료하면 '카드 방법'으로 남음), MES 복구 단계(완료하면 MES에도 반영, 순서대로),
  * 재가동(MES 단계를 다 끝낸 뒤), 이 설비의 이전 현장 기록. 이미 끝낸 카드·MES 단계는 다시 보이지 않는다. */
 const ACTION_TAGS = {mes_recovery: 'MES 단계', mes_restart: 'MES', field_record: '이전 기록'};
+const MES_RESTART_TEXT = '재가동 (라인 복구 시작)';   // 서버 field_draft.RESTART_ACTION과 같게
 function actionChips(r) {
   const done = new Set(r.steps.map((s) => s.action));
   const mesSteps = r.actions.filter((a) => a.source === 'mes_recovery');
   const mesDone = mesSteps.every((a) => done.has(a.text));
-  return r.actions.filter((a) => !(a.source !== 'field_record' && done.has(a.text)))
-    .map((a) => ({text: a.text, disabled: a.source === 'mes_restart' && !mesDone,
-      tag: a.source === 'card_step' ? a.card_id + (a.n ? ' · ' + a.n + '단계' : '') : ACTION_TAGS[a.source] || '',
-      card: a.source === 'card_step' ? {card_id: a.card_id, step_id: a.step_id, risky: !!a.risky} : null}));
+  return r.actions.filter((a) => a.source !== 'field_record' && a.check !== false).map((a) => {   // 판단 문장(T1, check=false)은 한 일이 아니라 목록에 넣지 않는다
+    const card = a.source === 'card_step' ? {card_id: a.card_id, step_id: a.step_id, risky: !!a.risky} : null;
+    const step = r.steps.find((s) => card ? s.card && s.card.card_id === card.card_id && s.card.step_id === card.step_id : s.action === a.text && !s.card);
+    return {text: a.text, disabled: a.source === 'mes_restart' && !mesDone, done: step || null, check: a.check !== false, type: a.tacit_type || '',
+      mes: a.source === 'mes_recovery' || a.source === 'mes_restart',
+      tag: a.source === 'card_step' ? (a.n && a.step_id && /^ST/.test(a.step_id) ? a.card_id + ' · ' + a.n + '단계' : '') : ACTION_TAGS[a.source] || '', card};
+  });
 }
 
-/* 조치 선택과 완료 기록을 구분한다. 센서값은 실제 작업을 끝낸 순간에 기록한다. */
-function startStep(r, live) {
-  if (r.busy || !r.sessionId) return;
-  r.live = live;
-  renderResolve();
-  $('resLive').scrollIntoView({block: 'nearest'});
+const CARD_TYPE_LABELS = {T1: '이상 징후 분석', T2: '운전 조건별 조치', T3: '고장 조치 절차', T4: '교대 인계 사례', T5: '안전 조치', T6: '재가동 절차'};
+let resArm = null;   // MES 단계 두 번 누르기: {key, timer}
+const armKey = (a) => JSON.stringify([a.text, a.card]);
+
+function checkRow(r, a) {
+  const armed = !!resArm && resArm.key === armKey(a);
+  const row = document.createElement('div');
+  row.className = 'res-check' + (a.done ? ' done' : '') + (a.disabled ? ' off' : '') + (a.check ? '' : ' plain') + (armed ? ' arm' : '');
+  const t = document.createElement('span'); t.className = 't'; t.textContent = a.text;
+  const meta = [a.mes ? '' : a.tag, a.disabled && !a.done ? '앞선 MES 조치를 먼저 완료해 주세요' : ''].filter(Boolean).join(' · ');   // MES 연동 줄에는 'MES 단계' 표시를 두지 않는다
+  if (meta) { const m = document.createElement('small'); m.textContent = meta; t.appendChild(m); }
+  row.appendChild(t);
+  if (a.check) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'box' + (a.mes ? ' mesbtn' : '');
+    b.disabled = a.disabled || r.busy || !r.sessionId || !!(a.done && a.done.mes_linked);
+    b.setAttribute('aria-label', a.text + (a.mes ? ' 적용' : ' 완료'));
+    if (!a.mes) { b.setAttribute('role', 'checkbox'); b.setAttribute('aria-checked', String(!!a.done)); }
+    row.appendChild(b);
+    row.addEventListener('click', () => { haptic(15); toggleAction(r, a); });
+  }
+  return row;
+}
+
+/* 줄을 누르면: 끝난 줄은 취소(MES 반영 단계는 불가), 아니면 한 번에 완료 기록. MES 단계만 두 번 눌러야 적용된다. */
+function toggleAction(r, a) {
+  if (r.busy || !r.sessionId || a.disabled) return;
+  if (a.done) { if (!a.done.mes_linked) removeSteps({order: a.done.order}); return; }
+  if (a.mes) {
+    if (!resArm || resArm.key !== armKey(a)) {
+      if (resArm) clearTimeout(resArm.timer);
+      resArm = {key: armKey(a), timer: setTimeout(() => { resArm = null; renderResolve(); }, 3000)};
+      renderResolve(); return;
+    }
+    clearTimeout(resArm.timer); resArm = null;
+  }
+  const live = {action: a.text, lockout: null, card: a.card};
+  r.live = live; completeStep();
 }
 
 /* 「모두 완료」 묶음: MES 단계, 카드별 단계. 남은 칩이 둘 이상인 묶음만, 칩 순서 그대로. */
 function actionGroups(chips) {
   const groups = new Map();
-  chips.filter((c) => !c.disabled).forEach((c) => {
+  chips.filter((c) => !c.disabled && !c.done).forEach((c) => {
     const key = c.card ? c.card.card_id : c.tag === ACTION_TAGS.mes_recovery ? ACTION_TAGS.mes_recovery : null;
     if (key) groups.set(key, [...(groups.get(key) || []), c]);
   });
@@ -1626,38 +1607,94 @@ async function completeStep() {
     const out = await postJson('/api/resolution/' + r.sessionId + '/step', {action: r.live.action, lockout: r.live.lockout,
       ...(card ? {card_id: card.card_id, step_id: card.step_id} : {})});
     r.steps.push({order: out.order, action: r.live.action, lockout: liveRisky(r.live) ? r.live.lockout : null,
-      result_text: out.result_text, mes_linked: out.mes_linked || null, card: card || null, at: kstMinute()});
+      result_text: out.result_text, readings_text: out.readings_text || '', mes_linked: out.mes_linked || null, card: card || null, at: kstMinute()});
     r.live = null; resolveWarn('');
   } catch (err) {
     resolveWarn(err.message === 'lockout_required' ? '잠금 여부를 골라 주세요.' : '조치를 기록하지 못했습니다 · ' + err.message);
   } finally { r.busy = false; renderResolve(); }
 }
 
+function addCustomStep() {
+  const r = S.res, text = $('resCustom').value.trim();
+  if (!text || !r || r.busy || !r.sessionId) return;
+  $('resCustom').value = ''; syncCustomBoxes(); r.live = {action: text, lockout: null}; completeStep();
+}
+function syncCustomBoxes() {
+  const r = S.res;
+  $('resCustomBox').setAttribute('aria-disabled', String(!r || r.busy || !r.sessionId || !$('resCustom').value.trim()));   // 모양은 다른 체크와 같게, 글자가 없으면 눌러도 아무 일 없음
+  const own = !!(r && r.causeCustom && r.causeCustom.trim());
+  $('resCauseBox').classList.toggle('done', own); $('resCauseBox').setAttribute('aria-checked', String(own));
+}
 const kstMinute = (d = new Date()) => d.toLocaleString('sv-SE', {timeZone: 'Asia/Seoul', hour12: false}).slice(0, 16).replace(' ', 'T');
 
 /* 조치 기록 → 근무일지 기록(새 양식 capture_version 1). 단계 결과는 「MES 센서:」를 붙여 작업자 관측과 섞지 않고,
  * 정상 운전은 미확인으로 둔다(지속시간·확인은 작업자 몫). 발생시각은 질문을 보낸 시각(새 양식은 필수).
  * 카드 후보 체크(candidate)는 하지 않고, 자동 판단(auto_candidate)은 근무일지 저장이 붙인다 — 같은 조치를
  * 「인계와 함께 저장」으로도 저장하면 초안이 겹칠 수 있다. source_session_id 가 있는 기록은 업로더가 보류한다. */
+/* 조치 단계 묶기: 같은 카드(매뉴얼)를 보고 한 조치는 「1. 2. 3.」으로 한 칸에, 다른 카드는 다른 칸에, 직접 입력한 조치는 한 칸에 모은다.
+ * MES 연동 단계(정상 범위 회복 확인·재가동)는 조치 내용 칸에 적지 않고, 그 내용과 센서값을 마지막 조치 칸의 확인 결과에 적는다.
+ * 확인 결과는 센서값이 실제로 바뀐 것만 적는다 — 바뀌지 않으면(모의 설비에서는 대부분) 늘 같은 「센서값 변화 없음」이 되어 정보가 없다. */
+function sessionSteps(r) {
+  const groups = [], mes = [];
+  const comp = r.components.find((c) => c.component_id === r.componentId);
+  const target = comp ? '조치 대상: ' + comp.name : '';   // 조치 대상(부품)은 첫 조치 내용의 맨 앞 줄에 적는다
+  r.steps.forEach((s) => {
+    if (s.mes_linked) { mes.push(s); return; }
+    const key = s.card ? s.card.card_id : 'custom';
+    const g = groups.find((x) => x.key === key);
+    if (g) g.items.push(s); else groups.push({key, items: [s]});
+  });
+  const changed = (s) => !/변화 없음/.test(s.result_text || '');
+  // MES 연동 단계 한 줄: 무엇을 했는지 + 그 시점 센서값(바뀌었으면 변화, 아니면 지금 값)
+  const mesLine = (s) => {
+    const sensor = changed(s) ? s.result_text : (s.readings_text || '');
+    return s.action.replace(/ \(.*\)$/, '') + (sensor ? ' — ' + sensor : '');
+  };
+  // 확인 결과는 조치 내용과 같은 번호로 맞춘다(「1. 2. 3.」). 센서가 바뀐 조치만 값이 있고 나머지는 '-'. 하나도 없으면 비운다.
+  const out = groups.map(({items}) => {
+    const many = items.length > 1, n = (s) => (many ? (items.indexOf(s) + 1) + '. ' : '');
+    const result = items.some(changed) ? items.map((s) => n(s) + (changed(s) ? 'MES 센서: ' + s.result_text : '-')).join('\n') : '';
+    return {action: items.map((s) => n(s) + s.action).join('\n'), observed_result: result,
+      failed: r.result === 'failed' && !items.some(changed), performed_at: items[0].at || ''};
+  });
+  if (mes.length) {
+    const text = mes.map(mesLine).join('\n');
+    const last = out[out.length - 1];
+    if (last) last.observed_result = [last.observed_result, text].filter(Boolean).join('\n');
+    else out.push({action: target, observed_result: text, failed: false, performed_at: mes[0].at || ''});   // MES 단계만 했으면 조치 내용은 작업자가 적는다
+  }
+  if (target && out.length && !out[0].action.startsWith(target)) out[0].action = target + '\n' + out[0].action;
+  return out;
+}
+
 function sessionRecord(r, eqId) {
   const cause = (r.causeCustom || '').trim() || r.cause;
-  const comp = r.components.find((c) => c.component_id === r.componentId);
   const restart = r.steps.some((s) => s.mes_linked === 'recover' || /^재가동/.test(s.action));
   const cards = [...new Set(r.steps.filter((s) => s.card).map((s) => s.card.card_id))];
   const query = r.turn.response && r.turn.response.query_id;
-  const steps = r.steps.map((s) => ({action: s.action, observed_result: 'MES 센서: ' + s.result_text,
-    failed: r.result === 'failed', performed_at: s.at || ''}));
+  const steps = sessionSteps(r);
+  // 조치 전 정상 범위를 벗어났던 신호 → 원인의 관련 센서(측정값·시각 포함), 미해결이면 남은 문제·다음 확인 내용
+  const before = r.before || {}, eq = (S.equipment || []).find((e) => e.equipment_id === eqId);
+  const outs = (before.out_of_range || []).filter((m) => typeof m.value === 'number' && Number.isFinite(m.value));
+  const spec = eq && (eq.signals || []).find((x) => outs.some((m) => m.signal === x.signal));
+  const out = spec && outs.find((m) => m.signal === spec.signal);
+  const sensor = out ? {sensor_ref: {equipment_id: eqId, signal: out.signal},
+    ...(spec.unit && before.simulated_at ? {sensor_reading: {value: out.value, unit: spec.unit, observed_at: before.simulated_at}} : {})} : {};
+  const unresolved = r.phase === 'wrap' && r.result && r.result !== 'resolved';
+  const remaining = unresolved && r.verdict && r.verdict.verdict !== 'recovered' ? '조치 후 MES: ' + r.verdict.text : '';
+  const nextCheck = unresolved && outs.length ? outs.map((m) => m.name).join(' · ') + ' 정상 범위 회복 여부' : '';
   return {type: r.before && (r.before.alarms || []).length ? '고장·정비' : '이상증상', equipment: [eqId],
     occurred_at: kstMinute(r.turn.started ? new Date(r.turn.started) : new Date()),
     story: (r.symptom || '').trim() || r.turn.question,
-    causes: cause ? [{equipment: [eqId], certainty: '추정', note: cause}] : [],
+    causes: cause && cause !== CAUSE_UNKNOWN ? [{equipment: [eqId], certainty: '추정', note: cause, ...sensor}] : [],   // 원인 모름은 원인 기록이 아니다
     result: null, pms: null, candidate: false, capture_version: 1,
     action_steps: steps.length ? steps : [{action: '', observed_result: '', failed: false}],
     restart_performed: restart, restart_type: restart ? 'abnormal_stop_restart' : 'unknown',
     outcome: r.phase === 'wrap' && r.result ? r.result : 'open', normal_run_status: 'unconfirmed',
     ...(r.verdict ? {normal_run_evidence: '조치 후 MES: ' + r.verdict.text} : {}),
     safety_notes: r.steps.filter((s) => s.lockout).map((s) => '에너지 차단(잠금) · ' + s.order + '. ' + s.action + ': ' + s.lockout).join('\n'),
-    operating_context: comp ? '부품: ' + comp.name : '', references: cards.join(', '),
+    ...(remaining ? {remaining_issue: remaining} : {}), ...(nextCheck ? {next_check: nextCheck} : {}),
+    references: cards.join(', '),
     ...(query ? {query_id: query} : {}), source_session_id: r.sessionId};
 }
 
@@ -1674,97 +1711,6 @@ async function finishResolve() {
   } finally { r.busy = false; renderResolve(); }
 }
 
-// ── 시도 기록 ──────────────────────────────────────────────────────
-function recordTry(card) {
-  S.attemptSeq += 1;
-  const id = 'AT-' + String(S.attemptSeq).padStart(4, '0');
-  const observed = S.observations.length
-    ? S.observations.map(obsText).join(', ')
-    : '관측값 미입력';
-  S.tries.push({
-    attempt_id: id, card_id: card.card_id, action: card.title,
-    observed_result: observed, failure_reason: '조치 후에도 증상이 유지됨',
-    at: new Date().toTimeString().slice(0, 5)
-  });
-  haptic(30);
-  renderTries();
-}
-
-function renderTries() {
-  const pane = $('triesPane'); pane.innerHTML = '';
-  const r = S.ranked;
-  if (r && r.safety.length) pane.appendChild(safetyStack(r.safety));
-
-  const lbl = document.createElement('p');
-  lbl.className = 'lbl';
-  lbl.textContent = '시도 기록 ' + S.tries.length + '건 · 미해결';
-  pane.appendChild(lbl);
-
-  S.tries.forEach((t, i) => {
-    const d = document.createElement('div');
-    d.className = 'try noeff';
-    d.innerHTML = '<div class="hd"><span class="rkno">' + (i + 1) + '</span>'
-      + '<span class="aid"></span><span class="pill miss" style="margin-left:auto">효과 없음</span></div>'
-      + '<div class="fld"><span class="k">조치</span><span class="v a"></span></div>'
-      + '<div class="fld"><span class="k">관측</span><span class="v b"></span></div>'
-      + '<div class="fld"><span class="k">사유</span><span class="v c"></span></div>';
-    d.querySelector('.aid').textContent = t.attempt_id + ' · ' + t.at;
-    d.querySelector('.a').textContent = t.card_id + ' ' + t.action;
-    d.querySelector('.b').textContent = t.observed_result;
-    d.querySelector('.c').textContent = t.failure_reason;
-    pane.appendChild(d);
-  });
-
-  const triedIds = S.tries.map((t) => t.card_id);
-  const next = r ? r.actions.filter((x) => triedIds.indexOf(x.card.card_id) === -1) : [];
-
-  const l2 = document.createElement('p');
-  l2.className = 'lbl hot';
-  l2.textContent = next.length ? '다음 조치 — 순위가 갱신되었습니다' : '다음 조치 — 남은 조치가 없습니다';
-  pane.appendChild(l2);
-
-  const box = document.createElement('div');
-  box.className = 'try now';
-  if (next.length) {
-    box.innerHTML = '<div class="hd"><span class="rkno next">' + (S.tries.length + 1) + '</span>'
-      + '<span class="aid"></span><span class="pill" style="margin-left:auto">권장</span></div>'
-      + '<div class="fld"><span class="k">조치</span><span class="v a"></span></div>'
-      + '<div class="fld"><span class="k">근거</span><span class="v b"></span></div>';
-    box.querySelector('.aid').textContent = next[0].card.card_id + ' · ' + next[0].card.tacit_type;
-    box.querySelector('.a').textContent = next[0].card.title;
-    box.querySelector('.b').textContent = next[0].why + ' — 앞선 조치가 배제되어 순위가 올라감';
-  } else {
-    box.innerHTML = '<div class="hd"><span class="rkno next">—</span>'
-      + '<span class="aid">조치 후보 소진</span>'
-      + '<span class="pill" style="margin-left:auto">인계 권장</span></div>'
-      + '<div class="fld"><span class="k">상태</span><span class="v a"></span></div>'
-      + '<div class="fld"><span class="k">다음</span><span class="v b"></span></div>';
-    box.querySelector('.a').textContent = '적용 가능한 조치를 모두 시도했고 전부 배제되었습니다.';
-    box.querySelector('.b').textContent = '시도 기록 ' + S.tries.length + '건을 인계로 넘겨 다음 교대가 이어받게 합니다.';
-  }
-  pane.appendChild(box);
-
-  const spacer = document.createElement('div'); spacer.className = 'grow'; pane.appendChild(spacer);
-
-  const go = document.createElement('button');
-  go.type = 'button'; go.className = 'btn primary';
-  go.textContent = next.length ? '조치 목록으로' : '인계로 넘기기 (시도 ' + S.tries.length + '건 포함)';
-  go.addEventListener('click', () => {
-    if (next.length) show('chat');
-    else openHandoverNew();
-  });
-  pane.appendChild(go);
-
-  if (next.length) {
-    const alt = document.createElement('button');
-    alt.type = 'button'; alt.className = 'btn sm ghost';
-    alt.textContent = '인계로 넘기기 (시도 ' + S.tries.length + '건 포함)';
-    alt.addEventListener('click', openHandoverNew);
-    pane.appendChild(alt);
-  }
-  show('tries');
-}
-
 // ── 대화 질의 ──────────────────────────────────────────────────────
 /* 한 번에 한 질문만 보낸다 — Jetson 부하, 그리고 답이 어느 질문의 것인지 섞이지 않게. */
 const chatPending = () => S.chat.some((t) => t.status === 'pending');
@@ -1772,6 +1718,8 @@ const chatPending = () => S.chat.some((t) => t.status === 'pending');
 const SEND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
 const STOP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
 function renderAskBlock() {
+  const rb = $('chatReport');
+  rb.classList.toggle('hot', !!resumableSession());   // 조치를 기록한 뒤
   const btn = $('doSearch');
   // 답을 기다리는 동안 보내기 버튼이 정지 버튼이 된다(누르면 이 질문 취소).
   const pending = chatPending();
@@ -1797,7 +1745,7 @@ function userBubble(t) {
   const q = document.createElement('p'); q.className = 'q'; q.textContent = t.label || t.question;
   d.appendChild(q);
   if (t.label) {   // 짧은 이름 대신 실제로 보낸 문장을 함께 보인다
-    const o = document.createElement('p'); o.className = 'orig'; o.textContent = '보낸 문장: ' + t.question;
+    const o = document.createElement('p'); o.className = 'orig'; o.textContent = t.question;
     d.appendChild(o);
   }
   return d;
@@ -1865,7 +1813,7 @@ async function sendChat(question, label) {
     status: 'pending', started: Date.now(), eqId: S.eq.equipment_id};
   S.chat.push(turn);
   if (!label) $('question').value = '';
-  S.tries = []; S.attemptSeq = 0; S.suggOpen = false;
+  S.suggOpen = false;
   renderChat(); renderSymptoms(); renderAskBlock();
   const timer = setInterval(() => {
     const el = $('turn-' + turn.id);
@@ -2154,7 +2102,7 @@ function renderEquipmentMetrics() {
     const at = document.createElement('small'); at.textContent = row && row.observed_at ? clock(row.observed_at) : '';
     name.append(label, at);
     const value = document.createElement('div'); value.className = 'sensor-value';
-    value.textContent = idle ? '정지 중' : row ? num(row.value) : '—';
+    value.textContent = idle ? '정지 중' : row ? fix2(row.value) : '—';   // 소수점 둘째 자리까지(반올림)
     if (!idle && row) { const u = document.createElement('span'); u.textContent = unitText(spec.unit); value.appendChild(u); }
     const pill = document.createElement('span'); pill.className = 'sensor-state' + (row && !idle && state === 'normal' ? ' ok' : '');
     pill.textContent = !row ? '값 없음' : idle ? '정지' : bad ? '범위 이탈' : state === 'normal' ? '정상' : '범위 미설정';
@@ -2557,12 +2505,7 @@ function openHandoverNew(memo) {
   S.hoNewBack = S.screen === 'ctx' ? 'chat' : 'ctx';
   S.resolution = null;
   if (typeof memo === 'string' && memo) $('hoMemo').value = memo;
-  const ctx = S.tries.length
-    ? '시도 ' + S.tries.length + '건 실패 (' + S.tries.map((t) => t.attempt_id).join(' · ') + ')'
-      + (S.observations.length ? ' · ' + S.observations.map(obsText).join(', ') : '')
-    : (S.observations.length
-        ? S.observations.map(obsText).join(', ')
-        : '시도 기록 없음 — 직접 입력 필요');
+  const ctx = S.observations.map(obsText).join(', ');
   $('hoCtx').value = ctx;
   $('hoLoadMes').disabled = false;
   $('hoMesStatus').textContent = '현재 측정값과 최근 이벤트를 작업 상황에 추가합니다.';
@@ -3060,7 +3003,7 @@ const REPORT_REVIEW_FIELDS = [
 function reportFaultRecord(record) { return ['이상증상','고장·정비'].includes(record.type); }
 function reportReviewText(record) {
   const captured=reportCaptureText(record);
-  const fields=[['solution','수행 조치'],['normal_run_evidence','정상 운전 확인 근거'],
+  const fields=[['symptom','발생 현상'],['solution','수행 조치'],['normal_run_evidence','정상 운전 확인 근거'],
     ['remaining_issue','남은 문제'],['next_check','다음 확인 내용'],['next_check_at','확인 시점'],...REPORT_REVIEW_FIELDS,...REPORT_MAINTENANCE_FIELDS,
     ['interpretation','징후 판단'],['interpretation_basis','정상 상태 대비 근거'],
     ['condition_signal','운전 조건 항목'],['condition_op','운전 조건 비교'],['condition_value','조치 적용 기준값'],['condition_unit','측정 단위'],
@@ -3146,6 +3089,8 @@ function reportFromSession(res) {
     S.reportRecords=S.reportRecords.filter((r)=>r.source_session_id!==res.sessionId&&r.story!==story);
     S.reportRecords.push(sessionRecord(res,eq.equipment_id));
   });
+  // 이전에 쓰던 기록이 있어도 방금 만든 기록(맨 아래)이 바로 보이게 내려간다
+  setTimeout(()=>{const recs=document.querySelectorAll('#reportRecords .record');if(recs.length>1)recs[recs.length-1].scrollIntoView({block:'start'});},400);
 }
 /* 현재 설비를 대상으로 기록을 넣고 바로 작성 화면으로 간다. */
 function reportWith(addRecord) {
@@ -3247,6 +3192,12 @@ function reportCauseSensors(record,cause,index,causeIndex,esc) {
   const sensors=S.equipment.filter(eq=>record.equipment.includes(eq.equipment_id)).flatMap(eq=>(eq.signals||[]).map(sensor=>({eq,sensor})));
   return '<div class="cause-sensor-field"><select class="cause-sensors" aria-label="관련 센서" data-key="sensor_ref" data-record="'+index+'" data-cause="'+causeIndex+'" '+(!sensors.length?'disabled':'')+'><option value="">'+(sensors.length?'관련 센서 선택':'등록된 센서 없음')+'</option>'+
     sensors.map(({eq,sensor})=>{const ref={equipment_id:eq.equipment_id,signal:sensor.signal};return '<option value="'+esc(JSON.stringify(ref))+'" '+(cause.sensor_ref?.equipment_id===eq.equipment_id&&cause.sensor_ref?.signal===sensor.signal?'selected':'')+'>'+esc(sensor.name||sensor.signal)+'</option>';}).join('')+'</select><input class="cause-sensor-value" type="text" aria-label="센서 선택 시 측정값" placeholder="센서 선택 시 측정값" value="'+esc(cause.sensor_ref?reportCauseSensorValue(cause.sensor_reading):'')+'" title="'+esc(cause.sensor_reading?.observed_at||'')+'" readonly></div>';
+}
+/* 조치 단계의 조치 내용·확인 결과 칸은 묶인 줄(1. 2. 3.)이 모두 보이게 내용 높이만큼 늘린다(너무 길면 스크롤). */
+function growStepBoxes() {
+  document.querySelectorAll('#reportRecords .capture-step textarea').forEach((t) => {
+    t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 4, 420) + 'px';
+  });
 }
 function refreshReportCauseSensors() {
   if(S.screen!=='reportWrite')return;
@@ -3408,7 +3359,7 @@ function renderReportRecords() {
   const edit=(value,key,index,placeholder,ci)=>'<textarea aria-label="'+placeholder+'" class="edit" data-key="'+key+'" data-record="'+index+'" '+(ci!==undefined?'data-cause="'+ci+'"':'')+' maxlength="4000" placeholder="'+placeholder+'">'+esc(value)+'</textarea>';
   $('reportLegacy').hidden=!$('reportMemo').value;
   $('reportMes').textContent=reportMesDisplayContext(S.reportContext);$('reportMesTable').hidden=!S.reportContext;
-  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><table><tbody><tr class="record-head"><th scope="row">기록 '+(i+1)+'</th><td><div class="record-tools"><select data-key="type" data-record="'+i+'" aria-label="기록 구분" '+(r.followup_from?'disabled':'')+'>'+Object.entries(REPORT_TYPE_LABELS).map(([value,label])=>'<option value="'+value+'" '+(r.type===value?'selected':'')+'>'+label+'</option>').join('')+'</select><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">삭제</button></div></td></tr><tr><th>설비명</th><td><output class="report-record-equipment">'+r.equipment.map(id=>{const eq=S.equipment.find(eq=>eq.equipment_id===id);return esc(eq?[eq.code,eq.name||eq.group].filter(Boolean).join(' '):id);}).join(' · ')+'</output></td></tr><tr><th>발생시각</th><td>'+reportOccurrenceFields(r,i,esc)+'</td></tr><tr><th>'+(r.type==='PMS 정비'?'정비 사유':reportStructuredRecord(r)?'발생 현상':'작업 내용')+'</th><td>'+edit(r.story,'story',i,reportFaultRecord(r)?'발생 상황·이상증상':reportStructuredRecord(r)?'정비 대상·점검 목적':'작업 내용')+'</td></tr>'+reportCauseFields(r,i,edit,esc)+(reportStructuredRecord(r)?reportCaptureFields(r,i,edit,esc):reportFaultRecord(r)?reportFaultFields(r,i,edit,esc):r.type==='PMS 정비'?reportMaintenanceFields(r,i,edit):'')+(r.result!==null&&!reportFaultRecord(r)&&r.type!=='PMS 정비'?'<tr><th>조치 결과·인계사항</th><td>'+edit(r.result,'result',i,'조치 결과·인계사항')+reportRemoveButton('result',i,'조치 결과·인계사항 삭제')+'</td></tr>':'')+'</tbody></table><div class="record-end">'+(r.result===null&&!reportStructuredRecord(r)?'<button data-action="result" data-record="'+i+'">'+reportIcon(true)+'<span>결과·인계 추가</span></button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>'+(r.followup_from?'인계 사례 후보':'지식카드 후보')+'</label>'+(reportStructuredRecord(r)?'<small>'+(r.followup_from?'이전 인계부터 해결·정상 운전 확인까지의 기록을 묶어 검토합니다.':'입력한 내용에 해당하는 후보만 검토합니다.')+'</small>':'')+'</div></section>').join(''):'<table aria-label="특이사항 없음"><tbody><tr><td class="empty"><span>특이사항 기록 0건</span><p>정상 근무라면 저장 전 확인에서 다시 확인해 주세요.</p></td></tr></tbody></table>';
+  $('reportRecords').innerHTML=records.length?records.map((r,i)=>'<section class="record" aria-label="추가 기록 '+(i+1)+'"><table><tbody><tr class="record-head"><th scope="row">기록 '+(i+1)+'</th><td><div class="record-tools"><select data-key="type" data-record="'+i+'" aria-label="기록 구분" '+(r.followup_from?'disabled':'')+'>'+Object.entries(REPORT_TYPE_LABELS).map(([value,label])=>'<option value="'+value+'" '+(r.type===value?'selected':'')+'>'+label+'</option>').join('')+'</select><button type="button" class="smallbtn" data-action="remove" data-record="'+i+'">삭제</button></div></td></tr><tr><th>설비명</th><td><output class="report-record-equipment">'+r.equipment.map(id=>{const eq=S.equipment.find(eq=>eq.equipment_id===id);return esc(eq?[eq.code,eq.name||eq.group].filter(Boolean).join(' '):id);}).join(' · ')+'</output></td></tr><tr><th>발생시각</th><td>'+reportOccurrenceFields(r,i,esc)+'</td></tr>'+(r.type!=='PMS 정비'&&!reportStructuredRecord(r)?'<tr><th>발생 현상</th><td>'+edit(r.symptom||'','symptom',i,'발생 현상')+'</td></tr>':'')+'<tr><th>'+(r.type==='PMS 정비'?'정비 사유':reportStructuredRecord(r)?'발생 현상':'작업 내용')+'</th><td>'+edit(r.story,'story',i,reportFaultRecord(r)?'발생 상황·이상증상':reportStructuredRecord(r)?'정비 대상·점검 목적':'작업 내용')+'</td></tr>'+reportCauseFields(r,i,edit,esc)+(reportStructuredRecord(r)?reportCaptureFields(r,i,edit,esc):reportFaultRecord(r)?reportFaultFields(r,i,edit,esc):r.type==='PMS 정비'?reportMaintenanceFields(r,i,edit):'')+(r.result!==null&&!reportFaultRecord(r)&&r.type!=='PMS 정비'?'<tr><th>조치 결과·인계사항</th><td>'+edit(r.result,'result',i,'조치 결과·인계사항')+reportRemoveButton('result',i,'조치 결과·인계사항 삭제')+'</td></tr>':'')+'</tbody></table><div class="record-end">'+(r.result===null&&!reportStructuredRecord(r)?'<button data-action="result" data-record="'+i+'">'+reportIcon(true)+'<span>결과·인계 추가</span></button>':'')+'<label class="check"><input type="checkbox" data-key="candidate" data-record="'+i+'" '+(r.candidate?'checked':'')+'>'+(r.followup_from?'인계 사례 후보':'지식카드 후보')+'</label>'+(reportStructuredRecord(r)?'<small>'+(r.followup_from?'이전 인계부터 해결·정상 운전 확인까지의 기록을 묶어 검토합니다.':'입력한 내용에 해당하는 후보만 검토합니다.')+'</small>':'')+'</div></section>').join(''):'<table aria-label="특이사항 없음"><tbody><tr><td class="empty"><span>특이사항 기록 0건</span><p>정상 근무라면 저장 전 확인에서 다시 확인해 주세요.</p></td></tr></tbody></table>';
   records.forEach((r,i)=>{
     if(r.capture_version!==1)return;
     const body=$('reportRecords').querySelectorAll('.record > table > tbody')[i];
@@ -3426,6 +3377,7 @@ function renderReportRecords() {
   });
   refreshReportCauseSensors();
   prepareReportHelp();
+  growStepBoxes();
 }
 function renderReportRecordEquipment() {
   const select=$('reportRecordEquipment'),previous=select.value;
@@ -3531,10 +3483,11 @@ function reportPreviewLines(r) {
     ['기존 조건별 조치',r.condition_method],['기존 조건별 확인 결과',r.condition_result],
     ['위험 요인·작업 중지 기준',r.safety_notes],['실시한 정지·격리 조치',r.safety_action],['적용 안전 기준',r.safety_basis]]
     .filter(([,value])=>value?.trim());
-  if(r.type==='추가 기록')return [['작업 상황·조치',r.story.trim()||'미기재'],
+  const symptom=r.symptom?.trim()?[['발생 현상',r.symptom.trim()]]:[];
+  if(r.type==='추가 기록')return [...symptom,['작업 상황·조치',r.story.trim()||'미기재'],
     ...((r.causes||[]).length?[['원인·판단 근거',r.causes.map(reportCauseText).join('\n')]]:[]),
     ...(r.result?.trim()?[['조치 결과·인계사항',r.result.trim()]]:[]),...chosen];
-  return [[r.type==='PMS 정비'?'정비 대상·점검 목적':'발생 상황',r.story.trim()||'미기재'],
+  return [...symptom,[r.type==='PMS 정비'?'정비 대상·점검 목적':'발생 상황',r.story.trim()||'미기재'],
     ...(!reportRoutineMaintenance(r)||(r.causes||[]).length?[['원인·판단 근거',(r.causes||[]).map(reportCauseText).join('\n')||'미기재']]:[]),
     ['수행 조치',action],['조치 후 결과',result],...(r.type==='PMS 정비'&&r.maintenance_status?[['정비 작업 완료',REPORT_MAINTENANCE_STATUS[r.maintenance_status]],['정비 후 설비 상태',REPORT_MAINTENANCE_OUTCOMES[r.outcome]]]:[]),
     ...(!reportRoutineMaintenance(r)||[r.remaining_issue,r.next_check,r.next_check_at,r.follow_up,r.next_maintenance].some(v=>v?.trim())?[[r.outcome==='resolved'?'정상 운전 확인':'미완료 사항·인계',remaining]]:[]),...chosen];
@@ -3640,7 +3593,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { hasHandoverNotes, handoverEntries, handoverTableRow, equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, reportArchiveText, reportCandidateLines, reportPreviewLines, reportCandidatePreview, reportSaveWarnings, homeEquipmentSummary, homeWatch, lossView, lossDonut, madeRingArcs, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, resolveError, sessionPayload, draftNotice, actionChips, actionGroups, sessionRecord }; }
+if (typeof module !== 'undefined') { module.exports = { hasHandoverNotes, handoverEntries, handoverTableRow, equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, reportArchiveText, reportCandidateLines, reportPreviewLines, reportCandidatePreview, reportSaveWarnings, homeEquipmentSummary, homeWatch, lossView, lossDonut, madeRingArcs, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, resolveError, sessionPayload, draftNotice, actionChips, actionGroups, sessionRecord, resumableSession, citedCardIds, fix2 }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────
@@ -3847,7 +3800,9 @@ on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = n
 on('askBack', () => show('ctx'));
 on('doSearch', () => (chatPending() ? cancelChat() : sendChat(currentQuestion())));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
-on('triesBack', () => show('chat'));
+// 근무일지 작성(입력칸 옆 고정): 이 설비에서 조치를 기록한 세션이 있으면 그 조치·증상·원인을 넘기고(조치 기록 화면의
+// 「근무일지 작성」과 같다), 없으면 마지막 답의 질문·답을 이상증상 기록으로, 답도 없으면 빈 기록으로 작성 화면으로 간다.
+on('chatReport', () => { const res = resumableSession(), turn = lastAnswer(); if (res) reportFromSession(res); else if (turn) reportFromChat(turn); else reportWith(() => {}); });
 on('toHandover', openHistory);
 [['homeHandoverPending','pending'],['homeHandoverComplete','complete']].forEach(([id,filter])=>on(id,()=>{S.homeHandoverFilter=filter;$('homeHandover').scrollTop=0;renderHome();}));
 on('toHandoverHome', openHandover);   // 전체 인계 — 선택 설비로 거르지 않는다
@@ -3865,7 +3820,7 @@ on('hoSave', async () => {
       equipment_id:S.eq ? S.eq.equipment_id : null,
       required_context:{recipient_role:$('hoRole').value.trim(), timing:$('hoTiming').value.trim(),
         channel:$('hoChannel').value.trim(), acknowledgement:$('hoAck').value.trim(), context:$('hoCtx').value.trim()},
-      attempts:S.tries, observations:S.observations,
+      observations:S.observations,
       ...(S.resolution ? {resolution: S.resolution} : {})});
     haptic([120]);
     $('hoWarn').textContent = 'MES 로컬 저장 완료 · ' + result.handover_id
@@ -3882,10 +3837,14 @@ on('hoSave', async () => {
 });
 on('resBack', () => show('chat'));
 $('resComponents').addEventListener('change', () => { if (S.res) S.res.componentId = $('resComponents').value; });
-on('resAddCustom', () => {
-  const text = $('resCustom').value.trim();
-  if (!text || !S.res) return;
-  $('resCustom').value = ''; startStep(S.res, {action: text, lockout: null});
+// 다른 조치 입력: Enter(한글 조합 중에는 제외)나 오른쪽 체크로 바로 기록한다. 기록하면 체크된 줄로 보인다.
+$('resCustom').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.isComposing) { ev.preventDefault(); addCustomStep(); } });
+$('resCustom').addEventListener('input', syncCustomBoxes);
+on('resCustomBox', addCustomStep);
+// 원인 직접 입력: 적으면 그 원인이 선택된다(체크 표시). 체크를 누르면 지운다.
+on('resCauseBox', () => {
+  const r = S.res; if (!r) return;
+  if (r.causeCustom && r.causeCustom.trim()) { r.causeCustom = ''; $('resCauseCustom').value = ''; renderResolve(); } else $('resCauseCustom').focus();
 });
 on('resFinish', finishResolve);
 on('resClear', () => removeSteps({all: true}));
@@ -3896,18 +3855,6 @@ on('resToReport', () => {
 on('resMore', () => { if (S.res && !S.res.busy) { S.res.phase = 'work'; renderResolve(); document.querySelector('#s-resolve > .pane').scrollTop = 0; } });
 $('resSymptom').addEventListener('input', () => { if (S.res) S.res.symptom = $('resSymptom').value; });
 $('resCauseCustom').addEventListener('input', () => { if (S.res) { S.res.causeCustom = $('resCauseCustom').value; renderResolve(); } });
-on('resSave', () => {
-  const r = S.res;
-  if (!r) return;
-  r.symptom = $('resSymptom').value;
-  const err = resolveError(r);
-  resolveWarn(err);
-  if (err) return;
-  openHandoverNew(chatMemo(r.turn));
-  S.resolution = sessionPayload(r);   // openHandoverNew가 비운 뒤에 붙인다
-  S.hoNewBack = 'resolve';
-});
-
 $('question').addEventListener('input', renderAskBlock);
 // Enter 로 보내고 Shift+Enter 는 줄바꿈. 한글 조합 중 Enter 는 조합 확정이므로 보내지 않는다.
 $('question').addEventListener('keydown', (ev) => {
@@ -3986,6 +3933,7 @@ $('reportRecords').addEventListener('focusin',event=>{
 });
 $('reportRecords').addEventListener('input',event=>{
   const t=event.target;if(t.dataset.record===undefined)return;
+  if(t.closest('.capture-step')&&t.tagName==='TEXTAREA')growStepBoxes();
   const r=S.reportRecords[Number(t.dataset.record)];
   if(t.dataset.occurrencePart){
     if(r.followup_from)return;

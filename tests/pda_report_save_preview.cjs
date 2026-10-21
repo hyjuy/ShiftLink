@@ -45,3 +45,9 @@ assert.ok(!reportPreviewLines(maintenance).some(([label])=>label==='원인·판�
 assert.match(reportCandidatePreview({...maintenance,restart_performed:true}).at(-1),/재가동 절차.*보완/);
 assert.match(reportCandidatePreview({...maintenance,outcome:'resolved'}).at(-1),/정상 운전/);
 console.log('PASS: candidate preview and nonblocking save warnings');
+
+// 발생 현상: 작업 내용 위에 따로 적는 칸. 비어 있으면 아무 줄도 만들지 않는다.
+const symptomRecord={...general,symptom:'모터에서 소음이 남'};
+assert.deepEqual(reportPreviewLines(symptomRecord),[['발생 현상','모터에서 소음이 남'],['작업 상황·조치','통로 청소 완료'],['조치 결과·인계사항','흡착포 보충 요청']]);
+assert.deepEqual(reportPreviewLines({...general,symptom:'  '}),reportPreviewLines(general));
+assert.equal(reportPreviewLines({...record,symptom:'경보 반복'})[0][0],'발생 현상');

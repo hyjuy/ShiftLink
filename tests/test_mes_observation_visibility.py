@@ -18,15 +18,13 @@ def _engine(scenario_id):
     return engine
 
 
-def test_unauthored_scenario_gets_optional_check_repair_verify_plan():
+def test_unauthored_scenario_gets_optional_verify_only_plan():
     engine = _engine("sensor_anomaly_EQ-0001_hpu_pressure")
     plan = engine.snapshot.recovery
     assert plan["required"] is False and plan["stage"] == "actions"
-    assert [a["action_id"] for a in plan["actions"]] == ["inspect", "repair", "verify"]
-    assert "HPU-01" in plan["actions"][0]["detail"]
+    assert [a["action_id"] for a in plan["actions"]] == ["verify"]
 
-    for action in ("inspect", "repair", "verify"):
-        engine.perform_action(action)
+    engine.perform_action("verify")
     pressure = next(m for m in engine.snapshot.measurements if m.equipment_id == "EQ-0001" and m.signal == "hpu_pressure")
     assert 145 <= pressure.value <= 165, "verify restores the injected signal"
     engine.recover()

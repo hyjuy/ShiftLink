@@ -53,11 +53,11 @@ context.snapshot = snapshot;
   assert.equal(vm.runInContext('rankCards(S.eq, S.queryResponse.evidence.measurements).actions.length',context),1,'result ranking uses frozen evidence, not recovered live pressure');
   vm.runInContext('S.sensorSnapshot = null; renderEquipmentMetrics()', context);
   const frozenTime = nodes.metricsTime.textContent;
-  assert.match(nodes.equipmentMetrics.text(), /154\.845/);
+  assert.match(nodes.equipmentMetrics.text(), /154\.85/);   // 설비 창은 소수점 둘째 자리까지 반올림
   snapshot.measurements[0].value = 160;
   snapshot.simulated_at = '2026-10-07T06:19:00.000000+00:00';
   await vm.runInContext('loadMesObservations(snapshot)', context);
-  assert.match(nodes.equipmentMetrics.text(), /154\.845/, 'sensor panel keeps its values until refresh');
+  assert.match(nodes.equipmentMetrics.text(), /154\.85/, 'sensor panel keeps its values until refresh');
   assert.equal(nodes.metricsTime.textContent, frozenTime, 'snapshot time stays fixed');
   assert.equal(vm.runInContext('S.mes.readings[0].value',context), 160, 'live monitoring still updates');
   vm.runInContext('S.sensorSnapshot = null; renderEquipmentMetrics()',context);  // 새로고침 버튼과 같은 동작

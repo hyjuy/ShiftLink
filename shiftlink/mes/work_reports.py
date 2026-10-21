@@ -94,7 +94,7 @@ def validate(body, known_ids, config=None):
             raise ValueError('지식카드 후보 표시를 확인해 주세요.')
         if 'auto_candidate' in record and type(record['auto_candidate']) is not bool:
             raise ValueError('지식카드 자동 판단 설정을 확인해 주세요.')
-        for key in ('interpretation','interpretation_basis','condition_signal','condition_value',
+        for key in ('symptom','interpretation','interpretation_basis','condition_signal','condition_value',
                     'condition_unit','condition_method','condition_result','condition_observed_at','safety_action','safety_basis'):
             if key in record:_text(record[key],key)
         if 'condition_op' in record and record['condition_op'] not in ('','==','!=','>','>=','<','<='):

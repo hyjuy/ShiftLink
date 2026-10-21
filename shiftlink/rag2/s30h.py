@@ -76,7 +76,7 @@ class S30hPipeline:
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
-                 event_label=False, mes_only=False, mes_prefix=False):
+                 event_label=False, mes_only=False, mes_prefix=False, p_fix=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -95,6 +95,7 @@ class S30hPipeline:
         self.model = SimpleNamespace(model=answer_model)   # the server logs pipeline.model.model
         # ponytail: module globals of the evaluated code; one pipeline per process. Pass them as arguments if that changes.
         G.GEN_MODEL, G.KEEP_ALIVE, E.KEEP_ALIVE = answer_model, -1, -1
+        G.P_FIX = p_fix   # p_insuff spellings summed (generate.P_FIX); off = the values T was calibrated on
         # the MES passes loader KnowledgeCard models; tests pass plain dicts
         self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
         self.source_conditions = source_conditions

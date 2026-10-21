@@ -35,6 +35,9 @@ CONFIGS = {
 }
 GEN_MODEL = "exaone3.5:2.4b-instruct-q4_K_M"
 KEEP_ALIVE = None   # the app sets -1 so the answer model stays loaded between PDA queries; evaluation runs leave it unset
+# 10/21: p_insufficient keyed tokens by strip(), so a later 'false' (-10.7) overwrote ' false' (-0.0) and a sure answer
+# read as p_insuff 0.98. True sums the spellings. Off keeps the old values T (0.3528) was calibrated on; S30h sets it.
+P_FIX = False
 MAX_CHUNKS, MAX_TOKENS = 5, 1500
 
 SYSTEM = """당신은 냉연 코일 라인 설비의 현장 지식 도우미입니다. 작업자의 질문에 아래 [근거]만 사용해 한국어로 답합니다.
@@ -117,7 +120,11 @@ def p_insufficient(logprobs: list[dict]) -> tuple[float | None, bool]:
     A side missing from top_logprobs counts as 0 and is flagged; no decision token found -> (None, True)."""
     for k, e in enumerate(logprobs):
         if e["token"].strip() in ("true", "false") and "evidence" in "".join(x["token"] for x in logprobs[max(0, k - 4):k]):
-            top = {x["token"].strip(): math.exp(x["logprob"]) for x in e.get("top_logprobs", []) if x["token"].strip() in ("true", "false")}
+            top = {}
+            for x in e.get("top_logprobs", []):
+                t = x["token"].strip()
+                if t in ("true", "false"):
+                    top[t] = top.get(t, 0.0) + math.exp(x["logprob"]) if P_FIX else math.exp(x["logprob"])
             pt, pf = top.get("true", 0.0), top.get("false", 0.0)
             return (pt / (pt + pf) if pt + pf else None), not (pt and pf)
     return None, True

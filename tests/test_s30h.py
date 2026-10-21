@@ -275,6 +275,24 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_MES_PREFIX", flag)
     assert Q.build_query_pipeline().mes_prefix is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)
+    Q.build_query_pipeline()
+    assert G.P_FIX is enabled
+    monkeypatch.setattr(G, "P_FIX", False)   # module global: back to the default for later tests
+
+
+def test_p_fix_sums_token_spellings(monkeypatch):
+    # B3 MX-C02a 10/21: ' false' -0.0, ' true' -6.67, then 'false' -10.66 overwrote ' false' (recorded 0.982)
+    lp = [{"token": t, "top_logprobs": []} for t in ('{"', "ins", "ufficient", "_", "evidence", '":')]
+    lp.append({"token": " false", "top_logprobs": [{"token": " false", "logprob": -0.0}, {"token": " true", "logprob": -6.67},
+                                                   {"token": "false", "logprob": -10.66}]})
+    monkeypatch.setattr(G, "P_FIX", False)
+    assert round(G.p_insufficient(lp)[0], 3) == 0.982
+    monkeypatch.setattr(G, "P_FIX", True)
+    p, missing = G.p_insufficient(lp)
+    assert p < 0.002 and not missing
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

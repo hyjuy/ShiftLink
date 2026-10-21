@@ -72,7 +72,9 @@ class PublicationManager:
                 return False
             artifact = job['review_flags']['publication']
             card = KnowledgeCard.model_validate(artifact['card']).model_dump(mode='json')
+            reviewed = KnowledgeCard.model_validate({**job['card'],'status':'accepted','grade':'L1','split':'kb'}).model_dump(mode='json')
             if (content_hash(card) != artifact['content_hash'] or not artifact.get('assets')
+                    or content_hash(reviewed) != artifact['content_hash']
                     or embedding_text(card) != artifact['embed_text']
                     or artifact['review_revision'] != job['revision']):
                 raise ValueError('review artifact integrity mismatch; repeat quality review')
@@ -153,21 +155,30 @@ class PublicationManager:
                     or not artifact.get('searchable') or artifact.get('assets',{}).get(equipment_id) != asset_id
                     or model != PUBLICATION_MODEL):
                 continue
-            record = json.loads(payload)
-            card = KnowledgeCard.model_validate(record['card'])
-            manifest = record['manifest']
-            if (content_hash(record['card']) != digest or record['manifest']['content_hash'] != digest
-                    or embedding_text(record['card']) != artifact['embed_text']
-                    or record['chunks'] != chunks_for(artifact)
-                    or manifest['model'] != model or manifest['review_revision'] != revision
-                    or (manifest['doc_prefix'],manifest['query_prefix']) != prefixes(model)
-                    or record['manifest']['assets'].get(equipment_id) != asset_id
-                    or card.mes_equipment_id not in (None,equipment_id) or _condition_status(card,values) != 'verified'):
+            try:
+                record = json.loads(payload)
+                card = KnowledgeCard.model_validate(record['card'])
+                manifest = record['manifest']
+                reviewed = KnowledgeCard.model_validate({**draft['card'],'status':'accepted','grade':'L1','split':'kb'}).model_dump(mode='json')
+                if (content_hash(record['card']) != digest or manifest['content_hash'] != digest
+                        or content_hash(reviewed) != digest or embedding_text(record['card']) != artifact['embed_text']
+                        or record['chunks'] != chunks_for(artifact)
+                        or manifest['model'] != model or manifest['review_revision'] != revision
+                        or (manifest['doc_prefix'],manifest['query_prefix']) != prefixes(model)
+                        or manifest['assets'] != artifact['assets']):
+                    raise ValueError('index manifest mismatch')
+                record['vectors'] = normalise(record['vectors'],len(record['chunks']),manifest['dimension'])
+                if getattr(pipeline,'answer_mode',None)=='s30h':
+                    from shiftlink.rag2.s30h import CFG
+                    if model != CFG['model'] or len(record['vectors'][0]) != pipeline.vec.shape[1]:
+                        raise ValueError('active index model or dimension mismatch')
+            except (ValueError,KeyError,TypeError,IndexError):
+                artifact.update(state='embedding_failed',searchable=False,retry_at=time.time()+10,
+                    error='검색 인덱스가 검수된 내용·모델과 일치하지 않아 제외했습니다. 자동으로 재처리합니다.')
+                with self.service.storage.connection:self._write_flags(draft)
                 continue
-            record['vectors'] = normalise(record['vectors'],len(record['chunks']),record['manifest']['dimension'])
-            if getattr(pipeline,'answer_mode',None)=='s30h':
-                from shiftlink.rag2.s30h import CFG
-                if model != CFG['model'] or len(record['vectors'][0]) != pipeline.vec.shape[1]:continue
+            if card.mes_equipment_id not in (None,equipment_id) or _condition_status(card,values) != 'verified':
+                continue
             records.append(record)
             ticket.append((draft_id,revision,digest,equipment_id,asset_id))
         if not records:

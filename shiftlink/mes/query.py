@@ -35,6 +35,11 @@ def build_query_pipeline():
             judge_model=os.environ.get('SHIFTLINK_JUDGE_MODEL', JUDGE_MODEL),
             judge_ctx=int(os.environ.get('SHIFTLINK_S30H_JUDGE_CTX', '2048')),
             source_conditions=os.environ.get('SHIFTLINK_S30H_SOURCE_CONDITIONS') == '1',
+            mes_block=os.environ.get('SHIFTLINK_S30H_MES_BLOCK') == '1',
+            event_label=os.environ.get('SHIFTLINK_S30H_EVENT_LABEL') == '1',
+            mes_only=os.environ.get('SHIFTLINK_S30H_MES_ONLY') == '1',
+            mes_prefix=os.environ.get('SHIFTLINK_S30H_MES_PREFIX') == '1',
+            p_fix=os.environ.get('SHIFTLINK_S30H_P_FIX') == '1',
             cards=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider.cards)
     return FixedPipeline(
         model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', ANSWER_MODEL),

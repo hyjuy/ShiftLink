@@ -35,6 +35,9 @@ CONFIGS = {
 }
 GEN_MODEL = "exaone3.5:2.4b-instruct-q4_K_M"
 KEEP_ALIVE = None   # the app sets -1 so the answer model stays loaded between PDA queries; evaluation runs leave it unset
+# 10/21: p_insufficient keyed tokens by strip(), so a later 'false' (-10.7) overwrote ' false' (-0.0) and a sure answer
+# read as p_insuff 0.98. True sums the spellings. Off keeps the old values T (0.3528) was calibrated on; S30h sets it.
+P_FIX = False
 MAX_CHUNKS, MAX_TOKENS = 5, 1500
 
 SYSTEM = """당신은 냉연 코일 라인 설비의 현장 지식 도우미입니다. 작업자의 질문에 아래 [근거]만 사용해 한국어로 답합니다.
@@ -117,14 +120,18 @@ def p_insufficient(logprobs: list[dict]) -> tuple[float | None, bool]:
     A side missing from top_logprobs counts as 0 and is flagged; no decision token found -> (None, True)."""
     for k, e in enumerate(logprobs):
         if e["token"].strip() in ("true", "false") and "evidence" in "".join(x["token"] for x in logprobs[max(0, k - 4):k]):
-            top = {x["token"].strip(): math.exp(x["logprob"]) for x in e.get("top_logprobs", []) if x["token"].strip() in ("true", "false")}
+            top = {}
+            for x in e.get("top_logprobs", []):
+                t = x["token"].strip()
+                if t in ("true", "false"):
+                    top[t] = top.get(t, 0.0) + math.exp(x["logprob"]) if P_FIX else math.exp(x["logprob"])
             pt, pf = top.get("true", 0.0), top.get("false", 0.0)
             return (pt / (pt + pf) if pt + pf else None), not (pt and pf)
     return None, True
 
 
-def ask(p: str, host: str, logprobs=False) -> dict:
-    body = {"model": GEN_MODEL, "system": SYSTEM, "prompt": p, "stream": False, "format": "json",
+def ask(p: str, host: str, logprobs=False, system: str | None = None) -> dict:
+    body = {"model": GEN_MODEL, "system": system or SYSTEM, "prompt": p, "stream": False, "format": "json",
             "options": {"num_ctx": 4096, "temperature": 0, "num_predict": 400}, **({"keep_alive": KEEP_ALIVE} if KEEP_ALIVE is not None else {})}
     if logprobs:
         body.update(logprobs=True, top_logprobs=20)
@@ -146,13 +153,13 @@ def ask(p: str, host: str, logprobs=False) -> dict:
 FORCE_PREFIX = '{"insufficient_evidence": false, "answer": "'
 
 
-def templated(p: str) -> str:
-    return f"[|system|]{SYSTEM}[|endofturn|]\n[|user|]{p}\n[|assistant|]"
+def templated(p: str, system: str | None = None) -> str:
+    return f"[|system|]{system or SYSTEM}[|endofturn|]\n[|user|]{p}\n[|assistant|]"
 
 
-def ask_raw(p: str, host: str, prefix: str) -> dict:
+def ask_raw(p: str, host: str, prefix: str, system: str | None = None) -> dict:
     """No JSON grammar here (it would reject a continuation that starts mid-object); check() parses prefix+output."""
-    body = {"model": GEN_MODEL, "prompt": templated(p) + prefix, "raw": True, "stream": False,
+    body = {"model": GEN_MODEL, "prompt": templated(p, system) + prefix, "raw": True, "stream": False,
             "options": {"num_ctx": 4096, "temperature": 0, "num_predict": 400}, **({"keep_alive": KEEP_ALIVE} if KEEP_ALIVE is not None else {})}
     t = time.time()
     for _ in range(3):
@@ -195,7 +202,8 @@ def numbers_not_in(answer: str, allowed: set[str]) -> list[str]:
     return [n for n in NUM.findall(NOT_CLAIM.sub(" ", answer)) if n.replace(",", "") not in allowed]
 
 
-def check(out: dict, ev: list[dict], question: str) -> dict:
+def check(out: dict, ev: list[dict], question: str, mes: str | None = None) -> dict:
+    """mes: the [MES] block text when the prompt carried one; then [M] is a valid citation and its numbers are allowed."""
     try:
         j = json.loads(out["raw"])
         answer = str(j.get("answer", "")).strip()
@@ -203,12 +211,12 @@ def check(out: dict, ev: list[dict], question: str) -> dict:
         insufficient = bool(j.get("insufficient_evidence"))
     except Exception:
         return {"answer": "", "valid_cites": [], "abstain": True, "reason": "broken_json", "number_violations": []}
-    ids = {f"S{n}" for n in range(1, len(ev) + 1)}
-    cites = sorted((set(cites) | set(re.findall(r"S\d+", answer))) & ids) if not insufficient else []
+    ids = {f"S{n}" for n in range(1, len(ev) + 1)} | ({"M"} if mes else set())
+    cites = sorted((set(cites) | set(re.findall(r"S\d+|(?<=\[)M(?=\])", answer))) & ids) if not insufficient else []
     if insufficient or not answer or not cites:
         return {"answer": "", "valid_cites": [], "abstain": True, "reason": "insufficient" if insufficient else "no_cite",
                 "number_violations": []}
-    allowed = " ".join(ev[int(c[1:]) - 1]["text"] for c in cites) + " " + question
+    allowed = " ".join(mes if c == "M" else ev[int(c[1:]) - 1]["text"] for c in cites) + " " + question
     allowed_nums = {n.replace(",", "") for n in NUM.findall(allowed)}
     viol = numbers_not_in(answer, allowed_nums)
     return {"answer": answer, "valid_cites": cites, "abstain": False, "reason": "", "number_violations": viol}

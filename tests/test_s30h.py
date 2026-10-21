@@ -177,6 +177,59 @@ def test_mes_low_high_states_reach_the_search_only(pipe, monkeypatch):
     assert searched == ["필터 차압 경보"]   # line stopped: 0 A is not an abnormal state
 
 
+def test_mes_block_is_opt_in_and_reaches_the_answer_prompt(pipe, monkeypatch):
+    judged(monkeypatch, {"c1": 0.95, "c2": 0.1, "c4": 0.1})
+    calls = []
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: calls.append((p, kw)) or
+                        {"raw": prefix + '유면이 60 pct로 낮습니다 [M]. 압력 152 bar를 확인합니다 [S1]", "citations": ["M", "S1"]}'})
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "유압 경보", "eq_id": "EQ-0001", "observations": obs, "snapshot_at": "2026-10-21T00:00:00+00:00",
+               "active_alarms": []}
+    off = pipe.run(payload)
+    assert "[MES]" not in calls[0][0] and calls[0][1] == {}
+    assert off.output.answer == "유면이 60 pct로 낮습니다. 압력 152 bar를 확인합니다\n근거: hpu_manual p.12"   # [M] not a source when off
+    pipe.mes_block = True
+    on = pipe.run(payload)
+    p, kw = calls[1]
+    assert p.index("[질문]") < p.index("[MES]") < p.index("[근거]") and kw["system"].count("[M]") == 1
+    assert '<mes id="M" eq="HPU-01" snapshot_at="2026-10-21T00:00:00+00:00">\n활성 경보: 없음\n유압유 탱크 유면 60 pct · 낮음 (기준 70–100)' in p
+    assert on.output.answer == "유면이 60 pct로 낮습니다. 압력 152 bar를 확인합니다\n근거: hpu_manual p.12 · MES 현재값"
+    assert on.output.cited_card_ids == [] and on.tool_results["route"] == "confident"
+
+
+def test_mes_only_route_asks_the_model_when_nothing_is_kept(pipe, monkeypatch):
+    judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
+    asked = []
+    monkeypatch.setattr(G, "ask", lambda p, host, logprobs, **kw: asked.append(p) or
+                        answer("MES 기준 HPU-01 유면은 60 pct로 낮습니다 [M].", ["M"], p_insuff=S.T - 1e-9))
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "유면 괜찮죠?", "eq_id": "EQ-0001", "observations": obs, "snapshot_at": "t", "active_alarms": []}
+    pipe.mes_block = True
+    assert pipe.run(payload).tool_results["route"] == "drop_all" and asked == []   # mes_only off: as before
+    pipe.mes_only = True
+    r = pipe.run(payload)
+    assert r.tool_results["route"] == "mes_only" and asked[0].endswith("[근거]\n") and "[MES]" in asked[0]
+    assert r.output.answer == "MES 기준 HPU-01 유면은 60 pct로 낮습니다.\n근거: MES 현재값" and not r.output.no_knowledge
+    monkeypatch.setattr(G, "ask", lambda p, host, logprobs, **kw: answer("낮습니다 [M].", ["M"], p_insuff=S.T))
+    assert pipe.run(payload).output.no_knowledge   # same threshold T as the model route
+    pipe.mes_block = False
+    assert pipe.run(payload).tool_results["route"] == "drop_all"   # needs the block
+
+
+def test_mes_prefix_states_the_unit_in_code_and_fills_abstentions(pipe, monkeypatch):
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "q", "eq_id": "EQ-0001", "observations": obs, "active_alarms": ["AL-HYD-LOW"]}
+    judged(monkeypatch, {"c1": 0.95, "c2": 0.1, "c4": 0.1})
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '152 bar [S1]", "citations": ["S1"]}'})
+    assert pipe.run(payload).output.answer == "152 bar\n근거: hpu_manual p.12"   # off: unchanged
+    pipe.mes_prefix = True
+    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 활성 경보 유압 공급 저하(AL-HYD-LOW)."
+    assert pipe.run(payload).output.answer == f"{head}\n152 bar\n근거: hpu_manual p.12"
+    judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
+    out = pipe.run(payload).output
+    assert out.no_knowledge and out.answer == f"{head} 근거 자료에서 이 상황의 조치를 찾지 못했습니다. 조치는 정비 담당 확인이 필요합니다."
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):
@@ -206,6 +259,40 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_SOURCE_CONDITIONS", flag)
     assert Q.build_query_pipeline().source_conditions is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_BLOCK", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_BLOCK", flag)
+    assert Q.build_query_pipeline().mes_block is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_EVENT_LABEL", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_EVENT_LABEL", flag)
+    assert Q.build_query_pipeline().event_label is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_ONLY", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_ONLY", flag)
+    assert Q.build_query_pipeline().mes_only is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_PREFIX", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_PREFIX", flag)
+    assert Q.build_query_pipeline().mes_prefix is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)
+    Q.build_query_pipeline()
+    assert G.P_FIX is enabled
+    monkeypatch.setattr(G, "P_FIX", False)   # module global: back to the default for later tests
+
+
+def test_p_fix_sums_token_spellings(monkeypatch):
+    # B3 MX-C02a 10/21: ' false' -0.0, ' true' -6.67, then 'false' -10.66 overwrote ' false' (recorded 0.982)
+    lp = [{"token": t, "top_logprobs": []} for t in ('{"', "ins", "ufficient", "_", "evidence", '":')]
+    lp.append({"token": " false", "top_logprobs": [{"token": " false", "logprob": -0.0}, {"token": " true", "logprob": -6.67},
+                                                   {"token": "false", "logprob": -10.66}]})
+    monkeypatch.setattr(G, "P_FIX", False)
+    assert round(G.p_insufficient(lp)[0], 3) == 0.982
+    monkeypatch.setattr(G, "P_FIX", True)
+    p, missing = G.p_insufficient(lp)
+    assert p < 0.002 and not missing
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

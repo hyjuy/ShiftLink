@@ -1000,10 +1000,13 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     if os.environ.get("SHIFTLINK_WARMUP", "1") != "0":  # load the models now so the first PDA query does not wait ~50 s
         service.query_pipeline = build_query_pipeline()
         threading.Thread(target=lambda: print(f"[예열] 모델 적재: {warm_models(service.query_pipeline)}", flush=True), daemon=True).start()
+    publication_worker = threading.Thread(target=service.publications.run,args=(stopped,),daemon=True)
+    publication_worker.start()
     try: server.serve_forever()
     finally:
         stopped.set()
         worker.join()
+        publication_worker.join()
         server.server_close()
         service.storage.close()
 
@@ -1011,6 +1014,3 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
 def _run_ticks(service: MesService, stopped: threading.Event) -> None:
     while not stopped.wait(1 / service.speed):
         service.tick()
-    publication_worker = threading.Thread(target=service.publications.run,args=(stopped,),daemon=True)
-    publication_worker.start()
-        publication_worker.join(timeout=125)

@@ -9,7 +9,7 @@ from uuid import uuid4
 from shiftlink.agent.schemas import KnowledgeCard
 from shiftlink.edge.ollama import DEFAULT_HOST
 from shiftlink.rag.embedding import PUBLICATION_MODEL, normalise, ollama_embed, prefixes
-from .candidate_review import content_hash
+from .candidate_review import content_hash, embedding_text
 
 
 def chunks_for(artifact):
@@ -73,12 +73,18 @@ class PublicationManager:
             artifact = job['review_flags']['publication']
             card = KnowledgeCard.model_validate(artifact['card']).model_dump(mode='json')
             if (content_hash(card) != artifact['content_hash'] or not artifact.get('assets')
+                    or embedding_text(card) != artifact['embed_text']
                     or artifact['review_revision'] != job['revision']):
                 raise ValueError('review artifact integrity mismatch; repeat quality review')
             model = PUBLICATION_MODEL
             doc_prefix, query_prefix = prefixes(model)
             dimension = None
             pipeline = self.service.query_pipeline
+            if pipeline is None and os.environ.get('SHIFTLINK_ANSWER_MODE')=='s30h':
+                from .query import build_query_pipeline
+                pipeline = build_query_pipeline()
+                with self.service._lock:
+                    if self.service.query_pipeline is None:self.service.query_pipeline = pipeline
             if getattr(pipeline,'answer_mode',None)=='s30h':
                 from shiftlink.rag2.s30h import CFG
                 if model != CFG['model']:
@@ -149,13 +155,19 @@ class PublicationManager:
                 continue
             record = json.loads(payload)
             card = KnowledgeCard.model_validate(record['card'])
+            manifest = record['manifest']
             if (content_hash(record['card']) != digest or record['manifest']['content_hash'] != digest
+                    or embedding_text(record['card']) != artifact['embed_text']
+                    or record['chunks'] != chunks_for(artifact)
+                    or manifest['model'] != model or manifest['review_revision'] != revision
+                    or (manifest['doc_prefix'],manifest['query_prefix']) != prefixes(model)
                     or record['manifest']['assets'].get(equipment_id) != asset_id
                     or card.mes_equipment_id not in (None,equipment_id) or _condition_status(card,values) != 'verified'):
                 continue
             record['vectors'] = normalise(record['vectors'],len(record['chunks']),record['manifest']['dimension'])
-            if getattr(pipeline,'answer_mode',None)=='s30h' and len(record['vectors'][0]) != pipeline.vec.shape[1]:
-                continue
+            if getattr(pipeline,'answer_mode',None)=='s30h':
+                from shiftlink.rag2.s30h import CFG
+                if model != CFG['model'] or len(record['vectors'][0]) != pipeline.vec.shape[1]:continue
             records.append(record)
             ticket.append((draft_id,revision,digest,equipment_id,asset_id))
         if not records:

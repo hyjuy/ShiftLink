@@ -410,6 +410,13 @@ class MesStorage:
             flags=draft['review_flags']
             if action=='quality_pass':
                 flags['publication']=quality_artifact(draft,actor,checked_at)
+                assets={}
+                for source in draft['card'].get('provenance',{}).get('sources',[]):
+                    if source.get('locator')=='incident':
+                        incident=self.get_incident(source['source_id'])
+                        if incident:assets.update(incident['assets'])
+                if not assets:raise ValueError('원본 사건·자산 연결을 보완한 뒤 검수해 주세요.')
+                flags['publication']['assets']=assets
             elif 'publication' in flags:
                 flags['publication']={**flags['publication'],'state':'superseded','searchable':False}
             self.connection.execute('UPDATE card_drafts SET status=?,review_flags=? WHERE draft_id=?',
@@ -466,13 +473,6 @@ class MesStorage:
 
     def mark_query(self, query_id: str, status: str) -> None:
         with self.connection:
-                assets={}
-                for source in draft['card'].get('provenance',{}).get('sources',[]):
-                    if source.get('locator')=='incident':
-                        incident=self.get_incident(source['source_id'])
-                        if incident:assets.update(incident['assets'])
-                if not assets:raise ValueError('원본 사건·자산 연결을 보완한 뒤 검수해 주세요.')
-                flags['publication']['assets']=assets
             self.connection.execute("UPDATE query_log SET status = ? WHERE query_id = ?", (status, query_id))
 
     def outbox_counts(self) -> dict[str, dict[str, int]]:

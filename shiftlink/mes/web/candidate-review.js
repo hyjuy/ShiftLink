@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   const $=id=>document.getElementById(id),key='shiftlink.mes.adminToken';
-  const labels={pending_review:'검토 대기',changes_requested:'보완 요청',review_approved:'검토 승인',rejected:'반려'};
+  const labels={pending_review:'검토 대기',changes_requested:'보완 요청',review_approved:'검토 승인',quality_passed:'검수 통과',rejected:'반려'};
+  const publicationStates={embedding_pending:'임베딩 대기',embedding_running:'임베딩 처리 중',embedding_failed:'임베딩 실패',published:'검색 반영 완료',superseded:'재검토로 검색 제외'};
   const types={T1:'징후 해석',T2:'운전 조건',T3:'문제 해결',T4:'인계 해결 사례',T5:'안전 조치',T6:'재가동 경험'};
   const outcomes={open:'미해결',temporary:'임시 복구',failed:'실패',resolved:'해결'};
   const normalStates={unconfirmed:'미확인',observing:'관찰 중',no_recurrence:'관찰 종료·재발 없음',recurred:'관찰 중 재발'};
@@ -117,11 +118,22 @@
     const preview=section('지식카드 초안'),previewBox=disclosure('초안 내용·판단 근거 보기');previewBox.append(el('p','',draft.card.know_how),el('p','',draft.card.rationale));
     if(draft.card.conditions?.length)previewBox.append(el('p','','적용 조건: '+draft.card.conditions.map(c=>[c.field||c.signal,c.op,c.value].filter(v=>v!==undefined).join(' ')).join('\n')));
     preview.append(previewBox);box.append(preview);
+    const publication=flags.publication;
+    if(publication){
+      const progress=section('지식카드 검색 반영'),state=el('p','',publicationStates[publication.state]||'상태 확인 필요');state.id='publication-state';
+      const search=el('p','section-note',publication.state==='published'&&publication.searchable?'후속 질문의 검색 후보로 사용':'아직 검색에 사용하지 않음');search.id='publication-search';
+      progress.append(state,search,facts([['검수 시각',stamp(publication.quality_checked_at)],['임베딩 모델',publication.model],['벡터 차원',publication.dimension]]));
+      if(publication.error)progress.append(el('p','',publication.error));
+      if(publication.state==='embedding_failed'&&publication.retry_at)progress.append(el('p','section-note','다음 시도: '+stamp(new Date(publication.retry_at*1000).toISOString())));
+      const structured=disclosure('구조화된 카드 보기'),json=el('pre','',JSON.stringify(publication.card,null,2));json.id='publication-json';structured.append(json);progress.append(structured);box.append(progress);
+    }
     const form=el('form','review-decision');form.id='review-decision-form';
-    form.append(el('h3','','검토 처리'),el('p','','검토 승인은 후보에 대한 판단을 기록합니다. 정식 지식카드 게시·검색 반영은 별도 단계입니다.'));
-    const label=el('label','','검토 의견'),reason=el('textarea');label.htmlFor='review-reason';reason.id='review-reason';reason.maxLength=2000;reason.placeholder='보완 요청·반려 시에는 사유를 작성하세요.';form.append(label,reason);
+    form.append(el('h3','','검토 처리'),el('p','','검토 승인 후 적용 조건·안전·원문을 확인해 검수 통과를 처리하세요. 임베딩 완료 후 검색에 반영됩니다.'));
+    const label=el('label','','검토 의견'),reason=el('textarea');label.htmlFor='review-reason';reason.id='review-reason';reason.maxLength=2000;reason.placeholder='보완·반려 사유 또는 검수한 근거를 작성하세요.';form.append(label,reason);
     const actions=el('div','review-actions');
-    for(const [action,text,style] of [['approve','검토 승인','approve-button'],['request_changes','보완 요청',''],['reject','반려','reject-button']]){
+    const decisions=[['approve','검토 승인','approve-button'],['request_changes','보완 요청',''],['reject','반려','reject-button']];
+    if(draft.status==='review_approved')decisions.unshift(['quality_pass','검수 통과','approve-button']);
+    for(const [action,text,style] of decisions){
       const button=el('button',style,text);button.type='submit';button.dataset.action=action;actions.append(button);
     }
     form.append(actions);form.addEventListener('submit',event=>{event.preventDefault();decide(event.submitter?.dataset.action,reason.value);});box.append(form);
@@ -146,13 +158,13 @@
   }
   async function decide(action,reason){
     if(saving||!detail||!action)return;
-    if(action!=='approve'&&!reason.trim()){message('보완 요청·반려 사유를 입력해 주세요.',true);$('review-reason').focus();return;}
+    if(action!=='approve'&&!reason.trim()){message('보완·반려 사유 또는 검수 근거를 입력해 주세요.',true);$('review-reason').focus();return;}
     const id=detail.draft_id,revision=detail.revision;saving=true;
     document.querySelectorAll('.review-actions button,#candidate-list button,#review-refresh').forEach(button=>{button.disabled=true;});
     try{
       const data=await request('/api/admin/card-drafts/'+encodeURIComponent(id)+'/review',{action,reason,expected_revision:revision});
-      if(selected!==id||!token)return;drafts=drafts.map(item=>item.draft_id===id?data.draft:item);renderList();renderDetail(data.draft);
-      message(status(data.draft.status)+'으로 처리했습니다.'+(action==='approve'?' 정식 카드 게시·검색 반영은 별도입니다.':''));
+      if(selected!==id||!token)return;drafts=drafts.map(item=>item.draft_id===id?data.draft:item);$('candidate-status').value='all';renderList();renderDetail(data.draft);
+      message(status(data.draft.status)+'으로 처리했습니다.'+(action==='approve'?' 이어서 검수를 진행할 수 있습니다.':action==='quality_pass'?' 임베딩 완료 후 검색에 반영됩니다.':''));
     }catch(error){
       if(error.status===409&&token){await loadDetail(id);if($('review-reason'))$('review-reason').value=reason;}
       message(errorText(error),true);
@@ -170,4 +182,8 @@
     if(saving)return;renderList();const item=filtered().find(item=>item.draft_id===selected)||filtered()[0];if(item&&item.draft_id!==selected)loadDetail(item.draft_id);else if(!item){selected=null;detail=null;detailRequest++;$('candidate-detail').replaceChildren(el('p','review-empty','조건에 맞는 후보가 없습니다.'));}
   });
   session(token);if(token)loadList();
+  setInterval(()=>{
+    const state=detail?.review_flags?.publication?.state;
+    if(token&&!saving&&document.visibilityState==='visible'&&['embedding_pending','embedding_running','embedding_failed'].includes(state)&&!$('review-reason')?.value.trim())loadDetail(selected);
+  },5000);
 })();

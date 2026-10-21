@@ -25,6 +25,16 @@ def validate_decision(body):
     return action,STATUSES[action],reason.strip(),revision
 
 
+def embedding_text(card):
+    # Include typed procedures and limits as well as the prose; no generated facts.
+    return '\n'.join([card['title'], '설비: '+card['equipment'], '부품: '+card['component'],
+        '증상: '+(card['symptom'] or ''), card['know_how'], card['rationale'],
+        '적용 조건: '+json.dumps(card['conditions'], ensure_ascii=False, sort_keys=True),
+        '제외 조건: '+json.dumps(card['exclusions'], ensure_ascii=False, sort_keys=True),
+        '유형별 지식: '+json.dumps(card['type_payload'], ensure_ascii=False, sort_keys=True),
+        '안전 근거: '+(card['safety_basis'] or '')])
+
+
 def quality_artifact(draft, actor, checked_at):
     """Prepare an approved copy; only a later embedding worker may consume it."""
     if draft['status'] != 'review_approved':
@@ -36,14 +46,7 @@ def quality_artifact(draft, actor, checked_at):
     if set(raw) - KnowledgeCard.model_fields.keys():
         raise ValueError('지식카드 스키마에 없는 항목이 있습니다.')
     card = KnowledgeCard.model_validate({**raw, 'status':'accepted', 'grade':'L1', 'split':'kb'}).model_dump(mode='json')
-    # Include typed procedures and limits as well as the prose; no generated facts.
-    text = '\n'.join([card['title'], '설비: '+card['equipment'], '부품: '+card['component'],
-        '증상: '+(card['symptom'] or ''), card['know_how'], card['rationale'],
-        '적용 조건: '+json.dumps(card['conditions'], ensure_ascii=False, sort_keys=True),
-        '제외 조건: '+json.dumps(card['exclusions'], ensure_ascii=False, sort_keys=True),
-        '유형별 지식: '+json.dumps(card['type_payload'], ensure_ascii=False, sort_keys=True),
-        '안전 근거: '+(card['safety_basis'] or '')])
-    return {'state':'embedding_pending', 'searchable':False, 'card':card, 'embed_text':text,
+    return {'state':'embedding_pending', 'searchable':False, 'card':card, 'embed_text':embedding_text(card),
             'content_hash':content_hash(card),
             'review_revision':draft['revision']+1, 'quality_checked_by':actor['id'],
             'quality_checked_at':checked_at}

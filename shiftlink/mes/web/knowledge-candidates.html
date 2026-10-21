@@ -29,7 +29,7 @@
         <div class="review-list-heading"><h2 id="candidate-list-title">후보 목록</h2><span id="candidate-count"></span></div>
         <div class="review-filters">
           <label for="candidate-search">검색<input id="candidate-search" type="search" placeholder="설비명, 제목, 카드 번호" autocomplete="off"></label>
-          <label for="candidate-status">검토 상태<select id="candidate-status"><option value="pending_review">검토 대기</option><option value="all">전체</option><option value="changes_requested">보완 요청</option><option value="review_approved">검토 승인</option><option value="rejected">반려</option></select></label>
+          <label for="candidate-status">검토 상태<select id="candidate-status"><option value="pending_review">검토 대기</option><option value="all">전체</option><option value="changes_requested">보완 요청</option><option value="review_approved">검토 승인</option><option value="quality_passed">검수 통과</option><option value="rejected">반려</option></select></label>
           <label for="candidate-type">유형<select id="candidate-type"><option value="all">전체 유형</option><option value="T1">T1 · 징후 해석</option><option value="T2">T2 · 운전 조건</option><option value="T3">T3 · 문제 해결</option><option value="T4">T4 · 인계 해결 사례</option><option value="T5">T5 · 안전 조치</option><option value="T6">T6 · 재가동 경험</option></select></label>
         </div>
         <div id="candidate-list" class="candidate-list" aria-live="polite"></div>
@@ -37,7 +37,7 @@
       <section id="candidate-detail" class="candidate-detail" aria-label="선택한 후보 상세" aria-live="polite"><p class="review-empty">목록에서 검토할 후보를 선택하세요.</p></section>
     </div>
   </main>
-  <footer>ShiftLink MES <span>검토 승인은 정식 지식카드 게시·검색 반영과 별도입니다.</span></footer>
+  <footer>ShiftLink MES <span>검수 통과 후 임베딩이 완료된 지식을 후속 질문에서 검색합니다.</span></footer>
   <script src="/static/candidate-review.js"></script>
 </body>
 </html>

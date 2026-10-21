@@ -86,8 +86,8 @@ assert.deepEqual(rec.causes, [{equipment: ['EQ-0001'], certainty: '추정', note
 assert.deepEqual(rec.action_steps[1], {action: '유온·공급 정상 확인', observed_result: 'MES 센서: 유압유 온도 78→47', failed: false, performed_at: '2026-10-20T14:03'});
 assert.deepEqual([rec.restart_performed, rec.restart_type, rec.outcome, rec.normal_run_status], [true, 'abnormal_stop_restart', 'resolved', 'unconfirmed']);
 assert.equal(rec.safety_notes, '에너지 차단(잠금) · 1. 팬 차단기 재투입: 예\n에너지 차단(잠금) · 3. 재가동 (라인 복구 시작): 해당 없음');
-assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, rec.operating_context],
-  [false, 'Q-1', 'RS-9', 'K-1002', '부품: 냉각 계통']);
+assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, 'operating_context' in rec],
+  [false, 'Q-1', 'RS-9', 'K-1002', false]);   // 부품 이름은 운전 조건·주의사항 칸(지식카드 근거)에 넣지 않는다
 // 자동 입력: 조치 전 벗어났던 신호 → 원인의 관련 센서(측정값·시각), 미해결이면 남은 문제·다음 확인 내용. 해결이면 넣지 않는다
 const {S: appState} = require('../shiftlink/mes/web/pda.js');
 appState.equipment = [{equipment_id: 'EQ-0001', signals: [{signal: 'hpu_pressure', unit: 'bar'}]}];

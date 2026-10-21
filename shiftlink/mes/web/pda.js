@@ -1633,7 +1633,6 @@ const kstMinute = (d = new Date()) => d.toLocaleString('sv-SE', {timeZone: 'Asia
  * 「인계와 함께 저장」으로도 저장하면 초안이 겹칠 수 있다. source_session_id 가 있는 기록은 업로더가 보류한다. */
 function sessionRecord(r, eqId) {
   const cause = (r.causeCustom || '').trim() || r.cause;
-  const comp = r.components.find((c) => c.component_id === r.componentId);
   const restart = r.steps.some((s) => s.mes_linked === 'recover' || /^재가동/.test(s.action));
   const cards = [...new Set(r.steps.filter((s) => s.card).map((s) => s.card.card_id))];
   const query = r.turn.response && r.turn.response.query_id;
@@ -1660,7 +1659,7 @@ function sessionRecord(r, eqId) {
     ...(r.verdict ? {normal_run_evidence: '조치 후 MES: ' + r.verdict.text} : {}),
     safety_notes: r.steps.filter((s) => s.lockout).map((s) => '에너지 차단(잠금) · ' + s.order + '. ' + s.action + ': ' + s.lockout).join('\n'),
     ...(remaining ? {remaining_issue: remaining} : {}), ...(nextCheck ? {next_check: nextCheck} : {}),
-    operating_context: comp ? '부품: ' + comp.name : '', references: cards.join(', '),
+    references: cards.join(', '),
     ...(query ? {query_id: query} : {}), source_session_id: r.sessionId};
 }
 

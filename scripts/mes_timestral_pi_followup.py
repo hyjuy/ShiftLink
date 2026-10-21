@@ -61,6 +61,10 @@ def improved(before,after):
             after['wrong_alert_equipment_seconds']<before['wrong_alert_equipment_seconds'])
 
 
+def hybrid_alerts(keys,values,equipment,thresholds,baseline,scale,k,n,gate):
+    raise NotImplementedError
+
+
 def paths():
     output=ROOT/'output'
     return {'runtime':output/'mes-diagnostic-runtime-20261021',

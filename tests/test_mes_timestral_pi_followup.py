@@ -9,6 +9,15 @@ spec.loader.exec_module(m)
 
 
 class AlarmTests(unittest.TestCase):
+    def test_hybrid_gates_baseline_and_adds_only_current_confirmed_evidence(self):
+        keys=[('a',i) for i in range(1,5)]
+        baseline={key:{'e'} for key in keys}
+        x=np.array([[.1],[1],[5],[5.]])
+        got=m.hybrid_alerts(keys,x,['e'],{'e':2},baseline,2,2,3,.25)
+        self.assertEqual([got[key] for key in keys],[set(),{'e'},{'e'},{'e'}])
+        got=m.hybrid_alerts(keys,x,['e'],{'e':2},{key:set() for key in keys},2,2,3,.25)
+        self.assertEqual([got[key] for key in keys],[set(),set(),set(),{'e'}])
+
     def test_strict_threshold_and_current_exceedance(self):
         keys=[('a',i) for i in range(1,6)]
         out=m.causal_alerts(keys,np.array([[2],[3],[3],[1],[3]]),['e'],{'e':2},1,2,3)

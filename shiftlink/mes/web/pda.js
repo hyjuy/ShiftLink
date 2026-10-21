@@ -1855,7 +1855,7 @@ function userBubble(t) {
   const q = document.createElement('p'); q.className = 'q'; q.textContent = t.label || t.question;
   d.appendChild(q);
   if (t.label) {   // 짧은 이름 대신 실제로 보낸 문장을 함께 보인다
-    const o = document.createElement('p'); o.className = 'orig'; o.textContent = '보낸 문장: ' + t.question;
+    const o = document.createElement('p'); o.className = 'orig'; o.textContent = t.question;
     d.appendChild(o);
   }
   return d;

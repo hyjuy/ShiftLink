@@ -58,8 +58,31 @@
 ## 진행 상태
 
 - [x] 현재 PDA·MES·후보 심사·스키마·검색 경로 코드 확인
-- [ ] 1단계 구현·회귀 검증
+- [x] 1단계 구현·회귀 검증
 - [ ] 2단계 검수 화면
 - [ ] 3단계 실제 임베딩 작업자
 - [ ] 4단계 실행 중 검색 풀 반영
 - [ ] 5단계 실제 모델·브라우저 전체 검증
+
+## 1단계 API와 검증 결과
+
+기존 관리자 `POST /api/admin/card-drafts/{draft_id}/review`에 아래 요청을 보낸다.
+관리자 세션·동일 출처·JSON·리비전 검증은 기존 경로를 사용한다.
+
+```json
+{"action":"quality_pass","reason":"원문·조건·조치 결과 검수 완료","expected_revision":1}
+```
+
+`expected_revision`은 실제 최신 조회값을 사용한다. 직전 상태는 `review_approved`여야 한다.
+응답 `draft.status`는 `quality_passed`, `draft.review_flags.publication.state`는 `embedding_pending`이다.
+`publication`에는 구조화 카드 사본·임베딩 입력·SHA-256·검수자·시각·리비전이 들어간다.
+`searchable=false`이며 실제 검색 풀이나 임베딩 모델에는 아직 전달하지 않는다.
+현재 MES 화면에는 새 검수 버튼·상태 표시를 아직 추가하지 않았다. 2단계에서 연결한다.
+
+- 적용 스킬: `ponytail`, `tdd-workflow`, `systematic-debugging`.
+- RED: 신규 HTTP 통합 테스트 11개 중 6개 실패·5개 통과. 미구현 `quality_pass`가 400으로 거절되는 것을 확인했다. 체크포인트 `d0028e3`.
+- GREEN: 신규 12개를 포함한 관련 테스트 87개 중 86개 통과. 기존 저장소 프로세스 동시성 테스트가 시작 대기 10초 제한으로 1회 실패했고, 단독 재실행에서는 통과했다.
+- 실행 대상: `test_knowledge_publication.py`, `test_candidate_management.py`, `test_work_report_capture.py`, `test_work_report_reuse_harness.py`, `test_mes_storage.py`.
+- 원본 보존·재시작 복원·권한·선행 승인·리비전 충돌·필수 의견·스키마 실패·중복 검수·재심사 무효화·감사 이력 실패 시 트랜잭션 롤백을 확인했다.
+- 대상 파일 `git diff --check` 통과. `coverage`/`pytest_cov`가 설치되어 있지 않아 커버리지 수치는 측정하지 않았다.
+- 브라우저 화면과 실제 Ollama 모델은 이번 API 단계에서 검증하지 않았다. 2~5단계는 미완료다.

@@ -31,7 +31,7 @@ def test_quality_pass_structures_without_publishing_and_survives_restart(service
     card = KnowledgeCard.model_validate(artifact['card'])
     assert (card.status, card.grade, card.split) == ('accepted', 'L1', 'kb')
     assert card.card_id == original['card']['card_id']
-    assert card.provenance.model_dump(mode='json') == original['card']['provenance']
+    assert card.provenance == KnowledgeCard.model_validate(original['card']).provenance
     assert checked['card'] == original['card']
     assert service.storage.get_handover(original['handover_id']) == source
     assert card.know_how in artifact['embed_text']
@@ -40,7 +40,7 @@ def test_quality_pass_structures_without_publishing_and_survives_restart(service
     path = Path(service.storage.connection.execute('PRAGMA database_list').fetchone()[2])
     reopened = MesStorage(path)
     try:
-        assert reopened.get_card_draft(draft_id) == checked
+        assert reopened.get_card_draft(draft_id) == {key:value for key,value in checked.items() if key != 'sources'}
     finally:
         reopened.close()
 
@@ -109,3 +109,17 @@ def test_quality_artifact_and_audit_roll_back_together(service, review_api):
         decide(request, token, draft_id, 'quality_pass', 1)
     assert error.value.code == 500
     assert service.storage.get_card_draft(draft_id) == before
+
+
+def test_repeated_quality_pass_needs_new_approval_and_keeps_content_hash(service, review_api):
+    request, token, draft_id, _ = review_api
+    decide(request, token, draft_id, 'approve', 0)
+    first = decide(request, token, draft_id, 'quality_pass', 1)['review_flags']['publication']
+    with pytest.raises(HTTPError) as error:
+        decide(request, token, draft_id, 'quality_pass', 2)
+    assert error.value.code == 400
+    decide(request, token, draft_id, 'approve', 2)
+    second = decide(request, token, draft_id, 'quality_pass', 3)['review_flags']['publication']
+    assert first['content_hash'] == second['content_hash']
+    assert first['embed_text'] == second['embed_text']
+    assert second['review_revision'] == 4

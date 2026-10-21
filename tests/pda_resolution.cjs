@@ -84,12 +84,12 @@ assert.equal(rec.occurred_at, '2026-10-20T13:59');   // 새 양식 필수 — �
 assert.equal(rec.story, '작동유 온도가 너무 높아요');
 assert.deepEqual(rec.causes, [{equipment: ['EQ-0001'], certainty: '추정', note: '쿨러 튜브 스케일'}]);
 // MES 연동 단계(회복 확인·재가동)는 조치 내용 칸에 적지 않고, 마지막 조치 칸의 확인 결과에 내용과 센서값을 적는다
-assert.deepEqual(rec.action_steps.map((x) => x.action), ['팬 차단기 재투입', 'K-1002 1단계']);
+assert.deepEqual(rec.action_steps.map((x) => x.action), ['조치 대상: 냉각 계통\n팬 차단기 재투입', 'K-1002 1단계']);   // 조치 대상은 첫 조치 내용의 맨 앞 줄
 assert.equal(rec.action_steps[1].observed_result, '유온·공급 정상 확인 — 유압유 온도 78→47\n재가동');
 assert.deepEqual([rec.restart_performed, rec.restart_type, rec.outcome, rec.normal_run_status], [true, 'abnormal_stop_restart', 'resolved', 'unconfirmed']);
 assert.equal(rec.safety_notes, '에너지 차단(잠금) · 1. 팬 차단기 재투입: 예\n에너지 차단(잠금) · 3. 재가동 (라인 복구 시작): 해당 없음');
-assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, rec.operating_context],
-  [false, 'Q-1', 'RS-9', 'K-1002', '조치 대상: 냉각 계통']);   // 조치 대상(부품)은 전용 칸이 없어 이름을 붙여 이 칸에 둔다
+assert.deepEqual([rec.candidate, rec.query_id, rec.source_session_id, rec.references, 'operating_context' in rec],
+  [false, 'Q-1', 'RS-9', 'K-1002', false]);   // 조치 대상(부품)은 운전 조건·주의사항 칸이 아니라 조치 내용 첫 줄에 적는다
 // 자동 입력: 조치 전 벗어났던 신호 → 원인의 관련 센서(측정값·시각), 미해결이면 남은 문제·다음 확인 내용. 해결이면 넣지 않는다
 const {S: appState} = require('../shiftlink/mes/web/pda.js');
 appState.equipment = [{equipment_id: 'EQ-0001', signals: [{signal: 'hpu_pressure', unit: 'bar'}]}];
@@ -114,13 +114,13 @@ rec = sessionRecord({...out, result: 'resolved', steps: [
   {order: 4, action: 'B1', result_text: '센서값 변화 없음', card: {card_id: 'K-2', step_id: 'S1'}, at: '2026-10-21T13:03'},
   {order: 5, action: '직접 한 일 둘', result_text: '센서값 변화 없음', at: '2026-10-21T13:04'},
   {order: 6, action: '정상 범위 회복 확인', result_text: '유압 공급 압력 155.6→154.3', mes_linked: 'recovery_action:verify', at: '2026-10-21T13:05'}]}, 'EQ-0001');
-assert.deepEqual(rec.action_steps.map((x) => x.action), ['1. A1\n2. A2', '1. 직접 한 일\n2. 직접 한 일 둘', 'B1']);
+assert.deepEqual(rec.action_steps.map((x) => x.action), ['조치 대상: 냉각 계통\n1. A1\n2. A2', '1. 직접 한 일\n2. 직접 한 일 둘', 'B1']);
 // 확인 결과도 조치 번호에 맞춘다(바뀐 것만 값, 나머지는 '-'). MES 연동 줄은 마지막 칸 끝에 붙는다
 assert.deepEqual(rec.action_steps.map((x) => x.observed_result), ['1. -\n2. MES 센서: 유압 공급 압력 116.0→155.6', '', '정상 범위 회복 확인 — 유압 공급 압력 155.6→154.3']);
 assert.deepEqual(rec.action_steps.map((x) => x.performed_at), ['2026-10-21T13:00', '2026-10-21T13:01', '2026-10-21T13:03']);
-// 센서 변화가 없어도 그 시점의 센서값(readings_text)을 적고, MES 단계만 했으면 조치 내용은 비워 작업자가 적게 한다
+// 센서 변화가 없어도 그 시점의 센서값(readings_text)을 적고, MES 단계만 했으면 조치 내용은 '조치 대상' 한 줄만 두어 작업자가 이어 적게 한다
 rec = sessionRecord({...out, result: 'resolved', steps: [{order: 1, action: '재가동 (라인 복구 시작)', result_text: '센서값 변화 없음', readings_text: '유압 공급 압력 154.3 bar', mes_linked: 'recover', at: ''}]}, 'EQ-0001');
-assert.deepEqual([rec.action_steps[0].action, rec.action_steps[0].observed_result], ['', '재가동 — 유압 공급 압력 154.3 bar']);
+assert.deepEqual([rec.action_steps[0].action, rec.action_steps[0].observed_result], ['조치 대상: 냉각 계통', '재가동 — 유압 공급 압력 154.3 bar']);
 // 설비 창 센서값: 소수점 둘째 자리까지 십진 반올림(154.845 → 154.85), 정수도 둘째 자리까지
 const {fix2} = require('../shiftlink/mes/web/pda.js');
 assert.deepEqual([154.845, 116, 46.532, 0.004, -1.005, '47.05'].map(fix2), ['154.85', '116.00', '46.53', '0.00', '-1.01', '47.05']);

@@ -787,6 +787,9 @@ class ResolutionSessionHttpTests(unittest.TestCase):
                     return json.load(res)
             try:
                 sid = post('/api/resolution/start', {'equipment_id': 'EQ-0001'})['session_id']
+                big = {'run_id': 'x', 'simulated_at': 'y', 'equipment_id': 'EQ-0001',   # 센서가 많은 설비의 질의 근거(8KB 넘음)도 받는다
+                       'measurements': [{'signal': f's{i}', 'value': 1.0, 'unit': 'bar', 'pad': 'x' * 40} for i in range(200)]}
+                self.assertIn('session_id', post('/api/resolution/start', {'equipment_id': 'EQ-0001', 'evidence': big}))
                 self.assertEqual(post(f'/api/resolution/{sid}/step', {'action': '쿨러 핀 청소'})['order'], 1)
                 self.assertIn('verdict', post(f'/api/resolution/{sid}/finish', {}))
                 with urlopen(f'{base}/api/resolution/{sid}', timeout=5) as res:

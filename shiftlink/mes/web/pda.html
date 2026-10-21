@@ -875,9 +875,6 @@ input:not([type=checkbox]):not([type=hidden]),select,textarea{border-color:#b5c9
 #s-ctx .equipment-functions>.section-heading .btn{margin:0}
 #s-ctx .workspace-divider{cursor:col-resize}
 #obsList small{white-space:pre-line}
-.report-ask{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-2)}
-.report-ask p{flex:1 1 auto;margin:0;font-weight:600}
-.report-ask .btn{width:auto;min-width:72px;margin:0}
 #s-ctx .chat-panel #askSafety{margin-top:12px;padding:0 14px;background:var(--surface);flex:0 0 auto;min-height:0;max-height:45%;overflow:auto}
 #s-ctx .chat-panel #askSafety:empty{display:none}
 #s-ctx .chat-panel #askSafety .safety-fold{gap:0;border:1px solid var(--edge);border-radius:10px;background:var(--surface)}
@@ -1539,11 +1536,6 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .msg.bot .ans-list li{overflow-wrap:anywhere}
 #s-ctx .chat-panel .msg.bot .ans-list li+li{margin-top:2px}
 /* 근무일지 상자: 질문 / 「조치하며 작성」(주, 꽉 참) / 「바로 작성」·「아니오」(보조, 반반) — 근무일지로 가는 두 길을 한 상자에 */
-#s-ctx .chat-panel .msg.bot .report-ask{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10px 8px;margin:0;padding:12px 12px 12px 16px}
-#s-ctx .chat-panel .msg.bot .report-ask p{grid-column:1/-1;margin:0;text-align:left;font-size:16px;line-height:1.5}
-#s-ctx .chat-panel .msg.bot .report-ask .btn{width:auto;min-width:0;height:48px;min-height:48px;margin:0;padding:0;font-size:15px;justify-content:center}
-#s-ctx .chat-panel .msg.bot .report-ask .btn.primary{grid-column:1/-1;height:56px;min-height:56px;font-size:17px}
-#s-ctx .chat-panel .msg.bot .report-ask .btn.yes{background:var(--surface);border-color:var(--accent);color:var(--accent)}
 #s-ctx .chat-panel .msg.bot .ans-meta{margin-top:4px;margin-bottom:0;font-size:14px;color:var(--tx-2)}
 #s-ctx .chat-panel .msg .basis-detail{border:1px solid var(--edge);border-radius:8px;background:var(--surface)}
 #s-ctx .chat-panel .msg .basis-detail[open]{padding:0 16px 12px}
@@ -1572,9 +1564,9 @@ button.ld-row:hover{background:var(--surface-2)}
 #s-ctx .chat-panel .sugg-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #s-ctx .chat-panel .chatfoot.open .sugg-toggle{border-color:var(--accent);color:var(--accent)}
 #s-ctx .chat-panel .sugg-toggle:not([data-hot=""])::after{content:attr(data-hot);position:absolute;top:-6px;left:30px;right:auto;box-sizing:border-box;min-width:20px;height:20px;padding:0 5px;text-align:center;border-radius:10px;background:var(--notice);color:#fff;font-size:12px;font-weight:700;line-height:20px}
-#s-ctx .chat-panel .chatin-eq{position:relative;margin-left:22px;padding:6px 18px;border-radius:999px;background:var(--surface-2);font-size:16px;font-weight:500;color:var(--tx)}
-#s-ctx .chat-panel .chatin-eq:empty{display:none}
-#s-ctx .chat-panel .chatin-eq::before{content:"";position:absolute;left:-12px;top:6px;bottom:6px;width:1px;background:var(--edge)}
+#s-ctx .chat-panel .chatin-report{position:relative;margin-left:22px;min-height:44px;padding:0 18px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);font:inherit;font-size:16px;font-weight:700;color:var(--accent);cursor:pointer}
+#s-ctx .chat-panel .chatin-report::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:1px;background:var(--edge)}
+#s-ctx .chat-panel .chatin-report.hot{background:var(--accent);color:#fff}
 #s-ctx .chat-panel .chatin #doSearch{margin-left:auto;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border-radius:10px;display:grid;place-items:center}
 #s-ctx .chat-panel .chatin #doSearch svg{width:24px;height:24px}
 #s-ctx .chat-panel .chatin #doSearch.stop{background:var(--tx);border-color:var(--tx);color:#fff}
@@ -2133,7 +2125,7 @@ button.ld-row:hover{background:var(--surface-2)}
       </div>
       <div class="chatin">
         <textarea id="question" rows="1" placeholder="증상이나 질문을 적어 주세요." autocomplete="off" enterkeyhint="send"></textarea>
-        <div class="chatin-tools"><button class="sugg-toggle" id="suggToggle" type="button" aria-controls="chatPlus" aria-expanded="false" aria-label="추천 질문 열기">+</button><span class="chatin-eq" id="chatEq"></span><button class="btn primary" id="doSearch" type="button" disabled aria-label="보내기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+        <div class="chatin-tools"><button class="sugg-toggle" id="suggToggle" type="button" aria-controls="chatPlus" aria-expanded="false" aria-label="추천 질문 열기">+</button><button class="chatin-report" id="chatReport" type="button">근무일지 작성</button><button class="btn primary" id="doSearch" type="button" disabled aria-label="보내기"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </div>
     <div class="disclaimer"><span>보조 정보입니다. 조치 전 매뉴얼과 현장 기준을 확인하세요.</span></div>

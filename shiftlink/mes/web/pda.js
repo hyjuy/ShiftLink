@@ -215,7 +215,7 @@ function show(name) {
   if(name==='home')renderHome();
   if(name==='ctx'&&S.eq){
     const code=document.createElement('b'),group=document.createElement('span');code.textContent=S.eq.code;group.textContent=S.eq.group;
-    $('workEquipment').replaceChildren(code,group);$('chatEq').textContent=S.eq.code;
+    $('workEquipment').replaceChildren(code,group);
     renderMesStatus();renderChat();renderSymptoms();renderAskBlock();renderEquipmentMetrics();
   }
 }
@@ -1270,25 +1270,15 @@ function answerBody(turn) {
     meta.textContent = [at ? '답변 기준 · ' + clock(at) + ' 센서값' : '', parts.source].filter(Boolean).join(' · ');
     d.appendChild(meta);
   }
-  // 「조치하며 작성」 — 조치 기록 화면으로 가고, 그 끝이 근무일지다. 카드 답에서도 조치를 기록한다
-  // (본 카드 ID가 세션에 남아 대시보드 사건에 연결된다).
-  const record = document.createElement('button');
-  record.type = 'button'; record.className = 'btn primary';   // 주 행동 56px(A1)
-  record.textContent = '조치하며 작성';
-  record.addEventListener('click', () => openResolve(turn));
-  // 카드가 있든 없든 같은 상자 — 근무일지로 가는 두 길(조치하며 / 바로)을 묶는다. 「아니오」면 상자만 걷고
-  // 「조치하며 작성」은 남긴다. 일지에서 이전으로 돌아와도 다시 쓸 수 있게 「바로 작성」 뒤에도 상자를 남긴다.
-  // 상자는 참고 매뉴얼보다 위에 둔다 — 매뉴얼을 펼쳐도 주 행동이 아래로 밀려나지 않게.
-  if (!turn.reportAsked) {
-    const ask = document.createElement('div'); ask.className = 'report-ask';
-    const q = document.createElement('p'); q.textContent = '근무일지를 작성할까요?';
-    const now = document.createElement('button'); now.type = 'button'; now.className = 'btn sm yes'; now.textContent = '바로 작성';
-    const no = document.createElement('button'); no.type = 'button'; no.className = 'btn sm no'; no.textContent = '아니오';
-    [q, record, now, no].forEach((el) => ask.appendChild(el));
-    no.addEventListener('click', () => { turn.reportAsked = 'no'; ask.replaceWith(record); });
-    now.addEventListener('click', () => reportFromChat(turn));
-    d.appendChild(ask);
-  } else d.appendChild(record);
+  // 「카드대로 조치」 — 조치 기록 화면으로 간다(본 카드 ID가 세션에 남아 대시보드 사건에 연결된다).
+  // 카드가 없거나 판단 문장뿐인 이상 징후 분석(T1) 카드만 있으면 따라 할 조치가 없어 두지 않는다.
+  // 근무일지는 입력칸 옆 고정 버튼으로 쓴다(답마다 묻지 않는다).
+  if (r.actions.some((x) => x.card.tacit_type !== 'T1')) {
+    const record = document.createElement('button');
+    record.type = 'button'; record.className = 'btn primary'; record.textContent = '카드대로 조치';   // 주 행동 56px(A1)
+    record.addEventListener('click', () => openResolve(turn));
+    d.appendChild(record);
+  }
   const ids = r.actions.map((x) => x.card.card_id);
   // 질의 당시 센서값은 싣지 않는다 — 같은 화면의 설비 칸이 보여 준다(사용자 결정 10/20).
   if (!ids.length && !r.excluded.length) return d;
@@ -1774,6 +1764,8 @@ const chatPending = () => S.chat.some((t) => t.status === 'pending');
 const SEND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
 const STOP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
 function renderAskBlock() {
+  const rb = $('chatReport');
+  rb.classList.toggle('hot', !!(S.res && S.res.sessionId && S.res.steps.length && S.eq && S.res.turn && S.res.turn.eqId === S.eq.equipment_id));   // 조치를 기록한 뒤
   const btn = $('doSearch');
   // 답을 기다리는 동안 보내기 버튼이 정지 버튼이 된다(누르면 이 질문 취소).
   const pending = chatPending();
@@ -3849,6 +3841,8 @@ on('mesRefresh', async () => { await loadMesObservations(); S.sensorSnapshot = n
 on('askBack', () => show('ctx'));
 on('doSearch', () => (chatPending() ? cancelChat() : sendChat(currentQuestion())));
 on('suggToggle', () => { S.suggOpen = !S.suggOpen; renderSymptoms(); });
+// 근무일지 작성(입력칸 옆 고정): 마지막 답이 있으면 그 질문·답을 이상증상 기록으로 넣고, 없으면 빈 기록으로 작성 화면으로.
+on('chatReport', () => { const turn = lastAnswer(); if (turn) reportFromChat(turn); else reportWith(() => {}); });
 on('triesBack', () => show('chat'));
 on('toHandover', openHistory);
 [['homeHandoverPending','pending'],['homeHandoverComplete','complete']].forEach(([id,filter])=>on(id,()=>{S.homeHandoverFilter=filter;$('homeHandover').scrollTop=0;renderHome();}));

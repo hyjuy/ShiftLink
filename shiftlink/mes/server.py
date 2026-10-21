@@ -948,7 +948,7 @@ class _Handler(BaseHTTPRequestHandler):
                 status, body = self.accounts.request("POST", account_path, payload, token=self._account_token())
                 self._send(status, body); return
             limit = _CONFIG_BODY_LIMIT if self.path.startswith("/api/config/") else _CONTROL_BODY_LIMIT
-            if self.path in ("/api/query", "/api/handover", "/api/work-reports"):
+            if self.path in ("/api/query", "/api/handover", "/api/work-reports", "/api/resolution/start"):   # 조치 시작은 질의 근거(설비 센서 전체)를 되돌려 보낸다
                 limit = _ASSIST_BODY_LIMIT
             size = int(self.headers.get("Content-Length", "0"))
             if not 0 <= size <= limit:

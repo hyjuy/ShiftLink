@@ -12,17 +12,7 @@ import urllib.request
 from pathlib import Path
 
 import numpy as np
-
-# Document/query prefixes each model expects (model cards). Same model for index and query (plan §5).
-PREFIX = {
-    "embeddinggemma": ("title: none | text: ", "task: search result | query: "),
-    "qwen3-embedding": ("", "Instruct: Given a maintenance question, retrieve manual passages that answer it\nQuery: "),
-}
-
-
-def prefixes(model: str) -> tuple[str, str]:
-    return next((v for k, v in PREFIX.items() if model.startswith(k)), ("", ""))
-
+from shiftlink.rag.embedding import PREFIX, prefixes
 
 def slug(model: str) -> str:
     return re.sub(r"[^A-Za-z0-9.-]+", "_", model)

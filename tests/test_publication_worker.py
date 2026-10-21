@@ -61,7 +61,7 @@ def test_question_to_log_to_review_to_embedding_to_rag_and_restart(service, tmp_
         reopened.close()
 
 
-@pytest.mark.parametrize('bad', [[], [[0.,0.]], [[float('nan'),1.]], [[True,1.]], [[1.]], [[1.,0.],[0.,1.]]])
+@pytest.mark.parametrize('bad', [[], [[0.,0.]], [[float('nan'),1.]], [[True,1.]], [[1.]], [[1.,0.],[0.,1.,0.]]])
 def test_invalid_embeddings_do_not_publish(service, bad):
     draft_id = quality_pass(service)
     assert service.publications.process_one(embedder=lambda *args:bad, now=100)

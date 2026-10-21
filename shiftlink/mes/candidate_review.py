@@ -9,6 +9,11 @@ STATUSES={'approve':'review_approved','request_changes':'changes_requested','rej
           'quality_pass':'quality_passed'}
 
 
+def content_hash(card):
+    canonical = json.dumps(card, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False)
+    return sha256(canonical.encode('utf-8')).hexdigest()
+
+
 def validate_decision(body):
     if not isinstance(body,dict) or set(body)-{'action','reason','expected_revision'}:
         raise ValueError('검토 요청 형식을 확인해 주세요.')
@@ -25,10 +30,12 @@ def quality_artifact(draft, actor, checked_at):
     if draft['status'] != 'review_approved':
         raise ValueError('심사 승인된 최신 후보만 검수 통과할 수 있습니다.')
     raw = draft['card']
+    from .field_draft import PLACEHOLDER
+    if draft['review_flags'].get('unstructured_work_report') or PLACEHOLDER in json.dumps(raw,ensure_ascii=False):
+        raise ValueError('근무일지의 재사용 절차·결과를 보완한 후보로 다시 검수해 주세요.')
     if set(raw) - KnowledgeCard.model_fields.keys():
         raise ValueError('지식카드 스키마에 없는 항목이 있습니다.')
     card = KnowledgeCard.model_validate({**raw, 'status':'accepted', 'grade':'L1', 'split':'kb'}).model_dump(mode='json')
-    canonical = json.dumps(card, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False)
     # Include typed procedures and limits as well as the prose; no generated facts.
     text = '\n'.join([card['title'], '설비: '+card['equipment'], '부품: '+card['component'],
         '증상: '+(card['symptom'] or ''), card['know_how'], card['rationale'],
@@ -37,7 +44,7 @@ def quality_artifact(draft, actor, checked_at):
         '유형별 지식: '+json.dumps(card['type_payload'], ensure_ascii=False, sort_keys=True),
         '안전 근거: '+(card['safety_basis'] or '')])
     return {'state':'embedding_pending', 'searchable':False, 'card':card, 'embed_text':text,
-            'content_hash':sha256(canonical.encode('utf-8')).hexdigest(),
+            'content_hash':content_hash(card),
             'review_revision':draft['revision']+1, 'quality_checked_by':actor['id'],
             'quality_checked_at':checked_at}
 

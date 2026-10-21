@@ -14,7 +14,7 @@ from .contracts import (
     Run, RuntimeEvent, ScenarioSpec, SignalEffect, SignalSpec, Snapshot
 )
 from .scenarios.priority import COMPONENTS
-from .signal_semantics import MODEL, SAMPLES
+from .signal_semantics import MODEL
 
 
 class MesEngine:
@@ -438,10 +438,7 @@ class MesEngine:
         elif high is None:
             high = float(low) * 1.1
 
-        sequence = self._sequence
-        if signal_spec.semantics.get('model') == MODEL and signal_spec.signal in SAMPLES:
-            sequence = int(sequence * self.run.tick_seconds // 60)
-        random = Random(f"{self.run.seed}:{sequence}:{equipment.equipment_id}:{signal_spec.signal}")
+        random = Random(f"{self.run.seed}:{self._sequence}:{equipment.equipment_id}:{signal_spec.signal}")
         value = (float(low) + float(high)) / 2 + (random.random() - 0.5) * (float(high) - float(low)) * 0.08
 
         return round(value, 3)
@@ -462,9 +459,6 @@ class MesEngine:
                 if signal_spec.semantics.get('model') == MODEL and self._signal_effect(eq, signal_spec.signal) is None:
                     if signal_spec.semantics.get('acquisition') == 'event':
                         quality = 'unavailable'
-                    elif signal_spec.signal in SAMPLES:
-                        elapsed = self._sequence * self.run.tick_seconds
-                        observed_at = self.run.started_at + timedelta(seconds=elapsed // 60 * 60)
                 measurements.append(Measurement(
                     eq.equipment_id, signal_spec.signal, self._measurement_value(eq, signal_spec),
                     signal_spec.unit, observed_at, quality

@@ -300,7 +300,7 @@ class MesService:
                         lambda card_id: work_reports.handover_candidate_from(chain, self.active_config, card_id, utc_now()))
                 elif record.get('capture_version') == 1:
                     kind = 'T6' if record['restart_performed'] else 'T3'
-                    add(kind, 'insufficient_capture', None if work_reports.capture_missing(record) else
+                    if not work_reports.routine_maintenance(record):add(kind, 'insufficient_capture', None if work_reports.capture_missing(record) else
                         lambda card_id: work_reports.capture_candidate_from(
                             record, self.active_config, body['handover_id'], index, card_id, utc_now()))
                 elif query is not None or not ready and not incomplete:

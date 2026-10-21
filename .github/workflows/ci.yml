@@ -37,6 +37,13 @@ jobs:
         run: |
           node tests/pda_sensor_display.cjs
           node tests/pda_report_empty_mes.cjs
+          node tests/pda_report_form.cjs
+          node tests/pda_report_sensor_context.cjs
+          node tests/pda_report_condition.cjs
+          node tests/pda_report_delete.cjs
+          node tests/pda_report_date.cjs
+          node tests/pda_report_save_preview.cjs
+          node tests/pda_report_save_success.cjs
           node tests/pda_resolution.cjs
 
       - name: kb_cards.json

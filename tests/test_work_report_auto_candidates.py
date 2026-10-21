@@ -5,6 +5,48 @@ from test_work_report_capture import captured
 from test_work_report_reuse_harness import service
 from test_work_report_t4 import chain
 from shiftlink.agent.schemas import KnowledgeCard
+from shiftlink.rag.retrieval import _evaluate_condition
+
+
+@pytest.mark.parametrize('status',['completed','partial','pending','unconfirmed'])
+def test_maintenance_completion_is_not_equipment_recovery(service,status):
+    note=captured(service,type='PMS 정비',candidate=False,auto_candidate=True,maintenance_status=status,
+                  causes=[],outcome='open',normal_run_status='unconfirmed',normal_run_minutes=None,normal_run_evidence='')
+    saved=service.record_work_report(note)
+    assert saved['candidates']==[]
+    record=service.work_report(note['handover_id'])['report']['work_report']['records'][0]
+    assert record['maintenance_status']==status and record['outcome']=='open'
+    assert service.storage.list_card_drafts()==[]
+
+
+def test_maintenance_still_creates_safety_candidate_without_fault_cause(service):
+    note=captured(service,type='PMS 정비',candidate=False,auto_candidate=True,maintenance_status='completed',
+                  causes=[],outcome='open',normal_run_status='unconfirmed',normal_run_minutes=None,normal_run_evidence='',
+                  safety_notes='잔압 접촉 위험',safety_action='전원 격리',safety_basis='HPU-M-02',
+                  operating_context='기동 직후 잔압이 남아 있을 때 접근 금지')
+    saved=service.record_work_report(note)
+    assert [(item['kind'],item['reason']) for item in saved['candidates']]==[('T5','pending_review')]
+    [draft]=service.storage.list_card_drafts()
+    assert draft['review_flags']['observations']['operating_context']=='기동 직후 잔압이 남아 있을 때 접근 금지'
+
+
+def test_invalid_maintenance_completion_is_rejected(service):
+    with pytest.raises(ValueError,match='정비 작업 완료'):
+        service.record_work_report(captured(service,type='PMS 정비',maintenance_status='invalid'))
+
+
+@pytest.mark.parametrize('op,observed,expected', [('>',155,True),('>',140,False),('==',145,True)])
+def test_mes_condition_threshold_is_numeric_in_saved_candidate(service,op,observed,expected):
+    signal=service.active_config.equipment[0].signals[0]
+    note=captured(service,candidate=False,auto_candidate=True,outcome='open',
+                  normal_run_status='unconfirmed',normal_run_minutes=None,normal_run_evidence='',
+                  condition_signal=signal.signal,condition_op=op,condition_value='145',condition_unit=signal.unit)
+    service.record_work_report(note)
+    card=KnowledgeCard.model_validate(service.storage.list_card_drafts()[0]['card'])
+    assert card.conditions[0].value==145
+    assert _evaluate_condition(card.conditions[0],{signal.signal:{'value':observed,'unit':signal.unit}}) is expected
+    stored=service.work_report(note['handover_id'])['report']['work_report']['records'][0]
+    assert stored['condition_value']=='145'
 
 
 @pytest.mark.parametrize('kind,fields', [

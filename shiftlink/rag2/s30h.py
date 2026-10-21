@@ -21,6 +21,7 @@ from shiftlink.agent.response import AgentResponse, SafetyNotice
 
 from . import evidence_score as E
 from . import generate as G
+from . import mes_block as MB
 from .embed import prefixes, slug
 from .retrieve import COMMON_FOLDERS, load
 from .source_conditions import with_source_conditions
@@ -74,7 +75,7 @@ class S30hPipeline:
     answer_mode = "s30h"
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
-                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False):
+                 judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -96,6 +97,9 @@ class S30hPipeline:
         # the MES passes loader KnowledgeCard models; tests pass plain dicts
         self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
         self.source_conditions = source_conditions
+        # experimental (default off): the unit's MES snapshot as an [MES] block in the answer prompt, for an answer model
+        # trained on it (MES SFT 10/21); ck106 never saw the block
+        self.mes_block = mes_block
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -104,6 +108,8 @@ class S30hPipeline:
             self.eq_code[e["equipment_id"]] = e["code"]
         from shiftlink.mes.configuration import from_catalog   # names/ranges as the MES shows them (catalog points have no names)
         self.specs = {e.equipment_id: {s.signal: s for s in e.signals} for e in from_catalog(cat).equipment}
+        from shiftlink.mes.engine import MesEngine
+        self.alarm_labels = MesEngine.ALARM_LABELS
 
     def _post(self, host, path, body, timeout=300):
         req = urllib.request.Request(f"{host}{path}", data=json.dumps(body).encode())
@@ -153,23 +159,28 @@ class S30hPipeline:
         kept = [(r, s) for r, s in zip(ev, scores) if s >= LO]
         ev2 = [r for r, _ in kept]
         route = "drop_all" if not ev2 else "confident" if max(s for _, s in kept) >= HI else "model"
+        block = None
+        if self.mes_block and eq_id in self.specs:
+            block = MB.render(self.eq_code[eq_id], self.specs[eq_id], payload.get("observations") or [],
+                              payload.get("snapshot_at"), payload.get("active_alarms") or [], self.alarm_labels)
+        p, extra = (MB.prompt(question, block, ev2), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
         elif route == "confident":
-            out = G.ask_raw(G.prompt(question, ev2), self.host, G.FORCE_PREFIX)
+            out = G.ask_raw(p, self.host, G.FORCE_PREFIX, **extra)
         else:
-            out = G.ask(G.prompt(question, ev2), self.host, logprobs=True)
-        res = G.check(out, ev2, question)
+            out = G.ask(p, self.host, logprobs=True, **extra)
+        res = G.check(out, ev2, question, block)
         abstain = res["abstain"] or (route == "model" and out.get("p_insuff") is not None and out["p_insuff"] >= T)
-        cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"]]
+        cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"] if c != "M"]
         answer = ""
         condition_cards = []
         if not abstain:
-            labels = list(dict.fromkeys(source_label(r) for r in cited))
+            labels = list(dict.fromkeys(source_label(r) for r in cited)) + (["MES 현재값"] if "M" in res["valid_cites"] else [])
             answer = res["answer"]
             if self.source_conditions:
                 answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
-            answer = re.sub(r"\s*\[S\d+\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+            answer = re.sub(r"\s*\[(?:S\d+|M)\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))

@@ -123,8 +123,8 @@ def p_insufficient(logprobs: list[dict]) -> tuple[float | None, bool]:
     return None, True
 
 
-def ask(p: str, host: str, logprobs=False) -> dict:
-    body = {"model": GEN_MODEL, "system": SYSTEM, "prompt": p, "stream": False, "format": "json",
+def ask(p: str, host: str, logprobs=False, system: str | None = None) -> dict:
+    body = {"model": GEN_MODEL, "system": system or SYSTEM, "prompt": p, "stream": False, "format": "json",
             "options": {"num_ctx": 4096, "temperature": 0, "num_predict": 400}, **({"keep_alive": KEEP_ALIVE} if KEEP_ALIVE is not None else {})}
     if logprobs:
         body.update(logprobs=True, top_logprobs=20)
@@ -146,13 +146,13 @@ def ask(p: str, host: str, logprobs=False) -> dict:
 FORCE_PREFIX = '{"insufficient_evidence": false, "answer": "'
 
 
-def templated(p: str) -> str:
-    return f"[|system|]{SYSTEM}[|endofturn|]\n[|user|]{p}\n[|assistant|]"
+def templated(p: str, system: str | None = None) -> str:
+    return f"[|system|]{system or SYSTEM}[|endofturn|]\n[|user|]{p}\n[|assistant|]"
 
 
-def ask_raw(p: str, host: str, prefix: str) -> dict:
+def ask_raw(p: str, host: str, prefix: str, system: str | None = None) -> dict:
     """No JSON grammar here (it would reject a continuation that starts mid-object); check() parses prefix+output."""
-    body = {"model": GEN_MODEL, "prompt": templated(p) + prefix, "raw": True, "stream": False,
+    body = {"model": GEN_MODEL, "prompt": templated(p, system) + prefix, "raw": True, "stream": False,
             "options": {"num_ctx": 4096, "temperature": 0, "num_predict": 400}, **({"keep_alive": KEEP_ALIVE} if KEEP_ALIVE is not None else {})}
     t = time.time()
     for _ in range(3):
@@ -195,7 +195,8 @@ def numbers_not_in(answer: str, allowed: set[str]) -> list[str]:
     return [n for n in NUM.findall(NOT_CLAIM.sub(" ", answer)) if n.replace(",", "") not in allowed]
 
 
-def check(out: dict, ev: list[dict], question: str) -> dict:
+def check(out: dict, ev: list[dict], question: str, mes: str | None = None) -> dict:
+    """mes: the [MES] block text when the prompt carried one; then [M] is a valid citation and its numbers are allowed."""
     try:
         j = json.loads(out["raw"])
         answer = str(j.get("answer", "")).strip()
@@ -203,12 +204,12 @@ def check(out: dict, ev: list[dict], question: str) -> dict:
         insufficient = bool(j.get("insufficient_evidence"))
     except Exception:
         return {"answer": "", "valid_cites": [], "abstain": True, "reason": "broken_json", "number_violations": []}
-    ids = {f"S{n}" for n in range(1, len(ev) + 1)}
-    cites = sorted((set(cites) | set(re.findall(r"S\d+", answer))) & ids) if not insufficient else []
+    ids = {f"S{n}" for n in range(1, len(ev) + 1)} | ({"M"} if mes else set())
+    cites = sorted((set(cites) | set(re.findall(r"S\d+|(?<=\[)M(?=\])", answer))) & ids) if not insufficient else []
     if insufficient or not answer or not cites:
         return {"answer": "", "valid_cites": [], "abstain": True, "reason": "insufficient" if insufficient else "no_cite",
                 "number_violations": []}
-    allowed = " ".join(ev[int(c[1:]) - 1]["text"] for c in cites) + " " + question
+    allowed = " ".join(mes if c == "M" else ev[int(c[1:]) - 1]["text"] for c in cites) + " " + question
     allowed_nums = {n.replace(",", "") for n in NUM.findall(allowed)}
     viol = numbers_not_in(answer, allowed_nums)
     return {"answer": answer, "valid_cites": cites, "abstain": False, "reason": "", "number_violations": viol}

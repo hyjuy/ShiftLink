@@ -177,6 +177,26 @@ def test_mes_low_high_states_reach_the_search_only(pipe, monkeypatch):
     assert searched == ["필터 차압 경보"]   # line stopped: 0 A is not an abnormal state
 
 
+def test_mes_block_is_opt_in_and_reaches_the_answer_prompt(pipe, monkeypatch):
+    judged(monkeypatch, {"c1": 0.95, "c2": 0.1, "c4": 0.1})
+    calls = []
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: calls.append((p, kw)) or
+                        {"raw": prefix + '유면이 60 pct로 낮습니다 [M]. 압력 152 bar를 확인합니다 [S1]", "citations": ["M", "S1"]}'})
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "유압 경보", "eq_id": "EQ-0001", "observations": obs, "snapshot_at": "2026-10-21T00:00:00+00:00",
+               "active_alarms": []}
+    off = pipe.run(payload)
+    assert "[MES]" not in calls[0][0] and calls[0][1] == {}
+    assert off.output.answer == "유면이 60 pct로 낮습니다. 압력 152 bar를 확인합니다\n근거: hpu_manual p.12"   # [M] not a source when off
+    pipe.mes_block = True
+    on = pipe.run(payload)
+    p, kw = calls[1]
+    assert p.index("[질문]") < p.index("[MES]") < p.index("[근거]") and kw["system"].count("[M]") == 1
+    assert '<mes id="M" eq="HPU-01" snapshot_at="2026-10-21T00:00:00+00:00">\n활성 경보: 없음\n유압유 탱크 유면 60 pct · 낮음 (기준 70–100)' in p
+    assert on.output.answer == "유면이 60 pct로 낮습니다. 압력 152 bar를 확인합니다\n근거: hpu_manual p.12 · MES 현재값"
+    assert on.output.cited_card_ids == [] and on.tool_results["route"] == "confident"
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):
@@ -206,6 +226,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_SOURCE_CONDITIONS", flag)
     assert Q.build_query_pipeline().source_conditions is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_BLOCK", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_BLOCK", flag)
+    assert Q.build_query_pipeline().mes_block is enabled
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

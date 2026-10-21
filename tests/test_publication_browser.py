@@ -1,6 +1,7 @@
 """Real browser + real MES HTTP; embedding output is an explicit deterministic fixture."""
 import hashlib
 import json
+import os
 from pathlib import Path
 from http.server import ThreadingHTTPServer
 from threading import Thread, Event
@@ -33,10 +34,12 @@ def publication_web(service,tmp_path):
 
 
 def test_question_report_review_quality_publish_browser_flow(service, publication_web):
-    from playwright.sync_api import sync_playwright, expect
+    api = pytest.importorskip('playwright.sync_api')
+    sync_playwright,expect = api.sync_playwright,api.expect
     artifact = Path('artifacts/knowledge-publication-20261021');artifact.mkdir(parents=True,exist_ok=True)
     with sync_playwright() as playwright:
-        browser=playwright.chromium.launch(channel='chrome',headless=True)
+        channel = os.environ.get('SHIFTLINK_BROWSER_CHANNEL','chrome')
+        browser=playwright.chromium.launch(headless=True,**({'channel':channel} if channel else {}))
         try:
             page=browser.new_page(viewport={'width':1280,'height':900})
             errors=[]
@@ -72,6 +75,7 @@ def test_question_report_review_quality_publish_browser_flow(service, publicatio
             expect(page.locator('#publication-json')).to_contain_text('accepted')
             for width in (1280,390):
                 page.set_viewport_size({'width':width,'height':900})
+                page.evaluate('scrollTo(0,0)')
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
                 page.screenshot(path=str(artifact/f'review-{width}.png'),full_page=True)
             response=page.request.post(publication_web+'/api/query',data={

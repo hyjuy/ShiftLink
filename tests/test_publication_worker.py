@@ -158,3 +158,13 @@ def test_worker_recovers_expired_running_lease(service):
     assert not service.publications.process_one(embedder=vectors, now=199)
     assert service.publications.process_one(embedder=vectors, now=200)
     assert service.storage.get_card_draft(draft_id)['review_flags']['publication']['state'] == 'published'
+
+
+def test_draft_changed_without_review_cannot_publish(service):
+    draft_id=quality_pass(service)
+    draft=service.storage.get_card_draft(draft_id)
+    draft['card']['know_how']='미심사 변경 내용'
+    with service.storage.connection:
+        service.storage.connection.execute('UPDATE card_drafts SET card=? WHERE draft_id=?',(json.dumps(draft['card']),draft_id))
+    service.publications.process_one(embedder=vectors,now=100)
+    assert service.storage.get_card_draft(draft_id)['review_flags']['publication']['state']=='embedding_failed'

@@ -51,6 +51,22 @@ def test_index_manifest_or_text_drift_cannot_enter_search(service, pipe, damage)
     with service._lock:
         view,ticket = service.publications.snapshot(pipe,eq.equipment_id,eq.asset_id,[])
     assert ticket == [] and view is pipe
+    artifact = service.storage.get_card_draft(draft_id)['review_flags']['publication']
+    assert artifact['state']=='embedding_failed' and artifact['searchable'] is False
+
+
+@pytest.mark.parametrize('raw',['{broken',json.dumps({'vectors':[[0.,0.,0.,0.]]})])
+def test_corrupt_index_row_is_excluded_without_breaking_other_queries(service,pipe,raw):
+    service.query_pipeline = pipe
+    draft_id=quality_pass(service)
+    service.publications.process_one(embedder=vectors,now=100)
+    with service.storage.connection:
+        service.storage.connection.execute('UPDATE knowledge_publications SET payload=?',(raw,))
+    eq=service.active_config.equipment[0]
+    with service._lock:
+        view,ticket=service.publications.snapshot(pipe,eq.equipment_id,eq.asset_id,[])
+    assert view is pipe and ticket==[]
+    assert not service.storage.get_card_draft(draft_id)['review_flags']['publication']['searchable']
 
 
 def test_active_model_drift_and_dimension_mismatch_fail_closed(service, pipe, monkeypatch):

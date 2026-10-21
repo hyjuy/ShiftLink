@@ -197,6 +197,25 @@ def test_mes_block_is_opt_in_and_reaches_the_answer_prompt(pipe, monkeypatch):
     assert on.output.cited_card_ids == [] and on.tool_results["route"] == "confident"
 
 
+def test_mes_only_route_asks_the_model_when_nothing_is_kept(pipe, monkeypatch):
+    judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
+    asked = []
+    monkeypatch.setattr(G, "ask", lambda p, host, logprobs, **kw: asked.append(p) or
+                        answer("MES 기준 HPU-01 유면은 60 pct로 낮습니다 [M].", ["M"], p_insuff=S.T - 1e-9))
+    obs = [{"signal": "hpu_oil_level", "value": 60}, {"signal": "hpu_oil_level_state", "value": "low"}]
+    payload = {"question": "유면 괜찮죠?", "eq_id": "EQ-0001", "observations": obs, "snapshot_at": "t", "active_alarms": []}
+    pipe.mes_block = True
+    assert pipe.run(payload).tool_results["route"] == "drop_all" and asked == []   # mes_only off: as before
+    pipe.mes_only = True
+    r = pipe.run(payload)
+    assert r.tool_results["route"] == "mes_only" and asked[0].endswith("[근거]\n") and "[MES]" in asked[0]
+    assert r.output.answer == "MES 기준 HPU-01 유면은 60 pct로 낮습니다.\n근거: MES 현재값" and not r.output.no_knowledge
+    monkeypatch.setattr(G, "ask", lambda p, host, logprobs, **kw: answer("낮습니다 [M].", ["M"], p_insuff=S.T))
+    assert pipe.run(payload).output.no_knowledge   # same threshold T as the model route
+    pipe.mes_block = False
+    assert pipe.run(payload).tool_results["route"] == "drop_all"   # needs the block
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):
@@ -234,6 +253,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_EVENT_LABEL", flag)
     assert Q.build_query_pipeline().event_label is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_MES_ONLY", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_MES_ONLY", flag)
+    assert Q.build_query_pipeline().mes_only is enabled
 
 
 def test_query_service_returns_the_pda_shape(pipe, monkeypatch):

@@ -76,7 +76,7 @@ class S30hPipeline:
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
-                 event_label=False):
+                 event_label=False, mes_only=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -102,6 +102,9 @@ class S30hPipeline:
         # trained on it (MES SFT 10/21); ck106 never saw the block
         self.mes_block = mes_block
         self.event_label = event_label   # with the block only: event chunks shown as 인계 기록 (separate switch for ablation)
+        # with the block only: drop_all still asks the model with the [MES] block and no evidence, same threshold T
+        # (option A of 10/21; the MES SFT data has 338 such rows, ck106 has none)
+        self.mes_only = mes_only
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -165,6 +168,8 @@ class S30hPipeline:
         if self.mes_block and eq_id in self.specs:
             block = MB.render(self.eq_code[eq_id], self.specs[eq_id], payload.get("observations") or [],
                               payload.get("snapshot_at"), payload.get("active_alarms") or [], self.alarm_labels)
+        if route == "drop_all" and block and self.mes_only:
+            route = "mes_only"   # no evidence survived, but the unit's MES can still answer a state question ([M] only)
         p, extra = (MB.prompt(question, block, ev2, self.event_label), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
@@ -173,7 +178,7 @@ class S30hPipeline:
         else:
             out = G.ask(p, self.host, logprobs=True, **extra)
         res = G.check(out, ev2, question, block)
-        abstain = res["abstain"] or (route == "model" and out.get("p_insuff") is not None and out["p_insuff"] >= T)
+        abstain = res["abstain"] or (route in ("model", "mes_only") and out.get("p_insuff") is not None and out["p_insuff"] >= T)
         cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"] if c != "M"]
         answer = ""
         condition_cards = []

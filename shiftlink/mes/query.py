@@ -141,6 +141,8 @@ def query_service(service, body, *, pipeline=None):
             if service.query_pipeline is None:
                 service.query_pipeline = build_query_pipeline()
             pipeline = service.query_pipeline
+        pipeline, publication_ticket = service.publications.snapshot(
+            pipeline,equipment_id,equipment.asset_id,prepared['request'].model_dump(mode='json')['observations'])
     # A model request can take a minute; never hold the simulator lock during it.
     result = pipeline.run(prepared['request'].model_dump(mode='json'))
     output = result.output.model_dump(mode='json')
@@ -158,4 +160,5 @@ def query_service(service, body, *, pipeline=None):
         knowledge_status = 'unknown'
     return {**output, 'scan': scan, 'query_context': context, 'knowledge_status': knowledge_status,
             'evidence': prepared['evidence'], 'is_synthetic': True,
+            **({'_publication_ticket':publication_ticket} if publication_ticket else {}),
             **({'s30h_trace': result.tool_results} if getattr(pipeline, 'answer_mode', None) == 's30h' else {})}

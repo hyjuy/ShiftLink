@@ -133,6 +133,8 @@ class MesService:
         # ponytail: 메모리에만 둔다(재시작하면 사라짐). 인계가 아니라 버려도 되는 값이다(작업계획 D1).
         self._scans: deque[dict[str, object]] = deque(maxlen=_SCAN_KEEP)
         self.query_pipeline = None
+        from .publication import PublicationManager
+        self.publications = PublicationManager(self)
 
     def _new_engine(self, run: Run, config: Configuration) -> MesEngine:
         if self.random_faults:
@@ -145,6 +147,8 @@ class MesService:
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
         with self._lock:
+            if not self.publications.still_current(result.pop('_publication_ticket',[])):
+                raise JudgeUnavailableError('질의 중 지식카드 검수 상태가 변경됐습니다. 다시 질문해 주세요.')
             return self._save_query_result(body, result, started)
 
     def _save_query_result(self, body, result, started):
@@ -1004,10 +1008,13 @@ def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | Non
     if os.environ.get("SHIFTLINK_WARMUP", "1") != "0":  # load the models now so the first PDA query does not wait ~50 s
         service.query_pipeline = build_query_pipeline()
         threading.Thread(target=lambda: print(f"[예열] 모델 적재: {warm_models(service.query_pipeline)}", flush=True), daemon=True).start()
+    publication_worker = threading.Thread(target=service.publications.run,args=(stopped,),daemon=True)
+    publication_worker.start()
     try: server.serve_forever()
     finally:
         stopped.set()
         worker.join()
+        publication_worker.join()
         server.server_close()
         service.storage.close()
 

@@ -401,13 +401,28 @@ class MesStorage:
                 'revision':reviews[-1]['revision'] if reviews else 0}
 
     def review_card_draft(self,draft_id: str,action: str,status: str,reason: str,revision: int,actor: dict) -> dict:
+        from .candidate_review import quality_artifact
         with self.connection:
             draft=self.get_card_draft(draft_id)
             if draft is None:raise KeyError('후보를 찾을 수 없습니다.')
             if draft['revision']!=revision:raise HandoverConflictError('다른 관리자가 먼저 처리했습니다. 최신 내용을 다시 불러와 주세요.')
-            self.connection.execute('UPDATE card_drafts SET status=? WHERE draft_id=?',(status,draft_id))
+            checked_at=datetime.now().astimezone().isoformat()
+            flags=draft['review_flags']
+            if action=='quality_pass':
+                flags['publication']=quality_artifact(draft,actor,checked_at)
+                assets={}
+                for source in draft['card'].get('provenance',{}).get('sources',[]):
+                    if source.get('locator')=='incident':
+                        incident=self.get_incident(source['source_id'])
+                        if incident:assets.update(incident['assets'])
+                if not assets:raise ValueError('원본 사건·자산 연결을 보완한 뒤 검수해 주세요.')
+                flags['publication']['assets']=assets
+            elif 'publication' in flags:
+                flags['publication']={**flags['publication'],'state':'superseded','searchable':False}
+            self.connection.execute('UPDATE card_drafts SET status=?,review_flags=? WHERE draft_id=?',
+                                    (status,_dump(flags),draft_id))
             self.connection.execute('INSERT INTO card_draft_reviews (draft_id,revision,action,status,reviewer_id,reviewer_name,reason,created_at) VALUES (?,?,?,?,?,?,?,?)',
-                (draft_id,revision+1,action,status,actor['id'],actor['name'],reason,datetime.now().astimezone().isoformat()))
+                (draft_id,revision+1,action,status,actor['id'],actor['name'],reason,checked_at))
         return self.get_card_draft(draft_id)
 
     def list_work_reports(self, limit: int = 30, offset: int = 0) -> list[dict[str, Any]]:

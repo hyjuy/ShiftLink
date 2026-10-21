@@ -2,6 +2,27 @@
 
 갱신: 2026-10-21 (Asia/Seoul). 작업 폴더: `D:\obsd\Projects\ShiftLink`.
 
+## 후속 Git 동기화 요청
+
+사용자는 원격·로컬이 뒤처지지 않도록 동기화하고 **PDA는 원격 main과 일치**시키라고 추가 지시했다.
+`origin/main` (`4c50d6c`) 병합은 `6c5676f`로 완료했고, PDA 화면과 `shiftlink/pda/`는 원격과 차이가 없다.
+기존 PDA 로컬 수정은 백업하고 재적용하지 않았다. MES 서버 로컬 수정은 충돌 없는 3-way로 복원했으며 다른 미커밋 작업은 남겨 두었다.
+병합 후 관련 Python 검사 **249개 통과**. 삭제된 `tries`를 요구하던 구형 PDA 테스트는 활성 상태 격리를 더 넓게 검사하도록 갱신했다.
+복구 참조·검증·최종 동기화 확인 명령은 `docs/testing/git-sync-20261021.md`에 있다. 새 대화에서는 먼저 `git status --short --branch`와 해당 문서의 동기화 명령으로 현재 원격 반영 상태를 확인한다.
+미커밋 작업은 커밋 기준 동기화와 구분하며, 사용자 요청 없이 일괄 커밋하거나 정기 자동 동기화를 만들지 않는다.
+
+## 후속 실행 결과 — 2026-10-21 17:05 KST
+
+- 사용자 요청에 따라 현재 작업 트리에서 관련 12개 Python 테스트 파일을 다시 실행했다. **184 passed in 149.07s**. 실제 Chrome·HTTP·NumPy 랭커 검사를 포함하며, 모델 응답은 결정적 픽스처다. 아래의 183 passed/89%는 이전 실행 기록이고 이번에는 커버리지를 다시 측정하지 않았다.
+- PDA JavaScript 문법과 Node 회귀 8개 명령, 검수 JavaScript 문법을 재확인했다. 모두 통과했다. 재생성된 1280/390 화면 이미지도 직접 확인했다.
+- `scripts/check_knowledge_publication.py`는 작업 트리·스테이징 Python 검사 포함 `ok=true`였다.
+- 실제 `tests/publication_live.py`를 로컬 Ollama 대상으로 실행했지만 **1 failed in 10.58s**. 첫 `/api/embed` 요청에서 `ConnectionRefusedError: [WinError 10061]` / `urllib.error.URLError`가 발생했다. 실제 벡터·게시·검색·judge·답변 성공 증거는 없다.
+- 외부 연결을 추가로 분리해서 확인했다. Tailscale ping은 `jetson-06 (100.115.59.4)`에 성공했고, Jetson MES `http://100.115.59.4:8000/api/config`도 응답했다. 따라서 장비 전체가 연결 불가인 상태로 단정하지 않는다.
+- Ollama는 `127.0.0.1:11434`, `100.115.59.4:11434`, Tailscale가 확인한 LAN `192.168.10.166:11434` 모두 외부에서 연결 실패했다. SSH `jetson@100.115.59.4`는 `Permission denied (publickey,password).`로 내부 모델·서비스 설정을 확인하지 못했다. localhost에만 바인딩된 것인지, 서비스가 중지된 것인지는 미확인이다.
+- 재개에는 접근 가능한 Ollama 주소 또는 인증된 Jetson SSH 연결 정보가 필요하다. 사용자에게 주소/SSH 별칭만 요청했다. 비밀번호·개인키는 요청하지 않았다. 장비 서비스 재시작·모델 설치·배포·운영 DB 변경은 수행하지 않았다.
+- 증거: `artifacts/knowledge-publication-live-20261021/regression.xml`, `regression.log`, `live-local.xml`, `live-local.log`. 자세한 명령과 반증 기록은 `docs/harness/knowledge-publication-adoption-20261021.md`의 후속 실행 절을 참고한다.
+- 기본 샌드박스 pytest는 Temp 폴더 `PermissionError: [WinError 5]`로 중단했고, 승인된 샌드박스 밖 실행에서 위 결과를 얻었다. 제품 코드 수정은 필요하지 않았다. 기존 사용자 변경·스테이징 상태를 유지했다.
+
 ## 사용자 요청
 
 PDA 질문에서 적용 지식 없음 확인 → 조치 시도 → 근무일지 → 지식카드 후보 → 심사 → 검수 → 스키마 구조화 → 임베딩 → RAG 검색 풀 반영까지 구현. `crash-out`과 `harness-engineering` 사용. 컨텍스트가 50% 미만이면 이 파일을 남기고 새 대화로 인계.

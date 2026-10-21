@@ -50,10 +50,14 @@ assert.deepEqual(r3.excluded.map((x) => [x.card.card_id, x.miss]), [['K-B', true
 assert.ok(r3.excluded[1].why.startsWith('미평가'));
 assert.ok(!/불일치/.test(r3.excluded[1].why));
 // B3: 재스캔 실패 시 이전 확정 해제 · 알림 확인 대상은 탭 시점 equipment_id로 고정.
-const st = {eq:{equipment_id:'EQ-1'}, source:'camera_scan', scanId:'SC-1', tries:[{}], observations:[{}]};
+// main의 '이 조치 시도' 제거 후에는 현재 사용하는 관측·근거·대화 상태의 격리를 확인한다.
+const st = {eq:{equipment_id:'EQ-1'}, source:'camera_scan', scanId:'SC-1', observations:[{}],
+  queryResponse:{answer:'이전 답변'}, ranked:{actions:[{}]}, obsRemoved:['pressure'],
+  mes:{operating:'running'}, mesExcluded:['pressure'], chat:[{question:'이전 질문'}]};
 releaseContext(st);
 assert.equal(st.eq, null); assert.equal(st.source, null); assert.equal(st.scanId, null);
-assert.equal(st.tries.length + st.observations.length, 0);
+assert.equal(st.queryResponse, null); assert.equal(st.ranked, null); assert.equal(st.mes, null);
+for (const key of ['observations', 'obsRemoved', 'mesExcluded', 'chat']) assert.deepEqual(st[key], []);
 const eqs2 = [{equipment_id:'EQ-1', code:'HPU-01'}, {equipment_id:'EQ-2', code:'GR-01'}];
 assert.equal(alertTarget('EQ-2', eqs2.slice().reverse()).code, 'GR-01');
 assert.equal(alertTarget('EQ-9', eqs2), null);

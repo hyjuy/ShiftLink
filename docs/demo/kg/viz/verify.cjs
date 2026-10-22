@@ -102,6 +102,34 @@ async function main() {
       await navigate(normal.url+'/viz/',"document.getElementById('workspace') && (!document.getElementById('workspace').hidden || !document.getElementById('error').hidden)");
       await check("document.getElementById('error').hidden && document.getElementById('dataset').textContent.includes('실제 파일')",'existing real graph loads without mock');
       reports.push('INFO actual graph '+await evaluate("document.getElementById('status').textContent"));
+      await check("Boolean(document.getElementById('depth'))",'two-hop: accessible depth selector exists');
+      await evaluate("document.getElementById('depth').value='2';chooseNeighbor(model.nodes.find(n=>n.props.card_id==='K-1004').id)");
+      await check("document.getElementById('graph').textContent.includes('2단계') && document.querySelectorAll('#graph .graph-node').length>3",'two-hop: actual card shows three columns');
+      await check("document.getElementById('two-hop-detail').textContent.includes('선택 카드 위치') && document.getElementById('two-hop-detail').textContent.includes('참고 카드 위치')",'two-hop: separate citation locators');
+      await check("document.getElementById('depth-note').textContent.includes('현재 게시 상태')",'two-hop: static snapshot boundary');
+      await check("(()=>{const x=twoHop(model,selectedId);return x.related.length>0 && x.related.length<=10 && x.paths.every(p=>p.edges.length===2 && p.nodes.length===3 && p.nodes[0]!==p.nodes[2] && p.edges.every(e=>model.edges.includes(e))) && x.paths.every(p=>p.edges[1].type==='PART_OF'||['CITES','DESCRIBES_SYMPTOM'].includes(p.edges[1].type));})()",'two-hop: bounded real edges and no self/asset traversal');
+      await check("(()=>{const before=JSON.stringify(model.nodes)+JSON.stringify(model.edges);for(const n of model.nodes){const x=twoHop(model,n.id);if(x.related.length>10||x.related.some(id=>x.paths.filter(p=>p.nodes[2]===id).length>3))return false;if(n.type!=='CardVersion'&&x.paths.length)return false;}return before===JSON.stringify(model.nodes)+JSON.stringify(model.edges);})()",'two-hop: all real roots bounded and graph immutable');
+
+      await check(`(()=>{
+        const root={id:'root',type:'CardVersion'}, nodes=[root],edges=[];
+        for(let d=0;d<5;d++) {nodes.push({id:'doc'+d,type:'DocumentVersion'});edges.push({source:'root',target:'doc'+d,type:'CITES'});}
+        for(let i=0;i<15;i++){const id='peer'+String(i).padStart(2,'0');nodes.push({id,type:'CardVersion'});for(let d=0;d<5;d++)edges.push({source:id,target:'doc'+d,type:'CITES'});}
+        const g={nodes,edges,byId:new Map(nodes.map(n=>[n.id,n]))}, result=twoHop(g,'root');
+        return result.related.length===10 && result.paths.length===30 && result.omitted===5 && result.pathsOmitted===20 && JSON.stringify(result)===JSON.stringify(twoHop({...g,edges:[...edges].reverse()},'root'));
+      })()`,'two-hop: card/path caps, omission counts and order independence');
+      await check("[...document.querySelectorAll('#graph .graph-edge')].every(n=>model.edges.some(e=>e.source===n.dataset.source && e.target===n.dataset.target && e.type===n.dataset.type))",'two-hop: drawn arrows preserve stored direction');
+      await shot('actual-two-hop-desktop.png');
+      await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+      await check('document.documentElement.scrollWidth<=390','two-hop: mobile page has no overflow');
+      await shot('actual-two-hop-mobile.png');
+      await evaluate("[...document.querySelectorAll('#graph .graph-node')].find(n=>n.getAttribute('data-lane')==='2').focus()");
+      await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+      await check("document.getElementById('selection-id').textContent!==model.nodes.find(n=>n.props.card_id==='K-1004').id",'two-hop: keyboard endpoint navigation');
+      await evaluate("chooseNeighbor(model.nodes.find(n=>n.type==='Asset').id)");
+      await check("document.getElementById('depth-note').textContent.includes('카드를 선택') && document.querySelectorAll('#graph [data-lane]').length===0",'two-hop: non-card keeps direct neighbors');
+      await evaluate("document.getElementById('depth').value='1';document.getElementById('depth').dispatchEvent(new Event('change'))");
+      await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+
       const actual = JSON.parse(fs.readFileSync(path.join(kg,'build','graph.json'),'utf8'));
       await check(`model.nodes.length===${actual.nodes.length} && model.edges.length===${actual.edges.length}`,'actual: browser counts match generated graph');
       if (actual.nodes.some(n=>n.type==='Symptom')) {
@@ -133,6 +161,8 @@ async function main() {
       await check("document.getElementById('badges').textContent.includes('합성 장비') && model.nodes.filter(n=>n.type==='Asset').length===10 && !model.nodes.some(n=>n.type==='AssetPart')",'integrated: synthetic assets and no AssetPart');
       await evaluate("chooseNeighbor(model.nodes.find(n=>n.type==='Symptom').id)");
       await shot('actual-file.png');
+      await navigate(normal.url+'/viz/?depth=2&card=K-1004',"document.getElementById('workspace') && !document.getElementById('workspace').hidden");
+      await check("document.getElementById('depth').value==='2' && model.byId.get(selectedId).props.card_id==='K-1004' && document.querySelectorAll('#graph [data-lane]').length>0",'two-hop: real graph deep link opens chosen card');
       await navigate(normal.url+'/viz/?selftest=1',"document.getElementById('workspace') && (!document.getElementById('workspace').hidden || !document.getElementById('error').hidden)");
       await check("document.getElementById('error').hidden && document.getElementById('selftest').hidden",'real mode selftest query does not run mock-only checks');
     }

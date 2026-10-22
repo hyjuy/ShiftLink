@@ -1,0 +1,200 @@
+{
+  "date": "2026-10-22",
+  "worktree": "C:/Users/hyjuy/.codex/worktrees/kg-integration/ShiftLink",
+  "branch": "codex/kg-integration",
+  "head": "10053831ea429ea9574b00d89c59fb5bf1e42ae7",
+  "implementation_state": "uncommitted; no staging, commit, push, PR or deployment",
+  "artifact_hashes": [
+    {
+      "path": "docs/data/knowledge_cards/kb/kb_cards.json",
+      "sha256": "05cfc4e79a3087e3544fc01e6b830268b542f55ae3be31bd6ad7601fc1d6dd3a",
+      "identical_to_head": true
+    },
+    {
+      "path": "docs/data/reference/00_plant_and_relations.json",
+      "sha256": "aee891c5e5e2270e815080f22b153e9b64e9128951d2262240c1f41cdc5e1708",
+      "identical_to_head": true
+    },
+    {
+      "path": "docs/demo/kg/schema.md",
+      "sha256": "ad460fc639146d17d448457a5c0a7908bf4aaca92f4098860456401fe0b81613",
+      "identical_to_head": true
+    },
+    {
+      "path": "docs/demo/kg/symptoms/symptom_concepts.json",
+      "sha256": "514f8cc20d4ac2546f5f49011811b9c60499dccc41f2e78edcf045fd2b209000",
+      "identical_to_head": true
+    },
+    {
+      "path": "docs/demo/kg/build/graph.json",
+      "sha256": "594d2842b57849fddd68d00141635392fa262c652504d35ec9760f460fc75c94",
+      "identical_to_head": true
+    },
+    {
+      "path": "docs/demo/kg/build/validation.json",
+      "sha256": "2cd2ee3b627dd74232fa31819e1b166def550a59ff1ad6186ad033d3af67151b",
+      "identical_to_head": true
+    }
+  ],
+  "graph_counts": {
+    "nodes": 289,
+    "edges": 434,
+    "artifact_changed": false
+  },
+  "tests": [
+    {
+      "command": "python -B -m pytest tests/test_graph_explain.py tests/test_graph_explain_browser.py tests/test_s30h.py tests/test_mes_query.py tests/test_publication_s30h.py tests/test_publication_worker.py tests/test_knowledge_publication.py -q -p no:cacheprovider --basetemp=docs/demo/kg/.explain-qa/pytest-combined",
+      "result": "117 passed, 1 failed in 28.78s",
+      "failure": "New browser test selected hidden legacy #ctxSensors; existing visible region MES 센서값 was present. Corrected new test target and added before/after sensor-text equality; no sensor product code or existing expectation changed."
+    },
+    {
+      "command": "python -B -m pytest tests/test_graph_explain_browser.py -q -p no:cacheprovider --basetemp=docs/demo/kg/.explain-qa/pytest-browser2",
+      "result": "1 passed in 7.38s"
+    },
+    {
+      "command": "PYTHONPATH=tests;. python -B -m pytest tests/test_graph_explain_browser.py docs/demo/kg/.explain-qa/test_publication_browser_redirected.py -q -p no:cacheprovider --basetemp=docs/demo/kg/.explain-qa/pytest-browser-final",
+      "result": "2 passed in 18.02s",
+      "note": "Original publication browser test copied with only output directory changed to docs/demo/kg/.explain-qa/publication-browser."
+    },
+    {
+      "command": "python -B -m pytest tests/test_graph_explain_browser.py -q -p no:cacheprovider --basetemp=docs/demo/kg/.explain-qa/pytest-scroll",
+      "result": "1 passed in 9.45s",
+      "note": "Final new browser test includes last-line viewport and hit-test checks at 1280 and 390 widths."
+    },
+    {
+      "command": "python -B -m pytest tests/test_graph_explain_browser.py -q -p no:cacheprovider --basetemp=docs/demo/kg/.explain-qa/pytest-browser-optional",
+      "result": "1 passed in 9.74s",
+      "note": "Final source uses pytest.importorskip for optional Playwright, matching existing browser test convention. Playwright and Chrome were present; test ran and was not skipped."
+    }
+  ],
+  "python_summary": "118 tests in selected suite passed across initial run and corrected focused rerun; 1 additional existing publication browser regression passed. No single fresh 119-test run claimed.",
+  "node_checks": [
+    {
+      "command": [
+        "node",
+        "--check",
+        "shiftlink/mes/web/pda.js"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/pda_graph_explain.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS graph explain DOM: optional, candidate/held labels, exact locators, text safety, immutable input\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/pda_sensor_display.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PDA sensor display, quality, manual override and disconnect PASS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/pda_network_boot.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PDA offline boot recovery PASS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/unity_pda_link.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "Unity -> PDA equipment link PASS\nUnity link preserved through login and work entry PASS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/pda_symptom_rank.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PDA symptom rank PASS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/mes_query_pda.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "MES query PDA contract PASS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/pda_chat.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PDA chat: one message one query, safety fold, handover draft PASS\n",
+      "stderr": ""
+    }
+  ],
+  "publication_check": {
+    "ok": true,
+    "errors": [],
+    "staged_python_checked": true
+  },
+  "diff_check": {
+    "exit_code": 0,
+    "output": "warning: in the working copy of 'docs/demo/kg/README.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/design/project-structure.md', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  "screenshots": [
+    ".explain-qa/pda-explain-1280.png",
+    ".explain-qa/pda-explain-390.png",
+    ".explain-qa/pda-graph-1280.png",
+    ".explain-qa/pda-graph-390.png"
+  ],
+  "browser_response": ".explain-qa/browser-response.json",
+  "browser_assertions": [
+    "real graph and manifest",
+    "actual MES HTTP and persisted query JSON",
+    "off/on answer and evidence equality",
+    "visible sensor region and unchanged sensor text",
+    "keyboard Enter disclosure",
+    "1280/390 widths and reachable last line without overlay",
+    "missing graph notice with unchanged answer",
+    "withheld answer omits graph",
+    "late response after equipment change cannot repaint graph",
+    "zero page errors"
+  ],
+  "not_run": [
+    "live Ollama and production S30h index",
+    "Jetson/Pi/physical PDA or live field sensors",
+    "full repository suite",
+    "latency benchmark",
+    "field safety or manufacturer approval"
+  ],
+  "staged_files": [],
+  "changed_tracked_files": [
+    "docs/demo/kg/README.md",
+    "docs/design/project-structure.md",
+    "shiftlink/mes/query.py",
+    "shiftlink/mes/server.py",
+    "shiftlink/mes/web/pda.html",
+    "shiftlink/mes/web/pda.js",
+    "shiftlink/rag2/s30h.py"
+  ],
+  "new_implementation_files": [
+    "shiftlink/rag/graph_explain.py",
+    "tests/test_graph_explain.py",
+    "tests/test_graph_explain_browser.py",
+    "tests/pda_graph_explain.cjs",
+    "docs/demo/kg/explain.md",
+    "docs/demo/kg/explain-validation.json"
+  ],
+  "temporary_evidence": "docs/demo/kg/.explain-qa/; includes disposable pytest fixtures and redirected browser test, all untracked"
+}

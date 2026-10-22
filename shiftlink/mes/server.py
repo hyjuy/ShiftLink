@@ -168,6 +168,7 @@ class MesService:
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
             "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True,
+            **({"graph_context": result["graph_context"]} if "graph_context" in result else {}),
             **({"s30h_trace": result["s30h_trace"]} if "s30h_trace" in result else {})})
         return {**result, "query_id": query_id}
 

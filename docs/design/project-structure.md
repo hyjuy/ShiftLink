@@ -117,6 +117,16 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 `pipeline.py`, `response.py`, `compose.py`, `router.py`에서 확인한다.
 최상단의 “one model call” 설명만 보고 판정·예열·재시도까지 호출 한 번이라고 단정하지 않는다.
 
+### 선택적 그래프 연결 설명 (2026-10-22)
+
+`SHIFTLINK_KG_MODE=explain`은 `rag/graph_explain.py`에서 kg-demo-v1을 읽고,
+`mes/query.py`가 기존 파이프라인의 최종 인용 카드에만 `graph_context`를 추가한다.
+`rag2/s30h.py`는 최종 청크를 내부 결과로 전달한다. 검색·생성·판정·센서 근거는 기존 경로를 따른다.
+`mes/server.py`가 연결 설명을 질의 JSON에 보존하고 PDA가 접기/펼치기 영역으로 표시한다.
+기본값은 `off`; 별도 검색 모드나 그래프 DB는 없다.
+[설정·제약·검증](../demo/kg/explain.md), `tests/test_graph_explain.py`,
+`tests/test_graph_explain_browser.py`, `tests/pda_graph_explain.cjs`를 함께 확인한다.
+
 ## 6. PDA·인식·Unity
 
 - `pda/__main__.py`가 `mes/web/` 화면을 제공하고 `/api/*`를 Jetson으로 프록시한다.

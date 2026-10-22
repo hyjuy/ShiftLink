@@ -99,7 +99,7 @@ python -m http.server 8766 --bind 127.0.0.1 --directory docs/demo/kg
 
 [/67 검토 보고서](ai-review-67.md)와 [86장 대장](ai-review-cards.json)에 원문 충실성 검토를 기록했다. 이번에는 그 수정 요청 R1–R6을 반영하고 기계 검증을 재실행했다. 6개 에이전트 검토를 새로 수행하거나 사람·제조사 승인을 취득한 것은 아니다.
 
-판본 누락 인용 42건의 근거 확보, 현장 안전·제조사 기준 확인, 안전 카드 후보 승격 여부는 남아 있다. `needs_review`를 승인 상태로 바꾸지 않았고 null 카드에서 증상을 추정하지 않았다. 분류 PART_OF는 실제 부품 장착 관계가 아니다. S30h·MES·PDA 답변 연결은 이번 작업 범위 밖이다.
+판본 누락 인용 42건의 근거 확보, 현장 안전·제조사 기준 확인, 안전 카드 후보 승격 여부는 남아 있다. `needs_review`를 승인 상태로 바꾸지 않았고 null 카드에서 증상을 추정하지 않았다. 분류 PART_OF는 실제 부품 장착 관계가 아니다. 위 통합 검증에는 S30h·MES·PDA 답변 연결이 포함되지 않았다. 후속 explain 구현은 아래 별도 기록을 따른다.
 
 발표 문장:
 
@@ -112,3 +112,9 @@ GraphRAG 구현, 검색·답변 성능 개선, 정식 온톨로지 달성을 주
 [integration_validation.json](integration_validation.json), [recheck-validation.json](recheck-validation.json), [acceptance-validation.json](acceptance-validation.json)은 **문구 수정 전** 검증 스냅샷으로 보존했다. 그 출력·매핑 해시와 “담당자 파일 불변”은 당시 결과이며 현재 결과에는 적용하지 않는다. [이전 README](.revision-20261022/README-before.md)와 [수정 전 상태](.revision-20261022/before.json)도 보존했다. 변환·시각화 HANDOFF의 이전 계약 해시는 승인 상태 설명·공백 차이가 있는 당시 로컬 문서 값이며 현재 schema 해시는 위 표를 따른다.
 
 별도 조사 clone `D:/obsd/Projects/ShiftLink-kg-integration-20261022`의 이전 변환 단독 merge `76e0531fbd9bf8d970e02cde1265d96860170095`는 이 통합 작업트리에 가져오지 않았다. 주 작업폴더의 이전 HEAD 이동 관찰은 과거 README에 남아 있으며 이번 후속 수정은 지정 통합 작업트리의 KG 경로에서만 수행했다. 최신 미커밋 파일 목록과 수정 범위는 revision-validation.json에 기록한다.
+
+## 후속: 기존 답변 연결 설명
+
+2026-10-22, 통합 결과 커밋 `10053831ea429ea9574b00d89c59fb5bf1e42ae7` 이후 별도 미커밋 작업으로 그래프 로더와 `SHIFTLINK_KG_MODE=explain`을 구현했다. 기존 최종 인용 카드에만 연결 설명을 붙이고 MES 응답·질의 저장·PDA에 표시한다. 기본값 off이며 기존 답변·검색·센서 동작을 유지한다. 그래프 산출물·원본·스키마는 변경하지 않았다.
+
+실행 방법과 제한은 [explain 안내](explain.md), 이번 검증은 [explain 검증 기록](explain-validation.json)에 있다. 위 통합 검증 기록과 후속 실행 기능의 검증을 구분한다. 검증 당시에는 커밋·push·PR·배포하지 않았다. 이후 사용자가 검증된 구현·테스트·문서만 `codex/kg-integration`에 커밋·push하도록 승인했다. `.explain-qa/` 임시 증거는 공유에서 제외하고, PR·main 병합·배포는 수행하지 않는다.

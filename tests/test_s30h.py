@@ -223,7 +223,7 @@ def test_mes_prefix_states_the_unit_in_code_and_fills_abstentions(pipe, monkeypa
     monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '152 bar [S1]", "citations": ["S1"]}'})
     assert pipe.run(payload).output.answer == "152 bar\n근거: hpu_manual p.12"   # off: unchanged
     pipe.mes_prefix = True
-    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 활성 경보 유압 공급 저하(AL-HYD-LOW)."
+    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 값 없음 12개, 활성 경보 유압 공급 저하(AL-HYD-LOW)."   # 1 of 13 sent
     assert pipe.run(payload).output.answer == f"{head}\n152 bar\n근거: hpu_manual p.12"
     judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
     out = pipe.run(payload).output

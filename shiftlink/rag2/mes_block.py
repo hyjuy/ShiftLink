@@ -62,7 +62,13 @@ def summary(eq_code: str, specs: dict, observations: list, active_alarms: list, 
     alarm = f"활성 경보 {_alarms(active_alarms, labels)}"
     if not rows:
         return f"현재 MES({eq_code}): 유효 관측 없음, {alarm}."
-    return f"현재 MES({eq_code}): {', '.join(off) if off else '측정값 모두 정상 범위'}, {alarm}."
+    # 10/22: a signal with no valid value is not "normal" (MX-C28b: dropped air pressure under "측정값 모두 정상 범위")
+    seen = {o["signal"] for o in observations}
+    gone = [s.name.split(" (")[0] for sig, s in specs.items() if sig not in seen]
+    rest = ", ".join(off) if off else ("나머지 측정값 정상 범위" if gone else "측정값 모두 정상 범위")
+    if gone:
+        rest += f", 값 없음 {'·'.join(gone) if len(gone) <= 3 else f'{len(gone)}개'}"
+    return f"현재 MES({eq_code}): {rest}, {alarm}."
 
 
 def where(m: dict, event_label: bool = True) -> str:
@@ -95,7 +101,7 @@ def demo():
     s = summary("HPU-01", specs, obs, ["AL-SENSOR-ANOMALY"], {"AL-SENSOR-ANOMALY": "센서값 범위 이탈"})
     assert s == "현재 MES(HPU-01): 리턴 필터 차압 1.5 bar 높음(기준 0–1.2), 누유 감지 1 높음(기준 0), 활성 경보 센서값 범위 이탈(AL-SENSOR-ANOMALY).", s
     assert summary("PDP-01", specs, [], []) == "현재 MES(PDP-01): 유효 관측 없음, 활성 경보 없음."
-    assert summary("HPU-01", specs, obs[2:4], []) == "현재 MES(HPU-01): 측정값 모두 정상 범위, 활성 경보 없음."   # stopped 0
+    assert summary("HPU-01", specs, obs[2:4], []) == "현재 MES(HPU-01): 나머지 측정값 정상 범위, 값 없음 리턴 필터 차압·누유 감지, 활성 경보 없음."   # stopped 0; the others missing
     ev = [{"text": "t", "metadata": {"kind": k, "source": s, "page": 3}} for k, s in (("event", "K-1103"), ("card", "K-1210"), ("source", "m.pdf"))]
     p = prompt("q", m, ev)
     assert p.index("[MES]") < p.index("[근거]"), p

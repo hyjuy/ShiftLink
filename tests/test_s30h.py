@@ -118,7 +118,7 @@ def test_source_conditions_are_opt_in_and_do_not_change_route_or_abstention(pipe
     card = next(c for c in cards if c["card_id"] == "K-1027")
     ev = [chunk("card_K-1027", "card", "K-1027", "GR", text=card["know_how"])]
     pipe.cards = [card]
-    def fixed_evidence(question, eq_type, equipment_id):
+    def fixed_evidence(question, eq_type, equipment_id, units=None):
         assert eq_type == "GR" and equipment_id == "EQ-0004"
         return ev
     monkeypatch.setattr(pipe, "evidence", fixed_evidence)
@@ -223,11 +223,100 @@ def test_mes_prefix_states_the_unit_in_code_and_fills_abstentions(pipe, monkeypa
     monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '152 bar [S1]", "citations": ["S1"]}'})
     assert pipe.run(payload).output.answer == "152 bar\n근거: hpu_manual p.12"   # off: unchanged
     pipe.mes_prefix = True
-    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 활성 경보 유압 공급 저하(AL-HYD-LOW)."
+    head = "현재 MES(HPU-01): 유압유 탱크 유면 60 pct 낮음(기준 70–100), 값 없음 12개, 활성 경보 유압 공급 저하(AL-HYD-LOW)."   # 1 of 13 sent
     assert pipe.run(payload).output.answer == f"{head}\n152 bar\n근거: hpu_manual p.12"
     judged(monkeypatch, {"c1": 0.1, "c2": 0.0, "c4": 0.1})
     out = pipe.run(payload).output
     assert out.no_knowledge and out.answer == f"{head} 근거 자료에서 이 상황의 조치를 찾지 못했습니다. 조치는 정비 담당 확인이 필요합니다."
+
+
+def test_unobserved_guard_answers_a_dropped_signal_in_code(pipe, monkeypatch):
+    # MX-C27/C28 (10/21): bearing temperature dropped for bad quality; the model called it normal from the surface temperature
+    obs = [{"signal": "gr_surface_temp", "value": 30}, {"signal": "gr_surface_temp_state", "value": "normal"}]
+    judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '베어링 온도 30도로 정상 [S1]", "citations": ["S1"]}'})
+    payload = {"question": "입측 감속기 베어링 쪽 온도 MES로 보면 어때요?", "eq_id": "EQ-0004", "observations": obs}
+    assert pipe.run(payload).tool_results["route"] == "confident"   # off: as before
+    pipe.unobserved_guard = True
+    pipe.specs["EQ-0004"]["gr_brg_temp"] = SimpleNamespace(name="감속기 베어링 온도")   # the test catalog has no GR points
+    monkeypatch.setattr(E, "judge_dist", lambda *a, **k: pytest.fail("no search or judge for an unobserved signal"))
+    r = pipe.run(payload)
+    assert r.tool_results["route"] == "unobserved" and r.tool_results["unobserved"] == ["감속기 베어링 온도"]
+    assert r.output.no_knowledge and r.output.answer.startswith("GR-01 감속기 베어링 온도: 지금 MES에 유효한 측정값이 없습니다.")
+    assert [n.card_id for n in r.output.safety_notices] == ["K-S2"]
+    assert S.unobserved("CAU 공압 지금 몇 kPa예요?", {"air_pressure": SimpleNamespace(name="압축공기 압력")}, obs) == ["압축공기 압력"]
+    assert S.unobserved("표면 온도 괜찮아요?", pipe.specs["EQ-0004"], obs) == []   # observed signal
+    assert S.unobserved("베어링 온도 괜찮아요?", pipe.specs["EQ-0004"], []) == []   # no MES snapshot at all
+    # field words: 유압 (not 유압유 / 유압 펌프), 열 (not 열화), 진동 without RMS, a pole tag picks its pole
+    hpu = {"hpu_pressure": SimpleNamespace(name="유압 공급 압력"), "hpu_oil_temp": SimpleNamespace(name="유압유 온도"),
+           "hpu_pump_current": SimpleNamespace(name="유압 펌프 전류")}
+    assert S.unobserved("유압 떨어졌어요?", hpu, obs) == ["유압 공급 압력"]
+    assert S.unobserved("유압유 온도 괜찮아요?", hpu, obs) == ["유압유 온도"]
+    assert S.unobserved("유압 펌프 전류 봐줘", hpu, obs) == ["유압 펌프 전류"]
+    gr = {"gr_brg_temp": SimpleNamespace(name="감속기 베어링 온도"), "gr_vib_rms": SimpleNamespace(name="감속기 진동 RMS")}
+    assert S.unobserved("베어링 열이 나요", gr, obs) == ["감속기 베어링 온도"]
+    assert S.unobserved("베어링 열화 원인이 뭐예요?", gr, obs) == []
+    assert S.unobserved("GR 진동 괜찮아요?", gr, obs) == ["감속기 진동 RMS"]
+    poles = {f"p{n}": SimpleNamespace(name=f"차단기 L{n}극 표면 온도") for n in (1, 2)}
+    assert S.unobserved("L1 표면 온도 높아요?", poles, obs) == ["차단기 L1극 표면 온도"]
+    assert len(S.unobserved("차단기 표면 온도 어때요?", poles, obs)) == 2
+
+
+def test_unit_guard_keeps_the_answer_on_the_units_the_question_names(pipe, monkeypatch):
+    # 10/22: with GR-01 selected, "GR-02 ..." got GR-01's MES ("MES 기준 GR-01 ...") in 17/288 C4 answers
+    pipe.eq_code["EQ-0005"], pipe.eq_id["GR-02"], pipe.eq_type["EQ-0005"] = "GR-02", "EQ-0005", "GR"
+    pipe.eq_type["GR-02"] = "GR"
+    judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
+    prompts = []
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: prompts.append(p) or {"raw": prefix +
+                        'GR-01 베어링은 46.4도로 정상입니다 [S1]. 오일 레벨 12.5 pct를 확인합니다 [S1].", "citations": ["S1"]}'})
+    obs = [{"signal": "gr_surface_temp", "value": 30}, {"signal": "gr_surface_temp_state", "value": "normal"}]
+    payload = {"question": "GR-02 베어링 어때요?", "eq_id": "EQ-0004", "observations": obs, "snapshot_at": "t", "active_alarms": []}
+    pipe.mes_block = True
+    off = pipe.run(payload)
+    assert "[MES]" in prompts[0] and off.output.answer.startswith("GR-01 베어링은")   # off: as before
+    pipe.unit_guard = True
+    r = pipe.run(payload)
+    assert "[MES]" not in prompts[1]   # GR-01's values never reach a GR-02 question
+    assert r.output.answer == ("선택된 설비(GR-01)와 질문의 설비(GR-02)가 달라 GR-01의 MES 현재값은 쓰지 않았습니다.\n"
+                               "오일 레벨 12.5 pct를 확인합니다.\n근거: gr_manual p.3")
+    assert r.tool_results["other_unit"] and r.tool_results["unit_dropped"] == ["GR-01 베어링은 46.4도로 정상입니다 [S1]."]
+    mine = pipe.run({**payload, "question": "베어링 어때요?"})   # no code in the question: the selected unit
+    assert "[MES]" in prompts[2] and not mine.tool_results["other_unit"] and mine.output.answer.startswith("GR-01 베어링은")
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: {"raw": prefix + 'HPU-01 압력을 봅니다 [S1].", "citations": ["S1"]}'})
+    out = pipe.run({**payload, "question": "베어링 어때요?"})
+    assert out.output.no_knowledge and out.tool_results["abstain_reason"] == "other_unit"   # only another unit's sentence
+    assert S.asked_units("gr02랑 GR 1, RT-03베어링, HPU-012") == ["GR-02", "GR-01", "RT-03"]
+    pipe.unit_header = True
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: {"raw": prefix + '오일을 봅니다 [S1].", "citations": ["S1"]}'})
+    judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
+    assert pipe.run({**payload, "question": "베어링 어때요?"}).output.answer.startswith("[GR-01 기준] 오일을 봅니다.")
+
+
+def test_place_names_come_from_the_catalog_location(pipe, tmp_path):
+    cat = {"equipment_types": CATALOG["equipment_types"],
+           "equipment": [{"equipment_id": "EQ-0001", "code": "HPU-01", "equipment_type_id": "ET-1", "location_text": "유틸리티실 A동 1층"},
+                         {"equipment_id": "EQ-0004", "code": "GR-01", "equipment_type_id": "ET-2", "location_text": "입측 조작반 좌측 5 m"},
+                         {"equipment_id": "EQ-0005", "code": "GR-02", "equipment_type_id": "ET-2", "location_text": "출측 조작반 우측 4 m"}]}
+    p = S.S30hPipeline(tmp_path, "http://main:11434", "http://judge:11436", catalog=cat)   # the pipe fixture wrote the index
+    assert p.units_in("출측 감속기 누유요") == ["GR-02"] and p.units_in("입측감속기 온도") == ["GR-01"]
+    assert p.units_in("조작반 감속기") == [] and p.units_in("좌측 감속기") == []   # shared word / panel direction
+    assert p.units_in("GR-01이랑 출측 감속기") == ["GR-01", "GR-02"]
+
+
+def test_range_answer_on_drop_all_from_the_mes_range(pipe, monkeypatch):
+    # 10/22 NQ-D08: "RT-03 모터 전류 정상 범위?" - the range is only in the MES; nothing survived the judge
+    judged(monkeypatch, {"c3": 0.1, "c4": 0.0})
+    monkeypatch.setattr(G, "ask", lambda *a, **k: pytest.fail("no model call on drop_all"))
+    payload = {"question": "감속기 진동값 정상 범위가 몇이야?", "eq_id": "EQ-0004", "observations": []}
+    pipe.specs["EQ-0004"]["gr_vib_rms"] = SimpleNamespace(name="감속기 진동 RMS", unit="mm_s", normal_min=0.5, normal_max=2.8)
+    assert pipe.run(payload).output.no_knowledge   # off: as before
+    pipe.range_answer = True
+    out = pipe.run(payload).output
+    assert not out.no_knowledge and out.answer.startswith("GR-01 감속기 진동 RMS 정상 범위는 0.5–2.8 mm_s입니다.")
+    assert out.answer.endswith("근거: MES 기준값")
+    assert pipe.run({**payload, "question": "감속기 진동 정격이 몇이야?"}).output.no_knowledge   # rating, not the MES range
+    assert pipe.run({**payload, "question": "감속기 진동 왜 생겨?"}).output.no_knowledge   # not a range question
 
 
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
@@ -275,6 +364,22 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_MES_PREFIX", flag)
     assert Q.build_query_pipeline().mes_prefix is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_UNOBSERVED", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_UNOBSERVED", flag)
+    assert Q.build_query_pipeline().unobserved_guard is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_UNIT_GUARD", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_UNIT_GUARD", flag)
+    assert Q.build_query_pipeline().unit_guard is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_UNIT_HEADER", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_UNIT_HEADER", flag)
+    assert Q.build_query_pipeline().unit_header is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_RANGE_ANSWER", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_RANGE_ANSWER", flag)
+    assert Q.build_query_pipeline().range_answer is enabled
     monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)

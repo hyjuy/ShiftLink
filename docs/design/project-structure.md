@@ -119,6 +119,8 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 
 ### 선택적 그래프 연결 설명 (2026-10-22)
 
+`SHIFTLINK_KG_DEPTH=2`는 explain 결과에 허용된 2-hop 분류·참고 카드 경로만 추가한다. 기본 depth 1과 기존 답변·인용·센서는 유지하며 검색·생성에는 사용하지 않는다. 자세한 설정과 경계는 [explain 안내](../demo/kg/explain.md)를 따른다.
+
 `SHIFTLINK_KG_MODE=explain`은 `rag/graph_explain.py`에서 kg-demo-v1을 읽고,
 `mes/query.py`가 기존 파이프라인의 최종 인용 카드에만 `graph_context`를 추가한다.
 `rag2/s30h.py`는 최종 청크를 내부 결과로 전달한다. 검색·생성·판정·센서 근거는 기존 경로를 따른다.

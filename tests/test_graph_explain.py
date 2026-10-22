@@ -116,7 +116,9 @@ def test_query_context_is_additive_and_persisted(service, monkeypatch):
 from test_s30h import pipe, E, G
 
 
-def test_s30h_explain_does_not_change_prompt_rank_or_output(service, pipe, monkeypatch):
+@pytest.mark.parametrize("depth", ["1", "2"])
+def test_s30h_explain_does_not_change_prompt_rank_or_output(service, pipe, monkeypatch, depth):
+    monkeypatch.setenv("SHIFTLINK_KG_DEPTH", depth)
     pipe.cards = deepcopy(CARDS)
     pipe.rows[1]["metadata"]["source"] = "K-1004"
     pipe.rows[1]["text"] = CARD["know_how"]

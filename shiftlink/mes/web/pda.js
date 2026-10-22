@@ -1254,6 +1254,28 @@ function graphContextElement(context) {
     (card.symptom_candidates || []).forEach((item) => line(section, '검수 전 증상 후보 · ' + item.label));
     (card.held_citations || []).forEach((item) => line(section,
       '판본 미확인 · 보류 · ' + item.source_id + ' · ' + item.locator));
+    (card.paths || []).forEach((path) => line(section,
+      '분류 경로 · ' + path.component + ' → ' + path.equipment));
+    if (card.paths_omitted) line(section, '분류 경로 ' + card.paths_omitted + '개 생략');
+    if ((card.related_cards || []).length || card.related_cards_omitted) {
+      const references = document.createElement('details'); references.className = 'graph-related';
+      section.appendChild(references); line(references, '연결된 참고 카드', 'summary');
+      line(references, '답변 근거에 추가하지 않음 · 공유 관계만 표시하며 같은 원인이나 조치를 뜻하지 않습니다.');
+      (card.related_cards || []).forEach((related) => {
+        line(references, related.card_id + ' · 카드 판본 ' + related.version, 'h4');
+        (related.paths || []).forEach((path) => {
+          if (path.relation === 'DESCRIBES_SYMPTOM') {
+            line(references, '검수 전 증상 후보 공유 · ' + path.label);
+          } else if (path.relation === 'CITES') {
+            line(references, '문서 판본 공유 · ' + path.source_id + ' · ' + path.document_version);
+            line(references, '인용 카드 위치 · ' + path.cited_locators.join(' / '));
+            line(references, '참고 카드 위치 · ' + path.related_locators.join(' / '));
+          }
+        });
+        if (related.paths_omitted) line(references, '추가 연결 경로 ' + related.paths_omitted + '개 생략');
+      });
+      if (card.related_cards_omitted) line(references, '표시 상한으로 참고 카드 ' + card.related_cards_omitted + '개 생략');
+    }
   });
   if ((context.unmatched || []).length) line(box, '연결 확인 보류 · ' + context.unmatched.map((item) => item.card_id).join(', '));
   return box;

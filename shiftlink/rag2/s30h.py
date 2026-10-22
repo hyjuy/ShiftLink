@@ -93,6 +93,10 @@ ASKED_UNIT = re.compile(r"(?<![A-Za-z])(HPU|PDP|CAU|GR|RT|CV)\s*-?\s*0?(\d)(?!\d
 SENTENCE = re.compile(r".+?(?:[.!?](?=\s|$)|\n|$)\s*", re.S)   # a "." inside 12.5 does not end a sentence
 
 
+TYPE_NOUN = {"GR": "감속기", "RT": "롤러", "CV": "컨베이어"}   # types with several units; the catalog has no Korean names
+RELATIVE = {"좌측", "우측"}   # 조작반 좌측 5 m: a direction from the panel, not what the field calls the unit
+
+
 def asked_units(question: str) -> list[str]:
     """Unit codes written in the question, normalised to the catalog form (GR-02)."""
     return [f"{t.upper()}-0{n}" for t, n in ASKED_UNIT.findall(question)]
@@ -159,10 +163,27 @@ class S30hPipeline:
             self.eq_type[e["equipment_id"]] = self.eq_type[e["code"]] = types[e["equipment_type_id"]]
             self.eq_code[e["equipment_id"]] = e["code"]
         self.eq_id = {c: i for i, c in self.eq_code.items()}
+        # field names of a type with several units, from the catalog location (입측 조작반 좌측 5 m -> 입측 감속기 = GR-01):
+        # every Korean word of the location that no other unit of the type has, followed by the type's noun
+        by_type = {}
+        for e in cat["equipment"]:
+            if types[e["equipment_type_id"]] in TYPE_NOUN:
+                words = {w for w in re.findall(r"[가-힣]{2,}", e.get("location_text") or "") if w != TYPE_NOUN[types[e["equipment_type_id"]]] and w not in RELATIVE}
+                by_type.setdefault(types[e["equipment_type_id"]], []).append((e["code"], words))
+        self.place_names = []
+        for t, units in by_type.items():
+            for c, words in units:
+                for w in sorted(words - set().union(*(o for oc, o in units if oc != c))):
+                    self.place_names.append((re.compile(rf"{w}\s*{TYPE_NOUN[t]}"), c))
         from shiftlink.mes.configuration import from_catalog   # names/ranges as the MES shows them (catalog points have no names)
         self.specs = {e.equipment_id: {s.signal: s for s in e.signals} for e in from_catalog(cat).equipment}
         from shiftlink.mes.engine import MesEngine
         self.alarm_labels = MesEngine.ALARM_LABELS
+
+    def units_in(self, text: str) -> list[str]:
+        """Catalog unit codes a text names: written codes (GR-02) and place names (출측 감속기)."""
+        named = asked_units(text) + [c for rx, c in self.place_names if rx.search(text)]
+        return [c for c in dict.fromkeys(named) if c in self.eq_id]
 
     def _post(self, host, path, body, timeout=300):
         req = urllib.request.Request(f"{host}{path}", data=json.dumps(body).encode())
@@ -207,7 +228,7 @@ class S30hPipeline:
         # unit guard (10/22): the MES request holds the selected unit only (MesCardAdapter filters by equipment_id). A
         # question naming other units (GR-02 while GR-01 is selected) is about them: no selected-unit MES, their type's
         # folders and handover records, their safety cards; and the answer names no unit outside them.
-        asked = [c for c in dict.fromkeys(asked_units(question)) if c in self.eq_id] if self.unit_guard else []
+        asked = self.units_in(question) if self.unit_guard else []
         away = bool(asked) and code not in asked
         if away:
             types = {self.eq_type[c] for c in asked}
@@ -258,8 +279,8 @@ class S30hPipeline:
             # is cut; nothing left = abstain
             allowed = set(asked) or {code}
             parts = SENTENCE.findall(res["answer"])
-            dropped = [s.strip() for s in parts if set(asked_units(s)) - allowed]
-            res["answer"] = "".join(s for s in parts if not set(asked_units(s)) - allowed).strip()
+            dropped = [s.strip() for s in parts if set(self.units_in(s)) - allowed]
+            res["answer"] = "".join(s for s in parts if not set(self.units_in(s)) - allowed).strip()
             if not res["answer"]:
                 abstain, res["abstain"], res["reason"] = True, True, "other_unit"
         cited = [] if abstain else [ev2[int(c[1:]) - 1] for c in res["valid_cites"] if c != "M"]

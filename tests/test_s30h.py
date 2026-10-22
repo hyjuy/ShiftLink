@@ -289,6 +289,17 @@ def test_unit_guard_keeps_the_answer_on_the_units_the_question_names(pipe, monke
     assert S.asked_units("gr02랑 GR 1, RT-03베어링, HPU-012") == ["GR-02", "GR-01", "RT-03"]
 
 
+def test_place_names_come_from_the_catalog_location(pipe, tmp_path):
+    cat = {"equipment_types": CATALOG["equipment_types"],
+           "equipment": [{"equipment_id": "EQ-0001", "code": "HPU-01", "equipment_type_id": "ET-1", "location_text": "유틸리티실 A동 1층"},
+                         {"equipment_id": "EQ-0004", "code": "GR-01", "equipment_type_id": "ET-2", "location_text": "입측 조작반 좌측 5 m"},
+                         {"equipment_id": "EQ-0005", "code": "GR-02", "equipment_type_id": "ET-2", "location_text": "출측 조작반 우측 4 m"}]}
+    p = S.S30hPipeline(tmp_path, "http://main:11434", "http://judge:11436", catalog=cat)   # the pipe fixture wrote the index
+    assert p.units_in("출측 감속기 누유요") == ["GR-02"] and p.units_in("입측감속기 온도") == ["GR-01"]
+    assert p.units_in("조작반 감속기") == [] and p.units_in("좌측 감속기") == []   # shared word / panel direction
+    assert p.units_in("GR-01이랑 출측 감속기") == ["GR-01", "GR-02"]
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):

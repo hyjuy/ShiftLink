@@ -123,7 +123,8 @@ class S30hPipeline:
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
-                 event_label=False, mes_only=False, mes_prefix=False, p_fix=False, unobserved_guard=False, unit_guard=False):
+                 event_label=False, mes_only=False, mes_prefix=False, p_fix=False, unobserved_guard=False, unit_guard=False,
+                 unit_header=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -156,6 +157,7 @@ class S30hPipeline:
         self.mes_prefix = mes_prefix   # independent of the block: works with ck106 too
         self.unobserved_guard = unobserved_guard   # code answers a question about a signal the MES has no valid value for
         self.unit_guard = unit_guard   # the question's unit codes decide which unit the answer is about (run())
+        self.unit_header = unit_header   # answers start with [GR-01 기준]
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -292,6 +294,9 @@ class S30hPipeline:
             if self.source_conditions:
                 answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
             answer = re.sub(r"\s*\[(?:S\d+|M)\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+        if self.unit_header and answer and code and not away:
+            # 10/22 trial: say which unit the answer is about, so a worker sees a unit the rules did not catch
+            answer = f"[{', '.join(asked) or code} 기준] {answer}"
         if away:
             head = f"선택된 설비({code})와 질문의 설비({', '.join(asked)})가 달라 {code}의 MES 값은 쓰지 않았습니다."
             answer = f"{head}\n{answer}" if answer else f"{head} {MB.NO_ACTION}"

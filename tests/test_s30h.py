@@ -287,6 +287,10 @@ def test_unit_guard_keeps_the_answer_on_the_units_the_question_names(pipe, monke
     out = pipe.run({**payload, "question": "베어링 어때요?"})
     assert out.output.no_knowledge and out.tool_results["abstain_reason"] == "other_unit"   # only another unit's sentence
     assert S.asked_units("gr02랑 GR 1, RT-03베어링, HPU-012") == ["GR-02", "GR-01", "RT-03"]
+    pipe.unit_header = True
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: {"raw": prefix + '오일을 봅니다 [S1].", "citations": ["S1"]}'})
+    judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
+    assert pipe.run({**payload, "question": "베어링 어때요?"}).output.answer.startswith("[GR-01 기준] 오일을 봅니다.")
 
 
 def test_place_names_come_from_the_catalog_location(pipe, tmp_path):
@@ -353,6 +357,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_UNIT_GUARD", flag)
     assert Q.build_query_pipeline().unit_guard is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_UNIT_HEADER", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_UNIT_HEADER", flag)
+    assert Q.build_query_pipeline().unit_header is enabled
     monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)

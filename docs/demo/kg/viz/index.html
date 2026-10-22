@@ -7,6 +7,8 @@
 <style>
 :root{color-scheme:light;--ink:#202f35;--muted:#52656c;--paper:#f4f5f0;--panel:#fff;--line:#c7d0cc;--accent:#14645c;--warning:#805016;--warn-bg:#fff3d9;--error:#9c302d;--focus:#006bc2}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,"Malgun Gothic",sans-serif}::selection{background:#c7e8df;color:#102e29}a{color:var(--accent);text-underline-offset:3px}button,input,select{font:inherit;color:inherit}button,select,input{border:1px solid #8a9b96;border-radius:5px;background:var(--panel)}button{cursor:pointer;padding:8px 13px}button:hover{background:#e8f1eb}button:disabled{cursor:default;opacity:.55}input,select{padding:8px;width:100%}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}header{padding:22px 28px 18px;background:var(--panel);border-bottom:1px solid var(--line)}.topline{display:flex;justify-content:space-between;align-items:center;gap:16px}h1{font-size:25px;letter-spacing:-.025em;margin:0}h2{font-size:18px;margin:0 0 12px;letter-spacing:-.015em}h3{font-size:15px;margin:22px 0 8px}p{margin:8px 0}code,pre{font-family:Consolas,monospace;font-size:12px}code{overflow-wrap:anywhere}.subtitle{color:var(--muted);max-width:75ch}.tag{display:inline-block;padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:12px;font-weight:650;vertical-align:middle}.tag.mock,.tag.review,.tag.synthetic{color:var(--warning);background:var(--warn-bg)}.tag.data{color:var(--accent);background:#edf6ef}.notice{padding:12px 28px;border-bottom:1px solid var(--line);color:#5c481d;background:#faf2df;font-size:13px}.notice p{margin:0;max-width:110ch}.toolbar{display:grid;grid-template-columns:1fr 1fr 1.3fr auto;gap:14px;align-items:end;padding:18px 28px}label{display:block;font-size:13px;font-weight:650;margin-bottom:5px}.statusline{padding:0 28px 14px;color:var(--muted);font-size:13px;min-height:34px;font-variant-numeric:tabular-nums}.workspace{display:grid;grid-template-columns:265px minmax(340px,1fr) minmax(300px,385px);gap:1px;background:var(--line);border-block:1px solid var(--line)}.workspace>section{background:var(--panel);padding:20px;min-width:0}.workspace>section:first-child{background:#f7f9f5}.count{color:var(--muted);font-weight:400;font-size:13px}#nodes{height:490px;border-color:var(--line);padding:5px;font-size:13px;background:transparent}#nodes option{padding:9px 6px;border-bottom:1px solid #e1e7e1}#nodes option:checked{background:#cce4dc;color:#183c34}.help{font-size:12px;color:var(--muted)}.graph-scroll{overflow:auto;max-height:550px;min-height:360px;background:#f9fbf8;border:1px solid #d8e0da}.graph-scroll svg{display:block;width:100%;min-width:720px}.graph-edge{fill:none;stroke:#83968f;stroke-width:1.5}.graph-node{cursor:pointer}.graph-node rect{fill:#fff;stroke:#80968b;stroke-width:1}.graph-node text{fill:var(--ink);font-size:12px}.graph-node .node-type{fill:var(--muted);font-size:10px}.graph-node.selected rect{fill:#e0eee6;stroke:var(--accent);stroke-width:2}.graph-node:focus rect,.graph-node:hover rect{stroke:var(--focus);stroke-width:2}.graph-node.warning rect{fill:#fff5df}.graph-node .node-heading{font-weight:650}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0;color:var(--muted);font-size:12px}.legend span{display:flex;align-items:center;gap:5px}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent)}.legend .amber{background:var(--warning)}#selection-title{overflow-wrap:anywhere}#selection-id{display:block;color:var(--muted);margin-bottom:10px}#badges{display:flex;gap:6px;flex-wrap:wrap}.relations{padding:0;list-style:none;margin:0}.relations li{border-top:1px solid var(--line);padding:10px 0}.relations button{display:block;text-align:left;width:100%;padding:7px 9px;background:#f6f9f6;overflow-wrap:anywhere}.edge-label{font-size:11px;color:var(--muted);margin-bottom:4px;overflow-wrap:anywhere}.citation{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;overflow-wrap:anywhere}.citation strong{font-size:13px}.citation ul{padding-left:18px;margin:7px 0}.citation li{font-size:13px;margin-bottom:5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f5f1;padding:12px;margin:8px 0;max-height:380px;overflow:auto}summary{cursor:pointer;color:var(--accent);padding:8px 0;font-size:13px}.empty{padding:20px;color:var(--muted)}#error{margin:0 28px 20px;padding:20px;background:#fff2ed;border:1px solid var(--error);color:#702824}#error h2{color:var(--error)}#error pre{background:#fff8f5}footer{padding:16px 28px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:20px}#selftest{white-space:pre-wrap;overflow-wrap:anywhere;margin:0 28px 20px}[hidden]{display:none!important}@media(min-width:1450px){.workspace{grid-template-columns:290px minmax(450px,1fr) 420px}.graph-scroll{max-height:620px}#nodes{height:560px}}@media(max-width:1080px){.workspace{grid-template-columns:240px minmax(340px,1fr)}.workspace>section:last-child{grid-column:1/-1;display:block}.graph-scroll{max-height:480px}#nodes{height:430px}}@media(max-width:640px){header,.notice{padding:16px}.topline{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:22px}.toolbar{padding:16px;grid-template-columns:1fr 1fr}.toolbar>div:nth-child(3){grid-column:1/-1}.toolbar>button{grid-column:1/-1}.statusline{padding:0 16px 12px}.workspace{display:block}.workspace>section{border-bottom:1px solid var(--line);padding:16px}#nodes{height:210px}.graph-scroll{min-height:280px;max-height:430px}footer{padding:16px;display:block}#error{margin:0 16px 16px}}
+
+.depth-control{display:flex;align-items:center;gap:12px;margin:14px 0}.depth-control label{margin:0;white-space:nowrap}.depth-control select{max-width:240px}.graph-node.endpoint rect{fill:#eaf2fb;stroke:#426c91}.lane-title{font-size:12px;fill:#52656c;font-weight:650}.path-record{padding:12px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.path-record p{font-size:12px}.path-record button{width:100%;text-align:left}.graph-edge.second{stroke:#426c91;stroke-dasharray:5 3}#depth-note{max-width:75ch}#two-hop-detail>summary{font-weight:650}
 </style>
 </head>
 <body>
@@ -33,7 +35,7 @@
   </section>
   <div class="workspace" id="workspace" hidden>
     <section aria-labelledby="list-title"><h2 id="list-title">노드 목록 <span id="list-count" class="count"></span></h2><label for="nodes">선택할 노드</label><select id="nodes" size="14" aria-describedby="keyboard-help"></select><p id="keyboard-help" class="help">목록에서 위·아래 방향키로 선택합니다. Tab으로 필터·이웃 관계·원문 속성으로 이동합니다.</p><p class="help">설비 필터는 분류·자산·카드와 그 카드에 직접 연결된 증상·문서 판본에 적용됩니다.</p></section>
-    <section aria-labelledby="graph-title"><h2 id="graph-title">선택 노드와 이웃</h2><p class="help">화살표는 저장된 관계 방향입니다. 관계 이름과 속성은 오른쪽 목록에서 확인할 수 있습니다. 이웃은 필터 밖의 노드도 보여줍니다. 좁은 화면에서는 그래프 안을 가로로 스크롤하세요.</p><div class="legend"><span><i></i>설비 분류 · 카드 · 문서</span><span><i class="amber"></i>합성 장비 · 검수 전 증상</span></div><div class="graph-scroll" id="graph"></div></section>
+    <section aria-labelledby="graph-title"><h2 id="graph-title">선택 노드와 이웃</h2><p class="help">화살표는 저장된 관계 방향입니다. 관계 이름과 속성은 오른쪽 목록에서 확인할 수 있습니다. 이웃은 필터 밖의 노드도 보여줍니다. 좁은 화면에서는 그래프 안을 가로로 스크롤하세요.</p><div class="legend"><span><i></i>설비 분류 · 카드 · 문서</span><span><i class="amber"></i>합성 장비 · 검수 전 증상</span><span>2-hop: 파란 상자 = 도착 노드, 점선 = 두 번째 관계</span></div><div class="depth-control"><label for="depth">연결 깊이</label><select id="depth" disabled><option value="1">1-hop · 직접 연결</option><option value="2">2-hop · 분류·참고 연결</option></select></div><p id="depth-note" class="help" role="status" aria-live="polite"></p><div class="graph-scroll" id="graph"></div></section>
     <section aria-labelledby="selection-title"><h2 id="selection-title">노드를 선택하세요</h2><code id="selection-id"></code><div id="badges"></div><p id="selection-note" class="help"></p><div id="detail"></div></section>
   </div>
   <pre id="selftest" hidden aria-label="브라우저 자가 점검 결과"></pre>
@@ -222,10 +224,83 @@ function svgEl(tag, attributes = {}, text) {
   if (text !== undefined) node.textContent = text;
   return node;
 }
+// These are graph-snapshot paths, not the MES request's current publication view.
+function twoHop(graph, rootId) {
+  const root = graph.byId.get(rootId), taxonomy = [], peers = new Map();
+  if (root?.type !== 'CardVersion') return {paths:[],related:[],omitted:0,pathsOmitted:0};
+  const order = (a,b) => a.type.localeCompare(b.type) || a.target.localeCompare(b.target) || a.source.localeCompare(b.source);
+  for (const first of graph.edges.filter(e=>e.source===rootId).sort(order)) {
+    if (first.type === 'ABOUT') {
+      for (const second of graph.edges.filter(e=>e.source===first.target && e.type==='PART_OF').sort(order))
+        taxonomy.push({nodes:[rootId,first.target,second.target],edges:[first,second]});
+    } else if (['CITES','DESCRIBES_SYMPTOM'].includes(first.type)) {
+      for (const second of graph.edges.filter(e=>e.target===first.target && e.type===first.type && e.source!==rootId).sort(order)) {
+        if (!peers.has(second.source)) peers.set(second.source,[]);
+        peers.get(second.source).push({nodes:[rootId,first.target,second.source],edges:[first,second]});
+      }
+    }
+  }
+  const related = [...peers.keys()].sort().slice(0,10);
+  return {paths:[...taxonomy.slice(0,10),...related.flatMap(id=>peers.get(id).slice(0,3))],related,
+    omitted:peers.size-related.length,
+    pathsOmitted:Math.max(0,taxonomy.length-10)+related.reduce((sum,id)=>sum+Math.max(0,peers.get(id).length-3),0)};
+}
+function renderPathDetails(view) {
+  const box=el('details');box.id='two-hop-detail';
+  box.append(el('summary','2-hop 경로 원문 · '+view.paths.length+'개'));
+  for(const path of view.paths){
+    const [first,second]=path.edges, via=model.byId.get(path.nodes[1]), end=model.byId.get(path.nodes[2]);
+    const row=el('div',undefined,'path-record');
+    row.append(el('p',first.type+' → '+via.label+' '+(second.type==='PART_OF'?'→':'←')+' '+second.type));
+    const button=el('button',end.label+' ['+end.type+']');button.type='button';button.addEventListener('click',()=>chooseNeighbor(end.id));row.append(button);
+    if(first.type==='CITES') row.append(el('p','문서 판본: '+via.props.source_id+' · '+via.props.document_version),el('p','선택 카드 위치: '+(first.props.locators.join(' / ')||'(없음)')),el('p','참고 카드 위치: '+(second.props.locators.join(' / ')||'(없음)')));
+    if(first.type==='DESCRIBES_SYMPTOM') row.append(el('p','증상 후보 공유 · 검수 전. 같은 원인이나 조치를 뜻하지 않습니다.'));
+    row.append(jsonDetails('관계 방향·원문 속성',path.edges));box.append(row);
+  }
+  $('detail').prepend(box);
+}
+function renderTwoHop(selected,view) {
+  const host=$('graph'), mids=[...new Set(view.paths.map(p=>p.nodes[1]))], ends=[...new Set(view.paths.map(p=>p.nodes[2]))];
+  const height=Math.max(340,Math.max(mids.length,ends.length)*82+85);
+  const svg=svgEl('svg',{viewBox:'0 0 720 '+height,height,role:'group','aria-label':'선택 카드에서 허용된 두 관계를 따라가는 2-hop 경로. 원래 화살표 방향 유지.'});
+  const defs=svgEl('defs'),marker=svgEl('marker',{id:'arrow-two',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto'});
+  marker.append(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#426c91'}));defs.append(marker);svg.append(defs);
+  ['선택 카드','1단계 · 중간 연결','2단계 · 분류 / 참고 카드'].forEach((text,i)=>svg.append(svgEl('text',{x:10+270*i,y:25,class:'lane-title'},text)));
+  const coords=new Map([['0:'+selected.id,[10,65]]]);
+  mids.forEach((id,i)=>coords.set('1:'+id,[280,65+i*82]));ends.forEach((id,i)=>coords.set('2:'+id,[550,65+i*82]));
+  const drawn=new Set();
+  for(const path of view.paths){
+    path.edges.forEach((edge,i)=>{
+      const from=i===0?'0:'+selected.id:(edge.type==='PART_OF'?'1:'+path.nodes[1]:'2:'+path.nodes[2]);
+      const to=i===0?'1:'+path.nodes[1]:(edge.type==='PART_OF'?'2:'+path.nodes[2]:'1:'+path.nodes[1]);
+      const key=from+'|'+to+'|'+edge.type;if(drawn.has(key))return;drawn.add(key);
+      const a=coords.get(from),b=coords.get(to),forward=a[0]<b[0];
+      const line=svgEl('path',{d:'M '+(a[0]+(forward?160:0))+' '+(a[1]+27)+' L '+(b[0]+(forward?0:160))+' '+(b[1]+27),class:'graph-edge'+(i?' second':''),'marker-end':'url(#arrow-two)','data-type':edge.type,'data-source':edge.source,'data-target':edge.target});
+      line.append(svgEl('title',{},edge.type+': '+edge.source+' → '+edge.target));svg.append(line);
+    });
+  }
+  for(const [key,pos] of coords){
+    const lane=key[0],n=model.byId.get(key.slice(2));
+    const group=svgEl('g',{transform:'translate('+pos.join(',')+')',class:'graph-node'+(lane==='0'?' selected':lane==='2'?' endpoint':'')+(n.type==='Symptom'?' warning':''),role:'button',tabindex:0,'data-lane':lane,'data-node':n.id,'aria-label':n.label+' ['+n.type+']'+(n.type==='Symptom'?' 검수 전':'')});
+    group.append(svgEl('title',{},n.label+'\n'+n.id),svgEl('rect',{width:160,height:54,rx:5}),svgEl('text',{x:9,y:21,class:'node-heading'},n.label.length>15?n.label.slice(0,14)+'…':n.label),svgEl('text',{x:9,y:40,class:'node-type'},n.type==='Symptom'?'Symptom · 검수 전':n.type==='CardVersion'?n.props.card_id:n.type));
+    group.addEventListener('click',()=>chooseNeighbor(n.id));group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();chooseNeighbor(n.id);}});svg.append(group);
+  }
+  host.append(svg);host.scrollLeft=0;host.scrollTop=0;
+}
 function renderGraph() {
   const host = $('graph'); host.replaceChildren();
   const selected = model.byId.get(selectedId);
+  $('two-hop-detail')?.remove();
+  $('depth-note').textContent = '';
   if (!selected) { host.append(el('p','필터 결과에서 노드를 선택하면 이웃이 표시됩니다.','empty')); return; }
+  if ($('depth').value === '2') {
+    if (selected.type === 'CardVersion') {
+      const view=twoHop(model,selectedId);
+      $('depth-note').textContent='완성된 2-hop 경로만 표시합니다. 정적 그래프의 연결입니다. 현재 게시 상태·질의 설비 적합성은 확인하지 않으며 답변 근거에 추가하지 않습니다. 참고 카드 '+view.related.length+'개 · 경로 '+view.paths.length+'개 · 참고 카드 '+view.omitted+'개 / 경로 '+view.pathsOmitted+'개 생략. ID 순서이며 관련성 순위가 아닙니다.';
+      if(view.paths.length){renderPathDetails(view);renderTwoHop(selected,view);return;}
+      $('depth-note').textContent+=' 허용된 2-hop 경로가 없어 직접 연결만 표시합니다.';
+    } else $('depth-note').textContent='2-hop 분류·참고 연결을 보려면 카드를 선택하세요. 현재는 직접 이웃을 표시합니다.';
+  }
   const incident = model.edges.filter(e => e.source === selectedId || e.target === selectedId);
   const neighbors = [...new Set(incident.map(e => e.source === selectedId ? e.target : e.source))].map(id => model.byId.get(id));
   const incoming = neighbors.filter(n => incident.some(e => e.source === n.id));
@@ -260,15 +335,17 @@ function initialize(graph) {
   $('type-filter').replaceChildren(new Option('모든 타입',''),...NODE_TYPES.map(type => new Option(type + ' (' + model.nodes.filter(n => n.type === type).length + ')',type)));
   const equipment = [...new Set([...model.scopes.values()].flatMap(s => [...s]))].sort();
   $('equipment-filter').replaceChildren(new Option('모든 설비',''),...equipment.map(name => new Option(name,name)));
-  for (const id of ['type-filter','equipment-filter','query','reset']) $(id).disabled = false;
-  resetFilters(); selectedId = graph.nodes.find(n => n.type === 'CardVersion')?.id ?? null;
+  for (const id of ['type-filter','equipment-filter','query','reset','depth']) $(id).disabled = false;
+  resetFilters(); const params=new URLSearchParams(location.search);
+  $('depth').value=params.get('depth')==='2'?'2':'1';
+  selectedId = graph.nodes.find(n => n.type === 'CardVersion' && n.props.card_id===params.get('card'))?.id ?? graph.nodes.find(n => n.type === 'CardVersion')?.id ?? null;
   $('error').hidden = true; $('workspace').hidden = false; $('checks').textContent = 'assert 자가 점검 통과'; render();
 }
 async function load() {
   const path = dataPath(location.search), mock = path === 'mock_graph.json';
   $('dataset').textContent = mock ? '가짜 데이터' : '실제 파일 · 확인 중'; $('dataset').className = 'tag ' + (mock ? 'mock' : 'data');
   $('workspace').hidden = true; $('error').hidden = true; $('status').textContent = path + ' 로드 중'; $('retry').disabled = true;
-  for (const id of ['type-filter','equipment-filter','query','reset']) $(id).disabled = true;
+  for (const id of ['type-filter','equipment-filter','query','reset','depth']) $(id).disabled = true;
   try {
     const response = await fetch(path,{cache:'no-store'});
     if (!response.ok) throw new Error('HTTP ' + response.status + ' · ' + path);
@@ -312,6 +389,7 @@ function browserSelfTest() {
   check($('nodes').options.length === model.nodes.length,'필터 초기화');
   $('selftest').hidden = false; $('selftest').textContent = results.join('\n');
 }
+$('depth').addEventListener('change',render);
 $('type-filter').addEventListener('change',render); $('equipment-filter').addEventListener('change',render); $('query').addEventListener('input',render);
 $('nodes').addEventListener('change',() => {selectedId = $('nodes').value;updateStatus(filteredNodes().length);renderSelection();renderGraph();});
 $('reset').addEventListener('click',() => {resetFilters();render();}); $('retry').addEventListener('click',load);

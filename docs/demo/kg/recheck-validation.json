@@ -1,0 +1,87 @@
+{
+  "ok": true,
+  "head": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "acceptance": "single-commit parent diff; existing uncommitted integration preserved",
+  "old_files_preserved": 23,
+  "input_hashes": {
+    "docs\\data\\knowledge_cards\\kb\\kb_cards.json": "05cfc4e79a3087e3544fc01e6b830268b542f55ae3be31bd6ad7601fc1d6dd3a",
+    "docs\\data\\reference\\00_plant_and_relations.json": "aee891c5e5e2270e815080f22b153e9b64e9128951d2262240c1f41cdc5e1708",
+    "docs\\demo\\kg\\schema.md": "ad460fc639146d17d448457a5c0a7908bf4aaca92f4098860456401fe0b81613",
+    "docs\\demo\\kg\\symptoms\\symptom_concepts.json": "c1765e5f82efa3dc11e7c84f663b7a33385a1719ed0c2758535e4074e3b76556"
+  },
+  "outputs_identical_to_existing": true,
+  "two_rebuilds_identical": true,
+  "browser_passes": 42,
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\hyjuy\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "docs/demo/kg/symptoms/check_symptoms.py"
+      ],
+      "exit_code": 0,
+      "stdout": "cards=86 safety=56 null=13 held_union=58 non_safety_string=28 linked=18 unlinked=10 concepts=18\nok\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\hyjuy\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "docs/demo/kg/build/build_graph.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"cases\": [\"valid_mapping\", \"absent_mapping\", \"ID_escaping\", \"citation_aggregation_and_raw_preservation\", \"deterministic_order\", \"missing_endpoint\", \"wrong_domain_range\", \"safety_card_edge\", \"null_card_edge\", \"duplicate_node\", \"duplicate_edge\", \"wrong_id\", \"lost_card_field\", \"missing_relation\", \"orphan_node\", \"unexpected_graph_key\", \"unknown_relation\", \"wrong_relation_props\", \"citation_count_loss\", \"SAFE_mapping\", \"NULL_mapping\", \"undefined_concept\", \"duplicate_mapping\", \"missing_card\", \"extra_card\", \"missing_review\", \"blank_review_reason\", \"duplicate_review\", \"unreferenced_concept\", \"invalid_slug\", \"wrong_mapping_type\", \"multiple_card_versions\", \"master_FK\", \"duplicate_JSON_key\", \"invalid_JSON_number\"], \"ok\": true, \"self_checks_passed\": 35}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\hyjuy\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "docs/demo/kg/build/build_graph.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"edges\": 434, \"graph_sha256\": \"e85de4143d03abc7ecc0e70e293c70af50cf8171881734c79e17f108463f524d\", \"nodes\": 289, \"ok\": true, \"self_checks_passed\": 35, \"symptoms_loaded\": true, \"unversioned_sources\": 42}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\hyjuy\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "docs/demo/kg/build/build_graph.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"edges\": 434, \"graph_sha256\": \"e85de4143d03abc7ecc0e70e293c70af50cf8171881734c79e17f108463f524d\", \"nodes\": 289, \"ok\": true, \"self_checks_passed\": 35, \"symptoms_loaded\": true, \"unversioned_sources\": 42}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "C:\\Users\\hyjuy\\.codex\\worktrees\\kg-integration\\ShiftLink\\docs\\demo\\kg\\.recheck-20261022\\browser.cjs"
+      ],
+      "exit_code": 0,
+      "stdout": "Chrome DevTools port: 3258\nCDP connected\nPASS 가짜 데이터 배너\nPASS 타입 필터\nPASS 설비 필터\nPASS 목록 선택\nPASS 증상 연결 후보 있음 표시\nPASS 인용 locator\nPASS 원문 HTML 문자열 그대로 표시\nPASS 데이터 HTML 실행 없음\nPASS 필터 밖 이웃 선택 및 검수 전\nPASS 합성 장비 표시\nPASS 증상 후보 연결 없음 표시\nPASS 안전·null·판본 미지정 보류\nPASS 빈 필터 결과\nPASS 필터 초기화\nPASS mock: 12 nodes\nPASS native keyboard list selection\nPASS both citation locators visible\nPASS status tracks current selected node\nPASS mobile: no page horizontal overflow\nPASS mobile: readable graph uses local horizontal scrolling\nPASS mobile: selected node is fully visible\nPASS actual missing file HTTP 404 and execution guide\nPASS no automatic mock fallback request\nPASS retry retains missing-file error\nPASS existing real graph loads without mock\nINFO actual graph 필터 결과 289 / 전체 289개 노드 · 전체 관계 434개 · 선택: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기\nPASS actual: browser counts match generated graph\nPASS integrated: 18 symptom concepts and 20 candidate edges\nPASS integrated: symptom type filter and review badge\nPASS integrated: equipment filter includes linked symptoms\nPASS integrated: composite card preserves three symptom candidates\nPASS integrated: real neighbor button updates selection\nPASS integrated: original card props and all citation locators preserved in detail\nPASS integrated: safety card is held without symptom edges\nPASS integrated: null symptom card stays held\nPASS integrated: unversioned citations remain visible\nPASS integrated: real graph native keyboard changes selection\nPASS integrated: synthetic assets and no AssetPart\nPASS real mode selftest query does not run mock-only checks\nPASS assetless graph does not claim synthetic assets included\nPASS valid empty graph has truthful banner and empty state\nPASS null provenance source rejected before selection rendering\nPASS no browser Runtime exceptions\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\hyjuy\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "scripts/check_knowledge_publication.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"errors\": [],\n  \"staged_python_checked\": true\n}\n",
+      "stderr": ""
+    }
+  ]
+}

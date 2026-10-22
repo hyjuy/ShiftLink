@@ -1,0 +1,107 @@
+{
+  "base_sha": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "submissions": {
+    "build": "6df10055ca37d87f6db266a4a74021ab28ddebd8",
+    "symptoms": "704c7b6c3ee96289822e30312a5a0c91e527e5d5",
+    "viz": "87438a9b5c964934470305e22eae6285664911e8"
+  },
+  "applied_with": "git cherry-pick --no-commit",
+  "node_counts": {
+    "Asset": 10,
+    "AssetPart": 0,
+    "CardVersion": 86,
+    "DocumentVersion": 92,
+    "EquipmentType": 83,
+    "Symptom": 18
+  },
+  "edge_counts": {
+    "ABOUT": 172,
+    "CITES": 156,
+    "DESCRIBES_SYMPTOM": 20,
+    "INSTALLED_ON": 0,
+    "INSTANCE_OF": 10,
+    "PART_OF": 76
+  },
+  "total_nodes": 289,
+  "total_edges": 434,
+  "symptoms_loaded": true,
+  "linked_cards": 18,
+  "symptom_links": 20,
+  "source_card_fields_preserved": 86,
+  "review_cards": 86,
+  "safety_review_cards": 56,
+  "null_symptom_cards": 13,
+  "safety_symptom_edges": 0,
+  "null_symptom_edges": 0,
+  "orphan_nodes": [],
+  "errors": [],
+  "unversioned_refs_preserved": 42,
+  "versioned_card_document_pairs": 156,
+  "source_and_contract_hashes": {
+    "docs/data/knowledge_cards/kb/kb_cards.json": "05cfc4e79a3087e3544fc01e6b830268b542f55ae3be31bd6ad7601fc1d6dd3a",
+    "docs/data/reference/00_plant_and_relations.json": "aee891c5e5e2270e815080f22b153e9b64e9128951d2262240c1f41cdc5e1708",
+    "docs/demo/kg/schema.md": "ad460fc639146d17d448457a5c0a7908bf4aaca92f4098860456401fe0b81613",
+    "docs/demo/kg/symptoms/symptom_concepts.json": "c1765e5f82efa3dc11e7c84f663b7a33385a1719ed0c2758535e4074e3b76556"
+  },
+  "output_hashes": {
+    "docs/demo/kg/build/graph.json": "e85de4143d03abc7ecc0e70e293c70af50cf8171881734c79e17f108463f524d",
+    "docs/demo/kg/build/validation.json": "4ad71a01b0ed246a70e0568af374b5f9fa6aa92027847d883823a98f97670415"
+  },
+  "deterministic_graph_and_validation": true,
+  "symptom_generator_self_check": true,
+  "symptom_generator_reproduces_submission": true,
+  "build_self_checks_passed": 35,
+  "browser_verification": {
+    "runner": "node docs/demo/kg/viz/verify.cjs plus in-memory real-data assertions",
+    "pass_checks": 40,
+    "actual_data_checks": 10,
+    "runtime_exceptions": 0,
+    "log": "viz/.qa/browser-results.txt",
+    "actual_graph_screenshot": "viz/.qa/actual-file.png"
+  },
+  "publication_integrity_check": {
+    "ok": true,
+    "errors": [],
+    "staged_python_checked": true
+  },
+  "original_worktree_preservation": {
+    "unchanged": true,
+    "before": {
+      "root": "C:\\Users\\hyjuy\\.codex\\worktrees\\63e5\\ShiftLink",
+      "head": "6295f1454c777244a5f14d9ee0e4ee455f63f311",
+      "branch": "",
+      "files": 169,
+      "status_sha256": "069306f4074632f62fca28a6a825b12f2de04e5d14ab3edfaa9908c4c2fffaf7",
+      "index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_sha256": "ecc1e2c174aaf8a37376eab49efb501b1e6c5d0aa489a0eb8dce82210ab7455d"
+    },
+    "after": {
+      "root": "C:\\Users\\hyjuy\\.codex\\worktrees\\63e5\\ShiftLink",
+      "head": "6295f1454c777244a5f14d9ee0e4ee455f63f311",
+      "branch": "",
+      "files": 169,
+      "status_sha256": "069306f4074632f62fca28a6a825b12f2de04e5d14ab3edfaa9908c4c2fffaf7",
+      "index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_sha256": "ecc1e2c174aaf8a37376eab49efb501b1e6c5d0aa489a0eb8dce82210ab7455d"
+    }
+  },
+  "preview": {
+    "url": "http://127.0.0.1:8766/viz/",
+    "served_graph_matches_output": true,
+    "graph_sha256": "e85de4143d03abc7ecc0e70e293c70af50cf8171881734c79e17f108463f524d"
+  },
+  "submission_files_unchanged_except_generated_outputs": [
+    "docs/demo/kg/build/HANDOFF.md",
+    "docs/demo/kg/build/build_graph.py",
+    "docs/demo/kg/symptoms/HANDOFF.md",
+    "docs/demo/kg/symptoms/build_symptom_concepts.py",
+    "docs/demo/kg/symptoms/check_symptoms.py",
+    "docs/demo/kg/symptoms/review.md",
+    "docs/demo/kg/symptoms/symptom_concepts.json",
+    "docs/demo/kg/viz/HANDOFF.md",
+    "docs/demo/kg/viz/demo_questions.md",
+    "docs/demo/kg/viz/index.html",
+    "docs/demo/kg/viz/mock_graph.json",
+    "docs/demo/kg/viz/verify.cjs"
+  ]
+}

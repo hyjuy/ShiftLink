@@ -12,6 +12,7 @@ from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.response import AgentResponse
 from shiftlink.edge.ollama import DEFAULT_HOST, DEFAULT_TIMEOUT_S, KEEP_ALIVE, OllamaModel
 from shiftlink.rag.loader import load_card_provider
+from shiftlink.rag.graph_explain import explain
 from shiftlink.rag.retrieval import InMemoryToolProvider
 
 from .card_adapter import MesCardAdapter
@@ -162,7 +163,16 @@ def query_service(service, body, *, pipeline=None):
         knowledge_status = 'answered'
     else:
         knowledge_status = 'unknown'
-    return {**output, 'scan': scan, 'query_context': context, 'knowledge_status': knowledge_status,
+    # Add metadata only after the unchanged pipeline has selected and validated its final citations.
+    eq_record = service.catalog.equipment.get(equipment_id, {})
+    eq_type = next((t['type_code'] for t in service.catalog.data['equipment_types']
+                    if t['equipment_type_id'] == eq_record.get('equipment_type_id')), None)
+    cards = getattr(pipeline, 'cards', getattr(getattr(pipeline, 'tools', None), 'cards', ()))
+    graph_context = explain(output, cards, eq_type, equipment_id,
+                            cited_chunks=getattr(result, 'cited_chunks', [])
+                            if getattr(pipeline, 'answer_mode', None) == 's30h' else None)
+    return {**output, **({'graph_context': graph_context} if graph_context is not None else {}),
+            'scan': scan, 'query_context': context, 'knowledge_status': knowledge_status,
             'evidence': prepared['evidence'], 'is_synthetic': True,
             **({'_publication_ticket':publication_ticket} if publication_ticket else {}),
             **({'s30h_trace': result.tool_results} if getattr(pipeline, 'answer_mode', None) == 's30h' else {})}

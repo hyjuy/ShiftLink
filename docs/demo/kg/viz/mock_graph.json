@@ -1,0 +1,32 @@
+{
+  "nodes": [
+    {"id":"asset:MOCK-AS-CV-001","type":"Asset","label":"MOCK-CV-01 (합성 장비)","props":{"asset_id":"MOCK-AS-CV-001","equipment_id":"MOCK-EQ-CV","code":"MOCK-CV-01","equipment_type_id":"MOCK-ET-CV","type_code":"CV","is_synthetic":true,"dataset_version":"DS-v1.0","identity_basis":"from_catalog_default","source_path":"viz/mock_graph.json (가짜 데이터)"}},
+    {"id":"asset:MOCK-AS-HPU-001","type":"Asset","label":"MOCK-HPU-01 (합성 장비)","props":{"asset_id":"MOCK-AS-HPU-001","equipment_id":"MOCK-EQ-HPU","code":"MOCK-HPU-01","equipment_type_id":"MOCK-ET-HPU","type_code":"HPU","is_synthetic":true,"dataset_version":"DS-v1.0","identity_basis":"from_catalog_default","source_path":"viz/mock_graph.json (가짜 데이터)"}},
+    {"id":"card:MOCK-CV-001@mock-v1","type":"CardVersion","label":"가짜 카드 · 컨베이어 속도 관측","props":{"card_id":"MOCK-CV-001","version":"mock-v1","title":"가짜 카드 · 컨베이어 속도 관측","equipment":"CV","component":"구동부","symptom":"가짜 관측: 설정 속도보다 낮게 표시됨","safety_flag":false,"status":"accepted","know_how":"화면 동작 확인용 가짜 문장입니다. 실제 작업 절차가 아닙니다.","provenance":{"sources":[{"source_id":"MOCK-CV-MANUAL","document_version":"mock-2026","locator":"가짜 매뉴얼 p. 5"}]}}},
+    {"id":"card:MOCK-HPU-001@mock-v1","type":"CardVersion","label":"가짜 카드 · 펌프 출구 압력 관측","props":{"card_id":"MOCK-HPU-001","version":"mock-v1","title":"가짜 카드 · 펌프 출구 압력 관측","equipment":"HPU","component":"주 베인펌프","symptom":"가짜 관측: 운전 중 펌프 출구 압력이 읽히지 않음","safety_flag":false,"status":"accepted","mes_equipment_id":"MOCK-EQ-HPU","mes_component_code":null,"know_how":"화면 동작 확인용 가짜 문장입니다. 실제 작업 절차가 아닙니다.","display_literal":"<img src=x onerror=\"window.__kgInjected=true\">","provenance":{"sources":[{"source_id":"MOCK-HPU-MANUAL","document_version":"mock-2026/1","locator":"p. 12, Fig. 3"},{"source_id":"MOCK-HPU-MANUAL","document_version":"mock-2026/1","locator":"p. 13, Table 2"}]}}},
+    {"id":"card:MOCK-HPU-SAFE@mock-v1","type":"CardVersion","label":"가짜 안전 카드 · 증상 연결 보류","props":{"card_id":"MOCK-HPU-SAFE","version":"mock-v1","title":"가짜 안전 카드 · 증상 연결 보류","equipment":"HPU","component":"주 베인펌프","symptom":null,"safety_flag":true,"status":"accepted","know_how":"가짜 안전 카드입니다. 안전 절차를 제공하지 않습니다.","provenance":{"sources":[{"source_id":"MOCK-HPU-MANUAL","document_version":"mock-2026/1","locator":"가짜 안전 안내 p. 1"},{"source_id":"EV-MOCK-UNVERSIONED","locator":"가짜 사건 근거 / 판본 미지정"}]}}},
+    {"id":"doc:MOCK-CV-MANUAL@mock-2026","type":"DocumentVersion","label":"MOCK-CV-MANUAL @ mock-2026","props":{"source_id":"MOCK-CV-MANUAL","document_version":"mock-2026"}},
+    {"id":"doc:MOCK-HPU-MANUAL@mock-2026%2F1","type":"DocumentVersion","label":"MOCK-HPU-MANUAL @ mock-2026/1","props":{"source_id":"MOCK-HPU-MANUAL","document_version":"mock-2026/1"}},
+    {"id":"sym:mock-hpu-outlet-pressure-absent","type":"Symptom","label":"가짜 증상 후보 · 출구 압력 없음","props":{"definition":"가짜 문장: 펌프 운전 중 출구 압력이 읽히지 않는 관측 후보. 낮은 압력과 구분하는 UI 예시이며 사람 검수 전입니다.","review_status":"needs_review"}},
+    {"id":"type:CV","type":"EquipmentType","label":"CV","props":{"kind":"equipment","equipment":"CV","is_common_scope":false}},
+    {"id":"type:CV/구동부","type":"EquipmentType","label":"구동부","props":{"kind":"component","equipment":"CV","component":"구동부","is_common_scope":false}},
+    {"id":"type:HPU","type":"EquipmentType","label":"HPU","props":{"kind":"equipment","equipment":"HPU","is_common_scope":false}},
+    {"id":"type:HPU/주 베인펌프","type":"EquipmentType","label":"주 베인펌프","props":{"kind":"component","equipment":"HPU","component":"주 베인펌프","is_common_scope":false}}
+  ],
+  "edges": [
+    {"source":"card:MOCK-CV-001@mock-v1","target":"type:CV","type":"ABOUT","props":{"basis":"card_equipment"}},
+    {"source":"card:MOCK-CV-001@mock-v1","target":"type:CV/구동부","type":"ABOUT","props":{"basis":"card_component"}},
+    {"source":"card:MOCK-HPU-001@mock-v1","target":"type:HPU","type":"ABOUT","props":{"basis":"card_equipment"}},
+    {"source":"card:MOCK-HPU-001@mock-v1","target":"type:HPU/주 베인펌프","type":"ABOUT","props":{"basis":"card_component"}},
+    {"source":"card:MOCK-HPU-SAFE@mock-v1","target":"type:HPU","type":"ABOUT","props":{"basis":"card_equipment"}},
+    {"source":"card:MOCK-HPU-SAFE@mock-v1","target":"type:HPU/주 베인펌프","type":"ABOUT","props":{"basis":"card_component"}},
+    {"source":"card:MOCK-CV-001@mock-v1","target":"doc:MOCK-CV-MANUAL@mock-2026","type":"CITES","props":{"locators":["가짜 매뉴얼 p. 5"],"source_ref_count":1}},
+    {"source":"card:MOCK-HPU-001@mock-v1","target":"doc:MOCK-HPU-MANUAL@mock-2026%2F1","type":"CITES","props":{"locators":["p. 12, Fig. 3","p. 13, Table 2"],"source_ref_count":2}},
+    {"source":"card:MOCK-HPU-SAFE@mock-v1","target":"doc:MOCK-HPU-MANUAL@mock-2026%2F1","type":"CITES","props":{"locators":["가짜 안전 안내 p. 1"],"source_ref_count":1}},
+    {"source":"card:MOCK-HPU-001@mock-v1","target":"sym:mock-hpu-outlet-pressure-absent","type":"DESCRIBES_SYMPTOM","props":{"review_status":"needs_review","basis":"symptom_concepts"}},
+    {"source":"asset:MOCK-AS-CV-001","target":"type:CV","type":"INSTANCE_OF","props":{"basis":"catalog_equipment_type_id","is_synthetic":true}},
+    {"source":"asset:MOCK-AS-HPU-001","target":"type:HPU","type":"INSTANCE_OF","props":{"basis":"catalog_equipment_type_id","is_synthetic":true}},
+    {"source":"type:CV/구동부","target":"type:CV","type":"PART_OF","props":{"basis":"card_classification"}},
+    {"source":"type:HPU/주 베인펌프","target":"type:HPU","type":"PART_OF","props":{"basis":"card_classification"}}
+  ]
+}

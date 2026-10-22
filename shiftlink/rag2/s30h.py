@@ -71,13 +71,26 @@ def state_lines(specs: dict, observations: list) -> list[str]:
     return lines
 
 
-ALIASES = {"air_pressure": ("공압",)}   # field words for a signal whose MES name the question does not use
+# field words for a signal whose MES name the question does not use (regex; 유압 not as in 유압유 / 유압 펌프 / 유압 유량)
+ALIASES = {"air_pressure": r"공압", "hpu_pressure": r"유압(?!유|\s*(?:펌프|유량))"}
+# a name word and what the field says for it: 베어링 열(이), not 열화 / 열교환
+WORD_ALT = {"온도": r"온도|열(?:[이은을도만]|(?![가-힣]))"}
+UNIT_WORDS = {"감속기", "롤러", "컨베이어", "배전반"}   # the selected unit already says which equipment
+TAG = re.compile(r"(?<![A-Za-z])[A-Za-z]\d(?!\d)")   # a pole/phase tag like L1
+
+
+def _asks(question: str, name: str) -> bool:
+    words = [w for w in name.split() if re.search("[가-힣]", w) and w not in UNIT_WORDS][-2:]   # 감속기 진동 RMS -> 진동
+    if not words or not all(re.search(WORD_ALT.get(w, re.escape(w)), question) for w in words):
+        return False
+    tag = TAG.search(name)   # "L1 표면 온도" is not about the L2 pole; "차단기 표면 온도" (no tag) is about every pole
+    return not (tag and TAG.search(question) and tag.group() not in TAG.findall(question))
 
 
 def unobserved(question: str, specs: dict, observations: list) -> list[str]:
     """Names of the unit's signals the question asks about that have no valid MES observation (10/21 MX-C27/C28: the
     model filled a dropped bearing temperature / air pressure with another signal and called it normal). A signal is
-    asked about when every word of its name's last two words (e.g. 베어링, 온도) or one of its ALIASES is in the question.
+    asked about when the last two Korean words of its name (e.g. 베어링, 온도) or its ALIASES are in the question.
     No observations at all = no MES snapshot: nothing is flagged, the [MES] block already says 유효 관측 없음."""
     if not observations:
         return []
@@ -85,7 +98,7 @@ def unobserved(question: str, specs: dict, observations: list) -> list[str]:
     names = []
     for sig, spec in specs.items():
         name = spec.name.split(" (")[0]
-        if sig not in seen and (all(w in question for w in name.split()[-2:]) or any(a in question for a in ALIASES.get(sig, ()))):
+        if sig not in seen and (_asks(question, name) or (sig in ALIASES and re.search(ALIASES[sig], question))):
             names.append(name)
     return names
 

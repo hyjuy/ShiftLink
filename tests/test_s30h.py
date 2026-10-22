@@ -247,6 +247,19 @@ def test_unobserved_guard_answers_a_dropped_signal_in_code(pipe, monkeypatch):
     assert S.unobserved("CAU 공압 지금 몇 kPa예요?", {"air_pressure": SimpleNamespace(name="압축공기 압력")}, obs) == ["압축공기 압력"]
     assert S.unobserved("표면 온도 괜찮아요?", pipe.specs["EQ-0004"], obs) == []   # observed signal
     assert S.unobserved("베어링 온도 괜찮아요?", pipe.specs["EQ-0004"], []) == []   # no MES snapshot at all
+    # field words: 유압 (not 유압유 / 유압 펌프), 열 (not 열화), 진동 without RMS, a pole tag picks its pole
+    hpu = {"hpu_pressure": SimpleNamespace(name="유압 공급 압력"), "hpu_oil_temp": SimpleNamespace(name="유압유 온도"),
+           "hpu_pump_current": SimpleNamespace(name="유압 펌프 전류")}
+    assert S.unobserved("유압 떨어졌어요?", hpu, obs) == ["유압 공급 압력"]
+    assert S.unobserved("유압유 온도 괜찮아요?", hpu, obs) == ["유압유 온도"]
+    assert S.unobserved("유압 펌프 전류 봐줘", hpu, obs) == ["유압 펌프 전류"]
+    gr = {"gr_brg_temp": SimpleNamespace(name="감속기 베어링 온도"), "gr_vib_rms": SimpleNamespace(name="감속기 진동 RMS")}
+    assert S.unobserved("베어링 열이 나요", gr, obs) == ["감속기 베어링 온도"]
+    assert S.unobserved("베어링 열화 원인이 뭐예요?", gr, obs) == []
+    assert S.unobserved("GR 진동 괜찮아요?", gr, obs) == ["감속기 진동 RMS"]
+    poles = {f"p{n}": SimpleNamespace(name=f"차단기 L{n}극 표면 온도") for n in (1, 2)}
+    assert S.unobserved("L1 표면 온도 높아요?", poles, obs) == ["차단기 L1극 표면 온도"]
+    assert len(S.unobserved("차단기 표면 온도 어때요?", poles, obs)) == 2
 
 
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):

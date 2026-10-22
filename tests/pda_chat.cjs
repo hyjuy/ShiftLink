@@ -77,6 +77,11 @@ context.api = async (path, init) => {
   run('S.chat.pop();');
   assert.match(first, /참고 매뉴얼 보기 K-1001/);
   assert.match(run('answerBody(S.chat[1])').text(), /해당 지식 없음/);
+  // 거절 답이라도 서버의 MES 현재값 첫 줄은 남긴다(그 뒤 문장은 보이지 않음).
+  const refused = run(`answerBody({question:'q', status:'done', ranked:S.chat[0].ranked, response:{answer:'현재 MES(PDP-01): 측정값 모두 정상 범위, 활성 경보 없음. 근거 자료에서 찾지 못했습니다.\\n근거: 없음', cited_card_ids:[], safety_notices:[], review_queue:false, no_knowledge:true}})`).text();
+  assert.match(refused, /현재 MES\(PDP-01\): 측정값 모두 정상 범위/);
+  assert.match(refused, /해당 지식 없음/);
+  assert.doesNotMatch(refused, /근거: 없음/);
   assert.equal(run('S.chat.length'), 2);
 
   // 4. 인계 초안은 마지막 질문과 답. 메모 칸 길이를 넘지 않는다.

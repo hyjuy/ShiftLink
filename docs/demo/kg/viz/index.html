@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShiftLink 지식 그래프</title>
+<style>
+:root{color-scheme:light;--ink:#202f35;--muted:#52656c;--paper:#f4f5f0;--panel:#fff;--line:#c7d0cc;--accent:#14645c;--warning:#805016;--warn-bg:#fff3d9;--error:#9c302d;--focus:#006bc2}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,"Malgun Gothic",sans-serif}::selection{background:#c7e8df;color:#102e29}a{color:var(--accent);text-underline-offset:3px}button,input,select{font:inherit;color:inherit}button,select,input{border:1px solid #8a9b96;border-radius:5px;background:var(--panel)}button{cursor:pointer;padding:8px 13px}button:hover{background:#e8f1eb}button:disabled{cursor:default;opacity:.55}input,select{padding:8px;width:100%}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}header{padding:22px 28px 18px;background:var(--panel);border-bottom:1px solid var(--line)}.topline{display:flex;justify-content:space-between;align-items:center;gap:16px}h1{font-size:25px;letter-spacing:-.025em;margin:0}h2{font-size:18px;margin:0 0 12px;letter-spacing:-.015em}h3{font-size:15px;margin:22px 0 8px}p{margin:8px 0}code,pre{font-family:Consolas,monospace;font-size:12px}code{overflow-wrap:anywhere}.subtitle{color:var(--muted);max-width:75ch}.tag{display:inline-block;padding:3px 8px;border:1px solid currentColor;border-radius:4px;font-size:12px;font-weight:650;vertical-align:middle}.tag.mock,.tag.review,.tag.synthetic{color:var(--warning);background:var(--warn-bg)}.tag.data{color:var(--accent);background:#edf6ef}.notice{padding:12px 28px;border-bottom:1px solid var(--line);color:#5c481d;background:#faf2df;font-size:13px}.notice p{margin:0;max-width:110ch}.toolbar{display:grid;grid-template-columns:1fr 1fr 1.3fr auto;gap:14px;align-items:end;padding:18px 28px}label{display:block;font-size:13px;font-weight:650;margin-bottom:5px}.statusline{padding:0 28px 14px;color:var(--muted);font-size:13px;min-height:34px;font-variant-numeric:tabular-nums}.workspace{display:grid;grid-template-columns:265px minmax(340px,1fr) minmax(300px,385px);gap:1px;background:var(--line);border-block:1px solid var(--line)}.workspace>section{background:var(--panel);padding:20px;min-width:0}.workspace>section:first-child{background:#f7f9f5}.count{color:var(--muted);font-weight:400;font-size:13px}#nodes{height:490px;border-color:var(--line);padding:5px;font-size:13px;background:transparent}#nodes option{padding:9px 6px;border-bottom:1px solid #e1e7e1}#nodes option:checked{background:#cce4dc;color:#183c34}.help{font-size:12px;color:var(--muted)}.graph-scroll{overflow:auto;max-height:550px;min-height:360px;background:#f9fbf8;border:1px solid #d8e0da}.graph-scroll svg{display:block;width:100%;min-width:720px}.graph-edge{fill:none;stroke:#83968f;stroke-width:1.5}.graph-node{cursor:pointer}.graph-node rect{fill:#fff;stroke:#80968b;stroke-width:1}.graph-node text{fill:var(--ink);font-size:12px}.graph-node .node-type{fill:var(--muted);font-size:10px}.graph-node.selected rect{fill:#e0eee6;stroke:var(--accent);stroke-width:2}.graph-node:focus rect,.graph-node:hover rect{stroke:var(--focus);stroke-width:2}.graph-node.warning rect{fill:#fff5df}.graph-node .node-heading{font-weight:650}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0;color:var(--muted);font-size:12px}.legend span{display:flex;align-items:center;gap:5px}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent)}.legend .amber{background:var(--warning)}#selection-title{overflow-wrap:anywhere}#selection-id{display:block;color:var(--muted);margin-bottom:10px}#badges{display:flex;gap:6px;flex-wrap:wrap}.relations{padding:0;list-style:none;margin:0}.relations li{border-top:1px solid var(--line);padding:10px 0}.relations button{display:block;text-align:left;width:100%;padding:7px 9px;background:#f6f9f6;overflow-wrap:anywhere}.edge-label{font-size:11px;color:var(--muted);margin-bottom:4px;overflow-wrap:anywhere}.citation{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;overflow-wrap:anywhere}.citation strong{font-size:13px}.citation ul{padding-left:18px;margin:7px 0}.citation li{font-size:13px;margin-bottom:5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f5f1;padding:12px;margin:8px 0;max-height:380px;overflow:auto}summary{cursor:pointer;color:var(--accent);padding:8px 0;font-size:13px}.empty{padding:20px;color:var(--muted)}#error{margin:0 28px 20px;padding:20px;background:#fff2ed;border:1px solid var(--error);color:#702824}#error h2{color:var(--error)}#error pre{background:#fff8f5}footer{padding:16px 28px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:20px}#selftest{white-space:pre-wrap;overflow-wrap:anywhere;margin:0 28px 20px}[hidden]{display:none!important}@media(min-width:1450px){.workspace{grid-template-columns:290px minmax(450px,1fr) 420px}.graph-scroll{max-height:620px}#nodes{height:560px}}@media(max-width:1080px){.workspace{grid-template-columns:240px minmax(340px,1fr)}.workspace>section:last-child{grid-column:1/-1;display:block}.graph-scroll{max-height:480px}#nodes{height:430px}}@media(max-width:640px){header,.notice{padding:16px}.topline{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:22px}.toolbar{padding:16px;grid-template-columns:1fr 1fr}.toolbar>div:nth-child(3){grid-column:1/-1}.toolbar>button{grid-column:1/-1}.statusline{padding:0 16px 12px}.workspace{display:block}.workspace>section{border-bottom:1px solid var(--line);padding:16px}#nodes{height:210px}.graph-scroll{min-height:280px;max-height:430px}footer{padding:16px;display:block}#error{margin:0 16px 16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="topline"><h1>ShiftLink 지식 그래프</h1><span id="dataset" class="tag">데이터 확인 중</span></div>
+  <p class="subtitle">카드에서 설비 분류와 인용 문서 판본까지, 연결과 원문을 함께 살펴봅니다.</p>
+</header>
+<aside class="notice" aria-label="시연의 범위와 한계"><p>합성 장비는 기본 구성 스냅샷입니다. 실제 현장 자산은 확인되지 않았으며, AssetPart는 설계만 되어 있습니다. 증상 연결은 사람 검수 전 후보입니다. 분류·인용 탐색 시연이며 GraphRAG·검색 성능 향상·정식 온톨로지 달성을 뜻하지 않습니다.</p></aside>
+<main>
+  <div class="toolbar">
+    <div><label for="type-filter">노드 타입</label><select id="type-filter" disabled><option value="">모든 타입</option></select></div>
+    <div><label for="equipment-filter">설비 분류</label><select id="equipment-filter" disabled><option value="">모든 설비</option></select></div>
+    <div><label for="query">이름 또는 ID 찾기</label><input id="query" type="search" placeholder="카드, 문서, 장비 이름" disabled></div>
+    <button id="reset" type="button" disabled>필터 초기화</button>
+  </div>
+  <div id="status" class="statusline" role="status" aria-live="polite">그래프를 불러오고 있습니다.</div>
+  <section id="error" role="alert" hidden>
+    <h2>그래프를 불러오지 못했습니다</h2><p id="error-message"></p>
+    <p>저장소 루트에서 아래 명령을 실행하고 HTTP 주소로 접속하세요.</p>
+    <pre>python -m http.server 8765 --bind 127.0.0.1 --directory docs/demo/kg</pre>
+    <p><code>http://127.0.0.1:8765/viz/</code> — 기본 경로는 <code>../build/graph.json</code>입니다. 파일이 없으면 변환 담당자의 산출물 통합을 확인하세요.</p>
+    <p>가짜 데이터 시연은 주소에 <code>?mock=1</code>을 명시해서 엽니다. 실제 파일 로드 실패를 가짜 데이터로 자동 대체하지 않습니다.</p>
+    <button id="retry" type="button">다시 불러오기</button>
+  </section>
+  <div class="workspace" id="workspace" hidden>
+    <section aria-labelledby="list-title"><h2 id="list-title">노드 목록 <span id="list-count" class="count"></span></h2><label for="nodes">선택할 노드</label><select id="nodes" size="14" aria-describedby="keyboard-help"></select><p id="keyboard-help" class="help">목록에서 위·아래 방향키로 선택합니다. Tab으로 필터·이웃 관계·원문 속성으로 이동합니다.</p><p class="help">설비 필터는 분류·자산·카드와 그 카드에 직접 연결된 증상·문서 판본에 적용됩니다.</p></section>
+    <section aria-labelledby="graph-title"><h2 id="graph-title">선택 노드와 이웃</h2><p class="help">화살표는 저장된 관계 방향입니다. 관계 이름과 속성은 오른쪽 목록에서 확인할 수 있습니다. 이웃은 필터 밖의 노드도 보여줍니다. 좁은 화면에서는 그래프 안을 가로로 스크롤하세요.</p><div class="legend"><span><i></i>설비 분류 · 카드 · 문서</span><span><i class="amber"></i>합성 장비 · 검수 전 증상</span></div><div class="graph-scroll" id="graph"></div></section>
+    <section aria-labelledby="selection-title"><h2 id="selection-title">노드를 선택하세요</h2><code id="selection-id"></code><div id="badges"></div><p id="selection-note" class="help"></p><div id="detail"></div></section>
+  </div>
+  <pre id="selftest" hidden aria-label="브라우저 자가 점검 결과"></pre>
+</main>
+<footer><span>kg-demo-v1 · 분류와 인용의 탐색</span><span id="checks">자가 점검 대기</span></footer>
+<script>
+'use strict';
+const NODE_TYPES = ['EquipmentType','Symptom','CardVersion','DocumentVersion','Asset','AssetPart'];
+const EDGE_TYPES = ['PART_OF','ABOUT','DESCRIBES_SYMPTOM','CITES','INSTANCE_OF','INSTALLED_ON'];
+const $ = id => document.getElementById(id);
+function assert(condition, message) {
+  if (!condition) throw new Error('자가 점검 실패: ' + message);
+}
+function runSelfChecks(graph) {
+  const checked = validateGraph(graph);
+  assert(checked.nodes.length === graph.nodes.length, '노드 손실 없음');
+  const rejects = (mutate, message) => {
+    const invalid = structuredClone(graph);
+    mutate(invalid);
+    let rejected = false;
+    try { validateGraph(invalid); } catch { rejected = true; }
+    assert(rejected, message);
+  };
+  rejects(g => g.edges[0].target = 'missing:node', '누락 끝점 거부');
+  rejects(g => g.nodes.push(g.nodes[0]), '중복 ID 거부');
+  if (graph.nodes.some(n => n.type === 'CardVersion')) {
+    rejects(g => g.nodes.find(n => n.type === 'CardVersion').props.provenance.sources = [null], '잘못된 원본 인용 항목 거부');
+  }
+  const link = graph.edges.find(e => e.type === 'DESCRIBES_SYMPTOM');
+  if (link) {
+    rejects(g => g.nodes.find(n => n.id === link.source).props.safety_flag = true, '안전 카드 증상 연결 거부');
+    rejects(g => g.nodes.find(n => n.id === link.source).props.symptom = null, 'null 증상 연결 거부');
+  }
+  const literal = '<img src=x onerror="window.__kgInjected=true">';
+  const target = document.createElement('div');
+  target.textContent = literal;
+  assert(target.children.length === 0 && target.textContent === literal, 'HTML 문자열은 텍스트로 보존');
+  assert(dataPath('?mock=1') === 'mock_graph.json', '명시적 mock 선택');
+  assert(dataPath('?mock=0') === '../build/graph.json', 'mock=0은 실제 경로');
+  assert(dataPath('') === '../build/graph.json', '기본 실제 경로');
+}
+function dataPath(search) {
+  return new URLSearchParams(search).get('mock') === '1' ? 'mock_graph.json' : '../build/graph.json';
+}
+function escapeId(value) { return value.replaceAll('%','%25').replaceAll('/','%2F').replaceAll('@','%40'); }
+function object(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
+function string(value) { return typeof value === 'string' && value.trim().length > 0; }
+function validateGraph(graph) {
+  assert(object(graph) && Object.keys(graph).sort().join() === 'edges,nodes', '최상위 키는 nodes, edges');
+  assert(Array.isArray(graph.nodes) && Array.isArray(graph.edges), 'nodes/edges 배열');
+  const byId = new Map();
+  for (const n of graph.nodes) {
+    assert(object(n) && string(n.id) && string(n.label) && NODE_TYPES.includes(n.type) && object(n.props), '노드 필드 형태');
+    assert(!byId.has(n.id), '중복 노드 ID: ' + n.id);
+    byId.set(n.id,n);
+    const p = n.props;
+    if (n.type === 'EquipmentType') {
+      assert(['equipment','component'].includes(p.kind) && string(p.equipment) && typeof p.is_common_scope === 'boolean', '설비 분류 속성');
+      assert(p.kind !== 'component' || string(p.component), '하위 분류 이름');
+      assert(n.id === 'type:' + escapeId(p.equipment) + (p.kind === 'component' ? '/' + escapeId(p.component) : ''), '설비 분류 ID');
+    } else if (n.type === 'CardVersion') {
+      assert(['card_id','version','equipment','component'].every(k => string(p[k])) && typeof p.safety_flag === 'boolean' && (p.symptom === null || string(p.symptom)) && object(p.provenance) && Array.isArray(p.provenance.sources) && p.provenance.sources.every(object), '카드 원문 필수 속성 및 원본 인용 항목');
+      assert(n.id === 'card:' + escapeId(p.card_id) + '@' + escapeId(p.version), '카드 판본 ID');
+    } else if (n.type === 'DocumentVersion') {
+      assert(string(p.source_id) && string(p.document_version), '문서 판본 속성');
+      assert(n.id === 'doc:' + escapeId(p.source_id) + '@' + escapeId(p.document_version), '문서 판본 ID');
+    } else if (n.type === 'Symptom') {
+      assert(/^sym:[a-z0-9]+(?:-[a-z0-9]+)*$/.test(n.id) && string(p.definition) && p.review_status === 'needs_review', '증상 후보 검수 전 표시');
+    } else if (n.type === 'Asset') {
+      assert(['asset_id','equipment_id','code','equipment_type_id','type_code','source_path'].every(k => string(p[k])) && p.is_synthetic === true && p.dataset_version === 'DS-v1.0' && p.identity_basis === 'from_catalog_default', '합성 자산 속성');
+      assert(n.id === 'asset:' + escapeId(p.asset_id), '자산 ID');
+    } else {
+      assert(false, 'AssetPart는 설계만 되어 있어 현재 계약에서 생성할 수 없음');
+    }
+  }
+  const edgeKeys = new Set();
+  for (const e of graph.edges) {
+    assert(object(e) && EDGE_TYPES.includes(e.type) && object(e.props), '관계 필드 형태');
+    const s = byId.get(e.source), t = byId.get(e.target), p = e.props;
+    assert(s && t, '관계 끝점 누락: ' + e.type);
+    const key = JSON.stringify([e.type,e.source,e.target]);
+    assert(!edgeKeys.has(key), '중복 관계'); edgeKeys.add(key);
+    if (e.type === 'PART_OF') assert(s.type === 'EquipmentType' && s.props.kind === 'component' && t.type === 'EquipmentType' && t.props.kind === 'equipment' && s.props.equipment === t.props.equipment && p.basis === 'card_classification', 'PART_OF 분류 범위');
+    if (e.type === 'ABOUT') assert(s.type === 'CardVersion' && t.type === 'EquipmentType' && s.props.equipment === t.props.equipment && ((p.basis === 'card_equipment' && t.props.kind === 'equipment') || (p.basis === 'card_component' && t.props.kind === 'component' && s.props.component === t.props.component)), 'ABOUT 분류 범위');
+    if (e.type === 'DESCRIBES_SYMPTOM') assert(s.type === 'CardVersion' && t.type === 'Symptom' && !s.props.safety_flag && string(s.props.symptom) && p.basis === 'symptom_concepts' && p.review_status === 'needs_review', '안전·null 카드 연결 금지 및 검수 전 표시');
+    if (e.type === 'CITES') assert(s.type === 'CardVersion' && t.type === 'DocumentVersion' && Array.isArray(p.locators) && p.locators.every(string) && new Set(p.locators).size === p.locators.length && Number.isInteger(p.source_ref_count) && p.source_ref_count > 0, 'CITES 판본·locator 형태');
+    if (e.type === 'INSTANCE_OF') assert(s.type === 'Asset' && t.type === 'EquipmentType' && t.props.kind === 'equipment' && s.props.type_code === t.props.equipment && p.basis === 'catalog_equipment_type_id' && p.is_synthetic === true, '합성 자산 유형 범위');
+    assert(e.type !== 'INSTALLED_ON', 'INSTALLED_ON은 설계만 되어 있음');
+  }
+  return {nodes:graph.nodes,edges:graph.edges,byId};
+}
+let model, selectedId = null;
+function scopesFor(graph) {
+  const scopes = new Map(graph.nodes.map(n => [n.id,new Set(n.props.equipment ? [n.props.equipment] : n.props.type_code ? [n.props.type_code] : [])]));
+  for (const e of graph.edges) {
+    if (['CITES','DESCRIBES_SYMPTOM'].includes(e.type)) {
+      for (const equipment of scopes.get(e.source)) scopes.get(e.target).add(equipment);
+    }
+  }
+  return scopes;
+}
+function filteredNodes() {
+  const type = $('type-filter').value, equipment = $('equipment-filter').value, query = $('query').value.trim().toLocaleLowerCase();
+  return model.nodes.filter(n => (!type || n.type === type) && (!equipment || model.scopes.get(n.id).has(equipment)) && (!query || (n.label + ' ' + n.id).toLocaleLowerCase().includes(query)));
+}
+function el(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+function jsonDetails(title, value) {
+  const details = el('details'); details.append(el('summary',title),el('pre',JSON.stringify(value,null,2))); return details;
+}
+function addBadge(text, kind) { $('badges').append(el('span',text,'tag ' + kind)); }
+function resetFilters() { $('type-filter').value = ''; $('equipment-filter').value = ''; $('query').value = ''; }
+function chooseNeighbor(id) {
+  selectedId = id;
+  if (!filteredNodes().some(n => n.id === id)) resetFilters();
+  render(); $('nodes').focus();
+}
+function updateStatus(visibleCount) {
+  $('status').textContent = '필터 결과 ' + visibleCount + ' / 전체 ' + model.nodes.length + '개 노드 · 전체 관계 ' + model.edges.length + '개 · ' + (selectedId ? '선택: ' + model.byId.get(selectedId).label : '조건에 맞는 노드가 없습니다. 필터를 초기화해 보세요.');
+}
+function render() {
+  const visible = filteredNodes();
+  if (!visible.some(n => n.id === selectedId)) selectedId = visible[0]?.id ?? null;
+  $('nodes').replaceChildren(...visible.map(n => {
+    const suffix = n.type === 'Asset' ? ' · 합성' : n.type === 'Symptom' ? ' · 검수 전' : '';
+    const option = el('option',n.label + ' [' + n.type + ']' + suffix); option.value = n.id; option.title = n.label + '\n' + n.id; return option;
+  }));
+  if (selectedId) $('nodes').value = selectedId;
+  $('list-count').textContent = visible.length + '개';
+  updateStatus(visible.length);
+  renderSelection(); renderGraph();
+}
+function renderSelection() {
+  $('detail').replaceChildren(); $('badges').replaceChildren(); $('selection-note').textContent = '';
+  const n = model.byId.get(selectedId);
+  $('selection-title').textContent = n?.label ?? '선택 결과 없음'; $('selection-id').textContent = n?.id ?? '';
+  if (!n) { $('detail').append(el('p','필터를 바꾸거나 초기화하면 다시 선택할 수 있습니다.','empty')); return; }
+  addBadge(n.type,'data');
+  if (n.type === 'Asset') { addBadge('합성 장비','synthetic'); $('selection-note').textContent = 'DS-v1.0 · from_catalog_default. 실제 현장 자산이나 현재 설치 이력을 확인한 자료가 아닙니다.'; }
+  if (n.type === 'Symptom') { addBadge('검수 전','review'); $('detail').append(el('p',n.props.definition)); }
+  if (n.type === 'EquipmentType') $('selection-note').textContent = n.props.is_common_scope ? '공통 적용 분류입니다. 실제 물리 부품을 의미하지 않습니다.' : '카드의 설비·하위 분류입니다. 실제 장착 관계를 뜻하지 않습니다.';
+  if (n.type === 'CardVersion') {
+    if (n.props.safety_flag) addBadge('안전 카드 · 증상 연결 보류','review');
+    if (n.props.symptom === null) addBadge('원문 증상 null · 연결 보류','review');
+    if (!n.props.safety_flag && n.props.symptom !== null) {
+      const mapped = model.edges.some(e => e.type === 'DESCRIBES_SYMPTOM' && e.source === n.id);
+      addBadge(mapped ? '증상 연결 후보 · 검수 전' : '증상 후보 연결 없음','review');
+    }
+    $('selection-note').textContent = '카드의 status=' + String(n.props.status ?? '(없음)') + '는 새 증상 매핑의 승인 상태가 아닙니다. mes_equipment_id도 자산 사건 관계로 추론하지 않습니다.';
+    $('detail').append(el('h3','원문 증상'),el('p',n.props.symptom === null ? 'null (원문에 증상 없음)' : n.props.symptom));
+  }
+  const incident = model.edges.filter(e => e.source === n.id || e.target === n.id);
+  $('detail').append(el('h3','이웃 관계 · ' + incident.length + '개'));
+  const list = el('ul',undefined,'relations');
+  for (const e of incident) {
+    const other = model.byId.get(e.source === n.id ? e.target : e.source);
+    const li = el('li');
+    li.append(el('div',(e.source === n.id ? '나가는 관계: ' : '들어오는 관계: ') + e.type + (e.type === 'DESCRIBES_SYMPTOM' ? ' · 검수 전' : ''),'edge-label'));
+    const button = el('button',other.label + ' [' + other.type + ']'); button.type = 'button'; button.addEventListener('click',() => chooseNeighbor(other.id));
+    li.append(button,jsonDetails('관계 원문 속성',e)); list.append(li);
+  }
+  if (!incident.length) list.append(el('li','연결된 관계가 없습니다.'));
+  $('detail').append(list,el('h3','인용 locator'));
+  const cites = incident.filter(e => e.type === 'CITES');
+  if (!cites.length) $('detail').append(el('p','이 노드에 연결된 판본 포함 CITES 인용이 없습니다.','help'));
+  for (const e of cites) {
+    const doc = model.byId.get(e.target), card = model.byId.get(e.source);
+    const block = el('div',undefined,'citation'); block.append(el('strong',doc.props.source_id),el('p','문서 판본: ' + doc.props.document_version),el('p','인용 카드: ' + card.label + ' · 원본 인용 ' + e.props.source_ref_count + '건'));
+    const locators = el('ul'); e.props.locators.forEach(locator => locators.append(el('li',locator)));
+    if (!e.props.locators.length) locators.append(el('li','locator 값 없음 (빈 배열)'));
+    block.append(locators); $('detail').append(block);
+  }
+  if (n.type === 'CardVersion') {
+    const unversioned = n.props.provenance.sources.filter(source => !source.document_version);
+    if (unversioned.length) { $('detail').append(el('h3','판본 미지정 인용 · ' + unversioned.length + '건'),el('p','문서 판본과 CITES 생성을 보류했습니다. 원본 인용은 아래에 그대로 남아 있습니다.','help'),el('pre',JSON.stringify(unversioned,null,2))); }
+  }
+  const raw = jsonDetails('원문 속성 (props) 전체 보기',n.props); raw.id = 'raw-props'; $('detail').append(raw);
+}
+function svgEl(tag, attributes = {}, text) {
+  const node = document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for (const [key,value] of Object.entries(attributes)) node.setAttribute(key,String(value));
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function renderGraph() {
+  const host = $('graph'); host.replaceChildren();
+  const selected = model.byId.get(selectedId);
+  if (!selected) { host.append(el('p','필터 결과에서 노드를 선택하면 이웃이 표시됩니다.','empty')); return; }
+  const incident = model.edges.filter(e => e.source === selectedId || e.target === selectedId);
+  const neighbors = [...new Set(incident.map(e => e.source === selectedId ? e.target : e.source))].map(id => model.byId.get(id));
+  const incoming = neighbors.filter(n => incident.some(e => e.source === n.id));
+  const outgoing = neighbors.filter(n => !incoming.includes(n));
+  const height = Math.max(340,Math.max(incoming.length,outgoing.length) * 76 + 60);
+  const svg = svgEl('svg',{viewBox:'0 0 720 ' + height,height,role:'group','aria-label':'선택 노드 및 직접 이웃. 같은 관계를 상세 목록에서 키보드로 탐색할 수 있습니다.'});
+  const defs = svgEl('defs'), marker = svgEl('marker',{id:'arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto-start-reverse'});
+  marker.append(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#6b8176'})); defs.append(marker); svg.append(defs);
+  const positions = new Map([[selectedId,[280,height/2-27]]]);
+  incoming.forEach((n,i) => positions.set(n.id,[10,30+i*76])); outgoing.forEach((n,i) => positions.set(n.id,[550,30+i*76]));
+  for (const e of incident) {
+    const s = positions.get(e.source), t = positions.get(e.target), forward = s[0] < t[0];
+    const path = svgEl('path',{d:'M ' + (s[0] + (forward ? 160 : 0)) + ' ' + (s[1]+27) + ' L ' + (t[0]+(forward ? 0 : 160)) + ' ' + (t[1]+27),class:'graph-edge','marker-end':'url(#arrow)'});
+    path.append(svgEl('title',{},e.type + ': ' + e.source + ' → ' + e.target)); svg.append(path);
+  }
+  for (const n of [selected,...neighbors]) {
+    const pos = positions.get(n.id), isSelected = n.id === selectedId;
+    const group = svgEl('g',{transform:'translate(' + pos.join(',') + ')',class:'graph-node' + (isSelected ? ' selected' : '') + (['Asset','Symptom'].includes(n.type) ? ' warning' : ''),role:'button',tabindex:0,'aria-label':n.label + ' [' + n.type + ']' + (n.type === 'Asset' ? ' 합성 장비' : n.type === 'Symptom' ? ' 검수 전' : '')});
+    group.append(svgEl('title',{},n.label + '\n' + n.id),svgEl('rect',{width:160,height:54,rx:5}),svgEl('text',{x:9,y:21,class:'node-heading'},n.label.length > 15 ? n.label.slice(0,14) + '…' : n.label),svgEl('text',{x:9,y:40,class:'node-type'},n.type + (n.type === 'Symptom' ? ' · 검수 전' : n.type === 'Asset' ? ' · 합성' : '')));
+    group.addEventListener('click',() => chooseNeighbor(n.id)); group.addEventListener('keydown',event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault();chooseNeighbor(n.id);}}); svg.append(group);
+  }
+  host.append(svg);
+  host.scrollLeft = Math.max(0,(host.scrollWidth-host.clientWidth)/2);
+}
+function initialize(graph) {
+  model = validateGraph(graph); model.scopes = scopesFor(model);
+  if (graph.edges.length) runSelfChecks(graph);
+  else {
+    assert(validateGraph({nodes:[],edges:[]}).nodes.length === 0,'빈 그래프 허용');
+    assert(dataPath('') === '../build/graph.json','기본 실제 경로');
+  }
+  $('type-filter').replaceChildren(new Option('모든 타입',''),...NODE_TYPES.map(type => new Option(type + ' (' + model.nodes.filter(n => n.type === type).length + ')',type)));
+  const equipment = [...new Set([...model.scopes.values()].flatMap(s => [...s]))].sort();
+  $('equipment-filter').replaceChildren(new Option('모든 설비',''),...equipment.map(name => new Option(name,name)));
+  for (const id of ['type-filter','equipment-filter','query','reset']) $(id).disabled = false;
+  resetFilters(); selectedId = graph.nodes.find(n => n.type === 'CardVersion')?.id ?? null;
+  $('error').hidden = true; $('workspace').hidden = false; $('checks').textContent = 'assert 자가 점검 통과'; render();
+}
+async function load() {
+  const path = dataPath(location.search), mock = path === 'mock_graph.json';
+  $('dataset').textContent = mock ? '가짜 데이터' : '실제 파일 · 확인 중'; $('dataset').className = 'tag ' + (mock ? 'mock' : 'data');
+  $('workspace').hidden = true; $('error').hidden = true; $('status').textContent = path + ' 로드 중'; $('retry').disabled = true;
+  for (const id of ['type-filter','equipment-filter','query','reset']) $(id).disabled = true;
+  try {
+    const response = await fetch(path,{cache:'no-store'});
+    if (!response.ok) throw new Error('HTTP ' + response.status + ' · ' + path);
+    initialize(await response.json());
+    $('dataset').textContent = mock ? '가짜 데이터' : '실제 파일' + (model.nodes.some(n => n.type === 'Asset') ? ' · 합성 장비 포함' : '');
+    if (mock && new URLSearchParams(location.search).get('selftest') === '1') browserSelfTest();
+  } catch (error) {
+    $('dataset').textContent = mock ? '가짜 데이터 · 로드 오류' : '실제 파일 · 로드 오류';
+    $('dataset').className = 'tag review'; $('error-message').textContent = String(error.message); $('error').hidden = false; $('workspace').hidden = true;
+    $('status').textContent = '로드 실패 · 선택한 데이터 경로: ' + path; $('checks').textContent = '데이터 로드·검증 실패';
+  } finally { $('retry').disabled = false; }
+}
+function browserSelfTest() {
+  const results = [];
+  const check = (value,message) => {assert(value,message);results.push('PASS ' + message);};
+  check($('dataset').textContent === '가짜 데이터','가짜 데이터 배너');
+  $('type-filter').value = 'CardVersion'; $('type-filter').dispatchEvent(new Event('change'));
+  check([...$('nodes').options].every(o => model.byId.get(o.value).type === 'CardVersion'),'타입 필터');
+  $('equipment-filter').value = 'HPU'; $('equipment-filter').dispatchEvent(new Event('change'));
+  check([...$('nodes').options].every(o => model.byId.get(o.value).props.equipment === 'HPU'),'설비 필터');
+  const card = model.nodes.find(n => n.type === 'CardVersion' && !n.props.safety_flag && n.props.equipment === 'HPU');
+  $('nodes').value = card.id; $('nodes').dispatchEvent(new Event('change'));
+  check($('selection-id').textContent === card.id,'목록 선택');
+  check($('badges').textContent.includes('증상 연결 후보 · 검수 전'),'증상 연결 후보 있음 표시');
+  check($('detail').textContent.includes('p. 12, Fig. 3'),'인용 locator');
+  $('raw-props').open = true;
+  check($('raw-props').textContent.includes('<img src=x onerror='),'원문 HTML 문자열 그대로 표시');
+  check(!document.querySelector('img') && !window.__kgInjected,'데이터 HTML 실행 없음');
+  const neighbor = model.edges.find(e => e.source === card.id && e.type === 'DESCRIBES_SYMPTOM');
+  chooseNeighbor(neighbor.target);
+  check($('badges').textContent.includes('검수 전') && $('equipment-filter').value === '' && $('type-filter').value === '','필터 밖 이웃 선택 및 검수 전');
+  chooseNeighbor(model.nodes.find(n => n.type === 'Asset').id);
+  check($('badges').textContent.includes('합성 장비'),'합성 장비 표시');
+  chooseNeighbor(model.nodes.find(n => n.type === 'CardVersion' && n.props.equipment === 'CV').id);
+  check($('badges').textContent.includes('증상 후보 연결 없음'),'증상 후보 연결 없음 표시');
+  chooseNeighbor(model.nodes.find(n => n.type === 'CardVersion' && n.props.safety_flag).id);
+  check($('badges').textContent.includes('연결 보류') && $('detail').textContent.includes('판본 미지정 인용'),'안전·null·판본 미지정 보류');
+  $('query').value = 'no-match-for-selftest'; $('query').dispatchEvent(new Event('input'));
+  check($('nodes').options.length === 0 && $('graph').textContent.includes('노드를 선택'),'빈 필터 결과');
+  $('reset').click();
+  check($('nodes').options.length === model.nodes.length,'필터 초기화');
+  $('selftest').hidden = false; $('selftest').textContent = results.join('\n');
+}
+$('type-filter').addEventListener('change',render); $('equipment-filter').addEventListener('change',render); $('query').addEventListener('input',render);
+$('nodes').addEventListener('change',() => {selectedId = $('nodes').value;updateStatus(filteredNodes().length);renderSelection();renderGraph();});
+$('reset').addEventListener('click',() => {resetFilters();render();}); $('retry').addEventListener('click',load);
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.recheck-*/
+.revision-*/
+.explain-qa/
+.explain-live-qa/
+.pr-qa/
+viz/.qa/

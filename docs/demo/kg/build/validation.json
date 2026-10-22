@@ -1,0 +1,689 @@
+{
+  "base_sha": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "blocked_symptom_card_ids": [
+    "K-1003",
+    "K-1005",
+    "K-1006",
+    "K-1007",
+    "K-1009",
+    "K-1010",
+    "K-1012",
+    "K-1014",
+    "K-1015",
+    "K-1017",
+    "K-1018",
+    "K-1019",
+    "K-1020",
+    "K-1021",
+    "K-1022",
+    "K-1023",
+    "K-1024",
+    "K-1025",
+    "K-1027",
+    "K-1028",
+    "K-1029",
+    "K-1030",
+    "K-1103",
+    "K-1110",
+    "K-1204",
+    "K-1205",
+    "K-1206",
+    "K-1207",
+    "K-1208",
+    "K-1209",
+    "K-1210",
+    "K-1211",
+    "K-1212",
+    "K-1213",
+    "K-1214",
+    "K-1215",
+    "K-1216",
+    "K-1217",
+    "K-1218",
+    "K-1219",
+    "K-1302",
+    "K-1304",
+    "K-1305",
+    "K-1306",
+    "K-1308",
+    "K-1309",
+    "K-1310",
+    "K-1312",
+    "K-1313",
+    "K-1314",
+    "K-1315",
+    "K-1316",
+    "K-1317",
+    "K-1318",
+    "K-1319",
+    "K-1320",
+    "K-1321",
+    "K-1325"
+  ],
+  "citation_counts": {
+    "source_refs": 222,
+    "unversioned_refs": 42,
+    "versioned_card_document_pairs": 156,
+    "versioned_refs": 180
+  },
+  "contract_hash_unchanged": true,
+  "contract_sha256": "ad460fc639146d17d448457a5c0a7908bf4aaca92f4098860456401fe0b81613",
+  "deterministic_rebuild": true,
+  "edge_counts": {
+    "ABOUT": 172,
+    "CITES": 156,
+    "DESCRIBES_SYMPTOM": 20,
+    "INSTALLED_ON": 0,
+    "INSTANCE_OF": 10,
+    "PART_OF": 76
+  },
+  "errors": [],
+  "graph_sha256": "594d2842b57849fddd68d00141635392fa262c652504d35ec9760f460fc75c94",
+  "input_hashes_after": {
+    "docs/data/knowledge_cards/kb/kb_cards.json": "05cfc4e79a3087e3544fc01e6b830268b542f55ae3be31bd6ad7601fc1d6dd3a",
+    "docs/data/reference/00_plant_and_relations.json": "aee891c5e5e2270e815080f22b153e9b64e9128951d2262240c1f41cdc5e1708",
+    "docs/demo/kg/symptoms/symptom_concepts.json": "514f8cc20d4ac2546f5f49011811b9c60499dccc41f2e78edcf045fd2b209000"
+  },
+  "node_counts": {
+    "Asset": 10,
+    "AssetPart": 0,
+    "CardVersion": 86,
+    "DocumentVersion": 92,
+    "EquipmentType": 83,
+    "Symptom": 18
+  },
+  "null_symptom_card_ids": [
+    "K-1003",
+    "K-1006",
+    "K-1007",
+    "K-1009",
+    "K-1014",
+    "K-1018",
+    "K-1019",
+    "K-1024",
+    "K-1029",
+    "K-1304",
+    "K-1314",
+    "K-1320",
+    "K-1321"
+  ],
+  "null_symptom_edges": 0,
+  "orphan_nodes": [],
+  "review_card_ids": [
+    "K-1001",
+    "K-1002",
+    "K-1003",
+    "K-1004",
+    "K-1005",
+    "K-1006",
+    "K-1007",
+    "K-1008",
+    "K-1009",
+    "K-1010",
+    "K-1011",
+    "K-1012",
+    "K-1013",
+    "K-1014",
+    "K-1015",
+    "K-1016",
+    "K-1017",
+    "K-1018",
+    "K-1019",
+    "K-1020",
+    "K-1021",
+    "K-1022",
+    "K-1023",
+    "K-1024",
+    "K-1025",
+    "K-1026",
+    "K-1027",
+    "K-1028",
+    "K-1029",
+    "K-1030",
+    "K-1101",
+    "K-1102",
+    "K-1103",
+    "K-1104",
+    "K-1105",
+    "K-1106",
+    "K-1107",
+    "K-1108",
+    "K-1109",
+    "K-1110",
+    "K-1111",
+    "K-1201",
+    "K-1202",
+    "K-1203",
+    "K-1204",
+    "K-1205",
+    "K-1206",
+    "K-1207",
+    "K-1208",
+    "K-1209",
+    "K-1210",
+    "K-1211",
+    "K-1212",
+    "K-1213",
+    "K-1214",
+    "K-1215",
+    "K-1216",
+    "K-1217",
+    "K-1218",
+    "K-1219",
+    "K-1301",
+    "K-1302",
+    "K-1303",
+    "K-1304",
+    "K-1305",
+    "K-1306",
+    "K-1307",
+    "K-1308",
+    "K-1309",
+    "K-1310",
+    "K-1311",
+    "K-1312",
+    "K-1313",
+    "K-1314",
+    "K-1315",
+    "K-1316",
+    "K-1317",
+    "K-1318",
+    "K-1319",
+    "K-1320",
+    "K-1321",
+    "K-1322",
+    "K-1323",
+    "K-1324",
+    "K-1325",
+    "K-1401"
+  ],
+  "safety_review_card_ids": [
+    "K-1003",
+    "K-1005",
+    "K-1006",
+    "K-1009",
+    "K-1010",
+    "K-1012",
+    "K-1014",
+    "K-1015",
+    "K-1017",
+    "K-1018",
+    "K-1019",
+    "K-1020",
+    "K-1021",
+    "K-1022",
+    "K-1023",
+    "K-1024",
+    "K-1025",
+    "K-1027",
+    "K-1028",
+    "K-1030",
+    "K-1103",
+    "K-1110",
+    "K-1204",
+    "K-1205",
+    "K-1206",
+    "K-1207",
+    "K-1208",
+    "K-1209",
+    "K-1210",
+    "K-1211",
+    "K-1212",
+    "K-1213",
+    "K-1214",
+    "K-1215",
+    "K-1216",
+    "K-1217",
+    "K-1218",
+    "K-1219",
+    "K-1302",
+    "K-1304",
+    "K-1305",
+    "K-1306",
+    "K-1308",
+    "K-1309",
+    "K-1310",
+    "K-1312",
+    "K-1313",
+    "K-1314",
+    "K-1315",
+    "K-1316",
+    "K-1317",
+    "K-1318",
+    "K-1319",
+    "K-1320",
+    "K-1321",
+    "K-1325"
+  ],
+  "safety_symptom_edges": 0,
+  "schema_version": "kg-demo-v1",
+  "self_checks": {
+    "cases": [
+      "valid_mapping",
+      "absent_mapping",
+      "ID_escaping",
+      "citation_aggregation_and_raw_preservation",
+      "deterministic_order",
+      "missing_endpoint",
+      "wrong_domain_range",
+      "safety_card_edge",
+      "null_card_edge",
+      "duplicate_node",
+      "duplicate_edge",
+      "wrong_id",
+      "lost_card_field",
+      "missing_relation",
+      "orphan_node",
+      "unexpected_graph_key",
+      "unknown_relation",
+      "wrong_relation_props",
+      "citation_count_loss",
+      "SAFE_mapping",
+      "NULL_mapping",
+      "undefined_concept",
+      "duplicate_mapping",
+      "missing_card",
+      "extra_card",
+      "missing_review",
+      "blank_review_reason",
+      "duplicate_review",
+      "unreferenced_concept",
+      "invalid_slug",
+      "wrong_mapping_type",
+      "multiple_card_versions",
+      "master_FK",
+      "duplicate_JSON_key",
+      "invalid_JSON_number"
+    ],
+    "passed": 35
+  },
+  "source_hashes": {
+    "docs/data/knowledge_cards/kb/kb_cards.json": "05cfc4e79a3087e3544fc01e6b830268b542f55ae3be31bd6ad7601fc1d6dd3a",
+    "docs/data/reference/00_plant_and_relations.json": "aee891c5e5e2270e815080f22b153e9b64e9128951d2262240c1f41cdc5e1708",
+    "docs/demo/kg/symptoms/symptom_concepts.json": "514f8cc20d4ac2546f5f49011811b9c60499dccc41f2e78edcf045fd2b209000"
+  },
+  "source_hashes_unchanged": true,
+  "symptoms_loaded": true,
+  "total_edges": 434,
+  "total_nodes": 289,
+  "unversioned_sources": [
+    {
+      "card_id": "K-1101",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0302 [확인 완료] K-1001 1~4단계",
+        "source_id": "EV-0301"
+      }
+    },
+    {
+      "card_id": "K-1101",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0314 [안 된 것] 필터 차압 정상 확인",
+        "source_id": "EV-0307"
+      }
+    },
+    {
+      "card_id": "K-1101",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0318 [확인 완료]·[다음 조 확인] 중복 금지",
+        "source_id": "EV-0309"
+      }
+    },
+    {
+      "card_id": "K-1101",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0324 [다음 조 확인] 중복 작업 금지",
+        "source_id": "EV-0312"
+      }
+    },
+    {
+      "card_id": "K-1102",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0304 [앞 근무자 조치] 유면 보충 후 압력 128→133 bar",
+        "source_id": "EV-0302"
+      }
+    },
+    {
+      "card_id": "K-1102",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0312 [안 된 것] 볼트 조임 후 누유 감소·미정지",
+        "source_id": "EV-0306"
+      }
+    },
+    {
+      "card_id": "K-1102",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0314 [앞 근무자 조치] 필터 교체와 그 후 압력",
+        "source_id": "EV-0307"
+      }
+    },
+    {
+      "card_id": "K-1102",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "work_note AR-0323 \"16:00 재확인 시각 16:35로 지정\"·\"16:35 재확인. hpu_pressure 133 bar. 미회복\" / handover AR-0324 [시도했으나 안 된 것]",
+        "source_id": "EV-0312"
+      }
+    },
+    {
+      "card_id": "K-1103",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0308 [다음 조 확인] 운전 복귀 조건·재가동 보류",
+        "source_id": "EV-0304"
+      }
+    },
+    {
+      "card_id": "K-1103",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0310 [현재 상태] 정지·재가동 보류",
+        "source_id": "EV-0305"
+      }
+    },
+    {
+      "card_id": "K-1103",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0316 [현재 상태] 재기동 방지·작업 제한",
+        "source_id": "EV-0308"
+      }
+    },
+    {
+      "card_id": "K-1103",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0322 [다음 조 확인] 승인 전 재가동 금지",
+        "source_id": "EV-0311"
+      }
+    },
+    {
+      "card_id": "K-1103",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0338 [현재 상태] 우발 재기동 방지 조치",
+        "source_id": "EV-0319"
+      }
+    },
+    {
+      "card_id": "K-1104",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0322 [앞 근무자 조치] \"22:38 감속기 쪽 갈리는 소리 청취 — 전 조 기록보다 커진 것으로 들렸다\"",
+        "source_id": "EV-0311"
+      }
+    },
+    {
+      "card_id": "K-1104",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0338 [다음 조 확인] 소음은 계측에 안 잡힘",
+        "source_id": "EV-0319"
+      }
+    },
+    {
+      "card_id": "K-1104",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "work_note AR-0303 펌프 소음·우유빛 거품 관측",
+        "source_id": "EV-0302"
+      }
+    },
+    {
+      "card_id": "K-1104",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "work_note AR-0309 23:24 규칙적으로 갈리는 소리",
+        "source_id": "EV-0305"
+      }
+    },
+    {
+      "card_id": "K-1105",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0320 [다음 조 확인] 알람 없으니 눈으로 확인",
+        "source_id": "EV-0310"
+      }
+    },
+    {
+      "card_id": "K-1105",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0326 [다음 조 확인] 알람 상한 근접 여부",
+        "source_id": "EV-0313"
+      }
+    },
+    {
+      "card_id": "K-1105",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0330 [다음 조 확인] 알람 하한 근접 여부",
+        "source_id": "EV-0315"
+      }
+    },
+    {
+      "card_id": "K-1105",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0332 [현재 상태] 알람 없음·정상 하한 미달 + [다음 조 확인] \"① 전압 표시 재확인(알람 하한 94 % 아래로 내려가는지)\"",
+        "source_id": "EV-0316"
+      }
+    },
+    {
+      "card_id": "K-1105",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0336 [현재 상태] 알람 하한 미달인데 알람 없음 + [다음 조 확인] \"① 클램프압 재확인, 계속 내려가는지\"",
+        "source_id": "EV-0318"
+      }
+    },
+    {
+      "card_id": "K-1106",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0326 [시도했으나 안 된 것] 조치 절차 없음",
+        "source_id": "EV-0313"
+      }
+    },
+    {
+      "card_id": "K-1106",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0330 [시도했으나 안 된 것] \"조치 절차가 정해진 카드가 없어 값 기록과 접수만 했다\"",
+        "source_id": "EV-0315"
+      }
+    },
+    {
+      "card_id": "K-1106",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0334 [다음 조 확인] \"조치 절차가 정해진 카드가 없어 정비 담당 확인 대상으로 두었다\"",
+        "source_id": "EV-0317"
+      }
+    },
+    {
+      "card_id": "K-1106",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0336 [다음 조 확인] \"승강부 구조는 확인하지 않았고 가정도 하지 않았다\"",
+        "source_id": "EV-0318"
+      }
+    },
+    {
+      "card_id": "K-1107",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0330 [다음 조 확인] 공급원 압력 같이 읽기",
+        "source_id": "EV-0315"
+      }
+    },
+    {
+      "card_id": "K-1107",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0336 [앞 근무자 조치] 공급원 정상 확인",
+        "source_id": "EV-0318"
+      }
+    },
+    {
+      "card_id": "K-1107",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "relations REL-0009~REL-0016 공급 관계",
+        "source_id": "docs/data/reference/00_plant_and_relations.json"
+      }
+    },
+    {
+      "card_id": "K-1108",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0304 [다음 조 확인] 우유빛 단정 금지",
+        "source_id": "EV-0302"
+      }
+    },
+    {
+      "card_id": "K-1108",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없어 확증 못 함",
+        "source_id": "EV-0310"
+      }
+    },
+    {
+      "card_id": "K-1108",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "work_note AR-0333 눈으로 본 인상임을 명시",
+        "source_id": "EV-0317"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0302 [미확인] 점검 요청만 접수",
+        "source_id": "EV-0301"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0316 [안 된 것] 정비 담당 미도착",
+        "source_id": "EV-0308"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0326 [다음 조 확인] 정비 담당 회신 여부",
+        "source_id": "EV-0313"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0330 [다음 조 확인] 정비 담당 회신 여부",
+        "source_id": "EV-0315"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0332 [미해결] 전기 담당 회신 대기",
+        "source_id": "EV-0316"
+      }
+    },
+    {
+      "card_id": "K-1109",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0334 [미해결] 컴프레서 확인 결과 미수령",
+        "source_id": "EV-0317"
+      }
+    },
+    {
+      "card_id": "K-1110",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0308 [앞 근무자 조치] 전원 차단·재기동 방지",
+        "source_id": "EV-0304"
+      }
+    },
+    {
+      "card_id": "K-1110",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "work_note AR-0339 \"MES 압력 표시는 정지 상태에서도 정상값으로 나온다. 감압 여부 판단에 쓰면 안 된다\"·06:35 표시값 149 bar·07:00 현장 잔압·08:30 감압 미실시 확인 / handover AR-0340 [시도했으나 안 된 것]",
+        "source_id": "EV-0320"
+      }
+    },
+    {
+      "card_id": "K-1111",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0320 [안 된 것] 측정 수단 없음",
+        "source_id": "EV-0310"
+      }
+    },
+    {
+      "card_id": "K-1111",
+      "card_version": "1.0-draft-KB-20260930-T4",
+      "reason": "document_version_missing",
+      "source": {
+        "locator": "handover AR-0334 [다음 조 확인] 동작 시간 계측 요청",
+        "source_id": "EV-0317"
+      }
+    }
+  ]
+}

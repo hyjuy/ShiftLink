@@ -332,7 +332,7 @@ class S30hPipeline:
             tool_results["source_condition_cards"] = condition_cards
         if self.unit_guard:
             tool_results.update(asked_units=asked, other_unit=away, unit_dropped=dropped)
-        return SimpleNamespace(mode="query", output=output, tool_results=tool_results)
+        return SimpleNamespace(mode="query", output=output, tool_results=tool_results, cited_chunks=cited)
 
     def warm(self, attempts=30, wait_s=10.0, sleep=time.sleep) -> list[str]:
         """Load the judge (judge server, its own ctx), then ck106 (ctx 4096), then the CPU embedding, before the first query.

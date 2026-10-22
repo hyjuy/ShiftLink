@@ -1229,6 +1229,36 @@ function actionEl(item, rank) {
   return d;
 }
 
+/* Server-bound final citation metadata; never re-rank cards or read live sensors here. */
+function graphContextElement(context) {
+  if (!context || context.mode !== 'explain' || ['empty', 'withheld'].includes(context.status)) return null;
+  const box = document.createElement('details'); box.className = 'basis-detail graph-context';
+  const summary = document.createElement('summary'); summary.textContent = '관련 지식 연결'; box.appendChild(summary);
+  const line = (parent, text, tag = 'p') => {
+    const node = document.createElement(tag); node.textContent = text; parent.appendChild(node); return node;
+  };
+  if (!['ok', 'partial'].includes(context.status)) {
+    line(box, context.status === 'unmatched'
+      ? '인용 카드와 그래프의 판본·내용·적용 범위를 확인할 수 없어 연결 설명을 표시하지 않습니다.'
+      : '그래프 연결 정보를 읽을 수 없습니다. 기존 답변은 그대로 표시합니다.');
+    return box;
+  }
+  line(box, '최종 인용 카드의 분류와 참조 문서입니다. 아래 연결을 별도의 답변 근거로 추가하지 않았습니다.');
+  (context.cards || []).forEach((card) => {
+    const section = document.createElement('section'); box.appendChild(section);
+    line(section, card.card_id + ' · 카드 판본 ' + card.version, 'h4');
+    (card.classifications || []).forEach((item) => line(section,
+      '분류 · ' + item.equipment + (item.component ? ' / ' + item.component : '')));
+    (card.citations || []).forEach((item) => line(section,
+      '카드 참조 문서 · ' + item.source_id + ' · ' + item.document_version + ' · 위치 ' + item.locators.join(' / ')));
+    (card.symptom_candidates || []).forEach((item) => line(section, '검수 전 증상 후보 · ' + item.label));
+    (card.held_citations || []).forEach((item) => line(section,
+      '판본 미확인 · 보류 · ' + item.source_id + ' · ' + item.locator));
+  });
+  if ((context.unmatched || []).length) line(box, '연결 확인 보류 · ' + context.unmatched.map((item) => item.card_id).join(', '));
+  return box;
+}
+
 /* 답 말풍선에는 해결 답변을 표시하고, 안전 카드는 상단 바에서만 제공한다. */
 function answerBody(turn) {
   const r = turn.ranked, res = turn.response;
@@ -1273,6 +1303,10 @@ function answerBody(turn) {
     record.type = 'button'; record.className = 'btn primary'; record.textContent = '조치 시작';   // 주 행동 56px(A1)
     record.addEventListener('click', () => openResolve(turn));
     d.appendChild(record);
+  }
+  if (!res.review_queue && !none) {
+    const graph = graphContextElement(res.graph_context);
+    if (graph) d.appendChild(graph);
   }
   const ids = r.actions.map((x) => x.card.card_id);
   // 질의 당시 센서값은 싣지 않는다 — 같은 화면의 설비 칸이 보여 준다(사용자 결정 10/20).

@@ -71,12 +71,31 @@ def state_lines(specs: dict, observations: list) -> list[str]:
     return lines
 
 
+ALIASES = {"air_pressure": ("공압",)}   # field words for a signal whose MES name the question does not use
+
+
+def unobserved(question: str, specs: dict, observations: list) -> list[str]:
+    """Names of the unit's signals the question asks about that have no valid MES observation (10/21 MX-C27/C28: the
+    model filled a dropped bearing temperature / air pressure with another signal and called it normal). A signal is
+    asked about when every word of its name's last two words (e.g. 베어링, 온도) or one of its ALIASES is in the question.
+    No observations at all = no MES snapshot: nothing is flagged, the [MES] block already says 유효 관측 없음."""
+    if not observations:
+        return []
+    seen = {o["signal"] for o in observations}
+    names = []
+    for sig, spec in specs.items():
+        name = spec.name.split(" (")[0]
+        if sig not in seen and (all(w in question for w in name.split()[-2:]) or any(a in question for a in ALIASES.get(sig, ()))):
+            names.append(name)
+    return names
+
+
 class S30hPipeline:
     answer_mode = "s30h"
 
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
-                 event_label=False, mes_only=False, mes_prefix=False, p_fix=False):
+                 event_label=False, mes_only=False, mes_prefix=False, p_fix=False, unobserved_guard=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -107,6 +126,7 @@ class S30hPipeline:
         # (option A of 10/21; the MES SFT data has 338 such rows, ck106 has none)
         self.mes_only = mes_only
         self.mes_prefix = mes_prefix   # independent of the block: works with ck106 too
+        self.unobserved_guard = unobserved_guard   # code answers a question about a signal the MES has no valid value for
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -157,6 +177,17 @@ class S30hPipeline:
         # MES low/high states go into the embedding search only; the judge and answer prompts keep the question
         # (adopted 10/20 by user decision although prereg gate Q1 missed by one: docs/experiments/mes-context-result-20261020.md)
         mes = state_lines(self.specs.get(eq_id, {}), payload.get("observations") or [])
+        missing = unobserved(question, self.specs.get(eq_id, {}), payload.get("observations") or []) if self.unobserved_guard else []
+        if missing:
+            # ponytail: also replaces a knowledge question that names the dropped signal (e.g. its limit) while the sensor
+            # is bad; narrow the match to state questions if that costs answers
+            answer = (f"{self.eq_code[eq_id]} {', '.join(missing)}: 지금 MES에 유효한 측정값이 없습니다. "
+                      "다른 신호나 과거 기록으로 대신 판단하지 말고 현장 계기로 직접 확인하세요.")
+            output = AgentResponse(mode="query", answer=answer, no_knowledge=True, cited_card_ids=[],
+                                   safety_notices=self.safety(eq_id, eq_type))
+            return SimpleNamespace(mode="query", output=output, tool_results={
+                "answer_mode": "s30h", "mes_lines": mes, "route": "unobserved", "candidates": [], "judge_p": [], "kept": [],
+                "p_insuff": None, "abstain_reason": "unobserved", "unobserved": missing, "seconds": round(time.time() - t0, 2)})
         ev = self.evidence("\n".join([question, *mes]), eq_type, eq_id)
         with ThreadPoolExecutor(self.judge_workers) as ex:
             dists = list(ex.map(lambda r: E.judge_dist(question, r, self.judge_host, model=self.judge_model, ctx=self.judge_ctx), ev))

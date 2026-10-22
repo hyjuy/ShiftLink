@@ -230,6 +230,25 @@ def test_mes_prefix_states_the_unit_in_code_and_fills_abstentions(pipe, monkeypa
     assert out.no_knowledge and out.answer == f"{head} 근거 자료에서 이 상황의 조치를 찾지 못했습니다. 조치는 정비 담당 확인이 필요합니다."
 
 
+def test_unobserved_guard_answers_a_dropped_signal_in_code(pipe, monkeypatch):
+    # MX-C27/C28 (10/21): bearing temperature dropped for bad quality; the model called it normal from the surface temperature
+    obs = [{"signal": "gr_surface_temp", "value": 30}, {"signal": "gr_surface_temp_state", "value": "normal"}]
+    judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
+    monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix: {"raw": prefix + '베어링 온도 30도로 정상 [S1]", "citations": ["S1"]}'})
+    payload = {"question": "입측 감속기 베어링 쪽 온도 MES로 보면 어때요?", "eq_id": "EQ-0004", "observations": obs}
+    assert pipe.run(payload).tool_results["route"] == "confident"   # off: as before
+    pipe.unobserved_guard = True
+    pipe.specs["EQ-0004"]["gr_brg_temp"] = SimpleNamespace(name="감속기 베어링 온도")   # the test catalog has no GR points
+    monkeypatch.setattr(E, "judge_dist", lambda *a, **k: pytest.fail("no search or judge for an unobserved signal"))
+    r = pipe.run(payload)
+    assert r.tool_results["route"] == "unobserved" and r.tool_results["unobserved"] == ["감속기 베어링 온도"]
+    assert r.output.no_knowledge and r.output.answer.startswith("GR-01 감속기 베어링 온도: 지금 MES에 유효한 측정값이 없습니다.")
+    assert [n.card_id for n in r.output.safety_notices] == ["K-S2"]
+    assert S.unobserved("CAU 공압 지금 몇 kPa예요?", {"air_pressure": SimpleNamespace(name="압축공기 압력")}, obs) == ["압축공기 압력"]
+    assert S.unobserved("표면 온도 괜찮아요?", pipe.specs["EQ-0004"], obs) == []   # observed signal
+    assert S.unobserved("베어링 온도 괜찮아요?", pipe.specs["EQ-0004"], []) == []   # no MES snapshot at all
+
+
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
     judged(monkeypatch, {"c1": 0.9, "c2": None, "c4": 0.1})
     with pytest.raises(JudgeUnavailableError):
@@ -275,6 +294,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_MES_PREFIX", flag)
     assert Q.build_query_pipeline().mes_prefix is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_UNOBSERVED", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_UNOBSERVED", flag)
+    assert Q.build_query_pipeline().unobserved_guard is enabled
     monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)

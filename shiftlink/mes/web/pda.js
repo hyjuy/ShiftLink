@@ -4421,6 +4421,7 @@ function renderAnalyticsPanels(a) {
     flow.appendChild(d);
   });
   gap.appendChild(flow);
+  document.dispatchEvent(new Event('shiftlink:knowledge-dashboard'));
 }
 
 $('homeWatch').addEventListener('click', (e) => {

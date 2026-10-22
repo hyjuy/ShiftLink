@@ -10,6 +10,9 @@ from shiftlink.agent.schemas import KnowledgeCard
 
 DEFAULT_GRAPH = Path(__file__).resolve().parents[2] / "docs/demo/kg/build/graph.json"
 SCHEMA = "kg-demo-v1"
+MAX_RELATED_PER_CARD = 10
+MAX_RELATED_PER_RESPONSE = 20
+MAX_PATHS_PER_REFERENCE = 3
 DOMAINS = {"ABOUT": ("CardVersion", "EquipmentType"), "CITES": ("CardVersion", "DocumentVersion"),
            "DESCRIBES_SYMPTOM": ("CardVersion", "Symptom"), "PART_OF": ("EquipmentType", "EquipmentType"),
            "INSTANCE_OF": ("Asset", "EquipmentType")}
@@ -55,6 +58,7 @@ class GraphSnapshot:
         graph = decode(raw)
         require(set(graph) == {"nodes", "edges"} and isinstance(graph["nodes"], list) and isinstance(graph["edges"], list))
         self.nodes, self.cards, self.outgoing = {}, {}, defaultdict(list)
+        self.incoming = defaultdict(list)
         for node in graph["nodes"]:
             require(set(node) == {"id", "type", "label", "props"} and nonblank(node["id"])
                     and node["id"] not in self.nodes and node["type"] in TYPES
@@ -95,6 +99,8 @@ class GraphSnapshot:
                 require(a["safety_flag"] is False and a["symptom"] is not None
                         and edge["props"] == {"review_status": "needs_review", "basis": "symptom_concepts"})
             self.outgoing[source].append(edge)
+            if kind in ("CITES", "DESCRIBES_SYMPTOM"):
+                self.incoming[target].append(edge)
         require(incident == set(self.nodes))
         require(report["total_nodes"] == len(self.nodes) and report["total_edges"] == len(seen))
         require({k: sum(n["type"] == k for n in self.nodes.values()) for k in TYPES | {"AssetPart"}} == report["node_counts"])
@@ -116,6 +122,64 @@ class GraphSnapshot:
                     actual[key] = locators
             require(set(actual) == set(expected))
 
+    def bind_current(self, cid, visible, eq_type, eq_id):
+        """Graph membership alone never authorizes either a root or a related card."""
+        candidates = visible.get(cid, [])
+        if len(candidates) != 1:
+            return None, "card_not_visible_or_ambiguous"
+        card = candidates[0]
+        if not (eq_type and (card["status"], card["grade"], card["split"]) == ("accepted", "L1", "kb")
+                and card["equipment"] in (eq_type, "COMMON") and card.get("mes_equipment_id") in (None, eq_id)):
+            return None, "card_scope_or_status_mismatch"
+        match = self.cards.get(cid)
+        if not match or match[1] != card:
+            return None, "card_version_or_content_mismatch"
+        return match, ""
+
+    def expand_two_hop(self, item, eligible, seen, remaining):
+        """Enumerate three allowed patterns, never generic BFS or recursive expansion."""
+        paths, candidates = [], {}
+        def receipt(first, second, end):
+            return {"nodes": [item["node_id"], first["target"], end],
+                    "edges": [{k: edge[k] for k in ("source", "target", "type")}
+                              for edge in (first, second)]}
+        for first in sorted(self.outgoing[item["node_id"]], key=lambda e: (e["type"], e["target"])):
+            via = self.nodes[first["target"]]
+            if first["type"] == "ABOUT" and via["props"]["kind"] == "component":
+                for second in sorted(self.outgoing[via["id"]], key=lambda e: (e["type"], e["target"])):
+                    if second["type"] == "PART_OF":
+                        paths.append({**receipt(first, second, second["target"]), "relation": "PART_OF",
+                                      "component": via["props"]["component"],
+                                      "equipment": self.nodes[second["target"]]["props"]["equipment"]})
+            if first["type"] not in ("CITES", "DESCRIBES_SYMPTOM"):
+                continue
+            for second in self.incoming[via["id"]]:
+                if second["type"] != first["type"] or second["source"] not in eligible:
+                    continue
+                node, card = eligible[second["source"]]
+                cid = card["card_id"]
+                if cid in seen:
+                    continue
+                related = candidates.setdefault(cid, {"card_id": cid, "version": card["version"],
+                                                       "node_id": node["id"], "paths": []})
+                path = {**receipt(first, second, node["id"]), "relation": first["type"]}
+                if first["type"] == "CITES":
+                    path.update(source_id=via["props"]["source_id"], document_version=via["props"]["document_version"],
+                                cited_locators=list(first["props"]["locators"]),
+                                related_locators=list(second["props"]["locators"]))
+                else:
+                    path.update(label=via["label"], review_status="needs_review")
+                related["paths"].append(path)
+        # Ordering is an identifier order, not a relevance/safety ranking.
+        chosen = sorted(candidates)[:min(MAX_RELATED_PER_CARD, remaining)]
+        item.update(paths=paths[:MAX_RELATED_PER_CARD], paths_omitted=max(0, len(paths)-MAX_RELATED_PER_CARD),
+                    related_cards=[candidates[cid] for cid in chosen], related_cards_omitted=len(candidates)-len(chosen))
+        for related in item["related_cards"]:
+            related["paths_omitted"] = max(0, len(related["paths"])-MAX_PATHS_PER_REFERENCE)
+            related["paths"] = related["paths"][:MAX_PATHS_PER_REFERENCE]
+        seen.update(chosen)
+        return remaining-len(chosen)
+
     def describe(self, node, card):
         result = {"card_id": card["card_id"], "version": card["version"], "node_id": node["id"],
                   "classifications": [], "citations": [], "symptom_candidates": [],
@@ -134,7 +198,7 @@ class GraphSnapshot:
         return result
 
 
-def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks=None):
+def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks=None, depth=None):
     """None means disabled. Failures omit graph details, never change the answer."""
     mode = os.environ.get("SHIFTLINK_KG_MODE", "off") if mode is None else mode
     if mode == "off":
@@ -144,6 +208,9 @@ def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks
               "retrieval_used": False, "synthetic_assets_used": False}
     if mode != "explain":
         return result
+    depth = str(os.environ.get("SHIFTLINK_KG_DEPTH", "1") if depth is None else depth)
+    if depth == "2":
+        result["depth"] = 2
     if output.get("no_knowledge") or output.get("review_queue") or output.get("validation_errors"):
         return {**result, "status": "withheld", "reason": "answer_withheld"}
     if not output.get("cited_card_ids"):
@@ -161,28 +228,30 @@ def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks
             continue
         visible[card["card_id"]].append(card)
     for cid in dict.fromkeys(output["cited_card_ids"]):
-        candidates = visible.get(cid, [])
-        reason = "card_not_visible_or_ambiguous"
-        if len(candidates) == 1:
-            card = candidates[0]
-            reason = "card_scope_or_status_mismatch"
-            if (eq_type and (card["status"], card["grade"], card["split"]) == ("accepted", "L1", "kb")
-                    and card["equipment"] in (eq_type, "COMMON") and card.get("mes_equipment_id") in (None, eq_id)):
-                reason = "card_version_or_content_mismatch"
-                match = graph.cards.get(cid)
-                if match and match[1] == card:
-                    # Legacy static chunks omit version: bind only when current full know_how is present.
-                    bound = cited_chunks is None or any(
-                        row.get("metadata", {}).get("kind") == "card"
-                        and row["metadata"].get("source") == cid
-                        and row["metadata"].get("version", card["version"]) == card["version"]
-                        and nonblank(card["know_how"]) and card["know_how"] in row.get("text", "")
-                        for row in cited_chunks)
-                    if bound:
-                        result["cards"].append(graph.describe(*match))
-                        continue
-                    reason = "cited_chunk_mismatch"
+        match, reason = graph.bind_current(cid, visible, eq_type, eq_id)
+        if match:
+            node, card = match
+            # Only final cited roots require chunk binding; related references are not evidence.
+            bound = cited_chunks is None or any(
+                row.get("metadata", {}).get("kind") == "card"
+                and row["metadata"].get("source") == cid
+                and row["metadata"].get("version", card["version"]) == card["version"]
+                and nonblank(card["know_how"]) and card["know_how"] in row.get("text", "")
+                for row in cited_chunks)
+            if bound:
+                result["cards"].append(graph.describe(node, card))
+                continue
+            reason = "cited_chunk_mismatch"
         result["unmatched"].append({"card_id": cid, "reason": reason})
+    if depth == "2" and result["cards"]:
+        eligible = {}
+        for cid in visible:
+            match, _ = graph.bind_current(cid, visible, eq_type, eq_id)
+            if match:
+                eligible[match[0]["id"]] = match
+        seen, remaining = set(output["cited_card_ids"]), MAX_RELATED_PER_RESPONSE
+        for item in result["cards"]:
+            remaining = graph.expand_two_hop(item, eligible, seen, remaining)
     result["status"] = "partial" if result["cards"] and result["unmatched"] else "ok" if result["cards"] else "unmatched"
     result["reason"] = "" if result["status"] == "ok" else "some_citations_not_bound"
     return result

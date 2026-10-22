@@ -1242,6 +1242,11 @@ function answerBody(turn) {
     : plain(res.answer);
   const row = document.createElement('div'); row.className = 'ans-row';
   row.appendChild(answer);
+  // 근거가 없어 거절해도 서버가 붙인 MES 현재값 첫 줄(「현재 MES(…)」, S30h MES_PREFIX)은 그 위에 보여 준다.
+  const mesLine = none ? (res.answer || '').split('\n')[0] : '';
+  if (mesLine.startsWith('현재 MES(')) {
+    const m = document.createElement('p'); m.className = 'ans-sub'; m.textContent = mesLine; d.appendChild(m);
+  }
   d.appendChild(row);
   // 인사·감사·작별에 대한 정해진 답(서버 smalltalk) — 조치 기록·근거·근무일지 질문을 붙이지 않는다.
   if (res.smalltalk) return d;

@@ -102,6 +102,9 @@ def asked_units(question: str) -> list[str]:
     return [f"{t.upper()}-0{n}" for t, n in ASKED_UNIT.findall(question)]
 
 
+RANGE_Q = re.compile(r"정상\s*범위|정상\s*값|기준\s*(?:값|치|범위)|몇\s*(?:부터|까지)|얼마\s*(?:부터|까지)|상한|하한")
+
+
 def unobserved(question: str, specs: dict, observations: list) -> list[str]:
     """Names of the unit's signals the question asks about that have no valid MES observation (10/21 MX-C27/C28: the
     model filled a dropped bearing temperature / air pressure with another signal and called it normal). A signal is
@@ -124,7 +127,7 @@ class S30hPipeline:
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
                  event_label=False, mes_only=False, mes_prefix=False, p_fix=False, unobserved_guard=False, unit_guard=False,
-                 unit_header=False):
+                 unit_header=False, range_answer=False):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -158,6 +161,9 @@ class S30hPipeline:
         self.unobserved_guard = unobserved_guard   # code answers a question about a signal the MES has no valid value for
         self.unit_guard = unit_guard   # the question's unit codes decide which unit the answer is about (run())
         self.unit_header = unit_header   # answers start with [GR-01 기준]
+        # drop_all + a question for a signal's normal range: code answers from the MES range (10/22 NQ-D08: the range
+        # is only in the MES; with MES_ONLY off nothing answered it). Not for 정격 (a manufacturer rating, NQ-M08).
+        self.range_answer = range_answer
         cat = catalog or json.loads((ROOT / "docs/data/reference/00_plant_and_relations.json").read_text(encoding="utf-8"))
         types = {t["equipment_type_id"]: t["type_code"] for t in cat["equipment_types"]}
         self.eq_type, self.eq_code = {}, {}
@@ -275,6 +281,10 @@ class S30hPipeline:
             out = G.ask(p, self.host, logprobs=True, **extra)
         res = G.check(out, ev2, question, block)
         abstain = res["abstain"] or (route in ("model", "mes_only") and out.get("p_insuff") is not None and out["p_insuff"] >= T)
+        ranged = []
+        if self.range_answer and route == "drop_all" and eq_id in self.specs and RANGE_Q.search(question) and "정격" not in question:
+            ranged = [sp for sp in self.specs[eq_id].values() if sp.unit != "bool" and sp.normal_min is not None
+                      and sp.normal_max is not None and _asks(question, sp.name.split(" (")[0])]
         dropped = []
         if self.unit_guard and not abstain and code:
             # a sentence naming a unit the question is not about (another unit's handover record, the selected unit's MES)
@@ -294,11 +304,15 @@ class S30hPipeline:
             if self.source_conditions:
                 answer, condition_cards = with_source_conditions(answer, res["valid_cites"], ev2, self.cards)
             answer = re.sub(r"\s*\[(?:S\d+|M)\]", "", answer).strip() + ("\n근거: " + " · ".join(labels) if labels else "")
+        if ranged:
+            abstain = False
+            answer = " ".join(f"{self.eq_code[eq_id]} {sp.name.split(' (')[0]} 정상 범위는 {_num(sp.normal_min)}–{_num(sp.normal_max)} {sp.unit}입니다."
+                               for sp in ranged) + " MES 판정 기준값이며 제조사 정격이나 고장 한계가 아닙니다.\n근거: MES 기준값"
         if self.unit_header and answer and code and not away:
             # 10/22 trial: say which unit the answer is about, so a worker sees a unit the rules did not catch
             answer = f"[{', '.join(asked) or code} 기준] {answer}"
         if away:
-            head = f"선택된 설비({code})와 질문의 설비({', '.join(asked)})가 달라 {code}의 MES 값은 쓰지 않았습니다."
+            head = f"선택된 설비({code})와 질문의 설비({', '.join(asked)})가 달라 {code}의 MES 현재값은 쓰지 않았습니다."
             answer = f"{head}\n{answer}" if answer else f"{head} {MB.NO_ACTION}"
         elif self.mes_prefix and eq_id in self.specs:
             # (가) 10/21: code states the unit's MES; an abstention becomes that state + "no action found" (still no_knowledge)

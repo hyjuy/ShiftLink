@@ -278,7 +278,7 @@ def test_unit_guard_keeps_the_answer_on_the_units_the_question_names(pipe, monke
     pipe.unit_guard = True
     r = pipe.run(payload)
     assert "[MES]" not in prompts[1]   # GR-01's values never reach a GR-02 question
-    assert r.output.answer == ("선택된 설비(GR-01)와 질문의 설비(GR-02)가 달라 GR-01의 MES 값은 쓰지 않았습니다.\n"
+    assert r.output.answer == ("선택된 설비(GR-01)와 질문의 설비(GR-02)가 달라 GR-01의 MES 현재값은 쓰지 않았습니다.\n"
                                "오일 레벨 12.5 pct를 확인합니다.\n근거: gr_manual p.3")
     assert r.tool_results["other_unit"] and r.tool_results["unit_dropped"] == ["GR-01 베어링은 46.4도로 정상입니다 [S1]."]
     mine = pipe.run({**payload, "question": "베어링 어때요?"})   # no code in the question: the selected unit
@@ -302,6 +302,21 @@ def test_place_names_come_from_the_catalog_location(pipe, tmp_path):
     assert p.units_in("출측 감속기 누유요") == ["GR-02"] and p.units_in("입측감속기 온도") == ["GR-01"]
     assert p.units_in("조작반 감속기") == [] and p.units_in("좌측 감속기") == []   # shared word / panel direction
     assert p.units_in("GR-01이랑 출측 감속기") == ["GR-01", "GR-02"]
+
+
+def test_range_answer_on_drop_all_from_the_mes_range(pipe, monkeypatch):
+    # 10/22 NQ-D08: "RT-03 모터 전류 정상 범위?" - the range is only in the MES; nothing survived the judge
+    judged(monkeypatch, {"c3": 0.1, "c4": 0.0})
+    monkeypatch.setattr(G, "ask", lambda *a, **k: pytest.fail("no model call on drop_all"))
+    payload = {"question": "감속기 진동값 정상 범위가 몇이야?", "eq_id": "EQ-0004", "observations": []}
+    pipe.specs["EQ-0004"]["gr_vib_rms"] = SimpleNamespace(name="감속기 진동 RMS", unit="mm_s", normal_min=0.5, normal_max=2.8)
+    assert pipe.run(payload).output.no_knowledge   # off: as before
+    pipe.range_answer = True
+    out = pipe.run(payload).output
+    assert not out.no_knowledge and out.answer.startswith("GR-01 감속기 진동 RMS 정상 범위는 0.5–2.8 mm_s입니다.")
+    assert out.answer.endswith("근거: MES 기준값")
+    assert pipe.run({**payload, "question": "감속기 진동 정격이 몇이야?"}).output.no_knowledge   # rating, not the MES range
+    assert pipe.run({**payload, "question": "감속기 진동 왜 생겨?"}).output.no_knowledge   # not a range question
 
 
 def test_judge_failure_is_unavailable_not_unfiltered(pipe, monkeypatch):
@@ -361,6 +376,10 @@ def test_mes_source_condition_flag(pipe, tmp_path, monkeypatch, flag, enabled):
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_UNIT_HEADER", flag)
     assert Q.build_query_pipeline().unit_header is enabled
+    monkeypatch.delenv("SHIFTLINK_S30H_RANGE_ANSWER", raising=False)
+    if flag is not None:
+        monkeypatch.setenv("SHIFTLINK_S30H_RANGE_ANSWER", flag)
+    assert Q.build_query_pipeline().range_answer is enabled
     monkeypatch.delenv("SHIFTLINK_S30H_P_FIX", raising=False)
     if flag is not None:
         monkeypatch.setenv("SHIFTLINK_S30H_P_FIX", flag)

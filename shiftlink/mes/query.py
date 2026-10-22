@@ -43,6 +43,7 @@ def build_query_pipeline():
             unobserved_guard=os.environ.get('SHIFTLINK_S30H_UNOBSERVED') == '1',
             unit_guard=os.environ.get('SHIFTLINK_S30H_UNIT_GUARD') == '1',
             unit_header=os.environ.get('SHIFTLINK_S30H_UNIT_HEADER') == '1',
+            range_answer=os.environ.get('SHIFTLINK_S30H_RANGE_ANSWER') == '1',
             cards=load_card_provider(ROOT / 'docs/data/knowledge_cards/kb/kb_cards.json').provider.cards)
     return FixedPipeline(
         model=OllamaModel(model=os.environ.get('SHIFTLINK_QUERY_MODEL', ANSWER_MODEL),

@@ -1,0 +1,1097 @@
+{
+  "base_sha": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "submissions": {
+    "build": "6df10055ca37d87f6db266a4a74021ab28ddebd8",
+    "symptoms": "704c7b6c3ee96289822e30312a5a0c91e527e5d5",
+    "viz": "87438a9b5c964934470305e22eae6285664911e8"
+  },
+  "scope": "AI original-text fidelity review; no human/manufacturer/field approval",
+  "method": "see ai-review-67.md; generated per-card ledger, not six independent approvals per card",
+  "cards": [
+    {
+      "card_id": "K-1001",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "펌프 운전 중 펌프 출구 압력계에 압력이 읽히지 않는다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-outlet-pressure-absent"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 압력 '없음'. K-1203의 '읽히나 부족'과 병합하지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1002",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "냉각기 출구 포트의 오일 온도 측정값이 MES 연계 기준 상한 58 degC를 초과하거나, 냉각 성능 확인이 필요하다. 58 degC는 hpu_oil_temp의 MES 정상 상한에 맞춘 설정값이다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-cooler-outlet-oil-temp-over-limit"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 원문 증상의 '냉각 성능 확인이 필요하다'는 확인 요구라서 증상 개념에 넣지 않음. 58 degC는 프로젝트 설정값.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1003",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1004",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "펌프 운전 중 동일 조건의 정상 기록 대비 소음이 증가하고, hpu_flow < 38 L_min 또는 hpu_pressure < 145 bar이며 탱크 유면에 우유빛 거품이 관찰된다. 유량 정상 38–46 L_min·압력 정상 145–165 bar는 MES 기준이다. 소음 증가는 정성 관측으로 남긴다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-pump-noise-low-output-milky-foam"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 소음·유량/압력 미달·거품이 한 증상으로 함께 서술되어 복합 개념으로 둠. K-1008과 병합하지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [
+        "R1"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1005",
+      "version": "1.1-safety-20261020",
+      "symptom_original": "축압기가 계통에서 제 역할을 하는지 의심되어 가스 프리차지와 충전 압력 확인이 필요하다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1006",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1007",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류. 안전 카드 아님.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1008",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "작동유 색이 투명에서 크림색(우유빛)으로 바뀌고, 탱크나 부품에 젤라틴 같은 덩어리가 보이거나 금속면에 녹이 생긴다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-fluid-cream-color-gel-rust"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 작동유 외관 변화. 원문이 에어레이션 거품과 혼동 가능하다고 명시하여 K-1004와 분리.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1009",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1010",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "아이들러·벨트 설치 후 또는 운전 중 벨트가 아이들러 중앙을 벗어나 한쪽으로 치우쳐 돈다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1011",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "운전 중 부착물 없는 아이들러 롤의 회전수가 동일 조건 정상 기록의 80% 미만이거나 0 rpm이고, 정상 주행 시 없던 고음의 끽끽 소리가 관찰된다. 80%는 프로젝트 회전 지연 기준이며 원문 임계값이 아니다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cv-idler-roll-slow-or-stopped-squeal"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 회전수(정지/지연)와 소리가 함께 서술됨. 80%는 프로젝트 기준.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1012",
+      "version": "1.1-safety-20261020",
+      "symptom_original": "벨트 교체 후 또는 사용 중 벨트가 중앙을 벗어나 한쪽으로 쏠린다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1013",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "벨트의 같은 구간이 지나갈 때마다 컨베이어 모든 지점에서 한쪽으로 벗어나고, 나머지 구간은 똑바로 돈다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cv-belt-section-drift-at-all-points"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 특정 구간·모든 지점이라는 조건이 증상의 일부. 일반적 벨트 사행과 분리.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1014",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1015",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "운전 중 컨베이어에 오작동·고장이 발생한다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1016",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "벨트 커버 표면이 군데군데 점이나 줄무늬 모양으로 부풀어 있다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cv-belt-cover-spot-stripe-swelling"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 외관 증상만 연결. 기름·그리스 오염은 원인 후보.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1017",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "운전 중 롤러 컨베이어에서 평소와 다른 소음, 끽끽거리는 소리 또는 휘파람 같은 소리가 난다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1018",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1019",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1020",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "상승 버튼을 누르는 동안 파워유닛 밸브에서 끽 하는 날카로운 소리(squealing)가 나고 플랫폼은 더 올라가지 않는다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1021",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "하강 버튼을 눌러도 리프트가 내려가지 않는다. 속도 퓨즈 잠김은 원문이 제시한 가능한 원인 중 하나다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1022",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "상승 버튼을 눌러도 리프트가 오르지 않고, 모터가 웅웅거리기만 하거나 과부하 보호장치의 퓨즈가 끊어진다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1023",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "올려 둔 리프트가 버튼을 누르지 않았는데도 서서히 내려앉는다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1024",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1025",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "감속기 베어링부 온도 측정값이 MES 상한 62 degC를 초과한다(정상 30–62 degC). 이는 원문 제조사 임계값이 아닌 프로젝트 관측 기준이다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1026",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "감속기에서 평소와 다른 규칙적인 운전음이 난다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:gr-reducer-regular-abnormal-noise"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 원문 증상은 '규칙적인 운전음'. 갈리는/두드리는 구분은 know_how의 원인 후보 분기라 개념으로 나누지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1027",
+      "version": "1.1-safety-20261020",
+      "symptom_original": "감속기 커버판·하우징 커버·베어링 커버·장착 플랜지·오일실 또는 드레인 플러그·밸브·브리더 플러그에서 오일이 샌다. 프로젝트 관측은 gr_oil_leak == 1 bool(정상 0)이며 누유 위치·양은 별도로 확인한다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1028",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": "감속기에서 평소와 다른 불규칙한 운전음이 난다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1029",
+      "version": "1.0-draft-KB-20260929-A",
+      "symptom_original": null,
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류. 안전 카드 아님.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1030",
+      "version": "1.1-safety-20261020",
+      "symptom_original": "감속기 장착부 주변에서 평소와 다른 소리가 난다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1101",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "원인 미해결·여러 단계 확인 진행, 확인 완료 범위·정상 결과의 다음 조 인계",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 증상이 아니라 인계 상황(확인 완료 범위·정상 결과의 다음 조 인계)을 서술. 증상 개념으로 만들지 않음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1102",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "필터를 갈거나 볼트를 조이거나 유면을 보충했는데 계측값이 덜 회복돼서, 조치 효과를 다음 조가 재확인하도록 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 조치 후 계측값 회복 부족을 다음 조에 넘기는 인계 기록 절차. 특정 설비 증상이 없음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1103",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "설비를 세우고 잠금·재기동 방지를 걸어 둔 상태로 정비 확인이나 부품 입고를 기다리며, 재가동 보류 상태를 다음 조에 넘겨야 한다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1104",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "계측값에 남지 않는 갈리는 소리·끽끽 소리·외관 변화를 현장에서 듣거나 봤는데, 들은 소리와 본 모습을 다음 조에 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 감각 관측을 기록하는 방법에 관한 카드. 소리·외관은 예시이며 특정 증상 개념으로 확정할 수 없음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1105",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "알람은 안 떴는데 순회하며 읽은 값이 정상 범위를 벗어나 있어, 몇 시에 얼마였는지, 다음 조가 무엇을 다시 읽을지 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:common-signal-out-of-range-without-alarm"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 인계 카드지만 증상 문장에 '알람 없이 정상 범위 이탈'이 관측으로 서술됨. 인계 방법 자체는 증상이 아니므로 제외.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [
+        "R2"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1106",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "따를 조치 절차가 정해지지 않은 신호 이상이라 현장에서 어떻게 조치할지 모르는데, 다음 조에 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 조치 절차가 없는 상태의 인계 방법. 증상이 특정되지 않음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1107",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "공급받는 설비의 유지압·장력이 떨어졌는데, 공급원 설비도 이상인지 함께 봐서 다음 조에 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 공급받는 설비의 유지압·장력 저하는 명시된 관측이다. RT 압력 81→79 bar, CV 장력 342→338 kPa, 공급원 HPU 압력 152 bar 등 설비·단위·확인 시각과 공급원 확인 여부가 달라 단일 개념의 범위를 확정하기 어려워 연결 보류. 공급원 전체 정상이나 고장 원인 배제를 뜻하지 않음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [
+        "R4"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1108",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "원인이 짐작되지만 관측만으로는 확정하지 못했고 다른 원인 가능성도 남아 있어, 추정과 실제 관측을 나눠 다음 조에 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 추정과 관측을 구분해 적는 방법. 증상이 아님.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1109",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "정비·전기 담당에게 점검을 요청하거나 접수만 해 두고 아직 회신이나 착수가 없는 상태로 다음 조에 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 요청만 접수된 상태의 인계 방법. 증상이 아님.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1110",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "정비하려고 세운 설비의 차단·감압을 했는지 기록이 없고, MES 압력 표시만으로는 잔압이 남았는지 모르는 상태로 다음 조에 넘기거나 받는다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1111",
+      "version": "1.0-draft-KB-20260930-T4",
+      "symptom_original": "누유량이 줄었는지 동작이 느려졌는지 눈대중으로만 봤고 잴 수단이 없어서, 다음 조가 수치로 비교하도록 넘겨야 한다.",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 수치 없이 눈대중으로 본 관측을 인계하는 방법. 증상이 특정되지 않음.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1201",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "hpu_filter_dp > 1.2 bar(MES 정상 범위 0–1.2 bar)이며 실제 막힘 표시 확인이 필요하다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-filter-dp-above-1-2-bar"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 관측 부분만 연결. '실제 막힘 표시 확인이 필요하다'는 확인 요구라 제외.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1202",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "필터 차압 > 1.2 bar가 관측되었고 카트리지 교체 필요 여부를 확인한다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-filter-dp-above-1-2-bar"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. K-1201과 같은 관측(1.2 bar 초과)으로 병합. '교체 필요 여부 확인'은 조치 판단이라 제외.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1203",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "펌프 출구 압력은 읽히지만 작업에 필요한 압력 또는 유량이 부족하다.",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:hpu-outlet-pressure-low-present"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 압력은 읽히고 압력 또는 유량이 부족. K-1001(압력 없음)과 병합하지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1204",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "운전 지시 중 벨트 미끄럼·정지",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1205",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "운전 중 이송 능력 저하, cv_belt_tension 380–460 kPa(가상 정상 범위)",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1206",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "운전 지시 중 벨트 저속·이송물 적체",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1207",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "반송 지시가 있지만 물품이 이동하지 않는다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1208",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "반송 중 rt_motor_current > 16 A(가상 정상 범위 8–16 A)가 관측되고 모터 차단 상태 확인이 필요하다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1209",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "정상 운전 대비 감속기 진동 상승, 베어링 온도 변화 동반 여부",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1210",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "MES gr_brg_temp > 62 degC(가상 정상 범위 30–62 degC)가 관측되어 실제 베어링부 온도와 해당 모델의 과열 기준 대조가 필요하며 윤활 상태 확인이 필요하다.",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1211",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "필터·오일 정비 후 재가동(다시 돌리기), 압력 회복에도 펌프 소음·기포 관찰, 유량 함께 확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1212",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "오일 교환 후 유면 확인 누락, 재가동 전 주입량 기록과 실제 유면 대조, 시험운전 소음·진동·누유 관측",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1213",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "벨트 정비 후 재가동 시험운전, 장력 정상 표시에도 벨트 한쪽 쏠림(편주) 확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1214",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "반송부 정비 후 재가동 전, 방호장치 미복구·도구·자재 잔류·걸림 확인, 정비 완료와 운전 복귀 승인 구분",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1215",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "끼임 비상정지 후 리셋·재가동, 정지 표시가 풀려도 걸림 제거·기능시험 기록·재가동 승인 전",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1216",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "과열 정지 후 식은 뒤 재가동, 온도 정상 복귀만으로 원인 해소 아님, 재가동 중 온도 재상승·진동·소음 변화 관측",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1217",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "반송부 인터록 정지 후 재가동, 해제 표시와 별개로 걸림 해소·안전장치·작업구역·재가동 승인 확인, 인터록 우회 금지",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1218",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "정상정지 후 저온(냉간) 기동, 압력·유량 부족과 펌프 소음, 반복 기동 금지, 오일 점도 적합성·흡입 조건 확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1219",
+      "version": "1.0-draft-KB-20260930-C",
+      "symptom_original": "장기 정상정지 후 재가동(오래 세워 둔 뒤), 이전 정상 운전 기록과 별개로 현재 유면·윤활 준비 확인, 방호·감시장치 확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1301",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축공기 압력 저하, 공기공구·공압 설비 출력 저하",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cau-air-pressure-drop"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 현재 압력 저하만 매핑. '공기공구·공압 설비 출력 저하'는 추가 관측으로 원문에 보존하며 별도 개념화는 보류.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [
+        "R3"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1302",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축공기 배관·이음부 누설음",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1303",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축공기 계통 압력 저하, 누설 의심",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cau-air-pressure-drop"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. '누설 의심'은 원인 후보라 제외. 압력 저하 관측만 연결.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1304",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1305",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축공기 압력 상승, 압축기 전류 상승",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1306",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "차단기 떨어짐(트립), 재투입 후 정상 복귀, 원인 흔적 없음",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1307",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "대형 모터 기동·부하 피크 시점 버스 전압 순간 강하",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:pdp-bus-voltage-dip-at-motor-start"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 기동·부하 피크와 시각이 겹친다는 조건을 정의에 포함. 차단기 트립 동반 전압 저하(K-1310)와 별도 관측으로 분류하며 동시 발생을 배제하지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [
+        "R5"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1308",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "배전반 차단기 트립, 급전 설비 정지",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1309",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "차단기 트립 표시, 배전반 충전부·단자 작업 전, 메인 차단기만 내린 상태",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1310",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "버스 전압 저하, 차단기 트립 동시 발생",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1311",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축기 부하 운전 중 정지, 과열 정지, 과부하 트립, 토출 고온 경보",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cau-compressor-stop-during-load-run"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 정지가 중심. 경보 종류(고온/과부하) 분기는 확인 순서라 개념으로 나누지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1312",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축공기 공급량 부족, 압축기 토출량 저하",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1313",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "압축기 정기 정비 시점, 흡기필터·오일필터·분리기·윤활유 교체",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1314",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1315",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "차단기 외함·접속 도체 변색, 열화상 상간 온도차, 핫스폿",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1316",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "장기 미조작 차단기, 조작 핸들 뻑뻑함, 첫 개폐 동작 지연",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1317",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "배선차단기 트립, 트립 원인 미확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1318",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "배선차단기 정기 시험, 트립 동작 확인",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1319",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "배전반 계기·보호계전기 점검, 변류기 2차 배선 분리 전",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1320",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1321",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": null,
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상). symptom=null. 제목·조치에서 증상을 만들지 않고 연결 보류.",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1322",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "정전 후 압축기 재기동, 복전 후 압축기 기동 불가",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cau-compressor-no-start-after-power-restore"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. '복전 후 기동 불가'만 연결. '정전 후 재기동' 상황·확인 순서는 증상이 아니라 제외.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1323",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "다른 회사·상표 오일 사용, 토출 고온, 윤활유 소비 증가, 윤활유 거품",
+      "safety_flag": false,
+      "concept_ids": [
+        "sym:cau-compressor-discharge-temp-high",
+        "sym:cau-compressor-oil-consumption-increase",
+        "sym:cau-compressor-oil-foaming"
+      ],
+      "existing_review_reason": "비안전 후보 연결, 사람 검수 전. 증상 문장에서 '다른 회사·상표 오일 사용'은 원인 후보라 제외하고 관측 3건만 연결. K-1311의 정지 관측과 병합하지 않으며 정지와의 동시 발생을 배제하지 않음.",
+      "ai_disposition": "후보 연결 유지",
+      "revision_request_ids": [
+        "R5",
+        "R6"
+      ],
+      "approval_status": "needs_review",
+      "revision_status": "applied_and_validated"
+    },
+    {
+      "card_id": "K-1324",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "배전반 전원 투입, 정전 복구 후 차단기 투입 순서",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 전원 투입 순서(절차)를 서술. 증상이 아님.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1325",
+      "version": "1.0-draft-KB-20260930-D",
+      "symptom_original": "차단기 동작 없음, 접속부·단자 발열, 단자 볼트 풀림",
+      "safety_flag": true,
+      "concept_ids": [],
+      "existing_review_reason": "safety_flag=true. 증상 연결 보류(안전 카드 검수 대상).",
+      "ai_disposition": "차단 유지: 안전/null",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    },
+    {
+      "card_id": "K-1401",
+      "version": "1.0-KB-20261001-handover-completion",
+      "symptom_original": "진행 중 정비 점검, 담당자 퇴근·작업 완료 증거 누락",
+      "safety_flag": false,
+      "concept_ids": [],
+      "existing_review_reason": "연결 보류. 정비 작업 완료 증거 대조와 인계 절차. 증상이 아님.",
+      "ai_disposition": "연결 보류 유지",
+      "revision_request_ids": [],
+      "approval_status": "needs_review",
+      "revision_status": "no_revision_requested"
+    }
+  ],
+  "current_mapping_sha256": "514f8cc20d4ac2546f5f49011811b9c60499dccc41f2e78edcf045fd2b209000",
+  "revision_validation": "revision-validation.json"
+}

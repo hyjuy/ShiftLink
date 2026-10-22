@@ -1,0 +1,145 @@
+{
+  "base_sha": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "head": "5167376b5ded1e33725394f2b65cb6977c121dec",
+  "branch": "codex/kg-integration",
+  "ownership_comparison": "SHA^..SHA --no-renames",
+  "submissions": {
+    "build": {
+      "sha": "6df10055ca37d87f6db266a4a74021ab28ddebd8",
+      "base_is_ancestor": true,
+      "files": [
+        "docs/demo/kg/build/HANDOFF.md",
+        "docs/demo/kg/build/build_graph.py",
+        "docs/demo/kg/build/graph.json",
+        "docs/demo/kg/build/validation.json"
+      ],
+      "outside_owner": [],
+      "working_copy_differs_only_in_generated_outputs": [
+        "docs/demo/kg/build/graph.json",
+        "docs/demo/kg/build/validation.json"
+      ]
+    },
+    "symptoms": {
+      "sha": "704c7b6c3ee96289822e30312a5a0c91e527e5d5",
+      "base_is_ancestor": true,
+      "files": [
+        "docs/demo/kg/symptoms/HANDOFF.md",
+        "docs/demo/kg/symptoms/build_symptom_concepts.py",
+        "docs/demo/kg/symptoms/check_symptoms.py",
+        "docs/demo/kg/symptoms/review.md",
+        "docs/demo/kg/symptoms/symptom_concepts.json"
+      ],
+      "outside_owner": [],
+      "working_copy_differs_only_in_generated_outputs": []
+    },
+    "viz": {
+      "sha": "87438a9b5c964934470305e22eae6285664911e8",
+      "base_is_ancestor": true,
+      "files": [
+        "docs/demo/kg/viz/.qa/actual-file.png",
+        "docs/demo/kg/viz/.qa/browser-results.txt",
+        "docs/demo/kg/viz/.qa/desktop.png",
+        "docs/demo/kg/viz/.qa/missing-file.png",
+        "docs/demo/kg/viz/.qa/mobile.png",
+        "docs/demo/kg/viz/HANDOFF.md",
+        "docs/demo/kg/viz/demo_questions.md",
+        "docs/demo/kg/viz/index.html",
+        "docs/demo/kg/viz/mock_graph.json",
+        "docs/demo/kg/viz/verify.cjs"
+      ],
+      "outside_owner": [],
+      "working_copy_differs_only_in_generated_outputs": [
+        "docs/demo/kg/viz/.qa/actual-file.png",
+        "docs/demo/kg/viz/.qa/browser-results.txt"
+      ]
+    }
+  },
+  "remote_sharing": {
+    "build": "advertised branch tip; fetched",
+    "symptoms": "advertised branch tip; fetched",
+    "viz": "branch absent; exact SHA fetch from origin succeeded"
+  },
+  "graph_validation": {
+    "node_counts": {
+      "EquipmentType": 83,
+      "Symptom": 18,
+      "CardVersion": 86,
+      "DocumentVersion": 92,
+      "Asset": 10,
+      "AssetPart": 0
+    },
+    "edge_counts": {
+      "PART_OF": 76,
+      "ABOUT": 172,
+      "DESCRIBES_SYMPTOM": 20,
+      "CITES": 156,
+      "INSTANCE_OF": 10,
+      "INSTALLED_ON": 0
+    },
+    "total_nodes": 289,
+    "total_edges": 434,
+    "orphan_nodes": [],
+    "errors": []
+  },
+  "data_checks": {
+    "source_cards": 86,
+    "all_source_fields_preserved": true,
+    "safety_cards": 56,
+    "null_cards": 13,
+    "safety_symptom_edges": 0,
+    "null_symptom_edges": 0,
+    "review_reasons": 86,
+    "unversioned_sources_preserved": 42,
+    "inputs_unchanged": true,
+    "graph_and_validation_preserved": true
+  },
+  "original_workspaces": {
+    "D:\\obsd\\Projects\\ShiftLink": {
+      "head_before": "479303f02aaf70eb12e1510d3897793b633859c0",
+      "head_now": "94bf56748295c65cca54a0bac46cd410e94b7b5f",
+      "head_changed_during_work": true,
+      "note": "Head movement observed; not reset or attributed to this integration task. File hashes and staging preserved.",
+      "branch": "codex/kg-viz",
+      "staging_unchanged": true,
+      "snapshot_files_unchanged": 170
+    }
+  },
+  "staging_empty": true,
+  "owner_source_files_unchanged": true,
+  "browser_passes": 42,
+  "ok": true,
+  "uncommitted_files": [
+    "docs/demo/kg/.recheck-20261022/actual-file.png",
+    "docs/demo/kg/.recheck-20261022/browser-results.txt",
+    "docs/demo/kg/.recheck-20261022/browser.cjs",
+    "docs/demo/kg/.recheck-20261022/desktop.png",
+    "docs/demo/kg/.recheck-20261022/missing-file.png",
+    "docs/demo/kg/.recheck-20261022/mobile.png",
+    "docs/demo/kg/README.md",
+    "docs/demo/kg/acceptance-validation.json",
+    "docs/demo/kg/ai-review-67.md",
+    "docs/demo/kg/ai-review-cards.json",
+    "docs/demo/kg/build/HANDOFF.md",
+    "docs/demo/kg/build/build_graph.py",
+    "docs/demo/kg/build/graph.json",
+    "docs/demo/kg/build/validation.json",
+    "docs/demo/kg/integration_validation.json",
+    "docs/demo/kg/recheck-validation.json",
+    "docs/demo/kg/revision-requests.md",
+    "docs/demo/kg/symptoms/HANDOFF.md",
+    "docs/demo/kg/symptoms/build_symptom_concepts.py",
+    "docs/demo/kg/symptoms/check_symptoms.py",
+    "docs/demo/kg/symptoms/review.md",
+    "docs/demo/kg/symptoms/symptom_concepts.json",
+    "docs/demo/kg/viz/.qa/actual-file.png",
+    "docs/demo/kg/viz/.qa/browser-results.txt",
+    "docs/demo/kg/viz/.qa/desktop.png",
+    "docs/demo/kg/viz/.qa/missing-file.png",
+    "docs/demo/kg/viz/.qa/mobile.png",
+    "docs/demo/kg/viz/HANDOFF.md",
+    "docs/demo/kg/viz/demo_questions.md",
+    "docs/demo/kg/viz/index.html",
+    "docs/demo/kg/viz/mock_graph.json",
+    "docs/demo/kg/viz/verify.cjs"
+  ]
+}

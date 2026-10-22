@@ -1,0 +1,43 @@
+PASS 가짜 데이터 배너
+PASS 타입 필터
+PASS 설비 필터
+PASS 목록 선택
+PASS 증상 연결 후보 있음 표시
+PASS 인용 locator
+PASS 원문 HTML 문자열 그대로 표시
+PASS 데이터 HTML 실행 없음
+PASS 필터 밖 이웃 선택 및 검수 전
+PASS 합성 장비 표시
+PASS 증상 후보 연결 없음 표시
+PASS 안전·null·판본 미지정 보류
+PASS 빈 필터 결과
+PASS 필터 초기화
+PASS mock: 12 nodes
+PASS native keyboard list selection
+PASS both citation locators visible
+PASS status tracks current selected node
+PASS mobile: no page horizontal overflow
+PASS mobile: readable graph uses local horizontal scrolling
+PASS mobile: selected node is fully visible
+PASS actual missing file HTTP 404 and execution guide
+PASS no automatic mock fallback request
+PASS retry retains missing-file error
+PASS existing real graph loads without mock
+INFO actual graph 필터 결과 289 / 전체 289개 노드 · 전체 관계 434개 · 선택: 기어·베인 펌프 출구 압력이 없을 때 확인 순서 — Algo A.1 좌측 분기
+PASS actual: browser counts match generated graph
+PASS integrated: 18 symptom concepts and 20 candidate edges
+PASS integrated: symptom type filter and review badge
+PASS integrated: equipment filter includes linked symptoms
+PASS integrated: composite card preserves three symptom candidates
+PASS integrated: real neighbor button updates selection
+PASS integrated: original card props and all citation locators preserved in detail
+PASS integrated: safety card is held without symptom edges
+PASS integrated: null symptom card stays held
+PASS integrated: unversioned citations remain visible
+PASS integrated: real graph native keyboard changes selection
+PASS integrated: synthetic assets and no AssetPart
+PASS real mode selftest query does not run mock-only checks
+PASS assetless graph does not claim synthetic assets included
+PASS valid empty graph has truthful banner and empty state
+PASS null provenance source rejected before selection rendering
+PASS no browser Runtime exceptions

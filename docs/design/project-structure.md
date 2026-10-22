@@ -122,6 +122,9 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 - `pda/__main__.py`가 `mes/web/` 화면을 제공하고 `/api/*`를 Jetson으로 프록시한다.
   Unity 영상 프록시·촬영 분류도 이 경로에 있다.
 - `mes/web/pda.html`, `pda.js`는 작업자 화면이다.
+  `knowledge.css/js`는 `/api/knowledge-cards`의 기준 KB·후보 상태를 표시한다.
+  이 목록은 검색 게시 경로와 별개이며 기존 대시보드에 진입부를 추가한다.
+  Jetson/Pi 제공 범위와 동시 배포 주의사항은 [통합 기록](../testing/jetson-knowledge-sync-20261022.md)을 참고한다.
   `index.html`, `app.js`, `operator.js`, `accounts.js`와 후보 검토 화면도 별도로 존재한다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.

@@ -123,6 +123,7 @@ class MesService:
         self.fault_hazard = fault_hazard
         self.catalog = Catalog.load(catalog_path)
         self.storage = storage or MesStorage()
+        self.storage.sync_knowledge_cards(kb_cards()['cards'])
         self.active_config: Configuration = self._restore_active_config()
         self.storage.save_configuration(self.active_config.config_id, json.dumps(configuration.to_payload(self.active_config), sort_keys=True, ensure_ascii=False))
         self.engine = self._new_engine(Run.create(seed=seed, config_id=self.active_config.config_id), self.active_config)
@@ -645,6 +646,18 @@ class MesService:
             self.storage.review_card_draft(draft_id,action,status,reason,revision,actor)
             return self.admin_card_draft(draft_id)
 
+    def knowledge_inventory(self):
+        with self._lock:
+            published=kb_cards()['cards']
+            self.storage.sync_knowledge_cards(published)
+            current={card['card_id'] for card in published}
+            cards=[card for card in self.storage.list_knowledge_cards() if card['card_id'] in current]
+            drafts=self.storage.list_card_drafts()
+            summary={status:sum(row['status']==status for row in drafts) for status in
+                     ('pending_review','changes_requested','review_approved','quality_passed','rejected')}
+            return {'cards':cards,'drafts':drafts,'summary':{'published':len(cards),**summary},'is_synthetic':True}
+
+
     def _restore_active_config(self) -> Configuration:
         """Resume with the configuration of the newest run that preserved one; else derive from the catalog."""
         for run in reversed(self.storage.list_runs()):
@@ -863,6 +876,10 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
+        if os.environ.get("SHIFTLINK_SERVE_PDA", "1") == "0" and (
+                parsed.path == "/pda.html" or
+                (parsed.path.startswith("/static/") and Path(parsed.path).name == "pda.js")):
+            self._send(404, {"error": "not found", "is_synthetic": True}); return
         try:
             if parsed.path=='/api/admin/card-drafts' or parsed.path.startswith('/api/admin/card-drafts/'):
                 actor=self.accounts.administrator(self._account_token())
@@ -887,6 +904,7 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path == "/api/catalog": self._send(200, {"data": self.service.catalog.data, "is_synthetic": True}); return
             if parsed.path == "/api/config": self._send(200, self.service.config()); return
             if parsed.path == "/api/kb/cards": self._send(200, kb_cards()); return
+            if parsed.path == "/api/knowledge-cards": self._send(200, self.service.knowledge_inventory()); return
             if parsed.path == "/api/analytics": self._send(200, self.service.analytics()); return
             if parsed.path.startswith("/api/configs/"):
                 self._send(200, self.service.stored_config(parsed.path.split("/")[3])); return
@@ -913,7 +931,7 @@ class _Handler(BaseHTTPRequestHandler):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
                 page = parsed.path[1:] if parsed.path!='/' else "index.html"
                 self._send(200, (self.web_root / page).read_bytes(), "text/html; charset=utf-8"); return
-            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "accounts.js", "style.css", "pda.js", "candidate-review.js", "candidate-review.css"}:
+            if parsed.path.startswith("/static/") and Path(parsed.path).name in {"app.js", "operator.js", "accounts.js", "style.css", "pda.js", "candidate-review.js", "candidate-review.css", "knowledge.js", "knowledge.css"}:
                 if getattr(self, "api_only", False):
                     self._send(404, {"error": "not found", "is_synthetic": True}); return
                 name = Path(parsed.path).name; kind = "text/javascript" if name.endswith("js") else "text/css"

@@ -134,6 +134,8 @@ class MesStorage:
                 PRIMARY KEY (handover_id, record_index),
                 FOREIGN KEY (handover_id, record_index) REFERENCES incident_records(handover_id, record_index),
                 FOREIGN KEY (query_id) REFERENCES query_log(query_id), FOREIGN KEY (draft_id) REFERENCES card_drafts(draft_id));
+            CREATE TABLE IF NOT EXISTS knowledge_cards (
+                card_id TEXT PRIMARY KEY, payload TEXT NOT NULL, updated_at TEXT NOT NULL);
         """)
         self.connection.commit()
         if "kind" not in {row[1] for row in self.connection.execute("PRAGMA table_info(work_report_candidates)")}:
@@ -152,6 +154,28 @@ class MesStorage:
                            old.query_id, old.draft_id, old.reason
                     FROM work_report_candidates_old old LEFT JOIN card_drafts d ON d.draft_id = old.draft_id""")
                 self.connection.execute("DROP TABLE work_report_candidates_old")
+
+    def sync_knowledge_cards(self, cards: list[dict[str, Any]]) -> None:
+        """Persist the published KB inventory; draft reviews never publish cards."""
+        rows = []
+        seen = set()
+        now = datetime.now().astimezone().isoformat()
+        for card in cards:
+            identifier = card.get('card_id')
+            if (not isinstance(identifier, str) or not identifier or len(identifier)>100 or identifier in seen
+                    or (card.get('status'),card.get('split'),card.get('grade')) != ('accepted','kb','L1')):
+                raise ValueError('Only distinct, published KB cards may enter the inventory')
+            seen.add(identifier)
+            rows.append((identifier, _dump(card), now))
+        with self.connection:
+            self.connection.executemany('''INSERT INTO knowledge_cards VALUES (?, ?, ?)
+                ON CONFLICT(card_id) DO UPDATE SET payload=excluded.payload, updated_at=excluded.updated_at
+                WHERE knowledge_cards.payload != excluded.payload''', rows)
+
+
+    def list_knowledge_cards(self) -> list[dict[str, Any]]:
+        return [json.loads(row[0]) for row in self.connection.execute('SELECT payload FROM knowledge_cards ORDER BY card_id')]
+
 
     def save_handover(self, body: dict[str, Any]) -> dict[str, Any]:
         """Commit the original note locally; retries never overwrite it."""

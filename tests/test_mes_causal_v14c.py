@@ -25,4 +25,13 @@ class CalibrationTests(unittest.TestCase):
     def test_existing_sustained_normal_alarm_is_not_silently_recalibrated(self):
         with self.assertRaises(ValueError):self.limits([0,0,0,0],[True]*4)
 
+class DataTests(unittest.TestCase):
+    def test_first_use_requires_lock_and_seed_groups_do_not_overlap(self):
+        from scripts import mes_causal_v14c_data as data
+        from scripts import mes_causal_v14_data as previous
+        with self.assertRaises(ValueError):data.generate('unused','test')
+        identities=[data.identity(role,family,i) for role in data.ROLES for family in ('A','B') for i in range(7)]
+        self.assertEqual(len(identities),len(set(identities)))
+        self.assertNotEqual(data.identity('test','A',0),previous.identity('test','A',0))
+
 if __name__=='__main__':unittest.main()

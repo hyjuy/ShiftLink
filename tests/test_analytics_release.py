@@ -10,6 +10,17 @@ spec=importlib.util.spec_from_file_location('analytics_release',Path(__file__).r
 d=importlib.util.module_from_spec(spec);spec.loader.exec_module(d)
 
 class ReleaseTests(TestCase):
+    def test_identical_pda_files_are_preserved_without_rewrite(self):
+        with TemporaryDirectory() as directory:
+            source=Path(directory)/'source';target=Path(directory)/'target';source.write_text('same');target.write_text('same');before=target.stat().st_mtime_ns
+            self.assertFalse(d.replace(source,target));self.assertEqual(before,target.stat().st_mtime_ns)
+            source.write_text('changed');self.assertTrue(d.replace(source,target));self.assertEqual(target.read_text(),'changed')
+
+    def test_unit_template_must_be_in_verified_manifest(self):
+        manifest={'files':{'deploy/analytics/context.service.in':'hash'},'unit_template':'deploy/analytics/context.service.in'}
+        self.assertEqual(d.unit_template(manifest),'deploy/analytics/context.service.in')
+        with self.assertRaises(ValueError):d.unit_template(dict(manifest,unit_template='../other'))
+
     def test_update_restarts_the_existing_worker(self):
         with patch.object(d,'command',return_value='') as command:
             d.activate_worker(True)

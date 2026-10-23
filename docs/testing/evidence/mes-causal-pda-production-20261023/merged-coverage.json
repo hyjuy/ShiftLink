@@ -1,0 +1,22 @@
+{
+  "scripts/mes_causal_v14_stream.py": {
+    "executable": 207,
+    "executed": 189,
+    "percent": 91.3
+  },
+  "scripts/mes_causal_pda_service.py": {
+    "executable": 295,
+    "executed": 280,
+    "percent": 94.92
+  },
+  "shiftlink/pda/ai_insights.py": {
+    "executable": 75,
+    "executed": 74,
+    "percent": 98.67
+  },
+  "deploy/analytics/apply_release.py": {
+    "executable": 143,
+    "executed": 57,
+    "percent": 39.86
+  }
+}

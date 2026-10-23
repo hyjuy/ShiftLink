@@ -50,7 +50,7 @@ python3 -B deploy/analytics/apply_release.py --rollback /home/pi/shiftlink/analy
 ## Pi 검증
 
 ```sh
-python3 -B -m unittest tests.test_mes_causal_v14_stream tests.test_mes_causal_pda_service tests.test_analytics_release -v
+python3 -B -m unittest tests.test_mes_causal_v14_stream tests.test_mes_causal_pda_service tests.test_analytics_release tests.test_pda_advisory_reader -v
 SHIFTLINK_BROWSER_EVIDENCE=/tmp/shiftlink-browser-result python3 -B -m unittest tests.test_mes_causal_pda_browser -v
 ```
 

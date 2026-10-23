@@ -138,6 +138,12 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   이 목록은 검색 게시 경로와 별개이며 기존 대시보드에 진입부를 추가한다.
   Jetson/Pi 제공 범위와 동시 배포 주의사항은 [통합 기록](../testing/jetson-knowledge-sync-20261022.md)을 참고한다.
   `index.html`, `app.js`, `operator.js`, `accounts.js`와 후보 검토 화면도 별도로 존재한다.
+- Pi 운영 통계 이상징후는 Timestral 없이 `scripts/mes_causal_pda_service.py`와
+  `deploy/analytics/`의 별도 systemd 경로를 사용한다. 승인된 합성 MES 69채널 replay를 검사하고,
+  Pi PDA 프록시의 `ai_insights.py`가 `/api/state`에 무음 참고 결과만 추가한다.
+  기존 경보와 같은 알람창에서 설비별로 합치되 확인·진동 규칙은 유지한다.
+  [배포·중지·복구 안내](../../deploy/analytics/README.md)와
+  [Pi 검증 기록](../testing/mes-causal-pda-production-20261023.md)을 따른다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
 - Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로

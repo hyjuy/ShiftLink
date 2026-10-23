@@ -10,6 +10,14 @@ spec=importlib.util.spec_from_file_location('analytics_release',Path(__file__).r
 d=importlib.util.module_from_spec(spec);spec.loader.exec_module(d)
 
 class ReleaseTests(TestCase):
+    def test_update_restarts_the_existing_worker(self):
+        with patch.object(d,'command',return_value='') as command:
+            d.activate_worker(True)
+            self.assertIn(('sudo','-n','systemctl','restart',d.UNIT),[c.args for c in command.call_args_list])
+        with patch.object(d,'command',return_value='') as command:
+            d.activate_worker(False)
+            self.assertNotIn(('sudo','-n','systemctl','restart',d.UNIT),[c.args for c in command.call_args_list])
+
     def test_restart_waits_until_old_pda_really_exits(self):
         with patch.object(d,'pda_pid',side_effect=[10,10,11]),patch.object(d,'get',return_value={}),patch.object(d.time,'sleep'):
             self.assertEqual(d.restart_pda(),11)

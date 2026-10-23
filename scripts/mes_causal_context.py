@@ -7,12 +7,13 @@ from scripts.mes_causal_schema import signals
 
 PAIRS={'hpu_cooler_oil_out_temp':'hpu_cooler_oil_in_temp','hpu_cooler_water_out_temp':'hpu_cooler_water_in_temp'}
 MODES=[a+':'+b for a in ('slow','nominal','fast') for b in ('empty','moving','queued')]
-CONTEXT_MODES=MODES+['unknown:'+b for b in ('empty','moving','queued')]
+# Fixture speed groups are replay-clock labels, not physical load features.
+CONTEXT_MODES=['unknown:'+b for b in ('empty','moving','queued')]
 
 
 def context(frame,capacities):
-    speed=frame.get('speed');coils=frame.get('coils')
-    if (speed is not None and (type(speed) not in (int,float) or not math.isfinite(speed) or not .25<=speed<=2)) or not isinstance(coils,list) or len(coils)>256:return None
+    coils=frame.get('coils')
+    if not isinstance(coils,list) or len(coils)>256:return None
     found=set()
     for c in coils:
         if (not isinstance(c,dict) or not isinstance(c.get('coil_id'),str) or not 0<len(c['coil_id'])<=128 or c['coil_id'] in found
@@ -20,7 +21,7 @@ def context(frame,capacities):
             or not math.isfinite(c['position']) or not 0<=c['position']<=1):return None
         found.add(c['coil_id'])
     load='queued' if any(c['equipment_id'] in capacities and c['position']>=1 for c in coils) else 'moving' if coils else 'empty'
-    return ('unknown' if speed is None else 'slow' if speed<.75 else 'fast' if speed>1.25 else 'nominal')+':'+load,coils
+    return 'unknown:'+load,coils
 
 
 class ContextDetector(OnlineDetector):
@@ -43,6 +44,8 @@ class ContextDetector(OnlineDetector):
         if len(self.flat_windows)!=len(self.channels) or any(type(v) is not int or not 5<=v<=16 for v in self.flat_windows):raise ValueError('normal flat windows')
         self.plateaus=profile.get('normal_plateaus',[[] for _ in self.channels])
         self.fast_flat=np.asarray(profile.get('fast_flat',[False for _ in self.channels]),bool)
+        self.plateau_bounds=profile.get('normal_plateau_bounds',[None for _ in self.channels])
+        if len(self.plateau_bounds)!=len(self.channels) or any(b is not None and (len(b)!=2 or any(type(x) not in (int,float) or not math.isfinite(x) for x in b) or b[0]>b[1]) for b in self.plateau_bounds):raise ValueError('normal plateau bounds')
         if len(self.plateaus)!=len(self.channels) or self.fast_flat.shape!=(len(self.channels),):raise ValueError('normal plateau shape')
         if any(len(v)>1024 or any(type(x) not in (int,float) or not math.isfinite(x) for x in v) for v in self.plateaus):raise ValueError('normal plateau values')
 
@@ -95,7 +98,9 @@ class ContextDetector(OnlineDetector):
             x=np.asarray(self.flat)
             for j,values in enumerate(self.plateaus):
                 # A healthy regulated plateau alone cannot identify sensor failure.
-                if flat[j] and self.channels[j][1]!='cv_queue_len' and any(abs(raw[j]-v)<=self.tolerance[j] for v in values):flat[j]=False
+                bounds=self.plateau_bounds[j]
+                normal_plateau=(bounds[0]-self.tolerance[j]<=raw[j]<=bounds[1]+self.tolerance[j]) if bounds is not None else any(abs(raw[j]-v)<=self.tolerance[j] for v in values)
+                if flat[j] and self.channels[j][1]!='cv_queue_len' and normal_plateau:flat[j]=False
                 width=self.flat_windows[j]
                 if width<16 and len(x)>=width and np.isfinite(x[-width:,j]).all() and np.ptp(x[-width:,j])<=self.tolerance[j]:flat[j]=known[j]=True
         for j,normal in queue_flat_suppressed.items():
@@ -123,7 +128,7 @@ def fit_profile(frames,source_config,settings=None):
         if frame['run_id']!=previous_run:history.clear();previous_run=frame['run_id']
         found=context(frame,capacities)
         if found is None:continue
-        mode,_=found;modes=list(dict.fromkeys([mode,'unknown:'+mode.split(':')[1]]));values={(m['equipment_id'],m['signal']):m for m in frame['measurements']}
+        mode,_=found;modes=[mode];values={(m['equipment_id'],m['signal']):m for m in frame['measurements']}
         for c in channels:
             v=values[c]
             if v['quality']=='good' and type(v['value']) in (int,float) and math.isfinite(v['value']):
@@ -167,5 +172,9 @@ def fit_profile(frames,source_config,settings=None):
         result['normal_scale_rule']='per-context normal training median and maximum deviation x2; original scale is floor; no fault/test fit'
         result['thermal_limits']=thermal.tolist()
         result['normal_plateaus']=[sorted(v) for v in plateaus]
+        result['normal_plateau_bounds']=[]
+        for j,c in enumerate(channels):
+            values=[v for group in samples.values() for v in group[c]] if plateaus[j] else []
+            result['normal_plateau_bounds'].append([float(min(values)),float(max(values))] if values else None)
         result['flat_windows']=[int(min(16,max(5,longest[j]+2))) if 'vib' in c[1] else 16 for j,c in enumerate(channels)]
     return result

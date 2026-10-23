@@ -59,7 +59,7 @@ SHIFTLINK_BROWSER_EVIDENCE=/tmp/shiftlink-browser-result python3 -B -m unittest 
 
 ## 운전·부하 정상 기준 profile
 
-원본 v14c core/settings는 유지한다. 정상 기준 보완 버전은 별도 `mes_causal_context.py`와 정상 학습 profile을 사용하며 Timestral을 사용하지 않는다. 속도·독립 코일 위치별 기준과 냉각기 입출구 관계, 원시 고착·온도 상승 근거를 함께 검사한다. replay에 속도가 없으면 세 속도의 정상 학습을 합친 기준을 쓴다. 현재 상태의 속도를 과거 프레임에 대입하거나 실시간 센서로 자동 재학습하지 않는다.
+원본 v14c core/settings는 유지한다. 정상 기준 보완 버전은 별도 `mes_causal_context.py`와 정상 학습 profile을 사용하며 Timestral을 사용하지 않는다. 독립 코일 위치의 빈 상태·이동·대기 3부하 기준과 냉각기 입출구 관계, 원시 고착·온도 상승 근거를 함께 검사한다. MES speed는 재생 배속이며 모델 입력에서 제외한다. 현재 상태의 속도를 과거 프레임에 대입하거나 실시간 센서로 자동 재학습하지 않는다.
 
 `context.service.in`은 `--normal-profile`과 고정 SHA256을 전달하고 `/var/lib/shiftlink-analytics-normal-v1`에 새 상태를 저장한다. 기존 `/var/lib/shiftlink-analytics`는 이전 버전 복구용으로 유지한다. 중지 스위치는 기존 `/var/lib/shiftlink-analytics/STOP`이며 새 worker에도 `--stop-file`로 전달한다. profile·source·코드 fingerprint가 다른 체크포인트를 읽지 않는다.
 

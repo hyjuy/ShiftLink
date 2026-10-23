@@ -17,7 +17,9 @@ def source_config():
 
 def rows(count=240):
     c=source_config();out=frames(count)
-    for f in out:f['config_id']=c['config_id']
+    for f in out:
+        f['config_id']=c['config_id']
+        f['equipment']=[dict(equipment_id=e['equipment_id'],operating_state='running') for e in metadata()['equipment']]
     return out
 
 
@@ -110,3 +112,55 @@ class ProductionTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+class PollBoundaryTests(unittest.TestCase):
+    setUp=ProductionTests.setUp
+    binding=ProductionTests.binding
+    def test_replay_is_complete_and_pinned_before_publication(self):
+        from unittest.mock import patch
+        b=self.binding();a=m.AdvisorySession(b,self.path);data=rows(80)
+        batch=dict(config_id=b.config_id,config_preserved=True,is_synthetic=True,snapshots=data)
+        state=data[-1]|dict(is_synthetic=True)
+        with patch.object(m,'get_json',return_value=batch):self.assertEqual(m.poll(a,'http://source',state)['status'],'ready')
+        a.flush();self.assertEqual(m.AdvisorySession(b,self.path).cursor,79)
+        bad=copy.deepcopy(batch);bad['snapshots']=data[1:]
+        with patch.object(m,'get_json',return_value=bad):
+            with self.assertRaises(ValueError):m.poll(m.AdvisorySession(b,Path(self.tmp.name)/'fresh.json'),'http://source',state)
+        for change in ({'config_id':'wrong'},{'config_preserved':False},{'is_synthetic':False}):
+            with patch.object(m,'get_json',return_value=batch|change):
+                with self.assertRaises(ValueError):m.poll(m.AdvisorySession(b,Path(self.tmp.name)/'fresh.json'),'http://source',state)
+        with self.assertRaises(ValueError):m.poll(a,'http://source',state|{'is_synthetic':False})
+
+    def test_actual_proxy_preserves_all_upstream_fields(self):
+        from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+        from threading import Thread
+        from urllib.request import urlopen
+        from shiftlink.pda.__main__ import make_handler
+        b=self.binding();data=rows(80);a=m.AdvisorySession(b,self.path)
+        for f in data:a.feed(f,b.config_id)
+        state=data[-1]|dict(equipment=[{'equipment_id':e['equipment_id']} for e in metadata()['equipment']],active_alarms=[{'id':'existing'}])
+        self.path.write_text(json.dumps(a.report(state)))
+        class Source(BaseHTTPRequestHandler):
+            def log_message(self,*args):pass
+            def do_GET(inner):
+                body=json.dumps(state).encode();inner.send_response(200);inner.end_headers();inner.wfile.write(body)
+        upstream=ThreadingHTTPServer(('127.0.0.1',0),Source);Thread(target=upstream.serve_forever,daemon=True).start()
+        proxy=ThreadingHTTPServer(('127.0.0.1',0),make_handler('http://127.0.0.1:'+str(upstream.server_port),ai_insights_path=self.path))
+        Thread(target=proxy.serve_forever,daemon=True).start()
+        try:
+            with urlopen('http://127.0.0.1:'+str(proxy.server_port)+'/api/state') as r:actual=json.load(r)
+            self.assertEqual(actual['ai_insights']['status'],'ready')
+            self.assertEqual({k:v for k,v in actual.items() if k!='ai_insights'},state)
+        finally:proxy.shutdown();proxy.server_close();upstream.shutdown();upstream.server_close()
+
+    def test_nonrunning_equipment_values_cannot_start_advisory(self):
+        b=self.binding();data=rows(140);temp,current=channel_choices();modify(data,[current],75,130,6.)
+        for f in data:
+            for eq in f['equipment']:
+                if eq['equipment_id']==current[0]:eq['operating_state']='waiting'
+        a=m.AdvisorySession(b,self.path)
+        self.assertFalse(any(a.feed(f,b.config_id) for f in data))
+        for f in data[:2]:
+            adapted=b.adapt(f,b.config_id)
+            self.assertTrue(all(v['quality']!='good' for v in adapted['measurements'] if v['equipment_id']==current[0]))
+            self.assertTrue(all(v['quality']=='good' for v in f['measurements']))

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ChibiWorker_Male",
+    "height_m": 1.719,
+    "bones": 22,
+    "deformed_vertices": 2648,
+    "fbx_reimport": "passed"
+  },
+  {
+    "name": "ChibiWorker_Female",
+    "height_m": 1.719,
+    "bones": 22,
+    "deformed_vertices": 2648,
+    "fbx_reimport": "passed"
+  },
+  {
+    "name": "ChibiWorker_PDA",
+    "fbx_reimport": "passed"
+  }
+]

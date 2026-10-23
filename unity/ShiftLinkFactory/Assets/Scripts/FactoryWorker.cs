@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Small built-in employee controller: no external character or camera packages.
@@ -17,8 +16,9 @@ public class FactoryWorker : MonoBehaviour
     FactoryCapture capture;
     FactoryCameraStream cameraStream;
     Renderer[] bodyRenderers = new Renderer[0];
-    Transform body, leftLeg, rightLeg, pda, rightArm;
-    float yaw, pitch, verticalSpeed, walkCycle;
+    Transform body;
+    FactoryWorkerVisual visual;
+    float yaw, pitch, verticalSpeed;
     bool galleryOpen;
     Texture2D galleryImage;
     string galleryPath;
@@ -26,20 +26,11 @@ public class FactoryWorker : MonoBehaviour
     string galleryStatus = "";
     CursorLockMode previousLock;
     bool previousCursor;
-    readonly List<Material> materials = new List<Material>();
     Rect panel;
     Vector2 galleryScroll;
 
     static void Remove(UnityEngine.Object value)
     { if (value == null) return; if (Application.isPlaying) Destroy(value); else DestroyImmediate(value); }
-    Transform Shape(string name, PrimitiveType type, Transform parent, Vector3 position, Vector3 scale, Color color)
-    {
-        var obj = GameObject.CreatePrimitive(type); obj.name = name; obj.transform.SetParent(parent, false);
-        obj.transform.localPosition = position; obj.transform.localScale = scale;
-        Remove(obj.GetComponent<Collider>());
-        var material = new Material(Shader.Find("Standard")); material.color = color; materials.Add(material);
-        obj.GetComponent<Renderer>().sharedMaterial = material; return obj.transform;
-    }
     public void Initialize(FactoryDemo factory, Camera observationCamera)
     {
         if (WorkerRoot != null) return;
@@ -50,26 +41,11 @@ public class FactoryWorker : MonoBehaviour
         controller = WorkerRoot.gameObject.AddComponent<CharacterController>();
         controller.height = 1.8f; controller.radius = .28f; controller.center = new Vector3(0, .9f, 0);
         controller.stepOffset = .25f; controller.skinWidth = .035f;
-        body = new GameObject("Employee visual").transform; body.SetParent(WorkerRoot, false);
-        Color uniform = new Color(.07f, .22f, .44f), skin = new Color(.7f, .48f, .32f), dark = new Color(.06f, .07f, .09f);
-        Shape("Work jacket", PrimitiveType.Cube, body, new Vector3(0, 1.12f, 0), new Vector3(.48f, .62f, .28f), uniform);
-        Shape("Reflective vest", PrimitiveType.Cube, body, new Vector3(0, 1.15f, -.153f), new Vector3(.42f, .12f, .014f), new Color(.9f, .95f, .4f));
-        Shape("Head", PrimitiveType.Sphere, body, new Vector3(0, 1.59f, 0), new Vector3(.27f, .31f, .27f), skin);
-        Shape("Safety helmet", PrimitiveType.Sphere, body, new Vector3(0, 1.75f, 0), new Vector3(.33f, .18f, .33f), Color.yellow);
-        Shape("Helmet brim", PrimitiveType.Cylinder, body, new Vector3(0, 1.72f, 0), new Vector3(.38f, .022f, .38f), Color.yellow);
-        leftLeg = new GameObject("Left leg pivot").transform; leftLeg.SetParent(body, false); leftLeg.localPosition = new Vector3(-.13f, .83f, 0);
-        rightLeg = new GameObject("Right leg pivot").transform; rightLeg.SetParent(body, false); rightLeg.localPosition = new Vector3(.13f, .83f, 0);
-        foreach (var leg in new[] { leftLeg, rightLeg }) {
-            Shape("Work trousers", PrimitiveType.Cube, leg, new Vector3(0, -.33f, 0), new Vector3(.18f, .65f, .22f), uniform);
-            Shape("Safety boot", PrimitiveType.Cube, leg, new Vector3(0, -.73f, .035f), new Vector3(.2f, .16f, .32f), dark);
-        }
-        Shape("Left sleeve", PrimitiveType.Cube, body, new Vector3(-.32f, 1.08f, 0), new Vector3(.16f, .53f, .2f), uniform);
-        Shape("Left hand", PrimitiveType.Sphere, body, new Vector3(-.32f, .78f, 0), new Vector3(.15f, .17f, .14f), skin);
-        rightArm = new GameObject("PDA arm").transform; rightArm.SetParent(body, false); rightArm.localPosition = new Vector3(.31f, 1.26f, 0);
-        Shape("Right sleeve", PrimitiveType.Cube, rightArm, new Vector3(0, -.19f, .12f), new Vector3(.17f, .18f, .4f), uniform);
-        Shape("Right hand", PrimitiveType.Sphere, rightArm, new Vector3(0, -.19f, .35f), new Vector3(.15f, .15f, .15f), skin);
-        pda = Shape("Handheld PDA", PrimitiveType.Cube, rightArm, new Vector3(0, -.13f, .42f), new Vector3(.16f, .24f, .025f), dark);
-        Shape("PDA screen", PrimitiveType.Cube, pda, new Vector3(0, 0, -.55f), new Vector3(.83f, .8f, .07f), new Color(.2f, .55f, .65f));
+        var prefab = Resources.Load<GameObject>("Factory/WorkerMale");
+        if (prefab == null) throw new InvalidOperationException("WorkerMale prefab missing; run FactoryWorkerAssetBuilder.Prepare in the Unity Editor");
+        body = Instantiate(prefab, WorkerRoot, false).transform; body.name = "Employee visual";
+        visual = body.GetComponent<FactoryWorkerVisual>(); visual.Initialize();
+        visual.RunSpeedThreshold = (speed+runSpeed)*.5f;
         employeeView = new GameObject("Employee view camera").AddComponent<Camera>(); employeeView.transform.SetParent(WorkerRoot, false);
         employeeView.nearClipPlane = .05f; employeeView.farClipPlane = 300; employeeView.fieldOfView = 60; employeeView.enabled = false;
         PdaCamera = new GameObject("PDA photo camera").AddComponent<Camera>(); PdaCamera.transform.SetParent(WorkerRoot, false);
@@ -85,6 +61,7 @@ public class FactoryWorker : MonoBehaviour
         if (WorkerRoot == null || IsWorkerMode) return;
         previousLock = Cursor.lockState; previousCursor = Cursor.visible;
         IsWorkerMode = true; PdaRaised = false;
+        visual.Advance(0, 0, true, 0, false);
         if (demo != null) demo.SetExteriorView(false);
         if (observation != null) observation.enabled = false;
         employeeView.enabled = true; UpdateCameras(); UpdateCursor();
@@ -93,6 +70,7 @@ public class FactoryWorker : MonoBehaviour
     {
         if (!IsWorkerMode) return;
         IsWorkerMode = false; PdaRaised = false;
+        if (visual != null) visual.Advance(0, 0, true, 0, false);
         if (employeeView != null) employeeView.enabled = false;
         if (body != null) foreach (var renderer in bodyRenderers) renderer.enabled = true;
         if (observation != null) observation.enabled = true;
@@ -112,40 +90,50 @@ public class FactoryWorker : MonoBehaviour
         if (grounded && jump) verticalSpeed = Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight);
         verticalSpeed += Physics.gravity.y * seconds;
         float moveSpeed = running ? runSpeed : speed;
+        Vector3 before = WorkerRoot.position;
         var collisions = controller.Move((direction * moveSpeed + Vector3.up * verticalSpeed) * seconds);
         if ((collisions & CollisionFlags.Above) != 0 && verticalSpeed > 0) verticalSpeed = 0;
-        bool moving = movement.sqrMagnitude > .001f && controller.isGrounded;
-        walkCycle += moving ? seconds * (running ? 12 : 8) : 0;
-        float swing = moving ? Mathf.Sin(walkCycle) * (running ? 35 : 22) : 0;
-        leftLeg.localRotation = Quaternion.Euler(swing, 0, 0); rightLeg.localRotation = Quaternion.Euler(-swing, 0, 0);
+        Vector3 travelled = WorkerRoot.position-before; travelled.y = 0;
+        visual.RunSpeedThreshold = (speed+runSpeed)*.5f;
+        visual.Advance(seconds, travelled.magnitude/seconds, controller.isGrounded, verticalSpeed, false);
         UpdateCameras();
     }
     void UpdateCameras()
     {
         if (employeeView == null) return;
-        rightArm.localPosition = new Vector3(.31f, PdaRaised ? 1.69f : 1.26f, 0);
         // The rear lens faces away from the employee, opposite the visible PDA screen.
-        PdaCamera.transform.position = pda.TransformPoint(new Vector3(0, 0, .6f));
+        PdaCamera.transform.position = visual.PhotoLens.position;
         PdaCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         employeeView.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
-        employeeView.transform.localPosition = ThirdPerson ? new Vector3(0, 1.6f, 0) + Quaternion.Euler(pitch, 0, 0) * new Vector3(0, .4f, -3) : new Vector3(0, 1.58f, .12f);
-        foreach (var renderer in bodyRenderers) renderer.enabled = !IsWorkerMode || (ThirdPerson && !PdaRaised);
+        employeeView.transform.localPosition = ThirdPerson ? new Vector3(0, 1.1f, 0) + Quaternion.Euler(pitch, 0, 0) * new Vector3(0, .25f, -2.6f) : new Vector3(0, 1.25f, .08f);
+        foreach (var renderer in bodyRenderers) renderer.enabled = !IsWorkerMode || ThirdPerson;
     }
     void UpdateCursor()
     { Cursor.lockState = PdaRaised ? CursorLockMode.None : CursorLockMode.Locked; Cursor.visible = PdaRaised; }
     public void TogglePda()
     {
         if (!IsWorkerMode) return;
-        PdaRaised = !PdaRaised; galleryOpen = false; UpdateCameras(); UpdateCursor();
+        PdaRaised = !PdaRaised; galleryOpen = false;
+        visual.Advance(0, 0, controller.isGrounded, verticalSpeed, PdaRaised);
+        UpdateCameras(); UpdateCursor();
+    }
+    public void SetThirdPerson(bool value) { ThirdPerson = value; UpdateCameras(); }
+    public bool TakePhoto()
+    {
+        if (!IsWorkerMode || !PdaRaised || !capture.Capture()) return false;
+        visual.Shutter(); return true;
     }
     void Update()
     {
         if (WorkerRoot == null) return;
         if (!PdaRaised && Input.GetKeyDown(KeyCode.F)) { if (IsWorkerMode) ExitWorker(); else EnterWorker(); }
-        if (!IsWorkerMode) return;
+        if (!IsWorkerMode) { visual.Advance(Time.deltaTime, 0, true, 0, false); return; }
         if (Input.GetKeyDown(KeyCode.P) || (PdaRaised && Input.GetKeyDown(KeyCode.Escape))) TogglePda();
-        if (PdaRaised) { if (!galleryOpen && !capture.HasPreview && cameraStream?.Streaming!=true) capture.RenderLivePreview(); return; }
-        if (Input.GetKeyDown(KeyCode.V)) { ThirdPerson = !ThirdPerson; UpdateCameras(); }
+        if (PdaRaised) {
+            visual.Advance(Time.deltaTime, 0, controller.isGrounded, verticalSpeed, true); UpdateCameras();
+            if (!galleryOpen && !capture.HasPreview && cameraStream?.Streaming!=true) capture.RenderLivePreview(); return;
+        }
+        if (Input.GetKeyDown(KeyCode.V)) SetThirdPerson(!ThirdPerson);
         StepMovement(Time.deltaTime, new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")),
             new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")),
             Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift), Input.GetKeyDown(KeyCode.Space));
@@ -183,7 +171,7 @@ public class FactoryWorker : MonoBehaviour
         }
         var e=Event.current;
         if(!galleryOpen && !capture.HasPreview && e.type==EventType.KeyDown &&
-            (e.keyCode==KeyCode.Space || e.keyCode==KeyCode.Return || e.keyCode==KeyCode.KeypadEnter)) { capture.Capture(); e.Use(); }
+            (e.keyCode==KeyCode.Space || e.keyCode==KeyCode.Return || e.keyCode==KeyCode.KeypadEnter)) { TakePhoto(); e.Use(); }
         panel=FactoryUi.ScreenLayout.Pda;
         GUI.Box(new Rect(0,0,Screen.width,Screen.height),GUIContent.none);
         GUILayout.BeginArea(panel,GUI.skin.box);
@@ -217,7 +205,7 @@ public class FactoryWorker : MonoBehaviour
             var live=cameraStream?.Preview ?? capture.LivePreview;
             if(live!=null) DrawPhoto(live);
             GUILayout.Label("P로 PDA를 닫고 시점을 조정하세요.",ui.Caption);
-            if(GUILayout.Button("사진 촬영 [Space / Enter]",ui.Primary,GUILayout.Height(44))) capture.Capture();
+            if(GUILayout.Button("사진 촬영 [Space / Enter]",ui.Primary,GUILayout.Height(44))) TakePhoto();
             GUILayout.Label(capture.Status,ui.Caption);
         }
         GUILayout.Space(8);
@@ -229,7 +217,7 @@ public class FactoryWorker : MonoBehaviour
     void OnDestroy()
     {
         ExitWorker();
-        Remove(galleryImage); foreach (var material in materials) Remove(material);
+        Remove(galleryImage);
         if (WorkerRoot != null) Remove(WorkerRoot.gameObject);
     }
 }

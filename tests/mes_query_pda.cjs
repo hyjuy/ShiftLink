@@ -49,6 +49,16 @@ assert.equal(r3.actions[1].why, 'Jetson 인용 · 로컬 조건 판정 없음');
 assert.deepEqual(r3.excluded.map((x) => [x.card.card_id, x.miss]), [['K-B', true], ['K-U', false]]);
 assert.ok(r3.excluded[1].why.startsWith('미평가'));
 assert.ok(!/불일치/.test(r3.excluded[1].why));
+// Published work-log cards arrive after boot; only cited, matching snapshots enter this answer.
+const fieldCard = {card_id:'KD-new', equipment:'HPU', mes_equipment_id:'EQ-1', title:'새 현장카드', know_how:'검수된 조치'};
+const fieldEq = {equipment_id:'EQ-1', type:'HPU'};
+const bootCards = [card];
+const fieldResponse = {cited_card_ids:['KD-new'], cited_cards:[fieldCard, {card_id:'KD-uncited', equipment:'HPU'}]};
+assert.deepEqual(responseCards(fieldResponse, bootCards, null, fieldEq).actions.map(x=>x.card), [fieldCard]);
+assert.deepEqual(bootCards, [card]);
+assert.equal(responseCards({...fieldResponse, review_queue:true}, bootCards, null, fieldEq).actions.length, 0);
+assert.equal(responseCards({...fieldResponse, cited_cards:[{...fieldCard, mes_equipment_id:'EQ-other'}]}, bootCards, null, fieldEq).actions.length, 0);
+assert.equal(responseCards({...fieldResponse, cited_card_ids:['KD-absent']}, bootCards, null, fieldEq).actions.length, 0);
 // B3: 재스캔 실패 시 이전 확정 해제 · 알림 확인 대상은 탭 시점 equipment_id로 고정.
 // main의 '이 조치 시도' 제거 후에는 현재 사용하는 관측·근거·대화 상태의 격리를 확인한다.
 const st = {eq:{equipment_id:'EQ-1'}, source:'camera_scan', scanId:'SC-1', observations:[{}],

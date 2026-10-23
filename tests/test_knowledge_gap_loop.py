@@ -50,6 +50,10 @@ def test_identical_question_learns_only_after_review_and_publication(service, pi
     after = service.query(request)
     assert after['knowledge_status'] == 'answered' and after['no_knowledge'] is False
     assert after['cited_card_ids'] == [draft_id]
+    [card_snapshot] = after['cited_cards']
+    assert card_snapshot == service.storage.get_card_draft(draft_id)['review_flags']['publication']['card']
+    assert card_snapshot['card_id'] == draft_id and card_snapshot['status'] == 'accepted'
+    assert service.storage.get_query(after['query_id'])['payload']['cited_cards'] == [card_snapshot]
     assert service.storage.get_query(before['query_id'])['payload'] == old_answer
     assert service.storage.get_handover(note['handover_id'])['payload'] == report
     assert service.storage.get_card_draft(draft_id)['card'] == original_card

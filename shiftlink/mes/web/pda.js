@@ -976,7 +976,9 @@ function queryApiPayload(question, state) {
  * 로컬에서 실제 불일치로 판정된 인용 카드만 불일치로 내린다 — 숨기지 않고 제외 목록에 남긴다. */
 /* eq를 넘기면 공지·인용 안전 카드를 cardFits로 현재 설비와 대조한다. 맞지 않으면 지침 대신 불일치 경고만 남긴다(B1). */
 function responseCards(response, cards, local, eq) {
-  const byId = (id) => cards.find((c) => c.card_id === id);
+  const published = (Array.isArray(response.cited_cards) ? response.cited_cards : [])
+    .filter((c) => c && (response.cited_card_ids || []).includes(c.card_id) && (!eq || cardFits(c, eq)));
+  const byId = (id) => published.find((c) => c.card_id === id) || cards.find((c) => c.card_id === id);
   const mismatch = (c) => !!eq && !cardFits(c, eq);
   // 다른 설비의 안전 공지는 버리지 않되 본문·멈춤 조건은 싣지 않는다 — 엉뚱한 설비 지침이 실행되지 않게.
   const wrongEq = (id) => ({card_id: id, mismatch: true, eqCode: eq.code, stop_conditions: []});

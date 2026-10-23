@@ -247,3 +247,11 @@ pytest 전에 비전 의존성과 scikit-learn, CPU PyTorch, 고정 커밋의 Ti
 - 프로토콜·결과: `docs/research/mes-causal-v14*-20261023.md`; 검토용 고정 설정·요약은 `docs/research/evidence/mes-causal-v14c-20261023/`에 있다. 이 사본은 전체 원자료·lock·캐시를 대체하지 않는다.
 - 검증: `tests/test_mes_causal_v14.py`, `tests/test_mes_causal_v14c.py`와 기존 인과 분석 회귀. 기기 준비 및 SSH 인증 실패 기록은 `docs/testing/mes-causal-v14-device-readiness-20261023.md`를 따른다.
 - 실행기는 이전 `output/mes-causal-*` 자료와 절대 경로 고정 정보를 요구한다. 새 체크아웃에서 전체 평가 CLI가 즉시 실행된다고 가정하지 않는다. 이 경로는 MES/PDA 서비스에 연결되지 않았고 기기에 배포하지 않았다.
+
+## 질문 → 근무일지 → 같은 질문 재사용 (2026-10-23)
+
+구조화된 근무일지(`capture_version=1`)의 `query_id`는 저장된 질문의 설비·자산·사건 문맥을 검증한 뒤 후보에 연결한다. 원질문은 후보의 증상 참조와 `query_log` 출처, `review_flags.origin_query`에 보존한다. 일지 원문과 이전 답변은 갱신하지 않는다. 관리자 검토 승인 → 검수 통과 → 임베딩 게시를 거쳐야 검색되며, 게시 후에도 조건·판정 모델이 관련성을 확인한다. 같은 문자열이라는 이유로 답변을 캐시하거나 판정을 건너뛰지 않는다.
+
+`MesService.query`는 게시 버전 ticket을 마지막 잠금에서 재확인하고, 실제 인용한 현장 카드만 선택 필드 `cited_cards`로 반환·저장한다. PDA의 `responseCards`는 해당 응답의 인용 ID·설비와 일치하는 스냅샷을 사용한다. 초기 전역 카드 목록·센서 관측·정적 KB는 바꾸지 않는다. 검토 화면은 연결된 원질문과 기존 게시 상태를 함께 보여 준다.
+
+회귀 검사: `tests/test_knowledge_gap_loop.py`(extract/S30h, 동일 질문·검토 게이트·원문 보존·판정 거절·반려), `tests/test_publication_browser.py`(실제 브라우저와 HTTP, 모델 fixture), `tests/mes_query_pda.cjs`(동적 카드·미인용·다른 설비·검토 보류 대조군). fixture 검사의 통과는 실제 모델 응답의 품질 보장을 뜻하지 않는다.

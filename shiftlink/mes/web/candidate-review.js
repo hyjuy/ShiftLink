@@ -71,6 +71,11 @@
     head.append(labels,el('h2','',draft.card.title),
       el('p','',(types[draft.card.tacit_type]||draft.card.tacit_type)+' · '+draft.card.component),el('p','','후보 등록 '+stamp(draft.created_at)));box.append(head);
     const flags=draft.review_flags,causes=section('원인·판단 근거');
+    if(flags.origin_query?.question){
+      const origin=section('연결된 원질문');
+      origin.append(el('p','',flags.origin_query.question),el('p','section-note','질문 기록 '+flags.origin_query.query_id+' · 질문과 현장 조치 근거를 함께 검토하세요.'));
+      box.append(origin);
+    }
     const reported=flags.reported_causes||[];
     causes.append(el('p','',reported.length?reported.map(item=>(item.certainty||'확인 상태 미기재')+' · '+item.note).join('\n'):'별도 원인 기록 없음 · 원본 근무일지를 확인하세요.'));box.append(causes);
     const observations=observationFields.filter(([key])=>flags.observations?.[key]);

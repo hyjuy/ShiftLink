@@ -2,7 +2,8 @@
 
 <h1>ShiftLink</h1>
 
-📑 **최종 발표 자료** (PowerPoint · 31쪽) · [`docs/presentation/ShiftLink_발표_최종.pptx`](docs/presentation/ShiftLink_발표_최종.pptx)
+📦 **제출 자료** : [`docs/result/프로젝트 결과물`](<docs/result/프로젝트 결과물/>)<br>
+<sub>최종 발표 자료(PPTX) · 프로젝트 결과보고서 · 원문-RAG 구축 과정 · 모델 발전 보고서 · 운영 온톨로지와 상황 인식 실험 계획</sub>
 
 **현장 지식과 설비 상태를 잇는 온디바이스 AI 에이전트**<br>
 *“현장의 질문에, 현장의 데이터로 답하다.”*
@@ -232,7 +233,7 @@ python -m shiftlink.mes
 
 | 목적 | 문서 |
 |---|---|
-| 최종 발표 자료 (31쪽) | [`docs/presentation/ShiftLink_발표_최종.pptx`](docs/presentation/ShiftLink_발표_최종.pptx) |
+| 제출 자료 5종 (발표 자료 · 결과보고서 등) | [`docs/result/프로젝트 결과물`](<docs/result/프로젝트 결과물/>) |
 | 시스템 그림 11장 | [아키텍처 문서](docs/architecture/README.md) |
 | 문서 전체 탐색 | [문서 목차](docs/README.md) |
 | 장비 3대 설치·시작·확인·종료 | [시연 실행 가이드](docs/guides/run-demo.md) |

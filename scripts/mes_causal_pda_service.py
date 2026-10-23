@@ -91,7 +91,9 @@ class BoundSource:
             if key in found: raise ValueError('duplicate replay channel')
             found[key] = m
         if set(found) != set(self.canonical): raise ValueError('replay channel set mismatch')
-        return dict(frame, config_id=self.config_id, measurements=[found[k] for k in self.canonical])
+        states = {e['equipment_id']:e.get('operating_state') for e in frame.get('equipment', [])}
+        measurements = [dict(found[k], quality='inactive') if states.get(k[0], 'running') != 'running' else found[k] for k in self.canonical]
+        return dict(frame, config_id=self.config_id, measurements=measurements)
 
 
 def packed(array):
@@ -118,6 +120,7 @@ class AdvisorySession:
         self.detector = binding.new_detector()
         self.notices = {}
         self.cursor, self.run, self.since_save = -1, None, 0
+        self.defer_flush = False
         if self.journal.exists(): self._restore()
 
     def _restore(self):
@@ -175,7 +178,7 @@ class AdvisorySession:
                                    observed_at=frame['simulated_at'],state='recent',signals=[])
         self.since_save += 1
         # A notice is durable before publication; otherwise replay at most 29 frames.
-        if notices or self.since_save >= 30: self.flush()
+        if not self.defer_flush and (notices or self.since_save >= 30): self.flush()
         return notices
 
     def report(self, state, *, stalled=False):
@@ -218,7 +221,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mes-url',required=True);p.add_argument('--source-config',type=Path,required=True)
     p.add_argument('--settings',type=Path,default=ROOT/'docs/research/evidence/mes-causal-v14c-20261023/settings.json')
-    p.add_argument('--state-dir',type=Path,required=True);p.add_argument('--once',action='store_true');args=p.parse_args()
+    p.add_argument('--output',type=Path);p.add_argument('--state-dir',type=Path,required=True);p.add_argument('--once',action='store_true');args=p.parse_args()
+    output=args.output or args.state_dir/'latest.json'
     url=urlparse(args.mes_url)
     if url.scheme not in ('http','https') or not url.hostname or url.username or url.password or url.query or url.fragment:
         p.error('explicit MES origin without credentials required')
@@ -231,7 +235,7 @@ def main():
             try:
                 state=get_json(args.mes_url,'/api/state')
                 if (args.state_dir/'STOP').exists():
-                    atomic_json(args.state_dir/'latest.json',dict(schema_version=1,status='disabled',operational_notifications=False,items=[],
+                    atomic_json(output,dict(schema_version=1,status='disabled',operational_notifications=False,items=[],
                         run_id=state['run_id'],config_id=binding.config_id,sequence=state['sequence'],input_at=state['simulated_at'],generated_at=datetime.now(timezone.utc).isoformat()))
                     return
                 if time.monotonic()-checked>60:
@@ -243,13 +247,13 @@ def main():
                 if key!=last_key:progress=time.monotonic();last_key=key
                 result=poll(session,args.mes_url,state)
                 if state['line_mode']=='running' and time.monotonic()-progress>10:result=session.report(state,stalled=True)
-                atomic_json(args.state_dir/'latest.json',result)
+                atomic_json(output,result)
             except Exception as e:
                 print(json.dumps(dict(event='analysis_error',error=type(e).__name__,detail=str(e)[:160])),file=sys.stderr,flush=True)
                 if state:
                     result=dict(schema_version=1,status='model_error',operational_notifications=False,items=[],run_id=state['run_id'],
                         config_id=binding.config_id,sequence=state['sequence'],input_at=state['simulated_at'],generated_at=datetime.now(timezone.utc).isoformat())
-                    atomic_json(args.state_dir/'latest.json',result)
+                    atomic_json(output,result)
                 if args.once:raise
                 # Rebuild uncommitted in-memory progress from the last durable state.
                 session=None
@@ -260,3 +264,7 @@ def main():
 
 
 if __name__=='__main__':main()
+
+
+def iter_replay(response):
+    raise NotImplementedError('bounded replay streaming is not implemented')

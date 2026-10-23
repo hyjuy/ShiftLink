@@ -164,3 +164,26 @@ class PollBoundaryTests(unittest.TestCase):
             adapted=b.adapt(f,b.config_id)
             self.assertTrue(all(v['quality']!='good' for v in adapted['measurements'] if v['equipment_id']==current[0]))
             self.assertTrue(all(v['quality']=='good' for v in f['measurements']))
+
+    def test_streamed_large_replay_and_truncated_tail(self):
+        from io import BytesIO
+        payload=dict(snapshots=[rows(1)[0] for _ in range(80)],events=[],config_id=source_config()['config_id'],config_preserved=True,is_synthetic=True)
+        raw=json.dumps(payload,ensure_ascii=False).encode()
+        values=list(m.iter_replay(BytesIO(raw)))
+        self.assertEqual(sum(k=='frame' for k,v in values),80)
+        self.assertEqual(dict(v for k,v in values if k=='meta')['config_id'],payload['config_id'])
+        with self.assertRaises(ValueError):list(m.iter_replay(BytesIO(raw[:-2])))
+
+    def test_malformed_upstream_response_is_preserved(self):
+        from shiftlink.pda.ai_insights import overlay_response
+        self.assertEqual(overlay_response(b'not JSON',self.path),b'not JSON')
+        self.assertEqual(overlay_response(b'[]',self.path),b'[]')
+
+    def test_stream_chunks_include_utf8_and_reject_extra_document(self):
+        from io import BytesIO
+        class Chunks(BytesIO):
+            def read(self,size=-1):return super().read(min(size,7))
+        payload=dict(snapshots=rows(2),events=[{'note':'온도'}],config_id=source_config()['config_id'],config_preserved=True,is_synthetic=True)
+        raw=json.dumps(payload,ensure_ascii=False).encode()
+        self.assertEqual(len([v for k,v in m.iter_replay(Chunks(raw)) if k=='frame']),2)
+        with self.assertRaises(ValueError):list(m.iter_replay(Chunks(raw+b' {}')))

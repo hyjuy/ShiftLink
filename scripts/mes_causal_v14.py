@@ -40,5 +40,14 @@ def augment(args,rise=None):
             {'level':np.r_[thresholds['level'],np.ones(count)]},params)
 
 
-def predict(*args):
-    return previous.predict(*augment(args))
+def predict(*args,original=None):
+    rows=previous.predict(*augment(args))
+    original=previous.predict(*args) if original is None else original
+    process,flat,known,flat_known,indexes=previous.evidence(*args)
+    thermal=np.array(['temp' in c[1] for c in args[1]])
+    for i,key in enumerate(args[0]['keys']):
+        for j,eq in enumerate(args[0]['equipment']):
+            local=[k for k in indexes[j] if not thermal[k]]
+            if eq in original[key] and (flat[i,indexes[j]].any() or process[i,local].any()):
+                rows[key].add(eq)
+    return rows

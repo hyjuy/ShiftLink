@@ -121,15 +121,24 @@ def test_service_and_operator_display_observation_candidates():
         for _ in range(3): service.tick()
         state = service.state()
         assert state["symptom_diagnostics"]
-        result = subprocess.run(["node", "-e", """
+        result = subprocess.run(["node", "-e", r"""
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const {buildOperatorModel,evidenceView}=require('./shiftlink/mes/web/operator.js');
 const {snapshot,config}=JSON.parse(fs.readFileSync(0,'utf8'));
 const html=evidenceView(buildOperatorModel(snapshot,config,'EQ-0009'));
-assert.match(html,/원인 후보/);
-assert.match(html,/슬립/);
-assert.match(html,/확정 진단/);
+function assertObservationCandidate(markup) {
+  assert.match(markup,/<section class="symptom-candidate">/);
+  assert.match(markup,/<h4>[^<]*(?:원인|증상) 후보[^<]*<\/h4>/);
+  assert.match(markup,/슬립/);
+  assert.match(markup,/확정 진단 아님/);
+  assert.match(markup,/추가 확인:/);
+}
+assertObservationCandidate(html);
+// Candidate wording may change without turning an observation into a diagnosis.
+assertObservationCandidate(html.replace('증상별 원인 후보','센서 기반 증상 후보'));
+assert.throws(()=>assertObservationCandidate(html.replace('확정 진단 아님','확정 진단')));
+assert.throws(()=>assertObservationCandidate(html.replace('class="symptom-candidate"','class="diagnosis"')));
 """], input=json.dumps({"snapshot": state, "config": to_payload(service.active_config)}),
             text=True, encoding="utf-8", capture_output=True)
         assert result.returncode == 0, result.stdout + result.stderr

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "tests": 31,
+  "coverage": {
+    "scripts/mes_causal_pda_service.py": {
+      "executable": 322,
+      "executed": 258,
+      "percent": 80.12
+    },
+    "shiftlink/pda/ai_insights.py": {
+      "executable": 96,
+      "executed": 83,
+      "percent": 86.46
+    },
+    "deploy/analytics/apply_release.py": {
+      "executable": 143,
+      "executed": 35,
+      "percent": 24.48
+    }
+  }
+}

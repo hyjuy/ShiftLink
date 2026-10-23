@@ -1,0 +1,58 @@
+{
+  "verified_at": "2026-10-23T07:01:50.640998+00:00",
+  "deployed": true,
+  "release": "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2",
+  "backup": "/home/pi/shiftlink/analytics/backups/20261023-155748",
+  "python_unique": 32,
+  "chromium_passed": true,
+  "cjs_passed": 5,
+  "syntax_passed": true,
+  "coverage": {
+    "scripts/mes_causal_pda_service.py": {
+      "executable": 322,
+      "executed": 258,
+      "percent": 80.12
+    },
+    "shiftlink/pda/ai_insights.py": {
+      "executable": 96,
+      "executed": 83,
+      "percent": 86.46
+    },
+    "deploy/analytics/apply_release.py": {
+      "executable": 143,
+      "executed": 35,
+      "percent": 24.48
+    }
+  },
+  "service_active": "active",
+  "service_enabled": "enabled",
+  "service_pid": 26455,
+  "source": {
+    "run_id": "8d0b42cd007a4bfcae99c1119369c1e8",
+    "sequence": 2804,
+    "mode": "running"
+  },
+  "ai_status": "warming_up",
+  "protected": {
+    "/home/pi/shiftlink/app/shiftlink/face/engine.py": true,
+    "/home/pi/shiftlink/app/shiftlink/vision/classify.py": true,
+    "/home/pi/shiftlink/data/face/models/face_detection_yunet_2023mar.onnx": true,
+    "/home/pi/shiftlink/data/face/models/face_recognition_sface_2021dec.onnx": true,
+    "/home/pi/shiftlink/models/cnn/model.onnx": true,
+    "/home/pi/shiftlink/models/cnn/labels.txt": true
+  },
+  "pda_unchanged": {
+    "/home/pi/shiftlink/app/shiftlink/pda/__main__.py": true,
+    "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py": false,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.js": false,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.html": true
+  },
+  "frozen_unchanged": {
+    "scripts/mes_causal_v14_stream.py": true,
+    "docs/research/evidence/mes-causal-v14c-20261023/settings.json": true
+  },
+  "post_deploy_passed": true,
+  "torch_loaded": false,
+  "timestral_loaded": false,
+  "analysis_errors": 0
+}

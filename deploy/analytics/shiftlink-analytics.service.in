@@ -1,0 +1,38 @@
+[Unit]
+Description=ShiftLink statistical sensor advisory (no Timestral)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=6
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=@RELEASE@
+ExecStart=/usr/bin/python3 -B -m scripts.mes_causal_pda_service --mes-url http://jetson-06.tail0a6af3.ts.net:8000 --source-config @RELEASE@/deploy/analytics/source-config.json --state-dir /var/lib/shiftlink-analytics --output /run/shiftlink-analytics/latest.json
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=OPENBLAS_NUM_THREADS=1
+Environment=OMP_NUM_THREADS=1
+Environment=MKL_NUM_THREADS=1
+RuntimeDirectory=shiftlink-analytics
+RuntimeDirectoryMode=0750
+StateDirectory=shiftlink-analytics
+StateDirectoryMode=0700
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+Nice=10
+CPUQuota=100%
+MemoryMax=384M
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LogRateLimitIntervalSec=60
+LogRateLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target

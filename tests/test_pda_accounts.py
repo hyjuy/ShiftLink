@@ -1,4 +1,5 @@
 import json
+import os
 import tempfile
 import threading
 import unittest
@@ -46,7 +47,9 @@ class AccountTests(unittest.TestCase):
                 token = login['token']
                 self.assertEqual(request('/api/admin/accounts', account, token=token)[0], 201)
                 self.assertNotIn(account['password'], store.read_text())
-                self.assertEqual(store.stat().st_mode & 0o777, 0o600)
+                # POSIX mode bits are not implemented by Windows file permissions.
+                if os.name == 'posix':
+                    self.assertEqual(store.stat().st_mode & 0o777, 0o600)
                 self.assertEqual(request('/api/admin/accounts', account, token=token)[0], 409)
                 status, listing = request('/api/admin/accounts', token=token)
                 self.assertEqual(status, 200)

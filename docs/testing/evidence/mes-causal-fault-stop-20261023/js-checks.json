@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "--check",
+      "shiftlink/mes/web/pda.js"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "tests/pda_sensor_display.cjs"
+    ],
+    "exit": 0,
+    "stdout": "PDA sensor display, quality, manual override and disconnect PASS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "tests/pda_network_boot.cjs"
+    ],
+    "exit": 0,
+    "stdout": "PDA offline boot recovery PASS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "tests/unity_pda_link.cjs"
+    ],
+    "exit": 0,
+    "stdout": "Unity -> PDA equipment link PASS\nUnity link preserved through login and work entry PASS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "tests/pda_symptom_rank.cjs"
+    ],
+    "exit": 0,
+    "stdout": "PDA symptom rank PASS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "tests/mes_query_pda.cjs"
+    ],
+    "exit": 0,
+    "stdout": "MES query PDA contract PASS\n",
+    "stderr": ""
+  }
+]

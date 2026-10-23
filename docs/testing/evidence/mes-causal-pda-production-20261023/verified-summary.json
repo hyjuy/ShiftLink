@@ -1,0 +1,54 @@
+{
+  "verified_at": "2026-10-23T06:38:11.383861+00:00",
+  "deployed": true,
+  "release": "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1",
+  "backup": "/home/pi/shiftlink/analytics/backups/20261023-153140",
+  "service_active": "active",
+  "service_enabled": "enabled",
+  "pda_pid": 24459,
+  "python_regressions": 36,
+  "chromium_regressions": 1,
+  "cjs_regressions": 5,
+  "js_syntax_passed": true,
+  "coverage": {
+    "scripts/mes_causal_v14_stream.py": {
+      "executable": 207,
+      "executed": 189,
+      "percent": 91.3
+    },
+    "scripts/mes_causal_pda_service.py": {
+      "executable": 295,
+      "executed": 280,
+      "percent": 94.92
+    },
+    "shiftlink/pda/ai_insights.py": {
+      "executable": 75,
+      "executed": 74,
+      "percent": 98.67
+    },
+    "deploy/analytics/apply_release.py": {
+      "executable": 143,
+      "executed": 57,
+      "percent": 39.86
+    }
+  },
+  "post_deploy_monitor_passed": true,
+  "source": {
+    "run_id": "8d0b42cd007a4bfcae99c1119369c1e8",
+    "sequence": 1809,
+    "mode": "running"
+  },
+  "ai_status": "ready",
+  "latest_model": "statistical-v14c",
+  "torch_loaded": false,
+  "timestral_loaded": false,
+  "deployed_js_http_hash_matches": true,
+  "protected": {
+    "/home/pi/shiftlink/app/shiftlink/face/engine.py": true,
+    "/home/pi/shiftlink/app/shiftlink/vision/classify.py": true,
+    "/home/pi/shiftlink/data/face/models/face_detection_yunet_2023mar.onnx": true,
+    "/home/pi/shiftlink/data/face/models/face_recognition_sface_2021dec.onnx": true,
+    "/home/pi/shiftlink/models/cnn/model.onnx": true,
+    "/home/pi/shiftlink/models/cnn/labels.txt": true
+  }
+}

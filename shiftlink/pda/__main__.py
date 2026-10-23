@@ -30,7 +30,7 @@ def _face_bypass() -> bool:
     """모델이 없을 때 시연만. 서버는 127.0.0.1에만 열린다. 기본은 꺼져 있다."""
     return os.environ.get("SHIFTLINK_FACE_BYPASS") == "1"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
-PAGES = {"/pda.html": "pda.html", "/static/pda.js": "pda.js"}
+PAGES = {'/pda.html': 'pda.html', '/static/pda.js': 'pda.js', '/static/knowledge.js': 'knowledge.js', '/static/knowledge.css': 'knowledge.css', '/knowledge-candidates.html': 'knowledge-candidates.html', '/static/candidate-review.js': 'candidate-review.js', '/static/candidate-review.css': 'candidate-review.css'}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 
@@ -53,7 +53,7 @@ def restart_kiosk() -> None:
 
 
 def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *, unity: str | None = None,
-                 shoot=None) -> type[BaseHTTPRequestHandler]:
+                 shoot=None, ai_insights_path: Path | None = None) -> type[BaseHTTPRequestHandler]:
     stream_seen_at = 0.0
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: object) -> None:  # noqa: A002
@@ -73,10 +73,16 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *,
             req = urllib.request.Request(jetson + self.path, data=body, method=self.command)
             if self.headers.get("Content-Type"):
                 req.add_header("Content-Type", self.headers["Content-Type"])
+            if self.headers.get("Authorization"):
+                req.add_header("Authorization", self.headers["Authorization"])
             try:
                 timeout = 180 if self.path.split("?", 1)[0] == "/api/query" else 8
                 with urllib.request.urlopen(req, timeout=timeout) as res:
-                    self._send(res.status, res.read(), res.headers.get("Content-Type", "application/json"))
+                    data = res.read()
+                    if self.command == "GET" and self.path.split("?", 1)[0] == "/api/state" and ai_insights_path is not None:
+                        from shiftlink.pda.ai_insights import overlay_response
+                        data = overlay_response(data, ai_insights_path)
+                    self._send(res.status, data, res.headers.get("Content-Type", "application/json"))
             except urllib.error.HTTPError as err:
                 self._send(err.code, err.read(), err.headers.get("Content-Type", "application/json"))
             except (urllib.error.URLError, TimeoutError, OSError) as err:
@@ -259,6 +265,8 @@ def main() -> None:
     parser.add_argument("--page", default="pda.html", help="키오스크로 열 화면 (pda.html=PDA, 빈 값=MES 대시보드)")
     parser.add_argument("--scale", type=float, default=2.0, help="화면 배율 (모니터에 맞춰 조정)")
     parser.add_argument("--no-window", action="store_true", help="서버만 띄운다 (개발·점검용)")
+    parser.add_argument("--ai-insights", type=Path, default=Path("/run/shiftlink-analytics/latest.json"),
+                        help="Pi 분석 참고 결과. 파일이 없으면 기존 MES 응답을 유지")
     args = parser.parse_args()
     jetson = args.jetson.rstrip("/")
 
@@ -267,7 +275,7 @@ def main() -> None:
         from shiftlink.vision.classify import ShotClassifier
         shoot = ShotClassifier(args.cnn, jetson, args.device_id, args.min_conf, args.save_shots)
         print(f"스캔 촬영 분류: {args.cnn} min_conf={args.min_conf} → {jetson} ({args.device_id})", flush=True)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson, unity=args.unity, shoot=shoot))
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(jetson, unity=args.unity, shoot=shoot, ai_insights_path=args.ai_insights))
     threading.Thread(target=server.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{args.port}/{args.page}"
     print(f"PDA: {url} → API: {jetson}", flush=True)

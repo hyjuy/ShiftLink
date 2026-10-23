@@ -75,6 +75,41 @@ const plain = (t) => String(t == null ? '' : t).replace(/\bdegC\b/g, '℃').repl
 const obsText = (o) => signalName(o.signal) + ' ' + o.value + (unitText(o.unit) ? ' ' + unitText(o.unit) : '');
 
 
+/* AI output is advisory only: it never enters faultsFrom, alertAck or haptics. */
+function aiInsightsFrom(snap) {
+  const data = snap && snap.ai_insights;
+  const messages = {disabled:'AI 분석 연결 전입니다.', unavailable:'AI 분석 결과를 확인할 수 없습니다.',
+    warming_up:'분석에 필요한 센서 이력을 모으고 있습니다.', stale:'AI 분석 결과 갱신이 늦어 표시를 중단했습니다.',
+    catching_up:'누락된 센서 이력을 순서대로 분석하고 있습니다.', inactive:'비가동 중에는 AI 판단을 보류합니다.',
+    stopped:'정지 전 AI 감지 이력입니다. 정지 중 신규 분석은 보류합니다.',
+    model_error:'AI 분석을 완료하지 못했습니다.', session_limit:'분석 세션을 다시 시작해 주세요.'};
+  let status = data && data.status || 'unavailable';
+  if (['ready','stopped'].includes(status) && (data.run_id !== snap.run_id || data.config_id !== snap.config_id
+      || !Number.isInteger(data.sequence) || data.sequence > snap.sequence || snap.sequence - data.sequence > 3)) status = 'unavailable';
+  const seen = new Set(), items = [];
+  if (['ready','stopped'].includes(status)) (data.items || []).forEach((row) => {
+    const eq = S.equipment.find((e) => e.equipment_id === row.equipment_id);
+    if (!eq || seen.has(eq.equipment_id) || !['active','recent','before_stop'].includes(row.state)) return;
+    seen.add(eq.equipment_id);
+    const evidence = (row.signals || []).map((s) => {
+      const spec = eq.signals.find((p) => p.signal === s.signal);
+      return spec && ['high','low'].includes(s.direction) ? shortName(spec.name) + (s.direction === 'high' ? ': 평소보다 높은 값이 관측됐습니다.' : ': 평소보다 낮은 값이 관측됐습니다.') : '';
+    }).filter(Boolean).slice(0,2);
+    items.push({equipment_id:eq.equipment_id, code:eq.code, event_id:row.event_id, state:row.state,
+      summary:evidence.join(' ') || '센서 흐름에서 평소와 다른 변화가 감지됐습니다.', observed_at:row.observed_at});
+  });
+  return {status, items, message:status === 'ready' ? (items.length ? '점검할 설비 후보를 확인해 주세요.' : '현재 모델이 표시할 이상징후가 없습니다.') : messages[status] || messages.unavailable};
+}
+
+function aiInsightNote(insight) {
+  const note=document.createElement('p');note.className='ai-insights-note';
+  const label=document.createElement('strong');label.textContent='AI 이상징후 · '+(insight.state==='before_stop'?'정지 전 감지 · '+new Date(insight.observed_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}):insight.state==='recent'?'최근 감지':'점검 참고');
+  const text=document.createElement('span');text.textContent=insight.summary;
+  note.append(label,text);
+  return note;
+}
+
+
 // ── 부팅: MES 구성·카드 적재 ───────────────────────────────────────
 async function getJson(path) {
   const res = await api(path);
@@ -4206,27 +4241,48 @@ function toggleNotify() {
 }
 function renderNotifyPanel() {
   const p = $('notifyPanel'), faults = alertOrder(S.faults || [], S.eq), un = unacked(faults).length;
+  const ai = aiInsightsFrom(S.snapshot);
+  const showAiStatus = !S.snapshot || (Boolean(S.snapshot.ai_insights) && ai.status !== 'disabled');
+  const key = JSON.stringify([faults.map(f=>[f.eq.equipment_id,f.eq.code,f.items,f.level,f.at,ackOf()[f.eq.equipment_id]]),ai.status,ai.items,showAiStatus]);
+  if (p.notifyView === key) return;
+  const scroll = p.querySelector('.np-list')?.scrollTop || 0;
+  p.notifyView = key;
   p.innerHTML = '<header><h2></h2><button type="button" class="np-all">모두 확인</button><button type="button" class="np-x" aria-label="닫기">✕</button></header><div class="np-list"></div>';
-  p.querySelector('h2').textContent = un ? '미확인 알림 ' + un + '건' : faults.length ? '미확인 알림 없음' : '알림 없음';
+  p.querySelector('h2').textContent = un ? '미확인 알림 ' + un + '건' : faults.length ? '미확인 알림 없음' : ai.items.length ? 'AI 이상징후 ' + ai.items.length + '대' : '알림 없음';
   const all = p.querySelector('.np-all'); all.disabled = !un;
   all.addEventListener('click', () => { faults.forEach((f) => { ackOf()[f.eq.equipment_id] = ackKey(f); }); S.alertUn = 0; S.alertView = null; paintNotify(); });
   p.querySelector('.np-x').addEventListener('click', closeNotify);
   const list = p.querySelector('.np-list');
-  faults.forEach((f) => {
-    const acked = ackOf()[f.eq.equipment_id] === ackKey(f), row = document.createElement('div');
-    row.className = 'np-row' + (f.level === 0 ? '' : ' warn') + (acked ? ' acked' : '');
-    row.innerHTML = '<div><div class="np-head"><span class="np-tag"></span><b class="np-code mono"></b><span class="np-at"></span></div><p class="np-msg"></p></div><button type="button" class="np-go">설비 확인</button>';
-    row.querySelector('.np-tag').textContent = f.level === 0 ? '고장' : '주의';
-    row.querySelector('.np-code').textContent = f.eq.code;
-    row.querySelector('.np-at').textContent = f.at ? new Date(f.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' 발생' : '';
-    row.querySelector('.np-msg').textContent = f.items.join(' · ');
+  const remaining = new Map(ai.items.map(item=>[item.equipment_id,item]));
+  const rows = faults.map(f => {
+    const insight=remaining.get(f.eq.equipment_id);remaining.delete(f.eq.equipment_id);
+    return {id:f.eq.equipment_id,code:f.eq.code,fault:f,insight};
+  });
+  remaining.forEach(insight=>rows.push({id:insight.equipment_id,code:insight.code,insight}));
+  rows.forEach(({id,code,fault:f,insight}) => {
+    const acked = f && ackOf()[id] === ackKey(f), row = document.createElement('div');
+    row.dataset.equipmentId=id;
+    row.className = 'np-row' + (!f ? ' ai-only' : f.level === 0 ? '' : ' warn') + (acked ? ' acked' : '');
+    row.innerHTML = '<div class="np-content"><div class="np-head"><span class="np-tag"></span><b class="np-code mono"></b><span class="np-at"></span></div><p class="np-msg"></p></div><button type="button" class="np-go">설비 확인</button>';
+    row.querySelector('.np-tag').textContent = !f ? 'AI 이상징후' : f.level === 0 ? '고장' : '주의';
+    row.querySelector('.np-code').textContent = code;
+    row.querySelector('.np-at').textContent = f && f.at ? new Date(f.at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) + ' 발생' : '';
+    row.querySelector('.np-msg').textContent = f ? f.items.join(' · ') : '';
+    if (insight) row.querySelector('.np-content').appendChild(aiInsightNote(insight));
     // 누른 순간의 설비로 바로 채팅을 연다(확인 화면 없음).
     row.querySelector('.np-go').addEventListener('click', () => {
-      ackOf()[f.eq.equipment_id] = ackKey(f); S.alertUn = unacked(S.faults).length; S.alertView = null; closeNotify(); paintNotify();
-      openAlertGo({ equipment_id: f.eq.equipment_id, items: f.items.slice() });
+      if (f) { ackOf()[id] = ackKey(f); S.alertUn = unacked(S.faults).length; S.alertView = null; }
+      closeNotify(); paintNotify();
+      openAlertGo({ equipment_id: id, items: f ? f.items.slice() : [] });
     });
     list.appendChild(row);
   });
+  if (showAiStatus) {
+    const note=document.createElement('p');note.className='np-ai-status';
+    note.textContent=ai.status==='ready' && ai.items.length ? '고장 확정이 아닌 점검 참고 정보입니다.' : ai.message;
+    list.appendChild(note);
+  }
+  list.scrollTop=scroll;
 }
 document.addEventListener('click', (e) => {
   if ($('notifyPanel').hidden || e.target.closest('#notifyPanel, .notify')) return;
@@ -4646,9 +4702,9 @@ async function watchMes() {
     try {
       const snap = await getJson('/api/state');
       renderAlert(faultsFrom(snap));
-      S.snap=snap;S.snapshot=snap;renderDash();if(S.screen==='home')renderHome();
+      S.snap=snap;S.snapshot=snap;paintNotify();renderDash();if(S.screen==='home')renderHome();
       if (S.eq) await loadMesObservations(snap);   // 화면의 고정 값과 별도로 최신 MES 상태를 감시한다
-    } catch (err) { S.snapshot=null;if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
+    } catch (err) { S.snapshot=null;paintNotify();if(S.screen==='home')renderHome();if (S.eq) clearMesObservations(); console.warn('MES 감시 실패', err); }
     refreshReportCauseSensors();
   }
   setTimeout(watchMes, WATCH_MS);

@@ -1,0 +1,30 @@
+[
+  {
+    "role": "development",
+    "run_id": "a715b2bc6b86b8f98cc39f3ab18b695a",
+    "interval": [
+      102,
+      140
+    ],
+    "notice_ticks": [
+      123,
+      660
+    ],
+    "detected_inside": true,
+    "paired_normal_notices": 0
+  },
+  {
+    "role": "test",
+    "run_id": "1bd4f2fa4967cdc82b2a2f87620a4e07",
+    "interval": [
+      104,
+      138
+    ],
+    "notice_ticks": [
+      122,
+      668
+    ],
+    "detected_inside": true,
+    "paired_normal_notices": 0
+  }
+]

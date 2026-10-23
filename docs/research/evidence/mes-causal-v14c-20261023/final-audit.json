@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "protected_files": 760,
+  "frozen_files": 803,
+  "frames": 53248,
+  "paired_prefixes": 24,
+  "forced_bad_observations": 56,
+  "raw_channels": 69,
+  "analysis_channels": 63,
+  "timestamps_units_quality_order_config": true,
+  "roles_disjoint": true,
+  "frozen_unchanged": true
+}

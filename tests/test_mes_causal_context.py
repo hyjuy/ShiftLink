@@ -83,6 +83,14 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
 
+    def test_simulator_clock_speed_is_not_a_process_load_feature(self):
+        p=profile();p['offsets']['slow:empty']={'hpu_cooler_oil_out_temp':10.,'hpu_cooler_water_out_temp':10.}
+        a=ContextDetector(config(),p);a.config_id=p['source_config_id'];b=ContextDetector(config(),p);b.config_id=a.config_id
+        left=source_rows();right=copy.deepcopy(left)
+        for f in left:f['speed']=.5
+        for f in right:f['speed']=20.
+        self.assertEqual([a.step(f) for f in left],[b.step(f) for f in right])
+
     def test_brief_workpiece_queue_mismatch_requires_persistence(self):
         for duration in (1,2):
             d=detector();data=source_rows()

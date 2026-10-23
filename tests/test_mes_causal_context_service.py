@@ -9,6 +9,19 @@ from tests.test_mes_causal_context import config,profile,source_rows
 from tests.test_mes_causal_pda_service import source_config
 
 class ContextBindingTests(TestCase):
+    def test_initial_zero_control_state_has_no_missing_sensor_frame(self):
+        from unittest.mock import patch
+        from scripts import mes_causal_pda_service as m
+        with TemporaryDirectory() as directory:
+            b=BoundSource(config(),source_config(),normal_profile=profile());s=AdvisorySession(b,Path(directory)/'state.json');state=source_rows(1)[0]|dict(is_synthetic=True,line_mode='stopped')
+            meta=[('meta',x) for x in dict(config_id=b.config_id,config_preserved=True,is_synthetic=True).items()]
+            for mode,expected in (('stopped','inactive'),('running','warming_up')):
+                with patch.object(m,'replay_stream',return_value=iter(meta)):r=m.poll(s,'http://source',state|dict(line_mode=mode))
+                self.assertEqual(r['status'],expected);self.assertEqual(r['items'],[]);self.assertEqual(s.cursor,-1);self.assertEqual(s.detector.warm,0)
+            wrong=[('meta',(k,False if k=='config_preserved' else v)) for _,(k,v) in meta]
+            with patch.object(m,'replay_stream',return_value=iter(wrong)):
+                with self.assertRaises(ValueError):m.poll(s,'http://source',state)
+
     def test_cli_pins_profile_and_preserves_external_stop_switch(self):
         import hashlib,signal,sys
         from unittest.mock import patch

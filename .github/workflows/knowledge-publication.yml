@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'shiftlink/mes/**'
+      - 'shiftlink/pda/__main__.py'
+      - 'tests/test_pda_app.py'
       - 'shiftlink/rag/**'
       - 'shiftlink/rag2/**'
       - 'tests/*publication*'
@@ -47,7 +49,7 @@ jobs:
           --include='*/mes/publication.py,*/mes/candidate_review.py,*/rag/embedding.py'
           -m pytest -q tests/test_knowledge_publication.py tests/test_publication_worker.py
           tests/test_publication_s30h.py tests/test_publication_browser.py tests/test_candidate_management.py
-          tests/test_knowledge_gap_loop.py
+          tests/test_knowledge_gap_loop.py tests/test_pda_app.py
           tests/test_embedding_contract.py tests/test_publication_harness.py
           tests/test_field_history_boundaries.py tests/test_field_history_intent.py
           tests/test_field_history_request_scope.py tests/test_field_history_evaluation.py

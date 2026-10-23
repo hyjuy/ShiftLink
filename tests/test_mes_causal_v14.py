@@ -57,6 +57,11 @@ class ExtendedRiseTests(RiseTests):
         a=self.args();a[1][2]=('OTHER','other_temp');a[0]['signed_z'][60:]=2.
         self.assertEqual(ticks(candidate.predict(*a)),[])
 
+    def test_new_current_after_derived_heat_notice_is_preserved(self):
+        a=self.args();a[0]['signed_z'][60:,0]=1.;a[0]['signed_z'][60:,2]=1.
+        a[4]['level'][80:95,1]=4.
+        self.assertIn(83,ticks(candidate.predict(*a)))
+
     def test_invalid_limits_fail_closed(self):
         for limits in ([],[0],[-1],[float('nan')],[float('inf')]):
             a=self.args();a[7]['thermal_rise_limits']=limits
@@ -102,6 +107,17 @@ class DataTests(unittest.TestCase):
 
 
 class PipelineTests(unittest.TestCase):
+    def test_freeze_is_blocked_when_known_cooling_miss_remains(self):
+        import tempfile
+        from scripts import mes_causal_v14_run as runner
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            for name in ('development','diagnostic-v13'):
+                (root/name).mkdir();runner.d.write_new(root/name/'result.json',dict(checks={'ok':True},methods={'v14':{'detected_events':41}}))
+            runner.d.write_new(root/'regression.json',{'passed':True})
+            with self.assertRaisesRegex(AssertionError,'known cooling miss'):runner.freeze(root)
+            self.assertFalse((root/'candidate-lock.json').exists())
+
     def test_predictions_are_persisted_before_private_truth_is_opened(self):
         import tempfile,pickle,json
         from scripts import mes_causal_v14_run as runner

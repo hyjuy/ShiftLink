@@ -1,0 +1,480 @@
+{
+  "source_config_id": "23e0e6b3aa6f073857d48e81fd7430068ee40ca2f0cfe77147bae37741a0b036",
+  "source_sha256": "8e3f6b57a617eab49f785a8c2e1c54836fe53379eee07818ed4473db3bc30306",
+  "equipment": [
+    {
+      "equipment_id": "EQ-0001",
+      "code": "HPU-01",
+      "signals": [
+        {
+          "signal": "hpu_pressure",
+          "unit": "bar",
+          "normal_min": 145.0,
+          "normal_max": 165.0
+        },
+        {
+          "signal": "hpu_oil_temp",
+          "unit": "degC",
+          "normal_min": 35.0,
+          "normal_max": 58.0
+        },
+        {
+          "signal": "hpu_filter_dp",
+          "unit": "bar",
+          "normal_min": 0.0,
+          "normal_max": 1.2
+        },
+        {
+          "signal": "hpu_flow",
+          "unit": "L_min",
+          "normal_min": 38.0,
+          "normal_max": 46.0
+        },
+        {
+          "signal": "hpu_pump_outlet_pressure",
+          "unit": "bar",
+          "normal_min": 145,
+          "normal_max": 165
+        },
+        {
+          "signal": "fluid_viscosity",
+          "unit": "cSt",
+          "normal_min": 20,
+          "normal_max": 100
+        },
+        {
+          "signal": "hpu_oil_level",
+          "unit": "pct",
+          "normal_min": 70,
+          "normal_max": 100
+        },
+        {
+          "signal": "hpu_pump_current",
+          "unit": "A",
+          "normal_min": 15,
+          "normal_max": 25
+        },
+        {
+          "signal": "hpu_cooler_oil_in_temp",
+          "unit": "degC",
+          "normal_min": 35,
+          "normal_max": 58
+        },
+        {
+          "signal": "hpu_cooler_oil_out_temp",
+          "unit": "degC",
+          "normal_min": 35,
+          "normal_max": 58
+        },
+        {
+          "signal": "hpu_cooler_water_in_temp",
+          "unit": "degC",
+          "normal_min": 15,
+          "normal_max": 30
+        },
+        {
+          "signal": "hpu_cooler_water_out_temp",
+          "unit": "degC",
+          "normal_min": 20,
+          "normal_max": 40
+        },
+        {
+          "signal": "hpu_cooler_oil_flow",
+          "unit": "L_min",
+          "normal_min": 38,
+          "normal_max": 46
+        },
+        {
+          "signal": "hpu_accumulator_gas_pressure",
+          "unit": "bar",
+          "normal_min": 145,
+          "normal_max": 165
+        },
+        {
+          "signal": "hpu_accumulator_fluid_pressure",
+          "unit": "bar",
+          "normal_min": 145,
+          "normal_max": 165
+        },
+        {
+          "signal": "hpu_return_submergence",
+          "unit": "mm",
+          "normal_min": 100,
+          "normal_max": 200
+        },
+        {
+          "signal": "hpu_suction_head",
+          "unit": "mm",
+          "normal_min": 100,
+          "normal_max": 200
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0002",
+      "code": "PDP-01",
+      "signals": [
+        {
+          "signal": "bus_voltage",
+          "unit": "pct",
+          "normal_min": 97.0,
+          "normal_max": 103.0
+        },
+        {
+          "signal": "breaker_pole_l1_temp",
+          "unit": "degC",
+          "normal_min": 30,
+          "normal_max": 45
+        },
+        {
+          "signal": "breaker_pole_l2_temp",
+          "unit": "degC",
+          "normal_min": 30,
+          "normal_max": 45
+        },
+        {
+          "signal": "breaker_pole_l3_temp",
+          "unit": "degC",
+          "normal_min": 30,
+          "normal_max": 45
+        },
+        {
+          "signal": "bus_current",
+          "unit": "A",
+          "normal_min": 20,
+          "normal_max": 40
+        },
+        {
+          "signal": "breaker_trip",
+          "unit": "bool",
+          "normal_min": 0,
+          "normal_max": 0
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0003",
+      "code": "CAU-01",
+      "signals": [
+        {
+          "signal": "air_pressure",
+          "unit": "kPa",
+          "normal_min": 550.0,
+          "normal_max": 700.0
+        },
+        {
+          "signal": "compressor_discharge_temp",
+          "unit": "degC",
+          "normal_min": 70,
+          "normal_max": 90
+        },
+        {
+          "signal": "compressor_separator_dp",
+          "unit": "bar",
+          "normal_min": 0,
+          "normal_max": 0.8
+        },
+        {
+          "signal": "air_nozzle_pressure",
+          "unit": "MPa",
+          "normal_min": 0.1,
+          "normal_max": 0.2
+        },
+        {
+          "signal": "air_flow",
+          "unit": "L_min",
+          "normal_min": 100,
+          "normal_max": 150
+        },
+        {
+          "signal": "compressor_current",
+          "unit": "A",
+          "normal_min": 8,
+          "normal_max": 16
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0004",
+      "code": "GR-01",
+      "signals": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0
+        },
+        {
+          "signal": "gr_oil_water_content",
+          "unit": "ppm",
+          "normal_min": 0,
+          "normal_max": 300
+        },
+        {
+          "signal": "gr_oil_level",
+          "unit": "pct",
+          "normal_min": 70,
+          "normal_max": 100
+        },
+        {
+          "signal": "gr_surface_temp",
+          "unit": "degC",
+          "normal_min": 20,
+          "normal_max": 40
+        },
+        {
+          "signal": "gr_rpm",
+          "unit": "rpm",
+          "normal_min": 900,
+          "normal_max": 1100
+        },
+        {
+          "signal": "gr_oil_leak",
+          "unit": "bool",
+          "normal_min": 0,
+          "normal_max": 0
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0005",
+      "code": "GR-02",
+      "signals": [
+        {
+          "signal": "gr_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.5,
+          "normal_max": 2.8
+        },
+        {
+          "signal": "gr_brg_temp",
+          "unit": "degC",
+          "normal_min": 30.0,
+          "normal_max": 62.0
+        },
+        {
+          "signal": "gr_current",
+          "unit": "A",
+          "normal_min": 18.0,
+          "normal_max": 30.0
+        },
+        {
+          "signal": "gr_oil_water_content",
+          "unit": "ppm",
+          "normal_min": 0,
+          "normal_max": 300
+        },
+        {
+          "signal": "gr_oil_level",
+          "unit": "pct",
+          "normal_min": 70,
+          "normal_max": 100
+        },
+        {
+          "signal": "gr_surface_temp",
+          "unit": "degC",
+          "normal_min": 20,
+          "normal_max": 40
+        },
+        {
+          "signal": "gr_rpm",
+          "unit": "rpm",
+          "normal_min": 900,
+          "normal_max": 1100
+        },
+        {
+          "signal": "gr_oil_leak",
+          "unit": "bool",
+          "normal_min": 0,
+          "normal_max": 0
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0006",
+      "code": "RT-01",
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8,
+          "normal_max": 16
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.8,
+          "normal_max": 1.8
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0007",
+      "code": "RT-02",
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0
+        },
+        {
+          "signal": "rt_lift_delay",
+          "unit": "min",
+          "normal_min": 0.0,
+          "normal_max": 0.05
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8,
+          "normal_max": 16
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.8,
+          "normal_max": 1.8
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0008",
+      "code": "RT-03",
+      "signals": [
+        {
+          "signal": "rt_speed",
+          "unit": "m_min",
+          "normal_min": 20.0,
+          "normal_max": 120.0
+        },
+        {
+          "signal": "rt_clamp_press",
+          "unit": "bar",
+          "normal_min": 95.0,
+          "normal_max": 115.0
+        },
+        {
+          "signal": "rt_motor_current",
+          "unit": "A",
+          "normal_min": 8.0,
+          "normal_max": 16.0
+        },
+        {
+          "signal": "rt_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.8,
+          "normal_max": 1.8
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0009",
+      "code": "CV-01",
+      "signals": [
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_min": 10.0,
+          "normal_max": 60.0
+        },
+        {
+          "signal": "cv_belt_tension",
+          "unit": "kPa",
+          "normal_min": 380.0,
+          "normal_max": 460.0
+        },
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0
+        },
+        {
+          "signal": "cv_idler_speed_ratio",
+          "unit": "pct",
+          "normal_min": 80,
+          "normal_max": 100
+        },
+        {
+          "signal": "cv_motor_current",
+          "unit": "A",
+          "normal_min": 10,
+          "normal_max": 20
+        },
+        {
+          "signal": "cv_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.8,
+          "normal_max": 1.8
+        }
+      ]
+    },
+    {
+      "equipment_id": "EQ-0010",
+      "code": "CV-02",
+      "signals": [
+        {
+          "signal": "cv_queue_len",
+          "unit": "pct",
+          "normal_min": 0.0,
+          "normal_max": 70.0
+        },
+        {
+          "signal": "cv_speed",
+          "unit": "m_min",
+          "normal_min": 8,
+          "normal_max": 12
+        },
+        {
+          "signal": "cv_idler_speed_ratio",
+          "unit": "pct",
+          "normal_min": 80,
+          "normal_max": 100
+        },
+        {
+          "signal": "cv_motor_current",
+          "unit": "A",
+          "normal_min": 10,
+          "normal_max": 20
+        },
+        {
+          "signal": "cv_vib_rms",
+          "unit": "mm_s",
+          "normal_min": 0.8,
+          "normal_max": 1.8
+        }
+      ]
+    }
+  ]
+}

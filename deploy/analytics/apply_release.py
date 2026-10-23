@@ -58,6 +58,13 @@ def unit_template(manifest):
     return relative
 
 
+def validate_live(manifest):
+    for rel,value in manifest['expected_live'].items():
+        target=APP/rel
+        if (sha(target) if target.exists() else None)!=value:raise ValueError('deployed file changed since capture: '+rel)
+    if manifest.get('expected_unit_sha256') and sha(UNIT_PATH)!=manifest['expected_unit_sha256']:raise ValueError('worker unit changed since capture')
+
+
 def restart_pda():
     old_pid=pda_pid()
     get('/pda/restart')
@@ -116,9 +123,7 @@ def main():
     for rel,value in manifest['files'].items():
         path=(release/rel).resolve()
         if not path.is_relative_to(release) or sha(path)!=value:raise ValueError('release file hash mismatch: '+rel)
-    for rel,value in manifest['expected_live'].items():
-        target=APP/rel
-        if (sha(target) if target.exists() else None)!=value:raise ValueError('deployed file changed since capture: '+rel)
+    validate_live(manifest)
     unit=release/'shiftlink-analytics.service'
     unit.write_text((release/unit_template(manifest)).read_text().replace('@RELEASE@',str(release)).replace('@PROFILE_SHA256@',manifest.get('normal_profile_sha256','')))
     command('systemd-analyze','verify',str(unit))

@@ -66,7 +66,7 @@ class ContextDetector(OnlineDetector):
         observed=context(self.pending,self.profile['capacities']) if self.pending.get('config_id')==self.profile['source_config_id'] else None
         if observed is not None and any(c['equipment_id'] not in self.equipment for c in observed[1]):observed=None
         if observed is None:return super()._scores(raw,reset,hold,ready)
-        mode,coils=observed;expected=self.reference_center.copy();scales=self.reference_scale.copy();queue_normal={}
+        mode,coils=observed;expected=self.reference_center.copy();scales=self.reference_scale.copy();queue_flat_suppressed={}
         if mode in self.normal_stats:
             expected,scales=np.asarray(self.normal_stats[mode],float).T.copy()
         for (eq,sig),j in self.lookup.items():
@@ -86,8 +86,8 @@ class ContextDetector(OnlineDetector):
                 queued=sum(pos>=1 for _,pos in items);value=min(100.,100*queued/self.profile['capacities'][eq])
                 if value<=high:
                     expected[j]=raw[j] if abs(raw[j]-value)<=.001 else value
-                    # Matching empty queues or physically moving stock are not stuck sensors.
-                    queue_normal[j]=abs(raw[j]-value)<=.001 and (queued==0 or self.ages[eq]<16)
+                    # New stock/reading mismatch requires process persistence; prior empty history is not stuck evidence.
+                    queue_flat_suppressed[j]=abs(raw[j]-value)>.001 or queued==0 or self.ages[eq]<16
         self.center=expected;self.scale=scales
         try:level,flat,known,_=super()._scores(raw,reset,hold,ready)
         finally:self.center=self.reference_center.copy();self.scale=self.reference_scale.copy()
@@ -98,7 +98,7 @@ class ContextDetector(OnlineDetector):
                 if flat[j] and self.channels[j][1]!='cv_queue_len' and any(abs(raw[j]-v)<=self.tolerance[j] for v in values):flat[j]=False
                 width=self.flat_windows[j]
                 if width<16 and len(x)>=width and np.isfinite(x[-width:,j]).all() and np.ptp(x[-width:,j])<=self.tolerance[j]:flat[j]=known[j]=True
-        for j,normal in queue_normal.items():
+        for j,normal in queue_flat_suppressed.items():
             if normal:flat[j]=False
         # Thermal rise and raw flat-line tests keep their original physical input.
         if not hold and self.thermal_history:self.thermal_history[-1]=(raw-self.reference_center)/self.reference_scale
@@ -147,7 +147,7 @@ def fit_profile(frames,source_config,settings=None):
             for target,reference in PAIRS.items():
                 a,b=values.get((eq,target)),values.get((eq,reference))
                 if a and b and a['quality']==b['quality']=='good' and a['observed_at']==b['observed_at']==frame['simulated_at'] and all(type(v['value']) in (int,float) and math.isfinite(v['value']) for v in (a,b)):
-                    
+
                     for m in modes:offsets[m][target].append(a['value']-b['value'])
     if any(len(v)<64 for group in offsets.values() for v in group.values()):raise ValueError('normal context needs 64 reference samples per cell')
     result=dict(schema_version=1,source_config_id=source_config['config_id'],capacities=capacities,minimum_samples=64,

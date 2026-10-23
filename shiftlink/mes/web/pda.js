@@ -137,7 +137,7 @@ async function boot() {
     const [cfg, cat, kb] = await Promise.all([getJson('/api/config'), getJson('/api/catalog'), getJson('/api/kb/cards')]);
     S.equipment = equipmentFrom(cfg.config, cat.data);
     S.cards = kb.cards || [];
-    S.handovers = kb.handovers || [];
+    // 시나리오 샘플 인계(kb.handovers)는 쓰지 않는다. 인계사항은 저장소의 근무일지만 보여 준다.
     S.basisRecords = kb.basis_records || {};
 
     if (!S.equipment.length || !S.cards.length) throw new Error('구성 또는 카드가 비어 있습니다');
@@ -2026,7 +2026,12 @@ function handoverEntries(h, equipment) {
   return rows;
 }
 async function refreshSavedHandovers() {
-  try { S.savedHandovers = (await getJson('/api/outbox/pending')).handovers || []; renderHome(); }
+  try {
+    // 업로드가 끝난 근무일지도 홈에 남아야 하므로 저장소의 최근 일지를 함께 읽는다(같은 id는 일지 쪽을 쓴다).
+    const [pending, saved] = await Promise.all([getJson('/api/outbox/pending'), getJson('/api/work-reports?limit=30').catch(() => ({}))]);
+    const reports = saved.reports || [], ids = new Set(reports.map(h => h.handover_id));
+    S.savedHandovers = [...reports, ...(pending.handovers || []).filter(h => !ids.has(h.handover_id))]; renderHome();
+  }
   catch (_) { /* 보존된 정적 인계는 연결 끊김에도 열 수 있다. */ }
 }
 function handoverCard(h) {

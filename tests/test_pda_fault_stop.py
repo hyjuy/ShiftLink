@@ -65,4 +65,22 @@ class FaultStopTests(TestCase):
                 notices=[eq for f in data for eq in a.feed(f,self.binding.config_id)]
                 self.assertEqual(self.key[0] in notices,expected)
 
+    def test_retained_reader_rejects_stale_wrong_run_normal_stop_and_invalid_time(self):
+        from datetime import datetime,timedelta,timezone
+        a=self.detected();f=self.stopped();a.feed(f,self.binding.config_id);value=a.report(f);output=Path(self.tmp.name)/'latest.json'
+        for change,state in ((dict(generated_at=(datetime.now(timezone.utc)-timedelta(seconds=11)).isoformat()),f),({},f|dict(run_id='other')),({},self.stopped(mode='paused'))):
+            output.write_text(json.dumps(value|change));self.assertEqual(read_insights(output,state,self.binding.config_id)['items'],[])
+        invalid=copy.deepcopy(value);invalid['items'][0]['stopped_at']=invalid['items'][0]['observed_at'];output.write_text(json.dumps(invalid))
+        self.assertEqual(read_insights(output,f,self.binding.config_id)['items'],[])
+        b=m.AdvisorySession(self.binding,Path(self.tmp.name)/'empty.json')
+        for g in rows(113):b.feed(g,self.binding.config_id)
+        b.feed(self.stopped(113),self.binding.config_id);self.assertEqual(b.report(self.stopped(113))['items'],[])
+    def test_bad_replay_trailer_cannot_commit_a_tentative_stop(self):
+        from unittest.mock import patch
+        a=self.detected();a.flush();f=self.stopped()|dict(is_synthetic=True)
+        batch=[('frame',f)]+[('meta',v) for v in dict(config_id=self.binding.config_id,config_preserved=False,is_synthetic=True).items()]
+        with patch.object(m,'replay_stream',return_value=iter(batch)):
+            with self.assertRaises(ValueError):m.poll(a,'http://unused',f)
+        self.assertEqual(a.cursor,111);self.assertEqual(a.stopped_notices,{})
+        self.assertEqual(m.AdvisorySession(self.binding,self.path).stopped_notices,{})
 if __name__=='__main__':main()

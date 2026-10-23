@@ -93,6 +93,12 @@ def restore(backup):
     return dict(restored=True,files={rel:sha(APP/rel)==value for rel,value in record['present'].items()},pda_pid=pda_pid())
 
 
+def activate_worker(was_active):
+    command('sudo','-n','systemctl','daemon-reload')
+    command('sudo','-n','systemctl','enable','--now',UNIT)
+    if was_active:command('sudo','-n','systemctl','restart',UNIT)
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--release',type=Path);p.add_argument('--apply',action='store_true');p.add_argument('--rollback',type=Path);args=p.parse_args()
     if args.rollback:
@@ -137,7 +143,7 @@ def main():
             source=release/('device-pda.html' if rel.endswith('pda.html') else rel)
             replace(source,APP/rel)
         command('sudo','-n','install','-m','0644',str(unit),str(UNIT_PATH))
-        command('sudo','-n','systemctl','daemon-reload');command('sudo','-n','systemctl','enable','--now',UNIT)
+        activate_worker(record['unit_active'])
         print('WORKER_STARTED',flush=True)
         deadline=time.monotonic()+120
         while time.monotonic()<deadline:

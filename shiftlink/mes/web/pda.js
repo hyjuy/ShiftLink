@@ -81,14 +81,15 @@ function aiInsightsFrom(snap) {
   const messages = {disabled:'AI 분석 연결 전입니다.', unavailable:'AI 분석 결과를 확인할 수 없습니다.',
     warming_up:'분석에 필요한 센서 이력을 모으고 있습니다.', stale:'AI 분석 결과 갱신이 늦어 표시를 중단했습니다.',
     catching_up:'누락된 센서 이력을 순서대로 분석하고 있습니다.', inactive:'비가동 중에는 AI 판단을 보류합니다.',
+    stopped:'정지 전 AI 감지 이력입니다. 정지 중 신규 분석은 보류합니다.',
     model_error:'AI 분석을 완료하지 못했습니다.', session_limit:'분석 세션을 다시 시작해 주세요.'};
   let status = data && data.status || 'unavailable';
-  if (status === 'ready' && (data.run_id !== snap.run_id || data.config_id !== snap.config_id
+  if (['ready','stopped'].includes(status) && (data.run_id !== snap.run_id || data.config_id !== snap.config_id
       || !Number.isInteger(data.sequence) || data.sequence > snap.sequence || snap.sequence - data.sequence > 3)) status = 'unavailable';
   const seen = new Set(), items = [];
-  if (status === 'ready') (data.items || []).forEach((row) => {
+  if (['ready','stopped'].includes(status)) (data.items || []).forEach((row) => {
     const eq = S.equipment.find((e) => e.equipment_id === row.equipment_id);
-    if (!eq || seen.has(eq.equipment_id) || !['active','recent'].includes(row.state)) return;
+    if (!eq || seen.has(eq.equipment_id) || !['active','recent','before_stop'].includes(row.state)) return;
     seen.add(eq.equipment_id);
     const evidence = (row.signals || []).map((s) => {
       const spec = eq.signals.find((p) => p.signal === s.signal);
@@ -102,7 +103,7 @@ function aiInsightsFrom(snap) {
 
 function aiInsightNote(insight) {
   const note=document.createElement('p');note.className='ai-insights-note';
-  const label=document.createElement('strong');label.textContent='AI 이상징후 · '+(insight.state==='recent'?'최근 감지':'점검 참고');
+  const label=document.createElement('strong');label.textContent='AI 이상징후 · '+(insight.state==='before_stop'?'정지 전 감지 · '+new Date(insight.observed_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}):insight.state==='recent'?'최근 감지':'점검 참고');
   const text=document.createElement('span');text.textContent=insight.summary;
   note.append(label,text);
   return note;

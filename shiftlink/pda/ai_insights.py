@@ -5,7 +5,26 @@ from pathlib import Path
 
 VALIDATION = '합성 데이터 검증 완료 · 현장 검증 전'
 DISCLAIMER = '고장 확정이 아닌 점검 참고 정보입니다.'
-STATUSES = {'ready', 'warming_up', 'inactive', 'catching_up', 'unavailable', 'model_error', 'session_limit', 'stale', 'disabled'}
+STATUSES = {'ready', 'warming_up', 'inactive', 'catching_up', 'unavailable', 'model_error', 'session_limit', 'stale', 'disabled', 'stopped'}
+
+
+def fault_stopped_equipment(snapshot):
+    alarms={a.get('equipment_id') for a in snapshot.get('active_alarms', [])}
+    return {e['equipment_id'] for e in snapshot.get('equipment', [])
+            if e.get('operating_state') in {'stopped', 'waiting'} and
+            (snapshot.get('line_mode')=='fault' or e['equipment_id'] in alarms or
+             e.get('fault_level') in {'warning', 'critical', 'fault'})}
+
+
+def valid_stop_notice(row, sequence):
+    stop=row.get('stop_sequence')
+    try:
+        at=datetime.fromisoformat(row['observed_at']);stopped=datetime.fromisoformat(row['stopped_at'])
+        return (type(stop) is int and type(row['sequence']) is int and
+                0 <= row['sequence'] <= stop <= sequence and stop-row['sequence'] <= 30 and
+                at.utcoffset() is not None and stopped.utcoffset() is not None and
+                (stopped-at).total_seconds()==stop-row['sequence'])
+    except (KeyError,TypeError,ValueError):return False
 
 
 def read_insights(path, snapshot, config_id, *, now=None):
@@ -43,25 +62,31 @@ def read_insights(path, snapshot, config_id, *, now=None):
             return base
         if lag > 3:
             return base | dict(status='catching_up')
-        if snapshot['line_mode'] in {'paused', 'stopped', 'recovering', 'quality_hold'}:
+        stopped=fault_stopped_equipment(snapshot)
+        if snapshot['line_mode'] in {'paused', 'stopped', 'recovering', 'quality_hold', 'fault'} and data['status']!='stopped':
             return base | dict(status='inactive')
         base['status'] = data['status']
-        if base['status'] != 'ready':
+        if base['status'] not in {'ready','stopped'}:
             return base
         equipment = {row['equipment_id'] for row in snapshot['equipment']}
         seen = set()
         for row in data.get('items', []):
             eq = row.get('equipment_id')
-            if eq not in equipment or eq in seen or row.get('state') not in {'active', 'recent'}:
+            if eq not in equipment or eq in seen or row.get('state') not in {'active', 'recent', 'before_stop'}:
                 continue
             if (not isinstance(row.get('event_id'), str) or type(row.get('sequence')) is not int
                     or not 0 <= row['sequence'] <= sequence or not isinstance(row.get('observed_at'), str)):
                 continue
+            retained=row['state']=='before_stop'
+            if retained:
+                if eq not in stopped or not valid_stop_notice(row,sequence):continue
+            elif base['status']!='ready' or snapshot['line_mode']!='running':continue
             signals = [dict(signal=s['signal'], direction=s['direction']) for s in row.get('signals', [])
                        if isinstance(s, dict) and isinstance(s.get('signal'), str) and s.get('direction') in {'low', 'high'}][:2]
             seen.add(eq)
             base['items'].append(dict(equipment_id=eq, event_id=row['event_id'], sequence=row['sequence'],
                                       observed_at=row['observed_at'], state=row['state'], signals=signals))
+            if retained:base['items'][-1].update(stop_sequence=row['stop_sequence'],stopped_at=row['stopped_at'])
         return base
     except (OSError, ValueError, TypeError, KeyError, AttributeError):
         return base | dict(status='unavailable', items=[])

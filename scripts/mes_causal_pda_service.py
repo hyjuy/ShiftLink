@@ -21,6 +21,7 @@ from urllib.request import urlopen
 import numpy as np
 from scripts.mes_causal_schema import ROOT, metadata, signals
 from scripts.mes_causal_v14_stream import OnlineDetector
+from shiftlink.pda.ai_insights import fault_stopped_equipment, valid_stop_notice
 
 SETTINGS_SHA256 = 'e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789'
 MAX_RESPONSE = 16 * 1024 * 1024
@@ -121,6 +122,7 @@ class AdvisorySession:
         self.binding, self.journal = binding, Path(journal)
         self.detector = binding.new_detector()
         self.notices = {}
+        self.stopped_notices = {}; self.stop_dirty = False
         self.cursor, self.run, self.since_save = -1, None, 0
         self.defer_flush = False
         if self.journal.exists(): self._restore()
@@ -156,6 +158,13 @@ class AdvisorySession:
             for eq, row in notices.items():
                 if row['event_id'] != f"{d.run}:{row['sequence']}:{eq}" or type(row['sequence']) is not int or not 0 <= row['sequence'] <= d.sequence:
                     raise ValueError('checkpoint notice identity')
+            stopped=saved.get('stopped_notices',{})
+            if not isinstance(stopped,dict) or not set(stopped)<=set(d.equipment):raise ValueError('checkpoint stopped equipment')
+            for eq,row in stopped.items():
+                if (row.get('equipment_id')!=eq or row.get('state')!='before_stop' or not valid_stop_notice(row,d.sequence)
+                        or row.get('event_id')!=f"{d.run}:{row['sequence']}:{eq}"):
+                    raise ValueError('checkpoint stopped notice invalid')
+            self.stopped_notices=stopped
             self.detector = d; self.cursor = d.sequence if d.sequence is not None else -1; self.run = d.run; self.notices = notices
         except (KeyError, TypeError, AttributeError, OverflowError) as e:
             raise ValueError('invalid checkpoint') from e
@@ -167,13 +176,27 @@ class AdvisorySession:
                      ewma=packed(d.ewma), ewma_valid=d.ewma_valid.tolist())
         for name in ('median','flat','thermal_history'): state[name] = [packed(row) for row in getattr(d,name)]
         state['machines'] = [{name:getattr(m,name).tolist() for name in ('on','high','low','process_sources','flat_sources')} for m in d.machines]
-        atomic_json(self.journal,dict(binding=self.binding.fingerprint,detector=state,notices=self.notices))
-        self.since_save = 0
+        atomic_json(self.journal,dict(binding=self.binding.fingerprint,detector=state,notices=self.notices,stopped_notices=self.stopped_notices))
+        self.since_save = 0; self.stop_dirty = False
+
+    def sync_stop(self, state):
+        if state['run_id']!=self.run or state['sequence'] not in (self.cursor,self.cursor+1):return
+        stopped=fault_stopped_equipment(state)
+        held={e:r for e,r in self.stopped_notices.items() if e in stopped}
+        for eq,row in self.notices.items():
+            if eq in stopped and eq not in held and 0 <= state['sequence']-row['sequence'] <= 30:
+                held[eq]=dict(row,state='before_stop',stop_sequence=state['sequence'],stopped_at=state['simulated_at'])
+        if held!=self.stopped_notices:self.stopped_notices=held;self.stop_dirty=True
 
     def feed(self, frame, config_id):
+        source=frame
         frame = self.binding.adapt(frame,config_id)
         notices = self.detector.step(frame)
         if not self.detector.last_status['accepted']: return set()
+        if self.detector.last_status['discontinuity']:
+            self.notices.clear()
+            if self.stopped_notices:self.stopped_notices.clear();self.stop_dirty=True
+        else:self.sync_stop(source)
         self.run,self.cursor = frame['run_id'],frame['sequence']
         if self.detector.last_status['discontinuity'] or frame['line_mode'] != 'running': self.notices.clear()
         for eq in notices:
@@ -181,21 +204,24 @@ class AdvisorySession:
                                    observed_at=frame['simulated_at'],state='recent',signals=[])
         self.since_save += 1
         # A notice is durable before publication; otherwise replay at most 29 frames.
-        if not self.defer_flush and (notices or self.since_save >= 30): self.flush()
+        if not self.defer_flush and (notices or self.stop_dirty or self.since_save >= 30): self.flush()
         return notices
 
     def report(self, state, *, stalled=False):
         base = dict(schema_version=1,run_id=state['run_id'],config_id=self.binding.config_id,
                     sequence=max(0,self.cursor),input_at=self.detector.at.isoformat() if self.detector.at else state['simulated_at'],
                     generated_at=datetime.now(timezone.utc).isoformat(),operational_notifications=False,items=[])
-        if state['line_mode'] != 'running': return base | dict(status='inactive')
+        held=[dict(r) for e,r in self.stopped_notices.items() if state['run_id']==self.run and e in fault_stopped_equipment(state)]
+        history=base | dict(status='stopped',items=held) if held else None
+        if state['line_mode'] != 'running': return history or (base | dict(status='inactive'))
         if stalled: return base | dict(status='stale')
         if state['run_id'] != self.run: return base | dict(status='warming_up')
         if state['sequence']-self.cursor > 3: return base | dict(status='catching_up')
-        if not self.detector.was_ready: return base | dict(status='warming_up')
+        if not self.detector.was_ready: return history or (base | dict(status='warming_up'))
         if self.detector.last_status.get('hold') or (self.detector.previous_raw is not None and not np.isfinite(self.detector.previous_raw[self.detector.variable]).any()):
-            return base | dict(status='unavailable')
-        return base | dict(status='ready',items=[dict(r) for r in self.notices.values() if 0 <= self.cursor-r['sequence'] <= 30])
+            return history or (base | dict(status='unavailable'))
+        running={e['equipment_id'] for e in state.get('equipment',[]) if e.get('operating_state')=='running'}
+        return base | dict(status='ready',items=held+[dict(r) for e,r in self.notices.items() if e in running and 0 <= self.cursor-r['sequence'] <= 30])
 
 
 def get_json(base, path):
@@ -221,15 +247,17 @@ def poll(session, base, state):
             if meta.get('config_id')!=session.binding.config_id or meta.get('config_preserved') is not True or meta.get('is_synthetic') is not True:
                 raise ValueError('unapproved replay provenance')
             if cursor<state['sequence']:raise ValueError('replay incomplete; no advance past missing frame')
-            if noticed or session.since_save>=30:session.flush()
+            if noticed or session.stop_dirty or session.since_save>=30:session.flush()
         except BaseException:
             # A bad/truncated trailer cannot commit speculative frames or notices.
             restored=AdvisorySession(session.binding,session.journal)
             session.__dict__.update(restored.__dict__)
             raise
         finally:session.defer_flush=False
+    session.sync_stop(state)
     if state['line_mode']!='running' and session.detector.warm:
         session.detector._restart();session.notices.clear();session.flush()
+    if session.stop_dirty:session.flush()
     return session.report(state)
 
 

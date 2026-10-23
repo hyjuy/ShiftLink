@@ -6,7 +6,7 @@ from unittest import TestCase,main
 from tests.test_mes_causal_pda_service import rows,source_config
 from tests.test_mes_causal_v14_stream import config,modify,channel_choices
 from scripts.mes_causal_v14_stream import OnlineDetector
-from scripts.mes_causal_context import ContextDetector
+from scripts.mes_causal_context import ContextDetector,fit_profile,MODES
 
 
 def profile():
@@ -83,4 +83,28 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
 
+    def test_full_capacity_queue_is_not_an_out_of_range_fault(self):
+        p=profile();p['capacities']={'EQ-0009':1,'EQ-0010':1};d=ContextDetector(config(),p);d.config_id=p['source_config_id'];data=source_rows()
+        for i,f in enumerate(data):
+            f['coils']=[dict(coil_id=str(i//4),equipment_id='EQ-0009',position=1.)]
+            next(m for m in f['measurements'] if m['equipment_id']=='EQ-0009' and m['signal']=='cv_queue_len')['value']=100.
+        self.assertFalse(any(d.step(f) for f in data))
+
+    def test_normal_statistics_fit_is_frozen_and_fault_does_not_change_it(self):
+        source=source_config()
+        for e in source['equipment']:
+            e['code']='CV' if e['equipment_id'] in ('EQ-0009','EQ-0010') else 'other';e['coil_capacity']=3
+        data=[]
+        for mode in MODES:
+            speed,load=mode.split(':');batch=source_rows(64)
+            for i,f in enumerate(batch):
+                f['run_id']=mode;f['speed']={'slow':.5,'nominal':1.,'fast':1.5}[speed]
+                f['coils']=[] if load=='empty' else [dict(coil_id=str(i),equipment_id='EQ-0006' if load=='moving' else 'EQ-0009',position=.5 if load=='moving' else 1.)]
+            data.extend(batch)
+        fitted=fit_profile(iter(data),source,config());before=copy.deepcopy(fitted)
+        d=ContextDetector(config(),fitted);d.config_id=fitted['source_config_id'];test=source_rows(150)
+        modify(test,[('EQ-0006','rt_vib_rms')],100,140,8.)
+        self.assertTrue(any('EQ-0006' in d.step(f) for f in test));self.assertEqual(fitted,before)
+        bad=copy.deepcopy(fitted);bad['normal_stats']['nominal:empty'][0][1]=0
+        with self.assertRaises(ValueError):ContextDetector(config(),bad)
 if __name__=='__main__':main()

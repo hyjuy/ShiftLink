@@ -83,6 +83,12 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
 
+    def test_brief_workpiece_queue_mismatch_requires_persistence(self):
+        for duration in (1,2):
+            d=detector();data=source_rows()
+            for i,f in enumerate(data[100:100+duration]):f['coils']=[dict(coil_id=str(i),equipment_id='EQ-0009',position=1.)]
+            self.assertFalse(any('EQ-0009' in d.step(f) for f in data))
+
     def test_replay_without_historical_speed_uses_pooled_normal_context(self):
         d=detector();data=source_rows()
         for f in data:f.pop('speed')

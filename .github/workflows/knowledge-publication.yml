@@ -6,6 +6,17 @@ on:
       - 'shiftlink/rag/**'
       - 'shiftlink/rag2/**'
       - 'tests/*publication*'
+      - 'tests/test_field_history*.py'
+      - 'tests/history_scope_challenge.py'
+      - 'tests/fixtures/field_history_scope_cases.json'
+      - 'tests/fixtures/field_history_integration_cases.json'
+      - 'tests/fixtures/field_history_integration_novel_cases.json'
+      - 'tests/fixtures/field_history_reaudit_cases.json'
+      - 'tests/fixtures/field_history_post67_cases.json'
+      - 'tests/fixtures/field_history_stability_cases.json'
+      - 'tests/fixtures/field_history_stability_context_cases.json'
+      - 'tests/fixtures/field_history_closure_cases.json'
+      - '.github/instructions/knowledge-publication.instructions.md'
       - 'tests/test_embedding_contract.py'
       - 'scripts/check_knowledge_publication.py'
       - 'docs/failures/knowledge-publication-integrity.md'
@@ -34,6 +45,12 @@ jobs:
           -m pytest -q tests/test_knowledge_publication.py tests/test_publication_worker.py
           tests/test_publication_s30h.py tests/test_publication_browser.py tests/test_candidate_management.py
           tests/test_embedding_contract.py tests/test_publication_harness.py
+          tests/test_field_history_boundaries.py tests/test_field_history_intent.py
+          tests/test_field_history_request_scope.py tests/test_field_history_evaluation.py
+          tests/test_s30h_publication_integrity.py
+          tests/test_field_history_residual_scope.py tests/history_scope_challenge.py
+          tests/test_field_history_integration.py
+      # Strict history fixtures: known_issue never exempts a semantic failure.
       - run: python -m coverage report --fail-under=80
       - uses: actions/upload-artifact@v4
         if: always()

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "context-use-H",
+    "question": "교육 자료에 붙일 거라서, 근무일지 결과만 복사해줘.",
+    "history": true,
+    "oracle": "The destination of a verbatim copy adds no new task.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-use-C",
+    "question": "담당자를 다시 정해서 알려주세요, 교육 자료에 붙일 거라서 근무일지 결과도 복사해줘.",
+    "history": false,
+    "oracle": "The independent reassignment before the copy purpose must survive.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-report-H",
+    "question": "재가동 가능 여부는 어제 이미 확인했습니다. 근무일지 결과만 알려줘.",
+    "history": true,
+    "oracle": "Completed confirmation is context for a record lookup.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-report-C",
+    "question": "압력을 보정해, 재가동 가능 여부는 어제 이미 확인했습니다. 근무일지 결과만 알려줘.",
+    "history": false,
+    "oracle": "A bare independent calibration command precedes completed context.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-time-H",
+    "question": "근무일지에서 필터를 교체했던 시각만 알려주세요.",
+    "history": true,
+    "oracle": "Explicit past event time is recorded metadata.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-time-C",
+    "question": "근무일지의 결과를 보고 필터를 교체할 적절한 시각을 알려주세요.",
+    "history": false,
+    "oracle": "The requested time is newly selected, not a completed event.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-plan-H",
+    "question": "근무일지에 기록했던 개선안과 결과를 원문으로 알려주세요.",
+    "history": true,
+    "oracle": "Already recorded proposal and result are copied without new inference.",
+    "family": "independent-context-request"
+  },
+  {
+    "id": "context-plan-C",
+    "question": "근무일지 결과를 바탕으로 개선안을 알려주세요.",
+    "history": false,
+    "oracle": "A proposal derived from results is new analysis, not record copying.",
+    "family": "independent-context-request"
+  }
+]

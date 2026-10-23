@@ -1,0 +1,3359 @@
+[
+  {
+    "id": "union-001",
+    "question": "근무일지에 “밸브를 잠가주세요”라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n01h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-002",
+    "question": "근무일지에 “밸브를 잠가주세요”라고 요청했던 시각과 결과만 알려줘. 밸브를 열어 주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n01c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-003",
+    "question": "근무일지 결과와 시각만 알려줘. 펌프를 정지해 주세요라는 요청은 제외합니다.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n02h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-004",
+    "question": "근무일지 결과와 시각만 알려줘. 펌프를 정지해 주세요라는 요청은 제외합니다. 대신 밸브를 잠가 주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n02c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-005",
+    "question": "근무일지의 “주간 점검을 예약해주세요”라는 요청의 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n03h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-006",
+    "question": "근무일지의 “주간 점검을 예약해주세요”라는 요청의 시각과 결과를 보고 점검 일정을 예약해주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n03c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-007",
+    "question": "근무일지에 “모레 냉각 가능한지”라고 메모했던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n04h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-008",
+    "question": "근무일지에 “모레 냉각 가능한지”라고 메모했던 시각과 결과와 내일 냉각 안전 여부를 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n04c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-009",
+    "question": "근무일지에서 밸브를 잠가줘서 누수가 멎었던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n05h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-010",
+    "question": "근무일지에서 밸브를 잠가줘서 누수가 멎었던 결과와 시각을 보고 운전을 재개해 주십시오",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n05c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-011",
+    "question": "근무일지에 “필터를 교체해줘”라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n06h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      },
+      {
+        "source": "lens1-novel",
+        "id": "n07h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-012",
+    "question": "운전을 중단해주고 근무일지에 “필터를 교체해줘”라고 요청했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n06c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-013",
+    "question": "근무일지에 “필터를 교체해줘”라고 요청했던 시각과 결과만 알려줘. 냉각수를 보충해 주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n07c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-014",
+    "question": "근무일지의 밸브 조치 결과와 담당자만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n08h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-015",
+    "question": "근무일지의 밸브 조치 결과와 필요한 새 조치를 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n08c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-016",
+    "question": "근무일지에 적힌 밸브 점검 내용과 결과를 말해줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n09h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-017",
+    "question": "근무일지의 밸브 점검 결과와 다음 절차를 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n09c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-018",
+    "question": "근무일지 결과와 시각만 알려줘. “밸브를 열어줘”라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n10h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-019",
+    "question": "근무일지 결과와 시각만 알려줘. 밸브를 열어줘 그리고 교체해줘라는 요청은 하지 않아.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n10c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-020",
+    "question": "근무일지 결과와 시각만 알려줘. “펌프를 정지해주세요”라는 요청은 제외해.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n11h",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-021",
+    "question": "근무일지 결과와 시각만 알려줘. 펌프를 정지해주시고 “교체해주세요”라는 요청은 제외해.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens1-novel",
+        "id": "n11c",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-022",
+    "question": "근무일지의 밸브 조절 결과와 담당자만 정리해 주세요",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel01",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-023",
+    "question": "근무일지의 밸브 조절 결과와 담당자만 정리해 주세요. 이어서 밸브를 잠가",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel02",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-024",
+    "question": "근무일지에 '모레 압축기를 가동하세요'라고 기록했던 담당자와 결과만 보여줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel03",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-025",
+    "question": "근무일지에 '모레 압축기를 가동하세요'라고 기록했던 담당자와 결과를 보고 압축기를 가동하십시오",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel04",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-026",
+    "question": "근무일지에 '펌프를 꺼'라고 지시했던 담당자와 결과만 설명해줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel05",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-027",
+    "question": "근무일지에 '펌프를 꺼'라고 지시했던 담당자와 결과를 보고 펌프를 켜",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel06",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-028",
+    "question": "근무일지의 '밸브를 잠가줘'라는 요청의 내용과 담당자만 말해줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel07",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-029",
+    "question": "근무일지의 '밸브를 잠가줘'라는 요청의 내용과 담당자를 보고 밸브를 잠가줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel08",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-030",
+    "question": "근무일지에서 밸브를 조절해줘서 안정됐던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel09",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-031",
+    "question": "근무일지에서 밸브를 조절해줘서 안정됐던 결과와 시각을 보고 밸브를 잠가주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel10",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-032",
+    "question": "근무일지에서 장비를 멈춰줘야 했던 작업의 결과와 담당자는?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel11",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-033",
+    "question": "근무일지에서 장비를 멈춰줘야 했던 작업의 결과와 담당자를 보고 운전을 중지하십시오",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel12",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-034",
+    "question": "근무일지 결과와 담당자만 알려줘. 밸브를 잠가줘라는 요청은 하지 않습니다.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel13",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-035",
+    "question": "근무일지 결과와 담당자만 알려줘. 밸브를 잠가줘라는 요청은 하지 않습니다. 대신 펌프를 켜",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel14",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-036",
+    "question": "근무일지 결과와 담당자만 알려줘. 오늘 가동 가능한지는 묻지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel15",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-037",
+    "question": "근무일지 결과와 담당자만 알려줘. 오늘 가동 가능한지는 묻지 않아. 내일 운전 안전성도 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel16",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-038",
+    "question": "근무일지에서 내일 운전이 안전한지 판단했던 결과와 담당자만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel17",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-039",
+    "question": "근무일지 결과와 내일 운전이 안전한지 판단한 결과와 담당자만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel18",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-040",
+    "question": "근무일지에 '운전해줘'라고 메모했던 담당자와 결과만 알려주세요",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel19",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-041",
+    "question": "근무일지에 '운전해줘'라고 메모했던 담당자와 결과를 보고 운전을 예약해 주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel20",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-042",
+    "question": "근무일지에 '지금 차단해줘'라고 적어둔 결과와 시각만 말해줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel21",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-043",
+    "question": "근무일지에 '지금 차단해줘'라고 적어둔 결과와 시각을 보고 차단하지 말아줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel22",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-044",
+    "question": "근무일지의 결과와 시각만 알려줘; 지금 밸브를 잠가줘라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel23",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-045",
+    "question": "근무일지의 결과와 시각만 알려줘; 지금 밸브를 잠가줘라는 요청은 하지 않아도 운전은 계속해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel24",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-046",
+    "question": "근무일지에 '필터를 씻어줘'라고 요청했던 담당자와 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel25",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-047",
+    "question": "펌프를 가동해줘 그리고 근무일지에 '필터를 씻어줘'라고 요청했던 담당자와 결과만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel26",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-048",
+    "question": "근무일지에 '필터를 씻어줘'라는 요청을 받았던 담당자와 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel27",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-049",
+    "question": "펌프를 가동해줘 근무일지에 '필터를 씻어줘'라는 요청을 받았던 담당자와 결과만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel28",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-050",
+    "question": "근무일지 결과와 시각만 알려줘. 재가동해줘라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel29",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-052",
+    "question": "근무일지의 '밸브를 열어줘'라는 지시의 내용과 시각은?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel31",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-053",
+    "question": "근무일지의 '밸브를 열어줘'라는 지시의 내용과 시각을 보고 다음 달 재가동 일정을 정해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel32",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-054",
+    "question": "근무일지에서 냉각수를 보충해줘서 해결한 결과와 시각은?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel33",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-055",
+    "question": "근무일지 결과를 보고 냉각수를 보충해줘서 해결한 결과가 되도록 만들어줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel34",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-056",
+    "question": "근무일지에 '내일 재시작 가능해'라고 문의했던 담당자와 결과는?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel35",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-057",
+    "question": "근무일지 결과와 다음 주 재시작 가능 여부 판단 결과와 담당자는?",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel36",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-058",
+    "question": "근무일지에서 장비를 멈춰줘서 완료됐던 결과와 담당자만 보여줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel37",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-059",
+    "question": "근무일지 결과와 담당자를 보고 장비를 멈춰",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel38",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-060",
+    "question": "근무일지에 적힌 '압력을 낮춰주세요' 지시의 담당자와 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel39",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-061",
+    "question": "근무일지에 적힌 '압력을 낮춰주세요' 지시의 담당자와 결과를 보고 압력을 낮춰 주시겠어요?",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-novel",
+        "id": "novel40",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-062",
+    "question": "근무일지에 “밸브를 잠가줘”라고 지시했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n001",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-063",
+    "question": "근무일지에 “밸브를 잠가줘”라고 지시했던 결과와 시각을 보고 밸브를 잠가줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n002",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-064",
+    "question": "근무일지 결과와 시각만 알려줘. 밸브를 잠가줘라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.; completed/reference/excluded unknown action verb",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n003",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      },
+      {
+        "source": "lens6-novel",
+        "id": "n003",
+        "history": true,
+        "reason": "completed/reference/excluded unknown action verb"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-065",
+    "question": "근무일지 결과와 시각만 알려줘. 밸브를 잠가줘라는 요청은 하지 않아. 대신 시료를 폐기해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n004",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-066",
+    "question": "근무일지에 “회로를 차단해줘”라고 지시했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n005",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-067",
+    "question": "근무일지에 “회로를 차단해줘”라고 지시했던 결과와 시각을 보고 회로를 차단해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n006",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-068",
+    "question": "근무일지 결과와 시각만 알려줘. 회로를 차단해줘라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n007",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-069",
+    "question": "근무일지 결과와 시각만 알려줘. 회로를 차단해줘라는 요청은 하지 않아. 대신 시료를 폐기해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n008",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-070",
+    "question": "근무일지에 “시료를 채취해 주세요”라고 지시했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n009",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-071",
+    "question": "근무일지에 “시료를 채취해 주세요”라고 지시했던 결과와 시각을 보고 시료를 채취해 주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n010",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-072",
+    "question": "근무일지 결과와 시각만 알려줘. 시료를 채취해 주세요라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n011",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-073",
+    "question": "근무일지 결과와 시각만 알려줘. 시료를 채취해 주세요라는 요청은 하지 않아. 대신 시료를 폐기해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n012",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-074",
+    "question": "근무일지에 “전원을 격리하십시오”라고 지시했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n013",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-075",
+    "question": "근무일지에 “전원을 격리하십시오”라고 지시했던 결과와 시각을 보고 전원을 격리하십시오",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n014",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-076",
+    "question": "근무일지 결과와 시각만 알려줘. 전원을 격리하십시오라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n015",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-077",
+    "question": "근무일지 결과와 시각만 알려줘. 전원을 격리하십시오라는 요청은 하지 않아. 대신 시료를 폐기해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n016",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-078",
+    "question": "근무일지에서 밸브를 잠가줘서 압력이 안정됐던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n017",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-079",
+    "question": "근무일지 결과를 보고 밸브를 잠가줘서 압력이 안정되게 해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n018",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-080",
+    "question": "근무일지 결과와 시각만 알려줘. 밸브를 잠가",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n019",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-081",
+    "question": "근무일지 결과와 시각만 알려줘. 밸브를 잠가 주시기 바랍니다",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n020",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-082",
+    "question": "근무일지 결과와 시각만 알려줘. 내주 화요일 작업 시간을 정해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n021",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-083",
+    "question": "근무일지에 “밸브를 잠가”라고 메모했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n022",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-084",
+    "question": "근무일지 결과와 시각을 알려줘 그리고 밸브를 잠가줘 그리고 어제 점검했던 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n023",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-085",
+    "question": "근무일지 결과와 내일 운전 안전성을 알려주고 어제 점검했던 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n024",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-086",
+    "question": "근무일지에서 어제 밸브를 잠가준 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n025",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-087",
+    "question": "근무일지에서 어제 밸브를 잠갔다는 기록의 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens3-novel",
+        "id": "n026",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-088",
+    "question": "근무일지에 '모터를 정비해줘'라고 기록했던 결과와 담당자만 알려주세요",
+    "history": true,
+    "oracle": "completed reported instruction",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n01",
+        "history": true,
+        "reason": "completed reported instruction"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-089",
+    "question": "근무일지에 '모터를 정비해줘'라고 기록했던 결과와 담당자를 보고 모터를 정비해줘",
+    "history": false,
+    "oracle": "new independent request",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n02",
+        "history": false,
+        "reason": "new independent request"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-090",
+    "question": "근무일지에 '밸브를 잠가주세요'라고 기록했던 결과와 담당자만 알려주세요",
+    "history": true,
+    "oracle": "completed reported instruction",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n03",
+        "history": true,
+        "reason": "completed reported instruction"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-091",
+    "question": "근무일지에 '밸브를 잠가주세요'라고 기록했던 결과와 담당자를 보고 밸브를 잠가주세요",
+    "history": false,
+    "oracle": "new independent request",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n04",
+        "history": false,
+        "reason": "new independent request"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-092",
+    "question": "근무일지에 '라인을 재가동시켜 주십시오'라고 기록했던 결과와 담당자만 알려주세요",
+    "history": true,
+    "oracle": "completed reported instruction",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n05",
+        "history": true,
+        "reason": "completed reported instruction"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-093",
+    "question": "근무일지에 '라인을 재가동시켜 주십시오'라고 기록했던 결과와 담당자를 보고 라인을 재가동시켜 주십시오",
+    "history": false,
+    "oracle": "new independent request",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n06",
+        "history": false,
+        "reason": "new independent request"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-094",
+    "question": "근무일지에 '설정을 초기화해 주시겠어요?'라고 기록했던 결과와 담당자만 알려주세요",
+    "history": true,
+    "oracle": "completed reported instruction",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n07",
+        "history": true,
+        "reason": "completed reported instruction"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-095",
+    "question": "근무일지에 '설정을 초기화해 주시겠어요?'라고 기록했던 결과와 담당자를 보고 설정을 초기화해 주시겠어요?",
+    "history": false,
+    "oracle": "new independent request",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n08",
+        "history": false,
+        "reason": "new independent request"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-096",
+    "question": "근무일지에서 밸브를 열어줘서 복구했던 결과와 담당자만 알려줘",
+    "history": true,
+    "oracle": "novel past or excluded scope",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n09",
+        "history": true,
+        "reason": "novel past or excluded scope"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-097",
+    "question": "근무일지에서 밸브를 열어줘서 복구했던 결과와 담당자만 알려줘 대신 모터를 정비해줘",
+    "history": false,
+    "oracle": "append unseen action",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n10",
+        "history": false,
+        "reason": "append unseen action"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-098",
+    "question": "근무일지에서 내일 정비 가능 여부를 문의했던 결과와 담당자만 알려줘",
+    "history": true,
+    "oracle": "novel past or excluded scope",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n11",
+        "history": true,
+        "reason": "novel past or excluded scope"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-099",
+    "question": "근무일지에서 내일 정비 가능 여부를 문의했던 결과와 담당자만 알려줘 대신 모터를 정비해줘",
+    "history": false,
+    "oracle": "append unseen action",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n12",
+        "history": false,
+        "reason": "append unseen action"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-100",
+    "question": "근무일지의 결과와 시각만 알려줘. 모터를 정비해줘라는 요청은 하지 않는다.",
+    "history": true,
+    "oracle": "novel past or excluded scope",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n13",
+        "history": true,
+        "reason": "novel past or excluded scope"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-101",
+    "question": "근무일지의 결과와 시각만 알려줘. 모터를 정비해줘라는 요청은 하지 않는다. 대신 모터를 정비해줘",
+    "history": false,
+    "oracle": "append unseen action",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n14",
+        "history": false,
+        "reason": "append unseen action"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-102",
+    "question": "근무일지의 결과와 시각만 알려줘. 모터를 정비해줘라는 지시는 제외합니다.",
+    "history": true,
+    "oracle": "novel past or excluded scope",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n15",
+        "history": true,
+        "reason": "novel past or excluded scope"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-103",
+    "question": "근무일지의 결과와 시각만 알려줘. 모터를 정비해줘라는 지시는 제외합니다. 대신 모터를 정비해줘",
+    "history": false,
+    "oracle": "append unseen action",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n16",
+        "history": false,
+        "reason": "append unseen action"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-104",
+    "question": "근무일지 결과와 시각을 보고 모터를 가동해줘. '내일 정비 가능해'라고 기록했던 결과와 시각도 알려줘",
+    "history": false,
+    "oracle": "active instruction precedes completed report",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n17",
+        "history": false,
+        "reason": "active instruction precedes completed report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-105",
+    "question": "근무일지 결과와 시각을 보고 모터를 가동해주고 '내일 정비 가능해'라고 기록했던 결과와 시각도 알려줘",
+    "history": false,
+    "oracle": "active instruction precedes report without sentence boundary",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n18",
+        "history": false,
+        "reason": "active instruction precedes report without sentence boundary"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-106",
+    "question": "근무일지의 지난 작업 시각과 결과를 알려준 뒤 지금 밸브를 잠가줘",
+    "history": false,
+    "oracle": "retrieval before new unfamiliar imperative",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n19",
+        "history": false,
+        "reason": "retrieval before new unfamiliar imperative"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-107",
+    "question": "근무일지에서 교체 순서와 결과만 알려줘. 온도를 조절해주세요",
+    "history": false,
+    "oracle": "unseen action with no time hint",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n20",
+        "history": false,
+        "reason": "unseen action with no time hint"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-108",
+    "question": "근무일지에서 당시 정비했던 담당자와 결과는?",
+    "history": true,
+    "oracle": "completed maintenance worker",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n21",
+        "history": true,
+        "reason": "completed maintenance worker"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-109",
+    "question": "근무일지의 담당자와 결과를 보고 다음 달 정비를 예약해줘",
+    "history": false,
+    "oracle": "new scheduling",
+    "sources": [
+      {
+        "source": "lens4-novel",
+        "id": "n22",
+        "history": false,
+        "reason": "new scheduling"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-110",
+    "question": "근무일지의 점검 결과와 담당자만 말해줘.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n01",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-111",
+    "question": "밸브를 잠가 주세요. 근무일지의 점검 결과와 담당자만 말해줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n02",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-112",
+    "question": "근무일지에 “밸브를 잠가 주세요”라고 기록했던 시간과 결과만 알려줘.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n03",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-113",
+    "question": "밸브를 잠가 주세요. 그리고 근무일지에 “밸브를 잠가 주세요”라고 기록했던 시간과 결과만 알려줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n04",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-114",
+    "question": "근무일지 결과와 담당자만 알려줘. 밸브를 잠가 주세요라는 요청은 하지 않아.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n05",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-115",
+    "question": "모터를 분해해 주십시오. 근무일지 결과와 담당자만 알려줘. 밸브를 잠가 주세요라는 요청은 하지 않아.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n06",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-116",
+    "question": "근무일지의 “밸브를 잠가 주세요”라는 지시의 시간과 결과는?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n07",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-117",
+    "question": "근무일지의 “밸브를 잠가 주세요”라는 지시의 시간과 결과를 보고 잠금 시각을 정해줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n08",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-118",
+    "question": "근무일지에 “나중에 밸브 교체 가능해”라고 메모했던 시간과 결과만 알려줘.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n09",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-119",
+    "question": "근무일지에 “나중에 밸브 교체 가능해”라고 메모했던 시간과 결과를 보고 다음 주 안전성을 검토해 주세요.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n10",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-120",
+    "question": "근무일지에서 수리를 도와줘서 정상화됐던 결과와 시각은?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n11",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-121",
+    "question": "근무일지 결과를 보고 수리를 도와줘서 정상화된 결과가 되게 해줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n12",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-122",
+    "question": "근무일지에 “다음 교대 가동 가능해”라고 적어둔 시각과 결과는?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n13",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-123",
+    "question": "근무일지 결과와 다음 교대 가동 가능 여부를 알려줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n14",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-124",
+    "question": "근무일지의 결과와 시각만 알려줘. 밸브를 잠가 주세요라는 지시는 제외해.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n15",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-125",
+    "question": "모터를 분해해줘 그리고 근무일지의 결과와 시각만 알려줘. 밸브를 잠가 주세요라는 지시는 제외해.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n16",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-126",
+    "question": "근무일지 결과와 시각만 알려줘.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n17",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-127",
+    "question": "근무일지 결과와 시각을 보고 새 작업을 예약해줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n18",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-128",
+    "question": "근무일지에 “새 작업을 예약해줘”라고 요청했던 결과와 시각만 알려줘.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n19",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-129",
+    "question": "새 작업을 예약해줘 그리고 근무일지에 “새 작업을 예약해줘”라고 요청했던 결과와 시각만 알려줘.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n20",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-130",
+    "question": "근무일지 결과와 시각만 알려줘. 교체해줘라는 요청은 제외해.",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n21",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-131",
+    "question": "펌프를 가동해줘 근무일지 결과와 시각만 알려줘 교체해줘라는 요청은 제외해.",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n22",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-132",
+    "question": "과거 근무일지에서 모레 교체 가능한지 검토했던 시각과 결과는?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n23",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-133",
+    "question": "내일 펌프를 가동해줘 근무일지에서 모레 교체 가능한지 검토했던 시각과 결과는?",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens5-novel",
+        "id": "n24",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-134",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": true,
+    "oracle": "completed/reference/excluded unknown action verb",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n001",
+        "history": true,
+        "reason": "completed/reference/excluded unknown action verb"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-135",
+    "question": "근무일지에 '압력을 내려줘'라고 요청했던 결과와 시각만 말해줘",
+    "history": true,
+    "oracle": "completed/reference/excluded unknown action verb",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n002",
+        "history": true,
+        "reason": "completed/reference/excluded unknown action verb"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-136",
+    "question": "근무일지 결과와 시각만 알려줘. 팬을 꺼줘라는 지시는 제외해.",
+    "history": true,
+    "oracle": "completed/reference/excluded unknown action verb",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n004",
+        "history": true,
+        "reason": "completed/reference/excluded unknown action verb"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-137",
+    "question": "근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "completed/reference/excluded unknown action verb",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n005",
+        "history": true,
+        "reason": "completed/reference/excluded unknown action verb"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-138",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 밸브를 잠가줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n006",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-139",
+    "question": "밸브를 잠가줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n007",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-140",
+    "question": "밸브를 잠가줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n008",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-141",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 밸브를 닫아줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n009",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-142",
+    "question": "밸브를 닫아줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n010",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-143",
+    "question": "밸브를 닫아줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n011",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-144",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 팬을 꺼줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n012",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-145",
+    "question": "팬을 꺼줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n013",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-146",
+    "question": "팬을 꺼줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n014",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-147",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 절차를 공유해줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n015",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-148",
+    "question": "절차를 공유해줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n016",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-149",
+    "question": "절차를 공유해줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n017",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-150",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 수리를 예약해줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n018",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-151",
+    "question": "수리를 예약해줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n019",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-152",
+    "question": "수리를 예약해줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n020",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-153",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 라인을 비워줘",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n021",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-154",
+    "question": "라인을 비워줘. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n022",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-155",
+    "question": "라인을 비워줘 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n023",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-156",
+    "question": "근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘. 압력을 내려 주십시오",
+    "history": false,
+    "oracle": "unseen independent action after history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n024",
+        "history": false,
+        "reason": "unseen independent action after history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-157",
+    "question": "압력을 내려 주십시오. 근무일지에 '밸브를 잠가줘'라고 메모했던 결과와 시각만 보여줘",
+    "history": false,
+    "oracle": "order inversion: action before history",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n025",
+        "history": false,
+        "reason": "order inversion: action before history"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-158",
+    "question": "압력을 내려 주십시오 그리고 근무일지에 밸브를 닫아줘라고 기록했던 시각과 결과만 알려줘",
+    "history": false,
+    "oracle": "same sentence action before unquoted report",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n026",
+        "history": false,
+        "reason": "same sentence action before unquoted report"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-159",
+    "question": "근무일지 결과와 시각을 보고 밸브를 닫아",
+    "history": false,
+    "oracle": "bare action ending / fulfillment",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n027",
+        "history": false,
+        "reason": "bare action ending / fulfillment"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-160",
+    "question": "밸브를 닫아. 근무일지 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "bare action before retrieval",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n028",
+        "history": false,
+        "reason": "bare action before retrieval"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-161",
+    "question": "근무일지 결과와 시각을 보고 팬을 꺼",
+    "history": false,
+    "oracle": "bare action ending / fulfillment",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n029",
+        "history": false,
+        "reason": "bare action ending / fulfillment"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-162",
+    "question": "팬을 꺼. 근무일지 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "bare action before retrieval",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n030",
+        "history": false,
+        "reason": "bare action before retrieval"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-163",
+    "question": "근무일지 결과와 시각을 보고 라인을 비워",
+    "history": false,
+    "oracle": "bare action ending / fulfillment",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n031",
+        "history": false,
+        "reason": "bare action ending / fulfillment"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-164",
+    "question": "라인을 비워. 근무일지 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "bare action before retrieval",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n032",
+        "history": false,
+        "reason": "bare action before retrieval"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-165",
+    "question": "근무일지 결과와 시각을 보고 수리를 예약 바랍니다",
+    "history": false,
+    "oracle": "bare action ending / fulfillment",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n033",
+        "history": false,
+        "reason": "bare action ending / fulfillment"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-166",
+    "question": "수리를 예약 바랍니다. 근무일지 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "bare action before retrieval",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n034",
+        "history": false,
+        "reason": "bare action before retrieval"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-167",
+    "question": "근무일지 결과와 시각만 알려줘. 다음 주에 팬을 켜도 안전할지 알려줘",
+    "history": false,
+    "oracle": "future safety retrieval predicate",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n035",
+        "history": false,
+        "reason": "future safety retrieval predicate"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-168",
+    "question": "내일 팬을 켜도 안전할지 알려줘. 근무일지 결과와 시각만 알려줘",
+    "history": false,
+    "oracle": "safety first order inversion",
+    "sources": [
+      {
+        "source": "lens6-novel",
+        "id": "n036",
+        "history": false,
+        "reason": "safety first order inversion"
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-169",
+    "question": "근무일지의 밸브 교체 결과만 요약해줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout01",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-170",
+    "question": "근무일지의 밸브 교체 결과만 설명해 주시겠어요?",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout02",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-171",
+    "question": "근무일지에 \"가동해줘\"라고 적어 놓았던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout03",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-172",
+    "question": "근무일지에 \"가동해줘\"라고 써둔 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout04",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-173",
+    "question": "근무일지에 \"가동해줘\"라고 전달했던 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout05",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-174",
+    "question": "근무일지 결과와 펌프 가동 계획을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout06",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-175",
+    "question": "근무일지 결과를 바탕으로 다음 해 교체 일정을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout07",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-176",
+    "question": "근무일지 결과를 보고 이번 주 점검 시각을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout08",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-177",
+    "question": "근무일지 결과와 시각을 참고해서 가동 예약을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout09",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-178",
+    "question": "펌프를 켜고 근무일지에 \"교체해줘\"라고 요청했던 결과와 시각을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout10",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-179",
+    "question": "펌프를 켜 근무일지에 \"교체해줘\"라고 요청했던 결과와 시각을 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout11",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-180",
+    "question": "근무일지 결과를 보고 압축기를 돌리세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout12",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-181",
+    "question": "근무일지 결과를 보고 펌프를 멈추시오",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout13",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-182",
+    "question": "근무일지 결과와 차주 점검 가능 여부를 알려줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout14",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-183",
+    "question": "근무일지 결과와 향후 재가동 안전 여부를 설명해줘",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout15",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-184",
+    "question": "근무일지에 \"펌프를 켜\"라고 지시했던 결과와 시각을 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout16",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-185",
+    "question": "근무일지의 \"펌프를 켜\"라는 지시의 결과와 시각만 알려줘",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout17",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-186",
+    "question": "근무일지의 \"펌프를 켜\"라는 지시의 결과와 시각을 보고 펌프를 멈춰",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout18",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-187",
+    "question": "근무일지 결과를 보고 장비를 재가동하도록 해주세요",
+    "history": false,
+    "oracle": "Explicit author oracle retained: independent current/future request.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout19",
+        "history": false,
+        "reason": "Explicit author oracle retained: independent current/future request."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-188",
+    "question": "근무일지에서 장비를 멈춰줘서 완료했던 결과와 시각을 보여주세요",
+    "history": true,
+    "oracle": "Explicit author oracle retained: completed record lookup.",
+    "sources": [
+      {
+        "source": "lens2-holdout",
+        "id": "holdout20",
+        "history": true,
+        "reason": "Explicit author oracle retained: completed record lookup."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-189",
+    "question": "근무일지에 “다음 달 가동해줘”라고 전했던 당시 시각과 결과만 보여주세요",
+    "history": true,
+    "oracle": "Future words are inside a completed historical report; asks only recorded fields.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h01",
+        "history": true,
+        "reason": "Future words are inside a completed historical report; asks only recorded fields."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-190",
+    "question": "근무일지에서 펌프를 켰다고 적어 놓았던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Completed past recording; no live operation requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h02",
+        "history": true,
+        "reason": "Completed past recording; no live operation requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-191",
+    "question": "근무일지 결과와 시각만 보여줘. 지금 가동할 수 있는지는 질문하지 않겠습니다.",
+    "history": true,
+    "oracle": "Current availability question explicitly excluded; only historical record retrieval remains.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h03",
+        "history": true,
+        "reason": "Current availability question explicitly excluded; only historical record retrieval remains."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-192",
+    "question": "근무일지에 ‘정지시키십시오’라는 지시를 받았었던 시각과 결과만 알려줘.",
+    "history": true,
+    "oracle": "Honorific instruction belongs to an explicitly completed received-reference.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h04",
+        "history": true,
+        "reason": "Honorific instruction belongs to an explicitly completed received-reference."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-193",
+    "question": "근무일지에서 밸브를 닫아줘서 누유가 멈췄던 결과와 시각을 보여줘.",
+    "history": true,
+    "oracle": "Completed causal result, with only record retrieval requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h05",
+        "history": true,
+        "reason": "Completed causal result, with only record retrieval requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-194",
+    "question": "현재 안전성을 판단하지 말고 근무일지 담당자와 시각만 찾아줘.",
+    "history": true,
+    "oracle": "Live safety judgement explicitly excluded; recorded worker and time requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h06",
+        "history": true,
+        "reason": "Live safety judgement explicitly excluded; recorded worker and time requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-195",
+    "question": "근무일지에 “당장 밸브를 닫아주세요”라고 부탁했던 담당자와 시각을 보여줘.",
+    "history": true,
+    "oracle": "Immediate command is inside a completed past request report.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h07",
+        "history": true,
+        "reason": "Immediate command is inside a completed past request report."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-196",
+    "question": "근무일지에서 교체를 해줘야 했다고 기록한 담당자와 결과만 알려줘.",
+    "history": true,
+    "oracle": "Obligation was historically recorded; no new obligation judgement requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h08",
+        "history": true,
+        "reason": "Obligation was historically recorded; no new obligation judgement requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-197",
+    "question": "근무일지 결과만 찾아줘. 가동하라는 새 지시를 부탁하는 것은 아닙니다.",
+    "history": true,
+    "oracle": "New instruction explicitly disclaimed; only record result requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h09",
+        "history": true,
+        "reason": "New instruction explicitly disclaimed; only record result requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-198",
+    "question": "근무일지에 '펌프를 가동해줘'라고 전달했었던 시각과 담당자만 조회해줘.",
+    "history": true,
+    "oracle": "Completed transmission of a quoted instruction; only recorded fields requested.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h10",
+        "history": true,
+        "reason": "Completed transmission of a quoted instruction; only recorded fields requested."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-199",
+    "question": "근무일지에서 과거에 교체했던 조치의 결과와 담당자를 요약해줘.",
+    "history": true,
+    "oracle": "Explicitly historical extraction request; no independent current decision or action.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h11",
+        "history": true,
+        "reason": "Explicitly historical extraction request; no independent current decision or action."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-200",
+    "question": "근무일지에서 필터를 교체한 다음 정상 운전을 확인했던 순서와 시각은?",
+    "history": true,
+    "oracle": "The action sequence is explicitly completed; requests historical sequence and times.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-h12",
+        "history": true,
+        "reason": "The action sequence is explicitly completed; requests historical sequence and times."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-201",
+    "question": "펌프를 가동해주시고, 근무일지에 ‘교체해주세요’라고 요청했던 결과와 시각만 알려줘.",
+    "history": false,
+    "oracle": "Independent honorific operation before the historical report must reach judgement.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c01",
+        "history": false,
+        "reason": "Independent honorific operation before the historical report must reach judgement."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-202",
+    "question": "근무일지에 ‘진행해줘’라고 기록했던 시각을 알려준 뒤 펌프를 차단해 주십시오.",
+    "history": false,
+    "oracle": "Independent current stop instruction follows historical retrieval.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c02",
+        "history": false,
+        "reason": "Independent current stop instruction follows historical retrieval."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-203",
+    "question": "근무일지 결과와 내일 점검 시간을 예약해줘.",
+    "history": false,
+    "oracle": "Explicit future scheduling instruction.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c03",
+        "history": false,
+        "reason": "Explicit future scheduling instruction."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-204",
+    "question": "근무일지 결과와 펌프의 가동 예정 시각이 언제인지 알려줘.",
+    "history": false,
+    "oracle": "Prospective planned operation time, not a completed log timestamp.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c04",
+        "history": false,
+        "reason": "Prospective planned operation time, not a completed log timestamp."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-205",
+    "question": "근무일지 결과를 보고 펌프를 돌려줘서 필요한 기록이 생기도록 해줘.",
+    "history": false,
+    "oracle": "Live operation and requested future outcome, not completed causal history.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c05",
+        "history": false,
+        "reason": "Live operation and requested future outcome, not completed causal history."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-206",
+    "question": "근무일지의 ‘재개해줘’라는 요청을 받았던 시각을 확인하고 새 가동 시각을 잡아줘.",
+    "history": false,
+    "oracle": "A new operation schedule is requested after the completed reference.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c06",
+        "history": false,
+        "reason": "A new operation schedule is requested after the completed reference."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-207",
+    "question": "근무일지 결과와 내일의 정지 계획을 알려줘.",
+    "history": false,
+    "oracle": "Explicit future plan alongside records.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c07",
+        "history": false,
+        "reason": "Explicit future plan alongside records."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-208",
+    "question": "현재 상태는 묻지 말고 근무일지 결과와 다음 교대 가동 안전성도 확인해줘.",
+    "history": false,
+    "oracle": "Excluding present state must not hide a separate future safety assessment.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c08",
+        "history": false,
+        "reason": "Excluding present state must not hide a separate future safety assessment."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-209",
+    "question": "근무일지 결과와 펌프 가동 허용 여부를 알려줘.",
+    "history": false,
+    "oracle": "Live permission judgement remains requested without an explicit time marker.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c09",
+        "history": false,
+        "reason": "Live permission judgement remains requested without an explicit time marker."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-210",
+    "question": "근무일지 결과와 지금 필터를 교체하지 않아도 되는지 알려줘.",
+    "history": false,
+    "oracle": "A negative current permission question is still a live decision.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c10",
+        "history": false,
+        "reason": "A negative current permission question is still a live decision."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-211",
+    "question": "근무일지 결과를 참고해 새 정지 절차를 설명해줘.",
+    "history": false,
+    "oracle": "A new procedure is requested; not merely historical record extraction.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c11",
+        "history": false,
+        "reason": "A new procedure is requested; not merely historical record extraction."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "union-212",
+    "question": "먼저 펌프를 멈춰줘. 근무일지에서 교체를 완료했던 시각과 결과도 알려줘.",
+    "history": false,
+    "oracle": "An explicit independent operation in an earlier sentence must not be swallowed by the later report.",
+    "sources": [
+      {
+        "source": "central-holdout",
+        "id": "central-c12",
+        "history": false,
+        "reason": "An explicit independent operation in an earlier sentence must not be swallowed by the later report."
+      }
+    ],
+    "family": "cross-lens"
+  },
+  {
+    "id": "judge-h01",
+    "question": "근무일지에 “이번 주 시료를 채취해줘”라고 전달했던 담당자와 결과만 요약해 주세요.",
+    "history": true,
+    "oracle": "Future time is reported in completed speech; summary of recorded fields only.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-h02",
+    "question": "근무일지에서 밸브를 잠가줘서 오염이 줄었던 결과와 담당자를 설명해줘.",
+    "history": true,
+    "oracle": "Completed causal event; explanatory lookup of recorded fields only.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-h03",
+    "question": "근무일지 결과와 시각만 조회해줘. 압력을 낮춰 주세요라는 요청은 제외합니다.",
+    "history": true,
+    "oracle": "Single explicit excluded command; remaining record retrieval only.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-h04",
+    "question": "근무일지에서 가동 계획을 기록했던 시각과 결과만 알려줘.",
+    "history": true,
+    "oracle": "Plan is inside completed recorded event, not a new schedule request.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-h05",
+    "question": "근무일지에 ‘새 절차를 공유해 주세요’라는 요청을 받았었던 담당자와 시각만 정리해줘.",
+    "history": true,
+    "oracle": "Received instruction has explicit completed reference scope.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-h06",
+    "question": "근무일지에 “모레 재가동 허용 여부를 알려줘”라고 써둔 시각과 결과만 보여주세요.",
+    "history": true,
+    "oracle": "Permission request is quoted completed record content, not live permission.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c01",
+    "question": "근무일지에서 펌프를 가동해주시고 어제 점검했던 결과와 시각만 알려줘.",
+    "history": false,
+    "oracle": "Independent honorific operation must not be swallowed by later past attributive.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c02",
+    "question": "근무일지 결과를 보고 밸브를 조절해줘 그리고 어제 기록했던 결과와 시각만 알려줘.",
+    "history": false,
+    "oracle": "Independent imperative precedes later completed record in another conjunction clause.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c03",
+    "question": "근무일지 결과만 알려줘. 펌프를 켜고 교체해줘라는 요청은 제외해.",
+    "history": false,
+    "oracle": "Bare independent operation before excluded command remains live.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c04",
+    "question": "근무일지 결과만 알려줘. 펌프를 켜 교체해줘라는 요청은 제외해.",
+    "history": false,
+    "oracle": "Bare independent operation cannot borrow final exclusion certificate.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c05",
+    "question": "근무일지에서 장비를 멈춰주시고 기록했던 시각과 결과만 알려줘.",
+    "history": false,
+    "oracle": "Honorific active request inside record-prefixed clause before completed report remains live.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c06",
+    "question": "근무일지 결과와 새 밸브 정비 계획을 정리해줘.",
+    "history": false,
+    "oracle": "New plan requested in addition to recorded result.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c07",
+    "question": "근무일지에 “새 절차를 공유해줘”라고 요청했던 담당자를 알려준 뒤 해당 절차를 공유해 주세요.",
+    "history": false,
+    "oracle": "Independent fulfilment request follows historical speech report.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c08",
+    "question": "근무일지 결과와 다음 해의 점검 예정 시각을 요약해줘.",
+    "history": false,
+    "oracle": "Prospective schedule remains live despite summary verb.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c09",
+    "question": "근무일지 결과만 조회해줘. ‘교체해주세요’라는 요청은 제외해. 시료를 추출해 주시기 바랍니다.",
+    "history": false,
+    "oracle": "Unfamiliar action root and honorific fulfilment after exclusion remain live.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c10",
+    "question": "근무일지 결과와 밸브를 열어도 되는지 설명해줘.",
+    "history": false,
+    "oracle": "Untimed permission question, not completed historical extraction.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c11",
+    "question": "새 작업을 수행해주시고 근무일지에 ‘가동해주세요’라고 전달했던 담당자와 시각만 알려줘.",
+    "history": false,
+    "oracle": "Independent honorific request precedes completed record report.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  },
+  {
+    "id": "judge-c12",
+    "question": "근무일지 결과만 알려줘. 기계를 돌려줘서 새 관찰 결과가 만들어지도록 해주세요.",
+    "history": false,
+    "oracle": "Desired future outcome differs from completed causal history.",
+    "family": "judge-holdout",
+    "sources": [
+      "judge-independent"
+    ]
+  }
+]

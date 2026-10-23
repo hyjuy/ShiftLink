@@ -1,0 +1,1010 @@
+[
+  {
+    "id": "minimal-01h",
+    "question": "내일 인계 자료에 그대로 붙일 거야. 근무일지에 적힌 조치 순서와 결과 원문만 읽어줘.",
+    "history": true,
+    "family": "future-copy-purpose",
+    "oracle": "Tomorrow describes reuse of an existing copy; the sole requested output is the recorded action/result text.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-01c",
+    "question": "내일 인계 자료를 만들 거야. 근무일지에 적힌 조치 순서와 결과를 바탕으로 다음 교대의 작업 순서를 새로 짜줘.",
+    "history": false,
+    "family": "future-copy-purpose",
+    "oracle": "The second clause explicitly requests a new next-shift work plan derived from the record.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-02h",
+    "question": "담당 배정은 이미 끝났어. 근무일지에 기록된 작업자와 작업 시각만 그대로 알려줘.",
+    "history": true,
+    "family": "assignment-scope",
+    "oracle": "Assignment is explicitly completed; only recorded worker/time are requested.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-02c",
+    "question": "근무일지에 기록된 작업자와 작업 시각을 읽어줘. 이번 필터 교체는 그중 누구에게 맡길지도 정해줘.",
+    "history": false,
+    "family": "assignment-scope",
+    "oracle": "An independent second-clause request chooses a worker for a new filter replacement and must retain MES/model judgement.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-03h",
+    "question": "운전 시간 계산은 내가 할게. 근무일지에 쓰인 시작 시각과 종료 시각 원문만 읽어줘.",
+    "history": true,
+    "family": "calculation-scope",
+    "oracle": "The user reserves calculation to themselves; the requested object is the two stored timestamps.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-03c",
+    "question": "근무일지에 쓰인 시작 시각과 종료 시각을 읽어줘. 두 시각 사이가 몇 분인지 계산한 값도 알려줘.",
+    "history": false,
+    "family": "calculation-scope",
+    "oracle": "The independent second clause requests a newly computed duration, beyond verbatim retrieval.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-04h",
+    "question": "두 기록의 비교는 끝냈어. 근무일지에 남은 필터 교체 결과 문장만 원문으로 옮겨줘.",
+    "history": true,
+    "family": "comparison-scope",
+    "oracle": "Comparison is explicitly completed and the output is only a literal stored result sentence.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-04c",
+    "question": "근무일지에 남은 필터 교체 결과 문장을 읽어줘. 지난번 결과와 비교해서 어느 쪽 조치가 더 나았는지도 알려줘.",
+    "history": false,
+    "family": "comparison-scope",
+    "oracle": "The second clause requests a new effectiveness comparison and ranking.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-05h",
+    "question": "지금 상태 판단은 따로 받았어. 근무일지에서 검증자가 남긴 137분 관찰 문장만 보여줘.",
+    "history": true,
+    "family": "judgement-scope",
+    "oracle": "Present judgement is already obtained; only the verifier's stored observation is requested.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-05c",
+    "question": "근무일지에서 검증자가 남긴 137분 관찰 문장만 보여줘. 그 관찰을 근거로 지금도 계속 운전해도 되는지 판단해줘.",
+    "history": false,
+    "family": "judgement-scope",
+    "oracle": "A separate second clause requests present continued-operation permission.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-06h",
+    "question": "보고서에 인용할 문구를 찾고 있어. 근무일지에 기록된 정상 운전 확인 내용만 글자 그대로 복사해줘.",
+    "history": true,
+    "family": "report-purpose",
+    "oracle": "Report use is an inert purpose; the requested output remains a literal recorded passage.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "minimal-06c",
+    "question": "보고서에 넣을 결론을 만들고 있어. 근무일지에 기록된 정상 운전 확인 내용을 바탕으로 재발 위험 등급을 정해서 알려줘.",
+    "history": false,
+    "family": "report-purpose",
+    "oracle": "The requested output is a newly assigned recurrence-risk grade, not stored report text.",
+    "ambiguity_status": "firm",
+    "audit_lens": 1,
+    "sources": [
+      "independent-67-lens-1"
+    ]
+  },
+  {
+    "id": "lens2-h01",
+    "question": "검수된 근무일지를 펼쳐서 조치 담당자와 수행 시각이 적힌 부분을 보여 주시겠습니까?",
+    "history": true,
+    "family": "formal-view",
+    "oracle": "Stored worker and timestamps only; formal viewing request adds no new judgement.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-h02",
+    "question": "근무일지의 관찰 결과란을 원문 그대로 받아 적을 수 있게 읽어 주십시오.",
+    "history": true,
+    "family": "formal-transcription",
+    "oracle": "Read the existing observation field verbatim for transcription.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-h03",
+    "question": "인계 자료에 붙여 넣으려니 근무일지에 남아 있는 교체 단계와 결과를 한 글자도 바꾸지 말고 옮겨 적어 주세요.",
+    "history": true,
+    "family": "copy-purpose",
+    "oracle": "Copy stored steps and results verbatim; document reuse is inert.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-h04",
+    "question": "근무일지에서 검증자가 09:10과 09:20에 각각 적은 조치 내용은 어떻게 되어 있습니까?",
+    "history": true,
+    "family": "record-fields",
+    "oracle": "Look up stored worker, timestamps and actions with no calculation or present decision.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-h05",
+    "question": "내일 교육 자료로 쓸 예정입니다. 근무일지의 137분 연속 운전 관찰 문장을 그대로 복사해 주십시오.",
+    "history": true,
+    "family": "future-copy",
+    "oracle": "Tomorrow modifies intended use of an existing copy, not an equipment decision.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-h06",
+    "question": "근무일지에서 필터 교체가 끝난 뒤 남긴 관찰 결과와 작업자 이름을 열람하고 싶습니다.",
+    "history": true,
+    "family": "view-morphology",
+    "oracle": "Desire to view existing observations and worker identity only.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c01",
+    "question": "근무일지의 조치 시각을 보고 다음 교대의 필터 점검 시간을 정해 주십시오.",
+    "history": false,
+    "family": "new-planning",
+    "oracle": "Use recorded times to make a new next-shift schedule.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c02",
+    "question": "검수된 근무일지의 137분 관찰 결과가 지금 운전 조건에도 유효한지 검토해 주시겠습니까?",
+    "history": false,
+    "family": "present-validity",
+    "oracle": "New judgement about applicability to current operation conditions.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c03",
+    "question": "근무일지의 조치 내용은 참고만 하고, 이번에는 필터를 청소할지 교체할지 골라 주세요.",
+    "history": false,
+    "family": "new-selection",
+    "oracle": "Reference scope leaves an independent current choice between two actions.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c04",
+    "question": "근무일지의 관찰 결과와 지금 압력을 대조해서 재가동 여부를 알려 주십시오.",
+    "history": false,
+    "family": "new-comparison",
+    "oracle": "Comparison with present pressure determines a new restart decision.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c05",
+    "question": "근무일지에 적힌 담당자 대신 다음 교대에서 누가 필터 점검을 맡을지 배정해 주세요.",
+    "history": false,
+    "family": "new-assignment",
+    "oracle": "Assign a future worker rather than return the stored worker field.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens2-c06",
+    "question": "근무일지에서 교체 후 관찰 결과를 읽고 이번 교대에도 같은 시간만 지켜보면 되는지 판단해 주십시오.",
+    "history": false,
+    "family": "reading-new-judgement",
+    "oracle": "Reading stored results is subordinate to a new observation-duration judgement.",
+    "ambiguity_status": "firm",
+    "audit_lens": 2,
+    "sources": [
+      "independent-67-lens-2"
+    ]
+  },
+  {
+    "id": "lens3-01",
+    "question": "근무일지에서 검증자가 09:20에 남긴 결과 문장을 인계 자료에 붙일 수 있게 원문으로 보여줘.",
+    "history": true,
+    "family": "copy-destination",
+    "oracle": "The requested object is an existing result sentence. Copy destination adds no new decision.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-02",
+    "question": "근무일지에서 검증자가 09:20에 남긴 결과를 토대로 다음 교대가 먼저 확인할 항목을 정해서 알려줘.",
+    "history": false,
+    "family": "new-handover-plan",
+    "oracle": "The result is input to a new priority decision for the next shift.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-03",
+    "question": "근무일지에 적힌 필터 교체 이유를 재해석하지 말고 그 문장만 읽어줘.",
+    "history": true,
+    "family": "literal-reason",
+    "oracle": "Explicitly asks for the stored reason sentence and excludes interpretation.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-04",
+    "question": "근무일지에 적힌 필터 교체 이유가 이번 압력 저하에도 들어맞는지 판단해줘.",
+    "history": false,
+    "family": "new-applicability",
+    "oracle": "Asks for a fresh applicability judgement about the current pressure drop.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-05",
+    "question": "회의에서 검토할 예정이니 근무일지의 조치 단계와 관찰 결과를 적힌 순서대로 옮겨줘.",
+    "history": true,
+    "family": "future-meeting-copy",
+    "oracle": "Future meeting is merely the purpose of copying existing sequence and observations.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-06",
+    "question": "회의에서 검토할 수 있도록 근무일지의 조치 단계 중 효과가 가장 컸던 단계를 골라줘.",
+    "history": false,
+    "family": "new-effect-ranking",
+    "oracle": "Requires a new ranking of effects rather than retrieval of the stored sequence.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-07",
+    "question": "앞으로 인계할 때 참고하려고 하는데, 근무일지에 남아 있는 정상 운전 확인 시간만 그대로 알려줘.",
+    "history": true,
+    "family": "future-reference",
+    "oracle": "Future use is inert; output is an existing recorded confirmation time.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-08",
+    "question": "다음 교대 인계 시간을 잡으려는데, 근무일지의 137분을 기준으로 관찰을 언제까지 이어갈지 계산해줘.",
+    "history": false,
+    "family": "new-observation-deadline",
+    "oracle": "Requests a new observation deadline calculation and plan.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-09",
+    "question": "근무일지의 필터 교체 대목을 찾았어. 그 아래 기록된 작업자와 시각을 원문대로 보여줘.",
+    "history": true,
+    "family": "record-location",
+    "oracle": "The located passage and recorded worker/time are the complete requested object.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-10",
+    "question": "근무일지의 필터 교체 대목을 찾았어. 그 작업을 오늘도 같은 순서로 해도 될지 알려줘.",
+    "history": false,
+    "family": "new-repeat-permission",
+    "oracle": "Finding a passage does not complete the new request for present repeat-work permission.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-11",
+    "question": "검증자가 점검했다는 근무일지 기록을 확인하려고 해. 조치 내용과 결과를 빼지 말고 그대로 읽어줘.",
+    "history": true,
+    "family": "record-verification",
+    "oracle": "Verification purpose asks for complete existing actions/results without derivation.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "lens3-12",
+    "question": "검증자가 점검했다는 근무일지 기록은 확인했어. 지금 설비를 다시 멈춰야 할지 판단해줘.",
+    "history": false,
+    "family": "new-stop-decision",
+    "oracle": "Completed record confirmation is followed by an independent current stop decision.",
+    "ambiguity_status": "firm",
+    "audit_lens": 3,
+    "sources": [
+      "independent-67-lens-3"
+    ]
+  },
+  {
+    "id": "l4-01",
+    "question": "근무일지에 적힌 필터 점검 담당자와 조치 시각을 원문 그대로 전해 주시겠습니까?",
+    "history": true,
+    "family": "recorded-metadata-polite",
+    "oracle": "The only requested object is existing recorded author/time; formal interrogative is a display request.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-02",
+    "question": "내일 인계 자료에 붙여 넣을 거예요. 근무일지의 137분 관찰 결과 문장만 복사해 주세요.",
+    "history": true,
+    "family": "future-copy-use",
+    "oracle": "Tomorrow describes later use of an existing copy, not a new equipment decision or generated plan.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-03",
+    "question": "근무일지에서 교체하라고 보고했던 대목의 시각과 담당자를 읽어 주세요.",
+    "history": true,
+    "family": "completed-report-reference",
+    "oracle": "The command was previously reported; the request selects recorded metadata only.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-04",
+    "question": "근무일지의 필터 점검 결과를 화면에 띄워 주실 수 있나요?",
+    "history": true,
+    "family": "recorded-display-capability",
+    "oracle": "Capability concerns showing the recorded result; it asks for no new condition assessment.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-05",
+    "question": "조치 순서를 새로 짜 달라는 뜻은 아닙니다. 근무일지에 남긴 조치 단계와 결과 원문만 부탁합니다.",
+    "history": true,
+    "family": "nominal-exclusion-raw",
+    "oracle": "The plan request is explicitly disclaimed; the positive request is original recorded steps/results.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-06",
+    "question": "필터 교체가 끝났다고 기록한 내용에서 작업자와 두 조치 시각을 발췌해 주세요.",
+    "history": true,
+    "family": "record-without-log-noun",
+    "oracle": "The completed work record and its worker/time fields suffice; literal work-log wording is unnecessary.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-07",
+    "question": "근무일지의 조치 결과를 읽고 다음 교대에 누가 어떤 순서로 맡을지 배정해 주세요.",
+    "history": false,
+    "family": "new-assignment-from-record",
+    "oracle": "The record is input to a new future assignment, requiring the normal complete-question/MES route.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-08",
+    "question": "근무일지의 137분 관찰 결과와 현재 MES 상태가 얼마나 다른지 비교해서 읽어 주세요.",
+    "history": false,
+    "family": "new-comparison",
+    "oracle": "A newly requested comparison of stored and present evidence is not verbatim historical retrieval.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-09",
+    "question": "근무일지의 필터 점검 결과를 근거로 이번 교대 운전을 계속할지 결론을 내려 주세요.",
+    "history": false,
+    "family": "new-decision-grounded-in-log",
+    "oracle": "The requested conclusion decides current operation, rather than quoting the recorded conclusion.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-10",
+    "question": "근무일지의 조치 단계와 결과를 참고해서 내일 작업할 새 절차를 작성해 주세요.",
+    "history": false,
+    "family": "new-document-content",
+    "oracle": "The requested object is a newly authored future procedure.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-11",
+    "question": "근무일지의 담당자와 시각은 그대로 복사하고, 오늘 재점검은 언제 할지 정해 주세요.",
+    "history": false,
+    "family": "independent-plan-after-copy",
+    "oracle": "An independent present scheduling request must survive the preceding historical copy request.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "l4-12",
+    "question": "근무일지에 적힌 담당자가 오늘 결근했는데, 그 사람 대신 점검을 맡길 사람과 순서를 정리해서 읽어 주세요.",
+    "history": false,
+    "family": "current-reassignment-reading",
+    "oracle": "The absent-worker context asks for a new replacement assignment, despite a reading-verb ending.",
+    "ambiguity_status": "firm",
+    "audit_lens": 4,
+    "sources": [
+      "independent-67-lens-4"
+    ]
+  },
+  {
+    "id": "a5_h01",
+    "question": "근무일지의 조치 시각과 작업자 이름을 다음 교대 자료에 붙일 원문으로 보여줘.",
+    "history": true,
+    "family": "future-copy-purpose",
+    "oracle": "Future use of an existing passage is inert; retrieve recorded fields verbatim.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_h02",
+    "question": "근무일지에서 필터를 교체해 달라고 요청했던 대목만 인용해줘.",
+    "history": true,
+    "family": "completed-request-object",
+    "oracle": "The request is a completed recorded passage; only quotation is requested.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_h03",
+    "question": "필터 교체 여부를 정해 달라는 말은 이미 철회했으니, 근무일지의 관찰 결과 문장만 읽어줘.",
+    "history": true,
+    "family": "withdrawn-request",
+    "oracle": "Explicitly withdrawn decision request leaves only literal record retrieval.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_h04",
+    "question": "근무일지의 필터 교체 단계에 적힌 작업자와 수행 시각만 그대로 읽어줄래?",
+    "history": true,
+    "family": "literal-fields",
+    "oracle": "Recorded step fields only; no new action or reasoning.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_h05",
+    "question": "오늘 작성할 보고서에는 판단을 덧붙이지 않을 거야. 근무일지에 남은 137분 관찰 문구만 가져와줘.",
+    "history": true,
+    "family": "report-context",
+    "oracle": "Future report context does not create a new decision request; only existing text is requested.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_h06",
+    "question": "근무일지에서 교체 후 결과를 그대로 옮길 수 있도록 기록 문장을 보여줘.",
+    "history": true,
+    "family": "copy-use",
+    "oracle": "Purpose is verbatim copying of an existing result, not a new assessment.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c01",
+    "question": "근무일지 원문은 나중에 복사할게. 지금은 재가동 순서부터.",
+    "history": false,
+    "family": "bare-request-after-copy",
+    "oracle": "The independent elliptical request asks for a new restart sequence.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c02",
+    "question": "근무일지의 관찰 결과만 복사해 두고, 다음 교대에 맡길 점검 작업도 골라줘.",
+    "history": false,
+    "family": "connected-assignment",
+    "oracle": "Independent selection of future inspection assignments requires normal judgement.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c03",
+    "question": "재가동 계획도 부탁해. 근무일지의 교체 지시는 제외한 원문만 읽어줘.",
+    "history": false,
+    "family": "request-before-exclusion",
+    "oracle": "The earlier independent restart-planning request survives the later exclusion scope.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c04",
+    "question": "근무일지의 조치 요청은 어제 처리됐어. 오늘 필요한 추가 점검은?",
+    "history": false,
+    "family": "nominal-after-completion",
+    "oracle": "Completed prior request does not swallow a new question about required inspections.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c05",
+    "question": "근무일지에서 관찰 시간을 읽어 두고, 교대가 끝날 때까지 남은 시간도 산출해줘.",
+    "history": false,
+    "family": "derived-calculation",
+    "oracle": "Reading a recorded time is followed by independent new time calculation.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "a5_c06",
+    "question": "근무일지의 관찰 결과를 비교해 줬다는 보고는 확인했어. 이번 알람과 비교해서 재발 원인을 알려줘.",
+    "history": false,
+    "family": "derived-after-report",
+    "oracle": "Completed comparison report is context; a new comparison and cause assessment is requested.",
+    "ambiguity_status": "firm",
+    "audit_lens": 5,
+    "sources": [
+      "independent-67-lens-5"
+    ]
+  },
+  {
+    "id": "w6-01",
+    "question": "먼저 근무일지의 작업자 이름을 읽고, 이어서 그 작업자가 남긴 조치 시각과 결과를 적힌 순서대로 읽어줘.",
+    "history": true,
+    "family": "reading-order",
+    "oracle": "먼저/이어서/읽고는 문서 낭독 순서다. 새 작업·계산·판단을 요청하지 않는다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-02",
+    "question": "먼저 근무일지의 작업자 이름을 읽고, 이어서 두 조치 시각 사이의 경과 시간을 계산해서 알려줘.",
+    "history": false,
+    "family": "reading-order-new-calculation",
+    "oracle": "기록 낭독 후 두 시각의 경과 시간을 새로 계산하므로 전체 질문과 MES를 생성 경로로 전달한다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-03",
+    "question": "새 담당자를 정하라는 뜻은 아니야. 근무일지에 담당자를 다시 정해 달라고 적었던 문장과 그때의 처리 결과만 읽어줘.",
+    "history": true,
+    "family": "quoted-reassignment-excluded",
+    "oracle": "첫 문장은 새 배정의 명시적 배제이고 뒤의 재배정 요청은 과거 기록의 발화 내용이다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-04",
+    "question": "새 담당자를 정해서 알려줘. 근무일지에 담당자를 다시 정해 달라고 적었던 문장과 그때의 처리 결과도 읽어줘.",
+    "history": false,
+    "family": "reassignment-before-record",
+    "oracle": "앞의 독립된 새 담당자 배정 요청을 뒤의 과거 기록 발화로 지우면 안 된다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-05",
+    "question": "나중에 같은 고장이 나면 참고할 사본이 필요해. 근무일지에 적힌 교체 과정과 관찰 결과를 문장 그대로 옮겨줘.",
+    "history": true,
+    "family": "conditional-copy-use",
+    "oracle": "미래의 참고용 사본 목적이며 지금 요구한 출력은 이미 기록된 원문 복사뿐이다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-06",
+    "question": "나중에 같은 고장이 나면 어떻게 대응할지 정해야 해. 근무일지에 적힌 교체 과정과 관찰 결과를 보고 대응 순서를 새로 짜줘.",
+    "history": false,
+    "family": "conditional-new-advice",
+    "oracle": "기록을 근거로 미래 대응 순서를 새로 계획하므로 현재·미래 판단 경로다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-07",
+    "question": "근무일지에 남은 원인 문장을 다시 분석하지 말아줘. 기록된 원인과 조치 결과만 원문 그대로 읽어줘.",
+    "history": true,
+    "family": "negative-reanalysis",
+    "oracle": "다시 분석하는 일을 금지하고 기록된 원인과 결과만 낭독한다. 새 분석 요청이 없다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-08",
+    "question": "근무일지에 남은 원인 문장을 다시 분석해줘. 기록된 원인과 조치 결과를 보고 가장 유력한 원인을 골라줘.",
+    "history": false,
+    "family": "positive-reanalysis",
+    "oracle": "원인 재분석과 선택이라는 독립된 새 판단을 명시적으로 요청한다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-09",
+    "question": "근무일지에서 필터 교체 결과가 적힌 대목을 찾았어. 그 대목의 작업자 이름과 시각만 원문 그대로 보여줘.",
+    "history": true,
+    "family": "anaphoric-passage",
+    "oracle": "그 대목은 앞 문장이 특정한 기존 근무일지 대목을 가리키며 현재 판단이 아니다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-10",
+    "question": "근무일지에서 필터 교체 결과가 적힌 대목을 찾았어. 그 대목의 작업자와 다른 사람 중 다음 작업 담당자를 정해서 알려줘.",
+    "history": false,
+    "family": "anaphoric-new-assignment",
+    "oracle": "기존 대목의 작업자를 다음 작업 후보로 삼아 새 배정을 요구한다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-11",
+    "question": "가능하시면 근무일지에 기록된 교체 시각과 검증자 이름을 읽어 주시겠어요?",
+    "history": true,
+    "family": "polite-reading-capability",
+    "oracle": "가능하시면은 독자의 원문 조회 부탁을 꾸미는 예의 표현이며 설비 운전 가능성 판단이 아니다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "w6-12",
+    "question": "가능하시면 근무일지에 기록된 교체 시각과 검증자 이름을 읽고, 다음 교대에 재가동해도 되는지 판단해 주시겠어요?",
+    "history": false,
+    "family": "equipment-capability-after-reading",
+    "oracle": "낭독 뒤 다음 교대 재가동 가능성을 판단하라는 요청이 남는다.",
+    "ambiguity_status": "firm",
+    "lens": "wildcard-reading-versus-operating",
+    "audit_lens": 6,
+    "sources": [
+      "independent-67-lens-6"
+    ]
+  },
+  {
+    "id": "scope-copy-h",
+    "question": "앞으로 감사에서 인용할 사본이 필요해. 근무일지의 작업 시각과 관찰 결과만 원문으로 읽어줘.",
+    "history": true,
+    "family": "copy-context",
+    "oracle": "Reader requests an existing verbatim copy for future use.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-copy-c",
+    "question": "압력을 보정해줘, 앞으로 감사에서 인용할 사본이 필요해. 근무일지의 작업 시각과 관찰 결과도 읽어줘.",
+    "history": false,
+    "family": "copy-context",
+    "oracle": "The independent correction request must survive document-purpose certification.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-lookup-h",
+    "question": "근무일지의 교체 결과가 적힌 대목을 찾았어. 기록된 담당자와 시각만 그대로 읽어줘.",
+    "history": true,
+    "family": "record-lookup",
+    "oracle": "A completed document lookup precedes literal recorded-field retrieval.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-lookup-c",
+    "question": "근무일지를 보고 압력을 보정해줘, 결과가 적힌 대목을 찾았어. 기록된 담당자와 시각도 읽어줘.",
+    "history": false,
+    "family": "record-lookup",
+    "oracle": "A new correction within the lookup span must not be erased.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-analysis-h",
+    "question": "근무일지의 결과를 다시 분석하지 말아줘. 기록된 조치 시각과 결과만 그대로 읽어줘.",
+    "history": true,
+    "family": "negative-analysis",
+    "oracle": "Analysis is excluded; the positive request is only recorded source text.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-analysis-c",
+    "question": "이번 담당자는 새로 배정해줘. 근무일지의 결과를 다시 분석하지 말아줘. 기록된 조치 시각과 결과도 읽어줘.",
+    "history": false,
+    "family": "negative-analysis",
+    "oracle": "The earlier independent new assignment survives the excluded analysis.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-formal-h",
+    "question": "가능하시면 근무일지의 담당자와 시각을 원문대로 전해 주시겠습니까?",
+    "history": true,
+    "family": "reading-morphology",
+    "oracle": "Formal capability asks only to read stored fields.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-formal-c",
+    "question": "가능하시면 근무일지의 담당자를 보고 이번 점검 담당자를 새로 정해서 전해 주시겠습니까?",
+    "history": false,
+    "family": "reading-morphology",
+    "oracle": "A formal reading ending cannot certify a fresh assignment.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-computed-h",
+    "question": "근무일지에 적힌 계산한 값과 관찰 결과를 원문 그대로 보여줘.",
+    "history": true,
+    "family": "computed-object",
+    "oracle": "The computed value is explicitly already written; no fresh calculation is requested.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-computed-c",
+    "question": "근무일지의 시작 시각과 종료 시각을 읽어줘. 두 시각으로 계산한 값도 원문 옆에 보여줘.",
+    "history": false,
+    "family": "computed-object",
+    "oracle": "An additional newly calculated value is requested beyond literal timestamps.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-prior-assignment-h",
+    "question": "새 담당자를 정하라는 뜻은 아니야. 근무일지에 담당자를 다시 정해 달라고 적었던 시각과 처리 결과만 알려줘.",
+    "history": true,
+    "family": "reported-assignment",
+    "oracle": "The new assignment is disclaimed and the reported assignment request is completed.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  },
+  {
+    "id": "scope-prior-assignment-c",
+    "question": "새 담당자를 정해서 알려줘. 근무일지에 담당자를 다시 정해 달라고 적었던 시각과 처리 결과도 알려줘.",
+    "history": false,
+    "family": "reported-assignment",
+    "oracle": "The independent new assignment precedes a distinct completed historical request.",
+    "audit_lens": 0,
+    "sources": [
+      "preregistered-bounded-scope-control"
+    ]
+  }
+]

@@ -187,7 +187,8 @@ def test_mes_block_is_opt_in_and_reaches_the_answer_prompt(pipe, monkeypatch):
                "active_alarms": []}
     off = pipe.run(payload)
     assert "[MES]" not in calls[0][0] and calls[0][1] == {}
-    assert off.output.answer == "유면이 60 pct로 낮습니다. 압력 152 bar를 확인합니다\n근거: hpu_manual p.12"   # [M] not a source when off
+    # Without the MES block, 60 is unsupported even though the manual supports 152.
+    assert off.output.no_knowledge and off.tool_results['abstain_reason'] == 'unsupported_number'
     pipe.mes_block = True
     on = pipe.run(payload)
     p, kw = calls[1]
@@ -266,6 +267,8 @@ def test_unit_guard_keeps_the_answer_on_the_units_the_question_names(pipe, monke
     # 10/22: with GR-01 selected, "GR-02 ..." got GR-01's MES ("MES 기준 GR-01 ...") in 17/288 C4 answers
     pipe.eq_code["EQ-0005"], pipe.eq_id["GR-02"], pipe.eq_type["EQ-0005"] = "GR-02", "EQ-0005", "GR"
     pipe.eq_type["GR-02"] = "GR"
+    # Keep numeric claims grounded so this test isolates the independent unit guard.
+    pipe.rows[2] = {**pipe.rows[2], 'text': '베어링 46.4도, 오일 레벨 12.5 pct를 확인한다.'}
     judged(monkeypatch, {"c3": 0.95, "c4": 0.1})
     prompts = []
     monkeypatch.setattr(G, "ask_raw", lambda p, host, prefix, **kw: prompts.append(p) or {"raw": prefix +

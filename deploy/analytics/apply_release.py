@@ -46,9 +46,16 @@ def pda_pid():
 
 
 def replace(source,target):
+    if target.exists() and source.read_bytes()==target.read_bytes():return False
     target.parent.mkdir(parents=True,exist_ok=True)
     temporary=target.with_name(target.name+'.analytics-new')
-    shutil.copy2(source,temporary);temporary.replace(target)
+    shutil.copy2(source,temporary);temporary.replace(target);return True
+
+
+def unit_template(manifest):
+    relative=manifest.get('unit_template','deploy/analytics/shiftlink-analytics.service.in')
+    if relative not in manifest['files']:raise ValueError('unit template must be pinned')
+    return relative
 
 
 def restart_pda():
@@ -113,7 +120,7 @@ def main():
         target=APP/rel
         if (sha(target) if target.exists() else None)!=value:raise ValueError('deployed file changed since capture: '+rel)
     unit=release/'shiftlink-analytics.service'
-    unit.write_text((release/'deploy/analytics/shiftlink-analytics.service.in').read_text().replace('@RELEASE@',str(release)))
+    unit.write_text((release/unit_template(manifest)).read_text().replace('@RELEASE@',str(release)).replace('@PROFILE_SHA256@',manifest.get('normal_profile_sha256','')))
     command('systemd-analyze','verify',str(unit))
     state=get('/api/state');old_pid=pda_pid()
     plan=dict(release=str(release),state={k:state[k] for k in ('run_id','sequence','line_mode')},pda_pid=old_pid,files=list(TARGETS),mes_service_changed=False)
@@ -139,9 +146,10 @@ def main():
         unit_active=subprocess.run(['systemctl','is-active',UNIT],capture_output=True).returncode==0,old_pid=old_pid,plan=plan)
     (backup/'record.json').write_text(json.dumps(record,indent=2));(backup/'before-state.json').write_text(json.dumps(state))
     try:
+        pda_changed=False
         for rel in TARGETS:
             source=release/('device-pda.html' if rel.endswith('pda.html') else rel)
-            replace(source,APP/rel)
+            pda_changed=replace(source,APP/rel) or pda_changed
         command('sudo','-n','install','-m','0644',str(unit),str(UNIT_PATH))
         activate_worker(record['unit_active'])
         print('WORKER_STARTED',flush=True)
@@ -154,8 +162,8 @@ def main():
                 if value['status'] not in ('model_error','unavailable'):break
             if subprocess.run(['systemctl','is-active','--quiet',UNIT]).returncode!=0:raise RuntimeError('worker exited before readiness')
         else:raise RuntimeError('worker produced no valid source result')
-        new_pid=restart_pda()
-        print('PDA_RESTARTED',new_pid,flush=True)
+        new_pid=restart_pda() if pda_changed else pda_pid()
+        print('PDA_RESTARTED' if pda_changed else 'PDA_PRESERVED',new_pid,flush=True)
         for _ in range(10):
             time.sleep(1);state=get('/api/state')
             if state.get('ai_insights',{}).get('status') not in (None,'disabled','unavailable','model_error','stale'):break

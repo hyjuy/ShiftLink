@@ -6,12 +6,12 @@ from unittest import TestCase,main
 from tests.test_mes_causal_pda_service import rows,source_config
 from tests.test_mes_causal_v14_stream import config,modify,channel_choices
 from scripts.mes_causal_v14_stream import OnlineDetector
-from scripts.mes_causal_context import ContextDetector,fit_profile,MODES
+from scripts.mes_causal_context import ContextDetector,fit_profile,MODES,CONTEXT_MODES
 
 
 def profile():
     config_id=source_config()['config_id']
-    offsets={c:{'hpu_cooler_oil_out_temp':-5.,'hpu_cooler_water_out_temp':6.} for c in [a+':'+b for a in ('slow','nominal','fast') for b in ('empty','moving','queued')]}
+    offsets={c:{'hpu_cooler_oil_out_temp':-5.,'hpu_cooler_water_out_temp':6.} for c in CONTEXT_MODES}
     return dict(schema_version=1,source_config_id=config_id,offsets=offsets,capacities={'EQ-0009':3,'EQ-0010':3},minimum_samples=64)
 
 
@@ -82,6 +82,31 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_in_temp':m['quality']='bad'
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
+
+    def test_replay_without_historical_speed_uses_pooled_normal_context(self):
+        d=detector();data=source_rows()
+        for f in data:f.pop('speed')
+        self.assertFalse(any(d.step(f) for f in data))
+        data=source_rows();modify(data,[('EQ-0006','rt_vib_rms')],100,180,8.)
+        for f in data:f.pop('speed')
+        d=detector();self.assertTrue(any('EQ-0006' in d.step(f) for f in data))
+
+    def test_learned_normal_plateau_and_fast_noisy_sensor_guard(self):
+        settings=config();p=profile();p['normal_plateaus']=[[] for _ in settings['base']['channels']];p['fast_flat']=[False for _ in settings['base']['channels']]
+        channels=[tuple(c) for c in settings['base']['channels']];bus=('EQ-0002','bus_voltage');vib=('EQ-0006','rt_vib_rms')
+        value=next(row[2] for row in settings['base']['stats'] if tuple(row[:2])==bus);p['normal_plateaus'][channels.index(bus)]=[value];p['fast_flat'][channels.index(vib)]=True
+        data=source_rows()
+        for f in data:
+            next(m for m in f['measurements'] if (m['equipment_id'],m['signal'])==bus)['value']=value
+        d=ContextDetector(settings,p);d.config_id=p['source_config_id'];self.assertFalse(any(d.step(f) for f in data))
+        data=source_rows()
+        held=next(m['value'] for m in data[99]['measurements'] if (m['equipment_id'],m['signal'])==vib)
+        for f in data[100:]:next(m for m in f['measurements'] if (m['equipment_id'],m['signal'])==vib)['value']=held
+        d=ContextDetector(settings,p);d.config_id=p['source_config_id'];hits=[f['sequence'] for f in data if vib[0] in d.step(f)]
+        self.assertTrue(any(100<=t<=105 for t in hits))
+        for key,value in [('thermal_limits',[0.]),('normal_plateaus',[]),('normal_plateaus',[[float('nan')]]*len(channels))]:
+            bad=copy.deepcopy(p);bad[key]=value
+            with self.assertRaises(ValueError):ContextDetector(settings,bad)
 
     def test_full_capacity_queue_is_not_an_out_of_range_fault(self):
         p=profile();p['capacities']={'EQ-0009':1,'EQ-0010':1};d=ContextDetector(config(),p);d.config_id=p['source_config_id'];data=source_rows()

@@ -108,11 +108,16 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);p.add_argument('--phase',choices=('develop','freeze','test'),required=True);a=p.parse_args();out=a.out
     config=load(ROOT/'deploy/analytics/source-config.json');settings=load(ROOT/'docs/research/evidence/mes-causal-v14c-20261023/settings.json')
     if a.phase=='develop':
-        out.mkdir(exist_ok=False);entries=[(m,f,None) for m in MODES for f in ('mes','dynamics')]
-        dataset(config,'train',entries,out/'train');profile=fit_profile(read(out/'train/features.jsonl'),config,settings);profile['training_sha256']=sha(out/'train/features.jsonl');save(out/'profile.json',profile)
+        out.mkdir(exist_ok=False);entries=[(m,f,None) for _ in range(4) for m in MODES for f in ('mes','dynamics')]
+        dataset(config,'train-expanded-v3',entries,out/'train');profile=fit_profile(read(out/'train/features.jsonl'),config,settings);profile['training_sha256']=sha(out/'train/features.jsonl');save(out/'profile.json',profile)
         modes=['slow:empty','nominal:moving','fast:queued'];entries=[(m,f,None) for m in modes for f in ('mes','dynamics')]+[(m,'dynamics',k) for m in modes for k in KINDS]
-        dataset(config,'development',entries,out/'development');r=evaluate(out/'development',settings,profile);save(out/'development-result.json',r);print(json.dumps({k:v for k,v in r.items() if k not in ('original','candidate')}),flush=True)
-        print('DEVELOPMENT',json.dumps({n:{k:v for k,v in r[n].items() if k not in ('cases','detected_runs')} for n in ('original','candidate')}),flush=True)
+        dataset(config,'development',entries,out/'development')
+        dataset(config,'development-transitions-v3',[(m,f,'normal_transition') for m in modes for f in ('mes','dynamics')],out/'transitions')
+        modes=['unknown:empty','unknown:moving','unknown:queued'];entries=[(m,f,None) for m in modes for f in ('mes','dynamics')]+[(m,'dynamics',k) for m in modes for k in KINDS]
+        dataset(config,'development-replay-v4',entries,out/'replay-development')
+        for name in ('development','transitions','replay-development'):
+            r=evaluate(out/name,settings,profile);save(out/(name+'-result.json'),r)
+            print(name,r['checks'],json.dumps({n:{k:v for k,v in r[n].items() if k not in ('cases','detected_runs','normal_cases')} for n in ('original','candidate')}),flush=True)
     elif a.phase=='freeze':
         r=load(out/'development-result.json');assert all(r['checks'].values()),'development failed; cannot freeze'
         for name in ('transitions','replay-development'):
@@ -126,6 +131,6 @@ def main():
             sets={name:{row[field] for row in rows} for name,rows in splits.items()};overlap[field]=all(not(sets[a]&sets[b]) for i,a in enumerate(sets) for b in list(sets)[i+1:])
         assert all(overlap.values()),'split identity overlap'
         r['integrity']=dict(candidate_unchanged=True,roles_disjoint=overlap,training_sha256=sha(out/'train/features.jsonl'),test_sha256=sha(out/'test/features.jsonl'));
-        save(out/'test-result.json',r);print('TEST',json.dumps({n:{k:v for k,v in r[n].items() if k not in ('cases','detected_runs')} for n in ('original','candidate')}),r['checks'],flush=True)
+        save(out/'test-result.json',r);print('TEST',json.dumps({n:{k:v for k,v in r[n].items() if k not in ('cases','detected_runs','normal_cases')} for n in ('original','candidate')}),r['checks'],flush=True)
 
 if __name__=='__main__':main()

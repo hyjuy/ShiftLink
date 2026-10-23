@@ -144,6 +144,12 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   기존 경보와 같은 알람창에서 설비별로 합치되 확인·진동 규칙은 유지한다.
   [배포·중지·복구 안내](../../deploy/analytics/README.md)와
   [Pi 검증 기록](../testing/mes-causal-pda-production-20261023.md)을 따른다.
+- 운전·부하 정상 기준은 원본 v14c를 보존한 `scripts/mes_causal_context.py`의 선택적 profile이다.
+  `mes_causal_context_run.py`가 정상 적합→개발→고정→미사용 평가를, `mes_causal_context_validate.py`가
+  Pi 회귀·기존 자료 통지 일치·운영 replay·1Hz/얼굴/CNN 검증을 담당한다.
+  속도 없는 replay는 정상 학습을 합친 기준을 사용하며 현재 속도를 과거에 대입하지 않는다.
+  [사전 계획](../research/mes-context-v1-prereg-20261023.md),
+  [검증·운영 경계](../testing/mes-normal-context-20261023.md)를 함께 확인한다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
 - Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로

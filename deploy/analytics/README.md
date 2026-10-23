@@ -55,3 +55,23 @@ SHIFTLINK_BROWSER_EVIDENCE=/tmp/shiftlink-browser-result python3 -B -m unittest 
 ```
 
 브라우저 검사는 Pi에 이미 있는 Chromium과 별도 프로필·합성 화면 데이터를 사용한다. 개인 얼굴·실제 경보 조작은 하지 않는다. 기존 CJS 검사에는 `/tmp`에서만 검증한 ARM64 Node 실행 파일을 사용하고 시스템 환경은 바꾸지 않는다. 상세 실행·실패·수정·결과는 `docs/testing/mes-causal-pda-production-20261023.md`에 기록한다.
+
+
+## 운전·부하 정상 기준 profile
+
+원본 v14c core/settings는 유지한다. 정상 기준 보완 버전은 별도 `mes_causal_context.py`와 정상 학습 profile을 사용하며 Timestral을 사용하지 않는다. 속도·독립 코일 위치별 기준과 냉각기 입출구 관계, 원시 고착·온도 상승 근거를 함께 검사한다. replay에 속도가 없으면 세 속도의 정상 학습을 합친 기준을 쓴다. 현재 상태의 속도를 과거 프레임에 대입하거나 실시간 센서로 자동 재학습하지 않는다.
+
+`context.service.in`은 `--normal-profile`과 고정 SHA256을 전달하고 `/var/lib/shiftlink-analytics-normal-v1`에 새 상태를 저장한다. 기존 `/var/lib/shiftlink-analytics`는 이전 버전 복구용으로 유지한다. 중지 스위치는 기존 `/var/lib/shiftlink-analytics/STOP`이며 새 worker에도 `--stop-file`로 전달한다. profile·source·코드 fingerprint가 다른 체크포인트를 읽지 않는다.
+
+릴리스 manifest의 `unit_template`는 해시 검증한 파일이어야 한다. `expected_unit_sha256`이 있으면 설치 직전 현재 worker unit도 대조한다. PDA 4파일이 같으면 덮어쓰거나 재시작하지 않는다. 이전 unit과 상태로 돌아가는 기존 백업·롤백 경로를 유지한다.
+
+Pi에서 별도 폴더에 개발 자료를 만들고 각 검사를 통과한 다음 후보를 고정한다. 임시 파일시스템이 작은 장비는 평가 자료를 `/home/pi/shiftlink/analytics/validation/` 아래에 둔다.
+
+```sh
+python3 -B -m scripts.mes_causal_context_run --phase develop --out <새-검증폴더>
+python3 -B -m scripts.mes_causal_context_validate --phase regression --profile <새-검증폴더>/profile.json --out <새-회귀폴더>
+python3 -B -m scripts.mes_causal_context_run --phase freeze --out <새-검증폴더>
+python3 -B -m scripts.mes_causal_context_run --phase test --out <새-검증폴더>
+```
+
+운영 replay와 얼굴/CNN 동시 부하도 `mes_causal_context_validate --phase observed/paced`로 별도 검사한다. 이 하니스는 이전 검증의 보존된 Pi 자료와 측정 probe를 명시적으로 사용한다. 새 체크아웃만으로 원자료·가중치가 자동 준비되는 것은 아니다. 이번 검증의 해시·자료 경로·결과·실측 한계는 [정상 기준 검증](../../docs/testing/mes-normal-context-20261023.md)에 기록한다.

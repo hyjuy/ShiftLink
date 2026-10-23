@@ -38,7 +38,7 @@ class ContextTests(TestCase):
             a=detector();b=OnlineDetector(config());b.config_id=a.config_id
             data=rows(150);modify(data,[channel_choices()[1]],90,140,6.)
             if mode=='invalid':
-                for f in data:f.update(coils=[],speed=True)
+                for f in data:f.update(coils=[dict(coil_id='bad',equipment_id='EQ-0009',position=True)],speed=True)
             self.assertEqual([a.step(f) for f in data],[b.step(f) for f in data])
     def test_outlet_bias_raw_stuck_and_coherent_rise_are_not_hidden(self):
         for kind in ('bias','stuck','rise','water_rise'):
@@ -83,8 +83,16 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
 
+    def test_regulated_plateau_inside_learned_normal_range_is_not_stuck(self):
+        settings=config();p=profile();channels=[tuple(c) for c in settings['base']['channels']];bus=('EQ-0002','bus_voltage');j=channels.index(bus);value=next(r[2] for r in settings['base']['stats'] if tuple(r[:2])==bus)
+        p['normal_plateaus']=[[] for _ in channels];p['normal_plateaus'][j]=[value-.01,value+.01];p['normal_plateau_bounds']=[None for _ in channels];p['normal_plateau_bounds'][j]=[value-.1,value+.1]
+        for offset,expected in ((0.,False),(1.,True)):
+            data=source_rows()
+            for f in data:next(m for m in f['measurements'] if (m['equipment_id'],m['signal'])==bus)['value']=value+offset
+            d=ContextDetector(settings,p);d.config_id=p['source_config_id'];self.assertEqual(any(bus[0] in d.step(f) for f in data),expected)
+
     def test_simulator_clock_speed_is_not_a_process_load_feature(self):
-        p=profile();p['offsets']['slow:empty']={'hpu_cooler_oil_out_temp':10.,'hpu_cooler_water_out_temp':10.}
+        p=profile()
         a=ContextDetector(config(),p);a.config_id=p['source_config_id'];b=ContextDetector(config(),p);b.config_id=a.config_id
         left=source_rows();right=copy.deepcopy(left)
         for f in left:f['speed']=.5
@@ -144,6 +152,6 @@ class ContextTests(TestCase):
         d=ContextDetector(config(),fitted);d.config_id=fitted['source_config_id'];test=source_rows(150)
         modify(test,[('EQ-0006','rt_vib_rms')],100,140,8.)
         self.assertTrue(any('EQ-0006' in d.step(f) for f in test));self.assertEqual(fitted,before)
-        bad=copy.deepcopy(fitted);bad['normal_stats']['nominal:empty'][0][1]=0
+        bad=copy.deepcopy(fitted);bad['normal_stats']['unknown:empty'][0][1]=0
         with self.assertRaises(ValueError):ContextDetector(config(),bad)
 if __name__=='__main__':main()

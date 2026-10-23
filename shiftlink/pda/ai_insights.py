@@ -72,3 +72,13 @@ def overlay_state(state, path):
     if path is None or not Path(path).exists():
         return state
     return dict(state, ai_insights=read_insights(path, state, state.get('config_id')))
+
+
+def overlay_response(body, path):
+    try:
+        state = json.loads(body)
+        if not isinstance(state, dict):
+            return body
+        return json.dumps(overlay_state(state, path), ensure_ascii=False).encode()
+    except (ValueError, TypeError):
+        return body

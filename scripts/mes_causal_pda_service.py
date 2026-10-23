@@ -68,7 +68,7 @@ class BoundSource:
         for key, reference in signals().items():
             if any(found[key].get(k) != reference[k] for k in ('unit', 'normal_min', 'normal_max')):
                 raise ValueError('source units or range mismatch')
-        self.fingerprint = digest(dict(settings=settings, source=self.source_digest, version=1,
+        self.fingerprint = digest(dict(settings=settings, source=self.source_digest, version=2,
             core_sha256=hashlib.sha256((ROOT / 'scripts/mes_causal_v14_stream.py').read_bytes()).hexdigest()))
         self.new_detector()
 
@@ -92,8 +92,10 @@ class BoundSource:
             found[key] = m
         if set(found) != set(self.canonical): raise ValueError('replay channel set mismatch')
         states = {e['equipment_id']:e.get('operating_state') for e in frame.get('equipment', [])}
+        if set(states) != {e for e,s in self.canonical}:raise ValueError('source equipment states required')
         measurements = [dict(found[k], quality='inactive') if states.get(k[0], 'running') != 'running' else found[k] for k in self.canonical]
-        return dict(frame, config_id=self.config_id, measurements=measurements)
+        return dict(frame, config_id=self.config_id, measurements=measurements,
+                    line_mode='quality_hold' if frame['line_mode']=='fault' else frame['line_mode'])
 
 
 def packed(array):
@@ -136,7 +138,8 @@ class AdvisorySession:
             if type(state['warm']) is not int or not 0 <= state['warm'] <= 64 or type(state['was_ready']) is not bool:
                 raise ValueError('checkpoint readiness invalid')
             d.warm, d.was_ready = state['warm'], state['was_ready']
-            d.last_status = dict(accepted=False, ready=d.was_ready)
+            d.last_status = dict(accepted=False, ready=d.was_ready,hold=state.get('last_hold',False))
+            if type(d.last_status['hold']) is not bool:raise ValueError('checkpoint hold flag invalid')
             d.previous_raw = None if state['previous_raw'] is None else unpack(state['previous_raw'], (n,))
             d.ewma = unpack(state['ewma'], (n,)); d.ewma_valid = unpack(state['ewma_valid'], (n,), bool)
             for name, limit in [('median',5),('flat',16),('thermal_history',37)]:
@@ -160,7 +163,7 @@ class AdvisorySession:
     def flush(self):
         d = self.detector
         state = dict(run=d.run, sequence=d.sequence, at=d.at.isoformat() if d.at else None,
-                     warm=d.warm, was_ready=d.was_ready, previous_raw=packed(d.previous_raw),
+                     warm=d.warm, was_ready=d.was_ready,last_hold=bool(d.last_status.get('hold',False)),previous_raw=packed(d.previous_raw),
                      ewma=packed(d.ewma), ewma_valid=d.ewma_valid.tolist())
         for name in ('median','flat','thermal_history'): state[name] = [packed(row) for row in getattr(d,name)]
         state['machines'] = [{name:getattr(m,name).tolist() for name in ('on','high','low','process_sources','flat_sources')} for m in d.machines]
@@ -190,6 +193,8 @@ class AdvisorySession:
         if state['run_id'] != self.run: return base | dict(status='warming_up')
         if state['sequence']-self.cursor > 3: return base | dict(status='catching_up')
         if not self.detector.was_ready: return base | dict(status='warming_up')
+        if self.detector.last_status.get('hold') or (self.detector.previous_raw is not None and not np.isfinite(self.detector.previous_raw[self.detector.variable]).any()):
+            return base | dict(status='unavailable')
         return base | dict(status='ready',items=[dict(r) for r in self.notices.values() if 0 <= self.cursor-r['sequence'] <= 30])
 
 
@@ -205,15 +210,26 @@ def poll(session, base, state):
         raise ValueError('unapproved source state')
     cursor=session.cursor if state['run_id']==session.run else -1
     if state['sequence'] > cursor:
-        batch=get_json(base,f"/api/runs/{quote(state['run_id'],safe='')}/replay?sequence={cursor}")
-        if batch.get('config_id')!=session.binding.config_id or batch.get('config_preserved') is not True or batch.get('is_synthetic') is not True:
-            raise ValueError('unapproved replay provenance')
-        frames=batch['snapshots']
-        if not isinstance(frames,list):raise ValueError('replay snapshots required')
-        for frame in frames:
-            if frame['run_id']!=state['run_id'] or frame['sequence']!=cursor+1:raise ValueError('replay missing or out of order')
-            session.feed(frame,batch['config_id']);cursor=frame['sequence']
-        if cursor<state['sequence']:raise ValueError('replay incomplete; no advance past missing frame')
+        meta={};noticed=False;session.defer_flush=True
+        try:
+            for kind,value in replay_stream(base,f"/api/runs/{quote(state['run_id'],safe='')}/replay?sequence={cursor}"):
+                if kind=='meta':meta.update([value]);continue
+                frame=value
+                if cursor == -1 and frame['sequence']==1:cursor=0  # MES stores ticks from 1; no observation 0 is skipped.
+                if frame['run_id']!=state['run_id'] or frame['sequence']!=cursor+1:raise ValueError('replay missing or out of order')
+                noticed=bool(session.feed(frame,session.binding.config_id)) or noticed;cursor=frame['sequence']
+            if meta.get('config_id')!=session.binding.config_id or meta.get('config_preserved') is not True or meta.get('is_synthetic') is not True:
+                raise ValueError('unapproved replay provenance')
+            if cursor<state['sequence']:raise ValueError('replay incomplete; no advance past missing frame')
+            if noticed or session.since_save>=30:session.flush()
+        except BaseException:
+            # A bad/truncated trailer cannot commit speculative frames or notices.
+            restored=AdvisorySession(session.binding,session.journal)
+            session.__dict__.update(restored.__dict__)
+            raise
+        finally:session.defer_flush=False
+    if state['line_mode']!='running' and session.detector.warm:
+        session.detector._restart();session.notices.clear();session.flush()
     return session.report(state)
 
 
@@ -245,7 +261,10 @@ def main():
                 if session is None:session=AdvisorySession(binding,args.state_dir/'checkpoint.json')
                 key=state['run_id'],state['sequence']
                 if key!=last_key:progress=time.monotonic();last_key=key
-                result=poll(session,args.mes_url,state)
+                poll_started=time.monotonic();result=poll(session,args.mes_url,state)
+                result['poll_seconds']=time.monotonic()-poll_started
+                result['processed_sequence']=session.cursor
+                result['model']='statistical-v14c';result['torch_loaded']='torch' in sys.modules;result['timestral_loaded']='timestral' in sys.modules
                 if state['line_mode']=='running' and time.monotonic()-progress>10:result=session.report(state,stalled=True)
                 atomic_json(output,result)
             except Exception as e:
@@ -263,8 +282,70 @@ def main():
         if session:session.flush()
 
 
-if __name__=='__main__':main()
+
+
+
+
+class _JsonStream:
+    """At most one bounded JSON value, not the accumulated run, is buffered."""
+    def __init__(self,response):
+        import codecs
+        self.response=response;self.buffer='';self.position=0;self.eof=False
+        self.utf8=codecs.getincrementaldecoder('utf-8')();self.decoder=json.JSONDecoder()
+
+    def more(self):
+        self.buffer=self.buffer[self.position:];self.position=0
+        raw=self.response.read(64*1024)
+        self.eof=not raw
+        self.buffer+=self.utf8.decode(raw,final=self.eof)
+
+    def peek(self):
+        while True:
+            while self.position<len(self.buffer) and self.buffer[self.position].isspace():self.position+=1
+            if self.position<len(self.buffer):return self.buffer[self.position]
+            if self.eof:return None
+            self.more()
+
+    def take(self,char):
+        if self.peek()!=char:raise ValueError('malformed/truncated replay JSON')
+        self.position+=1
+
+    def value(self):
+        if self.peek() is None:raise ValueError('truncated replay value')
+        while True:
+            try:
+                value,end=self.decoder.raw_decode(self.buffer,self.position)
+                if end<len(self.buffer) or self.eof:
+                    self.position=end;return value
+            except json.JSONDecodeError:
+                if self.eof:raise ValueError('truncated replay value')
+            if len(self.buffer)-self.position>2*1024*1024:raise ValueError('oversized individual replay value')
+            self.more()
 
 
 def iter_replay(response):
-    raise NotImplementedError('bounded replay streaming is not implemented')
+    stream=_JsonStream(response);stream.take('{');seen=set()
+    while stream.peek()!='}':
+        if seen:stream.take(',')
+        key=stream.value()
+        if not isinstance(key,str) or key in seen:raise ValueError('duplicate/invalid replay field')
+        seen.add(key);stream.take(':')
+        if key in ('snapshots','events'):
+            stream.take('[');first=True
+            while stream.peek()!=']':
+                if not first:stream.take(',')
+                value=stream.value();first=False
+                if key=='snapshots':yield 'frame',value
+            stream.take(']')
+        else:yield 'meta',(key,stream.value())
+    stream.take('}')
+    if stream.peek() is not None:raise ValueError('extra replay document')
+    if 'snapshots' not in seen:raise ValueError('replay snapshots required')
+
+
+def replay_stream(base,path):
+    with urlopen(base+path,timeout=8) as response:
+        yield from iter_replay(response)
+
+
+if __name__=='__main__':main()

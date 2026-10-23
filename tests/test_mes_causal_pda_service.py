@@ -123,7 +123,7 @@ class PollBoundaryTests(unittest.TestCase):
         state=data[-1]|dict(is_synthetic=True)
         with patch.object(m,'replay_stream',side_effect=lambda *_: iter([('frame',f) for f in batch['snapshots']]+[('meta',(k,v)) for k,v in batch.items() if k!='snapshots'])):self.assertEqual(m.poll(a,'http://source',state)['status'],'ready')
         a.flush();self.assertEqual(m.AdvisorySession(b,self.path).cursor,79)
-        bad=copy.deepcopy(batch);bad['snapshots']=data[1:]
+        bad=copy.deepcopy(batch);bad['snapshots']=data[2:]
         with patch.object(m,'replay_stream',side_effect=lambda *_: iter([('frame',f) for f in bad['snapshots']]+[('meta',(k,v)) for k,v in bad.items() if k!='snapshots'])):
             with self.assertRaises(ValueError):m.poll(m.AdvisorySession(b,Path(self.tmp.name)/'fresh.json'),'http://source',state)
         for change in ({'config_id':'wrong'},{'config_preserved':False},{'is_synthetic':False}):

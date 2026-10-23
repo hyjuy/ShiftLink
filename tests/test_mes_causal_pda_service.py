@@ -111,7 +111,7 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(overlay_state(state,None),state)
 
 
-if __name__=='__main__':unittest.main()
+
 
 class PollBoundaryTests(unittest.TestCase):
     setUp=ProductionTests.setUp
@@ -121,13 +121,13 @@ class PollBoundaryTests(unittest.TestCase):
         b=self.binding();a=m.AdvisorySession(b,self.path);data=rows(80)
         batch=dict(config_id=b.config_id,config_preserved=True,is_synthetic=True,snapshots=data)
         state=data[-1]|dict(is_synthetic=True)
-        with patch.object(m,'get_json',return_value=batch):self.assertEqual(m.poll(a,'http://source',state)['status'],'ready')
+        with patch.object(m,'replay_stream',side_effect=lambda *_: iter([('frame',f) for f in batch['snapshots']]+[('meta',(k,v)) for k,v in batch.items() if k!='snapshots'])):self.assertEqual(m.poll(a,'http://source',state)['status'],'ready')
         a.flush();self.assertEqual(m.AdvisorySession(b,self.path).cursor,79)
         bad=copy.deepcopy(batch);bad['snapshots']=data[1:]
-        with patch.object(m,'get_json',return_value=bad):
+        with patch.object(m,'replay_stream',side_effect=lambda *_: iter([('frame',f) for f in bad['snapshots']]+[('meta',(k,v)) for k,v in bad.items() if k!='snapshots'])):
             with self.assertRaises(ValueError):m.poll(m.AdvisorySession(b,Path(self.tmp.name)/'fresh.json'),'http://source',state)
         for change in ({'config_id':'wrong'},{'config_preserved':False},{'is_synthetic':False}):
-            with patch.object(m,'get_json',return_value=batch|change):
+            with patch.object(m,'replay_stream',side_effect=lambda *_: iter([('frame',f) for f in batch['snapshots']]+[('meta',(k,v)) for k,v in (batch|change).items() if k!='snapshots'])):
                 with self.assertRaises(ValueError):m.poll(m.AdvisorySession(b,Path(self.tmp.name)/'fresh.json'),'http://source',state)
         with self.assertRaises(ValueError):m.poll(a,'http://source',state|{'is_synthetic':False})
 
@@ -187,3 +187,52 @@ class PollBoundaryTests(unittest.TestCase):
         raw=json.dumps(payload,ensure_ascii=False).encode()
         self.assertEqual(len([v for k,v in m.iter_replay(Chunks(raw)) if k=='frame']),2)
         with self.assertRaises(ValueError):list(m.iter_replay(Chunks(raw+b' {}')))
+
+    def test_service_cli_once_stop_and_error_publish_safe_status(self):
+        from unittest.mock import patch
+        import sys,signal,hashlib
+        directory=Path(self.tmp.name);settings=directory/'settings.json';source=directory/'source.json';output=directory/'runtime.json'
+        settings.write_text(json.dumps(config()));c=source_config();source.write_text(json.dumps(c));data=rows(80);state=data[-1]|dict(is_synthetic=True)
+        batch=[('frame',f) for f in data]+[('meta',v) for v in dict(config_id=c['config_id'],config_preserved=True,is_synthetic=True).items()]
+        argv=['service','--mes-url','http://source','--settings',str(settings),'--source-config',str(source),'--state-dir',str(directory/'journal'),'--output',str(output),'--once']
+        old={s:signal.getsignal(s) for s in (signal.SIGTERM,signal.SIGINT)}
+        try:
+            with patch.object(sys,'argv',argv),patch.object(m,'SETTINGS_SHA256',hashlib.sha256(settings.read_bytes()).hexdigest()),patch.object(m,'get_json',side_effect=[state,dict(config=c,is_synthetic=True)]),patch.object(m,'replay_stream',return_value=iter(batch)):
+                m.main()
+            self.assertEqual(json.loads(output.read_text())['status'],'ready')
+            (directory/'journal/STOP').touch()
+            with patch.object(sys,'argv',argv),patch.object(m,'SETTINGS_SHA256',hashlib.sha256(settings.read_bytes()).hexdigest()),patch.object(m,'get_json',return_value=state):m.main()
+            self.assertEqual(json.loads(output.read_text())['status'],'disabled')
+            (directory/'journal/STOP').unlink()
+            with patch.object(sys,'argv',argv),patch.object(m,'SETTINGS_SHA256',hashlib.sha256(settings.read_bytes()).hexdigest()),patch.object(m,'get_json',side_effect=[state|{'config_id':'bad'},dict(config=c,is_synthetic=True)]):
+                with self.assertRaises(ValueError):m.main()
+            result=json.loads(output.read_text());self.assertEqual(result['status'],'model_error');self.assertEqual(result['items'],[])
+        finally:
+            for s,h in old.items():signal.signal(s,h)
+
+    def test_real_mes_starts_at_one_and_fault_mode_is_nonoperating(self):
+        from unittest.mock import patch
+        b=self.binding();a=m.AdvisorySession(b,self.path);data=rows(100)[1:]
+        for f in data[:10]:f['line_mode']='fault'
+        batch=[('frame',f) for f in data]+[('meta',v) for v in dict(config_id=b.config_id,config_preserved=True,is_synthetic=True).items()]
+        with patch.object(m,'replay_stream',return_value=iter(batch)):
+            self.assertEqual(m.poll(a,'http://source',data[-1]|{'is_synthetic':True})['status'],'ready')
+        self.assertEqual(a.cursor,99)
+        unknown=copy.deepcopy(data[-1]);unknown['sequence']=100;unknown['line_mode']='unknown_mode'
+        with self.assertRaises(ValueError):a.feed(unknown,b.config_id)
+
+    def test_pause_without_new_sensor_sequence_clears_model_warmth(self):
+        b=self.binding();a=m.AdvisorySession(b,self.path);data=rows(80)
+        for f in data:a.feed(f,b.config_id)
+        m.poll(a,'http://unused',data[-1]|{'is_synthetic':True,'line_mode':'paused'})
+        self.assertFalse(a.detector.was_ready);self.assertEqual(a.detector.warm,0)
+        a.flush();self.assertFalse(m.AdvisorySession(b,self.path).detector.was_ready)
+
+    def test_all_bad_measurements_and_common_hold_are_not_healthy(self):
+        b=self.binding();a=m.AdvisorySession(b,self.path);data=rows(100)
+        for f in data[:80]:a.feed(f,b.config_id)
+        f=copy.deepcopy(data[80])
+        for sample in f['measurements']:sample['quality']='bad'
+        a.feed(f,b.config_id);self.assertEqual(a.report(f)['status'],'unavailable')
+
+if __name__=='__main__':unittest.main()

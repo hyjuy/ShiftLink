@@ -135,7 +135,7 @@ public static class FactoryWorkerChecks
                 "employee camera sees enclosed factory walls and roof");
             var root = (Transform)Get(worker, "WorkerRoot");
             Check(root.GetComponent<CharacterController>() != null, "employee has a CharacterController");
-            Check(root.GetComponentsInChildren<Renderer>(true).Length >= 6, "employee body and PDA are visible models");
+            Check(root.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length == 1 && root.GetComponentInChildren<FactoryWorkerVisual>() != null, "employee body and PDA are visible models");
             Vector3 before = root.position;
             Physics.SyncTransforms();
             Call(worker, "Step", .25f, new Vector2(0, 1), Vector2.zero);

@@ -1,0 +1,24 @@
+{
+  "reference": "supplied chibi illustration",
+  "rest_pose": "T",
+  "units": "metres",
+  "clips": 0,
+  "characters": [
+    {
+      "name": "ChibiWorker_Male",
+      "vertices": 17670,
+      "triangles": 34908,
+      "bones": 22,
+      "materials": 9,
+      "height_m": 1.719
+    },
+    {
+      "name": "ChibiWorker_Female",
+      "vertices": 18290,
+      "triangles": 36140,
+      "bones": 22,
+      "materials": 9,
+      "height_m": 1.719
+    }
+  ]
+}

@@ -36,6 +36,8 @@ jobs:
       - name: pytest
         env:
           HF_HUB_OFFLINE: "1"
+          # Isolated synthetic browser fixture only; production flags stay unchanged.
+          SHIFTLINK_TEST_CHROMIUM_NO_SANDBOX: "1"
         run: python -m pytest -q
 
       - name: PDA sensor and work-report regressions

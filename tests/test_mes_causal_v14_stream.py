@@ -4,6 +4,8 @@ from datetime import datetime, timedelta, timezone
 import json
 import math
 import sys
+import subprocess
+from pathlib import Path
 import unittest
 import numpy as np
 from scripts.mes_causal_schema import signals, units, metadata, MANUAL
@@ -153,7 +155,28 @@ class OnlineTests(unittest.TestCase):
         for field, value in [('thermal_rise_limits', [0.] * len(config()['thermal_rise_limits'])), ('limits', [1.])]:
             bad = copy.deepcopy(config()); bad[field] = value
             with self.assertRaises(ValueError): OnlineDetector(bad)
-        self.assertNotIn('torch', sys.modules); self.assertNotIn('timestral', sys.modules)
+        # Other collected research tests may already have imported torch in pytest.
+        # Verify this module's dependency contract in a fresh interpreter.
+        probe = '''
+import json, sys
+from scripts.mes_causal_v14_stream import OnlineDetector
+settings = json.load(sys.stdin)
+OnlineDetector(settings)
+for field, value in [('thermal_rise_limits', [0.] * len(settings['thermal_rise_limits'])), ('limits', [1.])]:
+    bad = dict(settings); bad[field] = value
+    try:
+        OnlineDetector(bad)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('Invalid settings were accepted')
+assert 'torch' not in sys.modules
+assert 'timestral' not in sys.modules
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', probe], input=json.dumps(config()),
+                                cwd=Path(__file__).resolve().parents[1],
+                                text=True, encoding='utf-8', capture_output=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_history_is_bounded_and_input_is_not_mutated(self):
         detector = OnlineDetector(config()); rows = frames(1500)

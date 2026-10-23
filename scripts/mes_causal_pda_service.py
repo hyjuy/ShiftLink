@@ -46,9 +46,11 @@ def atomic_json(path, value):
         os.fsync(f.fileno())
     os.chmod(temp, 0o600)
     temp.replace(path)
-    fd = os.open(path.parent, os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0))
-    try: os.fsync(fd)
-    finally: os.close(fd)
+    # Windows cannot open directory descriptors; retain POSIX durability on Pi.
+    if os.name == 'posix':
+        fd = os.open(path.parent, os.O_RDONLY | getattr(os, 'O_DIRECTORY', 0))
+        try: os.fsync(fd)
+        finally: os.close(fd)
 
 
 class BoundSource:

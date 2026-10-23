@@ -1,6 +1,6 @@
 # 전체 테스트 환경·검증 복구 (2026-10-23)
 
-기준 main은 `e1c88f5978d259ab85af324a8ce3d6b4fcb2e717`이다. 이 변경은 테스트 2개, 연구 테스트 의존성 파일, CI의 같은 의존성 파일 참조, 이 문서에 한정한다. 실행 코드, UI, 서비스 설정, 운영 DB는 변경하지 않는다.
+기준은 main `e1c88f5978d259ab85af324a8ce3d6b4fcb2e717`에 PR #343의 `b7bbeb2885d50358490158a3054d0a0e6b79371c`를 반영한 코드다. 변경은 테스트 4개, 연구 테스트 의존성 파일, CI, 체크포인트 저장 함수의 OS 분기, 이 문서의 8파일이다. UI·모델·임계값·MES·운영 DB는 변경하지 않는다.
 
 ## 확인한 원인
 
@@ -30,4 +30,11 @@ python scripts/check_knowledge_publication.py
 
 로컬 원자료는 `artifacts/full-suite-repair-20261023/`에 보존한다. 최초 수집 오류, WSL 시간 초과, Windows 권한 실패, 중단한 실행은 성공으로 집계하지 않는다. 장시간 실행 중 테스트 자료/임시 경로 문제를 발견하면 준비를 수정한 뒤 별도 실행으로 확인한다.
 
-기기에 반영하는 경우 위 5개 개발/테스트 파일의 저장소 상대 경로만 기존 `/home/pi/shiftlink/app` 및 `/home/jetson/shiftlink/app` 아래에 복사한다. 기존 파일 유무와 해시를 백업하고 적용 후 파일 해시·실행 Python/UI 소스·HTTP 상태·서비스 PID 불변을 확인한다. CPU torch 설치, 모델 다운로드, 서비스 재시작, 운영 데이터 변경은 이 배포에 포함하지 않는다.
+운영 실행 파일 변경은 `scripts/mes_causal_pda_service.py` 하나다. Pi의 기존 r2를 보존한 별도 analytics 릴리스에 반영하고 #343의 기존 PDA 4파일·기기용 HTML·설정·core를 보존한다. CI·테스트 파일은 검증용이며 기기에 연구용 CPU torch를 설치하지 않는다. Jetson 실행 코드의 변경은 없다.
+
+## #343 통합에서 추가 확인한 경계
+
+- 원 PR의 Linux CI #519는 2 실패·2953 통과·5 skip이었다. Chromium은 JS 검사 전에 Zygote 초기화에서 종료됐고, 다른 연구 테스트가 import한 torch 때문에 전역 `sys.modules` 부재 검사도 실패했다. 모듈 부재 검사는 새 Python 프로세스에서 정상/비정상 설정 모두에 적용한다. 부모가 torch를 이미 import해도 독립적인 검사가 된다.
+- Chromium의 `--no-sandbox`는 GitHub Actions의 합성 file fixture에만 명시적으로 설정한다. 기본 Pi 브라우저와 운영 브라우저 인수는 그대로 유지한다. 실행 실패의 전체 stderr를 보존하도록 해 실제 UI assertion 실패와 구분한다. 최종 CI 결과로 실행 조건 수정의 효과를 확인한다.
+- Windows 전체 통합 검사에서는 22 실패·2929 통과·3 skip·WSL 오류 1개였다. 이 중 21개는 체크포인트 파일 교체 뒤 디렉터리를 `os.open`하는 부분의 `PermissionError`, 1개는 위 전역 모듈 검사였다. `atomic_json`은 파일 flush/fsync·chmod·원자적 교체를 유지하고 디렉터리 fsync만 POSIX에서 수행한다. Pi의 POSIX 저장 경로는 동일하며 Linux 오류를 숨기는 예외 처리는 추가하지 않는다.
+- 수정 후 Torch 미세조정·통계 core·실서비스/정지 이력·reader·배포 복구·표시·계정의 관련 8개 파일은 **84개 모두 통과**했다. 선택 skip은 없었다. 전체 검사·Linux CI·Pi 격리 검사·실제 배포 결과는 PR의 검증 결과와 로컬 원자료에 따로 남긴다. 개별 검사 통과를 전체 검사의 성공으로 바꾸지 않는다.

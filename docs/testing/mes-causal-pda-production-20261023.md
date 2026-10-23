@@ -58,3 +58,20 @@ Python 표준 trace의 실행 줄 집합으로 합친 커버리지는 새 서비
 원자료 보존 위치는 Pi `/tmp/shiftlink-production-validate-20261023`, 로컬 `output/mes-causal-v14-production-20261023/`다. 영구 롤백 백업과 릴리스는 `/tmp`가 아닌 `/home/pi/shiftlink/analytics/`에 남는다. 서비스 재시작 1회·PDA 재시작 1회를 수행했고 MES 서비스·DB·실제 경보에는 변경 명령을 보내지 않았다.
 
 Pi 생성 근거: [최종 요약](evidence/mes-causal-pda-production-20261023/verified-summary.json), [운전 중 감독 13표본](evidence/mes-causal-pda-production-20261023/post-deploy-monitor-v2.json), [실행 줄 커버리지](evidence/mes-causal-pda-production-20261023/merged-coverage.json), [Chromium 결과](evidence/mes-causal-pda-production-20261023/browser-result.json). Pi에서 ZIP CRC와 SHA256을 확인한 원자료 `production-evidence.zip`은 로컬 output에 보존했다. SHA256은 `394cfda030a69a08c5e292618d808308f81b4df504a2749d2e9a446454f174b99`다. PR: https://github.com/hyjuy/ShiftLink/pull/343.
+
+## 고장 정지 전 감지 이력 유지 — 2026-10-23 후속
+
+기존 배포는 비가동 시 신규 분석과 기존 AI 이력 표시를 함께 중단했다. 후속 요청에 따라 신규 분석 보류는 유지하고, 정지 직전 확정된 AI 통지를 별도 `stopped_notices`로 보존한다. 모델·정상화·임계값·감지 조건·Timestral 제외 결정은 바꾸지 않는다.
+
+- 대상은 stopped/waiting 설비 중 MES fault 모드 또는 해당 설비의 활성 경보·warning/critical/fault 상태가 있는 경우다. 정지 사유의 인과관계를 AI가 확정하는 규칙은 아니다.
+- 정지 시점 기준 최근 30프레임 안에 이미 발생한 AI 통지만 동일 event_id·감지 시각으로 보존한다. 정지 중 0값·고정값으로 새 통지를 만들지 않는다. 화면은 `AI 이상징후 · 정지 전 감지 · 시각`으로 구분한다.
+- 정지가 이어지는 동안 이력을 유지하고 체크포인트에 즉시 저장한다. 서비스 재시작 뒤에도 같은 이력이며, 구형 체크포인트의 필드 부재는 빈 이력으로 읽는다. 이전 버전에서 이미 지운 과거 AI 감지를 만들어 복원하지 않는다.
+- 정상 계획 정지, 운전 재개, 다른 run, 프레임 불연속에는 정지 이력을 재사용하지 않는다. 통신 만료·config/run 불일치·잘린 replay·조작된 정지 시각은 게시하지 않는다.
+- 동일 설비는 기존 알람창 한 행에 합친다. 기존 active_alarms·확인·배지·진동·범위 이탈 규칙은 변경하지 않았다. AI 이력의 유지·재조회·복원 자체는 재진동이나 새 미확인을 만들지 않는다.
+- 잠깐 튄 값을 점검 요청으로 만들지 않는 대조군도 검사했다. 1프레임 20z·2프레임 6z·6프레임 1.5z는 AI 통지 없음, 12프레임 6z 지속 이상은 통지 있음을 확인했다. 특정 합성 채널 fixture의 회귀 결과이며 모든 순간 변화에 대한 성능 보장은 아니다. 같은 창의 기존 MES 범위 이탈 표시는 원래 규칙대로 남는다.
+
+Pi `/tmp/shiftlink-fault-stop-20261023`에서 RED 7건 중 4실패·1오류를 재현했다. 정상 정지/경계와 순간 튐 대조는 수정 전부터 통과했다. 최소 수정 후 초기 Python 29건+Chromium 1건, 추가 경계까지 Python 31건을 통과했다. 이미 active인 서비스를 새 unit으로 교체할 때 `enable --now`만으로는 새 코드가 시작되지 않는 배포 경로도 보완했다. 별도 RED 1오류 후 배포 테스트 3건 PASS를 확인해 전체 고유 Python 회귀는 32건이다. 실제 Chromium 알람창 회귀 1건, 기존 CJS 5건과 JS 문법 검사도 Pi에서 통과했다.
+
+수정 런타임의 보수적 실행 줄 커버리지는 서비스 80.12%(258/322), reader 86.46%(83/96), 두 모듈 합계 81.58%(341/418)다. 이 측정은 테스트 모듈 import 이후 trace를 켰으므로 import/정의 줄은 미집계다. 배포 도구의 기존 전체 코드는 이 80% 범위에 포함하지 않으며 새 업데이트 경로는 별도 기능 테스트와 실제 적용으로 확인한다.
+
+r2 릴리스는 `/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2`다. 적용 전에 현재 r1의 PDA 4파일 해시·unit 구문·Python compile·실제 체크포인트를 복사한 독립 `--once` 실행을 확인했다. r1 릴리스와 첫 영구 백업은 보존한다. 새 적용 백업과 배포 후 결과는 아래 Pi 생성 근거에 기록한다. 실제 MES 고장을 강제로 만들거나 사용자 경보를 확인/해제하는 검증은 수행하지 않는다.

@@ -10,7 +10,7 @@ Timestral을 사용하지 않는 고정 v14c 통계 후보를 별도 프로세�
 - 화면의 기존 3초 폴링은 유지한다. 분석 서비스는 1초 대기 주기로 조회하고 replay로 중간 프레임을 모두 소비한다. 실제 조회 주기는 네트워크·처리 시간을 포함한다.
 - 전송은 69채널 전체의 키·단위·정상 범위를 고정 설정과 검사한다. 고정 모델은 그중 선택한 채널을 사용한다. 배열 위치로 임의 축소하거나 config_id를 연구 ID로 위장하지 않는다.
 - 실제 MES의 최초 sequence=1, snapshot에 없는 config_id의 배치 검증, `fault` 비가동 처리, 개별 비가동 설비 품질 제외를 어댑터에서 처리한다.
-- 정상 64프레임 준비 전·비가동·불량 측정·통신/모델 오류·오래된 결과는 정상 판정으로 표시하지 않는다. `recent`는 최근 통지이며 현재 고장 확정 상태가 아니다.
+- 정상 64프레임 준비 전·비가동·불량 측정·통신/모델 오류·오래된 결과는 정상 판정으로 표시하지 않는다. 고장 정지는 최근 30프레임 내 확정한 감지만 별도 영속 이력으로 유지하고 감지 시각과 정지 전 이력임을 표시한다. 신규 통지·진동은 만들지 않으며 정상 정지·재개·다른 run에는 재사용하지 않는다. `recent`는 최근 통지이며 현재 고장 확정 상태가 아니다.
 
 ## 배포
 
@@ -50,7 +50,7 @@ python3 -B deploy/analytics/apply_release.py --rollback /home/pi/shiftlink/analy
 ## Pi 검증
 
 ```sh
-python3 -B -m unittest tests.test_mes_causal_v14_stream tests.test_mes_causal_pda_service tests.test_analytics_release tests.test_pda_advisory_reader -v
+python3 -B -m unittest tests.test_mes_causal_v14_stream tests.test_mes_causal_pda_service tests.test_analytics_release tests.test_pda_advisory_reader tests.test_pda_fault_stop -v
 SHIFTLINK_BROWSER_EVIDENCE=/tmp/shiftlink-browser-result python3 -B -m unittest tests.test_mes_causal_pda_browser -v
 ```
 

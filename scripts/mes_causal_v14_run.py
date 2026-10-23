@@ -125,6 +125,7 @@ def freeze(out):
     assert not (out/'data/test').exists(),'test already exists'
     assert load(out/'regression.json')['passed'],'regressions required'
     assert load(out/'diagnostic-v13/result.json')['methods']['v14']['detected_events']==42,'known cooling miss remains'
+    assert load(out/'regression.json')['core_sha256']==d.sha(ROOT/'scripts/mes_causal_v14.py'),'tested core changed'
     verify(out);files=load(out/'protected.json')
     paths=list(out.rglob('*'))+[ROOT/'scripts'/n for n in ('mes_causal_v14.py','mes_causal_v14_data.py','mes_causal_v14_run.py','mes_causal_v14_audit.py')]
     paths +=[ROOT/'tests/test_mes_causal_v14.py',ROOT/'docs/research/mes-causal-v14-prereg-20261023.md']

@@ -92,3 +92,35 @@ def test_question_report_review_quality_publish_browser_flow(service, publicatio
             assert errors==[]
         finally:
             browser.close()
+
+
+def test_pda_unanswered_question_opens_structured_log(service, publication_web):
+    api = pytest.importorskip('playwright.sync_api')
+    with api.sync_playwright() as playwright:
+        channel = os.environ.get('SHIFTLINK_BROWSER_CHANNEL', 'chrome')
+        browser = playwright.chromium.launch(headless=True, **({'channel': channel} if channel else {}))
+        try:
+            page = browser.new_page(viewport={'width': 1280, 'height': 900})
+            page.goto(publication_web + '/pda.html')
+            page.locator('#employeeId').fill('WORKER-01')
+            page.locator('#employeePassword').fill('local-publication-test')
+            page.locator('#accountSubmit').click()
+            page.locator('#toManual').click()
+            page.get_by_role('button', name='HPU-01 선택', exact=True).click()
+            question = '압력 표시가 요동칠 때 어떤 순서로 점검하나요?'
+            page.locator('#question').fill(question)
+            page.locator('#doSearch').click()
+            page.wait_for_function("S.chat.length && S.chat.at(-1).status !== 'pending'")
+            turn = page.evaluate('S.chat.at(-1)')
+            assert turn['response']['knowledge_status'] == 'no_applicable_card'
+            page.locator('#chatReport').click()
+            [record] = page.evaluate('S.reportRecords')
+            assert record['query_id'] == turn['response']['query_id']
+            assert record['story'] == question and record['capture_version'] == 1
+            assert record['normal_run_status'] == 'unconfirmed' and record['outcome'] == 'open'
+            assert record['action_steps'] == [{'action': '', 'observed_result': '', 'failed': False, 'worker': '검증 WORKER-01'}]
+            # Reopening the same source cannot append another draft or rewrite a record.
+            page.evaluate('reportFromChat(S.chat.at(-1))')
+            assert page.evaluate('S.reportRecords') == [record]
+        finally:
+            browser.close()

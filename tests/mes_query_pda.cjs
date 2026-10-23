@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { queryApiPayload, responseCards, scanTarget, staleResponse, outboxLabels, refreshOutbox, outboxItemView, releaseContext, alertTarget, failScan, symptomsFor, S } = require('../shiftlink/mes/web/pda.js');
+const { queryApiPayload, responseCards, scanTarget, staleResponse, outboxLabels, refreshOutbox, outboxItemView, questionRecord, releaseContext, alertTarget, failScan, symptomsFor, S } = require('../shiftlink/mes/web/pda.js');
 assert.deepEqual(queryApiPayload('q', {source:'camera_scan', scanId:'SC-1', eq:{equipment_id:'EQ-1'}}),
   {question:'q', scan_id:'SC-1'});
 assert.deepEqual(queryApiPayload('q', {source:'manual_selection', eq:{equipment_id:'EQ-2'}}),
@@ -59,6 +59,13 @@ assert.deepEqual(bootCards, [card]);
 assert.equal(responseCards({...fieldResponse, review_queue:true}, bootCards, null, fieldEq).actions.length, 0);
 assert.equal(responseCards({...fieldResponse, cited_cards:[{...fieldCard, mes_equipment_id:'EQ-other'}]}, bootCards, null, fieldEq).actions.length, 0);
 assert.equal(responseCards({...fieldResponse, cited_card_ids:['KD-absent']}, bootCards, null, fieldEq).actions.length, 0);
+// The existing work-log button must retain the unanswered question as structured, editable capture.
+const gapTurn={question:'압력 표시가 요동칠 때 어떤 순서로 점검하나요?',eqId:'EQ-1',started:Date.parse('2026-10-23T09:00:00+09:00'),response:{query_id:'Q-gap',knowledge_status:'no_applicable_card',answer:'해당 지식 없음'}};
+const gapBefore=JSON.stringify(gapTurn),gapRecord=questionRecord(gapTurn,'EQ-1');
+assert.equal(gapRecord.query_id,'Q-gap');assert.equal(gapRecord.story,gapTurn.question);assert.equal(gapRecord.capture_version,1);
+assert.equal(gapRecord.occurred_at,'2026-10-23T09:00');assert.equal(gapRecord.outcome,'open');assert.equal(gapRecord.normal_run_status,'unconfirmed');
+assert.deepEqual(gapRecord.action_steps,[{action:'',observed_result:'',failed:false}]);
+assert.equal(questionRecord(gapTurn,'EQ-other'),null);assert.equal(JSON.stringify(gapTurn),gapBefore);
 // B3: 재스캔 실패 시 이전 확정 해제 · 알림 확인 대상은 탭 시점 equipment_id로 고정.
 // main의 '이 조치 시도' 제거 후에는 현재 사용하는 관측·근거·대화 상태의 격리를 확인한다.
 const st = {eq:{equipment_id:'EQ-1'}, source:'camera_scan', scanId:'SC-1', observations:[{}],

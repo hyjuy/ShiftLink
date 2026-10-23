@@ -30,7 +30,7 @@ def _face_bypass() -> bool:
     """모델이 없을 때 시연만. 서버는 127.0.0.1에만 열린다. 기본은 꺼져 있다."""
     return os.environ.get("SHIFTLINK_FACE_BYPASS") == "1"
 # Jetson MES 서버(shiftlink/mes/server.py)와 같은 경로·파일
-PAGES = {'/pda.html': 'pda.html', '/static/pda.js': 'pda.js', '/static/knowledge.js': 'knowledge.js', '/static/knowledge.css': 'knowledge.css', '/knowledge-candidates.html': 'knowledge-candidates.html', '/static/candidate-review.js': 'candidate-review.js', '/static/candidate-review.css': 'candidate-review.css'}
+PAGES = {'/static/style.css': 'style.css', '/pda.html': 'pda.html', '/static/pda.js': 'pda.js', '/static/knowledge.js': 'knowledge.js', '/static/knowledge.css': 'knowledge.css', '/knowledge-candidates.html': 'knowledge-candidates.html', '/static/candidate-review.js': 'candidate-review.js', '/static/candidate-review.css': 'candidate-review.css'}
 TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css"}
 
 

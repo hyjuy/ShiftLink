@@ -55,6 +55,11 @@ def test_pages_local_and_api_proxied():
         assert status == 200 and b"/static/pda.js" in body and b'href="/"' in body
         assert b'id="loginName"' in body and b'id="loginId"' in body and b'id="faceVideo"' in body
         assert fetch(pda_url + "/static/pda.js")[0] == 200
+        status, review = fetch(pda_url + "/knowledge-candidates.html")
+        assert status == 200 and b'/static/style.css' in review
+        with urllib.request.urlopen(pda_url + "/static/style.css") as stylesheet:
+            assert stylesheet.headers.get_content_type() == 'text/css'
+            assert b'--' in stylesheet.read()
         conn = http.client.HTTPConnection(pda_url.split("//")[1]); conn.request("GET", "/")
         res = conn.getresponse()  # 대시보드는 파이에 두지 않고 Jetson 화면으로 보낸다
         assert res.status == 302 and res.getheader("Location") == jetson_url + "/?from=pda"

@@ -148,8 +148,23 @@ class MesService:
         started = time.perf_counter()
         result = query_service(self, body, pipeline=self.query_pipeline)
         with self._lock:
-            if not self.publications.still_current(result.pop('_publication_ticket',[])):
+            ticket = result.pop('_publication_ticket', [])
+            if not self.publications.still_current(ticket):
                 raise JudgeUnavailableError('질의 중 지식카드 검수 상태가 변경됐습니다. 다시 질문해 주세요.')
+            # Boot-time PDA catalogs cannot contain cards published later. Freeze only
+            # the cited, still-reviewed versions with this answer, never all drafts.
+            from .candidate_review import content_hash
+            cited = set(result.get('cited_card_ids', []))
+            snapshots = []
+            for draft_id, revision, digest, equipment_id, asset_id in ticket:
+                if draft_id not in cited:
+                    continue
+                card = self.storage.get_card_draft(draft_id)['review_flags']['publication']['card']
+                if content_hash(card) != digest:
+                    raise JudgeUnavailableError('인용 카드 원문이 검수본과 다릅니다. 다시 검수해 주세요.')
+                snapshots.append(card)
+            if snapshots:
+                result['cited_cards'] = snapshots
             return self._save_query_result(body, result, started)
 
     def _save_query_result(self, body, result, started):
@@ -169,6 +184,7 @@ class MesService:
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
             "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True,
+            **({"cited_cards": result["cited_cards"]} if "cited_cards" in result else {}),
             **({"graph_context": result["graph_context"]} if "graph_context" in result else {}),
             **({"s30h_trace": result["s30h_trace"]} if "s30h_trace" in result else {})})
         return {**result, "query_id": query_id}
@@ -307,7 +323,7 @@ class MesService:
                     kind = 'T6' if record['restart_performed'] else 'T3'
                     if not work_reports.routine_maintenance(record):add(kind, 'insufficient_capture', None if work_reports.capture_missing(record) else
                         lambda card_id: work_reports.capture_candidate_from(
-                            record, self.active_config, body['handover_id'], index, card_id, utc_now()))
+                            record, self.active_config, body['handover_id'], index, card_id, utc_now(), query=query))
                 elif query is not None or not ready and not incomplete:
                     reason = ('missing_query' if query is None else
                               'query_not_knowledge_gap' if query.get('knowledge_status') != 'no_applicable_card' else

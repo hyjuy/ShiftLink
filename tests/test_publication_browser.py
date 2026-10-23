@@ -45,8 +45,9 @@ def test_question_report_review_quality_publish_browser_flow(service, publicatio
             errors=[]
             page.on('pageerror',lambda error:errors.append(str(error)))
             # HTTP APIs used by the PDA preserve the query -> log source chain.
+            question_text='압력이 낮고 필터 오염이 의심됩니다'
             question=page.request.post(publication_web+'/api/query',data={
-                'question':'압력이 낮고 필터 오염이 의심됩니다','equipment_id':service.active_config.equipment[0].equipment_id}).json()
+                'question':question_text,'equipment_id':service.active_config.equipment[0].equipment_id}).json()
             assert question['knowledge_status']=='no_applicable_card'
             note=captured(service)
             note['work_report']['records'][0]['query_id']=question['query_id']
@@ -57,6 +58,8 @@ def test_question_report_review_quality_publish_browser_flow(service, publicatio
             page.locator('#review-admin-password').fill('local-publication-test')
             page.locator('#review-login-form button').click()
             expect(page.locator('#candidate-detail h2')).to_contain_text('HPU')
+            expect(page.locator('#candidate-detail')).to_contain_text('연결된 원질문')
+            expect(page.get_by_text(question_text,exact=True)).to_be_visible()
             assert page.get_by_role('button',name='검수 통과',exact=True).count()==0
             page.locator('#review-reason').fill('원문·조치 결과 심사 완료')
             page.get_by_role('button',name='검토 승인',exact=True).click()
@@ -79,13 +82,45 @@ def test_question_report_review_quality_publish_browser_flow(service, publicatio
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
                 page.screenshot(path=str(artifact/f'review-{width}.png'),full_page=True)
             response=page.request.post(publication_web+'/api/query',data={
-                'question':'필터 오염 확인 필터 교체 압력','equipment_id':note['equipment_id']}).json()
+                'question':question_text,'equipment_id':note['equipment_id']}).json()
             assert draft_id in response['cited_card_ids']
             page.locator('#review-reason').fill('반대 근거 발견으로 재검토')
             page.get_by_role('button',name='보완 요청',exact=True).click()
             expect(page.locator('#publication-state')).to_have_text('재검토로 검색 제외')
             assert page.request.post(publication_web+'/api/query',data={
-                'question':'필터 오염 확인 필터 교체 압력','equipment_id':note['equipment_id']}).json()['no_knowledge']
+                'question':question_text,'equipment_id':note['equipment_id']}).json()['no_knowledge']
             assert errors==[]
+        finally:
+            browser.close()
+
+
+def test_pda_unanswered_question_opens_structured_log(service, publication_web):
+    api = pytest.importorskip('playwright.sync_api')
+    with api.sync_playwright() as playwright:
+        channel = os.environ.get('SHIFTLINK_BROWSER_CHANNEL', 'chrome')
+        browser = playwright.chromium.launch(headless=True, **({'channel': channel} if channel else {}))
+        try:
+            page = browser.new_page(viewport={'width': 1280, 'height': 900})
+            page.goto(publication_web + '/pda.html')
+            page.locator('#employeeId').fill('WORKER-01')
+            page.locator('#employeePassword').fill('local-publication-test')
+            page.locator('#accountSubmit').click()
+            page.locator('#toManual').click()
+            page.get_by_role('button', name='HPU-01 선택', exact=True).click()
+            question = '압력 표시가 요동칠 때 어떤 순서로 점검하나요?'
+            page.locator('#question').fill(question)
+            page.locator('#doSearch').click()
+            page.wait_for_function("S.chat.length && S.chat.at(-1).status !== 'pending'")
+            turn = page.evaluate('S.chat.at(-1)')
+            assert turn['response']['knowledge_status'] == 'no_applicable_card'
+            page.locator('#chatReport').click()
+            [record] = page.evaluate('S.reportRecords')
+            assert record['query_id'] == turn['response']['query_id']
+            assert record['story'] == question and record['capture_version'] == 1
+            assert record['normal_run_status'] == 'unconfirmed' and record['outcome'] == 'open'
+            assert record['action_steps'] == [{'action': '', 'observed_result': '', 'failed': False, 'worker': '검증 WORKER-01'}]
+            # Reopening the same source cannot append another draft or rewrite a record.
+            page.evaluate('reportFromChat(S.chat.at(-1))')
+            assert page.evaluate('S.reportRecords') == [record]
         finally:
             browser.close()

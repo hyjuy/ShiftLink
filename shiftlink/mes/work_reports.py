@@ -211,7 +211,7 @@ def step_worker_time(step):
     return f"근무자: {step.get('worker') or '미기재'} · 조치시각: {step.get('performed_at') or '미기재'}"
 
 
-def capture_candidate_from(record, config, report_id, record_index, card_id, now):
+def capture_candidate_from(record, config, report_id, record_index, card_id, now, *, query=None):
     """Observed outcomes are draft evidence, not an approved procedure or proof of continuous MES operation."""
     eq=next(eq for eq in config.equipment if eq.equipment_id==record['equipment'][0])
     steps=[step for step in record['action_steps'] if step['action'].strip() or step['observed_result'].strip()]
@@ -235,6 +235,11 @@ def capture_candidate_from(record, config, report_id, record_index, card_id, now
           'provenance':{'seed_ids':[],'persona_id':'field-work-report','event_ids':[],'generator':'work-report-capture-v1',
               'generated_at':now.isoformat(),'extraction_method':'rule','schema_version':field_draft.SCHEMA_VERSION,
               'sources':[{'source_id':report_id,'locator':f'work_report.records[{record_index}]'}]}}
+    if query is not None:
+        # Keep the linked symptom question searchable without changing the work log or its outcomes.
+        if query['question'] != card['symptom']:
+            card['symptom'] += '\n원질문(참조): ' + query['question']
+        card['provenance']['sources'].append({'source_id':query['query_id'], 'locator':'query_log'})
     card=KnowledgeCard.model_validate(card).model_dump(mode='json')
     risk=record.get('safety_notes','')
     flags={'work_report':{'handover_id':report_id,'record_index':record_index},'normal_operation':normal,
@@ -244,6 +249,9 @@ def capture_candidate_from(record, config, report_id, record_index, card_id, now
            'needs_safety_review':bool(risk) or any(word in card['know_how'] for word in field_draft.SAFETY_WORDS),
            'scenario_default':'S1 기본 분류·검토 필요','lint':lint_card(card,known_fields=set(KnowledgeCard.model_fields)),
            'completeness':{'missing':[],'operator':['재사용 타당성·적용 조건·안전 근거 판정'],'ready':False}}
+    if query is not None:
+        flags['work_report']['query_id'] = query['query_id']
+        flags['origin_query'] = {key:query.get(key) for key in ('query_id','question','knowledge_status')}
     return {'status':'pending_review','card':card,'review_flags':flags}
 
 

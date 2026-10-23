@@ -232,3 +232,12 @@ pytest 전에 비전 의존성과 scikit-learn, CPU PyTorch, 고정 커밋의 Ti
 `shiftlink/rag2/field_history.py`는 기존 기록 조회만 `record_history`로 분류한다. S30h의 검색·judge를 통과한 해당 장비의 accepted/L1/kb 현장 카드 원문을 질의별로 사용하며 저장 카드·청크를 바꾸지 않는다. 독립된 현재·미래 요청은 원래 전체 질문과 MES를 생성 경로로 전달한다. 숫자 원출처 보호는 `generate.py`에 있다.
 
 변경 시 `tests/test_field_history_integration.py`, `tests/test_s30h_publication_integrity.py`와 `scripts/check_knowledge_publication.py --history-scope closure`를 확인한다. 검증 범위·원문 보존 계약·하니스와 한계는 [안정화 보고서](../harness/history-stability-20261023.md)에 있다. UI·온톨로지 및 MES 저장 경로의 변경은 포함하지 않는다.
+
+
+## 합성 센서 분석 v14c 검토 경로 (2026-10-23)
+
+- `scripts/mes_causal_*.py`: 독립 로컬 합성 MES 생성, 정상 통계 보정, 실행 단위 분할, 후보 고정 및 사후 평가. v8~v13은 v14의 비교·회귀 의존성으로 보존한다.
+- 최종 후보: `scripts/mes_causal_v14.py`와 `mes_causal_v14c.py`. 다중 온도 상승 증거와 정상 지속 구간 보정을 사용하며 Timestral 모델을 로딩하지 않는다.
+- 프로토콜·결과: `docs/research/mes-causal-v14*-20261023.md`; 검토용 고정 설정·요약은 `docs/research/evidence/mes-causal-v14c-20261023/`에 있다. 이 사본은 전체 원자료·lock·캐시를 대체하지 않는다.
+- 검증: `tests/test_mes_causal_v14.py`, `tests/test_mes_causal_v14c.py`와 기존 인과 분석 회귀. 기기 준비 및 SSH 인증 실패 기록은 `docs/testing/mes-causal-v14-device-readiness-20261023.md`를 따른다.
+- 실행기는 이전 `output/mes-causal-*` 자료와 절대 경로 고정 정보를 요구한다. 새 체크아웃에서 전체 평가 CLI가 즉시 실행된다고 가정하지 않는다. 이 경로는 MES/PDA 서비스에 연결되지 않았고 기기에 배포하지 않았다.

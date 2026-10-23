@@ -1,0 +1,650 @@
+{
+  "methods": {
+    "v13": {
+      "events": 42,
+      "detected_events": 41,
+      "missed_events": 1,
+      "event_recall": 0.9761904761904762,
+      "duplicate_notifications": 0,
+      "unmatched_starts_including_duplicates": 11,
+      "no_active_intervention_operating_seconds": 22964,
+      "operating_seconds": 24960,
+      "no_active_intervention_starts": 2,
+      "pristine_normal_run_seconds": 13440,
+      "pristine_normal_false_starts": 0,
+      "pristine_normal_false_starts_per_line_hour": 0.0,
+      "wrong_source_equipment_seconds": 11,
+      "p95_injection_delay_seconds": 33,
+      "within_10s_fraction": 0.3333333333333333,
+      "by_run": {
+        "a277bd7b818d6c267390a522967518c4": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "8f4617c3404efa59f70f1b10336ce8d1": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            5,
+            6,
+            15
+          ]
+        },
+        "1df0600b2c11d6787b9fa1f19c70a6f4": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "e8ac6f85894d2dbb9f54bee40e2ff25a": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            16,
+            5,
+            15
+          ]
+        },
+        "354bdb51e2870e0f4e738cced13d351f": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "92185bfd15b33bae4937126b71914b11": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            5,
+            5,
+            15
+          ]
+        },
+        "b843480e5eef4161b2b6d27ba2fe46ee": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "35159d4c6345a98bb5f9b6a2517d87c7": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            11,
+            6,
+            15
+          ]
+        },
+        "bd5624d2c7e69f5e61c7c3d901e1e2d8": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "0281e6e0aff5c76122a6948a869bcd6d": {
+          "events": 4,
+          "detected": 4,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            6,
+            7,
+            8,
+            15
+          ]
+        },
+        "16d0e1816730dee80732d412e825019a": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "79e2016ce28436785ebcfc0583c0864c": {
+          "events": 5,
+          "detected": 5,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            24,
+            5,
+            41,
+            15,
+            33
+          ]
+        },
+        "9591c55fc59c918e06d4e4d149c6985e": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "39b305920523ab877e62735e1e9fbbfc": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "7df56fb08d06a0091f97b036f0c624d2": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            9,
+            8,
+            15
+          ]
+        },
+        "f4a02ccdf3708ff4444f06270f937d16": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "c18fe0b8eccd232ecb9172fa2e776e93": {
+          "events": 3,
+          "detected": 2,
+          "missed": 1,
+          "duplicates": 0,
+          "delays": [
+            16,
+            15
+          ]
+        },
+        "1928736a7c319c2cf0303f9cdbe576d0": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "43de1196d0e0634aa64737282bc29afd": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            15,
+            12,
+            15
+          ]
+        },
+        "333d34acb09ead9c37d9bf1a2cc5f23d": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "d198805adb0b86c9f603cdd57977851e": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            29,
+            23,
+            15
+          ]
+        },
+        "55308e966019c3f83fe2bedd6f3942fc": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "21301f327934a17dfbe6d2c5353dc2b2": {
+          "events": 4,
+          "detected": 4,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            7,
+            13,
+            9,
+            15
+          ]
+        },
+        "afcf80ab4175817414e89405f24bd623": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "e5e12ba46b7afb42f9ff8f5841fe7086": {
+          "events": 5,
+          "detected": 5,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            16,
+            11,
+            41,
+            15,
+            20
+          ]
+        },
+        "a88d8959d104e28ed293ec04e7b32124": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        }
+      },
+      "attributable_events": 41,
+      "attributable_within_10s": 14,
+      "by_kind": {
+        "friction": {
+          "events": 8,
+          "detected": 8,
+          "attributable": 8
+        },
+        "leak": {
+          "events": 6,
+          "detected": 6,
+          "attributable": 6
+        },
+        "sensor_stuck": {
+          "events": 14,
+          "detected": 14,
+          "attributable": 14
+        },
+        "cooling_loss": {
+          "events": 8,
+          "detected": 8,
+          "attributable": 8
+        },
+        "blockage": {
+          "events": 6,
+          "detected": 5,
+          "attributable": 5
+        }
+      }
+    },
+    "v14": {
+      "events": 42,
+      "detected_events": 41,
+      "missed_events": 1,
+      "event_recall": 0.9761904761904762,
+      "duplicate_notifications": 0,
+      "unmatched_starts_including_duplicates": 11,
+      "no_active_intervention_operating_seconds": 22964,
+      "operating_seconds": 24960,
+      "no_active_intervention_starts": 2,
+      "pristine_normal_run_seconds": 13440,
+      "pristine_normal_false_starts": 0,
+      "pristine_normal_false_starts_per_line_hour": 0.0,
+      "wrong_source_equipment_seconds": 11,
+      "p95_injection_delay_seconds": 23,
+      "within_10s_fraction": 0.35714285714285715,
+      "by_run": {
+        "a277bd7b818d6c267390a522967518c4": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "8f4617c3404efa59f70f1b10336ce8d1": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            5,
+            6,
+            15
+          ]
+        },
+        "1df0600b2c11d6787b9fa1f19c70a6f4": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "e8ac6f85894d2dbb9f54bee40e2ff25a": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            15,
+            5,
+            15
+          ]
+        },
+        "354bdb51e2870e0f4e738cced13d351f": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "92185bfd15b33bae4937126b71914b11": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            5,
+            5,
+            15
+          ]
+        },
+        "b843480e5eef4161b2b6d27ba2fe46ee": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "35159d4c6345a98bb5f9b6a2517d87c7": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            9,
+            6,
+            15
+          ]
+        },
+        "bd5624d2c7e69f5e61c7c3d901e1e2d8": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "0281e6e0aff5c76122a6948a869bcd6d": {
+          "events": 4,
+          "detected": 4,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            6,
+            7,
+            8,
+            15
+          ]
+        },
+        "16d0e1816730dee80732d412e825019a": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "79e2016ce28436785ebcfc0583c0864c": {
+          "events": 5,
+          "detected": 5,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            15,
+            5,
+            41,
+            15,
+            17
+          ]
+        },
+        "9591c55fc59c918e06d4e4d149c6985e": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "39b305920523ab877e62735e1e9fbbfc": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "7df56fb08d06a0091f97b036f0c624d2": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            9,
+            8,
+            15
+          ]
+        },
+        "f4a02ccdf3708ff4444f06270f937d16": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "c18fe0b8eccd232ecb9172fa2e776e93": {
+          "events": 3,
+          "detected": 2,
+          "missed": 1,
+          "duplicates": 0,
+          "delays": [
+            13,
+            15
+          ]
+        },
+        "1928736a7c319c2cf0303f9cdbe576d0": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "43de1196d0e0634aa64737282bc29afd": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            15,
+            12,
+            15
+          ]
+        },
+        "333d34acb09ead9c37d9bf1a2cc5f23d": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "d198805adb0b86c9f603cdd57977851e": {
+          "events": 3,
+          "detected": 3,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            19,
+            23,
+            15
+          ]
+        },
+        "55308e966019c3f83fe2bedd6f3942fc": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "21301f327934a17dfbe6d2c5353dc2b2": {
+          "events": 4,
+          "detected": 4,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            7,
+            13,
+            9,
+            15
+          ]
+        },
+        "afcf80ab4175817414e89405f24bd623": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        },
+        "e5e12ba46b7afb42f9ff8f5841fe7086": {
+          "events": 5,
+          "detected": 5,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": [
+            15,
+            11,
+            41,
+            15,
+            16
+          ]
+        },
+        "a88d8959d104e28ed293ec04e7b32124": {
+          "events": 0,
+          "detected": 0,
+          "missed": 0,
+          "duplicates": 0,
+          "delays": []
+        }
+      },
+      "attributable_events": 41,
+      "attributable_within_10s": 15,
+      "by_kind": {
+        "friction": {
+          "events": 8,
+          "detected": 8,
+          "attributable": 8
+        },
+        "leak": {
+          "events": 6,
+          "detected": 6,
+          "attributable": 6
+        },
+        "sensor_stuck": {
+          "events": 14,
+          "detected": 14,
+          "attributable": 14
+        },
+        "cooling_loss": {
+          "events": 8,
+          "detected": 8,
+          "attributable": 8
+        },
+        "blockage": {
+          "events": 6,
+          "detected": 5,
+          "attributable": 5
+        }
+      }
+    }
+  },
+  "cooling": {
+    "v13": {
+      "events": 8,
+      "detected": 8,
+      "p95": 33,
+      "delays": [
+        16,
+        11,
+        24,
+        33,
+        16,
+        29,
+        16,
+        20
+      ]
+    },
+    "v14": {
+      "events": 8,
+      "detected": 8,
+      "p95": 19,
+      "delays": [
+        15,
+        9,
+        15,
+        17,
+        13,
+        19,
+        15,
+        16
+      ]
+    }
+  },
+  "checks": {
+    "detected_not_lower": true,
+    "attributable_not_lower": true,
+    "duplicate_zero": true,
+    "normal_not_higher": true,
+    "p95_not_higher": true,
+    "first_notice_not_later": true
+  },
+  "event_delay_changes": {
+    "e8ac6f85894d2dbb9f54bee40e2ff25a:0": {
+      "v13": 16,
+      "v14": 15
+    },
+    "35159d4c6345a98bb5f9b6a2517d87c7:0": {
+      "v13": 11,
+      "v14": 9
+    },
+    "79e2016ce28436785ebcfc0583c0864c:0": {
+      "v13": 24,
+      "v14": 15
+    },
+    "79e2016ce28436785ebcfc0583c0864c:recurrent-cooling": {
+      "v13": 33,
+      "v14": 17
+    },
+    "c18fe0b8eccd232ecb9172fa2e776e93:0": {
+      "v13": 16,
+      "v14": 13
+    },
+    "d198805adb0b86c9f603cdd57977851e:0": {
+      "v13": 29,
+      "v14": 19
+    },
+    "e5e12ba46b7afb42f9ff8f5841fe7086:0": {
+      "v13": 16,
+      "v14": 15
+    },
+    "e5e12ba46b7afb42f9ff8f5841fe7086:recurrent-cooling": {
+      "v13": 20,
+      "v14": 16
+    }
+  },
+  "timing": {
+    "seconds": 167.2942167000001,
+    "timestral_loaded": false,
+    "torch_loaded": false
+  },
+  "scope": "Synthetic; original injection windows; no field or end-to-end claim"
+}

@@ -1,0 +1,32 @@
+{
+  "source": "output/mes-causal-v14c-20261023",
+  "source_commit": "30fcdfc2",
+  "candidate_lock_sha256": "9834d57710ea1a76478dc3627624be90a17684003a5d3a3fadf35b17e0c1895f",
+  "copied_without_recomputation": true,
+  "files": {
+    "settings.json": {
+      "sha256": "e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789",
+      "bytes": 65530
+    },
+    "evaluation/result.json": {
+      "sha256": "3c7994c36ec0dd7b7630a089fa309d4fadb7bd2400399ea48c25e2c3a65f76e8",
+      "bytes": 15615
+    },
+    "evaluation/event-delays.json": {
+      "sha256": "999eccd41499c9f8b4a515f9438f2909961c6e902eece7158fa0eaa4cde48d4e",
+      "bytes": 4154
+    },
+    "post-evaluation-comparison.json": {
+      "sha256": "2ba58f3c4d160b46f2f0d807c7df88d1d43ed669c814fafdc78f671a3b4fce7f",
+      "bytes": 2296
+    },
+    "known-cases.json": {
+      "sha256": "2b46c9f4a8569cf6bc9574d84c066c29827e65ba1387ea8330a2f04d4fd4a75e",
+      "bytes": 510
+    },
+    "final-audit.json": {
+      "sha256": "76be590fa2b9b482c328e0292cc181e223dd76386aba7a13a85f38823998459b",
+      "bytes": 312
+    }
+  }
+}

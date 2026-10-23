@@ -70,6 +70,9 @@ document.getElementById('test-result').textContent='ALARM_PANEL_PASS '+JSON.stri
             cmd=[chromium,'--headless','--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-extensions',
                  '--user-data-dir='+directory+'/profile','--window-size=430,900','--virtual-time-budget=1500','--dump-dom','--screenshot='+str(evidence/'alarm-panel.png'),
                  fixture.as_uri()]
+            # Only this synthetic file fixture may opt out on restricted CI hosts.
+            if os.environ.get('SHIFTLINK_TEST_CHROMIUM_NO_SANDBOX') == '1':
+                cmd.insert(1, '--no-sandbox')
             proc=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)
             try:stdout,stderr=proc.communicate(timeout=45)
             except subprocess.TimeoutExpired:
@@ -80,7 +83,7 @@ document.getElementById('test-result').textContent='ALARM_PANEL_PASS '+JSON.stri
             match=re.search(r'<pre id="test-result"[^>]*>([^<]*)</pre>',stdout)
             message=unescape(match.group(1)) if match else 'missing browser test result'
             (evidence/'result.json').write_text(json.dumps(dict(exit_code=proc.returncode,result=message),ensure_ascii=False,indent=2))
-            self.assertEqual(proc.returncode,0,stderr[-1500:]);self.assertTrue(message.startswith('ALARM_PANEL_PASS'),message)
+            self.assertEqual(proc.returncode,0,stderr);self.assertTrue(message.startswith('ALARM_PANEL_PASS'),message)
 
 
 if __name__=='__main__':unittest.main()

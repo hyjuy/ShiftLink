@@ -1,0 +1,2 @@
+# Preserve evidence bytes for the SHA256 provenance manifest.
+*.json -text

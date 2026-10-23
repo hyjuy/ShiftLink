@@ -75,3 +75,11 @@ Pi `/tmp/shiftlink-fault-stop-20261023`에서 RED 7건 중 4실패·1오류를 �
 수정 런타임의 보수적 실행 줄 커버리지는 서비스 80.12%(258/322), reader 86.46%(83/96), 두 모듈 합계 81.58%(341/418)다. 이 측정은 테스트 모듈 import 이후 trace를 켰으므로 import/정의 줄은 미집계다. 배포 도구의 기존 전체 코드는 이 80% 범위에 포함하지 않으며 새 업데이트 경로는 별도 기능 테스트와 실제 적용으로 확인한다.
 
 r2 릴리스는 `/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2`다. 적용 전에 현재 r1의 PDA 4파일 해시·unit 구문·Python compile·실제 체크포인트를 복사한 독립 `--once` 실행을 확인했다. r1 릴리스와 첫 영구 백업은 보존한다. 새 적용 백업과 배포 후 결과는 아래 Pi 생성 근거에 기록한다. 실제 MES 고장을 강제로 만들거나 사용자 경보를 확인/해제하는 검증은 수행하지 않는다.
+
+r2 운영 적용 백업은 `/home/pi/shiftlink/analytics/backups/20261023-155748`이며 새 worker PID 26455의 cwd/ExecStart가 r2인 것을 확인했다. PDA는 공식 경로로 24459→26465 재시작했다. 운영 main.py·HTML, 얼굴/CNN 코드·모델·라벨 6파일, 고정 incremental core·settings 해시는 그대로다. worker/reader/JS만 새 동작으로 바뀌었다.
+
+배포 후 60초 감독 13표본에서 같은 run·sequence·line_mode의 기존 응답 13/13 일치, 허용 범위의 최대 lag 3프레임, 최대 RSS 39,480KiB, 최고 온도 45.277℃, 스로틀링 0x0을 확인했다. 표본 중 실제 MES는 ready/inactive 상태를 거쳤다. 최종 독립 상태 조회는 MES 운전 재개에 따른 warming_up이었으며 서비스 active/enabled·Torch/Timestral 미로딩·분석 오류 로그 0건을 확인했다. 실제 MES 운전과 고장은 제어하지 않았다. 운영 파일을 읽어 만든 격리 Chromium 화면에서 정지 전 감지 시각·한 행 병합·확인 보존·재진동 없음·44px 버튼·정렬을 추가 확인했다.
+
+Pi 생성 원자료: [최종 요약](evidence/mes-causal-fault-stop-20261023/verified-summary.json), [배포 후 감독](evidence/mes-causal-fault-stop-20261023/r2-monitor.json), [회귀·실행 줄 집계](evidence/mes-causal-fault-stop-20261023/final-tests.json), [기존 PDA 검사](evidence/mes-causal-fault-stop-20261023/js-checks.json), [배포 파일 Chromium 결과](evidence/mes-causal-fault-stop-20261023/browser-result.json). 후속 worker 업데이트 시험 3건은 별도 update-green.log에 보존하며 final-tests.json의 31건과 중복 2건을 빼 전체 고유 32건이다. 해당 JSON의 배포 도구 집계는 후속 수정 전 검증 복사본을 측정한 값이며, 수정 런타임 두 모듈의 커버리지와 구분한다.
+
+로컬 원자료 `output/mes-causal-fault-stop-20261023/evidence.zip`의 CRC·SHA256은 Pi에서 확인했다. SHA256: `96cd4f6cc2eee97e56f4fc3fbcff81cb63e2962dc0302137bf7239ac2dea28fc`.

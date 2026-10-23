@@ -83,6 +83,21 @@ class ContextTests(TestCase):
                 if m['signal']=='hpu_cooler_oil_out_temp':m['value']=90.
         self.assertTrue(any('EQ-0001' in d.step(f) for f in data))
 
+    def test_rms_flat_window_pools_normal_plateaus_across_equipment(self):
+        source=source_config()
+        for e in source['equipment']:e['code']='CV' if e['equipment_id'] in ('EQ-0009','EQ-0010') else 'other';e['coil_capacity']=3
+        data=[]
+        for mode in CONTEXT_MODES:
+            batch=source_rows(64)
+            for i,f in enumerate(batch):
+                f['run_id']=mode;load=mode.split(':')[1];f['coils']=[] if load=='empty' else [dict(coil_id=str(i),equipment_id='EQ-0006' if load=='moving' else 'EQ-0009',position=.5 if load=='moving' else 1.)]
+                for m in f['measurements']:
+                    if m['signal']=='cv_queue_len':m['value']=100/3 if load=='queued' and m['equipment_id']=='EQ-0009' else 0.
+                    if i<6 and m['equipment_id']=='EQ-0006' and m['signal']=='rt_vib_rms':m['value']=1.
+            data.extend(batch)
+        fitted=fit_profile(data,source,config());windows=[fitted['flat_windows'][j] for j,c in enumerate(config()['base']['channels']) if 'vib' in c[1]]
+        self.assertEqual(set(windows),{8})
+
     def test_regulated_plateau_inside_learned_normal_range_is_not_stuck(self):
         settings=config();p=profile();channels=[tuple(c) for c in settings['base']['channels']];bus=('EQ-0002','bus_voltage');j=channels.index(bus);value=next(r[2] for r in settings['base']['stats'] if tuple(r[:2])==bus)
         p['normal_plateaus']=[[] for _ in channels];p['normal_plateaus'][j]=[value-.01,value+.01];p['normal_plateau_bounds']=[None for _ in channels];p['normal_plateau_bounds'][j]=[value-.1,value+.1]

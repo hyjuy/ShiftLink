@@ -127,9 +127,14 @@ const fs=require('node:fs');
 const {buildOperatorModel,evidenceView}=require('./shiftlink/mes/web/operator.js');
 const {snapshot,config}=JSON.parse(fs.readFileSync(0,'utf8'));
 const html=evidenceView(buildOperatorModel(snapshot,config,'EQ-0009'));
-assert.match(html,/원인 후보/);
-assert.match(html,/슬립/);
-assert.match(html,/확정 진단/);
+function assertObservationCandidate(markup) {
+  assert.match(markup,/원인 후보/);
+  assert.match(markup,/슬립/);
+  assert.match(markup,/확정 진단/);
+}
+assertObservationCandidate(html);
+// Candidate wording may change without turning an observation into a diagnosis.
+assertObservationCandidate(html.replace('증상별 원인 후보','센서 기반 증상 후보'));
 """], input=json.dumps({"snapshot": state, "config": to_payload(service.active_config)}),
             text=True, encoding="utf-8", capture_output=True)
         assert result.returncode == 0, result.stdout + result.stderr

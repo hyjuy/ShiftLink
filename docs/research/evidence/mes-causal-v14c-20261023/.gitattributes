@@ -1,2 +1,2 @@
-# Preserve evidence bytes for the SHA256 provenance manifest.
-*.json -text
+# Preserve Windows evidence bytes and recognize CRLF line endings.
+*.json -text whitespace=trailing-space,space-before-tab,cr-at-eol

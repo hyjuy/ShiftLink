@@ -14,6 +14,7 @@ HARNESS = runpy.run_path(str(ROOT / 'scripts/check_knowledge_publication.py'))
 CASES = HARNESS['load_history_cases'](ROOT, profile='integration')
 NOVEL = HARNESS['load_novel_history_cases'](ROOT)
 REAUDIT = HARNESS['load_history_cases'](ROOT, profile='reaudit')
+CLOSURE = HARNESS['load_history_cases'](ROOT, profile='closure')
 STABILITY = HARNESS['load_history_cases'](ROOT, profile='stability')
 POSTAUDIT = HARNESS['load_history_cases'](ROOT, profile='postaudit')
 FOLLOWUP = [
@@ -56,6 +57,11 @@ def test_postfix_independent_audit_oracle(case):
     assert is_history_question(case['question']) is case['history'], case['oracle']
 
 
+@pytest.mark.parametrize('case', CLOSURE, ids=lambda c:c['id'])
+def test_bounded_closure_keeps_all_independent_oracles(case):
+    assert is_history_question(case['question']) is case['history'],case['oracle']
+
+
 @pytest.mark.parametrize('case', STABILITY, ids=lambda c:c['id'])
 def test_stability_oracles_remain_independent(case):
     assert is_history_question(case['question']) is case['history'],case['oracle']
@@ -78,7 +84,7 @@ def test_main_requests_and_verbatim_history_survive_publication(published_histor
     monkeypatch.setattr(G, 'ask_raw', lambda prompt, *a, **k:
                         calls.append(prompt) or output('자료 확인 [S1].', ['S1']))
     observations = []
-    for case in CASES + NOVEL + REAUDIT + FOLLOWUP + POSTAUDIT + STABILITY:
+    for case in CASES + NOVEL + REAUDIT + FOLLOWUP + POSTAUDIT + STABILITY + CLOSURE:
         calls.clear()
         result = svc.query({'equipment_id': 'EQ-0001', 'question': case['question']})
         invariants = {

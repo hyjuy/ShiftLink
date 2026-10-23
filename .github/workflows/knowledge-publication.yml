@@ -15,6 +15,7 @@ on:
       - 'tests/fixtures/field_history_post67_cases.json'
       - 'tests/fixtures/field_history_stability_cases.json'
       - 'tests/fixtures/field_history_stability_context_cases.json'
+      - 'tests/fixtures/field_history_closure_cases.json'
       - '.github/instructions/knowledge-publication.instructions.md'
       - 'tests/test_embedding_contract.py'
       - 'scripts/check_knowledge_publication.py'

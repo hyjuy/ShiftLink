@@ -20,7 +20,7 @@ def test_publication_harness_matches_current_repository():
 def copied_contract(tmp_path):
     memory=(ROOT/HARNESS['MEMORY']).read_text(encoding='utf-8')
     paths=set(HARNESS['SOURCES'])|{'shiftlink/rag2/generate.py','shiftlink/mes/web/knowledge-candidates.html',
-        HARNESS['MEMORY'], HARNESS['HISTORY_CASES'], HARNESS['INTEGRATION_CASES'], HARNESS['NOVEL_CASES'], HARNESS['REAUDIT_CASES'], HARNESS['POSTAUDIT_CASES'], HARNESS['STABILITY_CASES'],
+        HARNESS['MEMORY'], HARNESS['HISTORY_CASES'], HARNESS['INTEGRATION_CASES'], HARNESS['NOVEL_CASES'], HARNESS['REAUDIT_CASES'], HARNESS['POSTAUDIT_CASES'], HARNESS['STABILITY_CASES'], HARNESS['CLOSURE_CASES'],
         HARNESS['INSTRUCTIONS'], HARNESS['WORKFLOW']}
     paths.update(re.findall(r'(tests/[\w]+\.py)::test_\w+',memory))
     for path in paths:
@@ -29,9 +29,9 @@ def copied_contract(tmp_path):
     return tmp_path
 
 
-@pytest.mark.parametrize('damage', ['trigger', 'run', 'scope', 'command', 'integration-trigger', 'integration-run', 'integration-command', 'novel-trigger', 'reaudit-trigger', 'reaudit-command', 'postaudit-trigger', 'postaudit-command'])
+@pytest.mark.parametrize('damage', ['trigger', 'run', 'scope', 'command', 'integration-trigger', 'integration-run', 'integration-command', 'novel-trigger', 'reaudit-trigger', 'reaudit-command', 'postaudit-trigger', 'postaudit-command', 'stability-trigger','stability-command','closure-trigger','closure-command'])
 def test_history_verification_wiring_cannot_silently_drift(copied_contract, damage):
-    target = copied_contract / (HARNESS['WORKFLOW'] if damage in ('trigger', 'run', 'integration-trigger', 'integration-run', 'novel-trigger', 'reaudit-trigger', 'postaudit-trigger') else HARNESS['INSTRUCTIONS'])
+    target = copied_contract / (HARNESS['WORKFLOW'] if damage in ('trigger', 'run', 'integration-trigger', 'integration-run', 'novel-trigger', 'reaudit-trigger', 'postaudit-trigger', 'stability-trigger', 'closure-trigger') else HARNESS['INSTRUCTIONS'])
     text = target.read_text(encoding='utf-8')
     old = {'trigger': "      - 'tests/test_field_history*.py'",
            'run': 'tests/test_field_history_evaluation.py',
@@ -40,7 +40,9 @@ def test_history_verification_wiring_cannot_silently_drift(copied_contract, dama
            'integration-run': 'tests/test_field_history_integration.py',
            'integration-command': '--history-scope integration', 'novel-trigger': HARNESS['NOVEL_CASES'],
            'reaudit-trigger':HARNESS['REAUDIT_CASES'], 'reaudit-command':'--history-scope reaudit',
-           'postaudit-trigger':HARNESS['POSTAUDIT_CASES'], 'postaudit-command':'--history-scope postaudit'}[damage]
+           'postaudit-trigger':HARNESS['POSTAUDIT_CASES'], 'postaudit-command':'--history-scope postaudit',
+           'stability-trigger':HARNESS['STABILITY_CASES'],'stability-command':'--history-scope stability',
+           'closure-trigger':HARNESS['CLOSURE_CASES'],'closure-command':'--history-scope closure'}[damage]
     assert old in text
     target.write_text(text.replace(old, 'missing-history-contract'), encoding='utf-8')
     assert HARNESS['check'](copied_contract, staged=False)

@@ -79,3 +79,14 @@
 
 RED/GREEN 체크포인트와 검증 결과는 `docs/harness/knowledge-publication-adoption-20261021.md`에 기록한다.
 결정적인 모델 픽스처의 성공을 실제 모델 측정과 혼동하지 않는다. 실제 모델·장비 확인에는 별도의 증거가 필요하다.
+
+
+## 기록 조회 문맥이 새 판단을 삼키거나 원문 조회를 거부하는 문제
+
+원인: 과거 지시 인용·문서 재사용·완료 문맥을 넓게 제거하면 독립된 새 배정·계산을 잃는다. 반대로 정중형 읽기나 부정된 재해석을 새 판단으로 읽으면 원문 보존 경로를 잃는다. 기록에 이미 적힌 계산값과 새로 계산해 달라는 값도 구별해야 한다.
+
+예방: 문맥 인증은 해당 절에만 적용하고 앞선 독립 요청 검사를 공유한다. 고정72 감사 오라클과 범위 대조12를 보존하며 양쪽 경로를 각각 검사한다. 실패를 제외·재분류하거나 모델 호출 성공만으로 원문 보존을 통과 처리하지 않는다.
+
+검출: `tests/test_field_history_integration.py::test_bounded_closure_keeps_all_independent_oracles`, `tests/test_field_history_integration.py::test_main_requests_and_verbatim_history_survive_publication`, `tests/test_field_history_evaluation.py::test_closure_cannot_trade_new_requests_for_history`, `tests/test_field_history_evaluation.py::test_closure_oracles_and_independent_cohorts_cannot_drift`.
+
+증거: [2026-10-23 안정화 보고서](../harness/history-stability-20261023.md). `python scripts/check_knowledge_publication.py --history-scope closure` 실패는 차단 상태를 유지한다.

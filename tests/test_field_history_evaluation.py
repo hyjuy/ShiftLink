@@ -297,3 +297,28 @@ def test_stability_human_oracles_and_roles_cannot_drift(tmp_path,damage):
     target.parent.mkdir(parents=True)
     target.write_text(json.dumps(cases),encoding='utf-8')
     with pytest.raises(ValueError):HARNESS['load_history_cases'](tmp_path,profile='stability')
+
+
+@pytest.mark.parametrize('history',[True,False])
+def test_closure_cannot_trade_new_requests_for_history(history):
+    cases=HARNESS['load_history_cases'](ROOT,profile='closure')
+    oracle={c['question']:c['history'] for c in cases}
+    target=next(c for c in cases if c['history'] is history)
+    report=HARNESS['evaluate_history'](ROOT,profile='closure',classifier=lambda q:
+        not oracle[q] if q==target['question'] else oracle[q])
+    assert not report['ok'] and report['decision']=='blocked' and report['passed']==83
+    assert [r['id'] for r in report['results'] if not r['passed']]==[target['id']]
+
+
+@pytest.mark.parametrize('damage',['duplicate','wrong-label','missing-source','missing-lens','wrong-cohort'])
+def test_closure_oracles_and_independent_cohorts_cannot_drift(tmp_path,damage):
+    cases=deepcopy(HARNESS['load_history_cases'](ROOT,profile='closure'))
+    if damage=='duplicate':cases[-1]=deepcopy(cases[0])
+    elif damage=='wrong-label':cases[0]['history']='true'
+    elif damage=='missing-source':cases[0]['sources']=[]
+    elif damage=='missing-lens':cases[0].pop('audit_lens')
+    else:cases[0]['audit_lens']=0
+    target=tmp_path/HARNESS['CLOSURE_CASES']
+    target.parent.mkdir(parents=True)
+    target.write_text(json.dumps(cases),encoding='utf-8')
+    with pytest.raises(ValueError):HARNESS['load_history_cases'](tmp_path,profile='closure')

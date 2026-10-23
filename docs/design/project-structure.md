@@ -225,3 +225,10 @@ pytest 전에 비전 의존성과 scikit-learn, CPU PyTorch, 고정 커밋의 Ti
   이번 작업은 구조 문서와 안내 링크만 변경하며 기존 작업을 정리·되돌리지 않는다.
 - 경로·계약·실행 모드·CI·데이터 경계 변경 시 해당 절과 기준일을 갱신한다.
   서비스가 실제로 확인되지 않았으면 “배포됨/가동 중”으로 바꾸지 않는다.
+
+
+## 근무일지 원문 조회 경계 (2026-10-23)
+
+`shiftlink/rag2/field_history.py`는 기존 기록 조회만 `record_history`로 분류한다. S30h의 검색·judge를 통과한 해당 장비의 accepted/L1/kb 현장 카드 원문을 질의별로 사용하며 저장 카드·청크를 바꾸지 않는다. 독립된 현재·미래 요청은 원래 전체 질문과 MES를 생성 경로로 전달한다. 숫자 원출처 보호는 `generate.py`에 있다.
+
+변경 시 `tests/test_field_history_integration.py`, `tests/test_s30h_publication_integrity.py`와 `scripts/check_knowledge_publication.py --history-scope closure`를 확인한다. 검증 범위·원문 보존 계약·하니스와 한계는 [안정화 보고서](../harness/history-stability-20261023.md)에 있다. UI·온톨로지 및 MES 저장 경로의 변경은 포함하지 않는다.

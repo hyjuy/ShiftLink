@@ -1,0 +1,3432 @@
+[
+  {
+    "id": "q001",
+    "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Recorded operation only; no new decision or action.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q002",
+    "question": "근무일지에 “지금 교체 가능해”라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Now belongs inside completed quotation.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q003",
+    "question": "근무일지에 ‘내일 교체 가능해’라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Tomorrow belongs inside completed quotation.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q004",
+    "question": "근무일지에 '교체할 수 없다'고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Negative availability belongs to past report.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q005",
+    "question": "과거 근무일지에서 교체 가능한가 검토한 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Explicit past review only.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q006",
+    "question": "근무일지에서 교체 가능한지 판단한 뒤 진행했던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Completed work after completed judgement.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q007",
+    "question": "근무일지의 교체 순서와 결과만 알려줘. 현재 상태는 판단하지 말고.",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Current judgement explicitly excluded.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q008",
+    "question": "근무일지 결과만 알려줘. 오늘 교체할 수 있는지는 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Today request explicitly excluded.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q009",
+    "question": "오늘 근무일지의 교체 가능 여부 판단 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Today qualifies log, not new work.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q010",
+    "question": "근무일지 결과와 오늘 교체 가능한가요?",
+    "history": false,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Explicit current availability request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q011",
+    "question": "근무일지 결과를 보고 교체 가능한지 판단한 뒤 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Uncompleted judgement/action request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q012",
+    "question": "근무일지 결과와 내일 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Explicit future decision remains requested.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q013",
+    "question": "근무일지 결과와 내일 가능 여부는 묻지 않아. 지금 교체 가능한가요?",
+    "history": false,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Negated tomorrow does not cancel subsequent now request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q014",
+    "question": "근무일지에 '교체 가능해'라고 기록한 결과와 내일 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30"
+    ],
+    "oracle": "Past quote plus new safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q015",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q016",
+    "question": "근무일지에 “교체 가능해”라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q017",
+    "question": "근무일지에 ‘교체 가능해’라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q018",
+    "question": "근무일지에 \"교체 가능해\"라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q019",
+    "question": "근무일지에서 교체 가능한가 검토한 결과와 시각을 보고 진행해줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Completed review plus independent proceed imperative.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q020",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q021",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘 펌프 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q022",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘의 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q023",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q024",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 펌프 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q025",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일의 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q026",
+    "question": "근무일지 결과와 모레 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Explicit future decision, not completed past report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q027",
+    "question": "근무일지 결과와 다음 교대에 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Explicit future decision, not completed past report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q028",
+    "question": "근무일지 결과와 나중에 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Explicit future decision, not completed past report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q029",
+    "question": "근무일지에 '지금 교체 가능해'라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Explicit completed written quotation, no subsequent request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q030",
+    "question": "근무일지에 “내일 교체 가능해”라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "original30",
+      "former16"
+    ],
+    "oracle": "Explicit completed written quotation, no subsequent request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q031",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "target12",
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q032",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q033",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해주세요라는 요청은 하지 않습니다.",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q034",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라고 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q035",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해.",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q036",
+    "question": "근무일지에 교체를 진행해줘라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q037",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q038",
+    "question": "근무일지에 '작업을 시작해주세요'라고 지시했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q039",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q040",
+    "question": "근무일지에 적힌 '교체를 진행해주세요' 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q041",
+    "question": "근무일지에서 교체를 진행해줘서 해결됐던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q042",
+    "question": "근무일지의 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "target12",
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q043",
+    "question": "근무일지에 '작업을 진행시켜주세요'라고 요청했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed reported command, no independent live action.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q044",
+    "question": "근무일지에서 교체를 진행해줘서 복구한 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal clause, no active request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q045",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 지시는 제외해.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "The instruction is explicitly excluded.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q046",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않겠습니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit refusal to make the action request; only historical result and time are requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q047",
+    "question": "근무일지에 '작업을 진행시켜주세요'라고 요청했던 결과와 시각을 보고 교체를 진행시켜주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "New independent causative action after a historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q048",
+    "question": "근무일지에서 교체를 진행해줘서 복구한 결과와 시각을 보고 작업을 시작해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent current action follows completed causal clause.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q049",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 지시는 제외해. 그리고 교체를 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Excluded instruction does not exclude the independent later action.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q050",
+    "question": "근무일지 결과와 내일 펌프 교체 안전성을 판단해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Future safety judgement still requires MES/model transfer.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q051",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행시켜줘라는 요청은 하지 않겠습니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "The causative command is expressly excluded; only historical result and time are requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q052",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q053",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않습니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q054",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않습니다. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q055",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라고 묻지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q056",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q057",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 제외해.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q058",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q059",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않을게.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q060",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않을게. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q061",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 하지 않았어.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q062",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 하지 않았어. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q063",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라고 요청하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q064",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라고 요청하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q065",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청이 아니야.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q066",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청이 아니야. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q067",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q068",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q069",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않습니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q070",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않습니다. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q071",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라고 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q072",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라고 묻지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q073",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 지시는 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q074",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 제외해.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q075",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q076",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않을게.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q077",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청은 하지 않을게. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q078",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 지시는 하지 않았어.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q079",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 지시는 하지 않았어. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q080",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라고 요청하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q081",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라고 요청하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q082",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청이 아니야.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q083",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작해주세요라는 요청이 아니야. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q084",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q085",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q086",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않습니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q087",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않습니다. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q088",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라고 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q089",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라고 묻지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q090",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 지시는 제외해.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q091",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 지시는 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q092",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 제외해.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q093",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 제외해. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q094",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않을게.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q095",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않을게. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q096",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 지시는 하지 않았어.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q097",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 지시는 하지 않았어. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q098",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라고 요청하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q099",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라고 요청하지 않아. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q100",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청이 아니야.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excludes the mentioned command; asks only log results and times.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q101",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청이 아니야. 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request remains after an excluded command.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q102",
+    "question": "근무일지에 작업을 진행시켜줘라고 기록했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q103",
+    "question": "근무일지에 작업을 진행시켜줘라고 기록했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q104",
+    "question": "근무일지에 작업을 진행시켜줘라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q105",
+    "question": "근무일지에 작업을 진행시켜줘라고 요청했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q106",
+    "question": "근무일지에 작업을 진행시켜줘라고 지시했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q107",
+    "question": "근무일지에 작업을 진행시켜줘라고 지시했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q108",
+    "question": "근무일지에 작업을 진행시켜줘라는 요청을 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q109",
+    "question": "근무일지에 작업을 진행시켜줘라는 요청을 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q110",
+    "question": "근무일지에 작업을 진행시켜줘라는 지시를 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q111",
+    "question": "근무일지에 작업을 진행시켜줘라는 지시를 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q112",
+    "question": "근무일지에 작업을 진행시켜줘라는 요청의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q113",
+    "question": "근무일지에 작업을 진행시켜줘라는 요청의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q114",
+    "question": "근무일지에 작업을 진행시켜줘라는 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q115",
+    "question": "근무일지에 작업을 진행시켜줘라는 지시의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q116",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 기록했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q117",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 기록했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q118",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q119",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 요청했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q120",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 지시했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q121",
+    "question": "근무일지에 '작업을 진행시켜줘'라고 지시했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q122",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 요청을 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q123",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 요청을 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q124",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 지시를 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q125",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 지시를 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q126",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 요청의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q127",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 요청의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q128",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q129",
+    "question": "근무일지에 '작업을 진행시켜줘'라는 지시의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q130",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 기록했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q131",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 기록했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q132",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 요청했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q133",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 요청했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q134",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 지시했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q135",
+    "question": "근무일지에 “작업을 진행시켜줘”라고 지시했던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q136",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 요청을 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q137",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 요청을 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q138",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 지시를 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q139",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 지시를 받았던 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q140",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 요청의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q141",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 요청의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q142",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Only a completed report or reference to an instruction; no new request.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q143",
+    "question": "근무일지에 “작업을 진행시켜줘”라는 지시의 시각과 결과만 알려줘 그리고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent execution request follows referenced historical instruction.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q144",
+    "question": "근무일지에서 교체를 진행해줘서 완료된 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q145",
+    "question": "근무일지에서 교체를 진행해줘서 완료했다는 기록의 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q146",
+    "question": "근무일지에서 교체를 진행해줘서 끝났다는 기록의 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q147",
+    "question": "근무일지에서 교체를 진행해줘서 해결됐다고 기록한 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q148",
+    "question": "근무일지에서 교체를 진행해줘야 했던 작업의 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q149",
+    "question": "근무일지에서 작업을 진행시켜줘서 해결됐던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187",
+      "permanent61"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q150",
+    "question": "근무일지에서 작업을 진행시켜줘서 완료된 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q151",
+    "question": "근무일지에서 작업을 진행시켜줘서 완료했다는 기록의 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q152",
+    "question": "근무일지에서 작업을 진행시켜줘서 끝났다는 기록의 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q153",
+    "question": "근무일지에서 작업을 진행시켜줘서 해결됐다고 기록한 시각과 결과는?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q154",
+    "question": "근무일지에서 작업을 진행시켜줘야 했던 작업의 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal or past obligation statement; only stored result/times requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q155",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행시켜주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q156",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 교체시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q157",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 시작시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q158",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 작업시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q159",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행해 줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q160",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행해 주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit independent action after completed historical report.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q161",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아도 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "A remaining explicit action request must keep MES judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q162",
+    "question": "근무일지에서 교체를 진행해줘서 해결됐던 결과와 시각을 보고 작업을 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "A remaining explicit action request must keep MES judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q163",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행시켜줘요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "A remaining explicit action request must keep MES judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q164",
+    "question": "근무일지 결과를 보고 교체를 진행해줘서 상태가 회복되는지 확인해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "future causal observation request",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q165",
+    "question": "근무일지 결과를 보고 '교체해줘'라는 요청의 실행 시각을 정해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "new scheduling request, not completed report",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q166",
+    "question": "근무일지 결과와 '교체해줘'라는 요청의 진행을 부탁해",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "new action request through referenced instruction",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q167",
+    "question": "근무일지에 '진행해줘'라고 기록한 결과와 시각을 보고 계속 운전해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed mention followed by independent active operation",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q168",
+    "question": "근무일지에 '교체해줘'라고 요청했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed quoted request",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q169",
+    "question": "근무일지 결과와 시각을 보고 '교체해줘'라는 요청의 내용을 말해줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "reference content only",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q170",
+    "question": "근무일지에서 교체를 진행해줘서 해결된 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed causal result",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q171",
+    "question": "근무일지에서 교체를 진행해줘서 해결한 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed causal result",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q172",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해줘.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "explicit exclusion variant",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q173",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해. 내일 작업을 시작시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "exclusion plus independent future causative",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q174",
+    "question": "근무일지에 작업을 진행시켜줘라고 지시했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed causative report",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q175",
+    "question": "근무일지에 작업을 진행시켜줘라고 지시했던 결과와 시각을 보고 교체시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "completed report followed independent causative",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q176",
+    "question": "근무일지에 적힌 “작업을 시작해주세요” 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "record-bound reference",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q177",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 시작시켜줘라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "excluded causative request",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q178",
+    "question": "근무일지 결과를 보고 교체를 진행해줘서 안전한 결과를 만들어줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "new requested safe outcome, adjectival 안전한 is not completed event",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q179",
+    "question": "근무일지 결과를 보고 작업을 진행해줘서 필요한 결과를 얻어줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "new requested required outcome, 필요한 is not completed event",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q180",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘서 안전한 결과가 되게 해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "explicit new action and requested future outcome",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q181",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘서 필요한 기록을 남겨줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "explicit new action and new record creation",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q182",
+    "question": "근무일지 결과를 보고 작업을 진행해줘서 해결된 결과가 되게 해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "requested future result despite passive completed adjective",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q183",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과를 보고 작업을 중단해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Historical reference followed by an independent request to stop work requires current judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q184",
+    "question": "근무일지에 '작업을 시작해주세요'라고 지시했던 시각과 결과를 보고 작업을 재개해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "A completed instruction mention does not authorize a fresh resume-work request to use the history-only route.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q185",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 대신 작업을 중단해줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "The excluded command is followed by a separate stop-work request.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q186",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과를 보고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Historical request must not swallow independent recognized active action.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q187",
+    "question": "근무일지에 '작업을 시작해주세요'라고 지시했던 시각과 결과를 보고 작업을 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Historical instruction must not swallow active causative action.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q188",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해. 대신 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicitly excluded mention and following action differ.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q189",
+    "question": "근무일지에서 작업을 시작해줘서 해결됐던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed causal clause asks only historical time/result.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q190",
+    "question": "근무일지의 '작업을 진행시켜줘'라는 요청을 받았던 시각과 처리 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit completed request reference asks only historical time/result.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q191",
+    "question": "근무일지 결과와 내일 교체 안전 여부를 알려줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Future safety judgement requires current observation context.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q192",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해 주십시오",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Polite current imperative must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q193",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않는다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q194",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해주세요라는 지시는 제외합니다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q195",
+    "question": "근무일지에 교체를 진행해줘라고 요청받았던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q196",
+    "question": "근무일지에 교체를 진행해주세요라는 요청을 받았던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q197",
+    "question": "근무일지에서 교체를 진행해줘서 문제가 해결되었던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q198",
+    "question": "근무일지에서 교체를 진행해줘서 정상 운전을 확인했던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q199",
+    "question": "근무일지 결과와 시각만 알려줘. “교체를 진행해줘”라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q200",
+    "question": "근무일지에 “교체 가능해”라고 적었던 결과와 시각을 보고 작업을 진행시켜 주세요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent operative request must reach MES/model judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q201",
+    "question": "근무일지에 “오늘 교체 안전성 확인해줘”라고 요청했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q202",
+    "question": "근무일지 결과와 시각만 알려줘. “지금 교체해줘”라는 요청은 하지 않아.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q203",
+    "question": "근무일지에 “작업을 시작해주세요”라고 요청했었던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q204",
+    "question": "근무일지에 “작업을 시작해주세요”라고 요청했음이 남은 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit historical-only request excludes/reports the instruction.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q205",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 작업을 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent operative request must reach MES/model judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q206",
+    "question": "근무일지에 “교체해줘”라는 요청을 받았던 시각과 결과를 보고 작업을 진행해줘요",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent operative request must reach MES/model judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q207",
+    "question": "근무일지 결과와 시각만 알려줘. 작업을 진행시켜줘라는 요청은 하지 않는다.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Explicit 하지 않는다 excludes this causative command. Candidate detects 시켜줘 but only recognizes 않습니다/아 exclusions.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q208",
+    "question": "근무일지에 작업을 진행시켜줘라고 요청받았던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "요청받았던 explicitly reports a previously received instruction. Candidate recognizes only 요청을 받았던 receiver scope.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q209",
+    "question": "근무일지에 “교체 가능해”라고 요청했던 결과와 시각을 보고 작업을 진행해 주십시오",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "After a completed requested quotation, 진행해 주십시오 independently requests action. Candidate newly removes quote blocker but misses 주십시오.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q210",
+    "question": "근무일지에 “교체 가능해”라고 지시했던 결과와 시각을 보고 작업을 시작해 주시겠어요?",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "After a completed instruction quotation, 시작해 주시겠어요 independently requests action. Candidate newly removes quote blocker but misses 주시겠어요.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q211",
+    "question": "근무일지에 “교체 가능해”라는 요청을 받았던 시각과 결과를 보고 작업을 진행시켜 주십시오",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "After a received request quotation, 진행시켜 주십시오 independently requests action. Candidate newly removes quote blocker but misses polite causative suffix.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q212",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 대신 펌프를 가동해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q213",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 대신 펌프를 정지시켜줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q214",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 대신 작업을 진행해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q215",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 결과와 시각만 알려줘.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed/excluded mention requests historical content only.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q216",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 결과와 시각만 알려줘. 대신 펌프를 가동해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q217",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 결과와 시각만 알려줘. 대신 펌프를 정지시켜줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q218",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 결과와 시각만 알려줘. 대신 작업을 진행해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q219",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘.",
+    "history": true,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Completed/excluded mention requests historical content only.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q220",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘. 대신 펌프를 가동해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q221",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘. 대신 펌프를 정지시켜줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q222",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘. 대신 작업을 진행해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation request after historical or excluded mention must reach judgement.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q223",
+    "question": "근무일지 결과와 시각을 보고 펌프를 가동해줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation must reach judgement; standalone variant distinguishes latent shared action-vocabulary defect.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q224",
+    "question": "근무일지 결과와 시각을 보고 펌프를 정지시켜줘.",
+    "history": false,
+    "cohorts": [
+      "audit187"
+    ],
+    "oracle": "Independent actual operation must reach judgement; standalone variant distinguishes latent shared action-vocabulary defect.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q225",
+    "question": "근무일지에 “모레 교체 가능해”라고 적어둔 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q226",
+    "question": "근무일지에 “모레 교체 가능해”라고 메모했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": false,
+    "family": "completed-history"
+  },
+  {
+    "id": "q227",
+    "question": "근무일지 결과와 오늘 필터 교체 안전성 여부를 알려줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q228",
+    "question": "근무일지 결과와 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q229",
+    "question": "근무일지 결과와 내일 필터 교체 안전성도 확인해줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q230",
+    "question": "근무일지의 결과와 시각을 알려주고 필터를 교체시켜줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q231",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 필터 교체가 안전한지 확인해줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q232",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 필터 교체의 안전 여부를 알려줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q233",
+    "question": "근무일지 결과와 내일 필터 교체가 안전한지 확인해줘",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q234",
+    "question": "근무일지에 '교체 가능해'라고 기록한 결과를 보고 교체를 진행해 주십시오",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q235",
+    "question": "근무일지에 '교체 가능해'라고 기록한 결과를 보고 교체를 진행해 주시겠어요?",
+    "history": false,
+    "cohorts": [
+      "previous_shared11"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q236",
+    "question": "근무일지에 '교체를 진행해줘'라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q237",
+    "question": "근무일지에 “작업을 시작해주세요”라고 문의했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q238",
+    "question": "근무일지에 '오늘 필터 교체 안전성을 알려줘'라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q239",
+    "question": "근무일지에 “모레 교체 가능해”라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q240",
+    "question": "근무일지에 ‘다음 교대에 교체 가능해’라고 기록했던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q241",
+    "question": "근무일지의 결과와 시각만 알려줘. 모레 교체 가능한지는 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q242",
+    "question": "근무일지의 결과와 시각만 알려줘. 다음 교대에 교체 가능한지는 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q243",
+    "question": "근무일지의 결과와 시각만 알려줘. 나중에 교체 가능한지는 묻지 않아.",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q244",
+    "question": "과거 근무일지에서 모레 교체 가능한지 검토했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q245",
+    "question": "과거 근무일지에서 다음 교대에 교체 가능한지 확인했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q246",
+    "question": "근무일지에서 모레 교체 가능한지 판단한 뒤 진행했던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q247",
+    "question": "과거 근무일지에서 모레 교체 안전성을 판단했던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q248",
+    "question": "과거 근무일지에서 모레 교체 안전성을 알려줬던 결과와 시각만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q249",
+    "question": "근무일지에 '지금 교체해줘'라는 요청을 받았던 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q250",
+    "question": "근무일지에 적힌 '내일 작업을 시작해주세요' 지시의 시각과 결과만 알려줘",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q251",
+    "question": "근무일지에 작업을 진행시켜줘라고 요청했던 결과와 시각은?",
+    "history": true,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "Only completed/excluded historical record content is requested.",
+    "preserve_main_request": false,
+    "preserve_local_history": true,
+    "family": "completed-history"
+  },
+  {
+    "id": "q252",
+    "question": "근무일지에 '교체 가능해'라고 적었던 결과를 보고 교체를 진행해주세요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q253",
+    "question": "근무일지에 '진행해줘'라고 기록했던 시각과 결과와 내일 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q254",
+    "question": "근무일지 결과와 오늘의 펌프 교체 안전성을 알려주세요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q255",
+    "question": "근무일지 결과와 내일 압력이 0.6 bar이면 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q256",
+    "question": "근무일지 결과와 모레 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q257",
+    "question": "근무일지 결과와 다음 교대에 교체 가능한지 판단한 뒤 진행해주세요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q258",
+    "question": "근무일지 결과와 나중에 교체 가능 여부를 확인한 결과를 알려줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q259",
+    "question": "근무일지 결과만 알려줘. 모레 교체 가능한지는 묻지 않아. 지금 교체 가능한가요?",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q260",
+    "question": "근무일지 결과만 알려줘. 다음 교대에 교체 가능한지는 묻지 않아. 오늘 필터 교체 안전성을 알려줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q261",
+    "question": "근무일지에서 교체 가능한지 판단한 뒤 진행했던 결과와 교체를 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q262",
+    "question": "근무일지 결과와 내일 교체 안전성을 알려.",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q263",
+    "question": "근무일지 결과와 내일 교체 안전성을 알려 줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q264",
+    "question": "근무일지 결과와 내일 필터 교체 안전성을 알려주실래요?",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q265",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q266",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해주세요라는 요청은 하지 않습니다. 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q267",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라고 묻지 않아. 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q268",
+    "question": "근무일지 결과와 시각만 알려줘. 교체를 진행해줘라는 지시는 제외해. 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q269",
+    "question": "근무일지에 교체를 진행해줘라고 기록한 시각과 결과만 알려줘 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q270",
+    "question": "근무일지에 '교체를 진행해줘'라고 요청했던 시각과 결과만 알려줘 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q271",
+    "question": "근무일지에 '작업을 시작해주세요'라고 지시했던 시각과 결과만 알려줘 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q272",
+    "question": "근무일지의 '교체해줘'라는 요청을 받았던 시각과 처리 결과만 알려줘 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q273",
+    "question": "근무일지에 적힌 '교체를 진행해주세요' 지시의 시각과 결과만 알려줘 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q274",
+    "question": "근무일지에서 교체를 진행해줘서 해결됐던 결과와 시각은? 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q275",
+    "question": "근무일지의 결과와 시각만 알려줘. 교체를 진행해줘라는 요청은 하지 않아. 그리고 작업을 진행해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q276",
+    "question": "근무일지 결과와 시각을 보고 '교체해줘'라고 요청해주세요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q277",
+    "question": "근무일지 결과와 시각을 보고 '교체해줘'라는 요청을 해줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q278",
+    "question": "근무일지에 교체를 진행해줘라고 기록한 결과와 시각을 보고 작업을 진행시켜줘",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q279",
+    "question": "근무일지에서 교체를 진행해줘서 해결됐던 결과와 시각을 보고 작업을 시작해주세요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q280",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘요",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q281",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘야 해",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q282",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘도 돼?",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  },
+  {
+    "id": "q283",
+    "question": "근무일지 결과와 시각을 보고 작업을 진행해줘서는 안 돼",
+    "history": false,
+    "cohorts": [
+      "permanent61"
+    ],
+    "oracle": "An independent live/future action or judgement is requested alongside records.",
+    "preserve_main_request": true,
+    "preserve_local_history": false,
+    "family": "live-request"
+  }
+]

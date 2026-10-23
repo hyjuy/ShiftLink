@@ -5,8 +5,8 @@
 Configs (stage 4 result):
   A = bge-m3, 700 tokens, lanes (cards dense+BM25 w=0.25, sources dense)
   B = embeddinggemma, 700 tokens, dense
-Checks (plan §8): cited ids must exist in the evidence, numbers in the answer must appear in the cited
-evidence (or the question), broken JSON or no citation -> "해당 지식 없음".
+Checks (plan §8): cited ids must exist in the evidence, numbers in the answer must appear in their cited
+evidence; unsupported numbers, broken JSON or no citation -> "해당 지식 없음".
 Auto metrics: gold evidence cited, key-fact coverage, abstain on unanswerable, number violations, latency.
 """
 import argparse
@@ -216,9 +216,19 @@ def check(out: dict, ev: list[dict], question: str, mes: str | None = None) -> d
     if insufficient or not answer or not cites:
         return {"answer": "", "valid_cites": [], "abstain": True, "reason": "insufficient" if insufficient else "no_cite",
                 "number_violations": []}
-    allowed = " ".join(mes if c == "M" else ev[int(c[1:]) - 1]["text"] for c in cites) + " " + question
+    def source_text(refs):
+        return " ".join(mes if c == "M" else ev[int(c[1:]) - 1]["text"] for c in refs if c in ids)
+    # A question is not evidence. Inline claims must cite the source containing their numbers,
+    # even when a different source is also present in the answer's citation array.
+    allowed = source_text(cites)
     allowed_nums = {n.replace(",", "") for n in NUM.findall(allowed)}
     viol = numbers_not_in(answer, allowed_nums)
+    for claim, refs in re.findall(r"(.*?)(\[(?:S\d+|M)\](?:\s*\[(?:S\d+|M)\])*)", answer, re.S):
+        texts = source_text(re.findall(r"S\d+|M", refs))
+        viol.extend(numbers_not_in(claim, {n.replace(",", "") for n in NUM.findall(texts)}))
+    viol = list(dict.fromkeys(viol))
+    if viol:
+        return {"answer": "", "valid_cites": [], "abstain": True, "reason": "unsupported_number", "number_violations": viol}
     return {"answer": answer, "valid_cites": cites, "abstain": False, "reason": "", "number_violations": viol}
 
 

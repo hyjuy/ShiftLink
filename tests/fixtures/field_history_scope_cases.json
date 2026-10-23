@@ -1,0 +1,354 @@
+[
+  {
+    "id": "ordinary-history",
+    "family": "history-control",
+    "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각은?",
+    "history": true,
+    "oracle": "Recorded operation only; no new decision or action.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "quoted-today",
+    "family": "history-control",
+    "question": "근무일지에 “지금 교체 가능해”라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Now belongs inside completed quotation.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "quoted-tomorrow",
+    "family": "history-control",
+    "question": "근무일지에 ‘내일 교체 가능해’라고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Tomorrow belongs inside completed quotation.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "quoted-negative",
+    "family": "history-control",
+    "question": "근무일지에 '교체할 수 없다'고 기록한 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Negative availability belongs to past report.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "past-review",
+    "family": "history-control",
+    "question": "과거 근무일지에서 교체 가능한가 검토한 결과와 시각은?",
+    "history": true,
+    "oracle": "Explicit past review only.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "past-condition",
+    "family": "history-control",
+    "question": "근무일지에서 교체 가능한지 판단한 뒤 진행했던 결과와 시각은?",
+    "history": true,
+    "oracle": "Completed work after completed judgement.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "excluded-current",
+    "family": "history-control",
+    "question": "근무일지의 교체 순서와 결과만 알려줘. 현재 상태는 판단하지 말고.",
+    "history": true,
+    "oracle": "Current judgement explicitly excluded.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "excluded-today",
+    "family": "history-control",
+    "question": "근무일지 결과만 알려줘. 오늘 교체할 수 있는지는 묻지 않아.",
+    "history": true,
+    "oracle": "Today request explicitly excluded.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "today-log",
+    "family": "history-control",
+    "question": "오늘 근무일지의 교체 가능 여부 판단 결과와 시각은?",
+    "history": true,
+    "oracle": "Today qualifies log, not new work.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "current-permission",
+    "family": "request-control",
+    "question": "근무일지 결과와 오늘 교체 가능한가요?",
+    "history": false,
+    "oracle": "Explicit current availability request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "current-conditional",
+    "family": "request-control",
+    "question": "근무일지 결과를 보고 교체 가능한지 판단한 뒤 진행해줘",
+    "history": false,
+    "oracle": "Uncompleted judgement/action request.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "future-control",
+    "family": "request-control",
+    "question": "근무일지 결과와 내일 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "oracle": "Explicit future decision remains requested.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "negation-scope",
+    "family": "request-control",
+    "question": "근무일지 결과와 내일 가능 여부는 묻지 않아. 지금 교체 가능한가요?",
+    "history": false,
+    "oracle": "Negated tomorrow does not cancel subsequent now request.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "safety-control",
+    "family": "request-control",
+    "question": "근무일지에 '교체 가능해'라고 기록한 결과와 내일 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Past quote plus new safety request.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": null
+  },
+  {
+    "id": "mixed-action-quote-0",
+    "family": "mixed-action",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": "mixed-action"
+  },
+  {
+    "id": "mixed-action-quote-1",
+    "family": "mixed-action",
+    "question": "근무일지에 “교체 가능해”라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "mixed-action"
+  },
+  {
+    "id": "mixed-action-quote-2",
+    "family": "mixed-action",
+    "question": "근무일지에 ‘교체 가능해’라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "mixed-action"
+  },
+  {
+    "id": "mixed-action-quote-3",
+    "family": "mixed-action",
+    "question": "근무일지에 \"교체 가능해\"라고 기록한 시각과 결과를 알려주고 교체를 진행해줘",
+    "history": false,
+    "oracle": "Completed quotation does not cancel independent proceed imperative.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "mixed-action"
+  },
+  {
+    "id": "mixed-action-review",
+    "family": "mixed-action",
+    "question": "근무일지에서 교체 가능한가 검토한 결과와 시각을 보고 진행해줘",
+    "history": false,
+    "oracle": "Completed review plus independent proceed imperative.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": "mixed-action"
+  },
+  {
+    "id": "mixed-safety-오늘-필터교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘 필터 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "mixed-safety-오늘-펌프교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘 펌프 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "mixed-safety-오늘-의교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 오늘의 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "mixed-safety-내일-필터교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 필터 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "mixed-safety-내일-펌프교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일 펌프 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "mixed-safety-내일-의교체",
+    "family": "mixed-safety",
+    "question": "근무일지에 '교체 가능해'라고 기록한 시각과 결과와 내일의 교체 안전성을 알려줘",
+    "history": false,
+    "oracle": "Asset noun or genitive particle does not cancel explicit safety request.",
+    "profiles": [
+      "full",
+      "minimal",
+      "adversarial"
+    ],
+    "known_issue": "safety-scope"
+  },
+  {
+    "id": "future-gap-모레",
+    "family": "future-markers",
+    "question": "근무일지 결과와 모레 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "oracle": "Explicit future decision, not completed past report.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": "future-marker"
+  },
+  {
+    "id": "future-gap-다음교대에",
+    "family": "future-markers",
+    "question": "근무일지 결과와 다음 교대에 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "oracle": "Explicit future decision, not completed past report.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "future-marker"
+  },
+  {
+    "id": "future-gap-나중에",
+    "family": "future-markers",
+    "question": "근무일지 결과와 나중에 교체 가능 여부 판단 결과를 알려줘",
+    "history": false,
+    "oracle": "Explicit future decision, not completed past report.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "future-marker"
+  },
+  {
+    "id": "past-synonym-28",
+    "family": "past-report-synonym",
+    "question": "근무일지에 '지금 교체 가능해'라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit completed written quotation, no subsequent request.",
+    "profiles": [
+      "full",
+      "adversarial"
+    ],
+    "known_issue": "past-report-verb"
+  },
+  {
+    "id": "past-synonym-29",
+    "family": "past-report-synonym",
+    "question": "근무일지에 “내일 교체 가능해”라고 적었던 시각과 결과만 알려줘",
+    "history": true,
+    "oracle": "Explicit completed written quotation, no subsequent request.",
+    "profiles": [
+      "full"
+    ],
+    "known_issue": "past-report-verb"
+  }
+]

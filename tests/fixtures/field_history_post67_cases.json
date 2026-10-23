@@ -1,0 +1,1066 @@
+[
+  {
+    "id": "post67-001",
+    "question": "근무일지의 근무자와 시각을 원문으로 복사해 주실 수 있나요?",
+    "history": true,
+    "family": "record-capability",
+    "oracle": "복사 능력의 대상은 기록된 근무자와 시각이다. 새 설비 판단이나 작업 요청이 없다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h1",
+        "oracle": "복사 능력의 대상은 기록된 근무자와 시각이다. 새 설비 판단이나 작업 요청이 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-002",
+    "question": "근무일지의 근무자와 시각을 알려주고, 다음 교대의 필터 교체 담당자를 정해 주세요.",
+    "history": false,
+    "family": "record-capability",
+    "oracle": "기록 조회에 더해 다음 교대의 담당자를 새로 정해 달라는 독립 요청이다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c1",
+        "oracle": "기록 조회에 더해 다음 교대의 담당자를 새로 정해 달라는 독립 요청이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-003",
+    "question": "근무일지에서 압력이 정상으로 나오게 조정했던 순서를 읽어 주세요.",
+    "history": true,
+    "family": "completed-result-target",
+    "oracle": "정상으로 나오게 조정했던 것은 완료된 사건이며 요청은 그 순서의 조회이다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h2",
+        "oracle": "정상으로 나오게 조정했던 것은 완료된 사건이며 요청은 그 순서의 조회이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-004",
+    "question": "근무일지에서 조정했던 순서를 읽어 주고 압력이 정상으로 나오게 설정해 주세요.",
+    "history": false,
+    "family": "completed-result-target",
+    "oracle": "완료된 조정 순서 조회 뒤 정상 압력이 나오게 새로 설정해 달라는 요청이 남는다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c2",
+        "oracle": "완료된 조정 순서 조회 뒤 정상 압력이 나오게 새로 설정해 달라는 요청이 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-005",
+    "question": "근무일지 결과를 보여줘. '내일 재가동해줘'라는 지시는 하지 않겠습니다.",
+    "history": true,
+    "family": "quoted-exclusion",
+    "oracle": "내일 재가동 지시는 명시적으로 제외했고 기록 결과의 조회만 요청한다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h3",
+        "oracle": "내일 재가동 지시는 명시적으로 제외했고 기록 결과의 조회만 요청한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-006",
+    "question": "근무일지 결과를 보여줘. 지금 점검을 시작해줘, '내일 재가동해줘'라는 지시는 하지 않겠습니다.",
+    "history": false,
+    "family": "quoted-exclusion",
+    "oracle": "제외 대상은 내일 재가동이며 그 앞의 지금 점검 시작 요청은 독립적으로 남는다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c3",
+        "oracle": "제외 대상은 내일 재가동이며 그 앞의 지금 점검 시작 요청은 독립적으로 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-007",
+    "question": "근무일지 결과만 발췌해 줘. 당시 교체해도 된다고 판단했던 근거도 알려줘.",
+    "history": true,
+    "family": "past-reason-vs-new-review",
+    "oracle": "당시 완료된 허가 판단의 근거와 기록 결과만 조회한다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h4",
+        "oracle": "당시 완료된 허가 판단의 근거와 기록 결과만 조회한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-008",
+    "question": "근무일지 결과만 발췌해 줘. 당시 교체해도 된다고 판단했던 근거도 알려줘. 그리고 그 근거가 지금도 유효한지 검토해줘.",
+    "history": false,
+    "family": "past-reason-vs-new-review",
+    "oracle": "당시 근거 조회 외에 현재도 유효한지 새로 검토하는 요청이 있다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c4",
+        "oracle": "당시 근거 조회 외에 현재도 유효한지 새로 검토하는 요청이 있다."
+      }
+    ]
+  },
+  {
+    "id": "post67-009",
+    "question": "근무일지에 '오늘 필터를 바꿔 주세요'라고 부탁했던 시각과 결과를 알려 주세요.",
+    "history": true,
+    "family": "completed-polite-report",
+    "oracle": "오늘은 완료된 부탁의 인용 안에 있고 시각과 결과만 조회한다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h5",
+        "oracle": "오늘은 완료된 부탁의 인용 안에 있고 시각과 결과만 조회한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-010",
+    "question": "근무일지에 '오늘 필터를 바꿔 주세요'라고 부탁했던 시각과 결과를 알려 주시고 오늘 필터를 바꿔 주세요.",
+    "history": false,
+    "family": "completed-polite-report",
+    "oracle": "완료된 인용 조회 뒤 오늘 필터 교체를 다시 독립적으로 요청한다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c5",
+        "oracle": "완료된 인용 조회 뒤 오늘 필터 교체를 다시 독립적으로 요청한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-011",
+    "question": "근무일지의 결과와 조치 순서를 원문으로 부탁드립니다.",
+    "history": true,
+    "family": "nominal-reading-vs-new-analysis",
+    "oracle": "부탁 대상은 기록된 결과와 순서의 원문뿐이다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-h6",
+        "oracle": "부탁 대상은 기록된 결과와 순서의 원문뿐이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-012",
+    "question": "근무일지의 결과와 조치 순서를 원문으로 알려줘. 같은 결과를 내려면 무엇을 바꿔야 하는지 설명해줘.",
+    "history": false,
+    "family": "nominal-reading-vs-new-analysis",
+    "oracle": "같은 결과를 얻기 위한 새로운 변경사항 분석을 추가로 요청한다.",
+    "sources": [
+      {
+        "lens": 1,
+        "id": "a1-c6",
+        "oracle": "같은 결과를 얻기 위한 새로운 변경사항 분석을 추가로 요청한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-013",
+    "question": "근무일지에서 137분 운전으로 끝난 조치 순서와 결과를 읽어 주실 수 있나요?",
+    "history": true,
+    "family": "retrieval-capability",
+    "oracle": "이미 완료된 운전의 조치 순서와 결과를 읽어 달라는 공손한 조회다. 설비를 운전할 수 있는지 판단하는 질문이 아니다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H01",
+        "oracle": "이미 완료된 운전의 조치 순서와 결과를 읽어 달라는 공손한 조회다. 설비를 운전할 수 있는지 판단하는 질문이 아니다."
+      }
+    ]
+  },
+  {
+    "id": "post67-014",
+    "question": "근무일지의 조치 시각과 담당자를 발췌해 줄래요?",
+    "history": true,
+    "family": "retrieval-ending",
+    "oracle": "기록의 시각과 담당자만 발췌하는 조회다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H02",
+        "oracle": "기록의 시각과 담당자만 발췌하는 조회다."
+      }
+    ]
+  },
+  {
+    "id": "post67-015",
+    "question": "근무일지에 남은 조치 결과와 당시 판단 근거가 어떠했나요?",
+    "history": true,
+    "family": "retrieval-field-question",
+    "oracle": "당시 완료된 판단의 근거와 조치 결과를 묻는다. 새 판단을 요구하지 않는다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H03",
+        "oracle": "당시 완료된 판단의 근거와 조치 결과를 묻는다. 새 판단을 요구하지 않는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-016",
+    "question": "근무일지에 '다음 교대에 필터를 교체해줘'라고 보고했던 시각과 결과만 복사해줘.",
+    "history": true,
+    "family": "completed-quoted-report",
+    "oracle": "미래 시점과 명령은 이미 보고했던 인용 내용이다. 현재 요청은 그 보고의 시각과 결과를 복사하는 것뿐이다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H04",
+        "oracle": "미래 시점과 명령은 이미 보고했던 인용 내용이다. 현재 요청은 그 보고의 시각과 결과를 복사하는 것뿐이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-017",
+    "question": "근무일지에 당시 안전하게 재가동할 수 있었다고 설명했던 근거와 결과를 알려줘.",
+    "history": true,
+    "family": "completed-unquoted-report",
+    "oracle": "안전성 및 가능성 표현 모두 당시 설명했던 완료 보고 안에 있다. 기록된 근거와 결과 조회뿐이다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H05",
+        "oracle": "안전성 및 가능성 표현 모두 당시 설명했던 완료 보고 안에 있다. 기록된 근거와 결과 조회뿐이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-018",
+    "question": "근무일지 조치 순서와 결과만 알려줘. '지금 설비를 재가동해줘'라는 요청은 하지 않겠습니다.",
+    "history": true,
+    "family": "exclusion-particle",
+    "oracle": "재가동 요청은 명시적으로 배제했고 근무일지 조회만 남는다. 요청은의 조사 범위도 검증한다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H06",
+        "oracle": "재가동 요청은 명시적으로 배제했고 근무일지 조회만 남는다. 요청은의 조사 범위도 검증한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-019",
+    "question": "현재 재가동 여부는 묻지 않습니다. 근무일지의 시각과 결과를 제시해줘.",
+    "history": true,
+    "family": "excluded-current-judgement",
+    "oracle": "현재 판단을 명시적으로 부정한 뒤 기록의 시각과 결과 제시만 요구한다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-H07",
+        "oracle": "현재 판단을 명시적으로 부정한 뒤 기록의 시각과 결과 제시만 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-020",
+    "question": "근무일지 조치 결과를 읽어주고 지금 운전을 재개할지 판단해줘.",
+    "history": false,
+    "family": "retrieval-plus-current",
+    "oracle": "조회 요청과 별도로 지금 운전 재개 판단을 요구한다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C01",
+        "oracle": "조회 요청과 별도로 지금 운전 재개 판단을 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-021",
+    "question": "내일 필터를 교체할 일정을 잡아줘. '지금 재가동해줘'라는 요청은 하지 않겠습니다. 근무일지 결과도 알려줘.",
+    "history": false,
+    "family": "request-before-exclusion",
+    "oracle": "지금 재가동 요청만 제외한다. 내일의 교체 일정 요청은 독립적으로 남는다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C02",
+        "oracle": "지금 재가동 요청만 제외한다. 내일의 교체 일정 요청은 독립적으로 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-022",
+    "question": "근무일지의 결과는 보여주고 압력 조정을 진행시켜줘. 현재 안전한지는 묻지 않겠습니다.",
+    "history": false,
+    "family": "causative-before-exclusion",
+    "oracle": "현재 안전성 질문을 제외해도 압력 조정을 진행시키라는 독립 지시는 남는다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C03",
+        "oracle": "현재 안전성 질문을 제외해도 압력 조정을 진행시키라는 독립 지시는 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-023",
+    "question": "근무일지 결과를 복사해줘. 다음 교대 작업자에게 새 조치 계획을 작성해줘.",
+    "history": false,
+    "family": "retrieval-plus-scheduling",
+    "oracle": "기록 복사에 더해 다음 교대를 위한 새 계획 작성을 요청한다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C04",
+        "oracle": "기록 복사에 더해 다음 교대를 위한 새 계획 작성을 요청한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-024",
+    "question": "근무일지에 '내일 재가동해도 되나요'라고 문의했던 결과를 보여줘. 그 답변과 현재 압력을 비교해줘.",
+    "history": false,
+    "family": "completed-report-plus-analysis",
+    "oracle": "인용은 완료 보고지만 뒤의 현재 압력 비교는 새로운 분석 요청이다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C05",
+        "oracle": "인용은 완료 보고지만 뒤의 현재 압력 비교는 새로운 분석 요청이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-025",
+    "question": "근무일지에서 137분 운전 결과를 확인해줘. 그리고 필터 점검이 필요한지 검토해줘.",
+    "history": false,
+    "family": "record-confirmation-plus-judgement",
+    "oracle": "기록 확인 뒤 필터 점검의 필요성을 새로 검토하라는 요청이 남는다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C06",
+        "oracle": "기록 확인 뒤 필터 점검의 필요성을 새로 검토하라는 요청이 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-026",
+    "question": "근무일지의 결과를 알려줘. 담당자에게 연락해 주십시오. '지금 재가동해줘'라는 요청은 하지 않습니다.",
+    "history": false,
+    "family": "unlisted-action-plus-exclusion",
+    "oracle": "재가동을 제외해도 담당자 연락이라는 독립 실행 요청이 남는다. 기록 필드 담당자 조회와 구별한다.",
+    "sources": [
+      {
+        "lens": 2,
+        "id": "L2-C07",
+        "oracle": "재가동을 제외해도 담당자 연락이라는 독립 실행 요청이 남는다. 기록 필드 담당자 조회와 구별한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-027",
+    "question": "근무일지에서 검증자가 남긴 조치 순서와 시각을 원문 그대로 옮겨 줘.",
+    "history": true,
+    "family": "verbatim-transcription",
+    "oracle": "완료 기록의 두 필드를 그대로 옮기는 조회이며 새 판단이나 동작은 요구하지 않는다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H01",
+        "oracle": "완료 기록의 두 필드를 그대로 옮기는 조회이며 새 판단이나 동작은 요구하지 않는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-028",
+    "question": "근무일지의 조치 결과를 한 글자도 바꾸지 않고 보여 주실 수 있나요?",
+    "history": true,
+    "family": "read-only-capability",
+    "oracle": "보여줄 수 있는지는 기록 표시를 부탁하는 공손한 표현이다. 설비 작업 가능 여부가 아니다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H02",
+        "oracle": "보여줄 수 있는지는 기록 표시를 부탁하는 공손한 표현이다. 설비 작업 가능 여부가 아니다."
+      }
+    ]
+  },
+  {
+    "id": "post67-029",
+    "question": "근무일지에서 '내일 다시 확인해줘'라고 인계했던 문장과 당시 결과만 읽어줘.",
+    "history": true,
+    "family": "completed-speech-time-binding",
+    "oracle": "내일은 완료된 인계 발화 안에 있고 현재 요청은 문장과 당시 결과 읽기뿐이다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H03",
+        "oracle": "내일은 완료된 인계 발화 안에 있고 현재 요청은 문장과 당시 결과 읽기뿐이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-030",
+    "question": "근무일지에서 담당자가 재가동해도 된다고 판단했던 근거와 조치 시각만 알려줘.",
+    "history": true,
+    "family": "completed-permission-reason",
+    "oracle": "재가동 허용은 담당자의 과거 판단 내용이다. 판단했던 근거와 시각의 조회만 남는다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H04",
+        "oracle": "재가동 허용은 담당자의 과거 판단 내용이다. 판단했던 근거와 시각의 조회만 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-031",
+    "question": "근무일지에 적힌 '필터를 교체해줘' 요청의 시각과 결과만 복사해줘.",
+    "history": true,
+    "family": "reference-object",
+    "oracle": "교체해줘는 기록에 적힌 요청의 인용이며 요청의 시각과 결과를 복사하는 조회다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H05",
+        "oracle": "교체해줘는 기록에 적힌 요청의 인용이며 요청의 시각과 결과를 복사하는 조회다."
+      }
+    ]
+  },
+  {
+    "id": "post67-032",
+    "question": "현재 안전성은 묻지 않습니다. 근무일지에 기록된 조치 순서와 결과를 펼쳐 주세요.",
+    "history": true,
+    "family": "excluded-judgement-plus-reading",
+    "oracle": "현재 안전성 판단을 명시적으로 제외한 뒤 완료 기록의 순서와 결과를 표시한다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H06",
+        "oracle": "현재 안전성 판단을 명시적으로 제외한 뒤 완료 기록의 순서와 결과를 표시한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-033",
+    "question": "근무일지 조치 결과를 볼 수 있을까요?",
+    "history": true,
+    "family": "read-only-capability",
+    "oracle": "기록된 결과를 볼 수 있는지 묻는 조회 부탁이다. 설비 실행 가능 여부를 묻지 않는다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-H07",
+        "oracle": "기록된 결과를 볼 수 있는지 묻는 조회 부탁이다. 설비 실행 가능 여부를 묻지 않는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-034",
+    "question": "근무일지 조치 결과는 읽어주고, 그 결과만으로 재가동 승인안을 작성해줘.",
+    "history": false,
+    "family": "new-decision-artifact",
+    "oracle": "과거 결과 조회 외에 새로운 재가동 승인안 작성이 독립 요청으로 남는다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C01",
+        "oracle": "과거 결과 조회 외에 새로운 재가동 승인안 작성이 독립 요청으로 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-035",
+    "question": "근무일지의 조치 시각만 알려주고 같은 순서로 점검을 예약해줘.",
+    "history": false,
+    "family": "independent-scheduling",
+    "oracle": "조치 시각 조회 뒤 점검 예약이라는 새 실행 요청이 남는다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C02",
+        "oracle": "조치 시각 조회 뒤 점검 예약이라는 새 실행 요청이 남는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-036",
+    "question": "근무일지 결과를 보여줘. 재가동 판단은 묻지 않지만 필터 세척을 지시해줘.",
+    "history": false,
+    "family": "exclusion-object-boundary",
+    "oracle": "재가동 판단만 제외했으며 필터 세척 지시는 별개의 새 요청이다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C03",
+        "oracle": "재가동 판단만 제외했으며 필터 세척 지시는 별개의 새 요청이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-037",
+    "question": "근무일지에서 '내일 다시 확인해줘'라고 인계했던 결과를 읽어주고 그 지시를 이번 교대에 다시 내려줘.",
+    "history": false,
+    "family": "completed-speech-plus-renewal",
+    "oracle": "인계 문장의 내일은 과거 발화에 속하나 이번 교대의 지시 갱신은 새 요청이다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C04",
+        "oracle": "인계 문장의 내일은 과거 발화에 속하나 이번 교대의 지시 갱신은 새 요청이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-038",
+    "question": "근무일지의 조치 결과를 읽고 기록에 없는 원인을 새로 추론해줘.",
+    "history": false,
+    "family": "new-analysis",
+    "oracle": "기록의 단순 재현을 넘어 기록에 없는 원인의 새 추론을 요구한다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C05",
+        "oracle": "기록의 단순 재현을 넘어 기록에 없는 원인의 새 추론을 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-039",
+    "question": "근무일지 결과만 알려달라는 요청은 하지 않습니다. 필터 교체 주기를 계산해줘.",
+    "history": false,
+    "family": "excluded-history-object-live-calculation",
+    "oracle": "철회한 것은 이력 조회이며 뒤의 교체 주기 계산은 철회되지 않았다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C06",
+        "oracle": "철회한 것은 이력 조회이며 뒤의 교체 주기 계산은 철회되지 않았다."
+      }
+    ]
+  },
+  {
+    "id": "post67-040",
+    "question": "근무일지 결과를 보여줘. 재가동은 하지 말고 세척 여부를 검토해줘.",
+    "history": false,
+    "family": "prohibition-plus-live-review",
+    "oracle": "재가동 실행 금지와 별개로 세척 여부의 새 검토를 요구한다.",
+    "sources": [
+      {
+        "lens": 3,
+        "id": "L3-C07",
+        "oracle": "재가동 실행 금지와 별개로 세척 여부의 새 검토를 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-041",
+    "question": "근무일지에서 검증자가 필터 오염을 확인한 시각과 교체한 시각을 원문으로 나열해 주세요",
+    "history": true,
+    "family": "immutable two-step time",
+    "oracle": "완료된 두 조치의 기록 시각을 읽기만 요청한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h01",
+        "oracle": "완료된 두 조치의 기록 시각을 읽기만 요청한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-042",
+    "question": "근무일지의 137분 연속 운전 관찰 결과를 읽어 주실 수 있나요?",
+    "history": true,
+    "family": "read-only capability",
+    "oracle": "가능 여부의 대상은 기록을 읽는 기능이며 현재 설비 운전 허용이 아니다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h02",
+        "oracle": "가능 여부의 대상은 기록을 읽는 기능이며 현재 설비 운전 허용이 아니다."
+      }
+    ]
+  },
+  {
+    "id": "post67-043",
+    "question": "근무일지에 2026-10-22T09:10에 남은 조치와 2026-10-22T09:20에 남은 조치의 순서를 보여줄래요?",
+    "history": true,
+    "family": "exact source timestamps",
+    "oracle": "완료된 기록에서 지정한 두 시각의 조치 순서를 조회한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h03",
+        "oracle": "완료된 기록에서 지정한 두 시각의 조치 순서를 조회한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-044",
+    "question": "근무일지에서 “내일 필터를 바꿔주세요”라고 전달했던 시각과 담당자를 알려줘",
+    "history": true,
+    "family": "completed quoted future command",
+    "oracle": "내일은 과거 전달 내용 안에 있으며 새 교체 지시가 없다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h04",
+        "oracle": "내일은 과거 전달 내용 안에 있으며 새 교체 지시가 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-045",
+    "question": "“필터를 교체해줘”라는 요청은 하지 않겠습니다. 근무일지의 교체 시각과 결과만 발췌해 주세요",
+    "history": true,
+    "family": "explicit request exclusion",
+    "oracle": "명시적으로 새 교체 요청을 제외하고 기록 시각과 결과만 요구한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h05",
+        "oracle": "명시적으로 새 교체 요청을 제외하고 기록 시각과 결과만 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-046",
+    "question": "근무일지의 담당자와 조치 결과를 확인하고 싶습니다.",
+    "history": true,
+    "family": "read-only confirmation",
+    "oracle": "확인 대상이 담당자와 기록 결과이며 새 설비 판단은 없다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-h06",
+        "oracle": "확인 대상이 담당자와 기록 결과이며 새 설비 판단은 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-047",
+    "question": "근무일지에서 검증자가 필터 오염을 확인한 시각과 교체한 시각을 원문으로 나열해 주세요. 다음 교대 때도 같은 순서가 적절한지 판단해줘",
+    "history": false,
+    "family": "future judgement after lookup",
+    "oracle": "조회와 별도로 다음 교대의 조치 적절성을 새로 판단하도록 요구한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c01",
+        "oracle": "조회와 별도로 다음 교대의 조치 적절성을 새로 판단하도록 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-048",
+    "question": "근무일지의 137분 연속 운전 관찰 결과를 보여줘. 그 근거로 오늘 재가동을 승인해줘",
+    "history": false,
+    "family": "new approval from old evidence",
+    "oracle": "과거 관찰 조회 후 현재 재가동 승인을 별도로 요구한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c02",
+        "oracle": "과거 관찰 조회 후 현재 재가동 승인을 별도로 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-049",
+    "question": "필터 교체를 준비해줘. 지금 재가동이 가능한지는 묻지 않겠습니다. 근무일지의 담당자와 결과만 알려줘",
+    "history": false,
+    "family": "independent command before exclusion",
+    "oracle": "재가동 판단만 제외했으며 첫 문장의 준비 지시는 취소하지 않았다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c03",
+        "oracle": "재가동 판단만 제외했으며 첫 문장의 준비 지시는 취소하지 않았다."
+      }
+    ]
+  },
+  {
+    "id": "post67-050",
+    "question": "근무일지에 남은 교체 시각과 결과를 읽어주고, 다음 주 교체 일정을 잡아줘",
+    "history": false,
+    "family": "new scheduling",
+    "oracle": "기록 읽기와 별도로 미래 교체 일정 수립을 요구한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c04",
+        "oracle": "기록 읽기와 별도로 미래 교체 일정 수립을 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-051",
+    "question": "근무일지의 교체 전후 결과를 비교해서 더 나은 점검 순서를 제안해줘",
+    "history": false,
+    "family": "new analysis recommendation",
+    "oracle": "원문 조회를 넘어 비교 판단과 새로운 점검 순서 제안을 요구한다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c05",
+        "oracle": "원문 조회를 넘어 비교 판단과 새로운 점검 순서 제안을 요구한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-052",
+    "question": "근무일지의 조치 순서와 담당자를 보여주고 필터 교체를 진행시켜줘",
+    "history": false,
+    "family": "new causative execution",
+    "oracle": "접속된 별도 사동 실행 요청을 원문 이력으로 덮어쓸 수 없다.",
+    "sources": [
+      {
+        "lens": 4,
+        "id": "p4-c06",
+        "oracle": "접속된 별도 사동 실행 요청을 원문 이력으로 덮어쓸 수 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-053",
+    "question": "근무일지에서 '감압해 주세요'라고 전달했던 대목의 시각과 결과만 읽어 주세요.",
+    "history": true,
+    "family": "quoted_completed_control",
+    "oracle": "Explicit completed reported speech; only recorded time and result requested.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-01",
+        "oracle": "Explicit completed reported speech; only recorded time and result requested."
+      }
+    ]
+  },
+  {
+    "id": "post67-054",
+    "question": "회로를 분리해 주시고, 근무일지에서 '감압해 주세요'라고 전달했던 대목의 시각과 결과만 읽어 주세요.",
+    "history": false,
+    "family": "connected_request_before_report",
+    "oracle": "Independent connected instruction to disconnect precedes completed quotation.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-02",
+        "oracle": "Independent connected instruction to disconnect precedes completed quotation."
+      }
+    ]
+  },
+  {
+    "id": "post67-055",
+    "question": "근무일지에서 내일 필터 교체를 진행하라고 보고했던 대목의 시각과 결과만 복사해 주세요.",
+    "history": true,
+    "family": "unquoted_future_report_control",
+    "oracle": "Tomorrow is content of completed report; request copies recorded passage only.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-03",
+        "oracle": "Tomorrow is content of completed report; request copies recorded passage only."
+      }
+    ]
+  },
+  {
+    "id": "post67-056",
+    "question": "근무일지에서 내일 필터 교체를 진행하라고 보고했던 대목의 시각과 결과만 복사해 주세요. 교체 작업은 예약 부탁드립니다.",
+    "history": false,
+    "family": "nominal_request_after_report",
+    "oracle": "Separate request to schedule replacement remains live despite completed report.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-04",
+        "oracle": "Separate request to schedule replacement remains live despite completed report."
+      }
+    ]
+  },
+  {
+    "id": "post67-057",
+    "question": "현재 압력의 안전 여부는 묻지 않습니다. 근무일지에 적힌 조치 순서와 결과만 펼쳐 주세요.",
+    "history": true,
+    "family": "judgement_exclusion_control",
+    "oracle": "Explicitly disclaims present pressure judgement; only expands recorded fields.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-05",
+        "oracle": "Explicitly disclaims present pressure judgement; only expands recorded fields."
+      }
+    ]
+  },
+  {
+    "id": "post67-058",
+    "question": "펌프 가동은 보류 부탁드리며 현재 압력의 안전 여부는 묻지 않습니다. 근무일지에 적힌 조치 순서와 결과만 펼쳐 주세요.",
+    "history": false,
+    "family": "nominal_connected_before_exclusion",
+    "oracle": "Request to hold pump operation precedes excluded pressure judgement and must survive.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-06",
+        "oracle": "Request to hold pump operation precedes excluded pressure judgement and must survive."
+      }
+    ]
+  },
+  {
+    "id": "post67-059",
+    "question": "'밸브를 잠가 주세요'라는 요청은 하지 않겠습니다. 근무일지의 조치 순서와 결과만 제시해 주세요.",
+    "history": true,
+    "family": "quoted_exclusion_control",
+    "oracle": "Explicitly excludes quoted command and requests only original log fields.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-07",
+        "oracle": "Explicitly excludes quoted command and requests only original log fields."
+      }
+    ]
+  },
+  {
+    "id": "post67-060",
+    "question": "'밸브를 잠가 주세요'라는 요청은 하지 않겠습니다. 회로를 격리해 주시고 근무일지의 조치 순서와 결과만 제시해 주세요.",
+    "history": false,
+    "family": "connected_request_after_exclusion",
+    "oracle": "New isolation command after excluded valve command requires ordinary judgement path.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-08",
+        "oracle": "New isolation command after excluded valve command requires ordinary judgement path."
+      }
+    ]
+  },
+  {
+    "id": "post67-061",
+    "question": "근무일지에서 오늘 점검해 달라고 전달했던 문장의 시각과 결과만 확인해 주세요.",
+    "history": true,
+    "family": "completed_today_report_control",
+    "oracle": "Today modifies completed delivered request; confirms recorded sentence/time/results only.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-09",
+        "oracle": "Today modifies completed delivered request; confirms recorded sentence/time/results only."
+      }
+    ]
+  },
+  {
+    "id": "post67-062",
+    "question": "유압 회로를 차단해 주시고 근무일지에서 오늘 점검해 달라고 전달했던 문장의 시각과 결과만 확인해 주세요.",
+    "history": false,
+    "family": "connected_request_before_today_report",
+    "oracle": "Independent circuit shutdown instruction cannot borrow completed report tense.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-10",
+        "oracle": "Independent circuit shutdown instruction cannot borrow completed report tense."
+      }
+    ]
+  },
+  {
+    "id": "post67-063",
+    "question": "현재 가동을 허용하는지 판단하지 말고 근무일지의 담당자와 조치 결과만 알려 주세요.",
+    "history": true,
+    "family": "plain_judgement_exclusion_control",
+    "oracle": "Declines present authorization judgement; only asks named record fields.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-11",
+        "oracle": "Declines present authorization judgement; only asks named record fields."
+      }
+    ]
+  },
+  {
+    "id": "post67-064",
+    "question": "감압 작업은 승인 부탁드립니다. 현재 가동을 허용하는지 판단하지 말고 근무일지의 담당자와 조치 결과만 알려 주세요.",
+    "history": false,
+    "family": "nominal_request_before_judgement_exclusion",
+    "oracle": "Independent approval request for depressurization remains live before exclusion.",
+    "sources": [
+      {
+        "lens": 5,
+        "id": "L5-12",
+        "oracle": "Independent approval request for depressurization remains live before exclusion."
+      }
+    ]
+  },
+  {
+    "id": "post67-065",
+    "question": "근무일지에 남은 필터 점검 시각과 교체 결과를 원문으로 읽어 줄 수 있나요?",
+    "history": true,
+    "family": "capability_reading",
+    "oracle": "기록된 시각과 결과를 읽어 달라는 기능상 존대 의문이다. 설비의 현재 가능 여부 판단은 없다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H1",
+        "oracle": "기록된 시각과 결과를 읽어 달라는 기능상 존대 의문이다. 설비의 현재 가능 여부 판단은 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-066",
+    "question": "근무일지에 남은 필터 점검 시각과 교체 결과를 원문으로 읽어 주실 수 있습니까?",
+    "history": true,
+    "family": "capability_reading_formal",
+    "oracle": "H1의 존대 종결형만 바뀐다. 기록을 읽는 기능 질문은 현재 설비 판단이 아니므로 원문 조회 계약이다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H2",
+        "oracle": "H1의 존대 종결형만 바뀐다. 기록을 읽는 기능 질문은 현재 설비 판단이 아니므로 원문 조회 계약이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-067",
+    "question": "근무일지의 필터 교체 결과를 보고, 지금 같은 조치를 해도 되는지 판단해 줄 수 있나요?",
+    "history": false,
+    "family": "capability_live_judgement",
+    "oracle": "지금 같은 조치를 허용할지 새 판단을 요구한다. 전체 원문 질문과 MES가 생성 경로에 전달되어야 한다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C1",
+        "oracle": "지금 같은 조치를 허용할지 새 판단을 요구한다. 전체 원문 질문과 MES가 생성 경로에 전달되어야 한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-068",
+    "question": "근무일지의 필터 교체 결과를 보고, 지금 같은 조치를 해도 되는지 판단해 주실 수 있습니까?",
+    "history": false,
+    "family": "capability_live_judgement_formal",
+    "oracle": "C1의 존대 종결형만 바뀌며 현재 조치 허용 판단이라는 목적은 같다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C2",
+        "oracle": "C1의 존대 종결형만 바뀌며 현재 조치 허용 판단이라는 목적은 같다."
+      }
+    ]
+  },
+  {
+    "id": "post67-069",
+    "question": "근무일지의 교체 결과와 점검 담당자를 알려줘.",
+    "history": true,
+    "family": "field_order",
+    "oracle": "완료된 기록의 결과와 담당자를 조회한다. 새로운 분석이나 조치 요구가 없다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H3",
+        "oracle": "완료된 기록의 결과와 담당자를 조회한다. 새로운 분석이나 조치 요구가 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-070",
+    "question": "근무일지의 점검 담당자와 교체 결과를 알려줘!",
+    "history": true,
+    "family": "field_order_punctuation",
+    "oracle": "H3의 병렬 필드 순서와 종결 부호만 바뀐다. 두 필드는 같은 완료 기록 조회다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H4",
+        "oracle": "H3의 병렬 필드 순서와 종결 부호만 바뀐다. 두 필드는 같은 완료 기록 조회다."
+      }
+    ]
+  },
+  {
+    "id": "post67-071",
+    "question": "근무일지의 교체 결과를 알려주고, 내일 점검 일정을 잡아줘.",
+    "history": false,
+    "family": "schedule_after_history",
+    "oracle": "내일의 점검 일정 수립은 독립적인 미래 요청이다. 이력 조회와 함께 전체 판단 경로로 전달해야 한다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C3",
+        "oracle": "내일의 점검 일정 수립은 독립적인 미래 요청이다. 이력 조회와 함께 전체 판단 경로로 전달해야 한다."
+      }
+    ]
+  },
+  {
+    "id": "post67-072",
+    "question": "내일 점검 일정을 잡아줘! 근무일지의 교체 결과도 알려줘.",
+    "history": false,
+    "family": "schedule_before_history",
+    "oracle": "C3의 절 순서와 문장 부호만 바뀐다. 앞쪽 일정 요청을 뒤의 이력 조회가 지울 수 없다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C4",
+        "oracle": "C3의 절 순서와 문장 부호만 바뀐다. 앞쪽 일정 요청을 뒤의 이력 조회가 지울 수 없다."
+      }
+    ]
+  },
+  {
+    "id": "post67-073",
+    "question": "근무일지에 '내일 필터를 교체해줘'라고 요청했던 시각과 담당자만 알려줘.",
+    "history": true,
+    "family": "completed_quote",
+    "oracle": "미래형 명령은 과거에 요청했던 발화의 인용이다. 지금 요구하는 것은 그 발화의 기록 시각과 담당자뿐이다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H5",
+        "oracle": "미래형 명령은 과거에 요청했던 발화의 인용이다. 지금 요구하는 것은 그 발화의 기록 시각과 담당자뿐이다."
+      }
+    ]
+  },
+  {
+    "id": "post67-074",
+    "question": "근무일지에 “내일 필터를 교체해줘”라고 요청했던 시각과 담당자만 알려줘!",
+    "history": true,
+    "family": "completed_quote_typography",
+    "oracle": "H5의 인용 부호와 종결 부호만 바뀐다. 완료된 요청의 기록 조회라는 의미는 같다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-H6",
+        "oracle": "H5의 인용 부호와 종결 부호만 바뀐다. 완료된 요청의 기록 조회라는 의미는 같다."
+      }
+    ]
+  },
+  {
+    "id": "post67-075",
+    "question": "근무일지의 조치 결과를 알려줘. 그리고 '내일 필터를 교체해줘'라는 요청도 진행해줘.",
+    "history": false,
+    "family": "active_quote_after_history",
+    "oracle": "따옴표 속 내일 교체 요청을 현재 진행하라는 독립 지시다. 인용 부호만으로 완료 이력이 되지 않는다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C5",
+        "oracle": "따옴표 속 내일 교체 요청을 현재 진행하라는 독립 지시다. 인용 부호만으로 완료 이력이 되지 않는다."
+      }
+    ]
+  },
+  {
+    "id": "post67-076",
+    "question": "“내일 필터를 교체해줘”라는 요청도 진행해줘! 그리고 근무일지의 조치 결과를 알려줘.",
+    "history": false,
+    "family": "active_quote_before_history",
+    "oracle": "C5의 절 순서와 인용 부호를 바꾼 같은 요청이다. 진행 지시를 이력 조회가 가리지 않아야 한다.",
+    "sources": [
+      {
+        "lens": 6,
+        "id": "W6-C6",
+        "oracle": "C5의 절 순서와 인용 부호를 바꾼 같은 요청이다. 진행 지시를 이력 조회가 가리지 않아야 한다."
+      }
+    ]
+  }
+]

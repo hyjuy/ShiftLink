@@ -23,6 +23,7 @@ from . import evidence_score as E
 from . import generate as G
 from . import mes_block as MB
 from .embed import prefixes, slug
+from .field_history import is_history_question, record_sources
 from .retrieve import COMMON_FOLDERS, load
 from .source_conditions import with_source_conditions
 
@@ -228,6 +229,7 @@ class S30hPipeline:
 
     def run(self, payload) -> SimpleNamespace:
         question, eq_id = payload["question"], payload["eq_id"]
+        history = is_history_question(question)
         eq_type = self.eq_type.get(eq_id)
         t0 = time.time()
         # MES low/high states go into the embedding search only; the judge and answer prompts keep the question
@@ -245,8 +247,8 @@ class S30hPipeline:
                 eq_id = self.eq_id[asked[0]]
         observations = [] if away else payload.get("observations") or []
         alarms = [] if away else payload.get("active_alarms") or []
-        mes = state_lines(self.specs.get(eq_id, {}), observations)
-        missing = unobserved(question, self.specs.get(eq_id, {}), observations) if self.unobserved_guard else []
+        mes = [] if history else state_lines(self.specs.get(eq_id, {}), observations)
+        missing = unobserved(question, self.specs.get(eq_id, {}), observations) if self.unobserved_guard and not history else []
         if missing:
             # ponytail: also replaces a knowledge question that names the dropped signal (e.g. its limit) while the sensor
             # is bad; narrow the match to state questions if that costs answers
@@ -266,8 +268,11 @@ class S30hPipeline:
         kept = [(r, s) for r, s in zip(ev, scores) if s >= LO]
         ev2 = [r for r, _ in kept]
         route = "drop_all" if not ev2 else "confident" if max(s for _, s in kept) >= HI else "model"
+        if history and any(row["chunk_id"].startswith("field_") for row in ev):
+            ev2 = record_sources(question, ev2, self.cards, eq_id)
+            route = "record_history" if ev2 else "drop_all"
         block = None
-        if self.mes_block and eq_id in self.specs and not away:
+        if self.mes_block and eq_id in self.specs and not away and not history:
             block = MB.render(self.eq_code[eq_id], self.specs[eq_id], observations,
                               payload.get("snapshot_at"), alarms, self.alarm_labels)
         if route == "drop_all" and block and self.mes_only:
@@ -275,6 +280,11 @@ class S30hPipeline:
         p, extra = (MB.prompt(question, block, ev2, self.event_label), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
+        elif route == "record_history":
+            text = "근무일지에 기록된 과거 조치·관찰입니다. 현재 상태·작업 승인을 뜻하지 않습니다.\n"
+            text += "\n\n".join(f"{row['text']} [S{i}]" for i, row in enumerate(ev2, 1))
+            out = {"raw": json.dumps({"insufficient_evidence": False, "answer": text,
+                    "citations": [f"S{i}" for i in range(1, len(ev2)+1)]}), "prompt_tokens": 0}
         elif route == "confident":
             out = G.ask_raw(p, self.host, G.FORCE_PREFIX, **extra)
         else:
@@ -282,7 +292,7 @@ class S30hPipeline:
         res = G.check(out, ev2, question, block)
         abstain = res["abstain"] or (route in ("model", "mes_only") and out.get("p_insuff") is not None and out["p_insuff"] >= T)
         ranged = []
-        if self.range_answer and route == "drop_all" and eq_id in self.specs and RANGE_Q.search(question) and "정격" not in question:
+        if self.range_answer and not history and route == "drop_all" and eq_id in self.specs and RANGE_Q.search(question) and "정격" not in question:
             ranged = [sp for sp in self.specs[eq_id].values() if sp.unit != "bool" and sp.normal_min is not None
                       and sp.normal_max is not None and _asks(question, sp.name.split(" (")[0])]
         dropped = []
@@ -314,12 +324,13 @@ class S30hPipeline:
         if away:
             head = f"선택된 설비({code})와 질문의 설비({', '.join(asked)})가 달라 {code}의 MES 현재값은 쓰지 않았습니다."
             answer = f"{head}\n{answer}" if answer else f"{head} {MB.NO_ACTION}"
-        elif self.mes_prefix and eq_id in self.specs:
+        elif self.mes_prefix and eq_id in self.specs and not history:
             # (가) 10/21: code states the unit's MES; an abstention becomes that state + "no action found" (still no_knowledge)
             head = MB.summary(self.eq_code[eq_id], self.specs[eq_id], payload.get("observations") or [],
                               payload.get("active_alarms") or [], self.alarm_labels)
             answer = f"{head}\n{answer}" if answer else f"{head} {MB.NO_ACTION}"
         output = AgentResponse(mode="query", answer=answer, no_knowledge=abstain,
+                               review_queue=res["reason"] == "unsupported_number",
                                cited_card_ids=list(dict.fromkeys(r["metadata"]["source"] for r in cited if r["metadata"]["kind"] == "card")),
                                safety_notices=self.safety(eq_id, eq_type))
         # why it answered or abstained (MES query log): candidates with their judge P(>=2), what survived LO, the route,

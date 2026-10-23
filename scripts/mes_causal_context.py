@@ -176,5 +176,7 @@ def fit_profile(frames,source_config,settings=None):
         for j,c in enumerate(channels):
             values=[v for group in samples.values() for v in group[c]] if plateaus[j] else []
             result['normal_plateau_bounds'].append([float(min(values)),float(max(values))] if values else None)
-        result['flat_windows']=[int(min(16,max(5,longest[j]+2))) if 'vib' in c[1] else 16 for j,c in enumerate(channels)]
+        vibration_window=int(min(16,max([5]+[int(longest[j])+2 for j,c in enumerate(channels) if 'vib' in c[1]])))
+        result['flat_windows']=[vibration_window if 'vib' in c[1] else 16 for c in channels]
+        result['normal_flat_rule']='RMS sensors pool the longest normal plateau across equipment, plus two frames, bounded 5..16; other channels retain 16'
     return result

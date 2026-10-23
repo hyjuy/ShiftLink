@@ -258,7 +258,12 @@ def poll(session, base, state):
                 noticed=bool(session.feed(frame,session.binding.config_id)) or noticed;cursor=frame['sequence']
             if meta.get('config_id')!=session.binding.config_id or meta.get('config_preserved') is not True or meta.get('is_synthetic') is not True:
                 raise ValueError('unapproved replay provenance')
-            if cursor<state['sequence']:raise ValueError('replay incomplete; no advance past missing frame')
+            if cursor<state['sequence']:
+                if state['sequence']!=0 or cursor!=-1:raise ValueError('replay incomplete; no advance past missing frame')
+                # Initial control state has no stored sensor tick; discard the previous run only after provenance passed.
+                if session.run is not None:
+                    session.detector=session.binding.new_detector();session.run=None;session.cursor=-1
+                    session.notices.clear();session.stopped_notices.clear();session.stop_dirty=True
             if noticed or session.stop_dirty or session.since_save>=30:session.flush()
         except BaseException:
             # A bad/truncated trailer cannot commit speculative frames or notices.

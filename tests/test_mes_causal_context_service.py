@@ -18,6 +18,10 @@ class ContextBindingTests(TestCase):
             for mode,expected in (('stopped','inactive'),('running','warming_up')):
                 with patch.object(m,'replay_stream',return_value=iter(meta)):r=m.poll(s,'http://source',state|dict(line_mode=mode))
                 self.assertEqual(r['status'],expected);self.assertEqual(r['items'],[]);self.assertEqual(s.cursor,-1);self.assertEqual(s.detector.warm,0)
+            for frame in source_rows(80):s.feed(frame,b.config_id)
+            s.notices['EQ-0001']={'old':'notice'}
+            with patch.object(m,'replay_stream',return_value=iter(meta)):r=m.poll(s,'http://source',state|dict(run_id='new-control-run'))
+            self.assertEqual(r['sequence'],0);self.assertEqual(s.cursor,-1);self.assertEqual(s.detector.warm,0);self.assertFalse(s.notices)
             wrong=[('meta',(k,False if k=='config_preserved' else v)) for _,(k,v) in meta]
             with patch.object(m,'replay_stream',return_value=iter(wrong)):
                 with self.assertRaises(ValueError):m.poll(s,'http://source',state)

@@ -10,6 +10,14 @@ spec=importlib.util.spec_from_file_location('analytics_release',Path(__file__).r
 d=importlib.util.module_from_spec(spec);spec.loader.exec_module(d)
 
 class ReleaseTests(TestCase):
+    def test_current_worker_unit_cannot_be_overwritten_after_concurrent_update(self):
+        with TemporaryDirectory() as directory:
+            path=Path(directory)/'worker.service';path.write_text('approved')
+            manifest={'expected_unit_sha256':d.sha(path),'expected_live':{}}
+            with patch.object(d,'UNIT_PATH',path):
+                d.validate_live(manifest);path.write_text('other release')
+                with self.assertRaisesRegex(ValueError,'worker unit'):d.validate_live(manifest)
+
     def test_identical_pda_files_are_preserved_without_rewrite(self):
         with TemporaryDirectory() as directory:
             source=Path(directory)/'source';target=Path(directory)/'target';source.write_text('same');target.write_text('same');before=target.stat().st_mtime_ns

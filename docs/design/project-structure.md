@@ -117,6 +117,8 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 `pipeline.py`, `response.py`, `compose.py`, `router.py`에서 확인한다.
 최상단의 “one model call” 설명만 보고 판정·예열·재시도까지 호출 한 번이라고 단정하지 않는다.
 
+2026-10-24 로컬 통합은 원격 main `99c334d`의 최신 이력 처리를 유지하면서 Jetson의 관계 검색·게시 카드 자동 연결 5파일을 통합한다. `rag/knowledge_graph.py`, `rag2/s30h.py`, `mes/publication.py`, `mes/query.py`, `rag/graph_explain.py`가 실행 변경 범위다. Pi PDA와 센서·AI 모델 설정, 운영 데이터는 변경하지 않으며 운영 미배포다. [런타임 온톨로지 계약](knowledge-graph-runtime.md)을 참고한다.
+
 ### 선택적 그래프 연결 설명 (2026-10-22)
 
 `SHIFTLINK_KG_DEPTH=2`는 explain 결과에 허용된 2-hop 분류·참고 카드 경로만 추가한다. 기본 depth 1과 기존 답변·인용·센서는 유지하며 검색·생성에는 사용하지 않는다. 자세한 설정과 경계는 [explain 안내](../demo/kg/explain.md)를 따른다.
@@ -144,6 +146,12 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   기존 경보와 같은 알람창에서 설비별로 합치되 확인·진동 규칙은 유지한다.
   [배포·중지·복구 안내](../../deploy/analytics/README.md)와
   [Pi 검증 기록](../testing/mes-causal-pda-production-20261023.md)을 따른다.
+- 2026-10-24 후속 통합본은 현재 Pi의 `normal-context-v1-pda-20261024-r5-manual-stop` 분석 결과를 질문 프록시에서 함께 전달한다.
+  `agent/pi_analysis.py`가 Jetson의 질의 시점 MES 실행·설정·장비·시각·분석 지연을 검증하고, `mes/query.py`가
+  허용한 결과만 S30h/하이브리드 답변 프롬프트의 참고 문맥에 넣는다. 과거 원문 조회·검색·judge·게시·센서 관측은
+  변경하지 않는다. 최신 Pi의 수동 정지 유지 계약까지 격리 검증한 뒤 Jetson 5파일 → Pi 2파일을 순차 배포했다.
+  실제 LLM과 Pi의 실제 UI 파일·현재 센서를 사용하되 질의 기록은 별도 DB에 저장해 검증했다.
+  [계약](../guides/pi-analysis-query-context.md)과 [배포·보존 결과](../testing/pi-analysis-query-deployment-20261024.md)를 따른다.
 - 운전·부하 정상 기준은 원본 v14c를 보존한 `scripts/mes_causal_context.py`의 선택적 profile이다.
   `mes_causal_context_run.py`가 정상 적합→개발→고정→미사용 평가를, `mes_causal_context_validate.py`가
   Pi 회귀·기존 자료 통지 일치·운영 replay·1Hz/얼굴/CNN 검증을 담당한다.

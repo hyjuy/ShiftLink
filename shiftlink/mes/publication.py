@@ -186,7 +186,9 @@ class PublicationManager:
         view = copy(pipeline)
         if getattr(pipeline,'answer_mode',None)=='s30h':
             import numpy as np
-            view.rows = [*pipeline.rows,*(chunk for record in records for chunk in record['chunks'])]
+            # The verified publication manifest binds each chunk to this card version.
+            view.rows = [*pipeline.rows,*({**chunk,'metadata':{**chunk['metadata'],'version':record['card']['version']}}
+                                         for record in records for chunk in record['chunks'])]
             view.vec = np.vstack([pipeline.vec,*(record['vectors'] for record in records)])
             view.folders = np.array([row['metadata']['folder'] for row in view.rows])
             view.cards = [*pipeline.cards,*(record['card'] for record in records)]

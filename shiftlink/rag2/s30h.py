@@ -18,7 +18,9 @@ import numpy as np
 
 from shiftlink.agent.pipeline import JudgeUnavailableError
 from shiftlink.agent.response import AgentResponse, SafetyNotice
+from shiftlink.rag.knowledge_graph import expand_ranking
 
+from shiftlink.agent.pi_analysis import prompt_block
 from . import evidence_score as E
 from . import generate as G
 from . import mes_block as MB
@@ -70,6 +72,13 @@ def state_lines(specs: dict, observations: list) -> list[str]:
             rng = f"{_num(spec.normal_min)}–{_num(spec.normal_max)} {spec.unit}"
             lines.append(f"{spec.name} {_num(v)} {spec.unit} (정상 {rng} {'초과' if o['value'] == 'high' else '미만'})")
     return lines
+
+
+class GraphEvidence(list):
+    """Keep retrieval trace local to one call while preserving the public list interface."""
+    def __init__(self, rows, trace):
+        super().__init__(rows)
+        self.graph_trace = trace
 
 
 # field words for a signal whose MES name the question does not use (regex; 유압 not as in 유압유 / 유압 펌프 / 유압 유량)
@@ -128,7 +137,7 @@ class S30hPipeline:
     def __init__(self, index_dir, host, judge_host, answer_model="exaone-rag-aug-ck106", judge_model="exaone-sft-judge",
                  judge_ctx=2048, judge_workers=2, cards=(), catalog=None, source_conditions=False, mes_block=False,
                  event_label=False, mes_only=False, mes_prefix=False, p_fix=False, unobserved_guard=False, unit_guard=False,
-                 unit_header=False, range_answer=False):
+                 unit_header=False, range_answer=False, knowledge_graph=True):
         index_dir = Path(index_dir)
         self.rows = load(index_dir, CFG["size"])
         self.vec = np.load(index_dir / f"vectors_{CFG['size']}__{slug(CFG['model'])}.npy")
@@ -151,6 +160,7 @@ class S30hPipeline:
         # the MES passes loader KnowledgeCard models; tests pass plain dicts
         self.cards = [c if isinstance(c, dict) else c.model_dump(mode="json") for c in cards]
         self.source_conditions = source_conditions
+        self.knowledge_graph = knowledge_graph
         # experimental (default off): the unit's MES snapshot as an [MES] block in the answer prompt, for an answer model
         # trained on it (MES SFT 10/21); ck106 never saw the block
         self.mes_block = mes_block
@@ -208,12 +218,22 @@ class S30hPipeline:
     def evidence(self, question: str, eq_type: str | None, eq_id: str | None = None, units: set | None = None) -> list[dict]:
         """units: unit codes whose handover records stay (the unit guard's asked units); default the eq_id's unit."""
         idx = np.where(np.isin(self.folders, list(COMMON_FOLDERS | {eq_type})))[0] if eq_type else np.arange(len(self.rows))
-        ranking = idx[np.argsort(-(self.vec[idx] @ self._embed(question)))][:CFG["top"]].tolist()
+        ranking = idx[np.argsort(-(self.vec[idx] @ self._embed(question)))].tolist()
+        trace = None
+        if self.knowledge_graph:
+            ranking, trace = expand_ranking(self.rows, ranking, self.cards, eq_type, eq_id, top=CFG["top"])
+        else:
+            ranking = ranking[:CFG["top"]]
         ev = G.evidence(self.rows, ranking, CFG)
         # another unit's handover event is not this unit's history: drop it without moving the next chunk up
         # (F′ of the 10/20 event-filter run, ShiftLink-records/experiments/evfilter_20261020; backfilling cost 충분 answers)
         units = units or ({self.eq_code[eq_id]} if eq_id in self.eq_code else None)
-        return [r for r in ev if not units or r["metadata"]["kind"] != "event" or units & self.event_units[r["chunk_id"]]]
+        ev = [r for r in ev if not units or r["metadata"]["kind"] != "event" or units & self.event_units[r["chunk_id"]]]
+        if trace is not None:
+            selected = {r["chunk_id"] for r in ev}
+            trace["paths"] = [path for path in trace["paths"] if path["chunk_id"] in selected]
+            return GraphEvidence(ev, trace)
+        return ev
 
     def safety(self, eq_id: str, eq_type: str | None) -> list[SafetyNotice]:
         out = []
@@ -278,13 +298,16 @@ class S30hPipeline:
         if route == "drop_all" and block and self.mes_only:
             route = "mes_only"   # no evidence survived, but the unit's MES can still answer a state question ([M] only)
         p, extra = (MB.prompt(question, block, ev2, self.event_label), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
+        if not history and not away and payload.get('analysis_context'):
+            p += "\n\n" + prompt_block(payload['analysis_context'])
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
         elif route == "record_history":
+            # Render only approved historical facts, retaining every recorded step, worker and time.
             text = "근무일지에 기록된 과거 조치·관찰입니다. 현재 상태·작업 승인을 뜻하지 않습니다.\n"
             text += "\n\n".join(f"{row['text']} [S{i}]" for i, row in enumerate(ev2, 1))
             out = {"raw": json.dumps({"insufficient_evidence": False, "answer": text,
-                    "citations": [f"S{i}" for i in range(1, len(ev2)+1)]}), "prompt_tokens": 0}
+                                      "citations": [f'S{i}' for i in range(1, len(ev2)+1)]}), "prompt_tokens": 0}
         elif route == "confident":
             out = G.ask_raw(p, self.host, G.FORCE_PREFIX, **extra)
         else:
@@ -338,7 +361,10 @@ class S30hPipeline:
         reason = ("drop_all" if route == "drop_all" else "threshold" if abstain and not res["abstain"] else res["reason"]) if abstain else ""
         tool_results = {"answer_mode": "s30h", "mes_lines": mes, "route": route, "candidates": [r["chunk_id"] for r in ev],
                         "judge_p": [round(s, 4) for s in scores], "kept": [r["chunk_id"] for r in ev2],
-                        "p_insuff": out.get("p_insuff"), "abstain_reason": reason, "seconds": round(time.time() - t0, 2)}
+                        "p_insuff": out.get("p_insuff"), "abstain_reason": reason,
+                        "number_violations": res['number_violations'], "seconds": round(time.time() - t0, 2)}
+        if getattr(ev, "graph_trace", None) is not None:
+            tool_results["knowledge_graph"] = ev.graph_trace
         if self.source_conditions:
             tool_results["source_condition_cards"] = condition_cards
         if self.unit_guard:

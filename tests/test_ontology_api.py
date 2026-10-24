@@ -118,3 +118,59 @@ def test_safe_unavailable_and_query_unchanged(api, service, monkeypatch):
     second=service.query(body)
     assert calls[0] == calls[1] and len(calls)==2
     assert {k:v for k,v in first.items() if k!='query_id'} == {k:v for k,v in second.items() if k!='query_id'}
+
+
+def test_other_equipment_incident_does_not_leak(api, service, monkeypatch):
+    from test_work_report_capture import captured
+    from test_work_report_reuse_harness import ask
+    monkeypatch.setenv('SHIFTLINK_HPU_ONTOLOGY','explain')
+    equipment=service.active_config.equipment[1].equipment_id
+    query=ask(service, equipment)
+    note=captured(service, query_id=query['query_id'], equipment=[equipment], story='OTHER-INCIDENT-SECRET', candidate=False)
+    note.update(handover_id='HO-OTHER', equipment_id=equipment, equipment_ids=[equipment])
+    note['work_report']['records'][0]['causes']=[]
+    saved=service.record_work_report(note)
+    assert saved['incidents']
+    status, graph=api[0]()
+    assert status==200 and 'OTHER-INCIDENT-SECRET' not in json.dumps(graph)
+    other_asset=service.active_config.equipment[1].asset_id
+    assert all(n['properties']['asset_id'] != other_asset for n in graph['nodes'] if n['type']=='Asset')
+
+
+def test_all_pages_reassemble_and_changed_source_is_rejected(api, monkeypatch):
+    from pathlib import Path
+    import os
+    monkeypatch.setenv('SHIFTLINK_HPU_ONTOLOGY','explain')
+    _, full=api[0]()
+    gathered={k:[] for k in ('nodes','edges','unresolved')}
+    offset=0
+    while offset is not None:
+        status, page=api[0](f'?limit=3&offset={offset}&snapshot_hash=' + full['snapshot_hash'])
+        assert status==200
+        for key in gathered: gathered[key].extend(page[key])
+        offset=page['page']['next_offset']
+    assert all(gathered[k]==full[k] for k in gathered)
+    path=Path(os.environ['SHIFTLINK_HPU_ONTOLOGY_MANIFEST'])
+    manifest=json.loads(path.read_text(encoding='utf-8'))
+    manifest['source_namespace']='changed-source'
+    path.write_text(json.dumps(manifest), encoding='utf-8')
+    assert api[0]('?snapshot_hash='+full['snapshot_hash'])[0]==409
+
+
+def test_projection_errors_truncation_and_bad_manifest(api, monkeypatch):
+    from pathlib import Path
+    import os
+    monkeypatch.setenv('SHIFTLINK_HPU_ONTOLOGY','explain')
+    original=ontology_api.run_shadow
+    def truncated(*a, **kw):
+        result=original(*a, **kw)
+        result['graph']['truncated']=True
+        return result
+    monkeypatch.setattr(ontology_api,'run_shadow',truncated)
+    assert api[0]()[1]['truncated'] is True
+    monkeypatch.setattr(ontology_api,'run_shadow',lambda *a,**kw: {'status':'error','error':{'stage':'project','type':'RuntimeError'}})
+    assert api[0]()==(503, {'error':'ontology source unavailable'})
+    path=Path(os.environ['SHIFTLINK_HPU_ONTOLOGY_MANIFEST'])
+    for value in ([], {}, {'source_namespace':'x','config_catalog_hashes':[]}, {'source_namespace':' '}):
+        path.write_text(json.dumps(value), encoding='utf-8')
+        assert api[0]()[0]==503

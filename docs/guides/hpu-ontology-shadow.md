@@ -3,7 +3,8 @@
 3단계는 **승인된 오프라인 DB 복사본을 읽는 별도 진단 실행기**다.
 기존 MES/PDA 서버와 `/api/query`, 검색·judge·답변·게시·업무 DB 저장에는 연결하지 않는다.
 서비스 설정에 환경 변수만 추가해도 질의별 진단이 자동 실행되지는 않는다.
-실시간 서비스 연결과 인증된 조회 API는 다음 단계의 별도 범위다.
+4단계의 인증된 별도 조회는 [설명 API 안내](hpu-ontology-api.md)를 따른다.
+shadow 실행 자체는 서버의 질의 경로에 연결하지 않는다.
 
 구현: `shiftlink/mes/ontology_shadow.py:run_shadow`,
 CLI: `shiftlink/mes/hpu_ontology.py:main`.

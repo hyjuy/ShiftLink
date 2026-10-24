@@ -38,7 +38,7 @@ def experiment(published_history, monkeypatch):
 
 
 def test_off_is_inert_and_does_not_change_normal_query(experiment, monkeypatch):
-    args,_=experiment
+    args,did=experiment
     monkeypatch.delenv('SHIFTLINK_HPU_RETRIEVAL',raising=False)
     def forbidden(*a,**kw): raise AssertionError('disabled experiment accessed dependencies')
     monkeypatch.setattr(X,'connect',forbidden)
@@ -46,6 +46,8 @@ def test_off_is_inert_and_does_not_change_normal_query(experiment, monkeypatch):
     assert X.run_experiment(**args)=={'mode':'off','status':'disabled'}
     monkeypatch.setenv('SHIFTLINK_HPU_RETRIEVAL','experiment')
     assert X.run_experiment(**args,mode='off')['status']=='disabled'
+    normal=args['service'].query({'question':QUESTION,'equipment_id':'EQ-0001'})
+    assert normal['cited_card_ids']==[did], 'The experiment environment must not hook normal queries'
 
 
 def test_relation_recovers_missed_history_without_mutation(experiment):
@@ -64,7 +66,7 @@ def test_relation_recovers_missed_history_without_mutation(experiment):
     assert list(args['service'].storage.connection.iterdump())==before
 
 
-@pytest.mark.parametrize('case', ['judge_reject','unrecorded_duration','current_action','other_asset','other_incident','other_equipment','revoked','legacy','stale_chunk'])
+@pytest.mark.parametrize('case', ['judge_reject','unrecorded_duration','current_action','other_asset','other_incident','other_equipment','named_other_unit','revoked','legacy','stale_chunk'])
 def test_negative_boundaries(experiment,monkeypatch,case):
     args,did=experiment
     args={**args,'payload':deepcopy(args['payload'])}
@@ -74,6 +76,7 @@ def test_negative_boundaries(experiment,monkeypatch,case):
     if case=='other_asset': args['payload']['asset_id']='replacement'
     if case=='other_incident': args['payload']['incident_id']='unrelated'
     if case=='other_equipment': args['payload'].update(eq_id='EQ-0004',asset_id='different')
+    if case=='named_other_unit': args['payload']['question']='GR-01 근무일지의 필터 교체 순서와 결과는?'
     if case=='revoked': args['service'].review_card_draft(did,{'action':'reject','reason':'반례','expected_revision':2},ACTOR)
     if case=='legacy':
         con=args['service'].storage.connection
@@ -110,10 +113,16 @@ def test_paired_report_against_fixed_oracles(experiment,monkeypatch):
     for case in cases:
         payload={**args['payload'],'question':case['question']}
         if case.get('asset_mismatch'): payload['asset_id']='other'
-        result=X.run_experiment(**{**args,'payload':payload},mode='experiment')
-        reports.append(X.score_case(case,result,card_id=did))
+        if case.get('incident_mismatch'): payload['incident_id']='other'
+        if case.get('revoked'):
+            args['service'].review_card_draft(did,{'action':'reject','reason':'고정 반례','expected_revision':2},ACTOR)
+        with monkeypatch.context() as scoped:
+            if case.get('judge_reject'): scoped.setattr(E,'judge_dist',lambda *a,**kw:[1,0,0,0])
+            for repeat in range(5):
+                result=X.run_experiment(**{**args,'payload':payload},mode='experiment',trial_first=bool(repeat%2))
+                reports.append({**X.score_case(case,result,card_id=did),'repeat':repeat})
     report=X.summarize(reports)
-    assert report['completed']==len(cases) and report['trial']['wrong_citations']==0
+    assert report['completed']==len(cases)*5 and report['trial']['wrong_citations']==0
     assert report['trial']['misconnections']==0
     assert report['trial']['expected_citation_hits']>report['baseline']['expected_citation_hits']
     assert report['trial']['abstentions']<report['baseline']['abstentions']
@@ -122,3 +131,20 @@ def test_paired_report_against_fixed_oracles(experiment,monkeypatch):
     if path:
         with Path(path).open('x',encoding='utf-8') as target:
             json.dump({'cases':reports,'summary':report},target,ensure_ascii=False,indent=2,allow_nan=False)
+
+
+def test_missing_expected_citation_is_a_regression():
+    output={'cited_card_ids':[],'abstained':True,'candidate_count':0,'judge_count':0}
+    result={'status':'completed','baseline':output,'trial':output,'added_card_ids':[],
+            'timings_ms':{'baseline':1,'trial_total':2},'order':['baseline','trial']}
+    row=X.score_case({'id':'missed','expect_citation':True,'allow_relation':True},result,card_id='K-expected')
+    assert X.summarize([row])['decision']=='fixture_regression_or_incomplete'
+
+
+def test_errors_and_invalidated_pairs_are_not_successes(experiment):
+    args,_=experiment
+    assert X.run_experiment(**args,mode='invalid')['status']=='error'
+    assert X.run_experiment(mode='experiment')['status']=='error'
+    rows=[X.score_case({'id':'invalid'}, {'status':'invalidated'}, card_id='K-x')]
+    assert X.summarize(rows)['excluded']==1
+    assert X.summarize(rows)['decision']=='fixture_regression_or_incomplete'

@@ -3,5 +3,8 @@
   {"id":"recorded-steps", "question":"근무일지의 필터 교체 순서와 결과는?", "expect_citation":true, "allow_relation":true},
   {"id":"missing-999", "question":"근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘", "expect_citation":false, "allow_relation":true},
   {"id":"current-permission", "question":"과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?", "expect_citation":false, "allow_relation":false},
-  {"id":"replacement", "question":"근무일지의 필터 교체 순서와 결과는?", "asset_mismatch":true, "expect_citation":false, "allow_relation":false}
+  {"id":"replacement", "question":"근무일지의 필터 교체 순서와 결과는?", "asset_mismatch":true, "expect_citation":false, "allow_relation":false},
+  {"id":"judge-rejected", "question":"근무일지의 필터 교체 순서와 결과는?", "judge_reject":true, "expect_citation":false, "allow_relation":true},
+  {"id":"other-incident", "question":"근무일지의 필터 교체 순서와 결과는?", "incident_mismatch":true, "expect_citation":false, "allow_relation":false},
+  {"id":"revoked", "question":"근무일지의 필터 교체 순서와 결과는?", "revoked":true, "expect_citation":false, "allow_relation":false}
 ]

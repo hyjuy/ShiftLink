@@ -1,0 +1,6 @@
+[
+  {"id":"diagnostic-observation-copy","group":"history","question":"과거 근무일지에서 압력이 정상으로 돌아왔다는 관찰 결과를 원문 그대로 읽어줘","require_field":true,"allow_relation":true},
+  {"id":"diagnostic-recurrence-copy","group":"history","question":"근무일지에서 정비 후 재발이 없었다고 기록한 근거 문장을 원문 그대로 읽어줘","require_field":true,"allow_relation":true},
+  {"id":"diagnostic-time-copy","group":"history","question":"근무일지에 남겨 둔 09:10 첫 점검과 09:20 후속 조치 내용을 원문 그대로 옮겨줘","require_field":true,"allow_relation":true},
+  {"id":"diagnostic-pressure-record","group":"history","question":"근무일지에서 압력 정상 범위 복귀와 재발 확인 결과를 원문 그대로 읽어줘","require_field":true,"allow_relation":true}
+]

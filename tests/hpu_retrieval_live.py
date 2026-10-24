@@ -84,7 +84,10 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
     db=service.storage.connection.execute('PRAGMA database_list').fetchone()[2]
     base=project_incident(read_incident_bundle(db,iid,source_namespace='isolated-real-hpu-20261025',
         catalog=service.catalog.data,config_catalog_hashes={service.active_config.config_id:content_hash(service.catalog.data)}),equipment_type='HPU')
-    cases=json.loads(Path('tests/fixtures/hpu_retrieval_live_cases.json').read_text(encoding='utf-8'))
+    case_path=Path(os.environ.get('SHIFTLINK_HPU_LIVE_CASES','tests/fixtures/hpu_retrieval_live_cases.json'))
+    cases=json.loads(case_path.read_text(encoding='utf-8'))
+    (out/'cohort.json').write_text(json.dumps({'path':str(case_path),'sha256':file_hash(case_path),
+        'exploratory':case_path.name!='hpu_retrieval_live_cases.json'},ensure_ascii=False,indent=2),encoding='utf-8')
     original_config=service.active_config
     records=[]
     for index_case,case in enumerate(cases):

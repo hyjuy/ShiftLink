@@ -23,3 +23,7 @@ Pi source initially lacked research imports; red.log contains an environment imp
 ## GREEN
 
 Pi green.log: five tests passed in 63.233s. Both consumed false notices disappeared; a persistent in-range freeze was still detected once within fifteen seconds; bad/stale measurements broke confirmation; checkpoint restoration preserved decisions. Only the seven RMS windows changed. Profile SHA256 a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af. Separate fresh development and holdout qualification remain required; this is not operational approval.
+
+## Incremental replay RED (separate transport candidate)
+
+Read-only Pi→Jetson state reads showed intermittent ~5s waits; operating poll_seconds was 5.390s. Inspection found MesStorage.replay deserializes the entire run before applying after_sequence while MesService holds its lock. This is a confirmed unnecessary workload; its exact share of live network jitter is not yet established. Pi isolated test with 1,000 frames reproduced 1,000 deserializations for a two-frame request and also for an empty tail. transport-red3.log: 3 tests, two assertion failures, 0.858s; as_of/run/sequence semantics passed. Earlier environment-only errors (upload ordering and missing system pydantic) are preserved and not counted as RED. Use the existing isolated test-venv, no global dependency changes. A separate transport-source keeps frozen model/data evaluation source unchanged.

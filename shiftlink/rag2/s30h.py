@@ -280,6 +280,16 @@ class S30hPipeline:
                 "answer_mode": "s30h", "mes_lines": mes, "route": "unobserved", "candidates": [], "judge_p": [], "kept": [],
                 "p_insuff": None, "abstain_reason": "unobserved", "unobserved": missing, "seconds": round(time.time() - t0, 2)})
         ev = self.evidence("\n".join([question, *mes]), eq_type, eq_id, units=set(asked) or None)
+        if history:
+            # Reject inapplicable records before network judging; keep original chunks for the judge.
+            eligible = {r['metadata']['source'] for r in record_sources(question, ev, self.cards, eq_id)}
+            selected = [r for r in ev if r['chunk_id'].startswith('field_') and r['metadata']['source'] in eligible]
+            if getattr(ev, 'graph_trace', None) is not None:
+                trace = {**ev.graph_trace, 'paths': [p for p in ev.graph_trace['paths']
+                         if p['chunk_id'] in {r['chunk_id'] for r in selected}]}
+                ev = GraphEvidence(selected, trace)
+            else:
+                ev = selected
         with ThreadPoolExecutor(self.judge_workers) as ex:
             dists = list(ex.map(lambda r: E.judge_dist(question, r, self.judge_host, model=self.judge_model, ctx=self.judge_ctx), ev))
         if any(p is None for p in dists):   # strict like hybrid: never answer from evidence the judge did not score
@@ -288,7 +298,7 @@ class S30hPipeline:
         kept = [(r, s) for r, s in zip(ev, scores) if s >= LO]
         ev2 = [r for r, _ in kept]
         route = "drop_all" if not ev2 else "confident" if max(s for _, s in kept) >= HI else "model"
-        if history and any(row["chunk_id"].startswith("field_") for row in ev):
+        if history:
             ev2 = record_sources(question, ev2, self.cards, eq_id)
             route = "record_history" if ev2 else "drop_all"
         block = None

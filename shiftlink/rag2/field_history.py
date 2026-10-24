@@ -10,7 +10,7 @@ def is_history_question(question):
     of their action root; uncertainty retains the normal MES/model path.
     """
     text = question
-    fields = r'순서|시각|시간|담당자|근무자|작업자|결과|근거|이력|대목|문장|내용|문구|단계|결론|확인했다고'
+    fields = r'순서|시각|시간|담당자|근무자|작업자|결과|근거|이력|대목|문장|내용|문구|단계|결론|확인했다고|기록'
     if not (re.search(r'근무일지|일지|기록|기재|적힌|적었|남긴', text)
             and re.search(fields, text)):
         return False

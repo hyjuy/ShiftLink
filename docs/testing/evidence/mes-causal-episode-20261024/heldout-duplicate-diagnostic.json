@@ -1,0 +1,6092 @@
+{
+  "case": {
+    "id": "variance-01",
+    "kind": "variance",
+    "run_id": "4417905334ac4893b7f72e5526c43356",
+    "source_offset": 152,
+    "events": [
+      {
+        "kind": "variance",
+        "equipment_id": "EQ-0009",
+        "signal": "cv_vib_rms",
+        "severity": 1,
+        "start": 137,
+        "end": 199,
+        "ramp": 16,
+        "scale": 0.9856333755677792,
+        "sign": 1,
+        "seed": 5653930505468535236
+      }
+    ],
+    "sha256": "7bc42999fe39cb9773c251e4485ef48da8d4d564fd3276985cf7328f3b7360f7",
+    "positive": true
+  },
+  "unseen_evaluation_consumed": true,
+  "diagnostic_only_no_parameter_change": true,
+  "transitions": [
+    {
+      "sequence": 153,
+      "base_emitted": true,
+      "emitted": true,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.012591999043471943,
+        "EQ-0009:cv_idler_speed_ratio": 0.049900547433153024,
+        "EQ-0009:cv_motor_current": 0.005751815351682493,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.07891927866705417,
+        "EQ-0009:cv_vib_rms": 1.7945806885038913,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 175,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 4
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011271286055097363,
+        "EQ-0009:cv_idler_speed_ratio": 0.0007683461153267351,
+        "EQ-0009:cv_motor_current": 0.01061864393548023,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01942101153333865,
+        "EQ-0009:cv_vib_rms": 0.493993221788305,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 188,
+      "base_emitted": true,
+      "emitted": true,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01899107484005681,
+        "EQ-0009:cv_idler_speed_ratio": 0.042050800381209334,
+        "EQ-0009:cv_motor_current": 0.00673281585168311,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007715873086221533,
+        "EQ-0009:cv_vib_rms": 6.270217151186542,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 205,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 4
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0031121214909301284,
+        "EQ-0009:cv_idler_speed_ratio": 0.042470911157552055,
+        "EQ-0009:cv_motor_current": 0.01857757689936954,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.046848943590078816,
+        "EQ-0009:cv_vib_rms": 0.066117019821001,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "sequence": 65,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": null,
+        "EQ-0009:cv_idler_speed_ratio": null,
+        "EQ-0009:cv_motor_current": null,
+        "EQ-0009:cv_queue_len": null,
+        "EQ-0009:cv_speed": null,
+        "EQ-0009:cv_vib_rms": null,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 66,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": null,
+        "EQ-0009:cv_idler_speed_ratio": null,
+        "EQ-0009:cv_motor_current": null,
+        "EQ-0009:cv_queue_len": null,
+        "EQ-0009:cv_speed": null,
+        "EQ-0009:cv_vib_rms": null,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 67,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": null,
+        "EQ-0009:cv_idler_speed_ratio": null,
+        "EQ-0009:cv_motor_current": null,
+        "EQ-0009:cv_queue_len": null,
+        "EQ-0009:cv_speed": null,
+        "EQ-0009:cv_vib_rms": null,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 68,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": null,
+        "EQ-0009:cv_idler_speed_ratio": null,
+        "EQ-0009:cv_motor_current": null,
+        "EQ-0009:cv_queue_len": null,
+        "EQ-0009:cv_speed": null,
+        "EQ-0009:cv_vib_rms": null,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 69,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.027765407146037913,
+        "EQ-0009:cv_idler_speed_ratio": 0.03315905338470001,
+        "EQ-0009:cv_motor_current": 0.06539735099337704,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.07514091208549876,
+        "EQ-0009:cv_vib_rms": 0.0,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 70,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.022133534308519467,
+        "EQ-0009:cv_idler_speed_ratio": 0.03860759493670902,
+        "EQ-0009:cv_motor_current": 0.06539735099337704,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.08582827025839979,
+        "EQ-0009:cv_vib_rms": 0.01818181818181831,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 71,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0073536363947781834,
+        "EQ-0009:cv_idler_speed_ratio": 0.03642817831590542,
+        "EQ-0009:cv_motor_current": 0.058554083885209336,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.09224068516214039,
+        "EQ-0009:cv_vib_rms": 0.015187165775401149,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 72,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0015143023534665845,
+        "EQ-0009:cv_idler_speed_ratio": 0.03473527793065546,
+        "EQ-0009:cv_motor_current": 0.05444812362030871,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.09608813410438477,
+        "EQ-0009:cv_vib_rms": 0.013390374331550853,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 73,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.006835065602413446,
+        "EQ-0009:cv_idler_speed_ratio": 0.03371953769950548,
+        "EQ-0009:cv_motor_current": 0.0438167770419423,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06232310958202187,
+        "EQ-0009:cv_vib_rms": 0.012312299465240673,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 74,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010027523551781561,
+        "EQ-0009:cv_idler_speed_ratio": 0.019626329113924767,
+        "EQ-0009:cv_motor_current": 0.03743796909492245,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.020338013322597322,
+        "EQ-0009:cv_vib_rms": 0.011665454545454567,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 75,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.019054779349800915,
+        "EQ-0009:cv_idler_speed_ratio": 0.011170403962576342,
+        "EQ-0009:cv_motor_current": 0.04685571743929326,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.004853044433057406,
+        "EQ-0009:cv_vib_rms": 0.021877732620320747,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 76,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02447113282861253,
+        "EQ-0009:cv_idler_speed_ratio": 0.00901374485415569,
+        "EQ-0009:cv_motor_current": 0.052506366445915734,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01996767908645024,
+        "EQ-0009:cv_vib_rms": 0.04200364491978593,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 77,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.027720944915899492,
+        "EQ-0009:cv_idler_speed_ratio": 0.004802853406714895,
+        "EQ-0009:cv_motor_current": 0.05622788167770381,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.044789333021008564,
+        "EQ-0009:cv_vib_rms": 0.01664603721925123,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 78,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01766713239779476,
+        "EQ-0009:cv_idler_speed_ratio": 0.0022763185382504185,
+        "EQ-0009:cv_motor_current": 0.058460790816776645,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.059682325381743555,
+        "EQ-0009:cv_vib_rms": 0.007124677133689914,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 79,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01163484488693192,
+        "EQ-0009:cv_idler_speed_ratio": 0.0036772935995601354,
+        "EQ-0009:cv_motor_current": 0.04269236852980098,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03251534647712448,
+        "EQ-0009:cv_vib_rms": 0.023526143178609682,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 80,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.008015472380414215,
+        "EQ-0009:cv_idler_speed_ratio": 0.029494229233769334,
+        "EQ-0009:cv_motor_current": 0.02064853370066185,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03840972761396661,
+        "EQ-0009:cv_vib_rms": 0.03336702280556154,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 81,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0058438488765035915,
+        "EQ-0009:cv_idler_speed_ratio": 0.04939714293376701,
+        "EQ-0009:cv_motor_current": 0.013769820176953905,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04379102359714802,
+        "EQ-0009:cv_vib_rms": 0.03927155058173266,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 82,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02390300693818058,
+        "EQ-0009:cv_idler_speed_ratio": 0.05484466990995742,
+        "EQ-0009:cv_motor_current": 0.03442083250352335,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04517513388598073,
+        "EQ-0009:cv_vib_rms": 0.04281426724743533,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 83,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.034738501775186774,
+        "EQ-0009:cv_idler_speed_ratio": 0.04017152401531902,
+        "EQ-0009:cv_motor_current": 0.04681143989946503,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.022815496845752754,
+        "EQ-0009:cv_vib_rms": 0.04066182238054677,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 84,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04517251766611959,
+        "EQ-0009:cv_idler_speed_ratio": 0.03136763647853597,
+        "EQ-0009:cv_motor_current": 0.05424580433703003,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03258981783514358,
+        "EQ-0009:cv_vib_rms": 0.013701906262552655,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 85,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05469420636206465,
+        "EQ-0009:cv_idler_speed_ratio": 0.02608530395646615,
+        "EQ-0009:cv_motor_current": 0.010472427414580114,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.040299077729854194,
+        "EQ-0009:cv_vib_rms": 0.00394306889122143,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 86,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.057145940418246326,
+        "EQ-0009:cv_idler_speed_ratio": 0.0201641157805937,
+        "EQ-0009:cv_motor_current": 0.01579159873888983,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.054587176672316995,
+        "EQ-0009:cv_vib_rms": 0.00832934583104255,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 87,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.058616980851955325,
+        "EQ-0009:cv_idler_speed_ratio": 0.016611402875070232,
+        "EQ-0009:cv_motor_current": 0.020622862113090976,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.07317394424363609,
+        "EQ-0009:cv_vib_rms": 0.028527019263331427,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 88,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05949960511218072,
+        "EQ-0009:cv_idler_speed_ratio": 0.014479775131756151,
+        "EQ-0009:cv_motor_current": 0.010386962300967091,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.09261236742459462,
+        "EQ-0009:cv_vib_rms": 0.02781139872377426,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 89,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05297221005439404,
+        "EQ-0009:cv_idler_speed_ratio": 0.013200798485767705,
+        "EQ-0009:cv_motor_current": 0.004245422413692762,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.09598905869500267,
+        "EQ-0009:cv_vib_rms": 0.032729619982927546,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 90,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.049055773019722027,
+        "EQ-0009:cv_idler_speed_ratio": 0.018386620523289435,
+        "EQ-0009:cv_motor_current": 0.0005604984813281636,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.08800116525140608,
+        "EQ-0009:cv_vib_rms": 0.03568055273841952,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 91,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05636642260050131,
+        "EQ-0009:cv_idler_speed_ratio": 0.037339071928723724,
+        "EQ-0009:cv_motor_current": 0.010701228505022246,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.07711809904836214,
+        "EQ-0009:cv_vib_rms": 0.023547369076206793,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 92,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05109230054738639,
+        "EQ-0009:cv_idler_speed_ratio": 0.04871054277198429,
+        "EQ-0009:cv_motor_current": 0.021542149906545415,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06599123129052074,
+        "EQ-0009:cv_vib_rms": 0.01626745887887916,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 93,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05258679754606762,
+        "EQ-0009:cv_idler_speed_ratio": 0.055533425277940626,
+        "EQ-0009:cv_motor_current": 0.02804670274745931,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05931511063581591,
+        "EQ-0009:cv_vib_rms": 0.011899512760482575,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 94,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.053483495745276353,
+        "EQ-0009:cv_idler_speed_ratio": 0.06678180530435403,
+        "EQ-0009:cv_motor_current": 0.03194943445200765,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05530943824299301,
+        "EQ-0009:cv_vib_rms": 0.009278745089444627,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 95,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.054021514664801595,
+        "EQ-0009:cv_idler_speed_ratio": 0.0695682576460137,
+        "EQ-0009:cv_motor_current": 0.03429107347473666,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.052906034807299274,
+        "EQ-0009:cv_vib_rms": 0.004497728337089116,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 96,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.030172492232131715,
+        "EQ-0009:cv_idler_speed_ratio": 0.0712401290510095,
+        "EQ-0009:cv_motor_current": 0.033157425541795724,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02522872446391243,
+        "EQ-0009:cv_vib_rms": 0.001579437864056693,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 97,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04003491255691482,
+        "EQ-0009:cv_idler_speed_ratio": 0.06712492498151366,
+        "EQ-0009:cv_motor_current": 0.03247723678203116,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.043524614811573326,
+        "EQ-0009:cv_vib_rms": 0.005225737584744179,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 98,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04706229589494548,
+        "EQ-0009:cv_idler_speed_ratio": 0.06465580253981616,
+        "EQ-0009:cv_motor_current": 0.03206912352617243,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05013936445095822,
+        "EQ-0009:cv_vib_rms": 0.0022121510320410784,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 99,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05127872589776388,
+        "EQ-0009:cv_idler_speed_ratio": 0.06317432907479767,
+        "EQ-0009:cv_motor_current": 0.03182425557265719,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0584709988038008,
+        "EQ-0009:cv_vib_rms": 0.007228859113395679,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 100,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04144860993487694,
+        "EQ-0009:cv_idler_speed_ratio": 0.062285444995786574,
+        "EQ-0009:cv_motor_current": 0.031677334800548046,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0591071948462947,
+        "EQ-0009:cv_vib_rms": 0.005288352981160341,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 101,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03555054035714477,
+        "EQ-0009:cv_idler_speed_ratio": 0.0617521145483799,
+        "EQ-0009:cv_motor_current": 0.019558277260019862,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.059488912471791035,
+        "EQ-0009:cv_vib_rms": 0.012798680237893953,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 102,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02780492254939051,
+        "EQ-0009:cv_idler_speed_ratio": 0.05504796658263269,
+        "EQ-0009:cv_motor_current": 0.021487991701383057,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.023761570892781116,
+        "EQ-0009:cv_vib_rms": 0.01730487659193412,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 103,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.023157551864737957,
+        "EQ-0009:cv_idler_speed_ratio": 0.029671597781170535,
+        "EQ-0009:cv_motor_current": 0.04644687890603939,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.006898170560005254,
+        "EQ-0009:cv_vib_rms": 0.030703781570133624,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 104,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02457590551506138,
+        "EQ-0009:cv_idler_speed_ratio": 0.01444577650029325,
+        "EQ-0009:cv_motor_current": 0.0614222112288332,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02529401543167708,
+        "EQ-0009:cv_vib_rms": 0.04302119942336349,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 105,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007309199591171776,
+        "EQ-0009:cv_idler_speed_ratio": 0.016759061342531995,
+        "EQ-0009:cv_motor_current": 0.07040741062250948,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03633152235468017,
+        "EQ-0009:cv_vib_rms": 0.046133575268991256,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 106,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011708481821125464,
+        "EQ-0009:cv_idler_speed_ratio": 0.013412618973928267,
+        "EQ-0009:cv_motor_current": 0.06641663180396921,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00038027641698065083,
+        "EQ-0009:cv_vib_rms": 0.04800100077636791,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 107,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.023119090668503806,
+        "EQ-0009:cv_idler_speed_ratio": 0.02576909037169888,
+        "EQ-0009:cv_motor_current": 0.050997881952138606,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03170214671843759,
+        "EQ-0009:cv_vib_rms": 0.03200915661555325,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 108,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.019386852982857385,
+        "EQ-0009:cv_idler_speed_ratio": 0.017615045501801752,
+        "EQ-0009:cv_motor_current": 0.03048835389534484,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05970645017146217,
+        "EQ-0009:cv_vib_rms": 0.01599693781959921,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 109,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010422631110494173,
+        "EQ-0009:cv_idler_speed_ratio": 0.02168625349810902,
+        "EQ-0009:cv_motor_current": 0.0022885973261692195,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06775418267150328,
+        "EQ-0009:cv_vib_rms": 0.004250569108871703,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 110,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0007381800845414009,
+        "EQ-0009:cv_idler_speed_ratio": 0.024128978295893378,
+        "EQ-0009:cv_motor_current": 0.014631256615336152,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.09345977115037286,
+        "EQ-0009:cv_vib_rms": 0.017770514149650373,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 111,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005072490531030262,
+        "EQ-0009:cv_idler_speed_ratio": 0.025594613174563994,
+        "EQ-0009:cv_motor_current": 0.008889129245140015,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.10841463730408805,
+        "EQ-0009:cv_vib_rms": 0.016009902072678047,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 112,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002033412947319111,
+        "EQ-0009:cv_idler_speed_ratio": 0.026473994101766367,
+        "EQ-0009:cv_motor_current": 0.030057539357238563,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.11738755699631716,
+        "EQ-0009:cv_vib_rms": 0.029926796858580223,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 113,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.001952162844469213,
+        "EQ-0009:cv_idler_speed_ratio": 0.01500382408901848,
+        "EQ-0009:cv_motor_current": 0.022118408824056253,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.11764723297533211,
+        "EQ-0009:cv_vib_rms": 0.023303671698035957,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 114,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.009070992818188657,
+        "EQ-0009:cv_idler_speed_ratio": 0.008121722081369749,
+        "EQ-0009:cv_motor_current": 0.009024760445080604,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.1178030385627411,
+        "EQ-0009:cv_vib_rms": 0.004199615162996502,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 115,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.008614806303773875,
+        "EQ-0009:cv_idler_speed_ratio": 0.0038273535570226606,
+        "EQ-0009:cv_motor_current": 0.01612125803305273,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06308355068321225,
+        "EQ-0009:cv_vib_rms": 0.023910143429348715,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 116,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005559415110414303,
+        "EQ-0009:cv_idler_speed_ratio": 0.013884105202054808,
+        "EQ-0009:cv_motor_current": 0.005588869610118522,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.030251857955494947,
+        "EQ-0009:cv_vib_rms": 0.034666941672582385,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 117,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0037261803943985615,
+        "EQ-0009:cv_idler_speed_ratio": 0.030124629329268147,
+        "EQ-0009:cv_motor_current": 0.0007305634436420024,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.010552842318864561,
+        "EQ-0009:cv_vib_rms": 0.04112102061852258,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 118,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002626239564789116,
+        "EQ-0009:cv_idler_speed_ratio": 0.043336197520510975,
+        "EQ-0009:cv_motor_current": 0.010268063699819167,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02220207690865927,
+        "EQ-0009:cv_vib_rms": 0.05568865515186211,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 119,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.013531652376367075,
+        "EQ-0009:cv_idler_speed_ratio": 0.05627139380124425,
+        "EQ-0009:cv_motor_current": 0.016867239985895868,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.041855028445173574,
+        "EQ-0009:cv_vib_rms": 0.061220679722133325,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 120,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02322638754106079,
+        "EQ-0009:cv_idler_speed_ratio": 0.0640325115696842,
+        "EQ-0009:cv_motor_current": 0.0437848031526854,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03060309832030669,
+        "EQ-0009:cv_vib_rms": 0.05705326344825315,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 121,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.021986259025955083,
+        "EQ-0009:cv_idler_speed_ratio": 0.06868918223074817,
+        "EQ-0009:cv_motor_current": 0.05993534105275912,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02385194024538656,
+        "EQ-0009:cv_vib_rms": 0.05027473881761488,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 122,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0028474347457789323,
+        "EQ-0009:cv_idler_speed_ratio": 0.07082275534835515,
+        "EQ-0009:cv_motor_current": 0.06962566379280336,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01417940219715507,
+        "EQ-0009:cv_vib_rms": 0.057972329921584985,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 123,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01756951391176842,
+        "EQ-0009:cv_idler_speed_ratio": 0.0719377918991615,
+        "EQ-0009:cv_motor_current": 0.055461932492017425,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0038633417722566815,
+        "EQ-0009:cv_vib_rms": 0.06259088458396705,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 124,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.026402761411362108,
+        "EQ-0009:cv_idler_speed_ratio": 0.017460969030526133,
+        "EQ-0009:cv_motor_current": 0.04696369371154587,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.014688988153903732,
+        "EQ-0009:cv_vib_rms": 0.053597311499043225,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 125,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007791230345498654,
+        "EQ-0009:cv_idler_speed_ratio": 0.015225124690655083,
+        "EQ-0009:cv_motor_current": 0.04186475044326293,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.040363059827412895,
+        "EQ-0009:cv_vib_rms": 0.048201167648088926,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 126,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02053579127160025,
+        "EQ-0009:cv_idler_speed_ratio": 0.034836780923363814,
+        "EQ-0009:cv_motor_current": 0.03880538448229317,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03658881898699746,
+        "EQ-0009:cv_vib_rms": 0.046033000054094005,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 127,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.028182527827261206,
+        "EQ-0009:cv_idler_speed_ratio": 0.046603774662989046,
+        "EQ-0009:cv_motor_current": 0.024607734000634034,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.022290016375728174,
+        "EQ-0009:cv_vib_rms": 0.044732099497697055,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 128,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0005140523409052333,
+        "EQ-0009:cv_idler_speed_ratio": 0.0536639709067642,
+        "EQ-0009:cv_motor_current": 0.021718282784486256,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0009294818662401929,
+        "EQ-0009:cv_vib_rms": 0.022561184832308068,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 129,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.009591880335376292,
+        "EQ-0009:cv_idler_speed_ratio": 0.0685219928907837,
+        "EQ-0009:cv_motor_current": 0.018880859295415713,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02314754344958829,
+        "EQ-0009:cv_vib_rms": 0.00036703241612331033,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 130,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.012723169904355564,
+        "EQ-0009:cv_idler_speed_ratio": 0.0774368060811954,
+        "EQ-0009:cv_motor_current": 0.012653018888507561,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.036478380399597145,
+        "EQ-0009:cv_vib_rms": 0.014123962765182137,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 131,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.026112200048194676,
+        "EQ-0009:cv_idler_speed_ratio": 0.08278569399544242,
+        "EQ-0009:cv_motor_current": 0.013441700957828496,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.036190519931435385,
+        "EQ-0009:cv_vib_rms": 0.046977051455900753,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 132,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005767008288997374,
+        "EQ-0009:cv_idler_speed_ratio": 0.011641697079708897,
+        "EQ-0009:cv_motor_current": 0.01501866295880293,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.036017803650538326,
+        "EQ-0009:cv_vib_rms": 0.06775842338690959,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 133,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010017020430218062,
+        "EQ-0009:cv_idler_speed_ratio": 0.031044701069731208,
+        "EQ-0009:cv_motor_current": 0.014861087400005716,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05506357729317047,
+        "EQ-0009:cv_vib_rms": 0.08022724654551487,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 134,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.012567027714950474,
+        "EQ-0009:cv_idler_speed_ratio": 0.05753711233143661,
+        "EQ-0009:cv_motor_current": 0.020616431689451546,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03211581272536422,
+        "EQ-0009:cv_vib_rms": 0.08770854044067805,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 135,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.014097032085789921,
+        "EQ-0009:cv_idler_speed_ratio": 0.07343255908845986,
+        "EQ-0009:cv_motor_current": 0.02406963826311904,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0215972820865765,
+        "EQ-0009:cv_vib_rms": 0.08684972319488814,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 136,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015015034708293589,
+        "EQ-0009:cv_idler_speed_ratio": 0.08407054260772663,
+        "EQ-0009:cv_motor_current": 0.026141562207319537,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.022986917674462586,
+        "EQ-0009:cv_vib_rms": 0.07456972696506135,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 137,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01556583628179579,
+        "EQ-0009:cv_idler_speed_ratio": 0.0863806854985926,
+        "EQ-0009:cv_motor_current": 0.027384716573839833,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02382069902719424,
+        "EQ-0009:cv_vib_rms": 0.037255205162994146,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 138,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.00878252214240202,
+        "EQ-0009:cv_idler_speed_ratio": 0.08776677123311216,
+        "EQ-0009:cv_motor_current": 0.028130609193752015,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.024320967838833224,
+        "EQ-0009:cv_vib_rms": 0.003101786199400753,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 139,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.001466971406094391,
+        "EQ-0009:cv_idler_speed_ratio": 0.07621537369198603,
+        "EQ-0009:cv_motor_current": 0.037960043220445355,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.024621129125816616,
+        "EQ-0009:cv_vib_rms": 0.03771112079372844,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 140,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0029223590356901863,
+        "EQ-0009:cv_idler_speed_ratio": 0.03362135409961655,
+        "EQ-0009:cv_motor_current": 0.04385770363646137,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.040905464240734046,
+        "EQ-0009:cv_vib_rms": 0.15339565643345623,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 141,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0005544157297286263,
+        "EQ-0009:cv_idler_speed_ratio": 0.00806494234419487,
+        "EQ-0009:cv_motor_current": 0.0499349312326493,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.050676065309684507,
+        "EQ-0009:cv_vib_rms": 0.22664381097237304,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 142,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0008663502538483097,
+        "EQ-0009:cv_idler_speed_ratio": 0.017111942841849834,
+        "EQ-0009:cv_motor_current": 0.04883513092501998,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.034051053137937125,
+        "EQ-0009:cv_vib_rms": 0.3072836127866324,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 143,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0017188098439944713,
+        "EQ-0009:cv_idler_speed_ratio": 0.0018407044104651609,
+        "EQ-0009:cv_motor_current": 0.0481752507404424,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.024076045834888694,
+        "EQ-0009:cv_vib_rms": 0.41298300189657816,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 144,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.013877711174458013,
+        "EQ-0009:cv_idler_speed_ratio": 0.011168554789053814,
+        "EQ-0009:cv_motor_current": 0.047779322629695836,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02014920450258043,
+        "EQ-0009:cv_vib_rms": 0.4764026353625456,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 145,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.024160274061736427,
+        "EQ-0009:cv_idler_speed_ratio": 0.02145072010513293,
+        "EQ-0009:cv_motor_current": 0.03264110351159229,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0466843547050619,
+        "EQ-0009:cv_vib_rms": 0.5144544154421261,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 146,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.030329811794103472,
+        "EQ-0009:cv_idler_speed_ratio": 0.025143409498412667,
+        "EQ-0009:cv_motor_current": 0.02355817204073016,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01956320780144285,
+        "EQ-0009:cv_vib_rms": 0.4985582107626018,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 147,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0340315344335237,
+        "EQ-0009:cv_idler_speed_ratio": 0.019268764466245914,
+        "EQ-0009:cv_motor_current": 0.018108413158212888,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.004527356045289101,
+        "EQ-0009:cv_vib_rms": 0.48902048795488723,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 148,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.030894752252042468,
+        "EQ-0009:cv_idler_speed_ratio": 0.015743977446945865,
+        "EQ-0009:cv_motor_current": 0.014838557828702524,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011163818648767754,
+        "EQ-0009:cv_vib_rms": 0.48329785427025856,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 149,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0071292257131857955,
+        "EQ-0009:cv_idler_speed_ratio": 0.009595991077237192,
+        "EQ-0009:cv_motor_current": 0.012876644630996305,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.015145696210854945,
+        "EQ-0009:cv_vib_rms": 0.47986427405948123,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 150,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007130090210128206,
+        "EQ-0009:cv_idler_speed_ratio": 0.024799972191747028,
+        "EQ-0009:cv_motor_current": 0.007394860950783201,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0024846800059947992,
+        "EQ-0009:cv_vib_rms": 3.026360540218716,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 151,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.009916778390405624,
+        "EQ-0009:cv_idler_speed_ratio": 0.03392236086045293,
+        "EQ-0009:cv_motor_current": 0.0006403461226869421,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0390479519700506,
+        "EQ-0009:cv_vib_rms": 4.554258299914256,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 152,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011588791298572073,
+        "EQ-0009:cv_idler_speed_ratio": 0.04390872746839049,
+        "EQ-0009:cv_motor_current": 0.0007153335014267474,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06396753115567784,
+        "EQ-0009:cv_vib_rms": 2.829459792782778,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 153,
+      "base_emitted": true,
+      "emitted": true,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.012591999043471943,
+        "EQ-0009:cv_idler_speed_ratio": 0.049900547433153024,
+        "EQ-0009:cv_motor_current": 0.005751815351682493,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.07891927866705417,
+        "EQ-0009:cv_vib_rms": 1.7945806885038913,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 154,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.013193923690411865,
+        "EQ-0009:cv_idler_speed_ratio": 0.05349563941201054,
+        "EQ-0009:cv_motor_current": 0.009632104663548037,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.08036525580282376,
+        "EQ-0009:cv_vib_rms": 1.2530714077547414,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 155,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.022338607648524977,
+        "EQ-0009:cv_idler_speed_ratio": 0.05565269459932505,
+        "EQ-0009:cv_motor_current": 0.025315686639188387,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03821988549252791,
+        "EQ-0009:cv_vib_rms": 0.9281658393052513,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 156,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04328223690592575,
+        "EQ-0009:cv_idler_speed_ratio": 0.020898496231251396,
+        "EQ-0009:cv_motor_current": 0.0347258358245726,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009155487404147115,
+        "EQ-0009:cv_vib_rms": 1.0199668832622952,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 157,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05584841446036622,
+        "EQ-0009:cv_idler_speed_ratio": 0.009695354655305098,
+        "EQ-0009:cv_motor_current": 0.04434543526957792,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01469556635262197,
+        "EQ-0009:cv_vib_rms": 1.085432536374489,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 158,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.047931302110497585,
+        "EQ-0009:cv_idler_speed_ratio": 0.018310333321526696,
+        "EQ-0009:cv_motor_current": 0.05221432517940673,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02900619860668342,
+        "EQ-0009:cv_vib_rms": 1.1247119282418054,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 159,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03801505888611367,
+        "EQ-0009:cv_idler_speed_ratio": 0.03322065238697195,
+        "EQ-0009:cv_motor_current": 0.06234404764627527,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03759257795912029,
+        "EQ-0009:cv_vib_rms": 1.2064656596188799,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 160,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.019225739110230688,
+        "EQ-0009:cv_idler_speed_ratio": 0.04216684382623911,
+        "EQ-0009:cv_motor_current": 0.0684218811263964,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.042744405570582414,
+        "EQ-0009:cv_vib_rms": 1.2555178984451245,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 161,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007952147244700898,
+        "EQ-0009:cv_idler_speed_ratio": 0.047534558689799396,
+        "EQ-0009:cv_motor_current": 0.07206858121446906,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04583550213745969,
+        "EQ-0009:cv_vib_rms": 1.2849492417408714,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 162,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.014027565966635664,
+        "EQ-0009:cv_idler_speed_ratio": 0.06121198452593214,
+        "EQ-0009:cv_motor_current": 0.045227903695568734,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05460034234828357,
+        "EQ-0009:cv_vib_rms": 0.9925075129589613,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 163,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.004833243358543884,
+        "EQ-0009:cv_idler_speed_ratio": 0.0694184400276118,
+        "EQ-0009:cv_motor_current": 0.029123497184228537,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00028276362697144997,
+        "EQ-0009:cv_vib_rms": 0.9443665398609381,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 164,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.030641373167331492,
+        "EQ-0009:cv_idler_speed_ratio": 0.06184919280027596,
+        "EQ-0009:cv_motor_current": 0.004780941577645261,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04416350928517922,
+        "EQ-0009:cv_vib_rms": 0.915481956002124,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 165,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05049746135715022,
+        "EQ-0009:cv_idler_speed_ratio": 0.050263065487539824,
+        "EQ-0009:cv_motor_current": 0.0028685649465871564,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.019514722217033834,
+        "EQ-0009:cv_vib_rms": 0.770827141515713,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 166,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 1
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0580399039664953,
+        "EQ-0009:cv_idler_speed_ratio": 0.04683367858806584,
+        "EQ-0009:cv_motor_current": 0.0017211389679522937,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011840595280297165,
+        "EQ-0009:cv_vib_rms": 0.5966973544281443,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 167,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 1
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02168975718583105,
+        "EQ-0009:cv_idler_speed_ratio": 0.044776046448381464,
+        "EQ-0009:cv_motor_current": 0.0010326833807713762,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007236119118255165,
+        "EQ-0009:cv_vib_rms": 0.7068804447424478,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 168,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005073050639134671,
+        "EQ-0009:cv_idler_speed_ratio": 0.040019177676403124,
+        "EQ-0009:cv_motor_current": 0.00028848420064824345,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.004473433421029966,
+        "EQ-0009:cv_vib_rms": 0.7856534005353081,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 169,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.004896973288883154,
+        "EQ-0009:cv_idler_speed_ratio": 0.04068734590138383,
+        "EQ-0009:cv_motor_current": 0.00017309052038894608,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.004299323301455718,
+        "EQ-0009:cv_vib_rms": 0.7138850884495271,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 170,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01087898764569385,
+        "EQ-0009:cv_idler_speed_ratio": 0.04108824683637225,
+        "EQ-0009:cv_motor_current": 0.00022727151558121455,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0024478320307965646,
+        "EQ-0009:cv_vib_rms": 0.6708241011980585,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 171,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 1
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.004424004556858049,
+        "EQ-0009:cv_idler_speed_ratio": 0.020855479747392828,
+        "EQ-0009:cv_motor_current": 0.02160756645047459,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007037266669817252,
+        "EQ-0009:cv_vib_rms": 0.6449875088471773,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 172,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 1
+      },
+      "after": {
+        "on": true,
+        "quiet": 2
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005628972278732031,
+        "EQ-0009:cv_idler_speed_ratio": 0.009611092999115266,
+        "EQ-0009:cv_motor_current": 0.0012647606208364428,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.012728325890185544,
+        "EQ-0009:cv_vib_rms": 0.6294855534366485,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 173,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 2
+      },
+      "after": {
+        "on": true,
+        "quiet": 3
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01166075838008608,
+        "EQ-0009:cv_idler_speed_ratio": 0.009564124153899683,
+        "EQ-0009:cv_motor_current": 0.022502785732325187,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.016142961422406517,
+        "EQ-0009:cv_vib_rms": 0.6201843801903313,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 174,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 3
+      },
+      "after": {
+        "on": true,
+        "quiet": 4
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015279830040898506,
+        "EQ-0009:cv_idler_speed_ratio": 0.009535942846770333,
+        "EQ-0009:cv_motor_current": 0.0018018921899468003,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0181917427417391,
+        "EQ-0009:cv_vib_rms": 0.5413149061890649,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 175,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 4
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011271286055097363,
+        "EQ-0009:cv_idler_speed_ratio": 0.0007683461153267351,
+        "EQ-0009:cv_motor_current": 0.01061864393548023,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01942101153333865,
+        "EQ-0009:cv_vib_rms": 0.493993221788305,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 176,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.013469491735788028,
+        "EQ-0009:cv_idler_speed_ratio": 0.011096504713852595,
+        "EQ-0009:cv_motor_current": 0.01807096561073645,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.013394792704352794,
+        "EQ-0009:cv_vib_rms": 0.4028772164954428,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 177,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02831395841031926,
+        "EQ-0009:cv_idler_speed_ratio": 0.018215415211360192,
+        "EQ-0009:cv_motor_current": 0.03126200541500705,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009779061406961283,
+        "EQ-0009:cv_vib_rms": 0.33827820155501964,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 178,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.001730247541137972,
+        "EQ-0009:cv_idler_speed_ratio": 0.02248676150986475,
+        "EQ-0009:cv_motor_current": 0.03917662929756941,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007609622628526375,
+        "EQ-0009:cv_vib_rms": 0.2995187925907658,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 179,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.009054003165907291,
+        "EQ-0009:cv_idler_speed_ratio": 0.025049569288967486,
+        "EQ-0009:cv_motor_current": 0.022071098991345187,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01705387840106714,
+        "EQ-0009:cv_vib_rms": 0.26589095469884455,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 180,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015524553590134446,
+        "EQ-0009:cv_idler_speed_ratio": 0.027963148287744793,
+        "EQ-0009:cv_motor_current": 0.0038607609400610737,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011974512824989889,
+        "EQ-0009:cv_vib_rms": 0.23684687228454734,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 181,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01940688384467074,
+        "EQ-0009:cv_idler_speed_ratio": 0.038076733221408594,
+        "EQ-0009:cv_motor_current": 0.007065441890709394,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01967281251894525,
+        "EQ-0009:cv_vib_rms": 0.22828780251511346,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 182,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.021736281997392515,
+        "EQ-0009:cv_idler_speed_ratio": 0.04414488418160687,
+        "EQ-0009:cv_motor_current": 0.013621163589171675,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.024291792335318464,
+        "EQ-0009:cv_vib_rms": 0.32052134461067233,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 183,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.023133920889025588,
+        "EQ-0009:cv_idler_speed_ratio": 0.03463222495035081,
+        "EQ-0009:cv_motor_current": 0.017554596608249044,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02706318022514239,
+        "EQ-0009:cv_vib_rms": 0.37586146986800767,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 184,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.027809303237400385,
+        "EQ-0009:cv_idler_speed_ratio": 0.011258146197508128,
+        "EQ-0009:cv_motor_current": 0.019914656419695465,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.023656682304853204,
+        "EQ-0009:cv_vib_rms": 0.5453671493004836,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 185,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03061453264642526,
+        "EQ-0009:cv_idler_speed_ratio": 0.002766301054197479,
+        "EQ-0009:cv_motor_current": 0.017577932924664783,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0013099800761320374,
+        "EQ-0009:cv_vib_rms": 3.2553582653633164,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 186,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.032297670291840185,
+        "EQ-0009:cv_idler_speed_ratio": 0.011180969405220842,
+        "EQ-0009:cv_motor_current": 0.014409894412635335,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01628997750472318,
+        "EQ-0009:cv_vib_rms": 4.881352935001016,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 187,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.033307552879089146,
+        "EQ-0009:cv_idler_speed_ratio": 0.01789240900078619,
+        "EQ-0009:cv_motor_current": 0.012509071305417665,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.025277975961877863,
+        "EQ-0009:cv_vib_rms": 5.856949736783636,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 188,
+      "base_emitted": true,
+      "emitted": true,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01899107484005681,
+        "EQ-0009:cv_idler_speed_ratio": 0.042050800381209334,
+        "EQ-0009:cv_motor_current": 0.00673281585168311,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007715873086221533,
+        "EQ-0009:cv_vib_rms": 6.270217151186542,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 189,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010401188016637405,
+        "EQ-0009:cv_idler_speed_ratio": 0.05654583520946322,
+        "EQ-0009:cv_motor_current": 0.007902824168846332,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.021948900178502657,
+        "EQ-0009:cv_vib_rms": 4.225585905685187,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 190,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.014455573554733037,
+        "EQ-0009:cv_idler_speed_ratio": 0.06524285610641554,
+        "EQ-0009:cv_motor_current": 0.010812334677908212,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.030488716433871334,
+        "EQ-0009:cv_vib_rms": 2.8631526129298286,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 191,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02328743751778754,
+        "EQ-0009:cv_idler_speed_ratio": 0.04558489913440465,
+        "EQ-0009:cv_motor_current": 0.015538173433676384,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03561260618709254,
+        "EQ-0009:cv_vib_rms": 2.045692637276614,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 192,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02218732325542312,
+        "EQ-0009:cv_idler_speed_ratio": 0.03379012495119812,
+        "EQ-0009:cv_motor_current": 0.01903592834276645,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03868694003902526,
+        "EQ-0009:cv_vib_rms": 1.5405834968044705,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 193,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.021527254698004466,
+        "EQ-0009:cv_idler_speed_ratio": 0.022090255488055207,
+        "EQ-0009:cv_motor_current": 0.021134581288220492,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0294928169770789,
+        "EQ-0009:cv_vib_rms": 1.0792720232163722,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 194,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015537622721603054,
+        "EQ-0009:cv_idler_speed_ratio": 0.015070333810169461,
+        "EQ-0009:cv_motor_current": 0.0339831770290029,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.023976343139911083,
+        "EQ-0009:cv_vib_rms": 0.7604444973522829,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 195,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 1
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03777654917336756,
+        "EQ-0009:cv_idler_speed_ratio": 0.016472029675204093,
+        "EQ-0009:cv_motor_current": 0.03208968546684986,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03709278194719242,
+        "EQ-0009:cv_vib_rms": 0.6111886235450595,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 196,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 1
+      },
+      "after": {
+        "on": true,
+        "quiet": 2
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05338087589160548,
+        "EQ-0009:cv_idler_speed_ratio": 0.01731304719422487,
+        "EQ-0009:cv_motor_current": 0.030953590529558025,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04496264523156122,
+        "EQ-0009:cv_vib_rms": 0.5216350992607255,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 197,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 2
+      },
+      "after": {
+        "on": true,
+        "quiet": 3
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.06048250107536901,
+        "EQ-0009:cv_idler_speed_ratio": 0.014378269647141622,
+        "EQ-0009:cv_motor_current": 0.004333743721708172,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.051060743569651845,
+        "EQ-0009:cv_vib_rms": 0.46289228950295924,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 198,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 3
+      },
+      "after": {
+        "on": true,
+        "quiet": 4
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.06995056056094824,
+        "EQ-0009:cv_idler_speed_ratio": 0.021780511595660003,
+        "EQ-0009:cv_motor_current": 0.014300025482473016,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.054719602572506215,
+        "EQ-0009:cv_vib_rms": 0.6163086357338609,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 199,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 4
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.055022304408919864,
+        "EQ-0009:cv_idler_speed_ratio": 0.026221856764771033,
+        "EQ-0009:cv_motor_current": 0.011008271360123818,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05038538133707665,
+        "EQ-0009:cv_vib_rms": 0.7615552349162521,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 200,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.031197754540798456,
+        "EQ-0009:cv_idler_speed_ratio": 0.028886663866237648,
+        "EQ-0009:cv_motor_current": 0.009033218886714298,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.047784848595818906,
+        "EQ-0009:cv_vib_rms": 0.7955064029818365,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 201,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 0
+      },
+      "after": {
+        "on": true,
+        "quiet": 1
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01690302461992561,
+        "EQ-0009:cv_idler_speed_ratio": 0.021239538220678086,
+        "EQ-0009:cv_motor_current": 0.007848187402668585,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.048479122319046254,
+        "EQ-0009:cv_vib_rms": 0.6272150717356259,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 202,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 1
+      },
+      "after": {
+        "on": true,
+        "quiet": 2
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011930037169269386,
+        "EQ-0009:cv_idler_speed_ratio": 0.007729584717565624,
+        "EQ-0009:cv_motor_current": 0.007137168512241159,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04664109318500067,
+        "EQ-0009:cv_vib_rms": 0.3934413425066161,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 203,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 2
+      },
+      "after": {
+        "on": true,
+        "quiet": 3
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.000697126820076927,
+        "EQ-0009:cv_idler_speed_ratio": 0.02698227477110028,
+        "EQ-0009:cv_motor_current": 0.005982599554907157,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04779286907255531,
+        "EQ-0009:cv_vib_rms": 0.22643913705477167,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 204,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 3
+      },
+      "after": {
+        "on": true,
+        "quiet": 4
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0022064984893601777,
+        "EQ-0009:cv_idler_speed_ratio": 0.03666267251263264,
+        "EQ-0009:cv_motor_current": 0.013854460395196146,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0484839346050881,
+        "EQ-0009:cv_vib_rms": 0.126237813783665,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 205,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": true,
+        "quiet": 4
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0031121214909301284,
+        "EQ-0009:cv_idler_speed_ratio": 0.042470911157552055,
+        "EQ-0009:cv_motor_current": 0.01857757689936954,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.046848943590078816,
+        "EQ-0009:cv_vib_rms": 0.066117019821001,
+        "thermal-rise": null
+      },
+      "active_evidence_before": [
+        57
+      ]
+    },
+    {
+      "sequence": 206,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.003655495291872099,
+        "EQ-0009:cv_idler_speed_ratio": 0.030160587421003093,
+        "EQ-0009:cv_motor_current": 0.018100188523727755,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02698206947005639,
+        "EQ-0009:cv_vib_rms": 0.030044543443402617,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 207,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0035687527717790345,
+        "EQ-0009:cv_idler_speed_ratio": 0.015124420696960576,
+        "EQ-0009:cv_motor_current": 0.015495874703640805,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.033947824509059796,
+        "EQ-0009:cv_vib_rms": 0.005192501467111081,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 208,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007903301609969713,
+        "EQ-0009:cv_idler_speed_ratio": 0.0026905027208731173,
+        "EQ-0009:cv_motor_current": 0.013933286411588633,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01924139802144498,
+        "EQ-0009:cv_vib_rms": 0.005440648852353677,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 209,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010504030912884122,
+        "EQ-0009:cv_idler_speed_ratio": 0.004769848064779358,
+        "EQ-0009:cv_motor_current": 0.012995733436357331,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.014575363664634909,
+        "EQ-0009:cv_vib_rms": 0.016098613910342695,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 210,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0014584597933206746,
+        "EQ-0009:cv_idler_speed_ratio": 0.005833840594508893,
+        "EQ-0009:cv_motor_current": 0.012433201651218551,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011775743050548867,
+        "EQ-0009:cv_vib_rms": 0.02356291166171377,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 211,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0039688828784173935,
+        "EQ-0009:cv_idler_speed_ratio": 0.009884454054008564,
+        "EQ-0009:cv_motor_current": 0.012095682580135284,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01009597068209724,
+        "EQ-0009:cv_vib_rms": 0.030180527745691493,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 212,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.017694268646579785,
+        "EQ-0009:cv_idler_speed_ratio": 0.022661547501199964,
+        "EQ-0009:cv_motor_current": 0.018846813521591156,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.005047407458669037,
+        "EQ-0009:cv_vib_rms": 0.03415109739607813,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 213,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.025929500107477226,
+        "EQ-0009:cv_idler_speed_ratio": 0.03500584429598745,
+        "EQ-0009:cv_motor_current": 0.013526348973137996,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.006058969326969344,
+        "EQ-0009:cv_vib_rms": 0.03653343918631011,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 214,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.030870638984015684,
+        "EQ-0009:cv_idler_speed_ratio": 0.0377343816463873,
+        "EQ-0009:cv_motor_current": 0.02919748708807695,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0026252066455922994,
+        "EQ-0009:cv_vib_rms": 0.03796284426044929,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 215,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03383532230993876,
+        "EQ-0009:cv_idler_speed_ratio": 0.03937150405662721,
+        "EQ-0009:cv_motor_current": 0.03860016995704032,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0005649490367660725,
+        "EQ-0009:cv_vib_rms": 0.03882048730493281,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 216,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.039026142856690225,
+        "EQ-0009:cv_idler_speed_ratio": 0.024888725218786236,
+        "EQ-0009:cv_motor_current": 0.05649343530755749,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01812234380537606,
+        "EQ-0009:cv_vib_rms": 0.047891222864243244,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 217,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.026711222009446853,
+        "EQ-0009:cv_idler_speed_ratio": 0.00350374890835367,
+        "EQ-0009:cv_motor_current": 0.06722939451786779,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00026779860660667025,
+        "EQ-0009:cv_vib_rms": 0.056542220349562,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 218,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.019322269501100827,
+        "EQ-0009:cv_idler_speed_ratio": 0.020539233384637614,
+        "EQ-0009:cv_motor_current": 0.06141931441491483,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02108154879283454,
+        "EQ-0009:cv_vib_rms": 0.07456704343968375,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 219,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.014888897996093213,
+        "EQ-0009:cv_idler_speed_ratio": 0.011057717245972654,
+        "EQ-0009:cv_motor_current": 0.020295297258220373,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.033569798904571256,
+        "EQ-0009:cv_vib_rms": 0.07254771269482631,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 220,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.012228875093088643,
+        "EQ-0009:cv_idler_speed_ratio": 0.0037177343651951895,
+        "EQ-0009:cv_motor_current": 0.0063658680026837935,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03895455777038344,
+        "EQ-0009:cv_vib_rms": 0.06812755809817934,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 221,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.006316462461217064,
+        "EQ-0009:cv_idler_speed_ratio": 0.0006862553632712884,
+        "EQ-0009:cv_motor_current": 0.022362567159226292,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04218541308987074,
+        "EQ-0009:cv_vib_rms": 0.06547546534019116,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 222,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0008917239362546346,
+        "EQ-0009:cv_idler_speed_ratio": 0.00949265580464446,
+        "EQ-0009:cv_motor_current": 0.03196058665315179,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04412392628156313,
+        "EQ-0009:cv_vib_rms": 0.021103461022296616,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 223,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0023631191787228233,
+        "EQ-0009:cv_idler_speed_ratio": 0.008612489465175076,
+        "EQ-0009:cv_motor_current": 0.03771939834950709,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03553664989089087,
+        "EQ-0009:cv_vib_rms": 0.016214928734215515,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 224,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002438734101869815,
+        "EQ-0009:cv_idler_speed_ratio": 0.000886441378682485,
+        "EQ-0009:cv_motor_current": 0.04139543591919671,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.030384284056487524,
+        "EQ-0009:cv_vib_rms": 0.045023074887588034,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 225,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.004361394001597493,
+        "EQ-0009:cv_idler_speed_ratio": 0.006585799884997022,
+        "EQ-0009:cv_motor_current": 0.01545536309677199,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.027292864555845515,
+        "EQ-0009:cv_vib_rms": 0.05589085028014631,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 226,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011037239949997895,
+        "EQ-0009:cv_idler_speed_ratio": 0.01077591581432211,
+        "EQ-0009:cv_motor_current": 0.00960095432736721,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.025438012855460317,
+        "EQ-0009:cv_vib_rms": 0.06241151551568127,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 227,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015042747519038136,
+        "EQ-0009:cv_idler_speed_ratio": 0.0319471125045533,
+        "EQ-0009:cv_motor_current": 0.02463474478185073,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.003594555023136418,
+        "EQ-0009:cv_vib_rms": 0.04493354032545143,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 228,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010005402545200617,
+        "EQ-0009:cv_idler_speed_ratio": 0.04707140454180687,
+        "EQ-0009:cv_motor_current": 0.009593208900015448,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00951151967625792,
+        "EQ-0009:cv_vib_rms": 0.014125899596340368,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 229,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.00229661962310926,
+        "EQ-0009:cv_idler_speed_ratio": 0.05614597976415901,
+        "EQ-0009:cv_motor_current": 0.03136298935766925,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04794393691372622,
+        "EQ-0009:cv_vib_rms": 0.004358684841126268,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 230,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002328650130145554,
+        "EQ-0009:cv_idler_speed_ratio": 0.07777124223383948,
+        "EQ-0009:cv_motor_current": 0.03283545365875155,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0404346148383755,
+        "EQ-0009:cv_vib_rms": 0.015449435503606251,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 231,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005103811982098441,
+        "EQ-0009:cv_idler_speed_ratio": 0.07456588237937858,
+        "EQ-0009:cv_motor_current": 0.03371893223940092,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01839004201626743,
+        "EQ-0009:cv_vib_rms": 0.02210388590109424,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 232,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.006357823484691782,
+        "EQ-0009:cv_idler_speed_ratio": 0.06691894604843021,
+        "EQ-0009:cv_motor_current": 0.04462429532598034,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.005163298323002588,
+        "EQ-0009:cv_vib_rms": 0.01112329410750146,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 233,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.016033889376692426,
+        "EQ-0009:cv_idler_speed_ratio": 0.05429556135497947,
+        "EQ-0009:cv_motor_current": 0.05116751317792798,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011018336215088383,
+        "EQ-0009:cv_vib_rms": 0.005090729417851954,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 234,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03016776262810536,
+        "EQ-0009:cv_idler_speed_ratio": 0.046721530538909026,
+        "EQ-0009:cv_motor_current": 0.04471816795090678,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.012013241682204332,
+        "EQ-0009:cv_vib_rms": 0.033000961714882315,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 235,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03864808657895313,
+        "EQ-0009:cv_idler_speed_ratio": 0.04217711204926675,
+        "EQ-0009:cv_motor_current": 0.05089271092506946,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.012610184962473903,
+        "EQ-0009:cv_vib_rms": 0.031565282911282216,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 236,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.046038360357498594,
+        "EQ-0009:cv_idler_speed_ratio": 0.04787093426313168,
+        "EQ-0009:cv_motor_current": 0.03395726010912543,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.012968350930635645,
+        "EQ-0009:cv_vib_rms": 0.03070387562912216,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 237,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05047252462462588,
+        "EQ-0009:cv_idler_speed_ratio": 0.05128722759145064,
+        "EQ-0009:cv_motor_current": 0.014524466440751104,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.007254491967056006,
+        "EQ-0009:cv_vib_rms": 0.048368849441644435,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 238,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.052721937576324644,
+        "EQ-0009:cv_idler_speed_ratio": 0.05333700358844202,
+        "EQ-0009:cv_motor_current": 0.002864790239726506,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.019388197705670993,
+        "EQ-0009:cv_vib_rms": 0.035438421964451905,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 239,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04611022739454997,
+        "EQ-0009:cv_idler_speed_ratio": 0.03189213060655946,
+        "EQ-0009:cv_motor_current": 0.017044922765656563,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.026668421148839987,
+        "EQ-0009:cv_vib_rms": 0.013776422162628236,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 240,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05010455923827909,
+        "EQ-0009:cv_idler_speed_ratio": 0.008513374126181254,
+        "EQ-0009:cv_motor_current": 0.028990750568886402,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.029016205313562773,
+        "EQ-0009:cv_vib_rms": 0.014682965597042186,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 241,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04453980039172264,
+        "EQ-0009:cv_idler_speed_ratio": 0.005513879762045669,
+        "EQ-0009:cv_motor_current": 0.020595333343539534,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.005009459664237591,
+        "EQ-0009:cv_vib_rms": 0.015226891657690556,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 242,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04120094508378876,
+        "EQ-0009:cv_idler_speed_ratio": 0.022460776949137083,
+        "EQ-0009:cv_motor_current": 0.011143071970803716,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.028748954169980932,
+        "EQ-0009:cv_vib_rms": 0.004767608320893817,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 243,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.016903089060482115,
+        "EQ-0009:cv_idler_speed_ratio": 0.03262891526139193,
+        "EQ-0009:cv_motor_current": 0.005471715147162225,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04900400247051205,
+        "EQ-0009:cv_vib_rms": 0.026389976757242185,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 244,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002324375446498128,
+        "EQ-0009:cv_idler_speed_ratio": 0.011817305128217045,
+        "EQ-0009:cv_motor_current": 0.0007443977417190022,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05860963374934485,
+        "EQ-0009:cv_vib_rms": 0.02973772936985346,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 245,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0064228527218922644,
+        "EQ-0009:cv_idler_speed_ratio": 0.00551280899791838,
+        "EQ-0009:cv_motor_current": 0.02814055782295962,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06692041021813039,
+        "EQ-0009:cv_vib_rms": 0.041372049386617975,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 246,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01816634223845856,
+        "EQ-0009:cv_idler_speed_ratio": 0.015910877473599636,
+        "EQ-0009:cv_motor_current": 0.0454715311617668,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06935947839791586,
+        "EQ-0009:cv_vib_rms": 0.048352641396676686,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 247,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.025212435948398337,
+        "EQ-0009:cv_idler_speed_ratio": 0.029029190215585168,
+        "EQ-0009:cv_motor_current": 0.05686349264849485,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06473258916890094,
+        "EQ-0009:cv_vib_rms": 0.019385916388808263,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 248,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.011420839665027114,
+        "EQ-0009:cv_idler_speed_ratio": 0.036900177860776484,
+        "EQ-0009:cv_motor_current": 0.06270529205708793,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0349891765157611,
+        "EQ-0009:cv_vib_rms": 0.0009363626675095507,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 249,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.019753740481554927,
+        "EQ-0009:cv_idler_speed_ratio": 0.041732841994396246,
+        "EQ-0009:cv_motor_current": 0.03166291033359048,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.017143128923877194,
+        "EQ-0009:cv_vib_rms": 0.009063850848692018,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 250,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.024753480971471616,
+        "EQ-0009:cv_idler_speed_ratio": 0.0446324404745681,
+        "EQ-0009:cv_motor_current": 0.007739468054458881,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.006435500368746854,
+        "EQ-0009:cv_vib_rms": 0.015063978958412957,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 251,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.016599202419338606,
+        "EQ-0009:cv_idler_speed_ratio": 0.04637219956267122,
+        "EQ-0009:cv_motor_current": 0.006614597313020076,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03907102132512046,
+        "EQ-0009:cv_vib_rms": 0.005934874657037798,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 252,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0117066352880588,
+        "EQ-0009:cv_idler_speed_ratio": 0.060569604822908116,
+        "EQ-0009:cv_motor_current": 0.01522703653350745,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.058652333898944635,
+        "EQ-0009:cv_vib_rms": 0.01853418682630825,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 253,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.008771095009290917,
+        "EQ-0009:cv_idler_speed_ratio": 0.06908804797905026,
+        "EQ-0009:cv_motor_current": 0.002513705363813217,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0788046058148078,
+        "EQ-0009:cv_vib_rms": 0.037858480010223586,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 254,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007009770842030187,
+        "EQ-0009:cv_idler_speed_ratio": 0.05741320303068784,
+        "EQ-0009:cv_motor_current": 0.02509221828281579,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0908959689643257,
+        "EQ-0009:cv_vib_rms": 0.04945305592057279,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 255,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0058040720636567495,
+        "EQ-0009:cv_idler_speed_ratio": 0.04248314471329442,
+        "EQ-0009:cv_motor_current": 0.041655772470793204,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.08286640064512059,
+        "EQ-0009:cv_vib_rms": 0.04464509558442925,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 256,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.013492377807068912,
+        "EQ-0009:cv_idler_speed_ratio": 0.020811846101504005,
+        "EQ-0009:cv_motor_current": 0.03625174162817112,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06613152327997911,
+        "EQ-0009:cv_vib_rms": 0.012883314035149635,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 257,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04355156042409325,
+        "EQ-0009:cv_idler_speed_ratio": 0.002042336477788297,
+        "EQ-0009:cv_motor_current": 0.02837356153319393,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.031172948079692266,
+        "EQ-0009:cv_vib_rms": 0.007729988421089781,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 258,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.06257367545489505,
+        "EQ-0009:cv_idler_speed_ratio": 0.02516596325156028,
+        "EQ-0009:cv_motor_current": 0.02828241506561156,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.010197802959520169,
+        "EQ-0009:cv_vib_rms": 0.004637993052653868,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 259,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.07398694447337613,
+        "EQ-0009:cv_idler_speed_ratio": 0.039040139315823466,
+        "EQ-0009:cv_motor_current": 0.00593192144554779,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0023872841125830904,
+        "EQ-0009:cv_vib_rms": 0.011120947483915592,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 260,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.08083490588446478,
+        "EQ-0009:cv_idler_speed_ratio": 0.047364644954381384,
+        "EQ-0009:cv_motor_current": 0.0023450248320084736,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.028355728933255123,
+        "EQ-0009:cv_vib_rms": 0.020576311805857266,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 261,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05311195377356276,
+        "EQ-0009:cv_idler_speed_ratio": 0.03898565543713115,
+        "EQ-0009:cv_motor_current": 0.00019288686388488428,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04393679582565834,
+        "EQ-0009:cv_vib_rms": 0.012345787083514359,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 262,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03647818250702154,
+        "EQ-0009:cv_idler_speed_ratio": 0.007706197885283833,
+        "EQ-0009:cv_motor_current": 0.030800058829147575,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02527396671805937,
+        "EQ-0009:cv_vib_rms": 0.02131121556561653,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 263,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02649791974709681,
+        "EQ-0009:cv_idler_speed_ratio": 0.011061476645824558,
+        "EQ-0009:cv_motor_current": 0.050599240595501645,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.011231930634562189,
+        "EQ-0009:cv_vib_rms": 0.02669047265487783,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 264,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02050976209114197,
+        "EQ-0009:cv_idler_speed_ratio": 0.04020870767158936,
+        "EQ-0009:cv_motor_current": 0.062478749655314095,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.016738426369903654,
+        "EQ-0009:cv_vib_rms": 0.016014283592926698,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 265,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.025275608205320887,
+        "EQ-0009:cv_idler_speed_ratio": 0.05769704628704824,
+        "EQ-0009:cv_motor_current": 0.06960645509120156,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.005460933637101765,
+        "EQ-0009:cv_vib_rms": 0.009608570155756018,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 266,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.028135115873828238,
+        "EQ-0009:cv_idler_speed_ratio": 0.06373215182286165,
+        "EQ-0009:cv_motor_current": 0.06107954634390405,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.003238336238206073,
+        "EQ-0009:cv_vib_rms": 0.008973698243186114,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 267,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02985082047493265,
+        "EQ-0009:cv_idler_speed_ratio": 0.06350071101666707,
+        "EQ-0009:cv_motor_current": 0.047243754296408466,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.008457898163390775,
+        "EQ-0009:cv_vib_rms": 0.005384218945911668,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 268,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.025262073251696566,
+        "EQ-0009:cv_idler_speed_ratio": 0.06336184653295034,
+        "EQ-0009:cv_motor_current": 0.03154713558005258,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0014293249459080431,
+        "EQ-0009:cv_vib_rms": 2.197521781425957e-05,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 269,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02250882491775492,
+        "EQ-0009:cv_idler_speed_ratio": 0.0632785278427203,
+        "EQ-0009:cv_motor_current": 0.022129164350239042,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.002787818984581596,
+        "EQ-0009:cv_vib_rms": 0.0031953710190441857,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 270,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.020432087455192597,
+        "EQ-0009:cv_idler_speed_ratio": 0.06322853662858226,
+        "EQ-0009:cv_motor_current": 0.008310611192924693,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.005318105342875379,
+        "EQ-0009:cv_vib_rms": 0.03400278410875273,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 271,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.00927888181092552,
+        "EQ-0009:cv_idler_speed_ratio": 0.03986337404099066,
+        "EQ-0009:cv_motor_current": 0.0024087767721039264,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.008944468359081508,
+        "EQ-0009:cv_vib_rms": 0.05248723196257785,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 272,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.002586958424365276,
+        "EQ-0009:cv_idler_speed_ratio": 0.02584427648843571,
+        "EQ-0009:cv_motor_current": 0.018884559661496495,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.039785830418860066,
+        "EQ-0009:cv_vib_rms": 0.06357790067487294,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 273,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0014281956075708707,
+        "EQ-0009:cv_idler_speed_ratio": 0.017432817956902734,
+        "EQ-0009:cv_motor_current": 0.028770029395132034,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.029625103404672316,
+        "EQ-0009:cv_vib_rms": 0.05739807730331949,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 274,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0038372880267325583,
+        "EQ-0009:cv_idler_speed_ratio": 0.011120120053173036,
+        "EQ-0009:cv_motor_current": 0.03470131123531336,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.023528667196159668,
+        "EQ-0009:cv_vib_rms": 0.03229980894883661,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 275,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010791290633174423,
+        "EQ-0009:cv_idler_speed_ratio": 0.007332501310935217,
+        "EQ-0009:cv_motor_current": 0.03826008033942216,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.042621702184323464,
+        "EQ-0009:cv_vib_rms": 0.017240847936146882,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 276,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005536128906984523,
+        "EQ-0009:cv_idler_speed_ratio": 0.0004436472596693633,
+        "EQ-0009:cv_motor_current": 0.018541037166125793,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02216185082527083,
+        "EQ-0009:cv_vib_rms": 0.019970177210886116,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 277,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0023830318712705825,
+        "EQ-0009:cv_idler_speed_ratio": 0.007530910425146966,
+        "EQ-0009:cv_motor_current": 0.004170979915569643,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009885940009839257,
+        "EQ-0009:cv_vib_rms": 0.021607774775729654,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 278,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0004911736498422187,
+        "EQ-0009:cv_idler_speed_ratio": 0.02818392875371266,
+        "EQ-0009:cv_motor_current": 0.0019124230881857156,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.034436065872531216,
+        "EQ-0009:cv_vib_rms": 0.010825627432282709,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 279,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0006439412830147997,
+        "EQ-0009:cv_idler_speed_ratio": 0.04063077552410417,
+        "EQ-0009:cv_motor_current": 0.0055624648904389305,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04916614139014639,
+        "EQ-0009:cv_vib_rms": 0.004356339026214544,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 280,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.008779362611609614,
+        "EQ-0009:cv_idler_speed_ratio": 0.04804384781308699,
+        "EQ-0009:cv_motor_current": 0.02585403522565397,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.0573892976003568,
+        "EQ-0009:cv_vib_rms": 0.0004747659825736451,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 281,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.020868316412500695,
+        "EQ-0009:cv_idler_speed_ratio": 0.05254672695972877,
+        "EQ-0009:cv_motor_current": 0.006341883500369264,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.062323191326483035,
+        "EQ-0009:cv_vib_rms": 0.0018541778436108943,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 282,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02812168869303534,
+        "EQ-0009:cv_idler_speed_ratio": 0.06080706754622781,
+        "EQ-0009:cv_motor_current": 0.025659434735983203,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.04019019618085435,
+        "EQ-0009:cv_vib_rms": 0.024555942491694443,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 283,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.004962484026478871,
+        "EQ-0009:cv_idler_speed_ratio": 0.06020465879961326,
+        "EQ-0009:cv_motor_current": 0.0008261244177488907,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02691039909347714,
+        "EQ-0009:cv_vib_rms": 0.04040201469287764,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 284,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0248129876581874,
+        "EQ-0009:cv_idler_speed_ratio": 0.0654018266501585,
+        "EQ-0009:cv_motor_current": 0.014073861773191696,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.030976778948070632,
+        "EQ-0009:cv_vib_rms": 0.057396289029630475,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 285,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.036723289837212514,
+        "EQ-0009:cv_idler_speed_ratio": 0.06852012736048567,
+        "EQ-0009:cv_motor_current": 0.023013853487756048,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.02334413778828463,
+        "EQ-0009:cv_vib_rms": 0.06759285363168217,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 286,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04386947114462758,
+        "EQ-0009:cv_idler_speed_ratio": 0.02162941268486602,
+        "EQ-0009:cv_motor_current": 0.028377848516494657,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.018764553092413025,
+        "EQ-0009:cv_vib_rms": 0.05873753036082761,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 287,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.020874798373117714,
+        "EQ-0009:cv_idler_speed_ratio": 0.006505016120505771,
+        "EQ-0009:cv_motor_current": 0.014819203591132847,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.016016802274890066,
+        "EQ-0009:cv_vib_rms": 0.05342433639831488,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 288,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.02449338002857729,
+        "EQ-0009:cv_idler_speed_ratio": 0.020468777421340442,
+        "EQ-0009:cv_motor_current": 0.0060091400969761,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.014368151784376287,
+        "EQ-0009:cv_vib_rms": 0.02456797082294626,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 289,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05171428706959429,
+        "EQ-0009:cv_idler_speed_ratio": 0.028847034201841246,
+        "EQ-0009:cv_motor_current": 0.01530526330763397,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01337896149006802,
+        "EQ-0009:cv_vib_rms": 0.00725415147772509,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 290,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.036475456555415404,
+        "EQ-0009:cv_idler_speed_ratio": 0.03387398827014173,
+        "EQ-0009:cv_motor_current": 0.04395136990511034,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.022828635952674817,
+        "EQ-0009:cv_vib_rms": 0.009700084469522877,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 291,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.027332158246908076,
+        "EQ-0009:cv_idler_speed_ratio": 0.036890160711122014,
+        "EQ-0009:cv_motor_current": 0.038070601192514514,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.028498440630238896,
+        "EQ-0009:cv_vib_rms": 0.011167644264601548,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 292,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04455180770892762,
+        "EQ-0009:cv_idler_speed_ratio": 0.04150668861159362,
+        "EQ-0009:cv_motor_current": 0.03454213996495702,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.031900323436777345,
+        "EQ-0009:cv_vib_rms": 0.012048180141648752,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 293,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.03075287216261192,
+        "EQ-0009:cv_idler_speed_ratio": 0.04427660535187658,
+        "EQ-0009:cv_motor_current": 0.03242506322842252,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03394145312070041,
+        "EQ-0009:cv_vib_rms": 0.02006313268391974,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 294,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04660423605834992,
+        "EQ-0009:cv_idler_speed_ratio": 0.045938555396046354,
+        "EQ-0009:cv_motor_current": 0.03832921012248411,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03414131576378988,
+        "EQ-0009:cv_vib_rms": 0.03556729137505774,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 295,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05611505439579272,
+        "EQ-0009:cv_idler_speed_ratio": 0.06223567038677451,
+        "EQ-0009:cv_motor_current": 0.021231521658479423,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.023046827376435073,
+        "EQ-0009:cv_vib_rms": 0.044869786589740536,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 296,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05520306710015274,
+        "EQ-0009:cv_idler_speed_ratio": 0.03855218924362174,
+        "EQ-0009:cv_motor_current": 0.010972908580076615,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.015833806110364383,
+        "EQ-0009:cv_vib_rms": 0.05045128371855021,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 297,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.053258183653603935,
+        "EQ-0009:cv_idler_speed_ratio": 0.023626635505446594,
+        "EQ-0009:cv_motor_current": 0.0057007429405405464,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.012062321584379776,
+        "EQ-0009:cv_vib_rms": 0.045244032263215696,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 298,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05348894465483947,
+        "EQ-0009:cv_idler_speed_ratio": 0.0022882542807028407,
+        "EQ-0009:cv_motor_current": 0.001654441349313288,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009799430868789013,
+        "EQ-0009:cv_vib_rms": 0.042119681390014985,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 299,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0536274012555808,
+        "EQ-0009:cv_idler_speed_ratio": 0.0018682745276952508,
+        "EQ-0009:cv_motor_current": 0.010265613336107232,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.01306800490879994,
+        "EQ-0009:cv_vib_rms": 0.04024507086609456,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 300,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.05762949135113576,
+        "EQ-0009:cv_idler_speed_ratio": 0.006694115085254622,
+        "EQ-0009:cv_motor_current": 0.017417646147359543,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.015029149332806493,
+        "EQ-0009:cv_vib_rms": 0.039120304551742306,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 301,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.060030745408468734,
+        "EQ-0009:cv_idler_speed_ratio": 0.01590419607371789,
+        "EQ-0009:cv_motor_current": 0.011333589895921146,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.016205835987210426,
+        "EQ-0009:cv_vib_rms": 0.04593207577917385,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 302,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.06147149784286852,
+        "EQ-0009:cv_idler_speed_ratio": 0.017357597446102505,
+        "EQ-0009:cv_motor_current": 0.0018332665203339546,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.004174859472422809,
+        "EQ-0009:cv_vib_rms": 0.05001913851563278,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 303,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.04996227248531147,
+        "EQ-0009:cv_idler_speed_ratio": 0.018229638269533274,
+        "EQ-0009:cv_motor_current": 0.026714609624223555,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.003043726436449761,
+        "EQ-0009:cv_vib_rms": 0.04498474514146524,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 304,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.043056737270777246,
+        "EQ-0009:cv_idler_speed_ratio": 0.018752862763591737,
+        "EQ-0009:cv_motor_current": 0.043843335310958055,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03636250699868281,
+        "EQ-0009:cv_vib_rms": 0.03233844066776697,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 305,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.025717568106703,
+        "EQ-0009:cv_idler_speed_ratio": 0.007454249303724518,
+        "EQ-0009:cv_motor_current": 0.054120570722998765,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.027366146319113133,
+        "EQ-0009:cv_vib_rms": 0.02154210183381526,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 306,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015834775045790717,
+        "EQ-0009:cv_idler_speed_ratio": 0.021174120753483173,
+        "EQ-0009:cv_motor_current": 0.044944748614814865,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00936173377357122,
+        "EQ-0009:cv_vib_rms": 0.011673669380994163,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 307,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.009384390771711085,
+        "EQ-0009:cv_idler_speed_ratio": 0.03835114278780779,
+        "EQ-0009:cv_motor_current": 0.028953604135776412,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.040885322234715776,
+        "EQ-0009:cv_vib_rms": 0.03160313210987981,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 308,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0060348686447955725,
+        "EQ-0009:cv_idler_speed_ratio": 0.048657356008402555,
+        "EQ-0009:cv_motor_current": 0.01935891744835334,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05031261490586856,
+        "EQ-0009:cv_vib_rms": 0.04356080974721121,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 309,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.0035044469311139976,
+        "EQ-0009:cv_idler_speed_ratio": 0.020058475245107756,
+        "EQ-0009:cv_motor_current": 0.021990626407201983,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.05699380567582482,
+        "EQ-0009:cv_vib_rms": 0.010093705099663494,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 310,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.00250690234043732,
+        "EQ-0009:cv_idler_speed_ratio": 0.0028991467871308718,
+        "EQ-0009:cv_motor_current": 0.025666782025336794,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.061002520137798576,
+        "EQ-0009:cv_vib_rms": 0.012125595122020215,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 311,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005600788197326618,
+        "EQ-0009:cv_idler_speed_ratio": 0.015101458543021279,
+        "EQ-0009:cv_motor_current": 0.025775345153392054,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.016968981521226716,
+        "EQ-0009:cv_vib_rms": 0.02545717525503044,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 312,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.00129164588534552,
+        "EQ-0009:cv_idler_speed_ratio": 0.02419571277028198,
+        "EQ-0009:cv_motor_current": 0.042617524972829994,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009451141648716401,
+        "EQ-0009:cv_vib_rms": 0.0452208292171894,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 313,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.006329942070381698,
+        "EQ-0009:cv_idler_speed_ratio": 0.029652265306638406,
+        "EQ-0009:cv_motor_current": 0.05349545979606005,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.008427843668994212,
+        "EQ-0009:cv_vib_rms": 0.05707902159448478,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 314,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.01176617462183164,
+        "EQ-0009:cv_idler_speed_ratio": 0.032926196828452256,
+        "EQ-0009:cv_motor_current": 0.06002222068999809,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.00548127248497747,
+        "EQ-0009:cv_vib_rms": 0.06419393702086201,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 315,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015027914152701605,
+        "EQ-0009:cv_idler_speed_ratio": 0.03489055574154057,
+        "EQ-0009:cv_motor_current": 0.06316565029479361,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.017387292149210535,
+        "EQ-0009:cv_vib_rms": 0.053489624244602775,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 316,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010202045329686727,
+        "EQ-0009:cv_idler_speed_ratio": 0.02874941324679611,
+        "EQ-0009:cv_motor_current": 0.06505170805767092,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.024530903947750374,
+        "EQ-0009:cv_vib_rms": 0.02995473711360658,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 317,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.015583047621915189,
+        "EQ-0009:cv_idler_speed_ratio": 0.016864397535309873,
+        "EQ-0009:cv_motor_current": 0.06695596964696461,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.015143108652231167,
+        "EQ-0009:cv_vib_rms": 0.015833804835008868,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 318,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.010535125411214876,
+        "EQ-0009:cv_idler_speed_ratio": 0.002303558719314932,
+        "EQ-0009:cv_motor_current": 0.016442897461467952,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.009510431474919645,
+        "EQ-0009:cv_vib_rms": 0.007361245467850239,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 319,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.007506372084794689,
+        "EQ-0009:cv_idler_speed_ratio": 0.006763159209797728,
+        "EQ-0009:cv_motor_current": 0.013864945849830038,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.03992729649166785,
+        "EQ-0009:cv_vib_rms": 0.003347228564132721,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    },
+    {
+      "sequence": 320,
+      "base_emitted": false,
+      "emitted": false,
+      "before": {
+        "on": false,
+        "quiet": 0
+      },
+      "after": {
+        "on": false,
+        "quiet": 0
+      },
+      "ratios": {
+        "EQ-0009:cv_belt_tension": 0.005689120088942578,
+        "EQ-0009:cv_idler_speed_ratio": 0.011872975327749627,
+        "EQ-0009:cv_motor_current": 0.00853971806177428,
+        "EQ-0009:cv_queue_len": 0.0,
+        "EQ-0009:cv_speed": 0.06958993327162034,
+        "EQ-0009:cv_vib_rms": 0.011634005587677618,
+        "thermal-rise": null
+      },
+      "active_evidence_before": []
+    }
+  ]
+}

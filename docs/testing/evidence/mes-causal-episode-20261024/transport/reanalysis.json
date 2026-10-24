@@ -1,0 +1,63 @@
+{
+  "processed": 320,
+  "requested": 320,
+  "events": [
+    {
+      "kind": "cooling_loss",
+      "target": "EQ-0001",
+      "detected": true,
+      "duplicates": 0,
+      "notices": [
+        {
+          "event_id": "e2448cd05ac71ce83356f382e68afca8:121:EQ-0001",
+          "frame_delay": 8,
+          "worker_observed_seconds": 9.001974784001504,
+          "pda_api_seconds": 11.188123084000836
+        }
+      ]
+    },
+    {
+      "kind": "air_leak",
+      "target": "EQ-0003",
+      "detected": true,
+      "duplicates": 0,
+      "notices": [
+        {
+          "event_id": "e2448cd05ac71ce83356f382e68afca8:163:EQ-0003",
+          "frame_delay": 8,
+          "worker_observed_seconds": 9.000588209999478,
+          "pda_api_seconds": 11.190749752999182
+        }
+      ]
+    },
+    {
+      "kind": "friction",
+      "target": "EQ-0004",
+      "detected": true,
+      "duplicates": 0,
+      "notices": [
+        {
+          "event_id": "e2448cd05ac71ce83356f382e68afca8:203:EQ-0004",
+          "frame_delay": 6,
+          "worker_observed_seconds": 7.000781716000347,
+          "pda_api_seconds": 8.20479502300077
+        }
+      ]
+    }
+  ],
+  "detected": 3,
+  "total": 3,
+  "duplicates": 0,
+  "api_observed": 3,
+  "api_polls": 109,
+  "valid_api_polls": 108,
+  "startup_observer_errors": [
+    {
+      "index": 0,
+      "at": 9368.001754716,
+      "error": "'ai_insights'"
+    }
+  ],
+  "analysis_errors": 0,
+  "scope": "Saved 1Hz synthetic regression; 3s actual PDA proxy API polling. Original harness failed on first pre-worker missing optional AI field. All raw observations and failed harness preserved. No physical UI or vibration timing."
+}

@@ -1,0 +1,12 @@
+{
+  "tests": 57,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 113.22023796399844,
+  "coverage_percent": 100.0,
+  "covered": 78,
+  "executable": 78,
+  "missing": [],
+  "candidate_sha256": "e645fd0bbb5ae4166966c12c6c9bdfe7e100c58c9db970107067ca73e1200294"
+}

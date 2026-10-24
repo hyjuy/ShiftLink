@@ -1,0 +1,15 @@
+{
+  "files": {
+    "scripts/mes_causal_episode.py": "e645fd0bbb5ae4166966c12c6c9bdfe7e100c58c9db970107067ca73e1200294",
+    "scripts/mes_causal_episode_validate.py": "771a9200a25aad6f6c66b8a76e85f6b3704042fa00b8ab420651a7e2ce489f88",
+    "scripts/mes_causal_context.py": "b92d559dbe86728fa969663925d4960195e8a853ee08831a0913258f0108b61f",
+    "scripts/mes_causal_v14_stream.py": "686400e7d7d0d7566acd0c965120e55c84c1b87ece4b8c1d02414f90a5ab0ee9",
+    "scripts/mes_causal_pda_service.py": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+    "tests/test_mes_causal_episode.py": "02916019dc16446da70d852ae8e858277c6711b3e01c65fdb19c01d2ab1c6bec"
+  },
+  "development_manifest_sha256": "c3d5ea60d0a73f84cd5dd869e7db31ffe321fc1a1c53207481e1a4e42d8f3f91",
+  "split_sha256": "39033f7d57aa65360a8685cd0f19ff8b6cd5de301ec8d8984468c79537693c63",
+  "before_unseen_data_generation": true,
+  "selection": "fixed score model; one equipment episode; five valid healthy frames at two-thirds exit bound; no fault-score retraining",
+  "criteria": "no previously detected incident lost; identical first frame for common detections; normal/spike/quality and unmatched counts not increased; duplicates zero; paired delay p95 not increased"
+}

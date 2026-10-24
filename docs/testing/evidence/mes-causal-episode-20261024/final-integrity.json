@@ -1,0 +1,70 @@
+{
+  "at": 1792839867.6766706,
+  "candidate_lock_verified": true,
+  "case_hashes_verified": {
+    "previous": 52,
+    "development": 36,
+    "test": 60
+  },
+  "run_ids_seeds_nonces_disjoint": true,
+  "source_blocks_disjoint": true,
+  "purge_frames": 64,
+  "previous_archive_sha256": "3fae2ed75dabb50c4d7d4afa27365390e98351a4cc2ef9539a0dcf2574da2643",
+  "previous_plan_generator_replay_http_unchanged": true,
+  "release_files_unchanged": {
+    "device-pda.html": true,
+    "scripts/mes_causal_context.py": true,
+    "scripts/mes_causal_pda_service.py": true,
+    "scripts/mes_causal_schema.py": true,
+    "scripts/mes_causal_v14_stream.py": true,
+    "deploy/analytics/normal-profile.json": true,
+    "deploy/analytics/source-config.json": true,
+    "deploy/analytics/context.service.in": true,
+    "deploy/analytics/apply_release.py": true,
+    "deploy/analytics/shiftlink-analytics.service.in": true,
+    "shiftlink/pda/ai_insights.py": true,
+    "shiftlink/pda/__main__.py": true,
+    "shiftlink/mes/web/pda.html": true,
+    "shiftlink/mes/web/pda.js": true,
+    "docs/research/evidence/mes-causal-v14c-20261023/settings.json": true,
+    "docs/data/reference/mes-causal-v8-signals.json": true
+  },
+  "previous_live_pins": {
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/release-manifest.json": true,
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_pda_service.py": true,
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_context.py": true,
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_v14_stream.py": true,
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/deploy/analytics/normal-profile.json": true,
+    "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/docs/research/evidence/mes-causal-v14c-20261023/settings.json": true,
+    "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py": true,
+    "/home/pi/shiftlink/app/shiftlink/pda/__main__.py": false,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.js": true,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.html": true
+  },
+  "preexisting_live_drift": {
+    "/home/pi/shiftlink/app/shiftlink/pda/__main__.py": {
+      "current_sha256": "838b8fdd4786308084855d73f8ff69376c34e994add20171e653e470ceb7514d",
+      "prior_sha256": "d50bb64083313c2be4539ddc20278c3dc8c74bd097550d6deda912209b07fcef",
+      "mtime": 1792836062.0467067,
+      "predates_this_task": true
+    }
+  },
+  "proxy_drift_scope": "Pre-task app POST /api/query hook only; GET /api/state and AI reader unchanged. Separate transport used frozen r5 proxy.",
+  "worker": "MainPID=7066\nNRestarts=0\nActiveState=active\nSubState=running\n",
+  "operating_snapshot": {
+    "run_id": "fd2d5e210e24490a9562f65282cfb890",
+    "sequence": 2520,
+    "legacy_alarms": 0,
+    "ai_status": "ready"
+  },
+  "resource": {
+    "at": 1792839867.6719596,
+    "temperature": "temp=47.7'C",
+    "throttle": "throttled=0x0"
+  },
+  "transport_candidate_fingerprint_verified": true,
+  "candidate_deployed": false,
+  "operating_files_written_by_task": false,
+  "operating_services_restarted_by_task": false,
+  "physical_display_vibration_verified": false
+}

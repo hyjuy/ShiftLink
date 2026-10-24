@@ -214,7 +214,7 @@ def test_ontology_rejects_wrong_edge_domain_and_explicit_version_is_honored():
 
 def test_runtime_graph_http_response_and_persisted_trace(service,pipe,monkeypatch,publication_web,tmp_path):
     from pathlib import Path
-    from playwright.sync_api import sync_playwright
+    sync_playwright = pytest.importorskip('playwright.sync_api').sync_playwright
     configure_graph_pipe(pipe,monkeypatch)
     service.query_pipeline=pipe
     monkeypatch.setattr(E,'judge_dist',lambda *a,**kw:[1,0,0,0])

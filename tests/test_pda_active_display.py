@@ -13,6 +13,8 @@ except ModuleNotFoundError:
 from shiftlink.pda.ai_insights import read_insights,overlay_state
 ROOT=Path(__file__).resolve().parents[1]
 OLD=Path('/home/pi/shiftlink/analytics/validation/fault-lifecycle-20261024')
+# The repository copy preserves identical consumed input; missing input still fails.
+if not OLD.is_dir():OLD=ROOT/'tests/fixtures/mes_causal_pi/lifecycle'
 
 class ActiveDisplayTests(unittest.TestCase):
     @classmethod

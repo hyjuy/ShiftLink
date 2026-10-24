@@ -4,8 +4,6 @@ import os
 from statistics import mean
 from time import perf_counter
 
-from shiftlink.agent.schemas import KnowledgeCard
-from shiftlink.rag.retrieval import InMemoryToolProvider, _condition_status
 from shiftlink.rag2.field_history import is_history_question
 from shiftlink.rag2.s30h import S30hPipeline, CFG, G, GraphEvidence
 from .publication import validated_record
@@ -21,6 +19,7 @@ def _view(pipeline):
 
 
 def _plan(service,pipeline,payload,database,graph,witness_query_id):
+    from shiftlink.rag.retrieval import InMemoryToolProvider, _condition_status
     eq,asset=payload.get('eq_id'),payload.get('asset_id')
     if (not is_history_question(payload['question']) or pipeline.eq_type.get(eq)!='HPU'
             or graph.get('equipment_type')!='HPU' or payload.get('incident_id')!=graph['scope']['incident_id']
@@ -83,8 +82,13 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
     try:
         started=perf_counter()
         additions,digest,reason=_plan(service,pipeline,payload,database,graph,witness_query_id)
-        baseline,trial=_view(pipeline),_view(pipeline)
-        timings['prepare']=(perf_counter()-started)*1000
+        timings['relation_prepare']=(perf_counter()-started)*1000
+        started=perf_counter()
+        baseline=_view(pipeline)
+        timings['baseline_prepare']=(perf_counter()-started)*1000
+        started=perf_counter()
+        trial=_view(pipeline)
+        timings['trial_prepare']=(perf_counter()-started)*1000
         original=trial.evidence
         admitted=[]
         def evidence(question,eq_type,eq_id=None,units=None):
@@ -117,7 +121,8 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
             if status!=200 or current['snapshot_hash']!=digest:
                 return {'mode':mode,'status':'invalidated','reason':'publication_changed','timings_ms':timings}
         timings['recheck']=(perf_counter()-started)*1000
-        timings['trial_total']=timings['prepare']+timings['trial']+timings['recheck']
+        timings['baseline_total']=timings['baseline_prepare']+timings['baseline']
+        timings['trial_total']=timings['relation_prepare']+timings['trial_prepare']+timings['trial']+timings['recheck']
         return {'schema_version':'shiftlink-hpu-retrieval-trial-v1','mode':mode,'status':'completed',
                 **results,'added_card_ids':sorted(set(admitted)),'scope_reason':reason,
                 'candidate_budget':CFG.get('max_chunks',G.MAX_CHUNKS),'timings_ms':timings,'order':list(order)}
@@ -134,6 +139,7 @@ def score_case(case,result,*,card_id):
         cites=set(result[name]['cited_card_ids'])
         scored[name]={**result[name], 'expected_citation_hits':len(cites & allowed),
                       'wrong_citations':len(cites-allowed),
+                      'oracle_failures':int(cites!=allowed or result[name]['abstained']!=(not case['expect_citation'])),
                       'misconnections':len(set(result['added_card_ids'])-relation_allowed) if name=='trial' else 0}
     return {**scored,'timings_ms':result['timings_ms'],'order':result['order'],
             'added_card_ids':result['added_card_ids'],'expected_citations':len(allowed)}
@@ -143,17 +149,18 @@ def summarize(rows):
     valid=[r for r in rows if r['status']=='completed']
     out={'total':len(rows),'completed':len(valid),'excluded':len(rows)-len(valid)}
     for name in ('baseline','trial'):
-        sums={k:sum(r[name][k] for r in valid) for k in ('expected_citation_hits','wrong_citations','misconnections','candidate_count','judge_count')}
+        sums={k:sum(r[name][k] for r in valid) for k in ('expected_citation_hits','wrong_citations','misconnections','oracle_failures','candidate_count','judge_count')}
         sums['abstentions']=sum(r[name]['abstained'] for r in valid)
         expected=sum(r['expected_citations'] for r in valid)
         cited=sums['expected_citation_hits']+sums['wrong_citations']
         sums['citation_recall']=sums['expected_citation_hits']/expected if expected else None
         sums['citation_precision']=sums['expected_citation_hits']/cited if cited else None
-        times=sorted(r['timings_ms']['trial_total' if name=='trial' else 'baseline'] for r in valid)
+        times=sorted(r['timings_ms']['trial_total'] if name=='trial' else
+                     r['timings_ms'].get('baseline_total',r['timings_ms']['baseline']) for r in valid)
         sums['mean_ms']=mean(times) if times else None
         sums['p95_ms']=times[max(0,(95*len(times)+99)//100-1)] if times else None
         out[name]=sums
     out['mean_latency_delta_ms']=(out['trial']['mean_ms']-out['baseline']['mean_ms']) if valid else None
     out['decision']='fixture_pass_only' if (valid and out['excluded']==0 and out['trial']['wrong_citations']==0
-        and out['trial']['misconnections']==0 and out['trial']['expected_citation_hits']>=out['baseline']['expected_citation_hits']) else 'fixture_regression_or_incomplete'
+        and out['trial']['misconnections']==0 and out['trial']['oracle_failures']==0) else 'fixture_regression_or_incomplete'
     return out

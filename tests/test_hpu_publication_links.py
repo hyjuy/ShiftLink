@@ -83,9 +83,12 @@ def test_rejection_during_query_keeps_existing_final_ticket_guard(api, published
 def test_rejection_during_projection_rechecks_ticket(api, published, service, monkeypatch):
     did, result, _=published
     original=publication_ontology.add_links
+    changed=[]
     def reject(*args, **kwargs):
         graph=original(*args, **kwargs)
-        service.review_card_draft(did,{'action':'reject','reason':'설명 중 변경','expected_revision':2},ACTOR)
+        if not changed:
+            changed.append(True)
+            service.review_card_draft(did,{'action':'reject','reason':'설명 중 변경','expected_revision':2},ACTOR)
         return graph
     monkeypatch.setattr(publication_ontology,'add_links',reject)
     status, graph=api[0]('?query_id='+result['query_id'])
@@ -124,6 +127,16 @@ def test_later_review_cannot_relabel_old_citation_as_new_revision(api, published
     for revision, action in ((2,'reject'),(3,'approve'),(4,'quality_pass')):
         service.review_card_draft(did,{'action':action,'reason':'새 검수','expected_revision':revision},ACTOR)
     assert service.publications.process_one(embedder=vectors)
+    status, graph=api[0]('?query_id='+result['query_id'])
+    assert status==200 and not cards(graph)
+    assert any(r['reason']=='citation_revision_unverified' for r in graph['unresolved'])
+
+
+def test_legacy_citation_without_exact_ticket_is_not_inferred(api, published, service):
+    _, result, _=published
+    con=service.storage.connection
+    with con:
+        con.execute("UPDATE query_log SET payload=json_remove(payload,'$.publication_ticket') WHERE query_id=?",(result['query_id'],))
     status, graph=api[0]('?query_id='+result['query_id'])
     assert status==200 and not cards(graph)
     assert any(r['reason']=='citation_revision_unverified' for r in graph['unresolved'])

@@ -30,3 +30,18 @@ def test_trial_view_has_no_retained_evidence_closure(experiment,monkeypatch,fail
     finally:
         if was_enabled:gc.enable()
         gc.collect()
+
+
+def test_only_one_copied_index_is_live_at_a_time(experiment,monkeypatch):
+    args,_=experiment
+    original=X._view
+    references=[]
+    def capture(pipeline):
+        assert all(ref() is None for ref in references), 'previous independent view still occupies memory'
+        view=original(pipeline)
+        references.append(weakref.ref(view))
+        return view
+    monkeypatch.setattr(X,'_view',capture)
+    result=X.run_experiment(**args,mode='experiment')
+    assert result['status']=='completed',result
+    assert len(references)==2 and all(ref() is None for ref in references)

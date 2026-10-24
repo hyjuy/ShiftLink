@@ -1,5 +1,8 @@
 # HPU 온톨로지 1~2단계 구현·검증
 
+이 문서는 1~2단계 완료 시점의 기록이다. 후속 3단계의 off/shadow 실행기는
+[별도 검증 기록](hpu-ontology-shadow-20261024.tdd.md)과 [실행 안내](../guides/hpu-ontology-shadow.md)를 따른다.
+
 일자: 2026-10-24 (Asia/Seoul). 원 계획: [HPU 확장 설계](../design/hpu-ontology-extension.md).
 시작 HEAD: `a37547f81dad64f5d77ce692e5df86269f4362f5`와 기존 로컬 변경.
 범위: 서비스에 연결하지 않는 공통 모델·HPU 진입점·오프라인 SQLite 어댑터.

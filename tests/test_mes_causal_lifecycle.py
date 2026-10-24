@@ -18,9 +18,11 @@ class LifecycleRegressions(unittest.TestCase):
         level=np.zeros(self.n);level[self.j]=self.d.aug_limits[self.j]*2 if high else 0
         return level,np.zeros(self.n,bool),np.ones(self.n,bool)
     def test_twelve_normal_frames_inside_same_fault_do_not_rearm(self):
-        self.d._merge({self.eq},*self.evidence(True))
-        for _ in range(12):self.d._merge(set(),*self.evidence())
-        self.assertEqual(self.d._merge({self.eq},*self.evidence(True)),set(),'brief quiet interval reissued same fault')
+        for gap in (12,20,31):
+            with self.subTest(gap=gap):
+                self.d=self.binding.new_detector();self.d._merge({self.eq},*self.evidence(True))
+                for _ in range(gap):self.d._merge(set(),*self.evidence())
+                self.assertEqual(self.d._merge({self.eq},*self.evidence(True)),set(),'brief quiet interval reissued same fault')
     def test_checkpoint_keeps_short_quiet_interval(self):
         self.d._merge({self.eq},*self.evidence(True))
         for _ in range(12):self.d._merge(set(),*self.evidence())

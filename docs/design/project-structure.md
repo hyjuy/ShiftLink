@@ -287,3 +287,10 @@ PDA 대화의 기존 근무일지 작성 버튼은 `questionRecord`로 질문 ID
 `MesService.query`는 게시 버전 ticket을 마지막 잠금에서 재확인하고, 실제 인용한 현장 카드만 선택 필드 `cited_cards`로 반환·저장한다. PDA의 `responseCards`는 해당 응답의 인용 ID·설비와 일치하는 스냅샷을 사용한다. 초기 전역 카드 목록·센서 관측·정적 KB는 바꾸지 않는다. 검토 화면은 연결된 원질문과 기존 게시 상태를 함께 보여 준다.
 
 회귀 검사: `tests/test_knowledge_gap_loop.py`(extract/S30h, 동일 질문·검토 게이트·원문 보존·판정 거절·반려), `tests/test_publication_browser.py`(실제 브라우저와 HTTP, 모델 fixture), `tests/mes_query_pda.cjs`(동적 카드·미인용·다른 설비·검토 보류 대조군). fixture 검사의 통과는 실제 모델 응답의 품질 보장을 뜻하지 않는다.
+
+
+## HPU 공통 온톨로지·기본 off 실험 (2026-10-25)
+
+`incident_ontology.py`/`hpu_ontology.py`는 사건·자산·관측·조치·결과를 읽기 전용으로 투영한다. `ontology_shadow.py`는 별도 진단, `ontology_api.py`는 명시적으로 켠 관리자 설명 API다. `publication_ontology.py`는 실제 인용 ticket·검수 판본·사건 원문을 대조한다. `hpu_retrieval_experiment.py`는 서버 훅이 없는 기본 off 비교 실험이다.
+
+일지 분류·조건 보류·검색 범위 개선과 judge 점수 이후 decode 생략은 기존 S30h 경로의 후속 수정이다. 원문·게시 검증·현재 판단 경로를 유지한다. [설계](hpu-ontology-extension.md), [실험 안내](../guides/hpu-retrieval-experiment.md), [검증·측정 한계](../testing/hpu-p95-20261025.md), [공유 커밋 대응표](../testing/hpu-github-source-map-20261025.json)를 참고한다. 운영 배포나 일관된 서비스 p95 개선을 의미하지 않는다.

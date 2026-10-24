@@ -1,6 +1,7 @@
 """Authenticated, opt-in ontology reads must not enter the query pipeline."""
 import json
 import threading
+import time
 import urllib.request
 import urllib.error
 from http.server import ThreadingHTTPServer
@@ -25,7 +26,12 @@ def api(arguments, service, tmp_path, monkeypatch):
     accounts = Accounts(tmp_path / 'accounts.json')
     _, login = accounts.request('POST', '/api/admin/login', {'id':'admin', 'password':'admin'})
     accounts.request('POST', '/api/admin/accounts', {'id':'TEST-01','name':'test','password':'test-password'}, token=login['token'])
-    _, operator = accounts.request('POST', '/api/account/login', {'id':'TEST-01','password':'test-password'})
+    status, operator = accounts.request('POST', '/api/account/login', {'id':'TEST-01','password':'test-password'})
+    assert status == 200 and operator == {'operator':{'id':'TEST-01','name':'test'}}
+    # Main's operator login has no bearer token; seed a role-bearing session to test admin rejection.
+    operator_token = 'isolated-operator-session'
+    accounts.sessions[operator_token] = time.monotonic() + 3600
+    accounts.session_actors[operator_token] = {'id':'TEST-01','name':'test','role':'operator'}
     handler = type('OntologyHandler', (_Handler,), {'service':service, 'accounts':accounts})
     server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -40,7 +46,7 @@ def api(arguments, service, tmp_path, monkeypatch):
             response = error
         with response:
             return response.status, json.load(response)
-    yield request, operator['token']
+    yield request, operator_token
     server.shutdown()
     server.server_close()
     thread.join()

@@ -96,3 +96,15 @@ python -m pytest tests/test_hpu_retrieval_experiment.py -q
 Ollama 입력/생성 시간과 클라이언트·하니스 비용을 구분한다.
 확인한 judge의 점수 이후 JSON 닫기 토큰만 생략하고, 점수 누락 시 기존 예산으로 확인한다.
 답변 길이·검색 후보·판정 임계값·원문·관계 실험 기본 off는 유지한다.
+
+## GitHub 공유본의 과거 기준 재현
+
+GitHub 통합은 최신 main 위에 HPU 작업만 옮겼으므로 과거 보고서의 원래 커밋과 공개 커밋 번호가 다르다.
+[대응표](../testing/hpu-github-source-map-20261025.json)는 40개 커밋과 실제 모델 기준 두 버전을 연결한다.
+두 기준의 분류·S30h·judge·실험 소스 8개는 원본과 바이트 단위로 같음을 확인했다.
+보고서의 측정 당시 번호와 결과는 소급 변경하지 않는다.
+
+opt-in 하니스는 `SHIFTLINK_HPU_LIVE_REFERENCE`에 등록된 원래 번호 또는 공개 번호를 받으면
+공개 커밋으로 해석한다. 임의 `HEAD` 등은 거부한다. 이력 없는 shallow clone에서는 먼저
+해당 브랜치의 전체 이력을 fetch해야 한다. 이 참조 설정은 테스트 프로세스 안에서만 적용하며
+작업 파일·운영 모델·DB·기본 off 설정을 바꾸지 않는다.

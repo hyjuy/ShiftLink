@@ -33,6 +33,8 @@
 | 장비 구성 변경 | [구성 가이드](guides/mock-mes-configuration-guide.md) |
 | 이상상황 조치·복귀 | [복구 가이드](guides/mock-mes-recovery.md) |
 | 검증 결과 확인 | [검증 문서 목차](testing/README.md) |
+| 코드로 프로젝트 기능 확인 | [구조와 진입점](design/project-structure.md), [기능 지도](design/feature-map.md), [프로젝트 스킬](../.agents/skills/shiftlink-codebase/SKILL.md) |
+| HPU 온톨로지·기본 off 실험 확인 | [확장 설계](design/hpu-ontology-extension.md), [설명 API](guides/hpu-ontology-api.md), [검색 실험](guides/hpu-retrieval-experiment.md), [지연 검증](testing/hpu-p95-20261025.md) |
 | 공동 개발 시작 | [협업 안내](collaboration/README.md) |
 
 ## 설계와 작업 지시

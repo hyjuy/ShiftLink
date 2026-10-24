@@ -1,0 +1,24 @@
+{
+  "changed_operating_pins": [],
+  "checked_pins": 14,
+  "service": {
+    "MainPID": "7066",
+    "NRestarts": "0",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "previous_main_pid": "7066",
+  "operating_pid_unchanged": true,
+  "legacy_alarm_count": 0,
+  "operating_ai_status": "ready",
+  "line_mode": "running",
+  "run_id": "fd2d5e210e24490a9562f65282cfb890",
+  "sequence": 5168,
+  "temperature_c": 47.712,
+  "throttling": "throttled=0x0",
+  "pi_tests_only": true,
+  "operating_deployment": false,
+  "physical_vibration_measured": false,
+  "torch_loaded": false,
+  "timestral_loaded": false
+}

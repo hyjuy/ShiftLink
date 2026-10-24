@@ -1,0 +1,15 @@
+test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears) ... FAIL
+
+======================================================================
+FAIL: test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 72, in test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears
+    value=self.s.report(frame);self.assertEqual(len(value['items']),1,'warm-up hid confirmed history')
+                               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : warm-up hid confirmed history
+
+----------------------------------------------------------------------
+Ran 1 test in 2.371s
+
+FAILED (failures=1)

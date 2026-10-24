@@ -1,0 +1,7 @@
+{
+  "shiftlink/mes/web/pda.js": "441e21770537668f17812974ccbafa978d493a7cf121ad3058c315dde5c5778b",
+  "tests/pda_active_advisory.cjs": "5f4478bc8cacb04f762f7c5b03ef63fff5fc05dcc1db799b3873e6c0d2978c30",
+  "scripts/mes_causal_active_advisory.py": "6da86f888773d9e1b5e9eb6e67016daf09224accee006389cf93886d82d5e50e",
+  "shiftlink/pda/ai_insights.py": "6590a76d41c901e2a921fe3ccdc71d1a07168d9e0b23d39f045970d1591993ff",
+  "tests/test_pda_active_display.py": "a5036c9cd8056db136ab2a912b8ffd8c0675d4112d54010f1079e2fbb0f5d2d7"
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "test": "shiftlink/mes/web/pda.js",
+    "exit": 0
+  },
+  {
+    "test": "tests/pda_sensor_display.cjs",
+    "exit": 0
+  },
+  {
+    "test": "tests/pda_network_boot.cjs",
+    "exit": 0
+  },
+  {
+    "test": "tests/unity_pda_link.cjs",
+    "exit": 0
+  },
+  {
+    "test": "tests/pda_symptom_rank.cjs",
+    "exit": 0
+  },
+  {
+    "test": "tests/mes_query_pda.cjs",
+    "exit": 0
+  }
+]

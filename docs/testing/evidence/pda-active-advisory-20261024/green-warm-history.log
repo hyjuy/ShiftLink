@@ -1,0 +1,12 @@
+test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) ... ok
+test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery (tests.test_pda_active_display.ActiveDisplayTests.test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery) ... ok
+test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop (tests.test_pda_active_display.ActiveDisplayTests.test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop) ... ok
+test_overlay_preserves_legacy_alarms_and_deduplicates_equipment (tests.test_pda_active_display.ActiveDisplayTests.test_overlay_preserves_legacy_alarms_and_deduplicates_equipment) ... ok
+test_restart_and_duplicate_input_keep_event_identity (tests.test_pda_active_display.ActiveDisplayTests.test_restart_and_duplicate_input_keep_event_identity) ... ok
+test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears) ... ok
+test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results (tests.test_pda_active_display.ActiveDisplayTests.test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 27.141s
+
+OK

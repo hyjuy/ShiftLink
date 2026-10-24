@@ -1,0 +1,88 @@
+test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) ... ok
+test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery (tests.test_pda_active_display.ActiveDisplayTests.test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery) ... ok
+test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop (tests.test_pda_active_display.ActiveDisplayTests.test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop) ... ok
+test_overlay_preserves_legacy_alarms_and_deduplicates_equipment (tests.test_pda_active_display.ActiveDisplayTests.test_overlay_preserves_legacy_alarms_and_deduplicates_equipment) ... ok
+test_restart_and_duplicate_input_keep_event_identity (tests.test_pda_active_display.ActiveDisplayTests.test_restart_and_duplicate_input_keep_event_identity) ... ok
+test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears) ... ok
+test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results (tests.test_pda_active_display.ActiveDisplayTests.test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results) ... ok
+test_friction_thermal_then_level_is_one_notice (tests.test_mes_causal_episode.ConsumedDuplicates.test_friction_thermal_then_level_is_one_notice) ... ok
+test_manual_stop_history_and_hold_do_not_reissue_existing_notice (tests.test_mes_causal_episode.ConsumedDuplicates.test_manual_stop_history_and_hold_do_not_reissue_existing_notice) ... ok
+test_second_friction_thermal_then_level_is_one_notice (tests.test_mes_causal_episode.ConsumedDuplicates.test_second_friction_thermal_then_level_is_one_notice) ... ok
+test_session_checkpoint_and_duplicate_frame_preserve_first_notice (tests.test_mes_causal_episode.ConsumedDuplicates.test_session_checkpoint_and_duplicate_frame_preserve_first_notice) ... ok
+test_variance_dip_is_not_complete_recovery (tests.test_mes_causal_episode.ConsumedDuplicates.test_variance_dip_is_not_complete_recovery) ... ok
+test_binding_cannot_silently_restore_an_operating_checkpoint (tests.test_mes_causal_episode.EpisodeUnits.test_binding_cannot_silently_restore_an_operating_checkpoint) ... ok
+test_checkpoint_rejects_corrupt_or_cross_equipment_evidence (tests.test_mes_causal_episode.EpisodeUnits.test_checkpoint_rejects_corrupt_or_cross_equipment_evidence) ... ok
+test_checkpoint_roundtrip_preserves_episode_and_quiet_count (tests.test_mes_causal_episode.EpisodeUnits.test_checkpoint_roundtrip_preserves_episode_and_quiet_count) ... ok
+test_five_valid_healthy_frames_allow_a_nearby_new_first_notice (tests.test_mes_causal_episode.EpisodeUnits.test_five_valid_healthy_frames_allow_a_nearby_new_first_notice) ... ok
+test_flat_history_reconstruction_is_not_recovery (tests.test_mes_causal_episode.EpisodeUnits.test_flat_history_reconstruction_is_not_recovery) ... ok
+test_hysteresis_rejects_shallow_dips (tests.test_mes_causal_episode.EpisodeUnits.test_hysteresis_rejects_shallow_dips) ... ok
+test_routes_share_first_notice_and_new_equipment_stays_independent (tests.test_mes_causal_episode.EpisodeUnits.test_routes_share_first_notice_and_new_equipment_stays_independent) ... ok
+test_unknown_source_does_not_count_as_recovery (tests.test_mes_causal_episode.EpisodeUnits.test_unknown_source_does_not_count_as_recovery) ... ok
+test_actual_proxy_preserves_all_upstream_fields (tests.test_mes_causal_pda_service.PollBoundaryTests.test_actual_proxy_preserves_all_upstream_fields) ... ok
+test_all_bad_measurements_and_common_hold_are_not_healthy (tests.test_mes_causal_pda_service.PollBoundaryTests.test_all_bad_measurements_and_common_hold_are_not_healthy) ... ok
+test_malformed_upstream_response_is_preserved (tests.test_mes_causal_pda_service.PollBoundaryTests.test_malformed_upstream_response_is_preserved) ... ok
+test_nonrunning_equipment_values_cannot_start_advisory (tests.test_mes_causal_pda_service.PollBoundaryTests.test_nonrunning_equipment_values_cannot_start_advisory) ... ok
+test_pause_without_new_sensor_sequence_clears_model_warmth (tests.test_mes_causal_pda_service.PollBoundaryTests.test_pause_without_new_sensor_sequence_clears_model_warmth) ... ok
+test_real_mes_starts_at_one_and_fault_mode_is_nonoperating (tests.test_mes_causal_pda_service.PollBoundaryTests.test_real_mes_starts_at_one_and_fault_mode_is_nonoperating) ... ok
+test_replay_is_complete_and_pinned_before_publication (tests.test_mes_causal_pda_service.PollBoundaryTests.test_replay_is_complete_and_pinned_before_publication) ... ok
+test_service_cli_once_stop_and_error_publish_safe_status (tests.test_mes_causal_pda_service.PollBoundaryTests.test_service_cli_once_stop_and_error_publish_safe_status) ... {"event": "analysis_error", "error": "ValueError", "detail": "unapproved source state"}
+ok
+test_stream_chunks_include_utf8_and_reject_extra_document (tests.test_mes_causal_pda_service.PollBoundaryTests.test_stream_chunks_include_utf8_and_reject_extra_document) ... ok
+test_streamed_large_replay_and_truncated_tail (tests.test_mes_causal_pda_service.PollBoundaryTests.test_streamed_large_replay_and_truncated_tail) ... ok
+test_bad_measurement_restart_does_not_create_duplicate (tests.test_mes_causal_pda_service.ProductionTests.test_bad_measurement_restart_does_not_create_duplicate) ... ok
+test_corrupt_or_different_model_journal_fails_closed (tests.test_mes_causal_pda_service.ProductionTests.test_corrupt_or_different_model_journal_fails_closed) ... ok
+test_overlay_is_additive_and_stale_results_are_hidden (tests.test_mes_causal_pda_service.ProductionTests.test_overlay_is_additive_and_stale_results_are_hidden) ... ok
+test_recent_notice_has_stable_id_and_no_haptics_contract (tests.test_mes_causal_pda_service.ProductionTests.test_recent_notice_has_stable_id_and_no_haptics_contract) ... ok
+test_restart_replays_only_after_durable_cursor_with_same_notices (tests.test_mes_causal_pda_service.ProductionTests.test_restart_replays_only_after_durable_cursor_with_same_notices) ... ok
+test_run_change_pause_gap_and_lag_hide_advisories (tests.test_mes_causal_pda_service.ProductionTests.test_run_change_pause_gap_and_lag_hide_advisories) ... ok
+test_source_order_is_mapped_by_keys_without_forging_config (tests.test_mes_causal_pda_service.ProductionTests.test_source_order_is_mapped_by_keys_without_forging_config) ... ok
+test_source_schema_and_hash_are_pinned (tests.test_mes_causal_pda_service.ProductionTests.test_source_schema_and_hash_are_pinned) ... ok
+test_bad_replay_trailer_cannot_commit_a_tentative_stop (tests.test_pda_fault_stop.FaultStopTests.test_bad_replay_trailer_cannot_commit_a_tentative_stop) ... ok
+test_fault_retains_same_event_across_long_stop_and_restart (tests.test_pda_fault_stop.FaultStopTests.test_fault_retains_same_event_across_long_stop_and_restart) ... ok
+test_individual_fault_stop_retains_while_line_is_running (tests.test_pda_fault_stop.FaultStopTests.test_individual_fault_stop_retains_while_line_is_running) ... ok
+test_old_checkpoint_is_compatible_and_corrupt_stop_is_rejected (tests.test_pda_fault_stop.FaultStopTests.test_old_checkpoint_is_compatible_and_corrupt_stop_is_rejected) ... ok
+test_retained_reader_rejects_stale_wrong_run_unconfirmed_hold_and_invalid_time (tests.test_pda_fault_stop.FaultStopTests.test_retained_reader_rejects_stale_wrong_run_unconfirmed_hold_and_invalid_time) ... ok
+test_same_sequence_fault_is_durable_and_does_not_reissue (tests.test_pda_fault_stop.FaultStopTests.test_same_sequence_fault_is_durable_and_does_not_reissue) ... ok
+test_single_brief_and_small_spikes_do_not_notify_but_sustained_does (tests.test_pda_fault_stop.FaultStopTests.test_single_brief_and_small_spikes_do_not_notify_but_sustained_does) ... ok
+test_unconfirmed_hold_old_evidence_resume_run_and_gap_do_not_retain (tests.test_pda_fault_stop.FaultStopTests.test_unconfirmed_hold_old_evidence_resume_run_and_gap_do_not_retain) ... ok
+test_individual_manual_stop_retains_without_mes_alarm (tests.test_pda_manual_stop.ManualStopTests.test_individual_manual_stop_retains_without_mes_alarm) ... ok
+test_manual_pause_same_sequence_preserves_identity_restart_and_reader (tests.test_pda_manual_stop.ManualStopTests.test_manual_pause_same_sequence_preserves_identity_restart_and_reader) ... ok
+test_manual_stop_advanced_frames_do_not_analyze_or_repeat (tests.test_pda_manual_stop.ManualStopTests.test_manual_stop_advanced_frames_do_not_analyze_or_repeat) ... ok
+test_manual_stop_does_not_resurrect_expired_or_unconfirmed_notices (tests.test_pda_manual_stop.ManualStopTests.test_manual_stop_does_not_resurrect_expired_or_unconfirmed_notices) ... ok
+test_age_identity_lag_and_format_boundaries_hide_results (tests.test_pda_advisory_reader.ReaderTests.test_age_identity_lag_and_format_boundaries_hide_results) ... ok
+test_inactive_missing_oversized_and_malformed_files_fail_closed (tests.test_pda_advisory_reader.ReaderTests.test_inactive_missing_oversized_and_malformed_files_fail_closed) ... ok
+test_ready_filters_duplicates_and_keeps_only_safe_signals (tests.test_pda_advisory_reader.ReaderTests.test_ready_filters_duplicates_and_keeps_only_safe_signals) ... ok
+test_cli_pins_profile_and_preserves_external_stop_switch (tests.test_mes_causal_context_service.ContextBindingTests.test_cli_pins_profile_and_preserves_external_stop_switch) ... ok
+test_context_history_roundtrip_preserves_normal_and_stall_decisions (tests.test_mes_causal_context_service.ContextBindingTests.test_context_history_roundtrip_preserves_normal_and_stall_decisions) ... ok
+test_initial_zero_control_state_has_no_missing_sensor_frame (tests.test_mes_causal_context_service.ContextBindingTests.test_initial_zero_control_state_has_no_missing_sensor_frame) ... ok
+test_old_model_state_cannot_silently_enter_new_profile (tests.test_mes_causal_context_service.ContextBindingTests.test_old_model_state_cannot_silently_enter_new_profile) ... ok
+test_opt_in_only_and_profile_is_in_checkpoint_identity (tests.test_mes_causal_context_service.ContextBindingTests.test_opt_in_only_and_profile_is_in_checkpoint_identity) ... ok
+test_current_worker_unit_cannot_be_overwritten_after_concurrent_update (tests.test_analytics_release.ReleaseTests.test_current_worker_unit_cannot_be_overwritten_after_concurrent_update) ... ok
+test_identical_pda_files_are_preserved_without_rewrite (tests.test_analytics_release.ReleaseTests.test_identical_pda_files_are_preserved_without_rewrite) ... ok
+test_restart_waits_until_old_pda_really_exits (tests.test_analytics_release.ReleaseTests.test_restart_waits_until_old_pda_really_exits) ... ok
+test_rollback_restores_exact_files_and_falls_back_if_endpoint_is_down (tests.test_analytics_release.ReleaseTests.test_rollback_restores_exact_files_and_falls_back_if_endpoint_is_down) ... ok
+test_unit_template_must_be_in_verified_manifest (tests.test_analytics_release.ReleaseTests.test_unit_template_must_be_in_verified_manifest) ... ok
+test_update_restarts_the_existing_worker (tests.test_analytics_release.ReleaseTests.test_update_restarts_the_existing_worker) ... ok
+test_bad_evidence_never_counts_as_recovery (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_bad_evidence_never_counts_as_recovery) ... ok
+test_checkpoint_keeps_short_quiet_interval (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_checkpoint_keeps_short_quiet_interval) ... ok
+test_consumed_variance_fault_remains_one_notice (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_consumed_variance_fault_remains_one_notice) ... ok
+test_different_equipment_first_notice_is_independent (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_different_equipment_first_notice_is_independent) ... ok
+test_new_distinct_sensor_after_old_evidence_recovers_is_not_hidden (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_new_distinct_sensor_after_old_evidence_recovers_is_not_hidden) ... ok
+test_pending_distinct_source_at_recovery_boundary_can_restore (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_pending_distinct_source_at_recovery_boundary_can_restore) ... ok
+test_stable_recovery_allows_new_same_sensor_fault (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_stable_recovery_allows_new_same_sensor_fault) ... ok
+test_twelve_normal_frames_inside_same_fault_do_not_rearm (tests.test_mes_causal_lifecycle.LifecycleRegressions.test_twelve_normal_frames_inside_same_fault_do_not_rearm) ... ok
+
+----------------------------------------------------------------------
+Ran 72 tests in 139.093s
+
+OK
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/../run-final.py", line 23, in <module>
+    executable=lines(compile(p.read_text(encoding='utf-8-sig'),str(p),'exec'));seen=hits[str(p)]&executable
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/../run-final.py", line 19, in lines
+    if isinstance(v,types.CodeType):out|=lines(v)
+                                         ~~~~~^^^
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/../run-final.py", line 17, in lines
+    out={n for _,n in dis.findlinestarts(code) if n>0}
+                                                  ^^^
+TypeError: '>' not supported between instances of 'NoneType' and 'int'

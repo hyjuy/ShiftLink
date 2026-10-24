@@ -1,0 +1,16 @@
+{
+  "/home/pi/shiftlink/app/shiftlink/pda/accounts.py": "868429f2b9a71894bd6af60cf1a7f54230e4eb0455a4c2b7ccd5c3a607187235",
+  "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py": "ce48e76280447596f89f73fa657dcaef86aae14e71f573f3602d53245c54d306",
+  "/home/pi/shiftlink/app/shiftlink/pda/__init__.py": "c86eb50f6e9661a22e690f0a0a1ee22d62ae06e19582ec0a072f6484b782350f",
+  "/home/pi/shiftlink/app/shiftlink/pda/__main__.py": "838b8fdd4786308084855d73f8ff69376c34e994add20171e653e470ceb7514d",
+  "/home/pi/shiftlink/app/shiftlink/mes/web/knowledge.js": "59479104243154e93a38d12d6c9092eb45cafd1b4db8331959118998809ae0de",
+  "/home/pi/shiftlink/app/shiftlink/mes/web/pda.html": "dfddf2de37aaa11b55af49aabc32052bbf0dc748d5f0b2e4354aa63f98365192",
+  "/home/pi/shiftlink/app/shiftlink/mes/web/candidate-review.js": "ca4ac7a75a44c7ba301ea21dc55298e7b7e9a039a26094d9d0ff73d231176d0c",
+  "/home/pi/shiftlink/app/shiftlink/mes/web/pda.js": "ada61519f36ec648378c9473e51c8c4f1a54fda8771b2a3313173c736d435236",
+  "/home/pi/shiftlink/app/shiftlink/mes/web/knowledge-candidates.html": "e0111a5591dd4e567ef445a0dd25c7bbdf956f00d5e4a249c852a4615ad26075",
+  "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_context.py": "b92d559dbe86728fa969663925d4960195e8a853ee08831a0913258f0108b61f",
+  "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_pda_service.py": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+  "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_schema.py": "faba04cfdb662e9686e4826d4f517a4413744e307bf4a1a296a70fa8bb5cd142",
+  "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_v14_stream.py": "686400e7d7d0d7566acd0c965120e55c84c1b87ece4b8c1d02414f90a5ab0ee9",
+  "/home/pi/shiftlink/analytics/validation/fault-lifecycle-20261024/evidence.zip": "37ae1722e02814fb53d1d32b123a771c4b8646246c27a8fc2890fc85800b505b"
+}

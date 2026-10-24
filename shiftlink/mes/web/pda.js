@@ -1355,9 +1355,9 @@ function answerBody(turn) {
     meta.textContent = [at ? '답변 기준 · ' + clock(at) + ' 센서값' : '', parts.source].filter(Boolean).join(' · ');
     d.appendChild(meta);
   }
-  // 「조치 시작」 — 매뉴얼·지식카드를 참고한 답이면 종류와 관계없이 항상 둔다. 조치 기록 화면으로 가며
+  // 「조치 시작」 — 카드가 없어도 현재 설비의 답에서 직접 조치를 기록한다. 조치 기록 화면으로 가며
   // (본 카드 ID가 세션에 남아 대시보드 사건에 연결된다), 근무일지는 입력칸 옆 고정 버튼으로 쓴다(답마다 묻지 않는다).
-  if (citedCardIds(turn).length) {
+  if (citedCardIds(turn).length || (S.eq && turn.eqId === S.eq.equipment_id)) {
     const record = document.createElement('button');
     record.type = 'button'; record.className = 'btn primary'; record.textContent = '조치 시작';   // 주 행동 56px(A1)
     record.addEventListener('click', () => openResolve(turn));

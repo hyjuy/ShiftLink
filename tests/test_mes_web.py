@@ -119,7 +119,7 @@ const vm = require('node:vm');
 const fs = require('node:fs');
 let calls = 0, interval;
 const elements = new Map();
-const document = { addEventListener() {}, querySelector(selector) { if (!elements.has(selector)) elements.set(selector, {addEventListener() {}}); return elements.get(selector); }, querySelectorAll() {return [];} };
+const document = { addEventListener() {}, querySelector(selector) { if (!elements.has(selector)) elements.set(selector, {addEventListener() {}, setAttribute(k,v) { this[k]=v; }}); return elements.get(selector); }, querySelectorAll() {return [];} };
 vm.runInNewContext(fs.readFileSync('./shiftlink/mes/web/app.js', 'utf8'), {
  document, fetch: async () => { calls++; throw new Error('offline'); }, AbortSignal,
  setInterval(callback) { interval = callback; }, Date, console
@@ -127,6 +127,7 @@ vm.runInNewContext(fs.readFileSync('./shiftlink/mes/web/app.js', 'utf8'), {
 (async () => {
  await new Promise(setImmediate);
  assert.equal(calls, 1);
+ assert.equal(elements.get('#random-toggle')['aria-pressed'], 'false');
  assert.match(elements.get('#connection-status').textContent, /offline/);
  interval(); await new Promise(setImmediate);
  assert.equal(calls, 2, 'first failure must not disable future polling');

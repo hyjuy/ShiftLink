@@ -1,0 +1,81 @@
+{
+  "source_sha256": {
+    "shiftlink/mes/__main__.py": "bb8033afcd161e57ff9f7b90f8a83a6740f27be8ebe82405894038e457f9cffc",
+    "shiftlink/mes/contracts.py": "74a384d40b7e363325bd78c280449e5a0385eab562d4514289f2531a286e6f9e",
+    "shiftlink/mes/progressive_factory.py": "a093d750714b39ac1d183519b970bfa267a468ad0f6e4aceca36090a2dd432dd",
+    "shiftlink/mes/server.py": "19df8f68d75390b1b617fd7474409861c5ee2ddda4292ce0685bffec6918c60e",
+    "shiftlink/mes/web/app.js": "e3aa3be88b07af36f93a3bd11e5ee9cccf948af431443c7bb09c73e43a09ca32",
+    "shiftlink/mes/web/index.html": "69d2e28fa988b31ce7b304d6d91bf4764690209fae3c4698b2af70ff98cb104a",
+    "tests/test_mes_random_mode_control.py": "e9b1d0c8b9e99759b53eae09c5498089216e79a34e3377b10fc64e8f7c2c0dee",
+    "tests/test_mes_random_mode_browser.py": "f86bffea9182a18350ce09d8822922da53629a900d64a79cc33b4c6f8fcc9ac1",
+    "tests/test_mes_progressive_faults.py": "631d949b459a8bac2201ac17bdc85ff02e3dd3950d871fc991a0ca4324581b68",
+    "shiftlink/mes/web/pda.js": "da7265fd8e338b4e6bcabf824fd5dbf2289be6823fdfa411744edeed0301fc7a",
+    "tests/mes_operator_dom.cjs": "34d1834576b65c4e563bcb58975f79bbc68ec8511de4133f2399766ef427c896",
+    "tests/test_mes_web.py": "508a7d285951deb8cc63e5d1f0111d42584e6660b0e434eba5bb5165e3fcb7c4",
+    "tests/pda_cardless_recovery.cjs": "d4464fb45dce54e01eddc8261c707f307c17e38d62a3baeb61b8b7158561efd3"
+  },
+  "cardless_control_and_browser": {
+    "tests": 15,
+    "passed": 15,
+    "skipped": 0,
+    "elapsed_seconds": 26.558
+  },
+  "mes_dom_regressions": {
+    "tests": 12,
+    "passed": 12,
+    "elapsed_seconds": 1.631
+  },
+  "pda_node_regressions": [
+    {
+      "file": "tests/pda_sensor_display.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/pda_network_boot.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/unity_pda_link.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/pda_symptom_rank.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/mes_query_pda.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/pda_resolution.cjs",
+      "returncode": 0
+    },
+    {
+      "file": "tests/pda_cardless_recovery.cjs",
+      "returncode": 0
+    }
+  ],
+  "publication_metadata_and_staged_syntax": {
+    "ok": true,
+    "errors": [],
+    "staged_python_checked": true,
+    "check_kind": "metadata_and_syntax",
+    "history_semantics_evaluated": false
+  },
+  "node_runtime": "isolated ARM64 v22.16.0",
+  "node_archive_sha256": "eab80cb88f8fda1e65f5e8d0420c9809bdb320b03fd34976ab7161b6e703b910",
+  "deployed": false,
+  "operating_observation": {
+    "run_id": "2ce4d5209feb46cbbf33f369c379474a",
+    "sequence": 4829,
+    "line_mode": "running",
+    "ai_status": "ready",
+    "active_alarms": 0,
+    "ai_events": [
+      [
+        "EQ-0004",
+        "2ce4d5209feb46cbbf33f369c379474a:372:EQ-0004"
+      ]
+    ]
+  }
+}

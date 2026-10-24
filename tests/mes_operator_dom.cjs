@@ -4,7 +4,7 @@ const vm = require('node:vm');
 const fs = require('node:fs');
 const elements = new Map();
 const document = {activeElement:null, addEventListener(){}, querySelectorAll(){return [];}, querySelector(s){
-  if (!elements.has(s)) elements.set(s,{addEventListener(){}}); return elements.get(s);
+  if (!elements.has(s)) elements.set(s,{addEventListener(){},setAttribute(k,v){this[k]=v;}}); return elements.get(s);
 }};
 const scope={document,fetch:async()=>{throw new Error('offline');},AbortSignal,setInterval(){},Date};
 const source=fs.readFileSync('shiftlink/mes/web/app.js','utf8').replace('  refresh();','  globalThis.testView = setView; globalThis.testTabs = {showWorkspace,workspaceKeydown}; globalThis.testDiagramMode = setDiagramMode;\n  refresh();');

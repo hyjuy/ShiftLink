@@ -1,5 +1,7 @@
 """Button opt-in and observation-driven repair; run on the Pi in isolation."""
 import json
+import shutil
+import subprocess
 import unittest
 from dataclasses import replace
 from pathlib import Path
@@ -141,6 +143,104 @@ class RandomModeControlTests(unittest.TestCase):
         with patch('shiftlink.mes.server.SIM_LINK',True), self.assertRaises(ValueError):
             s.resolution_step(out['session_id'],{'action':'모의 수리 완료 기록'})
         self.assertEqual(s.engine.scheduler.active,fault)
+
+    def test_no_card_direct_action_before_after_and_recovery_are_saved(self):
+        s = self.service(); eq = self.fault(s)
+        with patch('shiftlink.mes.server.SIM_LINK',True):
+            out = s.resolution_start({'equipment_id':eq,'card_ids':[],'question':'관측 이상을 직접 점검하고 조치를 기록합니다'})
+            self.assertFalse(any(a['source']=='card_step' for a in out['action_suggestions']))
+            sid = out['session_id']
+            action = '냉각기 팬 필터를 청소하고 팬 회전 상태를 확인함'
+            s.resolution_step(sid,{'action':action})
+            repair = next(a['text'] for a in out['action_suggestions'] if a['source']=='mes_recovery')
+            s.resolution_step(sid,{'action':repair})
+            s.resolution_step(sid,{'action':RESTART_ACTION})
+            s.engine.tick(15)
+            self.assertEqual(s.resolution_finish(sid)['verdict'],'recovered')
+            components = [c['component_id'] for c in s.state()['components'] if c['equipment_id']==eq]
+            saved = s.record_handover({'handover_id':'HO-RANDOM-NO-CARD','equipment_id':eq,'memo_text':'직접 조치 후 MES 회복 확인',
+                'resolution':{'session_id':sid,'symptom':'센서 이상 징후를 보고 현장 점검을 진행함','cause':'원인 모름',
+                              'component_id':components[0] if components else '', 'result':'resolved'}})
+            self.assertTrue(saved['draft']['mes_recovered'])
+            data = s.resolution_get(sid)
+            self.assertEqual(data['status'],'saved')
+            record = data['data']
+            self.assertEqual(record['card_ids'],[])
+            self.assertEqual(record['steps'][0]['action'],action)
+            self.assertEqual(record['steps'][0]['measurements'],record['before']['measurements'])
+            self.assertIsNone(record['steps'][0]['mes_linked'])
+            self.assertEqual([step['mes_linked'] for step in record['steps'][1:]],['recovery_action:verify','recover'])
+            self.assertNotEqual(record['before']['measurements'],record['after']['measurements'])
+            self.assertTrue(record['verdict']['check']['recovered'])
+            [draft] = s.card_drafts()['drafts']
+            self.assertEqual(draft['status'],'pending_review')
+            self.assertIn(action,draft['card']['know_how'])
+            self.assertEqual(draft['card']['status'],'draft')
+
+    def test_no_card_unrepaired_attempt_is_saved_as_failed(self):
+        s = self.service(); eq = self.fault(s)
+        out = s.resolution_start({'equipment_id':eq,'card_ids':[]})
+        sid = out['session_id']
+        s.resolution_step(sid,{'action':'팬 회전 상태 점검했으나 센서 이상은 계속됨'})
+        self.assertNotEqual(s.resolution_finish(sid)['verdict'],'recovered')
+        components = [c['component_id'] for c in s.state()['components'] if c['equipment_id']==eq]
+        saved = s.record_handover({'handover_id':'HO-RANDOM-FAILED','equipment_id':eq,'memo_text':'추가 점검 필요',
+            'resolution':{'session_id':sid,'symptom':'점검 뒤에도 센서 이상이 유지됨','cause':'원인 모름',
+                          'component_id':components[0] if components else '', 'result':'failed'}})
+        self.assertFalse(saved['draft']['mes_recovered'])
+        self.assertFalse(saved['draft']['created'])
+        self.assertEqual(s.resolution_get(sid)['status'],'saved')
+        self.assertEqual(s.card_drafts()['drafts'],[])
+
+    @unittest.skipUnless(shutil.which('node'), 'Node is required for PDA DOM checks')
+    def test_cardless_answer_can_start_direct_action_record(self):
+        result = subprocess.run(['node','tests/pda_cardless_recovery.cjs'],text=True,capture_output=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+
+    @unittest.skipUnless(shutil.which('node'), 'Node is required for actual PDA serialization')
+    def test_no_card_actual_pda_work_report_keeps_action_and_recovery(self):
+        from shiftlink.mes.configuration import to_payload
+        s = self.service(); eq = self.fault(s)
+        with patch('shiftlink.mes.server.SIM_LINK',True):
+            out = s.resolution_start({'equipment_id':eq,'card_ids':[],'question':'이상 징후 점검'})
+            sid = out['session_id']; action = '팬 필터 오염을 제거하고 회전 상태를 확인함'
+            s.resolution_step(sid,{'action':action})
+            repair = next(a['text'] for a in out['action_suggestions'] if a['source']=='mes_recovery')
+            s.resolution_step(sid,{'action':repair})
+            s.resolution_step(sid,{'action':RESTART_ACTION}); s.engine.tick(15)
+            verdict = s.resolution_finish(sid)
+        data = s.resolution_get(sid)['data']
+        components = [c for c in s.state()['components'] if c['equipment_id']==eq]
+        state = dict(sessionId=sid,phase='wrap',result='resolved',before=out['before'],verdict=verdict,
+            symptom='운전 중 센서 이상을 보고 직접 점검함',cause='원인 모름',causeCustom='',components=components,
+            componentId=components[0]['component_id'] if components else '',
+            steps=[dict(step,at=step['simulated_at']) for step in data['steps']],
+            turn=dict(question='이상 징후 점검',started=s.engine.run.started_at.isoformat(),response={}))
+        source = """
+const p=require('./shiftlink/mes/web/pda.js');
+const input=JSON.parse(require('node:fs').readFileSync(0,'utf8'));
+p.S.equipment=input.equipment;
+process.stdout.write(JSON.stringify(p.sessionRecord(input.state,input.eq)));
+"""
+        encoded = subprocess.run(['node','-e',source],input=json.dumps(dict(state=state,eq=eq,equipment=to_payload(s.active_config)['equipment'])),
+                                 text=True,capture_output=True)
+        self.assertEqual(encoded.returncode,0,encoded.stderr)
+        record = json.loads(encoded.stdout)
+        self.assertIn(action,record['action_steps'][0]['action'])
+        self.assertIn('모의 수리 완료 기록',record['action_steps'][0]['observed_result'])
+        self.assertIn('MES 정상 복귀 확인',record['normal_run_evidence'])
+        self.assertEqual(record['source_session_id'],sid)
+        payload = dict(handover_id='HO-PDA-RANDOM-NO-CARD',kind='work_log',equipment_id=eq,equipment_ids=[eq],memo_text='직접 조치 기록',
+            required_context=dict(author='합성 검증 작업자',start_at='2026-10-25T00:00',end_at='2026-10-25T23:59',context='격리 검증'),
+            work_report=dict(legacy_memo='',mes_context='',records=[record]))
+        s.record_work_report(payload)
+        saved = s.work_report(payload['handover_id'])['report']['work_report']['records'][0]
+        self.assertEqual(saved['action_steps'],record['action_steps'])
+        self.assertEqual(saved['normal_run_evidence'],record['normal_run_evidence'])
+        self.assertEqual(saved['outcome'],'resolved')
+        self.assertEqual(saved['normal_run_status'],'unconfirmed')
+        self.assertFalse(saved['candidate'])
+        self.assertTrue(s.resolution_get(sid)['data']['verdict']['check']['recovered'])
 
     def test_bad_measurement_does_not_confirm_recovery(self):
         s = self.service(); self.fault(s)

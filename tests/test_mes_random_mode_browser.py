@@ -85,8 +85,16 @@ class RandomModeBrowserTests(unittest.TestCase):
         self.assertTrue(js("document.querySelector('#control-panel [data-command=recover]').disabled"))
         # Run the unchanged PDA's actual step logic against the real resolution API.
         src=(ROOT/'shiftlink/mes/web/pda.js').read_text()
-        js("globalThis.pdaSteps=(new Function('module','document',"+json.dumps(src+';return module.exports;')+"))({exports:{}},undefined)")
+        marker="if (typeof document !== 'undefined') {"
+        boot=src.rfind(marker)
+        assert boot>=0
+        src=src[:boot]+src[boot:].replace(marker,'if (false) {',1)
+        js("globalThis.pdaSteps=(new Function('module','document',"+json.dumps(src+';return module.exports;')+"))({exports:{}},document)")
         equipment_id=service.engine.scheduler.active['equipment_id']
+        js('pdaSteps.S.eq={equipment_id:'+json.dumps(equipment_id)+'}')
+        cardless=dict(eqId=equipment_id,question='직접 점검 기록',ranked=dict(actions=[],excluded=[]),
+                      response=dict(no_knowledge=True,cited_card_ids=[],answer=''))
+        self.assertTrue(js("[...pdaSteps.answerBody("+json.dumps(cardless)+").querySelectorAll('button')].some(b=>b.textContent==='조치 시작')"))
         for cards in ([],['K-1002']):
             out=service.resolution_start(dict(equipment_id=equipment_id,card_ids=cards))
             js('globalThis.repairState='+json.dumps(dict(actions=out['action_suggestions'],steps=[])))

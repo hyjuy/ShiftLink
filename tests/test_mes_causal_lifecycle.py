@@ -43,6 +43,12 @@ class LifecycleRegressions(unittest.TestCase):
         self.d._merge({self.eq},*self.evidence(True));x=self.evidence();x[0][self.j]=np.nan
         for _ in range(40):self.d._merge(set(),*x)
         self.assertTrue(self.d.episode_on[self.k]);self.assertEqual(self.d.episode_quiet[self.k],0)
+    def test_pending_distinct_source_at_recovery_boundary_can_restore(self):
+        self.d._merge({self.eq},*self.evidence(True))
+        for _ in range(31):self.d._merge(set(),*self.evidence())
+        x=self.evidence();j=int(self.d.indexes[self.k][-1]);x[0][j]=2*self.d.aug_limits[j]
+        self.d._merge(set(),*x);state=self.d.context_state();other=self.binding.new_detector();other.load_context(state)
+        self.assertEqual(other.context_state(),state)
     def test_consumed_variance_fault_remains_one_notice(self):
         with gzip.open(PREVIOUS/'test/cases/variance-01.json.gz','rt') as f:frames=json.load(f)
         with TemporaryDirectory() as tmp:

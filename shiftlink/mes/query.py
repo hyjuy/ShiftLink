@@ -41,6 +41,7 @@ def build_query_pipeline():
             mes_only=os.environ.get('SHIFTLINK_S30H_MES_ONLY') == '1',
             mes_prefix=os.environ.get('SHIFTLINK_S30H_MES_PREFIX') == '1',
             p_fix=os.environ.get('SHIFTLINK_S30H_P_FIX') == '1',
+            knowledge_graph=os.environ.get('SHIFTLINK_KNOWLEDGE_GRAPH', '1') != '0',
             unobserved_guard=os.environ.get('SHIFTLINK_S30H_UNOBSERVED') == '1',
             unit_guard=os.environ.get('SHIFTLINK_S30H_UNIT_GUARD') == '1',
             unit_header=os.environ.get('SHIFTLINK_S30H_UNIT_HEADER') == '1',
@@ -169,6 +170,7 @@ def query_service(service, body, *, pipeline=None):
                     if t['equipment_type_id'] == eq_record.get('equipment_type_id')), None)
     cards = getattr(pipeline, 'cards', getattr(getattr(pipeline, 'tools', None), 'cards', ()))
     graph_context = explain(output, cards, eq_type, equipment_id,
+                            published_card_ids=[ticket[0] for ticket in publication_ticket],
                             cited_chunks=getattr(result, 'cited_chunks', [])
                             if getattr(pipeline, 'answer_mode', None) == 's30h' else None)
     return {**output, **({'graph_context': graph_context} if graph_context is not None else {}),

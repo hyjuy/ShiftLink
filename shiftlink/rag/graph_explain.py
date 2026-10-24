@@ -136,6 +136,51 @@ class GraphSnapshot:
             return None, "card_version_or_content_mismatch"
         return match, ""
 
+    def add_publications(self, visible, published_card_ids, eq_type, eq_id):
+        """Only the publication snapshot's ticket may add request-local field cards."""
+        added = []
+        def node(kind, props, label):
+            existing = next((n for n in self.nodes.values() if n['type'] == kind
+                             and all(n['props'].get(k) == v for k, v in props.items())), None)
+            if existing:
+                return existing['id']
+            identity = [props['card_id'], props['version']] if kind == 'CardVersion' else props
+            ident = 'publication:' + json.dumps([kind, identity], ensure_ascii=False, sort_keys=True)
+            self.nodes[ident] = {'id': ident, 'type': kind, 'label': label, 'props': deepcopy(props)}
+            return ident
+        def edge(source, target, kind, props=None):
+            require((self.nodes[source]['type'], self.nodes[target]['type']) == DOMAINS[kind])
+            if any(e['target'] == target and e['type'] == kind for e in self.outgoing[source]):
+                return
+            item = {'source': source, 'target': target, 'type': kind, 'props': props or {}}
+            self.outgoing[source].append(item)
+            if kind == 'CITES':
+                self.incoming[target].append(item)
+        for cid in sorted(set(published_card_ids)):
+            current = visible.get(cid, [])
+            if cid in self.cards or len(current) != 1:
+                continue
+            card = current[0]
+            if (not eq_type or (card['status'], card['grade'], card['split']) != ('accepted', 'L1', 'kb')
+                    or card['equipment'] not in (eq_type, 'COMMON') or card.get('mes_equipment_id') != eq_id
+                    or not nonblank(card['component'])):
+                continue
+            cn = node('CardVersion', card, card['title'])
+            self.cards[cid] = (self.nodes[cn], card)
+            equipment = node('EquipmentType', {'kind': 'equipment', 'equipment': card['equipment']}, card['equipment'])
+            component = node('EquipmentType', {'kind': 'component', 'equipment': card['equipment'],
+                                              'component': card['component']}, card['component'])
+            edge(cn, component, 'ABOUT'); edge(cn, equipment, 'ABOUT'); edge(component, equipment, 'PART_OF')
+            references = defaultdict(list)
+            for ref in card['provenance']['sources']:
+                if all(nonblank(ref.get(k)) for k in ('source_id', 'document_version', 'locator')):
+                    references[ref['source_id'], ref['document_version']].append(ref['locator'])
+            for (sid, version), locators in sorted(references.items()):
+                dn = node('DocumentVersion', {'source_id': sid, 'document_version': version}, sid)
+                edge(cn, dn, 'CITES', {'locators': list(dict.fromkeys(locators)), 'source_ref_count': len(locators)})
+            added.append(cid)
+        return added
+
     def expand_two_hop(self, item, eligible, seen, remaining):
         """Enumerate three allowed patterns, never generic BFS or recursive expansion."""
         paths, candidates = [], {}
@@ -198,7 +243,8 @@ class GraphSnapshot:
         return result
 
 
-def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks=None, depth=None):
+def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks=None, depth=None,
+            published_card_ids=()):
     """None means disabled. Failures omit graph details, never change the answer."""
     mode = os.environ.get("SHIFTLINK_KG_MODE", "off") if mode is None else mode
     if mode == "off":
@@ -227,6 +273,9 @@ def explain(output, cards, eq_type, eq_id, *, mode=None, path=None, cited_chunks
         except (ValueError, TypeError):
             continue
         visible[card["card_id"]].append(card)
+    added = graph.add_publications(visible, published_card_ids, eq_type, eq_id)
+    if added:
+        result['publication_overlay'] = {'card_ids': added, 'scope': 'validated_query_snapshot'}
     for cid in dict.fromkeys(output["cited_card_ids"]):
         match, reason = graph.bind_current(cid, visible, eq_type, eq_id)
         if match:

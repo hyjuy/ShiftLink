@@ -22,10 +22,14 @@ def stopped_equipment_for_retention(snapshot):
 
 def valid_stop_notice(row, sequence):
     stop=row.get('stop_sequence')
+    checked=row.get('confirmed_sequence',row.get('sequence'))
+    checked_at=row.get('confirmed_at',row.get('observed_at'))
     try:
         at=datetime.fromisoformat(row['observed_at']);stopped=datetime.fromisoformat(row['stopped_at'])
+        confirmed=datetime.fromisoformat(checked_at)
         return (type(stop) is int and type(row['sequence']) is int and
-                0 <= row['sequence'] <= stop <= sequence and stop-row['sequence'] <= 30 and
+                type(checked) is int and 0 <= row['sequence'] <= checked <= stop <= sequence and stop-checked <= 30 and
+                confirmed.utcoffset() is not None and (confirmed-at).total_seconds()==checked-row['sequence'] and
                 at.utcoffset() is not None and stopped.utcoffset() is not None and
                 (stopped-at).total_seconds()==stop-row['sequence'])
     except (KeyError,TypeError,ValueError):return False
@@ -91,6 +95,8 @@ def read_insights(path, snapshot, config_id, *, now=None):
             base['items'].append(dict(equipment_id=eq, event_id=row['event_id'], sequence=row['sequence'],
                                       observed_at=row['observed_at'], state=row['state'], signals=signals))
             if retained:base['items'][-1].update(stop_sequence=row['stop_sequence'],stopped_at=row['stopped_at'])
+            if 'confirmed_sequence' in row or 'confirmed_at' in row:
+                base['items'][-1].update(confirmed_sequence=row.get('confirmed_sequence'),confirmed_at=row.get('confirmed_at'))
         return base
     except (OSError, ValueError, TypeError, KeyError, AttributeError):
         return base | dict(status='unavailable', items=[])

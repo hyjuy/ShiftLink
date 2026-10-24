@@ -9,7 +9,9 @@ class Element {
 }
 const c=vm.createContext({URLSearchParams});vm.runInContext(fs.readFileSync(require.resolve('../shiftlink/mes/web/pda.js'),'utf8'),c);
 const nodes={},vibrations=[];
-c.document={getElementById:id=>nodes[id] ||= new Element(),createElement:()=>new Element(),querySelectorAll:()=>[]};
+c.document={getElementById:id=>nodes[id] ||= new Element(),createElement:()=>new Element(),querySelectorAll:()=>[],addEventListener(){}};
+const source=fs.readFileSync(require.resolve('../shiftlink/mes/web/pda.js'),'utf8');
+vm.runInContext(source.slice(source.indexOf('function faultsFrom(snap)'),source.indexOf('function renderDash()')),c);
 c.navigator={vibrate:p=>vibrations.push(p)};c.setTimeout=()=>0;c.clearTimeout=()=>{};
 vm.runInContext(`S.equipment=[{equipment_id:'E',code:'HPU-01',signals:[]}];S.alertAck={};
 S.snapshot={run_id:'r',config_id:'c',sequence:160,line_mode:'running',equipment:[{equipment_id:'E',operating_state:'running'}],measurements:[],active_alarms:[],

@@ -1,0 +1,2777 @@
+{
+  "cases": [
+    {
+      "case_id": "recorded-137",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 34.88719999950263,
+        "baseline_prepare": 6.712200000038138,
+        "trial_prepare": 6.490799998573493,
+        "baseline": 6.95590000032098,
+        "trial": 9.279300000343937,
+        "recheck": 36.48359999715467,
+        "baseline_total": 13.668100000359118,
+        "trial_total": 87.14089999557473
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 0
+    },
+    {
+      "case_id": "recorded-137",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 37.588299997878494,
+        "baseline_prepare": 5.979400000796886,
+        "trial_prepare": 6.756499999028165,
+        "trial": 10.331900000892347,
+        "baseline": 9.664599998359336,
+        "recheck": 38.60200000053737,
+        "baseline_total": 15.643999999156222,
+        "trial_total": 93.27869999833638
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 1
+    },
+    {
+      "case_id": "recorded-137",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 47.10200000045006,
+        "baseline_prepare": 7.215500001620967,
+        "trial_prepare": 7.00199999846518,
+        "baseline": 8.553800002118805,
+        "trial": 7.834199997887481,
+        "recheck": 32.981399999698624,
+        "baseline_total": 15.769300003739772,
+        "trial_total": 94.91959999650135
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 2
+    },
+    {
+      "case_id": "recorded-137",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 38.89490000074147,
+        "baseline_prepare": 11.177799999131821,
+        "trial_prepare": 8.249599999544444,
+        "trial": 9.235699999408098,
+        "baseline": 7.8247999990708195,
+        "recheck": 29.81310000177473,
+        "baseline_total": 19.00259999820264,
+        "trial_total": 86.19330000146874
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 3
+    },
+    {
+      "case_id": "recorded-137",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 38.13860000082059,
+        "baseline_prepare": 7.645800000318559,
+        "trial_prepare": 6.867300002340926,
+        "baseline": 11.864999996760162,
+        "trial": 14.166699998895638,
+        "recheck": 34.62440000294009,
+        "baseline_total": 19.51079999707872,
+        "trial_total": 93.79700000499724
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 4
+    },
+    {
+      "case_id": "recorded-steps",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 37.22090000155731,
+        "baseline_prepare": 6.915500001923647,
+        "trial_prepare": 6.940699997358024,
+        "baseline": 7.169800002884585,
+        "trial": 7.629399999132147,
+        "recheck": 37.05009999976028,
+        "baseline_total": 14.085300004808232,
+        "trial_total": 88.84109999780776
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 0
+    },
+    {
+      "case_id": "recorded-steps",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 35.86880000148085,
+        "baseline_prepare": 6.42110000262619,
+        "trial_prepare": 7.113499999832129,
+        "trial": 8.605600000009872,
+        "baseline": 6.4851000024646055,
+        "recheck": 30.951900000218302,
+        "baseline_total": 12.906200005090795,
+        "trial_total": 82.53980000154115
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 1
+    },
+    {
+      "case_id": "recorded-steps",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 56.08589999974356,
+        "baseline_prepare": 8.09559999834164,
+        "trial_prepare": 7.571599999209866,
+        "baseline": 7.25600000077975,
+        "trial": 7.6033000004827045,
+        "recheck": 32.10150000086287,
+        "baseline_total": 15.35159999912139,
+        "trial_total": 103.362300000299
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 2
+    },
+    {
+      "case_id": "recorded-steps",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 35.99969999777386,
+        "baseline_prepare": 7.083200001943624,
+        "trial_prepare": 8.650100000522798,
+        "trial": 8.311600002343766,
+        "baseline": 5.619600000500213,
+        "recheck": 41.0559000010835,
+        "baseline_total": 12.702800002443837,
+        "trial_total": 94.01730000172392
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 3
+    },
+    {
+      "case_id": "recorded-steps",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 1,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [
+          "K-7000"
+        ],
+        "abstained": false,
+        "answer_hash": "8c5e53bb87f9e99e5a8e072a6ca51dcd2946bba617e3c415a620009a0463447f",
+        "route": "record_history",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "",
+        "expected_citation_hits": 1,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 40.76770000028773,
+        "baseline_prepare": 7.327699997404125,
+        "trial_prepare": 8.68090000221855,
+        "baseline": 6.8859999992128,
+        "trial": 8.723999999347143,
+        "recheck": 51.023699998040684,
+        "baseline_total": 14.213699996616924,
+        "trial_total": 109.19629999989411
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 1,
+      "repeat": 4
+    },
+    {
+      "case_id": "missing-999",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 37.93020000011893,
+        "baseline_prepare": 6.6923000013048295,
+        "trial_prepare": 6.5275000015390106,
+        "baseline": 9.769399999640882,
+        "trial": 22.821700000349665,
+        "recheck": 45.06259999834583,
+        "baseline_total": 16.46170000094571,
+        "trial_total": 112.34200000035344
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "missing-999",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 47.22160000164877,
+        "baseline_prepare": 6.0444000009738375,
+        "trial_prepare": 6.533600000693696,
+        "trial": 6.684200001473073,
+        "baseline": 6.925300000148127,
+        "recheck": 33.080200002586935,
+        "baseline_total": 12.969700001121964,
+        "trial_total": 93.51960000640247
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "missing-999",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 36.4317999992636,
+        "baseline_prepare": 6.19379999989178,
+        "trial_prepare": 6.48430000001099,
+        "baseline": 8.435499999905005,
+        "trial": 8.726799998839851,
+        "recheck": 32.030300000769785,
+        "baseline_total": 14.629299999796785,
+        "trial_total": 83.67319999888423
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "missing-999",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 40.99240000141435,
+        "baseline_prepare": 8.235400000558002,
+        "trial_prepare": 7.519800001318799,
+        "trial": 6.919800001924159,
+        "baseline": 6.59540000197012,
+        "recheck": 35.35040000133449,
+        "baseline_total": 14.830800002528122,
+        "trial_total": 90.7824000059918
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "missing-999",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 39.75459999855957,
+        "baseline_prepare": 6.555500000104075,
+        "trial_prepare": 8.32539999828441,
+        "baseline": 6.480500000179745,
+        "trial": 9.42169999689213,
+        "recheck": 31.02299999954994,
+        "baseline_total": 13.03600000028382,
+        "trial_total": 88.52469999328605
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 4
+    },
+    {
+      "case_id": "current-permission",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.08629999865661375,
+        "baseline_prepare": 6.587599997146754,
+        "trial_prepare": 7.736899999144953,
+        "baseline": 6.361199997627409,
+        "trial": 5.342199998267461,
+        "recheck": 0.0010999974620062858,
+        "baseline_total": 12.948799994774163,
+        "trial_total": 13.166499993531033
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "current-permission",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.05360000068321824,
+        "baseline_prepare": 7.294800001545809,
+        "trial_prepare": 6.808999998611398,
+        "trial": 5.991999998514075,
+        "baseline": 5.370499999116873,
+        "recheck": 0.0013000026228837669,
+        "baseline_total": 12.665300000662683,
+        "trial_total": 12.855900000431575
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "current-permission",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.07510000068577938,
+        "baseline_prepare": 7.78800000261981,
+        "trial_prepare": 7.384699998510769,
+        "baseline": 4.660099999455269,
+        "trial": 5.479600000398932,
+        "recheck": 0.0011000010999850929,
+        "baseline_total": 12.44810000207508,
+        "trial_total": 12.940500000695465
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "current-permission",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.05669999882229604,
+        "baseline_prepare": 6.958999998460058,
+        "trial_prepare": 6.951900002604816,
+        "trial": 5.035100002714898,
+        "baseline": 4.938400001265109,
+        "recheck": 0.0013999997463542968,
+        "baseline_total": 11.897399999725167,
+        "trial_total": 12.045100003888365
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "current-permission",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "db033d7b44508303bbde180854511ae3550337024b0332287950a42ed7b2e8f9",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.05500000042957254,
+        "baseline_prepare": 6.801899999118177,
+        "trial_prepare": 7.663100001082057,
+        "baseline": 6.824600000982173,
+        "trial": 14.861400002700975,
+        "recheck": 0.0012999989849049598,
+        "baseline_total": 13.62650000010035,
+        "trial_total": 22.58080000319751
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 4
+    },
+    {
+      "case_id": "replacement",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.2049999968439806,
+        "baseline_prepare": 7.818300000508316,
+        "trial_prepare": 7.854600000428036,
+        "baseline": 6.485499998234445,
+        "trial": 7.901600001787301,
+        "recheck": 0.0010999974620062858,
+        "baseline_total": 14.303799998742761,
+        "trial_total": 16.962299996521324
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "replacement",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 3.1118000006244984,
+        "baseline_prepare": 10.204800000792602,
+        "trial_prepare": 9.459299999434734,
+        "trial": 15.050300000439165,
+        "baseline": 14.052800001081778,
+        "recheck": 0.0012999989849049598,
+        "baseline_total": 24.25760000187438,
+        "trial_total": 27.622699999483302
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "replacement",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.5674999995098915,
+        "baseline_prepare": 8.3228000003146,
+        "trial_prepare": 7.312500001717126,
+        "baseline": 6.438799999159528,
+        "trial": 6.70670000181417,
+        "recheck": 0.0010999974620062858,
+        "baseline_total": 14.761599999474129,
+        "trial_total": 15.587800000503194
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "replacement",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.1941000011574943,
+        "baseline_prepare": 8.891199999197852,
+        "trial_prepare": 7.47840000258293,
+        "trial": 7.219400002213661,
+        "baseline": 10.282299997925293,
+        "recheck": 0.0011000010999850929,
+        "baseline_total": 19.173499997123145,
+        "trial_total": 15.89300000705407
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "replacement",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.0607999975036364,
+        "baseline_prepare": 5.962200000794837,
+        "trial_prepare": 11.590400001296075,
+        "baseline": 5.581900000834139,
+        "trial": 13.27060000039637,
+        "recheck": 0.0011999982234556228,
+        "baseline_total": 11.544100001628976,
+        "trial_total": 25.922999997419538
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 4
+    },
+    {
+      "case_id": "judge-rejected",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 52.88669999936246,
+        "baseline_prepare": 6.7302000024938025,
+        "trial_prepare": 6.520900002215058,
+        "baseline": 6.566200001543621,
+        "trial": 8.645500001875916,
+        "recheck": 72.63029999739956,
+        "baseline_total": 13.296400004037423,
+        "trial_total": 140.683400000853
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "judge-rejected",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 57.63239999942016,
+        "baseline_prepare": 6.973200001084479,
+        "trial_prepare": 6.446999999752734,
+        "trial": 14.215400002285605,
+        "baseline": 6.1834999978600536,
+        "recheck": 33.184100000653416,
+        "baseline_total": 13.156699998944532,
+        "trial_total": 111.47890000211191
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "judge-rejected",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 34.91310000026715,
+        "baseline_prepare": 7.13510000059614,
+        "trial_prepare": 7.120299997041002,
+        "baseline": 6.204100001923507,
+        "trial": 6.359800001519034,
+        "recheck": 32.497299998794915,
+        "baseline_total": 13.339200002519647,
+        "trial_total": 80.8904999976221
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "judge-rejected",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 35.04210000028252,
+        "baseline_prepare": 7.470399999874644,
+        "trial_prepare": 7.511200001317775,
+        "trial": 23.066500001732493,
+        "baseline": 5.560400000831578,
+        "recheck": 19.75230000243755,
+        "baseline_total": 13.030800000706222,
+        "trial_total": 85.37210000577033
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "judge-rejected",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "field_K-7000_r2_0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 23.061799998686183,
+        "baseline_prepare": 8.897599996998906,
+        "trial_prepare": 23.291299999982584,
+        "baseline": 22.6172000002407,
+        "trial": 28.38020000126562,
+        "recheck": 35.449099999823375,
+        "baseline_total": 31.514799997239606,
+        "trial_total": 110.18239999975776
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [
+        "K-7000"
+      ],
+      "expected_citations": 0,
+      "repeat": 4
+    },
+    {
+      "case_id": "other-incident",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 0.9299000012106262,
+        "baseline_prepare": 6.373700001859106,
+        "trial_prepare": 8.542700001271442,
+        "baseline": 6.73070000266307,
+        "trial": 9.289300000091316,
+        "recheck": 0.0012999989849049598,
+        "baseline_total": 13.104400004522176,
+        "trial_total": 18.76320000155829
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "other-incident",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.0428999994473998,
+        "baseline_prepare": 8.305399998789653,
+        "trial_prepare": 13.211500001489185,
+        "trial": 8.363700002519181,
+        "baseline": 7.99620000179857,
+        "recheck": 0.0013000026228837669,
+        "baseline_total": 16.301600000588223,
+        "trial_total": 22.61940000607865
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "other-incident",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.1314999974274542,
+        "baseline_prepare": 8.926700000301935,
+        "trial_prepare": 7.483999997930368,
+        "baseline": 10.305799998604925,
+        "trial": 8.578000000852626,
+        "recheck": 0.0011999982234556228,
+        "baseline_total": 19.23249999890686,
+        "trial_total": 17.194699994433904
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "other-incident",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.269300002604723,
+        "baseline_prepare": 9.398500002134824,
+        "trial_prepare": 7.645000001502922,
+        "trial": 7.204699999419972,
+        "baseline": 10.299499997927342,
+        "recheck": 0.0013999997463542968,
+        "baseline_total": 19.698000000062166,
+        "trial_total": 16.12040000327397
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "other-incident",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 1.5598999998474028,
+        "baseline_prepare": 7.938599999761209,
+        "trial_prepare": 7.586100000480656,
+        "baseline": 11.536699999851407,
+        "trial": 20.656999997299863,
+        "recheck": 0.0015000005078036338,
+        "baseline_total": 19.475299999612616,
+        "trial_total": 29.804499998135725
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 4
+    },
+    {
+      "case_id": "revoked",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 79.53579999957583,
+        "baseline_prepare": 23.74190000045928,
+        "trial_prepare": 12.368400002742419,
+        "baseline": 14.64990000022226,
+        "trial": 8.360800002265023,
+        "recheck": 0.0013999997463542968,
+        "baseline_total": 38.39180000068154,
+        "trial_total": 100.26640000432963
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 0
+    },
+    {
+      "case_id": "revoked",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 32.705099998565856,
+        "baseline_prepare": 6.6454000007070135,
+        "trial_prepare": 6.573499998921761,
+        "trial": 6.039299998519709,
+        "baseline": 11.941799999476643,
+        "recheck": 0.0017000020307023078,
+        "baseline_total": 18.587200000183657,
+        "trial_total": 45.31959999803803
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 1
+    },
+    {
+      "case_id": "revoked",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 35.54249999797321,
+        "baseline_prepare": 6.697799999528797,
+        "trial_prepare": 7.146300002204953,
+        "baseline": 6.712900001730304,
+        "trial": 6.984700001339661,
+        "recheck": 0.0016000012692529708,
+        "baseline_total": 13.410700001259102,
+        "trial_total": 49.675100002787076
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 2
+    },
+    {
+      "case_id": "revoked",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 33.65050000138581,
+        "baseline_prepare": 7.501100000808947,
+        "trial_prepare": 8.06419999935315,
+        "trial": 9.511200001725229,
+        "baseline": 14.13459999821498,
+        "recheck": 0.0014999968698248267,
+        "baseline_total": 21.635699999023927,
+        "trial_total": 51.22739999933401
+      },
+      "order": [
+        "trial",
+        "baseline"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 3
+    },
+    {
+      "case_id": "revoked",
+      "status": "completed",
+      "baseline": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "trial": {
+        "cited_card_ids": [],
+        "abstained": true,
+        "answer_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+        "route": "drop_all",
+        "candidate_count": 8,
+        "candidate_ids": [
+          "distractor-0",
+          "distractor-1",
+          "distractor-2",
+          "distractor-3",
+          "distractor-4",
+          "distractor-5",
+          "distractor-6",
+          "distractor-7"
+        ],
+        "judge_count": 8,
+        "abstain_reason": "drop_all",
+        "expected_citation_hits": 0,
+        "wrong_citations": 0,
+        "oracle_failures": 0,
+        "misconnections": 0
+      },
+      "timings_ms": {
+        "relation_prepare": 31.227299998136004,
+        "baseline_prepare": 6.86429999768734,
+        "trial_prepare": 7.174599999416387,
+        "baseline": 5.834800002048723,
+        "trial": 9.560300000885036,
+        "recheck": 0.0018999999156221747,
+        "baseline_total": 12.699099999736063,
+        "trial_total": 47.96409999835305
+      },
+      "order": [
+        "baseline",
+        "trial"
+      ],
+      "added_card_ids": [],
+      "expected_citations": 0,
+      "repeat": 4
+    }
+  ],
+  "summary": {
+    "total": 40,
+    "completed": 40,
+    "excluded": 0,
+    "baseline": {
+      "expected_citation_hits": 0,
+      "wrong_citations": 0,
+      "misconnections": 0,
+      "oracle_failures": 10,
+      "candidate_count": 320,
+      "judge_count": 320,
+      "abstentions": 40,
+      "citation_recall": 0.0,
+      "citation_precision": null,
+      "mean_ms": 16.232070000387466,
+      "p95_ms": 24.25760000187438
+    },
+    "trial": {
+      "expected_citation_hits": 10,
+      "wrong_citations": 0,
+      "misconnections": 0,
+      "oracle_failures": 0,
+      "candidate_count": 320,
+      "judge_count": 320,
+      "abstentions": 30,
+      "citation_recall": 1.0,
+      "citation_precision": 1.0,
+      "mean_ms": 62.63169750045563,
+      "p95_ms": 111.47890000211191
+    },
+    "mean_latency_delta_ms": 46.39962750006816,
+    "decision": "fixture_pass_only"
+  }
+}

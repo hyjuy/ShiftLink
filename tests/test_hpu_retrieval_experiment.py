@@ -32,7 +32,7 @@ def experiment(published_history, monkeypatch):
     iid=svc.storage.get_card_draft(did)['review_flags']['work_report']['incident_id']
     db=svc.storage.connection.execute('PRAGMA database_list').fetchone()[2]
     graph=project_incident(read_incident_bundle(db,iid,source_namespace='experiment-fixture',catalog=svc.catalog.data,
-        config_catalog_hashes={svc.active_config.config_id:content_hash(svc.catalog.data)}))
+        config_catalog_hashes={svc.active_config.config_id:content_hash(svc.catalog.data)}),equipment_type='HPU')
     return dict(service=svc,pipeline=view,database=db,graph=graph,witness_query_id=witness['query_id'],
         payload={'question':QUESTION,'eq_id':'EQ-0001','asset_id':asset,'incident_id':iid,'observations':[]}),did
 

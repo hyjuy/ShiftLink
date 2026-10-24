@@ -21,7 +21,7 @@ from urllib.request import urlopen
 import numpy as np
 from scripts.mes_causal_schema import ROOT, metadata, signals
 from scripts.mes_causal_v14_stream import OnlineDetector
-from shiftlink.pda.ai_insights import fault_stopped_equipment, valid_stop_notice
+from shiftlink.pda.ai_insights import stopped_equipment_for_retention, valid_stop_notice
 
 SETTINGS_SHA256 = 'e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789'
 MAX_RESPONSE = 16 * 1024 * 1024
@@ -193,7 +193,7 @@ class AdvisorySession:
 
     def sync_stop(self, state):
         if state['run_id']!=self.run or state['sequence'] not in (self.cursor,self.cursor+1):return
-        stopped=fault_stopped_equipment(state)
+        stopped=stopped_equipment_for_retention(state)
         held={e:r for e,r in self.stopped_notices.items() if e in stopped}
         for eq,row in self.notices.items():
             if eq in stopped and eq not in held and 0 <= state['sequence']-row['sequence'] <= 30:
@@ -223,7 +223,7 @@ class AdvisorySession:
         base = dict(schema_version=1,run_id=state['run_id'],config_id=self.binding.config_id,
                     sequence=max(0,self.cursor),input_at=self.detector.at.isoformat() if self.detector.at else state['simulated_at'],
                     generated_at=datetime.now(timezone.utc).isoformat(),operational_notifications=False,items=[])
-        held=[dict(r) for e,r in self.stopped_notices.items() if state['run_id']==self.run and e in fault_stopped_equipment(state)]
+        held=[dict(r) for e,r in self.stopped_notices.items() if state['run_id']==self.run and e in stopped_equipment_for_retention(state)]
         history=base | dict(status='stopped',items=held) if held else None
         if state['line_mode'] != 'running': return history or (base | dict(status='inactive'))
         if stalled: return base | dict(status='stale')

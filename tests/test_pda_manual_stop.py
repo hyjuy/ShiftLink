@@ -14,7 +14,7 @@ class ManualStopTests(TestCase):
     def test_manual_pause_same_sequence_preserves_identity_restart_and_reader(self):
         for mode in ('paused','stopped'):
             with self.subTest(mode=mode):
-                self.path.unlink(missing_ok=True);a=self.detected()
+                self.path.unlink(missing_ok=True);self.data=baseline.rows(180);a=self.detected()
                 before=a.report(self.data[111])['items'][0];state=copy.deepcopy(self.data[111]);state.update(line_mode=mode,is_synthetic=True)
                 # MesEngine.pause changes line_mode without rewriting equipment states.
                 original=copy.deepcopy(state);first=m.poll(a,'http://unused',state)
@@ -44,3 +44,13 @@ class ManualStopTests(TestCase):
         self.assertFalse(a.feed(f,self.binding.config_id));value=a.report(f)
         self.assertEqual(len(value['items']),1);self.assertEqual(value['items'][0]['event_id'],before['event_id']);self.assertEqual(value['items'][0]['state'],'before_stop');self.assertEqual(f,original)
         output=Path(self.tmp.name)/'individual.json';output.write_text(json.dumps(value));self.assertEqual(read_insights(output,f,self.binding.config_id)['items'],value['items'])
+
+    def test_manual_stop_does_not_resurrect_expired_or_unconfirmed_notices(self):
+        for mode in ('paused','stopped'):
+            with self.subTest(mode=mode):
+                self.path.unlink(missing_ok=True);self.data=baseline.rows(180);a=self.detected()
+                for f in self.data[112:155]:a.feed(f,self.binding.config_id)
+                state=self.stopped(155,mode=mode);a.feed(state,self.binding.config_id);self.assertEqual(a.report(state)['items'],[])
+                blank=m.AdvisorySession(self.binding,Path(self.tmp.name)/('blank-'+mode+'.json'))
+                for f in baseline.rows(113):blank.feed(f,self.binding.config_id)
+                state=self.stopped(113,mode=mode);blank.feed(state,self.binding.config_id);self.assertEqual(blank.report(state)['items'],[])

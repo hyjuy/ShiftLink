@@ -19,3 +19,7 @@ Operational application is conditional on all gates and preserving active alarms
 ## RED
 
 Pi source initially lacked research imports; red.log contains an environment import error and is NOT RED evidence. After supplying exact installed r6 dependencies in the isolated source, red2.log ran five tests in 40.686s: three assertion failures (profile assertion and both reproduced false notices), other three behaviors passed. All originals and running services stayed unchanged.
+
+## GREEN
+
+Pi green.log: five tests passed in 63.233s. Both consumed false notices disappeared; a persistent in-range freeze was still detected once within fifteen seconds; bad/stale measurements broke confirmation; checkpoint restoration preserved decisions. Only the seven RMS windows changed. Profile SHA256 a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af. Separate fresh development and holdout qualification remain required; this is not operational approval.

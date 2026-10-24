@@ -222,3 +222,65 @@ def test_limits_schema_and_malformed_values_are_explicit(bundle):
     graph=project_hpu(b)
     assert any(x['reason']=='measurement_unit_conflict' for x in graph['unresolved'])
 
+
+@pytest.mark.parametrize('damage', ['missing_run', 'evidence_config', 'record_incident'])
+def test_incomplete_or_conflicting_source_context_stays_unresolved(bundle, damage):
+    b = deepcopy(bundle)
+    if damage == 'missing_run':
+        b['queries'][0]['payload']['evidence'].pop('run_id')
+    if damage == 'evidence_config':
+        b['queries'][0]['payload']['evidence']['config_id'] = 'other'
+    if damage == 'record_incident':
+        b['reports'][0]['record']['incident_id'] = 'other'
+    graph = project_hpu(b)
+    if damage == 'record_incident':
+        assert not nodes(graph, 'Action')
+    else:
+        assert not [n for n in nodes(graph, 'Observation') if n['properties']['scope'] == 'query_snapshot']
+    assert graph['unresolved']
+
+
+def test_same_asset_in_later_config_retains_both_observation_contexts(bundle):
+    b = deepcopy(bundle)
+    original_config = b['incident']['config_id']
+    b['configurations']['later-config'] = deepcopy(b['configurations'][original_config])
+    b['config_catalog_hashes']['later-config'] = content_hash(b['catalog'])
+    sensor = b['reports'][0]['sensor_evidence']
+    sensor.update(config_id='later-config', run_id='later-run')
+    b['runs']['later-run'] = 'later-config'
+    graph = project_hpu(b)
+    assert len(nodes(graph, 'Asset')) == 1
+    assert {n['properties']['config_id'] for n in nodes(graph,'Observation')
+            if n['provenance']['claim_kind'] == 'sensor_observation'} == {original_config, 'later-config'}
+
+
+def test_session_step_measurements_have_exact_source_paths(bundle):
+    b = add_session(bundle)
+    sample = deepcopy(b['reports'][0]['sensor_evidence']['measurements'][0])
+    b['sessions'][0]['data']['steps'][0]['measurements'] = [sample]
+    graph = project_hpu(b)
+    step = [n for n in nodes(graph,'Observation') if n['properties']['scope'] == 'session_step']
+    assert len(step) == 1
+    assert step[0]['provenance']['source_ref']['path'] == 'data.steps[0].measurements[0]'
+    assert relations(graph,'SUPPORTED_BY')
+    actions_from_report = [n for n in nodes(graph,'Action') if n['provenance']['source_ref']['kind'] == 'report']
+    assert all('.action_steps[' in n['provenance']['source_ref']['path'] for n in actions_from_report)
+
+
+def test_graph_caps_never_leave_dangling_edges(bundle):
+    from shiftlink.mes.incident_ontology import RELATIONS
+    b = deepcopy(bundle)
+    template = b['reports'][0]
+    b['reports'] = []
+    for index in range(30):
+        report = deepcopy(template)
+        report['handover_id'] = f'large-{index}'
+        report['record']['action_steps'] *= 25
+        b['reports'].append(report)
+    graph = project_hpu(b)
+    assert graph['truncated']
+    assert len(graph['nodes']) <= 1000 and len(graph['edges']) <= 2000
+    by_id = {n['id']:n for n in graph['nodes']}
+    for edge in graph['edges']:
+        assert (by_id[edge['source']]['type'], by_id[edge['target']]['type']) == RELATIONS[edge['type']]
+

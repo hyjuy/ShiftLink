@@ -91,6 +91,8 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 
 `MesService`는 엔진 한 개를 소유하고 일반 상태 조회 자체로 엔진을 진행시키지 않는다.
 `--random-faults`가 켜지면 기본 `MesEngine` 대신 `RandomFactoryEngine`을 구성한다.
+별도 `--progressive-faults`는 `progressive_factory.py`의 점진 악화·명시적 수리 전 유지 모드다. 기존 랜덤 모드와 동시 지정하지 않는다.
+[사용·검증 범위](../guides/mes-progressive-faults.md)를 참고하며 현재 운영에는 적용하지 않았다.
 합성 데이터는 실측 또는 보정된 물리 모델의 출력으로 해석하지 않는다.
 
 주요 API 예: `/api/state`, `/api/config`, `/api/catalog`, `/api/query`,

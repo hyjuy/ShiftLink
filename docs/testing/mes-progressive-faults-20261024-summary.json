@@ -1,0 +1,14 @@
+{
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 36.29900044399983,
+  "covered": 104,
+  "executable": 104,
+  "line_percent": 100.0,
+  "operating_files_unchanged": true,
+  "verified_source_files": 6,
+  "archive_sha256": "d25ef30e6e6e75515366902fd336be8898dcc95d4f2f55216e9afb81926a7492",
+  "deployment": "Not deployed; Raspberry Pi isolated validation only"
+}

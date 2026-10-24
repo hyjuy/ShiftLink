@@ -433,7 +433,7 @@ def s5_9(t):
     a = ramp(t, 0.1, 0.6)
     c.text((CX, 330), "ShiftLink", 96, fade(TEAL, a), bold=True)
     c.text((CX, 440), "경험은 이어진다", 40, fade(GREY, a))
-    c.text((CX, 600), "허재원", 60, fade(INK, ramp(t, 0.35, 0.9)), bold=True)
+    c.text((CX, 600), "최재영 · 허재원 · 전혜민 · 유현준", 56, fade(INK, ramp(t, 0.35, 0.9)), bold=True)
     c.text((CX, 930), "모의 시연 · MES 데이터는 시뮬레이션 · 시연 설비 Unity 가상 공장 · 일부 장면 AI 생성", 26,
            fade(GREY, ramp(t, 0.4, 1.0)))
     return c.out()

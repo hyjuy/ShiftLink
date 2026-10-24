@@ -90,3 +90,11 @@ RED/GREEN 체크포인트와 검증 결과는 `docs/harness/knowledge-publicatio
 검출: `tests/test_field_history_integration.py::test_bounded_closure_keeps_all_independent_oracles`, `tests/test_field_history_integration.py::test_main_requests_and_verbatim_history_survive_publication`, `tests/test_field_history_evaluation.py::test_closure_cannot_trade_new_requests_for_history`, `tests/test_field_history_evaluation.py::test_closure_oracles_and_independent_cohorts_cannot_drift`.
 
 증거: [2026-10-23 안정화 보고서](../harness/history-stability-20261023.md). `python scripts/check_knowledge_publication.py --history-scope closure` 실패는 차단 상태를 유지한다.
+
+## 원질문이 구조화 후보에서 사라지고 새 카드가 PDA에서 누락되는 문제
+
+원인: 구조화 근무일지 후보 생성기가 검증한 `query_id`를 받지 않아, 질문과 다른 표현으로 작성된 일지에서 원질문·출처가 사라졌다. PDA는 부팅 때 받은 정적 카드만 해석하여 이후 게시된 현장 카드 ID를 표시에서 누락했다. 과거 검사는 게시 후 질문을 다른 표현으로 바꿔 이 경계를 놓쳤다.
+
+예방: 원질문 참조를 후보에 보존하고 검토자에게 제시한다. 검색·판정이 통과한 현장 카드의 검수 버전을 답변과 함께 동결한다. 클라이언트는 해당 응답의 인용·설비를 대조하며 전역 카드 목록에 추가하지 않는다. 검토 승인만으로 게시하거나 같은 질문이라는 이유로 judge를 생략하지 않는다.
+
+검출: `tests/test_knowledge_gap_loop.py::test_identical_question_learns_only_after_review_and_publication`, `tests/test_publication_browser.py::test_question_report_review_quality_publish_browser_flow`, `tests/mes_query_pda.cjs`. 동일 질문으로 게시 전·승인 후·임베딩 후·반려 후를 대조하며 과거 일지·후보 원문·저장 답변을 비교한다.

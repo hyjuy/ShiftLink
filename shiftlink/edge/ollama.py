@@ -252,6 +252,9 @@ def build_messages(
     ]
 
     parts = [f"모드: {mode}", f"{ask_label}: {ask}"]
+    if mode == 'query' and getattr(request, 'analysis_context', None):
+        from shiftlink.agent.pi_analysis import prompt_block
+        parts.append(prompt_block(request.analysis_context))
     if observations:
         parts.append(f"관측값: {json.dumps(observations, ensure_ascii=False)}")
     fact_block = observation_fact_block(tool_results.get("observation_facts"))

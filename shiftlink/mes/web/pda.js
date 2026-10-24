@@ -976,7 +976,9 @@ function queryApiPayload(question, state) {
  * 로컬에서 실제 불일치로 판정된 인용 카드만 불일치로 내린다 — 숨기지 않고 제외 목록에 남긴다. */
 /* eq를 넘기면 공지·인용 안전 카드를 cardFits로 현재 설비와 대조한다. 맞지 않으면 지침 대신 불일치 경고만 남긴다(B1). */
 function responseCards(response, cards, local, eq) {
-  const byId = (id) => cards.find((c) => c.card_id === id);
+  const published = (Array.isArray(response.cited_cards) ? response.cited_cards : [])
+    .filter((c) => c && (response.cited_card_ids || []).includes(c.card_id) && (!eq || cardFits(c, eq)));
+  const byId = (id) => published.find((c) => c.card_id === id) || cards.find((c) => c.card_id === id);
   const mismatch = (c) => !!eq && !cardFits(c, eq);
   // 다른 설비의 안전 공지는 버리지 않되 본문·멈춤 조건은 싣지 않는다 — 엉뚱한 설비 지침이 실행되지 않게.
   const wrongEq = (id) => ({card_id: id, mismatch: true, eqCode: eq.code, stop_conditions: []});
@@ -3176,11 +3178,19 @@ function openEquipmentReport() {
     S.reportSelected=[S.eq.equipment_id];saveReportDraft();renderReportSelection();
   }
 }
-/* 지식 없음 답에서 「네」 — 현재 설비를 대상으로, 질문·답을 이상증상 기록 하나로 넣고 바로 작성 화면으로 간다. */
+/* 질문에서 근무일지로: 관측·조치·정상 운전은 작업자가 채우며, 질문을 결과로 꾸미지 않는다. */
+function questionRecord(turn, eqId) {
+  if (!turn || turn.eqId !== eqId) return null;
+  const query = turn.response && turn.response.query_id;
+  return {type:'이상증상',equipment:[eqId],story:turn.question,causes:[],result:null,pms:null,candidate:false,
+    ...(query ? {query_id:query} : {}),occurred_at:kstMinute(new Date(turn.started)),capture_version:1,
+    action_steps:[{action:'',observed_result:'',failed:false}],restart_performed:false,restart_type:'unknown',
+    outcome:'open',normal_run_status:'unconfirmed',normal_run_minutes:null,normal_run_evidence:''};
+}
 function reportFromChat(turn) {
   reportWith((eq)=>{
-    const story=chatMemo(turn);
-    if(!S.reportRecords.some((r)=>r.story===story))S.reportRecords.push({type:'이상증상',equipment:[eq.equipment_id],story,causes:[],result:null,pms:null,candidate:false});
+    const record=questionRecord(turn,eq.equipment_id);
+    if(record&&!S.reportRecords.some((r)=>(record.query_id&&r.query_id===record.query_id)||r.story===chatMemo(turn)))S.reportRecords.push(record);
   });
 }
 /* 조치 기록 화면의 「근무일지 작성」 — 조치 기록을 기록 하나로 넣는다. 같은 조치를 다시 넘기거나 같은 대화로 만든 질문·답 기록이 있으면 바꾼다. */
@@ -3694,7 +3704,7 @@ function faceVerdict(scores, threshold, need, max) {
   return 'wait';
 }
 
-if (typeof module !== 'undefined') { module.exports = { hasHandoverNotes, handoverEntries, handoverTableRow, equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, reportArchiveText, reportCandidateLines, reportPreviewLines, reportCandidatePreview, reportSaveWarnings, homeEquipmentSummary, homeWatch, lossView, lossDonut, madeRingArcs, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, resolveError, sessionPayload, draftNotice, actionChips, actionGroups, sessionRecord, resumableSession, citedCardIds, fix2 }; }
+if (typeof module !== 'undefined') { module.exports = { hasHandoverNotes, handoverEntries, handoverTableRow, equipmentGroups, handoverEquipment, dutyTimeline, reportTargets, selectedReportPayload, reportArchiveText, reportCandidateLines, reportPreviewLines, reportCandidatePreview, reportSaveWarnings, homeEquipmentSummary, homeWatch, lossView, lossDonut, madeRingArcs, unityLocation, handoverStatus, mesHandoverContext, appendMesContext, dashSummary, S, equipmentFrom, stateOf, usableReadings, evalCondition, rankCards, cardFits, obsView, queryApiPayload, responseCards, scanTarget, staleResponse, submitHandover, outboxLabels, refreshOutbox, outboxItemView, equipmentFromLink, symptomsFor, alertOrder, releaseContext, alertTarget, failScan, hangulPress, hangulText, emptyHangul, faceVerdict, stopFaceCamera, safetyAlert, answerBody, chatMemo, riskyAction, resolveError, sessionPayload, draftNotice, actionChips, actionGroups, sessionRecord, questionRecord, resumableSession, citedCardIds, fix2 }; }
 if (typeof document !== 'undefined') {
 
 // ── 배선 ───────────────────────────────────────────────────────────

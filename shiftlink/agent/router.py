@@ -24,6 +24,7 @@ class QueryRequest(BaseModel):
     line_id: NonBlank
     eq_id: NonBlank
     observations: list[Observation] = Field(default_factory=list)
+    analysis_context: dict[str, object] | None = None
     snapshot_at: str | None = None
     active_alarms: list[NonBlank] = Field(default_factory=list)
     k: int = Field(default=5, ge=1, le=5)

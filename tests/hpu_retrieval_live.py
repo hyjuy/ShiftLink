@@ -12,6 +12,7 @@ import time
 import urllib.request
 import subprocess
 from types import ModuleType
+from io import BytesIO
 
 import numpy as np
 import pytest
@@ -29,7 +30,8 @@ def reference_code(monkeypatch):
     revision = os.environ.get('SHIFTLINK_HPU_LIVE_REFERENCE')
     if not revision:
         return None
-    assert revision == '7a52b517e58c66e1a385b0a78aceaddfe37c587b'
+    assert revision in {'7a52b517e58c66e1a385b0a78aceaddfe37c587b',
+                        '39a96aa27fec096195d1905be374527c7834ae23'}
     modules = {}
     for name in ('field_history', 's30h'):
         source = subprocess.check_output(['git', 'show', f'{revision}:shiftlink/rag2/{name}.py'])
@@ -46,11 +48,43 @@ def reference_code(monkeypatch):
     return revision
 
 
+def profile_requests(monkeypatch):
+    """Observe unchanged Ollama response bytes; never save prompts or alter requests."""
+    original = urllib.request.urlopen
+    events = []
+    def measured(request, *args, **kwargs):
+        url = getattr(request, 'full_url', str(request))
+        if not any(url.endswith(path) for path in ('/api/embed', '/api/chat', '/api/generate')):
+            return original(request, *args, **kwargs)
+        body = json.loads(request.data)
+        started = time.perf_counter()
+        with original(request, *args, **kwargs) as response:
+            raw = response.read()
+        wall = (time.perf_counter()-started)*1000
+        data = json.loads(raw)
+        events.append({'path':url.rsplit('/', 1)[-1], 'model':body['model'], 'wall_ms':wall,
+                       **{k:data.get(k) for k in ('total_duration','load_duration','prompt_eval_duration',
+                           'eval_duration','prompt_eval_count','eval_count','done_reason')}})
+        return BytesIO(raw)
+    monkeypatch.setattr(urllib.request, 'urlopen', measured)
+    return events
+
+
 class RecordingPipeline(S30hPipeline):
     def run(self,payload):
+        begin = len(self.network_events)
+        self.retrieval_ms = 0
         result=super().run(payload)
         self.captures.append({'output':result.output.model_dump(mode='json'),
-                              'trace':deepcopy(result.tool_results)})
+                              'trace':deepcopy(result.tool_results),
+                              'profile':{'retrieval_ms':self.retrieval_ms,
+                                         'network':deepcopy(self.network_events[begin:])}})
+        return result
+
+    def evidence(self, *args, **kwargs):
+        started = time.perf_counter()
+        result = super().evidence(*args, **kwargs)
+        self.retrieval_ms += (time.perf_counter()-started)*1000
         return result
 
 
@@ -63,6 +97,7 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
     settings={name:os.environ.get('SHIFTLINK_HPU_LIVE_'+name) for name in names}
     assert all(settings.values()), 'Explicit real-model endpoints, index and new output directory are required'
     reference = reference_code(monkeypatch)
+    network_events = profile_requests(monkeypatch)
     out=Path(settings['OUTPUT']);out.mkdir(parents=True,exist_ok=False)
     main,judge=settings['MAIN_HOST'],settings['JUDGE_HOST']
     monkeypatch.setenv('OLLAMA_HOST',main)
@@ -78,6 +113,7 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
         catalog=service.catalog.data,mes_block=True,event_label=True,mes_only=False,mes_prefix=True,p_fix=True,
         unobserved_guard=True,unit_guard=True,source_conditions=True,knowledge_graph=True)
     pipe.captures=[]
+    pipe.network_events=network_events
     service.query_pipeline=pipe
     note=captured(service,normal_run_minutes=137,normal_run_evidence='137분 연속 운전, 정지·재발 없음')
     note['work_report']['records'][0]['action_steps'][0].update(worker='검증자',performed_at='2026-10-22T09:10')

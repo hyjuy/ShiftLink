@@ -52,10 +52,16 @@ def judge_dist(question: str, chunk: dict, host: str, model="exaone-sft-judge", 
                "stream": False, "format": {"type": "object", "properties": {"score": {"type": "integer", "enum": [0, 1, 2, 3]}},
                                            "required": ["score"]}, "options": {"temperature": 0, "num_ctx": ctx or 4096, "num_predict": 20},
                "logprobs": True, "top_logprobs": 20, **({"keep_alive": KEEP_ALIVE} if KEEP_ALIVE is not None else {})}
+    # This judge emits its score by token 6; the unused closing JSON token need not be decoded.
+    if model in ('exaone-sft-judge', 'exaone-sft-judge:latest'):
+        payload['options']['num_predict'] = 6
     for _ in range(3):
         try:
             d = json.load(urllib.request.urlopen(urllib.request.Request(f"{host}/api/chat", data=json.dumps(payload).encode()), timeout=300))
-            return digit_dist(d.get("logprobs") or [])
+            score = digit_dist(d.get("logprobs") or [])
+            if score is not None or payload['options']['num_predict'] == 20:
+                return score
+            payload['options']['num_predict'] = 20
         except (urllib.error.HTTPError, urllib.error.URLError, ValueError, KeyError):
             time.sleep(1)
     return None

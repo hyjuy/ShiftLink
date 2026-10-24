@@ -21,6 +21,7 @@ from shiftlink.mes.hpu_retrieval_experiment import run_experiment
 from shiftlink.mes.incident_ontology import content_hash, project_incident, read_incident_bundle
 from shiftlink.rag.loader import load_card_provider
 from shiftlink.rag2.s30h import S30hPipeline
+from shiftlink.rag2 import evidence_score as E
 from test_work_report_reuse_harness import service
 from test_work_report_capture import captured
 
@@ -45,6 +46,12 @@ def reference_code(monkeypatch):
     monkeypatch.setattr(S30hPipeline, 'evidence', modules['s30h'].S30hPipeline.evidence)
     monkeypatch.setitem(run_experiment.__globals__['_plan'].__globals__,
                         'is_history_question', modules['field_history'].is_history_question)
+    source = subprocess.check_output(['git', 'show', f'{revision}:shiftlink/rag2/evidence_score.py'])
+    scorer = ModuleType('shiftlink.rag2._reference_evidence_score')
+    scorer.__package__ = 'shiftlink.rag2'
+    exec(compile(source, 'reference_evidence_score.py', 'exec'), scorer.__dict__)
+    scorer.KEEP_ALIVE = -1
+    monkeypatch.setattr(E, 'judge_dist', scorer.judge_dist)
     return revision
 
 

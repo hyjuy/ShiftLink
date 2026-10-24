@@ -79,7 +79,7 @@ python3 -B -m scripts.mes_causal_context_run --phase test --out <새-검증폴�
 
 ## 2026-10-24 정상 기준 후보 적용
 
-현재 확인한 릴리스는 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4`, 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-174937`다. 이전 r3 및 기존 체크포인트는 보존한다. PDA 파일 4개와 프로세스는 유지하고 worker만 갱신했다. 검증·제약은 [Pi 최종 기록](../../docs/testing/mes-normal-context-20261023.md)의 연결 복구 후 항목을 참고한다.
+정상 기준 보완의 최초 적용 릴리스는 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4`, 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-174937`다. 이전 r3 및 기존 체크포인트는 보존한다. PDA 파일 4개와 프로세스는 유지하고 worker만 갱신했다. 검증·제약은 [Pi 최종 기록](../../docs/testing/mes-normal-context-20261023.md)의 연결 복구 후 항목을 참고한다.
 
 PDA를 건드리지 않고 이전 worker로 복구할 때는 위 백업의 previous.service를 복원한다. 이 명령은 복구가 필요할 때만 실행한다. 이전 unit은 보존된 기존 state directory를 사용한다.
 
@@ -95,6 +95,6 @@ systemctl status shiftlink-analytics.service
 
 현재 Pi는 CPU quota를 실제 cgroup에서 확인했지만 memory.max/current 파일이 없어 MemoryMax=384MiB의 강제 적용은 확인하지 못했다. 실제 worker VmHWM은 약 38.4MiB였으며, 이번 배포에서 부팅 설정을 변경하지 않았다. 자세한 자원 기록은 정상 기준 검증 문서와 runtime-resources.json을 참고한다.
 
-## 수동 정지 보존 후속 변경 — 운영 미배포
+## 수동 정지 보존 후속 변경 — 운영 r5 적용
 
-현재 코드의 worker·reader는 수동 정지도 정지 전 감지 보존 대상으로 처리한다. 정지 중 신규 판단·기존 경보·확인·배지·진동 규칙은 유지한다. Pi 44개 회귀와 Chromium·고정 profile 통합을 통과했지만, 운영은 앞의 r4 그대로다. reader 반영에는 PDA 프로세스 재시작이 필요하며 이번 변경에서 서비스나 키오스크를 재시작하지 않았다. [후속 검증 기록](../../docs/testing/pda-manual-stop-20261024.md)을 참고한다.
+사용자 요청 후 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop`을 운영에 적용했다. r4에서 worker와 reader 두 파일만 변경했고 모델·profile·settings·기존 화면 코드는 같다. 정지 시점 최근 30프레임 내 확정 감지만 ‘정지 전 감지’로 유지하고 정지 중 신규 판단은 보류한다. 기존 경보·확인·배지·진동 규칙은 유지한다. reader 반영을 위해 공식 경로로 PDA와 키오스크를 재시작했으며 로그인 세션은 초기화될 수 있다. 이번 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-183824`다. 이전 r4·원본·검증 결과는 보존했다. [배포 후 검증·복구 기록](../../docs/testing/pda-manual-stop-20261024.md)을 참고한다.

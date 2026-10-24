@@ -21,7 +21,7 @@ from urllib.request import urlopen
 import numpy as np
 from scripts.mes_causal_schema import ROOT, metadata, signals
 from scripts.mes_causal_v14_stream import OnlineDetector
-from shiftlink.pda.ai_insights import fault_stopped_equipment, valid_stop_notice
+from shiftlink.pda.ai_insights import stopped_equipment_for_retention, valid_stop_notice
 
 SETTINGS_SHA256 = 'e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789'
 MAX_RESPONSE = 16 * 1024 * 1024
@@ -54,7 +54,9 @@ def atomic_json(path, value):
 
 
 class BoundSource:
-    def __init__(self, settings, source_config):
+    def __init__(self, settings, source_config, normal_profile=None):
+        self.normal_profile=normal_profile
+        if normal_profile is not None and normal_profile.get('source_config_id')!=source_config['config_id']:raise ValueError('normal profile source binding')
         self.config_id = source_config['config_id']
         if config_digest(source_config) != self.config_id:
             raise ValueError('source config hash mismatch')
@@ -71,8 +73,10 @@ class BoundSource:
         for key, reference in signals().items():
             if any(found[key].get(k) != reference[k] for k in ('unit', 'normal_min', 'normal_max')):
                 raise ValueError('source units or range mismatch')
-        self.fingerprint = digest(dict(settings=settings, source=self.source_digest, version=2,
-            core_sha256=hashlib.sha256((ROOT / 'scripts/mes_causal_v14_stream.py').read_bytes()).hexdigest()))
+        identity = dict(settings=settings, source=self.source_digest, version=2,
+            core_sha256=hashlib.sha256((ROOT / 'scripts/mes_causal_v14_stream.py').read_bytes()).hexdigest())
+        if normal_profile is not None:identity.update(normal_profile=digest(normal_profile),context_sha256=hashlib.sha256((ROOT/'scripts/mes_causal_context.py').read_bytes()).hexdigest())
+        self.fingerprint=digest(identity)
         self.new_detector()
 
     def validate_config(self, config):
@@ -80,7 +84,10 @@ class BoundSource:
             raise ValueError('source configuration differs from approved binding')
 
     def new_detector(self):
-        detector = OnlineDetector(self.settings)
+        if self.normal_profile is None:detector=OnlineDetector(self.settings)
+        else:
+            from scripts.mes_causal_context import ContextDetector
+            detector=ContextDetector(self.settings,self.normal_profile)
         # Approved transport contract only; thresholds and model schema stay frozen.
         detector.config_id = self.config_id
         return detector
@@ -160,6 +167,9 @@ class AdvisorySession:
             for eq, row in notices.items():
                 if row['event_id'] != f"{d.run}:{row['sequence']}:{eq}" or type(row['sequence']) is not int or not 0 <= row['sequence'] <= d.sequence:
                     raise ValueError('checkpoint notice identity')
+            if self.binding.normal_profile is not None:
+                if not isinstance(saved.get('context_state'),dict):raise ValueError('context checkpoint missing')
+                d.load_context(saved['context_state'])
             stopped=saved.get('stopped_notices',{})
             if not isinstance(stopped,dict) or not set(stopped)<=set(d.equipment):raise ValueError('checkpoint stopped equipment')
             for eq,row in stopped.items():
@@ -178,12 +188,12 @@ class AdvisorySession:
                      ewma=packed(d.ewma), ewma_valid=d.ewma_valid.tolist())
         for name in ('median','flat','thermal_history'): state[name] = [packed(row) for row in getattr(d,name)]
         state['machines'] = [{name:getattr(m,name).tolist() for name in ('on','high','low','process_sources','flat_sources')} for m in d.machines]
-        atomic_json(self.journal,dict(binding=self.binding.fingerprint,detector=state,notices=self.notices,stopped_notices=self.stopped_notices))
+        atomic_json(self.journal,dict(binding=self.binding.fingerprint,detector=state,notices=self.notices,stopped_notices=self.stopped_notices,context_state=d.context_state() if self.binding.normal_profile is not None else None))
         self.since_save = 0; self.stop_dirty = False
 
     def sync_stop(self, state):
         if state['run_id']!=self.run or state['sequence'] not in (self.cursor,self.cursor+1):return
-        stopped=fault_stopped_equipment(state)
+        stopped=stopped_equipment_for_retention(state)
         held={e:r for e,r in self.stopped_notices.items() if e in stopped}
         for eq,row in self.notices.items():
             if eq in stopped and eq not in held and 0 <= state['sequence']-row['sequence'] <= 30:
@@ -213,7 +223,7 @@ class AdvisorySession:
         base = dict(schema_version=1,run_id=state['run_id'],config_id=self.binding.config_id,
                     sequence=max(0,self.cursor),input_at=self.detector.at.isoformat() if self.detector.at else state['simulated_at'],
                     generated_at=datetime.now(timezone.utc).isoformat(),operational_notifications=False,items=[])
-        held=[dict(r) for e,r in self.stopped_notices.items() if state['run_id']==self.run and e in fault_stopped_equipment(state)]
+        held=[dict(r) for e,r in self.stopped_notices.items() if state['run_id']==self.run and e in stopped_equipment_for_retention(state)]
         history=base | dict(status='stopped',items=held) if held else None
         if state['line_mode'] != 'running': return history or (base | dict(status='inactive'))
         if stalled: return base | dict(status='stale')
@@ -248,7 +258,12 @@ def poll(session, base, state):
                 noticed=bool(session.feed(frame,session.binding.config_id)) or noticed;cursor=frame['sequence']
             if meta.get('config_id')!=session.binding.config_id or meta.get('config_preserved') is not True or meta.get('is_synthetic') is not True:
                 raise ValueError('unapproved replay provenance')
-            if cursor<state['sequence']:raise ValueError('replay incomplete; no advance past missing frame')
+            if cursor<state['sequence']:
+                if state['sequence']!=0 or cursor!=-1:raise ValueError('replay incomplete; no advance past missing frame')
+                # Initial control state has no stored sensor tick; discard the previous run only after provenance passed.
+                if session.run is not None:
+                    session.detector=session.binding.new_detector();session.run=None;session.cursor=-1
+                    session.notices.clear();session.stopped_notices.clear();session.stop_dirty=True
             if noticed or session.stop_dirty or session.since_save>=30:session.flush()
         except BaseException:
             # A bad/truncated trailer cannot commit speculative frames or notices.
@@ -267,20 +282,25 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mes-url',required=True);p.add_argument('--source-config',type=Path,required=True)
     p.add_argument('--settings',type=Path,default=ROOT/'docs/research/evidence/mes-causal-v14c-20261023/settings.json')
-    p.add_argument('--output',type=Path);p.add_argument('--state-dir',type=Path,required=True);p.add_argument('--once',action='store_true');args=p.parse_args()
+    p.add_argument('--normal-profile',type=Path);p.add_argument('--normal-profile-sha256')
+    p.add_argument('--stop-file',type=Path);p.add_argument('--output',type=Path);p.add_argument('--state-dir',type=Path,required=True);p.add_argument('--once',action='store_true');args=p.parse_args()
     output=args.output or args.state_dir/'latest.json'
     url=urlparse(args.mes_url)
     if url.scheme not in ('http','https') or not url.hostname or url.username or url.password or url.query or url.fragment:
         p.error('explicit MES origin without credentials required')
     if hashlib.sha256(args.settings.read_bytes()).hexdigest()!=SETTINGS_SHA256:raise ValueError('frozen settings hash mismatch')
-    binding=BoundSource(json.loads(args.settings.read_text()),json.loads(args.source_config.read_text()))
+    profile=None
+    if args.normal_profile:
+        if not args.normal_profile_sha256 or hashlib.sha256(args.normal_profile.read_bytes()).hexdigest()!=args.normal_profile_sha256:raise ValueError('normal profile hash mismatch')
+        profile=json.loads(args.normal_profile.read_text())
+    binding=BoundSource(json.loads(args.settings.read_text()),json.loads(args.source_config.read_text()),normal_profile=profile)
     stop=threading.Event();signal.signal(signal.SIGTERM,lambda *_:stop.set());signal.signal(signal.SIGINT,lambda *_:stop.set())
     session=None;state=None;progress=time.monotonic();last_key=None;checked=0
     try:
         while not stop.is_set():
             try:
                 state=get_json(args.mes_url,'/api/state')
-                if (args.state_dir/'STOP').exists():
+                if (args.stop_file or args.state_dir/'STOP').exists():
                     atomic_json(output,dict(schema_version=1,status='disabled',operational_notifications=False,items=[],
                         run_id=state['run_id'],config_id=binding.config_id,sequence=state['sequence'],input_at=state['simulated_at'],generated_at=datetime.now(timezone.utc).isoformat()))
                     return
@@ -294,7 +314,7 @@ def main():
                 poll_started=time.monotonic();result=poll(session,args.mes_url,state)
                 result['poll_seconds']=time.monotonic()-poll_started
                 result['processed_sequence']=session.cursor
-                result['model']='statistical-v14c';result['torch_loaded']='torch' in sys.modules;result['timestral_loaded']='timestral' in sys.modules
+                result['model']='statistical-context-v1' if profile else 'statistical-v14c';result['torch_loaded']='torch' in sys.modules;result['timestral_loaded']='timestral' in sys.modules
                 if state['line_mode']=='running' and time.monotonic()-progress>10:result=session.report(state,stalled=True)
                 atomic_json(output,result)
             except Exception as e:
@@ -374,7 +394,7 @@ def iter_replay(response):
 
 
 def replay_stream(base,path):
-    with urlopen(base+path,timeout=8) as response:
+    with urlopen(base+path,timeout=45) as response:
         yield from iter_replay(response)
 
 

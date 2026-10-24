@@ -47,12 +47,15 @@ snap.ai_insights.status='ready';snap.active_alarms=[];draw();check(rows().length
 snap.ai_insights.run_id='other';draw();check(rows().length===0,'wrong run AI shown');
 S.snapshot=null;renderNotifyPanel();check(panel.textContent.includes('확인할 수 없습니다'),'offline AI appears healthy');
 snap.ai_insights.run_id='r';snap.active_alarms=[{equipment_id:'A',label:'기존 경보'}];draw();
-const stopBefore=operations();snap.line_mode='fault';snap.equipment=[{equipment_id:'A',operating_state:'stopped'}];
+const stopBefore=operations();
+for (const mode of ['fault','paused','stopped']) {
+snap.line_mode=mode;snap.equipment=[{equipment_id:'A',operating_state:mode==='paused'?'running':'stopped'}];
 snap.ai_insights.status='stopped';snap.ai_insights.items=[{equipment_id:'A',event_id:'r:10:A',sequence:10,state:'before_stop',observed_at:'2026-01-01T00:00:09Z',stop_sequence:10,stopped_at:'2026-01-01T00:00:10Z',signals:[]}];
 draw();check(rows().length===1&&rows()[0].textContent.includes('정지 전 감지'),'pre-stop evidence missing or duplicate');
 check(operations()===stopBefore,'stop retention re-vibrated or changed acknowledgement');
 const held=rows()[0];draw();check(rows()[0]===held,'same stop poll recreated row');
 snap.ai_insights.status='stale';draw();check(!panel.textContent.includes('정지 전 감지'),'stale retained evidence shown');
+}
 snap.ai_insights.status='ready';snap.line_mode='running';snap.equipment=[];snap.ai_insights.items=['A','B'].map(id=>({equipment_id:id,event_id:'r:5:'+id,state:'recent',sequence:5,signals:[]}));draw();
 const rects=rows().map(r=>r.querySelector('.np-go').getBoundingClientRect());
 check(rects.every(r=>r.width>=44&&r.height>=44),'small touch target');

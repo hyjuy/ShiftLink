@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "tests": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "worker_file": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_pda_service.py",
+  "reader_file": "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py",
+  "worker_sha256": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+  "reader_sha256": "ce48e76280447596f89f73fa657dcaef86aae14e71f573f3602d53245c54d306",
+  "live_ui_identical": true,
+  "operating_mes_modified": false
+}

@@ -1,0 +1,16 @@
+{
+  "status": "frozen_before_test",
+  "test_role": "unused-315e803b9651f1ad7927bfc03303dce1",
+  "files": {
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/scripts/mes_causal_context.py": "b52f05b776ac91493bbb5d1ce01580766a61d1cc2e0d9c3a7e622d26dbded7ad",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/scripts/mes_causal_context_run.py": "05933f14dcd4c66e9b50d8fb6348c2e129d2589c2c8d1c67a0184e4ddc16caa6",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/tests/test_mes_causal_context.py": "7ed3d6c5bbc369b56b58ac6b0dafd70271f8d653e1c0f5a0e2b479e19580500b",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/scripts/mes_causal_pda_service.py": "fbca5aeed1df319c75eabf392ca7919bdb83884afb39757a6b51954df0b3d973",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/scripts/mes_causal_context_validate.py": "17d63cf773811f667e8f0cb987fc845f665cc945519614da88eba432ac41c4d8",
+    "/home/pi/shiftlink/analytics/validation/normal-context-20261023/candidate-v5/profile.json": "9b722b1bc7105989f93c4b220273dc7f22d56391b0560bb9c9b0fc2641913c69",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/deploy/analytics/source-config.json": "f54c6469b9912f3883ee85a1b665cbbaf704127d4bb6253139584396ad29deea",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/shiftlink/mes/engine.py": "83bb5a42ff00a28575ea3cc41946021f34a8ea457a127b204c09cfd3a9ee7e7b",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/shiftlink/mes/signal_dynamics.py": "50d855f8f733ae1bd4f64e67dc0758680782fb938ba0bca180aeb27aa0df7f47",
+    "/tmp/shiftlink-normal-context-20261023/validation-v5/docs/research/evidence/mes-causal-v14c-20261023/settings.json": "e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789"
+  }
+}

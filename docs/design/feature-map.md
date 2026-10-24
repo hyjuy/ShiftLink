@@ -11,3 +11,5 @@
 [최종 검증 증거](../testing/pi-analysis-llm-context-20261024.tdd.md)를 참고한다.
 
 [2026-10-24 순차 배포·실제 모델·화면·보존 근거](../testing/pi-analysis-query-deployment-20261024.md).
+
+최신 main `fb88ed9`와의 충돌 해소·로컬 재검증·PR 범위는 [2026-10-24 main 대조 기록](../testing/pi-analysis-main-pr-20261024.md)을 따른다. 이 후속 작업은 추가 배포를 포함하지 않는다.

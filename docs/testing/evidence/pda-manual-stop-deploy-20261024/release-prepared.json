@@ -1,0 +1,10 @@
+{
+  "release": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop",
+  "changed_files": [
+    "scripts/mes_causal_pda_service.py",
+    "shiftlink/pda/ai_insights.py"
+  ],
+  "protected_files": 64,
+  "source_commit": "b14731e8d04b97b403ee1618157c92777b63b745",
+  "profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f"
+}

@@ -10,7 +10,7 @@ Timestral을 사용하지 않는 고정 v14c 통계 후보를 별도 프로세�
 - 화면의 기존 3초 폴링은 유지한다. 분석 서비스는 1초 대기 주기로 조회하고 replay로 중간 프레임을 모두 소비한다. 실제 조회 주기는 네트워크·처리 시간을 포함한다.
 - 전송은 69채널 전체의 키·단위·정상 범위를 고정 설정과 검사한다. 고정 모델은 그중 선택한 채널을 사용한다. 배열 위치로 임의 축소하거나 config_id를 연구 ID로 위장하지 않는다.
 - 실제 MES의 최초 sequence=1, snapshot에 없는 config_id의 배치 검증, `fault` 비가동 처리, 개별 비가동 설비 품질 제외를 어댑터에서 처리한다.
-- 정상 64프레임 준비 전·비가동·불량 측정·통신/모델 오류·오래된 결과는 정상 판정으로 표시하지 않는다. 고장 정지는 최근 30프레임 내 확정한 감지만 별도 영속 이력으로 유지하고 감지 시각과 정지 전 이력임을 표시한다. 신규 통지·진동은 만들지 않으며 정상 정지·재개·다른 run에는 재사용하지 않는다. `recent`는 최근 통지이며 현재 고장 확정 상태가 아니다.
+- 정상 64프레임 준비 전·비가동·불량 측정·통신/모델 오류·오래된 결과는 정상 판정으로 표시하지 않는다. 수동·고장 정지는 최근 30프레임 내 확정한 감지만 별도 영속 이력으로 유지하고 감지 시각과 정지 전 이력임을 표시한다. 신규 통지·진동은 만들지 않으며 재개·다른 run·불연속에는 재사용하지 않는다. 수동 정지 후속 구현의 운영 반영 여부는 아래 항목을 확인한다. `recent`는 최근 통지이며 현재 고장 확정 상태가 아니다.
 
 ## 배포
 
@@ -55,3 +55,46 @@ SHIFTLINK_BROWSER_EVIDENCE=/tmp/shiftlink-browser-result python3 -B -m unittest 
 ```
 
 브라우저 검사는 Pi에 이미 있는 Chromium과 별도 프로필·합성 화면 데이터를 사용한다. 개인 얼굴·실제 경보 조작은 하지 않는다. 기존 CJS 검사에는 `/tmp`에서만 검증한 ARM64 Node 실행 파일을 사용하고 시스템 환경은 바꾸지 않는다. 상세 실행·실패·수정·결과는 `docs/testing/mes-causal-pda-production-20261023.md`에 기록한다.
+
+
+## 운전·부하 정상 기준 profile
+
+원본 v14c core/settings는 유지한다. 정상 기준 보완 버전은 별도 `mes_causal_context.py`와 정상 학습 profile을 사용하며 Timestral을 사용하지 않는다. 독립 코일 위치의 빈 상태·이동·대기 3부하 기준과 냉각기 입출구 관계, 원시 고착·온도 상승 근거를 함께 검사한다. MES speed는 재생 배속이며 모델 입력에서 제외한다. 현재 상태의 속도를 과거 프레임에 대입하거나 실시간 센서로 자동 재학습하지 않는다.
+
+`context.service.in`은 `--normal-profile`과 고정 SHA256을 전달하고 `/var/lib/shiftlink-analytics-normal-v1`에 새 상태를 저장한다. 기존 `/var/lib/shiftlink-analytics`는 이전 버전 복구용으로 유지한다. 중지 스위치는 기존 `/var/lib/shiftlink-analytics/STOP`이며 새 worker에도 `--stop-file`로 전달한다. profile·source·코드 fingerprint가 다른 체크포인트를 읽지 않는다.
+
+릴리스 manifest의 `unit_template`는 해시 검증한 파일이어야 한다. `expected_unit_sha256`이 있으면 설치 직전 현재 worker unit도 대조한다. PDA 4파일이 같으면 덮어쓰거나 재시작하지 않는다. 이전 unit과 상태로 돌아가는 기존 백업·롤백 경로를 유지한다.
+
+Pi에서 별도 폴더에 개발 자료를 만들고 각 검사를 통과한 다음 후보를 고정한다. 임시 파일시스템이 작은 장비는 평가 자료를 `/home/pi/shiftlink/analytics/validation/` 아래에 둔다.
+
+```sh
+python3 -B -m scripts.mes_causal_context_run --phase develop --out <새-검증폴더>
+python3 -B -m scripts.mes_causal_context_validate --phase regression --profile <새-검증폴더>/profile.json --out <새-회귀폴더>
+python3 -B -m scripts.mes_causal_context_run --phase freeze --out <새-검증폴더>
+python3 -B -m scripts.mes_causal_context_run --phase test --out <새-검증폴더>
+```
+
+운영 replay와 얼굴/CNN 동시 부하도 `mes_causal_context_validate --phase observed/paced`로 별도 검사한다. 이 하니스는 이전 검증의 보존된 Pi 자료와 측정 probe를 명시적으로 사용한다. 새 체크아웃만으로 원자료·가중치가 자동 준비되는 것은 아니다. 이번 검증의 해시·자료 경로·결과·실측 한계는 [정상 기준 검증](../../docs/testing/mes-normal-context-20261023.md)에 기록한다.
+
+
+## 2026-10-24 정상 기준 후보 적용
+
+정상 기준 보완의 최초 적용 릴리스는 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4`, 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-174937`다. 이전 r3 및 기존 체크포인트는 보존한다. PDA 파일 4개와 프로세스는 유지하고 worker만 갱신했다. 검증·제약은 [Pi 최종 기록](../../docs/testing/mes-normal-context-20261023.md)의 연결 복구 후 항목을 참고한다.
+
+PDA를 건드리지 않고 이전 worker로 복구할 때는 위 백업의 previous.service를 복원한다. 이 명령은 복구가 필요할 때만 실행한다. 이전 unit은 보존된 기존 state directory를 사용한다.
+
+```sh
+sudo -v
+sudo install -m 0644 /home/pi/shiftlink/analytics/backups/20261024-174937/previous.service /etc/systemd/system/shiftlink-analytics.service
+sudo systemctl daemon-reload
+sudo systemctl restart shiftlink-analytics.service
+systemctl status shiftlink-analytics.service
+```
+
+기존 `/var/lib/shiftlink-analytics/STOP`을 새 버전과 이전 버전이 공유한다. 복구를 위해 STOP을 임의로 제거하지 않는다. 전체 PDA 파일 복원도 필요한 경우에만 앞의 apply_release.py --rollback 절차를 사용한다.
+
+현재 Pi는 CPU quota를 실제 cgroup에서 확인했지만 memory.max/current 파일이 없어 MemoryMax=384MiB의 강제 적용은 확인하지 못했다. 실제 worker VmHWM은 약 38.4MiB였으며, 이번 배포에서 부팅 설정을 변경하지 않았다. 자세한 자원 기록은 정상 기준 검증 문서와 runtime-resources.json을 참고한다.
+
+## 수동 정지 보존 후속 변경 — 운영 r5 적용
+
+사용자 요청 후 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop`을 운영에 적용했다. r4에서 worker와 reader 두 파일만 변경했고 모델·profile·settings·기존 화면 코드는 같다. 정지 시점 최근 30프레임 내 확정 감지만 ‘정지 전 감지’로 유지하고 정지 중 신규 판단은 보류한다. 기존 경보·확인·배지·진동 규칙은 유지한다. reader 반영을 위해 공식 경로로 PDA와 키오스크를 재시작했으며 로그인 세션은 초기화될 수 있다. 이번 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-183824`다. 이전 r4·원본·검증 결과는 보존했다. [배포 후 검증·복구 기록](../../docs/testing/pda-manual-stop-20261024.md)을 참고한다.

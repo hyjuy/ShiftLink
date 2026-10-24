@@ -39,11 +39,11 @@ class FaultStopTests(TestCase):
     def test_individual_fault_stop_retains_while_line_is_running(self):
         a=self.detected();f=self.stopped(mode='running',alarm=True);a.feed(f,self.binding.config_id)
         self.assertEqual(a.report(f)['items'][0]['state'],'before_stop')
-    def test_normal_pause_old_evidence_resume_run_and_gap_do_not_retain(self):
-        for kind in ('normal','expired','resume','run','gap'):
+    def test_unconfirmed_hold_old_evidence_resume_run_and_gap_do_not_retain(self):
+        for kind in ('quality_hold','recovering','expired','resume','run','gap'):
             with self.subTest(kind=kind):
                 self.path.unlink(missing_ok=True);self.data=rows(180);a=self.detected()
-                if kind=='normal':f=self.stopped(mode='paused')
+                if kind in ('quality_hold','recovering'):f=self.stopped(mode=kind)
                 else:f=self.stopped()
                 if kind=='expired':
                     for g in self.data[112:155]:a.feed(g,self.binding.config_id)
@@ -65,10 +65,10 @@ class FaultStopTests(TestCase):
                 notices=[eq for f in data for eq in a.feed(f,self.binding.config_id)]
                 self.assertEqual(self.key[0] in notices,expected)
 
-    def test_retained_reader_rejects_stale_wrong_run_normal_stop_and_invalid_time(self):
+    def test_retained_reader_rejects_stale_wrong_run_unconfirmed_hold_and_invalid_time(self):
         from datetime import datetime,timedelta,timezone
         a=self.detected();f=self.stopped();a.feed(f,self.binding.config_id);value=a.report(f);output=Path(self.tmp.name)/'latest.json'
-        for change,state in ((dict(generated_at=(datetime.now(timezone.utc)-timedelta(seconds=11)).isoformat()),f),({},f|dict(run_id='other')),({},self.stopped(mode='paused'))):
+        for change,state in ((dict(generated_at=(datetime.now(timezone.utc)-timedelta(seconds=11)).isoformat()),f),({},f|dict(run_id='other')),({},self.stopped(mode='quality_hold'))):
             output.write_text(json.dumps(value|change));self.assertEqual(read_insights(output,state,self.binding.config_id)['items'],[])
         invalid=copy.deepcopy(value);invalid['items'][0]['stopped_at']=invalid['items'][0]['observed_at'];output.write_text(json.dumps(invalid))
         self.assertEqual(read_insights(output,f,self.binding.config_id)['items'],[])

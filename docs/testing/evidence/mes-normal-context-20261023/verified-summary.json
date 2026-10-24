@@ -1,0 +1,261 @@
+{
+  "candidate": "normal-context-v1 / v8",
+  "original": {
+    "events": 96,
+    "detected": 20,
+    "normal_notices": 290,
+    "duplicates": 0,
+    "unmatched": 869,
+    "p95": 14
+  },
+  "candidate_result": {
+    "events": 96,
+    "detected": 96,
+    "normal_notices": 0,
+    "duplicates": 0,
+    "unmatched": 0,
+    "p95": 16
+  },
+  "paired_common_cases": 20,
+  "paired_delay_difference_p95": 0,
+  "checks": {
+    "normal_zero": true,
+    "no_detection_lost": true,
+    "sensitivity": true,
+    "duplicates_zero": true,
+    "delay_not_worse": true
+  },
+  "integrity": {
+    "candidate_unchanged": true,
+    "profile_reproduced": true,
+    "roles_disjoint": {
+      "run_id": true,
+      "seed": true,
+      "nonce": true
+    },
+    "previous_tests_disjoint": {
+      "candidate-v5": {
+        "run_id": true,
+        "seed": true,
+        "nonce": true
+      },
+      "candidate-v7": {
+        "run_id": true,
+        "seed": true,
+        "nonce": true
+      }
+    },
+    "training_sha256": "ebd4bd23208236a28f2f6c454bddb56fb6cc59db073b69891ce846a079673052",
+    "test_sha256": "50ba6e0dc3b7b9c753919ca0fb5a401144ced5a0eb28d78d44a747e34ec61136",
+    "recovery": "Same frozen candidate and existing unused test bytes/role; deterministic train/dev inputs rebuilt; preserved pre-freeze development results verified; redundant consumed-development replay stopped after reconstruction"
+  },
+  "regression": {
+    "tests": 68,
+    "failures": 0,
+    "errors": 0,
+    "coverage": {
+      "scripts/mes_causal_context.py": {
+        "covered": 148,
+        "executable": 165,
+        "percent": 89.6969696969697,
+        "missing": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          11,
+          14,
+          27,
+          28,
+          52,
+          57,
+          64,
+          68,
+          119
+        ]
+      },
+      "scripts/mes_causal_pda_service.py": {
+        "covered": 277,
+        "executable": 343,
+        "percent": 80.75801749271137,
+        "missing": [
+          1,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          22,
+          23,
+          24,
+          26,
+          27,
+          30,
+          35,
+          39,
+          56,
+          57,
+          62,
+          82,
+          86,
+          95,
+          111,
+          116,
+          125,
+          129,
+          130,
+          139,
+          148,
+          150,
+          169,
+          182,
+          184,
+          194,
+          203,
+          222,
+          239,
+          240,
+          241,
+          242,
+          243,
+          246,
+          281,
+          290,
+          328,
+          330,
+          339,
+          340,
+          341,
+          346,
+          352,
+          359,
+          363,
+          376,
+          396,
+          397,
+          398,
+          401
+        ]
+      },
+      "shiftlink/pda/ai_insights.py": {
+        "covered": 83,
+        "executable": 97,
+        "percent": 85.56701030927834,
+        "missing": [
+          1,
+          2,
+          3,
+          4,
+          6,
+          7,
+          8,
+          11,
+          19,
+          27,
+          30,
+          95,
+          102,
+          107
+        ]
+      }
+    },
+    "scope": "conservative stdlib executable line trace; import lines excluded from reached"
+  },
+  "parity": {
+    "development": {
+      "frames": 2048,
+      "notices": 5,
+      "mismatches": 0,
+      "input_sha256": "5fa7ba236278e27a85a2f72d84e0b948a88f87c9026d2c423fe3a4d455275bcb",
+      "unchanged": true
+    },
+    "consumed-test": {
+      "frames": 26624,
+      "notices": 52,
+      "mismatches": 0,
+      "input_sha256": "8815866436d531315a786a7f08da67125b3ee073eb8c5ae0bd420e58c31690a9",
+      "unchanged": true
+    }
+  },
+  "paced": {
+    "requested": 192,
+    "processed": 192,
+    "failures": [],
+    "processing_p95": 0.08616510499996366,
+    "processing_max": 0.13694989300006455,
+    "scheduled_p95": 0.09120579399996132,
+    "deadline_misses": 0,
+    "max_temp_c": 54.043,
+    "min_available_kb": 2390008,
+    "throttling": [
+      "throttled=0x0"
+    ],
+    "pda_pid_preserved": true,
+    "vision": {
+      "face": {
+        "exit_code": 0,
+        "result": {
+          "calls": 193,
+          "p95_seconds": 0.6823685539999929,
+          "maximum_seconds": 1.5028389960000368,
+          "cv2": "4.10.0",
+          "cv2_threads": 4,
+          "scope": "YuNet plus SFace with forced synthetic landmarks; no login identity decision"
+        }
+      },
+      "cnn": {
+        "exit_code": 0,
+        "result": {
+          "calls": 193,
+          "p95_seconds": 0.20340731499999265,
+          "maximum_seconds": 0.7072038009999915,
+          "onnxruntime": "1.20.1",
+          "providers": [
+            "CPUExecutionProvider"
+          ],
+          "intra_threads": 0,
+          "scope": "synthetic frame CPU CNN; no equipment scan POST"
+        }
+      }
+    },
+    "torch_loaded": false,
+    "timestral_loaded": false,
+    "scope": "1Hz approved-config synthetic replay plus face/CNN synthetic-image inference; excludes MES network/UI display",
+    "passed": true
+  },
+  "deployment": {
+    "release": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4",
+    "backup": "/home/pi/shiftlink/analytics/backups/20261024-174937",
+    "pda_pid_before": 1215,
+    "pda_pid_after": 1215,
+    "worker_pid": 4053,
+    "protected_files": 49,
+    "all_protected_unchanged": true,
+    "monitor_passed": true,
+    "comparable": 13,
+    "monitor_seconds": 174.35052680969238,
+    "profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f"
+  },
+  "limitations": [
+    "Shared synthetic normal generator; not field generalization",
+    "Strong additive/hold interventions are not physically calibrated faults",
+    "Delay excludes network/wait/PDA render",
+    "Normal-value sensor stuck cannot always be distinguished from regulation without independent reference",
+    "Retrospective 2902-frame observed source and original temporary logs were lost at reboot; prior notes only",
+    "Existing 28224-frame unused test is reused byte-for-byte; no new test sampling or threshold tuning"
+  ]
+}

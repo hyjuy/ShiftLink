@@ -1,0 +1,15 @@
+{
+  "unit": "NRestarts=0\nMemoryCurrent=[not set]\nCPUUsageNSec=9071123000\nCPUAccounting=yes\nCPUQuotaPerSecUSec=1s\nMemoryAccounting=yes\nMemoryMax=402653184\n",
+  "worker_pid": 4053,
+  "process": {
+    "VmHWM": "39340 kB",
+    "VmRSS": "39340 kB",
+    "Threads": "1"
+  },
+  "cgroup": "0::/system.slice/shiftlink-analytics.service\n",
+  "cgroup_values": {
+    "memory.max": null,
+    "memory.current": null,
+    "cpu.max": "100000 100000"
+  }
+}

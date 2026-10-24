@@ -38,6 +38,8 @@ class LifecycleDetector(ContextDetector):
                 if distinct or clear:
                     self.episode_on[k]=False;self.episode_quiet[k]=0
                     self.episode_process[k]=self.episode_flat[k]=False
+                elif self.episode_quiet[k]==RECOVERY_FRAMES:
+                    self.episode_quiet[k]=RECOVERY_FRAMES-1
                 elif self.episode_quiet[k]==0:
                     self.episode_process[k,ix]|=process[ix];self.episode_flat[k,ix]|=flat[ix]
             if eq in events and not self.episode_on[k]:

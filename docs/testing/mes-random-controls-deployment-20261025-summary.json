@@ -1,0 +1,120 @@
+{
+  "jetson": {
+    "deployed": true,
+    "source_head": "77af5ac10e6909acc463d984615ddf84c4d34450",
+    "backup": "/home/jetson/shiftlink/backups/20261025-030006-random-controls",
+    "old_run": "2ce4d5209feb46cbbf33f369c379474a",
+    "new_run": "6c99af654a5440e1ba2616def2d26f29",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "simulation_mode": "standard",
+    "channels": 69,
+    "old_run_frames_preserved": 6323,
+    "all_table_counts_nondecreasing": true,
+    "unit_dropins_unchanged": true,
+    "source_hashes": {
+      "shiftlink/mes/__main__.py": "bb8033afcd161e57ff9f7b90f8a83a6740f27be8ebe82405894038e457f9cffc",
+      "shiftlink/mes/contracts.py": "74a384d40b7e363325bd78c280449e5a0385eab562d4514289f2531a286e6f9e",
+      "shiftlink/mes/progressive_factory.py": "a093d750714b39ac1d183519b970bfa267a468ad0f6e4aceca36090a2dd432dd",
+      "shiftlink/mes/server.py": "19df8f68d75390b1b617fd7474409861c5ee2ddda4292ce0685bffec6918c60e",
+      "shiftlink/mes/web/app.js": "e3aa3be88b07af36f93a3bd11e5ee9cccf948af431443c7bb09c73e43a09ca32",
+      "shiftlink/mes/web/index.html": "69d2e28fa988b31ce7b304d6d91bf4764690209fae3c4698b2af70ff98cb104a"
+    },
+    "verified_at": "2026-10-24T18:10:52.964337+00:00",
+    "backup_integrity": "quick_check=ok",
+    "backup_bytes": 2946883584,
+    "pre_repair_backup_frames": 6103,
+    "repair": {
+      "equipment_id": "EQ-0004",
+      "before_sequence": 6271,
+      "after_sequence": 6316,
+      "observed_recovery_seconds": 45.58,
+      "persisted_repair_event_count": 1,
+      "forced_ai_clear": false
+    },
+    "related_services_unchanged": true,
+    "service_status": "MainPID=69298\nNRestarts=0\nId=shiftlink-mes.service\nActiveState=active\n\nMainPID=1145\nNRestarts=0\nId=shiftlink-uploader.service\nActiveState=active\n\nMainPID=1049\nNRestarts=0\nId=ollama.service\nActiveState=active\n\nMainPID=1050\nNRestarts=0\nId=ollama-judge.service\nActiveState=active"
+  },
+  "pi": {
+    "deployment": {
+      "deployed": true,
+      "source_head": "77af5ac10e6909acc463d984615ddf84c4d34450",
+      "backup": "/home/pi/shiftlink/analytics/backups/20261025-030007-pda-random-controls",
+      "pda_pid": 20812,
+      "analytics_pid": 30896,
+      "restarted": false,
+      "served_js_sha256": "da7265fd8e338b4e6bcabf824fd5dbf2289be6823fdfa411744edeed0301fc7a",
+      "other_files_unchanged": true
+    },
+    "browser": {
+      "ok": true,
+      "actual_deployed_mes_browser": true,
+      "start_does_not_arm_random": true,
+      "button_opt_in_off": true,
+      "run_preserved": true,
+      "final_mode": "standard",
+      "final_line_mode": "running"
+    },
+    "monitor": {
+      "ok": true,
+      "run_id": "6c99af654a5440e1ba2616def2d26f29",
+      "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+      "channels": 69,
+      "one_second_frames": 16,
+      "sequence_first": 326,
+      "sequence_last": 341,
+      "sequence_gaps": 0,
+      "replay_matches": true,
+      "simulation_mode": "standard",
+      "existing_alarms": 0,
+      "confirmed_ai_events": 0,
+      "ai_status": "ready",
+      "pda_pid": 20812,
+      "analytics_pid": 30896,
+      "served_mes_assets_match": true,
+      "physical_kiosk_refresh_verified": false,
+      "physical_haptics_measured": false
+    },
+    "node_regressions": [
+      {
+        "name": "pda_sensor_display",
+        "passed": true
+      },
+      {
+        "name": "pda_network_boot",
+        "passed": true
+      },
+      {
+        "name": "unity_pda_link",
+        "passed": true
+      },
+      {
+        "name": "pda_symptom_rank",
+        "passed": true
+      },
+      {
+        "name": "mes_query_pda",
+        "passed": true
+      },
+      {
+        "name": "pda_resolution",
+        "passed": true
+      },
+      {
+        "name": "pda_cardless_recovery",
+        "passed": true
+      },
+      {
+        "name": "pda_active_advisory",
+        "passed": true
+      }
+    ],
+    "predeploy_regression": {
+      "passed": 15,
+      "skipped": 0,
+      "seconds": 34.236
+    },
+    "verified_at": "2026-10-24T18:11:33.649948+00:00",
+    "service_status": "MainPID=30896\nNRestarts=0\nActiveState=active",
+    "pda_cache_control": "no-store"
+  }
+}

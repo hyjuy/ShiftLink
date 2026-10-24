@@ -1,0 +1,523 @@
+{
+  "status": "deployed_and_verified",
+  "baseline": {
+    "profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
+    "positive": 38,
+    "detected": 38,
+    "false_notifications": 0,
+    "normal_notifications": 0,
+    "duplicates": 0,
+    "p95_delay": 25,
+    "p95_simulated_display_delay": 26,
+    "compute_p95_seconds": 0.030879811998602236,
+    "frames": 38935,
+    "elapsed_seconds": 816.2770906930018,
+    "by_kind": {
+      "cooling_loss": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 15
+      },
+      "drive_friction": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 25
+      },
+      "hydraulic_leak": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 14
+      },
+      "pneumatic_leak": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 26
+      },
+      "stuck_inside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 7
+      },
+      "stuck_outside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 5
+      }
+    },
+    "latency_scope": "offline Pi feed/report/reader; simulated three-frame display polling, excludes actual transport and rendering",
+    "gates": {
+      "no_misses": true,
+      "zero_false": true,
+      "zero_duplicates": true,
+      "delay": true,
+      "stuck_inside_delay": true,
+      "one_second_compute": true
+    },
+    "passed": true
+  },
+  "candidate": {
+    "profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+    "positive": 38,
+    "detected": 38,
+    "false_notifications": 0,
+    "normal_notifications": 0,
+    "duplicates": 0,
+    "p95_delay": 25,
+    "p95_simulated_display_delay": 26,
+    "compute_p95_seconds": 0.027031465000618482,
+    "frames": 38935,
+    "elapsed_seconds": 778.4592357879992,
+    "by_kind": {
+      "cooling_loss": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 15
+      },
+      "drive_friction": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 25
+      },
+      "hydraulic_leak": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 14
+      },
+      "pneumatic_leak": {
+        "detected": 6,
+        "total": 6,
+        "p95_delay": 26
+      },
+      "stuck_inside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 15
+      },
+      "stuck_outside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 5
+      }
+    },
+    "latency_scope": "offline Pi feed/report/reader; simulated three-frame display polling, excludes actual transport and rendering",
+    "gates": {
+      "no_misses": true,
+      "zero_false": true,
+      "zero_duplicates": true,
+      "delay": true,
+      "stuck_inside_delay": true,
+      "one_second_compute": true
+    },
+    "passed": true
+  },
+  "development": {
+    "profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+    "positive": 18,
+    "detected": 18,
+    "false_notifications": 0,
+    "normal_notifications": 0,
+    "duplicates": 0,
+    "p95_delay": 24,
+    "p95_simulated_display_delay": 26,
+    "compute_p95_seconds": 0.027626499002508353,
+    "frames": 13281,
+    "elapsed_seconds": 265.8154600670023,
+    "by_kind": {
+      "cooling_loss": {
+        "detected": 1,
+        "total": 1,
+        "p95_delay": 13
+      },
+      "drive_friction": {
+        "detected": 1,
+        "total": 1,
+        "p95_delay": 24
+      },
+      "hydraulic_leak": {
+        "detected": 1,
+        "total": 1,
+        "p95_delay": 9
+      },
+      "pneumatic_leak": {
+        "detected": 1,
+        "total": 1,
+        "p95_delay": 14
+      },
+      "stuck_inside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 15
+      },
+      "stuck_outside": {
+        "detected": 7,
+        "total": 7,
+        "p95_delay": 5
+      }
+    },
+    "latency_scope": "offline Pi feed/report/reader; simulated three-frame display polling, excludes actual transport and rendering",
+    "gates": {
+      "no_misses": true,
+      "zero_false": true,
+      "zero_duplicates": true,
+      "delay": true,
+      "stuck_inside_delay": true,
+      "one_second_compute": true
+    },
+    "passed": true
+  },
+  "realtime": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "hydraulic_leak-01",
+        "frames_sent": 49,
+        "source_to_visible_seconds": 14.836117119000846,
+        "first_notice_sequence": 243,
+        "model_notice_delay_frames": 12,
+        "processed_frames": 49,
+        "visible_polls": 12,
+        "worker_poll_p95_seconds": 0.1628110290002951,
+        "max_processed_sequence_lag": 2,
+        "rows": 1,
+        "legacy_vibrations": 1,
+        "ai_added_vibrations": 0,
+        "retained_beyond_thirty_frames": true
+      },
+      {
+        "case": "cooling_loss-01",
+        "frames_sent": 49,
+        "source_to_visible_seconds": 14.58518410599936,
+        "first_notice_sequence": 282,
+        "model_notice_delay_frames": 13,
+        "processed_frames": 49,
+        "visible_polls": 12,
+        "worker_poll_p95_seconds": 0.1865965300021344,
+        "max_processed_sequence_lag": 2,
+        "rows": 1,
+        "legacy_vibrations": 1,
+        "ai_added_vibrations": 0,
+        "retained_beyond_thirty_frames": true
+      },
+      {
+        "case": "pneumatic_leak-01",
+        "frames_sent": 61,
+        "source_to_visible_seconds": 26.642252502999327,
+        "first_notice_sequence": 231,
+        "model_notice_delay_frames": 24,
+        "processed_frames": 61,
+        "visible_polls": 12,
+        "worker_poll_p95_seconds": 0.18774374799977522,
+        "max_processed_sequence_lag": 2,
+        "rows": 1,
+        "legacy_vibrations": 1,
+        "ai_added_vibrations": 0,
+        "retained_beyond_thirty_frames": true
+      },
+      {
+        "case": "drive_friction-01",
+        "frames_sent": 58,
+        "source_to_visible_seconds": 23.534812038000382,
+        "first_notice_sequence": 202,
+        "model_notice_delay_frames": 20,
+        "processed_frames": 58,
+        "visible_polls": 12,
+        "worker_poll_p95_seconds": 0.17823324300115928,
+        "max_processed_sequence_lag": 2,
+        "rows": 1,
+        "legacy_vibrations": 1,
+        "ai_added_vibrations": 0,
+        "retained_beyond_thirty_frames": true
+      },
+      {
+        "case": "stuck-EQ-0008-inside",
+        "frames_sent": 52,
+        "source_to_visible_seconds": 17.58237075999932,
+        "first_notice_sequence": 211,
+        "model_notice_delay_frames": 15,
+        "processed_frames": 52,
+        "visible_polls": 12,
+        "worker_poll_p95_seconds": 0.15112437499919906,
+        "max_processed_sequence_lag": 2,
+        "rows": 1,
+        "legacy_vibrations": 1,
+        "ai_added_vibrations": 0,
+        "retained_beyond_thirty_frames": true
+      }
+    ],
+    "samples": 5,
+    "p95_source_to_visible_seconds": 26.642252502999327,
+    "worst_source_to_visible_seconds": 26.642252502999327,
+    "scope": "actual 1Hz frames, worker HTTP/replay/fsync and installed PDA reader/alarm DOM in isolated Pi Chromium; five selected episodes; Pi to Jetson to Pi SSH-relayed HTTP, excludes operating MES database and kiosk"
+  },
+  "integrity": {
+    "overlap": {
+      "seed": [
+        0,
+        0,
+        0
+      ],
+      "nonce": [
+        0,
+        0,
+        0
+      ],
+      "run_id": [
+        0,
+        0,
+        0
+      ]
+    },
+    "verified_inputs": 54,
+    "frozen_before_generation": true
+  },
+  "storage_benchmark": {
+    "original": {
+      "seconds": [
+        2.3853614539984846,
+        2.5757981699971424,
+        2.345205667999835,
+        2.380828223002027,
+        2.4731841380016704
+      ],
+      "median_seconds": 2.3853614539984846,
+      "requested_frames": 2
+    },
+    "incremental": {
+      "seconds": [
+        0.0027111560011690017,
+        0.0023170109998318367,
+        0.0022311419998004567,
+        0.002171143001760356,
+        0.002068125999358017
+      ],
+      "median_seconds": 0.0022311419998004567,
+      "requested_frames": 2
+    },
+    "history_frames": 2000,
+    "channels": 69,
+    "plan": [
+      [
+        4,
+        0,
+        0,
+        "SEARCH snapshots USING INDEX sqlite_autoindex_snapshots_1 (run_id=? AND sequence>?)"
+      ]
+    ],
+    "snapshot_count": 2000
+  },
+  "storage_line_observation": {
+    "passed": true,
+    "method_scope": [
+      "snapshots",
+      "replay"
+    ],
+    "executed": 8,
+    "executable": 8,
+    "percent": 100.0,
+    "missing": []
+  },
+  "migration_rehearsal": {
+    "passed": true,
+    "source_checkpoint_unchanged": true,
+    "confirmed_notices_preserved": true,
+    "cursor_preserved": true,
+    "implicit_old_binding_rejected": true,
+    "duplicate_notifications": [],
+    "unique_retained_event_ids": 1
+  },
+  "regressions": {
+    "candidate_ui_reader_lifecycle_rms": 24,
+    "storage_incremental_http": 20,
+    "portable_fixture_repeat": 5
+  },
+  "model_profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+  "pi_deployment": {
+    "deployed": true,
+    "release": "/home/pi/shiftlink/analytics/releases/rms16-active-advisory-20261024-r7",
+    "backup": "/home/pi/shiftlink/analytics/backups/20261025-004001-rms16",
+    "old_analysis_pid": 20799,
+    "new_analysis_pid": 30896,
+    "pda_pid_preserved": true,
+    "pda_files_unchanged": true,
+    "profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+    "cursor_preserved_at_migration": 8909,
+    "notices_preserved": true,
+    "ai_status": "ready",
+    "source_run_unchanged": true,
+    "original_checkpoint_preserved": true
+  },
+  "post_deployment": {
+    "passed": true,
+    "samples": 120,
+    "run": "414b92e58b834856a6b3085be96c9089",
+    "api_p95_seconds": 0.1096877099989797,
+    "poll_p95_seconds": 0.14031975900070393,
+    "ready_samples": 120,
+    "last_status": "ready",
+    "last_sequence": 220,
+    "replay_frames": 221,
+    "replay_sequence_start": 1,
+    "replay_sequence_end": 221,
+    "missing_frames": 0,
+    "channels": 69,
+    "analysis_errors": 0,
+    "pda_pid_preserved": true,
+    "pda_and_r6_files_unchanged": true,
+    "torch_loaded": false,
+    "timestral_loaded": false,
+    "source_period_seconds": 1,
+    "legacy_alarm_count": 0,
+    "analysis": "MainPID=30896\nNRestarts=0\nActiveState=active",
+    "resources": [
+      {
+        "temperature": "temp=43.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=43.3'C",
+        "throttle": "throttled=0x0"
+      }
+    ],
+    "max_active_ai_items": 0
+  },
+  "operating_natural_fault": {
+    "operating_fault_kind": "pneumatic_leak",
+    "equipment_id": "EQ-0003",
+    "private_generator_start": 248,
+    "notice_sequence": 274,
+    "latent_frame_delay": 26,
+    "event_id_preserved": true,
+    "observed_polls": 2,
+    "shown_after_thirty_frames": true,
+    "unique_ai_equipment_per_poll": [
+      1,
+      1
+    ],
+    "scope": "one naturally generated operating synthetic fault; frame delay, not operating end-to-end wall time; private label read separately, never fed to detector"
+  },
+  "runtime_memory": {
+    "VmHWM": "40352 kB",
+    "VmRSS": "40352 kB",
+    "Threads": "1"
+  },
+  "final_temperature": "temp=43.3'C",
+  "final_throttle": "throttled=0x0",
+  "mes_deployment": {
+    "deployed": true,
+    "backup": "/home/jetson/shiftlink/backups/20261025-003710-rms16-progressive-pinned",
+    "old_run": "fd2d5e210e24490a9562f65282cfb890",
+    "new_run": "414b92e58b834856a6b3085be96c9089",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "restored_line_mode": "running",
+    "channels": 69,
+    "original_run_frames_preserved": 8947,
+    "all_table_counts_non_decreasing": true,
+    "original_unit_dropins_unchanged": true,
+    "source_hashes": {
+      "shiftlink/mes/server.py": "628c8f3a281d87c45a5a1875af4c8ddcdda00bc77e7e92105cdf95fd4d98d57f",
+      "shiftlink/mes/__main__.py": "72f1b0ad3596d293c2771065c947ec731b00cba92f1630b4b31dc2cb5e9d9814",
+      "shiftlink/mes/storage.py": "a0a2c84d0001c2b381db278ce76ec1e6580e6a587df4d6310603abcdd2e011f0",
+      "shiftlink/mes/progressive_factory.py": "c6e6f037e9c2d529e62364b2ca5e88d32b503662767037991c9478e125aca715"
+    },
+    "service": "MainPID=45593\nNRestarts=0\nActiveState=active",
+    "related_services": "MainPID=1145\nId=shiftlink-uploader.service\nActiveState=active\n\nMainPID=1049\nId=ollama.service\nActiveState=active\n\nMainPID=1050\nId=ollama-judge.service\nActiveState=active"
+  },
+  "related_services_preserved": {
+    "shiftlink-uploader.service": true,
+    "ollama.service": true,
+    "ollama-judge.service": true
+  },
+  "database_backup": {
+    "backup": "/home/jetson/shiftlink/backups/20261025-003710-rms16-progressive-pinned",
+    "database_bytes": 2806358016,
+    "preserved_run_frames": 8899,
+    "backup_completed": true
+  },
+  "incomplete_backup_preserved": "/home/jetson/shiftlink/backups/20261025-002914-rms16-progressive/INCOMPLETE.json",
+  "channel_mapping": {
+    "source_channels": 69,
+    "selected_analysis_channels": 63,
+    "variable_score_channels": 60,
+    "excluded_from_selected_analysis": [
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "fluid_viscosity",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "hpu_return_submergence",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "hpu_suction_head",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0004",
+        "signal": "gr_oil_water_content",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0005",
+        "signal": "gr_oil_water_content",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0007",
+        "signal": "rt_lift_delay",
+        "acquisition": "event"
+      }
+    ],
+    "unchanged_from_original_r6": true
+  },
+  "evidence_archive": {
+    "local_file": "D:\\obsd\\Projects\\ShiftLink\\output\\rms-confirmation-20261024-evidence.zip",
+    "bytes": 58929486,
+    "sha256": "46e5784e9e6e7f9e449703c9307d8d79f7c321a43c16c67bce0c66fd2cef5047",
+    "source_zip_crc_verified": true,
+    "source_entries": 958,
+    "source_model_locks_unchanged": true
+  }
+}

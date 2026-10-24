@@ -91,6 +91,8 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
 
 `MesService`는 엔진 한 개를 소유하고 일반 상태 조회 자체로 엔진을 진행시키지 않는다.
 `--random-faults`가 켜지면 기본 `MesEngine` 대신 `RandomFactoryEngine`을 구성한다.
+별도 `--progressive-faults`는 `progressive_factory.py`의 점진 악화·명시적 수리 전 유지 모드다. 기존 랜덤 모드와 동시 지정하지 않는다. 2026-10-25 운영 적용한 버튼 분리는 기본 시작을 기존 운전으로 두고 `/api/control`의 `random_mode`를 눌러야 활성화한다. 관측 기반/사용자 선택 설비의 공통 모의 수리 절차를 기존 resolution API에 연결하며 재가동 후 센서 3회 연속 정상으로 회복을 확인한다. 현재 적용·백업은 [운영 기록](../testing/mes-random-controls-deployment-20261025.md)을 따른다. 이전 [버튼·복구 검증](../testing/mes-random-mode-controls-20261025.md)과 구분한다.
+[사용·검증 범위](../guides/mes-progressive-faults.md)를 참고한다. 2026-10-25 Pi의 RMS16·미사용 평가·실시간 검증 후 운영 MES에 선택 적용했으며 [실제 적용·복구 기록](../testing/mes-rms16-deployment-20261025.md)을 따른다.
 합성 데이터는 실측 또는 보정된 물리 모델의 출력으로 해석하지 않는다.
 
 주요 API 예: `/api/state`, `/api/config`, `/api/catalog`, `/api/query`,

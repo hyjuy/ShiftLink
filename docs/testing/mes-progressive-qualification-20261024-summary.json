@@ -1,0 +1,111 @@
+{
+  "summary": {
+    "positive_cases": 24,
+    "detected": 24,
+    "normal_cases": 8,
+    "normal_frames": 7200,
+    "normal_notifications": 1,
+    "duplicates": 0,
+    "unmatched": 1,
+    "p95_latent_seconds": 25,
+    "p95_observable_seconds": 0,
+    "p95_simulated_display_seconds": 26,
+    "compute_p95_seconds": 0.03105843700177502,
+    "frames": 25760,
+    "elapsed_seconds": 528.1760647189985,
+    "by_kind": {
+      "hydraulic_leak": {
+        "detected": 6,
+        "total": 6,
+        "duplicates": 0,
+        "unmatched": 0
+      },
+      "cooling_loss": {
+        "detected": 6,
+        "total": 6,
+        "duplicates": 0,
+        "unmatched": 1
+      },
+      "pneumatic_leak": {
+        "detected": 6,
+        "total": 6,
+        "duplicates": 0,
+        "unmatched": 0
+      },
+      "drive_friction": {
+        "detected": 6,
+        "total": 6,
+        "duplicates": 0,
+        "unmatched": 0
+      }
+    },
+    "model_files_unchanged": true,
+    "latency_scope": "offline feed/report/reader compute plus separately simulated three-frame polling; no real network or Chromium display timing",
+    "gates": {
+      "recall": true,
+      "all_kinds_no_misses": true,
+      "normal_zero": false,
+      "unmatched_zero": false,
+      "duplicates_zero": true,
+      "latent_delay": true,
+      "observable_delay": true,
+      "one_second_compute": true
+    },
+    "passed": false
+  },
+  "diagnostic": {
+    "events": [
+      {
+        "case": "cooling_loss-03",
+        "sequence": 649,
+        "equipment_id": "EQ-0009",
+        "equipment_code": "CV-01",
+        "features": [
+          {
+            "category": "flat",
+            "equipment": "EQ-0009",
+            "signal": "cv_vib_rms",
+            "value": 1.369,
+            "quality": "good",
+            "min": 0.8,
+            "max": 1.8,
+            "normal": true,
+            "flat_window": 8,
+            "recent_peak_to_peak": 0.0,
+            "flat_tolerance": 4.8794200000004125e-06,
+            "known_plateau_bounds": null
+          }
+        ],
+        "same_as_fault_disabled": true
+      },
+      {
+        "case": "normal-06",
+        "sequence": 515,
+        "equipment_id": "EQ-0008",
+        "equipment_code": "RT-03",
+        "features": [
+          {
+            "category": "flat",
+            "equipment": "EQ-0008",
+            "signal": "rt_vib_rms",
+            "value": 1.348,
+            "quality": "good",
+            "min": 0.8,
+            "max": 1.8,
+            "normal": true,
+            "flat_window": 8,
+            "recent_peak_to_peak": 0.0,
+            "flat_tolerance": 3.876870999999027e-06,
+            "known_plateau_bounds": null
+          }
+        ],
+        "same_as_fault_disabled": true
+      }
+    ],
+    "no_model_changes": true
+  },
+  "decision": "HOLD: two false notifications; operating MES unchanged; actual 1Hz/transport/display qualification not run",
+  "source_equivalence": "Six generator dependencies matched Jetson before and after test",
+  "pure_normal_equivalent_hours": 2,
+  "total_false_notifications": 2
+}

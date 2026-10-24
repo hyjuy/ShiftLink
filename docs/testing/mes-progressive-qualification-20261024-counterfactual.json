@@ -1,0 +1,17 @@
+{
+  "series": [
+    {
+      "case": "cooling_loss-03",
+      "equipment_code": "CV-01",
+      "prefix_frames": 649,
+      "mismatches": 0
+    },
+    {
+      "case": "normal-06",
+      "equipment_code": "RT-03",
+      "prefix_frames": 515,
+      "mismatches": 0
+    }
+  ],
+  "all_matched": true
+}

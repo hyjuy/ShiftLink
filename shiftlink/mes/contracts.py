@@ -186,6 +186,7 @@ class Snapshot:
     is_synthetic: bool = True
     recovery: dict[str, object] | None = None
     components: tuple[dict[str, object], ...] = ()
+    simulation_mode: str | None = None
 
     @property
     def key(self) -> tuple[str, int]:

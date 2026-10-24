@@ -59,3 +59,13 @@ def test_static_event_cannot_replace_an_unavailable_work_log(published_history, 
                             'equipment_id': 'EQ-0001'})
     assert result['no_knowledge'] and not result['cited_card_ids']
     assert not calls
+
+
+def test_impossible_duration_skips_embedding_search(published_history, monkeypatch):
+    service, _ = published_history
+    def no_embedding(*a, **k):
+        raise AssertionError('No matching reviewed record: no embedding request is needed')
+    monkeypatch.setattr(service.query_pipeline, '_embed', no_embedding)
+    result = service.query({'question': '근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘',
+                            'equipment_id': 'EQ-0001'})
+    assert result['no_knowledge'] and not result['cited_card_ids']

@@ -77,3 +77,7 @@ python -m pytest tests/test_hpu_retrieval_experiment.py -q
 실행한 [비교 JSON](../testing/hpu-retrieval-comparison-20261025.json)과
 [검증 기록](../testing/hpu-retrieval-experiment-20261025.tdd.md)을 참고한다.
 로컬 fixture 지연은 실제 Ollama·Pi/Jetson의 지연이나 운영 p95를 보장하지 않는다.
+
+2026-10-25에는 운영 모델·자연 검색 인덱스로 본평가 32쌍과 별도 탐색 8쌍을 실행했다.
+표현에 따른 실제 인용 회복은 확인했지만 공통 이력 분류/보류 문제와 지연 때문에 **운영 적용 보류·기본 off 유지**다.
+[실제 모델 비교](../testing/hpu-retrieval-live-20261025.md)의 평가군 구분과 남은 문제를 확인한다.

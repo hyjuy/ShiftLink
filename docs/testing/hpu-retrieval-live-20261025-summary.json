@@ -1,0 +1,154 @@
+{
+  "schema_version": "shiftlink-hpu-real-evaluation-v1",
+  "date": "2026-10-25",
+  "models_mocked": false,
+  "index_rank_modified": false,
+  "data_kind": "synthetic_reviewed_work_report",
+  "primary": {
+    "pairs": 32,
+    "completed": 32,
+    "invalid_or_error": 0,
+    "unique_questions": 16,
+    "candidate_added_pairs": 0,
+    "answer_hash_changed_pairs": 1,
+    "baseline": {
+      "history_expected": 12,
+      "history_citation_hits": 10,
+      "abstentions": 8,
+      "required_abstentions": 4,
+      "required_abstention_hits": 2,
+      "forbidden_field_citations": 2,
+      "field_scope_leaks": 0,
+      "new_relation_misconnections": 0,
+      "judge_chunks": 150,
+      "candidate_chunks": 150,
+      "mean_ms": 6035.27157500082,
+      "median_ms": 5722.02395000204,
+      "p95_ms": 10790.106000000378
+    },
+    "trial": {
+      "history_expected": 12,
+      "history_citation_hits": 10,
+      "abstentions": 8,
+      "required_abstentions": 4,
+      "required_abstention_hits": 2,
+      "forbidden_field_citations": 2,
+      "field_scope_leaks": 0,
+      "new_relation_misconnections": 0,
+      "judge_chunks": 150,
+      "candidate_chunks": 150,
+      "mean_ms": 5818.32577187447,
+      "median_ms": 4932.600449999882,
+      "p95_ms": 11481.549500000256
+    },
+    "paired_mean_delta_ms": -216.94580312635026,
+    "paired_median_delta_ms": -257.0543500023632,
+    "preservation_checks": {
+      "pairs": 32,
+      "completed": 32,
+      "index_unchanged": true,
+      "kb_unchanged": true,
+      "ordinary_query_hook_added": false
+    }
+  },
+  "exploratory_diagnostics": {
+    "pairs": 8,
+    "completed": 8,
+    "invalid_or_error": 0,
+    "unique_questions": 4,
+    "candidate_added_pairs": 6,
+    "answer_hash_changed_pairs": 6,
+    "baseline": {
+      "history_expected": 8,
+      "history_citation_hits": 2,
+      "abstentions": 6,
+      "required_abstentions": 0,
+      "required_abstention_hits": 0,
+      "forbidden_field_citations": 0,
+      "field_scope_leaks": 0,
+      "new_relation_misconnections": 0,
+      "judge_chunks": 30,
+      "candidate_chunks": 30,
+      "mean_ms": 4663.362862498161,
+      "median_ms": 4386.622699996224,
+      "p95_ms": 7255.734600003052
+    },
+    "trial": {
+      "history_expected": 8,
+      "history_citation_hits": 8,
+      "abstentions": 0,
+      "required_abstentions": 0,
+      "required_abstention_hits": 0,
+      "forbidden_field_citations": 0,
+      "field_scope_leaks": 0,
+      "new_relation_misconnections": 0,
+      "judge_chunks": 32,
+      "candidate_chunks": 32,
+      "mean_ms": 5941.464675000134,
+      "median_ms": 5678.718200000731,
+      "p95_ms": 12989.908899995498
+    },
+    "paired_mean_delta_ms": 1278.1018125019727,
+    "paired_median_delta_ms": 922.7100500047527,
+    "preservation_checks": {
+      "pairs": 8,
+      "completed": 8,
+      "index_unchanged": true,
+      "kb_unchanged": true,
+      "ordinary_query_hook_added": false
+    }
+  },
+  "models": {
+    "main": [
+      {
+        "name": "exaone-rag-mes-ck176:latest",
+        "digest": "69657565df76f145168153ab12722a6ad5b09488d57c9ecb5439c5e4c754a301",
+        "size": 1497462920
+      },
+      {
+        "name": "embeddinggemma:300m",
+        "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+        "size": 621875917
+      },
+      {
+        "name": "exaone-sft-judge:latest",
+        "digest": "f31ce4dde5303fb7b8731097fd7f75808f47d31349deb760bdef87c027374db5",
+        "size": 1497462920
+      }
+    ],
+    "judge": [
+      {
+        "name": "exaone-rag-mes-ck176:latest",
+        "digest": "69657565df76f145168153ab12722a6ad5b09488d57c9ecb5439c5e4c754a301",
+        "size": 1497462920
+      },
+      {
+        "name": "embeddinggemma:300m",
+        "digest": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+        "size": 621875917
+      },
+      {
+        "name": "exaone-sft-judge:latest",
+        "digest": "f31ce4dde5303fb7b8731097fd7f75808f47d31349deb760bdef87c027374db5",
+        "size": 1497462920
+      }
+    ]
+  },
+  "index_sha256": {
+    "chunks_700.jsonl": "e08cf3b14afa13d3d1aef08944c99dc31d4826f5d0a4f112b5ec5fa6f6da5a26",
+    "vectors_700__embeddinggemma_300m.npy": "9e67ba9952addce6b395cbeb14377ed70fae08d0536aa01b48cd93544e7615b1"
+  },
+  "operational_decision": "hold_keep_default_off",
+  "limitations": [
+    "Synthetic reviewed work report; no production work-log corpus",
+    "One field card and two repeats per question",
+    "PC pipeline over SSH to Jetson model APIs; not PDA end-to-end latency",
+    "Exploratory wording cohort separated from fixed primary cohort"
+  ],
+  "findings": [
+    "history-observation: existing history classifier rejected a recorded observation lookup",
+    "missing-217: both paths answered from a 137-minute record; no invented 217-minute number, but required abstention failed",
+    "replacement/revoked: both paths substituted a static handover response, outside the field-card link guard",
+    "foam-noise: one answer hash differed with identical candidates and temperature zero"
+  ]
+}

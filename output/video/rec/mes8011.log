@@ -1,3 +1,0 @@
-Synthetic MES: http://127.0.0.1:8011 | database: output\video\rec\db\mock-mes.sqlite3
-[경고] 판정 모델을 확인하지 못했습니다(missing). 질의는 준비될 때까지 503(잠시 후 다시 시도)으로 응답합니다.
-[예열] 모델 적재: []

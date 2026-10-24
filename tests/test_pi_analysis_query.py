@@ -354,13 +354,13 @@ def test_all_fixed_history_current_questions_with_pi_context(published_history,m
     assert len(observed)==909
     (tmp_path/'with-analysis-summary.json').write_text(json.dumps({'cases':len(cases),'passed':sum(r['passed'] for r in cases),'history':sum(r['history'] for r in cases),'current':sum(not r['history'] for r in cases),'all_context_boundaries_passed':True},indent=2),encoding='utf-8')
 
-@pytest.mark.parametrize('mode,state,retained', [('paused','running',True),('stopped','running',True),('running','stopped',True),('running','waiting',False),('recovering','stopped',False),('running','running',False)])
-def test_pi_r5_manual_stop_contract(service,mode,state,retained):
+@pytest.mark.parametrize('mode,state,status,retained', [('paused','running','stopped',True),('stopped','running','stopped',True),('running','stopped','stopped',True),('running','stopped','ready',True),('running','waiting','stopped',False),('recovering','stopped','stopped',False),('running','running','stopped',False),('paused','running','ready',False)])
+def test_pi_r5_manual_stop_contract(service,mode,state,status,retained):
     from shiftlink.agent.pi_analysis import validate_context
     snap=running(service)
     snap['line_mode']=mode
     next(e for e in snap['equipment'] if e['equipment_id']=='EQ-0001')['operating_state']=state
-    raw=report(snap)|{'status':'stopped'}
+    raw=report(snap)|{'status':status}
     raw['items'][0].update(state='before_stop',stop_sequence=snap['sequence'],stopped_at=snap['simulated_at'])
     context=validate_context(raw,snap,snap['config_id'],'EQ-0001')
     assert len(context['items'])==int(retained)

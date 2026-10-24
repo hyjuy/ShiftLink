@@ -75,3 +75,13 @@ Jetson은 현재 MES 실행·설정·선택 장비·생성 시각·센서 입력
 직접 MES API 입력의 발신자 암호학적 인증, 실제 모델의 답변 품질, 실제 장비의 물리 결함 탐지는 이번 범위에서 검증하지 않았다.
 
 로컬 증거: `artifacts/pi-analysis-llm-context-20261024/`.
+
+## 배포 직전 최신 Pi r5 호환 대조
+
+장비 읽기 전용 대조에서 Pi 분석기가 `normal-context-v1-pda-20261024-r5-manual-stop`으로 바뀐 것을 확인했다.
+기존 연결 검증기가 수동 정지/일시정지의 정지 전 기록을 누락하는 3유형을 재현했다(RED `a40ae5a`).
+라인이 running/ready인 동안 개별 장비가 stopped인 r5 결과도 추가 재현했다(RED `2f71a6a`).
+Pi 분석기와 UI를 변경하지 않고 `agent/pi_analysis.py`의 before_stop 허용 경계만 r5의 기존 유지 조건에 맞췄다.
+시각·실행·설정·순번·최근성 검사는 유지하며 수동 정지를 고장으로 바꾸지 않는다.
+`python -m pytest tests/test_pi_analysis_query.py tests/test_pda_app.py tests/test_pda_advisory_reader.py tests/test_pda_fault_stop.py -q`: **100 passed in 35.01s**.
+이 실행은 기존 908질문 서비스 검사도 포함한다. 장비 배포 결과는 별도 배포 기록에 남긴다.

@@ -85,9 +85,14 @@ def validate_context(data, snapshot, config_id, equipment_id, *, now=None):
                             observed_at=_instant(row['observed_at']).isoformat(), state=row['state'], signals=[])
                 if row['state'] == 'before_stop':
                     stop = row['stop_sequence']
-                    fault = (snapshot['line_mode'] == 'fault' or equipment.get('fault_level') in {'warning','critical','fault'}
-                             or any(a['equipment_id'] == equipment_id for a in snapshot['active_alarms']))
-                    if (status != 'stopped' or equipment['operating_state'] not in {'stopped','waiting'} or not fault
+                    # Match the Pi r5 retention contract without labelling a manual pause as a fault.
+                    retained = (snapshot['line_mode'] in {'paused','stopped'} or
+                                equipment['operating_state'] in {'stopped','waiting'} and (
+                                    snapshot['line_mode'] == 'fault' or
+                                    snapshot['line_mode'] == 'running' and equipment['operating_state'] == 'stopped' or
+                                    equipment.get('fault_level') in {'warning','critical','fault'} or
+                                    any(a['equipment_id'] == equipment_id for a in snapshot['active_alarms'])))
+                    if (status not in {'ready','stopped'} or not retained
                             or type(stop) is not int or not seq <= stop <= sequence or stop - seq > 30
                             or (_instant(row['stopped_at']) - _instant(row['observed_at'])).total_seconds() != stop - seq):
                         continue

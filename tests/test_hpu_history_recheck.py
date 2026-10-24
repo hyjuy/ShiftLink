@@ -1,10 +1,12 @@
 """Regressions from the unchanged real-model HPU evaluation questions."""
 from copy import deepcopy
 
+import numpy as np
 import pytest
 
 from shiftlink.rag2.field_history import is_history_question
 from test_s30h_publication_integrity import published_history, service, pipe, E, G
+from test_s30h import chunk
 
 
 @pytest.mark.parametrize('question', [
@@ -69,3 +71,18 @@ def test_impossible_duration_skips_embedding_search(published_history, monkeypat
     result = service.query({'question': '근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘',
                             'equipment_id': 'EQ-0001'})
     assert result['no_knowledge'] and not result['cited_card_ids']
+
+
+def test_work_log_search_budget_is_not_consumed_by_manuals(published_history):
+    service, did = published_history
+    with service._lock:
+        view, _ = service.publications.snapshot(service.query_pipeline, 'EQ-0001',
+            service.active_config.equipment[0].asset_id, [])
+    field = [r for r in view.rows if r['metadata']['source'] == did]
+    view.rows = [chunk(f'manual-{i}', 'source', f'manual-{i}', 'HPU', page=1) for i in range(35)] + field
+    view.vec = np.array([[3, 0, 0, 0]] * 35 + [[.6, .8, 0, 0]] * len(field), dtype=np.float32)
+    view.folders = np.array(['HPU'] * len(view.rows))
+    result = view.run({'question': '근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘',
+                       'eq_id': 'EQ-0001'})
+    assert result.output.cited_card_ids == [did] and not result.output.no_knowledge
+    assert all(c.startswith('field_') for c in result.tool_results['candidates'])

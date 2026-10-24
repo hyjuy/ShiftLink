@@ -106,3 +106,7 @@ systemctl status shiftlink-analytics.service
 위 초기 계약의 최근 30프레임 표시는 r6의 현재 표시 정책과 다르다. r6에서는 확정 사건을 유효 정상 근거 32회 연속 확인까지 유지하며 정지·워밍업·불량 측정을 회복으로 세지 않는다. 같은 알람창의 같은 설비 행에 무음 참고 정보로 표시하고 기존 경보·확인·진동 규칙을 유지한다. Jetson 질문 참고의 기존 30프레임 검증 제한은 별도로 남아 있다.
 
 배포 전 Pi 회귀 73개, 배포 후 설치 코드 회귀 19개와 Pi Chromium 검사를 통과했다. 격리 재생/UI의 표시·진동 호출 검사이며 실제 MES 고장 주입이나 물리 진동 측정은 아니다. 백업 `/home/pi/shiftlink/analytics/backups/20261024-214132` 및 재현·중지·복구 경로는 [r6 배포 결과](../../docs/testing/pda-active-advisory-deploy-20261024.md)에 있다.
+
+## RMS16 정상 정체 확인 — 운영 r7 적용
+
+2026-10-25 `rms16-active-advisory-20261024-r7`을 적용했다. 원본 모델·profile·r6 journal은 보존하고, 일곱 RMS 고착 확인만8→16 유효 프레임으로 보정한 별도 normal-profile-rms16.json을 선택한다. 정상 범위 고착 확인은7→15초로 늘었다. `rms16.service.in`과 별도 `/var/lib/shiftlink-analytics-rms16-v1` 상태를 사용한다. PDA 네 파일과 프로세스·기존 경보 규칙은 그대로다. Timestral은 사용하지 않는다. [새 평가·실기 결과](../../docs/testing/mes-rms-confirmation-20261024.md), [적용·STOP·복구](../../docs/testing/mes-rms16-deployment-20261025.md).

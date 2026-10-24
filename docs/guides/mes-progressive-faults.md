@@ -1,6 +1,6 @@
 # 점진 악화·수리 전 유지 랜덤 모드
 
-기존 정상/`--random-faults` 경로를 보존한 선택적 합성 MES 모드다. 운영 서비스에는 아직 적용하지 않았다. 실제 물리 모델이나 실측 고장 재현으로 설명하지 않는다.
+기존 정상/`--random-faults` 경로를 보존한 선택적 합성 MES 모드다. 2026-10-25 Pi 검증 후 운영 MES에 선택 적용했다. [적용·보존·복구 기록](../testing/mes-rms16-deployment-20261025.md)을 따른다. 실제 물리 모델이나 실측 고장 재현으로 설명하지 않는다.
 
 ## 동작
 
@@ -22,18 +22,22 @@ python -m shiftlink.mes --progressive-faults --host 127.0.0.1 --port 18000 --db 
 
 `--random-faults`와 동시 사용은 거부한다. `--fault-hazard`는 기존 랜덤 모드의 옵션이며 새 모드는 위 대기 구간을 사용한다. 같은 seed·nonce·구성·시작 시각·조작 순서는 재현 가능하다.
 
-별도 서버에만 다음 제어를 보낸다. `HPU-01`은 예시이며 실제 고장이 지속 중인 설비 ID를 사용한다. 이 명령은 시뮬레이션 수리 기록이며 실제 장비 제어가 아니다.
+별도 서버에만 다음 제어를 보낸다. `EQ-0001`(HPU-01의 equipment_id)은 예시이며 실제 고장이 지속 중인 설비 ID를 사용한다. 이 명령은 시뮬레이션 수리 기록이며 실제 장비 제어가 아니다.
 
 ```sh
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"start"}'
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"pause"}'
-curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"repair_fault","equipment_id":"HPU-01"}'
+curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"repair_fault","equipment_id":"EQ-0001"}'
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"resume"}'
 ```
 
-새 UI 버튼은 추가하지 않았다. 운영 전환이나 기존 운영 경보·PDA 변경도 하지 않았다. [Pi 회귀·HTTP 검증](../testing/mes-progressive-faults-20261024.tdd.md)을 참고한다.
+새 UI 버튼은 추가하지 않았다. 초기 기능 검증에서는 운영을 바꾸지 않았고, 후속 운영 전환은 위 2026-10-25 기록으로 구분한다. 기존 경보·PDA 파일은 유지했다. [Pi 회귀·HTTP 검증](../testing/mes-progressive-faults-20261024.tdd.md)을 참고한다.
 
 생성 메커니즘은 탐지기의 PATTERNS를 읽어 구성하지 않는다. 다만 정상 생성기와 센서 범위는 공유하므로 이 기능 검증을 독립 평가나 현장 탐지 성능으로 설명하지 않는다. 고정 운영 AI의 합성 평가 결과는 아래에 기록했다. 실측 센서 검증은 별도로 남아 있다.
 ## 2026-10-24 운영 AI 검증 — 적용 보류
 
 현재 Pi r6을 고정해 새 합성 고장 24건과 정상 8실행을 검증했다. 해당 설비 탐지 24/24, 미탐·중복 0이었으나 정상 오통지 총 2건(순수 정상 1건·고장 중 다른 정상 설비 1건)으로 통과 기준을 충족하지 못했다. 고장 시작 기준 지연 p95는 25프레임이며 실제 통신·화면 포함 지연이 아니다. 운영 MES에는 아직 적용하지 않는다. [평가·원인·보존 기록](../testing/mes-progressive-qualification-20261024.md)을 따른다. 수정 시 이번 자료는 개발 자료로만 사용하고 새 미사용 평가가 필요하다.
+
+## 2026-10-25 RMS16 후속 검증·적용
+
+초기 오통지2건의 자료와 r6 결과를 보존하고, RMS16 확인 후보를 별도 개발/고정 후 새 평가했다. 공정24·고착14 모두 탐지, 오통지·중복0, 탐지 p95 25초였고 정상 범위 고착 확인은 7→15초로 늦어졌다. 원본도 이번 새 평가에서 오통지0이므로 우위를 주장하지 않는다. 실제 1Hz·격리 화면 검증과 기존 경보 부재·백업을 확인한 뒤 적용했다. [평가](../testing/mes-rms-confirmation-20261024.md), [실제 적용 결과](../testing/mes-rms16-deployment-20261025.md).

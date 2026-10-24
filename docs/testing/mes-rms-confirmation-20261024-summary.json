@@ -1,5 +1,5 @@
 {
-  "status": "validation_passed_deployment_pending",
+  "status": "deployed_and_verified",
   "baseline": {
     "profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
     "positive": 38,
@@ -330,5 +330,148 @@
     "storage_incremental_http": 20,
     "portable_fixture_repeat": 5
   },
-  "model_profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af"
+  "model_profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+  "pi_deployment": {
+    "deployed": true,
+    "release": "/home/pi/shiftlink/analytics/releases/rms16-active-advisory-20261024-r7",
+    "backup": "/home/pi/shiftlink/analytics/backups/20261025-004001-rms16",
+    "old_analysis_pid": 20799,
+    "new_analysis_pid": 30896,
+    "pda_pid_preserved": true,
+    "pda_files_unchanged": true,
+    "profile_sha256": "a87bef7e719b8f4b26b8eb8d840fb962fe58ac6c5599915e2c4e67cda01874af",
+    "cursor_preserved_at_migration": 8909,
+    "notices_preserved": true,
+    "ai_status": "ready",
+    "source_run_unchanged": true,
+    "original_checkpoint_preserved": true
+  },
+  "post_deployment": {
+    "passed": true,
+    "samples": 120,
+    "run": "414b92e58b834856a6b3085be96c9089",
+    "api_p95_seconds": 0.1096877099989797,
+    "poll_p95_seconds": 0.14031975900070393,
+    "ready_samples": 120,
+    "last_status": "ready",
+    "last_sequence": 220,
+    "replay_frames": 221,
+    "replay_sequence_start": 1,
+    "replay_sequence_end": 221,
+    "missing_frames": 0,
+    "channels": 69,
+    "analysis_errors": 0,
+    "pda_pid_preserved": true,
+    "pda_and_r6_files_unchanged": true,
+    "torch_loaded": false,
+    "timestral_loaded": false,
+    "source_period_seconds": 1,
+    "legacy_alarm_count": 0,
+    "analysis": "MainPID=30896\nNRestarts=0\nActiveState=active",
+    "resources": [
+      {
+        "temperature": "temp=43.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.3'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=42.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=41.8'C",
+        "throttle": "throttled=0x0"
+      },
+      {
+        "temperature": "temp=43.3'C",
+        "throttle": "throttled=0x0"
+      }
+    ],
+    "max_active_ai_items": 0
+  },
+  "operating_natural_fault": {
+    "operating_fault_kind": "pneumatic_leak",
+    "equipment_id": "EQ-0003",
+    "private_generator_start": 248,
+    "notice_sequence": 274,
+    "latent_frame_delay": 26,
+    "event_id_preserved": true,
+    "observed_polls": 2,
+    "shown_after_thirty_frames": true,
+    "unique_ai_equipment_per_poll": [
+      1,
+      1
+    ],
+    "scope": "one naturally generated operating synthetic fault; frame delay, not operating end-to-end wall time; private label read separately, never fed to detector"
+  },
+  "runtime_memory": {
+    "VmHWM": "40352 kB",
+    "VmRSS": "40352 kB",
+    "Threads": "1"
+  },
+  "final_temperature": "temp=43.3'C",
+  "final_throttle": "throttled=0x0",
+  "mes_deployment": {
+    "deployed": true,
+    "backup": "/home/jetson/shiftlink/backups/20261025-003710-rms16-progressive-pinned",
+    "old_run": "fd2d5e210e24490a9562f65282cfb890",
+    "new_run": "414b92e58b834856a6b3085be96c9089",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "restored_line_mode": "running",
+    "channels": 69,
+    "original_run_frames_preserved": 8947,
+    "all_table_counts_non_decreasing": true,
+    "original_unit_dropins_unchanged": true,
+    "source_hashes": {
+      "shiftlink/mes/server.py": "628c8f3a281d87c45a5a1875af4c8ddcdda00bc77e7e92105cdf95fd4d98d57f",
+      "shiftlink/mes/__main__.py": "72f1b0ad3596d293c2771065c947ec731b00cba92f1630b4b31dc2cb5e9d9814",
+      "shiftlink/mes/storage.py": "a0a2c84d0001c2b381db278ce76ec1e6580e6a587df4d6310603abcdd2e011f0",
+      "shiftlink/mes/progressive_factory.py": "c6e6f037e9c2d529e62364b2ca5e88d32b503662767037991c9478e125aca715"
+    },
+    "service": "MainPID=45593\nNRestarts=0\nActiveState=active",
+    "related_services": "MainPID=1145\nId=shiftlink-uploader.service\nActiveState=active\n\nMainPID=1049\nId=ollama.service\nActiveState=active\n\nMainPID=1050\nId=ollama-judge.service\nActiveState=active"
+  },
+  "related_services_preserved": {
+    "shiftlink-uploader.service": true,
+    "ollama.service": true,
+    "ollama-judge.service": true
+  },
+  "database_backup": {
+    "backup": "/home/jetson/shiftlink/backups/20261025-003710-rms16-progressive-pinned",
+    "database_bytes": 2806358016,
+    "preserved_run_frames": 8899,
+    "backup_completed": true
+  },
+  "incomplete_backup_preserved": "/home/jetson/shiftlink/backups/20261025-002914-rms16-progressive/INCOMPLETE.json"
 }

@@ -72,3 +72,48 @@ GET /api/incidents/<incident_id>/ontology?limit=100&offset=100&snapshot_hash=<�
 승인 복사본 읽기와 투영만 수행하며 업무 DB 쓰기·검색·모델·게시 호출은 없다.
 API 요청 자체의 CPU/IO 비용은 있으므로 운영 부하·실제 장비 성능은 별도 검증 대상이다.
 검증 기록은 [4단계 테스트](../testing/hpu-ontology-api-20261024.tdd.md)를 참고한다.
+
+## 5단계: 실제 인용 게시 카드 연결
+
+관리자 인증·explain 모드·승인 복사본 설정은 그대로 사용한다.
+`query_id`를 추가하면 해당 질의가 실제 인용한 검수 카드의 판본만 사건 설명에 연결한다.
+파라미터를 생략하면 기존 4단계 그래프다. 자동 검색·판정·답변에는 이 연결을 사용하지 않는다.
+
+```text
+GET /api/incidents/<원본 사건 ID>/ontology?query_id=<저장된 질의 ID>
+```
+
+질의 이후 만든 승인 복사본이 필요하다. 복사본과 현재 서비스의 질의 payload·저장 시각,
+출처 사건·자산·일지 원문이 일치해야 한다. 동일 ID만으로 서로 다른 데이터셋을 결합하지 않는다.
+현재 서비스의 게시 상태를 검사하므로 복사본에 게시본이 남아 있어도 현재 반려 상태면 연결하지 않는다.
+질의의 현재 사건과 카드가 유래한 사건은 다를 수 있으며, 대상은 카드의 명시적인 원본 사건이다.
+
+새 질의 로그는 기존 최종 ticket 검증 잠금 안에서 실제 인용된 항목만 `publication_ticket`
+내부 메타데이터로 함께 저장한다. 항목은 카드 ID·검수 리비전·내용 해시·설비 ID·자산 ID다.
+응답에는 이 필드를 추가하지 않고 기존 로그를 수정하거나 과거 ticket을 추정해 채우지 않는다.
+ticket이 없는 과거 인용은 `citation_revision_unverified`로 보류한다.
+
+응답은 `CardVersion` 노드와 `DERIVED_FROM_INCIDENT` 관계를 추가한다.
+카드 원문을 복제하지 않고 카드 ID·판본·검수 리비전·해시와 인용 질의 참조만 제공한다.
+`publication_overlay`에는 확장 스키마 `shiftlink-hpu-publication-v1`, 질의 ID, 연결 카드 ID가 있다.
+기존 노드·관계·원문은 유지한다. 전체 결과의 `snapshot_hash`와 요약은 확장 결과로 다시 계산한다.
+페이지를 넘길 때 `query_id`와 `snapshot_hash`를 함께 유지한다.
+
+게시 리비전·모델·prefix·청크·벡터·원문은 검색 경로와 동일한 순수 검증 함수를 재사용한다.
+설명 API는 인덱스를 수리하거나 게시 상태를 쓰지 않는다. 연결 생성 후 같은 MES 잠금에서
+ticket과 게시 행을 다시 확인하며 도중 반려·자산 변경 시 연결을 제거한다.
+
+| 미확인 사유 | 의미 |
+|---|---|
+| `query_source_mismatch` | 승인 복사본과 서비스의 질의 내용·저장 시각 불일치 |
+| `publication_not_current` | 반려·게시 보류·리비전/해시 변경·자산 교체 |
+| `citation_revision_unverified` | 당시 실제 인용 ticket 없음 또는 현재 검수 판본과 불일치 |
+| `publication_integrity_mismatch` | 게시 원문·청크·벡터·모델·manifest 검증 실패 |
+| `publication_origin_mismatch` | 원본 사건·자산·일지 참조 또는 투영 원본 해시 불일치/상한으로 출처 제외 |
+| `citation_snapshot_missing` | 인용 ID에 해당하는 저장 카드 스냅샷 없음 |
+| `publication_changed` | 설명 생성 후 최종 ticket/게시 행 재확인 실패 |
+
+질의가 어느 한쪽 DB에 없으면 404, 출처 조회 오류는 내부 정보를 숨긴 503이다.
+관계 상한은 기존 노드 1000개·관계 2000개를 유지하고 인용 스냅샷은 최대 30개를 검사한다.
+상한 초과는 `truncated`로 표시한다. API의 잠금·CPU 비용은 운영 성능 보장과 별개다.
+[5단계 검증 기록](../testing/hpu-publication-links-20261024.tdd.md)을 참고한다.

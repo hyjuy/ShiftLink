@@ -5,7 +5,8 @@
 
 | 사용자 목적 | 호출 경로와 코드 근거 | 저장 경계 | 검증과 확인 수준 |
 |---|---|---|---|
-| Pi 분석을 현재 센서·지식카드와 함께 질문에 참고 | PDA 기존 UI → `pda/__main__.py:make_handler` → `agent/pi_analysis.py:attach_to_query` → `mes/query.py:query_service` / `validate_context` → `rag2/s30h.py:run` 또는 `edge/ollama.py:build_messages` | 질의 당시 `query_context.pi_analysis`만 추가. 기존 일지·후보·게시·KG·센서는 유지 | `tests/test_pi_analysis_query.py`, 기존 이력·게시·PDA 회귀. 로컬 fixture 이후 2026-10-24 Jetson 5파일→Pi 2파일 순차 배포, 실제 LLM·Pi 실제 UI로 격리 재검증. 분석기는 r5 유지, 기존 업무 14테이블 1054행 보존 |
+|
+| Pi 분석을 현재 센서·지식카드와 함께 질문에 참고 | PDA 기존 UI → `pda/__main__.py:make_handler` → `agent/pi_analysis.py:attach_to_query` → `mes/query.py:query_service` / `validate_context` → `rag2/s30h.py:run` 또는 `edge/ollama.py:build_messages` | 질의 당시 `query_context.pi_analysis`만 추가. 기존 일지·후보·게시·KG·센서는 유지 | `tests/test_pi_analysis_query.py`, 기존 이력·게시·PDA 회귀. 로컬 fixture 이후 2026-10-24 Jetson 5파일→Pi 2파일 순차 배포, 실제 LLM·Pi 실제 UI로 격리 재검증. 당시 분석기는 r5 유지, 기존 업무 14테이블 1054행 보존. 이후 PDA 표시 r6 적용은 질문 연결을 유지하되 Jetson의 기존 30프레임 참고 제한은 남음 |
 
 [입력 계약·실패 처리·배포 순서](../guides/pi-analysis-query-context.md)와
 [최종 검증 증거](../testing/pi-analysis-llm-context-20261024.tdd.md)를 참고한다.

@@ -98,3 +98,11 @@ systemctl status shiftlink-analytics.service
 ## 수동 정지 보존 후속 변경 — 운영 r5 적용
 
 사용자 요청 후 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop`을 운영에 적용했다. r4에서 worker와 reader 두 파일만 변경했고 모델·profile·settings·기존 화면 코드는 같다. 정지 시점 최근 30프레임 내 확정 감지만 ‘정지 전 감지’로 유지하고 정지 중 신규 판단은 보류한다. 기존 경보·확인·배지·진동 규칙은 유지한다. reader 반영을 위해 공식 경로로 PDA와 키오스크를 재시작했으며 로그인 세션은 초기화될 수 있다. 이번 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-183824`다. 이전 r4·원본·검증 결과는 보존했다. [배포 후 검증·복구 기록](../../docs/testing/pda-manual-stop-20261024.md)을 참고한다.
+
+## 회복 전 표시 유지 — 운영 r6 적용
+
+2026-10-24 사용자 승인 후 `active-advisory-v1-pda-20261024-r6`을 적용했다. `active.service.in`은 `scripts.mes_causal_active_advisory`와 별도 `/var/lib/shiftlink-analytics-active-v1` 상태를 선택한다. 기존 r5·normal checkpoint·STOP·MES·얼굴/CNN을 보존했다.
+
+위 초기 계약의 최근 30프레임 표시는 r6의 현재 표시 정책과 다르다. r6에서는 확정 사건을 유효 정상 근거 32회 연속 확인까지 유지하며 정지·워밍업·불량 측정을 회복으로 세지 않는다. 같은 알람창의 같은 설비 행에 무음 참고 정보로 표시하고 기존 경보·확인·진동 규칙을 유지한다. Jetson 질문 참고의 기존 30프레임 검증 제한은 별도로 남아 있다.
+
+배포 전 Pi 회귀 73개, 배포 후 설치 코드 회귀 19개와 Pi Chromium 검사를 통과했다. 격리 재생/UI의 표시·진동 호출 검사이며 실제 MES 고장 주입이나 물리 진동 측정은 아니다. 백업 `/home/pi/shiftlink/analytics/backups/20261024-214132` 및 재현·중지·복구 경로는 [r6 배포 결과](../../docs/testing/pda-active-advisory-deploy-20261024.md)에 있다.

@@ -1,0 +1,18 @@
+[
+  {"id":"history-order","group":"history","question":"근무일지의 필터 교체 순서와 결과는?","require_field":true,"allow_relation":true},
+  {"id":"history-137","group":"history","question":"근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘","require_field":true,"allow_relation":true},
+  {"id":"history-worker","group":"history","question":"과거 근무일지에서 필터를 점검하고 교체한 담당자와 조치 시각을 원문 그대로 읽어줘","require_field":true,"allow_relation":true},
+  {"id":"history-observation","group":"history","question":"근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘","require_field":true,"allow_relation":true},
+  {"id":"history-rephrase","group":"history","question":"지난 필터 정비 기록의 작업 순서와 각 단계에서 관찰한 결과를 그대로 옮겨줘","require_field":true,"allow_relation":true},
+  {"id":"history-duration","group":"history","question":"근무일지에 적힌 필터 교체 후 정상 운전 시간과 확인 근거만 읽어줘","require_field":true,"allow_relation":true},
+  {"id":"missing-999","group":"missing","question":"근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘","must_abstain":true,"forbid_field":true,"allow_relation":true},
+  {"id":"missing-217","group":"missing","question":"근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘","must_abstain":true,"forbid_field":true,"allow_relation":true},
+  {"id":"current-restart","group":"current","question":"과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?","allow_relation":false,"manual_review":"과거 137분 관찰만으로 현재 작업 허용을 단정하지 않음"},
+  {"id":"pressure-zero","group":"current","question":"HPU 펌프는 운전 중인데 출구 압력계에 압력이 읽히지 않습니다. 어떤 순서로 확인해야 하나요?","anchor_cards":["K-1001","K-1003","K-1006"],"allow_relation":false},
+  {"id":"foam-noise","group":"current","question":"HPU 펌프 소음이 커지고 탱크 유면에 우유빛 거품이 보입니다. 무엇을 확인해야 하나요?","anchor_cards":["K-1004","K-1008"],"allow_relation":false},
+  {"id":"filter-indicator","group":"current","question":"HPU 필터 차압이 1.2 bar를 넘었습니다. 막힘 표시기와 교체 필요 여부를 어떻게 확인하나요?","anchor_cards":["K-1201","K-1202"],"allow_relation":false},
+  {"id":"other-named-unit","group":"scope","question":"GR-01 근무일지의 필터 교체 순서와 결과는?","forbid_field":true,"allow_relation":false},
+  {"id":"other-selected-unit","group":"scope","question":"근무일지의 필터 교체 순서와 결과는?","equipment_id":"EQ-0004","forbid_field":true,"allow_relation":false},
+  {"id":"replacement","group":"scope","question":"근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘","replacement":true,"forbid_field":true,"allow_relation":false},
+  {"id":"revoked","group":"scope","question":"근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘","revoked":true,"forbid_field":true,"allow_relation":false}
+]

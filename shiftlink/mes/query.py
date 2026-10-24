@@ -10,6 +10,8 @@ from types import SimpleNamespace
 
 from shiftlink.agent.pipeline import FixedPipeline
 from shiftlink.agent.response import AgentResponse
+from shiftlink.agent.pi_analysis import validate_context
+from shiftlink.rag2.field_history import is_history_question
 from shiftlink.edge.ollama import DEFAULT_HOST, DEFAULT_TIMEOUT_S, KEEP_ALIVE, OllamaModel
 from shiftlink.rag.loader import load_card_provider
 from shiftlink.rag.graph_explain import explain
@@ -95,8 +97,8 @@ def judge_model_status(host=None, name=None, timeout=3.0):
 
 
 def query_service(service, body, *, pipeline=None):
-    if not isinstance(body, dict) or set(body) - {'question', 'equipment_id', 'scan_id', 'k', 'incident_id'}:
-        raise ValueError('query body must contain question and optional equipment_id, scan_id, k, incident_id')
+    if not isinstance(body, dict) or set(body) - {'question', 'equipment_id', 'scan_id', 'k', 'incident_id', 'pi_analysis'}:
+        raise ValueError('query body must contain question and optional equipment_id, scan_id, k, incident_id, pi_analysis')
     question = body.get('question')
     if not isinstance(question, str) or not question.strip() or len(question) > 4000:
         raise ValueError('question must be a nonblank string of at most 4000 characters')
@@ -143,6 +145,12 @@ def query_service(service, body, *, pipeline=None):
             return {**AgentResponse(mode='query', answer=REPLY[smalltalk]).model_dump(mode='json'), 'scan': scan,
                     'query_context': context, 'knowledge_status': 'smalltalk', 'evidence': prepared['evidence'],
                     'is_synthetic': True, 'smalltalk': smalltalk}
+        request_payload = prepared['request'].model_dump(mode='json')
+        if not is_history_question(rest or question):
+            analysis = validate_context(body.get('pi_analysis'), snap, config.config_id, equipment_id)
+            if analysis is not None:
+                request_payload['analysis_context'] = analysis
+                context['pi_analysis'] = analysis
         if pipeline is None:
             if service.query_pipeline is None:
                 service.query_pipeline = build_query_pipeline()
@@ -150,7 +158,7 @@ def query_service(service, body, *, pipeline=None):
         pipeline, publication_ticket = service.publications.snapshot(
             pipeline,equipment_id,equipment.asset_id,prepared['request'].model_dump(mode='json')['observations'])
     # A model request can take a minute; never hold the simulator lock during it.
-    result = pipeline.run(prepared['request'].model_dump(mode='json'))
+    result = pipeline.run(request_payload)
     output = result.output.model_dump(mode='json')
     if smalltalk in LEAD and output.get('answer') and not output.get('no_knowledge') and not output.get('review_queue'):
         output['answer'] = LEAD[smalltalk] + output['answer']

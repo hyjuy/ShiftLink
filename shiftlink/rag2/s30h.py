@@ -20,6 +20,7 @@ from shiftlink.agent.pipeline import JudgeUnavailableError
 from shiftlink.agent.response import AgentResponse, SafetyNotice
 from shiftlink.rag.knowledge_graph import expand_ranking
 
+from shiftlink.agent.pi_analysis import prompt_block
 from . import evidence_score as E
 from . import generate as G
 from . import mes_block as MB
@@ -297,6 +298,8 @@ class S30hPipeline:
         if route == "drop_all" and block and self.mes_only:
             route = "mes_only"   # no evidence survived, but the unit's MES can still answer a state question ([M] only)
         p, extra = (MB.prompt(question, block, ev2, self.event_label), {"system": MB.SYSTEM}) if block else (G.prompt(question, ev2), {})
+        if not history and not away and payload.get('analysis_context'):
+            p += "\n\n" + prompt_block(payload['analysis_context'])
         if route == "drop_all":
             out = {"raw": json.dumps({"insufficient_evidence": True, "answer": "", "citations": []}), "prompt_tokens": 0}
         elif route == "record_history":

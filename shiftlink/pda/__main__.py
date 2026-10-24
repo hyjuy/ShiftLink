@@ -70,6 +70,9 @@ def make_handler(jetson: str, web: Path = WEB, on_exit=None, on_restart=None, *,
         def _proxy(self) -> None:
             length = int(self.headers.get("Content-Length") or 0)
             body = self.rfile.read(length) if length else None
+            if self.command == "POST" and self.path.split("?", 1)[0] == "/api/query":
+                from shiftlink.agent.pi_analysis import attach_to_query
+                body = attach_to_query(body, ai_insights_path)
             req = urllib.request.Request(jetson + self.path, data=body, method=self.command)
             if self.headers.get("Content-Type"):
                 req.add_header("Content-Type", self.headers["Content-Type"])

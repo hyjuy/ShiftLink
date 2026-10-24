@@ -146,6 +146,10 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   기존 경보와 같은 알람창에서 설비별로 합치되 확인·진동 규칙은 유지한다.
   [배포·중지·복구 안내](../../deploy/analytics/README.md)와
   [Pi 검증 기록](../testing/mes-causal-pda-production-20261023.md)을 따른다.
+- 2026-10-24 로컬 후속본은 현재 Pi의 `normal-context-v1-pda-20261024-r4` 분석 결과를 질문 프록시에서 함께 전달한다.
+  `agent/pi_analysis.py`가 Jetson의 질의 시점 MES 실행·설정·장비·시각·분석 지연을 검증하고, `mes/query.py`가
+  허용한 결과만 S30h/하이브리드 답변 프롬프트의 참고 문맥에 넣는다. 과거 원문 조회·검색·judge·게시·센서 관측은
+  변경하지 않는다. Pi 모델·UI·운영 설정과 별개인 운영 미배포 소스다. [계약과 검증](../guides/pi-analysis-query-context.md)을 따른다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
 - Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로

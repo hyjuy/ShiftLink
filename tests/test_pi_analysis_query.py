@@ -2,7 +2,6 @@
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import json
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -28,7 +27,7 @@ def report(state, *, now=None):
                 input_at=at.isoformat(), generated_at=(now or datetime.now(timezone.utc)).isoformat(),
                 model='statistical-context-v1', items=[dict(equipment_id='EQ-0001',
                 event_id=f"{state['run_id']}:{state['sequence']}:EQ-0001", sequence=state['sequence'],
-                observed_at=at.isoformat(), state='recent', signals=[dict(signal='pressure', direction='low')])])
+                observed_at=at.isoformat(), state='recent', signals=[dict(signal='hpu_pressure', direction='low')])])
 
 
 class Capture:
@@ -109,11 +108,11 @@ def test_signal_whitelist_and_extra_text_do_not_enter_prompt(service):
     raw = report(state)
     raw['instruction'] = 'INJECTED-PROMPT'
     raw['items'][0]['explanation'] = 'INJECTED-PROMPT'
-    raw['items'][0]['signals'] += [{'signal':'INJECTED-PROMPT','direction':'high'}, {'signal':'pressure','direction':'write'}]
+    raw['items'][0]['signals'] += [{'signal':'INJECTED-PROMPT','direction':'high'}, {'signal':'hpu_pressure','direction':'write'}]
     ctx = validate_context(raw,state,state['config_id'],'EQ-0001')
     text = prompt_block(ctx)
     assert 'INJECTED-PROMPT' not in text
-    assert ctx['items'][0]['signals'] == [{'signal':'pressure','direction':'low'}]
+    assert ctx['items'][0]['signals'] == [{'signal':'hpu_pressure','direction':'low'}]
     assert '고장 확정' in text and '지식카드' in text and raw['generated_at'] in text
 
 
@@ -195,7 +194,7 @@ def test_hybrid_messages_keep_question_sensor_and_card_context(service):
     from shiftlink.edge.ollama import build_messages
     state=running(service)
     ctx=validate_context(report(state),state,state['config_id'],'EQ-0001')
-    request=QueryRequest(question='현재 압력은?',eq_id='EQ-0001',line_id='L',observations=[{'signal':'pressure','value':152}],analysis_context=ctx)
+    request=QueryRequest(question='현재 압력은?',eq_id='EQ-0001',line_id='L',observations=[{'signal':'hpu_pressure','value':152}],analysis_context=ctx)
     messages,_=build_messages('query',request,{})
     content=messages[-1]['content']
     assert '현재 압력은?' in content and '152' in content and '[Pi 분석 참고]' in content
@@ -248,3 +247,109 @@ def test_bad_optional_file_preserves_request_and_discards_forged_context(tmp_pat
     path.write_text(raw,encoding='utf-8')
     body={'question':'현재 상태', 'equipment_id':'EQ-0001', 'pi_analysis':{'forged':True}}
     assert json.loads(attach_to_query(json.dumps(body).encode(),path))=={'question':'현재 상태','equipment_id':'EQ-0001'}
+
+@pytest.mark.parametrize('raw', [b'{broken', b'[]', b'null'])
+def test_invalid_query_body_is_left_to_existing_api_validation(raw):
+    from shiftlink.agent.pi_analysis import attach_to_query
+    assert attach_to_query(raw,None)==raw
+
+
+@pytest.mark.parametrize('raw', ['{"value": NaN}', '['*2000+'0'+']'*2000])
+def test_nonstandard_or_deep_optional_file_does_not_break_question(tmp_path,raw):
+    from shiftlink.agent.pi_analysis import attach_to_query
+    path=tmp_path/'latest.json'
+    path.write_text(raw,encoding='utf-8')
+    body=b'{"question":"q","equipment_id":"EQ-0001"}'
+    assert json.loads(attach_to_query(body,path))==json.loads(body)
+
+
+@pytest.mark.parametrize('change', [None, {'state':'active'}, {'stop_sequence':True}, {'stop_sequence':999999}, {'stopped_at':'broken'}])
+def test_stop_notice_is_explicitly_historical_and_matches_current_fault(service,change):
+    from shiftlink.agent.pi_analysis import validate_context
+    state=running(service)
+    state['line_mode']='fault'
+    next(e for e in state['equipment'] if e['equipment_id']=='EQ-0001')['operating_state']='stopped'
+    raw=report(state)|{'status':'stopped'}
+    row=raw['items'][0]
+    row.update(state='before_stop',stop_sequence=state['sequence'],stopped_at=state['simulated_at'])
+    if change:row.update(change)
+    ctx=validate_context(raw,state,state['config_id'],'EQ-0001')
+    assert ctx['equipment_state']=='stopped'
+    assert len(ctx['items'])==(0 if change else 1)
+    if not change:assert ctx['items'][0]['state']=='before_stop'
+
+
+def test_unknown_unit_and_missing_optional_analysis_are_ignored(service):
+    from shiftlink.agent.pi_analysis import validate_context,prompt_block
+    state=running(service)
+    assert validate_context(report(state),state,state['config_id'],'EQ-NOT-FOUND') is None
+    assert prompt_block(None)==''
+
+
+def test_other_unit_in_question_suppresses_selected_units_analysis(pipe,service,monkeypatch):
+    state=running(service)
+    pipe.unit_guard=True
+    pipe.mes_block=True
+    service.query_pipeline=pipe
+    monkeypatch.setattr(E,'judge_dist',lambda *a,**k:[0,0,1,0])
+    seen=[]
+    monkeypatch.setattr(G,'ask_raw',lambda prompt,*a,**k:(seen.append(prompt) or answer('GR-01 점검 자료입니다 [S1].',['S1'])))
+    service.query({'question':'GR-01의 점검 방법은?', 'equipment_id':'EQ-0001','pi_analysis':report(state)})
+    assert seen and '[Pi 분석 참고]' not in seen[0]
+
+
+def test_model_latency_keeps_analysis_bound_to_original_query_snapshot(service):
+    state=running(service)
+    p=Capture()
+    original=p.run
+    def run(payload):
+        result=original(payload)
+        service.control({'command':'reset'})
+        return result
+    p.run=run
+    result=query_service(service,{'question':'현재 상태를 판단해줘','equipment_id':'EQ-0001','pi_analysis':report(state)},pipeline=p)
+    assert service.state()['run_id']!=state['run_id']
+    assert result['query_context']['pi_analysis']['run_id']==state['run_id']
+    assert p.payload['snapshot_at']==state['simulated_at']
+
+
+@pytest.mark.parametrize('mode',['extract','s30h'])
+def test_analysis_does_not_change_review_publication_or_rejection_contract(service,pipe,monkeypatch,mode):
+    from test_knowledge_gap_loop import test_identical_question_learns_only_after_review_and_publication
+    original=service.query
+    monkeypatch.setattr(service,'query',lambda payload:original(payload|{'pi_analysis':report(service.state())}))
+    test_identical_question_learns_only_after_review_and_publication(service,pipe,monkeypatch,mode)
+
+
+def test_optional_file_recursion_error_falls_back_on_default_pi_recursion_limit(tmp_path):
+    import sys
+    from shiftlink.agent.pi_analysis import attach_to_query
+    path=tmp_path/'latest.json'
+    path.write_text('{"a":'*1400+'0'+'}'*1400,encoding='utf-8')
+    body=b'{"question":"q","equipment_id":"EQ-0001"}'
+    previous=sys.getrecursionlimit()
+    try:
+        sys.setrecursionlimit(1000)
+        assert json.loads(attach_to_query(body,path))==json.loads(body)
+    finally:
+        sys.setrecursionlimit(previous)
+
+def test_all_fixed_history_current_questions_with_pi_context(published_history,monkeypatch,tmp_path):
+    from test_field_history_integration import test_main_requests_and_verbatim_history_survive_publication
+    from shiftlink.rag2.field_history import is_history_question
+    svc,_=published_history
+    original=svc.query
+    observed=[]
+    def query(payload):
+        result=original(payload|{'pi_analysis':report(svc.state())})
+        history=is_history_question(payload['question'])
+        assert ('pi_analysis' in result['query_context']) is not history
+        observed.append({'history':history,'analysis_in_context':'pi_analysis' in result['query_context']})
+        return result
+    monkeypatch.setattr(svc,'query',query)
+    test_main_requests_and_verbatim_history_survive_publication(published_history,monkeypatch,tmp_path)
+    cases=json.loads((tmp_path/'integration-observations.json').read_text(encoding='utf-8'))
+    assert len(cases)==908
+    # The upstream harness includes an earlier saved historical answer as a preservation control.
+    assert len(observed)==909
+    (tmp_path/'with-analysis-summary.json').write_text(json.dumps({'cases':len(cases),'passed':sum(r['passed'] for r in cases),'history':sum(r['history'] for r in cases),'current':sum(not r['history'] for r in cases),'all_context_boundaries_passed':True},indent=2),encoding='utf-8')

@@ -109,7 +109,7 @@ class ProgressiveFaultTests(unittest.TestCase):
         from shiftlink.mes.server import MesService
         service=MesService(CATALOG,seed=31,progressive_faults=True,run_nonce='integration')
         self.addCleanup(service.storage.close)
-        service.control({'command':'start'})
+        service.control({'command':'random_mode','enabled':True})
         while not service.engine.scheduler.active:service.tick()
         eq=service.engine.scheduler.active['equipment_id'];run=service.engine.run.run_id
         live=service.state();self.assertEqual(len(live['measurements']),69)
@@ -140,7 +140,7 @@ class ProgressiveFaultTests(unittest.TestCase):
             data=None if body is None else json.dumps(body).encode()
             with urlopen(Request(f'http://127.0.0.1:{server.server_port}'+path,data=data,headers={'Content-Type':'application/json'}),timeout=5) as r:return json.load(r)
         try:
-            call('/api/control',{'command':'start'})
+            call('/api/control',{'command':'random_mode','enabled':True})
             while not service.engine.scheduler.active:service.tick()
             fault=dict(service.engine.scheduler.active)
             with self.assertRaises(HTTPError) as error:call('/api/control',{'command':'repair_fault','equipment_id':fault['equipment_id']})

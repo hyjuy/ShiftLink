@@ -1,0 +1,50 @@
+{
+  "python_api_passed": 84,
+  "browser_passed": 1,
+  "manual_tests_on": "Raspberry Pi",
+  "module_line_observation": {
+    "tests": 85,
+    "failures": 1,
+    "errors": 0,
+    "skips": 0,
+    "module": "shiftlink/mes/progressive_factory.py",
+    "executable_lines": 217,
+    "hit_lines": 208,
+    "line_percent": 95.85,
+    "missing_lines": [
+      95,
+      140,
+      152,
+      160,
+      162,
+      165,
+      173,
+      185,
+      237
+    ]
+  },
+  "browser": {
+    "passed": true,
+    "pi": true,
+    "widths": [
+      1440,
+      390
+    ],
+    "card_paths": 2,
+    "final_log": "browser-final.log",
+    "elapsed_seconds": 10.041
+  },
+  "source_sha256": {
+    "shiftlink/mes/__main__.py": "bb8033afcd161e57ff9f7b90f8a83a6740f27be8ebe82405894038e457f9cffc",
+    "shiftlink/mes/contracts.py": "74a384d40b7e363325bd78c280449e5a0385eab562d4514289f2531a286e6f9e",
+    "shiftlink/mes/progressive_factory.py": "a093d750714b39ac1d183519b970bfa267a468ad0f6e4aceca36090a2dd432dd",
+    "shiftlink/mes/server.py": "19df8f68d75390b1b617fd7474409861c5ee2ddda4292ce0685bffec6918c60e",
+    "shiftlink/mes/web/app.js": "e3aa3be88b07af36f93a3bd11e5ee9cccf948af431443c7bb09c73e43a09ca32",
+    "shiftlink/mes/web/index.html": "69d2e28fa988b31ce7b304d6d91bf4764690209fae3c4698b2af70ff98cb104a",
+    "tests/test_mes_random_mode_control.py": "5a7bd19bb6450f7d3f8c4d794e2e8e5e69d1329bcb73fc789792ddd36f63a5b9",
+    "tests/test_mes_random_mode_browser.py": "1ffe8da8007c2dff127ed8d656b137a096913e69a7922efbc9ca59222950f223",
+    "tests/test_mes_progressive_faults.py": "631d949b459a8bac2201ac17bdc85ff02e3dd3950d871fc991a0ca4324581b68"
+  },
+  "deployed": false,
+  "reason": "Existing EQ-0004 AI event retained; no operating controls or restart performed"
+}

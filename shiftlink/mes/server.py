@@ -141,7 +141,7 @@ class MesService:
     def _new_engine(self, run: Run, config: Configuration) -> MesEngine:
         if self.progressive_faults:
             from .progressive_factory import ProgressiveFactoryEngine
-            return ProgressiveFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id)
+            return ProgressiveFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id, enabled=False)
         if self.random_faults:
             from .random_factory import RandomFactoryEngine
             return RandomFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id, hazard=self.fault_hazard)
@@ -455,6 +455,8 @@ class MesService:
                     "card_ids": card_ids, "steps": [], "after": None, "verdict": None}
             session_id = self.storage.create_resolution_session(eq.equipment_id, data)
             recovery = snap["recovery"] if (snap["recovery"] or {}).get("equipment_id") == eq.equipment_id else None
+            if recovery is None and self.progressive_faults and self.engine.progressive_enabled:
+                recovery = self.engine.recovery_plan(eq.equipment_id)
             spec = next((s for s in self.active_config.scenarios if s.scenario_id == snap["scenario_id"]), None)
             suggested = spec.component_id if spec and recovery else ""
             drafts = [row for row in self.storage.list_card_drafts() if row["card"].get("mes_equipment_id") == eq.equipment_id]
@@ -507,6 +509,10 @@ class MesService:
             if lockout is not None and lockout not in field_draft.LOCKOUT_ANSWERS:   # 응답은 받으면 기록하고, 필수로 묻지 않는다
                 raise ValueError("lockout_required")
             eq = field_draft._equipment(self.active_config, session["equipment_id"])
+            if (SIM_LINK and self.progressive_faults and self.engine.progressive_enabled
+                    and action in ("모의 수리 완료 기록", field_draft.RESTART_ACTION)
+                    and data["run_id"] != self.engine.run.run_id):
+                raise ValueError("실행이 바뀌었습니다. 현재 설비에서 새 조치 기록을 시작하세요.")
             linked = self._sim_link(eq.equipment_id, action) if SIM_LINK else None
             snap = self._eq_snapshot(eq.equipment_id)
             previous = data["steps"][-1]["measurements"] if data["steps"] else data["before"]["measurements"]
@@ -556,6 +562,11 @@ class MesService:
         재가동 칩이면 라인 복구를 시작한다. 실제 설비라면 센서가 스스로 바뀌므로 이 연결이 필요 없다(끄면 기록만 한다).
         직접 적은 조치는 설비를 바꾸지 않는다. 순서가 틀리면 MES가 거절하고 단계도 남지 않는다."""
         recovery = asdict(self.engine.snapshot).get("recovery") or {}
+        if (self.progressive_faults and self.engine.progressive_enabled
+                and recovery.get("equipment_id") != equipment_id
+                and action in ("모의 수리 완료 기록", field_draft.RESTART_ACTION)):
+            self.engine.prepare_recovery(equipment_id)
+            recovery = asdict(self.engine.snapshot).get("recovery") or {}
         if recovery.get("equipment_id") != equipment_id:
             return None
         if action == field_draft.RESTART_ACTION:
@@ -852,6 +863,8 @@ class MesService:
                 self.engine.resume()
             elif command == "scenario":
                 self.engine.set_scenario(str(payload.get("scenario_id", "")))
+            elif command == "random_mode" and self.progressive_faults:
+                self.engine.set_progressive(payload.get("enabled"))
             elif command == "repair_fault" and self.progressive_faults:
                 self.engine.repair_fault(str(payload.get("equipment_id", "")))
             elif command == "recover":

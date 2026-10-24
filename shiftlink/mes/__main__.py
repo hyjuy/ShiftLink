@@ -12,7 +12,7 @@ if __name__ == "__main__":
     parser.add_argument("--db", type=Path, help="SQLite history path")
     parser.add_argument("--api-only", action="store_true", help="Serve APIs only; PDA files are hosted on Raspberry Pi")
     modes = parser.add_mutually_exclusive_group()
-    modes.add_argument('--progressive-faults', action='store_true', help='Occasional gradual faults that persist until explicit simulated repair')
+    modes.add_argument('--progressive-faults', action='store_true', help='Enable the random-mode button; starts in standard mode until clicked')
     modes.add_argument('--random-faults', action='store_true', help='Use varied synthetic sensors and random performance warnings')
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--run-nonce', help='Replay identifier; omitted values create a fresh sensor trajectory')

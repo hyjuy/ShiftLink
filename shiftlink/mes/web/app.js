@@ -408,7 +408,15 @@
   function updateControls() {
     document.querySelectorAll("#control-panel button, #control-panel select, #recovery-panel [data-action], #recovery-panel [data-command]").forEach((el) => { el.disabled = mode !== "live" || controlPending || stale; });
     const plan = lastSnapshot?.recovery, stage = plan?.stage, optional = plan?.required === false;
-    document.querySelectorAll('[data-command="recover"]').forEach(recover=>{ recover.disabled = mode !== "live" || controlPending || stale || lastSnapshot?.scenario_id === "normal" || (stage && stage !== "ready" && !(optional && stage === "actions")); });
+    document.querySelectorAll('[data-command="recover"]').forEach(recover=>{ recover.disabled = mode !== "live" || controlPending || stale || (!plan && lastSnapshot?.scenario_id === "normal") || (stage && stage !== "ready" && !(optional && stage === "actions")); });
+    const randomToggle = $("#random-toggle"), randomMode = lastSnapshot?.simulation_mode === "progressive";
+    if (randomToggle) {
+      randomToggle.disabled ||= !lastSnapshot?.simulation_mode;
+      randomToggle.textContent = randomMode ? "랜덤 모드 켜짐 · 끄기" : "랜덤 모드";
+      randomToggle.setAttribute("aria-pressed", String(randomMode));
+      randomToggle.classList?.toggle("attention", randomMode);
+    }
+    setText("#random-hint", randomMode ? "점진 악화 · 모의 수리 전 유지" : "랜덤 모드를 눌러야 자동 고장이 발생합니다.");
     const locked = stage === "stabilizing" || (stage && stage !== "completed" && !optional);
     if (locked) { $("#scenario").disabled = true; if ($("#scenario-equipment")) $("#scenario-equipment").disabled = true; }
     if ($("#scenario-lock")) $("#scenario-lock").hidden = !locked || mode !== "live";
@@ -592,7 +600,7 @@
       }
       disarmReset(button);
     }
-    control(button.dataset.command);
+    control(button.dataset.command, button.dataset.command === "random_mode" ? {enabled: lastSnapshot?.simulation_mode !== "progressive"} : {});
   }; });
   $("#speed").onchange = (event) => control("speed", { speed: Number(event.target.value) });
   $("#scenario-equipment").onchange = (event) => { pickedScenarioGroup = event.target.value; if (lastSnapshot) renderScenarioPicker(currentConfig(), lastSnapshot.scenario_id); };

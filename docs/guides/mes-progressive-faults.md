@@ -2,6 +2,16 @@
 
 기존 정상/`--random-faults` 경로를 보존한 선택적 합성 MES 모드다. 2026-10-25 Pi 검증 후 운영 MES에 선택 적용했다. [적용·보존·복구 기록](../testing/mes-rms16-deployment-20261025.md)을 따른다. 실제 물리 모델이나 실측 고장 재현으로 설명하지 않는다.
 
+## 화면에서 켜기 (2026-10-25 수정 후보)
+
+`--progressive-faults` 서버도 처음에는 기존 운전으로 시작한다. **시작**은 가동/재개만 수행하고 자동 고장을 켜지 않는다. 제어 바의 **랜덤 모드**를 누르면 점진 고장 모드를 켜고 운전을 시작한다. 켜짐 표시와 `aria-pressed`가 바뀐다. 다시 누르면 기존 운전으로 돌아가되, 진행 중인 고장이나 미완료 회복 확인은 모드 전환으로 지우지 않고 오류 안내한다. 초기화/프로세스 재시작 후에도 버튼을 다시 눌러야 한다. 기존 `--random-faults` 경로는 그대로다.
+
+지식카드 유무와 관계없이 PDA 조치 시작의 **MES 연동 → 모의 수리 완료 기록 → 재가동 (라인 복구 시작)**을 사용한다. 수리 기록은 모의 운전을 일시정지하고 선택 설비의 주입 고장만 해제한다. 재가동 후 유효·동시각·정상 범위 센서를 3회 연속 확인해야 복구 완료다. 센서 불량/결측/비가동은 확인 횟수를 채우지 않는다. MES 설비 상세의 같은 복구 단계와 **모의 복구**도 이 상태기를 사용한다.
+
+정상 범위 이탈 전 조기 이상징후에서도 사용자가 선택한 설비에 공통 수리 항목을 제공한다. 항목에는 생성기의 고장 종류·목표·예정 시각을 넣지 않는다. 다른 설비나 이전 실행의 세션으로 현재 고장을 해제할 수 없다. AI 탐지 모델·PDA 경보 병합·진동 코드는 바꾸지 않는다.
+
+이번 버튼/복구 수정의 Pi 검증·운영 적용 여부는 [별도 기록](../testing/mes-random-mode-controls-20261025.md)으로 구분한다. 앞선 운영 배포가 이번 수정의 적용을 뜻하지 않는다.
+
 ## 동작
 
 - 정상 운전 180~420 tick 후 가동 중인 설비의 고장 하나를 무작위로 선택한다. 기본 tick이 1초이면 3~7분이다. 배속은 실제 대기 시간을 바꾼다.
@@ -25,13 +35,13 @@ python -m shiftlink.mes --progressive-faults --host 127.0.0.1 --port 18000 --db 
 별도 서버에만 다음 제어를 보낸다. `EQ-0001`(HPU-01의 equipment_id)은 예시이며 실제 고장이 지속 중인 설비 ID를 사용한다. 이 명령은 시뮬레이션 수리 기록이며 실제 장비 제어가 아니다.
 
 ```sh
-curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"start"}'
+curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"random_mode","enabled":true}'
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"pause"}'
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"repair_fault","equipment_id":"EQ-0001"}'
 curl -X POST http://127.0.0.1:18000/api/control -H 'Content-Type: application/json' -d '{"command":"resume"}'
 ```
 
-새 UI 버튼은 추가하지 않았다. 초기 기능 검증에서는 운영을 바꾸지 않았고, 후속 운영 전환은 위 2026-10-25 기록으로 구분한다. 기존 경보·PDA 파일은 유지했다. [Pi 회귀·HTTP 검증](../testing/mes-progressive-faults-20261024.tdd.md)을 참고한다.
+초기 배포에는 UI 버튼이 없었으며 위 수정 후보에서 랜덤 모드 버튼을 분리했다. 초기 기능 검증에서는 운영을 바꾸지 않았고, 후속 운영 전환은 각각의 적용 기록으로 구분한다. 기존 경보·PDA 파일은 유지했다. [Pi 회귀·HTTP 검증](../testing/mes-progressive-faults-20261024.tdd.md)을 참고한다.
 
 생성 메커니즘은 탐지기의 PATTERNS를 읽어 구성하지 않는다. 다만 정상 생성기와 센서 범위는 공유하므로 이 기능 검증을 독립 평가나 현장 탐지 성능으로 설명하지 않는다. 고정 운영 AI의 합성 평가 결과는 아래에 기록했다. 실측 센서 검증은 별도로 남아 있다.
 ## 2026-10-24 운영 AI 검증 — 적용 보류

@@ -89,9 +89,58 @@ class RandomModeControlTests(unittest.TestCase):
                 s.engine.tick(15)
                 self.assertEqual(s.state()['recovery']['stage'],'completed')
                 self.assertTrue(any(e.event_type=='recovered' for e in s.engine.events))
-                self.assertEqual(s.resolution_finish(sid)['verdict']['verdict'],'recovered')
+                self.assertEqual(s.resolution_finish(sid)['verdict'],'recovered')
                 s.control({'command':'random_mode','enabled':False})
                 self.assertEqual(s.state()['simulation_mode'],'standard')
+
+    def test_early_ai_session_can_repair_before_range_crossing(self):
+        s = self.service()
+        s.control({'command':'random_mode','enabled':True})
+        s.engine.scheduler.next_fault = 1
+        s.engine.tick()
+        self.assertIsNone(s.state()['recovery'])
+        eq = s.engine.scheduler.active['equipment_id']
+        with patch('shiftlink.mes.server.SIM_LINK',True):
+            out = s.resolution_start({'equipment_id':eq})
+            actions = [a for a in out['action_suggestions'] if a['source']=='mes_recovery']
+            self.assertEqual(len(actions),1)
+            with self.assertRaises(ValueError):
+                s.resolution_step(out['session_id'], {'action':RESTART_ACTION})
+            step = s.resolution_step(out['session_id'], {'action':actions[0]['text']})
+            self.assertEqual(step['mes_linked'],'recovery_action:verify')
+            self.assertIsNone(s.engine.scheduler.active)
+
+    def test_wrong_equipment_does_not_repair_or_pause_other_fault(self):
+        s = self.service(); eq = self.fault(s)
+        wrong = next(e.equipment_id for e in s.active_config.equipment if e.active and e.equipment_id != eq)
+        out = s.resolution_start({'equipment_id':wrong})
+        actions = [a for a in out['action_suggestions'] if a['source']=='mes_recovery']
+        self.assertEqual(len(actions),1)
+        before = dict(s.engine.scheduler.active)
+        with patch('shiftlink.mes.server.SIM_LINK',True), self.assertRaises(ValueError):
+            s.resolution_step(out['session_id'], {'action':actions[0]['text']})
+        self.assertEqual(s.engine.scheduler.active,before)
+        self.assertEqual(s.state()['line_mode'],'running')
+
+    def test_next_fault_on_same_equipment_has_fresh_repair_steps(self):
+        s = self.service(); eq = self.fault(s)
+        kind = s.engine.scheduler.active['kind']
+        s.control({'command':'recovery_action','action_id':'verify'})
+        s.control({'command':'recover'}); s.engine.tick(10)
+        s.engine.scheduler.options = [(eq,kind)]
+        s.engine.scheduler.next_fault = s.engine.scheduler.clock + 1
+        s.engine.tick(145)
+        self.assertEqual(s.state()['recovery']['stage'],'actions')
+        self.assertFalse(s.state()['recovery']['actions'][0]['completed'])
+
+    def test_old_run_session_cannot_repair_new_run(self):
+        s = self.service(); eq = self.fault(s)
+        out = s.resolution_start({'equipment_id':eq})
+        s.control({'command':'reset'}); self.fault(s)
+        fault = dict(s.engine.scheduler.active)
+        with patch('shiftlink.mes.server.SIM_LINK',True), self.assertRaises(ValueError):
+            s.resolution_step(out['session_id'],{'action':'모의 수리 완료 기록'})
+        self.assertEqual(s.engine.scheduler.active,fault)
 
     def test_bad_measurement_does_not_confirm_recovery(self):
         s = self.service(); self.fault(s)

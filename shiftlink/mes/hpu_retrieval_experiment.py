@@ -79,67 +79,63 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
     if mode!='experiment' or not isinstance(pipeline,S30hPipeline):
         return {'mode':mode,'status':'error','reason':'unsupported_experiment_configuration'}
     timings={}
-    trial=None
-    had_evidence_override=False
-    prior_evidence=None
     try:
         started=perf_counter()
         additions,digest,reason=_plan(service,pipeline,payload,database,graph,witness_query_id)
         timings['relation_prepare']=(perf_counter()-started)*1000
-        started=perf_counter()
-        baseline=_view(pipeline)
-        timings['baseline_prepare']=(perf_counter()-started)*1000
-        started=perf_counter()
-        trial=_view(pipeline)
-        had_evidence_override='evidence' in trial.__dict__
-        prior_evidence=trial.__dict__.get('evidence')
-        timings['trial_prepare']=(perf_counter()-started)*1000
-        original=trial.evidence
         admitted=[]
-        def evidence(question,eq_type,eq_id=None,units=None):
-            ev=original(question,eq_type,eq_id,units)
-            if eq_id!=payload['eq_id'] or eq_type!='HPU' or (units and trial.eq_code[eq_id] not in units):
-                return ev
-            by_id={r['chunk_id']:i for i,r in enumerate(trial.rows)}
-            selected={r['metadata']['source'] for r in ev if r['metadata']['kind']=='card'}
-            extra=[i for i in additions if trial.rows[i]['metadata']['source'] not in selected]
-            if not extra:return ev
-            # Keep one dense seed, then a bounded relation lane, within unchanged evidence budgets.
-            dense=[by_id[r['chunk_id']] for r in ev]
-            ranking=list(dict.fromkeys([*dense[:1],*extra,*dense[1:]]))
-            chosen=G.evidence(trial.rows,ranking,CFG)
-            admitted.extend(trial.rows[i]['metadata']['source'] for i in extra if trial.rows[i] in chosen)
-            if hasattr(ev,'graph_trace'):
-                return GraphEvidence(chosen,deepcopy(ev.graph_trace))
-            return chosen
-        trial.evidence=evidence
+        def execute(name):
+            started=perf_counter()
+            view=_view(pipeline)
+            timings[name+'_prepare']=(perf_counter()-started)*1000
+            had_override='evidence' in view.__dict__
+            prior=view.__dict__.get('evidence')
+            original=view.evidence
+            def evidence(question,eq_type,eq_id=None,units=None):
+                ev=original(question,eq_type,eq_id,units)
+                if eq_id!=payload['eq_id'] or eq_type!='HPU' or (units and view.eq_code[eq_id] not in units):
+                    return ev
+                by_id={r['chunk_id']:i for i,r in enumerate(view.rows)}
+                selected={r['metadata']['source'] for r in ev if r['metadata']['kind']=='card'}
+                extra=[i for i in additions if view.rows[i]['metadata']['source'] not in selected]
+                if not extra:return ev
+                # Keep one dense seed, then a bounded relation lane, within unchanged evidence budgets.
+                dense=[by_id[r['chunk_id']] for r in ev]
+                ranking=list(dict.fromkeys([*dense[:1],*extra,*dense[1:]]))
+                chosen=G.evidence(view.rows,ranking,CFG)
+                admitted.extend(view.rows[i]['metadata']['source'] for i in extra if view.rows[i] in chosen)
+                if hasattr(ev,'graph_trace'):
+                    return GraphEvidence(chosen,deepcopy(ev.graph_trace))
+                return chosen
+            try:
+                if name=='trial':view.evidence=evidence
+                started=perf_counter()
+                result=view.run(deepcopy(payload))
+                timings[name]=(perf_counter()-started)*1000
+                return _outcome(result)
+            finally:
+                if name=='trial':
+                    if had_override:view.evidence=prior
+                    else:view.__dict__.pop('evidence',None)
         results={}
         order=('trial','baseline') if trial_first else ('baseline','trial')
         for name in order:
             started=perf_counter()
-            result={'baseline':baseline,'trial':trial}[name].run(deepcopy(payload))
-            timings[name]=(perf_counter()-started)*1000
-            results[name]=_outcome(result)
+            results[name]=execute(name)
+            timings[name+'_overhead']=max(0,(perf_counter()-started)*1000-timings[name+'_prepare']-timings[name])
         started=perf_counter()
         if admitted:
             status,current=connect(service,database,graph,witness_query_id)
             if status!=200 or current['snapshot_hash']!=digest:
                 return {'mode':mode,'status':'invalidated','reason':'publication_changed','timings_ms':timings}
         timings['recheck']=(perf_counter()-started)*1000
-        timings['baseline_total']=timings['baseline_prepare']+timings['baseline']
-        timings['trial_total']=timings['relation_prepare']+timings['trial_prepare']+timings['trial']+timings['recheck']
+        timings['baseline_total']=timings['baseline_prepare']+timings['baseline']+timings['baseline_overhead']
+        timings['trial_total']=timings['relation_prepare']+timings['trial_prepare']+timings['trial']+timings['trial_overhead']+timings['recheck']
         return {'schema_version':'shiftlink-hpu-retrieval-trial-v1','mode':mode,'status':'completed',
                 **results,'added_card_ids':sorted(set(admitted)),'scope_reason':reason,
                 'candidate_budget':CFG.get('max_chunks',G.MAX_CHUNKS),'timings_ms':timings,'order':list(order)}
     except Exception as error:
         return {'mode':mode,'status':'error','reason':'experiment_failed','error_type':type(error).__name__}
-    finally:
-        # The wrapper closes over trial: detach it so index copies do not wait for cyclic GC.
-        if trial is not None:
-            if had_evidence_override:
-                trial.evidence=prior_evidence
-            else:
-                trial.__dict__.pop('evidence',None)
 
 
 def score_case(case,result,*,card_id):

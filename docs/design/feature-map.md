@@ -5,7 +5,7 @@
 
 | 사용자 목적 | 호출 경로와 코드 근거 | 저장 경계 | 검증과 확인 수준 |
 |---|---|---|---|
-| 가끔 발생해 수리 전까지 유지되는 점진 합성 고장 | `mes/__main__.py --progressive-faults` → `server.py:_new_engine` → `progressive_factory.py` | 센서만 공개, 정답은 simulation_labels; 기존 랜덤 원본 유지 | Pi 단위·저장·실제 HTTP 포함 20개 통과. 운영 미배포. [사용법](../guides/mes-progressive-faults.md) |
+| 가끔 발생해 수리 전까지 유지되는 점진 합성 고장 | `mes/__main__.py --progressive-faults` → `server.py:_new_engine` → `progressive_factory.py` | 센서만 공개, 정답은 simulation_labels; 기존 랜덤 원본 유지 | Pi 기능 20개 통과. 운영 AI 별도 평가 24/24 탐지·중복0·오통지2로 운영 보류. [판정](../testing/mes-progressive-qualification-20261024.md). [사용법](../guides/mes-progressive-faults.md) |
 |
 | Pi 분석을 현재 센서·지식카드와 함께 질문에 참고 | PDA 기존 UI → `pda/__main__.py:make_handler` → `agent/pi_analysis.py:attach_to_query` → `mes/query.py:query_service` / `validate_context` → `rag2/s30h.py:run` 또는 `edge/ollama.py:build_messages` | 질의 당시 `query_context.pi_analysis`만 추가. 기존 일지·후보·게시·KG·센서는 유지 | `tests/test_pi_analysis_query.py`, 기존 이력·게시·PDA 회귀. 로컬 fixture 이후 2026-10-24 Jetson 5파일→Pi 2파일 순차 배포, 실제 LLM·Pi 실제 UI로 격리 재검증. 당시 분석기는 r5 유지, 기존 업무 14테이블 1054행 보존. 이후 PDA 표시 r6 적용은 질문 연결을 유지하되 Jetson의 기존 30프레임 참고 제한은 남음 |
 

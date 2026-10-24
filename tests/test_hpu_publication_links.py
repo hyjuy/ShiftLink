@@ -140,3 +140,62 @@ def test_legacy_citation_without_exact_ticket_is_not_inferred(api, published, se
     status, graph=api[0]('?query_id='+result['query_id'])
     assert status==200 and not cards(graph)
     assert any(r['reason']=='citation_revision_unverified' for r in graph['unresolved'])
+
+
+@pytest.mark.parametrize('change', ['asset','origin','report_copy'])
+def test_asset_and_origin_boundaries(api, published, service, tmp_path, monkeypatch, change):
+    from dataclasses import replace
+    did, result, _=published
+    if change=='asset':
+        eq=service.active_config.equipment[0]
+        service.active_config=replace(service.active_config,equipment=(replace(eq,asset_id='replacement'),*service.active_config.equipment[1:]))
+    elif change=='origin':
+        draft=service.storage.get_card_draft(did)
+        draft['review_flags']['work_report']['incident_id']='another-incident'
+        with service.storage.connection:
+            service.storage.connection.execute('UPDATE card_drafts SET review_flags=? WHERE draft_id=?',(json.dumps(draft['review_flags']),did))
+    else:
+        path=tmp_path/'source.sqlite3'
+        with sqlite3.connect(path) as con:
+            service.storage.connection.backup(con)
+            con.execute("UPDATE handover_outbox SET payload=json_set(payload,'$.work_report.records[0].story','changed source')")
+        monkeypatch.setenv('SHIFTLINK_HPU_ONTOLOGY_DB',str(path))
+    status, graph=api[0]('?query_id='+result['query_id'])
+    assert status==200 and not cards(graph)
+    assert any(r['reason'] in {'publication_not_current','publication_origin_mismatch'} for r in graph['unresolved'])
+
+
+def test_query_inputs_and_answers_are_identical_across_modes(api, published, service, monkeypatch):
+    _, _, request=published
+    calls=[]
+    original=type(service.query_pipeline).run
+    def capture(pipeline, payload):
+        calls.append(deepcopy(payload))
+        return original(pipeline, payload)
+    monkeypatch.setattr(type(service.query_pipeline),'run',capture)
+    results=[]
+    for mode in ('off','shadow','explain'):
+        monkeypatch.setenv('SHIFTLINK_HPU_ONTOLOGY',mode)
+        result=service.query(request)
+        results.append({k:v for k,v in result.items() if k!='query_id'})
+        saved=service.storage.get_query(result['query_id'])['payload']
+        assert saved['publication_ticket']
+        assert 'publication_ticket' not in result and 'publication_overlay' not in result
+    assert calls[0]==calls[1]==calls[2]
+    assert results[0]==results[1]==results[2]
+
+
+def test_origin_record_hash_must_match_the_projected_snapshot(api, published, monkeypatch):
+    from shiftlink.mes import ontology_api
+    _, result, _=published
+    original=ontology_api.run_shadow
+    def changed(*args, **kwargs):
+        output=original(*args, **kwargs)
+        for node in output['graph']['nodes']:
+            if node['provenance']['source_ref']['kind']=='report':
+                node['provenance']['source_hash']='different-record-revision'
+        return output
+    monkeypatch.setattr(ontology_api,'run_shadow',changed)
+    status, graph=api[0]('?query_id='+result['query_id'])
+    assert status==200 and not cards(graph)
+    assert any(r['reason']=='publication_origin_mismatch' for r in graph['unresolved'])

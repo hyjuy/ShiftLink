@@ -59,7 +59,7 @@ def test_no_attestation_is_visible_as_unresolved_not_a_successful_connection(arg
     assert not result['graph']['nodes']
 
 
-def test_truncated_and_outside_scope_are_distinguishable(arguments, monkeypatch):
+def test_truncated_empty_and_unresolved_are_distinguishable(arguments, monkeypatch):
     original = shadow.project_incident
     def truncated(*args, **kwargs):
         graph = original(*args, **kwargs)
@@ -69,8 +69,28 @@ def test_truncated_and_outside_scope_are_distinguishable(arguments, monkeypatch)
     assert shadow.run_shadow(**arguments, mode='shadow')['summary']['projection_state'] == 'truncated'
     monkeypatch.setattr(shadow, 'project_incident', original)
     other = shadow.run_shadow(**arguments, mode='shadow', equipment_type='PDP')
-    assert other['summary']['projection_state'] == 'empty'
+    assert other['summary']['projection_state'] == 'unresolved'
     assert other['summary']['node_counts'] == {}
+    assert other['summary']['unresolved_by_reason']['query_context_conflict'] >= 1
+    reader = shadow.read_incident_bundle
+    def no_queries(*args, **kwargs):
+        return {**reader(*args, **kwargs), 'queries': []}
+    monkeypatch.setattr(shadow, 'read_incident_bundle', no_queries)
+    empty = shadow.run_shadow(**arguments, mode='shadow', equipment_type='PDP')
+    assert empty['summary']['projection_state'] == 'empty'
+
+
+def test_partial_diagnostics_keep_both_connections_and_unknowns(arguments, monkeypatch):
+    reader = shadow.read_incident_bundle
+    def damaged_query(*args, **kwargs):
+        bundle = reader(*args, **kwargs)
+        bundle['queries'][0]['payload']['query_context']['asset_id'] = 'other'
+        return bundle
+    monkeypatch.setattr(shadow, 'read_incident_bundle', damaged_query)
+    result = shadow.run_shadow(**arguments, mode='shadow')
+    assert result['summary']['projection_state'] == 'partial'
+    assert result['summary']['node_counts']['Action'] == 2
+    assert result['summary']['unresolved_count'] >= 1
 
 
 def test_environment_can_only_enable_separate_shadow_runner(arguments, monkeypatch):
@@ -134,7 +154,7 @@ def test_off_cli_ignores_unreadable_input_and_creates_nothing(tmp_path, capsys):
     assert not output.exists()
 
 
-def test_real_cli_writes_full_artifact_but_prints_only_summary(arguments, tmp_path):
+def test_real_cli_writes_full_artifact_but_prints_only_summary(arguments, tmp_path, capsys):
     catalog = tmp_path/'catalog.json'
     catalog.write_text(json.dumps(arguments['catalog']), encoding='utf-8')
     manifest = tmp_path/'manifest.json'
@@ -150,6 +170,21 @@ def test_real_cli_writes_full_artifact_but_prints_only_summary(arguments, tmp_pa
     artifact = json.loads(output.read_text(encoding='utf-8'))
     assert artifact['graph']['nodes'] and summary['summary'] == artifact['summary']
     assert '필터' not in result.stdout
+    second = tmp_path/'second.json'
+    assert main([*command[3:-1], str(second)]) == 0
+    assert json.loads(capsys.readouterr().out)['summary'] == artifact['summary']
+
+
+@pytest.mark.parametrize('manifest,catalog', [([], {}), ({'source_namespace':'test'}, []),
+    ({'source_namespace':'test','config_catalog_hashes':[]}, {}), ({}, {})])
+def test_cli_rejects_invalid_manifest_and_catalog_objects(tmp_path, capsys, manifest, catalog):
+    mp, cp = tmp_path/'manifest.json', tmp_path/'catalog.json'
+    mp.write_text(json.dumps(manifest), encoding='utf-8')
+    cp.write_text(json.dumps(catalog), encoding='utf-8')
+    assert main(['--mode','shadow','--db','missing','--incident-id','INC-x',
+                 '--catalog',str(cp),'--manifest',str(mp)]) == 1
+    result = json.loads(capsys.readouterr().out)
+    assert result['error']['stage'] == 'input'
 
 
 def test_cli_missing_or_bad_inputs_return_nonzero(tmp_path, capsys):

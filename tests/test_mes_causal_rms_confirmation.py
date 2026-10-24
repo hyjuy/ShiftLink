@@ -5,6 +5,7 @@ from tempfile import TemporaryDirectory
 from scripts.mes_causal_active_advisory import ActiveAdvisorySource,ActiveAdvisorySession
 ROOT=Path(__file__).resolve().parents[1]
 OLD=Path('/home/pi/shiftlink/analytics/validation/mes-progressive-eval-20261024-v2')
+if not OLD.is_dir():OLD=ROOT/'tests/fixtures/mes_causal_pi/rms_quantization'
 def load(p):return json.loads(p.read_text())
 class RmsConfirmationTests(unittest.TestCase):
  def setUp(self):
@@ -12,7 +13,7 @@ class RmsConfirmationTests(unittest.TestCase):
   self.original=load(ROOT/'deploy/analytics/normal-profile.json');self.profile=load(ROOT/'deploy/analytics/normal-profile-rms16.json')
   self.binding=ActiveAdvisorySource(self.settings,self.config,self.profile)
  def frames(self,name):
-  with gzip.open(OLD/'data'/(name+'.json.gz'),'rt') as z:return json.load(z)
+  with gzip.open((OLD/'data' if (OLD/'data').is_dir() else OLD)/(name+'.json.gz'),'rt') as z:return json.load(z)
  def run_frames(self,frames,binding=None):
   with TemporaryDirectory() as temp:
    session=ActiveAdvisorySession(binding or self.binding,Path(temp)/'state.json');session.defer_flush=True;events=[]

@@ -284,3 +284,26 @@ def test_graph_caps_never_leave_dangling_edges(bundle):
     for edge in graph['edges']:
         assert (by_id[edge['source']]['type'], by_id[edge['target']]['type']) == RELATIONS[edge['type']]
 
+
+def test_real_resolution_session_is_read_from_an_offline_copy(service, tmp_path):
+    eq = service.active_config.equipment[0].equipment_id
+    started = service.resolution_start({'equipment_id': eq, 'question': '압력 점검'})
+    sid = started['session_id']
+    service.resolution_step(sid, {'action': '필터 상태 관찰'})
+    service.resolution_finish(sid)
+    saved = service.record_work_report(captured(service, source_session_id=sid))
+    incident_id = saved['incidents'][0]['incident_id']
+    before = list(service.storage.connection.iterdump())
+    path = tmp_path / 'approved-copy.sqlite3'
+    with sqlite3.connect(path) as target:
+        service.storage.connection.backup(target)
+    bundle = read_incident_bundle(path, incident_id, source_namespace='copied-fixture',
+        catalog=service.catalog.data,
+        config_catalog_hashes={service.active_config.config_id: content_hash(service.catalog.data)})
+    assert bundle['sessions'][0]['session_id'] == sid
+    assert 'scenarios' not in bundle['configurations'][service.active_config.config_id]
+    graph = project_hpu(bundle)
+    assert any(n['provenance']['source_ref']['kind'] == 'session' for n in nodes(graph,'Action'))
+    assert any(n['properties']['outcome_kind'] == 'mes_assessment' for n in nodes(graph,'Outcome'))
+    assert list(service.storage.connection.iterdump()) == before
+

@@ -68,5 +68,10 @@ docs/data/sources/**/*.html
 # face verify attempt logs (python -m shiftlink.face verify --log): keep outside the repo, this is a second guard
 attempts*.csv
 
-# Unity 빌드 산출물
-/output/
+# Unity 빌드 산출물 (output/video는 영상 작업물이라 추적)
+/output/*
+!/output/video/
+# 영상 작업물 중 제외: 2GB급 DB 사본, 외부에서 받은 무관한 파일
+/output/video/rec/db/
+/output/video/final/카카오톡 받은 파일/
+*.sqlite3

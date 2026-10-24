@@ -67,7 +67,10 @@ class ActiveDisplayTests(unittest.TestCase):
         with patch.object(worker,'AdvisorySession',Session):worker.poll(self.s,'http://unused',state)
         self.s.flush();self.s=Session(self.binding,self.path);self.s.defer_flush=True
         emitted=[]
-        for frame in self.frames[161:250]:emitted.extend(self.s.feed(frame,self.binding.config_id))
+        for frame in self.frames[161:250]:
+            emitted.extend(self.s.feed(frame,self.binding.config_id))
+            value=self.s.report(frame);self.assertEqual(len(value['items']),1,'warm-up hid confirmed history')
+            self.assertEqual(self.read(value,frame)['items'][0]['event_id'],before)
         self.assertNotIn(self.eq,emitted);self.assertEqual(self.s.report(self.frames[249])['items'][0]['event_id'],before)
         fresh=copy.deepcopy(self.frames[250]);fresh['run_id']='other';self.s.feed(fresh,self.binding.config_id)
         self.assertEqual(self.s.report(fresh)['items'],[])

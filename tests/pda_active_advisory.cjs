@@ -21,6 +21,9 @@ const rows=()=>nodes.notifyPanel.querySelector('.np-list').children.filter(r=>r.
 assert.equal(rows().length,1);assert.equal(vibrations.length,0);
 for(let i=161;i<220;i++)vm.runInContext(`S.snapshot.sequence=${i};S.snapshot.ai_insights.sequence=${i};renderAlert(faultsFrom(S.snapshot));renderNotifyPanel();`,c);
 assert.equal(rows().length,1);assert.equal(vibrations.length,0,'refresh must stay silent');
+vm.runInContext(`S.snapshot.ai_insights.status='warming_up';renderNotifyPanel();`,c);
+assert.equal(rows().length,1,'warm-up must retain confirmed history');assert.equal(vibrations.length,0);
+vm.runInContext(`S.snapshot.ai_insights.status='ready';`,c);
 vm.runInContext(`S.snapshot.active_alarms=[{equipment_id:'E',code:'LEGACY',label:'기존 경보'}];renderAlert(faultsFrom(S.snapshot));renderNotifyPanel();`,c);
 assert.equal(rows().length,1,'legacy and AI must share one equipment row');assert.equal(vibrations.length,1,'legacy first alert keeps its own haptic');
 vm.runInContext(`S.alertAck.E=ackKey(S.faults[0]);S.snapshot.ai_insights.items[0].state='before_stop';S.snapshot.ai_insights.status='stopped';renderAlert(faultsFrom(S.snapshot));renderNotifyPanel();renderAlert(faultsFrom(S.snapshot));`,c);

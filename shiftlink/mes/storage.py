@@ -590,8 +590,10 @@ class MesStorage:
         columns = [description[0] for description in cursor.description]
         return [dict(zip(columns, row)) for row in cursor]
 
-    def snapshots(self, run_id: str, *, as_of: datetime | None = None) -> list[Snapshot]:
+    def snapshots(self, run_id: str, *, as_of: datetime | None = None, after_sequence: int | None = None) -> list[Snapshot]:
         query = "SELECT payload FROM snapshots WHERE run_id = ?"; args: list[object] = [run_id]
+        if after_sequence is not None:
+            query += " AND sequence > ?"; args.append(after_sequence)
         if as_of:
             query += " AND simulated_at <= ?"; args.append(as_of.isoformat())
         query += " ORDER BY sequence"
@@ -605,7 +607,7 @@ class MesStorage:
         return [_event(json.loads(row[0])) for row in self.connection.execute(query, args)]
 
     def replay(self, run_id: str, *, after_sequence: int = -1, as_of: datetime | None = None) -> tuple[list[Snapshot], list[RuntimeEvent]]:
-        return ([item for item in self.snapshots(run_id, as_of=as_of) if item.sequence > after_sequence], self.events(run_id, after_sequence=after_sequence, as_of=as_of))
+        return (self.snapshots(run_id, as_of=as_of, after_sequence=after_sequence), self.events(run_id, after_sequence=after_sequence, as_of=as_of))
 
     def _public_records(self, run_id: str) -> list[dict[str, Any]]:
         records = [{"kind": "snapshot", "payload": json.loads(row[0])} for row in self.connection.execute("SELECT payload FROM snapshots WHERE run_id = ? ORDER BY sequence", (run_id,))]

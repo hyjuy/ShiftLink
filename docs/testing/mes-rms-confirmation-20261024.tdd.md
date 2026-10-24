@@ -27,3 +27,7 @@ Pi green.log: five tests passed in 63.233s. Both consumed false notices disappea
 ## Incremental replay RED (separate transport candidate)
 
 Read-only Pi→Jetson state reads showed intermittent ~5s waits; operating poll_seconds was 5.390s. Inspection found MesStorage.replay deserializes the entire run before applying after_sequence while MesService holds its lock. This is a confirmed unnecessary workload; its exact share of live network jitter is not yet established. Pi isolated test with 1,000 frames reproduced 1,000 deserializations for a two-frame request and also for an empty tail. transport-red3.log: 3 tests, two assertion failures, 0.858s; as_of/run/sequence semantics passed. Earlier environment-only errors (upload ordering and missing system pydantic) are preserved and not counted as RED. Use the existing isolated test-venv, no global dependency changes. A separate transport-source keeps frozen model/data evaluation source unchanged.
+
+## Incremental replay GREEN
+
+Pi transport-green.log: all 20 incremental/storage/progressive HTTP tests passed in 25.053s. Tail and empty requests now decode only the requested frames (2 and 0), while existing full replay, time/run/sequence boundaries, storage atomicity and legacy/progressive controls remain valid. The snapshots method adds an optional after_sequence bound in the indexed SQL query; callers omitting it retain the original full-history behavior. The frozen analysis/source tree remains unchanged.

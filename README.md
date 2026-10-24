@@ -96,7 +96,7 @@
 | 장비 | 하는 일 | 관련 코드 |
 |---|---|---|
 | Jetson Orin Nano 8GB | 모의 MES 서버, 지식 검색 · 판정 · 답변, 기록 저장 · 업로드 | `shiftlink/mes/`, `shiftlink/rag2/`, `shiftlink/edge/` |
-| 라즈베리파이 4 (PDA) | 작업자 화면, Jetson API 프록시, 얼굴 확인 · 설비 분류 | `shiftlink/pda/`, `shiftlink/face/`, `shiftlink/vision/` |
+| 라즈베리파이 4 (PDA) | 작업자 화면, Jetson API 프록시, 얼굴 확인 · 설비 분류, 설비 이상징후 통계 분석(참고 정보) | `shiftlink/pda/`, `shiftlink/face/`, `shiftlink/vision/`, `scripts/mes_causal_pda_service.py` |
 | Unity PC | 공장 시뮬레이션과 작업자 시점 영상 | `unity/ShiftLinkFactory/` |
 
 검색 색인과 모델은 PC · GPU에서 미리 만들고 Jetson은 완성본만 읽습니다. 외부 네트워크는 기록을 클라우드 DB(Aiven MySQL)에 올릴 때만 씁니다. 모듈별 그림 11장은 [아키텍처 문서](docs/architecture/README.md)에 있습니다.
@@ -112,11 +112,15 @@
 3. **답변**: 답변 모델이 남은 근거만으로 답하고 카드 ID · 매뉴얼 쪽수를 인용합니다.
 4. **코드 규칙**: 모델이 반복해서 틀리던 출력은 코드가 고정합니다.
 
+검색 단계에서는 관련 설비 · 카드의 관계로 검색 후보를 보완합니다(`SHIFTLINK_KNOWLEDGE_GRAPH` 기본 `1`, `0`으로 끔). 자세한 조건은 [관계 검색 계약](docs/design/knowledge-graph-runtime.md)을 따릅니다.
+
 | 이럴 때 | ShiftLink는 |
 |---|---|
 | 근거가 있는 증상 질문 | 판정을 통과한 근거로만 답하고 카드 ID · 매뉴얼 쪽수를 인용합니다 |
 | 기준 범위를 벗어난 MES 값 | 현재값과 기준 범위를 코드가 답변 첫 줄에 씁니다 |
 | 근거가 약한 질문 | ‘해당 지식 없음’으로 답하고 확인 경로를 안내합니다 |
+| Pi 이상징후 분석이 있을 때 | 실행 · 설비 · 시각 검사를 통과한 분석만 참고 문맥으로 덧붙입니다. 인용 · 센서값 · 지식 카드를 대신하지 않으며, 검사에 실패하면 쓰지 않습니다 |
+| 지난 근무일지를 묻는 질문 | 과거 기록 조회를 따로 분류해 일지 원문을 찾아 답합니다. 현재 · 미래 요청은 기존 판단 경로로 보내고, Pi 분석은 섞지 않습니다 |
 | 인용 근거에 없는 숫자가 답변에 들어감 | 답변을 보류하고 검수 대기로 넘깁니다 |
 | 값이 없는 센서 | ‘정상’ 대신 ‘관측값 없음’으로 씁니다 |
 | 질문 대상이 아닌 설비의 기록이 섞임 | 그 문장을 지웁니다 |
@@ -215,6 +219,7 @@ python -m shiftlink.mes
 - 브라우저에서 [모의 MES 대시보드](http://127.0.0.1:8000/)에 접속합니다. 시작 → 이상상황 선택 → 복구 진행 순서로 확인할 수 있습니다.
 - 기본 DB는 `mes_data/mock-mes.sqlite3`에 생성되며 Git에서 제외됩니다. 재시작해도 기존 기록을 보존합니다. 같은 DB를 여러 서버에서 동시에 운전하지 않습니다.
 - 포트나 DB 경로를 바꾸려면 `python -m shiftlink.mes --port 8001 --db mes_data/local-demo.sqlite3`을 사용합니다. 종료는 터미널에서 `Ctrl+C`를 누릅니다.
+- 센서 값과 성능 경고를 다양하게 만들려면 `--random-faults`, 수리 전까지 유지되는 점진 고장은 `--progressive-faults`(화면의 랜덤 모드 버튼으로 켬)를 붙입니다. 둘 다 합성 시연용이며 실제 설비 데이터가 아닙니다.
 
 <details>
 <summary><b>모델을 쓰는 질의</b> (Ollama와 SFT 모델 필요)</summary>
@@ -236,6 +241,8 @@ python -m shiftlink.mes
 | 제출 자료 5종 (발표 자료 · 결과보고서 등) | [`docs/result/프로젝트 결과물`](<docs/result/프로젝트 결과물/>) |
 | 시스템 그림 11장 | [아키텍처 문서](docs/architecture/README.md) |
 | 문서 전체 탐색 | [문서 목차](docs/README.md) |
+| 기능별 호출 경로 · 코드 근거 | [기능 지도](docs/design/feature-map.md) |
+| Pi 분석을 질의에 참고하는 방법 | [Pi 분석 질의 문맥](docs/guides/pi-analysis-query-context.md) |
 | 장비 3대 설치·시작·확인·종료 | [시연 실행 가이드](docs/guides/run-demo.md) |
 | 로컬 MES 운전·기록 재생 | [모의 MES 사용법](docs/guides/mock-mes-usage.md) |
 | 설비 추가·교체·제거 | [구성 관리 가이드](docs/guides/mock-mes-configuration-guide.md) |

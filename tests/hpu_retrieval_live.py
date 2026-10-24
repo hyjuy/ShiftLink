@@ -10,6 +10,8 @@ import os
 from pathlib import Path
 import time
 import urllib.request
+import subprocess
+from types import ModuleType
 
 import numpy as np
 import pytest
@@ -20,6 +22,27 @@ from shiftlink.rag.loader import load_card_provider
 from shiftlink.rag2.s30h import S30hPipeline
 from test_work_report_reuse_harness import service
 from test_work_report_capture import captured
+
+
+def reference_code(monkeypatch):
+    """Explicit historical control in this process only; never replace workspace files."""
+    revision = os.environ.get('SHIFTLINK_HPU_LIVE_REFERENCE')
+    if not revision:
+        return None
+    assert revision == '7a52b517e58c66e1a385b0a78aceaddfe37c587b'
+    modules = {}
+    for name in ('field_history', 's30h'):
+        source = subprocess.check_output(['git', 'show', f'{revision}:shiftlink/rag2/{name}.py'])
+        module = ModuleType('shiftlink.rag2._reference_' + name)
+        module.__package__ = 'shiftlink.rag2'
+        module.__file__ = str(Path('shiftlink/rag2/' + name + '.py').resolve())
+        exec(compile(source, module.__file__, 'exec'), module.__dict__)
+        modules[name] = module
+    modules['s30h'].is_history_question = modules['field_history'].is_history_question
+    monkeypatch.setattr(S30hPipeline, 'run', modules['s30h'].S30hPipeline.run)
+    monkeypatch.setitem(run_experiment.__globals__['_plan'].__globals__,
+                        'is_history_question', modules['field_history'].is_history_question)
+    return revision
 
 
 class RecordingPipeline(S30hPipeline):
@@ -38,6 +61,7 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
     names=['INDEX','MAIN_HOST','JUDGE_HOST','OUTPUT']
     settings={name:os.environ.get('SHIFTLINK_HPU_LIVE_'+name) for name in names}
     assert all(settings.values()), 'Explicit real-model endpoints, index and new output directory are required'
+    reference = reference_code(monkeypatch)
     out=Path(settings['OUTPUT']);out.mkdir(parents=True,exist_ok=False)
     main,judge=settings['MAIN_HOST'],settings['JUDGE_HOST']
     monkeypatch.setenv('OLLAMA_HOST',main)
@@ -74,6 +98,7 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
         witness_attempts.append({'question':question,'result':result})
         if did in result.get('cited_card_ids',[]):witness=result;break
     metadata={'models_mocked':False,'index_rank_modified':False,'data_kind':'synthetic_reviewed_work_report',
+        'reference_commit':reference,
         'models':model_info,'index_hashes_before':index_hashes,'kb_hash_before':file_hash(kb),
         'card_id':did,'incident_id':iid,'witness_attempts':witness_attempts,
         'adoption_gates':{'new_misconnections':0,'new_wrong_field_citations':0,'source_mutations':0,
@@ -126,3 +151,4 @@ def test_real_model_hpu_pairs(service,tmp_path,monkeypatch):
         'kb_unchanged':metadata['kb_hash_before']==file_hash(kb),'ordinary_query_hook_added':False}
     (out/'final.json').write_text(json.dumps(final,ensure_ascii=False,indent=2),encoding='utf-8')
     assert final['index_unchanged'] and final['kb_unchanged']
+    assert final['completed'] == final['pairs'], 'Incomplete model pairs are a failed collection, not a quality pass'

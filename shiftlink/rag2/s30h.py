@@ -279,10 +279,11 @@ class S30hPipeline:
             return SimpleNamespace(mode="query", output=output, tool_results={
                 "answer_mode": "s30h", "mes_lines": mes, "route": "unobserved", "candidates": [], "judge_p": [], "kept": [],
                 "p_insuff": None, "abstain_reason": "unobserved", "unobserved": missing, "seconds": round(time.time() - t0, 2)})
-        ev = self.evidence("\n".join([question, *mes]), eq_type, eq_id, units=set(asked) or None)
+        # An impossible record scope cannot gain a valid source through embedding retrieval.
+        eligible = {r['metadata']['source'] for r in record_sources(question, self.rows, self.cards, eq_id)} if history else None
+        ev = [] if history and not eligible else self.evidence("\n".join([question, *mes]), eq_type, eq_id, units=set(asked) or None)
         if history:
             # Reject inapplicable records before network judging; keep original chunks for the judge.
-            eligible = {r['metadata']['source'] for r in record_sources(question, ev, self.cards, eq_id)}
             selected = [r for r in ev if r['chunk_id'].startswith('field_') and r['metadata']['source'] in eligible]
             if getattr(ev, 'graph_trace', None) is not None:
                 trace = {**ev.graph_trace, 'paths': [p for p in ev.graph_trace['paths']

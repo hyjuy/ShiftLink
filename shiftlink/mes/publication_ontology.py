@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sqlite3
 
-from .incident_ontology import content_hash
+from .incident_ontology import content_hash, _record
 from .publication import PUBLICATION_MODEL, validated_record
 
 
@@ -56,11 +56,14 @@ def _origin_matches(service, source, base, draft, equipment, asset):
          'WHERE r.incident_id=? AND r.handover_id=? AND r.record_index=?')
     before=source.execute(sql,(iid,hid,index)).fetchone()
     current=con.execute(sql,(iid,hid,index)).fetchone()
-    # The origin must also be present in the bounded, verified base projection.
-    projected=any(n['provenance']['source_ref'].get('kind')=='report'
-                  and n['provenance']['source_ref']['id']==hid for n in base['nodes'])
-    return bool(projected and before and current and
-                content_hash(json.loads(before[0]))==content_hash(json.loads(current[0])))
+    if not before or not current or content_hash(json.loads(before[0]))!=content_hash(json.loads(current[0])):
+        return False
+    digest=content_hash(_record(json.loads(before[0])['work_report']['records'][index]))
+    # Bind the precise record revision present in the bounded base projection.
+    return any(n['provenance']['source_ref'].get('kind')=='report'
+               and n['provenance']['source_ref']['id']==hid
+               and n['provenance']['source_ref']['path']==f'work_report.records[{index}]'
+               and n['provenance']['source_hash']==digest for n in base['nodes'])
 
 
 def connect(service, database, base, query_id):

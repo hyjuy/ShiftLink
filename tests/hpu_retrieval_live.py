@@ -40,6 +40,7 @@ def reference_code(monkeypatch):
         modules[name] = module
     modules['s30h'].is_history_question = modules['field_history'].is_history_question
     monkeypatch.setattr(S30hPipeline, 'run', modules['s30h'].S30hPipeline.run)
+    monkeypatch.setattr(S30hPipeline, 'evidence', modules['s30h'].S30hPipeline.evidence)
     monkeypatch.setitem(run_experiment.__globals__['_plan'].__globals__,
                         'is_history_question', modules['field_history'].is_history_question)
     return revision

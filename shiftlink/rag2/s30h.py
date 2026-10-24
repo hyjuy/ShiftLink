@@ -218,12 +218,22 @@ class S30hPipeline:
     def evidence(self, question: str, eq_type: str | None, eq_id: str | None = None, units: set | None = None) -> list[dict]:
         """units: unit codes whose handover records stay (the unit guard's asked units); default the eq_id's unit."""
         idx = np.where(np.isin(self.folders, list(COMMON_FOLDERS | {eq_type})))[0] if eq_type else np.arange(len(self.rows))
+        history = is_history_question(question)
+        if history:
+            eligible = {r['metadata']['source'] for r in record_sources(question, self.rows, self.cards, eq_id)}
+            idx = np.array([i for i in idx if self.rows[i]['chunk_id'].startswith('field_')
+                            and self.rows[i]['metadata']['source'] in eligible], dtype=int)
+            if not len(idx):
+                return []
         ranking = idx[np.argsort(-(self.vec[idx] @ self._embed(question)))].tolist()
         trace = None
         if self.knowledge_graph:
             ranking, trace = expand_ranking(self.rows, ranking, self.cards, eq_type, eq_id, top=CFG["top"])
         else:
             ranking = ranking[:CFG["top"]]
+        if history:
+            allowed = set(idx)
+            ranking = [i for i in ranking if i in allowed]
         ev = G.evidence(self.rows, ranking, CFG)
         # another unit's handover event is not this unit's history: drop it without moving the next chunk up
         # (F′ of the 10/20 event-filter run, ShiftLink-records/experiments/evfilter_20261020; backfilling cost 충분 answers)

@@ -26,7 +26,14 @@ def experiment(published_history, monkeypatch):
     with svc._lock:
         view,_=svc.publications.snapshot(svc.query_pipeline,'EQ-0001',asset,[])
     field=[r for r in view.rows if r['metadata']['source']==did]
-    view.rows=[chunk(f'distractor-{i}','source',f'manual-{i}','HPU',page=1) for i in range(35)]+field
+    # Competing reviewed histories, not manuals: history-only retrieval now excludes manuals.
+    template=next(c for c in view.cards if c['card_id']==did)
+    distractors=[]
+    for i in range(35):
+        cid=f'K-fixture-{i}'
+        view.cards.append({**deepcopy(template),'card_id':cid})
+        distractors.append(chunk(f'field_{cid}_r2_0','card',cid,'HPU',page=1))
+    view.rows=distractors+field
     view.vec=np.array([[3,0,0,0]]*35+[[.6,.8,0,0]]*len(field),dtype=np.float32)
     view.folders=np.array(['HPU']*len(view.rows))
     iid=svc.storage.get_card_draft(did)['review_flags']['work_report']['incident_id']

@@ -42,7 +42,9 @@ def test_service_to_readonly_bundle_to_graph_preserves_originals(service, bundle
     normal = [n for n in nodes(graph, 'Outcome') if n['properties']['outcome_kind'] == 'normal_operation']
     assert normal[0]['properties']['minutes'] == 120
     assert normal[0]['provenance']['claim_kind'] == 'worker_report'
-    assert all(n['properties']['scope'] in {'query_snapshot', 'save_snapshot'} for n in nodes(graph, 'Observation'))
+    sensors = [n for n in nodes(graph, 'Observation') if n['provenance']['claim_kind'] == 'sensor_observation']
+    assert sensors and all(n['properties']['scope'] in {'query_snapshot', 'save_snapshot'} for n in sensors)
+    assert any(n['properties']['scope'] == 'worker_report' for n in nodes(graph, 'Observation'))
     assert not relations(graph, 'SUPPORTED_BY'), 'Save-time sensors do not prove 120-minute normal operation'
     assert bundle == original
     assert list(service.storage.connection.iterdump()) == before

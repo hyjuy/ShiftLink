@@ -4,7 +4,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import numpy as np
 from scripts.mes_causal_pda_service import AdvisorySession
-from scripts.mes_causal_episode import EpisodeSource as Source
+from scripts.mes_causal_lifecycle import LifecycleSource as Source
 ROOT=Path(__file__).resolve().parents[1]
 PREVIOUS=Path('/home/pi/shiftlink/analytics/validation/episode-notices-20261024')
 class LifecycleRegressions(unittest.TestCase):

@@ -1,0 +1,15 @@
+test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears) ... FAIL
+
+======================================================================
+FAIL: test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears (tests.test_pda_active_display.ActiveDisplayTests.test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 71, in test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears
+    self.assertNotIn(self.eq,emitted);self.assertEqual(self.s.report(self.frames[249])['items'][0]['event_id'],before)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: 'EQ-0001' unexpectedly found in ['EQ-0001']
+
+----------------------------------------------------------------------
+Ran 1 test in 2.956s
+
+FAILED (failures=1)

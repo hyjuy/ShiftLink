@@ -1,0 +1,16 @@
+{
+  "tests": 26,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 59.46436065099988,
+  "original_suite_tests_previously_passed": 57,
+  "new_candidate_and_data_tests": 26,
+  "candidate_executable_lines": 83,
+  "candidate_covered_lines": 82,
+  "candidate_line_coverage": 98.79518072289157,
+  "missing": [
+    0
+  ],
+  "candidate_sha256": "eef47badb546b37a34ac757297e509b156b360a1011bd859c9b41b1a8f7326d4"
+}

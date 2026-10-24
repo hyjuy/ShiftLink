@@ -1,0 +1,25 @@
+{
+  "files": {
+    "scripts/mes_causal_lifecycle.py": "eef47badb546b37a34ac757297e509b156b360a1011bd859c9b41b1a8f7326d4",
+    "scripts/mes_causal_lifecycle_validate.py": "ef851619bbc65636bd6101387b830a34fa4e76e1d783baffe3b37c9610e1c9f3",
+    "scripts/mes_causal_episode.py": "e645fd0bbb5ae4166966c12c6c9bdfe7e100c58c9db970107067ca73e1200294",
+    "scripts/mes_causal_episode_validate.py": "771a9200a25aad6f6c66b8a76e85f6b3704042fa00b8ab420651a7e2ce489f88",
+    "scripts/mes_causal_context.py": "b92d559dbe86728fa969663925d4960195e8a853ee08831a0913258f0108b61f",
+    "scripts/mes_causal_v14_stream.py": "686400e7d7d0d7566acd0c965120e55c84c1b87ece4b8c1d02414f90a5ab0ee9",
+    "scripts/mes_causal_schema.py": "faba04cfdb662e9686e4826d4f517a4413744e307bf4a1a296a70fa8bb5cd142",
+    "scripts/mes_causal_pda_service.py": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+    "tests/test_mes_causal_lifecycle.py": "f0ab0707fa2c223fc583695155cb01158104c75e49bf567d0e82262af61f3fd6",
+    "tests/test_mes_causal_lifecycle_data.py": "0099e4241d3c55039f5cf5445a847e16581c0268f90a690616ce7970f829d54f",
+    "docs/research/mes-causal-lifecycle-prereg-20261024.md": "7ab4e21207ac406c363ddec8144bb87a4883d18a9bff53b8ce45ca39744129a2",
+    "deploy/analytics/normal-profile.json": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
+    "deploy/analytics/source-config.json": "f54c6469b9912f3883ee85a1b665cbbaf704127d4bb6253139584396ad29deea",
+    "docs/research/evidence/mes-causal-v14c-20261023/settings.json": "e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789"
+  },
+  "development_manifest_sha256": "161329ea20ad1f28e5a1b221f9b271f7e10b7c42c335ee093d99e731d5c09d57",
+  "split_sha256": "dffc0a16670953551d34a76f6bf6de2d89d755ae5399af5217d7a8fbbc6d3f8d",
+  "normal_source_provenance_sha256": "8e370a9d72b2f0460fa6111845ff9676aa82cce988ac20762b8ea6c2f023b97e",
+  "model_input_overlap_sha256": "cf7f4417d1336d81c3dbb1b31d84cac1f5a346ed21483b9675fac077dbf7936d",
+  "protocol_sha256": "72ca15a263065f7f6d321308c18207bfd35442baab984b42024d926d0cf1a38d",
+  "before_unseen_generation": true,
+  "selection": "first development-passing candidate, no score fitting"
+}

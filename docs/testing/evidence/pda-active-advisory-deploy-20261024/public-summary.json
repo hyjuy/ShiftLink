@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-24",
+  "scope": "Raspberry Pi installed-code isolated replay and Chromium verification",
+  "release": "active-advisory-v1-pda-20261024-r6",
+  "pre_deploy": {
+    "python_tests": 73,
+    "errors": 0,
+    "js_checks": 7,
+    "failures": 0
+  },
+  "post_deploy": {
+    "errors": 0,
+    "same_equipment_duplicate_rows": 0,
+    "chromium_tests": 1,
+    "failures": 0,
+    "ai_additional_vibration_calls": 0,
+    "python_tests": 19
+  },
+  "live_observation": {
+    "temperature_c": 41.381,
+    "seconds": 101.724858795,
+    "mismatches": 0,
+    "matched_frames": 21,
+    "service_active": true,
+    "service_restarts": 0,
+    "throttled": "0x0",
+    "errors": 0
+  },
+  "integrity": {
+    "approved_changed_files": 3,
+    "served_static_hashes_match": true,
+    "unchanged_files": 57,
+    "release_manifest_files": 19,
+    "protected_files": 60
+  },
+  "archive_sha256": "c79b22068a2a1d75b578c76f6d126e6f22f18107b88231704cadad4737d614c5",
+  "limitations": [
+    "No live MES fault injection or stop operation",
+    "Physical vibration not measured; API calls checked",
+    "Existing Jetson query-context 30-frame age filter retained",
+    "Tests overlap; counts must not be summed",
+    "Raw operational logs and screenshots retained locally, not published"
+  ]
+}

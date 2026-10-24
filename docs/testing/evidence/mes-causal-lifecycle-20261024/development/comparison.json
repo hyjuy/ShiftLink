@@ -1,0 +1,154 @@
+{
+  "role": "development",
+  "passed": true,
+  "gates": {
+    "no_detection_loss": true,
+    "first_notices_unchanged": true,
+    "duplicates_zero": true,
+    "normal_zero": true,
+    "spike_zero": true,
+    "quality_not_increased": true,
+    "unmatched_not_increased": true,
+    "p95_not_increased": true
+  },
+  "lost": [],
+  "common_first_deltas": {
+    "000-hydraulic_leak-persistent-2:0": 0,
+    "001-hydraulic_leak-progressive-2:0": 0,
+    "002-hydraulic_leak-intermittent-2:0": 0,
+    "003-cooling_loss-persistent-2:0": 0,
+    "004-cooling_loss-progressive-2:0": 0,
+    "005-cooling_loss-intermittent-2:0": 0,
+    "006-air_leak-persistent-2:0": 0,
+    "007-air_leak-progressive-2:0": 0,
+    "008-air_leak-intermittent-2:0": 0,
+    "009-friction-persistent-2:0": 0,
+    "010-friction-progressive-2:0": 0,
+    "011-friction-intermittent-2:0": 0,
+    "012-sensor_bias-persistent-2:0": 0,
+    "013-sensor_bias-progressive-2:0": 0,
+    "014-sensor_bias-intermittent-2:0": 0,
+    "015-sensor_stuck-persistent-2:0": 0,
+    "016-sensor_stuck-progressive-2:0": 0,
+    "017-sensor_stuck-intermittent-2:0": 0,
+    "018-phase_heating-persistent-2:0": 0,
+    "019-phase_heating-progressive-2:0": 0,
+    "020-phase_heating-intermittent-2:0": 0,
+    "021-variance-persistent-2:0": 0,
+    "022-variance-progressive-2:0": 0,
+    "023-variance-intermittent-2:0": 0,
+    "032-post_repair-persistent-0:0": 0,
+    "032-post_repair-persistent-0:1": 0,
+    "033-post_repair-persistent-1:0": 0,
+    "033-post_repair-persistent-1:1": 0,
+    "034-post_repair-persistent-2:0": 0,
+    "034-post_repair-persistent-2:1": 0,
+    "035-post_repair-persistent-3:0": 0,
+    "035-post_repair-persistent-3:1": 0,
+    "036-nearby-persistent-0:0": 0,
+    "037-nearby-persistent-1:0": 0,
+    "037-nearby-persistent-1:1": 0,
+    "038-nearby-persistent-2:0": 0,
+    "038-nearby-persistent-2:1": 0,
+    "039-nearby-persistent-3:0": 0,
+    "039-nearby-persistent-3:1": 0
+  },
+  "original": {
+    "model": "original",
+    "cases": 40,
+    "frames": 17920,
+    "detected": 39,
+    "total": 40,
+    "duplicates": 40,
+    "unmatched": 1,
+    "normal": 0,
+    "spike": 0,
+    "quality": 0,
+    "delay_p95_frames": 63
+  },
+  "candidate": {
+    "model": "candidate",
+    "cases": 40,
+    "frames": 17920,
+    "detected": 39,
+    "total": 40,
+    "duplicates": 0,
+    "unmatched": 0,
+    "normal": 0,
+    "spike": 0,
+    "quality": 0,
+    "delay_p95_frames": 63
+  },
+  "by_scenario": {
+    "persistent": {
+      "original": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 1,
+        "p95_frames": 8
+      },
+      "candidate": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 0,
+        "p95_frames": 8
+      }
+    },
+    "progressive": {
+      "original": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 8,
+        "p95_frames": 74
+      },
+      "candidate": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 0,
+        "p95_frames": 74
+      }
+    },
+    "intermittent": {
+      "original": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 25,
+        "p95_frames": 8
+      },
+      "candidate": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 0,
+        "p95_frames": 8
+      }
+    },
+    "post_repair": {
+      "original": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 2,
+        "p95_frames": 11
+      },
+      "candidate": {
+        "detected": 8,
+        "total": 8,
+        "duplicates": 0,
+        "p95_frames": 11
+      }
+    },
+    "nearby": {
+      "original": {
+        "detected": 7,
+        "total": 8,
+        "duplicates": 4,
+        "p95_frames": 7
+      },
+      "candidate": {
+        "detected": 7,
+        "total": 8,
+        "duplicates": 0,
+        "p95_frames": 7
+      }
+    }
+  }
+}

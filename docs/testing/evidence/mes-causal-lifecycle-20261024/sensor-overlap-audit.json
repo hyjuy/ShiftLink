@@ -1,0 +1,11 @@
+{
+  "development_test_exact_sensor_frame_overlap": 0,
+  "development_prior_exact_sensor_frame_overlap": 708,
+  "test_prior_exact_sensor_frame_overlap": 708,
+  "counts": {
+    "development": 708,
+    "test": 708,
+    "prior": 2833
+  },
+  "hash_fields": "69-channel identity/value/quality/freshness, excludes run_id and timestamps; a zero exact match count is not field independence"
+}

@@ -1,0 +1,9 @@
+{
+  "reason": "Every selected source sensor frame matched earlier data despite a new run ID. Stop exploratory pair before any unseen fault generation. Replace both normal sources with independent newly seeded MES streams and require zero exact sensor overlap.",
+  "stopped_only_verified_validation_pids": [
+    16514,
+    16515
+  ],
+  "original_source_and_partial_results_preserved": true,
+  "no_unseen_evaluation_started": true
+}

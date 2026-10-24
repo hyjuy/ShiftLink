@@ -1,0 +1,18 @@
+{
+  "candidate_lock_unchanged": true,
+  "case_hashes_verified": {
+    "development": {
+      "cases": 40,
+      "incidents": 40,
+      "frames": 17920
+    },
+    "test": {
+      "cases": 68,
+      "incidents": 64,
+      "frames": 30464
+    }
+  },
+  "development_test_run_ids_seeds_nonces_disjoint": true,
+  "no_truth_keys_in_declared_input": true,
+  "source_roles_different_runs_and_normal_seeds": true
+}

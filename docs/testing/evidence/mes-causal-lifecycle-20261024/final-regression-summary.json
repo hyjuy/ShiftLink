@@ -1,0 +1,21 @@
+{
+  "unique_configured_checks": 85,
+  "existing_original_suite": 57,
+  "new_candidate_state_checks": 21,
+  "final_new_data_contract_checks": 7,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "execution": "Multiple Pi invocations: original57 passed; candidate13 inherited +8 lifecycle passed; extended12/20/31-gap assertion and final7 data checks passed. Earlier5 data checks are replaced by final7, not added again.",
+  "candidate_sha256": "eef47badb546b37a34ac757297e509b156b360a1011bd859c9b41b1a8f7326d4",
+  "coverage": {
+    "covered": 82,
+    "reported_executable": 83,
+    "percent": 98.79518072289157,
+    "missing": [
+      0
+    ],
+    "note": "Reported line0 is a Python trace code-object marker; 98.8% retained conservatively. Not branch coverage."
+  },
+  "initial_expected_red_and_setup_or_observer_failures_preserved": true
+}

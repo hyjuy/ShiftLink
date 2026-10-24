@@ -1,0 +1,17 @@
+{
+  "source_run": "1bcc37b580134c3c90249619cc7c678e",
+  "development": [
+    1725,
+    2246
+  ],
+  "purge_frames": 64,
+  "test": [
+    2311,
+    2833
+  ],
+  "development_sha256": "c02cc89b0e78d79f16c41e858820f3eb8a1edd264bb8afbe0f6e08131da88cc7",
+  "test_sha256": "fcc94254af6c91fc32fdfd2408bc450f20a8ad7871ee37a7df5833b9e0fc4363",
+  "shared_source_run": true,
+  "disjoint_source_times": true,
+  "previous_test_source_max_sequence": 1724
+}

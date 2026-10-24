@@ -1,0 +1,20 @@
+{
+  "case": "002-hydraulic_leak-intermittent-2",
+  "frames": 448,
+  "notices": [
+    105
+  ],
+  "original_notices": [
+    105
+  ],
+  "first_release_index": 312,
+  "original_first_release_index": 312,
+  "quiet_samples": 69,
+  "previous_quiet_hidden": 65,
+  "candidate_quiet_hidden": 0,
+  "event_ids": [
+    "2598dd7d5aedb58c1d5983b68b916c49:105:EQ-0001"
+  ],
+  "feed_and_report_p95_ms": 23.25169200048549,
+  "scope": "consumed synthetic development replay on Pi; compute timing excludes replay wait, network, browser and fsync"
+}

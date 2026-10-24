@@ -1,0 +1,16 @@
+[
+  {
+    "path": "tests/fixtures/mes_causal_pi/lifecycle/development/cases/002-hydraulic_leak-intermittent-2.json.gz",
+    "source": "/home/pi/shiftlink/analytics/validation/fault-lifecycle-20261024/development/cases/002-hydraulic_leak-intermittent-2.json.gz",
+    "bytes": 459877,
+    "sha256": "c5e1acb8d7e5093358e6f6496f7e62c1ddb7df1749866206b23e6b494255ad86",
+    "scope": "consumed synthetic Pi regression fixture; no new evaluation claim"
+  },
+  {
+    "path": "tests/fixtures/mes_causal_pi/episode/test/cases/variance-01.json.gz",
+    "source": "/home/pi/shiftlink/analytics/validation/episode-notices-20261024/test/cases/variance-01.json.gz",
+    "bytes": 196521,
+    "sha256": "7bc42999fe39cb9773c251e4485ef48da8d4d564fd3276985cf7328f3b7360f7",
+    "scope": "consumed synthetic Pi regression fixture; no new evaluation claim"
+  }
+]

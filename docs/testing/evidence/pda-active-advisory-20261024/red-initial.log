@@ -1,0 +1,90 @@
+test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) ... 
+  test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='paused') ... FAIL
+  test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='stopped') ... FAIL
+  test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='fault') ... FAIL
+  test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='running') ... FAIL
+test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery (tests.test_pda_active_display.ActiveDisplayTests.test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery) ... FAIL
+test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop (tests.test_pda_active_display.ActiveDisplayTests.test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop) ... FAIL
+test_overlay_preserves_legacy_alarms_and_deduplicates_equipment (tests.test_pda_active_display.ActiveDisplayTests.test_overlay_preserves_legacy_alarms_and_deduplicates_equipment) ... FAIL
+test_restart_and_duplicate_input_keep_event_identity (tests.test_pda_active_display.ActiveDisplayTests.test_restart_and_duplicate_input_keep_event_identity) ... FAIL
+test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results (tests.test_pda_active_display.ActiveDisplayTests.test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results) ... ok
+
+======================================================================
+FAIL: test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='paused')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 57, in test_late_manual_pause_and_individual_stop_keep_same_event_after_restart
+    f=self.feed_to(160);before=self.s.report(f)['items'];self.assertEqual(len(before),1)
+                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='stopped')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 57, in test_late_manual_pause_and_individual_stop_keep_same_event_after_restart
+    f=self.feed_to(160);before=self.s.report(f)['items'];self.assertEqual(len(before),1)
+                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='fault')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 57, in test_late_manual_pause_and_individual_stop_keep_same_event_after_restart
+    f=self.feed_to(160);before=self.s.report(f)['items'];self.assertEqual(len(before),1)
+                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_late_manual_pause_and_individual_stop_keep_same_event_after_restart (tests.test_pda_active_display.ActiveDisplayTests.test_late_manual_pause_and_individual_stop_keep_same_event_after_restart) (mode='running')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 57, in test_late_manual_pause_and_individual_stop_keep_same_event_after_restart
+    f=self.feed_to(160);before=self.s.report(f)['items'];self.assertEqual(len(before),1)
+                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery (tests.test_pda_active_display.ActiveDisplayTests.test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 39, in test_long_fault_and_short_normal_gaps_stay_visible_until_observed_recovery
+    self.assertEqual(items[0]['state'],'active');ids.add(items[0]['event_id'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'recent' != 'active'
+- recent
++ active
+
+
+======================================================================
+FAIL: test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop (tests.test_pda_active_display.ActiveDisplayTests.test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 80, in test_long_stop_confirmation_must_be_valid_and_not_stale_at_stop
+    self.assertEqual(len(value['items']),1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_overlay_preserves_legacy_alarms_and_deduplicates_equipment (tests.test_pda_active_display.ActiveDisplayTests.test_overlay_preserves_legacy_alarms_and_deduplicates_equipment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 86, in test_overlay_preserves_legacy_alarms_and_deduplicates_equipment
+    value=self.s.report(f);self.assertEqual(len(value['items']),1);value['items']*=2
+                           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_restart_and_duplicate_input_keep_event_identity (tests.test_pda_active_display.ActiveDisplayTests.test_restart_and_duplicate_input_keep_event_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pi/shiftlink/analytics/validation/active-advisory-20261024/source/tests/test_pda_active_display.py", line 44, in test_restart_and_duplicate_input_keep_event_identity
+    f=self.feed_to(160);before=self.s.report(f)['items'];self.assertEqual(len(before),1)
+                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 6 tests in 18.147s
+
+FAILED (failures=8)

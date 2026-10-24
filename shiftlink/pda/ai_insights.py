@@ -22,10 +22,14 @@ def stopped_equipment_for_retention(snapshot):
 
 def valid_stop_notice(row, sequence):
     stop=row.get('stop_sequence')
+    checked=row.get('confirmed_sequence',row.get('sequence'))
+    checked_at=row.get('confirmed_at',row.get('observed_at'))
     try:
         at=datetime.fromisoformat(row['observed_at']);stopped=datetime.fromisoformat(row['stopped_at'])
+        confirmed=datetime.fromisoformat(checked_at)
         return (type(stop) is int and type(row['sequence']) is int and
-                0 <= row['sequence'] <= stop <= sequence and stop-row['sequence'] <= 30 and
+                type(checked) is int and 0 <= row['sequence'] <= checked <= stop <= sequence and stop-checked <= 30 and
+                confirmed.utcoffset() is not None and (confirmed-at).total_seconds()==checked-row['sequence'] and
                 at.utcoffset() is not None and stopped.utcoffset() is not None and
                 (stopped-at).total_seconds()==stop-row['sequence'])
     except (KeyError,TypeError,ValueError):return False
@@ -70,7 +74,7 @@ def read_insights(path, snapshot, config_id, *, now=None):
         if snapshot['line_mode'] in {'paused', 'stopped', 'recovering', 'quality_hold', 'fault'} and data['status']!='stopped':
             return base | dict(status='inactive')
         base['status'] = data['status']
-        if base['status'] not in {'ready','stopped'}:
+        if base['status'] not in {'ready','stopped','warming_up'}:
             return base
         equipment = {row['equipment_id'] for row in snapshot['equipment']}
         seen = set()
@@ -84,13 +88,16 @@ def read_insights(path, snapshot, config_id, *, now=None):
             retained=row['state']=='before_stop'
             if retained:
                 if eq not in stopped or not valid_stop_notice(row,sequence):continue
-            elif base['status']!='ready' or snapshot['line_mode']!='running':continue
+            elif base['status'] not in {'ready','warming_up'} or snapshot['line_mode']!='running':continue
+            if base['status']=='warming_up' and row['state']!='active':continue
             signals = [dict(signal=s['signal'], direction=s['direction']) for s in row.get('signals', [])
                        if isinstance(s, dict) and isinstance(s.get('signal'), str) and s.get('direction') in {'low', 'high'}][:2]
             seen.add(eq)
             base['items'].append(dict(equipment_id=eq, event_id=row['event_id'], sequence=row['sequence'],
                                       observed_at=row['observed_at'], state=row['state'], signals=signals))
             if retained:base['items'][-1].update(stop_sequence=row['stop_sequence'],stopped_at=row['stopped_at'])
+            if 'confirmed_sequence' in row or 'confirmed_at' in row:
+                base['items'][-1].update(confirmed_sequence=row.get('confirmed_sequence'),confirmed_at=row.get('confirmed_at'))
         return base
     except (OSError, ValueError, TypeError, KeyError, AttributeError):
         return base | dict(status='unavailable', items=[])

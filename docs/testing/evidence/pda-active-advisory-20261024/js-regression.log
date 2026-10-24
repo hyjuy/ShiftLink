@@ -1,0 +1,12 @@
+shiftlink/mes/web/pda.js 0  
+tests/pda_sensor_display.cjs 0 PDA sensor display, quality, manual override and disconnect PASS
+ 
+tests/pda_network_boot.cjs 0 PDA offline boot recovery PASS
+ 
+tests/unity_pda_link.cjs 0 Unity -> PDA equipment link PASS
+Unity link preserved through login and work entry PASS
+ 
+tests/pda_symptom_rank.cjs 0 PDA symptom rank PASS
+ 
+tests/mes_query_pda.cjs 0 MES query PDA contract PASS
+ 

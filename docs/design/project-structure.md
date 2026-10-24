@@ -158,6 +158,20 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   MES speed는 재생 배속이므로 모델 입력에서 제외하고 코일의 빈 상태·이동·대기 기준을 사용한다.
   [사전 계획](../research/mes-context-v1-prereg-20261023.md),
   [검증·운영 경계](../testing/mes-normal-context-20261023.md)를 함께 확인한다.
+- 고장 생애주기 후속은 별도 `scripts/mes_causal_lifecycle.py`의 `LifecycleSource`와
+  `mes_causal_lifecycle_validate.py`다. 지속·점진·간헐의 정답 사건/수리 장부는 입력과 분리하고,
+  Pi 개발→고정→새 평가로 원본과 비교한다. 운영 r5·episode 후보는 보존하며 후속 active 표시 릴리스에서 고정 생애주기 후보를 선택한다.
+  [사전 계획](../research/mes-causal-lifecycle-prereg-20261024.md)과 [Pi 결과](../testing/mes-causal-lifecycle-20261024.md)를 따른다.
+- PDA 30프레임 표시 제한 후속은 별도 `scripts/mes_causal_active_advisory.py`다.
+  `ActiveAdvisorySession`은 생애주기 확정 상태가 회복될 때까지 최초 감지 ID를 유지한다.
+  정지·워밍업은 회복으로 세지 않으며 새 run/누락 구간은 이력을 분리한다.
+  2026-10-24 사용자 승인 후 별도 `active.service.in`으로 운영 r6에 적용했다. 기존 경보·질의 연결과 원본은 보존한다.
+  [Pi 표시 검증](../testing/pda-active-advisory-20261024.md)과 [운영 배포·복구](../testing/pda-active-advisory-deploy-20261024.md)를 참고한다.
+- 통지 중복 후속 후보는 `scripts/mes_causal_episode.py`의 `EpisodeDetector/EpisodeSource`다.
+  기존 점수·첫 통지는 유지하고 설비별 통지 사건과 유효한 회복 근거를 저장한다.
+  `mes_causal_episode_validate.py`가 Pi에서 개발→후보 고정→새 평가의 원본·후보 비교를 수행한다.
+  운영 worker의 선택 경로는 바꾸지 않으며 원본 코드·profile·기존 결과를 보존한다.
+  [사전 검증 계획](../research/mes-causal-episode-prereg-20261024.md)을 따른다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
 - Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로

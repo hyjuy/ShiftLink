@@ -1,0 +1,1322 @@
+{
+  "role": "test",
+  "seed": 2443205636064317390,
+  "nonce": "b34223d2d4165bd1e932b4853ed89627",
+  "cases": [
+    {
+      "id": "hydraulic_leak-00",
+      "kind": "hydraulic_leak",
+      "run_id": "d02c733dbbe99481131e46ab32303917",
+      "source_offset": 186,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 0,
+          "start": 127,
+          "end": 183,
+          "ramp": 20,
+          "scale": 1.075519246700721,
+          "sign": -1,
+          "seed": 4362800069753759165
+        }
+      ],
+      "sha256": "ec03705098373aaed56ead8f91bdfc2f8e76490f68fcd88ab8b7113e312bb8f3",
+      "positive": true
+    },
+    {
+      "id": "hydraulic_leak-01",
+      "kind": "hydraulic_leak",
+      "run_id": "31b1136ccbe1d1480b883959641d1d17",
+      "source_offset": 76,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 114,
+          "end": 158,
+          "ramp": 18,
+          "scale": 0.9127719209440213,
+          "sign": 1,
+          "seed": 8943741395950683999
+        }
+      ],
+      "sha256": "20ae54b717b15fced8531d2175d5b21728bd5d412dce603c70a1abe318d47370",
+      "positive": true
+    },
+    {
+      "id": "hydraulic_leak-02",
+      "kind": "hydraulic_leak",
+      "run_id": "c855b9fe6a3b197d1ac527ad2628af62",
+      "source_offset": 140,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 2,
+          "start": 144,
+          "end": 190,
+          "ramp": 16,
+          "scale": 1.0647497995809767,
+          "sign": -1,
+          "seed": 5864215105487945922
+        }
+      ],
+      "sha256": "cc4d1b6184f7c795fc13df7106c067eeda3b58da74d742dc5b2301c1948bd7f5",
+      "positive": true
+    },
+    {
+      "id": "hydraulic_leak-03",
+      "kind": "hydraulic_leak",
+      "run_id": "25276f0dfb26085671c3b1f66d42d471",
+      "source_offset": 93,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 120,
+          "end": 179,
+          "ramp": 19,
+          "scale": 0.9142162402019786,
+          "sign": -1,
+          "seed": 6589130621149303657
+        }
+      ],
+      "sha256": "0514246e26ff5bf5dfbccbf0b77edf5a40d76a73fd7f70a8265b856c83909291",
+      "positive": true
+    },
+    {
+      "id": "cooling_loss-00",
+      "kind": "cooling_loss",
+      "run_id": "bca6c49938371f9026cdf50bdb49c17c",
+      "source_offset": 109,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 0,
+          "start": 121,
+          "end": 179,
+          "ramp": 20,
+          "scale": 1.0344203492361204,
+          "sign": 1,
+          "seed": 7695795697912715409
+        }
+      ],
+      "sha256": "d017175ee257fb4c77b127fab2109c1741e77224453b9fc8caa381e2ce71c3c5",
+      "positive": true
+    },
+    {
+      "id": "cooling_loss-01",
+      "kind": "cooling_loss",
+      "run_id": "c8eca93599be7beeb146a059a2720a4e",
+      "source_offset": 160,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 142,
+          "end": 198,
+          "ramp": 17,
+          "scale": 1.095032600619526,
+          "sign": 1,
+          "seed": 4553942347641654062
+        }
+      ],
+      "sha256": "5d391eb3ad008b058f05e2ae8c0f3e0cfe6dad14da713ffa232478c335f51714",
+      "positive": true
+    },
+    {
+      "id": "cooling_loss-02",
+      "kind": "cooling_loss",
+      "run_id": "8f66a23b51c7a1a2a9783c4b234124ea",
+      "source_offset": 125,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 2,
+          "start": 127,
+          "end": 187,
+          "ramp": 18,
+          "scale": 1.033901747190535,
+          "sign": -1,
+          "seed": 9002036277821867798
+        }
+      ],
+      "sha256": "b86c815f69aa34c17a8535683db5ded3ac480ae6bf35dbf131c794f7e77e9681",
+      "positive": true
+    },
+    {
+      "id": "cooling_loss-03",
+      "kind": "cooling_loss",
+      "run_id": "5ff0b4f0309a3fba95842757de37ff4f",
+      "source_offset": 89,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 121,
+          "end": 176,
+          "ramp": 9,
+          "scale": 0.9189158804972669,
+          "sign": -1,
+          "seed": 1913139073597648372
+        }
+      ],
+      "sha256": "2e946943dbef84734b87baf8c6090d3a51f60bead4f47a85e61e02fe7ec6e56f",
+      "positive": true
+    },
+    {
+      "id": "air_leak-00",
+      "kind": "air_leak",
+      "run_id": "2859b6b0c06354a2e24ea983d0f394ab",
+      "source_offset": 39,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 0,
+          "start": 126,
+          "end": 183,
+          "ramp": 11,
+          "scale": 0.9101465612002124,
+          "sign": 1,
+          "seed": 6472378942820507028
+        }
+      ],
+      "sha256": "74edd7d72142cab7a483b153462697633a7c70b7bdfdc902974fb0988e6241af",
+      "positive": true
+    },
+    {
+      "id": "air_leak-01",
+      "kind": "air_leak",
+      "run_id": "d380ab78d51d81f25c97562a3cc26b79",
+      "source_offset": 102,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 1,
+          "start": 112,
+          "end": 165,
+          "ramp": 9,
+          "scale": 1.024333137264411,
+          "sign": -1,
+          "seed": 1515998696686562575
+        }
+      ],
+      "sha256": "4f5ce2f6dfc412bb6545c39118f4f29732ad1edc7e9fbcda397cf9c5bb0f38ae",
+      "positive": true
+    },
+    {
+      "id": "air_leak-02",
+      "kind": "air_leak",
+      "run_id": "4702f68b5111fee96acff324dfff7ba0",
+      "source_offset": 175,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 2,
+          "start": 112,
+          "end": 168,
+          "ramp": 19,
+          "scale": 1.0322181765503717,
+          "sign": 1,
+          "seed": 1963882029928871623
+        }
+      ],
+      "sha256": "0716e5ea98f85b636c7c6ea2fcca4ccf2e9288246a49283615fd22a5dbf79634",
+      "positive": true
+    },
+    {
+      "id": "air_leak-03",
+      "kind": "air_leak",
+      "run_id": "3f5713bab13a4f760c5ab6f018c9b746",
+      "source_offset": 90,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 3,
+          "start": 134,
+          "end": 188,
+          "ramp": 11,
+          "scale": 1.0930738483728981,
+          "sign": 1,
+          "seed": 9035759493657997204
+        }
+      ],
+      "sha256": "3389738c37070a4ab44c423e605066f63eeba323df97216779df8bcc078d736a",
+      "positive": true
+    },
+    {
+      "id": "friction-00",
+      "kind": "friction",
+      "run_id": "3689ae74630df9e1637112a52c620011",
+      "source_offset": 116,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 0,
+          "start": 137,
+          "end": 189,
+          "ramp": 13,
+          "scale": 1.0704033192233935,
+          "sign": 1,
+          "seed": 2916348801103288139
+        }
+      ],
+      "sha256": "d32609d784fe92eb7673c4a9263ab2ba546f58b26ada1727f81acfa2100cf369",
+      "positive": true
+    },
+    {
+      "id": "friction-01",
+      "kind": "friction",
+      "run_id": "934d26fffafb5ad6c423854d68acd7c6",
+      "source_offset": 189,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0005",
+          "signal": null,
+          "severity": 1,
+          "start": 143,
+          "end": 205,
+          "ramp": 14,
+          "scale": 1.0953148978355483,
+          "sign": -1,
+          "seed": 8567850794183948971
+        }
+      ],
+      "sha256": "4a15490460f2e5b449482b3b17e7141152f221547c0910dc9bc42b75e1e9d71d",
+      "positive": true
+    },
+    {
+      "id": "friction-02",
+      "kind": "friction",
+      "run_id": "cdfd854826a08fee919545277e0e8d5c",
+      "source_offset": 83,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0009",
+          "signal": null,
+          "severity": 2,
+          "start": 122,
+          "end": 168,
+          "ramp": 13,
+          "scale": 0.9805185955518744,
+          "sign": 1,
+          "seed": 4071177006188106069
+        }
+      ],
+      "sha256": "28a7bdb31b1c4ebc984d67e912e70ba58b0aa9183645e8f50554d0c0c5e4ac3c",
+      "positive": true
+    },
+    {
+      "id": "friction-03",
+      "kind": "friction",
+      "run_id": "c242c8099898ac0264e55c465388d0d2",
+      "source_offset": 29,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0006",
+          "signal": null,
+          "severity": 3,
+          "start": 122,
+          "end": 167,
+          "ramp": 15,
+          "scale": 1.0365067242453176,
+          "sign": 1,
+          "seed": 4767841361560988169
+        }
+      ],
+      "sha256": "5a3e78ccaf1ff4eedf57ef762b771c8c1a918bd8461007aeeedf80d689a253af",
+      "positive": true
+    },
+    {
+      "id": "sensor_bias-00",
+      "kind": "sensor_bias",
+      "run_id": "b8bf3fecaec0ece8a92cd2044f2080c4",
+      "source_offset": 89,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 0,
+          "start": 144,
+          "end": 204,
+          "ramp": 12,
+          "scale": 0.9891736092688431,
+          "sign": -1,
+          "seed": 5030674855107646111
+        }
+      ],
+      "sha256": "210794e1eadfac93fd8da3580033d9d66f9a06d80bf887d4c70b58b3636ec44b",
+      "positive": true
+    },
+    {
+      "id": "sensor_bias-01",
+      "kind": "sensor_bias",
+      "run_id": "1526a5572719c8a20366e35874b44a18",
+      "source_offset": 193,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 1,
+          "start": 118,
+          "end": 162,
+          "ramp": 16,
+          "scale": 1.045201524113326,
+          "sign": 1,
+          "seed": 2707020789342135722
+        }
+      ],
+      "sha256": "e6404ef30f011fceaafbaff0de56814d480213c27aca12bf3ca60a886d07b53b",
+      "positive": true
+    },
+    {
+      "id": "sensor_bias-02",
+      "kind": "sensor_bias",
+      "run_id": "d0264c19fdbbb2425df441635feab041",
+      "source_offset": 130,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 2,
+          "start": 113,
+          "end": 173,
+          "ramp": 15,
+          "scale": 0.9498025743207988,
+          "sign": 1,
+          "seed": 1260754805090497269
+        }
+      ],
+      "sha256": "2d040662b8d2bbc69d0d5a7f8b32fadf71172c0c47d97b0f93afdc704fa809b8",
+      "positive": true
+    },
+    {
+      "id": "sensor_bias-03",
+      "kind": "sensor_bias",
+      "run_id": "0505b5bf7b27db46c5e322c77fa1e84d",
+      "source_offset": 68,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 3,
+          "start": 118,
+          "end": 168,
+          "ramp": 18,
+          "scale": 1.0326364162249868,
+          "sign": -1,
+          "seed": 7337321682562748792
+        }
+      ],
+      "sha256": "2a10c19dd4a3c241c9305639ac20827c5d7a4d4c420a3ff1188fc375d913358d",
+      "positive": true
+    },
+    {
+      "id": "sensor_stuck-00",
+      "kind": "sensor_stuck",
+      "run_id": "fcc51ed3fb41828d7fa3f150fdaef072",
+      "source_offset": 16,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_vib_rms",
+          "severity": 0,
+          "start": 112,
+          "end": 161,
+          "ramp": 9,
+          "scale": 1.0292540509147958,
+          "sign": -1,
+          "seed": 7610249498457969770
+        }
+      ],
+      "sha256": "37656dcc839a16d8123bfbcf4cb7b4f860add826492fab3942ec5209d3357eda",
+      "positive": true
+    },
+    {
+      "id": "sensor_stuck-01",
+      "kind": "sensor_stuck",
+      "run_id": "6f545d5706b48103c1295f519f130395",
+      "source_offset": 120,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 1,
+          "start": 136,
+          "end": 181,
+          "ramp": 9,
+          "scale": 0.9438758069706799,
+          "sign": -1,
+          "seed": 7246199697305279053
+        }
+      ],
+      "sha256": "2ce87c587562468c8f403e935fc0ff504891e8b35ca748b9ece53ac44747c90c",
+      "positive": true
+    },
+    {
+      "id": "sensor_stuck-02",
+      "kind": "sensor_stuck",
+      "run_id": "b1e330cdfc716a8c5282092b80ec406f",
+      "source_offset": 57,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_vib_rms",
+          "severity": 2,
+          "start": 139,
+          "end": 201,
+          "ramp": 8,
+          "scale": 0.9419105864791116,
+          "sign": 1,
+          "seed": 4410476462121332187
+        }
+      ],
+      "sha256": "b851520b2cc8870fb9d3ca7298720d27109880b55b92312ceb1df1e988e85b1c",
+      "positive": true
+    },
+    {
+      "id": "sensor_stuck-03",
+      "kind": "sensor_stuck",
+      "run_id": "6a1ba382e9f02740ee00455c5e97b66d",
+      "source_offset": 64,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 3,
+          "start": 133,
+          "end": 184,
+          "ramp": 17,
+          "scale": 0.9981137552730902,
+          "sign": -1,
+          "seed": 6584452921834904473
+        }
+      ],
+      "sha256": "7c5c93168061c3c7bb7b12fe95d2f47acdc1fb513f0febf240c563e63c3e776c",
+      "positive": true
+    },
+    {
+      "id": "phase_heating-00",
+      "kind": "phase_heating",
+      "run_id": "675d97ae67bca0366f88d0e88eaaf415",
+      "source_offset": 176,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 0,
+          "start": 127,
+          "end": 184,
+          "ramp": 9,
+          "scale": 0.9185068366987662,
+          "sign": 1,
+          "seed": 3010125223143335652
+        }
+      ],
+      "sha256": "efcf64ae0fb5e4de3c5f46a4fffeafa99426b9212d8fcb3585b1546dac2909fa",
+      "positive": true
+    },
+    {
+      "id": "phase_heating-01",
+      "kind": "phase_heating",
+      "run_id": "db3465dc547a1254cf5f46f259457077",
+      "source_offset": 20,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 1,
+          "start": 112,
+          "end": 160,
+          "ramp": 11,
+          "scale": 1.0298513066145232,
+          "sign": 1,
+          "seed": 7285985464096007012
+        }
+      ],
+      "sha256": "21aec32657817027abbbf18272bd340397d97eda96d738bf41f8e4ae4f247132",
+      "positive": true
+    },
+    {
+      "id": "phase_heating-02",
+      "kind": "phase_heating",
+      "run_id": "e1e7052c43b1f0f504c02391d0530cb1",
+      "source_offset": 43,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 2,
+          "start": 115,
+          "end": 174,
+          "ramp": 12,
+          "scale": 1.0719458217245346,
+          "sign": 1,
+          "seed": 676287773461656591
+        }
+      ],
+      "sha256": "0e15af881a344b2407582e6dea53eff458eb2a274955247e3196432f41d34da4",
+      "positive": true
+    },
+    {
+      "id": "phase_heating-03",
+      "kind": "phase_heating",
+      "run_id": "a27b52d30780c80678478acb3172ab7e",
+      "source_offset": 192,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 3,
+          "start": 139,
+          "end": 190,
+          "ramp": 12,
+          "scale": 1.0059810212637825,
+          "sign": 1,
+          "seed": 8568178305676929236
+        }
+      ],
+      "sha256": "1a00b35ac7c5c56d50298e395c3f79e6ad0ccbd5264e75f27e5dbe8bcc2e1963",
+      "positive": true
+    },
+    {
+      "id": "variance-00",
+      "kind": "variance",
+      "run_id": "2277b33ec1e41c55981d77b8296e571c",
+      "source_offset": 130,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_vib_rms",
+          "severity": 0,
+          "start": 137,
+          "end": 184,
+          "ramp": 19,
+          "scale": 1.0617990692168833,
+          "sign": 1,
+          "seed": 1247920202723244123
+        }
+      ],
+      "sha256": "1ac0621c00dbbf46d40985780c9fb76a13b42752fb914369e9e2ea9d4707bf71",
+      "positive": true
+    },
+    {
+      "id": "variance-01",
+      "kind": "variance",
+      "run_id": "4417905334ac4893b7f72e5526c43356",
+      "source_offset": 152,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_vib_rms",
+          "severity": 1,
+          "start": 137,
+          "end": 199,
+          "ramp": 16,
+          "scale": 0.9856333755677792,
+          "sign": 1,
+          "seed": 5653930505468535236
+        }
+      ],
+      "sha256": "7bc42999fe39cb9773c251e4485ef48da8d4d564fd3276985cf7328f3b7360f7",
+      "positive": true
+    },
+    {
+      "id": "variance-02",
+      "kind": "variance",
+      "run_id": "3b666dd06eadd86ff40eed6f6387177f",
+      "source_offset": 138,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_vib_rms",
+          "severity": 2,
+          "start": 113,
+          "end": 158,
+          "ramp": 19,
+          "scale": 1.0109328685694345,
+          "sign": 1,
+          "seed": 5638103662633645789
+        }
+      ],
+      "sha256": "19937e3e69e721b251659c39dc7350f4154fc82cc12129e2760c3675f229bfd3",
+      "positive": true
+    },
+    {
+      "id": "variance-03",
+      "kind": "variance",
+      "run_id": "59a9bf134975418be89454a450b6973c",
+      "source_offset": 17,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_vib_rms",
+          "severity": 3,
+          "start": 134,
+          "end": 189,
+          "ramp": 12,
+          "scale": 0.9488587750710539,
+          "sign": 1,
+          "seed": 5608373982896524439
+        }
+      ],
+      "sha256": "e7d5c5a77f624f49f9ff99d6aee38f44ea1b08da2d4e2c6d5551365d9cec6501",
+      "positive": true
+    },
+    {
+      "id": "normal-00",
+      "kind": "normal",
+      "run_id": "782a61ceac2ff7dff86def84c2bf0d56",
+      "source_offset": 12,
+      "events": [],
+      "sha256": "c0cb736662501dac9c4ff5b300b2c0ec2dd1be372467d3087b248ddd9ea0ba86",
+      "positive": false
+    },
+    {
+      "id": "normal-01",
+      "kind": "normal",
+      "run_id": "ba55eb3ce3d66c2573f75a0bd9e4961c",
+      "source_offset": 89,
+      "events": [],
+      "sha256": "1944b23abbcbf01ea0eca564359d78df6aa172a26673c3b537e0cc6700fa6eec",
+      "positive": false
+    },
+    {
+      "id": "normal-02",
+      "kind": "normal",
+      "run_id": "72e37b480aa1f17261b5a2116247ebf5",
+      "source_offset": 46,
+      "events": [],
+      "sha256": "b762f9636a612576ebc6b13f6c44d4c2337e4b31be0d1c08c4442a9ce60fbab1",
+      "positive": false
+    },
+    {
+      "id": "normal-03",
+      "kind": "normal",
+      "run_id": "95960ca018191e74cc69c43336662b63",
+      "source_offset": 90,
+      "events": [],
+      "sha256": "027da801252e467dfb71d2cb206c91bc8a22b84da711f3db16ac68eb4b118965",
+      "positive": false
+    },
+    {
+      "id": "normal-04",
+      "kind": "normal",
+      "run_id": "90309b9673fe16aac71f04add6acc21e",
+      "source_offset": 103,
+      "events": [],
+      "sha256": "cbecd6bff52b07fc6c848a943e86194893eadafd715f4b4e41842eb7f8da9fef",
+      "positive": false
+    },
+    {
+      "id": "normal-05",
+      "kind": "normal",
+      "run_id": "2ae236b0400b859ba048411abffee81b",
+      "source_offset": 21,
+      "events": [],
+      "sha256": "180104eb7c626ebec9d5fe655d5559a2e83963753aa1343f33538e466a085831",
+      "positive": false
+    },
+    {
+      "id": "normal-06",
+      "kind": "normal",
+      "run_id": "193eafd6458e504fc1d629a7090772f1",
+      "source_offset": 132,
+      "events": [],
+      "sha256": "eeb54bbd512e15700932d966d59b2fd1b5d89a865843d5907d6810f9eda92678",
+      "positive": false
+    },
+    {
+      "id": "normal-07",
+      "kind": "normal",
+      "run_id": "a82fd91c5bad940b55520b946eee2192",
+      "source_offset": 92,
+      "events": [],
+      "sha256": "31e84d6aba4efb6a887ca200c1f1def82f382e5f77b98e0013925c9aa89a0a8e",
+      "positive": false
+    },
+    {
+      "id": "spike-00",
+      "kind": "spike",
+      "run_id": "9f499df20da2122ecd957b201689ced2",
+      "source_offset": 194,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 0,
+          "start": 141,
+          "end": 142,
+          "ramp": 15,
+          "scale": 0.9054330673821587,
+          "sign": 1,
+          "seed": 860639674140223733
+        }
+      ],
+      "sha256": "87413d4feb608c8b15c4aa1a7a5a1a673ccd822f73a67340f6484ca6319201dc",
+      "positive": false
+    },
+    {
+      "id": "spike-01",
+      "kind": "spike",
+      "run_id": "fa85ffabbac364ef631782eb733ac5ef",
+      "source_offset": 65,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 1,
+          "start": 115,
+          "end": 116,
+          "ramp": 13,
+          "scale": 1.0934821363644212,
+          "sign": -1,
+          "seed": 1966596791404776270
+        }
+      ],
+      "sha256": "68e6299c84a681e54c832e3dae1a38a2abd24fc24f17d3fdc530696de2df6d1f",
+      "positive": false
+    },
+    {
+      "id": "spike-02",
+      "kind": "spike",
+      "run_id": "0295148e368feea74bc1a7f1865ba97a",
+      "source_offset": 91,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 2,
+          "start": 139,
+          "end": 140,
+          "ramp": 10,
+          "scale": 0.9637145032652698,
+          "sign": -1,
+          "seed": 7354436552341143095
+        }
+      ],
+      "sha256": "a5a1f8bb047143e31499783ae7c57a0a52f7fe28dfdebcfb7fb21f5d97638e01",
+      "positive": false
+    },
+    {
+      "id": "spike-03",
+      "kind": "spike",
+      "run_id": "d12204983abe6c1eb5670df229f06999",
+      "source_offset": 74,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_current",
+          "severity": 3,
+          "start": 139,
+          "end": 140,
+          "ramp": 16,
+          "scale": 1.0268915253582926,
+          "sign": 1,
+          "seed": 3210893776769568022
+        }
+      ],
+      "sha256": "8b35d36cf79dc716789dcc26e7441946ef3a0588f84bb025dfa34ef07ba43322",
+      "positive": false
+    },
+    {
+      "id": "spike-04",
+      "kind": "spike",
+      "run_id": "5ff510ca97f7f71973b73b8022f2802d",
+      "source_offset": 53,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 3,
+          "start": 128,
+          "end": 129,
+          "ramp": 10,
+          "scale": 0.9450677616372468,
+          "sign": -1,
+          "seed": 8578753972820406706
+        }
+      ],
+      "sha256": "3c130b7842362643d8094000a684cb8d193623bb2c8c8dc0cfa0d4d85fba2628",
+      "positive": false
+    },
+    {
+      "id": "spike-05",
+      "kind": "spike",
+      "run_id": "c84dd0f5efa6ac42f78d46320d23b661",
+      "source_offset": 177,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_motor_current",
+          "severity": 3,
+          "start": 122,
+          "end": 123,
+          "ramp": 18,
+          "scale": 0.9693644597708683,
+          "sign": -1,
+          "seed": 3780162784949433697
+        }
+      ],
+      "sha256": "d966dd1883fc6e7603240c3a6c0ee5e522ccdb10c0a7885a05df0192f2e42acb",
+      "positive": false
+    },
+    {
+      "id": "spike-06",
+      "kind": "spike",
+      "run_id": "886357786d208fd9f18decc2db464fb8",
+      "source_offset": 195,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_motor_current",
+          "severity": 3,
+          "start": 138,
+          "end": 139,
+          "ramp": 17,
+          "scale": 0.9542936494239489,
+          "sign": -1,
+          "seed": 1579934757161926537
+        }
+      ],
+      "sha256": "ed38262106de453010cfc82ef1af9c725d21fda7e4fc2caa03e6a3ce493ca3ff",
+      "positive": false
+    },
+    {
+      "id": "spike-07",
+      "kind": "spike",
+      "run_id": "a1b0261e34a20eac77f1ed8a66a6bfca",
+      "source_offset": 141,
+      "events": [
+        {
+          "kind": "spike",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 3,
+          "start": 128,
+          "end": 129,
+          "ramp": 8,
+          "scale": 1.013455883206588,
+          "sign": 1,
+          "seed": 7448992500349833528
+        }
+      ],
+      "sha256": "7639bea94e4208f7a203cc8f197c3c2136311dbb1ce69f7a9e153b0b2aa74086",
+      "positive": false
+    },
+    {
+      "id": "bad_quality-00",
+      "kind": "bad_quality",
+      "run_id": "5bcfde0c151a21caf5904db50ba6c277",
+      "source_offset": 95,
+      "events": [
+        {
+          "kind": "bad_quality",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 0,
+          "start": 133,
+          "end": 189,
+          "ramp": 12,
+          "scale": 1.0310071828925498,
+          "sign": -1,
+          "seed": 9184036966294897079
+        }
+      ],
+      "sha256": "13c0b4269936c967d0a613555257d89da44788450b020c1f71e9ec59cede7a7d",
+      "positive": false
+    },
+    {
+      "id": "bad_quality-01",
+      "kind": "bad_quality",
+      "run_id": "0de621c164aef93c5c61098982f86b5e",
+      "source_offset": 11,
+      "events": [
+        {
+          "kind": "bad_quality",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 1,
+          "start": 113,
+          "end": 157,
+          "ramp": 11,
+          "scale": 1.0488782910967602,
+          "sign": 1,
+          "seed": 5129116242706492513
+        }
+      ],
+      "sha256": "aef7a6abeadd21b4638255d3b2ddabd85de7956e11682bdf66bc04f2beeefd3d",
+      "positive": false
+    },
+    {
+      "id": "bad_quality-02",
+      "kind": "bad_quality",
+      "run_id": "405dcda8b6c675eb29315f59baa169d9",
+      "source_offset": 105,
+      "events": [
+        {
+          "kind": "bad_quality",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 2,
+          "start": 128,
+          "end": 191,
+          "ramp": 16,
+          "scale": 0.9603249149884108,
+          "sign": -1,
+          "seed": 2874013133197911203
+        }
+      ],
+      "sha256": "30e49b59751f774c0d31a427ecc3537b82ad291ce7fc3755c5f754f74767a91e",
+      "positive": false
+    },
+    {
+      "id": "bad_quality-03",
+      "kind": "bad_quality",
+      "run_id": "f0e03f3443e4bb388553b366e77fcbd8",
+      "source_offset": 108,
+      "events": [
+        {
+          "kind": "bad_quality",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 3,
+          "start": 115,
+          "end": 171,
+          "ramp": 9,
+          "scale": 0.9046801770001023,
+          "sign": 1,
+          "seed": 877414063719767654
+        }
+      ],
+      "sha256": "6dbc29bba1e89c952d7490dc9bb95e0576d024ab7ad42eae6ffa018de0688ae2",
+      "positive": false
+    },
+    {
+      "id": "nearby-00",
+      "kind": "nearby",
+      "run_id": "a691554adde13fef1bfc3535f7155927",
+      "source_offset": 152,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 12,
+          "scale": 0.9640502435663859,
+          "sign": 1,
+          "seed": 4673278831714832903
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 137,
+          "end": 173,
+          "ramp": 14,
+          "scale": 0.9672837326085324,
+          "sign": -1,
+          "seed": 6349345173885857728
+        }
+      ],
+      "sha256": "9388e3845faeddac85832c21ca7b158cf49ecf9c93e0a2e56fc1732f27dd98f5",
+      "positive": true
+    },
+    {
+      "id": "nearby-01",
+      "kind": "nearby",
+      "run_id": "66c1c8d2e427b84324e2238abfb04cf2",
+      "source_offset": 124,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 20,
+          "scale": 1.0169806635398597,
+          "sign": -1,
+          "seed": 1001070353474889690
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 144,
+          "end": 180,
+          "ramp": 18,
+          "scale": 1.0081011589762237,
+          "sign": -1,
+          "seed": 3661015173932597183
+        }
+      ],
+      "sha256": "183b8cbbf418bab39c437c46d45110cc5cb1d3bb582693b06fba639a47ea8689",
+      "positive": true
+    },
+    {
+      "id": "nearby-02",
+      "kind": "nearby",
+      "run_id": "f34a8c61521a894e50e64e2c6f0d09b0",
+      "source_offset": 165,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 19,
+          "scale": 0.9789060732338885,
+          "sign": -1,
+          "seed": 8244438829752126181
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 156,
+          "end": 192,
+          "ramp": 11,
+          "scale": 0.9644036598161054,
+          "sign": -1,
+          "seed": 4465660970325684439
+        }
+      ],
+      "sha256": "89bc33bf7dbc88506996864bc8c2848424af5b7037bbb4dc4b229e53c6c46f26",
+      "positive": true
+    },
+    {
+      "id": "nearby-03",
+      "kind": "nearby",
+      "run_id": "253b7bd62647e2444eb9a77736964a37",
+      "source_offset": 110,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 14,
+          "scale": 1.0980303869703982,
+          "sign": 1,
+          "seed": 7408538660346365153
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 180,
+          "end": 216,
+          "ramp": 18,
+          "scale": 0.9032004836840626,
+          "sign": -1,
+          "seed": 114994261325506448
+        }
+      ],
+      "sha256": "ece6af17053372a3f66dc0a2c64d5f5d6fd225cbe8685033f2a0d8ce638c6624",
+      "positive": true
+    },
+    {
+      "id": "nearby-04",
+      "kind": "nearby",
+      "run_id": "ab7fe2686de5ab184b7dc1d1a564696a",
+      "source_offset": 125,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 16,
+          "scale": 1.0784170234313275,
+          "sign": -1,
+          "seed": 6326617380411621775
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 137,
+          "end": 173,
+          "ramp": 12,
+          "scale": 1.0865882913793805,
+          "sign": -1,
+          "seed": 8107206162224285543
+        }
+      ],
+      "sha256": "1ddbe46a89b0d399cc7b94e3a15260358308b2f1b8afa404cecaa8b39b112b69",
+      "positive": true
+    },
+    {
+      "id": "nearby-05",
+      "kind": "nearby",
+      "run_id": "0cc50888a66e172c8c05d2b7504f99bc",
+      "source_offset": 105,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 15,
+          "scale": 1.0007228099318417,
+          "sign": -1,
+          "seed": 2707093073517026519
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 144,
+          "end": 180,
+          "ramp": 16,
+          "scale": 0.9498167145921234,
+          "sign": -1,
+          "seed": 6136333762631273823
+        }
+      ],
+      "sha256": "0342c39dea1e323e5b913c41264c0caff9de73c18a379b307ca928989151cdca",
+      "positive": true
+    },
+    {
+      "id": "nearby-06",
+      "kind": "nearby",
+      "run_id": "c22d0ce7b707d43a536b2d6b96dae8ca",
+      "source_offset": 201,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 10,
+          "scale": 0.9637031823355046,
+          "sign": 1,
+          "seed": 918887768258932888
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 156,
+          "end": 192,
+          "ramp": 15,
+          "scale": 1.0379655769858638,
+          "sign": -1,
+          "seed": 5007369796236723960
+        }
+      ],
+      "sha256": "4fab97ecb88c2f3b57277e880f34860bf809a24cc5932eacf460b356864d6114",
+      "positive": true
+    },
+    {
+      "id": "nearby-07",
+      "kind": "nearby",
+      "run_id": "edbc791617f1d7453e2764d75501d49d",
+      "source_offset": 103,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 13,
+          "scale": 0.970223225765706,
+          "sign": -1,
+          "seed": 4597370705952737817
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 180,
+          "end": 216,
+          "ramp": 13,
+          "scale": 1.0820153315540975,
+          "sign": -1,
+          "seed": 4843999637491137006
+        }
+      ],
+      "sha256": "60ab63824c2b586f3306e153b105d3699d1fa8de0e25caaea2cab1f075b3e0f7",
+      "positive": true
+    }
+  ],
+  "source_sha256": "fcc94254af6c91fc32fdfd2408bc450f20a8ad7871ee37a7df5833b9e0fc4363",
+  "generator_sha256": "e05f506162aa0b280392bf80959778821d96dfdbfcc28de80089d8c9641c7498",
+  "context": "new random interventions on disjoint time blocks from one shared synthetic source run; not an independent field domain"
+}

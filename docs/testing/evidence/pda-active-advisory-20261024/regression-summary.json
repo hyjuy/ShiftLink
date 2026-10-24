@@ -1,0 +1,30 @@
+{
+  "tests": 73,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 145.45096896199902,
+  "coverage": [
+    {
+      "path": "scripts/mes_causal_active_advisory.py",
+      "covered": 84,
+      "executable": 86,
+      "percent": 97.67441860465117,
+      "missing": [
+        103,
+        104
+      ]
+    },
+    {
+      "path": "shiftlink/pda/ai_insights.py",
+      "covered": 104,
+      "executable": 107,
+      "percent": 97.19626168224299,
+      "missing": [
+        35,
+        78,
+        118
+      ]
+    }
+  ],
+  "scope": "Pi isolated source; line observation coverage, not branch coverage"
+}

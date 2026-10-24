@@ -1,0 +1,1132 @@
+{
+  "model": "candidate",
+  "cases": 60,
+  "frames": 19200,
+  "detected": 43,
+  "total": 48,
+  "duplicates": 1,
+  "unmatched": 0,
+  "normal": 0,
+  "spike": 0,
+  "quality": 0,
+  "delay_p95_frames": 15,
+  "rows": [
+    {
+      "id": "hydraulic_leak-00",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "hydraulic_leak-00:0",
+          "kind": "hydraulic_leak",
+          "detected": true,
+          "first": 140,
+          "delay": 12,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 140,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "hydraulic_leak-01",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "hydraulic_leak-01:0",
+          "kind": "hydraulic_leak",
+          "detected": true,
+          "first": 124,
+          "delay": 9,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 124,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "hydraulic_leak-02",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "hydraulic_leak-02:0",
+          "kind": "hydraulic_leak",
+          "detected": true,
+          "first": 152,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 152,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "hydraulic_leak-03",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "hydraulic_leak-03:0",
+          "kind": "hydraulic_leak",
+          "detected": true,
+          "first": 128,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 128,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "cooling_loss-00",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "cooling_loss-00:0",
+          "kind": "cooling_loss",
+          "detected": true,
+          "first": 138,
+          "delay": 16,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 138,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "cooling_loss-01",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "cooling_loss-01:0",
+          "kind": "cooling_loss",
+          "detected": true,
+          "first": 153,
+          "delay": 10,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 153,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "cooling_loss-02",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "cooling_loss-02:0",
+          "kind": "cooling_loss",
+          "detected": true,
+          "first": 135,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 135,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "cooling_loss-03",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "cooling_loss-03:0",
+          "kind": "cooling_loss",
+          "detected": true,
+          "first": 128,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 128,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "air_leak-00",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "air_leak-00:0",
+          "kind": "air_leak",
+          "detected": true,
+          "first": 142,
+          "delay": 15,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 142,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "air_leak-01",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "air_leak-01:0",
+          "kind": "air_leak",
+          "detected": true,
+          "first": 121,
+          "delay": 8,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 121,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "air_leak-02",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "air_leak-02:0",
+          "kind": "air_leak",
+          "detected": true,
+          "first": 122,
+          "delay": 9,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "air_leak-03",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "air_leak-03:0",
+          "kind": "air_leak",
+          "detected": true,
+          "first": 141,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 141,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "friction-00",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "friction-00:0",
+          "kind": "friction",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "friction-01",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "friction-01:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 153,
+          "delay": 9,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 153,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "friction-02",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "friction-02:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 134,
+          "delay": 11,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 134,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "friction-03",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "friction-03:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 132,
+          "delay": 9,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 132,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "sensor_bias-00",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_bias-00:0",
+          "kind": "sensor_bias",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "sensor_bias-01",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_bias-01:0",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 125,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 125,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "sensor_bias-02",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_bias-02:0",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 119,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "sensor_bias-03",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_bias-03:0",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 124,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 124,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "sensor_stuck-00",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_stuck-00:0",
+          "kind": "sensor_stuck",
+          "detected": true,
+          "first": 119,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "sensor_stuck-01",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_stuck-01:0",
+          "kind": "sensor_stuck",
+          "detected": true,
+          "first": 142,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 142,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "sensor_stuck-02",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_stuck-02:0",
+          "kind": "sensor_stuck",
+          "detected": true,
+          "first": 146,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 146,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "sensor_stuck-03",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "sensor_stuck-03:0",
+          "kind": "sensor_stuck",
+          "detected": true,
+          "first": 140,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 140,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "phase_heating-00",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "phase_heating-00:0",
+          "kind": "phase_heating",
+          "detected": true,
+          "first": 138,
+          "delay": 10,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 138,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "phase_heating-01",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "phase_heating-01:0",
+          "kind": "phase_heating",
+          "detected": true,
+          "first": 120,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 120,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "phase_heating-02",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "phase_heating-02:0",
+          "kind": "phase_heating",
+          "detected": true,
+          "first": 122,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "phase_heating-03",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "phase_heating-03:0",
+          "kind": "phase_heating",
+          "detected": true,
+          "first": 146,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 146,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "variance-00",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "variance-00:0",
+          "kind": "variance",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "variance-01",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "variance-01:0",
+          "kind": "variance",
+          "detected": true,
+          "first": 153,
+          "delay": 15,
+          "duplicates": 1
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 153,
+          "equipment_id": "EQ-0009"
+        },
+        {
+          "sequence": 188,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "variance-02",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "variance-02:0",
+          "kind": "variance",
+          "detected": true,
+          "first": 120,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 120,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "variance-03",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "variance-03:0",
+          "kind": "variance",
+          "detected": true,
+          "first": 141,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 141,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "normal-00",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-01",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-02",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-03",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-04",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-05",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-06",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "normal-07",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-00",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-01",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-02",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-03",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-04",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-05",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-06",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "spike-07",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "bad_quality-00",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "bad_quality-01",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "bad_quality-02",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "bad_quality-03",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "nearby-00",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-00:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-00:1",
+          "kind": "sensor_bias",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-01",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-01:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 105,
+          "delay": 8,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-01:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 150,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 105,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 150,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-02",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-02:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 106,
+          "delay": 9,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-02:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 162,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 162,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-03",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-03:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-03:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 186,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 186,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "nearby-04",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-04:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-04:1",
+          "kind": "sensor_bias",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-05",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-05:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 105,
+          "delay": 8,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-05:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 150,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 105,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 150,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-06",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-06:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-06:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 162,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 162,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "nearby-07",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "nearby-07:0",
+          "kind": "friction",
+          "detected": true,
+          "first": 106,
+          "delay": 9,
+          "duplicates": 0
+        },
+        {
+          "key": "nearby-07:1",
+          "kind": "sensor_bias",
+          "detected": true,
+          "first": 186,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 186,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    }
+  ]
+}

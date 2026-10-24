@@ -1,0 +1,7 @@
+{
+  "started_at": 1792842100.2576969,
+  "purpose": "descriptive comparison with immediate previous undeployed candidate; primary preregistered gates and frozen candidate unchanged",
+  "source_sha256": "e645fd0bbb5ae4166966c12c6c9bdfe7e100c58c9db970107067ca73e1200294",
+  "fingerprint": "0fb98a9a84be1bfba235fec89886331c495f905711a9bd384b9a8d2e8e1071df",
+  "no_post_test_selection": true
+}

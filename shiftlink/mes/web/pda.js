@@ -84,10 +84,10 @@ function aiInsightsFrom(snap) {
     stopped:'정지 전 AI 감지 이력입니다. 정지 중 신규 분석은 보류합니다.',
     model_error:'AI 분석을 완료하지 못했습니다.', session_limit:'분석 세션을 다시 시작해 주세요.'};
   let status = data && data.status || 'unavailable';
-  if (['ready','stopped'].includes(status) && (data.run_id !== snap.run_id || data.config_id !== snap.config_id
+  if (['ready','stopped','warming_up'].includes(status) && (data.run_id !== snap.run_id || data.config_id !== snap.config_id
       || !Number.isInteger(data.sequence) || data.sequence > snap.sequence || snap.sequence - data.sequence > 3)) status = 'unavailable';
   const seen = new Set(), items = [];
-  if (['ready','stopped'].includes(status)) (data.items || []).forEach((row) => {
+  if (['ready','stopped','warming_up'].includes(status)) (data.items || []).forEach((row) => {
     const eq = S.equipment.find((e) => e.equipment_id === row.equipment_id);
     if (!eq || seen.has(eq.equipment_id) || !['active','recent','before_stop'].includes(row.state)) return;
     seen.add(eq.equipment_id);
@@ -103,7 +103,7 @@ function aiInsightsFrom(snap) {
 
 function aiInsightNote(insight) {
   const note=document.createElement('p');note.className='ai-insights-note';
-  const label=document.createElement('strong');label.textContent='AI 이상징후 · '+(insight.state==='before_stop'?'정지 전 감지 · '+new Date(insight.observed_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}):insight.state==='recent'?'최근 감지':'점검 참고');
+  const label=document.createElement('strong');label.textContent='AI 이상징후 · '+(insight.state==='before_stop'?'정지 전 감지 · '+new Date(insight.observed_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}):insight.state==='recent'?'최근 감지':'회복 확인 중');
   const text=document.createElement('span');text.textContent=insight.summary;
   note.append(label,text);
   return note;

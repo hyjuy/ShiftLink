@@ -1,0 +1,32 @@
+{
+  "deployed": true,
+  "backup": "/home/pi/shiftlink/analytics/backups/20261024-174937",
+  "old_pda_pid": 1215,
+  "new_pda_pid": 1215,
+  "service_active": "active",
+  "service_enabled": "enabled",
+  "source": {
+    "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+    "sequence": 1306,
+    "line_mode": "running"
+  },
+  "ai": {
+    "status": "ready",
+    "items": [],
+    "operational_notifications": false,
+    "validation": "\ud569\uc131 \ub370\uc774\ud130 \uac80\uc99d \uc644\ub8cc \u00b7 \ud604\uc7a5 \uac80\uc99d \uc804",
+    "disclaimer": "\uace0\uc7a5 \ud655\uc815\uc774 \uc544\ub2cc \uc810\uac80 \ucc38\uace0 \uc815\ubcf4\uc785\ub2c8\ub2e4.",
+    "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "sequence": 1303,
+    "input_at": "2026-10-24T08:42:17.810177+00:00",
+    "generated_at": "2026-10-24T08:49:44.239139+00:00"
+  },
+  "files": {
+    "shiftlink/pda/__main__.py": "d50bb64083313c2be4539ddc20278c3dc8c74bd097550d6deda912209b07fcef",
+    "shiftlink/pda/ai_insights.py": "cc3e8ae41d6a71f956e57011738ea262648a95578a80b4d87ae01a0320cd0a87",
+    "shiftlink/mes/web/pda.js": "ada61519f36ec648378c9473e51c8c4f1a54fda8771b2a3313173c736d435236",
+    "shiftlink/mes/web/pda.html": "dfddf2de37aaa11b55af49aabc32052bbf0dc748d5f0b2e4354aa63f98365192"
+  },
+  "mes_service_changed": false
+}

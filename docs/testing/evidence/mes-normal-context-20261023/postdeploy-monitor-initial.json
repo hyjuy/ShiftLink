@@ -1,0 +1,277 @@
+{
+  "samples": [
+    {
+      "at": 1792831799.6498044,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1317,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 44.79,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831805.6532362,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1323,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 46.251,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831810.7705243,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1327,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.329,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831816.3592167,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1333,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 44.79,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831821.4744601,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1337,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.816,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831826.9813757,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1343,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 42.842,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831832.0995631,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1347,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 44.303,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831837.5886774,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1353,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.329,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831842.6977532,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1357,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.329,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831848.0289135,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1363,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 44.79,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831853.1478503,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1368,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.329,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831858.631898,
+      "comparable": false,
+      "equal": null,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1373,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 44.303,
+      "throttle": "throttled=0x0"
+    },
+    {
+      "at": 1792831863.7386854,
+      "comparable": true,
+      "equal": true,
+      "source": {
+        "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+        "sequence": 1377,
+        "line_mode": "running"
+      },
+      "ai_status": "ready",
+      "ai_model": null,
+      "ai_items": 0,
+      "temp_c": 43.816,
+      "throttle": "throttled=0x0"
+    }
+  ],
+  "comparable": 6,
+  "all_equal": true,
+  "protected": {
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/scripts/mes_causal_schema.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/device-pda.html": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/docs/research/evidence/mes-causal-v14c-20261023/settings.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/deploy/analytics/apply_release.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/deploy/analytics/source-config.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/shiftlink/mes/web/pda.html": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/shiftlink/pda/ai_insights.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/scripts/mes_causal_v14_stream.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/shiftlink/mes/web/pda.js": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/deploy/analytics/shiftlink-analytics.service.in": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/docs/data/reference/mes-causal-v8-signals.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/scripts/mes_causal_pda_service.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r1/shiftlink/pda/__main__.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/deploy/analytics/apply_release.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/scripts/mes_causal_v14_stream.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/device-pda.html": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/deploy/analytics/shiftlink-analytics.service.in": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/shiftlink/mes/web/pda.js": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/shiftlink/pda/__main__.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/scripts/mes_causal_pda_service.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/scripts/mes_causal_schema.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/shiftlink/pda/ai_insights.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/deploy/analytics/source-config.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/docs/research/evidence/mes-causal-v14c-20261023/settings.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/docs/data/reference/mes-causal-v8-signals.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r2/shiftlink/mes/web/pda.html": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/deploy/analytics/apply_release.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/scripts/mes_causal_v14_stream.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/device-pda.html": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/deploy/analytics/shiftlink-analytics.service.in": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/shiftlink/mes/web/pda.js": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/shiftlink/pda/__main__.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/scripts/mes_causal_pda_service.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/scripts/mes_causal_schema.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/shiftlink/pda/ai_insights.py": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/deploy/analytics/source-config.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/docs/research/evidence/mes-causal-v14c-20261023/settings.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/docs/data/reference/mes-causal-v8-signals.json": true,
+    "/home/pi/shiftlink/analytics/releases/v14c-pda-20261023-r3-c6c8872/shiftlink/mes/web/pda.html": true,
+    "/home/pi/shiftlink/app/shiftlink/pda/__main__.py": true,
+    "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py": true,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.js": true,
+    "/home/pi/shiftlink/app/shiftlink/mes/web/pda.html": true,
+    "/home/pi/shiftlink/app/shiftlink/face/engine.py": true,
+    "/home/pi/shiftlink/app/shiftlink/vision/classify.py": true,
+    "/home/pi/shiftlink/data/face/models/face_detection_yunet_2023mar.onnx": true,
+    "/home/pi/shiftlink/data/face/models/face_recognition_sface_2021dec.onnx": true,
+    "/home/pi/shiftlink/models/cnn/model.onnx": true,
+    "/home/pi/shiftlink/models/cnn/labels.txt": true
+  },
+  "pda_pid": [
+    1215
+  ],
+  "pda_preserved": true,
+  "worker_pid": 4053,
+  "worker_cwd": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4",
+  "latest": {
+    "schema_version": 1,
+    "run_id": "c473ad9e67674434b1d3769e3a23eac3",
+    "config_id": "14dbf3965aeea121a083b71c67ffcbf830a3a4ab156eba6f9011b24383a30bec",
+    "sequence": 1376,
+    "input_at": "2026-10-24T08:43:30.810177+00:00",
+    "generated_at": "2026-10-24T08:51:02.785758+00:00",
+    "operational_notifications": false,
+    "items": [],
+    "status": "ready",
+    "poll_seconds": 1.024236103000021,
+    "processed_sequence": 1376,
+    "model": "statistical-context-v1",
+    "torch_loaded": false,
+    "timestral_loaded": false
+  },
+  "service_active": "active",
+  "service_enabled": "enabled",
+  "passed": false
+}

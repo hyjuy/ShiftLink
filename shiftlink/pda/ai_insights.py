@@ -8,11 +8,15 @@ DISCLAIMER = '고장 확정이 아닌 점검 참고 정보입니다.'
 STATUSES = {'ready', 'warming_up', 'inactive', 'catching_up', 'unavailable', 'model_error', 'session_limit', 'stale', 'disabled', 'stopped'}
 
 
-def fault_stopped_equipment(snapshot):
+def stopped_equipment_for_retention(snapshot):
+    # Pause is a line control change; its last equipment states may still say running.
+    if snapshot.get('line_mode') in {'paused','stopped'}:
+        return {e['equipment_id'] for e in snapshot.get('equipment', [])}
     alarms={a.get('equipment_id') for a in snapshot.get('active_alarms', [])}
     return {e['equipment_id'] for e in snapshot.get('equipment', [])
             if e.get('operating_state') in {'stopped', 'waiting'} and
-            (snapshot.get('line_mode')=='fault' or e['equipment_id'] in alarms or
+            ((snapshot.get('line_mode')=='running' and e.get('operating_state')=='stopped') or
+             snapshot.get('line_mode')=='fault' or e['equipment_id'] in alarms or
              e.get('fault_level') in {'warning', 'critical', 'fault'})}
 
 
@@ -62,7 +66,7 @@ def read_insights(path, snapshot, config_id, *, now=None):
             return base
         if lag > 3:
             return base | dict(status='catching_up')
-        stopped=fault_stopped_equipment(snapshot)
+        stopped=stopped_equipment_for_retention(snapshot)
         if snapshot['line_mode'] in {'paused', 'stopped', 'recovering', 'quality_hold', 'fault'} and data['status']!='stopped':
             return base | dict(status='inactive')
         base['status'] = data['status']

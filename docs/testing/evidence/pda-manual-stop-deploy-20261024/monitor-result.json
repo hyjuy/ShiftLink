@@ -1,0 +1,173 @@
+{
+  "passed": true,
+  "seconds": 61.76773262199913,
+  "source_matches": 17,
+  "attempts": 17,
+  "rows": [
+    {
+      "attempt": 0,
+      "sequence": 1292,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 1,
+      "sequence": 1295,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 2,
+      "sequence": 1298,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 3,
+      "sequence": 1302,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 4,
+      "sequence": 1306,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 5,
+      "sequence": 1309,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 6,
+      "sequence": 1312,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 7,
+      "sequence": 1315,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 8,
+      "sequence": 1319,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 9,
+      "sequence": 1322,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 10,
+      "sequence": 1326,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 11,
+      "sequence": 1329,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 12,
+      "sequence": 1333,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 13,
+      "sequence": 1337,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 14,
+      "sequence": 1340,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 15,
+      "sequence": 1344,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    },
+    {
+      "attempt": 16,
+      "sequence": 1348,
+      "source_match": true,
+      "comparable": true,
+      "status": "ready",
+      "ai_items": 0,
+      "legacy_alarms": 0
+    }
+  ],
+  "protected_files": 64,
+  "protected_all_unchanged": true,
+  "release_files_verified": true,
+  "reader_installed_verified": true,
+  "pda_pid": 7075,
+  "chromium_pid": 7095,
+  "worker": "MainPID=7066\nNRestarts=0\nActiveState=active\nUnitFileState=enabled\n",
+  "analysis_errors": 0,
+  "temperature": "temp=44.3'C",
+  "throttled": "throttled=0x0",
+  "real_fault_injected": false,
+  "real_mes_stopped": false
+}

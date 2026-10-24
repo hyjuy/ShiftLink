@@ -1,0 +1,15 @@
+{
+  "normal": {
+    "frames": 16128,
+    "running": 16128,
+    "no_alarms": 16128
+  },
+  "quality": {
+    "good": 1096704,
+    "unavailable": 16128
+  },
+  "queue_fixture_above_mes_threshold": {
+    "EQ-0009:cv_queue_len_above_70": 5376
+  },
+  "scope": "Synthetic fixture; MES range alarms remain unchanged; unavailable channel is not validated"
+}

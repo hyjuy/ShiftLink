@@ -1,0 +1,26 @@
+{
+  "paused": {
+    "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+    "state": "before_stop",
+    "status": "stopped",
+    "legacy_alarms_unchanged": true,
+    "model": "ContextDetector",
+    "passed": true
+  },
+  "stopped": {
+    "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+    "state": "before_stop",
+    "status": "stopped",
+    "legacy_alarms_unchanged": true,
+    "model": "ContextDetector",
+    "passed": true
+  },
+  "individual": {
+    "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+    "state": "before_stop",
+    "status": "ready",
+    "legacy_alarms_unchanged": true,
+    "model": "ContextDetector",
+    "passed": true
+  }
+}

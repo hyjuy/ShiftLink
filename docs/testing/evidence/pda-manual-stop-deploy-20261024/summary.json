@@ -1,0 +1,86 @@
+{
+  "deployed": true,
+  "release": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop",
+  "backup": "/home/pi/shiftlink/analytics/backups/20261024-183824",
+  "code_commit": "b14731e8d04b97b403ee1618157c92777b63b745",
+  "regression": {
+    "tests": 44,
+    "passed": true,
+    "seconds": 39.77
+  },
+  "post_installed_tests": {
+    "passed": true,
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "worker_file": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r5-manual-stop/scripts/mes_causal_pda_service.py",
+    "reader_file": "/home/pi/shiftlink/app/shiftlink/pda/ai_insights.py",
+    "worker_sha256": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+    "reader_sha256": "ce48e76280447596f89f73fa657dcaef86aae14e71f573f3602d53245c54d306",
+    "live_ui_identical": true,
+    "operating_mes_modified": false
+  },
+  "installed_profile": {
+    "paused": {
+      "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+      "state": "before_stop",
+      "status": "stopped",
+      "legacy_alarms_unchanged": true,
+      "model": "ContextDetector",
+      "passed": true
+    },
+    "stopped": {
+      "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+      "state": "before_stop",
+      "status": "stopped",
+      "legacy_alarms_unchanged": true,
+      "model": "ContextDetector",
+      "passed": true
+    },
+    "individual": {
+      "event_id": "664700d34eaabfac950d994e9e9c0cd1:126:EQ-0006",
+      "state": "before_stop",
+      "status": "ready",
+      "legacy_alarms_unchanged": true,
+      "model": "ContextDetector",
+      "passed": true
+    }
+  },
+  "monitor": {
+    "passed": true,
+    "seconds": 61.76773262199913,
+    "source_matches": 17,
+    "attempts": 17,
+    "protected_files": 64,
+    "protected_all_unchanged": true,
+    "release_files_verified": true,
+    "reader_installed_verified": true,
+    "pda_pid": 7075,
+    "chromium_pid": 7095,
+    "worker": "MainPID=7066\nNRestarts=0\nActiveState=active\nUnitFileState=enabled\n",
+    "analysis_errors": 0,
+    "temperature": "temp=44.3'C",
+    "throttled": "throttled=0x0",
+    "real_fault_injected": false,
+    "real_mes_stopped": false
+  },
+  "original_model_changed": false,
+  "mes_service_changed": false,
+  "legacy_alarm_rules_changed": false,
+  "ui_product_code_changed": false,
+  "real_operating_stop_verified": false,
+  "real_hardware_vibration_observed": false,
+  "stop_validation": "isolated Pi fixtures importing deployed worker and app reader; actual Chromium with byte-identical deployed UI",
+  "harness_first_failures": [
+    "Chromium rewrites proc cmdline as one string; initial monitor token filter missed live PID",
+    "namespace package __path__ is _NamespacePath; initial post-runner list.insert failed"
+  ],
+  "harness_failures_preserved": true,
+  "public_archive_excludes": [
+    "production checkpoint copy",
+    "face data",
+    "actual browser profile",
+    "production log"
+  ]
+}

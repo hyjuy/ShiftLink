@@ -1,0 +1,8 @@
+{
+  "stopped": {
+    "3274": "own recovery process; consumed development replay after reconstruction, not required validation",
+    "2263": "own recovery process; consumed development replay after reconstruction, not required validation"
+  },
+  "required_validations_completed": true,
+  "pre_freeze_development_gates_preserved": true
+}

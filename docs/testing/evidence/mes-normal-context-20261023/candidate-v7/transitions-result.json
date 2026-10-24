@@ -1,0 +1,329 @@
+{
+  "original": {
+    "events": 0,
+    "detected": 0,
+    "detected_runs": [],
+    "normal_notices": 54,
+    "duplicates": 0,
+    "unmatched": 0,
+    "p95": null,
+    "cases": [],
+    "normal_cases": [
+      {
+        "run_id": "72ea802f983066beeaed0c5113f87b38",
+        "mode": "slow:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "341442e547f4a871d8432d040760376f",
+        "mode": "slow:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            75,
+            "EQ-0008"
+          ],
+          [
+            79,
+            "EQ-0003"
+          ],
+          [
+            81,
+            "EQ-0006"
+          ],
+          [
+            85,
+            "EQ-0007"
+          ],
+          [
+            122,
+            "EQ-0002"
+          ],
+          [
+            141,
+            "EQ-0008"
+          ],
+          [
+            143,
+            "EQ-0006"
+          ],
+          [
+            172,
+            "EQ-0006"
+          ],
+          [
+            172,
+            "EQ-0008"
+          ],
+          [
+            175,
+            "EQ-0003"
+          ],
+          [
+            176,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "31a8ae8648e13a0e2022c476338e2091",
+        "mode": "nominal:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "1008fa7e45e0752cae54fa104055c10d",
+        "mode": "nominal:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            99,
+            "EQ-0003"
+          ],
+          [
+            138,
+            "EQ-0007"
+          ],
+          [
+            139,
+            "EQ-0002"
+          ],
+          [
+            139,
+            "EQ-0006"
+          ],
+          [
+            146,
+            "EQ-0003"
+          ],
+          [
+            210,
+            "EQ-0003"
+          ],
+          [
+            210,
+            "EQ-0006"
+          ],
+          [
+            210,
+            "EQ-0007"
+          ],
+          [
+            215,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "cb60bba658ff9ee5b9393119daeeb3fa",
+        "mode": "fast:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "4c5f1581d9155f4cc4d91cc46d4a33c3",
+        "mode": "fast:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            91,
+            "EQ-0003"
+          ],
+          [
+            105,
+            "EQ-0006"
+          ],
+          [
+            106,
+            "EQ-0002"
+          ],
+          [
+            111,
+            "EQ-0007"
+          ],
+          [
+            133,
+            "EQ-0008"
+          ],
+          [
+            134,
+            "EQ-0003"
+          ],
+          [
+            148,
+            "EQ-0007"
+          ],
+          [
+            157,
+            "EQ-0006"
+          ],
+          [
+            223,
+            "EQ-0003"
+          ]
+        ]
+      }
+    ]
+  },
+  "candidate": {
+    "events": 0,
+    "detected": 0,
+    "detected_runs": [],
+    "normal_notices": 0,
+    "duplicates": 0,
+    "unmatched": 0,
+    "p95": null,
+    "cases": [],
+    "normal_cases": [
+      {
+        "run_id": "72ea802f983066beeaed0c5113f87b38",
+        "mode": "slow:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "341442e547f4a871d8432d040760376f",
+        "mode": "slow:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "31a8ae8648e13a0e2022c476338e2091",
+        "mode": "nominal:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "1008fa7e45e0752cae54fa104055c10d",
+        "mode": "nominal:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "cb60bba658ff9ee5b9393119daeeb3fa",
+        "mode": "fast:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "4c5f1581d9155f4cc4d91cc46d4a33c3",
+        "mode": "fast:queued",
+        "family": "dynamics",
+        "notices": []
+      }
+    ]
+  },
+  "checks": {
+    "normal_zero": true,
+    "no_detection_lost": true,
+    "sensitivity": true,
+    "duplicates_zero": true,
+    "delay_not_worse": true
+  },
+  "candidate_processing_p95": 0.05539633000080357,
+  "scope": "synthetic intervention replay, excludes network/UI; paired normal generators are shared"
+}

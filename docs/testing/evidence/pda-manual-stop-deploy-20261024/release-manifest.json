@@ -1,0 +1,33 @@
+{
+  "release": "normal-context-v1-pda-20261024-r5-manual-stop",
+  "files": {
+    "device-pda.html": "dfddf2de37aaa11b55af49aabc32052bbf0dc748d5f0b2e4354aa63f98365192",
+    "scripts/mes_causal_context.py": "b92d559dbe86728fa969663925d4960195e8a853ee08831a0913258f0108b61f",
+    "scripts/mes_causal_pda_service.py": "e15beb387df486a4d8dfbdfc6805f898a442d636a9ed7e9a3e5e3fb79817a7b1",
+    "scripts/mes_causal_schema.py": "faba04cfdb662e9686e4826d4f517a4413744e307bf4a1a296a70fa8bb5cd142",
+    "scripts/mes_causal_v14_stream.py": "686400e7d7d0d7566acd0c965120e55c84c1b87ece4b8c1d02414f90a5ab0ee9",
+    "deploy/analytics/normal-profile.json": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
+    "deploy/analytics/source-config.json": "f54c6469b9912f3883ee85a1b665cbbaf704127d4bb6253139584396ad29deea",
+    "deploy/analytics/context.service.in": "93198b0647c317addb1e57ee43c7130a11a57ed9f5760d3ed89d8054e6a357dc",
+    "deploy/analytics/apply_release.py": "157945cfab36f0f30d2bcede9652267d615a3d9049e5e853ef5466320872ba34",
+    "deploy/analytics/shiftlink-analytics.service.in": "9e032cdd0171e5991ea8ff765ac327c59aa56253a7cf6cd1a7a45faa85d7d52b",
+    "shiftlink/pda/ai_insights.py": "ce48e76280447596f89f73fa657dcaef86aae14e71f573f3602d53245c54d306",
+    "shiftlink/pda/__main__.py": "d50bb64083313c2be4539ddc20278c3dc8c74bd097550d6deda912209b07fcef",
+    "shiftlink/mes/web/pda.html": "e8aa0b59f930f81f199d819414121bdb08f1b6b03e0fc4e766e9bd13bc8478d8",
+    "shiftlink/mes/web/pda.js": "ada61519f36ec648378c9473e51c8c4f1a54fda8771b2a3313173c736d435236",
+    "docs/research/evidence/mes-causal-v14c-20261023/settings.json": "e8cea07e615f1e21d4ab472554d42348d903c8df027c69a49f226b3211f3d789",
+    "docs/data/reference/mes-causal-v8-signals.json": "33df91787a996d2dbea048e54620e8875e21257dd834556fe6de5ae76edf79b7"
+  },
+  "expected_live": {
+    "shiftlink/pda/__main__.py": "d50bb64083313c2be4539ddc20278c3dc8c74bd097550d6deda912209b07fcef",
+    "shiftlink/pda/ai_insights.py": "cc3e8ae41d6a71f956e57011738ea262648a95578a80b4d87ae01a0320cd0a87",
+    "shiftlink/mes/web/pda.js": "ada61519f36ec648378c9473e51c8c4f1a54fda8771b2a3313173c736d435236",
+    "shiftlink/mes/web/pda.html": "dfddf2de37aaa11b55af49aabc32052bbf0dc748d5f0b2e4354aa63f98365192"
+  },
+  "expected_unit_sha256": "dc7f0a0fe35a35b19accc68413e3b2f52624f776319231e93fcef4537ecd61f4",
+  "parent_release": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4",
+  "source_commit": "b14731e8d04b97b403ee1618157c92777b63b745",
+  "unit_template": "deploy/analytics/context.service.in",
+  "normal_profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
+  "state_directory": "/var/lib/shiftlink-analytics-normal-v1"
+}

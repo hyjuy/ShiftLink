@@ -79,6 +79,9 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
     if mode!='experiment' or not isinstance(pipeline,S30hPipeline):
         return {'mode':mode,'status':'error','reason':'unsupported_experiment_configuration'}
     timings={}
+    trial=None
+    had_evidence_override=False
+    prior_evidence=None
     try:
         started=perf_counter()
         additions,digest,reason=_plan(service,pipeline,payload,database,graph,witness_query_id)
@@ -88,6 +91,8 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
         timings['baseline_prepare']=(perf_counter()-started)*1000
         started=perf_counter()
         trial=_view(pipeline)
+        had_evidence_override='evidence' in trial.__dict__
+        prior_evidence=trial.__dict__.get('evidence')
         timings['trial_prepare']=(perf_counter()-started)*1000
         original=trial.evidence
         admitted=[]
@@ -128,6 +133,13 @@ def run_experiment(service=None,pipeline=None,payload=None,*,database=None,graph
                 'candidate_budget':CFG.get('max_chunks',G.MAX_CHUNKS),'timings_ms':timings,'order':list(order)}
     except Exception as error:
         return {'mode':mode,'status':'error','reason':'experiment_failed','error_type':type(error).__name__}
+    finally:
+        # The wrapper closes over trial: detach it so index copies do not wait for cyclic GC.
+        if trial is not None:
+            if had_evidence_override:
+                trial.evidence=prior_evidence
+            else:
+                trial.__dict__.pop('evidence',None)
 
 
 def score_case(case,result,*,card_id):

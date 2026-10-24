@@ -52,6 +52,12 @@ def reference_code(monkeypatch):
     exec(compile(source, 'reference_evidence_score.py', 'exec'), scorer.__dict__)
     scorer.KEEP_ALIVE = -1
     monkeypatch.setattr(E, 'judge_dist', scorer.judge_dist)
+    source = subprocess.check_output(['git', 'show', f'{revision}:shiftlink/mes/hpu_retrieval_experiment.py'])
+    trial_module = ModuleType('shiftlink.mes._reference_hpu_retrieval')
+    trial_module.__package__ = 'shiftlink.mes'
+    exec(compile(source, 'reference_hpu_retrieval.py', 'exec'), trial_module.__dict__)
+    trial_module.is_history_question = modules['field_history'].is_history_question
+    monkeypatch.setitem(globals(), 'run_experiment', trial_module.run_experiment)
     return revision
 
 

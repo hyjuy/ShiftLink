@@ -145,7 +145,10 @@ def read_incident_bundle(database, incident_id, *, source_namespace, catalog=Non
         configurations = {}
         for config_id in sorted(config_ids - {None}):
             row = con.execute('SELECT payload FROM configurations WHERE config_id=?', (config_id,)).fetchone()
-            if row: configurations[config_id] = json.loads(row['payload'])
+            if row:
+                payload = json.loads(row['payload'])
+                configurations[config_id] = {'equipment': [
+                    _take(eq, ('equipment_id', 'asset_id', 'signals')) for eq in payload.get('equipment', [])]}
         return {'source_namespace': source_namespace, 'catalog': deepcopy(catalog or {}),
                 'config_catalog_hashes': deepcopy(config_catalog_hashes or {}), 'incident': incident,
                 'configurations': configurations, 'runs': runs, 'reports': records, 'queries': queries,
@@ -237,13 +240,14 @@ def project_incident(bundle, *, equipment_type):
         selected[eq] = (asset, an)
 
     def context_valid(eq, cfg, run=None, asset=None):
-        if eq not in selected or cfg != config_id or (run is not None and runs.get(run) != cfg):
+        if eq not in selected or (run is not None and runs.get(run) != cfg):
             return False
         return asset in (None, selected[eq][0]) and binding(eq, selected[eq][0], cfg) is None
 
     def observations(evidence, eq, ref, scope, prov):
         output = []
-        specs = {s['signal']: s for e in configs[config_id]['equipment'] if e['equipment_id'] == eq
+        cfg = evidence.get('config_id', config_id)
+        specs = {s['signal']: s for e in configs[cfg]['equipment'] if e['equipment_id'] == eq
                  for s in e.get('signals', [])}
         for index, row in enumerate(evidence.get('measurements', [])):
             if row.get('equipment_id', eq) != eq: continue
@@ -254,7 +258,8 @@ def project_incident(bundle, *, equipment_type):
                 graph.problem(ref, 'measurement_unit_conflict', 'conflict'); continue
             props = {**_take(row, ('signal', 'value', 'unit', 'quality', 'normal_min', 'normal_max')),
                      'observed_at_raw': row.get('observed_at'), 'time_basis': _time_basis(row.get('observed_at')),
-                     'scope': scope, 'run_id': evidence.get('run_id'), 'config_id': config_id}
+                     'scope': scope, 'run_id': evidence.get('run_id'), 'config_id': cfg,
+                     'snapshot_at_raw': evidence.get('simulated_at')}
             rp = graph.provenance({**ref, 'path': ref['path'] + f'.measurements[{index}]'}, row, 'sensor_observation')
             on = graph.node('Observation', [ref['kind'], ref['id'], ref['path'], index, content_hash(row)], props, rp)
             graph.edge('OBSERVED_ON', on, selected[eq][1], rp)
@@ -262,7 +267,7 @@ def project_incident(bundle, *, equipment_type):
             output.append(on)
         return output
 
-    def actions(steps, eq, ref, revision, claim='worker_report'):
+    def actions(steps, eq, ref, revision, claim='worker_report', session_context=None):
         previous = None
         for index, step in enumerate(steps):
             text = step.get('action', '')
@@ -283,20 +288,28 @@ def project_incident(bundle, *, equipment_type):
             if result:
                 outcome = graph.node('Outcome', [action, 'step_result'], {'outcome_kind': 'step_result', 'text': result}, prov)
                 graph.edge('HAS_RECORDED_RESULT', action, outcome, prov)
+                if session_context:
+                    evidence = {**step, **session_context}
+                    for obs in observations(evidence, eq, sr, 'session_step', prov):
+                        graph.edge('SUPPORTED_BY', outcome, obs, prov)
             previous = action
 
     reports = bundle.get('reports', [])
+    valid_reports = []
     for report in reports:
         record = _record(report['record'])
         ref = {'kind': 'report', 'id': report['handover_id'], 'path': f"work_report.records[{report['record_index']}]"}
+        if record.get('incident_id') not in (None, iid):
+            graph.problem(ref, 'report_incident_conflict', 'conflict'); continue
         equipment = record.get('equipment', [])
         if len(equipment) != 1:
             graph.problem(ref, 'ambiguous_action_equipment'); continue
         eq = equipment[0]
         if eq not in selected: continue
+        valid_reports.append(report)
         evidence = report.get('sensor_evidence')
         if evidence:
-            if context_valid(eq, evidence.get('config_id'), evidence.get('run_id')):
+            if evidence.get('run_id') and context_valid(eq, evidence.get('config_id'), evidence['run_id']):
                 observations(_evidence(evidence), eq,
                              {'kind': 'report_sensor', 'id': report['handover_id'], 'path': 'server_sensor_evidence'},
                              'save_snapshot', root_prov)
@@ -326,19 +339,21 @@ def project_incident(bundle, *, equipment_type):
         ctx, evidence = payload.get('query_context') or {}, payload.get('evidence') or {}
         ref = {'kind': 'query', 'id': query['query_id'], 'path': 'evidence'}
         eq = ctx.get('equipment_id')
-        explicit = any(r['record'].get('query_id') == query['query_id'] for r in reports)
+        explicit = any(r['record'].get('query_id') == query['query_id'] for r in valid_reports)
         if (ctx.get('incident_id') not in (None, iid) or not (ctx.get('incident_id') == iid or explicit)
-                or not ctx.get('asset_id') or not context_valid(eq, ctx.get('config_id'), evidence.get('run_id'), ctx['asset_id'])
+                or not ctx.get('asset_id') or not evidence.get('run_id')
+                or evidence.get('config_id') not in (None, ctx.get('config_id'))
+                or not context_valid(eq, ctx.get('config_id'), evidence['run_id'], ctx['asset_id'])
                 or evidence.get('equipment_id') != eq):
             graph.problem(ref, 'query_context_conflict', 'conflict'); continue
-        observations(_evidence(evidence), eq, ref, 'query_snapshot', root_prov)
+        observations({**_evidence(evidence), 'config_id': ctx['config_id']}, eq, ref, 'query_snapshot', root_prov)
 
     for session in bundle.get('sessions', []):
         clean = _session(session)
         data, eq = clean['data'], clean.get('equipment_id')
         sid = clean['session_id']
         ref = {'kind': 'session', 'id': sid, 'path': 'data'}
-        linked = [r for r in reports if r['record'].get('source_session_id') == sid
+        linked = [r for r in valid_reports if r['record'].get('source_session_id') == sid
                   and r['record'].get('equipment') == [eq]]
         run = data.get('run_id')
         evidence = [data[k] for k in ('before', 'after') if k in data]
@@ -348,11 +363,12 @@ def project_incident(bundle, *, equipment_type):
                                       for e in evidence)):
             graph.problem(ref, 'session_binding_unresolved'); continue
         revision = content_hash(data)
-        actions(data.get('steps', []), eq, ref, revision)
+        actions(data.get('steps', []), eq, ref, revision,
+                session_context={'run_id': run, 'config_id': runs[run]})
         supports = []
         for key in ('before', 'after'):
             if key in data:
-                supports.extend(observations(data[key], eq, {**ref, 'path': f'data.{key}'},
+                supports.extend(observations({**data[key], 'config_id': runs[run]}, eq, {**ref, 'path': f'data.{key}'},
                                              f'session_{key}', root_prov))
         verdict = data.get('verdict')
         if verdict:

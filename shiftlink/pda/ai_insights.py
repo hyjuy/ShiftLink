@@ -74,7 +74,7 @@ def read_insights(path, snapshot, config_id, *, now=None):
         if snapshot['line_mode'] in {'paused', 'stopped', 'recovering', 'quality_hold', 'fault'} and data['status']!='stopped':
             return base | dict(status='inactive')
         base['status'] = data['status']
-        if base['status'] not in {'ready','stopped'}:
+        if base['status'] not in {'ready','stopped','warming_up'}:
             return base
         equipment = {row['equipment_id'] for row in snapshot['equipment']}
         seen = set()
@@ -88,7 +88,8 @@ def read_insights(path, snapshot, config_id, *, now=None):
             retained=row['state']=='before_stop'
             if retained:
                 if eq not in stopped or not valid_stop_notice(row,sequence):continue
-            elif base['status']!='ready' or snapshot['line_mode']!='running':continue
+            elif base['status'] not in {'ready','warming_up'} or snapshot['line_mode']!='running':continue
+            if base['status']=='warming_up' and row['state']!='active':continue
             signals = [dict(signal=s['signal'], direction=s['direction']) for s in row.get('signals', [])
                        if isinstance(s, dict) and isinstance(s.get('signal'), str) and s.get('direction') in {'low', 'high'}][:2]
             seen.add(eq)

@@ -63,14 +63,17 @@ class ActiveAdvisorySession(worker.AdvisorySession):
                 k=self.detector.equipment.index(eq)
                 if not self.detector.episode_on[k]:
                     del self.notices[eq];removed=True
-                elif self.detector.was_ready and not self.detector.last_status.get('hold'):
+                elif (not self.detector.last_status.get('hold') and self.detector.previous_raw is not None
+                      and worker.np.isfinite(self.detector.previous_raw[self.detector.variable]).any()):
                     self.notices[eq].update(state='active',confirmed_sequence=self.cursor,confirmed_at=frame['simulated_at'])
         if not deferred and (events or removed or self.stop_dirty or self.since_save>=30):self.flush()
         return events
 
     def report(self,state,*,stalled=False):
         result=super().report(state,stalled=stalled)
-        if result['status']!='ready':return result
+        if result['status'] not in {'ready','warming_up'} or state['run_id']!=self.run or state['line_mode']!='running':return result
+        if (self.detector.last_status.get('hold') or self.detector.previous_raw is None
+            or not worker.np.isfinite(self.detector.previous_raw[self.detector.variable]).any()):return result
         running={e['equipment_id'] for e in state['equipment'] if e.get('operating_state')=='running'}
         held=[row for row in result['items'] if row['state']=='before_stop']
         active=[dict(row) for eq,row in self.notices.items() if eq in running and row.get('state')=='active'

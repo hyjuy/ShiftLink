@@ -58,3 +58,8 @@ Original failed logs/probes and the v1/v3/v4 helpers remain preserved. The separ
 ## Deployment GREEN — 2026-10-25
 
 Full v5 relayed real-time protocol: five cases passed, 269/269 frames, p95 DOM26.6423s, max poll p950.187744s, same-equipment1row, extra AI vibration calls0, event identity/ack/retention maintained. Only after these gates passed: consistent WAL snapshot backup, profile migration, Pi worker selection and Jetson progressive flag activation. Actual postwatch: 120/120 ready, replay221 continuous 69-channel frames, analysis errors0, poll p950.140320s, unchanged PDA PID20812 and byte hashes. Old run8947 frames retained and every table count non-decreasing. A naturally generated operating pneumatic leak was matched on EQ-0003 at seq274 from private onset248 (26 frames); same ID remained active at seq366/369. This is one operating synthetic observation, not a new accuracy estimate. Pi backup /home/pi/shiftlink/analytics/backups/20261025-004001-rms16; Jetson backup /home/jetson/shiftlink/backups/20261025-003710-rms16-progressive-pinned. See mes-rms16-deployment-20261025.md.
+
+
+## Final metadata correction and evidence transfer
+
+Direct settings/config inspection confirms source69, selected statistical input63, variable scoring60; five manual_sample signals and one event signal were already excluded in original r6. The initial deployment prose inherited the historical Timestral68 label and is corrected; model inputs, frozen source/profile, results and deployed files did not change. The new 58,929,486-byte evidence ZIP (958 entries) passed CRC on Pi, all43 frozen file locks stayed unchanged, and the local transfer matched SHA256 46e5784e9e6e7f9e449703c9307d8d79f7c321a43c16c67bce0c66fd2cef5047. Raw inputs/logs remain private/local.

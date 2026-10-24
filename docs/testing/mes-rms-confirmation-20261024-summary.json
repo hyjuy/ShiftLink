@@ -473,5 +473,51 @@
     "preserved_run_frames": 8899,
     "backup_completed": true
   },
-  "incomplete_backup_preserved": "/home/jetson/shiftlink/backups/20261025-002914-rms16-progressive/INCOMPLETE.json"
+  "incomplete_backup_preserved": "/home/jetson/shiftlink/backups/20261025-002914-rms16-progressive/INCOMPLETE.json",
+  "channel_mapping": {
+    "source_channels": 69,
+    "selected_analysis_channels": 63,
+    "variable_score_channels": 60,
+    "excluded_from_selected_analysis": [
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "fluid_viscosity",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "hpu_return_submergence",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0001",
+        "signal": "hpu_suction_head",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0004",
+        "signal": "gr_oil_water_content",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0005",
+        "signal": "gr_oil_water_content",
+        "acquisition": "manual_sample"
+      },
+      {
+        "equipment_id": "EQ-0007",
+        "signal": "rt_lift_delay",
+        "acquisition": "event"
+      }
+    ],
+    "unchanged_from_original_r6": true
+  },
+  "evidence_archive": {
+    "local_file": "D:\\obsd\\Projects\\ShiftLink\\output\\rms-confirmation-20261024-evidence.zip",
+    "bytes": 58929486,
+    "sha256": "46e5784e9e6e7f9e449703c9307d8d79f7c321a43c16c67bce0c66fd2cef5047",
+    "source_zip_crc_verified": true,
+    "source_entries": 958,
+    "source_model_locks_unchanged": true
+  }
 }

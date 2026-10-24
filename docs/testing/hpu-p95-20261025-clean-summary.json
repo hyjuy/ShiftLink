@@ -1,0 +1,5239 @@
+{
+  "schema_version": "shiftlink-hpu-p95-profile-v1",
+  "date": "2026-10-25",
+  "conditions": "no concurrent full regression suite; identical one-token cache boundary before each cohort; final one-copy implementation verified through overhead fields",
+  "models_trained": false,
+  "models_mocked": false,
+  "data_kind": "synthetic_reviewed_work_report",
+  "reference_commit": "39a96aa27fec096195d1905be374527c7834ae23",
+  "implementation_commit": "8d2d18c",
+  "ordinary_query_hook_added": false,
+  "default_relation_mode": "off",
+  "deployed": false,
+  "intermediate_judge_only_directory": "after-primary",
+  "before": {
+    "primary": {
+      "pairs": 32,
+      "completed": 32,
+      "corpus_sha256": "daf6c3c46c8752a810c5e6c6c24c4269e28af39ff0cffd40671abc1df6b6255a",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 3952.2081968757448,
+        "median_ms": 2003.7703000016336,
+        "p95_ms": 11124.328700003389,
+        "new_relation_misconnections": 0,
+        "run_mean_ms": 3471.441025000786,
+        "run_p95_ms": 10617.77230000007,
+        "prepare_mean_ms": 480.7671718749589,
+        "prepare_max_ms": 3125.7816000070306,
+        "judge_eval_tokens": 504,
+        "judge_eval_count_histogram": {
+          "7": 72
+        }
+      },
+      "trial": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 5212.186696872095,
+        "median_ms": 2189.594550000038,
+        "p95_ms": 17503.48740001209,
+        "new_relation_misconnections": 0,
+        "run_mean_ms": 3928.7200031242264,
+        "run_p95_ms": 11402.362000000721,
+        "prepare_mean_ms": 779.077506249223,
+        "prepare_max_ms": 10199.818200002483,
+        "judge_eval_tokens": 504,
+        "judge_eval_count_histogram": {
+          "7": 72
+        }
+      },
+      "preservation": {
+        "pairs": 32,
+        "completed": 32,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": 1259.9784999963504,
+      "cases": [
+        {
+          "id": "history-order",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1668.9907499967376,
+            "median_ms": 1668.9907499967376,
+            "p95_ms": 1831.1726999891107,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1704.8014499960118,
+            "median_ms": 1704.8014499960118,
+            "p95_ms": 1891.1001999949804,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-137",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1446.499000001495,
+            "median_ms": 1446.499000001495,
+            "p95_ms": 1541.1450000028708,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1830.5649499925494,
+            "median_ms": 1830.5649499925494,
+            "p95_ms": 2105.0080999921192,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-worker",
+          "question": "과거 근무일지에서 필터를 점검하고 교체한 담당자와 조치 시각을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2003.7703000016336,
+            "median_ms": 2003.7703000016336,
+            "p95_ms": 2054.5576000004075,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1950.9223499953805,
+            "median_ms": 1950.9223499953805,
+            "p95_ms": 2031.242299999576,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-observation",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2469.5238000022073,
+            "median_ms": 2469.5238000022073,
+            "p95_ms": 2633.7688000057824,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 7574.102150003455,
+            "median_ms": 7574.102150003455,
+            "p95_ms": 12874.023299998953,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-rephrase",
+          "question": "지난 필터 정비 기록의 작업 순서와 각 단계에서 관찰한 결과를 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 7858.334600008675,
+            "median_ms": 7858.334600008675,
+            "p95_ms": 11124.328700003389,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 12463.239250002516,
+            "median_ms": 12463.239250002516,
+            "p95_ms": 17503.48740001209,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-duration",
+          "question": "근무일지에 적힌 필터 교체 후 정상 운전 시간과 확인 근거만 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1823.6982999951579,
+            "median_ms": 1823.6982999951579,
+            "p95_ms": 2187.9851999983657,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 6199.111549998634,
+            "median_ms": 6199.111549998634,
+            "p95_ms": 9946.637300003204,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-999",
+          "question": "근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 105.05955000189715,
+            "median_ms": 105.05955000189715,
+            "p95_ms": 126.58770000416553,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 496.86039999869536,
+            "median_ms": 496.86039999869536,
+            "p95_ms": 790.6696999925771,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-217",
+          "question": "근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 96.67385000284412,
+            "median_ms": 96.67385000284412,
+            "p95_ms": 97.38820000347914,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 196.23689998843474,
+            "median_ms": 196.23689998843474,
+            "p95_ms": 247.64859998686006,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "current-restart",
+          "question": "과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 7799.816899998405,
+            "median_ms": 7799.816899998405,
+            "p95_ms": 9209.997599995404,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 6553.942949991324,
+            "median_ms": 6553.942949991324,
+            "p95_ms": 6577.482899985625,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "pressure-zero",
+          "question": "HPU 펌프는 운전 중인데 출구 압력계에 압력이 읽히지 않습니다. 어떤 순서로 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 8237.77334999977,
+            "median_ms": 8237.77334999977,
+            "p95_ms": 8562.347700004466,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 9056.24749999697,
+            "median_ms": 9056.24749999697,
+            "p95_ms": 9375.678899996274,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "foam-noise",
+          "question": "HPU 펌프 소음이 커지고 탱크 유면에 우유빛 거품이 보입니다. 무엇을 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 14942.850499999622,
+            "median_ms": 14942.850499999622,
+            "p95_ms": 19053.790099998878,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 9134.39709999875,
+            "median_ms": 9134.39709999875,
+            "p95_ms": 9608.099099990795,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "filter-indicator",
+          "question": "HPU 필터 차압이 1.2 bar를 넘었습니다. 막힘 표시기와 교체 필요 여부를 어떻게 확인하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 9630.20840000172,
+            "median_ms": 9630.20840000172,
+            "p95_ms": 10193.152000007103,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 19091.922149997117,
+            "median_ms": 19091.922149997117,
+            "p95_ms": 25779.580400005216,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-named-unit",
+          "question": "GR-01 근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 4614.371899999242,
+            "median_ms": 4614.371899999242,
+            "p95_ms": 6133.861299997079,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 4156.984799999918,
+            "median_ms": 4156.984799999918,
+            "p95_ms": 4312.818499995046,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-selected-unit",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 174.87459999756538,
+            "median_ms": 174.87459999756538,
+            "p95_ms": 278.08139999979176,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 991.7790999934368,
+            "median_ms": 991.7790999934368,
+            "p95_ms": 1512.7041999876383,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "replacement",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 143.39510000354494,
+            "median_ms": 143.39510000354494,
+            "p95_ms": 184.60480000794632,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 1140.9128999985114,
+            "median_ms": 1140.9128999985114,
+            "p95_ms": 1331.5938000087044,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "revoked",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 219.49025000139954,
+            "median_ms": 219.49025000139954,
+            "p95_ms": 314.13289999909466,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 852.9616500018165,
+            "median_ms": 852.9616500018165,
+            "p95_ms": 1428.0379000047105,
+            "new_relation_misconnections": 0
+          }
+        }
+      ],
+      "current_profiles": [
+        {
+          "id": "current-restart",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 9209.997599995404,
+          "prepare_ms": 87.31499999703374,
+          "run_ms": 9122.68259999837,
+          "retrieval_ms": 628.1238999945344,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5302.12809999648,
+            "total_duration": 5062112877,
+            "load_duration": 5286733,
+            "prompt_eval_duration": 1209768000,
+            "eval_duration": 3822522000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1201.5972000008333,
+              "total_duration": 1096628770,
+              "load_duration": 9280864,
+              "prompt_eval_duration": 439566000,
+              "eval_duration": 622977000,
+              "prompt_eval_count": 454,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1238.8281999956234,
+              "total_duration": 1132887218,
+              "load_duration": 6627850,
+              "prompt_eval_duration": 408964000,
+              "eval_duration": 261637999,
+              "prompt_eval_count": 475,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1162.9793999964022,
+              "total_duration": 852601025,
+              "load_duration": 6645161,
+              "prompt_eval_duration": 151865000,
+              "eval_duration": 681436000,
+              "prompt_eval_count": 282,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1128.9560000004712,
+              "total_duration": 827743935,
+              "load_duration": 5158219,
+              "prompt_eval_duration": 481751000,
+              "eval_duration": 241789000,
+              "prompt_eval_count": 529,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 6577.482899985625,
+          "prepare_ms": 93.76539999357192,
+          "run_ms": 6483.696399998735,
+          "retrieval_ms": 539.9866000007023,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3927.3778999995557,
+            "total_duration": 3851929776,
+            "load_duration": 4880517,
+            "prompt_eval_duration": 39980000,
+            "eval_duration": 3783447000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1049.3315999992774,
+              "total_duration": 973355652,
+              "load_duration": 4091829,
+              "prompt_eval_duration": 360235000,
+              "eval_duration": 595910000,
+              "prompt_eval_count": 454,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1042.1521999960532,
+              "total_duration": 1016771016,
+              "load_duration": 3727693,
+              "prompt_eval_duration": 398737000,
+              "eval_duration": 239606000,
+              "prompt_eval_count": 475,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 888.327599997865,
+              "total_duration": 832283737,
+              "load_duration": 5083561,
+              "prompt_eval_duration": 134577000,
+              "eval_duration": 680571000,
+              "prompt_eval_count": 282,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 931.9207999942591,
+              "total_duration": 871704522,
+              "load_duration": 4439228,
+              "prompt_eval_duration": 465281000,
+              "eval_duration": 256906000,
+              "prompt_eval_count": 529,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 6389.636200001405,
+          "prepare_ms": 68.38479999714764,
+          "run_ms": 6321.251400004257,
+          "retrieval_ms": 550.7935999994515,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3941.90809999418,
+            "total_duration": 3866316516,
+            "load_duration": 4948615,
+            "prompt_eval_duration": 40199000,
+            "eval_duration": 3797998000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 946.1711999974796,
+              "total_duration": 925961802,
+              "load_duration": 4534302,
+              "prompt_eval_duration": 339449000,
+              "eval_duration": 572814000,
+              "prompt_eval_count": 454,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1002.4879999982659,
+              "total_duration": 970486083,
+              "load_duration": 3717197,
+              "prompt_eval_duration": 373477000,
+              "eval_duration": 241009000,
+              "prompt_eval_count": 475,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 814.5358000037959,
+              "total_duration": 788575691,
+              "load_duration": 4617247,
+              "prompt_eval_duration": 127466000,
+              "eval_duration": 644084000,
+              "prompt_eval_count": 282,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 797.7372000023024,
+              "total_duration": 760345154,
+              "load_duration": 5289165,
+              "prompt_eval_duration": 444946000,
+              "eval_duration": 238606000,
+              "prompt_eval_count": 529,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 6530.402999997023,
+          "prepare_ms": 63.81590000091819,
+          "run_ms": 6466.56410000287,
+          "retrieval_ms": 552.2012000001268,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3994.3331999966176,
+            "total_duration": 3890225438,
+            "load_duration": 4299705,
+            "prompt_eval_duration": 39471000,
+            "eval_duration": 3826240000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1023.3162000004086,
+              "total_duration": 1009572464,
+              "load_duration": 3023967,
+              "prompt_eval_duration": 417493000,
+              "eval_duration": 578989000,
+              "prompt_eval_count": 475,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1065.0671000039438,
+              "total_duration": 1042312597,
+              "load_duration": 4409115,
+              "prompt_eval_duration": 381652000,
+              "eval_duration": 238442000,
+              "prompt_eval_count": 454,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 831.5489000015077,
+              "total_duration": 783860620,
+              "load_duration": 4653184,
+              "prompt_eval_duration": 126615000,
+              "eval_duration": 640995000,
+              "prompt_eval_count": 282,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 841.1172999985865,
+              "total_duration": 794288613,
+              "load_duration": 4300026,
+              "prompt_eval_duration": 442667000,
+              "eval_duration": 237910000,
+              "prompt_eval_count": 529,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 7913.198999995075,
+          "prepare_ms": 235.96679999900516,
+          "run_ms": 7677.2321999960695,
+          "retrieval_ms": 889.3423999979859,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4332.38849999907,
+            "total_duration": 4281766176,
+            "load_duration": 6649577,
+            "prompt_eval_duration": 37355000,
+            "eval_duration": 4208014000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1049.8252999968827,
+              "total_duration": 1003785998,
+              "load_duration": 4970791,
+              "prompt_eval_duration": 382926000,
+              "eval_duration": 597215000,
+              "prompt_eval_count": 461,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1083.5489000019152,
+              "total_duration": 1036540180,
+              "load_duration": 4946982,
+              "prompt_eval_duration": 395073000,
+              "eval_duration": 244156000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 992.2433000028832,
+              "total_duration": 925270388,
+              "load_duration": 4834628,
+              "prompt_eval_duration": 320871000,
+              "eval_duration": 583880000,
+              "prompt_eval_count": 472,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 994.4165000051726,
+              "total_duration": 967752771,
+              "load_duration": 6772524,
+              "prompt_eval_duration": 385247000,
+              "eval_duration": 242268000,
+              "prompt_eval_count": 487,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 388.458499997796,
+              "total_duration": 347847170,
+              "load_duration": 4783139,
+              "prompt_eval_duration": 93120000,
+              "eval_duration": 237159000,
+              "prompt_eval_count": 220,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 9375.678899996274,
+          "prepare_ms": 77.9538999995566,
+          "run_ms": 9297.693900000013,
+          "retrieval_ms": 925.4938000012771,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5605.748900001345,
+            "total_duration": 5576705835,
+            "load_duration": 3446375,
+            "prompt_eval_duration": 1347020000,
+            "eval_duration": 4198693000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1124.6403999975882,
+              "total_duration": 1078569502,
+              "load_duration": 7392057,
+              "prompt_eval_duration": 571563000,
+              "eval_duration": 482004000,
+              "prompt_eval_count": 461,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1159.250400000019,
+              "total_duration": 1130222412,
+              "load_duration": 8225354,
+              "prompt_eval_duration": 840160000,
+              "eval_duration": 265065999,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1034.9270000006072,
+              "total_duration": 977931450,
+              "load_duration": 5196939,
+              "prompt_eval_duration": 336298000,
+              "eval_duration": 620279000,
+              "prompt_eval_count": 472,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1136.3953000036418,
+              "total_duration": 962483098,
+              "load_duration": 5150699,
+              "prompt_eval_duration": 405252000,
+              "eval_duration": 257906999,
+              "prompt_eval_count": 487,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 584.6877000003587,
+              "total_duration": 364659455,
+              "load_duration": 6486118,
+              "prompt_eval_duration": 103774000,
+              "eval_duration": 243586000,
+              "prompt_eval_count": 220,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 8562.347700004466,
+          "prepare_ms": 697.444400000677,
+          "run_ms": 7864.903300003789,
+          "retrieval_ms": 1005.5998999960138,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4354.509500000859,
+            "total_duration": 4280859804,
+            "load_duration": 5024552,
+            "prompt_eval_duration": 37764000,
+            "eval_duration": 4208657000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1065.8818000010797,
+              "total_duration": 1033915481,
+              "load_duration": 4189719,
+              "prompt_eval_duration": 386749000,
+              "eval_duration": 627074000,
+              "prompt_eval_count": 461,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1114.053099998273,
+              "total_duration": 1079373542,
+              "load_duration": 3793006,
+              "prompt_eval_duration": 405584000,
+              "eval_duration": 270349000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1022.4114000011468,
+              "total_duration": 959857852,
+              "load_duration": 5110730,
+              "prompt_eval_duration": 335491000,
+              "eval_duration": 603034000,
+              "prompt_eval_count": 472,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1011.8524999998044,
+              "total_duration": 981850499,
+              "load_duration": 7930884,
+              "prompt_eval_duration": 399916000,
+              "eval_duration": 245230000,
+              "prompt_eval_count": 487,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 398.1452000007266,
+              "total_duration": 344171316,
+              "load_duration": 4666080,
+              "prompt_eval_duration": 92564000,
+              "eval_duration": 235396000,
+              "prompt_eval_count": 220,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 8736.816099997668,
+          "prepare_ms": 1102.0755999998073,
+          "run_ms": 7634.659700001066,
+          "retrieval_ms": 902.6012999966042,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4353.0670999971335,
+            "total_duration": 4270750526,
+            "load_duration": 4977191,
+            "prompt_eval_duration": 37657000,
+            "eval_duration": 4198584000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1012.8585999991628,
+              "total_duration": 995305943,
+              "load_duration": 4977095,
+              "prompt_eval_duration": 407088000,
+              "eval_duration": 572087000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1057.9760000036913,
+              "total_duration": 1039148674,
+              "load_duration": 4441372,
+              "prompt_eval_duration": 368428000,
+              "eval_duration": 244946000,
+              "prompt_eval_count": 461,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 951.577100000577,
+              "total_duration": 902349043,
+              "load_duration": 4794019,
+              "prompt_eval_duration": 314958000,
+              "eval_duration": 566374000,
+              "prompt_eval_count": 472,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 952.1042999986093,
+              "total_duration": 877814519,
+              "load_duration": 4723650,
+              "prompt_eval_duration": 373286000,
+              "eval_duration": 234596000,
+              "prompt_eval_count": 487,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 398.8884999998845,
+              "total_duration": 346596645,
+              "load_duration": 4596991,
+              "prompt_eval_duration": 91873000,
+              "eval_duration": 238307000,
+              "prompt_eval_count": 220,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 19053.790099998878,
+          "prepare_ms": 1175.697599996056,
+          "run_ms": 17878.092500002822,
+          "retrieval_ms": 1511.068100000557,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 8752.595799996925,
+            "total_duration": 7054520788,
+            "load_duration": 6810445,
+            "prompt_eval_duration": 2053858000,
+            "eval_duration": 4955155000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 5927.453300006164,
+              "total_duration": 1113789828,
+              "load_duration": 9701609,
+              "prompt_eval_duration": 441881000,
+              "eval_duration": 638464000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 5899.428999997326,
+              "total_duration": 1149679018,
+              "load_duration": 7195189,
+              "prompt_eval_duration": 413312000,
+              "eval_duration": 273000000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1384.0524999977788,
+              "total_duration": 1095906001,
+              "load_duration": 4987879,
+              "prompt_eval_duration": 372646000,
+              "eval_duration": 701334000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1314.3639000045368,
+              "total_duration": 1061204707,
+              "load_duration": 5331342,
+              "prompt_eval_duration": 483172000,
+              "eval_duration": 266103000,
+              "prompt_eval_count": 547,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 9608.099099990795,
+          "prepare_ms": 1064.729099998658,
+          "run_ms": 8543.340099997295,
+          "retrieval_ms": 1146.736200003943,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5049.079600001278,
+            "total_duration": 5032508408,
+            "load_duration": 5089129,
+            "prompt_eval_duration": 45411000,
+            "eval_duration": 4942061000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1134.2331999985618,
+              "total_duration": 1070255162,
+              "load_duration": 6516679,
+              "prompt_eval_duration": 420514000,
+              "eval_duration": 622676000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1155.196600004274,
+              "total_duration": 1105879291,
+              "load_duration": 5288302,
+              "prompt_eval_duration": 401875000,
+              "eval_duration": 269338000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1110.2753000013763,
+              "total_duration": 1086552299,
+              "load_duration": 5389744,
+              "prompt_eval_duration": 360966000,
+              "eval_duration": 702945000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1134.1671000045608,
+              "total_duration": 1057156011,
+              "load_duration": 5082666,
+              "prompt_eval_duration": 483093000,
+              "eval_duration": 266622000,
+              "prompt_eval_count": 547,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 10831.910900000366,
+          "prepare_ms": 1954.475899998215,
+          "run_ms": 8877.435000002151,
+          "retrieval_ms": 828.0174000028637,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5642.415700000129,
+            "total_duration": 5013391875,
+            "load_duration": 5071849,
+            "prompt_eval_duration": 38763000,
+            "eval_duration": 4932603000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1071.3997999991989,
+              "total_duration": 1051779283,
+              "load_duration": 5561075,
+              "prompt_eval_duration": 590244000,
+              "eval_duration": 436502000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1134.786200003873,
+              "total_duration": 1096128680,
+              "load_duration": 5613300,
+              "prompt_eval_duration": 830076000,
+              "eval_duration": 240848000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1104.8542999997153,
+              "total_duration": 1033662173,
+              "load_duration": 5431377,
+              "prompt_eval_duration": 339570000,
+              "eval_duration": 672336000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1089.1677000035997,
+              "total_duration": 1019347284,
+              "load_duration": 4689473,
+              "prompt_eval_duration": 470549000,
+              "eval_duration": 247419000,
+              "prompt_eval_count": 547,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 8660.695100006706,
+          "prepare_ms": 213.2936999987578,
+          "run_ms": 8443.461900002148,
+          "retrieval_ms": 926.9637000033981,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5097.630100004608,
+            "total_duration": 5033523539,
+            "load_duration": 5126058,
+            "prompt_eval_duration": 44850000,
+            "eval_duration": 4946175000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1165.27849999693,
+              "total_duration": 1129248953,
+              "load_duration": 10275381,
+              "prompt_eval_duration": 626639000,
+              "eval_duration": 465244000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1217.0295000032638,
+              "total_duration": 1173668239,
+              "load_duration": 9172094,
+              "prompt_eval_duration": 867129000,
+              "eval_duration": 267945000,
+              "prompt_eval_count": 485,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1135.1722999970661,
+              "total_duration": 1088841140,
+              "load_duration": 4811395,
+              "prompt_eval_duration": 360150000,
+              "eval_duration": 706052000,
+              "prompt_eval_count": 483,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1124.768399997265,
+              "total_duration": 1058341373,
+              "load_duration": 5132458,
+              "prompt_eval_duration": 478586000,
+              "eval_duration": 268153000,
+              "prompt_eval_count": 547,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 10193.152000007103,
+          "prepare_ms": 1226.0026000003563,
+          "run_ms": 8967.149400006747,
+          "retrieval_ms": 1421.3033999985782,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3364.1398000036133,
+            "total_duration": 3147823678,
+            "load_duration": 7640926,
+            "prompt_eval_duration": 50071000,
+            "eval_duration": 3065845000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1384.2310999971232,
+              "total_duration": 1028567050,
+              "load_duration": 7277622,
+              "prompt_eval_duration": 374353000,
+              "eval_duration": 629605000,
+              "prompt_eval_count": 473,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1369.972799999232,
+              "total_duration": 1040577186,
+              "load_duration": 5033704,
+              "prompt_eval_duration": 418952000,
+              "eval_duration": 252133000,
+              "prompt_eval_count": 525,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1704.6804999990854,
+              "total_duration": 1003725992,
+              "load_duration": 5039112,
+              "prompt_eval_duration": 360335000,
+              "eval_duration": 620918000,
+              "prompt_eval_count": 489,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1616.4050000006682,
+              "total_duration": 1036545071,
+              "load_duration": 4925670,
+              "prompt_eval_duration": 405797000,
+              "eval_duration": 280502000,
+              "prompt_eval_count": 499,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1006.188999999722,
+              "total_duration": 756662646,
+              "load_duration": 5156459,
+              "prompt_eval_duration": 254738000,
+              "eval_duration": 482344000,
+              "prompt_eval_count": 355,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 999.1666999994777,
+              "total_duration": 774899375,
+              "load_duration": 5357583,
+              "prompt_eval_duration": 265856000,
+              "eval_duration": 264440999,
+              "prompt_eval_count": 343,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 12404.263899989019,
+          "prepare_ms": 1001.8606999947224,
+          "run_ms": 11402.362000000721,
+          "retrieval_ms": 1680.0204000028316,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4753.157399994961,
+            "total_duration": 4571595453,
+            "load_duration": 6736651,
+            "prompt_eval_duration": 1484761000,
+            "eval_duration": 3048204000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1532.479900000908,
+              "total_duration": 1211932732,
+              "load_duration": 9585350,
+              "prompt_eval_duration": 449466000,
+              "eval_duration": 722050000,
+              "prompt_eval_count": 473,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1482.237999996869,
+              "total_duration": 1054097693,
+              "load_duration": 5401583,
+              "prompt_eval_duration": 489203000,
+              "eval_duration": 281470000,
+              "prompt_eval_count": 525,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1355.595799999719,
+              "total_duration": 982247440,
+              "load_duration": 5046248,
+              "prompt_eval_duration": 355569000,
+              "eval_duration": 605493000,
+              "prompt_eval_count": 489,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1345.1464000027045,
+              "total_duration": 1020111135,
+              "load_duration": 4675105,
+              "prompt_eval_duration": 401520000,
+              "eval_duration": 245391000,
+              "prompt_eval_count": 499,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1231.6981999974814,
+              "total_duration": 749580743,
+              "load_duration": 5013928,
+              "prompt_eval_duration": 250513000,
+              "eval_duration": 480058000,
+              "prompt_eval_count": 355,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1124.4766999952844,
+              "total_duration": 727229880,
+              "load_duration": 5358735,
+              "prompt_eval_duration": 264875000,
+              "eval_duration": 264261000,
+              "prompt_eval_count": 343,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 9067.264799996337,
+          "prepare_ms": 760.027700001956,
+          "run_ms": 8307.237099994381,
+          "retrieval_ms": 1056.6607000000658,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3271.2547999981325,
+            "total_duration": 3137934917,
+            "load_duration": 5494801,
+            "prompt_eval_duration": 52339000,
+            "eval_duration": 3046389000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1295.4558999990695,
+              "total_duration": 1087441159,
+              "load_duration": 6250081,
+              "prompt_eval_duration": 579788000,
+              "eval_duration": 481838000,
+              "prompt_eval_count": 473,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1310.5765000000247,
+              "total_duration": 1137493681,
+              "load_duration": 6012060,
+              "prompt_eval_duration": 843985000,
+              "eval_duration": 268467000,
+              "prompt_eval_count": 525,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1377.6452000020072,
+              "total_duration": 1016477484,
+              "load_duration": 6697418,
+              "prompt_eval_duration": 540170000,
+              "eval_duration": 451548000,
+              "prompt_eval_count": 489,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1468.6644000030356,
+              "total_duration": 1065946666,
+              "load_duration": 7278582,
+              "prompt_eval_duration": 779273000,
+              "eval_duration": 262307000,
+              "prompt_eval_count": 499,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 975.4195999994408,
+              "total_duration": 726973518,
+              "load_duration": 5129642,
+              "prompt_eval_duration": 229370000,
+              "eval_duration": 477577000,
+              "prompt_eval_count": 355,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 921.7303000041284,
+              "total_duration": 702971486,
+              "load_duration": 5194955,
+              "prompt_eval_duration": 261849000,
+              "eval_duration": 261850000,
+              "prompt_eval_count": 343,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 25779.580400005216,
+          "prepare_ms": 658.5039000055986,
+          "run_ms": 25120.318200002657,
+          "retrieval_ms": 2131.770100000722,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4177.978300001996,
+            "total_duration": 3299610391,
+            "load_duration": 9470051,
+            "prompt_eval_duration": 131662000,
+            "eval_duration": 3109885000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1676.2948000032338,
+              "total_duration": 1054009712,
+              "load_duration": 6151935,
+              "prompt_eval_duration": 387563000,
+              "eval_duration": 638325000,
+              "prompt_eval_count": 473,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1695.339399993827,
+              "total_duration": 882963107,
+              "load_duration": 5242188,
+              "prompt_eval_duration": 419295000,
+              "eval_duration": 267548999,
+              "prompt_eval_count": 525,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1122.742499996093,
+              "total_duration": 983633442,
+              "load_duration": 5087241,
+              "prompt_eval_duration": 343225000,
+              "eval_duration": 618127000,
+              "prompt_eval_count": 489,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1286.8078999963473,
+              "total_duration": 1019815277,
+              "load_duration": 5468369,
+              "prompt_eval_duration": 402773000,
+              "eval_duration": 263197000,
+              "prompt_eval_count": 499,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1563.2155000057537,
+              "total_duration": 809684248,
+              "load_duration": 8499856,
+              "prompt_eval_duration": 528778000,
+              "eval_duration": 256130999,
+              "prompt_eval_count": 343,
+              "eval_count": 7,
+              "done_reason": "stop"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 15608.970900000713,
+              "total_duration": 813068862,
+              "load_duration": 9455556,
+              "prompt_eval_duration": 531298000,
+              "eval_duration": 256083000,
+              "prompt_eval_count": 355,
+              "eval_count": 7,
+              "done_reason": "stop"
+            }
+          ]
+        }
+      ]
+    },
+    "diagnostics": {
+      "pairs": 8,
+      "completed": 8,
+      "corpus_sha256": "54d9169bb5f41f439577c26aa4e2ac2b1ed6a8959eb215baefc8e8c6620d1f66",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1679.982525000014,
+        "median_ms": 1638.5979000006046,
+        "p95_ms": 2131.9559999974445,
+        "new_relation_misconnections": 0,
+        "run_mean_ms": 1453.306700000212,
+        "run_p95_ms": 1957.9796999969403,
+        "prepare_mean_ms": 226.675824999802,
+        "prepare_max_ms": 416.1318999977084,
+        "judge_eval_tokens": 112,
+        "judge_eval_count_histogram": {
+          "7": 16
+        }
+      },
+      "trial": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1823.34017499943,
+        "median_ms": 1784.4119999936083,
+        "p95_ms": 2585.6846000024234,
+        "new_relation_misconnections": 0,
+        "run_mean_ms": 1558.318537499872,
+        "run_p95_ms": 2346.3787000000593,
+        "prepare_mean_ms": 224.0440750019843,
+        "prepare_max_ms": 522.7430000013555,
+        "judge_eval_tokens": 112,
+        "judge_eval_count_histogram": {
+          "7": 16
+        }
+      },
+      "preservation": {
+        "pairs": 8,
+        "completed": 8,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": 143.35764999941603,
+      "cases": [
+        {
+          "id": "diagnostic-observation-copy",
+          "question": "과거 근무일지에서 압력이 정상으로 돌아왔다는 관찰 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1687.84654999763,
+            "median_ms": 1687.84654999763,
+            "p95_ms": 1936.761099997966,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1460.6107499967038,
+            "median_ms": 1460.6107499967038,
+            "p95_ms": 1493.1844999955501,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-recurrence-copy",
+          "question": "근무일지에서 정비 후 재발이 없었다고 기록한 근거 문장을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1594.9181500000122,
+            "median_ms": 1594.9181500000122,
+            "p95_ms": 1703.6512999984552,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1888.5279999994964,
+            "median_ms": 1888.5279999994964,
+            "p95_ms": 2005.5165000012494,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-time-copy",
+          "question": "근무일지에 남겨 둔 09:10 첫 점검과 09:20 후속 조치 내용을 원문 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1911.045799999556,
+            "median_ms": 1911.045799999556,
+            "p95_ms": 2131.9559999974445,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2141.96825000181,
+            "median_ms": 2141.96825000181,
+            "p95_ms": 2585.6846000024234,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-pressure-record",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 확인 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1526.1196000028576,
+            "median_ms": 1526.1196000028576,
+            "p95_ms": 1587.0601999995415,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1802.25369999971,
+            "median_ms": 1802.25369999971,
+            "p95_ms": 1807.222900009947,
+            "new_relation_misconnections": 0
+          }
+        }
+      ],
+      "current_profiles": []
+    }
+  },
+  "after": {
+    "primary": {
+      "pairs": 32,
+      "completed": 32,
+      "corpus_sha256": "daf6c3c46c8752a810c5e6c6c24c4269e28af39ff0cffd40671abc1df6b6255a",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 2959.46306250039,
+        "median_ms": 1743.4027000017522,
+        "p95_ms": 8807.395299998461,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -25.118745899067974,
+        "p95_change_percent_vs_before": -20.82762441210697,
+        "run_mean_ms": 2684.0039281241843,
+        "run_p95_ms": 8163.394499999413,
+        "prepare_mean_ms": 257.98554374910054,
+        "prepare_max_ms": 1050.4709000015282,
+        "judge_eval_tokens": 432,
+        "judge_eval_count_histogram": {
+          "6": 72
+        }
+      },
+      "trial": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 2913.9608468751703,
+        "median_ms": 1795.7917000057932,
+        "p95_ms": 8703.603599999042,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -44.09331406674518,
+        "p95_change_percent_vs_before": -50.27503147748129,
+        "run_mean_ms": 2630.2001000003656,
+        "run_p95_ms": 8372.692500000994,
+        "prepare_mean_ms": 240.54537187453207,
+        "prepare_max_ms": 712.9042999949888,
+        "judge_eval_tokens": 432,
+        "judge_eval_count_histogram": {
+          "6": 72
+        }
+      },
+      "preservation": {
+        "pairs": 32,
+        "completed": 32,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": -45.50221562521983,
+      "cases": [
+        {
+          "id": "history-order",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1923.0926499985799,
+            "median_ms": 1923.0926499985799,
+            "p95_ms": 2218.5591999950702,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1688.5776000017358,
+            "median_ms": 1688.5776000017358,
+            "p95_ms": 1763.2253000047058,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-137",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1883.3689500024775,
+            "median_ms": 1883.3689500024775,
+            "p95_ms": 1905.1527000046917,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2584.262599993963,
+            "median_ms": 2584.262599993963,
+            "p95_ms": 2814.0298999933293,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-worker",
+          "question": "과거 근무일지에서 필터를 점검하고 교체한 담당자와 조치 시각을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2413.459049999801,
+            "median_ms": 2413.459049999801,
+            "p95_ms": 3130.7452999972156,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1967.5359500033665,
+            "median_ms": 1967.5359500033665,
+            "p95_ms": 2106.713799999852,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-observation",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1725.1459500002966,
+            "median_ms": 1725.1459500002966,
+            "p95_ms": 1790.6326000011177,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1762.36025000253,
+            "median_ms": 1762.36025000253,
+            "p95_ms": 2152.083800006949,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-rephrase",
+          "question": "지난 필터 정비 기록의 작업 순서와 각 단계에서 관찰한 결과를 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1685.3269499988528,
+            "median_ms": 1685.3269499988528,
+            "p95_ms": 1951.637699996354,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1433.6387000039394,
+            "median_ms": 1433.6387000039394,
+            "p95_ms": 1434.4032000008156,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-duration",
+          "question": "근무일지에 적힌 필터 교체 후 정상 운전 시간과 확인 근거만 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1396.8396999989636,
+            "median_ms": 1396.8396999989636,
+            "p95_ms": 1406.9451999966986,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1673.812849996466,
+            "median_ms": 1673.812849996466,
+            "p95_ms": 2017.3979999963194,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-999",
+          "question": "근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 164.09425000165356,
+            "median_ms": 164.09425000165356,
+            "p95_ms": 186.34820000443142,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 184.43590000242693,
+            "median_ms": 184.43590000242693,
+            "p95_ms": 193.71729999693343,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-217",
+          "question": "근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 166.14990000380203,
+            "median_ms": 166.14990000380203,
+            "p95_ms": 167.672900002799,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 202.08570000249892,
+            "median_ms": 202.08570000249892,
+            "p95_ms": 210.70619999954943,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "current-restart",
+          "question": "과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 7270.462550000957,
+            "median_ms": 7270.462550000957,
+            "p95_ms": 7872.800799996185,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 6753.206950001186,
+            "median_ms": 6753.206950001186,
+            "p95_ms": 6803.650400004699,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "pressure-zero",
+          "question": "HPU 펌프는 운전 중인데 출구 압력계에 압력이 읽히지 않습니다. 어떤 순서로 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 8115.917849998368,
+            "median_ms": 8115.917849998368,
+            "p95_ms": 8467.831599999045,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 8617.927450002753,
+            "median_ms": 8617.927450002753,
+            "p95_ms": 9383.840299997246,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "foam-noise",
+          "question": "HPU 펌프 소음이 커지고 탱크 유면에 우유빛 거품이 보입니다. 무엇을 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 9426.848700000846,
+            "median_ms": 9426.848700000846,
+            "p95_ms": 10524.395300002652,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 8505.52979999702,
+            "median_ms": 8505.52979999702,
+            "p95_ms": 8650.527599995257,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "filter-indicator",
+          "question": "HPU 필터 차압이 1.2 bar를 넘었습니다. 막힘 표시기와 교체 필요 여부를 어떻게 확인하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 7961.727949998021,
+            "median_ms": 7961.727949998021,
+            "p95_ms": 8807.395299998461,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 7980.98559999562,
+            "median_ms": 7980.98559999562,
+            "p95_ms": 8703.603599999042,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-named-unit",
+          "question": "GR-01 근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 2935.932700002013,
+            "median_ms": 2935.932700002013,
+            "p95_ms": 2994.4997999991756,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 2969.640250001248,
+            "median_ms": 2969.640250001248,
+            "p95_ms": 3087.940899997193,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-selected-unit",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 125.16210000103456,
+            "median_ms": 125.16210000103456,
+            "p95_ms": 126.04700000520097,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 102.99149999991641,
+            "median_ms": 102.99149999991641,
+            "p95_ms": 128.02319999900647,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "replacement",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 95.0308000028599,
+            "median_ms": 95.0308000028599,
+            "p95_ms": 95.46340000088094,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 116.99180000141496,
+            "median_ms": 116.99180000141496,
+            "p95_ms": 127.18369999493007,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "revoked",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 62.84894999771495,
+            "median_ms": 62.84894999771495,
+            "p95_ms": 62.87239999801386,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 79.3906499966397,
+            "median_ms": 79.3906499966397,
+            "p95_ms": 91.9075999991037,
+            "new_relation_misconnections": 0
+          }
+        }
+      ],
+      "current_profiles": [
+        {
+          "id": "current-restart",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 7872.800799996185,
+          "prepare_ms": 191.58389999938663,
+          "run_ms": 7574.296499995398,
+          "retrieval_ms": 555.200299997523,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5062.836300006893,
+            "total_duration": 4975658878,
+            "load_duration": 4808944,
+            "prompt_eval_duration": 1122119000,
+            "eval_duration": 3825660000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1012.259000002814,
+              "total_duration": 993990147,
+              "load_duration": 2940804,
+              "prompt_eval_duration": 395388000,
+              "eval_duration": 584081000,
+              "prompt_eval_count": 454,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1066.7306999966968,
+              "total_duration": 1038961975,
+              "load_duration": 2801633,
+              "prompt_eval_duration": 409282000,
+              "eval_duration": 222976000,
+              "prompt_eval_count": 475,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 858.2438999947044,
+              "total_duration": 795711716,
+              "load_duration": 5970730,
+              "prompt_eval_duration": 141179000,
+              "eval_duration": 638262000,
+              "prompt_eval_count": 282,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 843.8513000000967,
+              "total_duration": 769943246,
+              "load_duration": 5105174,
+              "prompt_eval_duration": 467300000,
+              "eval_duration": 212160000,
+              "prompt_eval_count": 529,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 6803.650400004699,
+          "prepare_ms": 254.31229999958305,
+          "run_ms": 6537.6045999946655,
+          "retrieval_ms": 588.9994999961345,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3941.0186000022804,
+            "total_duration": 3875499883,
+            "load_duration": 4898130,
+            "prompt_eval_duration": 44885000,
+            "eval_duration": 3802410000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1021.1180000042077,
+              "total_duration": 997931835,
+              "load_duration": 3986812,
+              "prompt_eval_duration": 371385000,
+              "eval_duration": 608889000,
+              "prompt_eval_count": 454,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1067.541699994763,
+              "total_duration": 1043302263,
+              "load_duration": 4020285,
+              "prompt_eval_duration": 416970000,
+              "eval_duration": 240503000,
+              "prompt_eval_count": 475,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 892.0273999974597,
+              "total_duration": 833874268,
+              "load_duration": 6405140,
+              "prompt_eval_duration": 125920000,
+              "eval_duration": 689420000,
+              "prompt_eval_count": 282,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 890.2256000001216,
+              "total_duration": 814109426,
+              "load_duration": 4868881,
+              "prompt_eval_duration": 475996000,
+              "eval_duration": 256408000,
+              "prompt_eval_count": 529,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 6668.124300005729,
+          "prepare_ms": 194.8121999957948,
+          "run_ms": 6449.38259999617,
+          "retrieval_ms": 557.7970000013011,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3987.705999999889,
+            "total_duration": 3918979573,
+            "load_duration": 4781295,
+            "prompt_eval_duration": 40205000,
+            "eval_duration": 3849909000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 987.2852999978932,
+              "total_duration": 967647652,
+              "load_duration": 3191114,
+              "prompt_eval_duration": 383652000,
+              "eval_duration": 569026000,
+              "prompt_eval_count": 454,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1029.4189999985974,
+              "total_duration": 1006974897,
+              "load_duration": 2981029,
+              "prompt_eval_duration": 405011000,
+              "eval_duration": 205765000,
+              "prompt_eval_count": 475,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 796.7738000006648,
+              "total_duration": 778784178,
+              "load_duration": 9073394,
+              "prompt_eval_duration": 128088000,
+              "eval_duration": 623437000,
+              "prompt_eval_count": 282,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 796.5648999961559,
+              "total_duration": 733891845,
+              "load_duration": 4816912,
+              "prompt_eval_duration": 459889000,
+              "eval_duration": 205297000,
+              "prompt_eval_count": 529,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "current-restart",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 6702.763499997673,
+          "prepare_ms": 202.11769999878015,
+          "run_ms": 6487.877400002617,
+          "retrieval_ms": 567.6431999963825,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3968.672599999991,
+            "total_duration": 3902220066,
+            "load_duration": 6320819,
+            "prompt_eval_duration": 40730000,
+            "eval_duration": 3831858000,
+            "prompt_eval_count": 1201,
+            "eval_count": 100,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1025.1591999985976,
+              "total_duration": 1006068250,
+              "load_duration": 3412079,
+              "prompt_eval_duration": 370046000,
+              "eval_duration": 620803000,
+              "prompt_eval_count": 454,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1067.2572999974363,
+              "total_duration": 1038426887,
+              "load_duration": 4158689,
+              "prompt_eval_duration": 420608000,
+              "eval_duration": 241667000,
+              "prompt_eval_count": 475,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 842.9700000051525,
+              "total_duration": 790295923,
+              "load_duration": 4962611,
+              "prompt_eval_duration": 127246000,
+              "eval_duration": 646015000,
+              "prompt_eval_count": 282,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 842.756099998951,
+              "total_duration": 778579492,
+              "load_duration": 5826151,
+              "prompt_eval_duration": 468236000,
+              "eval_duration": 219913000,
+              "prompt_eval_count": 529,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 8467.831599999045,
+          "prepare_ms": 423.4485999986646,
+          "run_ms": 7939.040400000522,
+          "retrieval_ms": 1022.4317999964114,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4290.987100001075,
+            "total_duration": 4275587713,
+            "load_duration": 5213529,
+            "prompt_eval_duration": 37365000,
+            "eval_duration": 4201252999,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1015.5924999999115,
+              "total_duration": 991377984,
+              "load_duration": 5448638,
+              "prompt_eval_duration": 381311000,
+              "eval_duration": 588086000,
+              "prompt_eval_count": 461,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1127.5136999975075,
+              "total_duration": 1054405708,
+              "load_duration": 7551790,
+              "prompt_eval_duration": 406672000,
+              "eval_duration": 245164000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1030.175700005202,
+              "total_duration": 938025422,
+              "load_duration": 5092597,
+              "prompt_eval_duration": 336899000,
+              "eval_duration": 579646000,
+              "prompt_eval_count": 472,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 956.9141999963904,
+              "total_duration": 886708783,
+              "load_duration": 5209784,
+              "prompt_eval_duration": 407401000,
+              "eval_duration": 213593000,
+              "prompt_eval_count": 487,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 352.56849999859696,
+              "total_duration": 307747058,
+              "load_duration": 4681739,
+              "prompt_eval_duration": 92628000,
+              "eval_duration": 198836000,
+              "prompt_eval_count": 220,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 9383.840299997246,
+          "prepare_ms": 310.78859999979613,
+          "run_ms": 8958.511799995904,
+          "retrieval_ms": 927.121900000202,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5596.735699997225,
+            "total_duration": 5578684013,
+            "load_duration": 5045525,
+            "prompt_eval_duration": 1325589000,
+            "eval_duration": 4218189000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1038.6346000013873,
+              "total_duration": 1011564122,
+              "load_duration": 5353979,
+              "prompt_eval_duration": 408824000,
+              "eval_duration": 580073000,
+              "prompt_eval_count": 461,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1075.0026999958209,
+              "total_duration": 1051243918,
+              "load_duration": 4872816,
+              "prompt_eval_duration": 412705000,
+              "eval_duration": 208667000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 965.7291999974404,
+              "total_duration": 918386319,
+              "load_duration": 6040364,
+              "prompt_eval_duration": 335492000,
+              "eval_duration": 560825000,
+              "prompt_eval_count": 472,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 966.9175000017276,
+              "total_duration": 904300809,
+              "load_duration": 5552672,
+              "prompt_eval_duration": 394246000,
+              "eval_duration": 208069000,
+              "prompt_eval_count": 487,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 357.33800000161864,
+              "total_duration": 308233642,
+              "load_duration": 4745646,
+              "prompt_eval_duration": 92231000,
+              "eval_duration": 199313000,
+              "prompt_eval_count": 220,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 7764.004099997692,
+          "prepare_ms": 196.97699999960605,
+          "run_ms": 7539.236200005689,
+          "retrieval_ms": 892.3358999963966,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4291.692499995406,
+            "total_duration": 4276320768,
+            "load_duration": 5078900,
+            "prompt_eval_duration": 37880000,
+            "eval_duration": 4204136000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1026.3082000019494,
+              "total_duration": 1008647211,
+              "load_duration": 4685964,
+              "prompt_eval_duration": 606357000,
+              "eval_duration": 383845000,
+              "prompt_eval_count": 461,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1068.2531999991625,
+              "total_duration": 1048923722,
+              "load_duration": 2951460,
+              "prompt_eval_duration": 822968000,
+              "eval_duration": 210944000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 956.1334000027273,
+              "total_duration": 908274369,
+              "load_duration": 4641867,
+              "prompt_eval_duration": 330500000,
+              "eval_duration": 558363000,
+              "prompt_eval_count": 472,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 958.7327000044752,
+              "total_duration": 893460365,
+              "load_duration": 4654667,
+              "prompt_eval_duration": 394028000,
+              "eval_duration": 205470000,
+              "prompt_eval_count": 487,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 360.3702000036719,
+              "total_duration": 308869602,
+              "load_duration": 6665626,
+              "prompt_eval_duration": 92263000,
+              "eval_duration": 198145000,
+              "prompt_eval_count": 220,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "pressure-zero",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 7852.0146000082605,
+          "prepare_ms": 185.19650000234833,
+          "run_ms": 7626.563700003317,
+          "retrieval_ms": 876.9558999993023,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4359.311599997454,
+            "total_duration": 4292860660,
+            "load_duration": 5022996,
+            "prompt_eval_duration": 37153000,
+            "eval_duration": 4229416000,
+            "prompt_eval_count": 1671,
+            "eval_count": 119,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1019.714699999895,
+              "total_duration": 1000602226,
+              "load_duration": 3236202,
+              "prompt_eval_duration": 609827000,
+              "eval_duration": 375818000,
+              "prompt_eval_count": 461,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1063.5934000019915,
+              "total_duration": 1043830260,
+              "load_duration": 3660021,
+              "prompt_eval_duration": 819948000,
+              "eval_duration": 208838000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1001.4239000011003,
+              "total_duration": 911403021,
+              "load_duration": 4895057,
+              "prompt_eval_duration": 321021000,
+              "eval_duration": 569834000,
+              "prompt_eval_count": 472,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 966.0701999964658,
+              "total_duration": 862405062,
+              "load_duration": 6081227,
+              "prompt_eval_duration": 401834000,
+              "eval_duration": 210382000,
+              "prompt_eval_count": 487,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 354.64019999926677,
+              "total_duration": 307319284,
+              "load_duration": 4586282,
+              "prompt_eval_duration": 92682000,
+              "eval_duration": 198464000,
+              "prompt_eval_count": 220,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 10524.395300002652,
+          "prepare_ms": 270.45709999947576,
+          "run_ms": 10234.023199998774,
+          "retrieval_ms": 912.2089000011329,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 7168.1726000024355,
+            "total_duration": 7026608613,
+            "load_duration": 5069300,
+            "prompt_eval_duration": 2050862000,
+            "eval_duration": 4929822000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1027.2355999986758,
+              "total_duration": 1009175061,
+              "load_duration": 2861217,
+              "prompt_eval_duration": 410055000,
+              "eval_duration": 583937000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1071.9058999966364,
+              "total_duration": 1050226499,
+              "load_duration": 2653181,
+              "prompt_eval_duration": 408186000,
+              "eval_duration": 218965000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1051.6228000051342,
+              "total_duration": 1033675236,
+              "load_duration": 6650905,
+              "prompt_eval_duration": 359925000,
+              "eval_duration": 646436000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1055.812499995227,
+              "total_duration": 985893083,
+              "load_duration": 4857296,
+              "prompt_eval_duration": 471094000,
+              "eval_duration": 222293000,
+              "prompt_eval_count": 547,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 8650.527599995257,
+          "prepare_ms": 253.3971000011661,
+          "run_ms": 8372.692500000994,
+          "retrieval_ms": 845.5609999946319,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5230.2410999982385,
+            "total_duration": 5039265804,
+            "load_duration": 5475486,
+            "prompt_eval_duration": 46765000,
+            "eval_duration": 4946149000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1047.980400006054,
+              "total_duration": 1024440073,
+              "load_duration": 3959675,
+              "prompt_eval_duration": 416764000,
+              "eval_duration": 588804000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1095.7636000021012,
+              "total_duration": 1071038068,
+              "load_duration": 3857848,
+              "prompt_eval_duration": 415792000,
+              "eval_duration": 221003000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1152.5330000004033,
+              "total_duration": 1053981545,
+              "load_duration": 5136662,
+              "prompt_eval_duration": 367151000,
+              "eval_duration": 662851000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1179.6028000026126,
+              "total_duration": 1091368001,
+              "load_duration": 4806158,
+              "prompt_eval_duration": 490872000,
+              "eval_duration": 218915000,
+              "prompt_eval_count": 547,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 8329.30209999904,
+          "prepare_ms": 204.44389999465784,
+          "run_ms": 8045.425899996189,
+          "retrieval_ms": 848.9877000029082,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5020.342099996924,
+            "total_duration": 5007072672,
+            "load_duration": 5126614,
+            "prompt_eval_duration": 47352000,
+            "eval_duration": 4917560000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 995.822800003225,
+              "total_duration": 977627063,
+              "load_duration": 3197225,
+              "prompt_eval_duration": 400030000,
+              "eval_duration": 562950000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1043.83339999913,
+              "total_duration": 1024509125,
+              "load_duration": 2903554,
+              "prompt_eval_duration": 398443000,
+              "eval_duration": 212718000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1125.3442999950494,
+              "total_duration": 1065216003,
+              "load_duration": 4706860,
+              "prompt_eval_duration": 364265000,
+              "eval_duration": 678055000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1117.7891000043019,
+              "total_duration": 1043304430,
+              "load_duration": 4844846,
+              "prompt_eval_duration": 488281000,
+              "eval_duration": 231514000,
+              "prompt_eval_count": 547,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "foam-noise",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 8360.531999998784,
+          "prepare_ms": 110.80260000017006,
+          "run_ms": 8240.67980000109,
+          "retrieval_ms": 1065.4725999993389,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 5022.433599995566,
+            "total_duration": 5001892487,
+            "load_duration": 5063892,
+            "prompt_eval_duration": 43137000,
+            "eval_duration": 4916503000,
+            "prompt_eval_count": 2317,
+            "eval_count": 137,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1032.7135999978054,
+              "total_duration": 997687840,
+              "load_duration": 5386491,
+              "prompt_eval_duration": 399481000,
+              "eval_duration": 574944000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1077.4978999979794,
+              "total_duration": 1045696426,
+              "load_duration": 5999689,
+              "prompt_eval_duration": 400139000,
+              "eval_duration": 221430000,
+              "prompt_eval_count": 485,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1066.4606999998796,
+              "total_duration": 1012999707,
+              "load_duration": 4954610,
+              "prompt_eval_duration": 358330000,
+              "eval_duration": 632677000,
+              "prompt_eval_count": 483,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1062.737100000959,
+              "total_duration": 999470245,
+              "load_duration": 5050195,
+              "prompt_eval_duration": 469848000,
+              "eval_duration": 204923000,
+              "prompt_eval_count": 547,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 0,
+          "lane": "baseline",
+          "total_ms": 7116.060599997581,
+          "prepare_ms": 174.6318000004976,
+          "run_ms": 6923.711600000388,
+          "retrieval_ms": 998.0388000039966,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3176.998900002218,
+            "total_duration": 3101037167,
+            "load_duration": 5123893,
+            "prompt_eval_duration": 40519000,
+            "eval_duration": 3023275000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1056.7532999994,
+              "total_duration": 1032188274,
+              "load_duration": 5210199,
+              "prompt_eval_duration": 578667000,
+              "eval_duration": 436596000,
+              "prompt_eval_count": 525,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1100.0731000021915,
+              "total_duration": 1082353160,
+              "load_duration": 4482054,
+              "prompt_eval_duration": 841559000,
+              "eval_duration": 223958000,
+              "prompt_eval_count": 473,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 961.944399998174,
+              "total_duration": 913945673,
+              "load_duration": 4740204,
+              "prompt_eval_duration": 334689000,
+              "eval_duration": 559006000,
+              "prompt_eval_count": 489,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 962.1203999995487,
+              "total_duration": 896663840,
+              "load_duration": 4887536,
+              "prompt_eval_duration": 392418000,
+              "eval_duration": 205516000,
+              "prompt_eval_count": 499,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 660.1024000046891,
+              "total_duration": 633934624,
+              "load_duration": 6189773,
+              "prompt_eval_duration": 209974000,
+              "eval_duration": 402562000,
+              "prompt_eval_count": 355,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 659.6851000067545,
+              "total_duration": 588889630,
+              "load_duration": 4790797,
+              "prompt_eval_duration": 242549000,
+              "eval_duration": 201949000,
+              "prompt_eval_count": 343,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 0,
+          "lane": "trial",
+          "total_ms": 8703.603599999042,
+          "prepare_ms": 278.83270000165794,
+          "run_ms": 8351.590900005249,
+          "retrieval_ms": 886.0889999996289,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 4496.101699995052,
+            "total_duration": 4482519298,
+            "load_duration": 6423602,
+            "prompt_eval_duration": 1427758000,
+            "eval_duration": 3017597000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1120.0943000003463,
+              "total_duration": 1103532622,
+              "load_duration": 5144438,
+              "prompt_eval_duration": 579294000,
+              "eval_duration": 502113000,
+              "prompt_eval_count": 525,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1198.7492999978713,
+              "total_duration": 1149185055,
+              "load_duration": 6611479,
+              "prompt_eval_duration": 912922000,
+              "eval_duration": 213121000,
+              "prompt_eval_count": 473,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 978.6823000031291,
+              "total_duration": 927118739,
+              "load_duration": 4813006,
+              "prompt_eval_duration": 335871000,
+              "eval_duration": 569466000,
+              "prompt_eval_count": 489,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 974.3483000056585,
+              "total_duration": 911024932,
+              "load_duration": 5267544,
+              "prompt_eval_duration": 396898000,
+              "eval_duration": 211543000,
+              "prompt_eval_count": 499,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 690.6617000058759,
+              "total_duration": 644921038,
+              "load_duration": 4847054,
+              "prompt_eval_duration": 212355000,
+              "eval_duration": 413224000,
+              "prompt_eval_count": 355,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 694.9515000014799,
+              "total_duration": 636255208,
+              "load_duration": 4701835,
+              "prompt_eval_duration": 253163000,
+              "eval_duration": 202307000,
+              "prompt_eval_count": 343,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 1,
+          "lane": "baseline",
+          "total_ms": 8807.395299998461,
+          "prepare_ms": 612.32249999739,
+          "run_ms": 8163.394499999413,
+          "retrieval_ms": 2170.8279000013135,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3102.2506000008434,
+            "total_duration": 3089749931,
+            "load_duration": 5149493,
+            "prompt_eval_duration": 40800000,
+            "eval_duration": 3012282000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1026.2434999967809,
+              "total_duration": 1005929019,
+              "load_duration": 6215886,
+              "prompt_eval_duration": 383737000,
+              "eval_duration": 595424000,
+              "prompt_eval_count": 473,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1067.4600999991526,
+              "total_duration": 1047295432,
+              "load_duration": 5450044,
+              "prompt_eval_duration": 418466000,
+              "eval_duration": 224803000,
+              "prompt_eval_count": 525,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 954.4530999992276,
+              "total_duration": 929266248,
+              "load_duration": 6659703,
+              "prompt_eval_duration": 337112000,
+              "eval_duration": 567987000,
+              "prompt_eval_count": 489,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 949.9409999989439,
+              "total_duration": 872531839,
+              "load_duration": 5248600,
+              "prompt_eval_duration": 401853000,
+              "eval_duration": 207454000,
+              "prompt_eval_count": 499,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 707.4750999963726,
+              "total_duration": 661601825,
+              "load_duration": 5018514,
+              "prompt_eval_duration": 217174000,
+              "eval_duration": 425379000,
+              "prompt_eval_count": 355,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 721.7552999936743,
+              "total_duration": 650468388,
+              "load_duration": 4729644,
+              "prompt_eval_duration": 253904000,
+              "eval_duration": 222695000,
+              "prompt_eval_count": 343,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        },
+        {
+          "id": "filter-indicator",
+          "repeat": 1,
+          "lane": "trial",
+          "total_ms": 7258.367599992198,
+          "prepare_ms": 461.08339999773307,
+          "run_ms": 6759.260000006179,
+          "retrieval_ms": 925.9020000026794,
+          "generation": {
+            "path": "generate",
+            "model": "exaone-rag-mes-ck176",
+            "wall_ms": 3164.606399994227,
+            "total_duration": 3097048993,
+            "load_duration": 5064755,
+            "prompt_eval_duration": 40921000,
+            "eval_duration": 3019896000,
+            "prompt_eval_count": 1765,
+            "eval_count": 85,
+            "done_reason": "stop"
+          },
+          "judge_calls": [
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 999.9094000013429,
+              "total_duration": 981183535,
+              "load_duration": 5567391,
+              "prompt_eval_duration": 420080000,
+              "eval_duration": 543109000,
+              "prompt_eval_count": 525,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 1045.593499999086,
+              "total_duration": 1023204809,
+              "load_duration": 6138923,
+              "prompt_eval_duration": 373706000,
+              "eval_duration": 210363000,
+              "prompt_eval_count": 473,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 917.203499993775,
+              "total_duration": 897972585,
+              "load_duration": 3346028,
+              "prompt_eval_duration": 313405000,
+              "eval_duration": 559220000,
+              "prompt_eval_count": 489,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 913.0860000004759,
+              "total_duration": 849110579,
+              "load_duration": 4955440,
+              "prompt_eval_duration": 390924000,
+              "eval_duration": 207176000,
+              "prompt_eval_count": 499,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 683.659299997089,
+              "total_duration": 639223380,
+              "load_duration": 5400539,
+              "prompt_eval_duration": 210244000,
+              "eval_duration": 408991000,
+              "prompt_eval_count": 355,
+              "eval_count": 6,
+              "done_reason": "length"
+            },
+            {
+              "path": "chat",
+              "model": "exaone-sft-judge",
+              "wall_ms": 691.5169999992941,
+              "total_duration": 620132930,
+              "load_duration": 4772973,
+              "prompt_eval_duration": 247229000,
+              "eval_duration": 206701000,
+              "prompt_eval_count": 343,
+              "eval_count": 6,
+              "done_reason": "length"
+            }
+          ]
+        }
+      ]
+    },
+    "diagnostics": {
+      "pairs": 8,
+      "completed": 8,
+      "corpus_sha256": "54d9169bb5f41f439577c26aa4e2ac2b1ed6a8959eb215baefc8e8c6620d1f66",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1980.710499999077,
+        "median_ms": 1768.684899998334,
+        "p95_ms": 2854.2820000002393,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": 17.900660901163867,
+        "p95_change_percent_vs_before": 33.88090560985597,
+        "run_mean_ms": 1577.7153500021086,
+        "run_p95_ms": 2295.3278999993927,
+        "prepare_mean_ms": 394.8726999988139,
+        "prepare_max_ms": 663.2202999971923,
+        "judge_eval_tokens": 96,
+        "judge_eval_count_histogram": {
+          "6": 16
+        }
+      },
+      "trial": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 2084.011225007089,
+        "median_ms": 2072.815850006009,
+        "p95_ms": 2421.3839000003645,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": 14.29634763615848,
+        "p95_change_percent_vs_before": -6.354243669235792,
+        "run_mean_ms": 1592.5870624996605,
+        "run_p95_ms": 2018.3308999985456,
+        "prepare_mean_ms": 409.72968750156724,
+        "prepare_max_ms": 633.5727000041516,
+        "judge_eval_tokens": 96,
+        "judge_eval_count_histogram": {
+          "6": 16
+        }
+      },
+      "preservation": {
+        "pairs": 8,
+        "completed": 8,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": 103.3007250080118,
+      "cases": [
+        {
+          "id": "diagnostic-observation-copy",
+          "question": "과거 근무일지에서 압력이 정상으로 돌아왔다는 관찰 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2023.4716499981005,
+            "median_ms": 2023.4716499981005,
+            "p95_ms": 2373.5976999960258,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1828.0319000077725,
+            "median_ms": 1828.0319000077725,
+            "p95_ms": 1853.145900007803,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-recurrence-copy",
+          "question": "근무일지에서 정비 후 재발이 없었다고 기록한 근거 문장을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1727.7783999961684,
+            "median_ms": 1727.7783999961684,
+            "p95_ms": 1743.1646999975783,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2311.987350007257,
+            "median_ms": 2311.987350007257,
+            "p95_ms": 2421.3839000003645,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-time-copy",
+          "question": "근무일지에 남겨 둔 09:10 첫 점검과 09:20 후속 조치 내용을 원문 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2404.2381500003103,
+            "median_ms": 2404.2381500003103,
+            "p95_ms": 2854.2820000002393,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2123.2098000073165,
+            "median_ms": 2123.2098000073165,
+            "p95_ms": 2326.1885000101756,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-pressure-record",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 확인 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1767.3538000017288,
+            "median_ms": 1767.3538000017288,
+            "p95_ms": 1794.2050999990897,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2072.815850006009,
+            "median_ms": 2072.815850006009,
+            "p95_ms": 2162.9989000066416,
+            "new_relation_misconnections": 0
+          }
+        }
+      ],
+      "current_profiles": []
+    }
+  },
+  "model_digests": {
+    "exaone-rag-mes-ck176:latest": "69657565df76f145168153ab12722a6ad5b09488d57c9ecb5439c5e4c754a301",
+    "embeddinggemma:300m": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+    "exaone-sft-judge:latest": "f31ce4dde5303fb7b8731097fd7f75808f47d31349deb760bdef87c027374db5"
+  },
+  "index_hashes": {
+    "chunks_700.jsonl": "e08cf3b14afa13d3d1aef08944c99dc31d4826f5d0a4f112b5ec5fa6f6da5a26",
+    "vectors_700__embeddinggemma_300m.npy": "9e67ba9952addce6b395cbeb14377ed70fae08d0536aa01b48cd93544e7615b1"
+  },
+  "current_case_comparison": [
+    {
+      "id": "current-restart",
+      "before_citations": [
+        [
+          "K-7000"
+        ],
+        [
+          "K-7000"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-7000"
+        ],
+        [
+          "K-7000"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "pressure-zero",
+      "before_citations": [
+        [
+          "K-1001"
+        ],
+        [
+          "K-1001"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1001"
+        ],
+        [
+          "K-1001"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "foam-noise",
+      "before_citations": [
+        [
+          "K-1004"
+        ],
+        [
+          "K-1004"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1004"
+        ],
+        [
+          "K-1004"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "filter-indicator",
+      "before_citations": [
+        [
+          "K-1202"
+        ],
+        [
+          "K-1202"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1202"
+        ],
+        [
+          "K-1202"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    }
+  ],
+  "decision": "keep_relation_default_off_no_deployment_mixed_latency_evidence",
+  "candidate_judge_only": {
+    "primary": {
+      "baseline": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 3266.0780687513125,
+        "median_ms": 1578.5251500019513,
+        "p95_ms": 12393.494300005841,
+        "new_relation_misconnections": 0
+      },
+      "trial": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 2946.6774124998665,
+        "median_ms": 1671.962899996288,
+        "p95_ms": 9833.046800005832,
+        "new_relation_misconnections": 0
+      }
+    },
+    "diagnostics": {
+      "baseline": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1744.8611125018942,
+        "median_ms": 1648.9593500045885,
+        "p95_ms": 2160.6847000002745,
+        "new_relation_misconnections": 0
+      },
+      "trial": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1784.598074999849,
+        "median_ms": 1669.3298499994853,
+        "p95_ms": 2474.087899994629,
+        "new_relation_misconnections": 0
+      }
+    }
+  },
+  "rejected_prefix_probe": [
+    {
+      "case": "current-restart",
+      "chunk": "card_K-1201",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.0466371781303934,
+        0.951838250361949,
+        0.0014209075943248906,
+        0.0001036639133327188
+      ],
+      "fast": [
+        0.060056216658921795,
+        0.9374772993061201,
+        0.0023764679045899123,
+        9.001613036808261e-05
+      ],
+      "full_ms": 862.9274999984773,
+      "fast_ms": 70.97580000117887,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "current-restart",
+      "chunk": "event_K-1102_c02",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.011510540589021814,
+        0.8847204436049457,
+        0.09797797227669555,
+        0.005791043529336947
+      ],
+      "fast": [
+        0.02232850321437612,
+        0.8795309908999145,
+        0.0925224227921128,
+        0.005618083093596531
+      ],
+      "full_ms": 756.8695999943884,
+      "fast_ms": 126.51600000390317,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "pressure-zero",
+      "chunk": "card_K-1203",
+      "prefix": "{\"score\": ",
+      "full": [
+        8.045386553172302e-05,
+        0.08044547210424131,
+        0.6394218281843199,
+        0.28005224584590704
+      ],
+      "fast": [
+        7.434841894408078e-05,
+        0.1170105899783616,
+        0.6149596735596926,
+        0.2679553880430017
+      ],
+      "full_ms": 653.8499999951455,
+      "fast_ms": 121.29450000065845,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "pressure-zero",
+      "chunk": "card_K-1004",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.004084650845660945,
+        0.9796524003859826,
+        0.01530305210360143,
+        0.0009598966647550483
+      ],
+      "fast": [
+        0.0064566910787121805,
+        0.9763235145064593,
+        0.016317546367209057,
+        0.0009022480476195304
+      ],
+      "full_ms": 655.9283000024152,
+      "fast_ms": 108.80209999595536,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "pressure-zero",
+      "chunk": "card_K-1002",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.04972172236422556,
+        0.8308661403329087,
+        0.1019723764142701,
+        0.017439760888595633
+      ],
+      "fast": [
+        0.0442855431874082,
+        0.8049560004065811,
+        0.13017287744882827,
+        0.020585578957182372
+      ],
+      "full_ms": 610.1090000011027,
+      "fast_ms": 113.67410000093514,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "pressure-zero",
+      "chunk": "card_K-1001",
+      "prefix": "{\"score\": ",
+      "full": [
+        3.7065210084373654e-06,
+        0.000244369836026417,
+        0.026318200397806187,
+        0.973433723245159
+      ],
+      "fast": [
+        3.267614163248744e-06,
+        0.00043309214713773867,
+        0.023961113293370896,
+        0.9756025269453281
+      ],
+      "full_ms": 635.1598000037484,
+      "fast_ms": 121.7592999964836,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "pressure-zero",
+      "chunk": "HY13-PMDSPS1M_US_p18_c02",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.0015575194446239998,
+        0.9933632462705126,
+        0.004826334831352399,
+        0.0002528994535109983
+      ],
+      "fast": [
+        0.0012089279531306565,
+        0.9939775945019966,
+        0.004634630410428419,
+        0.00017884713444430155
+      ],
+      "full_ms": 363.2112999985111,
+      "fast_ms": 108.16049999993993,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "foam-noise",
+      "chunk": "card_K-1004",
+      "prefix": "{\"score\": ",
+      "full": [
+        1.342468045399324e-06,
+        0.00010672785902604056,
+        0.04437661499935651,
+        0.9555153146735721
+      ],
+      "fast": [
+        1.3346036353408861e-06,
+        0.00015745178268591184,
+        0.03570032137368616,
+        0.9641408922399927
+      ],
+      "full_ms": 618.7481999950251,
+      "fast_ms": 118.13780000375118,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "foam-noise",
+      "chunk": "card_K-1001",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.5126856921568856,
+        0.4869459417576547,
+        0.0002848486137977065,
+        8.35174716619166e-05
+      ],
+      "fast": [
+        0.5363430412342853,
+        0.46349827366768803,
+        0.00012366835001399357,
+        3.5016748012700565e-05
+      ],
+      "full_ms": 619.5655000046827,
+      "fast_ms": 67.65749999613035,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "foam-noise",
+      "chunk": "card_K-1007",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.24708455335908927,
+        0.7521297526737747,
+        0.0006937107285417363,
+        9.198323859433743e-05
+      ],
+      "fast": [
+        0.25386596171385667,
+        0.745496271959617,
+        0.0005848590561986401,
+        5.290727032771042e-05
+      ],
+      "full_ms": 621.0054000039236,
+      "fast_ms": 136.5762999994331,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "foam-noise",
+      "chunk": "event_K-1108_c00",
+      "prefix": "{\"score\": ",
+      "full": [
+        6.950072867566283e-06,
+        0.004628296889454218,
+        0.4879751145742192,
+        0.5073896384634591
+      ],
+      "fast": [
+        4.833141772245047e-06,
+        0.003205417277675163,
+        0.35288687845294137,
+        0.6439028711276112
+      ],
+      "full_ms": 712.412900000345,
+      "fast_ms": 109.69109999859938,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "card_K-1202",
+      "prefix": "{\"score\": ",
+      "full": [
+        1.8602504942336619e-06,
+        0.0007315527797293578,
+        0.187764658125613,
+        0.8115019288441634
+      ],
+      "fast": [
+        7.155733629335666e-07,
+        0.0007141250895057818,
+        0.15543770852610322,
+        0.843847450811028
+      ],
+      "full_ms": 617.4241999979131,
+      "fast_ms": 108.24719999800436,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "card_K-1218",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.10487185873034777,
+        0.8948348015633321,
+        0.00025637266776007845,
+        3.6967038560050755e-05
+      ],
+      "fast": [
+        0.14260366664169602,
+        0.8568010737999752,
+        0.0005363905121689923,
+        5.8869046159898266e-05
+      ],
+      "full_ms": 631.7920000001322,
+      "fast_ms": 109.10960000182968,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "card_K-1201",
+      "prefix": "{\"score\": ",
+      "full": [
+        1.9407028049231638e-06,
+        0.005266050923562314,
+        0.41063975771143224,
+        0.5840922506622005
+      ],
+      "fast": [
+        7.942517771165347e-07,
+        0.005556308704485257,
+        0.3085715099005248,
+        0.6858713871432128
+      ],
+      "full_ms": 613.047099999676,
+      "fast_ms": 84.01830000366317,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "card_K-1211",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.00033459659065948746,
+        0.7786458521485865,
+        0.20991532673108332,
+        0.011104224529670643
+      ],
+      "fast": [
+        0.0004112951633511996,
+        0.7659507882969138,
+        0.22146396154801629,
+        0.012173954991718746
+      ],
+      "full_ms": 629.1829999972833,
+      "fast_ms": 121.29209999693558,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "event_K-1102_c03",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.0029278710729978403,
+        0.9757969326686113,
+        0.020595083414241818,
+        0.0006801128441489551
+      ],
+      "fast": [
+        0.004798713494482009,
+        0.9560442481479547,
+        0.03793679203785341,
+        0.0012202463197098807
+      ],
+      "full_ms": 486.10209999606013,
+      "fast_ms": 69.3567999987863,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    },
+    {
+      "case": "filter-indicator",
+      "chunk": "card_K-1006",
+      "prefix": "{\"score\": ",
+      "full": [
+        0.011718003624272779,
+        0.9881174433545079,
+        0.00013980398631339817,
+        2.4749034905865172e-05
+      ],
+      "fast": [
+        0.01260865349189174,
+        0.9870151480547136,
+        0.00034369021834248484,
+        3.2508235052167964e-05
+      ],
+      "full_ms": 480.67789999913657,
+      "fast_ms": 112.16770000464749,
+      "full_tokens": 7,
+      "fast_tokens": 1
+    }
+  ],
+  "worker_probe": [
+    {
+      "case": "pressure-zero",
+      "repeat": 0,
+      "workers": 2,
+      "ms": 2735.842699999921,
+      "scores": [
+        [
+          9.666674183935127e-05,
+          0.09714139321696635,
+          0.6500098047620938,
+          0.25275213527910045
+        ],
+        [
+          0.003354821598894526,
+          0.9817366591989074,
+          0.013990240002238048,
+          0.0009182791999600121
+        ],
+        [
+          0.04850483412330867,
+          0.83546027317466,
+          0.09992263614105577,
+          0.016112256560975594
+        ],
+        [
+          4.140722617476541e-06,
+          0.0002633949628168972,
+          0.027088275220151163,
+          0.9726441890944144
+        ],
+        [
+          0.0015575194446239998,
+          0.9933632462705126,
+          0.004826334831352399,
+          0.0002528994535109983
+        ]
+      ]
+    },
+    {
+      "case": "pressure-zero",
+      "repeat": 0,
+      "workers": 4,
+      "ms": 2279.539199997089,
+      "scores": [
+        [
+          9.455801725972655e-05,
+          0.08987962665813315,
+          0.633913774741138,
+          0.2761120405834691
+        ],
+        [
+          0.006739315315122966,
+          0.9839943082551229,
+          0.008607344504504375,
+          0.0006590319252497058
+        ],
+        [
+          0.04850483412330867,
+          0.83546027317466,
+          0.09992263614105577,
+          0.016112256560975594
+        ],
+        [
+          4.140722617476541e-06,
+          0.0002633949628168972,
+          0.027088275220151163,
+          0.9726441890944144
+        ],
+        [
+          0.0015575194446239998,
+          0.9933632462705126,
+          0.004826334831352399,
+          0.0002528994535109983
+        ]
+      ]
+    },
+    {
+      "case": "foam-noise",
+      "repeat": 0,
+      "workers": 2,
+      "ms": 2119.0545999997994,
+      "scores": [
+        [
+          1.4224477479537648e-06,
+          0.00010543731958754373,
+          0.04666834712841466,
+          0.9532247931042498
+        ],
+        [
+          0.4812959864782182,
+          0.518266439327465,
+          0.00034040534394460013,
+          9.716885037221644e-05
+        ],
+        [
+          0.24034858432048062,
+          0.7589612454888621,
+          0.0006121538121613645,
+          7.801637849586676e-05
+        ],
+        [
+          8.599021367597336e-06,
+          0.004728948191386159,
+          0.4659003812964232,
+          0.529362071490823
+        ]
+      ]
+    },
+    {
+      "case": "foam-noise",
+      "repeat": 0,
+      "workers": 4,
+      "ms": 2025.6183000019519,
+      "scores": [
+        [
+          1.6372117769501447e-06,
+          0.000132625294344699,
+          0.04860182109520717,
+          0.9512639163986711
+        ],
+        [
+          0.516497196932305,
+          0.4831061324368347,
+          0.000302196690032368,
+          9.447394082791834e-05
+        ],
+        [
+          0.24034858432048062,
+          0.7589612454888621,
+          0.0006121538121613645,
+          7.801637849586676e-05
+        ],
+        [
+          8.599021367597336e-06,
+          0.004728948191386159,
+          0.4659003812964232,
+          0.529362071490823
+        ]
+      ]
+    },
+    {
+      "case": "filter-indicator",
+      "repeat": 0,
+      "workers": 2,
+      "ms": 2800.321399998211,
+      "scores": [
+        [
+          2.012445339323524e-06,
+          0.0007696833064452219,
+          0.1768442980742317,
+          0.8223840061739837
+        ],
+        [
+          0.10215167261132704,
+          0.8975090237548272,
+          0.0002988043470904405,
+          4.049928675526912e-05
+        ],
+        [
+          1.8816111917249782e-06,
+          0.005586385235595194,
+          0.40898982531295036,
+          0.5854219078402627
+        ],
+        [
+          0.0003279261629303003,
+          0.7645871314944352,
+          0.2229939955525973,
+          0.0120909467900372
+        ],
+        [
+          0.003297703057336932,
+          0.9684091460698417,
+          0.027366746362535763,
+          0.0009264045102855941
+        ],
+        [
+          0.011446051023297923,
+          0.9883378367745977,
+          0.0001834911639527027,
+          3.262103815159279e-05
+        ]
+      ]
+    },
+    {
+      "case": "filter-indicator",
+      "repeat": 0,
+      "workers": 4,
+      "ms": 2664.7397999986424,
+      "scores": [
+        [
+          2.343398038552253e-06,
+          0.0008043740376821177,
+          0.17840222879455805,
+          0.8207910537697213
+        ],
+        [
+          0.1051930996180197,
+          0.8945165605816098,
+          0.0002562754532339109,
+          3.406434713659678e-05
+        ],
+        [
+          2.1209401004221727e-06,
+          0.007160829937654692,
+          0.4085393537069372,
+          0.5842976954153076
+        ],
+        [
+          0.0003279261629303003,
+          0.7645871314944352,
+          0.2229939955525973,
+          0.0120909467900372
+        ],
+        [
+          0.003297703057336932,
+          0.9684091460698417,
+          0.027366746362535763,
+          0.0009264045102855941
+        ],
+        [
+          0.011446051023297923,
+          0.9883378367745977,
+          0.0001834911639527027,
+          3.262103815159279e-05
+        ]
+      ]
+    },
+    {
+      "case": "pressure-zero",
+      "repeat": 1,
+      "workers": 4,
+      "ms": 2292.3100000043632,
+      "scores": [
+        [
+          9.455801725972655e-05,
+          0.08987962665813315,
+          0.633913774741138,
+          0.2761120405834691
+        ],
+        [
+          0.005074951383677494,
+          0.9843570444297101,
+          0.009829918904462618,
+          0.0007380852821498777
+        ],
+        [
+          0.04850483412330867,
+          0.83546027317466,
+          0.09992263614105577,
+          0.016112256560975594
+        ],
+        [
+          3.883891854969179e-06,
+          0.00023437982705803645,
+          0.02551469415058752,
+          0.9742470421304994
+        ],
+        [
+          0.0015575194446239998,
+          0.9933632462705126,
+          0.004826334831352399,
+          0.0002528994535109983
+        ]
+      ]
+    },
+    {
+      "case": "pressure-zero",
+      "repeat": 1,
+      "workers": 2,
+      "ms": 2321.0476000022027,
+      "scores": [
+        [
+          9.455801725972655e-05,
+          0.08987962665813315,
+          0.633913774741138,
+          0.2761120405834691
+        ],
+        [
+          0.003710074735034839,
+          0.981778345068278,
+          0.013672267279037573,
+          0.000839312917649628
+        ],
+        [
+          0.04850483412330867,
+          0.83546027317466,
+          0.09992263614105577,
+          0.016112256560975594
+        ],
+        [
+          3.883891854969179e-06,
+          0.00023437982705803645,
+          0.02551469415058752,
+          0.9742470421304994
+        ],
+        [
+          0.0015575194446239998,
+          0.9933632462705126,
+          0.004826334831352399,
+          0.0002528994535109983
+        ]
+      ]
+    },
+    {
+      "case": "foam-noise",
+      "repeat": 1,
+      "workers": 4,
+      "ms": 2111.8093999975827,
+      "scores": [
+        [
+          1.4224477479537648e-06,
+          0.00010543731958754373,
+          0.04666834712841466,
+          0.9532247931042498
+        ],
+        [
+          0.5159337453383409,
+          0.48371443107747797,
+          0.00026957301296234577,
+          8.225057121879807e-05
+        ],
+        [
+          0.2973420124512612,
+          0.7022198904606226,
+          0.0003764086302582147,
+          6.168845785800753e-05
+        ],
+        [
+          6.156094456832908e-06,
+          0.004200541004103116,
+          0.4772495409784785,
+          0.5185437619229616
+        ]
+      ]
+    },
+    {
+      "case": "foam-noise",
+      "repeat": 1,
+      "workers": 2,
+      "ms": 2135.3483999992022,
+      "scores": [
+        [
+          1.509761213317743e-06,
+          0.00012151269548733143,
+          0.04465291071519011,
+          0.9552240668281092
+        ],
+        [
+          0.5096743425240753,
+          0.48999666250377466,
+          0.0002516934435700276,
+          7.73015285801136e-05
+        ],
+        [
+          0.24034858432048062,
+          0.7589612454888621,
+          0.0006121538121613645,
+          7.801637849586676e-05
+        ],
+        [
+          6.156094456832908e-06,
+          0.004200541004103116,
+          0.4772495409784785,
+          0.5185437619229616
+        ]
+      ]
+    },
+    {
+      "case": "filter-indicator",
+      "repeat": 1,
+      "workers": 4,
+      "ms": 2767.8306000016164,
+      "scores": [
+        [
+          1.926291371770966e-06,
+          0.0007650903999010847,
+          0.18728533329232083,
+          0.8119476500164063
+        ],
+        [
+          0.10317410688864277,
+          0.8964918476790088,
+          0.0002944337503569101,
+          3.9611681991523256e-05
+        ],
+        [
+          2.2686988521823688e-06,
+          0.005995857933069603,
+          0.4224995530329867,
+          0.5715023203350915
+        ],
+        [
+          0.0003434295138514411,
+          0.7767885727026059,
+          0.21185648963250553,
+          0.011011508151037148
+        ],
+        [
+          0.0030638582762624648,
+          0.9735890578294011,
+          0.022646146587072456,
+          0.0007009373072640338
+        ],
+        [
+          0.011308958875283368,
+          0.9885238389767699,
+          0.00014363166023324088,
+          2.3570487713563796e-05
+        ]
+      ]
+    },
+    {
+      "case": "filter-indicator",
+      "repeat": 1,
+      "workers": 2,
+      "ms": 2738.7298999965424,
+      "scores": [
+        [
+          1.8490074960217513e-06,
+          0.0007638771219308663,
+          0.18624344108286112,
+          0.812990832787712
+        ],
+        [
+          0.10717800623322982,
+          0.8924829853463427,
+          0.000295302284287121,
+          4.370613614028834e-05
+        ],
+        [
+          2.14671721161484e-06,
+          0.006245129792101935,
+          0.41975227721968167,
+          0.5740004462710048
+        ],
+        [
+          0.00044856592442994676,
+          0.7661246568285913,
+          0.22173869693844153,
+          0.011688080308537126
+        ],
+        [
+          0.0030638582762624648,
+          0.9735890578294011,
+          0.022646146587072456,
+          0.0007009373072640338
+        ],
+        [
+          0.011308958875283368,
+          0.9885238389767699,
+          0.00014363166023324088,
+          2.3570487713563796e-05
+        ]
+      ]
+    }
+  ],
+  "path_preservation": {
+    "primary": {
+      "comparisons": 64,
+      "same": {
+        "candidate_ids": 64,
+        "route": 64,
+        "kept": 64,
+        "answer_hash": 64
+      }
+    },
+    "diagnostics": {
+      "comparisons": 16,
+      "same": {
+        "candidate_ids": 16,
+        "route": 16,
+        "kept": 16,
+        "answer_hash": 16
+      }
+    }
+  }
+}

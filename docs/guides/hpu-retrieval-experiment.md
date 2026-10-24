@@ -51,7 +51,10 @@ comparison = run_experiment(
 `baseline`과 `trial`에는 실제 최종 인용 ID, 보류 여부·사유, 답변 해시, 후보/판정 수가 있다.
 답변·일지 원문은 비교 보고서에 복사하지 않는다. `added_card_ids`는 실제 예산 안에 들어간 관계 후보다.
 `timings_ms`에는 관계 준비, 각 view 복사, 각 실행, 재확인이 분리되어 있다.
-baseline_total은 기준 view 준비+실행, trial_total은 관계 준비+실험 view 준비+실행+재확인이다.
+baseline_total은 기준 view 준비+실행+overhead, trial_total은 관계 준비+실험 view 준비+실행+overhead+재확인이다.
+후속 수명 개선은 각 경로의 view를 복사→실행→해제한 뒤 다음 view를 만든다.
+`baseline_overhead`/`trial_overhead`에 초기화·결과 변환·해제 비용을 별도로 표시하고 total에 더한다.
+독립 딥 카피는 유지하므로 두 경로가 인덱스를 공유하지 않는다. override도 종료 시 복구해 순환 참조를 남기지 않는다.
 후보 판정·생성 시간만 비교해 관계 준비 비용을 숨기지 않는다.
 
 오류는 안전한 유형만 반환한다. off/error/invalidated는 completed 비교로 집계하지 않는다.
@@ -88,3 +91,8 @@ python -m pytest tests/test_hpu_retrieval_experiment.py -q
 모델 학습 없이 명시적 일지 검색의 범위를 검수 현장 청크로 좁힌다.
 미기록 기간/날짜는 검색 전에 거르고, 적합한 검색 후보는 기존 judge를 반드시 통과해야 한다.
 일반 현재 판단과 관계 검색 실험의 기본 off는 유지하며 운영 미배포다.
+
+[p95 구간 분석과 후속 검증](../testing/hpu-p95-20261025.md)은
+Ollama 입력/생성 시간과 클라이언트·하니스 비용을 구분한다.
+확인한 judge의 점수 이후 JSON 닫기 토큰만 생략하고, 점수 누락 시 기존 예산으로 확인한다.
+답변 길이·검색 후보·판정 임계값·원문·관계 실험 기본 off는 유지한다.

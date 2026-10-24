@@ -1,0 +1,7397 @@
+{
+  "original": {
+    "events": 96,
+    "detected": 20,
+    "detected_runs": [
+      "664700d34eaabfac950d994e9e9c0cd1",
+      "940b8beab38d0ca4aea190e2a0804008",
+      "6abcb481852cbc7f1a68486c40a76b25",
+      "2c42ce79dab68d636c4bd5dd6b3f7b23",
+      "3907ffa01d08ad139ed4c7ef017f1df3",
+      "af7eeac513b39a78efdee0f930ec61a2",
+      "6c647b32c9888e94d12e674f994654aa",
+      "7c7a47863e673f5510c249e66db2e96e",
+      "5617674c09cdcc27f72a5142737cd797",
+      "e942065a05ca02959992b47c8a8028b9",
+      "6a160654fc1548f99de45eb97f37bce6",
+      "3f0fe2152c4adcee54404e4e8e080454",
+      "1f9dcf43b15fe848bab46e3adfe891ad",
+      "98cf230de39ad190a1b9df1626051f13",
+      "98bb3e35e90870dfd898c776c51779df",
+      "1c72ded56d5ade167a5f2e83b73c6cb8",
+      "57a3665aff638a6dd79b03532b1de58e",
+      "3bfc5732348eb72713a9def916314a25",
+      "b7cea4c8b1705d193de0d1563af0586b",
+      "6d36001ea1b5497eba3e1439f5839f04"
+    ],
+    "normal_notices": 290,
+    "duplicates": 0,
+    "unmatched": 869,
+    "p95": 14,
+    "cases": [
+      {
+        "run_id": "00b1a08a6fee9fd12f22ebaeb67fa60a",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            140,
+            "EQ-0006"
+          ],
+          [
+            142,
+            "EQ-0007"
+          ],
+          [
+            143,
+            "EQ-0003"
+          ],
+          [
+            211,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "da5bf7f5a87c2fd7922e4bd8c9c6d458",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "9c5df48a09b4b2e7751da8baf4bd826b",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            114,
+            "EQ-0006"
+          ],
+          [
+            117,
+            "EQ-0007"
+          ],
+          [
+            130,
+            "EQ-0008"
+          ],
+          [
+            163,
+            "EQ-0008"
+          ],
+          [
+            167,
+            "EQ-0002"
+          ],
+          [
+            177,
+            "EQ-0007"
+          ],
+          [
+            200,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "664700d34eaabfac950d994e9e9c0cd1",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "940b8beab38d0ca4aea190e2a0804008",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            96,
+            "EQ-0007"
+          ],
+          [
+            99,
+            "EQ-0003"
+          ],
+          [
+            109,
+            "EQ-0006"
+          ],
+          [
+            128,
+            "EQ-0008"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            156,
+            "EQ-0002"
+          ],
+          [
+            167,
+            "EQ-0007"
+          ],
+          [
+            169,
+            "EQ-0003"
+          ],
+          [
+            176,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "72f1cc9ab34ca3b258c1866b378b42f2",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "aceecf692763bb4b7f7a0bd5dc9679be",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            86,
+            "EQ-0007"
+          ],
+          [
+            98,
+            "EQ-0008"
+          ],
+          [
+            147,
+            "EQ-0007"
+          ],
+          [
+            195,
+            "EQ-0008"
+          ],
+          [
+            196,
+            "EQ-0007"
+          ],
+          [
+            197,
+            "EQ-0006"
+          ],
+          [
+            198,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "7e63ae3b479de0779abd60e453db2785",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "552ed542c118024b2f4858ff047cdfe3",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            85,
+            "EQ-0008"
+          ],
+          [
+            87,
+            "EQ-0003"
+          ],
+          [
+            88,
+            "EQ-0006"
+          ],
+          [
+            88,
+            "EQ-0007"
+          ],
+          [
+            100,
+            "EQ-0002"
+          ],
+          [
+            202,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "e7283af29cb3d3fefc042ba507a78896",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "9424fde2d2c438252b9fe1e1e2a160ab",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0002"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            115,
+            "EQ-0003"
+          ],
+          [
+            149,
+            "EQ-0003"
+          ],
+          [
+            200,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "6abcb481852cbc7f1a68486c40a76b25",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "26d7b0d8c7c3fdba6928182fb3088fa0",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            97,
+            "EQ-0007"
+          ],
+          [
+            100,
+            "EQ-0006"
+          ],
+          [
+            100,
+            "EQ-0008"
+          ],
+          [
+            103,
+            "EQ-0002"
+          ],
+          [
+            105,
+            "EQ-0003"
+          ],
+          [
+            144,
+            "EQ-0003"
+          ],
+          [
+            159,
+            "EQ-0008"
+          ],
+          [
+            162,
+            "EQ-0007"
+          ],
+          [
+            217,
+            "EQ-0007"
+          ],
+          [
+            221,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "f78d3ad475db86945c4c69332f4bcf08",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "79e0c4698febdd6ccbfd07f776a91870",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            93,
+            "EQ-0006"
+          ],
+          [
+            96,
+            "EQ-0007"
+          ],
+          [
+            97,
+            "EQ-0008"
+          ],
+          [
+            98,
+            "EQ-0002"
+          ],
+          [
+            101,
+            "EQ-0003"
+          ],
+          [
+            157,
+            "EQ-0003"
+          ],
+          [
+            159,
+            "EQ-0007"
+          ],
+          [
+            159,
+            "EQ-0008"
+          ],
+          [
+            162,
+            "EQ-0006"
+          ],
+          [
+            174,
+            "EQ-0002"
+          ],
+          [
+            205,
+            "EQ-0002"
+          ],
+          [
+            210,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "dd8a53e09a27f21545967800f5093cc4",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "6a206f5cf90a7070f9a0af287e62e39c",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            73,
+            "EQ-0006"
+          ],
+          [
+            84,
+            "EQ-0003"
+          ],
+          [
+            118,
+            "EQ-0003"
+          ],
+          [
+            151,
+            "EQ-0002"
+          ],
+          [
+            166,
+            "EQ-0003"
+          ],
+          [
+            181,
+            "EQ-0008"
+          ],
+          [
+            183,
+            "EQ-0007"
+          ],
+          [
+            187,
+            "EQ-0003"
+          ],
+          [
+            194,
+            "EQ-0006"
+          ],
+          [
+            218,
+            "EQ-0006"
+          ],
+          [
+            221,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "6ef8c6852af89abde58d06f0e83e4738",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "b9ee1f396c4fbf2c74137c7ff791330f",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            84,
+            "EQ-0002"
+          ],
+          [
+            93,
+            "EQ-0008"
+          ],
+          [
+            111,
+            "EQ-0007"
+          ],
+          [
+            115,
+            "EQ-0006"
+          ],
+          [
+            118,
+            "EQ-0003"
+          ],
+          [
+            184,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "2c42ce79dab68d636c4bd5dd6b3f7b23",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "3907ffa01d08ad139ed4c7ef017f1df3",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            82,
+            "EQ-0008"
+          ],
+          [
+            86,
+            "EQ-0003"
+          ],
+          [
+            91,
+            "EQ-0006"
+          ],
+          [
+            93,
+            "EQ-0007"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            147,
+            "EQ-0002"
+          ],
+          [
+            185,
+            "EQ-0002"
+          ],
+          [
+            189,
+            "EQ-0008"
+          ],
+          [
+            191,
+            "EQ-0003"
+          ],
+          [
+            194,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "f432b78384895d3cb5624d501facfb16",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "9666d2ac2699ba91e99ebd312e4fda0e",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            74,
+            "EQ-0006"
+          ],
+          [
+            78,
+            "EQ-0003"
+          ],
+          [
+            79,
+            "EQ-0007"
+          ],
+          [
+            87,
+            "EQ-0002"
+          ],
+          [
+            137,
+            "EQ-0003"
+          ],
+          [
+            138,
+            "EQ-0007"
+          ],
+          [
+            142,
+            "EQ-0006"
+          ],
+          [
+            143,
+            "EQ-0002"
+          ],
+          [
+            199,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "50f01d7edd7ab3226d1fbbd035540062",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "4eb4980e118f6c9ea8b453196e00dc47",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "7cc11aa8f1dbba8c85c954958ccf81c3",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            118,
+            "EQ-0003"
+          ],
+          [
+            149,
+            "EQ-0008"
+          ],
+          [
+            152,
+            "EQ-0003"
+          ],
+          [
+            166,
+            "EQ-0007"
+          ],
+          [
+            173,
+            "EQ-0006"
+          ],
+          [
+            206,
+            "EQ-0003"
+          ],
+          [
+            208,
+            "EQ-0006"
+          ],
+          [
+            208,
+            "EQ-0007"
+          ],
+          [
+            210,
+            "EQ-0008"
+          ],
+          [
+            211,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "ee3a4a3238bfc5ec894c08472b33b670",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "af7eeac513b39a78efdee0f930ec61a2",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            85,
+            "EQ-0006"
+          ],
+          [
+            85,
+            "EQ-0008"
+          ],
+          [
+            87,
+            "EQ-0002"
+          ],
+          [
+            91,
+            "EQ-0003"
+          ],
+          [
+            122,
+            "EQ-0007"
+          ],
+          [
+            123,
+            "EQ-0003"
+          ],
+          [
+            125,
+            "EQ-0008"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ],
+          [
+            131,
+            "EQ-0002"
+          ],
+          [
+            220,
+            "EQ-0008"
+          ],
+          [
+            224,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "6c647b32c9888e94d12e674f994654aa",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "2df7f20eba267ec6522320bc8ee8016e",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            102,
+            "EQ-0003"
+          ],
+          [
+            104,
+            "EQ-0008"
+          ],
+          [
+            107,
+            "EQ-0007"
+          ],
+          [
+            112,
+            "EQ-0006"
+          ],
+          [
+            174,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "ab271d81c3f275ca7c8a5af0fb66977b",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "1ab831bc21aaed15e006aa7956cb348f",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            90,
+            "EQ-0006"
+          ],
+          [
+            145,
+            "EQ-0003"
+          ],
+          [
+            166,
+            "EQ-0002"
+          ],
+          [
+            169,
+            "EQ-0006"
+          ],
+          [
+            189,
+            "EQ-0007"
+          ],
+          [
+            190,
+            "EQ-0003"
+          ],
+          [
+            190,
+            "EQ-0008"
+          ],
+          [
+            195,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "071e397691570d748cf0b08d4383fe1b",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "f6c12a7c80b5079bde02ccf32b1bd66d",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            100,
+            "EQ-0006"
+          ],
+          [
+            101,
+            "EQ-0007"
+          ],
+          [
+            101,
+            "EQ-0008"
+          ],
+          [
+            103,
+            "EQ-0002"
+          ],
+          [
+            103,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "748cdb49fd58f41f148f0663bd503b68",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "7c7a47863e673f5510c249e66db2e96e",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            100,
+            "EQ-0003"
+          ],
+          [
+            111,
+            "EQ-0002"
+          ],
+          [
+            113,
+            "EQ-0007"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ],
+          [
+            140,
+            "EQ-0003"
+          ],
+          [
+            153,
+            "EQ-0003"
+          ],
+          [
+            159,
+            "EQ-0008"
+          ],
+          [
+            190,
+            "EQ-0008"
+          ],
+          [
+            195,
+            "EQ-0003"
+          ],
+          [
+            200,
+            "EQ-0007"
+          ],
+          [
+            203,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "5617674c09cdcc27f72a5142737cd797",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "35815f8423a75411a6e24f4be714aa7d",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            84,
+            "EQ-0007"
+          ],
+          [
+            85,
+            "EQ-0008"
+          ],
+          [
+            87,
+            "EQ-0003"
+          ],
+          [
+            90,
+            "EQ-0006"
+          ],
+          [
+            107,
+            "EQ-0003"
+          ],
+          [
+            108,
+            "EQ-0006"
+          ],
+          [
+            108,
+            "EQ-0008"
+          ],
+          [
+            110,
+            "EQ-0007"
+          ],
+          [
+            123,
+            "EQ-0002"
+          ],
+          [
+            207,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "2155b63b957c55e9bdafb6113e9d9532",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "4a6b93e5ac1905dd4e401ed62a917dff",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            81,
+            "EQ-0002"
+          ],
+          [
+            100,
+            "EQ-0006"
+          ],
+          [
+            102,
+            "EQ-0003"
+          ],
+          [
+            104,
+            "EQ-0002"
+          ],
+          [
+            105,
+            "EQ-0008"
+          ],
+          [
+            106,
+            "EQ-0007"
+          ],
+          [
+            173,
+            "EQ-0007"
+          ],
+          [
+            178,
+            "EQ-0008"
+          ],
+          [
+            209,
+            "EQ-0007"
+          ],
+          [
+            211,
+            "EQ-0008"
+          ],
+          [
+            213,
+            "EQ-0003"
+          ],
+          [
+            219,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "c664bfc66f8a2111b6a1a5f960b2f85d",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "3f32593c02f8804fef25360d620a2232",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0002"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            125,
+            "EQ-0003"
+          ],
+          [
+            152,
+            "EQ-0006"
+          ],
+          [
+            153,
+            "EQ-0008"
+          ],
+          [
+            156,
+            "EQ-0003"
+          ],
+          [
+            160,
+            "EQ-0002"
+          ],
+          [
+            164,
+            "EQ-0007"
+          ],
+          [
+            197,
+            "EQ-0007"
+          ],
+          [
+            204,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "c8ad6923897b0f8f080bbed5668a31c7",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "0f55994b11dedd26ee46d0d7e8e311bd",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            78,
+            "EQ-0008"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            93,
+            "EQ-0007"
+          ],
+          [
+            97,
+            "EQ-0006"
+          ],
+          [
+            101,
+            "EQ-0003"
+          ],
+          [
+            162,
+            "EQ-0003"
+          ],
+          [
+            166,
+            "EQ-0007"
+          ],
+          [
+            170,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "e942065a05ca02959992b47c8a8028b9",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "9e036ece8901d7896c3c9d8d56c0d273",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            93,
+            "EQ-0007"
+          ],
+          [
+            99,
+            "EQ-0003"
+          ],
+          [
+            121,
+            "EQ-0006"
+          ],
+          [
+            122,
+            "EQ-0008"
+          ],
+          [
+            125,
+            "EQ-0002"
+          ],
+          [
+            147,
+            "EQ-0006"
+          ],
+          [
+            147,
+            "EQ-0008"
+          ],
+          [
+            151,
+            "EQ-0003"
+          ],
+          [
+            151,
+            "EQ-0007"
+          ],
+          [
+            154,
+            "EQ-0002"
+          ],
+          [
+            205,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "5ae9c61a0d156508461c67380b4a6742",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "4878d3759bede184ce0ecb06076572e6",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            92,
+            "EQ-0007"
+          ],
+          [
+            93,
+            "EQ-0008"
+          ],
+          [
+            95,
+            "EQ-0006"
+          ],
+          [
+            96,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "325fdb85ae16e9d9dc2f0d822e654d64",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            132,
+            "EQ-0006"
+          ],
+          [
+            136,
+            "EQ-0003"
+          ],
+          [
+            137,
+            "EQ-0008"
+          ],
+          [
+            139,
+            "EQ-0007"
+          ],
+          [
+            174,
+            "EQ-0002"
+          ],
+          [
+            191,
+            "EQ-0006"
+          ],
+          [
+            193,
+            "EQ-0003"
+          ],
+          [
+            194,
+            "EQ-0008"
+          ],
+          [
+            195,
+            "EQ-0007"
+          ],
+          [
+            215,
+            "EQ-0008"
+          ],
+          [
+            216,
+            "EQ-0003"
+          ],
+          [
+            217,
+            "EQ-0002"
+          ],
+          [
+            217,
+            "EQ-0007"
+          ],
+          [
+            220,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "8f0ef5ea26ef8b73ef7ca73f7be565d9",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "d081aab474894f49adcc2dba810f24c7",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            89,
+            "EQ-0006"
+          ],
+          [
+            91,
+            "EQ-0003"
+          ],
+          [
+            108,
+            "EQ-0007"
+          ],
+          [
+            115,
+            "EQ-0008"
+          ],
+          [
+            163,
+            "EQ-0008"
+          ],
+          [
+            195,
+            "EQ-0002"
+          ],
+          [
+            195,
+            "EQ-0003"
+          ],
+          [
+            195,
+            "EQ-0006"
+          ],
+          [
+            198,
+            "EQ-0007"
+          ],
+          [
+            212,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "6a160654fc1548f99de45eb97f37bce6",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "addbb3c50572b748c74214286ef71aac",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            74,
+            "EQ-0006"
+          ],
+          [
+            83,
+            "EQ-0007"
+          ],
+          [
+            86,
+            "EQ-0003"
+          ],
+          [
+            112,
+            "EQ-0008"
+          ],
+          [
+            113,
+            "EQ-0003"
+          ],
+          [
+            113,
+            "EQ-0007"
+          ],
+          [
+            115,
+            "EQ-0002"
+          ],
+          [
+            119,
+            "EQ-0006"
+          ],
+          [
+            214,
+            "EQ-0003"
+          ],
+          [
+            216,
+            "EQ-0007"
+          ],
+          [
+            223,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "f803c37654ef86b702175c34020e26a3",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "5d3ed652bdfdeeba5a2ef980d889b68b",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            85,
+            "EQ-0008"
+          ],
+          [
+            97,
+            "EQ-0007"
+          ],
+          [
+            98,
+            "EQ-0006"
+          ],
+          [
+            108,
+            "EQ-0003"
+          ],
+          [
+            126,
+            "EQ-0002"
+          ],
+          [
+            134,
+            "EQ-0006"
+          ],
+          [
+            137,
+            "EQ-0003"
+          ],
+          [
+            140,
+            "EQ-0007"
+          ],
+          [
+            168,
+            "EQ-0003"
+          ],
+          [
+            204,
+            "EQ-0002"
+          ],
+          [
+            206,
+            "EQ-0003"
+          ],
+          [
+            222,
+            "EQ-0007"
+          ],
+          [
+            223,
+            "EQ-0006"
+          ],
+          [
+            224,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "bc06df252a8d040557d978986c2c599e",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "5176a1e61ad2e1d6f6d79f98c6d9e33d",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            73,
+            "EQ-0006"
+          ],
+          [
+            76,
+            "EQ-0008"
+          ],
+          [
+            92,
+            "EQ-0003"
+          ],
+          [
+            94,
+            "EQ-0006"
+          ],
+          [
+            95,
+            "EQ-0007"
+          ],
+          [
+            95,
+            "EQ-0008"
+          ],
+          [
+            136,
+            "EQ-0002"
+          ],
+          [
+            145,
+            "EQ-0008"
+          ],
+          [
+            151,
+            "EQ-0007"
+          ],
+          [
+            152,
+            "EQ-0006"
+          ],
+          [
+            160,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "fc57086dff36e6d1490cafa554d5253e",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "c5c2f6e88ddba09c848c5a434c785357",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            87,
+            "EQ-0002"
+          ],
+          [
+            115,
+            "EQ-0006"
+          ],
+          [
+            117,
+            "EQ-0003"
+          ],
+          [
+            119,
+            "EQ-0007"
+          ],
+          [
+            123,
+            "EQ-0008"
+          ],
+          [
+            151,
+            "EQ-0008"
+          ],
+          [
+            152,
+            "EQ-0007"
+          ],
+          [
+            153,
+            "EQ-0003"
+          ],
+          [
+            154,
+            "EQ-0006"
+          ],
+          [
+            175,
+            "EQ-0002"
+          ],
+          [
+            177,
+            "EQ-0006"
+          ],
+          [
+            181,
+            "EQ-0007"
+          ],
+          [
+            182,
+            "EQ-0003"
+          ],
+          [
+            186,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "3f0fe2152c4adcee54404e4e8e080454",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "1f9dcf43b15fe848bab46e3adfe891ad",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            89,
+            "EQ-0003"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            152,
+            "EQ-0008"
+          ],
+          [
+            153,
+            "EQ-0003"
+          ],
+          [
+            156,
+            "EQ-0007"
+          ],
+          [
+            209,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "02d45afc74e8dca2f93aa3939e8c473a",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "a2625801b182e9364a69662276d96194",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            77,
+            "EQ-0006"
+          ],
+          [
+            128,
+            "EQ-0008"
+          ],
+          [
+            132,
+            "EQ-0003"
+          ],
+          [
+            133,
+            "EQ-0002"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            136,
+            "EQ-0007"
+          ],
+          [
+            191,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "768701bd6fff1832ec69ce6e8e6050f0",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "c1971d88ff2bc24e1ea14455a0ae6e29",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            97,
+            "EQ-0008"
+          ],
+          [
+            194,
+            "EQ-0003"
+          ],
+          [
+            198,
+            "EQ-0002"
+          ],
+          [
+            223,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "47b5ffe9889a019525f0d878e580b40e",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "0bcf00c04df165da8e255193bf5bd657",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            79,
+            "EQ-0008"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            82,
+            "EQ-0007"
+          ],
+          [
+            85,
+            "EQ-0003"
+          ],
+          [
+            87,
+            "EQ-0006"
+          ],
+          [
+            126,
+            "EQ-0003"
+          ],
+          [
+            166,
+            "EQ-0008"
+          ],
+          [
+            174,
+            "EQ-0007"
+          ],
+          [
+            177,
+            "EQ-0003"
+          ],
+          [
+            182,
+            "EQ-0006"
+          ],
+          [
+            207,
+            "EQ-0003"
+          ],
+          [
+            207,
+            "EQ-0006"
+          ],
+          [
+            208,
+            "EQ-0007"
+          ],
+          [
+            216,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "98cf230de39ad190a1b9df1626051f13",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "98bb3e35e90870dfd898c776c51779df",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            116,
+            "EQ-0003"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            202,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "c334d1661b67f202f5814465058f178f",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "6b5a5d27efc92ccadbe6e832ee1bbb76",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            82,
+            "EQ-0003"
+          ],
+          [
+            95,
+            "EQ-0007"
+          ],
+          [
+            97,
+            "EQ-0006"
+          ],
+          [
+            101,
+            "EQ-0008"
+          ],
+          [
+            156,
+            "EQ-0003"
+          ],
+          [
+            189,
+            "EQ-0008"
+          ],
+          [
+            193,
+            "EQ-0006"
+          ],
+          [
+            194,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "4bfe3d0f9ee16431fd16db6430c728a4",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "4905276ca77cecd95cfaa04653973ba8",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "849807f19ef87a1ff3819cb661ebfc50",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            116,
+            "EQ-0002"
+          ],
+          [
+            172,
+            "EQ-0008"
+          ],
+          [
+            206,
+            "EQ-0003"
+          ],
+          [
+            210,
+            "EQ-0007"
+          ],
+          [
+            211,
+            "EQ-0006"
+          ],
+          [
+            212,
+            "EQ-0002"
+          ],
+          [
+            221,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "06a56e170a882e15bd1d56b180587d63",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "1c72ded56d5ade167a5f2e83b73c6cb8",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            120,
+            "EQ-0007"
+          ],
+          [
+            126,
+            "EQ-0003"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ],
+          [
+            128,
+            "EQ-0008"
+          ],
+          [
+            153,
+            "EQ-0002"
+          ],
+          [
+            172,
+            "EQ-0003"
+          ],
+          [
+            199,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "57a3665aff638a6dd79b03532b1de58e",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "712acc659959c7b86c179be16e1200c2",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            90,
+            "EQ-0002"
+          ],
+          [
+            91,
+            "EQ-0007"
+          ],
+          [
+            95,
+            "EQ-0003"
+          ],
+          [
+            98,
+            "EQ-0006"
+          ],
+          [
+            142,
+            "EQ-0008"
+          ],
+          [
+            171,
+            "EQ-0007"
+          ],
+          [
+            173,
+            "EQ-0006"
+          ],
+          [
+            174,
+            "EQ-0003"
+          ],
+          [
+            175,
+            "EQ-0002"
+          ],
+          [
+            177,
+            "EQ-0008"
+          ],
+          [
+            211,
+            "EQ-0006"
+          ],
+          [
+            213,
+            "EQ-0003"
+          ],
+          [
+            217,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "37988bad0775d29b098d3fd1156b8749",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "5fb0f249efe43246883248169658d78e",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0003"
+          ],
+          [
+            89,
+            "EQ-0007"
+          ],
+          [
+            93,
+            "EQ-0008"
+          ],
+          [
+            114,
+            "EQ-0003"
+          ],
+          [
+            117,
+            "EQ-0002"
+          ],
+          [
+            118,
+            "EQ-0006"
+          ],
+          [
+            124,
+            "EQ-0008"
+          ],
+          [
+            148,
+            "EQ-0007"
+          ],
+          [
+            150,
+            "EQ-0008"
+          ],
+          [
+            152,
+            "EQ-0006"
+          ],
+          [
+            156,
+            "EQ-0003"
+          ],
+          [
+            163,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "b45400acf706b1cd51d2cdcac1d65b55",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "53ee4103ca4dd96a90cea5e0a26f66a2",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            75,
+            "EQ-0003"
+          ],
+          [
+            75,
+            "EQ-0008"
+          ],
+          [
+            76,
+            "EQ-0006"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            111,
+            "EQ-0008"
+          ],
+          [
+            112,
+            "EQ-0003"
+          ],
+          [
+            112,
+            "EQ-0006"
+          ],
+          [
+            140,
+            "EQ-0007"
+          ],
+          [
+            147,
+            "EQ-0002"
+          ],
+          [
+            152,
+            "EQ-0006"
+          ],
+          [
+            155,
+            "EQ-0003"
+          ],
+          [
+            163,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "bb71e635897a24993759184808e7e878",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "2b807473fd56385554d7c9111b0e0bfc",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            85,
+            "EQ-0003"
+          ],
+          [
+            88,
+            "EQ-0007"
+          ],
+          [
+            88,
+            "EQ-0008"
+          ],
+          [
+            93,
+            "EQ-0006"
+          ],
+          [
+            111,
+            "EQ-0006"
+          ],
+          [
+            113,
+            "EQ-0007"
+          ],
+          [
+            114,
+            "EQ-0008"
+          ],
+          [
+            117,
+            "EQ-0003"
+          ],
+          [
+            147,
+            "EQ-0003"
+          ],
+          [
+            150,
+            "EQ-0002"
+          ],
+          [
+            151,
+            "EQ-0007"
+          ],
+          [
+            151,
+            "EQ-0008"
+          ],
+          [
+            175,
+            "EQ-0007"
+          ],
+          [
+            175,
+            "EQ-0008"
+          ],
+          [
+            178,
+            "EQ-0003"
+          ],
+          [
+            196,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "3bfc5732348eb72713a9def916314a25",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "24b428e5c2edbed27c8c55e666a9e408",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            75,
+            "EQ-0003"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            80,
+            "EQ-0007"
+          ],
+          [
+            81,
+            "EQ-0006"
+          ],
+          [
+            153,
+            "EQ-0006"
+          ],
+          [
+            155,
+            "EQ-0007"
+          ],
+          [
+            201,
+            "EQ-0007"
+          ],
+          [
+            205,
+            "EQ-0006"
+          ],
+          [
+            208,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "1948c41d01128ee702cab57bf2a29d2c",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "6874ec2bbd007ca10fe2fbc037c602b8",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            94,
+            "EQ-0003"
+          ],
+          [
+            96,
+            "EQ-0002"
+          ],
+          [
+            96,
+            "EQ-0006"
+          ],
+          [
+            99,
+            "EQ-0007"
+          ],
+          [
+            100,
+            "EQ-0008"
+          ],
+          [
+            146,
+            "EQ-0008"
+          ],
+          [
+            148,
+            "EQ-0007"
+          ],
+          [
+            150,
+            "EQ-0006"
+          ],
+          [
+            153,
+            "EQ-0003"
+          ],
+          [
+            197,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "b004733aed2ecb987b73bf20cda67e08",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "91bfeeed1d03945eb8da78ab964912d5",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            82,
+            "EQ-0006"
+          ],
+          [
+            87,
+            "EQ-0008"
+          ],
+          [
+            116,
+            "EQ-0002"
+          ],
+          [
+            191,
+            "EQ-0003"
+          ],
+          [
+            193,
+            "EQ-0007"
+          ],
+          [
+            194,
+            "EQ-0008"
+          ],
+          [
+            195,
+            "EQ-0002"
+          ],
+          [
+            197,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "d37c860ed2ddd445a4280c0187a93703",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "b7cea4c8b1705d193de0d1563af0586b",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            95,
+            "EQ-0002"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ],
+          [
+            156,
+            "EQ-0002"
+          ],
+          [
+            160,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "6d36001ea1b5497eba3e1439f5839f04",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "f271bdc4b1dbcebcd2afe85077be1238",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            81,
+            "EQ-0002"
+          ],
+          [
+            104,
+            "EQ-0007"
+          ],
+          [
+            104,
+            "EQ-0008"
+          ],
+          [
+            105,
+            "EQ-0003"
+          ],
+          [
+            108,
+            "EQ-0002"
+          ],
+          [
+            110,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "ef8dc0fe74b46ba0622b85365f157a0c",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "6b2746d6ef889ee0eaebf15aba95337c",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": false,
+        "delay": null,
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            74,
+            "EQ-0003"
+          ],
+          [
+            74,
+            "EQ-0007"
+          ],
+          [
+            75,
+            "EQ-0006"
+          ],
+          [
+            80,
+            "EQ-0008"
+          ],
+          [
+            109,
+            "EQ-0002"
+          ],
+          [
+            132,
+            "EQ-0003"
+          ],
+          [
+            132,
+            "EQ-0006"
+          ],
+          [
+            133,
+            "EQ-0007"
+          ],
+          [
+            134,
+            "EQ-0008"
+          ],
+          [
+            153,
+            "EQ-0002"
+          ],
+          [
+            199,
+            "EQ-0002"
+          ]
+        ]
+      }
+    ],
+    "normal_cases": [
+      {
+        "run_id": "190f2abaaa33c438e9ac7fb48bb71719",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "59c873a0898836fc7a121d61beb41ed5",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            74,
+            "EQ-0006"
+          ],
+          [
+            76,
+            "EQ-0003"
+          ],
+          [
+            78,
+            "EQ-0008"
+          ],
+          [
+            80,
+            "EQ-0007"
+          ],
+          [
+            81,
+            "EQ-0002"
+          ],
+          [
+            103,
+            "EQ-0007"
+          ],
+          [
+            106,
+            "EQ-0008"
+          ],
+          [
+            108,
+            "EQ-0003"
+          ],
+          [
+            134,
+            "EQ-0002"
+          ],
+          [
+            135,
+            "EQ-0006"
+          ],
+          [
+            171,
+            "EQ-0007"
+          ],
+          [
+            172,
+            "EQ-0008"
+          ],
+          [
+            177,
+            "EQ-0003"
+          ],
+          [
+            183,
+            "EQ-0006"
+          ],
+          [
+            216,
+            "EQ-0006"
+          ],
+          [
+            218,
+            "EQ-0003"
+          ],
+          [
+            221,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "b58d5afaa102585584c348230edd4a22",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "b3ee1525ec5af9469d2d104ab33beb6a",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            89,
+            "EQ-0003"
+          ],
+          [
+            109,
+            "EQ-0006"
+          ],
+          [
+            113,
+            "EQ-0008"
+          ],
+          [
+            117,
+            "EQ-0002"
+          ],
+          [
+            118,
+            "EQ-0003"
+          ],
+          [
+            121,
+            "EQ-0007"
+          ],
+          [
+            161,
+            "EQ-0007"
+          ],
+          [
+            163,
+            "EQ-0003"
+          ],
+          [
+            218,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "0891c1c99ce22121d1525f09d5914cbe",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "e21691dd9a68395049a8861686c4b421",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            76,
+            "EQ-0003"
+          ],
+          [
+            80,
+            "EQ-0007"
+          ],
+          [
+            81,
+            "EQ-0006"
+          ],
+          [
+            84,
+            "EQ-0008"
+          ],
+          [
+            119,
+            "EQ-0003"
+          ],
+          [
+            119,
+            "EQ-0006"
+          ],
+          [
+            122,
+            "EQ-0007"
+          ],
+          [
+            125,
+            "EQ-0008"
+          ],
+          [
+            158,
+            "EQ-0008"
+          ],
+          [
+            159,
+            "EQ-0007"
+          ],
+          [
+            160,
+            "EQ-0003"
+          ],
+          [
+            160,
+            "EQ-0006"
+          ],
+          [
+            164,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "b9d9d0aa6f642defe897c5a4ca157352",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "6fb72da20803a8e62ba57d1fda8f3022",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            97,
+            "EQ-0003"
+          ],
+          [
+            138,
+            "EQ-0006"
+          ],
+          [
+            140,
+            "EQ-0008"
+          ],
+          [
+            144,
+            "EQ-0002"
+          ],
+          [
+            146,
+            "EQ-0003"
+          ],
+          [
+            172,
+            "EQ-0007"
+          ],
+          [
+            175,
+            "EQ-0003"
+          ],
+          [
+            179,
+            "EQ-0008"
+          ],
+          [
+            184,
+            "EQ-0006"
+          ],
+          [
+            223,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "0ad44108e7e8077839df037eeea07a4f",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "7154bd97af7cc7ab955f1cdb433734ab",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            97,
+            "EQ-0006"
+          ],
+          [
+            100,
+            "EQ-0008"
+          ],
+          [
+            138,
+            "EQ-0002"
+          ],
+          [
+            138,
+            "EQ-0007"
+          ],
+          [
+            158,
+            "EQ-0003"
+          ],
+          [
+            159,
+            "EQ-0006"
+          ],
+          [
+            159,
+            "EQ-0008"
+          ],
+          [
+            162,
+            "EQ-0007"
+          ],
+          [
+            223,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "9b89a41e0fb0e6c376c1684fb2f6637b",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "3c0aa7dd749c01e1de02365ce37c1917",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            79,
+            "EQ-0003"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            80,
+            "EQ-0008"
+          ],
+          [
+            81,
+            "EQ-0007"
+          ],
+          [
+            149,
+            "EQ-0003"
+          ],
+          [
+            149,
+            "EQ-0007"
+          ],
+          [
+            149,
+            "EQ-0008"
+          ],
+          [
+            155,
+            "EQ-0006"
+          ],
+          [
+            184,
+            "EQ-0006"
+          ],
+          [
+            186,
+            "EQ-0002"
+          ],
+          [
+            193,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "a198bbdd78ceb33199475ebaafd2d96f",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "1a1566724fa58b7024adc7253adaad26",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            88,
+            "EQ-0003"
+          ],
+          [
+            88,
+            "EQ-0008"
+          ],
+          [
+            93,
+            "EQ-0006"
+          ],
+          [
+            171,
+            "EQ-0003"
+          ],
+          [
+            192,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "a661aa89ccb8706bb9f4f685d7f1b948",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "c0b5e95c49c6ce51ad5a854d87fa0cca",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            82,
+            "EQ-0007"
+          ],
+          [
+            83,
+            "EQ-0006"
+          ],
+          [
+            85,
+            "EQ-0003"
+          ],
+          [
+            85,
+            "EQ-0008"
+          ],
+          [
+            98,
+            "EQ-0002"
+          ],
+          [
+            121,
+            "EQ-0003"
+          ],
+          [
+            122,
+            "EQ-0008"
+          ],
+          [
+            125,
+            "EQ-0002"
+          ],
+          [
+            126,
+            "EQ-0006"
+          ],
+          [
+            129,
+            "EQ-0007"
+          ],
+          [
+            168,
+            "EQ-0007"
+          ],
+          [
+            179,
+            "EQ-0006"
+          ],
+          [
+            184,
+            "EQ-0003"
+          ],
+          [
+            184,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "1830832582327b079c371594b9a4bd39",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "b94f8cb36db75580382857ef342c4467",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            94,
+            "EQ-0008"
+          ],
+          [
+            95,
+            "EQ-0003"
+          ],
+          [
+            127,
+            "EQ-0002"
+          ],
+          [
+            165,
+            "EQ-0003"
+          ],
+          [
+            167,
+            "EQ-0008"
+          ],
+          [
+            179,
+            "EQ-0006"
+          ],
+          [
+            180,
+            "EQ-0007"
+          ],
+          [
+            183,
+            "EQ-0002"
+          ],
+          [
+            185,
+            "EQ-0003"
+          ],
+          [
+            186,
+            "EQ-0008"
+          ]
+        ]
+      },
+      {
+        "run_id": "28adc489ae7d7d87ca54fb9c976faf0b",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "e55c029d7eba96cb10c7e40e89341fef",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            77,
+            "EQ-0006"
+          ],
+          [
+            96,
+            "EQ-0008"
+          ],
+          [
+            99,
+            "EQ-0006"
+          ],
+          [
+            99,
+            "EQ-0007"
+          ],
+          [
+            102,
+            "EQ-0002"
+          ],
+          [
+            104,
+            "EQ-0003"
+          ],
+          [
+            130,
+            "EQ-0003"
+          ],
+          [
+            189,
+            "EQ-0003"
+          ],
+          [
+            208,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "debfcf75ee39ac5c5eeff84141eabf95",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "02fd6ede777caf35e2c135ba943c8592",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            81,
+            "EQ-0003"
+          ],
+          [
+            81,
+            "EQ-0006"
+          ],
+          [
+            83,
+            "EQ-0008"
+          ],
+          [
+            84,
+            "EQ-0007"
+          ],
+          [
+            109,
+            "EQ-0007"
+          ],
+          [
+            110,
+            "EQ-0008"
+          ],
+          [
+            111,
+            "EQ-0003"
+          ],
+          [
+            112,
+            "EQ-0002"
+          ],
+          [
+            112,
+            "EQ-0006"
+          ],
+          [
+            178,
+            "EQ-0006"
+          ],
+          [
+            180,
+            "EQ-0003"
+          ],
+          [
+            185,
+            "EQ-0008"
+          ],
+          [
+            190,
+            "EQ-0007"
+          ]
+        ]
+      },
+      {
+        "run_id": "349dcc4d5f6198295bba4257f81eac8c",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "c4a6fca059b45313718a553eb9f60b47",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            88,
+            "EQ-0006"
+          ],
+          [
+            91,
+            "EQ-0003"
+          ],
+          [
+            121,
+            "EQ-0002"
+          ],
+          [
+            145,
+            "EQ-0003"
+          ],
+          [
+            161,
+            "EQ-0006"
+          ],
+          [
+            163,
+            "EQ-0003"
+          ],
+          [
+            167,
+            "EQ-0008"
+          ],
+          [
+            169,
+            "EQ-0007"
+          ],
+          [
+            197,
+            "EQ-0002"
+          ],
+          [
+            221,
+            "EQ-0006"
+          ],
+          [
+            223,
+            "EQ-0003"
+          ]
+        ]
+      },
+      {
+        "run_id": "c662b702e4257c8bebc2263315954f5d",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "7ab35dfcd91d3f712ab210a0713fff5c",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0006"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            105,
+            "EQ-0008"
+          ],
+          [
+            132,
+            "EQ-0003"
+          ],
+          [
+            140,
+            "EQ-0007"
+          ],
+          [
+            141,
+            "EQ-0002"
+          ],
+          [
+            175,
+            "EQ-0007"
+          ],
+          [
+            178,
+            "EQ-0003"
+          ],
+          [
+            180,
+            "EQ-0008"
+          ],
+          [
+            183,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "6c137885e2590d4b6f86a7c0b1e931e2",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "5e4c6140fb271dd7c85235cf48f8196b",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0007"
+          ],
+          [
+            72,
+            "EQ-0008"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            137,
+            "EQ-0007"
+          ],
+          [
+            144,
+            "EQ-0003"
+          ],
+          [
+            165,
+            "EQ-0008"
+          ],
+          [
+            201,
+            "EQ-0003"
+          ],
+          [
+            218,
+            "EQ-0002"
+          ]
+        ]
+      },
+      {
+        "run_id": "d1552d560ecbf9d2446489afe5342675",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ]
+        ]
+      },
+      {
+        "run_id": "e7c2a95099b3ce53a24361c5a215cc22",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": [
+          [
+            72,
+            "EQ-0001"
+          ],
+          [
+            72,
+            "EQ-0003"
+          ],
+          [
+            72,
+            "EQ-0004"
+          ],
+          [
+            72,
+            "EQ-0005"
+          ],
+          [
+            72,
+            "EQ-0009"
+          ],
+          [
+            72,
+            "EQ-0010"
+          ],
+          [
+            80,
+            "EQ-0002"
+          ],
+          [
+            116,
+            "EQ-0008"
+          ],
+          [
+            200,
+            "EQ-0003"
+          ],
+          [
+            203,
+            "EQ-0008"
+          ],
+          [
+            205,
+            "EQ-0006"
+          ],
+          [
+            205,
+            "EQ-0007"
+          ],
+          [
+            208,
+            "EQ-0002"
+          ]
+        ]
+      }
+    ]
+  },
+  "candidate": {
+    "events": 96,
+    "detected": 96,
+    "detected_runs": [
+      "00b1a08a6fee9fd12f22ebaeb67fa60a",
+      "da5bf7f5a87c2fd7922e4bd8c9c6d458",
+      "9c5df48a09b4b2e7751da8baf4bd826b",
+      "664700d34eaabfac950d994e9e9c0cd1",
+      "940b8beab38d0ca4aea190e2a0804008",
+      "72f1cc9ab34ca3b258c1866b378b42f2",
+      "aceecf692763bb4b7f7a0bd5dc9679be",
+      "7e63ae3b479de0779abd60e453db2785",
+      "552ed542c118024b2f4858ff047cdfe3",
+      "e7283af29cb3d3fefc042ba507a78896",
+      "9424fde2d2c438252b9fe1e1e2a160ab",
+      "6abcb481852cbc7f1a68486c40a76b25",
+      "26d7b0d8c7c3fdba6928182fb3088fa0",
+      "f78d3ad475db86945c4c69332f4bcf08",
+      "79e0c4698febdd6ccbfd07f776a91870",
+      "dd8a53e09a27f21545967800f5093cc4",
+      "6a206f5cf90a7070f9a0af287e62e39c",
+      "6ef8c6852af89abde58d06f0e83e4738",
+      "b9ee1f396c4fbf2c74137c7ff791330f",
+      "2c42ce79dab68d636c4bd5dd6b3f7b23",
+      "3907ffa01d08ad139ed4c7ef017f1df3",
+      "f432b78384895d3cb5624d501facfb16",
+      "9666d2ac2699ba91e99ebd312e4fda0e",
+      "50f01d7edd7ab3226d1fbbd035540062",
+      "4eb4980e118f6c9ea8b453196e00dc47",
+      "7cc11aa8f1dbba8c85c954958ccf81c3",
+      "ee3a4a3238bfc5ec894c08472b33b670",
+      "af7eeac513b39a78efdee0f930ec61a2",
+      "6c647b32c9888e94d12e674f994654aa",
+      "2df7f20eba267ec6522320bc8ee8016e",
+      "ab271d81c3f275ca7c8a5af0fb66977b",
+      "1ab831bc21aaed15e006aa7956cb348f",
+      "071e397691570d748cf0b08d4383fe1b",
+      "f6c12a7c80b5079bde02ccf32b1bd66d",
+      "748cdb49fd58f41f148f0663bd503b68",
+      "7c7a47863e673f5510c249e66db2e96e",
+      "5617674c09cdcc27f72a5142737cd797",
+      "35815f8423a75411a6e24f4be714aa7d",
+      "2155b63b957c55e9bdafb6113e9d9532",
+      "4a6b93e5ac1905dd4e401ed62a917dff",
+      "c664bfc66f8a2111b6a1a5f960b2f85d",
+      "3f32593c02f8804fef25360d620a2232",
+      "c8ad6923897b0f8f080bbed5668a31c7",
+      "0f55994b11dedd26ee46d0d7e8e311bd",
+      "e942065a05ca02959992b47c8a8028b9",
+      "9e036ece8901d7896c3c9d8d56c0d273",
+      "5ae9c61a0d156508461c67380b4a6742",
+      "4878d3759bede184ce0ecb06076572e6",
+      "325fdb85ae16e9d9dc2f0d822e654d64",
+      "8f0ef5ea26ef8b73ef7ca73f7be565d9",
+      "d081aab474894f49adcc2dba810f24c7",
+      "6a160654fc1548f99de45eb97f37bce6",
+      "addbb3c50572b748c74214286ef71aac",
+      "f803c37654ef86b702175c34020e26a3",
+      "5d3ed652bdfdeeba5a2ef980d889b68b",
+      "bc06df252a8d040557d978986c2c599e",
+      "5176a1e61ad2e1d6f6d79f98c6d9e33d",
+      "fc57086dff36e6d1490cafa554d5253e",
+      "c5c2f6e88ddba09c848c5a434c785357",
+      "3f0fe2152c4adcee54404e4e8e080454",
+      "1f9dcf43b15fe848bab46e3adfe891ad",
+      "02d45afc74e8dca2f93aa3939e8c473a",
+      "a2625801b182e9364a69662276d96194",
+      "768701bd6fff1832ec69ce6e8e6050f0",
+      "c1971d88ff2bc24e1ea14455a0ae6e29",
+      "47b5ffe9889a019525f0d878e580b40e",
+      "0bcf00c04df165da8e255193bf5bd657",
+      "98cf230de39ad190a1b9df1626051f13",
+      "98bb3e35e90870dfd898c776c51779df",
+      "c334d1661b67f202f5814465058f178f",
+      "6b5a5d27efc92ccadbe6e832ee1bbb76",
+      "4bfe3d0f9ee16431fd16db6430c728a4",
+      "4905276ca77cecd95cfaa04653973ba8",
+      "849807f19ef87a1ff3819cb661ebfc50",
+      "06a56e170a882e15bd1d56b180587d63",
+      "1c72ded56d5ade167a5f2e83b73c6cb8",
+      "57a3665aff638a6dd79b03532b1de58e",
+      "712acc659959c7b86c179be16e1200c2",
+      "37988bad0775d29b098d3fd1156b8749",
+      "5fb0f249efe43246883248169658d78e",
+      "b45400acf706b1cd51d2cdcac1d65b55",
+      "53ee4103ca4dd96a90cea5e0a26f66a2",
+      "bb71e635897a24993759184808e7e878",
+      "2b807473fd56385554d7c9111b0e0bfc",
+      "3bfc5732348eb72713a9def916314a25",
+      "24b428e5c2edbed27c8c55e666a9e408",
+      "1948c41d01128ee702cab57bf2a29d2c",
+      "6874ec2bbd007ca10fe2fbc037c602b8",
+      "b004733aed2ecb987b73bf20cda67e08",
+      "91bfeeed1d03945eb8da78ab964912d5",
+      "d37c860ed2ddd445a4280c0187a93703",
+      "b7cea4c8b1705d193de0d1563af0586b",
+      "6d36001ea1b5497eba3e1439f5839f04",
+      "f271bdc4b1dbcebcd2afe85077be1238",
+      "ef8dc0fe74b46ba0622b85365f157a0c",
+      "6b2746d6ef889ee0eaebf15aba95337c"
+    ],
+    "normal_notices": 0,
+    "duplicates": 0,
+    "unmatched": 0,
+    "p95": 16,
+    "cases": [
+      {
+        "run_id": "00b1a08a6fee9fd12f22ebaeb67fa60a",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 8,
+        "notices": [
+          [
+            129,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "da5bf7f5a87c2fd7922e4bd8c9c6d458",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 11,
+        "notices": [
+          [
+            132,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "9c5df48a09b4b2e7751da8baf4bd826b",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": true,
+        "delay": 7,
+        "notices": [
+          [
+            128,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "664700d34eaabfac950d994e9e9c0cd1",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "940b8beab38d0ca4aea190e2a0804008",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "72f1cc9ab34ca3b258c1866b378b42f2",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "aceecf692763bb4b7f7a0bd5dc9679be",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "7e63ae3b479de0779abd60e453db2785",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "552ed542c118024b2f4858ff047cdfe3",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 8,
+        "notices": [
+          [
+            129,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "e7283af29cb3d3fefc042ba507a78896",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "9424fde2d2c438252b9fe1e1e2a160ab",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "6abcb481852cbc7f1a68486c40a76b25",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "26d7b0d8c7c3fdba6928182fb3088fa0",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "f78d3ad475db86945c4c69332f4bcf08",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "79e0c4698febdd6ccbfd07f776a91870",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "dd8a53e09a27f21545967800f5093cc4",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "6a206f5cf90a7070f9a0af287e62e39c",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "6ef8c6852af89abde58d06f0e83e4738",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 11,
+        "notices": [
+          [
+            132,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "b9ee1f396c4fbf2c74137c7ff791330f",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "2c42ce79dab68d636c4bd5dd6b3f7b23",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "3907ffa01d08ad139ed4c7ef017f1df3",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "f432b78384895d3cb5624d501facfb16",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "9666d2ac2699ba91e99ebd312e4fda0e",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "50f01d7edd7ab3226d1fbbd035540062",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "4eb4980e118f6c9ea8b453196e00dc47",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "7cc11aa8f1dbba8c85c954958ccf81c3",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "ee3a4a3238bfc5ec894c08472b33b670",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "af7eeac513b39a78efdee0f930ec61a2",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "6c647b32c9888e94d12e674f994654aa",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "2df7f20eba267ec6522320bc8ee8016e",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "ab271d81c3f275ca7c8a5af0fb66977b",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "1ab831bc21aaed15e006aa7956cb348f",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "071e397691570d748cf0b08d4383fe1b",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "f6c12a7c80b5079bde02ccf32b1bd66d",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 13,
+        "notices": [
+          [
+            134,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "748cdb49fd58f41f148f0663bd503b68",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "7c7a47863e673f5510c249e66db2e96e",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "5617674c09cdcc27f72a5142737cd797",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "35815f8423a75411a6e24f4be714aa7d",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "2155b63b957c55e9bdafb6113e9d9532",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "4a6b93e5ac1905dd4e401ed62a917dff",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "c664bfc66f8a2111b6a1a5f960b2f85d",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "3f32593c02f8804fef25360d620a2232",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 11,
+        "notices": [
+          [
+            132,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "c8ad6923897b0f8f080bbed5668a31c7",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "0f55994b11dedd26ee46d0d7e8e311bd",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "e942065a05ca02959992b47c8a8028b9",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "9e036ece8901d7896c3c9d8d56c0d273",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "5ae9c61a0d156508461c67380b4a6742",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "4878d3759bede184ce0ecb06076572e6",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "325fdb85ae16e9d9dc2f0d822e654d64",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "8f0ef5ea26ef8b73ef7ca73f7be565d9",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "d081aab474894f49adcc2dba810f24c7",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "6a160654fc1548f99de45eb97f37bce6",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "addbb3c50572b748c74214286ef71aac",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "f803c37654ef86b702175c34020e26a3",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "5d3ed652bdfdeeba5a2ef980d889b68b",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "bc06df252a8d040557d978986c2c599e",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "5176a1e61ad2e1d6f6d79f98c6d9e33d",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "fc57086dff36e6d1490cafa554d5253e",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 12,
+        "notices": [
+          [
+            133,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "c5c2f6e88ddba09c848c5a434c785357",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "3f0fe2152c4adcee54404e4e8e080454",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "1f9dcf43b15fe848bab46e3adfe891ad",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "02d45afc74e8dca2f93aa3939e8c473a",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "a2625801b182e9364a69662276d96194",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "768701bd6fff1832ec69ce6e8e6050f0",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "c1971d88ff2bc24e1ea14455a0ae6e29",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "47b5ffe9889a019525f0d878e580b40e",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 11,
+        "notices": [
+          [
+            132,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "0bcf00c04df165da8e255193bf5bd657",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "98cf230de39ad190a1b9df1626051f13",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "98bb3e35e90870dfd898c776c51779df",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "c334d1661b67f202f5814465058f178f",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "6b5a5d27efc92ccadbe6e832ee1bbb76",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "4bfe3d0f9ee16431fd16db6430c728a4",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "4905276ca77cecd95cfaa04653973ba8",
+        "mode": "unknown:empty",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "849807f19ef87a1ff3819cb661ebfc50",
+        "mode": "unknown:empty",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "06a56e170a882e15bd1d56b180587d63",
+        "mode": "unknown:empty",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "1c72ded56d5ade167a5f2e83b73c6cb8",
+        "mode": "unknown:empty",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "57a3665aff638a6dd79b03532b1de58e",
+        "mode": "unknown:empty",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "712acc659959c7b86c179be16e1200c2",
+        "mode": "unknown:empty",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "37988bad0775d29b098d3fd1156b8749",
+        "mode": "unknown:empty",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "5fb0f249efe43246883248169658d78e",
+        "mode": "unknown:empty",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "b45400acf706b1cd51d2cdcac1d65b55",
+        "mode": "unknown:moving",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 10,
+        "notices": [
+          [
+            131,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "53ee4103ca4dd96a90cea5e0a26f66a2",
+        "mode": "unknown:moving",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "bb71e635897a24993759184808e7e878",
+        "mode": "unknown:moving",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "2b807473fd56385554d7c9111b0e0bfc",
+        "mode": "unknown:moving",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "3bfc5732348eb72713a9def916314a25",
+        "mode": "unknown:moving",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "24b428e5c2edbed27c8c55e666a9e408",
+        "mode": "unknown:moving",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "1948c41d01128ee702cab57bf2a29d2c",
+        "mode": "unknown:moving",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "6874ec2bbd007ca10fe2fbc037c602b8",
+        "mode": "unknown:moving",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "b004733aed2ecb987b73bf20cda67e08",
+        "mode": "unknown:queued",
+        "kind": "oil_cooling",
+        "detected": true,
+        "delay": 9,
+        "notices": [
+          [
+            130,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "91bfeeed1d03945eb8da78ab964912d5",
+        "mode": "unknown:queued",
+        "kind": "water_cooling",
+        "detected": true,
+        "delay": 12,
+        "notices": [
+          [
+            133,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "d37c860ed2ddd445a4280c0187a93703",
+        "mode": "unknown:queued",
+        "kind": "leak",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "b7cea4c8b1705d193de0d1563af0586b",
+        "mode": "unknown:queued",
+        "kind": "friction",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "6d36001ea1b5497eba3e1439f5839f04",
+        "mode": "unknown:queued",
+        "kind": "stuck",
+        "detected": true,
+        "delay": 6,
+        "notices": [
+          [
+            127,
+            "EQ-0006"
+          ]
+        ]
+      },
+      {
+        "run_id": "f271bdc4b1dbcebcd2afe85077be1238",
+        "mode": "unknown:queued",
+        "kind": "outlet_stuck",
+        "detected": true,
+        "delay": 14,
+        "notices": [
+          [
+            135,
+            "EQ-0001"
+          ]
+        ]
+      },
+      {
+        "run_id": "ef8dc0fe74b46ba0622b85365f157a0c",
+        "mode": "unknown:queued",
+        "kind": "queue_mismatch",
+        "detected": true,
+        "delay": 5,
+        "notices": [
+          [
+            126,
+            "EQ-0009"
+          ]
+        ]
+      },
+      {
+        "run_id": "6b2746d6ef889ee0eaebf15aba95337c",
+        "mode": "unknown:queued",
+        "kind": "queue_stall",
+        "detected": true,
+        "delay": 16,
+        "notices": [
+          [
+            137,
+            "EQ-0009"
+          ]
+        ]
+      }
+    ],
+    "normal_cases": [
+      {
+        "run_id": "190f2abaaa33c438e9ac7fb48bb71719",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "59c873a0898836fc7a121d61beb41ed5",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "b58d5afaa102585584c348230edd4a22",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "b3ee1525ec5af9469d2d104ab33beb6a",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "0891c1c99ce22121d1525f09d5914cbe",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "e21691dd9a68395049a8861686c4b421",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "b9d9d0aa6f642defe897c5a4ca157352",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "6fb72da20803a8e62ba57d1fda8f3022",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "0ad44108e7e8077839df037eeea07a4f",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "7154bd97af7cc7ab955f1cdb433734ab",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "9b89a41e0fb0e6c376c1684fb2f6637b",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "3c0aa7dd749c01e1de02365ce37c1917",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "a198bbdd78ceb33199475ebaafd2d96f",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "1a1566724fa58b7024adc7253adaad26",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "a661aa89ccb8706bb9f4f685d7f1b948",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "c0b5e95c49c6ce51ad5a854d87fa0cca",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "1830832582327b079c371594b9a4bd39",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "b94f8cb36db75580382857ef342c4467",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "28adc489ae7d7d87ca54fb9c976faf0b",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "e55c029d7eba96cb10c7e40e89341fef",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "debfcf75ee39ac5c5eeff84141eabf95",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "02fd6ede777caf35e2c135ba943c8592",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "349dcc4d5f6198295bba4257f81eac8c",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "c4a6fca059b45313718a553eb9f60b47",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "c662b702e4257c8bebc2263315954f5d",
+        "mode": "unknown:empty",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "7ab35dfcd91d3f712ab210a0713fff5c",
+        "mode": "unknown:empty",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "6c137885e2590d4b6f86a7c0b1e931e2",
+        "mode": "unknown:moving",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "5e4c6140fb271dd7c85235cf48f8196b",
+        "mode": "unknown:moving",
+        "family": "dynamics",
+        "notices": []
+      },
+      {
+        "run_id": "d1552d560ecbf9d2446489afe5342675",
+        "mode": "unknown:queued",
+        "family": "mes",
+        "notices": []
+      },
+      {
+        "run_id": "e7c2a95099b3ce53a24361c5a215cc22",
+        "mode": "unknown:queued",
+        "family": "dynamics",
+        "notices": []
+      }
+    ]
+  },
+  "checks": {
+    "normal_zero": true,
+    "no_detection_lost": true,
+    "sensitivity": true,
+    "duplicates_zero": true,
+    "delay_not_worse": true
+  },
+  "candidate_processing_p95": 0.0449658710000449,
+  "scope": "synthetic intervention replay, excludes network/UI; paired normal generators are shared",
+  "integrity": {
+    "candidate_unchanged": true,
+    "profile_reproduced": true,
+    "roles_disjoint": {
+      "run_id": true,
+      "seed": true,
+      "nonce": true
+    },
+    "previous_tests_disjoint": {
+      "candidate-v5": {
+        "run_id": true,
+        "seed": true,
+        "nonce": true
+      },
+      "candidate-v7": {
+        "run_id": true,
+        "seed": true,
+        "nonce": true
+      }
+    },
+    "training_sha256": "ebd4bd23208236a28f2f6c454bddb56fb6cc59db073b69891ce846a079673052",
+    "test_sha256": "50ba6e0dc3b7b9c753919ca0fb5a401144ced5a0eb28d78d44a747e34ec61136",
+    "recovery": "Same frozen candidate and existing unused test bytes/role; deterministic train/dev inputs rebuilt; preserved pre-freeze development results verified; redundant consumed-development replay stopped after reconstruction"
+  }
+}

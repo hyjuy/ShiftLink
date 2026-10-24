@@ -1,0 +1,86 @@
+{
+  "original": {
+    "oil_cooling": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    },
+    "water_cooling": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    },
+    "leak": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    },
+    "friction": {
+      "events": 12,
+      "detected": 10,
+      "p95": 5
+    },
+    "stuck": {
+      "events": 12,
+      "detected": 10,
+      "p95": 14
+    },
+    "outlet_stuck": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    },
+    "queue_mismatch": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    },
+    "queue_stall": {
+      "events": 12,
+      "detected": 0,
+      "p95": null
+    }
+  },
+  "candidate": {
+    "oil_cooling": {
+      "events": 12,
+      "detected": 12,
+      "p95": 10
+    },
+    "water_cooling": {
+      "events": 12,
+      "detected": 12,
+      "p95": 13
+    },
+    "leak": {
+      "events": 12,
+      "detected": 12,
+      "p95": 7
+    },
+    "friction": {
+      "events": 12,
+      "detected": 12,
+      "p95": 5
+    },
+    "stuck": {
+      "events": 12,
+      "detected": 12,
+      "p95": 6
+    },
+    "outlet_stuck": {
+      "events": 12,
+      "detected": 12,
+      "p95": 14
+    },
+    "queue_mismatch": {
+      "events": 12,
+      "detected": 12,
+      "p95": 5
+    },
+    "queue_stall": {
+      "events": 12,
+      "detected": 12,
+      "p95": 16
+    }
+  }
+}

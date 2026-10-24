@@ -1,0 +1,9 @@
+{
+  "full_zip": "/home/pi/shiftlink/analytics/validation/normal-context-20261023/recovery-20261024/evidence-full.zip",
+  "full_sha256": "0e1a14ae7b29b8d86a0146f81ef30215af0584048e28428e5ddec53a2ba22e6b",
+  "full_bytes": 87742554,
+  "public_sha256": "d32ca3b1445a3bada6d8927fce3cf07e478b1a4f12d6fa9552b98de522067296",
+  "public_bytes": 126685,
+  "crc_passed": true,
+  "files": 224
+}

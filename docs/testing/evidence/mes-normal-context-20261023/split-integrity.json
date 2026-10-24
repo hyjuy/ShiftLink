@@ -1,0 +1,19 @@
+{
+  "roles_disjoint": {
+    "run_id": true,
+    "seed": true,
+    "nonce": true
+  },
+  "previous_tests_disjoint": {
+    "candidate-v5": {
+      "run_id": true,
+      "seed": true,
+      "nonce": true
+    },
+    "candidate-v7": {
+      "run_id": true,
+      "seed": true,
+      "nonce": true
+    }
+  }
+}

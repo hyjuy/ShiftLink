@@ -75,3 +75,22 @@ python3 -B -m scripts.mes_causal_context_run --phase test --out <새-검증폴�
 ```
 
 운영 replay와 얼굴/CNN 동시 부하도 `mes_causal_context_validate --phase observed/paced`로 별도 검사한다. 이 하니스는 이전 검증의 보존된 Pi 자료와 측정 probe를 명시적으로 사용한다. 새 체크아웃만으로 원자료·가중치가 자동 준비되는 것은 아니다. 이번 검증의 해시·자료 경로·결과·실측 한계는 [정상 기준 검증](../../docs/testing/mes-normal-context-20261023.md)에 기록한다.
+
+
+## 2026-10-24 정상 기준 후보 적용
+
+현재 확인한 릴리스는 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4`, 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-174937`다. 이전 r3 및 기존 체크포인트는 보존한다. PDA 파일 4개와 프로세스는 유지하고 worker만 갱신했다. 검증·제약은 [Pi 최종 기록](../../docs/testing/mes-normal-context-20261023.md)의 연결 복구 후 항목을 참고한다.
+
+PDA를 건드리지 않고 이전 worker로 복구할 때는 위 백업의 previous.service를 복원한다. 이 명령은 복구가 필요할 때만 실행한다. 이전 unit은 보존된 기존 state directory를 사용한다.
+
+```sh
+sudo -v
+sudo install -m 0644 /home/pi/shiftlink/analytics/backups/20261024-174937/previous.service /etc/systemd/system/shiftlink-analytics.service
+sudo systemctl daemon-reload
+sudo systemctl restart shiftlink-analytics.service
+systemctl status shiftlink-analytics.service
+```
+
+기존 `/var/lib/shiftlink-analytics/STOP`을 새 버전과 이전 버전이 공유한다. 복구를 위해 STOP을 임의로 제거하지 않는다. 전체 PDA 파일 복원도 필요한 경우에만 앞의 apply_release.py --rollback 절차를 사용한다.
+
+현재 Pi는 CPU quota를 실제 cgroup에서 확인했지만 memory.max/current 파일이 없어 MemoryMax=384MiB의 강제 적용은 확인하지 못했다. 실제 worker VmHWM은 약 38.4MiB였으며, 이번 배포에서 부팅 설정을 변경하지 않았다. 자세한 자원 기록은 정상 기준 검증 문서와 runtime-resources.json을 참고한다.

@@ -1,0 +1,16 @@
+{
+  "development": {
+    "frames": 2048,
+    "notices": 5,
+    "mismatches": 0,
+    "input_sha256": "5fa7ba236278e27a85a2f72d84e0b948a88f87c9026d2c423fe3a4d455275bcb",
+    "unchanged": true
+  },
+  "consumed-test": {
+    "frames": 26624,
+    "notices": 52,
+    "mismatches": 0,
+    "input_sha256": "8815866436d531315a786a7f08da67125b3ee073eb8c5ae0bd420e58c31690a9",
+    "unchanged": true
+  }
+}

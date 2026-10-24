@@ -1,0 +1,15 @@
+{
+  "release": "/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4",
+  "profile_sha256": "74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f",
+  "files": 16,
+  "protected_files": 49,
+  "pda_pid": 1215,
+  "checks": {
+    "normal_zero": true,
+    "no_detection_lost": true,
+    "sensitivity": true,
+    "duplicates_zero": true,
+    "delay_not_worse": true
+  },
+  "applied": false
+}

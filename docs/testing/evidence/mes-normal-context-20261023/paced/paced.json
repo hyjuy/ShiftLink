@@ -1,0 +1,46 @@
+{
+  "requested": 192,
+  "processed": 192,
+  "failures": [],
+  "processing_p95": 0.08616510499996366,
+  "processing_max": 0.13694989300006455,
+  "scheduled_p95": 0.09120579399996132,
+  "deadline_misses": 0,
+  "max_temp_c": 54.043,
+  "min_available_kb": 2390008,
+  "throttling": [
+    "throttled=0x0"
+  ],
+  "pda_pid_preserved": true,
+  "vision": {
+    "face": {
+      "exit_code": 0,
+      "result": {
+        "calls": 193,
+        "p95_seconds": 0.6823685539999929,
+        "maximum_seconds": 1.5028389960000368,
+        "cv2": "4.10.0",
+        "cv2_threads": 4,
+        "scope": "YuNet plus SFace with forced synthetic landmarks; no login identity decision"
+      }
+    },
+    "cnn": {
+      "exit_code": 0,
+      "result": {
+        "calls": 193,
+        "p95_seconds": 0.20340731499999265,
+        "maximum_seconds": 0.7072038009999915,
+        "onnxruntime": "1.20.1",
+        "providers": [
+          "CPUExecutionProvider"
+        ],
+        "intra_threads": 0,
+        "scope": "synthetic frame CPU CNN; no equipment scan POST"
+      }
+    }
+  },
+  "torch_loaded": false,
+  "timestral_loaded": false,
+  "scope": "1Hz approved-config synthetic replay plus face/CNN synthetic-image inference; excludes MES network/UI display",
+  "passed": true
+}

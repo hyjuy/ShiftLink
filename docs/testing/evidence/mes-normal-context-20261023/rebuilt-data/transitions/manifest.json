@@ -1,0 +1,81 @@
+{
+  "role": "development-transitions-v3",
+  "runs": [
+    {
+      "seed": 126351498516528,
+      "nonce": "normal-context-v1:development-transitions-v3:slow:empty:0:mes:normal_transition",
+      "run_id": "72ea802f983066beeaed0c5113f87b38",
+      "mode": "slow:empty",
+      "family": "mes",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    },
+    {
+      "seed": 57261626312692,
+      "nonce": "normal-context-v1:development-transitions-v3:slow:empty:1:dynamics:normal_transition",
+      "run_id": "341442e547f4a871d8432d040760376f",
+      "mode": "slow:empty",
+      "family": "dynamics",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    },
+    {
+      "seed": 54600552302817,
+      "nonce": "normal-context-v1:development-transitions-v3:nominal:moving:2:mes:normal_transition",
+      "run_id": "31a8ae8648e13a0e2022c476338e2091",
+      "mode": "nominal:moving",
+      "family": "mes",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    },
+    {
+      "seed": 17630748362208,
+      "nonce": "normal-context-v1:development-transitions-v3:nominal:moving:3:dynamics:normal_transition",
+      "run_id": "1008fa7e45e0752cae54fa104055c10d",
+      "mode": "nominal:moving",
+      "family": "dynamics",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    },
+    {
+      "seed": 223616325540095,
+      "nonce": "normal-context-v1:development-transitions-v3:fast:queued:4:mes:normal_transition",
+      "run_id": "cb60bba658ff9ee5b9393119daeeb3fa",
+      "mode": "fast:queued",
+      "family": "mes",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    },
+    {
+      "seed": 83971266435349,
+      "nonce": "normal-context-v1:development-transitions-v3:fast:queued:5:dynamics:normal_transition",
+      "run_id": "4c5f1581d9155f4cc4d91cc46d4a33c3",
+      "mode": "fast:queued",
+      "family": "dynamics",
+      "kind": "normal_transition",
+      "target": "EQ-0001",
+      "start": 121,
+      "end": 224,
+      "normal": true
+    }
+  ],
+  "features_sha256": "4ca258e452af9fa059eb7a869641ee0de33952a9ab8830a604ce839d767ab2e3",
+  "is_synthetic": true,
+  "normal_generator": "MesEngine / SignalDynamics; queue fixture uses independent workpiece metadata",
+  "faults": "separate additive/hold interventions; no PATTERNS import"
+}

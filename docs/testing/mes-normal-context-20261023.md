@@ -107,3 +107,37 @@ systemctl show shiftlink-analytics.service -p ActiveState -p MainPID -p Fragment
 남은 순서는 (1) v8 lock·test-result·새 분할 비중복 및 모든 통과 기준 확인, (2) v8 동시 부하와 보호 파일 49개의 해시·현재 unit·PDA PID 재확인, (3) 실제 결과를 사용자에게 알린 뒤 worker만 적용, (4) 배포 후 약 60초 동등 응답·오류 로그·기존 PDA 유지 확인, (5) 원자료·백업·해시를 영구 보존하고 후속 PR을 완료 상태로 갱신하는 것이다. 미사용 평가나 부하 검사가 실패하면 배포하지 않는다. Pi 연결 복구 전에는 후보 고정 소스와 profile을 더 수정하지 않는다.
 
 PR #343은 이미 병합되었으므로 이번 변경은 별도 후속 PR로 제시한다. 최종 평가·배포가 미확인인 동안 초안으로 유지한다. 실측 센서 정확도와 실제 고장→화면 표시 지연은 계속 미검증이다.
+
+## 2026-10-24 연결 복구 후 최종 확인·운영 적용
+
+Pi와 Jetson의 Tailscale Online 및 Pi SSH·Jetson MES GET API 연결을 확인했다. 재부팅으로 `/tmp/shiftlink-normal-context-20261023`의 원본 로그와 1Hz 결과가 사라졌지만 영구 validation의 v5/v7 결과, v8 profile·lock, v8 평가 입력·manifest는 남아 있었다. v8 평가 입력은 28,224프레임이며 SHA256 `50ba6e0dc3b7b9c753919ca0fb5a401144ced5a0eb28d78d44a747e34ec61136`이 manifest와 일치했다. 새로운 시험 입력이나 nonce로 바꾸지 않고 동일 입력을 다시 채점했다. 고정한 10개 파일의 해시도 모두 일치했다.
+
+새 복구 경로는 `/home/pi/shiftlink/analytics/validation/normal-context-20261023/recovery-20261024`다. 누락된 검증 복사본의 정상 생성기 의존성을 추가하고 고정 해시를 다시 확인한 뒤 Pi에서 검사를 재개했다. 이 과정의 최초 ModuleNotFoundError 로그도 보존한다. 정상 학습·개발 입력을 결정적으로 복구했고 재적합한 profile SHA256도 고정 profile `74e9b0febc08b4f8634713ef398b8509d8acf04dea864737049acd269bf4cd1f`와 정확히 같다. 후보나 임계값은 수정하지 않았다. 입력·profile 복구 후 이미 통과한 소비 개발 자료를 중복 채점하던 복구 helper만 중지했다. 고정 미사용 평가·68회귀·28,672프레임 일치·동시 부하·Chromium 검사는 모두 완료했으며, 고정 전 개발 결과의 통과 상태와 실행 ID를 다시 대조했다. 이 구분은 recovery-orchestration.json에 남긴다. 모든 분할의 run_id·seed·nonce 및 과거 v5/v7 시험과의 비중복을 확인했다. 이는 실행 누수 방지이며 공장 독립성을 의미하지 않는다.
+
+동일한 새 미사용 평가: 96고장·24정상·6정상 전환, 총 126실행·28,224프레임.
+
+| 항목 | 기존 v14c | 정상 기준 보완 v8 |
+|---|---:|---:|
+| 탐지 | 20/96 | 96/96 |
+| 정상/정상 전환 통지 | 290 | 0 |
+| 중복 통지 | 0 | 0 |
+| 비매칭 통지 | 869 | 0 |
+| 검출 사건 전체 지연 p95 | 14프레임 | 16프레임 |
+
+8개 개입 유형은 각각 12/12 탐지했다. 공통 검출 20건의 지연 차이 p95는 0프레임이며, 원래 검출 사건을 잃지 않음·탐지 ≥95%·정상 통지 0·중복 0·공통 지연 악화 ≤2프레임의 기존 다섯 기준을 모두 통과했다. 전체 p95는 검출 사건 모집단이 다르므로 직접 지연 악화로 해석하지 않는다. 1프레임=합성 시간 1초이며 통신·대기·PDA 화면 표시 시간은 제외한다. 이 표의 기존 v14c는 원래 연구 정상 분포를 유지한 고정 후보이고, 과거 55건 평가 또는 순수 EWMA 결과와 같은 모집단이 아니다.
+
+Pi 재검증: Python 68개 전부 통과, 대상 실행 줄 확인 비율 context 89.70%·worker 80.76%·reader 85.57%. 별도 실제 Chromium 1개도 통과했다. 기존 28,672프레임 통지는 차이 0이며 입력 해시도 보존 기록과 같다. 이 일치 검사는 구 경로 보존 검사다. 회귀 로그의 unapproved source state 오류 한 건은 거부 경계 테스트의 의도적 출력이며 테스트 실패나 운영 로그가 아니다.
+
+새 후보로 반복한 1Hz + 얼굴/CNN 동시 부하: 192/192프레임, 마감 초과 0건, 분석 처리 p95 86.17ms·최대 136.95ms, 예약 시점부터 완료 p95 91.21ms. 얼굴/CNN은 각각 193회 실제 모델 추론을 합성 이미지로 수행했다. 최고 온도 54.043℃·스로틀링 없음·가용 메모리 최저 2.28GiB·PDA PID 유지다. 얼굴 단일 호출 최대는 약 1.503초였으므로 얼굴 판정까지 매번 1초 안에 완료했다고 해석하지 않는다. 분석 검사는 MES 통신과 UI를 제외한다.
+
+통과 결과를 알린 뒤 worker만 `/home/pi/shiftlink/analytics/releases/normal-context-v1-pda-20261024-r4`에 적용했다. 영구 복구 백업은 `/home/pi/shiftlink/analytics/backups/20261024-174937`이며 이전 r1/r2/r3·기존 연구 원본·기존 체크포인트 디렉터리를 보존한다. 별도 `/var/lib/shiftlink-analytics-normal-v1` 상태를 사용한다. 배포 전·후 PDA PID는 1215 → 1215로 같고 파일을 교체하거나 PDA를 재시작하지 않았다. 얼굴/CNN·기존 릴리스·PDA 보호 49파일의 해시는 모두 같다. Jetson MES를 재시작하거나 고장·경보·확인 제어 요청을 보내지 않았다. 글로벌 STOP도 그대로다.
+
+배포 후 약 174초에 걸친 비교 가능한 13표본에서 Pi와 Jetson의 같은 run/sequence/line_mode 응답은 ai_insights를 제외하고 모두 같다. 처음 13회 관측은 비교 가능한 표본이 6개여서 개수 기준에 미달했고, 서로 다른 sequence를 비교에서 제외한 채 13개 같은 프레임을 확보할 때까지 관측을 연장했다. 첫 결과도 postdeploy-monitor-initial.json으로 보존한다. 새 worker PID 4053·실제 release cwd·active/enabled·profile SHA·statistical-context-v1·Torch/Timestral 미로딩을 확인했다. 감지 정보의 operational_notifications=false와 기존 같은 알람창·기존 경보 확인·진동 계약을 유지한다. 관측 MES 모드는 running(운전)이었다. 배포 직전 전체 replay를 처음 소비한 독립 실행은 10초를 넘는 초기 따라잡기 때문에 stale을 냈고, 영속 cursor 이후 후속 실행은 ready·항목 0·Torch/Timestral 미로딩이었다. 검증한 해당 release 체크포인트를 새 state directory에 전달해 시작했다. 실제 고장 제어를 하지 않았으므로 운전 중 정상 관측을 물리 고장 검증으로 해석하지 않는다. 배포 직후 분석 오류 로그는 동봉 JSON/로그에서 확인한다.
+
+추가 자원 확인에서 worker VmHWM/RSS는 39,340KiB(약 38.4MiB), Threads 1, 자동 재시작 NRestarts 0이었다. CPU cgroup의 cpu.max=100000 100000은 한 코어 할당과 일치했다. unit에는 MemoryMax=402653184가 있으나 MemoryCurrent는 [not set]이고 해당 cgroup의 memory.max/current 파일은 없어서 384MiB 강제 상한이 실제 적용됐다고 보장하지 않는다. 부팅 설정이나 기존 서비스를 변경하지 않고 이 제한을 기록한다.
+
+원자료 전체 ZIP CRC 확인 통과, SHA256 `0e1a14ae7b29b8d86a0146f81ef30215af0584048e28428e5ddec53a2ba22e6b`. 로컬 `D:\obsd\Projects\ShiftLink\output\mes-normal-context-20261024-recovery\evidence-full.zip`와 Pi 영구 recovery 경로에 보존한다. 이전 2,902프레임 진단의 원본과 과거 임시 로그는 재부팅으로 유실되었으므로, 과거 세션의 15→0 기록을 이번에 다시 재현했다고 주장하지 않는다. 재개 시 사라진 자료까지 모두 원형 보존했다고 주장하지 않는다.
+
+결과 JSON은 [최종 요약](evidence/mes-normal-context-20261023/verified-summary.json), [미사용 평가](evidence/mes-normal-context-20261023/test-result.json), [배포 후 대조](evidence/mes-normal-context-20261023/postdeploy-monitor.json), [동시 부하](evidence/mes-normal-context-20261023/paced/paced.json)에 보존한다. 실패한 v5/v7 및 기존 결과도 별도 보존한다.
+
+실측 센서 정확도·현장 일반화·물리 고장 원인 확정·고장→PDA 표시 p95는 미검증이다. 정상값 고착과 정상 조절을 독립 기준 없이 모두 구분할 수 없고, 합성 큐 fixture의 100%를 현장의 정상 판정으로 일반화하지 않는다. Timestral은 사용하지 않는다. 후속 PR은 https://github.com/hyjuy/ShiftLink/pull/351 이다.

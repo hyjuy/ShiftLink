@@ -1,0 +1,16 @@
+{
+  "zip_sha256": "700d410ec466245f244c942bce158ed55fabf0cdec5c1423b4f8934694b5a690",
+  "frozen_files": {
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/scripts/mes_causal_context.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/scripts/mes_causal_context_run.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/tests/test_mes_causal_context.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/scripts/mes_causal_pda_service.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/scripts/mes_causal_context_validate.py": true,
+    "/home/pi/shiftlink/analytics/validation/normal-context-20261023/candidate-v8/profile.json": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/deploy/analytics/source-config.json": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/shiftlink/mes/engine.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/shiftlink/mes/signal_dynamics.py": true,
+    "/tmp/shiftlink-normal-context-20261023/validation-v8/docs/research/evidence/mes-causal-v14c-20261023/settings.json": true
+  },
+  "existing_test_preserved": true
+}

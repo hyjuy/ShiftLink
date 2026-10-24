@@ -94,6 +94,18 @@ class ActiveDisplayTests(unittest.TestCase):
         for change in (dict(confirmed_sequence=True),dict(confirmed_sequence=f['sequence']+1),dict(confirmed_at=f['simulated_at'].replace('2026','2025')),dict(confirmed_sequence=105)):
             invalid=copy.deepcopy(value);invalid['items'][0].update(change)
             self.assertEqual(self.read(invalid,state)['items'],[])
+    def test_quality_hold_and_recovering_never_erase_confirmed_history(self):
+        for mode in ('quality_hold','recovering'):
+            with self.subTest(mode=mode):
+                self.path.unlink(missing_ok=True);self.s=Session(self.binding,self.path);self.s.defer_flush=True
+                f=self.feed_to(160);identity=self.s.report(f)['items'][0]['event_id'];state=copy.deepcopy(f)|dict(line_mode=mode,is_synthetic=True)
+                with patch.object(worker,'AdvisorySession',Session):value=worker.poll(self.s,'http://unused',state)
+                self.assertEqual(value['items'],[],'quality hold must not make a new judgment')
+                self.s=Session(self.binding,self.path);self.s.defer_flush=True
+                for frame in self.frames[161:235]:self.s.feed(frame,self.binding.config_id)
+                self.assertEqual(len(self.s.report(self.frames[234])['items']),1,'hold erased unrecovered evidence')
+                self.assertEqual(self.s.report(self.frames[234])['items'][0]['event_id'],identity)
+
     def test_overlay_preserves_legacy_alarms_and_deduplicates_equipment(self):
         f=copy.deepcopy(self.feed_to(160));f['active_alarms']=[dict(equipment_id=self.eq,code='EXISTING')]
         value=self.s.report(f);self.assertEqual(len(value['items']),1);value['items']*=2

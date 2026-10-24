@@ -150,6 +150,11 @@ PC 로컬 시연과 Unity 두 PC 교대 시연에는 별도 실행 경로가 있
   MES speed는 재생 배속이므로 모델 입력에서 제외하고 코일의 빈 상태·이동·대기 기준을 사용한다.
   [사전 계획](../research/mes-context-v1-prereg-20261023.md),
   [검증·운영 경계](../testing/mes-normal-context-20261023.md)를 함께 확인한다.
+- 통지 중복 후속 후보는 `scripts/mes_causal_episode.py`의 `EpisodeDetector/EpisodeSource`다.
+  기존 점수·첫 통지는 유지하고 설비별 통지 사건과 유효한 회복 근거를 저장한다.
+  `mes_causal_episode_validate.py`가 Pi에서 개발→후보 고정→새 평가의 원본·후보 비교를 수행한다.
+  운영 worker의 선택 경로는 바꾸지 않으며 원본 코드·profile·기존 결과를 보존한다.
+  [사전 검증 계획](../research/mes-causal-episode-prereg-20261024.md)을 따른다.
 - `face/`와 `vision/`는 각각 얼굴 확인과 설비 분류를 담당한다.
   모델 가중치·얼굴 템플릿·촬영 데이터는 소스와 구분해 관리한다.
 - Unity의 `Assets/Scripts/FactoryDemo.cs`를 시작으로

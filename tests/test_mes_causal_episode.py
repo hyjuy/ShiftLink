@@ -23,6 +23,32 @@ class ConsumedDuplicates(unittest.TestCase):
                 if case['event']['equipment_id'] in session.feed(frame,binding.config_id):events.append(frame['sequence'])
         self.assertEqual(events[0],{'friction-02':149,'friction-03':133,'variance-01':136}[name],'first notice changed')
         self.assertEqual(len(events),1,'same injected incident produced multiple first notices: '+str(events))
+    def first_session(self,tmp):
+        settings=json.loads((ROOT/'docs/research/evidence/mes-causal-v14c-20261023/settings.json').read_text())
+        config=json.loads((ROOT/'deploy/analytics/source-config.json').read_text());profile=json.loads((ROOT/'deploy/analytics/normal-profile.json').read_text())
+        binding=Source(settings,config,profile)
+        with gzip.open(FIXTURES/'cases/friction-02.json.gz','rt') as f:frames=json.load(f)
+        path=Path(tmp)/'checkpoint.json';session=AdvisorySession(binding,path)
+        for f in frames[:149]:session.feed(f,binding.config_id)
+        self.assertTrue(session.detector.episode_on[session.detector.equipment.index('EQ-0004')])
+        return binding,session,path,frames
+    def test_session_checkpoint_and_duplicate_frame_preserve_first_notice(self):
+        with TemporaryDirectory() as tmp:
+            binding,session,path,frames=self.first_session(tmp);session.flush();restored=AdvisorySession(binding,path)
+            state=restored.detector.context_state();self.assertEqual(restored.feed(frames[148],binding.config_id),set());self.assertEqual(restored.detector.context_state(),state)
+            for f in frames[149:]:self.assertEqual(restored.feed(f,binding.config_id),set())
+    def test_manual_stop_history_and_hold_do_not_reissue_existing_notice(self):
+        from scripts import mes_causal_pda_service as service
+        from shiftlink.pda.ai_insights import read_insights
+        with TemporaryDirectory() as tmp:
+            binding,session,path,frames=self.first_session(tmp);identity=session.notices['EQ-0004']['event_id']
+            held=copy.deepcopy(frames[149]);previous={(m['equipment_id'],m['signal']):m for m in frames[148]['measurements']}
+            for m in held['measurements']:m['value']=previous[m['equipment_id'],m['signal']]['value']
+            self.assertEqual(session.feed(held,binding.config_id),set());self.assertTrue(session.detector.last_status['hold'])
+            stopped=copy.deepcopy(held);stopped['line_mode']='paused';value=service.poll(session,'http://unused',stopped)
+            self.assertEqual(value['items'][0]['event_id'],identity);self.assertEqual(value['items'][0]['state'],'before_stop')
+            output=Path(tmp)/'latest.json';output.write_text(json.dumps(value));self.assertEqual(read_insights(output,stopped,binding.config_id)['items'],value['items'])
+            restored=AdvisorySession(binding,path);self.assertEqual(service.poll(restored,'http://unused',stopped)['items'],value['items'])
     def test_friction_thermal_then_level_is_one_notice(self):self.check_case('friction-02')
     def test_second_friction_thermal_then_level_is_one_notice(self):self.check_case('friction-03')
     def test_variance_dip_is_not_complete_recovery(self):self.check_case('variance-01')

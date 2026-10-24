@@ -26,13 +26,19 @@ from test_work_report_reuse_harness import service
 from test_work_report_capture import captured
 
 
+def reference_revision(revision):
+    manifest=Path(__file__).resolve().parents[1]/'docs/testing/hpu-github-source-map-20261025.json'
+    aliases=json.loads(manifest.read_text(encoding='utf-8'))['reference_aliases']
+    assert revision in set(aliases)|set(aliases.values()), 'Only registered historical baselines are allowed'
+    return aliases.get(revision,revision)
+
+
 def reference_code(monkeypatch):
     """Explicit historical control in this process only; never replace workspace files."""
     revision = os.environ.get('SHIFTLINK_HPU_LIVE_REFERENCE')
     if not revision:
         return None
-    assert revision in {'7a52b517e58c66e1a385b0a78aceaddfe37c587b',
-                        '39a96aa27fec096195d1905be374527c7834ae23'}
+    revision=reference_revision(revision)
     modules = {}
     for name in ('field_history', 's30h'):
         source = subprocess.check_output(['git', 'show', f'{revision}:shiftlink/rag2/{name}.py'])

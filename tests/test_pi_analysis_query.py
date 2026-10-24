@@ -353,3 +353,16 @@ def test_all_fixed_history_current_questions_with_pi_context(published_history,m
     # The upstream harness includes an earlier saved historical answer as a preservation control.
     assert len(observed)==909
     (tmp_path/'with-analysis-summary.json').write_text(json.dumps({'cases':len(cases),'passed':sum(r['passed'] for r in cases),'history':sum(r['history'] for r in cases),'current':sum(not r['history'] for r in cases),'all_context_boundaries_passed':True},indent=2),encoding='utf-8')
+
+@pytest.mark.parametrize('mode,state,retained', [('paused','running',True),('stopped','running',True),('running','stopped',True),('running','waiting',False),('recovering','stopped',False),('running','running',False)])
+def test_pi_r5_manual_stop_contract(service,mode,state,retained):
+    from shiftlink.agent.pi_analysis import validate_context
+    snap=running(service)
+    snap['line_mode']=mode
+    next(e for e in snap['equipment'] if e['equipment_id']=='EQ-0001')['operating_state']=state
+    raw=report(snap)|{'status':'stopped'}
+    raw['items'][0].update(state='before_stop',stop_sequence=snap['sequence'],stopped_at=snap['simulated_at'])
+    context=validate_context(raw,snap,snap['config_id'],'EQ-0001')
+    assert len(context['items'])==int(retained)
+    assert context['line_mode']==mode and context['equipment_state']==state
+    if retained:assert context['items'][0]['state']=='before_stop'

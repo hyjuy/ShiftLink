@@ -35,6 +35,22 @@ class ActiveAdvisorySource(LifecycleSource):
         detector=ActiveAdvisoryDetector(self.settings,self.normal_profile);detector.config_id=self.config_id;return detector
 
 class ActiveAdvisorySession(worker.AdvisorySession):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self._confirmed=dict(self.notices)
+
+    def _retain_confirmed(self):
+        for eq,row in getattr(self,'_confirmed',{}).items():
+            if (self.detector.episode_on[self.detector.equipment.index(eq)]
+                and row['event_id']==f"{self.run}:{row['sequence']}:{eq}"):
+                self.notices.setdefault(eq,dict(row))
+
+    def flush(self):
+        # The original poller clears transient notices on a non-running state.
+        # Preserve confirmed metadata with the episode in its existing checkpoint.
+        self._retain_confirmed()
+        super().flush()
+
     def sync_stop(self,state):
         super().sync_stop(state)
         if state['run_id']!=self.run or state['sequence'] not in (self.cursor,self.cursor+1):return
@@ -50,6 +66,7 @@ class ActiveAdvisorySession(worker.AdvisorySession):
         try:events=super().feed(frame,config_id)
         finally:self.defer_flush=deferred
         if not self.detector.last_status['accepted']:return events
+        self._retain_confirmed()
         removed=False
         if frame['line_mode']=='running':
             running={e['equipment_id'] for e in frame['equipment'] if e.get('operating_state')=='running'}
@@ -66,6 +83,7 @@ class ActiveAdvisorySession(worker.AdvisorySession):
                 elif (not self.detector.last_status.get('hold') and self.detector.previous_raw is not None
                       and worker.np.isfinite(self.detector.previous_raw[self.detector.variable]).any()):
                     self.notices[eq].update(state='active',confirmed_sequence=self.cursor,confirmed_at=frame['simulated_at'])
+        self._confirmed=dict(self.notices)
         if not deferred and (events or removed or self.stop_dirty or self.since_save>=30):self.flush()
         return events
 

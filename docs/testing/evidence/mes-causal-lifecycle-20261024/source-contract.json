@@ -1,0 +1,28 @@
+{
+  "development": {
+    "frames": 960,
+    "channels": {
+      "69": 960
+    },
+    "scenario_ids": {
+      "normal": 960
+    },
+    "equipment_fault_levels": {
+      "normal": 9600
+    },
+    "legacy_alarms": 0
+  },
+  "test": {
+    "frames": 960,
+    "channels": {
+      "69": 960
+    },
+    "scenario_ids": {
+      "normal": 960
+    },
+    "equipment_fault_levels": {
+      "normal": 9600
+    },
+    "legacy_alarms": 0
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "case": "000-hydraulic_leak-persistent-2",
+    "payload_bytes": 6642608,
+    "payload_sha256": "2ec38e1d9ed828830fc4f46bdde91aa95b1692ea239a771d0d88f1483c64ec7d",
+    "identical": true,
+    "new_write_seconds": 0.33310367300146027
+  },
+  {
+    "case": "024-normal-control-0",
+    "payload_bytes": 6640095,
+    "payload_sha256": "05caa2672a47d06d2bf0e2a7aaecb7079edcedeee0906683dd807f5ab7455c10",
+    "identical": true,
+    "new_write_seconds": 0.3259555069998896
+  },
+  {
+    "case": "029-spike-control-2",
+    "payload_bytes": 6640082,
+    "payload_sha256": "907a91b6322f6924078aefd99c60cc60671e9533aa85cd1a5d823310c89736e0",
+    "identical": true,
+    "new_write_seconds": 0.3385359529984271
+  }
+]

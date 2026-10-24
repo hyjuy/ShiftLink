@@ -1,0 +1,53 @@
+{
+  "case": "002-hydraulic_leak-intermittent-2",
+  "event": {
+    "kind": "hydraulic_leak",
+    "equipment_id": "EQ-0001",
+    "signal": null,
+    "severity": 2,
+    "start": 99,
+    "end": 289,
+    "ramp": 12,
+    "scale": 1.0608251910954256,
+    "sign": 1,
+    "seed": 1347970194044362653,
+    "repair": 289,
+    "lifecycle": "intermittent",
+    "incident_id": "2598dd7d5aedb58c1d5983b68b916c49:0",
+    "symptom_segments": [
+      [
+        99,
+        131
+      ],
+      [
+        135,
+        153
+      ],
+      [
+        173,
+        191
+      ],
+      [
+        200,
+        224
+      ],
+      [
+        244,
+        273
+      ]
+    ]
+  },
+  "notices": [
+    105
+  ],
+  "checkpoint_restore_inside_first_quiet_gap": 132,
+  "same_identity_through_fault": true,
+  "quiet_gap_samples": 69,
+  "still_active_during_all_quiet_samples": true,
+  "first_release_after_repair_index": 312,
+  "frames_after_repair_until_observed_release": 23,
+  "existing_pda_recent_policy_frames": 30,
+  "quiet_samples_with_hidden_recent_item": 65,
+  "display_policy_not_modified": true,
+  "scope": "AdvisorySession/checkpoint/report isolated replay on Pi, no physical browser or vibration"
+}

@@ -1,0 +1,37 @@
+{
+  "streams": {
+    "development": {
+      "run_id": "efc3407485924c9c9fa82b5e243b6be9",
+      "normal_seed": 7749861056317581876,
+      "source_sequences": [
+        65,
+        1024
+      ],
+      "discarded_initial_frames": 64,
+      "exact_sensor_frame_overlap_with_prior": 0,
+      "sha256": "00b2df13335e68c6f2b6f63faad7733855a283891021abd86cd72b22c3c6f24f"
+    },
+    "test": {
+      "run_id": "95815758f19348349712040b687643bc",
+      "normal_seed": 560277981459876032,
+      "source_sequences": [
+        65,
+        1024
+      ],
+      "discarded_initial_frames": 64,
+      "exact_sensor_frame_overlap_with_prior": 0,
+      "sha256": "0cad49dfbd28cfc158f59279ba62a2ca63e478f58a67c14a2fa142591bb0bbdf"
+    }
+  },
+  "engine": "in-memory MesEngine on Pi; no operating MES commands or service changes",
+  "generator_files": {
+    "shiftlink/mes/engine.py": "83bb5a42ff00a28575ea3cc41946021f34a8ea457a127b204c09cfd3a9ee7e7b",
+    "shiftlink/mes/contracts.py": "3dfb8c23f72503b66a3000f5169b863d570c0d8d2d46c2c3f1b79a4b181e42f6",
+    "shiftlink/mes/configuration.py": "fee3e794102dbae75995297837fa40652eea7b089bc5ea1cbe4ee3eabc6ad325",
+    "shiftlink/mes/signal_semantics.py": "12b66465783646b789469615d0ff8c5a741998c5031a5e5346b89f861cc447c9",
+    "shiftlink/mes/scenarios/priority.py": "4aa4e219f0a7463fa5d26f2d88bc5e0d398cf1fb603d2ff062e38777cb24239a"
+  },
+  "prior_source_frames": 2833,
+  "development_test_sensor_overlap": 0,
+  "normal_generator_shared": true
+}

@@ -1,0 +1,17 @@
+{
+  "frames": 448,
+  "lifecycles": [
+    "persistent",
+    "progressive",
+    "intermittent"
+  ],
+  "latent_fault": "start until repair exclusive, even when symptoms are quiet",
+  "maximum_intermittent_gap_frames": 20,
+  "minimum_first_burst_frames": 32,
+  "recovery_frames": 32,
+  "new_distinct_evidence_after_old_recovery_frames": 5,
+  "post_repair_same_sensor_gap_frames": 64,
+  "no_repair_or_event_label_in_model_input": true,
+  "no_score_training": true,
+  "limitations": "A sensor-only detector cannot distinguish identical same-sensor observations from an unobserved repair/new failure. Thirty-two healthy frames are observation-based recovery, not proof of repair. Normal seeds and exact sensor trajectories are disjoint, but synthetic normal generator and fault mechanisms remain shared."
+}

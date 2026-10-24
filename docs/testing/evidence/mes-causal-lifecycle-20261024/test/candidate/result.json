@@ -1,0 +1,1499 @@
+{
+  "model": "candidate",
+  "cases": 68,
+  "frames": 30464,
+  "detected": 63,
+  "total": 64,
+  "duplicates": 0,
+  "unmatched": 0,
+  "normal": 0,
+  "spike": 0,
+  "quality": 0,
+  "delay_p95_frames": 82,
+  "rows": [
+    {
+      "id": "000-hydraulic_leak-persistent-1",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "000-hydraulic_leak-persistent-1:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 119,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "001-hydraulic_leak-persistent-3",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "001-hydraulic_leak-persistent-3:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 122,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "002-hydraulic_leak-progressive-1",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "002-hydraulic_leak-progressive-1:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 142,
+          "delay": 26,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 142,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "003-hydraulic_leak-progressive-3",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "003-hydraulic_leak-progressive-3:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 125,
+          "delay": 16,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 125,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "004-hydraulic_leak-intermittent-1",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "004-hydraulic_leak-intermittent-1:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 115,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 115,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "005-hydraulic_leak-intermittent-3",
+      "kind": "hydraulic_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "005-hydraulic_leak-intermittent-3:0",
+          "kind": "hydraulic_leak",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 102,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 102,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "006-cooling_loss-persistent-1",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "006-cooling_loss-persistent-1:0",
+          "kind": "cooling_loss",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 114,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 114,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "007-cooling_loss-persistent-3",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "007-cooling_loss-persistent-3:0",
+          "kind": "cooling_loss",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 118,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 118,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "008-cooling_loss-progressive-1",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "008-cooling_loss-progressive-1:0",
+          "kind": "cooling_loss",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 166,
+          "delay": 45,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 166,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "009-cooling_loss-progressive-3",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "009-cooling_loss-progressive-3:0",
+          "kind": "cooling_loss",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 120,
+          "delay": 20,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 120,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "010-cooling_loss-intermittent-1",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "010-cooling_loss-intermittent-1:0",
+          "kind": "cooling_loss",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 111,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 111,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "011-cooling_loss-intermittent-3",
+      "kind": "cooling_loss",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "011-cooling_loss-intermittent-3:0",
+          "kind": "cooling_loss",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 118,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 118,
+          "equipment_id": "EQ-0001"
+        }
+      ]
+    },
+    {
+      "id": "012-air_leak-persistent-1",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "012-air_leak-persistent-1:0",
+          "kind": "air_leak",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 119,
+          "delay": 12,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "013-air_leak-persistent-3",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "013-air_leak-persistent-3:0",
+          "kind": "air_leak",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 125,
+          "delay": 8,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 125,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "014-air_leak-progressive-1",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "014-air_leak-progressive-1:0",
+          "kind": "air_leak",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 177,
+          "delay": 66,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 177,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "015-air_leak-progressive-3",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "015-air_leak-progressive-3:0",
+          "kind": "air_leak",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 127,
+          "delay": 24,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 127,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "016-air_leak-intermittent-1",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "016-air_leak-intermittent-1:0",
+          "kind": "air_leak",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 125,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 125,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "017-air_leak-intermittent-3",
+      "kind": "air_leak",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "017-air_leak-intermittent-3:0",
+          "kind": "air_leak",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 114,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 114,
+          "equipment_id": "EQ-0003"
+        }
+      ]
+    },
+    {
+      "id": "018-friction-persistent-1",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "018-friction-persistent-1:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 124,
+          "delay": 12,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 124,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "019-friction-persistent-3",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "019-friction-persistent-3:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 128,
+          "delay": 8,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 128,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "020-friction-progressive-1",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "020-friction-progressive-1:0",
+          "kind": "friction",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 203,
+          "delay": 92,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 203,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "021-friction-progressive-3",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "021-friction-progressive-3:0",
+          "kind": "friction",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 155,
+          "delay": 35,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 155,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "022-friction-intermittent-1",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "022-friction-intermittent-1:0",
+          "kind": "friction",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 116,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 116,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "023-friction-intermittent-3",
+      "kind": "friction",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "023-friction-intermittent-3:0",
+          "kind": "friction",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 110,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 110,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "024-sensor_bias-persistent-1",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "024-sensor_bias-persistent-1:0",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 106,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "025-sensor_bias-persistent-3",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "025-sensor_bias-persistent-3:0",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 119,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "026-sensor_bias-progressive-1",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "026-sensor_bias-progressive-1:0",
+          "kind": "sensor_bias",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 220,
+          "delay": 104,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 220,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "027-sensor_bias-progressive-3",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "027-sensor_bias-progressive-3:0",
+          "kind": "sensor_bias",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 155,
+          "delay": 40,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 155,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "028-sensor_bias-intermittent-1",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "028-sensor_bias-intermittent-1:0",
+          "kind": "sensor_bias",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 106,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "029-sensor_bias-intermittent-3",
+      "kind": "sensor_bias",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "029-sensor_bias-intermittent-3:0",
+          "kind": "sensor_bias",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 122,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "030-sensor_stuck-persistent-1",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "030-sensor_stuck-persistent-1:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 107,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 107,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "031-sensor_stuck-persistent-3",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "031-sensor_stuck-persistent-3:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 105,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 105,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "032-sensor_stuck-progressive-1",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "032-sensor_stuck-progressive-1:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 167,
+          "delay": 60,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 167,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "033-sensor_stuck-progressive-3",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "033-sensor_stuck-progressive-3:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 170,
+          "delay": 54,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 170,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "034-sensor_stuck-intermittent-1",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "034-sensor_stuck-intermittent-1:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 119,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 119,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "035-sensor_stuck-intermittent-3",
+      "kind": "sensor_stuck",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "035-sensor_stuck-intermittent-3:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 117,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 117,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "036-phase_heating-persistent-1",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "036-phase_heating-persistent-1:0",
+          "kind": "phase_heating",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 122,
+          "delay": 8,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "037-phase_heating-persistent-3",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "037-phase_heating-persistent-3:0",
+          "kind": "phase_heating",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 120,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 120,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "038-phase_heating-progressive-1",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "038-phase_heating-progressive-1:0",
+          "kind": "phase_heating",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 181,
+          "delay": 82,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 181,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "039-phase_heating-progressive-3",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "039-phase_heating-progressive-3:0",
+          "kind": "phase_heating",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 133,
+          "delay": 12,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 133,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "040-phase_heating-intermittent-1",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "040-phase_heating-intermittent-1:0",
+          "kind": "phase_heating",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 104,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "041-phase_heating-intermittent-3",
+      "kind": "phase_heating",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "041-phase_heating-intermittent-3:0",
+          "kind": "phase_heating",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 106,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0002"
+        }
+      ]
+    },
+    {
+      "id": "042-variance-persistent-1",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "042-variance-persistent-1:0",
+          "kind": "variance",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 133,
+          "delay": 17,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 133,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "043-variance-persistent-3",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "043-variance-persistent-3:0",
+          "kind": "variance",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 118,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 118,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "044-variance-progressive-1",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "044-variance-progressive-1:0",
+          "kind": "variance",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 200,
+          "delay": 92,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 200,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    },
+    {
+      "id": "045-variance-progressive-3",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "045-variance-progressive-3:0",
+          "kind": "variance",
+          "lifecycle": "progressive",
+          "detected": true,
+          "first": 153,
+          "delay": 56,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 153,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "046-variance-intermittent-1",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "046-variance-intermittent-1:0",
+          "kind": "variance",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 122,
+          "delay": 13,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 122,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "047-variance-intermittent-3",
+      "kind": "variance",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "047-variance-intermittent-3:0",
+          "kind": "variance",
+          "lifecycle": "intermittent",
+          "detected": true,
+          "first": 118,
+          "delay": 8,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 118,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "048-normal-control-0",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "049-normal-control-1",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "050-normal-control-2",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "051-normal-control-3",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "052-normal-control-4",
+      "kind": "normal",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "053-spike-control-0",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "054-spike-control-1",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "055-spike-control-2",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "056-spike-control-3",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "057-spike-control-4",
+      "kind": "spike",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "058-bad_quality-control-0",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "059-bad_quality-control-1",
+      "kind": "bad_quality",
+      "positive": false,
+      "incidents": [],
+      "unmatched": 0,
+      "notices": []
+    },
+    {
+      "id": "060-post_repair-persistent-0",
+      "kind": "post_repair",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "060-post_repair-persistent-0:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 109,
+          "delay": 12,
+          "duplicates": 0
+        },
+        {
+          "key": "060-post_repair-persistent-0:1",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 245,
+          "delay": 12,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 109,
+          "equipment_id": "EQ-0006"
+        },
+        {
+          "sequence": 245,
+          "equipment_id": "EQ-0006"
+        }
+      ]
+    },
+    {
+      "id": "061-post_repair-persistent-1",
+      "kind": "post_repair",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "061-post_repair-persistent-1:0",
+          "kind": "variance",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 106,
+          "delay": 9,
+          "duplicates": 0
+        },
+        {
+          "key": "061-post_repair-persistent-1:1",
+          "kind": "variance",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 240,
+          "delay": 7,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 106,
+          "equipment_id": "EQ-0009"
+        },
+        {
+          "sequence": 240,
+          "equipment_id": "EQ-0009"
+        }
+      ]
+    },
+    {
+      "id": "062-post_repair-persistent-2",
+      "kind": "post_repair",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "062-post_repair-persistent-2:0",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 102,
+          "delay": 5,
+          "duplicates": 0
+        },
+        {
+          "key": "062-post_repair-persistent-2:1",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 238,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 102,
+          "equipment_id": "EQ-0008"
+        },
+        {
+          "sequence": 238,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "063-post_repair-persistent-3",
+      "kind": "post_repair",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "063-post_repair-persistent-3:0",
+          "kind": "sensor_stuck",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 103,
+          "delay": 6,
+          "duplicates": 0
+        },
+        {
+          "key": "063-post_repair-persistent-3:1",
+          "kind": "sensor_stuck",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 239,
+          "delay": 6,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 103,
+          "equipment_id": "EQ-0008"
+        },
+        {
+          "sequence": 239,
+          "equipment_id": "EQ-0008"
+        }
+      ]
+    },
+    {
+      "id": "064-nearby-persistent-0",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "064-nearby-persistent-0:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 105,
+          "delay": 8,
+          "duplicates": 0
+        },
+        {
+          "key": "064-nearby-persistent-0:1",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": false,
+          "first": null,
+          "delay": null,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 105,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "065-nearby-persistent-1",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "065-nearby-persistent-1:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "065-nearby-persistent-1:1",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 150,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 150,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "066-nearby-persistent-2",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "066-nearby-persistent-2:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "066-nearby-persistent-2:1",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 162,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 162,
+          "equipment_id": "EQ-0004"
+        }
+      ]
+    },
+    {
+      "id": "067-nearby-persistent-3",
+      "kind": "nearby",
+      "positive": true,
+      "incidents": [
+        {
+          "key": "067-nearby-persistent-3:0",
+          "kind": "friction",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 104,
+          "delay": 7,
+          "duplicates": 0
+        },
+        {
+          "key": "067-nearby-persistent-3:1",
+          "kind": "sensor_bias",
+          "lifecycle": "persistent",
+          "detected": true,
+          "first": 186,
+          "delay": 5,
+          "duplicates": 0
+        }
+      ],
+      "unmatched": 0,
+      "notices": [
+        {
+          "sequence": 104,
+          "equipment_id": "EQ-0004"
+        },
+        {
+          "sequence": 186,
+          "equipment_id": "EQ-0005"
+        }
+      ]
+    }
+  ]
+}

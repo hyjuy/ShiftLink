@@ -1,0 +1,2360 @@
+{
+  "role": "test",
+  "seed": 6436176641542934646,
+  "nonce": "7b26787d4cde0288891e27c995ebea75",
+  "cases": [
+    {
+      "id": "000-hydraulic_leak-persistent-1",
+      "kind": "hydraulic_leak",
+      "lifecycle": "persistent",
+      "run_id": "44a35501adc26363bba1ed27ae54c2bd",
+      "source_offset": 14,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 111,
+          "end": 302,
+          "ramp": 10,
+          "scale": 0.9387934985877537,
+          "sign": 1,
+          "seed": 1850798367459576584,
+          "repair": 302,
+          "lifecycle": "persistent",
+          "incident_id": "44a35501adc26363bba1ed27ae54c2bd:0",
+          "symptom_segments": [
+            [
+              111,
+              302
+            ]
+          ]
+        }
+      ],
+      "sha256": "01a4439656b87dec5c49f01a94f7ca4cda83ad84422e80ac1dd3a28096698d8c"
+    },
+    {
+      "id": "001-hydraulic_leak-persistent-3",
+      "kind": "hydraulic_leak",
+      "lifecycle": "persistent",
+      "run_id": "69274d89abdc33daa3a069a0a91fa015",
+      "source_offset": 437,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 115,
+          "end": 299,
+          "ramp": 16,
+          "scale": 1.0780505118780424,
+          "sign": 1,
+          "seed": 1709832988451510964,
+          "repair": 299,
+          "lifecycle": "persistent",
+          "incident_id": "69274d89abdc33daa3a069a0a91fa015:0",
+          "symptom_segments": [
+            [
+              115,
+              299
+            ]
+          ]
+        }
+      ],
+      "sha256": "ae9a4798a36eea711b024ef0e22bcbb1178ea33a205a802c5b1bede41a345e7b"
+    },
+    {
+      "id": "002-hydraulic_leak-progressive-1",
+      "kind": "hydraulic_leak",
+      "lifecycle": "progressive",
+      "run_id": "7c8d7bd4c44721995976e9494e4f73e7",
+      "source_offset": 316,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 115,
+          "end": 284,
+          "ramp": 17,
+          "scale": 1.0523671786069009,
+          "sign": -1,
+          "seed": 3709668735327806879,
+          "repair": 284,
+          "lifecycle": "progressive",
+          "incident_id": "7c8d7bd4c44721995976e9494e4f73e7:0",
+          "symptom_segments": [
+            [
+              115,
+              284
+            ]
+          ]
+        }
+      ],
+      "sha256": "614847787c870bf1b01c4970686aacf053872487fc11ee43e327432a5bb90529"
+    },
+    {
+      "id": "003-hydraulic_leak-progressive-3",
+      "kind": "hydraulic_leak",
+      "lifecycle": "progressive",
+      "run_id": "f21fab017fde2c429411ec1b488d61c1",
+      "source_offset": 422,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 108,
+          "end": 303,
+          "ramp": 11,
+          "scale": 1.0209842594092358,
+          "sign": 1,
+          "seed": 1442017378527055410,
+          "repair": 303,
+          "lifecycle": "progressive",
+          "incident_id": "f21fab017fde2c429411ec1b488d61c1:0",
+          "symptom_segments": [
+            [
+              108,
+              303
+            ]
+          ]
+        }
+      ],
+      "sha256": "c31c29740f3387366760ae18e6fb62739e2fad5cb33cf5059d1a11121b29e2f6"
+    },
+    {
+      "id": "004-hydraulic_leak-intermittent-1",
+      "kind": "hydraulic_leak",
+      "lifecycle": "intermittent",
+      "run_id": "a015c4b10516eb9b672ee616900935bd",
+      "source_offset": 48,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 108,
+          "end": 293,
+          "ramp": 12,
+          "scale": 0.9721436611475917,
+          "sign": -1,
+          "seed": 5101608778957414607,
+          "repair": 293,
+          "lifecycle": "intermittent",
+          "incident_id": "a015c4b10516eb9b672ee616900935bd:0",
+          "symptom_segments": [
+            [
+              108,
+              140
+            ],
+            [
+              152,
+              178
+            ],
+            [
+              198,
+              228
+            ],
+            [
+              234,
+              260
+            ],
+            [
+              276,
+              293
+            ]
+          ]
+        }
+      ],
+      "sha256": "786158936d585153b4bc8f4cbd0c698355aff93b8630c5536b75a042511b5226"
+    },
+    {
+      "id": "005-hydraulic_leak-intermittent-3",
+      "kind": "hydraulic_leak",
+      "lifecycle": "intermittent",
+      "run_id": "6e07f947eebacbee049e914b09fb1c5c",
+      "source_offset": 198,
+      "positive": true,
+      "events": [
+        {
+          "kind": "hydraulic_leak",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 96,
+          "end": 278,
+          "ramp": 10,
+          "scale": 0.9633244389447366,
+          "sign": -1,
+          "seed": 5067561365203401285,
+          "repair": 278,
+          "lifecycle": "intermittent",
+          "incident_id": "6e07f947eebacbee049e914b09fb1c5c:0",
+          "symptom_segments": [
+            [
+              96,
+              128
+            ],
+            [
+              145,
+              168
+            ],
+            [
+              173,
+              195
+            ],
+            [
+              201,
+              219
+            ],
+            [
+              225,
+              254
+            ],
+            [
+              261,
+              278
+            ]
+          ]
+        }
+      ],
+      "sha256": "b5850aa08146a544697d6c78a954ee2278bb180500d150f9cac5f1c15571bb2b"
+    },
+    {
+      "id": "006-cooling_loss-persistent-1",
+      "kind": "cooling_loss",
+      "lifecycle": "persistent",
+      "run_id": "11e16c82335db8aa35691280394ebca4",
+      "source_offset": 308,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 106,
+          "end": 295,
+          "ramp": 8,
+          "scale": 0.9636896673482316,
+          "sign": 1,
+          "seed": 6250346187191128924,
+          "repair": 295,
+          "lifecycle": "persistent",
+          "incident_id": "11e16c82335db8aa35691280394ebca4:0",
+          "symptom_segments": [
+            [
+              106,
+              295
+            ]
+          ]
+        }
+      ],
+      "sha256": "588fdb63fb25667aaac30220243850fa48ef865b6393ca173f2df12dbf64bee4"
+    },
+    {
+      "id": "007-cooling_loss-persistent-3",
+      "kind": "cooling_loss",
+      "lifecycle": "persistent",
+      "run_id": "c50f216ca948967880fe7c2ea6b7eb5b",
+      "source_offset": 18,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 111,
+          "end": 281,
+          "ramp": 10,
+          "scale": 0.9775895986673842,
+          "sign": 1,
+          "seed": 1019898264417975751,
+          "repair": 281,
+          "lifecycle": "persistent",
+          "incident_id": "c50f216ca948967880fe7c2ea6b7eb5b:0",
+          "symptom_segments": [
+            [
+              111,
+              281
+            ]
+          ]
+        }
+      ],
+      "sha256": "ed7cd3fa443c2dfaac4d4ee3c1d6d326f795a4fa07fbaf1bd53584e5f235c40e"
+    },
+    {
+      "id": "008-cooling_loss-progressive-1",
+      "kind": "cooling_loss",
+      "lifecycle": "progressive",
+      "run_id": "379e080758bf71332371cd4a4fe9100a",
+      "source_offset": 82,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 120,
+          "end": 276,
+          "ramp": 16,
+          "scale": 0.9126928469698004,
+          "sign": -1,
+          "seed": 6444260404263268352,
+          "repair": 276,
+          "lifecycle": "progressive",
+          "incident_id": "379e080758bf71332371cd4a4fe9100a:0",
+          "symptom_segments": [
+            [
+              120,
+              276
+            ]
+          ]
+        }
+      ],
+      "sha256": "429d2142585ecaacb38bc9ba5e95bffb2cb4204b927c137f9c21b9b58f374a2f"
+    },
+    {
+      "id": "009-cooling_loss-progressive-3",
+      "kind": "cooling_loss",
+      "lifecycle": "progressive",
+      "run_id": "38321a7ccdac6293eaf62376194003f4",
+      "source_offset": 170,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 99,
+          "end": 285,
+          "ramp": 12,
+          "scale": 0.9478036891172713,
+          "sign": -1,
+          "seed": 211808045170259867,
+          "repair": 285,
+          "lifecycle": "progressive",
+          "incident_id": "38321a7ccdac6293eaf62376194003f4:0",
+          "symptom_segments": [
+            [
+              99,
+              285
+            ]
+          ]
+        }
+      ],
+      "sha256": "36b2ead989d5bf0ba18b2eeadbb46c89e950fa49e46f2b2b90108870c90436d1"
+    },
+    {
+      "id": "010-cooling_loss-intermittent-1",
+      "kind": "cooling_loss",
+      "lifecycle": "intermittent",
+      "run_id": "2b2c56c41d85d12e98d661ada5e83a8e",
+      "source_offset": 283,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 1,
+          "start": 104,
+          "end": 276,
+          "ramp": 14,
+          "scale": 1.0917805226219517,
+          "sign": 1,
+          "seed": 5552725050132953764,
+          "repair": 276,
+          "lifecycle": "intermittent",
+          "incident_id": "2b2c56c41d85d12e98d661ada5e83a8e:0",
+          "symptom_segments": [
+            [
+              104,
+              136
+            ],
+            [
+              144,
+              162
+            ],
+            [
+              166,
+              185
+            ],
+            [
+              202,
+              233
+            ],
+            [
+              237,
+              259
+            ],
+            [
+              273,
+              276
+            ]
+          ]
+        }
+      ],
+      "sha256": "c587f081c6f19aa8e17db599824971f1541d563479d3c4fbac3dc41abf0f1e3f"
+    },
+    {
+      "id": "011-cooling_loss-intermittent-3",
+      "kind": "cooling_loss",
+      "lifecycle": "intermittent",
+      "run_id": "b8f68bd4dc1ca3c2afba750059570459",
+      "source_offset": 290,
+      "positive": true,
+      "events": [
+        {
+          "kind": "cooling_loss",
+          "equipment_id": "EQ-0001",
+          "signal": null,
+          "severity": 3,
+          "start": 112,
+          "end": 279,
+          "ramp": 11,
+          "scale": 1.0377806664386968,
+          "sign": 1,
+          "seed": 940322728221635528,
+          "repair": 279,
+          "lifecycle": "intermittent",
+          "incident_id": "b8f68bd4dc1ca3c2afba750059570459:0",
+          "symptom_segments": [
+            [
+              112,
+              144
+            ],
+            [
+              161,
+              189
+            ],
+            [
+              197,
+              221
+            ],
+            [
+              236,
+              262
+            ]
+          ]
+        }
+      ],
+      "sha256": "c939e9c9817f0b32e650393c79910a267215bcf924f70560b0b3975764e893a7"
+    },
+    {
+      "id": "012-air_leak-persistent-1",
+      "kind": "air_leak",
+      "lifecycle": "persistent",
+      "run_id": "e71835a6c7c2962d0b017b18bdf3ce09",
+      "source_offset": 271,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 1,
+          "start": 106,
+          "end": 298,
+          "ramp": 17,
+          "scale": 0.9708745933311911,
+          "sign": 1,
+          "seed": 3144129011504287385,
+          "repair": 298,
+          "lifecycle": "persistent",
+          "incident_id": "e71835a6c7c2962d0b017b18bdf3ce09:0",
+          "symptom_segments": [
+            [
+              106,
+              298
+            ]
+          ]
+        }
+      ],
+      "sha256": "548bbcb4842900635d63c7145602461f2df85edcd4f9c1c4872461b9a5b8bf81"
+    },
+    {
+      "id": "013-air_leak-persistent-3",
+      "kind": "air_leak",
+      "lifecycle": "persistent",
+      "run_id": "34254f9fe0e9bc332fc79fb0ea093d64",
+      "source_offset": 332,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 3,
+          "start": 116,
+          "end": 274,
+          "ramp": 15,
+          "scale": 0.902134870018603,
+          "sign": 1,
+          "seed": 7469074431212215052,
+          "repair": 274,
+          "lifecycle": "persistent",
+          "incident_id": "34254f9fe0e9bc332fc79fb0ea093d64:0",
+          "symptom_segments": [
+            [
+              116,
+              274
+            ]
+          ]
+        }
+      ],
+      "sha256": "7aeeaf64242b1aa3a5adeba89475d43237ae40c191d80f9952377790b15c13eb"
+    },
+    {
+      "id": "014-air_leak-progressive-1",
+      "kind": "air_leak",
+      "lifecycle": "progressive",
+      "run_id": "f2363673aa025894ee72abae61c1b090",
+      "source_offset": 362,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 1,
+          "start": 110,
+          "end": 301,
+          "ramp": 19,
+          "scale": 0.9317689185192062,
+          "sign": 1,
+          "seed": 3780404113375849389,
+          "repair": 301,
+          "lifecycle": "progressive",
+          "incident_id": "f2363673aa025894ee72abae61c1b090:0",
+          "symptom_segments": [
+            [
+              110,
+              301
+            ]
+          ]
+        }
+      ],
+      "sha256": "cf1d2b81c4ac47329f2697904dc80813ee29763919d5e7becf989c956b1d4385"
+    },
+    {
+      "id": "015-air_leak-progressive-3",
+      "kind": "air_leak",
+      "lifecycle": "progressive",
+      "run_id": "7bc51e62d569bf6aefeda20d7839b5bc",
+      "source_offset": 213,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 3,
+          "start": 102,
+          "end": 297,
+          "ramp": 15,
+          "scale": 1.0285263694330267,
+          "sign": -1,
+          "seed": 2138496736200535127,
+          "repair": 297,
+          "lifecycle": "progressive",
+          "incident_id": "7bc51e62d569bf6aefeda20d7839b5bc:0",
+          "symptom_segments": [
+            [
+              102,
+              297
+            ]
+          ]
+        }
+      ],
+      "sha256": "2f6e311b2503a78af14ba2be23f57108cff5b9a61414579ef271303d79a57652"
+    },
+    {
+      "id": "016-air_leak-intermittent-1",
+      "kind": "air_leak",
+      "lifecycle": "intermittent",
+      "run_id": "474b9c8279b7d585e180d8d93d18474a",
+      "source_offset": 307,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 1,
+          "start": 117,
+          "end": 279,
+          "ramp": 12,
+          "scale": 0.9231617443887318,
+          "sign": -1,
+          "seed": 2897317827813394295,
+          "repair": 279,
+          "lifecycle": "intermittent",
+          "incident_id": "474b9c8279b7d585e180d8d93d18474a:0",
+          "symptom_segments": [
+            [
+              117,
+              149
+            ],
+            [
+              161,
+              181
+            ],
+            [
+              194,
+              220
+            ],
+            [
+              234,
+              261
+            ]
+          ]
+        }
+      ],
+      "sha256": "e7b85a5fb4c9cca450625608b21b930dbaad5af57aad6f1327d4c470522cdd26"
+    },
+    {
+      "id": "017-air_leak-intermittent-3",
+      "kind": "air_leak",
+      "lifecycle": "intermittent",
+      "run_id": "94fabfec7664c0e4c847ccc9c7c7cbf4",
+      "source_offset": 39,
+      "positive": true,
+      "events": [
+        {
+          "kind": "air_leak",
+          "equipment_id": "EQ-0003",
+          "signal": null,
+          "severity": 3,
+          "start": 108,
+          "end": 300,
+          "ramp": 15,
+          "scale": 1.091947166032835,
+          "sign": -1,
+          "seed": 361779108806563834,
+          "repair": 300,
+          "lifecycle": "intermittent",
+          "incident_id": "94fabfec7664c0e4c847ccc9c7c7cbf4:0",
+          "symptom_segments": [
+            [
+              108,
+              140
+            ],
+            [
+              147,
+              168
+            ],
+            [
+              184,
+              215
+            ],
+            [
+              231,
+              252
+            ],
+            [
+              270,
+              300
+            ]
+          ]
+        }
+      ],
+      "sha256": "61b218797b6669831187db06eab2fd1f79eade85d0a55db4b86e9b156086cd11"
+    },
+    {
+      "id": "018-friction-persistent-1",
+      "kind": "friction",
+      "lifecycle": "persistent",
+      "run_id": "7f96aed0a544cacfe13f35de3d557571",
+      "source_offset": 140,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0008",
+          "signal": null,
+          "severity": 1,
+          "start": 111,
+          "end": 282,
+          "ramp": 9,
+          "scale": 1.0642164525721687,
+          "sign": 1,
+          "seed": 5859745971673713559,
+          "repair": 282,
+          "lifecycle": "persistent",
+          "incident_id": "7f96aed0a544cacfe13f35de3d557571:0",
+          "symptom_segments": [
+            [
+              111,
+              282
+            ]
+          ]
+        }
+      ],
+      "sha256": "d9f13f93eb7b5bdf94497212d2cbb866badc305708fc59e2caec2fe8b4bcbabf"
+    },
+    {
+      "id": "019-friction-persistent-3",
+      "kind": "friction",
+      "lifecycle": "persistent",
+      "run_id": "6336b32ee5871eae3d1f423d95c7c457",
+      "source_offset": 249,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 3,
+          "start": 119,
+          "end": 283,
+          "ramp": 19,
+          "scale": 0.9001039506761381,
+          "sign": 1,
+          "seed": 4267130087404072012,
+          "repair": 283,
+          "lifecycle": "persistent",
+          "incident_id": "6336b32ee5871eae3d1f423d95c7c457:0",
+          "symptom_segments": [
+            [
+              119,
+              283
+            ]
+          ]
+        }
+      ],
+      "sha256": "700ff23a930436b6cde907ba02316dc6f07b4f3071753bcaeaded8637330e290"
+    },
+    {
+      "id": "020-friction-progressive-1",
+      "kind": "friction",
+      "lifecycle": "progressive",
+      "run_id": "0df8f4d4cac65a575b72cc2ab1d3fe5b",
+      "source_offset": 119,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0005",
+          "signal": null,
+          "severity": 1,
+          "start": 110,
+          "end": 280,
+          "ramp": 9,
+          "scale": 1.0683187434795212,
+          "sign": 1,
+          "seed": 300614314167604206,
+          "repair": 280,
+          "lifecycle": "progressive",
+          "incident_id": "0df8f4d4cac65a575b72cc2ab1d3fe5b:0",
+          "symptom_segments": [
+            [
+              110,
+              280
+            ]
+          ]
+        }
+      ],
+      "sha256": "861926c43ab1d6c282aaa401a83812a76cee12eab00f9f1f3bbab607eecab54d"
+    },
+    {
+      "id": "021-friction-progressive-3",
+      "kind": "friction",
+      "lifecycle": "progressive",
+      "run_id": "38e122691476742fd7d31eff2d2872af",
+      "source_offset": 100,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0006",
+          "signal": null,
+          "severity": 3,
+          "start": 119,
+          "end": 304,
+          "ramp": 10,
+          "scale": 1.0382924077857818,
+          "sign": 1,
+          "seed": 6495212316140444063,
+          "repair": 304,
+          "lifecycle": "progressive",
+          "incident_id": "38e122691476742fd7d31eff2d2872af:0",
+          "symptom_segments": [
+            [
+              119,
+              304
+            ]
+          ]
+        }
+      ],
+      "sha256": "014aeb3558863b352369c24efe39cb966ffb5300777d5c833225d25679b88647"
+    },
+    {
+      "id": "022-friction-intermittent-1",
+      "kind": "friction",
+      "lifecycle": "intermittent",
+      "run_id": "c43ffecdf6a610f5714afe10e8a18109",
+      "source_offset": 417,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 1,
+          "start": 109,
+          "end": 278,
+          "ramp": 16,
+          "scale": 1.0080825516737535,
+          "sign": -1,
+          "seed": 3328973106872564557,
+          "repair": 278,
+          "lifecycle": "intermittent",
+          "incident_id": "c43ffecdf6a610f5714afe10e8a18109:0",
+          "symptom_segments": [
+            [
+              109,
+              141
+            ],
+            [
+              154,
+              173
+            ],
+            [
+              187,
+              212
+            ],
+            [
+              231,
+              261
+            ],
+            [
+              265,
+              278
+            ]
+          ]
+        }
+      ],
+      "sha256": "3b3bb7ec41ea673bcb513e28a28be16c4ec10e333ac448d5c862033e2ffaee29"
+    },
+    {
+      "id": "023-friction-intermittent-3",
+      "kind": "friction",
+      "lifecycle": "intermittent",
+      "run_id": "5a8276a4c62c0edfb43738d229f1247f",
+      "source_offset": 443,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0009",
+          "signal": null,
+          "severity": 3,
+          "start": 103,
+          "end": 272,
+          "ramp": 18,
+          "scale": 0.9770360340321436,
+          "sign": 1,
+          "seed": 5381962157043970171,
+          "repair": 272,
+          "lifecycle": "intermittent",
+          "incident_id": "5a8276a4c62c0edfb43738d229f1247f:0",
+          "symptom_segments": [
+            [
+              103,
+              135
+            ],
+            [
+              140,
+              165
+            ],
+            [
+              182,
+              213
+            ],
+            [
+              225,
+              251
+            ],
+            [
+              266,
+              272
+            ]
+          ]
+        }
+      ],
+      "sha256": "8d7e1023d75716abeb08da17ab27d16020bd6a317f0ffbab0c3ef52aa5c6d0b4"
+    },
+    {
+      "id": "024-sensor_bias-persistent-1",
+      "kind": "sensor_bias",
+      "lifecycle": "persistent",
+      "run_id": "78b9b244af7c3575561785fd1df233d6",
+      "source_offset": 165,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 1,
+          "start": 99,
+          "end": 291,
+          "ramp": 9,
+          "scale": 1.00723899013118,
+          "sign": -1,
+          "seed": 7723676089448388931,
+          "repair": 291,
+          "lifecycle": "persistent",
+          "incident_id": "78b9b244af7c3575561785fd1df233d6:0",
+          "symptom_segments": [
+            [
+              99,
+              291
+            ]
+          ]
+        }
+      ],
+      "sha256": "033d77eacd0cb557c3821c3c803e48c3c3b4e47801b5f935563e2ddbc791357c"
+    },
+    {
+      "id": "025-sensor_bias-persistent-3",
+      "kind": "sensor_bias",
+      "lifecycle": "persistent",
+      "run_id": "a7cc92ec210b135197386a883be94fc1",
+      "source_offset": 439,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 3,
+          "start": 113,
+          "end": 277,
+          "ramp": 19,
+          "scale": 1.0565914349852195,
+          "sign": -1,
+          "seed": 4936651253566434312,
+          "repair": 277,
+          "lifecycle": "persistent",
+          "incident_id": "a7cc92ec210b135197386a883be94fc1:0",
+          "symptom_segments": [
+            [
+              113,
+              277
+            ]
+          ]
+        }
+      ],
+      "sha256": "2bfd6933cd138d58feec26fee958f40cd252ef7da47cf438787e1e289b672953"
+    },
+    {
+      "id": "026-sensor_bias-progressive-1",
+      "kind": "sensor_bias",
+      "lifecycle": "progressive",
+      "run_id": "fbc53240cd76e5d47d308aaf0e6e5b09",
+      "source_offset": 490,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_motor_current",
+          "severity": 1,
+          "start": 115,
+          "end": 304,
+          "ramp": 14,
+          "scale": 0.9852597031095318,
+          "sign": 1,
+          "seed": 2820750115260985863,
+          "repair": 304,
+          "lifecycle": "progressive",
+          "incident_id": "fbc53240cd76e5d47d308aaf0e6e5b09:0",
+          "symptom_segments": [
+            [
+              115,
+              304
+            ]
+          ]
+        }
+      ],
+      "sha256": "bf71a6ae49c44ac2451b7157178c6fdd0670df0f689a9f126ac9f4b1ecff36a3"
+    },
+    {
+      "id": "027-sensor_bias-progressive-3",
+      "kind": "sensor_bias",
+      "lifecycle": "progressive",
+      "run_id": "f3201d2eec3ebe723586e25927bec62d",
+      "source_offset": 331,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_current",
+          "severity": 3,
+          "start": 114,
+          "end": 291,
+          "ramp": 11,
+          "scale": 0.987401065155595,
+          "sign": 1,
+          "seed": 903487783217021065,
+          "repair": 291,
+          "lifecycle": "progressive",
+          "incident_id": "f3201d2eec3ebe723586e25927bec62d:0",
+          "symptom_segments": [
+            [
+              114,
+              291
+            ]
+          ]
+        }
+      ],
+      "sha256": "95f28b90ecea5492a46a239f506b44278945548ff9c1b06029d852630f54a3c2"
+    },
+    {
+      "id": "028-sensor_bias-intermittent-1",
+      "kind": "sensor_bias",
+      "lifecycle": "intermittent",
+      "run_id": "1f61745160b1e346e7f1e6b39c4fc6e9",
+      "source_offset": 452,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 1,
+          "start": 98,
+          "end": 299,
+          "ramp": 18,
+          "scale": 0.9731308722029287,
+          "sign": 1,
+          "seed": 5649170276171991451,
+          "repair": 299,
+          "lifecycle": "intermittent",
+          "incident_id": "1f61745160b1e346e7f1e6b39c4fc6e9:0",
+          "symptom_segments": [
+            [
+              98,
+              130
+            ],
+            [
+              141,
+              165
+            ],
+            [
+              174,
+              198
+            ],
+            [
+              212,
+              237
+            ],
+            [
+              250,
+              268
+            ],
+            [
+              281,
+              299
+            ]
+          ]
+        }
+      ],
+      "sha256": "00f912f4d478cfb6d82813cc8bdcb4fa380fa90614b3b2d341db42148e193493"
+    },
+    {
+      "id": "029-sensor_bias-intermittent-3",
+      "kind": "sensor_bias",
+      "lifecycle": "intermittent",
+      "run_id": "eb8ef65cb51524011bf8573f14e4ec7c",
+      "source_offset": 373,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 3,
+          "start": 116,
+          "end": 298,
+          "ramp": 11,
+          "scale": 0.9643222299921621,
+          "sign": -1,
+          "seed": 979361025444225846,
+          "repair": 298,
+          "lifecycle": "intermittent",
+          "incident_id": "eb8ef65cb51524011bf8573f14e4ec7c:0",
+          "symptom_segments": [
+            [
+              116,
+              148
+            ],
+            [
+              158,
+              183
+            ],
+            [
+              189,
+              208
+            ],
+            [
+              212,
+              230
+            ],
+            [
+              246,
+              274
+            ],
+            [
+              287,
+              298
+            ]
+          ]
+        }
+      ],
+      "sha256": "6e62da057bca3e68d29001d08eedca017e6ef538bd7c70ed2fbb56fce867b977"
+    },
+    {
+      "id": "030-sensor_stuck-persistent-1",
+      "kind": "sensor_stuck",
+      "lifecycle": "persistent",
+      "run_id": "8ccc41524b92af1919f95977b9a8a1ea",
+      "source_offset": 193,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 100,
+          "end": 274,
+          "ramp": 17,
+          "scale": 0.9657192200893068,
+          "sign": 1,
+          "seed": 2444119617972470716,
+          "repair": 274,
+          "lifecycle": "persistent",
+          "incident_id": "8ccc41524b92af1919f95977b9a8a1ea:0",
+          "symptom_segments": [
+            [
+              100,
+              274
+            ]
+          ]
+        }
+      ],
+      "sha256": "7393ca245cc2a5ed6008b7f664411a8fa4bcecd692f9be137edc821e83bf9c6b"
+    },
+    {
+      "id": "031-sensor_stuck-persistent-3",
+      "kind": "sensor_stuck",
+      "lifecycle": "persistent",
+      "run_id": "d3c9b3df47168795907918e0350d5461",
+      "source_offset": 463,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 3,
+          "start": 98,
+          "end": 300,
+          "ramp": 13,
+          "scale": 0.9005778490111511,
+          "sign": 1,
+          "seed": 388408904174656703,
+          "repair": 300,
+          "lifecycle": "persistent",
+          "incident_id": "d3c9b3df47168795907918e0350d5461:0",
+          "symptom_segments": [
+            [
+              98,
+              300
+            ]
+          ]
+        }
+      ],
+      "sha256": "28a769f0fa1b6ca449ed3c87f2d026a4112e4d4b67a9f9dc5c520307028c8239"
+    },
+    {
+      "id": "032-sensor_stuck-progressive-1",
+      "kind": "sensor_stuck",
+      "lifecycle": "progressive",
+      "run_id": "98fe427f2af6ac27c3d735b0cda2b797",
+      "source_offset": 14,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 106,
+          "end": 275,
+          "ramp": 18,
+          "scale": 0.9707677911347965,
+          "sign": -1,
+          "seed": 3126837915451919403,
+          "repair": 275,
+          "lifecycle": "progressive",
+          "incident_id": "98fe427f2af6ac27c3d735b0cda2b797:0",
+          "symptom_segments": [
+            [
+              106,
+              275
+            ]
+          ]
+        }
+      ],
+      "sha256": "fa590e138612d7e1ecf62c721a9799e17d592d81d4fa44be3e017b5ae0686783"
+    },
+    {
+      "id": "033-sensor_stuck-progressive-3",
+      "kind": "sensor_stuck",
+      "lifecycle": "progressive",
+      "run_id": "b7c332de2af468e63b304dcd57eda57a",
+      "source_offset": 188,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 3,
+          "start": 115,
+          "end": 272,
+          "ramp": 13,
+          "scale": 0.9070113616528788,
+          "sign": -1,
+          "seed": 5275129292622387782,
+          "repair": 272,
+          "lifecycle": "progressive",
+          "incident_id": "b7c332de2af468e63b304dcd57eda57a:0",
+          "symptom_segments": [
+            [
+              115,
+              272
+            ]
+          ]
+        }
+      ],
+      "sha256": "14770671cb6f157331b9ce01bb6dec7175eb9c895ef405c5d84702349dc42ef2"
+    },
+    {
+      "id": "034-sensor_stuck-intermittent-1",
+      "kind": "sensor_stuck",
+      "lifecycle": "intermittent",
+      "run_id": "0c83eb99bc3120d0d152798ec415560e",
+      "source_offset": 94,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 112,
+          "end": 272,
+          "ramp": 19,
+          "scale": 0.9896742790769846,
+          "sign": 1,
+          "seed": 8043014593581440808,
+          "repair": 272,
+          "lifecycle": "intermittent",
+          "incident_id": "0c83eb99bc3120d0d152798ec415560e:0",
+          "symptom_segments": [
+            [
+              112,
+              144
+            ],
+            [
+              163,
+              191
+            ],
+            [
+              208,
+              228
+            ],
+            [
+              243,
+              268
+            ]
+          ]
+        }
+      ],
+      "sha256": "a26a1d0e8b8d4029f607b54c31776dfee5792a081b1ed597f9d91ba7d871907d"
+    },
+    {
+      "id": "035-sensor_stuck-intermittent-3",
+      "kind": "sensor_stuck",
+      "lifecycle": "intermittent",
+      "run_id": "51f51aa36c08a498b6cc4159bee2035e",
+      "source_offset": 341,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_vib_rms",
+          "severity": 3,
+          "start": 110,
+          "end": 300,
+          "ramp": 16,
+          "scale": 1.0461834769331593,
+          "sign": 1,
+          "seed": 2308677891561639238,
+          "repair": 300,
+          "lifecycle": "intermittent",
+          "incident_id": "51f51aa36c08a498b6cc4159bee2035e:0",
+          "symptom_segments": [
+            [
+              110,
+              142
+            ],
+            [
+              157,
+              176
+            ],
+            [
+              191,
+              219
+            ],
+            [
+              229,
+              255
+            ],
+            [
+              268,
+              297
+            ]
+          ]
+        }
+      ],
+      "sha256": "269477125b64fd5567e1833d74dba6df1ba290e1820c9761c25f4fa87d5b792b"
+    },
+    {
+      "id": "036-phase_heating-persistent-1",
+      "kind": "phase_heating",
+      "lifecycle": "persistent",
+      "run_id": "1830e8ba232d4f4be7258ffd337f7581",
+      "source_offset": 174,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 1,
+          "start": 113,
+          "end": 284,
+          "ramp": 15,
+          "scale": 1.0443506276850352,
+          "sign": -1,
+          "seed": 4615895214680721080,
+          "repair": 284,
+          "lifecycle": "persistent",
+          "incident_id": "1830e8ba232d4f4be7258ffd337f7581:0",
+          "symptom_segments": [
+            [
+              113,
+              284
+            ]
+          ]
+        }
+      ],
+      "sha256": "86ddbb1bab81fd2e24e8637f7a4f483d857ba5427627278b1671a334c00030c0"
+    },
+    {
+      "id": "037-phase_heating-persistent-3",
+      "kind": "phase_heating",
+      "lifecycle": "persistent",
+      "run_id": "eae09a3408ebd3d55dac8a8d4470f9cf",
+      "source_offset": 233,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 3,
+          "start": 114,
+          "end": 295,
+          "ramp": 11,
+          "scale": 1.0465106086465965,
+          "sign": 1,
+          "seed": 8541273217295631423,
+          "repair": 295,
+          "lifecycle": "persistent",
+          "incident_id": "eae09a3408ebd3d55dac8a8d4470f9cf:0",
+          "symptom_segments": [
+            [
+              114,
+              295
+            ]
+          ]
+        }
+      ],
+      "sha256": "7519602d09a78ae18d7b083d2de045d2dd565fb031ad30a1546d23f1b56bbae5"
+    },
+    {
+      "id": "038-phase_heating-progressive-1",
+      "kind": "phase_heating",
+      "lifecycle": "progressive",
+      "run_id": "cecf9e8547323df4d6767f69f9639452",
+      "source_offset": 124,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 1,
+          "start": 98,
+          "end": 304,
+          "ramp": 19,
+          "scale": 0.9995467236315307,
+          "sign": -1,
+          "seed": 10341604917619098,
+          "repair": 304,
+          "lifecycle": "progressive",
+          "incident_id": "cecf9e8547323df4d6767f69f9639452:0",
+          "symptom_segments": [
+            [
+              98,
+              304
+            ]
+          ]
+        }
+      ],
+      "sha256": "14a1e5609605d33ecc1ef812f199c89cad56c5a0a4e8ae7ad4cbf7de89e61b40"
+    },
+    {
+      "id": "039-phase_heating-progressive-3",
+      "kind": "phase_heating",
+      "lifecycle": "progressive",
+      "run_id": "b264b7d03d3208506995f7aef0ad22c3",
+      "source_offset": 441,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 3,
+          "start": 120,
+          "end": 278,
+          "ramp": 14,
+          "scale": 0.9556103833396941,
+          "sign": 1,
+          "seed": 423547617117320344,
+          "repair": 278,
+          "lifecycle": "progressive",
+          "incident_id": "b264b7d03d3208506995f7aef0ad22c3:0",
+          "symptom_segments": [
+            [
+              120,
+              278
+            ]
+          ]
+        }
+      ],
+      "sha256": "6523aa40a50dccda0d76903a1b53a6a1842830bdcccf2e9ec393069c22b4103a"
+    },
+    {
+      "id": "040-phase_heating-intermittent-1",
+      "kind": "phase_heating",
+      "lifecycle": "intermittent",
+      "run_id": "80eb3fe593fef367568895a9b44da90b",
+      "source_offset": 318,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 1,
+          "start": 98,
+          "end": 304,
+          "ramp": 17,
+          "scale": 0.9946440317364427,
+          "sign": -1,
+          "seed": 3577778143806941695,
+          "repair": 304,
+          "lifecycle": "intermittent",
+          "incident_id": "80eb3fe593fef367568895a9b44da90b:0",
+          "symptom_segments": [
+            [
+              98,
+              130
+            ],
+            [
+              149,
+              178
+            ],
+            [
+              197,
+              226
+            ],
+            [
+              231,
+              257
+            ],
+            [
+              265,
+              289
+            ],
+            [
+              302,
+              304
+            ]
+          ]
+        }
+      ],
+      "sha256": "43eafb7ee63c7c6c2428555083714fcf0eea7a377d7db920d3aab4ba5606fd67"
+    },
+    {
+      "id": "041-phase_heating-intermittent-3",
+      "kind": "phase_heating",
+      "lifecycle": "intermittent",
+      "run_id": "200e5edafe1ce4ce905a96271587f42a",
+      "source_offset": 165,
+      "positive": true,
+      "events": [
+        {
+          "kind": "phase_heating",
+          "equipment_id": "EQ-0002",
+          "signal": null,
+          "severity": 3,
+          "start": 100,
+          "end": 290,
+          "ramp": 8,
+          "scale": 1.0871318363657672,
+          "sign": -1,
+          "seed": 7939661737815999481,
+          "repair": 290,
+          "lifecycle": "intermittent",
+          "incident_id": "200e5edafe1ce4ce905a96271587f42a:0",
+          "symptom_segments": [
+            [
+              100,
+              132
+            ],
+            [
+              151,
+              171
+            ],
+            [
+              180,
+              200
+            ],
+            [
+              205,
+              232
+            ],
+            [
+              239,
+              263
+            ],
+            [
+              279,
+              290
+            ]
+          ]
+        }
+      ],
+      "sha256": "d1b5dc7a70a79139c526921519928db4d66d9a1eecdc6967ca250aebdd59a298"
+    },
+    {
+      "id": "042-variance-persistent-1",
+      "kind": "variance",
+      "lifecycle": "persistent",
+      "run_id": "397253348addf6b32c6274e68fc025a9",
+      "source_offset": 190,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 115,
+          "end": 277,
+          "ramp": 10,
+          "scale": 0.9392264832060869,
+          "sign": 1,
+          "seed": 2618016348003588261,
+          "repair": 277,
+          "lifecycle": "persistent",
+          "incident_id": "397253348addf6b32c6274e68fc025a9:0",
+          "symptom_segments": [
+            [
+              115,
+              277
+            ]
+          ]
+        }
+      ],
+      "sha256": "22b66bafdfb1a9419b645c0ed04b704b702f72798d5a3fade5eac9f86a79c193"
+    },
+    {
+      "id": "043-variance-persistent-3",
+      "kind": "variance",
+      "lifecycle": "persistent",
+      "run_id": "535a8ddd4f8b7075c67796ff2af8e70d",
+      "source_offset": 149,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 3,
+          "start": 112,
+          "end": 290,
+          "ramp": 11,
+          "scale": 0.9365508667124932,
+          "sign": -1,
+          "seed": 7842732312438579596,
+          "repair": 290,
+          "lifecycle": "persistent",
+          "incident_id": "535a8ddd4f8b7075c67796ff2af8e70d:0",
+          "symptom_segments": [
+            [
+              112,
+              290
+            ]
+          ]
+        }
+      ],
+      "sha256": "45e06b9b2ed4b31c87966a57338dec59d4e1d567bcb19ee11874e5653c3e1cc8"
+    },
+    {
+      "id": "044-variance-progressive-1",
+      "kind": "variance",
+      "lifecycle": "progressive",
+      "run_id": "c66a0099a69a3f364004e41370327943",
+      "source_offset": 498,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 107,
+          "end": 282,
+          "ramp": 14,
+          "scale": 1.0080992625479577,
+          "sign": -1,
+          "seed": 656579294273146880,
+          "repair": 282,
+          "lifecycle": "progressive",
+          "incident_id": "c66a0099a69a3f364004e41370327943:0",
+          "symptom_segments": [
+            [
+              107,
+              282
+            ]
+          ]
+        }
+      ],
+      "sha256": "fb330b4ccfacea29b809689bc7cf933d95c739ffda1764971fceac0eec65cc92"
+    },
+    {
+      "id": "045-variance-progressive-3",
+      "kind": "variance",
+      "lifecycle": "progressive",
+      "run_id": "5e7f9a08e58dc3b2e56f48bcf9a1db80",
+      "source_offset": 48,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0006",
+          "signal": "rt_vib_rms",
+          "severity": 3,
+          "start": 96,
+          "end": 279,
+          "ramp": 20,
+          "scale": 1.0542537217208803,
+          "sign": 1,
+          "seed": 9081894247616848102,
+          "repair": 279,
+          "lifecycle": "progressive",
+          "incident_id": "5e7f9a08e58dc3b2e56f48bcf9a1db80:0",
+          "symptom_segments": [
+            [
+              96,
+              279
+            ]
+          ]
+        }
+      ],
+      "sha256": "0ee5ff221eea0a8dcc28fa8cf560e16677d069634613f50743e1fb562d6fe8fd"
+    },
+    {
+      "id": "046-variance-intermittent-1",
+      "kind": "variance",
+      "lifecycle": "intermittent",
+      "run_id": "b530abb809390778fa9c774bf92271a3",
+      "source_offset": 142,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 1,
+          "start": 108,
+          "end": 299,
+          "ramp": 15,
+          "scale": 0.9862065193816257,
+          "sign": -1,
+          "seed": 2067173223917029419,
+          "repair": 299,
+          "lifecycle": "intermittent",
+          "incident_id": "b530abb809390778fa9c774bf92271a3:0",
+          "symptom_segments": [
+            [
+              108,
+              140
+            ],
+            [
+              154,
+              178
+            ],
+            [
+              189,
+              213
+            ],
+            [
+              233,
+              255
+            ],
+            [
+              260,
+              285
+            ]
+          ]
+        }
+      ],
+      "sha256": "a514fad9687df2a1262aec699ab6f3723d68bf4e1508e7015715c51ee862144b"
+    },
+    {
+      "id": "047-variance-intermittent-3",
+      "kind": "variance",
+      "lifecycle": "intermittent",
+      "run_id": "8c2a84049541fcafebdb71e7af50a83f",
+      "source_offset": 120,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_vib_rms",
+          "severity": 3,
+          "start": 109,
+          "end": 299,
+          "ramp": 13,
+          "scale": 0.9407280329306892,
+          "sign": -1,
+          "seed": 6084924334041181953,
+          "repair": 299,
+          "lifecycle": "intermittent",
+          "incident_id": "8c2a84049541fcafebdb71e7af50a83f:0",
+          "symptom_segments": [
+            [
+              109,
+              141
+            ],
+            [
+              153,
+              172
+            ],
+            [
+              184,
+              215
+            ],
+            [
+              225,
+              254
+            ],
+            [
+              258,
+              284
+            ]
+          ]
+        }
+      ],
+      "sha256": "b8509d4f8ab96e95020b1bbd790698d5542bf960619c152826f89ab4ac85e88a"
+    },
+    {
+      "id": "048-normal-control-0",
+      "kind": "normal",
+      "lifecycle": "control",
+      "run_id": "f784e1ab26d8d21b4aff7a3e803f53a9",
+      "source_offset": 300,
+      "positive": false,
+      "events": [],
+      "sha256": "020da67e9bc13bd32cd0380927760ea343ab17c10b56ab588a60c68797468cce"
+    },
+    {
+      "id": "049-normal-control-1",
+      "kind": "normal",
+      "lifecycle": "control",
+      "run_id": "8f1faa90cc3029c8ed77d402247d9741",
+      "source_offset": 428,
+      "positive": false,
+      "events": [],
+      "sha256": "0dd514ff722c2a17b6ae681c88f848358ccb6f0d7ac8667870ac90b74319ed8e"
+    },
+    {
+      "id": "050-normal-control-2",
+      "kind": "normal",
+      "lifecycle": "control",
+      "run_id": "6cbda0a70d493f1a9eaa49b19821e28c",
+      "source_offset": 77,
+      "positive": false,
+      "events": [],
+      "sha256": "f999ddca2410a19c25c9526da5e35ceefd5214884d21561f0682b673f6bf3a3a"
+    },
+    {
+      "id": "051-normal-control-3",
+      "kind": "normal",
+      "lifecycle": "control",
+      "run_id": "088cd6ffb7c5f8ce951f5f947ec93f44",
+      "source_offset": 21,
+      "positive": false,
+      "events": [],
+      "sha256": "93c2d63e1c6276bd4c6e35d18c06ab6836f084e72b34e3e5832179ddcd819d32"
+    },
+    {
+      "id": "052-normal-control-4",
+      "kind": "normal",
+      "lifecycle": "control",
+      "run_id": "468317f50e60530736511def10dd362f",
+      "source_offset": 419,
+      "positive": false,
+      "events": [],
+      "sha256": "c57821ef809db4761ebe8280a8a3081848e4188180bf26eb879a37cc997ffaa6"
+    },
+    {
+      "id": "053-spike-control-0",
+      "kind": "spike",
+      "lifecycle": "control",
+      "run_id": "4132af96f114fff5ad069a9ef25fc805",
+      "source_offset": 102,
+      "positive": false,
+      "events": [],
+      "sha256": "f4f78719c4950c89d0224d985a4520317333ab459e3d7cd81a07b11634eaa0f9"
+    },
+    {
+      "id": "054-spike-control-1",
+      "kind": "spike",
+      "lifecycle": "control",
+      "run_id": "858d3b197634300a2af2e998606fa4e9",
+      "source_offset": 106,
+      "positive": false,
+      "events": [],
+      "sha256": "d0f15e2499a5cad2c251c4215dbba6dfbbb9423cddefa577ea3f7bd2039aba77"
+    },
+    {
+      "id": "055-spike-control-2",
+      "kind": "spike",
+      "lifecycle": "control",
+      "run_id": "bd60950851a019a3683b3f7a3f098e58",
+      "source_offset": 348,
+      "positive": false,
+      "events": [],
+      "sha256": "12128073f6bb8ad33271e38132fc004dba07bdf69be67b80e692636fad14b0c6"
+    },
+    {
+      "id": "056-spike-control-3",
+      "kind": "spike",
+      "lifecycle": "control",
+      "run_id": "953782b3072bd542a7076a9b5f8e7060",
+      "source_offset": 456,
+      "positive": false,
+      "events": [],
+      "sha256": "f3bf88bb428c30369bd3b1cb18d3c6b6e3466403fc49fb3d8e93f48256d9651f"
+    },
+    {
+      "id": "057-spike-control-4",
+      "kind": "spike",
+      "lifecycle": "control",
+      "run_id": "711f690a93c26ac0b385f8f0d25a9f33",
+      "source_offset": 255,
+      "positive": false,
+      "events": [],
+      "sha256": "f1af040b7a4ea685aa590c183befa40254d740e7734dcced8c1c867568d94ff8"
+    },
+    {
+      "id": "058-bad_quality-control-0",
+      "kind": "bad_quality",
+      "lifecycle": "control",
+      "run_id": "73ce29d4e8b26d46d82b032005335639",
+      "source_offset": 260,
+      "positive": false,
+      "events": [],
+      "sha256": "27d42f34a787833875b0b9b51a067ac41292b8e00da68a18f45ab57accf57917"
+    },
+    {
+      "id": "059-bad_quality-control-1",
+      "kind": "bad_quality",
+      "lifecycle": "control",
+      "run_id": "b6b27925a94ff19092cb227159b68b1d",
+      "source_offset": 425,
+      "positive": false,
+      "events": [],
+      "sha256": "f6657eaa783bc813238755d81de5b915cb327bb79262f0a3ce20e8669e947a55"
+    },
+    {
+      "id": "060-post_repair-persistent-0",
+      "kind": "post_repair",
+      "lifecycle": "persistent",
+      "run_id": "37a36d689808de543b88bc3f1189bdb4",
+      "source_offset": 347,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0006",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 168,
+          "ramp": 20,
+          "scale": 1.0441297895374007,
+          "sign": -1,
+          "seed": 1302719112485923398,
+          "repair": 168,
+          "lifecycle": "persistent",
+          "incident_id": "37a36d689808de543b88bc3f1189bdb4:0",
+          "symptom_segments": [
+            [
+              96,
+              168
+            ]
+          ]
+        },
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0006",
+          "signal": null,
+          "severity": 2,
+          "start": 232,
+          "end": 344,
+          "ramp": 20,
+          "scale": 1.0441297895374007,
+          "sign": -1,
+          "seed": 7994044357100826997,
+          "repair": 344,
+          "lifecycle": "persistent",
+          "incident_id": "37a36d689808de543b88bc3f1189bdb4:1",
+          "symptom_segments": [
+            [
+              232,
+              344
+            ]
+          ]
+        }
+      ],
+      "sha256": "5ebb2c7f909976644197dbf5f731fd200ce8d5e94848467e14a0a70dc4ac6e73"
+    },
+    {
+      "id": "061-post_repair-persistent-1",
+      "kind": "post_repair",
+      "lifecycle": "persistent",
+      "run_id": "25be8cdf2edcaf7c1f4267ff01a04349",
+      "source_offset": 27,
+      "positive": true,
+      "events": [
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_vib_rms",
+          "severity": 2,
+          "start": 96,
+          "end": 168,
+          "ramp": 16,
+          "scale": 0.9930706973068082,
+          "sign": -1,
+          "seed": 4517083591986808648,
+          "repair": 168,
+          "lifecycle": "persistent",
+          "incident_id": "25be8cdf2edcaf7c1f4267ff01a04349:0",
+          "symptom_segments": [
+            [
+              96,
+              168
+            ]
+          ]
+        },
+        {
+          "kind": "variance",
+          "equipment_id": "EQ-0009",
+          "signal": "cv_vib_rms",
+          "severity": 2,
+          "start": 232,
+          "end": 344,
+          "ramp": 16,
+          "scale": 0.9930706973068082,
+          "sign": -1,
+          "seed": 517165045398357795,
+          "repair": 344,
+          "lifecycle": "persistent",
+          "incident_id": "25be8cdf2edcaf7c1f4267ff01a04349:1",
+          "symptom_segments": [
+            [
+              232,
+              344
+            ]
+          ]
+        }
+      ],
+      "sha256": "118daecc296c03f1bc458299a64e207e75a98be1f7906d67f604f8bd7aaf305c"
+    },
+    {
+      "id": "062-post_repair-persistent-2",
+      "kind": "post_repair",
+      "lifecycle": "persistent",
+      "run_id": "096099404c7c93d16a3b82a5d075f3ca",
+      "source_offset": 227,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 2,
+          "start": 96,
+          "end": 168,
+          "ramp": 9,
+          "scale": 0.9567864070875819,
+          "sign": 1,
+          "seed": 6769469893830778906,
+          "repair": 168,
+          "lifecycle": "persistent",
+          "incident_id": "096099404c7c93d16a3b82a5d075f3ca:0",
+          "symptom_segments": [
+            [
+              96,
+              168
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_motor_current",
+          "severity": 2,
+          "start": 232,
+          "end": 344,
+          "ramp": 9,
+          "scale": 0.9567864070875819,
+          "sign": 1,
+          "seed": 4238088254086913763,
+          "repair": 344,
+          "lifecycle": "persistent",
+          "incident_id": "096099404c7c93d16a3b82a5d075f3ca:1",
+          "symptom_segments": [
+            [
+              232,
+              344
+            ]
+          ]
+        }
+      ],
+      "sha256": "04eec4901bc2f7d7dcb9d4d864ff77fe75e0e611095370fe7a387503d04f848a"
+    },
+    {
+      "id": "063-post_repair-persistent-3",
+      "kind": "post_repair",
+      "lifecycle": "persistent",
+      "run_id": "a573eb03c2e95cb3611a17a3ec62558f",
+      "source_offset": 66,
+      "positive": true,
+      "events": [
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_vib_rms",
+          "severity": 2,
+          "start": 96,
+          "end": 168,
+          "ramp": 10,
+          "scale": 1.0090498708649744,
+          "sign": 1,
+          "seed": 1799738290968302916,
+          "repair": 168,
+          "lifecycle": "persistent",
+          "incident_id": "a573eb03c2e95cb3611a17a3ec62558f:0",
+          "symptom_segments": [
+            [
+              96,
+              168
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_stuck",
+          "equipment_id": "EQ-0008",
+          "signal": "rt_vib_rms",
+          "severity": 2,
+          "start": 232,
+          "end": 344,
+          "ramp": 10,
+          "scale": 1.0090498708649744,
+          "sign": 1,
+          "seed": 5962841337208147600,
+          "repair": 344,
+          "lifecycle": "persistent",
+          "incident_id": "a573eb03c2e95cb3611a17a3ec62558f:1",
+          "symptom_segments": [
+            [
+              232,
+              344
+            ]
+          ]
+        }
+      ],
+      "sha256": "c0aaf039d398ff50058462160ecf65d6fe53fdcf70843c8a5b0bc8ff14f37cc0"
+    },
+    {
+      "id": "064-nearby-persistent-0",
+      "kind": "nearby",
+      "lifecycle": "persistent",
+      "run_id": "f5009aeef69ebf86ea0a994e673e06af",
+      "source_offset": 382,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 18,
+          "scale": 0.9473785210434561,
+          "sign": -1,
+          "seed": 7896810584272289962,
+          "repair": 132,
+          "lifecycle": "persistent",
+          "incident_id": "f5009aeef69ebf86ea0a994e673e06af:0",
+          "symptom_segments": [
+            [
+              96,
+              132
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 137,
+          "end": 225,
+          "ramp": 15,
+          "scale": 1.0020183806293548,
+          "sign": -1,
+          "seed": 3715422974871064619,
+          "repair": 225,
+          "lifecycle": "persistent",
+          "incident_id": "f5009aeef69ebf86ea0a994e673e06af:1",
+          "symptom_segments": [
+            [
+              137,
+              225
+            ]
+          ]
+        }
+      ],
+      "sha256": "0dfd9ad65aaf3acaa14b19cb3d6aaf4d1ab28a7abfecb11a6a3bc69450ccea8c"
+    },
+    {
+      "id": "065-nearby-persistent-1",
+      "kind": "nearby",
+      "lifecycle": "persistent",
+      "run_id": "6a53a8a7f557449bd8a8d690f680f375",
+      "source_offset": 318,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 11,
+          "scale": 1.0484966976500707,
+          "sign": -1,
+          "seed": 8834413192102941685,
+          "repair": 132,
+          "lifecycle": "persistent",
+          "incident_id": "6a53a8a7f557449bd8a8d690f680f375:0",
+          "symptom_segments": [
+            [
+              96,
+              132
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 144,
+          "end": 232,
+          "ramp": 13,
+          "scale": 0.9404586376325668,
+          "sign": -1,
+          "seed": 8617776205281279897,
+          "repair": 232,
+          "lifecycle": "persistent",
+          "incident_id": "6a53a8a7f557449bd8a8d690f680f375:1",
+          "symptom_segments": [
+            [
+              144,
+              232
+            ]
+          ]
+        }
+      ],
+      "sha256": "53c33168916e0dd62f4b99bb8a559101520707fd7f9435912a916fca6c176e02"
+    },
+    {
+      "id": "066-nearby-persistent-2",
+      "kind": "nearby",
+      "lifecycle": "persistent",
+      "run_id": "18f28cefac72976da98e3847930aeb00",
+      "source_offset": 292,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 13,
+          "scale": 1.0016469067895204,
+          "sign": 1,
+          "seed": 2182653204097659926,
+          "repair": 132,
+          "lifecycle": "persistent",
+          "incident_id": "18f28cefac72976da98e3847930aeb00:0",
+          "symptom_segments": [
+            [
+              96,
+              132
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0004",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 156,
+          "end": 244,
+          "ramp": 16,
+          "scale": 1.0406375327965547,
+          "sign": -1,
+          "seed": 5154305502229155932,
+          "repair": 244,
+          "lifecycle": "persistent",
+          "incident_id": "18f28cefac72976da98e3847930aeb00:1",
+          "symptom_segments": [
+            [
+              156,
+              244
+            ]
+          ]
+        }
+      ],
+      "sha256": "f28307def7618937d0bdb4c3833fb6e26d9294b4ba68e361699c12afedded74a"
+    },
+    {
+      "id": "067-nearby-persistent-3",
+      "kind": "nearby",
+      "lifecycle": "persistent",
+      "run_id": "d76058ba5b8de6b5890317c8549c9683",
+      "source_offset": 10,
+      "positive": true,
+      "events": [
+        {
+          "kind": "friction",
+          "equipment_id": "EQ-0004",
+          "signal": null,
+          "severity": 2,
+          "start": 96,
+          "end": 132,
+          "ramp": 10,
+          "scale": 0.9321554393428885,
+          "sign": 1,
+          "seed": 1733702444609173584,
+          "repair": 132,
+          "lifecycle": "persistent",
+          "incident_id": "d76058ba5b8de6b5890317c8549c9683:0",
+          "symptom_segments": [
+            [
+              96,
+              132
+            ]
+          ]
+        },
+        {
+          "kind": "sensor_bias",
+          "equipment_id": "EQ-0005",
+          "signal": "gr_oil_level",
+          "severity": 2,
+          "start": 180,
+          "end": 268,
+          "ramp": 17,
+          "scale": 1.032648929125786,
+          "sign": -1,
+          "seed": 707896391420661498,
+          "repair": 268,
+          "lifecycle": "persistent",
+          "incident_id": "d76058ba5b8de6b5890317c8549c9683:1",
+          "symptom_segments": [
+            [
+              180,
+              268
+            ]
+          ]
+        }
+      ],
+      "sha256": "f9cbbf88fe9e1b4a4b6dd16c165cac59f19d58dfe0bd0734ac6155fab77d3f63"
+    }
+  ],
+  "source_sha256": "0cad49dfbd28cfc158f59279ba62a2ca63e478f58a67c14a2fa142591bb0bbdf",
+  "generator_sha256": "e05f506162aa0b280392bf80959778821d96dfdbfcc28de80089d8c9641c7498",
+  "protocol_sha256": "72ca15a263065f7f6d321308c18207bfd35442baab984b42024d926d0cf1a38d",
+  "frames_per_case": 448,
+  "truth_not_in_frames": true
+}

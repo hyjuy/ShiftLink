@@ -1,0 +1,8 @@
+{
+  "channels": 63,
+  "development_prior": 0,
+  "test_prior": 0,
+  "development_test": 0,
+  "normal_generator_shared": true,
+  "passed": true
+}

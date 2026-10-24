@@ -1,0 +1,18 @@
+{
+  "development_run": "efc3407485924c9c9fa82b5e243b6be9",
+  "test_run": "95815758f19348349712040b687643bc",
+  "development": [
+    65,
+    1024
+  ],
+  "test": [
+    65,
+    1024
+  ],
+  "burnin_frames_per_independent_run": 64,
+  "development_sha256": "00b2df13335e68c6f2b6f63faad7733855a283891021abd86cd72b22c3c6f24f",
+  "test_sha256": "0cad49dfbd28cfc158f59279ba62a2ca63e478f58a67c14a2fa142591bb0bbdf",
+  "independent_normal_seeds": true,
+  "exact_sensor_frame_overlap": 0,
+  "shared_synthetic_normal_generator": true
+}

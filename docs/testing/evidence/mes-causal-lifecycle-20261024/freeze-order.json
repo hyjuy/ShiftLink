@@ -1,0 +1,7 @@
+{
+  "code_commit": "584a469",
+  "freeze_timestamp": 1792841985.2671711,
+  "test_manifest_timestamp": 1792842076.7133787,
+  "before_unseen_generation": true,
+  "no_candidate_tuning_after_freeze": true
+}

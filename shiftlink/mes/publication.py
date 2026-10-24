@@ -25,6 +25,28 @@ def chunks_for(artifact):
             for index,start in enumerate(range(0,len(text),600))]
 
 
+def validated_record(draft, revision, digest, model, payload, pipeline=None):
+    """Validate a published record without writes, retrieval or model calls."""
+    artifact = draft['review_flags']['publication']
+    record = json.loads(payload)
+    card = KnowledgeCard.model_validate(record['card'])
+    manifest = record['manifest']
+    reviewed = KnowledgeCard.model_validate({**draft['card'],'status':'accepted','grade':'L1','split':'kb'}).model_dump(mode='json')
+    if (content_hash(record['card']) != digest or manifest['content_hash'] != digest
+            or content_hash(reviewed) != digest or embedding_text(record['card']) != artifact['embed_text']
+            or record['chunks'] != chunks_for(artifact)
+            or manifest['model'] != model or manifest['review_revision'] != revision
+            or (manifest['doc_prefix'],manifest['query_prefix']) != prefixes(model)
+            or manifest['assets'] != artifact['assets']):
+        raise ValueError('index manifest mismatch')
+    record['vectors'] = normalise(record['vectors'],len(record['chunks']),manifest['dimension'])
+    if getattr(pipeline,'answer_mode',None)=='s30h':
+        from shiftlink.rag2.s30h import CFG
+        if model != CFG['model'] or len(record['vectors'][0]) != pipeline.vec.shape[1]:
+            raise ValueError('active index model or dimension mismatch')
+    return record, card
+
+
 class PublicationManager:
     def __init__(self, service):
         self.service = service
@@ -156,22 +178,7 @@ class PublicationManager:
                     or model != PUBLICATION_MODEL):
                 continue
             try:
-                record = json.loads(payload)
-                card = KnowledgeCard.model_validate(record['card'])
-                manifest = record['manifest']
-                reviewed = KnowledgeCard.model_validate({**draft['card'],'status':'accepted','grade':'L1','split':'kb'}).model_dump(mode='json')
-                if (content_hash(record['card']) != digest or manifest['content_hash'] != digest
-                        or content_hash(reviewed) != digest or embedding_text(record['card']) != artifact['embed_text']
-                        or record['chunks'] != chunks_for(artifact)
-                        or manifest['model'] != model or manifest['review_revision'] != revision
-                        or (manifest['doc_prefix'],manifest['query_prefix']) != prefixes(model)
-                        or manifest['assets'] != artifact['assets']):
-                    raise ValueError('index manifest mismatch')
-                record['vectors'] = normalise(record['vectors'],len(record['chunks']),manifest['dimension'])
-                if getattr(pipeline,'answer_mode',None)=='s30h':
-                    from shiftlink.rag2.s30h import CFG
-                    if model != CFG['model'] or len(record['vectors'][0]) != pipeline.vec.shape[1]:
-                        raise ValueError('active index model or dimension mismatch')
+                record, card = validated_record(draft, revision, digest, model, payload, pipeline)
             except (ValueError,KeyError,TypeError,IndexError):
                 artifact.update(state='embedding_failed',searchable=False,retry_at=time.time()+10,
                     error='검색 인덱스가 검수된 내용·모델과 일치하지 않아 제외했습니다. 자동으로 재처리합니다.')

@@ -4,10 +4,10 @@ import os
 from pathlib import Path
 from urllib.parse import parse_qs, unquote
 
-from .ontology_shadow import run_shadow
+from .ontology_shadow import run_shadow, _summary
 
 
-def explain(accounts, token, incident_id, query):
+def explain(accounts, token, incident_id, query, service=None):
     # Gate before authentication or source access; shadow never enables an HTTP read.
     if os.environ.get('SHIFTLINK_HPU_ONTOLOGY', 'off') != 'explain':
         return 404, {'error': 'not found'}
@@ -15,7 +15,7 @@ def explain(accounts, token, incident_id, query):
         return 401, {'error': 'MES 관리자 로그인이 필요합니다.'}
     try:
         params = parse_qs(query, keep_blank_values=True)
-        if set(params) - {'limit', 'offset', 'snapshot_hash', 'asset_id'} or any(len(v) != 1 for v in params.values()):
+        if set(params) - {'limit', 'offset', 'snapshot_hash', 'asset_id', 'query_id'} or any(len(v) != 1 for v in params.values()):
             raise ValueError()
         limit = int(params.get('limit', ['100'])[0])
         offset = int(params.get('offset', ['0'])[0])
@@ -24,6 +24,8 @@ def explain(accounts, token, incident_id, query):
         if not iid or len(iid) > 256 or '/' in iid or not 1 <= limit <= 100 or not 0 <= offset <= 2000:
             raise ValueError()
         if offset and not digest:
+            raise ValueError()
+        if 'query_id' in params and not 1 <= len(params['query_id'][0]) <= 256:
             raise ValueError()
     except ValueError:
         return 400, {'error': 'invalid ontology parameters'}
@@ -46,6 +48,16 @@ def explain(accounts, token, incident_id, query):
             return 404, {'error': 'not found'}
         return 503, {'error': 'ontology source unavailable'}
     graph = result['graph']
+    if 'query_id' in params:
+        if service is None:
+            return 503, {'error': 'ontology publication source unavailable'}
+        try:
+            from .publication_ontology import connect
+            status, graph = connect(service, os.environ['SHIFTLINK_HPU_ONTOLOGY_DB'], graph, params['query_id'][0])
+            if status != 200:
+                return status, graph
+        except Exception:
+            return 503, {'error': 'ontology publication source unavailable'}
     asset = params.get('asset_id', [None])[0]
     if asset is not None and asset not in {n['properties']['asset_id'] for n in graph['nodes'] if n['type'] == 'Asset'}:
         return 404, {'error': 'not found'}
@@ -55,6 +67,6 @@ def explain(accounts, token, incident_id, query):
     totals = {key: len(graph[key]) for key in ('nodes', 'edges', 'unresolved')}
     end = offset + limit
     return 200, {**graph, **{key: graph[key][offset:end] for key in totals},
-        'summary': result['summary'],
+        'summary': _summary(graph),
         'page': {'offset': offset, 'limit': limit, 'totals': totals,
                  'next_offset': end if end < max(totals.values()) else None}}

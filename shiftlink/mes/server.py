@@ -169,9 +169,10 @@ class MesService:
                 snapshots.append(card)
             if snapshots:
                 result['cited_cards'] = snapshots
-            return self._save_query_result(body, result, started)
+            cited_ticket = [entry for entry in ticket if entry[0] in cited]
+            return self._save_query_result(body, result, started, cited_ticket)
 
-    def _save_query_result(self, body, result, started):
+    def _save_query_result(self, body, result, started, publication_ticket=()):
         self.storage.save_query_evidence(result.get("evidence"))
         try:
             rendered_response = render_response(AgentResponse.model_validate(result))
@@ -188,6 +189,7 @@ class MesService:
             "latency_ms": round((time.perf_counter() - started) * 1000),
             "model": getattr(getattr(self.query_pipeline, "model", None), "model", None),
             "answer_mode": getattr(self.query_pipeline, "answer_mode", None), "is_synthetic": True,
+            **({"publication_ticket": publication_ticket} if publication_ticket else {}),
             **({"cited_cards": result["cited_cards"]} if "cited_cards" in result else {}),
             **({"graph_context": result["graph_context"]} if "graph_context" in result else {}),
             **({"s30h_trace": result["s30h_trace"]} if "s30h_trace" in result else {})})
@@ -920,7 +922,7 @@ class _Handler(BaseHTTPRequestHandler):
             if parsed.path.startswith('/api/incidents/') and parsed.path.endswith('/ontology'):
                 from .ontology_api import explain
                 status, body = explain(self.accounts, self._account_token(),
-                    parsed.path[len('/api/incidents/'):-len('/ontology')], parsed.query)
+                    parsed.path[len('/api/incidents/'):-len('/ontology')], parsed.query, self.service)
                 self._send(status, body); return
             if parsed.path=='/api/admin/card-drafts' or parsed.path.startswith('/api/admin/card-drafts/'):
                 actor=self.accounts.administrator(self._account_token())

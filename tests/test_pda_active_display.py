@@ -46,7 +46,7 @@ class ActiveDisplayTests(unittest.TestCase):
         self.assertEqual(self.s.feed(f,self.binding.config_id),set());self.assertEqual(self.s.report(f)['items'],before)
     def stopped(self,f,mode):
         state=copy.deepcopy(f);state['line_mode']=mode;state['is_synthetic']=True
-        if mode=='running':
+        if mode in ('running','fault'):
             for eq in state['equipment']:
                 if eq['equipment_id']==self.eq:eq['operating_state']='stopped'
         return state
@@ -62,6 +62,16 @@ class ActiveDisplayTests(unittest.TestCase):
                 self.assertEqual(self.read(result,state)['items'],result['items']);self.assertEqual(state,original)
                 self.s.flush();self.s=Session(self.binding,self.path)
                 self.assertEqual(self.s.report(state)['items'],result['items'])
+    def test_resume_after_pause_keeps_identity_until_recovery_and_run_change_clears(self):
+        f=self.feed_to(160);before=self.s.report(f)['items'][0]['event_id'];state=self.stopped(f,'paused')
+        with patch.object(worker,'AdvisorySession',Session):worker.poll(self.s,'http://unused',state)
+        self.s.flush();self.s=Session(self.binding,self.path);self.s.defer_flush=True
+        emitted=[]
+        for frame in self.frames[161:250]:emitted.extend(self.s.feed(frame,self.binding.config_id))
+        self.assertNotIn(self.eq,emitted);self.assertEqual(self.s.report(self.frames[249])['items'][0]['event_id'],before)
+        fresh=copy.deepcopy(self.frames[250]);fresh['run_id']='other';self.s.feed(fresh,self.binding.config_id)
+        self.assertEqual(self.s.report(fresh)['items'],[])
+
     def test_stale_bad_quality_lag_and_new_run_do_not_fabricate_current_results(self):
         f=self.feed_to(160)
         for change in (dict(run_id='new'),dict(sequence=f['sequence']+4)):

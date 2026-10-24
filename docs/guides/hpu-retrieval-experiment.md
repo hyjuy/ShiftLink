@@ -65,7 +65,9 @@ baseline_total은 기준 view 준비+실행, trial_total은 관계 준비+실험
 
 `tests/fixtures/hpu_retrieval_cases.json`은 긍정 2개와 미기록 수치·현재 승인·자산 교체·판정 거절·다른 사건·반려의 반례를 고정한다.
 `tests/test_hpu_retrieval_experiment.py`는 실제 S30h를 사용하되 임베딩·판정·모델 출력은 명시적인 fixture다.
-관련 카드의 dense rank를 35개 문서 뒤로 둔 의도적인 검색 누락 조건이므로 운영 질의 분포를 대표하지 않는다.
+관련 카드의 dense rank를 35개 경쟁 현장 일지 뒤로 둔 의도적인 검색 누락 조건이므로 운영 질의 분포를 대표하지 않는다.
+최초 비교는 매뉴얼 35개를 사용했다. 후속 일지 전용 검색 수정으로 이 조건이 기본 경로에서 회복되어,
+매뉴얼 조건은 `tests/test_hpu_history_recheck.py`에 보존하고 관계 보완 fixture는 경쟁 일지로 강화했다.
 각 사례를 5회, 기준/실험 실행 순서를 교차해 비교한다.
 
 ```powershell
@@ -81,3 +83,8 @@ python -m pytest tests/test_hpu_retrieval_experiment.py -q
 2026-10-25에는 운영 모델·자연 검색 인덱스로 본평가 32쌍과 별도 탐색 8쌍을 실행했다.
 표현에 따른 실제 인용 회복은 확인했지만 공통 이력 분류/보류 문제와 지연 때문에 **운영 적용 보류·기본 off 유지**다.
 [실제 모델 비교](../testing/hpu-retrieval-live-20261025.md)의 평가군 구분과 남은 문제를 확인한다.
+
+같은 질문으로 수행한 [분류·조건 보류·검색 지연 후속 검증](../testing/hpu-retrieval-recheck-20261025.md)은
+모델 학습 없이 명시적 일지 검색의 범위를 검수 현장 청크로 좁힌다.
+미기록 기간/날짜는 검색 전에 거르고, 적합한 검색 후보는 기존 judge를 반드시 통과해야 한다.
+일반 현재 판단과 관계 검색 실험의 기본 off는 유지하며 운영 미배포다.

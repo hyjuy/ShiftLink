@@ -1,0 +1,1711 @@
+{
+  "schema_version": "shiftlink-hpu-recheck-v1",
+  "date": "2026-10-25",
+  "models_trained": false,
+  "models_mocked": false,
+  "data_kind": "synthetic_reviewed_work_report",
+  "reference_commit": "7a52b517e58c66e1a385b0a78aceaddfe37c587b",
+  "implementation_commit": "305ab4b",
+  "ordinary_query_hook_added": false,
+  "default_relation_mode": "off",
+  "deployed": false,
+  "incomplete_attempt": {
+    "directory": "before-primary",
+    "pairs": 32,
+    "completed": 14,
+    "error": 18,
+    "reason": "SSH connection reset; excluded from completed comparison"
+  },
+  "before": {
+    "primary": {
+      "pairs": 32,
+      "completed": 32,
+      "corpus_sha256": "daf6c3c46c8752a810c5e6c6c24c4269e28af39ff0cffd40671abc1df6b6255a",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 12,
+        "history_citation_hits": 10,
+        "required_abstentions": 4,
+        "required_abstention_hits": 2,
+        "forbidden_field_citations": 2,
+        "field_scope_leaks": 0,
+        "abstentions": 8,
+        "judge_chunks": 150,
+        "candidate_chunks": 150,
+        "mean_ms": 5200.4716468745755,
+        "median_ms": 3319.859049996012,
+        "p95_ms": 10535.713700002816,
+        "new_relation_misconnections": 0
+      },
+      "trial": {
+        "history_expected": 12,
+        "history_citation_hits": 10,
+        "required_abstentions": 4,
+        "required_abstention_hits": 2,
+        "forbidden_field_citations": 2,
+        "field_scope_leaks": 0,
+        "abstentions": 8,
+        "judge_chunks": 150,
+        "candidate_chunks": 150,
+        "mean_ms": 5137.993478125054,
+        "median_ms": 3243.5227499991015,
+        "p95_ms": 10374.54419999267,
+        "new_relation_misconnections": 0
+      },
+      "preservation": {
+        "pairs": 32,
+        "completed": 32,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": -62.4781687495215,
+      "cases": [
+        {
+          "id": "history-order",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2612.6596500034793,
+            "median_ms": 2612.6596500034793,
+            "p95_ms": 2677.9185000050347,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2708.612800000992,
+            "median_ms": 2708.612800000992,
+            "p95_ms": 2866.5012000055867,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-137",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2912.8725999980816,
+            "median_ms": 2912.8725999980816,
+            "p95_ms": 2954.757299994526,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2992.415450004046,
+            "median_ms": 2992.415450004046,
+            "p95_ms": 3060.5405000096653,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-worker",
+          "question": "과거 근무일지에서 필터를 점검하고 교체한 담당자와 조치 시각을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 3300.5294499998854,
+            "median_ms": 3300.5294499998854,
+            "p95_ms": 3360.8000999956857,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 3339.6049500042864,
+            "median_ms": 3339.6049500042864,
+            "p95_ms": 3405.606500004069,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-observation",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 3299.9547500003246,
+            "median_ms": 3299.9547500003246,
+            "p95_ms": 3481.8545000016456,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 3158.213500002603,
+            "median_ms": 3158.213500002603,
+            "p95_ms": 3161.5182000023196,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-rephrase",
+          "question": "지난 필터 정비 기록의 작업 순서와 각 단계에서 관찰한 결과를 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 3260.7185499982734,
+            "median_ms": 3260.7185499982734,
+            "p95_ms": 3278.917999996338,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 3180.069199996069,
+            "median_ms": 3180.069199996069,
+            "p95_ms": 3213.4420999936992,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-duration",
+          "question": "근무일지에 적힌 필터 교체 후 정상 운전 시간과 확인 근거만 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2751.536750001833,
+            "median_ms": 2751.536750001833,
+            "p95_ms": 2805.1565999994637,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2801.120700001775,
+            "median_ms": 2801.120700001775,
+            "p95_ms": 2838.6641000106465,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-999",
+          "question": "근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2829.9430500010203,
+            "median_ms": 2829.9430500010203,
+            "p95_ms": 2869.0397000027588,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 2862.0287500016275,
+            "median_ms": 2862.0287500016275,
+            "p95_ms": 2866.440400001011,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-217",
+          "question": "근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 2,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 6437.953999997262,
+            "median_ms": 6437.953999997262,
+            "p95_ms": 6453.506099998776,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 2,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 6936.643499997444,
+            "median_ms": 6936.643499997444,
+            "p95_ms": 7550.494800001616,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "current-restart",
+          "question": "과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 7734.308749997581,
+            "median_ms": 7734.308749997581,
+            "p95_ms": 8572.628900001291,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 7045.239349994517,
+            "median_ms": 7045.239349994517,
+            "p95_ms": 7293.683099996997,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "pressure-zero",
+          "question": "HPU 펌프는 운전 중인데 출구 압력계에 압력이 읽히지 않습니다. 어떤 순서로 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 10108.436799997435,
+            "median_ms": 10108.436799997435,
+            "p95_ms": 11176.730899991526,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 9223.979599999439,
+            "median_ms": 9223.979599999439,
+            "p95_ms": 10374.54419999267,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "foam-noise",
+          "question": "HPU 펌프 소음이 커지고 탱크 유면에 우유빛 거품이 보입니다. 무엇을 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 10434.352749998652,
+            "median_ms": 10434.352749998652,
+            "p95_ms": 10535.713700002816,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 10653.737550001097,
+            "median_ms": 10653.737550001097,
+            "p95_ms": 12162.129299998924,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "filter-indicator",
+          "question": "HPU 필터 차압이 1.2 bar를 넘었습니다. 막힘 표시기와 교체 필요 여부를 어떻게 확인하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 6950.802100003784,
+            "median_ms": 6950.802100003784,
+            "p95_ms": 6955.1336000004085,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 7737.86055000528,
+            "median_ms": 7737.86055000528,
+            "p95_ms": 8557.252700004028,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-named-unit",
+          "question": "GR-01 근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 2866.402149997157,
+            "median_ms": 2866.402149997157,
+            "p95_ms": 2874.569599996903,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 2990.659899998718,
+            "median_ms": 2990.659899998718,
+            "p95_ms": 3012.0823999968707,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-selected-unit",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 2911.7494500023895,
+            "median_ms": 2911.7494500023895,
+            "p95_ms": 2923.679200001061,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 2956.754649996583,
+            "median_ms": 2956.754649996583,
+            "p95_ms": 2981.848600000376,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "replacement",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 8163.374849998945,
+            "median_ms": 8163.374849998945,
+            "p95_ms": 9551.545700000133,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 6705.996399996366,
+            "median_ms": 6705.996399996366,
+            "p95_ms": 6744.937399991613,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "revoked",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 6631.950699997105,
+            "median_ms": 6631.950699997105,
+            "p95_ms": 6669.936400001461,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 6914.958800000022,
+            "median_ms": 6914.958800000022,
+            "p95_ms": 7034.884999993665,
+            "new_relation_misconnections": 0
+          }
+        }
+      ]
+    },
+    "diagnostics": {
+      "pairs": 8,
+      "completed": 8,
+      "corpus_sha256": "54d9169bb5f41f439577c26aa4e2ac2b1ed6a8959eb215baefc8e8c6620d1f66",
+      "candidate_added_pairs": 6,
+      "baseline": {
+        "history_expected": 8,
+        "history_citation_hits": 2,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 6,
+        "judge_chunks": 30,
+        "candidate_chunks": 30,
+        "mean_ms": 3607.165574998362,
+        "median_ms": 3481.754500000534,
+        "p95_ms": 6833.212400000775,
+        "new_relation_misconnections": 0
+      },
+      "trial": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 32,
+        "candidate_chunks": 32,
+        "mean_ms": 3405.2286375008407,
+        "median_ms": 3138.7703999971563,
+        "p95_ms": 5736.920399991504,
+        "new_relation_misconnections": 0
+      },
+      "preservation": {
+        "pairs": 8,
+        "completed": 8,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": -201.93693749752128,
+      "cases": [
+        {
+          "id": "diagnostic-observation-copy",
+          "question": "과거 근무일지에서 압력이 정상으로 돌아왔다는 관찰 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 2,
+            "candidate_chunks": 2,
+            "mean_ms": 1738.3455499984848,
+            "median_ms": 1738.3455499984848,
+            "p95_ms": 1973.7669999958598,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2189.196700004686,
+            "median_ms": 2189.196700004686,
+            "p95_ms": 2614.0665000057197,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-recurrence-copy",
+          "question": "근무일지에서 정비 후 재발이 없었다고 기록한 근거 문장을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 3358.4242500000983,
+            "median_ms": 3358.4242500000983,
+            "p95_ms": 3432.045300003665,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 3131.035600003088,
+            "median_ms": 3131.035600003088,
+            "p95_ms": 3146.1175000004005,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-time-copy",
+          "question": "근무일지에 남겨 둔 09:10 첫 점검과 09:20 후속 조치 내용을 원문 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 4110.805699998309,
+            "median_ms": 4110.805699998309,
+            "p95_ms": 4690.147699999216,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 5133.731350000744,
+            "median_ms": 5133.731350000744,
+            "p95_ms": 5736.920399991504,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-pressure-record",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 확인 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 5221.086799996556,
+            "median_ms": 5221.086799996556,
+            "p95_ms": 6833.212400000775,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 3166.950899994845,
+            "median_ms": 3166.950899994845,
+            "p95_ms": 3202.4784999957774,
+            "new_relation_misconnections": 0
+          }
+        }
+      ]
+    }
+  },
+  "after": {
+    "primary": {
+      "pairs": 32,
+      "completed": 32,
+      "corpus_sha256": "daf6c3c46c8752a810c5e6c6c24c4269e28af39ff0cffd40671abc1df6b6255a",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 2986.3715687495187,
+        "median_ms": 1676.8122000030417,
+        "p95_ms": 10233.114899994689,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -42.5749860487309,
+        "p95_change_percent_vs_before": -2.872124363136841
+      },
+      "trial": {
+        "history_expected": 12,
+        "history_citation_hits": 12,
+        "required_abstentions": 4,
+        "required_abstention_hits": 4,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 12,
+        "judge_chunks": 72,
+        "candidate_chunks": 72,
+        "mean_ms": 3067.2216062487223,
+        "median_ms": 1950.801599996339,
+        "p95_ms": 9454.69410000078,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -40.30312379127413,
+        "p95_change_percent_vs_before": -8.866414584194848
+      },
+      "preservation": {
+        "pairs": 32,
+        "completed": 32,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": 80.85003749920361,
+      "cases": [
+        {
+          "id": "history-order",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1338.8622499987832,
+            "median_ms": 1338.8622499987832,
+            "p95_ms": 1497.5695999964955,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1140.332450002461,
+            "median_ms": 1140.332450002461,
+            "p95_ms": 1192.0649000094272,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-137",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1398.764300000039,
+            "median_ms": 1398.764300000039,
+            "p95_ms": 1494.1467999960878,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2092.1094000004814,
+            "median_ms": 2092.1094000004814,
+            "p95_ms": 2653.1895999942208,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-worker",
+          "question": "과거 근무일지에서 필터를 점검하고 교체한 담당자와 조치 시각을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2091.702699995949,
+            "median_ms": 2091.702699995949,
+            "p95_ms": 2275.572899990948,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1873.4281500001089,
+            "median_ms": 1873.4281500001089,
+            "p95_ms": 1893.0643999992753,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-observation",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 여부를 확인한 기록만 보여줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1676.8122000030417,
+            "median_ms": 1676.8122000030417,
+            "p95_ms": 1834.1656000047806,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2311.064150002494,
+            "median_ms": 2311.064150002494,
+            "p95_ms": 2534.149500002968,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-rephrase",
+          "question": "지난 필터 정비 기록의 작업 순서와 각 단계에서 관찰한 결과를 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2452.739999996993,
+            "median_ms": 2452.739999996993,
+            "p95_ms": 2710.9523999970406,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 2659.0734999954293,
+            "median_ms": 2659.0734999954293,
+            "p95_ms": 3193.5599999997066,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "history-duration",
+          "question": "근무일지에 적힌 필터 교체 후 정상 운전 시간과 확인 근거만 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1641.9862499969895,
+            "median_ms": 1641.9862499969895,
+            "p95_ms": 2038.1784999990487,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1818.5844999934488,
+            "median_ms": 1818.5844999934488,
+            "p95_ms": 2008.5387999934028,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-999",
+          "question": "근무일지에서 필터 교체 후 999분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 75.02590000149212,
+            "median_ms": 75.02590000149212,
+            "p95_ms": 76.11890000407584,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 87.71459999479703,
+            "median_ms": 87.71459999479703,
+            "p95_ms": 89.074299990898,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "missing-217",
+          "question": "근무일지에서 필터 교체 후 217분 정상 운전했다는 기록만 보여줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 89.40744999563321,
+            "median_ms": 89.40744999563321,
+            "p95_ms": 91.89369999512564,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 2,
+            "required_abstention_hits": 2,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 105.78060000625555,
+            "median_ms": 105.78060000625555,
+            "p95_ms": 121.60690000018803,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "current-restart",
+          "question": "과거 근무일지를 참고해서 지금 필터를 교체해도 되나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 9456.666300004144,
+            "median_ms": 9456.666300004144,
+            "p95_ms": 10769.541500005289,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 7974.352999994153,
+            "median_ms": 7974.352999994153,
+            "p95_ms": 8701.224299991736,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "pressure-zero",
+          "question": "HPU 펌프는 운전 중인데 출구 압력계에 압력이 읽히지 않습니다. 어떤 순서로 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 7674.908049993974,
+            "median_ms": 7674.908049993974,
+            "p95_ms": 7745.644599992374,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 8706.842799987498,
+            "median_ms": 8706.842799987498,
+            "p95_ms": 9787.283899982867,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "foam-noise",
+          "question": "HPU 펌프 소음이 커지고 탱크 유면에 우유빛 거품이 보입니다. 무엇을 확인해야 하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 9672.397949998413,
+            "median_ms": 9672.397949998413,
+            "p95_ms": 10233.114899994689,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 8,
+            "candidate_chunks": 8,
+            "mean_ms": 9097.827600005985,
+            "median_ms": 9097.827600005985,
+            "p95_ms": 9454.69410000078,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "filter-indicator",
+          "question": "HPU 필터 차압이 1.2 bar를 넘었습니다. 막힘 표시기와 교체 필요 여부를 어떻게 확인하나요?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 6964.904300002672,
+            "median_ms": 6964.904300002672,
+            "p95_ms": 7034.57100000378,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 12,
+            "candidate_chunks": 12,
+            "mean_ms": 7702.002350004477,
+            "median_ms": 7702.002350004477,
+            "p95_ms": 8592.015600013838,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-named-unit",
+          "question": "GR-01 근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 2925.618650002434,
+            "median_ms": 2925.618650002434,
+            "p95_ms": 2957.424100000935,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 10,
+            "candidate_chunks": 10,
+            "mean_ms": 3026.431649999722,
+            "median_ms": 3026.431649999722,
+            "p95_ms": 3135.240800002066,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "other-selected-unit",
+          "question": "근무일지의 필터 교체 순서와 결과는?",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 98.51754999908735,
+            "median_ms": 98.51754999908735,
+            "p95_ms": 108.5017000004882,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 119.43744999734918,
+            "median_ms": 119.43744999734918,
+            "p95_ms": 135.85539999621687,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "replacement",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 126.97345000560745,
+            "median_ms": 126.97345000560745,
+            "p95_ms": 142.29700000578305,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 247.13329999576672,
+            "median_ms": 247.13329999576672,
+            "p95_ms": 368.9866999993683,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "revoked",
+          "question": "근무일지에서 필터 교체 후 137분 관찰 결과와 시각만 알려줘",
+          "baseline": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 96.65779999704682,
+            "median_ms": 96.65779999704682,
+            "p95_ms": 105.08209999534301,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 0,
+            "history_citation_hits": 0,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 2,
+            "judge_chunks": 0,
+            "candidate_chunks": 0,
+            "mean_ms": 113.4301999991294,
+            "median_ms": 113.4301999991294,
+            "p95_ms": 114.42300000635441,
+            "new_relation_misconnections": 0
+          }
+        }
+      ]
+    },
+    "diagnostics": {
+      "pairs": 8,
+      "completed": 8,
+      "corpus_sha256": "54d9169bb5f41f439577c26aa4e2ac2b1ed6a8959eb215baefc8e8c6620d1f66",
+      "candidate_added_pairs": 0,
+      "baseline": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1516.9252500008952,
+        "median_ms": 1449.954699997761,
+        "p95_ms": 1996.8819000059739,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -57.946891583938886,
+        "p95_change_percent_vs_before": -70.77682086970182
+      },
+      "trial": {
+        "history_expected": 8,
+        "history_citation_hits": 8,
+        "required_abstentions": 0,
+        "required_abstention_hits": 0,
+        "forbidden_field_citations": 0,
+        "field_scope_leaks": 0,
+        "abstentions": 0,
+        "judge_chunks": 16,
+        "candidate_chunks": 16,
+        "mean_ms": 1653.938675000063,
+        "median_ms": 1548.6221000028308,
+        "p95_ms": 2241.3573000012548,
+        "new_relation_misconnections": 0,
+        "mean_change_percent_vs_before": -51.429438341211686,
+        "p95_change_percent_vs_before": -60.9310022847001
+      },
+      "preservation": {
+        "pairs": 8,
+        "completed": 8,
+        "index_unchanged": true,
+        "kb_unchanged": true,
+        "ordinary_query_hook_added": false
+      },
+      "paired_mean_added_ms": 137.0134249991679,
+      "cases": [
+        {
+          "id": "diagnostic-observation-copy",
+          "question": "과거 근무일지에서 압력이 정상으로 돌아왔다는 관찰 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1544.221699998161,
+            "median_ms": 1544.221699998161,
+            "p95_ms": 1762.0650999961072,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1389.0340500001912,
+            "median_ms": 1389.0340500001912,
+            "p95_ms": 1450.576799994451,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-recurrence-copy",
+          "question": "근무일지에서 정비 후 재발이 없었다고 기록한 근거 문장을 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1281.481600006373,
+            "median_ms": 1281.481600006373,
+            "p95_ms": 1285.4875000048196,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1819.7068000008585,
+            "median_ms": 1819.7068000008585,
+            "p95_ms": 2241.3573000012548,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-time-copy",
+          "question": "근무일지에 남겨 둔 09:10 첫 점검과 09:20 후속 조치 내용을 원문 그대로 옮겨줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1766.1686499995994,
+            "median_ms": 1766.1686499995994,
+            "p95_ms": 1996.8819000059739,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1548.6221000028308,
+            "median_ms": 1548.6221000028308,
+            "p95_ms": 1588.8858000034816,
+            "new_relation_misconnections": 0
+          }
+        },
+        {
+          "id": "diagnostic-pressure-record",
+          "question": "근무일지에서 압력 정상 범위 복귀와 재발 확인 결과를 원문 그대로 읽어줘",
+          "baseline": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1475.8290499994473,
+            "median_ms": 1475.8290499994473,
+            "p95_ms": 1587.2040999965975,
+            "new_relation_misconnections": 0
+          },
+          "trial": {
+            "history_expected": 2,
+            "history_citation_hits": 2,
+            "required_abstentions": 0,
+            "required_abstention_hits": 0,
+            "forbidden_field_citations": 0,
+            "field_scope_leaks": 0,
+            "abstentions": 0,
+            "judge_chunks": 4,
+            "candidate_chunks": 4,
+            "mean_ms": 1858.3917499963718,
+            "median_ms": 1858.3917499963718,
+            "p95_ms": 2116.190100001404,
+            "new_relation_misconnections": 0
+          }
+        }
+      ]
+    }
+  },
+  "model_digests": {
+    "exaone-rag-mes-ck176:latest": "69657565df76f145168153ab12722a6ad5b09488d57c9ecb5439c5e4c754a301",
+    "embeddinggemma:300m": "85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1",
+    "exaone-sft-judge:latest": "f31ce4dde5303fb7b8731097fd7f75808f47d31349deb760bdef87c027374db5"
+  },
+  "index_hashes": {
+    "chunks_700.jsonl": "e08cf3b14afa13d3d1aef08944c99dc31d4826f5d0a4f112b5ec5fa6f6da5a26",
+    "vectors_700__embeddinggemma_300m.npy": "9e67ba9952addce6b395cbeb14377ed70fae08d0536aa01b48cd93544e7615b1"
+  },
+  "current_case_comparison": [
+    {
+      "id": "current-restart",
+      "before_citations": [
+        [
+          "K-7000"
+        ],
+        [
+          "K-7000"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-7000"
+        ],
+        [
+          "K-7000"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "pressure-zero",
+      "before_citations": [
+        [
+          "K-1001"
+        ],
+        [
+          "K-1001"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1001"
+        ],
+        [
+          "K-1001"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "foam-noise",
+      "before_citations": [
+        [
+          "K-1004"
+        ],
+        [
+          "K-1004"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1004"
+        ],
+        [
+          "K-1004"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "filter-indicator",
+      "before_citations": [
+        [
+          "K-1202"
+        ],
+        [
+          "K-1202"
+        ]
+      ],
+      "after_citations": [
+        [
+          "K-1202"
+        ],
+        [
+          "K-1202"
+        ]
+      ],
+      "before_abstain": [
+        false,
+        false
+      ],
+      "after_abstain": [
+        false,
+        false
+      ],
+      "equal_answer_hashes": [
+        true,
+        true
+      ]
+    }
+  ],
+  "decision": "keep_relation_default_off_no_deployment"
+}

@@ -917,6 +917,11 @@ class _Handler(BaseHTTPRequestHandler):
                 (parsed.path.startswith("/static/") and Path(parsed.path).name == "pda.js")):
             self._send(404, {"error": "not found", "is_synthetic": True}); return
         try:
+            if parsed.path.startswith('/api/incidents/') and parsed.path.endswith('/ontology'):
+                from .ontology_api import explain
+                status, body = explain(self.accounts, self._account_token(),
+                    parsed.path[len('/api/incidents/'):-len('/ontology')], parsed.query)
+                self._send(status, body); return
             if parsed.path=='/api/admin/card-drafts' or parsed.path.startswith('/api/admin/card-drafts/'):
                 actor=self.accounts.administrator(self._account_token())
                 if not actor:

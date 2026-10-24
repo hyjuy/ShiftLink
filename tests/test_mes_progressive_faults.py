@@ -80,7 +80,9 @@ class ProgressiveFaultTests(unittest.TestCase):
         e.pause()
         with self.assertRaises(ValueError):e.repair_fault('unknown')
         e.repair_fault(eq);self.assertEqual(before,e.snapshot.active_alarms)
-        e.set_scenario('normal');e.start();e.tick()
+        scenario=next(iter(e._scenario_by_id))
+        e.set_scenario(scenario);e.start();e.tick()
+        self.assertEqual(e.snapshot.scenario_id,scenario)
         self.assertEqual(e.truth[-1]['profile']['mode'],'manual_scenario')
 
     def test_normal_wait_and_bad_quality_are_not_overwritten(self):
@@ -124,6 +126,34 @@ class ProgressiveFaultTests(unittest.TestCase):
         service.control({'command':'reset'})
         self.assertEqual(type(service.engine).__name__,'ProgressiveFactoryEngine')
 
+    def test_loopback_http_start_repair_resume_and_replay(self):
+        from http.server import ThreadingHTTPServer
+        from threading import Thread
+        from urllib.request import Request, urlopen
+        from urllib.error import HTTPError
+        from shiftlink.mes.server import MesService, _Handler
+        service=MesService(CATALOG,seed=31,progressive_faults=True,run_nonce='http')
+        handler=type('IsolatedHandler',(_Handler,),dict(service=service,web_root=ROOT/'shiftlink/mes/web',api_only=True))
+        server=ThreadingHTTPServer(('127.0.0.1',0),handler)
+        thread=Thread(target=server.serve_forever,daemon=True);thread.start()
+        def call(path,body=None):
+            data=None if body is None else json.dumps(body).encode()
+            with urlopen(Request(f'http://127.0.0.1:{server.server_port}'+path,data=data,headers={'Content-Type':'application/json'}),timeout=5) as r:return json.load(r)
+        try:
+            call('/api/control',{'command':'start'})
+            while not service.engine.scheduler.active:service.tick()
+            fault=dict(service.engine.scheduler.active)
+            with self.assertRaises(HTTPError) as error:call('/api/control',{'command':'repair_fault','equipment_id':fault['equipment_id']})
+            self.assertEqual(error.exception.code,400)
+            self.assertEqual(fault,service.engine.scheduler.active)
+            call('/api/control',{'command':'pause'})
+            call('/api/control',{'command':'repair_fault','equipment_id':fault['equipment_id']})
+            self.assertIsNone(service.engine.scheduler.active)
+            call('/api/control',{'command':'resume'});service.tick()
+            state=call('/api/state');self.assertEqual(len(state['measurements']),69)
+            self.assertFalse(state['active_alarms'])
+        finally:
+            server.shutdown();server.server_close();thread.join();service.storage.close()
     def test_cli_opt_in_and_exclusive_flags(self):
         p=subprocess.run([sys.executable,'-m','shiftlink.mes','--help'],cwd=ROOT,capture_output=True,text=True)
         self.assertEqual(p.returncode,0);self.assertIn('--progressive-faults',p.stdout)

@@ -117,8 +117,9 @@ def _json(value: object) -> object:
 class MesService:
     """Owns the single engine instance; HTTP reads never advance it."""
 
-    def __init__(self, catalog_path: Path, storage: MesStorage | None = None, seed: int = 0, *, random_faults: bool = False, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
-        self.random_faults = random_faults
+    def __init__(self, catalog_path: Path, storage: MesStorage | None = None, seed: int = 0, *, random_faults: bool = False, progressive_faults: bool = False, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
+        self.progressive_faults = progressive_faults
+        self.random_faults = random_faults or progressive_faults
         self.run_nonce = run_nonce
         self.fault_hazard = fault_hazard
         self.catalog = Catalog.load(catalog_path)
@@ -138,6 +139,9 @@ class MesService:
         self.publications = PublicationManager(self)
 
     def _new_engine(self, run: Run, config: Configuration) -> MesEngine:
+        if self.progressive_faults:
+            from .progressive_factory import ProgressiveFactoryEngine
+            return ProgressiveFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id)
         if self.random_faults:
             from .random_factory import RandomFactoryEngine
             return RandomFactoryEngine(run, config, run_nonce=self.run_nonce or run.run_id, hazard=self.fault_hazard)
@@ -848,6 +852,8 @@ class MesService:
                 self.engine.resume()
             elif command == "scenario":
                 self.engine.set_scenario(str(payload.get("scenario_id", "")))
+            elif command == "repair_fault" and self.progressive_faults:
+                self.engine.repair_fault(str(payload.get("equipment_id", "")))
             elif command == "recover":
                 self.engine.recover()
             elif command == "recovery_action":
@@ -1025,12 +1031,12 @@ class _Handler(BaseHTTPRequestHandler):
             self._send(500, {"error": f"MES 서버 오류: {type(error).__name__}: {error}", "is_synthetic": True})
 
 
-def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False, random_faults: bool = False, seed: int = 0, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
+def serve(host: str = "127.0.0.1", port: int = 8000, *, catalog_path: Path | None = None, db_path: Path | None = None, api_only: bool = False, random_faults: bool = False, progressive_faults: bool = False, seed: int = 0, run_nonce: str | None = None, fault_hazard: float = .015) -> None:
     root = Path(__file__).resolve().parents[2]
     database = db_path or root / "mes_data" / "mock-mes.sqlite3"
     database.parent.mkdir(parents=True, exist_ok=True)
     service = MesService(catalog_path or root / "docs" / "data" / "reference" / "00_plant_and_relations.json", MesStorage(database), seed,
-                         random_faults=random_faults, run_nonce=run_nonce, fault_hazard=fault_hazard)
+                         random_faults=random_faults, progressive_faults=progressive_faults, run_nonce=run_nonce, fault_hazard=fault_hazard)
     accounts = Accounts(database.with_name("accounts.json"))
     handler = type("MesHandler", (_Handler,), {"service": service, "accounts": accounts, "web_root": Path(__file__).with_name("web"), "api_only": api_only})
     server = ThreadingHTTPServer((host, port), handler)
